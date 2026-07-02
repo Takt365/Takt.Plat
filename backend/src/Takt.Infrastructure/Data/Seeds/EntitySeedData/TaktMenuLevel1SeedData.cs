@@ -244,10 +244,10 @@ public class TaktMenuLevel1SeedData
             insertCount += codeResult.InsertCount;
             updateCount += codeResult.UpdateCount;
 
-            // 10. 基础设置(目录)
+            // 10. 基础数据(目录)
             var foundationResult = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tc, "FOUNDATION", menu =>
             {
-                menu.MenuName = "基础设置";
+                menu.MenuName = "基础数据";
                 menu.MenuCode = "FOUNDATION";
                 menu.I18nKey = "menu.foundation._self";
                 menu.Icon = "RiSettings3Line";

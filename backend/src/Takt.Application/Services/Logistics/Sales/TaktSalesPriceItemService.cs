@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Sales
 // 文件名称：TaktSalesPriceItemService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-07-01
 // 创建人：Takt365(Cursor AI)
 // 功能描述：销售价格明细应用服务实现
 // 
@@ -405,6 +405,7 @@ public class TaktSalesPriceItemService : TaktServiceBase, ITaktSalesPriceItemSer
                 || SqlFunc.ToString(x.LineNumber).Contains(keywords)
                 || (x.MaterialCode != null && x.MaterialCode.Contains(keywords))
                 || (x.SalesUnit != null && x.SalesUnit.Contains(keywords))
+                || SqlFunc.ToString(x.SalesPerUnit).Contains(keywords)
                 || SqlFunc.ToString(x.SalesPrice).Contains(keywords)
                 || SqlFunc.ToString(x.MinOrderQuantity).Contains(keywords)
                 || SqlFunc.ToString(x.MaxOrderQuantity).Contains(keywords)
@@ -437,6 +438,11 @@ public class TaktSalesPriceItemService : TaktServiceBase, ITaktSalesPriceItemSer
         if (!string.IsNullOrEmpty(queryDto?.SalesUnit))
         {
             exp = exp.And(x => x.SalesUnit != null && x.SalesUnit.Contains(queryDto.SalesUnit));
+        }
+
+        if (queryDto?.SalesPerUnit.HasValue == true)
+        {
+            exp = exp.And(x => x.SalesPerUnit == queryDto.SalesPerUnit);
         }
 
         if (queryDto?.SalesPrice.HasValue == true)

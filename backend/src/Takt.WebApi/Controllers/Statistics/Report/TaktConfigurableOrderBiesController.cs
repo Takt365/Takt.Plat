@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Statistics.Report
 // 文件名称：TaktConfigurableOrderBiesController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-27
 // 创建人：Takt365(Cursor AI)
 // 功能描述：自定义报表排序控制器
 // 
@@ -41,7 +41,7 @@ public class TaktConfigurableOrderBiesController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("statistics:report:configurableorderby:list", "自定义报表排序列表")]
+    [TaktPermission("statistics:report:configurable:list", "自定义报表排序列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetConfigurableOrderByListAsync([FromQuery] TaktConfigurableOrderByQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktConfigurableOrderBiesController : TaktControllerBase
     /// </summary>
     /// <param name="id">自定义报表排序ID</param>
     /// <returns>自定义报表排序DTO</returns>
-    [TaktPermission("statistics:report:configurableorderby:query", "自定义报表排序详情")]
+    [TaktPermission("statistics:report:configurable:query", "自定义报表排序详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetConfigurableOrderByByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktConfigurableOrderBiesController : TaktControllerBase
     /// 获取自定义报表排序选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("statistics:report:configurableorderby:query", "自定义报表排序选项")]
+    [TaktPermission("statistics:report:configurable:query", "自定义报表排序选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetConfigurableOrderByOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktConfigurableOrderBiesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>自定义报表排序DTO</returns>
-    [TaktPermission("statistics:report:configurableorderby:create", "创建自定义报表排序")]
+    [TaktPermission("statistics:report:configurable:create", "创建自定义报表排序")]
     [HttpPost]
     public async Task<IActionResult> CreateConfigurableOrderByAsync([FromBody] TaktConfigurableOrderByCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktConfigurableOrderBiesController : TaktControllerBase
     /// <param name="id">自定义报表排序ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>自定义报表排序DTO</returns>
-    [TaktPermission("statistics:report:configurableorderby:update", "更新自定义报表排序")]
+    [TaktPermission("statistics:report:configurable:update", "更新自定义报表排序")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateConfigurableOrderByAsync(long id, [FromBody] TaktConfigurableOrderByUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktConfigurableOrderBiesController : TaktControllerBase
     /// </summary>
     /// <param name="id">自定义报表排序ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("statistics:report:configurableorderby:delete", "删除自定义报表排序")]
+    [TaktPermission("statistics:report:configurable:delete", "删除自定义报表排序")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteConfigurableOrderByByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktConfigurableOrderBiesController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("statistics:report:configurableorderby:delete", "批量删除自定义报表排序")]
+    [TaktPermission("statistics:report:configurable:delete", "批量删除自定义报表排序")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteConfigurableOrderByBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktConfigurableOrderBiesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">排序DTO</param>
     /// <returns>自定义报表排序DTO</returns>
-    [TaktPermission("statistics:report:configurableorderby:update", "更新自定义报表排序排序")]
+    [TaktPermission("statistics:report:configurable:update", "更新自定义报表排序排序")]
     [HttpPut("sort")]
     public async Task<IActionResult> UpdateConfigurableOrderBySortAsync([FromBody] TaktConfigurableOrderBySortDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktConfigurableOrderBiesController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("statistics:report:configurableorderby:import", "获取自定义报表排序导入模板")]
+    [TaktPermission("statistics:report:configurable:import", "获取自定义报表排序导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetConfigurableOrderByTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +224,7 @@ public class TaktConfigurableOrderBiesController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("statistics:report:configurableorderby:import", "导入自定义报表排序")]
+    [TaktPermission("statistics:report:configurable:import", "导入自定义报表排序")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportConfigurableOrderByAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +254,7 @@ public class TaktConfigurableOrderBiesController : TaktControllerBase
     /// 导出自定义报表排序
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("statistics:report:configurableorderby:export", "导出自定义报表排序")]
+    [TaktPermission("statistics:report:configurable:export", "导出自定义报表排序")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportConfigurableOrderByAsync([FromQuery] TaktConfigurableOrderByQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

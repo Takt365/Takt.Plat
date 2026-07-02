@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.HumanResource.Compensation
 // 文件名称：TaktSalaryFormulaValidators.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SalaryFormula 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktSalaryFormula 生成，请按需审阅）
 // 
@@ -42,24 +42,21 @@ public class TaktSalaryFormulaCreateValidator : AbstractValidator<TaktSalaryForm
             .NotEmpty().WithMessage("公式方案名称不能为空")
             .MaximumLength(80).WithMessage("公式方案名称长度不能超过80个字符");
         RuleFor(x => x.PayrollId)
-            .GreaterThanOrEqualTo(0).WithMessage("关联薪酬体系 ID不能为负数");
+            .GreaterThanOrEqualTo(0).WithMessage("薪酬体系不能为负数");
         RuleFor(x => x.FormulaCode)
             .NotEmpty().WithMessage("步骤编码不能为空")
             .MaximumLength(40).WithMessage("步骤编码长度不能超过40个字符");
         RuleFor(x => x.FormulaName)
             .NotEmpty().WithMessage("步骤名称不能为空")
             .MaximumLength(80).WithMessage("步骤名称长度不能超过80个字符");
-        RuleFor(x => x.SortOrder)
-            .GreaterThanOrEqualTo(0).WithMessage("执行顺序不能为负数");
         RuleFor(x => x.TargetField)
             .NotEmpty().WithMessage("结果写入字段不能为空")
             .MaximumLength(64).WithMessage("结果写入字段长度不能超过64个字符");
         RuleFor(x => x.FormulaExpression)
             .NotEmpty().WithMessage("计算公式表达式不能为空")
             .MaximumLength(1000).WithMessage("计算公式表达式长度不能超过1000个字符");
-        RuleFor(x => x.StepDescription)
-            .MaximumLength(500).WithMessage("步骤说明长度不能超过500个字符");
         RuleFor(x => x.RelatedPlant)
+            .NotEmpty().WithMessage("关联工厂不能为空")
             .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
@@ -84,6 +81,39 @@ public class TaktSalaryFormulaUpdateValidator : AbstractValidator<TaktSalaryForm
     {
         RuleFor(x => x.SalaryFormulaId)
             .GreaterThan(0).WithMessage("SalaryFormulaID无效");
+        RuleFor(x => x.TenantCode)
+            .NotEmpty().WithMessage("租户编码不能为空")
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.CompanyCode)
+            .NotEmpty().WithMessage("公司代码不能为空")
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.SetCode)
+            .NotEmpty().WithMessage("公式方案编码不能为空")
+            .MaximumLength(40).WithMessage("公式方案编码长度不能超过40个字符");
+        RuleFor(x => x.SetName)
+            .NotEmpty().WithMessage("公式方案名称不能为空")
+            .MaximumLength(80).WithMessage("公式方案名称长度不能超过80个字符");
+        RuleFor(x => x.PayrollId)
+            .GreaterThanOrEqualTo(0).WithMessage("薪酬体系不能为负数");
+        RuleFor(x => x.FormulaCode)
+            .NotEmpty().WithMessage("步骤编码不能为空")
+            .MaximumLength(40).WithMessage("步骤编码长度不能超过40个字符");
+        RuleFor(x => x.FormulaName)
+            .NotEmpty().WithMessage("步骤名称不能为空")
+            .MaximumLength(80).WithMessage("步骤名称长度不能超过80个字符");
+        RuleFor(x => x.TargetField)
+            .NotEmpty().WithMessage("结果写入字段不能为空")
+            .MaximumLength(64).WithMessage("结果写入字段长度不能超过64个字符");
+        RuleFor(x => x.FormulaExpression)
+            .NotEmpty().WithMessage("计算公式表达式不能为空")
+            .MaximumLength(1000).WithMessage("计算公式表达式长度不能超过1000个字符");
+        RuleFor(x => x.RelatedPlant)
+            .NotEmpty().WithMessage("关联工厂不能为空")
+            .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符");
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
     }
 }
 
@@ -112,25 +142,22 @@ public class TaktSalaryFormulaImportValidator : AbstractValidator<TaktSalaryForm
             .NotEmpty().WithMessage("公式方案名称不能为空")
             .MaximumLength(80).WithMessage("公式方案名称长度不能超过80个字符");
         RuleFor(x => x.PayrollId)
-            .GreaterThanOrEqualTo(0).WithMessage("关联薪酬体系 ID不能为负数");
+            .GreaterThanOrEqualTo(0).WithMessage("薪酬体系不能为负数");
         RuleFor(x => x.FormulaCode)
             .NotEmpty().WithMessage("步骤编码不能为空")
             .MaximumLength(40).WithMessage("步骤编码长度不能超过40个字符");
         RuleFor(x => x.FormulaName)
             .NotEmpty().WithMessage("步骤名称不能为空")
             .MaximumLength(80).WithMessage("步骤名称长度不能超过80个字符");
-        RuleFor(x => x.SortOrder)
-            .GreaterThanOrEqualTo(0).WithMessage("执行顺序不能为负数");
         RuleFor(x => x.TargetField)
             .NotEmpty().WithMessage("结果写入字段不能为空")
             .MaximumLength(64).WithMessage("结果写入字段长度不能超过64个字符");
         RuleFor(x => x.FormulaExpression)
             .NotEmpty().WithMessage("计算公式表达式不能为空")
             .MaximumLength(1000).WithMessage("计算公式表达式长度不能超过1000个字符");
-        RuleFor(x => x.StepDescription)
-            .MaximumLength(500).WithMessage("步骤说明长度不能超过500个字符").When(x => !string.IsNullOrWhiteSpace(x.StepDescription));
         RuleFor(x => x.RelatedPlant)
-            .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.RelatedPlant));
+            .NotEmpty().WithMessage("关联工厂不能为空")
+            .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

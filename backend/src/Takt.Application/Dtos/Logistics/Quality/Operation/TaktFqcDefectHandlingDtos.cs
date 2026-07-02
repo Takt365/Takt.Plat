@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Operation
 // 文件名称：TaktFqcDefectHandlingDtos.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：FqcDefectHandling 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktFqcDefectHandling 生成，请按需审阅）
 // 
@@ -41,13 +41,13 @@ public class TaktFqcDefectHandlingDto : TaktCompanyDtoBase
     public string FqcDefectHandlingCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// FQC检验单明细ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// FQC检验单明细 ID（关联 TaktFqcOrderItem.Id，选项 TaktFqcOrderItems/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long FqcOrderItemId { get; set; }
 
     /// <summary>
-    /// FQC检验单明细名称（填充字段）
+    /// FQC检验单明细 名称（填充字段）
     /// </summary>
     public string? FqcOrderItemName { get; set; }
 
@@ -62,7 +62,7 @@ public class TaktFqcDefectHandlingDto : TaktCompanyDtoBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 不良类型（0=轻微，1=一般，2=严重，3=致命）
+    /// 不良类型（字典 logistics_quality_defect_type）
     /// </summary>
     public int DefectType { get; set; } = 0;
 
@@ -82,7 +82,7 @@ public class TaktFqcDefectHandlingDto : TaktCompanyDtoBase
     public int DefectQuantity { get; set; } = 0;
 
     /// <summary>
-    /// 处理方式（0=返工，1=返修，2=让步接收，3=退货，4=报废，5=挑选使用）
+    /// 处理方式（字典 logistics_quality_defect_handling_method）
     /// </summary>
     public int HandlingMethod { get; set; } = 0;
 
@@ -92,17 +92,17 @@ public class TaktFqcDefectHandlingDto : TaktCompanyDtoBase
     public string? HandlingDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 责任部门
+    /// 责任部门（选项 TaktDepts/tree-options，DictValue=DeptCode）
     /// </summary>
     public string? ResponsibleDept { get; set; } = string.Empty;
 
     /// <summary>
-    /// 责任人（人员代码）
+    /// 责任人（选项 TaktEmployees/options，DictValue=EmployeeCode）
     /// </summary>
     public string? ResponsibleBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 处理人（人员代码）
+    /// 处理人（选项 TaktEmployees/options，DictValue=EmployeeCode）
     /// </summary>
     public string? HandlerBy { get; set; } = string.Empty;
 
@@ -110,11 +110,6 @@ public class TaktFqcDefectHandlingDto : TaktCompanyDtoBase
     /// 处理时间
     /// </summary>
     public DateTime? HandlingAt { get; set; }
-
-    /// <summary>
-    /// 处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）
-    /// </summary>
-    public int HandlingStatus { get; set; } = 0;
 
     /// <summary>
     /// 预防措施/纠正措施
@@ -125,6 +120,16 @@ public class TaktFqcDefectHandlingDto : TaktCompanyDtoBase
     /// 不良图片（JSON格式，存储不良图片URL列表）
     /// </summary>
     public string? DefectImages { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// </summary>
+    public string? Attachments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 处理状态（字典 logistics_quality_defect_handling_status）
+    /// </summary>
+    public int HandlingStatus { get; set; } = 0;
 
     /// <summary>
     /// FQC检验单明细（主表）
@@ -160,7 +165,7 @@ public class TaktFqcDefectHandlingQueryDto : TaktPagedQuery
     public string? FqcDefectHandlingCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// FQC检验单明细ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// FQC检验单明细 ID（关联 TaktFqcOrderItem.Id，选项 TaktFqcOrderItems/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? FqcOrderItemId { get; set; }
@@ -176,7 +181,7 @@ public class TaktFqcDefectHandlingQueryDto : TaktPagedQuery
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 不良类型（0=轻微，1=一般，2=严重，3=致命）
+    /// 不良类型（字典 logistics_quality_defect_type）
     /// </summary>
     public int? DefectType { get; set; }
 
@@ -196,7 +201,7 @@ public class TaktFqcDefectHandlingQueryDto : TaktPagedQuery
     public int? DefectQuantity { get; set; }
 
     /// <summary>
-    /// 处理方式（0=返工，1=返修，2=让步接收，3=退货，4=报废，5=挑选使用）
+    /// 处理方式（字典 logistics_quality_defect_handling_method）
     /// </summary>
     public int? HandlingMethod { get; set; }
 
@@ -206,17 +211,17 @@ public class TaktFqcDefectHandlingQueryDto : TaktPagedQuery
     public string? HandlingDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 责任部门
+    /// 责任部门（选项 TaktDepts/tree-options，DictValue=DeptCode）
     /// </summary>
     public string? ResponsibleDept { get; set; } = string.Empty;
 
     /// <summary>
-    /// 责任人（人员代码）
+    /// 责任人（选项 TaktEmployees/options，DictValue=EmployeeCode）
     /// </summary>
     public string? ResponsibleBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 处理人（人员代码）
+    /// 处理人（选项 TaktEmployees/options，DictValue=EmployeeCode）
     /// </summary>
     public string? HandlerBy { get; set; } = string.Empty;
 
@@ -231,11 +236,6 @@ public class TaktFqcDefectHandlingQueryDto : TaktPagedQuery
     public DateTime? HandlingAtEnd { get; set; }
 
     /// <summary>
-    /// 处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）
-    /// </summary>
-    public int? HandlingStatus { get; set; }
-
-    /// <summary>
     /// 预防措施/纠正措施
     /// </summary>
     public string? CorrectiveAction { get; set; } = string.Empty;
@@ -244,6 +244,16 @@ public class TaktFqcDefectHandlingQueryDto : TaktPagedQuery
     /// 不良图片（JSON格式，存储不良图片URL列表）
     /// </summary>
     public string? DefectImages { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// </summary>
+    public string? Attachments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 处理状态（字典 logistics_quality_defect_handling_status）
+    /// </summary>
+    public int? HandlingStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -286,7 +296,7 @@ public class TaktFqcDefectHandlingCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -297,7 +307,7 @@ public class TaktFqcDefectHandlingCreateDto
     public string FqcDefectHandlingCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// FQC检验单明细ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// FQC检验单明细 ID（关联 TaktFqcOrderItem.Id，选项 TaktFqcOrderItems/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long FqcOrderItemId { get; set; }
@@ -314,7 +324,7 @@ public class TaktFqcDefectHandlingCreateDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 不良类型（0=轻微，1=一般，2=严重，3=致命）
+    /// 不良类型（字典 logistics_quality_defect_type）
     /// </summary>
     public int DefectType { get; set; } = 0;
 
@@ -336,7 +346,7 @@ public class TaktFqcDefectHandlingCreateDto
     public int DefectQuantity { get; set; } = 0;
 
     /// <summary>
-    /// 处理方式（0=返工，1=返修，2=让步接收，3=退货，4=报废，5=挑选使用）
+    /// 处理方式（字典 logistics_quality_defect_handling_method）
     /// </summary>
     public int HandlingMethod { get; set; } = 0;
 
@@ -346,17 +356,17 @@ public class TaktFqcDefectHandlingCreateDto
     public string? HandlingDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 责任部门
+    /// 责任部门（选项 TaktDepts/tree-options，DictValue=DeptCode）
     /// </summary>
     public string? ResponsibleDept { get; set; } = string.Empty;
 
     /// <summary>
-    /// 责任人（人员代码）
+    /// 责任人（选项 TaktEmployees/options，DictValue=EmployeeCode）
     /// </summary>
     public string? ResponsibleBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 处理人（人员代码）
+    /// 处理人（选项 TaktEmployees/options，DictValue=EmployeeCode）
     /// </summary>
     public string? HandlerBy { get; set; } = string.Empty;
 
@@ -364,11 +374,6 @@ public class TaktFqcDefectHandlingCreateDto
     /// 处理时间
     /// </summary>
     public DateTime? HandlingAt { get; set; }
-
-    /// <summary>
-    /// 处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）
-    /// </summary>
-    public int HandlingStatus { get; set; } = 0;
 
     /// <summary>
     /// 预防措施/纠正措施
@@ -379,6 +384,16 @@ public class TaktFqcDefectHandlingCreateDto
     /// 不良图片（JSON格式，存储不良图片URL列表）
     /// </summary>
     public string? DefectImages { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// </summary>
+    public string? Attachments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 处理状态（字典 logistics_quality_defect_handling_status）
+    /// </summary>
+    public int HandlingStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -430,9 +445,9 @@ public class TaktFqcDefectHandlingStatusDto
     public long FqcDefectHandlingId { get; set; }
 
     /// <summary>
-    /// 处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）
+    /// 处理状态（字典 logistics_quality_defect_handling_status）
     /// </summary>
-    [Required(ErrorMessage = "处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）不能为空")]
+    [Required(ErrorMessage = "处理状态（字典 logistics_quality_defect_handling_status）不能为空")]
     public int HandlingStatus { get; set; } = 0;
 }
 
@@ -461,7 +476,7 @@ public class TaktFqcDefectHandlingTemplateDto
     public string? FqcDefectHandlingCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// FQC检验单明细ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// FQC检验单明细 ID（关联 TaktFqcOrderItem.Id，选项 TaktFqcOrderItems/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? FqcOrderItemId { get; set; }
@@ -477,7 +492,7 @@ public class TaktFqcDefectHandlingTemplateDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 不良类型（0=轻微，1=一般，2=严重，3=致命）
+    /// 不良类型（字典 logistics_quality_defect_type）
     /// </summary>
     public int? DefectType { get; set; }
 
@@ -497,7 +512,7 @@ public class TaktFqcDefectHandlingTemplateDto
     public int? DefectQuantity { get; set; }
 
     /// <summary>
-    /// 处理方式（0=返工，1=返修，2=让步接收，3=退货，4=报废，5=挑选使用）
+    /// 处理方式（字典 logistics_quality_defect_handling_method）
     /// </summary>
     public int? HandlingMethod { get; set; }
 
@@ -507,14 +522,44 @@ public class TaktFqcDefectHandlingTemplateDto
     public string? HandlingDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 责任部门
+    /// 责任部门（选项 TaktDepts/tree-options，DictValue=DeptCode）
     /// </summary>
     public string? ResponsibleDept { get; set; } = string.Empty;
 
     /// <summary>
-    /// 责任人（人员代码）
+    /// 责任人（选项 TaktEmployees/options，DictValue=EmployeeCode）
     /// </summary>
     public string? ResponsibleBy { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 处理人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// </summary>
+    public string? HandlerBy { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 处理时间
+    /// </summary>
+    public DateTime? HandlingAt { get; set; }
+
+    /// <summary>
+    /// 预防措施/纠正措施
+    /// </summary>
+    public string? CorrectiveAction { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 不良图片（JSON格式，存储不良图片URL列表）
+    /// </summary>
+    public string? DefectImages { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// </summary>
+    public string? Attachments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 处理状态（字典 logistics_quality_defect_handling_status）
+    /// </summary>
+    public int? HandlingStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -544,7 +589,7 @@ public class TaktFqcDefectHandlingImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -554,7 +599,7 @@ public class TaktFqcDefectHandlingImportDto
     public string? FqcDefectHandlingCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// FQC检验单明细ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// FQC检验单明细 ID（关联 TaktFqcOrderItem.Id，选项 TaktFqcOrderItems/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? FqcOrderItemId { get; set; }
@@ -570,7 +615,7 @@ public class TaktFqcDefectHandlingImportDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 不良类型（0=轻微，1=一般，2=严重，3=致命）
+    /// 不良类型（字典 logistics_quality_defect_type）
     /// </summary>
     public int? DefectType { get; set; }
 
@@ -590,7 +635,7 @@ public class TaktFqcDefectHandlingImportDto
     public int? DefectQuantity { get; set; }
 
     /// <summary>
-    /// 处理方式（0=返工，1=返修，2=让步接收，3=退货，4=报废，5=挑选使用）
+    /// 处理方式（字典 logistics_quality_defect_handling_method）
     /// </summary>
     public int? HandlingMethod { get; set; }
 
@@ -600,14 +645,44 @@ public class TaktFqcDefectHandlingImportDto
     public string? HandlingDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 责任部门
+    /// 责任部门（选项 TaktDepts/tree-options，DictValue=DeptCode）
     /// </summary>
     public string? ResponsibleDept { get; set; } = string.Empty;
 
     /// <summary>
-    /// 责任人（人员代码）
+    /// 责任人（选项 TaktEmployees/options，DictValue=EmployeeCode）
     /// </summary>
     public string? ResponsibleBy { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 处理人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// </summary>
+    public string? HandlerBy { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 处理时间
+    /// </summary>
+    public DateTime? HandlingAt { get; set; }
+
+    /// <summary>
+    /// 预防措施/纠正措施
+    /// </summary>
+    public string? CorrectiveAction { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 不良图片（JSON格式，存储不良图片URL列表）
+    /// </summary>
+    public string? DefectImages { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// </summary>
+    public string? Attachments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 处理状态（字典 logistics_quality_defect_handling_status）
+    /// </summary>
+    public int? HandlingStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -648,7 +723,7 @@ public class TaktFqcDefectHandlingExportDto
     public string FqcDefectHandlingCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// FQC检验单明细ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// FQC检验单明细 ID（关联 TaktFqcOrderItem.Id，选项 TaktFqcOrderItems/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long FqcOrderItemId { get; set; }
@@ -664,7 +739,7 @@ public class TaktFqcDefectHandlingExportDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 不良类型（0=轻微，1=一般，2=严重，3=致命）
+    /// 不良类型（字典 logistics_quality_defect_type）
     /// </summary>
     public int DefectType { get; set; } = 0;
 
@@ -684,7 +759,7 @@ public class TaktFqcDefectHandlingExportDto
     public int DefectQuantity { get; set; } = 0;
 
     /// <summary>
-    /// 处理方式（0=返工，1=返修，2=让步接收，3=退货，4=报废，5=挑选使用）
+    /// 处理方式（字典 logistics_quality_defect_handling_method）
     /// </summary>
     public int HandlingMethod { get; set; } = 0;
 
@@ -694,17 +769,17 @@ public class TaktFqcDefectHandlingExportDto
     public string? HandlingDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 责任部门
+    /// 责任部门（选项 TaktDepts/tree-options，DictValue=DeptCode）
     /// </summary>
     public string? ResponsibleDept { get; set; } = string.Empty;
 
     /// <summary>
-    /// 责任人（人员代码）
+    /// 责任人（选项 TaktEmployees/options，DictValue=EmployeeCode）
     /// </summary>
     public string? ResponsibleBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 处理人（人员代码）
+    /// 处理人（选项 TaktEmployees/options，DictValue=EmployeeCode）
     /// </summary>
     public string? HandlerBy { get; set; } = string.Empty;
 
@@ -712,11 +787,6 @@ public class TaktFqcDefectHandlingExportDto
     /// 处理时间
     /// </summary>
     public DateTime? HandlingAt { get; set; }
-
-    /// <summary>
-    /// 处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）
-    /// </summary>
-    public int HandlingStatus { get; set; } = 0;
 
     /// <summary>
     /// 预防措施/纠正措施
@@ -727,6 +797,16 @@ public class TaktFqcDefectHandlingExportDto
     /// 不良图片（JSON格式，存储不良图片URL列表）
     /// </summary>
     public string? DefectImages { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// </summary>
+    public string? Attachments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 处理状态（字典 logistics_quality_defect_handling_status）
+    /// </summary>
+    public int HandlingStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

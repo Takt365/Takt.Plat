@@ -31,19 +31,16 @@ public class TaktVisitor : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "visitor_company_name", ColumnDescription = "来访公司名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
     public string VisitorCompanyName { get; set; } = string.Empty;
-
     /// <summary>
     /// 参访开始时间
     /// </summary>
     [SugarColumn(ColumnName = "visit_start_time", ColumnDescription = "参访开始时间", ColumnDataType = "datetime", IsNullable = false)]
     public DateTime VisitStartTime { get; set; }
-
     /// <summary>
     /// 参访结束时间
     /// </summary>
     [SugarColumn(ColumnName = "visit_end_time", ColumnDescription = "参访结束时间", ColumnDataType = "datetime", IsNullable = false)]
     public DateTime VisitEndTime { get; set; }
-
     /// <summary>
     /// 来访人员列表
     /// </summary>

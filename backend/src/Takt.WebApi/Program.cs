@@ -21,6 +21,7 @@ using Microsoft.Extensions.Options;
 using Serilog;
 using Takt.Infrastructure.Data.Context;
 using Takt.Infrastructure.DependencyInjection;
+using Takt.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Takt.Shared.Helpers;
 using Takt.Shared.Options;
@@ -73,6 +74,8 @@ try
     {
         TaktLogger.Information("雪花ID已禁用");
     }
+
+    TaktPrimaryKeyInsertHelper.Configure(primaryKeyOptions);
     
     TaktLogger.Information("主键类型策略 - 自增: {Identity}, GUID: {Guid}, 雪花: {Snowflake}",
         primaryKeyOptions.Identity.Enabled, primaryKeyOptions.Guid.Enabled, primaryKeyOptions.Snowflake.Enabled);
@@ -252,8 +255,9 @@ try
     var locOptions = app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>();
     app.UseRequestLocalization(locOptions.Value);
     
-    // 7.3 静态文件（Scalar favicon 等 wwwroot 资源）
+    // 7.3 静态文件（wwwroot：内置资源 + uploads 正式文件；非 wwwroot 存储根时追加映射）
     app.UseStaticFiles();
+    app.UseTaktLocalUploadStaticFiles();
 
     // 7.4 API 文档（仅开发环境）
     app.UseTaktOpenApi();
@@ -273,6 +277,7 @@ try
     app.MapControllers();
     app.MapTaktSignalRHub<Takt.Infrastructure.SignalR.TaktConnectHub>("/hubs/TaktConnectHub");
     app.MapTaktSignalRHub<Takt.Infrastructure.SignalR.TaktNotificationHub>("/hubs/TaktNotificationHub");
+    app.MapTaktSignalRHub<Takt.Infrastructure.SignalR.TaktEcChangeHub>("/hubs/TaktEcChangeHub");
 
     // 健康检查 API
     app.MapGet("/health", () => new
@@ -286,7 +291,7 @@ try
 
     app.MapGet("/health/ready", (IConfiguration configuration, HttpContext httpContext) =>
     {
-        var tenantCode = httpContext.Request.Headers["X-Tenant-Code"].FirstOrDefault()?.Trim();
+        var tenantCode = TaktUserContext.TryResolveTenantCode(httpContext)?.Trim();
         if (string.IsNullOrWhiteSpace(tenantCode))
         {
             tenantCode = configuration["Tenant:DefaultTenantCode"]?.Trim() ?? "000";

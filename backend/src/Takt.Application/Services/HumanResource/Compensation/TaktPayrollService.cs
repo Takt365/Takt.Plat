@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Compensation
 // 文件名称：TaktPayrollService.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：薪酬体系应用服务实现
 // 
@@ -303,7 +303,7 @@ public class TaktPayrollService : TaktServiceBase, ITaktPayrollService
                 || SqlFunc.ToString(x.PayScaleId).Contains(keywords)
                 || (x.FormulaSetCode != null && x.FormulaSetCode.Contains(keywords))
                 || SqlFunc.ToString(x.PayrollStatus).Contains(keywords)
-                || (x.Description != null && x.Description.Contains(keywords))
+                || (x.PayrollDescription != null && x.PayrollDescription.Contains(keywords))
                 || (x.RelatedPlant != null && x.RelatedPlant.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
@@ -338,9 +338,9 @@ public class TaktPayrollService : TaktServiceBase, ITaktPayrollService
             exp = exp.And(x => x.PayrollStatus == queryDto.PayrollStatus);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Description))
+        if (!string.IsNullOrEmpty(queryDto?.PayrollDescription))
         {
-            exp = exp.And(x => x.Description != null && x.Description.Contains(queryDto.Description));
+            exp = exp.And(x => x.PayrollDescription != null && x.PayrollDescription.Contains(queryDto.PayrollDescription));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.RelatedPlant))

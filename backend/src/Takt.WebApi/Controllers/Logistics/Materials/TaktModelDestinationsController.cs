@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Materials
 // 文件名称：TaktModelDestinationsController.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：型号目的地控制器
 // 
@@ -91,6 +91,30 @@ public class TaktModelDestinationsController : TaktControllerBase
         try
         {
             var result = await _modelDestinationService.GetModelDestinationOptionsAsync();
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 根据物料编码获取机种名称与仕向地信息
+    /// </summary>
+    /// <param name="materialCode">物料编码</param>
+    /// <returns>型号目的地 DTO</returns>
+    [TaktPermission("logistics:materials:model:destination:query", "按物料查询机种仕向")]
+    [HttpGet("by-material")]
+    public async Task<IActionResult> GetModelDestinationByMaterialAsync([FromQuery] string materialCode)
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(materialCode))
+            {
+                return BadRequest("物料编码不能为空");
+            }
+            var result = await _modelDestinationService.GetModelDestinationByMaterialAsync(materialCode);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

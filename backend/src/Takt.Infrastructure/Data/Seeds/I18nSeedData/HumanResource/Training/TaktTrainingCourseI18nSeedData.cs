@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Training
 // 文件名称：TaktTrainingCourseI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktTrainingCourse 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -109,22 +109,22 @@ public class TaktTrainingCourseI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.trainingcourse.coursename", "zh-HK", "课程名称_hk", "课程名称"),
 
             // entity.trainingcourse.coursetype
-            new TranslationSeedItem("entity.trainingcourse.coursetype", "en-US", "课程类型_us", "课程类型（入职培训/技能培训/管理培训/安全培训/专业培训）"),
+            new TranslationSeedItem("entity.trainingcourse.coursetype", "en-US", "课程类型_us", "课程类型（字典 hr_training_course_type；列存 DictValue：ONBOARD/SKILL/MANAGEMENT/SAFETY/PROFESSIONAL）"),
             // entity.trainingcourse.coursetype
-            new TranslationSeedItem("entity.trainingcourse.coursetype", "ja-JP", "课程类型_jp", "课程类型（入职培训/技能培训/管理培训/安全培训/专业培训）"),
+            new TranslationSeedItem("entity.trainingcourse.coursetype", "ja-JP", "课程类型_jp", "课程类型（字典 hr_training_course_type；列存 DictValue：ONBOARD/SKILL/MANAGEMENT/SAFETY/PROFESSIONAL）"),
             // entity.trainingcourse.coursetype
-            new TranslationSeedItem("entity.trainingcourse.coursetype", "zh-CN", "课程类型", "课程类型（入职培训/技能培训/管理培训/安全培训/专业培训）"),
+            new TranslationSeedItem("entity.trainingcourse.coursetype", "zh-CN", "课程类型", "课程类型（字典 hr_training_course_type；列存 DictValue：ONBOARD/SKILL/MANAGEMENT/SAFETY/PROFESSIONAL）"),
             // entity.trainingcourse.coursetype
-            new TranslationSeedItem("entity.trainingcourse.coursetype", "zh-HK", "课程类型_hk", "课程类型（入职培训/技能培训/管理培训/安全培训/专业培训）"),
+            new TranslationSeedItem("entity.trainingcourse.coursetype", "zh-HK", "课程类型_hk", "课程类型（字典 hr_training_course_type；列存 DictValue：ONBOARD/SKILL/MANAGEMENT/SAFETY/PROFESSIONAL）"),
 
             // entity.trainingcourse.courselevel
-            new TranslationSeedItem("entity.trainingcourse.courselevel", "en-US", "课程级别_us", "课程级别（初级/中级/高级/专家）"),
+            new TranslationSeedItem("entity.trainingcourse.courselevel", "en-US", "课程级别_us", "课程级别（字典 hr_training_course_level；列存 DictValue：BEGINNER/INTERMEDIATE/ADVANCED/EXPERT）"),
             // entity.trainingcourse.courselevel
-            new TranslationSeedItem("entity.trainingcourse.courselevel", "ja-JP", "课程级别_jp", "课程级别（初级/中级/高级/专家）"),
+            new TranslationSeedItem("entity.trainingcourse.courselevel", "ja-JP", "课程级别_jp", "课程级别（字典 hr_training_course_level；列存 DictValue：BEGINNER/INTERMEDIATE/ADVANCED/EXPERT）"),
             // entity.trainingcourse.courselevel
-            new TranslationSeedItem("entity.trainingcourse.courselevel", "zh-CN", "课程级别", "课程级别（初级/中级/高级/专家）"),
+            new TranslationSeedItem("entity.trainingcourse.courselevel", "zh-CN", "课程级别", "课程级别（字典 hr_training_course_level；列存 DictValue：BEGINNER/INTERMEDIATE/ADVANCED/EXPERT）"),
             // entity.trainingcourse.courselevel
-            new TranslationSeedItem("entity.trainingcourse.courselevel", "zh-HK", "课程级别_hk", "课程级别（初级/中级/高级/专家）"),
+            new TranslationSeedItem("entity.trainingcourse.courselevel", "zh-HK", "课程级别_hk", "课程级别（字典 hr_training_course_level；列存 DictValue：BEGINNER/INTERMEDIATE/ADVANCED/EXPERT）"),
 
             // entity.trainingcourse.coursedescription
             new TranslationSeedItem("entity.trainingcourse.coursedescription", "en-US", "课程描述_us", "课程描述"),
@@ -163,22 +163,22 @@ public class TaktTrainingCourseI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.trainingcourse.maininstructor", "zh-HK", "主讲讲师_hk", "主讲讲师"),
 
             // entity.trainingcourse.trainingmethod
-            new TranslationSeedItem("entity.trainingcourse.trainingmethod", "en-US", "培训方式_us", "培训方式（线下/线上/混合）"),
+            new TranslationSeedItem("entity.trainingcourse.trainingmethod", "en-US", "培训方式_us", "培训方式（字典 hr_training_method_type；列存 DictValue：OFFLINE/ONLINE/HYBRID）"),
             // entity.trainingcourse.trainingmethod
-            new TranslationSeedItem("entity.trainingcourse.trainingmethod", "ja-JP", "培训方式_jp", "培训方式（线下/线上/混合）"),
+            new TranslationSeedItem("entity.trainingcourse.trainingmethod", "ja-JP", "培训方式_jp", "培训方式（字典 hr_training_method_type；列存 DictValue：OFFLINE/ONLINE/HYBRID）"),
             // entity.trainingcourse.trainingmethod
-            new TranslationSeedItem("entity.trainingcourse.trainingmethod", "zh-CN", "培训方式", "培训方式（线下/线上/混合）"),
+            new TranslationSeedItem("entity.trainingcourse.trainingmethod", "zh-CN", "培训方式", "培训方式（字典 hr_training_method_type；列存 DictValue：OFFLINE/ONLINE/HYBRID）"),
             // entity.trainingcourse.trainingmethod
-            new TranslationSeedItem("entity.trainingcourse.trainingmethod", "zh-HK", "培训方式_hk", "培训方式（线下/线上/混合）"),
+            new TranslationSeedItem("entity.trainingcourse.trainingmethod", "zh-HK", "培训方式_hk", "培训方式（字典 hr_training_method_type；列存 DictValue：OFFLINE/ONLINE/HYBRID）"),
 
             // entity.trainingcourse.assessmentmethod
-            new TranslationSeedItem("entity.trainingcourse.assessmentmethod", "en-US", "考核方式_us", "考核方式（考试/实操/作业/无）"),
+            new TranslationSeedItem("entity.trainingcourse.assessmentmethod", "en-US", "考核方式_us", "考核方式（字典 hr_training_assessment_method_type；列存 DictValue：EXAM/PRACTICAL/ASSIGNMENT/NONE）"),
             // entity.trainingcourse.assessmentmethod
-            new TranslationSeedItem("entity.trainingcourse.assessmentmethod", "ja-JP", "考核方式_jp", "考核方式（考试/实操/作业/无）"),
+            new TranslationSeedItem("entity.trainingcourse.assessmentmethod", "ja-JP", "考核方式_jp", "考核方式（字典 hr_training_assessment_method_type；列存 DictValue：EXAM/PRACTICAL/ASSIGNMENT/NONE）"),
             // entity.trainingcourse.assessmentmethod
-            new TranslationSeedItem("entity.trainingcourse.assessmentmethod", "zh-CN", "考核方式", "考核方式（考试/实操/作业/无）"),
+            new TranslationSeedItem("entity.trainingcourse.assessmentmethod", "zh-CN", "考核方式", "考核方式（字典 hr_training_assessment_method_type；列存 DictValue：EXAM/PRACTICAL/ASSIGNMENT/NONE）"),
             // entity.trainingcourse.assessmentmethod
-            new TranslationSeedItem("entity.trainingcourse.assessmentmethod", "zh-HK", "考核方式_hk", "考核方式（考试/实操/作业/无）"),
+            new TranslationSeedItem("entity.trainingcourse.assessmentmethod", "zh-HK", "考核方式_hk", "考核方式（字典 hr_training_assessment_method_type；列存 DictValue：EXAM/PRACTICAL/ASSIGNMENT/NONE）"),
 
             // entity.trainingcourse.passingscore
             new TranslationSeedItem("entity.trainingcourse.passingscore", "en-US", "及格分数线_us", "及格分数线"),
@@ -188,6 +188,15 @@ public class TaktTrainingCourseI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.trainingcourse.passingscore", "zh-CN", "及格分数线", "及格分数线"),
             // entity.trainingcourse.passingscore
             new TranslationSeedItem("entity.trainingcourse.passingscore", "zh-HK", "及格分数线_hk", "及格分数线"),
+
+            // entity.trainingcourse.relatedplant
+            new TranslationSeedItem("entity.trainingcourse.relatedplant", "en-US", "关联工厂_us", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            // entity.trainingcourse.relatedplant
+            new TranslationSeedItem("entity.trainingcourse.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            // entity.trainingcourse.relatedplant
+            new TranslationSeedItem("entity.trainingcourse.relatedplant", "zh-CN", "关联工厂", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            // entity.trainingcourse.relatedplant
+            new TranslationSeedItem("entity.trainingcourse.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
 
             // entity.trainingcourse.sortorder
             new TranslationSeedItem("entity.trainingcourse.sortorder", "en-US", "排序号_us", "排序号"),
@@ -199,22 +208,13 @@ public class TaktTrainingCourseI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.trainingcourse.sortorder", "zh-HK", "排序号_hk", "排序号"),
 
             // entity.trainingcourse.status
-            new TranslationSeedItem("entity.trainingcourse.status", "en-US", "状态_us", "状态（1=启用 0=禁用）"),
+            new TranslationSeedItem("entity.trainingcourse.status", "en-US", "状态_us", "课程状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
             // entity.trainingcourse.status
-            new TranslationSeedItem("entity.trainingcourse.status", "ja-JP", "状态_jp", "状态（1=启用 0=禁用）"),
+            new TranslationSeedItem("entity.trainingcourse.status", "ja-JP", "状态_jp", "课程状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
             // entity.trainingcourse.status
-            new TranslationSeedItem("entity.trainingcourse.status", "zh-CN", "状态", "状态（1=启用 0=禁用）"),
+            new TranslationSeedItem("entity.trainingcourse.status", "zh-CN", "状态", "课程状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
             // entity.trainingcourse.status
-            new TranslationSeedItem("entity.trainingcourse.status", "zh-HK", "状态_hk", "状态（1=启用 0=禁用）"),
-
-            // entity.trainingcourse.relatedplant
-            new TranslationSeedItem("entity.trainingcourse.relatedplant", "en-US", "关联工厂_us", "关联工厂"),
-            // entity.trainingcourse.relatedplant
-            new TranslationSeedItem("entity.trainingcourse.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂"),
-            // entity.trainingcourse.relatedplant
-            new TranslationSeedItem("entity.trainingcourse.relatedplant", "zh-CN", "关联工厂", "关联工厂"),
-            // entity.trainingcourse.relatedplant
-            new TranslationSeedItem("entity.trainingcourse.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂"),
+            new TranslationSeedItem("entity.trainingcourse.status", "zh-HK", "状态_hk", "课程状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
         };
     }
 

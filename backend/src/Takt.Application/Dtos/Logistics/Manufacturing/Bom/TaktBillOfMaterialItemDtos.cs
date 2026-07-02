@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Bom
 // 文件名称：TaktBillOfMaterialItemDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：BillOfMaterialItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktBillOfMaterialItem 生成，请按需审阅）
 // 
@@ -14,7 +14,6 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
-using Takt.Application.Dtos.Logistics.Materials;
 
 namespace Takt.Application.Dtos.Logistics.Manufacturing.Bom;
 
@@ -139,6 +138,12 @@ public class TaktBillOfMaterialItemDto : TaktCompanyDtoBase
     /// （主表：TaktMaterialPlant）
     /// </summary>
     public TaktMaterialPlantDto? MaterialPlant { get; set; }
+
+    /// <summary>
+    /// 替代料明细（一行主件可维护多条替代物料）
+    /// （子表：TaktBillOfMaterialSubstitute）
+    /// </summary>
+    public List<TaktBillOfMaterialSubstituteDto>? Substitutes { get; set; }
 
 }
 
@@ -285,7 +290,7 @@ public class TaktBillOfMaterialItemCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -375,6 +380,11 @@ public class TaktBillOfMaterialItemCreateDto
     public int IsPhantom { get; set; } = 0;
 
     /// <summary>
+    /// 替代料明细（一行主件可维护多条替代物料）（子表，级联保存）
+    /// </summary>
+    public List<TaktBillOfMaterialSubstituteCreateDto>? Substitutes { get; set; }
+
+    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -453,9 +463,24 @@ public class TaktBillOfMaterialItemTemplateDto
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 用量（quantity）
+    /// </summary>
+    public decimal? UsageQuantity { get; set; }
+
+    /// <summary>
     /// 单位（unit）
     /// </summary>
     public string? MaterialUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 损耗率（0-100，scrap_rate）
+    /// </summary>
+    public decimal? ScrapRate { get; set; }
+
+    /// <summary>
+    /// 实际用量（用量 × (1 + 损耗率/100)）
+    /// </summary>
+    public decimal? ActualUsageQuantity { get; set; }
 
     /// <summary>
     /// 工序号（operation_seq）
@@ -488,6 +513,16 @@ public class TaktBillOfMaterialItemTemplateDto
     public int? IsOptional { get; set; }
 
     /// <summary>
+    /// 是否虚拟件（0=否，1=是，phantom_flag）
+    /// </summary>
+    public int? IsPhantom { get; set; }
+
+    /// <summary>
+    /// 替代料明细（一行主件可维护多条替代物料）（子表，级联保存）
+    /// </summary>
+    public List<TaktBillOfMaterialSubstituteCreateDto>? Substitutes { get; set; }
+
+    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -515,7 +550,7 @@ public class TaktBillOfMaterialItemImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -547,9 +582,24 @@ public class TaktBillOfMaterialItemImportDto
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 用量（quantity）
+    /// </summary>
+    public decimal? UsageQuantity { get; set; }
+
+    /// <summary>
     /// 单位（unit）
     /// </summary>
     public string? MaterialUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 损耗率（0-100，scrap_rate）
+    /// </summary>
+    public decimal? ScrapRate { get; set; }
+
+    /// <summary>
+    /// 实际用量（用量 × (1 + 损耗率/100)）
+    /// </summary>
+    public decimal? ActualUsageQuantity { get; set; }
 
     /// <summary>
     /// 工序号（operation_seq）
@@ -580,6 +630,16 @@ public class TaktBillOfMaterialItemImportDto
     /// 是否可选件（0=否，1=是，optional_flag）
     /// </summary>
     public int? IsOptional { get; set; }
+
+    /// <summary>
+    /// 是否虚拟件（0=否，1=是，phantom_flag）
+    /// </summary>
+    public int? IsPhantom { get; set; }
+
+    /// <summary>
+    /// 替代料明细（一行主件可维护多条替代物料）（子表，级联保存）
+    /// </summary>
+    public List<TaktBillOfMaterialSubstituteCreateDto>? Substitutes { get; set; }
 
     /// <summary>
     /// 扩展字段JSON

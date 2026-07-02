@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Sales
 // 文件名称：TaktSalesQuotationChangeLogI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSalesQuotationChangeLog 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktSalesQuotationChangeLogI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salesquotationchangelog._self", "zh-HK", "销售报价变更记录信息_hk", "实体名称"),
 
             // entity.salesquotationchangelog.salesquotationid
-            new TranslationSeedItem("entity.salesquotationchangelog.salesquotationid", "en-US", "销售报价ID_us", "销售报价ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.salesquotationchangelog.salesquotationid", "en-US", "销售报价ID_us", "销售报价（关联 TaktSalesQuotation.Id，选项 TaktSalesQuotations/options）"),
             // entity.salesquotationchangelog.salesquotationid
-            new TranslationSeedItem("entity.salesquotationchangelog.salesquotationid", "ja-JP", "销售报价ID_jp", "销售报价ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.salesquotationchangelog.salesquotationid", "ja-JP", "销售报价ID_jp", "销售报价（关联 TaktSalesQuotation.Id，选项 TaktSalesQuotations/options）"),
             // entity.salesquotationchangelog.salesquotationid
-            new TranslationSeedItem("entity.salesquotationchangelog.salesquotationid", "zh-CN", "销售报价ID", "销售报价ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.salesquotationchangelog.salesquotationid", "zh-CN", "销售报价ID", "销售报价（关联 TaktSalesQuotation.Id，选项 TaktSalesQuotations/options）"),
             // entity.salesquotationchangelog.salesquotationid
-            new TranslationSeedItem("entity.salesquotationchangelog.salesquotationid", "zh-HK", "销售报价ID_hk", "销售报价ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.salesquotationchangelog.salesquotationid", "zh-HK", "销售报价ID_hk", "销售报价（关联 TaktSalesQuotation.Id，选项 TaktSalesQuotations/options）"),
 
             // entity.salesquotationchangelog.salesquotationcode
             new TranslationSeedItem("entity.salesquotationchangelog.salesquotationcode", "en-US", "销售报价编码_us", "销售报价编码"),

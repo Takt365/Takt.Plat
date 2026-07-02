@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/quality/complaint
 // 文件名称：supplier-evaluation.d.ts
-// 创建时间：2026-06-21
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/complaint 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -353,7 +353,7 @@ export interface SupplierEvaluationCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -585,6 +585,11 @@ export interface SupplierEvaluationTemplate {
   supplierCode?: string;
 
   /**
+   * 评价日期
+   */
+  evaluationDate?: string;
+
+  /**
    * 评价周期（0=月度，1=季度，2=半年度，3=年度）
    */
   evaluationPeriod?: number;
@@ -623,6 +628,66 @@ export interface SupplierEvaluationTemplate {
    * 交付评分（0-100分）
    */
   deliveryScore?: number;
+
+  /**
+   * 价格评分（0-100分）
+   */
+  priceScore?: number;
+
+  /**
+   * 服务评分（0-100分）
+   */
+  serviceScore?: number;
+
+  /**
+   * 技术能力评分（0-100分）
+   */
+  technicalScore?: number;
+
+  /**
+   * 主要优点
+   */
+  mainStrengths?: string;
+
+  /**
+   * 主要问题/不足
+   */
+  mainIssues?: string;
+
+  /**
+   * 改进要求/建议
+   */
+  improvementRequirements?: string;
+
+  /**
+   * 考核结论（0=继续合作，1=限期整改，2=减少订单，3=暂停合作，4=取消资格）
+   */
+  evaluationConclusion?: number;
+
+  /**
+   * 整改期限（要求完成日期）
+   */
+  rectificationDeadline?: string;
+
+  /**
+   * 评价状态（0=草稿，1=评价中，2=已完成，3=已归档）
+   */
+  evaluationStatus?: number;
+
+  /**
+   * 整改跟进状态（0=无需整改，1=待整改，2=整改中，3=已完成，4=未通过）
+   */
+  rectificationStatus?: number;
+
+  /**
+   * 关联工厂
+   */
+  relatedPlant?: string;
+
+  /**
+   * 评价项目明细列表（主子表关系）（子表，级联保存）
+   */
+  items?: SupplierEvaluationItemCreate[];
 
   /**
    * 扩展字段JSON
@@ -654,7 +719,7 @@ export interface SupplierEvaluationImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -677,6 +742,11 @@ export interface SupplierEvaluationImport {
    * 供应商编码
    */
   supplierCode?: string;
+
+  /**
+   * 评价日期
+   */
+  evaluationDate?: string;
 
   /**
    * 评价周期（0=月度，1=季度，2=半年度，3=年度）
@@ -717,6 +787,66 @@ export interface SupplierEvaluationImport {
    * 交付评分（0-100分）
    */
   deliveryScore?: number;
+
+  /**
+   * 价格评分（0-100分）
+   */
+  priceScore?: number;
+
+  /**
+   * 服务评分（0-100分）
+   */
+  serviceScore?: number;
+
+  /**
+   * 技术能力评分（0-100分）
+   */
+  technicalScore?: number;
+
+  /**
+   * 主要优点
+   */
+  mainStrengths?: string;
+
+  /**
+   * 主要问题/不足
+   */
+  mainIssues?: string;
+
+  /**
+   * 改进要求/建议
+   */
+  improvementRequirements?: string;
+
+  /**
+   * 考核结论（0=继续合作，1=限期整改，2=减少订单，3=暂停合作，4=取消资格）
+   */
+  evaluationConclusion?: number;
+
+  /**
+   * 整改期限（要求完成日期）
+   */
+  rectificationDeadline?: string;
+
+  /**
+   * 评价状态（0=草稿，1=评价中，2=已完成，3=已归档）
+   */
+  evaluationStatus?: number;
+
+  /**
+   * 整改跟进状态（0=无需整改，1=待整改，2=整改中，3=已完成，4=未通过）
+   */
+  rectificationStatus?: number;
+
+  /**
+   * 关联工厂
+   */
+  relatedPlant?: string;
+
+  /**
+   * 评价项目明细列表（主子表关系）（子表，级联保存）
+   */
+  items?: SupplierEvaluationItemCreate[];
 
   /**
    * 扩展字段JSON

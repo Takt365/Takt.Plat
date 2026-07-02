@@ -78,7 +78,7 @@
                   v-model:value="formState.costElementCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.costelement.code') })"
                   show-count
-                  :maxlength="50"
+                  :maxlength="4"
                   allow-clear
                   :disabled="!!formData?.costElementId"
                 />
@@ -100,25 +100,26 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.costelement.type')"
-                name="costElementType"
+                :label="t('entity.costelement.category')"
+                name="costElementCategory"
               >
-                <a-input-number
-                  v-model:value="formState.costElementType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.costelement.type') })"
-                  style="width: 100%"
+                <TaktSelect
+                  v-model:value="formState.costElementCategory"
+                  dict-type="accounting_cost_element_category"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.costelement.category') })"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.costelement.category')"
-                name="costElementCategory"
+                :label="t('entity.costelement.type')"
+                name="costElementType"
               >
-                <a-input-number
-                  v-model:value="formState.costElementCategory"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.costelement.category') })"
-                  style="width: 100%"
+                <TaktSelect
+                  v-model:value="formState.costElementType"
+                  dict-type="accounting_cost_element_type"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.costelement.type') })"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -270,6 +271,7 @@ import { RiQuestionLine } from '@remixicon/vue'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
+import { resolveCostElementTypeFromCategory, isValidCostElementKatyp } from '@/utils/takt-cost-element-katyp'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -405,7 +407,9 @@ const formRef = ref()
 const formState = reactive<Record<string, any>>({})
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
-  costElementStatus: 1
+  costElementStatus: 1,
+  costElementCategory: 1,
+  costElementType: 0,
 }
 
 /** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
@@ -457,6 +461,17 @@ watch(
   },
 )
 
+/** KATYP 类别变更时自动推导初级/次级类型 */
+watch(
+  () => formState.costElementCategory,
+  (category) => {
+    const derived = resolveCostElementTypeFromCategory(category)
+    if (derived !== undefined) {
+      formState.costElementType = derived
+    }
+  },
+)
+
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
   costElementCode: [
@@ -491,8 +506,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       if (value === undefined || value === null || value === '') {
         return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.costelement.category') }))
       }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
+      if (!isValidCostElementKatyp(value)) {
         return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.costelement.category') }))
       }
       return Promise.resolve()

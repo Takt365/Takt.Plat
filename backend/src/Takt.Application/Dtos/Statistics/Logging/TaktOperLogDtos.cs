@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Statistics.Logging
 // 文件名称：TaktOperLogDtos.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：OperLog 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktOperLog 生成，请按需审阅）
 // 
@@ -44,57 +44,72 @@ public class TaktOperLogDto : TaktCompanyDtoBase
     /// <summary>
     /// 操作模块（如：用户管理、部门管理）
     /// </summary>
-    public string? OperModule { get; set; } = string.Empty;
+    public string OperModule { get; set; } = string.Empty;
 
     /// <summary>
-    /// 操作类型（HTTP 审计推导）
+    /// 操作类型（TaktConstants.OperType）
     /// </summary>
-    public TaktHttpAuditOperType OperType { get; set; }
+    public string OperType { get; set; } = "unknown";
 
     /// <summary>
     /// 操作方法（如：TaktUserService.CreateUserAsync）
     /// </summary>
-    public string? OperMethod { get; set; } = string.Empty;
+    public string OperMethod { get; set; } = string.Empty;
 
     /// <summary>
     /// 请求方式（GET、POST、PUT、DELETE 等）
     /// </summary>
-    public string? RequestMethod { get; set; } = string.Empty;
+    public string RequestMethod { get; set; } = string.Empty;
 
     /// <summary>
     /// 操作 URL（含查询字符串）
     /// </summary>
-    public string? OperUrl { get; set; } = string.Empty;
+    public string OperUrl { get; set; } = string.Empty;
 
     /// <summary>
     /// 请求参数 JSON（当前操作入参/操作值完整快照；写入方须脱敏密码、Token 等）
     /// </summary>
-    public string? RequestParam { get; set; } = string.Empty;
+    public string RequestParam { get; set; } = string.Empty;
 
     /// <summary>
     /// 返回结果 JSON（当前操作出参/响应摘要）
     /// </summary>
-    public string? JsonResult { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 操作状态（0=失败，1=成功）
-    /// </summary>
-    public TaktExecuteStatus OperStatus { get; set; }
+    public string JsonResult { get; set; } = string.Empty;
 
     /// <summary>
     /// 错误消息（失败时）
     /// </summary>
-    public string? ErrorMsg { get; set; } = string.Empty;
+    public string ErrorMsg { get; set; } = string.Empty;
 
     /// <summary>
     /// 操作 IP
     /// </summary>
-    public string? OperIp { get; set; } = string.Empty;
+    public string OperIp { get; set; } = string.Empty;
 
     /// <summary>
     /// 操作地点（由 OperIp 解析，如：中国-广东省-深圳市）
     /// </summary>
-    public string? OperLocation { get; set; } = string.Empty;
+    public string OperLocation { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 用户代理（User-Agent）
+    /// </summary>
+    public string UserAgent { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 浏览器（TaktConstants.BrowserType）
+    /// </summary>
+    public string Browser { get; set; } = "unknown";
+
+    /// <summary>
+    /// 操作系统（TaktConstants.OperatingSystem）
+    /// </summary>
+    public string Os { get; set; } = "unknown";
+
+    /// <summary>
+    /// 登录设备（TaktConstants.DeviceType）
+    /// </summary>
+    public string DeviceType { get; set; } = "unknown";
 
     /// <summary>
     /// 操作时间（业务操作发生时刻）
@@ -105,6 +120,11 @@ public class TaktOperLogDto : TaktCompanyDtoBase
     /// 执行耗时（毫秒）
     /// </summary>
     public int ElapsedTime { get; set; } = 0;
+
+    /// <summary>
+    /// 操作状态（0=失败，1=成功）
+    /// </summary>
+    public TaktExecuteStatus OperStatus { get; set; }
 
 }
 
@@ -139,9 +159,9 @@ public class TaktOperLogQueryDto : TaktPagedQuery
     public string? OperModule { get; set; } = string.Empty;
 
     /// <summary>
-    /// 操作类型（HTTP 审计推导）
+    /// 操作类型（TaktConstants.OperType）
     /// </summary>
-    public TaktHttpAuditOperType? OperType { get; set; }
+    public string? OperType { get; set; }
 
     /// <summary>
     /// 操作方法（如：TaktUserService.CreateUserAsync）
@@ -169,11 +189,6 @@ public class TaktOperLogQueryDto : TaktPagedQuery
     public string? JsonResult { get; set; } = string.Empty;
 
     /// <summary>
-    /// 操作状态（0=失败，1=成功）
-    /// </summary>
-    public TaktExecuteStatus? OperStatus { get; set; }
-
-    /// <summary>
     /// 错误消息（失败时）
     /// </summary>
     public string? ErrorMsg { get; set; } = string.Empty;
@@ -189,6 +204,26 @@ public class TaktOperLogQueryDto : TaktPagedQuery
     public string? OperLocation { get; set; } = string.Empty;
 
     /// <summary>
+    /// 用户代理（User-Agent）
+    /// </summary>
+    public string? UserAgent { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 浏览器（TaktConstants.BrowserType）
+    /// </summary>
+    public string? Browser { get; set; }
+
+    /// <summary>
+    /// 操作系统（TaktConstants.OperatingSystem）
+    /// </summary>
+    public string? Os { get; set; }
+
+    /// <summary>
+    /// 登录设备（TaktConstants.DeviceType）
+    /// </summary>
+    public string? DeviceType { get; set; }
+
+    /// <summary>
     /// 操作时间（业务操作发生时刻）（范围查询-开始）
     /// </summary>
     public DateTime? OperTimeStart { get; set; }
@@ -202,6 +237,11 @@ public class TaktOperLogQueryDto : TaktPagedQuery
     /// 执行耗时（毫秒）
     /// </summary>
     public int? ElapsedTime { get; set; }
+
+    /// <summary>
+    /// 操作状态（0=失败，1=成功）
+    /// </summary>
+    public TaktExecuteStatus? OperStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -244,7 +284,7 @@ public class TaktOperLogCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -257,57 +297,72 @@ public class TaktOperLogCreateDto
     /// <summary>
     /// 操作模块（如：用户管理、部门管理）
     /// </summary>
-    public string? OperModule { get; set; } = string.Empty;
+    public string OperModule { get; set; } = string.Empty;
 
     /// <summary>
-    /// 操作类型（HTTP 审计推导）
+    /// 操作类型（TaktConstants.OperType）
     /// </summary>
-    public TaktHttpAuditOperType OperType { get; set; }
+    public string OperType { get; set; } = "unknown";
 
     /// <summary>
     /// 操作方法（如：TaktUserService.CreateUserAsync）
     /// </summary>
-    public string? OperMethod { get; set; } = string.Empty;
+    public string OperMethod { get; set; } = string.Empty;
 
     /// <summary>
     /// 请求方式（GET、POST、PUT、DELETE 等）
     /// </summary>
-    public string? RequestMethod { get; set; } = string.Empty;
+    public string RequestMethod { get; set; } = string.Empty;
 
     /// <summary>
     /// 操作 URL（含查询字符串）
     /// </summary>
-    public string? OperUrl { get; set; } = string.Empty;
+    public string OperUrl { get; set; } = string.Empty;
 
     /// <summary>
     /// 请求参数 JSON（当前操作入参/操作值完整快照；写入方须脱敏密码、Token 等）
     /// </summary>
-    public string? RequestParam { get; set; } = string.Empty;
+    public string RequestParam { get; set; } = string.Empty;
 
     /// <summary>
     /// 返回结果 JSON（当前操作出参/响应摘要）
     /// </summary>
-    public string? JsonResult { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 操作状态（0=失败，1=成功）
-    /// </summary>
-    public TaktExecuteStatus OperStatus { get; set; }
+    public string JsonResult { get; set; } = string.Empty;
 
     /// <summary>
     /// 错误消息（失败时）
     /// </summary>
-    public string? ErrorMsg { get; set; } = string.Empty;
+    public string ErrorMsg { get; set; } = string.Empty;
 
     /// <summary>
     /// 操作 IP
     /// </summary>
-    public string? OperIp { get; set; } = string.Empty;
+    public string OperIp { get; set; } = string.Empty;
 
     /// <summary>
     /// 操作地点（由 OperIp 解析，如：中国-广东省-深圳市）
     /// </summary>
-    public string? OperLocation { get; set; } = string.Empty;
+    public string OperLocation { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 用户代理（User-Agent）
+    /// </summary>
+    public string UserAgent { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 浏览器（TaktConstants.BrowserType）
+    /// </summary>
+    public string Browser { get; set; } = "unknown";
+
+    /// <summary>
+    /// 操作系统（TaktConstants.OperatingSystem）
+    /// </summary>
+    public string Os { get; set; } = "unknown";
+
+    /// <summary>
+    /// 登录设备（TaktConstants.DeviceType）
+    /// </summary>
+    public string DeviceType { get; set; } = "unknown";
 
     /// <summary>
     /// 操作时间（业务操作发生时刻）
@@ -318,6 +373,11 @@ public class TaktOperLogCreateDto
     /// 执行耗时（毫秒）
     /// </summary>
     public int ElapsedTime { get; set; } = 0;
+
+    /// <summary>
+    /// 操作状态（0=失败，1=成功）
+    /// </summary>
+    public TaktExecuteStatus OperStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -404,57 +464,72 @@ public class TaktOperLogExportDto
     /// <summary>
     /// 操作模块（如：用户管理、部门管理）
     /// </summary>
-    public string? OperModule { get; set; } = string.Empty;
+    public string OperModule { get; set; } = string.Empty;
 
     /// <summary>
-    /// 操作类型（HTTP 审计推导）
+    /// 操作类型（TaktConstants.OperType）
     /// </summary>
-    public TaktHttpAuditOperType OperType { get; set; }
+    public string OperType { get; set; } = "unknown";
 
     /// <summary>
     /// 操作方法（如：TaktUserService.CreateUserAsync）
     /// </summary>
-    public string? OperMethod { get; set; } = string.Empty;
+    public string OperMethod { get; set; } = string.Empty;
 
     /// <summary>
     /// 请求方式（GET、POST、PUT、DELETE 等）
     /// </summary>
-    public string? RequestMethod { get; set; } = string.Empty;
+    public string RequestMethod { get; set; } = string.Empty;
 
     /// <summary>
     /// 操作 URL（含查询字符串）
     /// </summary>
-    public string? OperUrl { get; set; } = string.Empty;
+    public string OperUrl { get; set; } = string.Empty;
 
     /// <summary>
     /// 请求参数 JSON（当前操作入参/操作值完整快照；写入方须脱敏密码、Token 等）
     /// </summary>
-    public string? RequestParam { get; set; } = string.Empty;
+    public string RequestParam { get; set; } = string.Empty;
 
     /// <summary>
     /// 返回结果 JSON（当前操作出参/响应摘要）
     /// </summary>
-    public string? JsonResult { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 操作状态（0=失败，1=成功）
-    /// </summary>
-    public TaktExecuteStatus OperStatus { get; set; }
+    public string JsonResult { get; set; } = string.Empty;
 
     /// <summary>
     /// 错误消息（失败时）
     /// </summary>
-    public string? ErrorMsg { get; set; } = string.Empty;
+    public string ErrorMsg { get; set; } = string.Empty;
 
     /// <summary>
     /// 操作 IP
     /// </summary>
-    public string? OperIp { get; set; } = string.Empty;
+    public string OperIp { get; set; } = string.Empty;
 
     /// <summary>
     /// 操作地点（由 OperIp 解析，如：中国-广东省-深圳市）
     /// </summary>
-    public string? OperLocation { get; set; } = string.Empty;
+    public string OperLocation { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 用户代理（User-Agent）
+    /// </summary>
+    public string UserAgent { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 浏览器（TaktConstants.BrowserType）
+    /// </summary>
+    public string Browser { get; set; } = "unknown";
+
+    /// <summary>
+    /// 操作系统（TaktConstants.OperatingSystem）
+    /// </summary>
+    public string Os { get; set; } = "unknown";
+
+    /// <summary>
+    /// 登录设备（TaktConstants.DeviceType）
+    /// </summary>
+    public string DeviceType { get; set; } = "unknown";
 
     /// <summary>
     /// 操作时间（业务操作发生时刻）
@@ -465,6 +540,11 @@ public class TaktOperLogExportDto
     /// 执行耗时（毫秒）
     /// </summary>
     public int ElapsedTime { get; set; } = 0;
+
+    /// <summary>
+    /// 操作状态（0=失败，1=成功）
+    /// </summary>
+    public TaktExecuteStatus OperStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON

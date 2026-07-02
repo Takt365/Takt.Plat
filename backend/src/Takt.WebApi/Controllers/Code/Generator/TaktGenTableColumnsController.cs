@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Code.Generator
 // 文件名称：TaktGenTableColumnsController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-27
 // 创建人：Takt365(Cursor AI)
 // 功能描述：代码生成数据表列配置控制器
 // 
@@ -41,7 +41,7 @@ public class TaktGenTableColumnsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("code:generator:list", "代码生成数据表列配置列表")]
+    [TaktPermission("code:generator:gen:table:list", "代码生成数据表列配置列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetGenTableColumnListAsync([FromQuery] TaktGenTableColumnQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktGenTableColumnsController : TaktControllerBase
     /// </summary>
     /// <param name="id">代码生成数据表列配置ID</param>
     /// <returns>代码生成数据表列配置DTO</returns>
-    [TaktPermission("code:generator:query", "代码生成数据表列配置详情")]
+    [TaktPermission("code:generator:gen:table:query", "代码生成数据表列配置详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetGenTableColumnByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktGenTableColumnsController : TaktControllerBase
     /// 获取代码生成字段配置选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("code:generator:query", "代码生成数据表列配置选项")]
+    [TaktPermission("code:generator:gen:table:query", "代码生成数据表列配置选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetGenTableColumnOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktGenTableColumnsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>代码生成数据表列配置DTO</returns>
-    [TaktPermission("code:generator:create", "创建代码生成数据表列配置")]
+    [TaktPermission("code:generator:gen:table:create", "创建代码生成数据表列配置")]
     [HttpPost]
     public async Task<IActionResult> CreateGenTableColumnAsync([FromBody] TaktGenTableColumnCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktGenTableColumnsController : TaktControllerBase
     /// <param name="id">代码生成数据表列配置ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>代码生成数据表列配置DTO</returns>
-    [TaktPermission("code:generator:update", "更新代码生成数据表列配置")]
+    [TaktPermission("code:generator:gen:table:update", "更新代码生成数据表列配置")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateGenTableColumnAsync(long id, [FromBody] TaktGenTableColumnUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktGenTableColumnsController : TaktControllerBase
     /// </summary>
     /// <param name="id">代码生成数据表列配置ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("code:generator:delete", "删除代码生成数据表列配置")]
+    [TaktPermission("code:generator:gen:table:delete", "删除代码生成数据表列配置")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteGenTableColumnByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktGenTableColumnsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("code:generator:delete", "批量删除代码生成数据表列配置")]
+    [TaktPermission("code:generator:gen:table:delete", "批量删除代码生成数据表列配置")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteGenTableColumnBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktGenTableColumnsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">排序DTO</param>
     /// <returns>代码生成数据表列配置DTO</returns>
-    [TaktPermission("code:generator:update", "更新代码生成数据表列配置排序")]
+    [TaktPermission("code:generator:gen:table:update", "更新代码生成数据表列配置排序")]
     [HttpPut("sort")]
     public async Task<IActionResult> UpdateGenTableColumnSortAsync([FromBody] TaktGenTableColumnSortDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktGenTableColumnsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("code:generator:import", "获取代码生成数据表列配置导入模板")]
+    [TaktPermission("code:generator:gen:table:import", "获取代码生成数据表列配置导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetGenTableColumnTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +224,7 @@ public class TaktGenTableColumnsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("code:generator:import", "导入代码生成数据表列配置")]
+    [TaktPermission("code:generator:gen:table:import", "导入代码生成数据表列配置")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportGenTableColumnAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +254,7 @@ public class TaktGenTableColumnsController : TaktControllerBase
     /// 导出代码生成数据表列配置
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("code:generator:export", "导出代码生成数据表列配置")]
+    [TaktPermission("code:generator:gen:table:export", "导出代码生成数据表列配置")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportGenTableColumnAsync([FromQuery] TaktGenTableColumnQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

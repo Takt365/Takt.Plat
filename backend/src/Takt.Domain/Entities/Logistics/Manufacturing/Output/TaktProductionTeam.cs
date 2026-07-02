@@ -11,7 +11,6 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
-using Newtonsoft.Json;
 using SqlSugar;
 using Takt.Domain.Entities;
 
@@ -27,7 +26,7 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Output;
 public class TaktProductionTeam : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
@@ -41,48 +40,29 @@ public class TaktProductionTeam : TaktCompanyEntityBase
     /// <summary>
     /// 班组名称（显示名称，如：SMT一班、手插二班等）
     /// </summary>
-    [SugarColumn(ColumnName = "team_name", ColumnDescription = "班组名称", ColumnDataType = "nvarchar", Length = 64, IsNullable = false)]
+    [SugarColumn(ColumnName = "team_name", ColumnDescription = "班组名称", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string TeamName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 班组分类编码（M=组立，P=PCBA，S=SMT，Q=质检，O=其他）
+    /// 班组分类（字典 logistics_team_category，存 DictValue；A=组立 P=PCBA S=SMT Q=质检 O=其他）
     /// </summary>
-    [SugarColumn(ColumnName = "team_category", ColumnDescription = "班组分类编码", ColumnDataType = "nvarchar", Length = 10, IsNullable = true)]
-    public string? TeamCategory { get; set; }
+    [SugarColumn(ColumnName = "team_category", ColumnDescription = "班组分类编码", ColumnDataType = "nvarchar", Length = 2, IsNullable = false, DefaultValue = "A")]
+    public string TeamCategory { get; set; } = "A";
 
     /// <summary>
-    /// 班组分类名称（如：组立、PCBA、SMT、质检等）
-    /// </summary>
-    [SugarColumn(ColumnName = "team_category_name", ColumnDescription = "班组分类名称", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
-    public string? TeamCategoryName { get; set; }
-
-    /// <summary>
-    /// 生产线代码（如：SMT1、ASSY1 等，与 TeamCode 区分，TeamCode 可包含班组信息）
-    /// </summary>
-    [SugarColumn(ColumnName = "production_line", ColumnDescription = "生产线代码", ColumnDataType = "nvarchar", Length = 20, IsNullable = true)]
-    public string? ProductionLine { get; set; }
-
-    /// <summary>
-    /// 班组长员工Id
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    [SugarColumn(ColumnName = "team_leader_id", ColumnDescription = "班组长员工Id", ColumnDataType = "bigint", IsNullable = true)]
-    public long? TeamLeaderId { get; set; }
-
-    /// <summary>
-    /// 班组长姓名
+    /// 班组长姓名（选项 TaktEmployees/options，存员工姓名或工号）
     /// </summary>
     [SugarColumn(ColumnName = "team_leader_name", ColumnDescription = "班组长姓名", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? TeamLeaderName { get; set; }
 
     /// <summary>
-    /// 班次（1=早班，2=中班，3=晚班）
+    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
-    [SugarColumn(ColumnName = "shift_no", ColumnDescription = "班次", ColumnDataType = "int", IsNullable = true)]
-    public int? ShiftNo { get; set; }
+    [SugarColumn(ColumnName = "shift_no", ColumnDescription = "班次", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
+    public int ShiftNo { get; set; } = 1;
 
     /// <summary>
-    /// 启用状态（1=启用，0=禁用）
+    /// 启用状态（字典 sys_normal_disable_status；0=禁用，1=启用）
     /// </summary>
     [SugarColumn(ColumnName = "status", ColumnDescription = "启用状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int Status { get; set; } = 1;

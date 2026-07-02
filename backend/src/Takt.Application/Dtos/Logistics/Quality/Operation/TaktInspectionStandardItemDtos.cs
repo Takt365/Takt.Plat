@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Operation
 // 文件名称：TaktInspectionStandardItemDtos.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：InspectionStandardItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktInspectionStandardItem 生成，请按需审阅）
 // 
@@ -36,13 +36,13 @@ public class TaktInspectionStandardItemDto : TaktCompanyDtoBase
     public long InspectionStandardItemId { get; set; }
 
     /// <summary>
-    /// 检验标准ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 检验标准 ID（关联 TaktInspectionStandard.Id，选项 TaktInspectionStandards/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long InspectionStandardId { get; set; }
 
     /// <summary>
-    /// 检验标准名称（填充字段）
+    /// 检验标准 名称（填充字段）
     /// </summary>
     public string? InspectionStandardName { get; set; }
 
@@ -62,17 +62,17 @@ public class TaktInspectionStandardItemDto : TaktCompanyDtoBase
     public string ItemName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检验项目类型（0=外观，1=尺寸，2=性能，3=材质，4=功能，5=颜色，6=结构）
+    /// 检验项目类型（字典 logistics_quality_inspection_item_type）
     /// </summary>
     public int ItemType { get; set; } = 0;
 
     /// <summary>
-    /// 缺点等级（CR=严重，MA=主要，MI=次要）
+    /// 缺点等级（字典 logistics_quality_defect_severity_code；CR/MA/MI）
     /// </summary>
     public string DefectLevel { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检验方式（1=计数，2=计量）
+    /// 检验方式（字典 logistics_quality_inspection_mode）
     /// </summary>
     public int InspectionMode { get; set; } = 0;
 
@@ -92,7 +92,7 @@ public class TaktInspectionStandardItemDto : TaktCompanyDtoBase
     public string LowerLimit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检验工具
+    /// 检验工具（手输名称）
     /// </summary>
     public string InspectionTool { get; set; } = string.Empty;
 
@@ -112,7 +112,7 @@ public class TaktInspectionStandardItemDto : TaktCompanyDtoBase
     public string RejectionCriteria { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否合格判定项目（0=否，1=是）
+    /// 是否合格判定项目（字典 sys_yes_no_type）
     /// </summary>
     public int IsQualifiedBasis { get; set; } = 0;
 
@@ -145,7 +145,7 @@ public class TaktInspectionStandardItemQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检验标准ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 检验标准 ID（关联 TaktInspectionStandard.Id，选项 TaktInspectionStandards/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? InspectionStandardId { get; set; }
@@ -166,17 +166,17 @@ public class TaktInspectionStandardItemQueryDto : TaktPagedQuery
     public string? ItemName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检验项目类型（0=外观，1=尺寸，2=性能，3=材质，4=功能，5=颜色，6=结构）
+    /// 检验项目类型（字典 logistics_quality_inspection_item_type）
     /// </summary>
     public int? ItemType { get; set; }
 
     /// <summary>
-    /// 缺点等级（CR=严重，MA=主要，MI=次要）
+    /// 缺点等级（字典 logistics_quality_defect_severity_code；CR/MA/MI）
     /// </summary>
     public string? DefectLevel { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检验方式（1=计数，2=计量）
+    /// 检验方式（字典 logistics_quality_inspection_mode）
     /// </summary>
     public int? InspectionMode { get; set; }
 
@@ -196,7 +196,7 @@ public class TaktInspectionStandardItemQueryDto : TaktPagedQuery
     public string? LowerLimit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检验工具
+    /// 检验工具（手输名称）
     /// </summary>
     public string? InspectionTool { get; set; } = string.Empty;
 
@@ -216,7 +216,7 @@ public class TaktInspectionStandardItemQueryDto : TaktPagedQuery
     public string? RejectionCriteria { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否合格判定项目（0=否，1=是）
+    /// 是否合格判定项目（字典 sys_yes_no_type）
     /// </summary>
     public int? IsQualifiedBasis { get; set; }
 
@@ -261,12 +261,12 @@ public class TaktInspectionStandardItemCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检验标准ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 检验标准 ID（关联 TaktInspectionStandard.Id，选项 TaktInspectionStandards/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long InspectionStandardId { get; set; }
@@ -289,18 +289,18 @@ public class TaktInspectionStandardItemCreateDto
     public string ItemName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检验项目类型（0=外观，1=尺寸，2=性能，3=材质，4=功能，5=颜色，6=结构）
+    /// 检验项目类型（字典 logistics_quality_inspection_item_type）
     /// </summary>
     public int ItemType { get; set; } = 0;
 
     /// <summary>
-    /// 缺点等级（CR=严重，MA=主要，MI=次要）
+    /// 缺点等级（字典 logistics_quality_defect_severity_code；CR/MA/MI）
     /// </summary>
-    [Required(ErrorMessage = "缺点等级（CR=严重，MA=主要，MI=次要）不能为空")]
+    [Required(ErrorMessage = "缺点等级（字典 logistics_quality_defect_severity_code；CR/MA/MI）不能为空")]
     public string DefectLevel { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检验方式（1=计数，2=计量）
+    /// 检验方式（字典 logistics_quality_inspection_mode）
     /// </summary>
     public int InspectionMode { get; set; } = 0;
 
@@ -323,9 +323,9 @@ public class TaktInspectionStandardItemCreateDto
     public string LowerLimit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检验工具
+    /// 检验工具（手输名称）
     /// </summary>
-    [Required(ErrorMessage = "检验工具不能为空")]
+    [Required(ErrorMessage = "检验工具（手输名称）不能为空")]
     public string InspectionTool { get; set; } = string.Empty;
 
     /// <summary>
@@ -347,7 +347,7 @@ public class TaktInspectionStandardItemCreateDto
     public string RejectionCriteria { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否合格判定项目（0=否，1=是）
+    /// 是否合格判定项目（字典 sys_yes_no_type）
     /// </summary>
     public int IsQualifiedBasis { get; set; } = 0;
 
@@ -403,7 +403,7 @@ public class TaktInspectionStandardItemTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检验标准ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 检验标准 ID（关联 TaktInspectionStandard.Id，选项 TaktInspectionStandards/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? InspectionStandardId { get; set; }
@@ -424,17 +424,17 @@ public class TaktInspectionStandardItemTemplateDto
     public string? ItemName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检验项目类型（0=外观，1=尺寸，2=性能，3=材质，4=功能，5=颜色，6=结构）
+    /// 检验项目类型（字典 logistics_quality_inspection_item_type）
     /// </summary>
     public int? ItemType { get; set; }
 
     /// <summary>
-    /// 缺点等级（CR=严重，MA=主要，MI=次要）
+    /// 缺点等级（字典 logistics_quality_defect_severity_code；CR/MA/MI）
     /// </summary>
     public string? DefectLevel { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检验方式（1=计数，2=计量）
+    /// 检验方式（字典 logistics_quality_inspection_mode）
     /// </summary>
     public int? InspectionMode { get; set; }
 
@@ -454,7 +454,7 @@ public class TaktInspectionStandardItemTemplateDto
     public string? LowerLimit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检验工具
+    /// 检验工具（手输名称）
     /// </summary>
     public string? InspectionTool { get; set; } = string.Empty;
 
@@ -462,6 +462,21 @@ public class TaktInspectionStandardItemTemplateDto
     /// 检验方法说明
     /// </summary>
     public string? InspectionMethodDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 接收标准（AC值）
+    /// </summary>
+    public string? AcceptanceCriteria { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 拒收标准（RE值）
+    /// </summary>
+    public string? RejectionCriteria { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否合格判定项目（字典 sys_yes_no_type）
+    /// </summary>
+    public int? IsQualifiedBasis { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -491,12 +506,12 @@ public class TaktInspectionStandardItemImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检验标准ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 检验标准 ID（关联 TaktInspectionStandard.Id，选项 TaktInspectionStandards/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? InspectionStandardId { get; set; }
@@ -517,17 +532,17 @@ public class TaktInspectionStandardItemImportDto
     public string? ItemName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检验项目类型（0=外观，1=尺寸，2=性能，3=材质，4=功能，5=颜色，6=结构）
+    /// 检验项目类型（字典 logistics_quality_inspection_item_type）
     /// </summary>
     public int? ItemType { get; set; }
 
     /// <summary>
-    /// 缺点等级（CR=严重，MA=主要，MI=次要）
+    /// 缺点等级（字典 logistics_quality_defect_severity_code；CR/MA/MI）
     /// </summary>
     public string? DefectLevel { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检验方式（1=计数，2=计量）
+    /// 检验方式（字典 logistics_quality_inspection_mode）
     /// </summary>
     public int? InspectionMode { get; set; }
 
@@ -547,7 +562,7 @@ public class TaktInspectionStandardItemImportDto
     public string? LowerLimit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检验工具
+    /// 检验工具（手输名称）
     /// </summary>
     public string? InspectionTool { get; set; } = string.Empty;
 
@@ -555,6 +570,21 @@ public class TaktInspectionStandardItemImportDto
     /// 检验方法说明
     /// </summary>
     public string? InspectionMethodDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 接收标准（AC值）
+    /// </summary>
+    public string? AcceptanceCriteria { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 拒收标准（RE值）
+    /// </summary>
+    public string? RejectionCriteria { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否合格判定项目（字典 sys_yes_no_type）
+    /// </summary>
+    public int? IsQualifiedBasis { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -590,7 +620,7 @@ public class TaktInspectionStandardItemExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检验标准ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 检验标准 ID（关联 TaktInspectionStandard.Id，选项 TaktInspectionStandards/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long InspectionStandardId { get; set; }
@@ -611,17 +641,17 @@ public class TaktInspectionStandardItemExportDto
     public string ItemName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检验项目类型（0=外观，1=尺寸，2=性能，3=材质，4=功能，5=颜色，6=结构）
+    /// 检验项目类型（字典 logistics_quality_inspection_item_type）
     /// </summary>
     public int ItemType { get; set; } = 0;
 
     /// <summary>
-    /// 缺点等级（CR=严重，MA=主要，MI=次要）
+    /// 缺点等级（字典 logistics_quality_defect_severity_code；CR/MA/MI）
     /// </summary>
     public string DefectLevel { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检验方式（1=计数，2=计量）
+    /// 检验方式（字典 logistics_quality_inspection_mode）
     /// </summary>
     public int InspectionMode { get; set; } = 0;
 
@@ -641,7 +671,7 @@ public class TaktInspectionStandardItemExportDto
     public string LowerLimit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检验工具
+    /// 检验工具（手输名称）
     /// </summary>
     public string InspectionTool { get; set; } = string.Empty;
 
@@ -661,7 +691,7 @@ public class TaktInspectionStandardItemExportDto
     public string RejectionCriteria { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否合格判定项目（0=否，1=是）
+    /// 是否合格判定项目（字典 sys_yes_no_type）
     /// </summary>
     public int IsQualifiedBasis { get; set; } = 0;
 

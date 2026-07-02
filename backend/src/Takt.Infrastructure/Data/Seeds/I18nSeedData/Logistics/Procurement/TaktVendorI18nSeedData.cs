@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Procurement
 // 文件名称：TaktVendorI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktVendor 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktVendorI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.vendor._self", "zh-HK", "Takt经销商信息_hk", "实体名称"),
 
             // entity.vendor.plantcode
-            new TranslationSeedItem("entity.vendor.plantcode", "en-US", "工厂代码_us", "工厂代码"),
+            new TranslationSeedItem("entity.vendor.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
             // entity.vendor.plantcode
-            new TranslationSeedItem("entity.vendor.plantcode", "ja-JP", "工厂代码_jp", "工厂代码"),
+            new TranslationSeedItem("entity.vendor.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
             // entity.vendor.plantcode
-            new TranslationSeedItem("entity.vendor.plantcode", "zh-CN", "工厂代码", "工厂代码"),
+            new TranslationSeedItem("entity.vendor.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
             // entity.vendor.plantcode
-            new TranslationSeedItem("entity.vendor.plantcode", "zh-HK", "工厂代码_hk", "工厂代码"),
+            new TranslationSeedItem("entity.vendor.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
 
             // entity.vendor.code
             new TranslationSeedItem("entity.vendor.code", "en-US", "经销商编码_us", "经销商编码（唯一索引）"),
@@ -136,13 +136,13 @@ public class TaktVendorI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.vendor.type", "zh-HK", "经销商类型_hk", "经销商类型（字典 logistics_vendor_category；0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）"),
 
             // entity.vendor.industrysector
-            new TranslationSeedItem("entity.vendor.industrysector", "en-US", "行业领域_us", "行业领域"),
+            new TranslationSeedItem("entity.vendor.industrysector", "en-US", "行业领域_us", "行业领域（字典 logistics_industry_sector，DictValue=A/C/M/P）"),
             // entity.vendor.industrysector
-            new TranslationSeedItem("entity.vendor.industrysector", "ja-JP", "行业领域_jp", "行业领域"),
+            new TranslationSeedItem("entity.vendor.industrysector", "ja-JP", "行业领域_jp", "行业领域（字典 logistics_industry_sector，DictValue=A/C/M/P）"),
             // entity.vendor.industrysector
-            new TranslationSeedItem("entity.vendor.industrysector", "zh-CN", "行业领域", "行业领域"),
+            new TranslationSeedItem("entity.vendor.industrysector", "zh-CN", "行业领域", "行业领域（字典 logistics_industry_sector，DictValue=A/C/M/P）"),
             // entity.vendor.industrysector
-            new TranslationSeedItem("entity.vendor.industrysector", "zh-HK", "行业领域_hk", "行业领域"),
+            new TranslationSeedItem("entity.vendor.industrysector", "zh-HK", "行业领域_hk", "行业领域（字典 logistics_industry_sector，DictValue=A/C/M/P）"),
 
             // entity.vendor.taxnumber
             new TranslationSeedItem("entity.vendor.taxnumber", "en-US", "经销商标识_us", "经销商标识（税务登记证号/统一社会信用代码）"),
@@ -152,6 +152,15 @@ public class TaktVendorI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.vendor.taxnumber", "zh-CN", "经销商标识", "经销商标识（税务登记证号/统一社会信用代码）"),
             // entity.vendor.taxnumber
             new TranslationSeedItem("entity.vendor.taxnumber", "zh-HK", "经销商标识_hk", "经销商标识（税务登记证号/统一社会信用代码）"),
+
+            // entity.vendor.taxrate
+            new TranslationSeedItem("entity.vendor.taxrate", "en-US", "税率_us", "税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等）"),
+            // entity.vendor.taxrate
+            new TranslationSeedItem("entity.vendor.taxrate", "ja-JP", "税率_jp", "税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等）"),
+            // entity.vendor.taxrate
+            new TranslationSeedItem("entity.vendor.taxrate", "zh-CN", "税率", "税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等）"),
+            // entity.vendor.taxrate
+            new TranslationSeedItem("entity.vendor.taxrate", "zh-HK", "税率_hk", "税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等）"),
 
             // entity.vendor.registrationcountry
             new TranslationSeedItem("entity.vendor.registrationcountry", "en-US", "注册国家_us", "注册国家（ISO 3166-1 alpha-2两位代码）"),
@@ -253,22 +262,22 @@ public class TaktVendorI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.vendor.contactemail", "zh-HK", "联系人邮箱_hk", "联系人邮箱"),
 
             // entity.vendor.currencycode
-            new TranslationSeedItem("entity.vendor.currencycode", "en-US", "结算币种代码_us", "结算币种代码"),
+            new TranslationSeedItem("entity.vendor.currencycode", "en-US", "结算币种代码_us", "结算币种代码（字典 accounting_currency_code，DictValue=CNY/USD 等）"),
             // entity.vendor.currencycode
-            new TranslationSeedItem("entity.vendor.currencycode", "ja-JP", "结算币种代码_jp", "结算币种代码"),
+            new TranslationSeedItem("entity.vendor.currencycode", "ja-JP", "结算币种代码_jp", "结算币种代码（字典 accounting_currency_code，DictValue=CNY/USD 等）"),
             // entity.vendor.currencycode
-            new TranslationSeedItem("entity.vendor.currencycode", "zh-CN", "结算币种代码", "结算币种代码"),
+            new TranslationSeedItem("entity.vendor.currencycode", "zh-CN", "结算币种代码", "结算币种代码（字典 accounting_currency_code，DictValue=CNY/USD 等）"),
             // entity.vendor.currencycode
-            new TranslationSeedItem("entity.vendor.currencycode", "zh-HK", "结算币种代码_hk", "结算币种代码"),
+            new TranslationSeedItem("entity.vendor.currencycode", "zh-HK", "结算币种代码_hk", "结算币种代码（字典 accounting_currency_code，DictValue=CNY/USD 等）"),
 
             // entity.vendor.paymentterms
-            new TranslationSeedItem("entity.vendor.paymentterms", "en-US", "付款条件_us", "付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）"),
+            new TranslationSeedItem("entity.vendor.paymentterms", "en-US", "付款条件_us", "付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）"),
             // entity.vendor.paymentterms
-            new TranslationSeedItem("entity.vendor.paymentterms", "ja-JP", "付款条件_jp", "付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）"),
+            new TranslationSeedItem("entity.vendor.paymentterms", "ja-JP", "付款条件_jp", "付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）"),
             // entity.vendor.paymentterms
-            new TranslationSeedItem("entity.vendor.paymentterms", "zh-CN", "付款条件", "付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）"),
+            new TranslationSeedItem("entity.vendor.paymentterms", "zh-CN", "付款条件", "付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）"),
             // entity.vendor.paymentterms
-            new TranslationSeedItem("entity.vendor.paymentterms", "zh-HK", "付款条件_hk", "付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）"),
+            new TranslationSeedItem("entity.vendor.paymentterms", "zh-HK", "付款条件_hk", "付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）"),
 
             // entity.vendor.creditlevel
             new TranslationSeedItem("entity.vendor.creditlevel", "en-US", "信用等级_us", "信用等级（字典 logistics_credit_rating_category；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）"),
@@ -324,24 +333,6 @@ public class TaktVendorI18nSeedData : ITaktSeedDataCoordinator
             // entity.vendor.evaluationscore
             new TranslationSeedItem("entity.vendor.evaluationscore", "zh-HK", "评价分数_hk", "评价分数（0-100分）"),
 
-            // entity.vendor.isqualified
-            new TranslationSeedItem("entity.vendor.isqualified", "en-US", "是否合格经销商_us", "是否合格经销商（0=否，1=是）"),
-            // entity.vendor.isqualified
-            new TranslationSeedItem("entity.vendor.isqualified", "ja-JP", "是否合格经销商_jp", "是否合格经销商（0=否，1=是）"),
-            // entity.vendor.isqualified
-            new TranslationSeedItem("entity.vendor.isqualified", "zh-CN", "是否合格经销商", "是否合格经销商（0=否，1=是）"),
-            // entity.vendor.isqualified
-            new TranslationSeedItem("entity.vendor.isqualified", "zh-HK", "是否合格经销商_hk", "是否合格经销商（0=否，1=是）"),
-
-            // entity.vendor.status
-            new TranslationSeedItem("entity.vendor.status", "en-US", "经销商状态_us", "经销商状态（1=启用，0=禁用）"),
-            // entity.vendor.status
-            new TranslationSeedItem("entity.vendor.status", "ja-JP", "经销商状态_jp", "经销商状态（1=启用，0=禁用）"),
-            // entity.vendor.status
-            new TranslationSeedItem("entity.vendor.status", "zh-CN", "经销商状态", "经销商状态（1=启用，0=禁用）"),
-            // entity.vendor.status
-            new TranslationSeedItem("entity.vendor.status", "zh-HK", "经销商状态_hk", "经销商状态（1=启用，0=禁用）"),
-
             // entity.vendor.sortorder
             new TranslationSeedItem("entity.vendor.sortorder", "en-US", "排序号_us", "排序号（越小越靠前）"),
             // entity.vendor.sortorder
@@ -350,6 +341,15 @@ public class TaktVendorI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.vendor.sortorder", "zh-CN", "排序号", "排序号（越小越靠前）"),
             // entity.vendor.sortorder
             new TranslationSeedItem("entity.vendor.sortorder", "zh-HK", "排序号_hk", "排序号（越小越靠前）"),
+
+            // entity.vendor.status
+            new TranslationSeedItem("entity.vendor.status", "en-US", "经销商状态_us", "经销商状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            // entity.vendor.status
+            new TranslationSeedItem("entity.vendor.status", "ja-JP", "经销商状态_jp", "经销商状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            // entity.vendor.status
+            new TranslationSeedItem("entity.vendor.status", "zh-CN", "经销商状态", "经销商状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            // entity.vendor.status
+            new TranslationSeedItem("entity.vendor.status", "zh-HK", "经销商状态_hk", "经销商状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
         };
     }
 

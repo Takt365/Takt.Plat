@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Procurement
 // 文件名称：TaktPurchaseInvoiceDtos.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchaseInvoice 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPurchaseInvoice 生成，请按需审阅）
 // 
@@ -86,12 +86,7 @@ public class TaktPurchaseInvoiceDto : TaktCompanyDtoBase
     public decimal PaidAmount { get; set; }
 
     /// <summary>
-    /// 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
-    /// </summary>
-    public int InvoiceStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 付款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+    /// 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
     /// </summary>
     public int PaymentMethod { get; set; } = 0;
 
@@ -99,6 +94,11 @@ public class TaktPurchaseInvoiceDto : TaktCompanyDtoBase
     /// 税务发票号码
     /// </summary>
     public string? TaxInvoiceNo { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
+    /// </summary>
+    public int InvoiceStatus { get; set; } = 0;
 
     /// <summary>
     /// 采购发票明细列表（主子表关系，一张发票可有多个明细行）
@@ -184,12 +184,7 @@ public class TaktPurchaseInvoiceQueryDto : TaktPagedQuery
     public decimal? PaidAmount { get; set; }
 
     /// <summary>
-    /// 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
-    /// </summary>
-    public int? InvoiceStatus { get; set; }
-
-    /// <summary>
-    /// 付款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+    /// 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
     /// </summary>
     public int? PaymentMethod { get; set; }
 
@@ -197,6 +192,11 @@ public class TaktPurchaseInvoiceQueryDto : TaktPagedQuery
     /// 税务发票号码
     /// </summary>
     public string? TaxInvoiceNo { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
+    /// </summary>
+    public int? InvoiceStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -239,7 +239,7 @@ public class TaktPurchaseInvoiceCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -298,12 +298,7 @@ public class TaktPurchaseInvoiceCreateDto
     public decimal PaidAmount { get; set; }
 
     /// <summary>
-    /// 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
-    /// </summary>
-    public int InvoiceStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 付款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+    /// 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
     /// </summary>
     public int PaymentMethod { get; set; } = 0;
 
@@ -311,6 +306,11 @@ public class TaktPurchaseInvoiceCreateDto
     /// 税务发票号码
     /// </summary>
     public string? TaxInvoiceNo { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
+    /// </summary>
+    public int InvoiceStatus { get; set; } = 0;
 
     /// <summary>
     /// 采购发票明细列表（主子表关系，一张发票可有多个明细行）（子表，级联保存）
@@ -418,12 +418,32 @@ public class TaktPurchaseInvoiceTemplateDto
     public string? SupplierName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
+    /// 开票日期
     /// </summary>
-    public int? InvoiceStatus { get; set; }
+    public DateTime? InvoiceDate { get; set; }
 
     /// <summary>
-    /// 付款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+    /// 发票总金额
+    /// </summary>
+    public decimal? TotalAmount { get; set; }
+
+    /// <summary>
+    /// 税费
+    /// </summary>
+    public decimal? TaxAmount { get; set; }
+
+    /// <summary>
+    /// 发票应付金额
+    /// </summary>
+    public decimal? ActualAmount { get; set; }
+
+    /// <summary>
+    /// 已付款金额
+    /// </summary>
+    public decimal? PaidAmount { get; set; }
+
+    /// <summary>
+    /// 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
     /// </summary>
     public int? PaymentMethod { get; set; }
 
@@ -431,6 +451,16 @@ public class TaktPurchaseInvoiceTemplateDto
     /// 税务发票号码
     /// </summary>
     public string? TaxInvoiceNo { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
+    /// </summary>
+    public int? InvoiceStatus { get; set; }
+
+    /// <summary>
+    /// 采购发票明细列表（主子表关系，一张发票可有多个明细行）（子表，级联保存）
+    /// </summary>
+    public List<TaktPurchaseInvoiceItemCreateDto>? Items { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -460,7 +490,7 @@ public class TaktPurchaseInvoiceImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -490,12 +520,32 @@ public class TaktPurchaseInvoiceImportDto
     public string? SupplierName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
+    /// 开票日期
     /// </summary>
-    public int? InvoiceStatus { get; set; }
+    public DateTime? InvoiceDate { get; set; }
 
     /// <summary>
-    /// 付款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+    /// 发票总金额
+    /// </summary>
+    public decimal? TotalAmount { get; set; }
+
+    /// <summary>
+    /// 税费
+    /// </summary>
+    public decimal? TaxAmount { get; set; }
+
+    /// <summary>
+    /// 发票应付金额
+    /// </summary>
+    public decimal? ActualAmount { get; set; }
+
+    /// <summary>
+    /// 已付款金额
+    /// </summary>
+    public decimal? PaidAmount { get; set; }
+
+    /// <summary>
+    /// 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
     /// </summary>
     public int? PaymentMethod { get; set; }
 
@@ -503,6 +553,16 @@ public class TaktPurchaseInvoiceImportDto
     /// 税务发票号码
     /// </summary>
     public string? TaxInvoiceNo { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
+    /// </summary>
+    public int? InvoiceStatus { get; set; }
+
+    /// <summary>
+    /// 采购发票明细列表（主子表关系，一张发票可有多个明细行）（子表，级联保存）
+    /// </summary>
+    public List<TaktPurchaseInvoiceItemCreateDto>? Items { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -588,12 +648,7 @@ public class TaktPurchaseInvoiceExportDto
     public decimal PaidAmount { get; set; }
 
     /// <summary>
-    /// 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
-    /// </summary>
-    public int InvoiceStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 付款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+    /// 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
     /// </summary>
     public int PaymentMethod { get; set; } = 0;
 
@@ -601,6 +656,11 @@ public class TaktPurchaseInvoiceExportDto
     /// 税务发票号码
     /// </summary>
     public string? TaxInvoiceNo { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
+    /// </summary>
+    public int InvoiceStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/scheduling
 // 文件名称：aps-order.d.ts
-// 创建时间：2026-06-22
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/scheduling 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface ApsOrder extends CompanyDtoBase {
   apsOrderId: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -54,7 +54,7 @@ export interface ApsOrder extends CompanyDtoBase {
   plannedOrderCode?: string;
 
   /**
-   * 物料编码
+   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
    */
   materialCode: string;
 
@@ -64,12 +64,12 @@ export interface ApsOrder extends CompanyDtoBase {
   orderQuantity: number;
 
   /**
-   * 计量单位
+   * 计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   unitOfMeasure: string;
 
   /**
-   * 工艺路线编码
+   * 工艺路线编码（关联 TaktRouting.RoutingCode，选项 TaktRoutings/options，DictValue=RoutingCode）
    */
   routingCode?: string;
 
@@ -124,7 +124,7 @@ export interface ApsOrderQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -144,7 +144,7 @@ export interface ApsOrderQuery extends TaktPagedQuery {
   plannedOrderCode?: string;
 
   /**
-   * 物料编码
+   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
    */
   materialCode?: string;
 
@@ -154,12 +154,12 @@ export interface ApsOrderQuery extends TaktPagedQuery {
   orderQuantity?: number;
 
   /**
-   * 计量单位
+   * 计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   unitOfMeasure?: string;
 
   /**
-   * 工艺路线编码
+   * 工艺路线编码（关联 TaktRouting.RoutingCode，选项 TaktRoutings/options，DictValue=RoutingCode）
    */
   routingCode?: string;
 
@@ -233,12 +233,12 @@ export interface ApsOrderCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -258,7 +258,7 @@ export interface ApsOrderCreate {
   plannedOrderCode?: string;
 
   /**
-   * 物料编码
+   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
    */
   materialCode: string;
 
@@ -268,12 +268,12 @@ export interface ApsOrderCreate {
   orderQuantity: number;
 
   /**
-   * 计量单位
+   * 计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   unitOfMeasure: string;
 
   /**
-   * 工艺路线编码
+   * 工艺路线编码（关联 TaktRouting.RoutingCode，选项 TaktRoutings/options，DictValue=RoutingCode）
    */
   routingCode?: string;
 
@@ -366,7 +366,7 @@ export interface ApsOrderTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -386,19 +386,34 @@ export interface ApsOrderTemplate {
   plannedOrderCode?: string;
 
   /**
-   * 物料编码
+   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
    */
   materialCode?: string;
 
   /**
-   * 计量单位
+   * 订单数量
+   */
+  orderQuantity?: number;
+
+  /**
+   * 计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   unitOfMeasure?: string;
 
   /**
-   * 工艺路线编码
+   * 工艺路线编码（关联 TaktRouting.RoutingCode，选项 TaktRoutings/options，DictValue=RoutingCode）
    */
   routingCode?: string;
+
+  /**
+   * 计划开始时间
+   */
+  plannedStartTime?: string;
+
+  /**
+   * 计划结束时间
+   */
+  plannedEndTime?: string;
 
   /**
    * APS 订单状态（字典 aps_order_status；0=待排程，1=已排程，2=已释放，3=已完成）
@@ -409,6 +424,11 @@ export interface ApsOrderTemplate {
    * 关联 APS 排程批次 ID（可选）
    */
   apsScheduleId?: string;
+
+  /**
+   * APS 工序排程列表（子表，级联保存）
+   */
+  operations?: ApsOperationCreate[];
 
   /**
    * 扩展字段JSON
@@ -440,12 +460,12 @@ export interface ApsOrderImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -465,19 +485,34 @@ export interface ApsOrderImport {
   plannedOrderCode?: string;
 
   /**
-   * 物料编码
+   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
    */
   materialCode?: string;
 
   /**
-   * 计量单位
+   * 订单数量
+   */
+  orderQuantity?: number;
+
+  /**
+   * 计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   unitOfMeasure?: string;
 
   /**
-   * 工艺路线编码
+   * 工艺路线编码（关联 TaktRouting.RoutingCode，选项 TaktRoutings/options，DictValue=RoutingCode）
    */
   routingCode?: string;
+
+  /**
+   * 计划开始时间
+   */
+  plannedStartTime?: string;
+
+  /**
+   * 计划结束时间
+   */
+  plannedEndTime?: string;
 
   /**
    * APS 订单状态（字典 aps_order_status；0=待排程，1=已排程，2=已释放，3=已完成）
@@ -488,6 +523,11 @@ export interface ApsOrderImport {
    * 关联 APS 排程批次 ID（可选）
    */
   apsScheduleId?: string;
+
+  /**
+   * APS 工序排程列表（子表，级联保存）
+   */
+  operations?: ApsOperationCreate[];
 
   /**
    * 扩展字段JSON
@@ -519,7 +559,7 @@ export interface ApsOrderExport {
   companyCode: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -539,7 +579,7 @@ export interface ApsOrderExport {
   plannedOrderCode?: string;
 
   /**
-   * 物料编码
+   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
    */
   materialCode: string;
 
@@ -549,12 +589,12 @@ export interface ApsOrderExport {
   orderQuantity: number;
 
   /**
-   * 计量单位
+   * 计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   unitOfMeasure: string;
 
   /**
-   * 工艺路线编码
+   * 工艺路线编码（关联 TaktRouting.RoutingCode，选项 TaktRoutings/options，DictValue=RoutingCode）
    */
   routingCode?: string;
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Sales
 // 文件名称：TaktSalesQuotationDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-07-01
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SalesQuotation 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSalesQuotation 生成，请按需审阅）
 // 
@@ -36,7 +36,7 @@ public class TaktSalesQuotationDto : TaktCompanyDtoBase
     public long SalesQuotationId { get; set; }
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -46,7 +46,7 @@ public class TaktSalesQuotationDto : TaktCompanyDtoBase
     public string SalesQuotationCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户编码
+    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
     /// </summary>
     public string CustomerCode { get; set; } = string.Empty;
 
@@ -66,7 +66,7 @@ public class TaktSalesQuotationDto : TaktCompanyDtoBase
     public DateTime? ValidUntilDate { get; set; }
 
     /// <summary>
-    /// 销售员（人员代码）
+    /// 销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）
     /// </summary>
     public string? SalesBy { get; set; } = string.Empty;
 
@@ -96,20 +96,26 @@ public class TaktSalesQuotationDto : TaktCompanyDtoBase
     public decimal ActualAmount { get; set; }
 
     /// <summary>
-    /// 报价状态（0=草稿，1=已发送，2=已接受，3=已拒绝，4=已过期，5=已作废）
-    /// </summary>
-    public int QuotationStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 关联销售订单编码（报价转订单后回填）
+    /// 关联销售订单编码（报价转订单后回填；选项 TaktSalesOrders/options，DictValue=SalesOrderCode）
     /// </summary>
     public string? SalesOrderCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 报价状态（字典 logistics_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）
+    /// </summary>
+    public int QuotationStatus { get; set; } = 0;
 
     /// <summary>
     /// 销售报价明细列表（主子表关系）
     /// （子表：TaktSalesQuotationItem）
     /// </summary>
     public List<TaktSalesQuotationItemDto>? Items { get; set; }
+
+    /// <summary>
+    /// 销售报价变更记录列表（外键在子表 TaktSalesQuotationChangeLog.SalesQuotationId）
+    /// （子表：TaktSalesQuotationChangeLog）
+    /// </summary>
+    public List<TaktSalesQuotationChangeLogDto>? ChangeLogs { get; set; }
 
 }
 
@@ -134,7 +140,7 @@ public class TaktSalesQuotationQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -144,7 +150,7 @@ public class TaktSalesQuotationQueryDto : TaktPagedQuery
     public string? SalesQuotationCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户编码
+    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
     /// </summary>
     public string? CustomerCode { get; set; } = string.Empty;
 
@@ -174,7 +180,7 @@ public class TaktSalesQuotationQueryDto : TaktPagedQuery
     public DateTime? ValidUntilDateEnd { get; set; }
 
     /// <summary>
-    /// 销售员（人员代码）
+    /// 销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）
     /// </summary>
     public string? SalesBy { get; set; } = string.Empty;
 
@@ -204,14 +210,14 @@ public class TaktSalesQuotationQueryDto : TaktPagedQuery
     public decimal? ActualAmount { get; set; }
 
     /// <summary>
-    /// 报价状态（0=草稿，1=已发送，2=已接受，3=已拒绝，4=已过期，5=已作废）
-    /// </summary>
-    public int? QuotationStatus { get; set; }
-
-    /// <summary>
-    /// 关联销售订单编码（报价转订单后回填）
+    /// 关联销售订单编码（报价转订单后回填；选项 TaktSalesOrders/options，DictValue=SalesOrderCode）
     /// </summary>
     public string? SalesOrderCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 报价状态（字典 logistics_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）
+    /// </summary>
+    public int? QuotationStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -254,13 +260,14 @@ public class TaktSalesQuotationCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -270,9 +277,9 @@ public class TaktSalesQuotationCreateDto
     public string SalesQuotationCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户编码
+    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
     /// </summary>
-    [Required(ErrorMessage = "客户编码不能为空")]
+    [Required(ErrorMessage = "客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）不能为空")]
     public string CustomerCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -292,7 +299,7 @@ public class TaktSalesQuotationCreateDto
     public DateTime? ValidUntilDate { get; set; }
 
     /// <summary>
-    /// 销售员（人员代码）
+    /// 销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）
     /// </summary>
     public string? SalesBy { get; set; } = string.Empty;
 
@@ -322,19 +329,24 @@ public class TaktSalesQuotationCreateDto
     public decimal ActualAmount { get; set; }
 
     /// <summary>
-    /// 报价状态（0=草稿，1=已发送，2=已接受，3=已拒绝，4=已过期，5=已作废）
-    /// </summary>
-    public int QuotationStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 关联销售订单编码（报价转订单后回填）
+    /// 关联销售订单编码（报价转订单后回填；选项 TaktSalesOrders/options，DictValue=SalesOrderCode）
     /// </summary>
     public string? SalesOrderCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 报价状态（字典 logistics_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）
+    /// </summary>
+    public int QuotationStatus { get; set; } = 0;
 
     /// <summary>
     /// 销售报价明细列表（主子表关系）（子表，级联保存）
     /// </summary>
     public List<TaktSalesQuotationItemCreateDto>? Items { get; set; }
+
+    /// <summary>
+    /// 销售报价变更记录列表（外键在子表 TaktSalesQuotationChangeLog.SalesQuotationId）（子表，级联保存）
+    /// </summary>
+    public List<TaktSalesQuotationChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -386,9 +398,9 @@ public class TaktSalesQuotationStatusDto
     public long SalesQuotationId { get; set; }
 
     /// <summary>
-    /// 报价状态（0=草稿，1=已发送，2=已接受，3=已拒绝，4=已过期，5=已作废）
+    /// 报价状态（字典 logistics_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）
     /// </summary>
-    [Required(ErrorMessage = "报价状态（0=草稿，1=已发送，2=已接受，3=已拒绝，4=已过期，5=已作废）不能为空")]
+    [Required(ErrorMessage = "报价状态（字典 logistics_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）不能为空")]
     public int QuotationStatus { get; set; } = 0;
 }
 
@@ -412,9 +424,9 @@ public class TaktSalesQuotationTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 销售报价编码（唯一索引）
@@ -422,7 +434,7 @@ public class TaktSalesQuotationTemplateDto
     public string? SalesQuotationCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户编码
+    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
     /// </summary>
     public string? CustomerCode { get; set; } = string.Empty;
 
@@ -432,19 +444,64 @@ public class TaktSalesQuotationTemplateDto
     public string? CustomerName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售员（人员代码）
+    /// 报价日期
+    /// </summary>
+    public DateTime? QuotationDate { get; set; }
+
+    /// <summary>
+    /// 报价有效期至
+    /// </summary>
+    public DateTime? ValidUntilDate { get; set; }
+
+    /// <summary>
+    /// 销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）
     /// </summary>
     public string? SalesBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 报价状态（0=草稿，1=已发送，2=已接受，3=已拒绝，4=已过期，5=已作废）
+    /// 报价总数量（基本单位数量）
+    /// </summary>
+    public decimal? TotalQuantity { get; set; }
+
+    /// <summary>
+    /// 报价总金额
+    /// </summary>
+    public decimal? TotalAmount { get; set; }
+
+    /// <summary>
+    /// 折扣金额
+    /// </summary>
+    public decimal? DiscountAmount { get; set; }
+
+    /// <summary>
+    /// 税费
+    /// </summary>
+    public decimal? TaxAmount { get; set; }
+
+    /// <summary>
+    /// 报价实付金额
+    /// </summary>
+    public decimal? ActualAmount { get; set; }
+
+    /// <summary>
+    /// 关联销售订单编码（报价转订单后回填；选项 TaktSalesOrders/options，DictValue=SalesOrderCode）
+    /// </summary>
+    public string? SalesOrderCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 报价状态（字典 logistics_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）
     /// </summary>
     public int? QuotationStatus { get; set; }
 
     /// <summary>
-    /// 关联销售订单编码（报价转订单后回填）
+    /// 销售报价明细列表（主子表关系）（子表，级联保存）
     /// </summary>
-    public string? SalesOrderCode { get; set; } = string.Empty;
+    public List<TaktSalesQuotationItemCreateDto>? Items { get; set; }
+
+    /// <summary>
+    /// 销售报价变更记录列表（外键在子表 TaktSalesQuotationChangeLog.SalesQuotationId）（子表，级联保存）
+    /// </summary>
+    public List<TaktSalesQuotationChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -474,14 +531,14 @@ public class TaktSalesQuotationImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 销售报价编码（唯一索引）
@@ -489,7 +546,7 @@ public class TaktSalesQuotationImportDto
     public string? SalesQuotationCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户编码
+    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
     /// </summary>
     public string? CustomerCode { get; set; } = string.Empty;
 
@@ -499,19 +556,64 @@ public class TaktSalesQuotationImportDto
     public string? CustomerName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售员（人员代码）
+    /// 报价日期
+    /// </summary>
+    public DateTime? QuotationDate { get; set; }
+
+    /// <summary>
+    /// 报价有效期至
+    /// </summary>
+    public DateTime? ValidUntilDate { get; set; }
+
+    /// <summary>
+    /// 销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）
     /// </summary>
     public string? SalesBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 报价状态（0=草稿，1=已发送，2=已接受，3=已拒绝，4=已过期，5=已作废）
+    /// 报价总数量（基本单位数量）
+    /// </summary>
+    public decimal? TotalQuantity { get; set; }
+
+    /// <summary>
+    /// 报价总金额
+    /// </summary>
+    public decimal? TotalAmount { get; set; }
+
+    /// <summary>
+    /// 折扣金额
+    /// </summary>
+    public decimal? DiscountAmount { get; set; }
+
+    /// <summary>
+    /// 税费
+    /// </summary>
+    public decimal? TaxAmount { get; set; }
+
+    /// <summary>
+    /// 报价实付金额
+    /// </summary>
+    public decimal? ActualAmount { get; set; }
+
+    /// <summary>
+    /// 关联销售订单编码（报价转订单后回填；选项 TaktSalesOrders/options，DictValue=SalesOrderCode）
+    /// </summary>
+    public string? SalesOrderCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 报价状态（字典 logistics_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）
     /// </summary>
     public int? QuotationStatus { get; set; }
 
     /// <summary>
-    /// 关联销售订单编码（报价转订单后回填）
+    /// 销售报价明细列表（主子表关系）（子表，级联保存）
     /// </summary>
-    public string? SalesOrderCode { get; set; } = string.Empty;
+    public List<TaktSalesQuotationItemCreateDto>? Items { get; set; }
+
+    /// <summary>
+    /// 销售报价变更记录列表（外键在子表 TaktSalesQuotationChangeLog.SalesQuotationId）（子表，级联保存）
+    /// </summary>
+    public List<TaktSalesQuotationChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -547,7 +649,7 @@ public class TaktSalesQuotationExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -557,7 +659,7 @@ public class TaktSalesQuotationExportDto
     public string SalesQuotationCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户编码
+    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
     /// </summary>
     public string CustomerCode { get; set; } = string.Empty;
 
@@ -577,7 +679,7 @@ public class TaktSalesQuotationExportDto
     public DateTime? ValidUntilDate { get; set; }
 
     /// <summary>
-    /// 销售员（人员代码）
+    /// 销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）
     /// </summary>
     public string? SalesBy { get; set; } = string.Empty;
 
@@ -607,14 +709,14 @@ public class TaktSalesQuotationExportDto
     public decimal ActualAmount { get; set; }
 
     /// <summary>
-    /// 报价状态（0=草稿，1=已发送，2=已接受，3=已拒绝，4=已过期，5=已作废）
-    /// </summary>
-    public int QuotationStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 关联销售订单编码（报价转订单后回填）
+    /// 关联销售订单编码（报价转订单后回填；选项 TaktSalesOrders/options，DictValue=SalesOrderCode）
     /// </summary>
     public string? SalesOrderCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 报价状态（字典 logistics_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）
+    /// </summary>
+    public int QuotationStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

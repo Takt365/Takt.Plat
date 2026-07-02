@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/accounting/financial
 // 文件名称：asset.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：accounting/financial 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -39,22 +39,12 @@ export interface Asset extends CompanyDtoBase {
   assetName: string;
 
   /**
-   * 资产规格
-   */
-  assetSpec?: string;
-
-  /**
-   * 资产描述
-   */
-  assetDesc?: string;
-
-  /**
-   * 资产大类
+   * 资产分类（字典 accounting_asset_category）
    */
   assetCategory: string;
 
   /**
-   * 资产类型
+   * 资产类型（字典 accounting_asset_type）
    */
   assetType: string;
 
@@ -134,7 +124,7 @@ export interface Asset extends CompanyDtoBase {
   expectedLifeMonths: number;
 
   /**
-   * 折旧方法
+   * 折旧方法（字典 accounting_depreciation_method）
    */
   depreciationMethod: number;
 
@@ -144,24 +134,19 @@ export interface Asset extends CompanyDtoBase {
   monthlyDepreciation: number;
 
   /**
-   * 关联供应商ID
-   */
-  relatedSupplierId?: string;
-
-  /**
-   * 关联供应商
-   */
-  relatedSupplierName?: string;
-
-  /**
-   * 关联生产线
+   * 关联工厂
    */
   relatedPlant?: string;
 
   /**
-   * 资产状态
+   * 资产状态（字典 accounting_asset_status）
    */
   assetStatus: number;
+
+  /**
+   * 固定资产变更记录列表（外键在子表 TaktAssetChangeLog.AssetId） （子表：TaktAssetChangeLog）
+   */
+  changeLogs?: AssetChangeLog[];
 
 }
 
@@ -194,22 +179,12 @@ export interface AssetQuery extends TaktPagedQuery {
   assetName?: string;
 
   /**
-   * 资产规格
-   */
-  assetSpec?: string;
-
-  /**
-   * 资产描述
-   */
-  assetDesc?: string;
-
-  /**
-   * 资产大类
+   * 资产分类（字典 accounting_asset_category）
    */
   assetCategory?: string;
 
   /**
-   * 资产类型
+   * 资产类型（字典 accounting_asset_type）
    */
   assetType?: string;
 
@@ -309,7 +284,7 @@ export interface AssetQuery extends TaktPagedQuery {
   expectedLifeMonths?: number;
 
   /**
-   * 折旧方法
+   * 折旧方法（字典 accounting_depreciation_method）
    */
   depreciationMethod?: number;
 
@@ -319,22 +294,12 @@ export interface AssetQuery extends TaktPagedQuery {
   monthlyDepreciation?: number;
 
   /**
-   * 关联供应商ID
-   */
-  relatedSupplierId?: string;
-
-  /**
-   * 关联供应商
-   */
-  relatedSupplierName?: string;
-
-  /**
-   * 关联生产线
+   * 关联工厂
    */
   relatedPlant?: string;
 
   /**
-   * 资产状态
+   * 资产状态（字典 accounting_asset_status）
    */
   assetStatus?: number;
 
@@ -351,7 +316,7 @@ export interface AssetQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -378,7 +343,7 @@ export interface AssetCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -393,22 +358,12 @@ export interface AssetCreate {
   assetName: string;
 
   /**
-   * 资产规格
-   */
-  assetSpec?: string;
-
-  /**
-   * 资产描述
-   */
-  assetDesc?: string;
-
-  /**
-   * 资产大类
+   * 资产分类（字典 accounting_asset_category）
    */
   assetCategory: string;
 
   /**
-   * 资产类型
+   * 资产类型（字典 accounting_asset_type）
    */
   assetType: string;
 
@@ -488,7 +443,7 @@ export interface AssetCreate {
   expectedLifeMonths: number;
 
   /**
-   * 折旧方法
+   * 折旧方法（字典 accounting_depreciation_method）
    */
   depreciationMethod: number;
 
@@ -498,29 +453,24 @@ export interface AssetCreate {
   monthlyDepreciation: number;
 
   /**
-   * 关联供应商ID
-   */
-  relatedSupplierId?: string;
-
-  /**
-   * 关联供应商
-   */
-  relatedSupplierName?: string;
-
-  /**
-   * 关联生产线
+   * 关联工厂
    */
   relatedPlant?: string;
 
   /**
-   * 资产状态
+   * 资产状态（字典 accounting_asset_status）
    */
   assetStatus: number;
 
   /**
+   * 固定资产变更记录列表（外键在子表 TaktAssetChangeLog.AssetId）（子表，级联保存）
+   */
+  changeLogs?: AssetChangeLogCreate[];
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -557,7 +507,7 @@ export interface AssetStatus {
   assetId: string;
 
   /**
-   * 资产状态
+   * 资产状态（字典 accounting_asset_status）
    */
   assetStatus: number;
 
@@ -591,24 +541,29 @@ export interface AssetTemplate {
   assetName?: string;
 
   /**
-   * 资产规格
-   */
-  assetSpec?: string;
-
-  /**
-   * 资产描述
-   */
-  assetDesc?: string;
-
-  /**
-   * 资产大类
+   * 资产分类（字典 accounting_asset_category）
    */
   assetCategory?: string;
 
   /**
-   * 资产类型
+   * 资产类型（字典 accounting_asset_type）
    */
   assetType?: string;
+
+  /**
+   * 资产原值
+   */
+  assetOriginalValue?: number;
+
+  /**
+   * 资产净值
+   */
+  assetNetValue?: number;
+
+  /**
+   * 累计折旧
+   */
+  accumulatedDepreciation?: number;
 
   /**
    * 成本中心ID
@@ -646,9 +601,59 @@ export interface AssetTemplate {
   assetLocation?: string;
 
   /**
+   * 购买日期
+   */
+  purchaseDate?: string;
+
+  /**
+   * 启用日期
+   */
+  startDate?: string;
+
+  /**
+   * 报废日期
+   */
+  scrapDate?: string;
+
+  /**
+   * 处置日期
+   */
+  disposalDate?: string;
+
+  /**
+   * 预计使用月数
+   */
+  expectedLifeMonths?: number;
+
+  /**
+   * 折旧方法（字典 accounting_depreciation_method）
+   */
+  depreciationMethod?: number;
+
+  /**
+   * 每月折旧金额
+   */
+  monthlyDepreciation?: number;
+
+  /**
+   * 关联工厂
+   */
+  relatedPlant?: string;
+
+  /**
+   * 资产状态（字典 accounting_asset_status）
+   */
+  assetStatus?: number;
+
+  /**
+   * 固定资产变更记录列表（外键在子表 TaktAssetChangeLog.AssetId）（子表，级联保存）
+   */
+  changeLogs?: AssetChangeLogCreate[];
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -675,7 +680,7 @@ export interface AssetImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -690,24 +695,29 @@ export interface AssetImport {
   assetName?: string;
 
   /**
-   * 资产规格
-   */
-  assetSpec?: string;
-
-  /**
-   * 资产描述
-   */
-  assetDesc?: string;
-
-  /**
-   * 资产大类
+   * 资产分类（字典 accounting_asset_category）
    */
   assetCategory?: string;
 
   /**
-   * 资产类型
+   * 资产类型（字典 accounting_asset_type）
    */
   assetType?: string;
+
+  /**
+   * 资产原值
+   */
+  assetOriginalValue?: number;
+
+  /**
+   * 资产净值
+   */
+  assetNetValue?: number;
+
+  /**
+   * 累计折旧
+   */
+  accumulatedDepreciation?: number;
 
   /**
    * 成本中心ID
@@ -745,9 +755,59 @@ export interface AssetImport {
   assetLocation?: string;
 
   /**
+   * 购买日期
+   */
+  purchaseDate?: string;
+
+  /**
+   * 启用日期
+   */
+  startDate?: string;
+
+  /**
+   * 报废日期
+   */
+  scrapDate?: string;
+
+  /**
+   * 处置日期
+   */
+  disposalDate?: string;
+
+  /**
+   * 预计使用月数
+   */
+  expectedLifeMonths?: number;
+
+  /**
+   * 折旧方法（字典 accounting_depreciation_method）
+   */
+  depreciationMethod?: number;
+
+  /**
+   * 每月折旧金额
+   */
+  monthlyDepreciation?: number;
+
+  /**
+   * 关联工厂
+   */
+  relatedPlant?: string;
+
+  /**
+   * 资产状态（字典 accounting_asset_status）
+   */
+  assetStatus?: number;
+
+  /**
+   * 固定资产变更记录列表（外键在子表 TaktAssetChangeLog.AssetId）（子表，级联保存）
+   */
+  changeLogs?: AssetChangeLogCreate[];
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -784,22 +844,12 @@ export interface AssetExport {
   assetName: string;
 
   /**
-   * 资产规格
-   */
-  assetSpec?: string;
-
-  /**
-   * 资产描述
-   */
-  assetDesc?: string;
-
-  /**
-   * 资产大类
+   * 资产分类（字典 accounting_asset_category）
    */
   assetCategory: string;
 
   /**
-   * 资产类型
+   * 资产类型（字典 accounting_asset_type）
    */
   assetType: string;
 
@@ -879,7 +929,7 @@ export interface AssetExport {
   expectedLifeMonths: number;
 
   /**
-   * 折旧方法
+   * 折旧方法（字典 accounting_depreciation_method）
    */
   depreciationMethod: number;
 
@@ -889,29 +939,19 @@ export interface AssetExport {
   monthlyDepreciation: number;
 
   /**
-   * 关联供应商ID
-   */
-  relatedSupplierId?: string;
-
-  /**
-   * 关联供应商
-   */
-  relatedSupplierName?: string;
-
-  /**
-   * 关联生产线
+   * 关联工厂
    */
   relatedPlant?: string;
 
   /**
-   * 资产状态
+   * 资产状态（字典 accounting_asset_status）
    */
   assetStatus: number;
 
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注

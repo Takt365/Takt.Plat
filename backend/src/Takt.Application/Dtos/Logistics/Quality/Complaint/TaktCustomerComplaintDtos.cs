@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Complaint
 // 文件名称：TaktCustomerComplaintDtos.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：CustomerComplaint 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktCustomerComplaint 生成，请按需审阅）
 // 
@@ -41,7 +41,7 @@ public class TaktCustomerComplaintDto : TaktCompanyDtoBase
     public string CustomerComplaintCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户ID（序列化为string以避免Javascript精度问题）
+    /// 客户 ID（关联 TaktCustomer.Id，选项 TaktCustomers/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long CustomerId { get; set; }
@@ -52,7 +52,7 @@ public class TaktCustomerComplaintDto : TaktCompanyDtoBase
     public string CustomerName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户编码
+    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
     /// </summary>
     public string? CustomerCode { get; set; } = string.Empty;
 
@@ -62,22 +62,22 @@ public class TaktCustomerComplaintDto : TaktCompanyDtoBase
     public DateTime ComplaintDate { get; set; }
 
     /// <summary>
-    /// 投诉方式（0=电话，1=邮件，2=传真，3=现场，4=其他）
+    /// 投诉方式（字典 logistics_quality_complaint_method；0=电话，1=邮件，2=传真，3=现场，4=其他）
     /// </summary>
     public int ComplaintMethod { get; set; } = 0;
 
     /// <summary>
-    /// 投诉类型（0=质量，1=交期，2=服务，3=价格，4=其他）
+    /// 投诉类型（字典 logistics_quality_complaint_type）
     /// </summary>
     public int ComplaintType { get; set; } = 0;
 
     /// <summary>
-    /// 投诉等级（0=一般，1=重要，2=紧急，3=严重）
+    /// 投诉等级（字典 logistics_quality_complaint_level）
     /// </summary>
     public int ComplaintLevel { get; set; } = 0;
 
     /// <summary>
-    /// 责任部门ID（序列化为string以避免Javascript精度问题）
+    /// 责任部门 ID（关联 TaktDept.Id，选项 TaktDepts/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ResponsibleDeptId { get; set; }
@@ -88,7 +88,7 @@ public class TaktCustomerComplaintDto : TaktCompanyDtoBase
     public string? ResponsibleDeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 责任人ID（序列化为string以避免Javascript精度问题）
+    /// 责任人 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ResponsiblePersonId { get; set; }
@@ -109,11 +109,6 @@ public class TaktCustomerComplaintDto : TaktCompanyDtoBase
     public DateTime? ActualReplyDate { get; set; }
 
     /// <summary>
-    /// 客诉状态（0=待处理，1=处理中，2=已回复，3=已关闭，4=已驳回）
-    /// </summary>
-    public int ComplaintStatus { get; set; } = 0;
-
-    /// <summary>
     /// 客诉描述
     /// </summary>
     public string ComplaintDescription { get; set; } = string.Empty;
@@ -124,19 +119,29 @@ public class TaktCustomerComplaintDto : TaktCompanyDtoBase
     public string? HandlingResult { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户满意度（0=不满意，1=一般，2=满意，3=非常满意）
+    /// 客户满意度（字典 logistics_quality_customer_satisfaction）
     /// </summary>
     public int? CustomerSatisfaction { get; set; }
 
     /// <summary>
-    /// 关联工厂
+    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? Attachments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options，DictValue=PlantCode）
+    /// </summary>
+    public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
+
+    /// <summary>
+    /// 客诉状态（字典 logistics_quality_complaint_status）
+    /// </summary>
+    public int ComplaintStatus { get; set; } = 0;
 
     /// <summary>
     /// 客诉明细列表（主子表关系）
@@ -172,7 +177,7 @@ public class TaktCustomerComplaintQueryDto : TaktPagedQuery
     public string? CustomerComplaintCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户ID（序列化为string以避免Javascript精度问题）
+    /// 客户 ID（关联 TaktCustomer.Id，选项 TaktCustomers/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CustomerId { get; set; }
@@ -183,7 +188,7 @@ public class TaktCustomerComplaintQueryDto : TaktPagedQuery
     public string? CustomerName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户编码
+    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
     /// </summary>
     public string? CustomerCode { get; set; } = string.Empty;
 
@@ -198,22 +203,22 @@ public class TaktCustomerComplaintQueryDto : TaktPagedQuery
     public DateTime? ComplaintDateEnd { get; set; }
 
     /// <summary>
-    /// 投诉方式（0=电话，1=邮件，2=传真，3=现场，4=其他）
+    /// 投诉方式（字典 logistics_quality_complaint_method；0=电话，1=邮件，2=传真，3=现场，4=其他）
     /// </summary>
     public int? ComplaintMethod { get; set; }
 
     /// <summary>
-    /// 投诉类型（0=质量，1=交期，2=服务，3=价格，4=其他）
+    /// 投诉类型（字典 logistics_quality_complaint_type）
     /// </summary>
     public int? ComplaintType { get; set; }
 
     /// <summary>
-    /// 投诉等级（0=一般，1=重要，2=紧急，3=严重）
+    /// 投诉等级（字典 logistics_quality_complaint_level）
     /// </summary>
     public int? ComplaintLevel { get; set; }
 
     /// <summary>
-    /// 责任部门ID（序列化为string以避免Javascript精度问题）
+    /// 责任部门 ID（关联 TaktDept.Id，选项 TaktDepts/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ResponsibleDeptId { get; set; }
@@ -224,7 +229,7 @@ public class TaktCustomerComplaintQueryDto : TaktPagedQuery
     public string? ResponsibleDeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 责任人ID（序列化为string以避免Javascript精度问题）
+    /// 责任人 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ResponsiblePersonId { get; set; }
@@ -255,11 +260,6 @@ public class TaktCustomerComplaintQueryDto : TaktPagedQuery
     public DateTime? ActualReplyDateEnd { get; set; }
 
     /// <summary>
-    /// 客诉状态（0=待处理，1=处理中，2=已回复，3=已关闭，4=已驳回）
-    /// </summary>
-    public int? ComplaintStatus { get; set; }
-
-    /// <summary>
     /// 客诉描述
     /// </summary>
     public string? ComplaintDescription { get; set; } = string.Empty;
@@ -270,12 +270,17 @@ public class TaktCustomerComplaintQueryDto : TaktPagedQuery
     public string? HandlingResult { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户满意度（0=不满意，1=一般，2=满意，3=非常满意）
+    /// 客户满意度（字典 logistics_quality_customer_satisfaction）
     /// </summary>
     public int? CustomerSatisfaction { get; set; }
 
     /// <summary>
-    /// 关联工厂
+    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// </summary>
+    public string? Attachments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string? RelatedPlant { get; set; } = string.Empty;
 
@@ -283,6 +288,11 @@ public class TaktCustomerComplaintQueryDto : TaktPagedQuery
     /// 排序号（越小越靠前）
     /// </summary>
     public int? SortOrder { get; set; }
+
+    /// <summary>
+    /// 客诉状态（字典 logistics_quality_complaint_status）
+    /// </summary>
+    public int? ComplaintStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -325,7 +335,7 @@ public class TaktCustomerComplaintCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -336,7 +346,7 @@ public class TaktCustomerComplaintCreateDto
     public string CustomerComplaintCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户ID（序列化为string以避免Javascript精度问题）
+    /// 客户 ID（关联 TaktCustomer.Id，选项 TaktCustomers/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long CustomerId { get; set; }
@@ -348,7 +358,7 @@ public class TaktCustomerComplaintCreateDto
     public string CustomerName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户编码
+    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
     /// </summary>
     public string? CustomerCode { get; set; } = string.Empty;
 
@@ -358,22 +368,22 @@ public class TaktCustomerComplaintCreateDto
     public DateTime ComplaintDate { get; set; }
 
     /// <summary>
-    /// 投诉方式（0=电话，1=邮件，2=传真，3=现场，4=其他）
+    /// 投诉方式（字典 logistics_quality_complaint_method；0=电话，1=邮件，2=传真，3=现场，4=其他）
     /// </summary>
     public int ComplaintMethod { get; set; } = 0;
 
     /// <summary>
-    /// 投诉类型（0=质量，1=交期，2=服务，3=价格，4=其他）
+    /// 投诉类型（字典 logistics_quality_complaint_type）
     /// </summary>
     public int ComplaintType { get; set; } = 0;
 
     /// <summary>
-    /// 投诉等级（0=一般，1=重要，2=紧急，3=严重）
+    /// 投诉等级（字典 logistics_quality_complaint_level）
     /// </summary>
     public int ComplaintLevel { get; set; } = 0;
 
     /// <summary>
-    /// 责任部门ID（序列化为string以避免Javascript精度问题）
+    /// 责任部门 ID（关联 TaktDept.Id，选项 TaktDepts/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ResponsibleDeptId { get; set; }
@@ -384,7 +394,7 @@ public class TaktCustomerComplaintCreateDto
     public string? ResponsibleDeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 责任人ID（序列化为string以避免Javascript精度问题）
+    /// 责任人 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ResponsiblePersonId { get; set; }
@@ -405,11 +415,6 @@ public class TaktCustomerComplaintCreateDto
     public DateTime? ActualReplyDate { get; set; }
 
     /// <summary>
-    /// 客诉状态（0=待处理，1=处理中，2=已回复，3=已关闭，4=已驳回）
-    /// </summary>
-    public int ComplaintStatus { get; set; } = 0;
-
-    /// <summary>
     /// 客诉描述
     /// </summary>
     [Required(ErrorMessage = "客诉描述不能为空")]
@@ -421,14 +426,25 @@ public class TaktCustomerComplaintCreateDto
     public string? HandlingResult { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户满意度（0=不满意，1=一般，2=满意，3=非常满意）
+    /// 客户满意度（字典 logistics_quality_customer_satisfaction）
     /// </summary>
     public int? CustomerSatisfaction { get; set; }
 
     /// <summary>
-    /// 关联工厂
+    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? Attachments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options，DictValue=PlantCode）
+    /// </summary>
+    [Required(ErrorMessage = "关联工厂（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
+    public string RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 客诉状态（字典 logistics_quality_complaint_status）
+    /// </summary>
+    public int ComplaintStatus { get; set; } = 0;
 
     /// <summary>
     /// 客诉明细列表（主子表关系）（子表，级联保存）
@@ -485,9 +501,9 @@ public class TaktCustomerComplaintStatusDto
     public long CustomerComplaintId { get; set; }
 
     /// <summary>
-    /// 客诉状态（0=待处理，1=处理中，2=已回复，3=已关闭，4=已驳回）
+    /// 客诉状态（字典 logistics_quality_complaint_status）
     /// </summary>
-    [Required(ErrorMessage = "客诉状态（0=待处理，1=处理中，2=已回复，3=已关闭，4=已驳回）不能为空")]
+    [Required(ErrorMessage = "客诉状态（字典 logistics_quality_complaint_status）不能为空")]
     public int ComplaintStatus { get; set; } = 0;
 }
 
@@ -540,7 +556,7 @@ public class TaktCustomerComplaintTemplateDto
     public string? CustomerComplaintCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户ID（序列化为string以避免Javascript精度问题）
+    /// 客户 ID（关联 TaktCustomer.Id，选项 TaktCustomers/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CustomerId { get; set; }
@@ -551,27 +567,32 @@ public class TaktCustomerComplaintTemplateDto
     public string? CustomerName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户编码
+    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
     /// </summary>
     public string? CustomerCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 投诉方式（0=电话，1=邮件，2=传真，3=现场，4=其他）
+    /// 投诉日期
+    /// </summary>
+    public DateTime? ComplaintDate { get; set; }
+
+    /// <summary>
+    /// 投诉方式（字典 logistics_quality_complaint_method；0=电话，1=邮件，2=传真，3=现场，4=其他）
     /// </summary>
     public int? ComplaintMethod { get; set; }
 
     /// <summary>
-    /// 投诉类型（0=质量，1=交期，2=服务，3=价格，4=其他）
+    /// 投诉类型（字典 logistics_quality_complaint_type）
     /// </summary>
     public int? ComplaintType { get; set; }
 
     /// <summary>
-    /// 投诉等级（0=一般，1=重要，2=紧急，3=严重）
+    /// 投诉等级（字典 logistics_quality_complaint_level）
     /// </summary>
     public int? ComplaintLevel { get; set; }
 
     /// <summary>
-    /// 责任部门ID（序列化为string以避免Javascript精度问题）
+    /// 责任部门 ID（关联 TaktDept.Id，选项 TaktDepts/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ResponsibleDeptId { get; set; }
@@ -582,7 +603,7 @@ public class TaktCustomerComplaintTemplateDto
     public string? ResponsibleDeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 责任人ID（序列化为string以避免Javascript精度问题）
+    /// 责任人 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ResponsiblePersonId { get; set; }
@@ -593,9 +614,49 @@ public class TaktCustomerComplaintTemplateDto
     public string? ResponsiblePersonName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客诉状态（0=待处理，1=处理中，2=已回复，3=已关闭，4=已驳回）
+    /// 要求回复日期
+    /// </summary>
+    public DateTime? RequiredReplyDate { get; set; }
+
+    /// <summary>
+    /// 实际回复日期
+    /// </summary>
+    public DateTime? ActualReplyDate { get; set; }
+
+    /// <summary>
+    /// 客诉描述
+    /// </summary>
+    public string? ComplaintDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 处理结果/回复内容
+    /// </summary>
+    public string? HandlingResult { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 客户满意度（字典 logistics_quality_customer_satisfaction）
+    /// </summary>
+    public int? CustomerSatisfaction { get; set; }
+
+    /// <summary>
+    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// </summary>
+    public string? Attachments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options，DictValue=PlantCode）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 客诉状态（字典 logistics_quality_complaint_status）
     /// </summary>
     public int? ComplaintStatus { get; set; }
+
+    /// <summary>
+    /// 客诉明细列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktCustomerComplaintItemCreateDto>? Items { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -625,7 +686,7 @@ public class TaktCustomerComplaintImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -635,7 +696,7 @@ public class TaktCustomerComplaintImportDto
     public string? CustomerComplaintCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户ID（序列化为string以避免Javascript精度问题）
+    /// 客户 ID（关联 TaktCustomer.Id，选项 TaktCustomers/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CustomerId { get; set; }
@@ -646,27 +707,32 @@ public class TaktCustomerComplaintImportDto
     public string? CustomerName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户编码
+    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
     /// </summary>
     public string? CustomerCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 投诉方式（0=电话，1=邮件，2=传真，3=现场，4=其他）
+    /// 投诉日期
+    /// </summary>
+    public DateTime? ComplaintDate { get; set; }
+
+    /// <summary>
+    /// 投诉方式（字典 logistics_quality_complaint_method；0=电话，1=邮件，2=传真，3=现场，4=其他）
     /// </summary>
     public int? ComplaintMethod { get; set; }
 
     /// <summary>
-    /// 投诉类型（0=质量，1=交期，2=服务，3=价格，4=其他）
+    /// 投诉类型（字典 logistics_quality_complaint_type）
     /// </summary>
     public int? ComplaintType { get; set; }
 
     /// <summary>
-    /// 投诉等级（0=一般，1=重要，2=紧急，3=严重）
+    /// 投诉等级（字典 logistics_quality_complaint_level）
     /// </summary>
     public int? ComplaintLevel { get; set; }
 
     /// <summary>
-    /// 责任部门ID（序列化为string以避免Javascript精度问题）
+    /// 责任部门 ID（关联 TaktDept.Id，选项 TaktDepts/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ResponsibleDeptId { get; set; }
@@ -677,7 +743,7 @@ public class TaktCustomerComplaintImportDto
     public string? ResponsibleDeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 责任人ID（序列化为string以避免Javascript精度问题）
+    /// 责任人 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ResponsiblePersonId { get; set; }
@@ -688,9 +754,49 @@ public class TaktCustomerComplaintImportDto
     public string? ResponsiblePersonName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客诉状态（0=待处理，1=处理中，2=已回复，3=已关闭，4=已驳回）
+    /// 要求回复日期
+    /// </summary>
+    public DateTime? RequiredReplyDate { get; set; }
+
+    /// <summary>
+    /// 实际回复日期
+    /// </summary>
+    public DateTime? ActualReplyDate { get; set; }
+
+    /// <summary>
+    /// 客诉描述
+    /// </summary>
+    public string? ComplaintDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 处理结果/回复内容
+    /// </summary>
+    public string? HandlingResult { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 客户满意度（字典 logistics_quality_customer_satisfaction）
+    /// </summary>
+    public int? CustomerSatisfaction { get; set; }
+
+    /// <summary>
+    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// </summary>
+    public string? Attachments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options，DictValue=PlantCode）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 客诉状态（字典 logistics_quality_complaint_status）
     /// </summary>
     public int? ComplaintStatus { get; set; }
+
+    /// <summary>
+    /// 客诉明细列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktCustomerComplaintItemCreateDto>? Items { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -731,7 +837,7 @@ public class TaktCustomerComplaintExportDto
     public string CustomerComplaintCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户ID（序列化为string以避免Javascript精度问题）
+    /// 客户 ID（关联 TaktCustomer.Id，选项 TaktCustomers/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long CustomerId { get; set; }
@@ -742,7 +848,7 @@ public class TaktCustomerComplaintExportDto
     public string CustomerName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户编码
+    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
     /// </summary>
     public string? CustomerCode { get; set; } = string.Empty;
 
@@ -752,22 +858,22 @@ public class TaktCustomerComplaintExportDto
     public DateTime ComplaintDate { get; set; }
 
     /// <summary>
-    /// 投诉方式（0=电话，1=邮件，2=传真，3=现场，4=其他）
+    /// 投诉方式（字典 logistics_quality_complaint_method；0=电话，1=邮件，2=传真，3=现场，4=其他）
     /// </summary>
     public int ComplaintMethod { get; set; } = 0;
 
     /// <summary>
-    /// 投诉类型（0=质量，1=交期，2=服务，3=价格，4=其他）
+    /// 投诉类型（字典 logistics_quality_complaint_type）
     /// </summary>
     public int ComplaintType { get; set; } = 0;
 
     /// <summary>
-    /// 投诉等级（0=一般，1=重要，2=紧急，3=严重）
+    /// 投诉等级（字典 logistics_quality_complaint_level）
     /// </summary>
     public int ComplaintLevel { get; set; } = 0;
 
     /// <summary>
-    /// 责任部门ID（序列化为string以避免Javascript精度问题）
+    /// 责任部门 ID（关联 TaktDept.Id，选项 TaktDepts/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ResponsibleDeptId { get; set; }
@@ -778,7 +884,7 @@ public class TaktCustomerComplaintExportDto
     public string? ResponsibleDeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 责任人ID（序列化为string以避免Javascript精度问题）
+    /// 责任人 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ResponsiblePersonId { get; set; }
@@ -799,11 +905,6 @@ public class TaktCustomerComplaintExportDto
     public DateTime? ActualReplyDate { get; set; }
 
     /// <summary>
-    /// 客诉状态（0=待处理，1=处理中，2=已回复，3=已关闭，4=已驳回）
-    /// </summary>
-    public int ComplaintStatus { get; set; } = 0;
-
-    /// <summary>
     /// 客诉描述
     /// </summary>
     public string ComplaintDescription { get; set; } = string.Empty;
@@ -814,19 +915,29 @@ public class TaktCustomerComplaintExportDto
     public string? HandlingResult { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户满意度（0=不满意，1=一般，2=满意，3=非常满意）
+    /// 客户满意度（字典 logistics_quality_customer_satisfaction）
     /// </summary>
     public int? CustomerSatisfaction { get; set; }
 
     /// <summary>
-    /// 关联工厂
+    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? Attachments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options，DictValue=PlantCode）
+    /// </summary>
+    public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
+
+    /// <summary>
+    /// 客诉状态（字典 logistics_quality_complaint_status）
+    /// </summary>
+    public int ComplaintStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

@@ -1,8 +1,8 @@
-﻿// ========================================
+// ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Compensation
 // 文件名称：TaktEmpSalaryDtos.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：EmpSalary 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktEmpSalary 生成，请按需审阅）
 // 
@@ -97,7 +97,7 @@ public class TaktEmpSalaryDto : TaktCompanyDtoBase
     /// <summary>
     /// 授予股数/份数（股权激励定薪时使用）
     /// </summary>
-    public decimal ShareCount { get; set; }
+    public decimal EmpSalaryShareCount { get; set; }
 
     /// <summary>
     /// 生效日期
@@ -105,14 +105,14 @@ public class TaktEmpSalaryDto : TaktCompanyDtoBase
     public DateTime EffectiveDate { get; set; }
 
     /// <summary>
+    /// 关联工厂
+    /// </summary>
+    public string RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
     /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int EmpSalaryStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
 
 }
 
@@ -183,7 +183,7 @@ public class TaktEmpSalaryQueryDto : TaktPagedQuery
     /// <summary>
     /// 授予股数/份数（股权激励定薪时使用）
     /// </summary>
-    public decimal? ShareCount { get; set; }
+    public decimal? EmpSalaryShareCount { get; set; }
 
     /// <summary>
     /// 生效日期（范围查询-开始）
@@ -196,14 +196,14 @@ public class TaktEmpSalaryQueryDto : TaktPagedQuery
     public DateTime? EffectiveDateEnd { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
-    /// </summary>
-    public int? EmpSalaryStatus { get; set; }
-
-    /// <summary>
     /// 关联工厂
     /// </summary>
     public string? RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 状态（字典 sys_normal_disable_status）
+    /// </summary>
+    public int? EmpSalaryStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -246,7 +246,7 @@ public class TaktEmpSalaryCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -298,7 +298,7 @@ public class TaktEmpSalaryCreateDto
     /// <summary>
     /// 授予股数/份数（股权激励定薪时使用）
     /// </summary>
-    public decimal ShareCount { get; set; }
+    public decimal EmpSalaryShareCount { get; set; }
 
     /// <summary>
     /// 生效日期
@@ -306,14 +306,15 @@ public class TaktEmpSalaryCreateDto
     public DateTime EffectiveDate { get; set; }
 
     /// <summary>
+    /// 关联工厂
+    /// </summary>
+    [Required(ErrorMessage = "关联工厂不能为空")]
+    public string RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
     /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int EmpSalaryStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON
@@ -414,20 +415,45 @@ public class TaktEmpSalaryTemplateDto
     public long? PayScaleId { get; set; }
 
     /// <summary>
+    /// 基本工资（元）
+    /// </summary>
+    public decimal? BaseSalary { get; set; }
+
+    /// <summary>
+    /// 岗位工资（元）
+    /// </summary>
+    public decimal? PositionSalary { get; set; }
+
+    /// <summary>
+    /// 津贴合计（元）
+    /// </summary>
+    public decimal? AllowanceTotal { get; set; }
+
+    /// <summary>
     /// 关联薪资项目 ID（如股权激励项，对应 TaktSalaryItem 中 item_type 为股权激励的记录）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SalaryItemId { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 授予股数/份数（股权激励定薪时使用）
     /// </summary>
-    public int? EmpSalaryStatus { get; set; }
+    public decimal? EmpSalaryShareCount { get; set; }
+
+    /// <summary>
+    /// 生效日期
+    /// </summary>
+    public DateTime? EffectiveDate { get; set; }
 
     /// <summary>
     /// 关联工厂
     /// </summary>
     public string? RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 状态（字典 sys_normal_disable_status）
+    /// </summary>
+    public int? EmpSalaryStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -457,7 +483,7 @@ public class TaktEmpSalaryImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -485,20 +511,45 @@ public class TaktEmpSalaryImportDto
     public long? PayScaleId { get; set; }
 
     /// <summary>
+    /// 基本工资（元）
+    /// </summary>
+    public decimal? BaseSalary { get; set; }
+
+    /// <summary>
+    /// 岗位工资（元）
+    /// </summary>
+    public decimal? PositionSalary { get; set; }
+
+    /// <summary>
+    /// 津贴合计（元）
+    /// </summary>
+    public decimal? AllowanceTotal { get; set; }
+
+    /// <summary>
     /// 关联薪资项目 ID（如股权激励项，对应 TaktSalaryItem 中 item_type 为股权激励的记录）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SalaryItemId { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 授予股数/份数（股权激励定薪时使用）
     /// </summary>
-    public int? EmpSalaryStatus { get; set; }
+    public decimal? EmpSalaryShareCount { get; set; }
+
+    /// <summary>
+    /// 生效日期
+    /// </summary>
+    public DateTime? EffectiveDate { get; set; }
 
     /// <summary>
     /// 关联工厂
     /// </summary>
     public string? RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 状态（字典 sys_normal_disable_status）
+    /// </summary>
+    public int? EmpSalaryStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -580,7 +631,7 @@ public class TaktEmpSalaryExportDto
     /// <summary>
     /// 授予股数/份数（股权激励定薪时使用）
     /// </summary>
-    public decimal ShareCount { get; set; }
+    public decimal EmpSalaryShareCount { get; set; }
 
     /// <summary>
     /// 生效日期
@@ -588,14 +639,14 @@ public class TaktEmpSalaryExportDto
     public DateTime EffectiveDate { get; set; }
 
     /// <summary>
+    /// 关联工厂
+    /// </summary>
+    public string RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
     /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int EmpSalaryStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON

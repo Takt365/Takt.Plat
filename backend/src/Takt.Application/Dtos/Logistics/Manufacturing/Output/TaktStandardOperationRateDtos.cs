@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Output
 // 文件名称：TaktStandardOperationRateDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：StandardOperationRate 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktStandardOperationRate 生成，请按需审阅）
 // 
@@ -36,7 +36,7 @@ public class TaktStandardOperationRateDto : TaktCompanyDtoBase
     public long StandardOperationRateId { get; set; }
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -66,9 +66,15 @@ public class TaktStandardOperationRateDto : TaktCompanyDtoBase
     public DateTime? ExpiryDate { get; set; }
 
     /// <summary>
-    /// 状态
+    /// 状态（字典 sys_normal_disable_status；0=禁用，1=启用）
     /// </summary>
-    public int Status { get; set; } = 0;
+    public int StandardOperationRateStatus { get; set; } = 0;
+
+    /// <summary>
+    /// 标准生产稼动率变更记录列表（外键在子表 TaktStandardOperationRateChangeLog.StandardOperationRateId）
+    /// （子表：TaktStandardOperationRateChangeLog）
+    /// </summary>
+    public List<TaktStandardOperationRateChangeLogDto>? ChangeLogs { get; set; }
 
 }
 
@@ -93,7 +99,7 @@ public class TaktStandardOperationRateQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -133,9 +139,9 @@ public class TaktStandardOperationRateQueryDto : TaktPagedQuery
     public DateTime? ExpiryDateEnd { get; set; }
 
     /// <summary>
-    /// 状态
+    /// 状态（字典 sys_normal_disable_status；0=禁用，1=启用）
     /// </summary>
-    public int? Status { get; set; }
+    public int? StandardOperationRateStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -178,14 +184,14 @@ public class TaktStandardOperationRateCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码不能为空")]
+    [Required(ErrorMessage = "工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -215,9 +221,14 @@ public class TaktStandardOperationRateCreateDto
     public DateTime? ExpiryDate { get; set; }
 
     /// <summary>
-    /// 状态
+    /// 状态（字典 sys_normal_disable_status；0=禁用，1=启用）
     /// </summary>
-    public int Status { get; set; } = 0;
+    public int StandardOperationRateStatus { get; set; } = 0;
+
+    /// <summary>
+    /// 标准生产稼动率变更记录列表（外键在子表 TaktStandardOperationRateChangeLog.StandardOperationRateId）（子表，级联保存）
+    /// </summary>
+    public List<TaktStandardOperationRateChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -269,10 +280,10 @@ public class TaktStandardOperationRateStatusDto
     public long StandardOperationRateId { get; set; }
 
     /// <summary>
-    /// 状态
+    /// 状态（字典 sys_normal_disable_status；0=禁用，1=启用）
     /// </summary>
-    [Required(ErrorMessage = "状态不能为空")]
-    public int Status { get; set; } = 0;
+    [Required(ErrorMessage = "状态（字典 sys_normal_disable_status；0=禁用，1=启用）不能为空")]
+    public int StandardOperationRateStatus { get; set; } = 0;
 }
 
 // ========================================
@@ -295,9 +306,9 @@ public class TaktStandardOperationRateTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 财务年度
@@ -310,9 +321,29 @@ public class TaktStandardOperationRateTemplateDto
     public int? OperationType { get; set; }
 
     /// <summary>
-    /// 状态
+    /// 稼动率（%）
     /// </summary>
-    public int? Status { get; set; }
+    public decimal? OperationRate { get; set; }
+
+    /// <summary>
+    /// 生效日期
+    /// </summary>
+    public DateTime? EffectiveDate { get; set; }
+
+    /// <summary>
+    /// 失效日期
+    /// </summary>
+    public DateTime? ExpiryDate { get; set; }
+
+    /// <summary>
+    /// 状态（字典 sys_normal_disable_status；0=禁用，1=启用）
+    /// </summary>
+    public int? StandardOperationRateStatus { get; set; }
+
+    /// <summary>
+    /// 标准生产稼动率变更记录列表（外键在子表 TaktStandardOperationRateChangeLog.StandardOperationRateId）（子表，级联保存）
+    /// </summary>
+    public List<TaktStandardOperationRateChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -342,14 +373,14 @@ public class TaktStandardOperationRateImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 财务年度
@@ -362,9 +393,29 @@ public class TaktStandardOperationRateImportDto
     public int? OperationType { get; set; }
 
     /// <summary>
-    /// 状态
+    /// 稼动率（%）
     /// </summary>
-    public int? Status { get; set; }
+    public decimal? OperationRate { get; set; }
+
+    /// <summary>
+    /// 生效日期
+    /// </summary>
+    public DateTime? EffectiveDate { get; set; }
+
+    /// <summary>
+    /// 失效日期
+    /// </summary>
+    public DateTime? ExpiryDate { get; set; }
+
+    /// <summary>
+    /// 状态（字典 sys_normal_disable_status；0=禁用，1=启用）
+    /// </summary>
+    public int? StandardOperationRateStatus { get; set; }
+
+    /// <summary>
+    /// 标准生产稼动率变更记录列表（外键在子表 TaktStandardOperationRateChangeLog.StandardOperationRateId）（子表，级联保存）
+    /// </summary>
+    public List<TaktStandardOperationRateChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -400,7 +451,7 @@ public class TaktStandardOperationRateExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -430,9 +481,9 @@ public class TaktStandardOperationRateExportDto
     public DateTime? ExpiryDate { get; set; }
 
     /// <summary>
-    /// 状态
+    /// 状态（字典 sys_normal_disable_status；0=禁用，1=启用）
     /// </summary>
-    public int Status { get; set; } = 0;
+    public int StandardOperationRateStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

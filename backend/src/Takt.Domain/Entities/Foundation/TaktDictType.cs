@@ -12,7 +12,6 @@
 
 using SqlSugar;
 using Takt.Domain.Entities;
-using Takt.Shared.Enums;
 
 namespace Takt.Domain.Entities.Foundation;
 
@@ -26,51 +25,42 @@ namespace Takt.Domain.Entities.Foundation;
 [SugarIndex("ix_dict_type_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
 [SugarIndex("ix_dict_type_code_unique", nameof(TenantCode), OrderByType.Asc, nameof(DictTypeCode), OrderByType.Asc, true)]
 public class TaktDictType : TaktTenantEntityBase
-{
-    /// <summary>
+{    /// <summary>
     /// 字典类型编码（租户内唯一；命名：{领域}_{业务项}_后缀，如 sys_equipment_status、logistics_supplier_category）
     /// </summary>
     [SugarColumn(ColumnName = "dict_type_code", ColumnDescription = "字典类型编码", ColumnDataType = "varchar", Length = 80, IsNullable = false)]
     public string DictTypeCode { get; set; } = string.Empty;
-
     /// <summary>
     /// 字典类型名称（如：订单状态、用户类型）
     /// </summary>
     [SugarColumn(ColumnName = "dict_type_name", ColumnDescription = "字典类型名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
     public string DictTypeName { get; set; } = string.Empty;
-
     /// <summary>
-    /// 数据源（0=表数据，1=SQL脚本）
+    /// 数据源（字典 sys_data_source_type；0=系统表 1=SQL查询）
     /// </summary>
     [SugarColumn(ColumnName = "data_source", ColumnDescription = "数据源", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int DataSource { get; set; } = 0;
-
     /// <summary>
-    /// 动态字典SQL脚本（仅当DataSource=SqlScript时使用）
+    /// SQL脚本（仅当DataSource=SqlScript时使用）
     /// SQL必须返回DictValue和DictLabel列，可选返回ListClass、CssClass、SortOrder
     /// </summary>
-    [SugarColumn(ColumnName = "dict_script", ColumnDescription = "动态字典SQL脚本", ColumnDataType = "nvarchar", Length = -1, IsNullable = true)]
+    [SugarColumn(ColumnName = "dict_script", ColumnDescription = "SQL脚本", ColumnDataType = "nvarchar", Length = -1, IsNullable = true)]
     public string? DictScript { get; set; }
-
+    /// <summary>
+    /// 内置（字典 sys_yes_no_type；0=否 1=是）
+    /// </summary>
+    [SugarColumn(ColumnName = "is_built_in", ColumnDescription = "内置", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int IsBuiltIn { get; set; } = 0;
     /// <summary>
     /// 排序号
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; } = 0;
-
-    /// <summary>
-    /// 是否内置（1=是，0=否）
-    /// 内置字典不允许删除和修改核心字段
-    /// </summary>
-    [SugarColumn(ColumnName = "is_built_in", ColumnDescription = "是否内置", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int IsBuiltIn { get; set; } = 0;
-
     /// <summary>
     /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
     /// </summary>
     [SugarColumn(ColumnName = "dict_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int DictStatus { get; set; } = 1;
-
 
     // ========================================
     // 导航属性区域

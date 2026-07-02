@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/quality/cost
 // 文件名称：assurance-reliability.d.ts
-// 创建时间：2026-06-21
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/cost 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -168,7 +168,7 @@ export interface QualityAssuranceReliabilityCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -267,9 +267,19 @@ export interface QualityAssuranceReliabilityTemplate {
   lineNumber?: number;
 
   /**
+   * 信赖性评价・ORT业务费用(元)
+   */
+  testCost?: number;
+
+  /**
    * 评价作业时间(分钟)
    */
   workTimeMinutes?: number;
+
+  /**
+   * 评价其他费用(元)
+   */
+  otherExpenses?: number;
 
   /**
    * 信赖性评价备注
@@ -306,7 +316,7 @@ export interface QualityAssuranceReliabilityImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -326,9 +336,19 @@ export interface QualityAssuranceReliabilityImport {
   lineNumber?: number;
 
   /**
+   * 信赖性评价・ORT业务费用(元)
+   */
+  testCost?: number;
+
+  /**
    * 评价作业时间(分钟)
    */
   workTimeMinutes?: number;
+
+  /**
+   * 评价其他费用(元)
+   */
+  otherExpenses?: number;
 
   /**
    * 信赖性评价备注

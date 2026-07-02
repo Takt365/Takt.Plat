@@ -143,10 +143,11 @@
       </div>
       <div v-show="isFieldVisible('inspectionType')">
       <a-form-item :label="t('entity.inspectionstandard.inspectiontype')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.inspectionType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionstandard.inspectiontype') })"
-          style="width: 100%"
+          dict-type="logistics_quality_inspection_type"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.inspectionstandard.inspectiontype') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -194,21 +195,13 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('isEnabled')">
-      <a-form-item :label="t('entity.inspectionstandard.isenabled')">
-        <a-input-number
-          v-model:value="advancedQueryForm.isEnabled"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionstandard.isenabled') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
       <div v-show="isFieldVisible('standardStatus')">
       <a-form-item :label="t('entity.inspectionstandard.standardstatus')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.standardStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionstandard.standardstatus') })"
-          style="width: 100%"
+          dict-type="logistics_quality_standard_status"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.inspectionstandard.standardstatus') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -228,7 +221,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -239,7 +232,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -394,7 +387,6 @@ const advancedQueryForm = ref({
   materialCategoryName: '',
   samplingSchemeCode: '',
   samplingSchemeName: '',
-  isEnabled: undefined as number | undefined,
   standardStatus: undefined as number | undefined,
   standardDescription: '',
   createdAtStart: '',
@@ -412,7 +404,6 @@ const queryFieldsMeta = computed(() => [
   { key: 'materialCategoryName', label: t('entity.inspectionstandard.materialcategoryname') },
   { key: 'samplingSchemeCode', label: t('entity.inspectionstandard.samplingschemecode') },
   { key: 'samplingSchemeName', label: t('entity.inspectionstandard.samplingschemename') },
-  { key: 'isEnabled', label: t('entity.inspectionstandard.isenabled') },
   { key: 'standardStatus', label: t('entity.inspectionstandard.standardstatus') },
   { key: 'standardDescription', label: t('entity.inspectionstandard.standarddescription') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
@@ -471,9 +462,6 @@ function buildListQuery(overrides?: Partial<InspectionStandardQuery>): Inspectio
   assignTrimmed('materialCategoryName', form.materialCategoryName)
   assignTrimmed('samplingSchemeCode', form.samplingSchemeCode)
   assignTrimmed('samplingSchemeName', form.samplingSchemeName)
-  if (form.isEnabled !== undefined && form.isEnabled !== null) {
-    query.isEnabled = form.isEnabled
-  }
   if (form.standardStatus !== undefined && form.standardStatus !== null) {
     query.standardStatus = form.standardStatus
   }
@@ -626,15 +614,6 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getInspectionStandardField(record, 'samplingSchemeName') ?? ''
   },
   {
-    title: t('entity.inspectionstandard.isenabled'),
-    dataIndex: 'isEnabled',
-    key: 'isEnabled',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getInspectionStandardField(record, 'isEnabled') ?? ''
-  },
-  {
     title: t('entity.inspectionstandard.standardstatus'),
     dataIndex: 'standardStatus',
     key: 'standardStatus',
@@ -701,7 +680,7 @@ const rowSelection = computed(() => ({
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
-    } else if (getInspectionStandardId(selectedRow.value) === getInspectionStandardId(record)) {
+    } else if (selectedRow.value && getInspectionStandardId(selectedRow.value) === getInspectionStandardId(record)) {
       selectedRow.value = null
       syncMasterSelection(null)
     }
@@ -750,7 +729,6 @@ function handleReset() {
   materialCategoryName: '',
   samplingSchemeCode: '',
   samplingSchemeName: '',
-  isEnabled: undefined as number | undefined,
   standardStatus: undefined as number | undefined,
   standardDescription: '',
   createdAtStart: '',
@@ -952,7 +930,6 @@ function handleAdvancedQueryReset() {
   materialCategoryName: '',
   samplingSchemeCode: '',
   samplingSchemeName: '',
-  isEnabled: undefined as number | undefined,
   standardStatus: undefined as number | undefined,
   standardDescription: '',
   createdAtStart: '',

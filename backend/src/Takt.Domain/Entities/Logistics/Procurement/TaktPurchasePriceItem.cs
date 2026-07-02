@@ -27,7 +27,7 @@ namespace Takt.Domain.Entities.Logistics.Procurement;
 public class TaktPurchasePriceItem : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 采购价格ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 采购价格 ID（关联 TaktPurchasePrice.Id，选项 TaktPurchasePrices/options）
     /// </summary>
     [SugarColumn(ColumnName = "purchase_price_id", ColumnDescription = "采购价格ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -66,26 +66,32 @@ public class TaktPurchasePriceItem : TaktCompanyEntityBase
     /// <summary>
     /// 采购单位
     /// </summary>
-    [SugarColumn(ColumnName = "purchase_unit", ColumnDescription = "采购单位", ColumnDataType = "nvarchar", Length = 20, IsNullable = false, DefaultValue = "个")]
-    public string PurchaseUnit { get; set; } = "个";
+    [SugarColumn(ColumnName = "purchase_unit", ColumnDescription = "采购单位", ColumnDataType = "nvarchar", Length = 20, IsNullable = false, DefaultValue = "PC")]
+    public string PurchaseUnit { get; set; } = "PC";
 
     /// <summary>
-    /// 采购价格（精确到分，存储为整数，单位为分）
+    /// 价格单位（字典 logistics_price_unit_param：1/100/1000/10000；默认 1000）
     /// </summary>
-    [SugarColumn(ColumnName = "purchase_price", ColumnDescription = "采购价格", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
+    [SugarColumn(ColumnName = "purchase_per_unit", ColumnDescription = "价格单位", ColumnDataType = "int", IsNullable = false, DefaultValue = "1000")]
+    public int PurchasePerUnit { get; set; } = 1000;
+
+    /// <summary>
+    /// 采购价格（decimal(18,5)）
+    /// </summary>
+    [SugarColumn(ColumnName = "purchase_price", ColumnDescription = "采购价格", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "0")]
     public decimal PurchasePrice { get; set; } = 0;
 
     /// <summary>
     /// 最小采购量（基本单位数量）
     /// </summary>
-    [SugarColumn(ColumnName = "min_purchase_quantity", ColumnDescription = "最小采购量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 4, IsNullable = false, DefaultValue = "0")]
-    public decimal MinPurchaseQuantity { get; set; } = 0;
+    [SugarColumn(ColumnName = "min_purchase_quantity", ColumnDescription = "最小采购量", ColumnDataType = "int",  IsNullable = false, DefaultValue = "0")]
+    public int MinPurchaseQuantity { get; set; } = 0;
 
     /// <summary>
     /// 最大采购量（基本单位数量，0表示无限制）
     /// </summary>
-    [SugarColumn(ColumnName = "max_purchase_quantity", ColumnDescription = "最大采购量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 4, IsNullable = false, DefaultValue = "0")]
-    public decimal MaxPurchaseQuantity { get; set; } = 0;
+    [SugarColumn(ColumnName = "max_purchase_quantity", ColumnDescription = "最大采购量", ColumnDataType = "int",  IsNullable = false, DefaultValue = "0")]
+    public int MaxPurchaseQuantity { get; set; } = 0;
 
     /// <summary>
     /// 排序号（越小越靠前）

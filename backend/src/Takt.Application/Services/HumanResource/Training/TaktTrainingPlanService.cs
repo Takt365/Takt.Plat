@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Training
 // 文件名称：TaktTrainingPlanService.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：培训计划应用服务实现
 // 
@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Services.HumanResource.Training;
 
@@ -307,7 +306,7 @@ public class TaktTrainingPlanService : TaktServiceBase, ITaktTrainingPlanService
                 || (x.TrainingObjectives != null && x.TrainingObjectives.Contains(keywords))
                 || SqlFunc.ToString(x.PlannedHeadcount).Contains(keywords)
                 || SqlFunc.ToString(x.TrainingBudget).Contains(keywords)
-                || (x.Description != null && x.Description.Contains(keywords))
+                || (x.TrainingPlanDescription != null && x.TrainingPlanDescription.Contains(keywords))
                 || SqlFunc.ToString(x.TrainingPlanStatus).Contains(keywords)
                 || (x.RelatedPlant != null && x.RelatedPlant.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
@@ -358,9 +357,9 @@ public class TaktTrainingPlanService : TaktServiceBase, ITaktTrainingPlanService
             exp = exp.And(x => x.TrainingBudget == queryDto.TrainingBudget);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Description))
+        if (!string.IsNullOrEmpty(queryDto?.TrainingPlanDescription))
         {
-            exp = exp.And(x => x.Description != null && x.Description.Contains(queryDto.Description));
+            exp = exp.And(x => x.TrainingPlanDescription != null && x.TrainingPlanDescription.Contains(queryDto.TrainingPlanDescription));
         }
 
         if (queryDto?.TrainingPlanStatus.HasValue == true)

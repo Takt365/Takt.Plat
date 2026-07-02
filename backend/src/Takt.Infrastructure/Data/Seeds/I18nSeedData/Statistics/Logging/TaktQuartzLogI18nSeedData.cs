@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Statistics.Logging
 // 文件名称：TaktQuartzLogI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktQuartzLog 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -109,22 +109,22 @@ public class TaktQuartzLogI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.quartzlog.taskname", "zh-HK", "任务名称_hk", "任务名称（执行时快照）"),
 
             // entity.quartzlog.jobgroup
-            new TranslationSeedItem("entity.quartzlog.jobgroup", "en-US", "任务组名_us", "任务组名（执行时快照）"),
+            new TranslationSeedItem("entity.quartzlog.jobgroup", "en-US", "任务组名_us", "任务组名（执行时快照；字典 sys_quartz_job_group 的 DictValue）"),
             // entity.quartzlog.jobgroup
-            new TranslationSeedItem("entity.quartzlog.jobgroup", "ja-JP", "任务组名_jp", "任务组名（执行时快照）"),
+            new TranslationSeedItem("entity.quartzlog.jobgroup", "ja-JP", "任务组名_jp", "任务组名（执行时快照；字典 sys_quartz_job_group 的 DictValue）"),
             // entity.quartzlog.jobgroup
-            new TranslationSeedItem("entity.quartzlog.jobgroup", "zh-CN", "任务组名", "任务组名（执行时快照）"),
+            new TranslationSeedItem("entity.quartzlog.jobgroup", "zh-CN", "任务组名", "任务组名（执行时快照；字典 sys_quartz_job_group 的 DictValue）"),
             // entity.quartzlog.jobgroup
-            new TranslationSeedItem("entity.quartzlog.jobgroup", "zh-HK", "任务组名_hk", "任务组名（执行时快照）"),
+            new TranslationSeedItem("entity.quartzlog.jobgroup", "zh-HK", "任务组名_hk", "任务组名（执行时快照；字典 sys_quartz_job_group 的 DictValue）"),
 
             // entity.quartzlog.tasktype
-            new TranslationSeedItem("entity.quartzlog.tasktype", "en-US", "任务类型_us", "任务类型（1=程序集 2=网络请求 3=SQL语句）"),
+            new TranslationSeedItem("entity.quartzlog.tasktype", "en-US", "任务类型_us", "任务类型（字典 sys_quartz_task_type 的 DictValue，如 assembly、http、sql）"),
             // entity.quartzlog.tasktype
-            new TranslationSeedItem("entity.quartzlog.tasktype", "ja-JP", "任务类型_jp", "任务类型（1=程序集 2=网络请求 3=SQL语句）"),
+            new TranslationSeedItem("entity.quartzlog.tasktype", "ja-JP", "任务类型_jp", "任务类型（字典 sys_quartz_task_type 的 DictValue，如 assembly、http、sql）"),
             // entity.quartzlog.tasktype
-            new TranslationSeedItem("entity.quartzlog.tasktype", "zh-CN", "任务类型", "任务类型（1=程序集 2=网络请求 3=SQL语句）"),
+            new TranslationSeedItem("entity.quartzlog.tasktype", "zh-CN", "任务类型", "任务类型（字典 sys_quartz_task_type 的 DictValue，如 assembly、http、sql）"),
             // entity.quartzlog.tasktype
-            new TranslationSeedItem("entity.quartzlog.tasktype", "zh-HK", "任务类型_hk", "任务类型（1=程序集 2=网络请求 3=SQL语句）"),
+            new TranslationSeedItem("entity.quartzlog.tasktype", "zh-HK", "任务类型_hk", "任务类型（字典 sys_quartz_task_type 的 DictValue，如 assembly、http、sql）"),
 
             // entity.quartzlog.executetime
             new TranslationSeedItem("entity.quartzlog.executetime", "en-US", "执行时间_us", "执行时间"),
@@ -145,31 +145,31 @@ public class TaktQuartzLogI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.quartzlog.executeduration", "zh-HK", "执行耗时（毫秒）_hk", "执行耗时（毫秒）"),
 
             // entity.quartzlog.executeparams
-            new TranslationSeedItem("entity.quartzlog.executeparams", "en-US", "执行参数_us", "执行参数"),
+            new TranslationSeedItem("entity.quartzlog.executeparams", "en-US", "执行参数_us", "执行参数（无参数为空串）"),
             // entity.quartzlog.executeparams
-            new TranslationSeedItem("entity.quartzlog.executeparams", "ja-JP", "执行参数_jp", "执行参数"),
+            new TranslationSeedItem("entity.quartzlog.executeparams", "ja-JP", "执行参数_jp", "执行参数（无参数为空串）"),
             // entity.quartzlog.executeparams
-            new TranslationSeedItem("entity.quartzlog.executeparams", "zh-CN", "执行参数", "执行参数"),
+            new TranslationSeedItem("entity.quartzlog.executeparams", "zh-CN", "执行参数", "执行参数（无参数为空串）"),
             // entity.quartzlog.executeparams
-            new TranslationSeedItem("entity.quartzlog.executeparams", "zh-HK", "执行参数_hk", "执行参数"),
+            new TranslationSeedItem("entity.quartzlog.executeparams", "zh-HK", "执行参数_hk", "执行参数（无参数为空串）"),
 
             // entity.quartzlog.executemessage
-            new TranslationSeedItem("entity.quartzlog.executemessage", "en-US", "执行消息_us", "执行消息"),
+            new TranslationSeedItem("entity.quartzlog.executemessage", "en-US", "执行消息_us", "执行消息（无消息为空串）"),
             // entity.quartzlog.executemessage
-            new TranslationSeedItem("entity.quartzlog.executemessage", "ja-JP", "执行消息_jp", "执行消息"),
+            new TranslationSeedItem("entity.quartzlog.executemessage", "ja-JP", "执行消息_jp", "执行消息（无消息为空串）"),
             // entity.quartzlog.executemessage
-            new TranslationSeedItem("entity.quartzlog.executemessage", "zh-CN", "执行消息", "执行消息"),
+            new TranslationSeedItem("entity.quartzlog.executemessage", "zh-CN", "执行消息", "执行消息（无消息为空串）"),
             // entity.quartzlog.executemessage
-            new TranslationSeedItem("entity.quartzlog.executemessage", "zh-HK", "执行消息_hk", "执行消息"),
+            new TranslationSeedItem("entity.quartzlog.executemessage", "zh-HK", "执行消息_hk", "执行消息（无消息为空串）"),
 
             // entity.quartzlog.errorinfo
-            new TranslationSeedItem("entity.quartzlog.errorinfo", "en-US", "错误信息_us", "错误信息"),
+            new TranslationSeedItem("entity.quartzlog.errorinfo", "en-US", "错误信息_us", "错误信息（成功为空串）"),
             // entity.quartzlog.errorinfo
-            new TranslationSeedItem("entity.quartzlog.errorinfo", "ja-JP", "错误信息_jp", "错误信息"),
+            new TranslationSeedItem("entity.quartzlog.errorinfo", "ja-JP", "错误信息_jp", "错误信息（成功为空串）"),
             // entity.quartzlog.errorinfo
-            new TranslationSeedItem("entity.quartzlog.errorinfo", "zh-CN", "错误信息", "错误信息"),
+            new TranslationSeedItem("entity.quartzlog.errorinfo", "zh-CN", "错误信息", "错误信息（成功为空串）"),
             // entity.quartzlog.errorinfo
-            new TranslationSeedItem("entity.quartzlog.errorinfo", "zh-HK", "错误信息_hk", "错误信息"),
+            new TranslationSeedItem("entity.quartzlog.errorinfo", "zh-HK", "错误信息_hk", "错误信息（成功为空串）"),
 
             // entity.quartzlog.executeip
             new TranslationSeedItem("entity.quartzlog.executeip", "en-US", "执行机器IP_us", "执行机器 IP"),

@@ -34,17 +34,17 @@ public class TaktBonusPlan : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "plan_name", ColumnDescription = "方案名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = false)]
     public string PlanName { get; set; } = string.Empty;
     /// <summary>
-    /// 奖金类型（字典 hr_comp_bonus_type）
+    /// 奖金类型（字典 hr_comp_bonus_type；1=绩效奖金 2=项目奖金 3=年终奖金 4=专项奖金）
     /// </summary>
     [SugarColumn(ColumnName = "bonus_type", ColumnDescription = "奖金类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int BonusType { get; set; } = 0;
     /// <summary>
-    /// 计算方式（字典 hr_comp_bonus_calc_method_type）
+    /// 计算方式（字典 hr_comp_bonus_calc_method_type；1=固定金额 2=按比例 3=按公式）
     /// </summary>
     [SugarColumn(ColumnName = "calc_method", ColumnDescription = "计算方式", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int CalcMethod { get; set; } = 0;
     /// <summary>
-    /// 关联计算公式 ID（按公式计算时引用 TaktSalaryFormula）
+    /// 计算公式（关联 TaktSalaryFormula.Id，选项 TaktSalaryFormulas/options；calc_method=3 按公式时使用）
     /// </summary>
     [SugarColumn(ColumnName = "salary_formula_id", ColumnDescription = "计算公式ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -60,18 +60,18 @@ public class TaktBonusPlan : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "effective_date", ColumnDescription = "生效日期", ColumnDataType = "date", IsNullable = false)]
     public DateTime EffectiveDate { get; set; }
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 方案说明
+    /// </summary>
+    [SugarColumn(ColumnName = "bonus_plan_description", ColumnDescription = "方案说明", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
+    public string? BonusPlanDescription { get; set; }
+    /// <summary>
+    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// </summary>
+    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
+    public string RelatedPlant { get; set; } = string.Empty;
+    /// <summary>
+    /// 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
     /// </summary>
     [SugarColumn(ColumnName = "plan_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int PlanStatus { get; set; } = 1;
-    /// <summary>
-    /// 方案说明
-    /// </summary>
-    [SugarColumn(ColumnName = "description", ColumnDescription = "方案说明", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
-    public string? Description { get; set; }
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = true)]
-    public string? RelatedPlant { get; set; }
 }

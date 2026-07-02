@@ -1,11 +1,11 @@
 ﻿// ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Domain.Entities
-// 文件名称：TaktCompanyEntityBase.cs
+// 文件名称：TaktEntityBase.cs
 // 创建时间：2025-01-20
 // 创建人：Takt365(Cursor AI)
-// 功能描述：实体基类体系，包含租户级、公司级、审批级三层基类
-// 
+// 功能描述：实体隔离基类（租户 / 公司 / 审批），不含主键 Id；主键见 TaktSnowflakeBase / TaktIncrementBase / TaktGuidBase
+//
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
@@ -15,23 +15,15 @@ using SqlSugar;
 namespace Takt.Domain.Entities;
 
 // ========================================
-// 租户级实体基类（对应 TaktTenantEntityBase）
+// 租户级隔离基类
 // ========================================
 
 /// <summary>
-/// 租户级实体基类
+/// 租户级隔离基类（无 Id）
 /// 仅包含租户隔离(TenantCode),不包含公司隔离(CompanyCode)
-/// 适用于用户、角色、菜单等跨公司共享的实体
 /// </summary>
-public abstract class TaktTenantEntityBase
+public abstract class TaktTenantEntityScopeBase
 {
-    /// <summary>
-    /// 主键ID(雪花ID,序列化为string以避免Javascript精度问题)
-    /// </summary>
-    [SugarColumn(ColumnName = "id", ColumnDescription = "主键ID", ColumnDataType = "bigint", IsPrimaryKey = true, IsNullable = false)]
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long Id { get; set; }
-
     /// <summary>
     /// 租户编码(第一层数据隔离)
     /// </summary>
@@ -51,7 +43,7 @@ public abstract class TaktTenantEntityBase
     public string? Remark { get; set; }
 
     /// <summary>
-    /// 创建人ID(非空;无当前用户时仓储填 999)
+    /// 创建人ID(非空;无当前用户时仓储填 900001)
     /// </summary>
     [SugarColumn(ColumnName = "created_by", ColumnDescription = "创建人ID", ColumnDataType = "bigint", IsNullable = false, DefaultValue = "0")]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -97,22 +89,15 @@ public abstract class TaktTenantEntityBase
 }
 
 // ========================================
-// 公司级实体基类（对应 TaktCompanyEntityBase）
+// 公司级隔离基类
 // ========================================
 
 /// <summary>
-/// 公司级实体基类(包含租户+公司双重隔离)
-/// 适用于部门、岗位、员工等业务实体
+/// 公司级隔离基类（无 Id）
+/// 包含租户+公司双重隔离
 /// </summary>
-public abstract class TaktCompanyEntityBase
+public abstract class TaktCompanyEntityScopeBase
 {
-    /// <summary>
-    /// 主键ID(雪花ID,序列化为string以避免Javascript精度问题)
-    /// </summary>
-    [SugarColumn(ColumnName = "id", ColumnDescription = "主键ID", ColumnDataType = "bigint", IsPrimaryKey = true, IsNullable = false)]
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long Id { get; set; }
-
     /// <summary>
     /// 租户编码(第一层数据隔离)
     /// </summary>
@@ -138,7 +123,7 @@ public abstract class TaktCompanyEntityBase
     public string? Remark { get; set; }
 
     /// <summary>
-    /// 创建人ID(非空;无当前用户时仓储填 999)
+    /// 创建人ID(非空;无当前用户时仓储填 900001)
     /// </summary>
     [SugarColumn(ColumnName = "created_by", ColumnDescription = "创建人ID", ColumnDataType = "bigint", IsNullable = false, DefaultValue = "0")]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -184,24 +169,15 @@ public abstract class TaktCompanyEntityBase
 }
 
 // ========================================
-// 审批级实体基类（对应 TaktApprovalEntityBase）
+// 审批级隔离基类
 // ========================================
 
 /// <summary>
-/// 审批级实体基类
+/// 审批级隔离基类（无 Id）
 /// 包含租户+公司双重隔离+审批流程相关字段
-/// 适用于需要审批的业务实体，如：请假单、报销单、采购单、合同等
-/// FlowInstanceId 由业务在调用 TaktFlowEngine 发起流程后写入；ApprovalStatus 与引擎终态对齐
 /// </summary>
-public abstract class TaktApprovalEntityBase
+public abstract class TaktApprovalEntityScopeBase
 {
-    /// <summary>
-    /// 主键ID(雪花ID,序列化为string以避免Javascript精度问题)
-    /// </summary>
-    [SugarColumn(ColumnName = "id", ColumnDescription = "主键ID", ColumnDataType = "bigint", IsPrimaryKey = true, IsNullable = false)]
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long Id { get; set; }
-
     /// <summary>
     /// 租户编码(第一层数据隔离)
     /// </summary>
@@ -227,7 +203,7 @@ public abstract class TaktApprovalEntityBase
     public string? Remark { get; set; }
 
     /// <summary>
-    /// 审批状态（0=待审批，1=审批中，2=已通过，3=已驳回，4=已撤回，5=已终止）
+    /// 审批状态（字典 sys_approval_status；0=待审批，1=审批中，2=已通过，3=已驳回，4=已撤回，5=已终止）
     /// </summary>
     [SugarColumn(ColumnName = "approval_status", ColumnDescription = "审批状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int ApprovalStatus { get; set; } = 0;
@@ -272,7 +248,7 @@ public abstract class TaktApprovalEntityBase
     public DateTime? ApprovedAt { get; set; }
 
     /// <summary>
-    /// 创建人ID(非空;无当前用户时仓储填 999)
+    /// 创建人ID(非空;无当前用户时仓储填 900001)
     /// </summary>
     [SugarColumn(ColumnName = "created_by", ColumnDescription = "创建人ID", ColumnDataType = "bigint", IsNullable = false, DefaultValue = "0")]
     [JsonConverter(typeof(ValueToStringConverter))]

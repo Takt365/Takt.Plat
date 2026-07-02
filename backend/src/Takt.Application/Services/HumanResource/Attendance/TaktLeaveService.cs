@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Attendance
 // 文件名称：TaktLeaveService.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：请假信息应用服务实现
 // 
@@ -277,7 +277,7 @@ public class TaktLeaveService : TaktServiceBase, ITaktLeaveService
                 || (x.LeaveType != null && x.LeaveType.Contains(keywords))
                 || (x.Reason != null && x.Reason.Contains(keywords))
                 || (x.RelatedPlant != null && x.RelatedPlant.Contains(keywords))
-                || (x.ProofAttachmentsJson != null && x.ProofAttachmentsJson.Contains(keywords))
+                || (x.Attachments != null && x.Attachments.Contains(keywords))
                 || SqlFunc.ToString(x.HandlingBy).Contains(keywords)
                 || (x.HandlingComment != null && x.HandlingComment.Contains(keywords))
                 || SqlFunc.ToString(x.LeaveStatus).Contains(keywords)
@@ -325,9 +325,9 @@ public class TaktLeaveService : TaktServiceBase, ITaktLeaveService
             exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(queryDto.RelatedPlant));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ProofAttachmentsJson))
+        if (!string.IsNullOrEmpty(queryDto?.Attachments))
         {
-            exp = exp.And(x => x.ProofAttachmentsJson != null && x.ProofAttachmentsJson.Contains(queryDto.ProofAttachmentsJson));
+            exp = exp.And(x => x.Attachments != null && x.Attachments.Contains(queryDto.Attachments));
         }
 
         if (queryDto?.HandlingBy.HasValue == true)

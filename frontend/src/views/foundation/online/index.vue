@@ -214,6 +214,24 @@
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
+
+    <!-- 强退弹窗 -->
+    <takt-modal
+      v-model:open="kickVisible"
+      :title="kickModalTitle"
+      :confirm-loading="kickLoading"
+      :use-viewport-size="false"
+      width="640px"
+      @ok="handleKickSubmit"
+      @cancel="handleKickCancel"
+    >
+      <online-kick-form
+        ref="kickFormRef"
+        :form-data="kickTarget"
+        :default-kick-mode="kickDefaultMode"
+        :loading="kickLoading"
+      />
+    </takt-modal>
   </div>
 </template>
 
@@ -222,7 +240,7 @@
  * 在线用户实体管理页
  * @module views/foundation/online
  */
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, nextTick } from 'vue'
 import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
@@ -230,11 +248,13 @@ import { useI18n } from 'vue-i18n'
 import { getTaktDefaultPageIndex, getTaktDefaultPageSize, ensureTaktPaginationConfigAsync } from '@/utils/takt-paged'
 import { getOnlineList, deleteOnlineById, deleteOnlineBatch, exportOnline, forceKickOnlineById } from '@/api/foundation/online'
 import type { Online, OnlineQuery } from '@/types/foundation/online'
+import OnlineKickForm from './components/online-kick-form.vue'
+import type { OnlineKickMode } from './components/online-kick-form.vue'
 import { useUserStore } from '@/stores/identity/user'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { TaktOnlineStatus } from '@/utils/foundation-enums'
-import { RiDeleteBinLine, RiLogoutBoxRLine } from '@remixicon/vue'
+import { RiDeleteBinLine, RiLogoutBoxRLine, RiTimerLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -301,6 +321,23 @@ const queryFieldsMeta = computed(() => [
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
 const columnSettingVisible = ref(false)
+/** 强退弹窗是否打开 */
+const kickVisible = ref(false)
+/** 强退提交 loading */
+const kickLoading = ref(false)
+/** 强退目标行 */
+const kickTarget = ref<Online | null>(null)
+/** 强退弹窗默认方式 */
+const kickDefaultMode = ref<OnlineKickMode>('immediate')
+/** 强退表单 ref */
+const kickFormRef = ref<InstanceType<typeof OnlineKickForm> | null>(null)
+
+/** 强退弹窗标题（随入口默认方式变化） */
+const kickModalTitle = computed(() =>
+  kickDefaultMode.value === 'immediate'
+    ? t('common.page.button.kick.immediate')
+    : t('common.page.button.kick.delayed'),
+)
 /** 表格当前可见列 key */
 const visibleColumnKeys = ref<string[]>([])
 /** 实体主键字段名（row-key、API 路径参数） */
@@ -426,13 +463,22 @@ const columns = computed<TableColumnsType>(() => [
   CreateActionColumn({
     actions: [
       {
-        key: 'kick',
-        label: t('common.page.button.kick'),
+        key: 'kick-immediate',
+        label: t('common.page.button.kick.immediate'),
         shape: 'plain',
         icon: RiLogoutBoxRLine,
         permission: 'foundation:online:kick',
         disabled: (record: Online) => !isOnlineActive(record),
-        onClick: (record: Online) => handleKick(record)
+        onClick: (record: Online) => openKickModal(record, 'immediate')
+      },
+      {
+        key: 'kick-delayed',
+        label: t('common.page.button.kick.delayed'),
+        shape: 'plain',
+        icon: RiTimerLine,
+        permission: 'foundation:online:kick',
+        disabled: (record: Online) => !isOnlineActive(record),
+        onClick: (record: Online) => openKickModal(record, 'delayed')
       },
       {
         key: 'delete',
@@ -629,33 +675,48 @@ async function handleExport() {
   }
 }
 
-/** 强退在线用户 */
-async function handleKick(record: Online) {
-  const onlineId = getOnlineId(record)
-  const connectionId = String(getOnlineField(record, 'connectionId') ?? '').trim()
-  if (!onlineId && !connectionId) {
-    message.error(t('common.feedback.failed'))
+/** 打开强退弹窗 */
+function openKickModal(record: Online, defaultMode: OnlineKickMode = 'immediate') {
+  kickTarget.value = record
+  kickDefaultMode.value = defaultMode
+  kickVisible.value = true
+  nextTick(() => {
+    kickFormRef.value?.resetFields()
+  })
+}
+
+/** 强退弹窗取消 */
+function handleKickCancel() {
+  kickVisible.value = false
+  kickFormRef.value?.resetFields()
+  kickTarget.value = null
+}
+
+/** 强退弹窗提交 */
+async function handleKickSubmit() {
+  if (!kickFormRef.value) {
     return
   }
-  const userName = getOnlineField(record, 'userName') || onlineId || connectionId
-  Modal.confirm({
-    title: t('common.page.button.kick'),
-    content: t('common.tip.confirm.kick.entity', { name: userName }),
-    okText: t('common.page.button.kick'),
-    cancelText: t('common.page.button.cancel'),
-    onOk: async () => {
-      try {
-        await forceKickOnlineById(onlineId || '0', {
-          ...(connectionId ? { connectionId } : {})
-        })
-        message.success(t('common.feedback.success'))
-        await loadData()
-      } catch (error: any) {
-        logger.error('[Online] 强退失败', { error })
-        message.error(error?.message || t('common.feedback.failed'))
-      }
+  try {
+    await kickFormRef.value.validate()
+    kickLoading.value = true
+    const onlineId = kickFormRef.value.getTargetOnlineId()
+    const dto = kickFormRef.value.getValues()
+    await forceKickOnlineById(onlineId, dto)
+    message.success(t('common.feedback.success'))
+    kickVisible.value = false
+    kickFormRef.value.resetFields()
+    kickTarget.value = null
+    await loadData()
+  } catch (error: any) {
+    if (error?.errorFields) {
+      return
     }
-  })
+    logger.error('[Online] 强退失败', { error })
+    message.error(error?.message || t('common.feedback.failed'))
+  } finally {
+    kickLoading.value = false
+  }
 }
 
 /** 删除单行 */

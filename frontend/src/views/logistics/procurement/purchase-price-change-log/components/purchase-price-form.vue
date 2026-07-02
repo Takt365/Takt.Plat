@@ -116,6 +116,35 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
+                :label="t('entity.purchaseprice.purchaseinquiryid')"
+                name="purchaseInquiryId"
+              >
+                <a-input
+                  v-model:value="formState.purchaseInquiryId"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseprice.purchaseinquiryid') })"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.purchaseprice.purchaseinquirycode')"
+                name="purchaseInquiryCode"
+              >
+                <a-input
+                  v-model:value="formState.purchaseInquiryCode"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseprice.purchaseinquirycode') })"
+                  show-count
+                  :maxlength="40"
+                  allow-clear
+                  :disabled="!!formData?.purchasePriceId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
                 :label="t('entity.purchaseprice.pricetype')"
                 name="priceType"
               >
@@ -139,7 +168,17 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.purchaseprice.effectiveenddate')"
                 name="effectiveEndDate"
@@ -152,7 +191,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.purchaseprice.pricestatus')"
                 name="priceStatus"
@@ -164,16 +203,6 @@
                 />
               </a-form-item>
             </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
                 name="extField"
@@ -278,7 +307,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","purchasePriceCode","supplierCode","priceType","effectiveStartDate","effectiveEndDate","priceStatus","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","purchasePriceCode","supplierCode","purchaseInquiryId","purchaseInquiryCode","priceType","effectiveStartDate","effectiveEndDate","priceStatus","extField","remark"]
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
 
@@ -291,7 +320,47 @@ const purchasePriceChangeLogTableRef = ref<{
 
 /** 子表 purchasePriceChangeLog 可编辑列 */
 const purchasePriceChangeLogFormColumns = computed<TaktEditableTableColumn[]>(() => [
-,
+  {
+    key: 'changeFields',
+    title: t('entity.purchasepricechangelog.changefields'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.purchasepricechangelog.changefields') }),
+  },
+  {
+    key: 'changeTime',
+    title: t('entity.purchasepricechangelog.changetime'),
+    editor: 'datePicker',
+    valueFormat: 'YYYY-MM-DD HH:mm:ss', showTime: true,
+    width: 140,
+  },
+  {
+    key: 'changeBy',
+    title: t('entity.purchasepricechangelog.changeby'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.purchasepricechangelog.changeby') }),
+  },
+  {
+    key: 'changeReason',
+    title: t('entity.purchasepricechangelog.changereason'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.purchasepricechangelog.changereason') }),
+  },
+  {
+    key: 'extField',
+    title: t('common.page.entity.extfield'),
+    editor: 'textarea',
+    rows: 2,
+    placeholder: t('common.page.form.placeholder.optional', { field: t('common.page.entity.extfield') }),
+    width: 140,
+  },
+  {
+    key: 'remark',
+    title: t('common.page.entity.remark'),
+    editor: 'textarea',
+    rows: 2,
+    placeholder: t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') }),
+    width: 140,
+  },
 ])
 
 /** 编辑态从 formData 同步各子表行 */
@@ -301,7 +370,12 @@ function syncChildRowsFromFormData(val: Partial<PurchasePriceCreate & { purchase
 
 function createDefaultPurchasePriceChangeLogRow(): Record<string, unknown> {
   return {
-
+    changeFields: '',
+    changeTime: '',
+    changeBy: '',
+    changeReason: '',
+    extField: '',
+    remark: '',
   }
 }
 

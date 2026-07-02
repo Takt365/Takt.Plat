@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/materials
 // 文件名称：material-plant-change-log.d.ts
-// 创建时间：2026-06-21
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/materials 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,22 +29,22 @@ export interface MaterialPlantChangeLog extends CompanyDtoBase {
   materialPlantChangeLogId: string;
 
   /**
-   * 工厂物料ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 工厂物料 ID（关联 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
    */
   materialPlantId: string;
 
   /**
-   * 工厂物料名称（填充字段）
+   * 工厂物料 名称（填充字段）
    */
   materialPlantName?: string;
 
   /**
-   * 物料编码
+   * 物料编码（关联 TaktMaterial.MaterialCode，冗余；选项 TaktMaterials/options）
    */
   materialCode: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -59,7 +59,7 @@ export interface MaterialPlantChangeLog extends CompanyDtoBase {
   changeTime: string;
 
   /**
-   * 变更人（人员代码）
+   * 变更人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
    */
   changeBy?: string;
 
@@ -94,17 +94,17 @@ export interface MaterialPlantChangeLogQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂物料ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 工厂物料 ID（关联 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
    */
   materialPlantId?: string;
 
   /**
-   * 物料编码
+   * 物料编码（关联 TaktMaterial.MaterialCode，冗余；选项 TaktMaterials/options）
    */
   materialCode?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -124,7 +124,7 @@ export interface MaterialPlantChangeLogQuery extends TaktPagedQuery {
   changeTimeEnd?: string;
 
   /**
-   * 变更人（人员代码）
+   * 变更人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
    */
   changeBy?: string;
 
@@ -173,22 +173,22 @@ export interface MaterialPlantChangeLogCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
   /**
-   * 工厂物料ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 工厂物料 ID（关联 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
    */
   materialPlantId: string;
 
   /**
-   * 物料编码
+   * 物料编码（关联 TaktMaterial.MaterialCode，冗余；选项 TaktMaterials/options）
    */
   materialCode: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -203,7 +203,7 @@ export interface MaterialPlantChangeLogCreate {
   changeTime: string;
 
   /**
-   * 变更人（人员代码）
+   * 变更人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
    */
   changeBy?: string;
 
@@ -257,17 +257,17 @@ export interface MaterialPlantChangeLogExport {
   companyCode: string;
 
   /**
-   * 工厂物料ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 工厂物料 ID（关联 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
    */
   materialPlantId: string;
 
   /**
-   * 物料编码
+   * 物料编码（关联 TaktMaterial.MaterialCode，冗余；选项 TaktMaterials/options）
    */
   materialCode: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -282,7 +282,7 @@ export interface MaterialPlantChangeLogExport {
   changeTime: string;
 
   /**
-   * 变更人（人员代码）
+   * 变更人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
    */
   changeBy?: string;
 

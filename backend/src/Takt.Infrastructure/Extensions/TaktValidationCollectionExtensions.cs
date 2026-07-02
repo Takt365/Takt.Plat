@@ -28,8 +28,8 @@ public static class TaktValidationCollectionExtensions
     /// <returns>服务集合</returns>
     public static IServiceCollection AddTaktValidators(this IServiceCollection services)
     {
-        // TaktUserDtoValidator 仅作程序集锚点；会扫描 Takt.Application 内所有 AbstractValidator<T>
-        services.AddValidatorsFromAssemblyContaining<TaktUserDtoValidator>();
+        // TaktUserCreateValidator 仅作程序集锚点；会扫描 Takt.Application 内所有 AbstractValidator<T>
+        services.AddValidatorsFromAssemblyContaining<TaktUserCreateValidator>();
         return services;
     }
 }

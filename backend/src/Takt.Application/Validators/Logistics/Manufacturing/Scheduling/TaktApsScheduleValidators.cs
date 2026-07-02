@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Manufacturing.Scheduling
 // 文件名称：TaktApsScheduleValidators.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ApsSchedule 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktApsSchedule 生成，请按需审阅）
 // 
@@ -44,24 +44,10 @@ public class TaktApsScheduleCreateValidator : AbstractValidator<TaktApsScheduleC
         RuleFor(x => x.ScheduleName)
             .NotEmpty().WithMessage("排程名称不能为空")
             .MaximumLength(200).WithMessage("排程名称长度不能超过200个字符");
-        RuleFor(x => x.WorkshopCode)
-            .MaximumLength(50).WithMessage("车间编码长度不能超过50个字符");
-        RuleFor(x => x.WorkshopName)
-            .MaximumLength(200).WithMessage("车间名称长度不能超过200个字符");
-        RuleFor(x => x.ProductionLineCode)
-            .MaximumLength(50).WithMessage("生产线编码长度不能超过50个字符");
-        RuleFor(x => x.ProductionLineName)
-            .MaximumLength(200).WithMessage("生产线名称长度不能超过200个字符");
         RuleFor(x => x.PlannerId)
             .GreaterThanOrEqualTo(0).WithMessage("计划员ID不能为负数");
-        RuleFor(x => x.PlannerName)
-            .MaximumLength(50).WithMessage("计划员姓名长度不能超过50个字符");
         RuleFor(x => x.PublishUserId)
             .GreaterThanOrEqualTo(0).WithMessage("发布人ID不能为负数");
-        RuleFor(x => x.PublishUserName)
-            .MaximumLength(20).WithMessage("发布人姓名长度不能超过20个字符");
-        RuleFor(x => x.ScheduleDescription)
-            .MaximumLength(1000).WithMessage("排程说明长度不能超过1000个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -85,6 +71,29 @@ public class TaktApsScheduleUpdateValidator : AbstractValidator<TaktApsScheduleU
     {
         RuleFor(x => x.ApsScheduleId)
             .GreaterThan(0).WithMessage("ApsScheduleID无效");
+        RuleFor(x => x.TenantCode)
+            .NotEmpty().WithMessage("租户编码不能为空")
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.CompanyCode)
+            .NotEmpty().WithMessage("公司代码不能为空")
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.PlantCode)
+            .NotEmpty().WithMessage("工厂编码不能为空")
+            .MaximumLength(4).WithMessage("工厂编码长度不能超过4个字符");
+        RuleFor(x => x.ScheduleCode)
+            .NotEmpty().WithMessage("排程编码不能为空")
+            .MaximumLength(50).WithMessage("排程编码长度不能超过50个字符");
+        RuleFor(x => x.ScheduleName)
+            .NotEmpty().WithMessage("排程名称不能为空")
+            .MaximumLength(200).WithMessage("排程名称长度不能超过200个字符");
+        RuleFor(x => x.PlannerId)
+            .GreaterThanOrEqualTo(0).WithMessage("计划员ID不能为负数");
+        RuleFor(x => x.PublishUserId)
+            .GreaterThanOrEqualTo(0).WithMessage("发布人ID不能为负数");
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
     }
 }
 
@@ -115,14 +124,10 @@ public class TaktApsScheduleImportValidator : AbstractValidator<TaktApsScheduleI
         RuleFor(x => x.ScheduleName)
             .NotEmpty().WithMessage("排程名称不能为空")
             .MaximumLength(200).WithMessage("排程名称长度不能超过200个字符");
-        RuleFor(x => x.WorkshopCode)
-            .MaximumLength(50).WithMessage("车间编码长度不能超过50个字符").When(x => !string.IsNullOrWhiteSpace(x.WorkshopCode));
-        RuleFor(x => x.WorkshopName)
-            .MaximumLength(200).WithMessage("车间名称长度不能超过200个字符").When(x => !string.IsNullOrWhiteSpace(x.WorkshopName));
-        RuleFor(x => x.ProductionLineCode)
-            .MaximumLength(50).WithMessage("生产线编码长度不能超过50个字符").When(x => !string.IsNullOrWhiteSpace(x.ProductionLineCode));
-        RuleFor(x => x.ProductionLineName)
-            .MaximumLength(200).WithMessage("生产线名称长度不能超过200个字符").When(x => !string.IsNullOrWhiteSpace(x.ProductionLineName));
+        RuleFor(x => x.PlannerId)
+            .GreaterThanOrEqualTo(0).WithMessage("计划员ID不能为负数");
+        RuleFor(x => x.PublishUserId)
+            .GreaterThanOrEqualTo(0).WithMessage("发布人ID不能为负数");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

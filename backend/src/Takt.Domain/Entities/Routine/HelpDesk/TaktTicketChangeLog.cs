@@ -27,7 +27,7 @@ namespace Takt.Domain.Entities.Routine.HelpDesk;
 public class TaktTicketChangeLog : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工单 ID
+    /// 工单 ID（关联 TaktTicket.Id，选项 TaktTickets/options）
     /// </summary>
     [SugarColumn(ColumnName = "ticket_id", ColumnDescription = "工单ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -40,7 +40,7 @@ public class TaktTicketChangeLog : TaktCompanyEntityBase
     public string? TicketNo { get; set; }
 
     /// <summary>
-    /// 变更类型（0=创建，1=更新，2=关闭/删除）
+    /// 变更类型（字典 sys_entity_change_type；0=创建 1=更新 2=删除 3=状态变更）
     /// </summary>
     [SugarColumn(ColumnName = "change_type", ColumnDescription = "变更类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int ChangeType { get; set; } = 1;

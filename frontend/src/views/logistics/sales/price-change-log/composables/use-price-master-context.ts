@@ -9,10 +9,13 @@
 import { inject, provide, type InjectionKey, type Ref, ref } from 'vue'
 import type { SalesPrice } from '@/types/logistics/sales/price'
 
+/** 表格行类型（与 index 列表行、TaktSingleTable slot record 一致） */
+export type SalesPriceRowRecord = SalesPrice | Record<string, unknown>
+
 /** 主表选中行上下文 */
 export interface SalesPriceMasterContext {
   /** 当前选中的主表行（右侧明细依赖） */
-  selectedMasterRow: Ref<SalesPrice | null>
+  selectedMasterRow: Ref<SalesPriceRowRecord | null>
 }
 
 const salesPriceMasterContextKey: InjectionKey<SalesPriceMasterContext> = Symbol('priceMasterContext')
@@ -22,7 +25,7 @@ const salesPriceMasterContextKey: InjectionKey<SalesPriceMasterContext> = Symbol
  * @returns {SalesPriceMasterContext} 主表上下文
  */
 export function provideSalesPriceMasterContext(): SalesPriceMasterContext {
-  const selectedMasterRow = ref<SalesPrice | null>(null)
+  const selectedMasterRow = ref<SalesPriceRowRecord | null>(null)
   const ctx: SalesPriceMasterContext = { selectedMasterRow }
   provide(salesPriceMasterContextKey, ctx)
   return ctx

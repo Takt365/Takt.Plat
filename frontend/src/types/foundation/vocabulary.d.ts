@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/foundation
 // 文件名称：vocabulary.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：foundation 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -44,14 +44,14 @@ export interface Vocabulary extends TenantDtoBase {
   filterLevel: number;
 
   /**
-   * 替换文本（为空时使用 * 替换）
+   * 替换文本（默认 *）
    */
-  replaceText?: string;
+  replaceText: string;
 
   /**
-   * 状态（1=启用，0=禁用）
+   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
    */
-  status: number;
+  vocabularyStatus: number;
 
 }
 
@@ -84,14 +84,14 @@ export interface VocabularyQuery extends TaktPagedQuery {
   filterLevel?: number;
 
   /**
-   * 替换文本（为空时使用 * 替换）
+   * 替换文本（默认 *）
    */
   replaceText?: string;
 
   /**
-   * 状态（1=启用，0=禁用）
+   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
    */
-  status?: number;
+  vocabularyStatus?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -106,7 +106,7 @@ export interface VocabularyQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -143,19 +143,19 @@ export interface VocabularyCreate {
   filterLevel: number;
 
   /**
-   * 替换文本（为空时使用 * 替换）
+   * 替换文本（默认 *）
    */
-  replaceText?: string;
+  replaceText: string;
 
   /**
-   * 状态（1=启用，0=禁用）
+   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
    */
-  status: number;
+  vocabularyStatus: number;
 
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -192,9 +192,9 @@ export interface VocabularyStatus {
   vocabularyId: string;
 
   /**
-   * 状态（1=启用，0=禁用）
+   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
    */
-  status: number;
+  vocabularyStatus: number;
 
 }
 
@@ -226,19 +226,19 @@ export interface VocabularyTemplate {
   filterLevel?: number;
 
   /**
-   * 替换文本（为空时使用 * 替换）
+   * 替换文本（默认 *）
    */
   replaceText?: string;
 
   /**
-   * 状态（1=启用，0=禁用）
+   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
    */
-  status?: number;
+  vocabularyStatus?: number;
 
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -275,19 +275,19 @@ export interface VocabularyImport {
   filterLevel?: number;
 
   /**
-   * 替换文本（为空时使用 * 替换）
+   * 替换文本（默认 *）
    */
   replaceText?: string;
 
   /**
-   * 状态（1=启用，0=禁用）
+   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
    */
-  status?: number;
+  vocabularyStatus?: number;
 
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -324,19 +324,19 @@ export interface VocabularyExport {
   filterLevel: number;
 
   /**
-   * 替换文本（为空时使用 * 替换）
+   * 替换文本（默认 *）
    */
-  replaceText?: string;
+  replaceText: string;
 
   /**
-   * 状态（1=启用，0=禁用）
+   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
    */
-  status: number;
+  vocabularyStatus: number;
 
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -348,63 +348,5 @@ export interface VocabularyExport {
    */
   createdAt: string;
 
-}
-
-/**
- * 敏感词过滤/检测请求 DTO
- * @description 对应后端 TaktVocabularyFilterRequestDto
- */
-export interface VocabularyFilterRequest {
-  /**
-   * 待检测或过滤的文本
-   */
-  text: string;
-
-  /**
-   * 最低过滤等级（字典 sys_word_filter_level_category：1=低，2=中，3=高）；为空时匹配全部启用词条
-   */
-  minFilterLevel?: number;
-}
-
-/**
- * 敏感词过滤结果 DTO
- * @description 对应后端 TaktVocabularyFilterResultDto
- */
-export interface VocabularyFilterResult {
-  /**
-   * 原始文本
-   */
-  originalText: string;
-
-  /**
-   * 过滤后的文本
-   */
-  filteredText: string;
-
-  /**
-   * 是否命中敏感词
-   */
-  hasSensitiveWord: boolean;
-
-  /**
-   * 命中的敏感词列表（去重）
-   */
-  matchedWords: string[];
-}
-
-/**
- * 敏感词检测结果 DTO（不返回替换后文本）
- * @description 对应后端 TaktVocabularyDetectResultDto
- */
-export interface VocabularyDetectResult {
-  /**
-   * 是否命中敏感词
-   */
-  hasSensitiveWord: boolean;
-
-  /**
-   * 命中的敏感词列表（去重）
-   */
-  matchedWords: string[];
 }
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/output
 // 文件名称：personnel-operation-rate-change-log.d.ts
-// 创建时间：2026-06-21
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/output 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -41,7 +41,7 @@ export interface PersonnelOperationRateChangeLog extends CompanyDtoBase {
   /**
    * 生产线（冗余）
    */
-  productionLine: string;
+  prodTeam: string;
 
   /**
    * 变更字段列表（JSON数组格式，记录同一时间点修改的所有字段及其旧值、新值）
@@ -96,7 +96,7 @@ export interface PersonnelOperationRateChangeLogQuery extends TaktPagedQuery {
   /**
    * 生产线（冗余）
    */
-  productionLine?: string;
+  prodTeam?: string;
 
   /**
    * 变更字段列表（JSON数组格式，记录同一时间点修改的所有字段及其旧值、新值）
@@ -163,7 +163,7 @@ export interface PersonnelOperationRateChangeLogCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -175,7 +175,7 @@ export interface PersonnelOperationRateChangeLogCreate {
   /**
    * 生产线（冗余）
    */
-  productionLine: string;
+  prodTeam: string;
 
   /**
    * 变更字段列表（JSON数组格式，记录同一时间点修改的所有字段及其旧值、新值）
@@ -249,7 +249,7 @@ export interface PersonnelOperationRateChangeLogExport {
   /**
    * 生产线（冗余）
    */
-  productionLine: string;
+  prodTeam: string;
 
   /**
    * 变更字段列表（JSON数组格式，记录同一时间点修改的所有字段及其旧值、新值）

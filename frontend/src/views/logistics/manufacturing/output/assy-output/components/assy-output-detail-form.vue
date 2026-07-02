@@ -96,12 +96,10 @@
                 :label="t('entity.assyoutputdetail.downtimereason')"
                 name="downtimeReason"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.downtimeReason"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyoutputdetail.downtimereason') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  dict-type="logistics_stop_reason_category"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.assyoutputdetail.downtimereason') })"
                 />
               </a-form-item>
             </a-col>
@@ -122,12 +120,10 @@
                 :label="t('entity.assyoutputdetail.unachievedreason')"
                 name="unachievedReason"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.unachievedReason"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyoutputdetail.unachievedreason') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  dict-type="logistics_nonachievement_reason_category"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.assyoutputdetail.unachievedreason') })"
                 />
               </a-form-item>
             </a-col>
@@ -143,10 +139,12 @@
  * 组立日报子表 assyOutputDetail 维护表单 · 由 generate-vue-master-detail-from-api.cjs 生成
  * @module views/logistics/manufacturing/output/assy-output/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import type { AssyOutputDetailCreate } from '@/types/logistics/manufacturing/output/assy-output-detail'
+import TaktSelect from '@/components/business/takt-select/index.vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -182,6 +180,13 @@ function applyFormDefaults(target: Record<string, unknown>) {
   void target
 }
 
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载全量字典 */
+onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
+})
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 assyOutputDetailId 才视为编辑） */
 watch(

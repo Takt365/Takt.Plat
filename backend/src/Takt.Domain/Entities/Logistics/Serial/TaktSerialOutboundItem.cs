@@ -5,7 +5,7 @@
 // 创建时间：2026-05-11
 // 创建人：Takt365(Cursor AI)
 // 功能描述：序列号出库明细实体，记录每个序列号的出库信息
-// 
+//
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
@@ -22,57 +22,55 @@ namespace Takt.Domain.Entities.Logistics.Serial;
 [SugarIndex("ix_serial_outbound_item_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_serial_outbound_item_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_serial_outbound_item_outbound_serial_no_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(OutboundSerialNo), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_serial_outbound_item_outbound_id", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(OutboundId), OrderByType.Asc, false)]
 public class TaktSerialOutboundItem : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 出库ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 出库主表 ID（关联 TaktSerialOutbound.Id，选项 TaktSerialOutbounds/options）
     /// </summary>
     [SugarColumn(ColumnName = "outbound_id", ColumnDescription = "出库ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long OutboundId { get; set; }
-
     /// <summary>
     /// 出库单号（冗余字段，便于查询）
     /// </summary>
     [SugarColumn(ColumnName = "outbound_no", ColumnDescription = "出库单号", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string OutboundNo { get; set; } = string.Empty;
-
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
     /// </summary>
     [SugarColumn(ColumnName = "line_number", ColumnDescription = "行号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int LineNumber { get; set; } = 0;
-
     /// <summary>
-    /// 出库序列号（唯一索引）
+    /// 出库序列号（租户+公司内唯一）
     /// </summary>
     [SugarColumn(ColumnName = "outbound_serial_no", ColumnDescription = "出库序列号", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
     public string OutboundSerialNo { get; set; } = string.Empty;
-
     /// <summary>
-    /// 关联入库ID(序列化为string以避免Javascript精度问题)
+    /// 关联入库主表 ID（关联 TaktSerialInbound.Id，选项 TaktSerialInbounds/options）
     /// </summary>
     [SugarColumn(ColumnName = "reference_inbound_id", ColumnDescription = "关联入库ID", ColumnDataType = "bigint", IsNullable = false, DefaultValue = "0")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ReferenceInboundId { get; set; }
-
     /// <summary>
-    /// 关联入库单号
+    /// 关联入库单号（选项 TaktSerialInbounds/options，DictValue=InboundNo）
     /// </summary>
     [SugarColumn(ColumnName = "reference_inbound_no", ColumnDescription = "关联入库单号", ColumnDataType = "nvarchar", Length = 50, IsNullable = false, DefaultValue = "")]
     public string ReferenceInboundNo { get; set; } = string.Empty;
-
     /// <summary>
-    /// 关联入库行号
+    /// 关联入库行号（对应 TaktSerialInboundItem.LineNumber）
     /// </summary>
     [SugarColumn(ColumnName = "reference_inbound_line_number", ColumnDescription = "关联入库行号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int ReferenceInboundLineNumber { get; set; } = 0;
-
     /// <summary>
     /// 出库时间
     /// </summary>
     [SugarColumn(ColumnName = "outbound_time", ColumnDescription = "出库时间", ColumnDataType = "datetime", IsNullable = false, DefaultValue = "GETDATE()")]
     public DateTime OutboundTime { get; set; } = DateTime.Now;
+
+    // ========================================
+    // 导航属性区域
+    // ========================================
 
     /// <summary>
     /// 出库主表

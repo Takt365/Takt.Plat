@@ -36,12 +36,12 @@ export interface DictType extends TenantDtoBase {
   dictTypeName: string;
 
   /**
-   * 数据源（0=表数据，1=SQL脚本）
+   * 数据源（字典 sys_data_source_type；0=系统表 1=SQL查询）
    */
   dataSource: number;
 
   /**
-   * 动态字典SQL脚本（仅当DataSource=SqlScript时使用） SQL必须返回DictValue和DictLabel列，可选返回ListClass、CssClass、SortOrder
+   * SQL脚本（仅当DataSource=SqlScript时使用） SQL必须返回DictValue和DictLabel列，可选返回ListClass、CssClass、SortOrder
    */
   dictScript?: string;
 
@@ -51,7 +51,7 @@ export interface DictType extends TenantDtoBase {
   sortOrder: number;
 
   /**
-   * 是否内置（1=是，0=否） 内置字典不允许删除和修改核心字段
+   * 内置（字典 sys_yes_no_type；0=否 1=是）
    */
   isBuiltIn: number;
 
@@ -91,12 +91,12 @@ export interface DictTypeQuery extends TaktPagedQuery {
   dictTypeName?: string;
 
   /**
-   * 数据源（0=表数据，1=SQL脚本）
+   * 数据源（字典 sys_data_source_type；0=系统表 1=SQL查询）
    */
   dataSource?: number;
 
   /**
-   * 动态字典SQL脚本（仅当DataSource=SqlScript时使用） SQL必须返回DictValue和DictLabel列，可选返回ListClass、CssClass、SortOrder
+   * SQL脚本（仅当DataSource=SqlScript时使用） SQL必须返回DictValue和DictLabel列，可选返回ListClass、CssClass、SortOrder
    */
   dictScript?: string;
 
@@ -106,7 +106,7 @@ export interface DictTypeQuery extends TaktPagedQuery {
   sortOrder?: number;
 
   /**
-   * 是否内置（1=是，0=否） 内置字典不允许删除和修改核心字段
+   * 内置（字典 sys_yes_no_type；0=否 1=是）
    */
   isBuiltIn?: number;
 
@@ -155,12 +155,12 @@ export interface DictTypeCreate {
   dictTypeName: string;
 
   /**
-   * 数据源（0=表数据，1=SQL脚本）
+   * 数据源（字典 sys_data_source_type；0=系统表 1=SQL查询）
    */
   dataSource: number;
 
   /**
-   * 动态字典SQL脚本（仅当DataSource=SqlScript时使用） SQL必须返回DictValue和DictLabel列，可选返回ListClass、CssClass、SortOrder
+   * SQL脚本（仅当DataSource=SqlScript时使用） SQL必须返回DictValue和DictLabel列，可选返回ListClass、CssClass、SortOrder
    */
   dictScript?: string;
 
@@ -170,7 +170,7 @@ export interface DictTypeCreate {
   sortOrder: number;
 
   /**
-   * 是否内置（1=是，0=否） 内置字典不允许删除和修改核心字段
+   * 内置（字典 sys_yes_no_type；0=否 1=是）
    */
   isBuiltIn: number;
 
@@ -232,7 +232,7 @@ export interface DictTypeStatus {
 
 
 /**
- * DictType 是否内置更新 DTO
+ * DictType 内置更新 DTO
  * 对应前端 DictTypeBuiltIn
  * @description 对应后端 TaktDictTypeBuiltInDto
  */
@@ -243,7 +243,7 @@ export interface DictTypeBuiltIn {
   dictTypeId: string;
 
   /**
-   * 是否内置（字典 sys_yes_no_type；1=是，0=否）
+   * 内置（字典 sys_yes_no_type；1=是，0=否）
    */
   isBuiltIn: number;
 
@@ -286,12 +286,12 @@ export interface DictTypeTemplate {
   dictTypeName?: string;
 
   /**
-   * 数据源（0=表数据，1=SQL脚本）
+   * 数据源（字典 sys_data_source_type；0=系统表 1=SQL查询）
    */
   dataSource?: number;
 
   /**
-   * 动态字典SQL脚本（仅当DataSource=SqlScript时使用） SQL必须返回DictValue和DictLabel列，可选返回ListClass、CssClass、SortOrder
+   * SQL脚本（仅当DataSource=SqlScript时使用） SQL必须返回DictValue和DictLabel列，可选返回ListClass、CssClass、SortOrder
    */
   dictScript?: string;
 
@@ -301,7 +301,7 @@ export interface DictTypeTemplate {
   sortOrder?: number;
 
   /**
-   * 是否内置（1=是，0=否） 内置字典不允许删除和修改核心字段
+   * 内置（字典 sys_yes_no_type；0=否 1=是）
    */
   isBuiltIn?: number;
 
@@ -340,12 +340,12 @@ export interface DictTypeImport {
   dictTypeName?: string;
 
   /**
-   * 数据源（0=表数据，1=SQL脚本）
+   * 数据源（字典 sys_data_source_type；0=系统表 1=SQL查询）
    */
   dataSource?: number;
 
   /**
-   * 动态字典SQL脚本（仅当DataSource=SqlScript时使用） SQL必须返回DictValue和DictLabel列，可选返回ListClass、CssClass、SortOrder
+   * SQL脚本（仅当DataSource=SqlScript时使用） SQL必须返回DictValue和DictLabel列，可选返回ListClass、CssClass、SortOrder
    */
   dictScript?: string;
 
@@ -355,7 +355,7 @@ export interface DictTypeImport {
   sortOrder?: number;
 
   /**
-   * 是否内置（1=是，0=否） 内置字典不允许删除和修改核心字段
+   * 内置（字典 sys_yes_no_type；0=否 1=是）
    */
   isBuiltIn?: number;
 
@@ -399,12 +399,12 @@ export interface DictTypeExport {
   dictTypeName: string;
 
   /**
-   * 数据源（0=表数据，1=SQL脚本）
+   * 数据源（字典 sys_data_source_type；0=系统表 1=SQL查询）
    */
   dataSource: number;
 
   /**
-   * 动态字典SQL脚本（仅当DataSource=SqlScript时使用） SQL必须返回DictValue和DictLabel列，可选返回ListClass、CssClass、SortOrder
+   * SQL脚本（仅当DataSource=SqlScript时使用） SQL必须返回DictValue和DictLabel列，可选返回ListClass、CssClass、SortOrder
    */
   dictScript?: string;
 
@@ -414,7 +414,7 @@ export interface DictTypeExport {
   sortOrder: number;
 
   /**
-   * 是否内置（1=是，0=否） 内置字典不允许删除和修改核心字段
+   * 内置（字典 sys_yes_no_type；0=否 1=是）
    */
   isBuiltIn: number;
 

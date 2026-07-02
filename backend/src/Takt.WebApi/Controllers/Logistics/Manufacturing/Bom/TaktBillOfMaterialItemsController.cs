@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Manufacturing.Bom
 // 文件名称：TaktBillOfMaterialItemsController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-27
 // 创建人：Takt365(Cursor AI)
 // 功能描述：物料清单明细控制器
 // 
@@ -41,7 +41,7 @@ public class TaktBillOfMaterialItemsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:manufacturing:bom:billofmaterial:list", "物料清单明细列表")]
+    [TaktPermission("logistics:manufacturing:bom:bill:of:material:list", "物料清单明细列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetBillOfMaterialItemListAsync([FromQuery] TaktBillOfMaterialItemQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktBillOfMaterialItemsController : TaktControllerBase
     /// </summary>
     /// <param name="id">物料清单明细ID</param>
     /// <returns>物料清单明细DTO</returns>
-    [TaktPermission("logistics:manufacturing:bom:billofmaterial:query", "物料清单明细详情")]
+    [TaktPermission("logistics:manufacturing:bom:bill:of:material:query", "物料清单明细详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetBillOfMaterialItemByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktBillOfMaterialItemsController : TaktControllerBase
     /// 获取物料清单明细选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:manufacturing:bom:billofmaterial:query", "物料清单明细选项")]
+    [TaktPermission("logistics:manufacturing:bom:bill:of:material:query", "物料清单明细选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetBillOfMaterialItemOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktBillOfMaterialItemsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>物料清单明细DTO</returns>
-    [TaktPermission("logistics:manufacturing:bom:billofmaterial:create", "创建物料清单明细")]
+    [TaktPermission("logistics:manufacturing:bom:bill:of:material:create", "创建物料清单明细")]
     [HttpPost]
     public async Task<IActionResult> CreateBillOfMaterialItemAsync([FromBody] TaktBillOfMaterialItemCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktBillOfMaterialItemsController : TaktControllerBase
     /// <param name="id">物料清单明细ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>物料清单明细DTO</returns>
-    [TaktPermission("logistics:manufacturing:bom:billofmaterial:update", "更新物料清单明细")]
+    [TaktPermission("logistics:manufacturing:bom:bill:of:material:update", "更新物料清单明细")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateBillOfMaterialItemAsync(long id, [FromBody] TaktBillOfMaterialItemUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktBillOfMaterialItemsController : TaktControllerBase
     /// </summary>
     /// <param name="id">物料清单明细ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:bom:billofmaterial:delete", "删除物料清单明细")]
+    [TaktPermission("logistics:manufacturing:bom:bill:of:material:delete", "删除物料清单明细")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteBillOfMaterialItemByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktBillOfMaterialItemsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:bom:billofmaterial:delete", "批量删除物料清单明细")]
+    [TaktPermission("logistics:manufacturing:bom:bill:of:material:delete", "批量删除物料清单明细")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteBillOfMaterialItemBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktBillOfMaterialItemsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:bom:billofmaterial:import", "获取物料清单明细导入模板")]
+    [TaktPermission("logistics:manufacturing:bom:bill:of:material:import", "获取物料清单明细导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetBillOfMaterialItemTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -204,7 +204,7 @@ public class TaktBillOfMaterialItemsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:manufacturing:bom:billofmaterial:import", "导入物料清单明细")]
+    [TaktPermission("logistics:manufacturing:bom:bill:of:material:import", "导入物料清单明细")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportBillOfMaterialItemAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -234,7 +234,7 @@ public class TaktBillOfMaterialItemsController : TaktControllerBase
     /// 导出物料清单明细
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:bom:billofmaterial:export", "导出物料清单明细")]
+    [TaktPermission("logistics:manufacturing:bom:bill:of:material:export", "导出物料清单明细")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportBillOfMaterialItemAsync([FromQuery] TaktBillOfMaterialItemQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

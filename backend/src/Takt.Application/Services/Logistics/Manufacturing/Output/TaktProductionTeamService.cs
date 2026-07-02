@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Output
 // 文件名称：TaktProductionTeamService.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：生产班组应用服务实现
 // 
@@ -97,8 +97,9 @@ public class TaktProductionTeamService : TaktServiceBase, ITaktProductionTeamSer
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.TeamName ?? e.Id.ToString(),
+            DictValue = e.TeamCode,
+            DictLabel = e.TeamName ?? e.TeamCode,
+            ExtValue = e.PlantCode,
         }).ToList();
     }
 
@@ -195,7 +196,7 @@ public class TaktProductionTeamService : TaktServiceBase, ITaktProductionTeamSer
         {
             throw new TaktBusinessException("生产班组不存在");
         }
-        entity.Status = dto.Status;
+        entity.Status = dto.ProductionTeamStatus;
         await _productionTeamRepository.UpdateAsync(entity);
         return await GetProductionTeamByIdAsync(dto.ProductionTeamId) ?? throw new TaktBusinessException("生产班组不存在");
     }
@@ -308,9 +309,6 @@ public class TaktProductionTeamService : TaktServiceBase, ITaktProductionTeamSer
                 || (x.TeamCode != null && x.TeamCode.Contains(keywords))
                 || (x.TeamName != null && x.TeamName.Contains(keywords))
                 || (x.TeamCategory != null && x.TeamCategory.Contains(keywords))
-                || (x.TeamCategoryName != null && x.TeamCategoryName.Contains(keywords))
-                || (x.ProductionLine != null && x.ProductionLine.Contains(keywords))
-                || SqlFunc.ToString(x.TeamLeaderId).Contains(keywords)
                 || (x.TeamLeaderName != null && x.TeamLeaderName.Contains(keywords))
                 || SqlFunc.ToString(x.ShiftNo).Contains(keywords)
                 || SqlFunc.ToString(x.Status).Contains(keywords)
@@ -337,27 +335,12 @@ public class TaktProductionTeamService : TaktServiceBase, ITaktProductionTeamSer
 
         if (!string.IsNullOrEmpty(queryDto?.TeamCategory))
         {
-            exp = exp.And(x => x.TeamCategory != null && x.TeamCategory.Contains(queryDto.TeamCategory));
+            exp = exp.And(x => x.TeamCategory == queryDto.TeamCategory);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.TeamCategoryName))
+        if (!string.IsNullOrEmpty(queryDto?.TeamLeader))
         {
-            exp = exp.And(x => x.TeamCategoryName != null && x.TeamCategoryName.Contains(queryDto.TeamCategoryName));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ProductionLine))
-        {
-            exp = exp.And(x => x.ProductionLine != null && x.ProductionLine.Contains(queryDto.ProductionLine));
-        }
-
-        if (queryDto?.TeamLeaderId.HasValue == true)
-        {
-            exp = exp.And(x => x.TeamLeaderId == queryDto.TeamLeaderId);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.TeamLeaderName))
-        {
-            exp = exp.And(x => x.TeamLeaderName != null && x.TeamLeaderName.Contains(queryDto.TeamLeaderName));
+            exp = exp.And(x => x.TeamLeaderName != null && x.TeamLeaderName.Contains(queryDto.TeamLeader));
         }
 
         if (queryDto?.ShiftNo.HasValue == true)
@@ -365,9 +348,9 @@ public class TaktProductionTeamService : TaktServiceBase, ITaktProductionTeamSer
             exp = exp.And(x => x.ShiftNo == queryDto.ShiftNo);
         }
 
-        if (queryDto?.Status.HasValue == true)
+        if (queryDto?.ProductionTeamStatus.HasValue == true)
         {
-            exp = exp.And(x => x.Status == queryDto.Status);
+            exp = exp.And(x => x.Status == queryDto.ProductionTeamStatus);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

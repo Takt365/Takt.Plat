@@ -203,6 +203,12 @@ function attachForwardedHeaders(entry: ProxyOptions): void {
 
       const encrypted = (req.socket as { encrypted?: boolean } | undefined)?.encrypted === true;
       proxyReq.setHeader('X-Forwarded-Proto', encrypted ? 'https' : 'http');
+
+      const userAgent = req.headers['user-agent'];
+      if (typeof userAgent === 'string' && userAgent.trim()) {
+        proxyReq.setHeader('User-Agent', userAgent);
+        proxyReq.setHeader('X-Takt-User-Agent', userAgent);
+      }
     });
   };
 }
@@ -504,6 +510,10 @@ export default defineConfig(({ mode }) => {
 
     resolve: {
       alias: buildResolveAlias(__dirname),
+    },
+
+    optimizeDeps: {
+      include: ['cron-parser'],
     },
 
     server: {

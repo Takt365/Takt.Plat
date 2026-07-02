@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Accounting.Controlling
 // 文件名称：ITaktCostCenterService.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-07-02
 // 创建人：Takt365(Cursor AI)
 // 功能描述：成本中心应用服务接口
 // 
@@ -36,7 +36,7 @@ public interface ITaktCostCenterService
     Task<TaktCostCenterDto?> GetCostCenterByIdAsync(long id);
 
     /// <summary>
-    /// 获取成本中心树形选项列表
+    /// 获取成本中心树形选项列表（DictValue 为 CostCenterCode，DictLabel 为成本中心名称）
     /// </summary>
     /// <returns>树形选项</returns>
     Task<List<TaktTreeSelectOption>> GetCostCenterTreeOptionsAsync();

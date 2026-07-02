@@ -311,7 +311,7 @@ public class TaktUserInfoResponseDto
     public string? Email { get; set; }
 
     /// <summary>
-    /// 用户头像 URL（来自员工档案 photo_url）
+    /// 用户头像 URL（来自员工档案 avatar）
     /// </summary>
     public string? Avatar { get; set; }
 
@@ -326,12 +326,12 @@ public class TaktUserInfoResponseDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 用户默认区域文化 BCP47（takt_identity_user.default_culture）
+    /// 用户区域文化 BCP47（takt_identity_user.default_culture）
     /// </summary>
     public string DefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（takt_company.default_culture）
+    /// 当前公司区域文化 BCP47（takt_company.default_culture）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -437,12 +437,12 @@ public class TaktLoginPreviewLocaleDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 用户默认区域文化 BCP47（takt_identity_user.default_culture，用于界面语言）
+    /// 用户区域文化 BCP47（takt_identity_user.default_culture，用于界面语言）
     /// </summary>
     public string DefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司默认区域文化 BCP47（takt_company.default_culture，用于业务数据 CRUD 语言校验）
+    /// 公司区域文化 BCP47（takt_company.default_culture，用于业务数据 CRUD 语言校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 }

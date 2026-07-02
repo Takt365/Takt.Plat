@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Manufacturing.Planning
 // 文件名称：TaktPurchasePlanValidators.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchasePlan 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktPurchasePlan 生成，请按需审阅）
 // 
@@ -43,17 +43,11 @@ public class TaktPurchasePlanCreateValidator : AbstractValidator<TaktPurchasePla
             .MaximumLength(10).WithMessage("采购计划编码长度不能超过10个字符");
         RuleFor(x => x.ProductionPlanId)
             .GreaterThanOrEqualTo(0).WithMessage("来源生产计划ID不能为负数");
-        RuleFor(x => x.ProductionPlanCode)
-            .MaximumLength(10).WithMessage("来源生产计划编码长度不能超过10个字符");
-        RuleFor(x => x.PurchaseGroupCode)
-            .MaximumLength(50).WithMessage("采购组编码长度不能超过50个字符");
         RuleFor(x => x.PlannerId)
             .GreaterThanOrEqualTo(0).WithMessage("计划人员工ID不能为负数");
         RuleFor(x => x.PlanBy)
             .NotEmpty().WithMessage("计划人不能为空")
             .MaximumLength(50).WithMessage("计划人长度不能超过50个字符");
-        RuleFor(x => x.PlanDescription)
-            .MaximumLength(1000).WithMessage("计划说明长度不能超过1000个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -77,6 +71,29 @@ public class TaktPurchasePlanUpdateValidator : AbstractValidator<TaktPurchasePla
     {
         RuleFor(x => x.PurchasePlanId)
             .GreaterThan(0).WithMessage("PurchasePlanID无效");
+        RuleFor(x => x.TenantCode)
+            .NotEmpty().WithMessage("租户编码不能为空")
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.CompanyCode)
+            .NotEmpty().WithMessage("公司代码不能为空")
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.PlantCode)
+            .NotEmpty().WithMessage("工厂代码不能为空")
+            .MaximumLength(50).WithMessage("工厂代码长度不能超过50个字符");
+        RuleFor(x => x.PurchasePlanCode)
+            .NotEmpty().WithMessage("采购计划编码不能为空")
+            .MaximumLength(10).WithMessage("采购计划编码长度不能超过10个字符");
+        RuleFor(x => x.ProductionPlanId)
+            .GreaterThanOrEqualTo(0).WithMessage("来源生产计划ID不能为负数");
+        RuleFor(x => x.PlannerId)
+            .GreaterThanOrEqualTo(0).WithMessage("计划人员工ID不能为负数");
+        RuleFor(x => x.PlanBy)
+            .NotEmpty().WithMessage("计划人不能为空")
+            .MaximumLength(50).WithMessage("计划人长度不能超过50个字符");
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
     }
 }
 
@@ -106,17 +123,11 @@ public class TaktPurchasePlanImportValidator : AbstractValidator<TaktPurchasePla
             .MaximumLength(10).WithMessage("采购计划编码长度不能超过10个字符");
         RuleFor(x => x.ProductionPlanId)
             .GreaterThanOrEqualTo(0).WithMessage("来源生产计划ID不能为负数");
-        RuleFor(x => x.ProductionPlanCode)
-            .MaximumLength(10).WithMessage("来源生产计划编码长度不能超过10个字符").When(x => !string.IsNullOrWhiteSpace(x.ProductionPlanCode));
-        RuleFor(x => x.PurchaseGroupCode)
-            .MaximumLength(50).WithMessage("采购组编码长度不能超过50个字符").When(x => !string.IsNullOrWhiteSpace(x.PurchaseGroupCode));
         RuleFor(x => x.PlannerId)
             .GreaterThanOrEqualTo(0).WithMessage("计划人员工ID不能为负数");
         RuleFor(x => x.PlanBy)
             .NotEmpty().WithMessage("计划人不能为空")
             .MaximumLength(50).WithMessage("计划人长度不能超过50个字符");
-        RuleFor(x => x.PlanDescription)
-            .MaximumLength(1000).WithMessage("计划说明长度不能超过1000个字符").When(x => !string.IsNullOrWhiteSpace(x.PlanDescription));
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

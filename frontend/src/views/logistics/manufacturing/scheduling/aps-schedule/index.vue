@@ -65,6 +65,8 @@
       :master-row-selection="rowSelection"
       master-id-column-key="apsScheduleId"
       :master-visible-column-keys="visibleColumnKeys"
+      master-table-mode="masterDetailMaster"
+      master-scroll-layout="masterDetailLr"
       :master-total="total"
       master-entity-scope="company"
       @master-change="handleTableChange"
@@ -175,8 +177,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.planStartTimeStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.apsschedule.planstarttimestart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -186,8 +187,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.planStartTimeEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.apsschedule.planstarttimeend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -197,8 +197,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.planEndTimeStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.apsschedule.planendtimestart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -208,8 +207,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.planEndTimeEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.apsschedule.planendtimeend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -330,8 +328,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.publishTimeStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.apsschedule.publishtimestart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -341,8 +338,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.publishTimeEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.apsschedule.publishtimeend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -385,7 +381,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -396,18 +392,36 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('ExtField')">
-      <a-form-item :label="t('entity.apsschedule.extfield')">
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
         <a-textarea
-          v-model:value="advancedQueryForm.ExtField"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.apsschedule.extfield') })"
-          :rows="2"
-          allow-clear
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -436,6 +450,7 @@
       @cancel="handleImportCancel"
     >
       <TaktImportFile
+        v-if="importVisible"
         entity-i18n-key="entity.apsschedule._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
@@ -455,7 +470,7 @@
       :id-column-key="'apsScheduleId'"
       :action-column-key="'action'"
       entity-scope="company"
-      table-mode="single"
+      table-mode="masterDetailMaster"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -480,7 +495,8 @@ import { getApsScheduleList, getApsScheduleById, createApsSchedule, updateApsSch
 import type { ApsSchedule, ApsScheduleQuery } from '@/types/logistics/manufacturing/scheduling/aps-schedule'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -553,7 +569,7 @@ const advancedQueryForm = ref({
   scheduleDescription: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
@@ -586,7 +602,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'scheduleDescription', label: t('entity.apsschedule.scheduledescription') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'ExtField', label: t('entity.apsschedule.extfield') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -670,7 +686,7 @@ function buildListQuery(overrides?: Partial<ApsScheduleQuery>): ApsScheduleQuery
   assignTrimmed('scheduleDescription', form.scheduleDescription)
   assignTrimmed('createdAtStart', form.createdAtStart)
   assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('ExtField', form.ExtField)
+  assignTrimmed('extField', form.extField)
   assignTrimmed('remark', form.remark)
   return query
 }
@@ -990,7 +1006,7 @@ const rowSelection = computed(() => ({
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
-    } else if (getApsScheduleId(selectedRow.value) === getApsScheduleId(record)) {
+    } else if (selectedRow.value && getApsScheduleId(selectedRow.value) === getApsScheduleId(record)) {
       selectedRow.value = null
       syncMasterSelection(null)
     }
@@ -1059,7 +1075,7 @@ function handleReset() {
   scheduleDescription: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
   currentPage.value = getTaktDefaultPageIndex()
@@ -1143,15 +1159,22 @@ async function handleDownloadTemplate(sheetName?: string, fileName?: string): Pr
   return (res as any)?.data ?? res
 }
 
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importApsSchedule(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importApsSchedule(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
+
+      if (selectedMasterKey.value) {
+    apsScheduleItemPanelRef.value?.reload?.()
+      }
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
+  }
 }
 
 /** 关闭导入对话框 */
@@ -1276,7 +1299,7 @@ function handleAdvancedQueryReset() {
   scheduleDescription: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
 }

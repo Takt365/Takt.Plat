@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Maintenance
 // 文件名称：TaktEquipmentDtos.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Equipment 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktEquipment 生成，请按需审阅）
 // 
@@ -51,7 +51,7 @@ public class TaktEquipmentDto : TaktCompanyDtoBase
     public string EquipmentName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设备类型（0=生产设备，1=检测设备，2=辅助设备，3=办公设备，4=其他设备）
+    /// 登录设备（0=生产设备，1=检测设备，2=辅助设备，3=办公设备，4=其他设备）
     /// </summary>
     public int EquipmentType { get; set; } = 0;
 
@@ -236,7 +236,7 @@ public class TaktEquipmentQueryDto : TaktPagedQuery
     public string? EquipmentName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设备类型（0=生产设备，1=检测设备，2=辅助设备，3=办公设备，4=其他设备）
+    /// 登录设备（0=生产设备，1=检测设备，2=辅助设备，3=办公设备，4=其他设备）
     /// </summary>
     public int? EquipmentType { get; set; }
 
@@ -431,7 +431,7 @@ public class TaktEquipmentCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -454,7 +454,7 @@ public class TaktEquipmentCreateDto
     public string EquipmentName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设备类型（0=生产设备，1=检测设备，2=辅助设备，3=办公设备，4=其他设备）
+    /// 登录设备（0=生产设备，1=检测设备，2=辅助设备，3=办公设备，4=其他设备）
     /// </summary>
     public int EquipmentType { get; set; } = 0;
 
@@ -689,7 +689,7 @@ public class TaktEquipmentTemplateDto
     public string? EquipmentName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设备类型（0=生产设备，1=检测设备，2=辅助设备，3=办公设备，4=其他设备）
+    /// 登录设备（0=生产设备，1=检测设备，2=辅助设备，3=办公设备，4=其他设备）
     /// </summary>
     public int? EquipmentType { get; set; }
 
@@ -732,6 +732,106 @@ public class TaktEquipmentTemplateDto
     /// 所属产线
     /// </summary>
     public string? ProductionLineBy { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 所属工位
+    /// </summary>
+    public string? WorkstationBy { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 所属部门
+    /// </summary>
+    public string? DeptBy { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 设备位置（详细位置描述）
+    /// </summary>
+    public string? EquipmentLocation { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 负责人
+    /// </summary>
+    public string? ResponsibleUserBy { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 操作人
+    /// </summary>
+    public string? OperatorBy { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 购买日期
+    /// </summary>
+    public DateTime? PurchaseDate { get; set; }
+
+    /// <summary>
+    /// 安装日期
+    /// </summary>
+    public DateTime? InstallationDate { get; set; }
+
+    /// <summary>
+    /// 启用日期
+    /// </summary>
+    public DateTime? StartDate { get; set; }
+
+    /// <summary>
+    /// 保修开始日期
+    /// </summary>
+    public DateTime? WarrantyStartDate { get; set; }
+
+    /// <summary>
+    /// 保修结束日期
+    /// </summary>
+    public DateTime? WarrantyEndDate { get; set; }
+
+    /// <summary>
+    /// 设备原值（精确到分，存储为整数，单位为分）
+    /// </summary>
+    public decimal? EquipmentOriginalValue { get; set; }
+
+    /// <summary>
+    /// 设备技术参数（JSON格式，存储设备技术参数配置）
+    /// </summary>
+    public string? TechnicalParameters { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 设备图片（JSON格式，存储设备图片URL列表）
+    /// </summary>
+    public string? EquipmentImages { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 设备文档（JSON格式，存储设备文档ID列表）
+    /// </summary>
+    public string? EquipmentDocuments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否关键设备（0=否，1=是）
+    /// </summary>
+    public int? IsCritical { get; set; }
+
+    /// <summary>
+    /// 保修状态（0=无保修，1=保修期内，2=保修期外，3=延保中）
+    /// </summary>
+    public int? WarrantyStatus { get; set; }
+
+    /// <summary>
+    /// 设备状态（字典 sys_equipment_status）
+    /// </summary>
+    public int? EquipmentStatus { get; set; }
+
+    /// <summary>
+    /// 维护通知单列表（子表，级联保存）
+    /// </summary>
+    public List<TaktMaintenanceNotificationCreateDto>? MaintenanceNotifications { get; set; }
+
+    /// <summary>
+    /// 维护工单列表（子表，级联保存）
+    /// </summary>
+    public List<TaktMaintenanceWorkOrderCreateDto>? MaintenanceWorkOrders { get; set; }
+
+    /// <summary>
+    /// 维护履历列表（由维护工单完工归档生成，只读）（子表，级联保存）
+    /// </summary>
+    public List<TaktMaintenanceHistoryCreateDto>? MaintenanceHistories { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -761,7 +861,7 @@ public class TaktEquipmentImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -781,7 +881,7 @@ public class TaktEquipmentImportDto
     public string? EquipmentName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设备类型（0=生产设备，1=检测设备，2=辅助设备，3=办公设备，4=其他设备）
+    /// 登录设备（0=生产设备，1=检测设备，2=辅助设备，3=办公设备，4=其他设备）
     /// </summary>
     public int? EquipmentType { get; set; }
 
@@ -824,6 +924,106 @@ public class TaktEquipmentImportDto
     /// 所属产线
     /// </summary>
     public string? ProductionLineBy { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 所属工位
+    /// </summary>
+    public string? WorkstationBy { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 所属部门
+    /// </summary>
+    public string? DeptBy { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 设备位置（详细位置描述）
+    /// </summary>
+    public string? EquipmentLocation { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 负责人
+    /// </summary>
+    public string? ResponsibleUserBy { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 操作人
+    /// </summary>
+    public string? OperatorBy { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 购买日期
+    /// </summary>
+    public DateTime? PurchaseDate { get; set; }
+
+    /// <summary>
+    /// 安装日期
+    /// </summary>
+    public DateTime? InstallationDate { get; set; }
+
+    /// <summary>
+    /// 启用日期
+    /// </summary>
+    public DateTime? StartDate { get; set; }
+
+    /// <summary>
+    /// 保修开始日期
+    /// </summary>
+    public DateTime? WarrantyStartDate { get; set; }
+
+    /// <summary>
+    /// 保修结束日期
+    /// </summary>
+    public DateTime? WarrantyEndDate { get; set; }
+
+    /// <summary>
+    /// 设备原值（精确到分，存储为整数，单位为分）
+    /// </summary>
+    public decimal? EquipmentOriginalValue { get; set; }
+
+    /// <summary>
+    /// 设备技术参数（JSON格式，存储设备技术参数配置）
+    /// </summary>
+    public string? TechnicalParameters { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 设备图片（JSON格式，存储设备图片URL列表）
+    /// </summary>
+    public string? EquipmentImages { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 设备文档（JSON格式，存储设备文档ID列表）
+    /// </summary>
+    public string? EquipmentDocuments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否关键设备（0=否，1=是）
+    /// </summary>
+    public int? IsCritical { get; set; }
+
+    /// <summary>
+    /// 保修状态（0=无保修，1=保修期内，2=保修期外，3=延保中）
+    /// </summary>
+    public int? WarrantyStatus { get; set; }
+
+    /// <summary>
+    /// 设备状态（字典 sys_equipment_status）
+    /// </summary>
+    public int? EquipmentStatus { get; set; }
+
+    /// <summary>
+    /// 维护通知单列表（子表，级联保存）
+    /// </summary>
+    public List<TaktMaintenanceNotificationCreateDto>? MaintenanceNotifications { get; set; }
+
+    /// <summary>
+    /// 维护工单列表（子表，级联保存）
+    /// </summary>
+    public List<TaktMaintenanceWorkOrderCreateDto>? MaintenanceWorkOrders { get; set; }
+
+    /// <summary>
+    /// 维护履历列表（由维护工单完工归档生成，只读）（子表，级联保存）
+    /// </summary>
+    public List<TaktMaintenanceHistoryCreateDto>? MaintenanceHistories { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -874,7 +1074,7 @@ public class TaktEquipmentExportDto
     public string EquipmentName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设备类型（0=生产设备，1=检测设备，2=辅助设备，3=办公设备，4=其他设备）
+    /// 登录设备（0=生产设备，1=检测设备，2=辅助设备，3=办公设备，4=其他设备）
     /// </summary>
     public int EquipmentType { get; set; } = 0;
 

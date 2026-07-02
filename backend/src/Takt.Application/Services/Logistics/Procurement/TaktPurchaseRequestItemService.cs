@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Procurement
 // 文件名称：TaktPurchaseRequestItemService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-30
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购申请明细应用服务实现
 // 
@@ -310,12 +310,14 @@ public class TaktPurchaseRequestItemService : TaktServiceBase, ITaktPurchaseRequ
                 SqlFunc.ToString(x.PurchaseRequestId).Contains(keywords)
                 || (x.PurchaseRequestCode != null && x.PurchaseRequestCode.Contains(keywords))
                 || SqlFunc.ToString(x.LineNumber).Contains(keywords)
+                || (x.AllocationCategory != null && x.AllocationCategory.Contains(keywords))
                 || (x.MaterialCode != null && x.MaterialCode.Contains(keywords))
                 || (x.MaterialName != null && x.MaterialName.Contains(keywords))
                 || (x.MaterialSpecification != null && x.MaterialSpecification.Contains(keywords))
                 || (x.RequestUnit != null && x.RequestUnit.Contains(keywords))
                 || SqlFunc.ToString(x.RequestQuantity).Contains(keywords)
                 || SqlFunc.ToString(x.ConvertedQuantity).Contains(keywords)
+                || SqlFunc.ToString(x.PurchasePerUnit).Contains(keywords)
                 || SqlFunc.ToString(x.EstimatedUnitPrice).Contains(keywords)
                 || SqlFunc.ToString(x.EstimatedAmount).Contains(keywords)
                 || (x.ReferenceSupplierCode != null && x.ReferenceSupplierCode.Contains(keywords))
@@ -339,6 +341,11 @@ public class TaktPurchaseRequestItemService : TaktServiceBase, ITaktPurchaseRequ
         if (queryDto?.LineNumber.HasValue == true)
         {
             exp = exp.And(x => x.LineNumber == queryDto.LineNumber);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.AllocationCategory))
+        {
+            exp = exp.And(x => x.AllocationCategory != null && x.AllocationCategory.Contains(queryDto.AllocationCategory));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.MaterialCode))
@@ -369,6 +376,11 @@ public class TaktPurchaseRequestItemService : TaktServiceBase, ITaktPurchaseRequ
         if (queryDto?.ConvertedQuantity.HasValue == true)
         {
             exp = exp.And(x => x.ConvertedQuantity == queryDto.ConvertedQuantity);
+        }
+
+        if (queryDto?.PurchasePerUnit.HasValue == true)
+        {
+            exp = exp.And(x => x.PurchasePerUnit == queryDto.PurchasePerUnit);
         }
 
         if (queryDto?.EstimatedUnitPrice.HasValue == true)

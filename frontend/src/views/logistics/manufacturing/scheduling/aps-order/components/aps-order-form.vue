@@ -160,12 +160,10 @@
                 :label="t('entity.apsorder.unitofmeasure')"
                 name="unitOfMeasure"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.unitOfMeasure"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsorder.unitofmeasure') })"
-                  show-count
-                  :maxlength="40"
-                  allow-clear
+                  dict-type="logistics_unit_of_measure_code"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.apsorder.unitofmeasure') })"
                 />
               </a-form-item>
             </a-col>
@@ -363,7 +361,56 @@ const apsOperationTableRef = ref<{
 
 /** 子表 apsOperation 可编辑列 */
 const apsOperationFormColumns = computed<TaktEditableTableColumn[]>(() => [
-,
+  {
+    key: 'lineNumber',
+    title: t('entity.apsoperation.linenumber'),
+    editor: 'inputNumber',
+    width: 140, summary: 'sum',
+  },
+  {
+    key: 'routingItemId',
+    title: t('entity.apsoperation.routingitemid'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.apsoperation.routingitemid') }),
+  },
+  {
+    key: 'processCode',
+    title: t('entity.apsoperation.processcode'),
+    editor: 'input',
+    width: 140,
+  },
+  {
+    key: 'processName',
+    title: t('entity.apsoperation.processname'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.apsoperation.processname') }),
+  },
+  {
+    key: 'workCenterCode',
+    title: t('entity.apsoperation.workcentercode'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.apsoperation.workcentercode') }),
+  },
+  {
+    key: 'workCenterResourceId',
+    title: t('entity.apsoperation.workcenterresourceid'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.apsoperation.workcenterresourceid') }),
+  },
+  {
+    key: 'plannedStartTime',
+    title: t('entity.apsoperation.plannedstarttime'),
+    editor: 'datePicker',
+    valueFormat: 'YYYY-MM-DD HH:mm:ss', showTime: true,
+    width: 140,
+  },
+  {
+    key: 'plannedEndTime',
+    title: t('entity.apsoperation.plannedendtime'),
+    editor: 'datePicker',
+    valueFormat: 'YYYY-MM-DD HH:mm:ss', showTime: true,
+    width: 140,
+  },
 ])
 
 /** 编辑态从 formData 同步各子表行 */
@@ -373,7 +420,14 @@ function syncChildRowsFromFormData(val: Partial<ApsOrderCreate & { apsOrderId?: 
 
 function createDefaultApsOperationRow(): Record<string, unknown> {
   return {
-
+    lineNumber: (childApsOperationRows.value.length + 1) * 10,
+    routingItemId: '',
+    processCode: '',
+    processName: '',
+    workCenterCode: '',
+    workCenterResourceId: '',
+    plannedStartTime: '',
+    plannedEndTime: '',
   }
 }
 
@@ -496,8 +550,8 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   unitOfMeasure: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.apsorder.unitofmeasure') }),
-      trigger: 'blur'
+      message: t('common.page.form.placeholder.select', { field: t('entity.apsorder.unitofmeasure') }),
+      trigger: 'change'
     }
   ],
   orderStatus: [{

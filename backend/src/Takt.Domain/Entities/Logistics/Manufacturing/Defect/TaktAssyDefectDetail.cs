@@ -44,9 +44,9 @@ public class TaktAssyDefectDetail : TaktCompanyEntityBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 不良区分
+    /// 不良区分（字典 logistics_defect_category，存 DictValue）
     /// </summary>
-    [SugarColumn(ColumnName = "defect_category", ColumnDescription = "不良区分", Length = 50, ColumnDataType = "nvarchar", IsNullable = true)]
+    [SugarColumn(ColumnName = "defect_category", ColumnDescription = "不良区分", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? DefectCategory { get; set; }
 
     /// <summary>
@@ -86,9 +86,9 @@ public class TaktAssyDefectDetail : TaktCompanyEntityBase
     public string? DefectSymptom { get; set; }
 
     /// <summary>
-    /// 不良个所
+    /// 不良个所（字典 logistics_pcb_location_category，存 DictValue）
     /// </summary>
-    [SugarColumn(ColumnName = "defect_location", ColumnDescription = "不良个所", Length =500, ColumnDataType = "nvarchar", IsNullable = true)]
+    [SugarColumn(ColumnName = "defect_location", ColumnDescription = "不良个所", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? DefectLocation { get; set; }
 
     /// <summary>
@@ -98,9 +98,9 @@ public class TaktAssyDefectDetail : TaktCompanyEntityBase
     public string? DefectReason { get; set; }
 
     /// <summary>
-    /// 修理员
+    /// 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
-    [SugarColumn(ColumnName = "repair_operator", ColumnDescription = "修理员", Length = 20, ColumnDataType = "nvarchar", IsNullable = true)]
+    [SugarColumn(ColumnName = "repair_operator", ColumnDescription = "修理员", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? RepairOperator { get; set; }
 
     /// <summary>

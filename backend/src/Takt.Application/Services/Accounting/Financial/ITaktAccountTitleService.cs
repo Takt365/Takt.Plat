@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Accounting.Financial
 // 文件名称：ITaktAccountTitleService.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：会计科目应用服务接口
 // 
@@ -36,10 +36,22 @@ public interface ITaktAccountTitleService
     Task<TaktAccountTitleDto?> GetAccountTitleByIdAsync(long id);
 
     /// <summary>
-    /// 获取会计科目树形选项列表
+    /// 获取会计科目树形选项列表（DictValue 为 AccountTitleCode，DictLabel 为科目名称）
     /// </summary>
     /// <returns>树形选项</returns>
     Task<List<TaktTreeSelectOption>> GetAccountTitleTreeOptionsAsync();
+
+    /// <summary>
+    /// 获取会计科目父级树形选项列表（DictValue 为 Id，用于 ParentId 选择）
+    /// </summary>
+    /// <returns>树形选项</returns>
+    Task<List<TaktTreeSelectOption>> GetAccountTitleParentTreeOptionsAsync();
+
+    /// <summary>
+    /// 获取会计科目选项列表（DictValue 为 AccountTitleCode，DictLabel 为科目名称）
+    /// </summary>
+    /// <returns>下拉选项</returns>
+    Task<List<TaktSelectOption>> GetAccountTitleOptionsAsync();
 
     /// <summary>
     /// 获取会计科目树形列表

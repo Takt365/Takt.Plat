@@ -24,11 +24,31 @@ public interface ITaktLoginLogTenantWriter
     /// </summary>
     /// <param name="tenantCode">租户编码（须与 ConnectionStrings:Tenant_{code} 一致）</param>
     /// <param name="entity">登录日志实体（TenantCode/CompanyCode 由调用方或本方法写入）</param>
+    /// <param name="operatorUserId">操作人 ID；无效时由审计 Helper 写入 SystemAuditUser.Id</param>
     /// <param name="cancellationToken">取消令牌</param>
     /// <returns>新记录主键 ID</returns>
     Task<long> CreateInTenantAsync(
         string tenantCode,
         TaktLoginLog entity,
+        long? operatorUserId = null,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// 登出时回填未关闭登录会话的 LogoutAt
+    /// </summary>
+    /// <param name="tenantCode">租户编码</param>
+    /// <param name="companyCode">公司编码（为空时按最近未关闭会话推断）</param>
+    /// <param name="username">用户名（小写）</param>
+    /// <param name="logoutAt">登出时间</param>
+    /// <param name="operatorUserId">操作人 ID；无效时按各条 CreatedBy 或 SystemAuditUser.Id</param>
+    /// <param name="cancellationToken">取消令牌</param>
+    /// <returns>更新的记录数</returns>
+    Task<int> CloseOpenLoginSessionAsync(
+        string tenantCode,
+        string? companyCode,
+        string username,
+        DateTime logoutAt,
+        long? operatorUserId = null,
         CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -39,6 +59,18 @@ public interface ITaktLoginLogTenantWriter
     /// <param name="cancellationToken">取消令牌</param>
     /// <returns>公司编码；无默认关联时返回 null</returns>
     Task<string?> ResolveUserDefaultCompanyCodeAsync(
+        string tenantCode,
+        long userId,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// 在指定租户库按用户 ID 解析登录名（小写）
+    /// </summary>
+    /// <param name="tenantCode">租户编码</param>
+    /// <param name="userId">用户 ID</param>
+    /// <param name="cancellationToken">取消令牌</param>
+    /// <returns>用户名；不存在时返回 null</returns>
+    Task<string?> ResolveUsernameByUserIdAsync(
         string tenantCode,
         long userId,
         CancellationToken cancellationToken = default);

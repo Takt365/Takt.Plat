@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Maintenance
 // 文件名称：TaktMaintenanceWorkOrderService.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：维护工单应用服务实现
 // 
@@ -447,6 +447,44 @@ public class TaktMaintenanceWorkOrderService : TaktServiceBase, ITaktMaintenance
             await _maintenanceWorkOrderLaborRepository.CreateRangeAsync(labors);
         }
     }
+
+    /// <summary>
+    /// 获取维护工单统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>维护工单统计</returns>
+    public async Task<TaktMaintenanceWorkOrderStatDto> GetMaintenanceWorkOrderStatAsync(TaktMaintenanceWorkOrderStatQueryDto queryDto)
+    {
+        EnsureThreeLayerContext();
+        var (start, end, statMonth) = TaktStatMonthRangeHelper.ResolveMonthRange(
+            queryDto.CreatedAtStart,
+            queryDto.CreatedAtEnd);
+        var tenantCode = CurrentTenantCode;
+        var companyCode = CurrentCompanyCode;
+        Expression<Func<TaktMaintenanceWorkOrder, bool>> predicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.CreatedAt >= start
+            && x.CreatedAt <= end;
+        var monthWorkOrderCount = await _maintenanceWorkOrderRepository.CountAsync(predicate);
+        var monthTotalCost = await _maintenanceWorkOrderRepository.SumAsync(x => x.TotalCost, predicate);
+        Expression<Func<TaktMaintenanceWorkOrder, bool>> openPredicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.CreatedAt >= start
+            && x.CreatedAt <= end
+            && x.WorkOrderStatus >= 0
+            && x.WorkOrderStatus <= 3;
+        var monthOpenWorkOrderCount = await _maintenanceWorkOrderRepository.CountAsync(openPredicate);
+        return new TaktMaintenanceWorkOrderStatDto
+        {
+            StatMonth = statMonth,
+            MonthWorkOrderCount = monthWorkOrderCount,
+            MonthOpenWorkOrderCount = monthOpenWorkOrderCount,
+            MonthTotalCost = monthTotalCost,
+        };
+    }
+
     // ========================================
     // 查询表达式
     // ========================================

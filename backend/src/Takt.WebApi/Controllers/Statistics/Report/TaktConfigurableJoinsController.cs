@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Statistics.Report
 // 文件名称：TaktConfigurableJoinsController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-27
 // 创建人：Takt365(Cursor AI)
 // 功能描述：自定义报表关联控制器
 // 
@@ -41,7 +41,7 @@ public class TaktConfigurableJoinsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("statistics:report:configurablejoin:list", "自定义报表关联列表")]
+    [TaktPermission("statistics:report:configurable:list", "自定义报表关联列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetConfigurableJoinListAsync([FromQuery] TaktConfigurableJoinQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktConfigurableJoinsController : TaktControllerBase
     /// </summary>
     /// <param name="id">自定义报表关联ID</param>
     /// <returns>自定义报表关联DTO</returns>
-    [TaktPermission("statistics:report:configurablejoin:query", "自定义报表关联详情")]
+    [TaktPermission("statistics:report:configurable:query", "自定义报表关联详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetConfigurableJoinByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktConfigurableJoinsController : TaktControllerBase
     /// 获取自定义报表关联选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("statistics:report:configurablejoin:query", "自定义报表关联选项")]
+    [TaktPermission("statistics:report:configurable:query", "自定义报表关联选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetConfigurableJoinOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktConfigurableJoinsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>自定义报表关联DTO</returns>
-    [TaktPermission("statistics:report:configurablejoin:create", "创建自定义报表关联")]
+    [TaktPermission("statistics:report:configurable:create", "创建自定义报表关联")]
     [HttpPost]
     public async Task<IActionResult> CreateConfigurableJoinAsync([FromBody] TaktConfigurableJoinCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktConfigurableJoinsController : TaktControllerBase
     /// <param name="id">自定义报表关联ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>自定义报表关联DTO</returns>
-    [TaktPermission("statistics:report:configurablejoin:update", "更新自定义报表关联")]
+    [TaktPermission("statistics:report:configurable:update", "更新自定义报表关联")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateConfigurableJoinAsync(long id, [FromBody] TaktConfigurableJoinUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktConfigurableJoinsController : TaktControllerBase
     /// </summary>
     /// <param name="id">自定义报表关联ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("statistics:report:configurablejoin:delete", "删除自定义报表关联")]
+    [TaktPermission("statistics:report:configurable:delete", "删除自定义报表关联")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteConfigurableJoinByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktConfigurableJoinsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("statistics:report:configurablejoin:delete", "批量删除自定义报表关联")]
+    [TaktPermission("statistics:report:configurable:delete", "批量删除自定义报表关联")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteConfigurableJoinBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktConfigurableJoinsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">排序DTO</param>
     /// <returns>自定义报表关联DTO</returns>
-    [TaktPermission("statistics:report:configurablejoin:update", "更新自定义报表关联排序")]
+    [TaktPermission("statistics:report:configurable:update", "更新自定义报表关联排序")]
     [HttpPut("sort")]
     public async Task<IActionResult> UpdateConfigurableJoinSortAsync([FromBody] TaktConfigurableJoinSortDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktConfigurableJoinsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("statistics:report:configurablejoin:import", "获取自定义报表关联导入模板")]
+    [TaktPermission("statistics:report:configurable:import", "获取自定义报表关联导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetConfigurableJoinTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +224,7 @@ public class TaktConfigurableJoinsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("statistics:report:configurablejoin:import", "导入自定义报表关联")]
+    [TaktPermission("statistics:report:configurable:import", "导入自定义报表关联")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportConfigurableJoinAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +254,7 @@ public class TaktConfigurableJoinsController : TaktControllerBase
     /// 导出自定义报表关联
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("statistics:report:configurablejoin:export", "导出自定义报表关联")]
+    [TaktPermission("statistics:report:configurable:export", "导出自定义报表关联")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportConfigurableJoinAsync([FromQuery] TaktConfigurableJoinQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Materials
 // 文件名称：TaktMaterialChangeLogsController.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-30
 // 创建人：Takt365(Cursor AI)
 // 功能描述：全局物料变更记录控制器
 // 
@@ -41,7 +41,7 @@ public class TaktMaterialChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:materials:material:change:log:list", "全局物料变更记录列表")]
+    [TaktPermission("logistics:materials:material:list", "全局物料变更记录列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetMaterialChangeLogListAsync([FromQuery] TaktMaterialChangeLogQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktMaterialChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="id">全局物料变更记录ID</param>
     /// <returns>全局物料变更记录DTO</returns>
-    [TaktPermission("logistics:materials:material:change:log:query", "全局物料变更记录详情")]
+    [TaktPermission("logistics:materials:material:query", "全局物料变更记录详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetMaterialChangeLogByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktMaterialChangeLogsController : TaktControllerBase
     /// 获取全局物料变更记录选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:materials:material:change:log:query", "全局物料变更记录选项")]
+    [TaktPermission("logistics:materials:material:query", "全局物料变更记录选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetMaterialChangeLogOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktMaterialChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>全局物料变更记录DTO</returns>
-    [TaktPermission("logistics:materials:material:change:log:create", "创建全局物料变更记录")]
+    [TaktPermission("logistics:materials:material:create", "创建全局物料变更记录")]
     [HttpPost]
     public async Task<IActionResult> CreateMaterialChangeLogAsync([FromBody] TaktMaterialChangeLogCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktMaterialChangeLogsController : TaktControllerBase
     /// <param name="id">全局物料变更记录ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>全局物料变更记录DTO</returns>
-    [TaktPermission("logistics:materials:material:change:log:update", "更新全局物料变更记录")]
+    [TaktPermission("logistics:materials:material:update", "更新全局物料变更记录")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateMaterialChangeLogAsync(long id, [FromBody] TaktMaterialChangeLogUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktMaterialChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="id">全局物料变更记录ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:materials:material:change:log:delete", "删除全局物料变更记录")]
+    [TaktPermission("logistics:materials:material:delete", "删除全局物料变更记录")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteMaterialChangeLogByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktMaterialChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:materials:material:change:log:delete", "批量删除全局物料变更记录")]
+    [TaktPermission("logistics:materials:material:delete", "批量删除全局物料变更记录")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteMaterialChangeLogBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktMaterialChangeLogsController : TaktControllerBase
     /// 导出全局物料变更记录
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:materials:material:change:log:export", "导出全局物料变更记录")]
+    [TaktPermission("logistics:materials:material:export", "导出全局物料变更记录")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportMaterialChangeLogAsync([FromQuery] TaktMaterialChangeLogQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

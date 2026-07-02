@@ -86,25 +86,25 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.isocode.status')"
-                name="status"
+                :label="t('entity.isocode.description')"
+                name="isoCodeDescription"
               >
-                <TaktSelect
-                  v-model:value="formState.status"
-                  dict-type="sys_normal_disable_status"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.isocode.status') })"
+                <a-textarea
+                  v-model:value="formState.isoCodeDescription"
+                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.isocode.description') })"
+                  :rows="2"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.isocode.description')"
-                name="description"
+                :label="t('entity.isocode.status')"
+                name="isoCodeStatus"
               >
-                <a-textarea
-                  v-model:value="formState.description"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.isocode.description') })"
-                  :rows="2"
+                <TaktSelect
+                  v-model:value="formState.isoCodeStatus"
+                  dict-type="sys_normal_disable_status"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.isocode.status') })"
                 />
               </a-form-item>
             </a-col>
@@ -193,7 +193,7 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   }
 }
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","isoCodeCategory","isoCode","isoName","isBuiltIn","status","description","extField","remark"]
+const formFields = ["tenantCode","isoCodeCategory","isoCode","isoName","isBuiltIn","isoCodeDescription","isoCodeStatus","extField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -216,7 +216,7 @@ const formState = reactive<Record<string, any>>({})
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
   isoCodeCategory: 1,
   isBuiltIn: 0,
-  status: 1
+  isoCodeStatus: 1
 }
 
 /** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
@@ -309,7 +309,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
-  status: [{
+  isoCodeStatus: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
         return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.isocode.status') }))
@@ -341,9 +341,9 @@ function getValues(): Record<string, any> {
     const rawisBuiltIn = payload.isBuiltIn
     payload.isBuiltIn = typeof rawisBuiltIn === 'number' ? rawisBuiltIn : Number(rawisBuiltIn)
   }
-  if ('status' in payload) {
-    const rawstatus = payload.status
-    payload.status = typeof rawstatus === 'number' ? rawstatus : Number(rawstatus)
+  if ('isoCodeStatus' in payload) {
+    const rawisoCodeStatus = payload.isoCodeStatus
+    payload.isoCodeStatus = typeof rawisoCodeStatus === 'number' ? rawisoCodeStatus : Number(rawisoCodeStatus)
   }
   if ('sortOrder' in payload) delete payload.sortOrder
   return payload

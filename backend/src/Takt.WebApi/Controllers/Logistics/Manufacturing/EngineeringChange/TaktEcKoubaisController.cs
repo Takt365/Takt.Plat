@@ -32,7 +32,7 @@ public class TaktEcKoubaisController : TaktControllerBase
     public TaktEcKoubaisController(ITaktEcKoubaiService service) => _service = service;
 
     /// <summary>获取采购部门列表（分页）</summary>
-    [TaktPermission("logistics:manufacturing:engineeringchange:koubai:list", "采购部门列表")]
+    [TaktPermission("logistics:manufacturing:engineering:change:koubai:list", "采购部门列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetEcKoubaiListAsync([FromQuery] TaktEcDeptViewQueryDto queryDto)
     {
@@ -41,7 +41,7 @@ public class TaktEcKoubaisController : TaktControllerBase
     }
 
     /// <summary>根据设变明细 ID 获取采购部门行</summary>
-    [TaktPermission("logistics:manufacturing:engineeringchange:koubai:query", "采购部门详情")]
+    [TaktPermission("logistics:manufacturing:engineering:change:koubai:query", "采购部门详情")]
     [HttpGet("detail/{ecDetailId}")]
     public async Task<IActionResult> GetEcKoubaiByEcDetailIdAsync(long ecDetailId)
     {
@@ -50,7 +50,7 @@ public class TaktEcKoubaisController : TaktControllerBase
     }
 
     /// <summary>更新采购部门</summary>
-    [TaktPermission("logistics:manufacturing:engineeringchange:koubai:update", "更新采购部门")]
+    [TaktPermission("logistics:manufacturing:engineering:change:koubai:update", "更新采购部门")]
     [HttpPut("detail/{ecDetailId}")]
     public async Task<IActionResult> UpdateEcKoubaiAsync(long ecDetailId, [FromBody] TaktEcDeptViewUpdateDto dto)
     {
@@ -59,7 +59,7 @@ public class TaktEcKoubaisController : TaktControllerBase
     }
 
     /// <summary>导出采购部门</summary>
-    [TaktPermission("logistics:manufacturing:engineeringchange:koubai:export", "导出采购部门")]
+    [TaktPermission("logistics:manufacturing:engineering:change:koubai:export", "导出采购部门")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportEcKoubaiAsync([FromQuery] TaktEcDeptViewQueryDto? query)
     {

@@ -27,13 +27,13 @@ namespace Takt.Domain.Entities.Routine.NewsCenter;
 public class TaktNewsCommentLike : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 评论 ID
+    /// 评论 ID（关联 TaktNewsComment.Id，选项 TaktNewsComments/options）
     /// </summary>
     [SugarColumn(ColumnName = "comment_id", ColumnDescription = "评论ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long CommentId { get; set; }
     /// <summary>
-    /// 用户 ID
+    /// 用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）
     /// </summary>
     [SugarColumn(ColumnName = "user_id", ColumnDescription = "用户ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]

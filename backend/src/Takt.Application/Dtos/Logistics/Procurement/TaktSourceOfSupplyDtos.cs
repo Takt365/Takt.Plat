@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Procurement
 // 文件名称：TaktSourceOfSupplyDtos.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SourceOfSupply 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSourceOfSupply 生成，请按需审阅）
 // 
@@ -36,7 +36,7 @@ public class TaktSourceOfSupplyDto : TaktCompanyDtoBase
     public long SourceOfSupplyId { get; set; }
 
     /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -46,47 +46,27 @@ public class TaktSourceOfSupplyDto : TaktCompanyDtoBase
     public string SourceOfSupplyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterialPlant.MaterialCode）
+    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称（冗余字段，便于查询展示）
-    /// </summary>
-    public string MaterialName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 供货商编码（关联 TaktSupplier.SupplierCode）
+    /// 供货商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
     /// </summary>
     public string SupplierCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供货商名称（冗余字段，便于查询展示）
+    /// 采购组（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
     /// </summary>
-    public string SupplierName { get; set; } = string.Empty;
+    public string? PurchaseGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
-    /// </summary>
-    public string? PurchaseGroupCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 生效日期
-    /// </summary>
-    public DateTime ValidFrom { get; set; }
-
-    /// <summary>
-    /// 失效日期
-    /// </summary>
-    public DateTime ValidTo { get; set; }
-
-    /// <summary>
-    /// 是否固定（字典 sys_yes_no_type；1=是，0=否；固定货源，MRP/寻源优先选用）
+    /// 固定（字典 sys_yes_no_type；1=是，0=否；固定货源，MRP/寻源优先选用）
     /// </summary>
     public int IsFixed { get; set; } = 0;
 
     /// <summary>
-    /// 是否冻结（字典 sys_yes_no_type；1=是，0=否；冻结后禁止新建采购订单引用）
+    /// 冻结（字典 sys_yes_no_type；1=是，0=否；冻结后禁止新建采购订单引用）
     /// </summary>
     public int IsBlocked { get; set; } = 0;
 
@@ -116,14 +96,24 @@ public class TaktSourceOfSupplyDto : TaktCompanyDtoBase
     public int? AgreementLineNumber { get; set; }
 
     /// <summary>
-    /// 货源状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 生效日期
     /// </summary>
-    public int SourceStatus { get; set; } = 0;
+    public DateTime ValidFrom { get; set; }
+
+    /// <summary>
+    /// 失效日期
+    /// </summary>
+    public DateTime ValidTo { get; set; }
 
     /// <summary>
     /// 排序号（越小越靠前；同物料多货源时的优先级）
     /// </summary>
     public int SortOrder { get; set; } = 0;
+
+    /// <summary>
+    /// 货源状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// </summary>
+    public int SourceStatus { get; set; } = 0;
 
 }
 
@@ -148,7 +138,7 @@ public class TaktSourceOfSupplyQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -158,57 +148,27 @@ public class TaktSourceOfSupplyQueryDto : TaktPagedQuery
     public string? SourceOfSupplyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterialPlant.MaterialCode）
+    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称（冗余字段，便于查询展示）
-    /// </summary>
-    public string? MaterialName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 供货商编码（关联 TaktSupplier.SupplierCode）
+    /// 供货商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
     /// </summary>
     public string? SupplierCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供货商名称（冗余字段，便于查询展示）
+    /// 采购组（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
     /// </summary>
-    public string? SupplierName { get; set; } = string.Empty;
+    public string? PurchaseGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
-    /// </summary>
-    public string? PurchaseGroupCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 生效日期（范围查询-开始）
-    /// </summary>
-    public DateTime? ValidFromStart { get; set; }
-
-    /// <summary>
-    /// 生效日期（范围查询-结束）
-    /// </summary>
-    public DateTime? ValidFromEnd { get; set; }
-
-    /// <summary>
-    /// 失效日期（范围查询-开始）
-    /// </summary>
-    public DateTime? ValidToStart { get; set; }
-
-    /// <summary>
-    /// 失效日期（范围查询-结束）
-    /// </summary>
-    public DateTime? ValidToEnd { get; set; }
-
-    /// <summary>
-    /// 是否固定（字典 sys_yes_no_type；1=是，0=否；固定货源，MRP/寻源优先选用）
+    /// 固定（字典 sys_yes_no_type；1=是，0=否；固定货源，MRP/寻源优先选用）
     /// </summary>
     public int? IsFixed { get; set; }
 
     /// <summary>
-    /// 是否冻结（字典 sys_yes_no_type；1=是，0=否；冻结后禁止新建采购订单引用）
+    /// 冻结（字典 sys_yes_no_type；1=是，0=否；冻结后禁止新建采购订单引用）
     /// </summary>
     public int? IsBlocked { get; set; }
 
@@ -238,14 +198,34 @@ public class TaktSourceOfSupplyQueryDto : TaktPagedQuery
     public int? AgreementLineNumber { get; set; }
 
     /// <summary>
-    /// 货源状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 生效日期（范围查询-开始）
     /// </summary>
-    public int? SourceStatus { get; set; }
+    public DateTime? ValidFromStart { get; set; }
+
+    /// <summary>
+    /// 生效日期（范围查询-结束）
+    /// </summary>
+    public DateTime? ValidFromEnd { get; set; }
+
+    /// <summary>
+    /// 失效日期（范围查询-开始）
+    /// </summary>
+    public DateTime? ValidToStart { get; set; }
+
+    /// <summary>
+    /// 失效日期（范围查询-结束）
+    /// </summary>
+    public DateTime? ValidToEnd { get; set; }
 
     /// <summary>
     /// 排序号（越小越靠前；同物料多货源时的优先级）
     /// </summary>
     public int? SortOrder { get; set; }
+
+    /// <summary>
+    /// 货源状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// </summary>
+    public int? SourceStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -288,14 +268,14 @@ public class TaktSourceOfSupplyCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码（关联 TaktPlant.PlantCode）不能为空")]
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -305,51 +285,29 @@ public class TaktSourceOfSupplyCreateDto
     public string SourceOfSupplyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterialPlant.MaterialCode）
+    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
     /// </summary>
-    [Required(ErrorMessage = "物料编码（关联 TaktMaterialPlant.MaterialCode）不能为空")]
+    [Required(ErrorMessage = "物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）不能为空")]
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称（冗余字段，便于查询展示）
+    /// 供货商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
     /// </summary>
-    [Required(ErrorMessage = "物料名称（冗余字段，便于查询展示）不能为空")]
-    public string MaterialName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 供货商编码（关联 TaktSupplier.SupplierCode）
-    /// </summary>
-    [Required(ErrorMessage = "供货商编码（关联 TaktSupplier.SupplierCode）不能为空")]
+    [Required(ErrorMessage = "供货商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）不能为空")]
     public string SupplierCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供货商名称（冗余字段，便于查询展示）
+    /// 采购组（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
     /// </summary>
-    [Required(ErrorMessage = "供货商名称（冗余字段，便于查询展示）不能为空")]
-    public string SupplierName { get; set; } = string.Empty;
+    public string? PurchaseGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
-    /// </summary>
-    public string? PurchaseGroupCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 生效日期
-    /// </summary>
-    public DateTime ValidFrom { get; set; }
-
-    /// <summary>
-    /// 失效日期
-    /// </summary>
-    public DateTime ValidTo { get; set; }
-
-    /// <summary>
-    /// 是否固定（字典 sys_yes_no_type；1=是，0=否；固定货源，MRP/寻源优先选用）
+    /// 固定（字典 sys_yes_no_type；1=是，0=否；固定货源，MRP/寻源优先选用）
     /// </summary>
     public int IsFixed { get; set; } = 0;
 
     /// <summary>
-    /// 是否冻结（字典 sys_yes_no_type；1=是，0=否；冻结后禁止新建采购订单引用）
+    /// 冻结（字典 sys_yes_no_type；1=是，0=否；冻结后禁止新建采购订单引用）
     /// </summary>
     public int IsBlocked { get; set; } = 0;
 
@@ -378,6 +336,16 @@ public class TaktSourceOfSupplyCreateDto
     /// 协议行号
     /// </summary>
     public int? AgreementLineNumber { get; set; }
+
+    /// <summary>
+    /// 生效日期
+    /// </summary>
+    public DateTime ValidFrom { get; set; }
+
+    /// <summary>
+    /// 失效日期
+    /// </summary>
+    public DateTime ValidTo { get; set; }
 
     /// <summary>
     /// 货源状态（字典 sys_normal_disable_status；1=启用，0=禁用）
@@ -484,7 +452,7 @@ public class TaktSourceOfSupplyTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -494,37 +462,27 @@ public class TaktSourceOfSupplyTemplateDto
     public string? SourceOfSupplyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterialPlant.MaterialCode）
+    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称（冗余字段，便于查询展示）
-    /// </summary>
-    public string? MaterialName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 供货商编码（关联 TaktSupplier.SupplierCode）
+    /// 供货商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
     /// </summary>
     public string? SupplierCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供货商名称（冗余字段，便于查询展示）
+    /// 采购组（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
     /// </summary>
-    public string? SupplierName { get; set; } = string.Empty;
+    public string? PurchaseGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
-    /// </summary>
-    public string? PurchaseGroupCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 是否固定（字典 sys_yes_no_type；1=是，0=否；固定货源，MRP/寻源优先选用）
+    /// 固定（字典 sys_yes_no_type；1=是，0=否；固定货源，MRP/寻源优先选用）
     /// </summary>
     public int? IsFixed { get; set; }
 
     /// <summary>
-    /// 是否冻结（字典 sys_yes_no_type；1=是，0=否；冻结后禁止新建采购订单引用）
+    /// 冻结（字典 sys_yes_no_type；1=是，0=否；冻结后禁止新建采购订单引用）
     /// </summary>
     public int? IsBlocked { get; set; }
 
@@ -532,6 +490,11 @@ public class TaktSourceOfSupplyTemplateDto
     /// 采购单位
     /// </summary>
     public string? PurchaseUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 最小订购量
+    /// </summary>
+    public decimal? MinimumOrderQuantity { get; set; }
 
     /// <summary>
     /// 计划交货天数（采购提前期）
@@ -542,6 +505,26 @@ public class TaktSourceOfSupplyTemplateDto
     /// 框架协议号（采购合同/协议编号，可选）
     /// </summary>
     public string? AgreementNumber { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 协议行号
+    /// </summary>
+    public int? AgreementLineNumber { get; set; }
+
+    /// <summary>
+    /// 生效日期
+    /// </summary>
+    public DateTime? ValidFrom { get; set; }
+
+    /// <summary>
+    /// 失效日期
+    /// </summary>
+    public DateTime? ValidTo { get; set; }
+
+    /// <summary>
+    /// 货源状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// </summary>
+    public int? SourceStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -571,12 +554,12 @@ public class TaktSourceOfSupplyImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -586,37 +569,27 @@ public class TaktSourceOfSupplyImportDto
     public string? SourceOfSupplyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterialPlant.MaterialCode）
+    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称（冗余字段，便于查询展示）
-    /// </summary>
-    public string? MaterialName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 供货商编码（关联 TaktSupplier.SupplierCode）
+    /// 供货商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
     /// </summary>
     public string? SupplierCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供货商名称（冗余字段，便于查询展示）
+    /// 采购组（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
     /// </summary>
-    public string? SupplierName { get; set; } = string.Empty;
+    public string? PurchaseGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
-    /// </summary>
-    public string? PurchaseGroupCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 是否固定（字典 sys_yes_no_type；1=是，0=否；固定货源，MRP/寻源优先选用）
+    /// 固定（字典 sys_yes_no_type；1=是，0=否；固定货源，MRP/寻源优先选用）
     /// </summary>
     public int? IsFixed { get; set; }
 
     /// <summary>
-    /// 是否冻结（字典 sys_yes_no_type；1=是，0=否；冻结后禁止新建采购订单引用）
+    /// 冻结（字典 sys_yes_no_type；1=是，0=否；冻结后禁止新建采购订单引用）
     /// </summary>
     public int? IsBlocked { get; set; }
 
@@ -624,6 +597,11 @@ public class TaktSourceOfSupplyImportDto
     /// 采购单位
     /// </summary>
     public string? PurchaseUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 最小订购量
+    /// </summary>
+    public decimal? MinimumOrderQuantity { get; set; }
 
     /// <summary>
     /// 计划交货天数（采购提前期）
@@ -634,6 +612,26 @@ public class TaktSourceOfSupplyImportDto
     /// 框架协议号（采购合同/协议编号，可选）
     /// </summary>
     public string? AgreementNumber { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 协议行号
+    /// </summary>
+    public int? AgreementLineNumber { get; set; }
+
+    /// <summary>
+    /// 生效日期
+    /// </summary>
+    public DateTime? ValidFrom { get; set; }
+
+    /// <summary>
+    /// 失效日期
+    /// </summary>
+    public DateTime? ValidTo { get; set; }
+
+    /// <summary>
+    /// 货源状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// </summary>
+    public int? SourceStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -669,7 +667,7 @@ public class TaktSourceOfSupplyExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -679,47 +677,27 @@ public class TaktSourceOfSupplyExportDto
     public string SourceOfSupplyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterialPlant.MaterialCode）
+    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称（冗余字段，便于查询展示）
-    /// </summary>
-    public string MaterialName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 供货商编码（关联 TaktSupplier.SupplierCode）
+    /// 供货商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
     /// </summary>
     public string SupplierCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供货商名称（冗余字段，便于查询展示）
+    /// 采购组（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
     /// </summary>
-    public string SupplierName { get; set; } = string.Empty;
+    public string? PurchaseGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
-    /// </summary>
-    public string? PurchaseGroupCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 生效日期
-    /// </summary>
-    public DateTime ValidFrom { get; set; }
-
-    /// <summary>
-    /// 失效日期
-    /// </summary>
-    public DateTime ValidTo { get; set; }
-
-    /// <summary>
-    /// 是否固定（字典 sys_yes_no_type；1=是，0=否；固定货源，MRP/寻源优先选用）
+    /// 固定（字典 sys_yes_no_type；1=是，0=否；固定货源，MRP/寻源优先选用）
     /// </summary>
     public int IsFixed { get; set; } = 0;
 
     /// <summary>
-    /// 是否冻结（字典 sys_yes_no_type；1=是，0=否；冻结后禁止新建采购订单引用）
+    /// 冻结（字典 sys_yes_no_type；1=是，0=否；冻结后禁止新建采购订单引用）
     /// </summary>
     public int IsBlocked { get; set; } = 0;
 
@@ -749,14 +727,24 @@ public class TaktSourceOfSupplyExportDto
     public int? AgreementLineNumber { get; set; }
 
     /// <summary>
-    /// 货源状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 生效日期
     /// </summary>
-    public int SourceStatus { get; set; } = 0;
+    public DateTime ValidFrom { get; set; }
+
+    /// <summary>
+    /// 失效日期
+    /// </summary>
+    public DateTime ValidTo { get; set; }
 
     /// <summary>
     /// 排序号（越小越靠前；同物料多货源时的优先级）
     /// </summary>
     public int SortOrder { get; set; } = 0;
+
+    /// <summary>
+    /// 货源状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// </summary>
+    public int SourceStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

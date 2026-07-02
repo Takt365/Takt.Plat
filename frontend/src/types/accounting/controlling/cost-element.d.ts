@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/accounting/controlling
 // 文件名称：cost-element.d.ts
-// 创建时间：2026-06-22
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：accounting/controlling 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -59,7 +59,7 @@ export interface CostElement extends CompanyDtoBase {
   costElementLevel: number;
 
   /**
-   * 成本要素状态（1=启用，0=禁用）
+   * 成本要素状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   costElementStatus: number;
 
@@ -149,7 +149,7 @@ export interface CostElementQuery extends TaktPagedQuery {
   costElementLevel?: number;
 
   /**
-   * 成本要素状态（1=启用，0=禁用）
+   * 成本要素状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   costElementStatus?: number;
 
@@ -218,7 +218,7 @@ export interface CostElementCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -253,7 +253,7 @@ export interface CostElementCreate {
   costElementLevel: number;
 
   /**
-   * 成本要素状态（1=启用，0=禁用）
+   * 成本要素状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   costElementStatus: number;
 
@@ -312,7 +312,7 @@ export interface CostElementStatus {
   costElementId: string;
 
   /**
-   * 成本要素状态（1=启用，0=禁用）
+   * 成本要素状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   costElementStatus: number;
 
@@ -385,9 +385,24 @@ export interface CostElementTemplate {
   costElementLevel?: number;
 
   /**
-   * 成本要素状态（1=启用，0=禁用）
+   * 成本要素状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   costElementStatus?: number;
+
+  /**
+   * 生效日期
+   */
+  validFrom?: string;
+
+  /**
+   * 失效日期
+   */
+  validTo?: string;
+
+  /**
+   * 成本要素变更记录列表（外键在子表 TaktCostElementChangeLog.CostElementId）（子表，级联保存）
+   */
+  changeLogs?: CostElementChangeLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -419,7 +434,7 @@ export interface CostElementImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -454,9 +469,24 @@ export interface CostElementImport {
   costElementLevel?: number;
 
   /**
-   * 成本要素状态（1=启用，0=禁用）
+   * 成本要素状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   costElementStatus?: number;
+
+  /**
+   * 生效日期
+   */
+  validFrom?: string;
+
+  /**
+   * 失效日期
+   */
+  validTo?: string;
+
+  /**
+   * 成本要素变更记录列表（外键在子表 TaktCostElementChangeLog.CostElementId）（子表，级联保存）
+   */
+  changeLogs?: CostElementChangeLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -518,7 +548,7 @@ export interface CostElementExport {
   costElementLevel: number;
 
   /**
-   * 成本要素状态（1=启用，0=禁用）
+   * 成本要素状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   costElementStatus: number;
 

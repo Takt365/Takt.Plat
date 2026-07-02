@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/maintenance
 // 文件名称：work-order-labor.d.ts
-// 创建时间：2026-06-20
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/maintenance 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -268,7 +268,7 @@ export interface MaintenanceWorkOrderLaborCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -441,6 +441,36 @@ export interface MaintenanceWorkOrderLaborTemplate {
   employeeName?: string;
 
   /**
+   * 报工日期
+   */
+  workDate?: string;
+
+  /**
+   * 开始时间
+   */
+  startTime?: string;
+
+  /**
+   * 结束时间
+   */
+  endTime?: string;
+
+  /**
+   * 工时（小时）
+   */
+  workHours?: number;
+
+  /**
+   * 小时费率
+   */
+  hourlyRate?: number;
+
+  /**
+   * 人工成本
+   */
+  laborCost?: number;
+
+  /**
    * 作业描述
    */
   operationDescription?: string;
@@ -449,6 +479,11 @@ export interface MaintenanceWorkOrderLaborTemplate {
    * 报工确认状态（0=待确认，1=已确认）
    */
   confirmationStatus?: number;
+
+  /**
+   * 确认时间
+   */
+  confirmedAt?: string;
 
   /**
    * 扩展字段JSON
@@ -480,7 +515,7 @@ export interface MaintenanceWorkOrderLaborImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -515,6 +550,36 @@ export interface MaintenanceWorkOrderLaborImport {
   employeeName?: string;
 
   /**
+   * 报工日期
+   */
+  workDate?: string;
+
+  /**
+   * 开始时间
+   */
+  startTime?: string;
+
+  /**
+   * 结束时间
+   */
+  endTime?: string;
+
+  /**
+   * 工时（小时）
+   */
+  workHours?: number;
+
+  /**
+   * 小时费率
+   */
+  hourlyRate?: number;
+
+  /**
+   * 人工成本
+   */
+  laborCost?: number;
+
+  /**
    * 作业描述
    */
   operationDescription?: string;
@@ -523,6 +588,11 @@ export interface MaintenanceWorkOrderLaborImport {
    * 报工确认状态（0=待确认，1=已确认）
    */
   confirmationStatus?: number;
+
+  /**
+   * 确认时间
+   */
+  confirmedAt?: string;
 
   /**
    * 扩展字段JSON

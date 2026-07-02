@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Serial
 // 文件名称：TaktSerialInboundI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSerialInbound 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,22 +91,22 @@ public class TaktSerialInboundI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.serialinbound._self", "zh-HK", "序列号入库主表信息_hk", "实体名称"),
 
             // entity.serialinbound.plantcode
-            new TranslationSeedItem("entity.serialinbound.plantcode", "en-US", "工厂代码_us", "工厂代码(4位字母数字组合)"),
+            new TranslationSeedItem("entity.serialinbound.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
             // entity.serialinbound.plantcode
-            new TranslationSeedItem("entity.serialinbound.plantcode", "ja-JP", "工厂代码_jp", "工厂代码(4位字母数字组合)"),
+            new TranslationSeedItem("entity.serialinbound.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
             // entity.serialinbound.plantcode
-            new TranslationSeedItem("entity.serialinbound.plantcode", "zh-CN", "工厂代码", "工厂代码(4位字母数字组合)"),
+            new TranslationSeedItem("entity.serialinbound.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
             // entity.serialinbound.plantcode
-            new TranslationSeedItem("entity.serialinbound.plantcode", "zh-HK", "工厂代码_hk", "工厂代码(4位字母数字组合)"),
+            new TranslationSeedItem("entity.serialinbound.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
 
             // entity.serialinbound.inboundno
-            new TranslationSeedItem("entity.serialinbound.inboundno", "en-US", "入库单号_us", "入库单号（组合唯一索引：PlantCode + InboundNo）"),
+            new TranslationSeedItem("entity.serialinbound.inboundno", "en-US", "入库单号_us", "入库单号（租户+公司+工厂内唯一）"),
             // entity.serialinbound.inboundno
-            new TranslationSeedItem("entity.serialinbound.inboundno", "ja-JP", "入库单号_jp", "入库单号（组合唯一索引：PlantCode + InboundNo）"),
+            new TranslationSeedItem("entity.serialinbound.inboundno", "ja-JP", "入库单号_jp", "入库单号（租户+公司+工厂内唯一）"),
             // entity.serialinbound.inboundno
-            new TranslationSeedItem("entity.serialinbound.inboundno", "zh-CN", "入库单号", "入库单号（组合唯一索引：PlantCode + InboundNo）"),
+            new TranslationSeedItem("entity.serialinbound.inboundno", "zh-CN", "入库单号", "入库单号（租户+公司+工厂内唯一）"),
             // entity.serialinbound.inboundno
-            new TranslationSeedItem("entity.serialinbound.inboundno", "zh-HK", "入库单号_hk", "入库单号（组合唯一索引：PlantCode + InboundNo）"),
+            new TranslationSeedItem("entity.serialinbound.inboundno", "zh-HK", "入库单号_hk", "入库单号（租户+公司+工厂内唯一）"),
 
             // entity.serialinbound.inbounddate
             new TranslationSeedItem("entity.serialinbound.inbounddate", "en-US", "入库日期_us", "入库日期"),
@@ -118,31 +118,31 @@ public class TaktSerialInboundI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.serialinbound.inbounddate", "zh-HK", "入库日期_hk", "入库日期"),
 
             // entity.serialinbound.inboundtype
-            new TranslationSeedItem("entity.serialinbound.inboundtype", "en-US", "入库类型_us", "入库类型（字典 logistics_inbound_type；0=采购入库，1=生产入库，2=退货入库，3=调拨入库，4=序列号入库，5=其他）"),
+            new TranslationSeedItem("entity.serialinbound.inboundtype", "en-US", "入库类型_us", "入库类型（字典 logistics_inbound_type；0=采购入库 1=生产入库 2=退货入库 3=调拨入库 4=序列号入库 5=其他）"),
             // entity.serialinbound.inboundtype
-            new TranslationSeedItem("entity.serialinbound.inboundtype", "ja-JP", "入库类型_jp", "入库类型（字典 logistics_inbound_type；0=采购入库，1=生产入库，2=退货入库，3=调拨入库，4=序列号入库，5=其他）"),
+            new TranslationSeedItem("entity.serialinbound.inboundtype", "ja-JP", "入库类型_jp", "入库类型（字典 logistics_inbound_type；0=采购入库 1=生产入库 2=退货入库 3=调拨入库 4=序列号入库 5=其他）"),
             // entity.serialinbound.inboundtype
-            new TranslationSeedItem("entity.serialinbound.inboundtype", "zh-CN", "入库类型", "入库类型（字典 logistics_inbound_type；0=采购入库，1=生产入库，2=退货入库，3=调拨入库，4=序列号入库，5=其他）"),
+            new TranslationSeedItem("entity.serialinbound.inboundtype", "zh-CN", "入库类型", "入库类型（字典 logistics_inbound_type；0=采购入库 1=生产入库 2=退货入库 3=调拨入库 4=序列号入库 5=其他）"),
             // entity.serialinbound.inboundtype
-            new TranslationSeedItem("entity.serialinbound.inboundtype", "zh-HK", "入库类型_hk", "入库类型（字典 logistics_inbound_type；0=采购入库，1=生产入库，2=退货入库，3=调拨入库，4=序列号入库，5=其他）"),
+            new TranslationSeedItem("entity.serialinbound.inboundtype", "zh-HK", "入库类型_hk", "入库类型（字典 logistics_inbound_type；0=采购入库 1=生产入库 2=退货入库 3=调拨入库 4=序列号入库 5=其他）"),
 
             // entity.serialinbound.warehousecode
-            new TranslationSeedItem("entity.serialinbound.warehousecode", "en-US", "仓库编码_us", "仓库编码（关联 Materials 模块 TaktWarehouse.WarehouseCode）"),
+            new TranslationSeedItem("entity.serialinbound.warehousecode", "en-US", "仓库编码_us", "仓库编码（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options）"),
             // entity.serialinbound.warehousecode
-            new TranslationSeedItem("entity.serialinbound.warehousecode", "ja-JP", "仓库编码_jp", "仓库编码（关联 Materials 模块 TaktWarehouse.WarehouseCode）"),
+            new TranslationSeedItem("entity.serialinbound.warehousecode", "ja-JP", "仓库编码_jp", "仓库编码（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options）"),
             // entity.serialinbound.warehousecode
-            new TranslationSeedItem("entity.serialinbound.warehousecode", "zh-CN", "仓库编码", "仓库编码（关联 Materials 模块 TaktWarehouse.WarehouseCode）"),
+            new TranslationSeedItem("entity.serialinbound.warehousecode", "zh-CN", "仓库编码", "仓库编码（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options）"),
             // entity.serialinbound.warehousecode
-            new TranslationSeedItem("entity.serialinbound.warehousecode", "zh-HK", "仓库编码_hk", "仓库编码（关联 Materials 模块 TaktWarehouse.WarehouseCode）"),
+            new TranslationSeedItem("entity.serialinbound.warehousecode", "zh-HK", "仓库编码_hk", "仓库编码（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options）"),
 
             // entity.serialinbound.locationcode
-            new TranslationSeedItem("entity.serialinbound.locationcode", "en-US", "库位编码_us", "库位编码（关联 Materials 模块 TaktStorageLocation.LocationCode）"),
+            new TranslationSeedItem("entity.serialinbound.locationcode", "en-US", "库位编码_us", "库位编码（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options）"),
             // entity.serialinbound.locationcode
-            new TranslationSeedItem("entity.serialinbound.locationcode", "ja-JP", "库位编码_jp", "库位编码（关联 Materials 模块 TaktStorageLocation.LocationCode）"),
+            new TranslationSeedItem("entity.serialinbound.locationcode", "ja-JP", "库位编码_jp", "库位编码（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options）"),
             // entity.serialinbound.locationcode
-            new TranslationSeedItem("entity.serialinbound.locationcode", "zh-CN", "库位编码", "库位编码（关联 Materials 模块 TaktStorageLocation.LocationCode）"),
+            new TranslationSeedItem("entity.serialinbound.locationcode", "zh-CN", "库位编码", "库位编码（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options）"),
             // entity.serialinbound.locationcode
-            new TranslationSeedItem("entity.serialinbound.locationcode", "zh-HK", "库位编码_hk", "库位编码（关联 Materials 模块 TaktStorageLocation.LocationCode）"),
+            new TranslationSeedItem("entity.serialinbound.locationcode", "zh-HK", "库位编码_hk", "库位编码（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options）"),
 
             // entity.serialinbound.totalquantity
             new TranslationSeedItem("entity.serialinbound.totalquantity", "en-US", "总数量_us", "总数量"),
@@ -153,23 +153,14 @@ public class TaktSerialInboundI18nSeedData : ITaktSeedDataCoordinator
             // entity.serialinbound.totalquantity
             new TranslationSeedItem("entity.serialinbound.totalquantity", "zh-HK", "总数量_hk", "总数量"),
 
-            // entity.serialinbound.relatedcompany
-            new TranslationSeedItem("entity.serialinbound.relatedcompany", "en-US", "关联公司_us", "关联公司"),
-            // entity.serialinbound.relatedcompany
-            new TranslationSeedItem("entity.serialinbound.relatedcompany", "ja-JP", "关联公司_jp", "关联公司"),
-            // entity.serialinbound.relatedcompany
-            new TranslationSeedItem("entity.serialinbound.relatedcompany", "zh-CN", "关联公司", "关联公司"),
-            // entity.serialinbound.relatedcompany
-            new TranslationSeedItem("entity.serialinbound.relatedcompany", "zh-HK", "关联公司_hk", "关联公司"),
-
             // entity.serialinbound.items
-            new TranslationSeedItem("entity.serialinbound.items", "en-US", "序列号入库明细列表_us", "序列号入库明细列表(主子表关系)"),
+            new TranslationSeedItem("entity.serialinbound.items", "en-US", "序列号入库明细列表_us", "序列号入库明细列表（主子表关系）"),
             // entity.serialinbound.items
-            new TranslationSeedItem("entity.serialinbound.items", "ja-JP", "序列号入库明细列表_jp", "序列号入库明细列表(主子表关系)"),
+            new TranslationSeedItem("entity.serialinbound.items", "ja-JP", "序列号入库明细列表_jp", "序列号入库明细列表（主子表关系）"),
             // entity.serialinbound.items
-            new TranslationSeedItem("entity.serialinbound.items", "zh-CN", "序列号入库明细列表", "序列号入库明细列表(主子表关系)"),
+            new TranslationSeedItem("entity.serialinbound.items", "zh-CN", "序列号入库明细列表", "序列号入库明细列表（主子表关系）"),
             // entity.serialinbound.items
-            new TranslationSeedItem("entity.serialinbound.items", "zh-HK", "序列号入库明细列表_hk", "序列号入库明细列表(主子表关系)"),
+            new TranslationSeedItem("entity.serialinbound.items", "zh-HK", "序列号入库明细列表_hk", "序列号入库明细列表（主子表关系）"),
         };
     }
 

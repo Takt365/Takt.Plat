@@ -27,5 +27,20 @@ export default {
         hint: "Item / change log tabs in this dialog can be saved with the header; the bottom panel supports independent item CRUD.",
       },
     },
+    explosion: {
+      title: "Multi-level BOM explosion",
+      quantity: "Demand quantity",
+      maxLevel: "Max level",
+      includeLevelZero: "Include parent row",
+      summary: "BOM {bomCode} · Parent {parentMaterialCode} {parentMaterialName} · Qty {quantity}",
+      column: {
+        level: "Level",
+        immediateParent: "Immediate parent",
+        cumulativeQuantity: "Cumulative qty",
+        hasChildBom: "Has child BOM",
+        isCircular: "Circular",
+      },
+      action: "Explode BOM",
+    },
   },
 };

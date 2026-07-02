@@ -17,8 +17,11 @@ const {
   logGeneratedFileWritePolicy,
   parseSingleEntityGenerateArgs,
   sanitizeXmlDocPlainText,
+  parseEntityClassHeaderFromCsContent,
+  resolveDtoBaseFromEntityBase,
+  ENTITY_CLASS_HEADER_REGEX,
 } = require('./generate-script-common.cjs');
-const { isRbacJunctionEntity, assertNotRbacJunctionEntityCli } = require('./generate-entity-exclusions.cjs');
+const { isRbacJunctionEntity, assertNotRbacJunctionEntityCli, assertNotManualDtoEntityCli } = require('./generate-entity-exclusions.cjs');
 const { isTransposableEntity, appendTransposedDtoBlock } = require('./generate-transposed-support.cjs');
 const {
   resolveRbacCreateFieldFromNav,
@@ -78,13 +81,6 @@ const CREATE_EXCLUDE_NAME_PATTERNS = [
 
 /** CreateDto / UpdateDto 排除：排序由服务端自动生成或走 TaktXxxSortDto 专用接口 */
 const CREATE_EXCLUDE_PROPERTY_NAMES = new Set(['SortOrder']);
-
-/** 实体基类 → DTO 基类 */
-const ENTITY_BASE_TO_DTO_BASE = {
-  TaktTenantEntityBase: 'TaktTenantDtoBase',
-  TaktCompanyEntityBase: 'TaktCompanyDtoBase',
-  TaktApprovalEntityBase: 'TaktApprovalDtoBase',
-};
 
 /**
  * 聚合实体 DTO 类名（统一为 Takt{Entity}{Suffix}Dto，禁止 TaktCreate{Entity}Dto / TaktUpdate{Entity}Dto）
@@ -218,13 +214,12 @@ function findSortOrderProperty(entity) {
 }
 
 /**
- * 导入/导出模板用业务字段
+ * 导入/模板用业务字段（与 CreateDto 业务标量字段一致，不含基类隔离字段）
  * @param {object[]} createProps
+ * @returns {object[]}
  */
 function getTemplateImportProps(createProps) {
-  return createProps
-    .filter((p) => p.bareType === 'string' || isSharedEnumType(p.bareType) || p.bareType === 'int' || p.bareType === 'long')
-    .slice(0, 12);
+  return createProps;
 }
 
 /**
@@ -285,7 +280,7 @@ function appendTenantCompanyCreateImportProperties(lines, entityBase, options = 
     lines.push('');
     if (withCompanyDefaultCulture) {
       lines.push('    /// <summary>');
-      lines.push('    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）');
+      lines.push('    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）');
       lines.push('    /// </summary>');
       lines.push(`    public ${stringType} CompanyDefaultCulture { get; set; } = string.Empty;`);
       lines.push('');
@@ -450,7 +445,7 @@ function appendApprovalQueryProperties(lines, entityBase) {
   if (entityBase !== 'TaktApprovalEntityBase') {
     return;
   }
-  appendQueryEnumProperty(lines, 'TaktApprovalStatus', 'ApprovalStatus', '审批状态（TaktApprovalStatus）');
+  appendQueryEnumProperty(lines, 'TaktApprovalStatus', 'ApprovalStatus', '审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）');
   appendQueryLongProperty(lines, 'InitiatorId', '发起人ID');
   appendDateRangeQueryProperties(lines, { name: 'InitiatedAt', summary: '发起时间' });
   appendQueryLongProperty(lines, 'ApprovedBy', '最终审批人ID');
@@ -794,13 +789,14 @@ function entityNamespaceToDirParts(entityNamespace) {
  */
 function parseEntityFile(filePath) {
   const content = fs.readFileSync(filePath, 'utf-8');
-  const classHeaderMatch = content.match(/public\s+class\s+(Takt\w+)\s*:\s*(Takt\w+EntityBase)\s*\{/);
-  if (!classHeaderMatch) {
+  const classHeader = parseEntityClassHeaderFromCsContent(content);
+  if (!classHeader) {
     return null;
   }
 
-  const className = classHeaderMatch[1];
-  const entityBase = classHeaderMatch[2];
+  const className = classHeader.className;
+  const entityBase = classHeader.entityBase;
+  const classHeaderMatch = content.match(ENTITY_CLASS_HEADER_REGEX);
   const openBraceIndex = classHeaderMatch.index + classHeaderMatch[0].length - 1;
   const classBody = extractClassBody(content, openBraceIndex);
   const beforeClass = content.slice(0, classHeaderMatch.index);
@@ -833,7 +829,7 @@ function parseEntityFile(filePath) {
     className,
     classDoc,
     entityBase,
-    dtoBase: ENTITY_BASE_TO_DTO_BASE[entityBase] || 'TaktTenantDtoBase',
+    dtoBase: resolveDtoBaseFromEntityBase(entityBase),
     entityNamespace,
     dtoNamespace,
     dtoDirParts,
@@ -1159,9 +1155,11 @@ function generateAggregateDtoFileContent(entity, entityRegistry, options = {}) {
     const templateProps = getTemplateImportProps(createProps);
     appendEmittedProperties(
       lines,
-      templateProps.map((p) => ({ ...p, isNullable: true, csharpType: `${p.bareType}?` })),
+      templateProps.map((p) => ({ ...p, isNullable: true })),
       { forceNullable: true }
     );
+    appendMasterDetailCreateProperties(lines, navigationProperties, entityShort);
+    appendInverseRbacCreateFields(lines, entityShort);
     appendExtFieldAndRemark(lines);
     lines.push('}');
     lines.push('');
@@ -1176,9 +1174,11 @@ function generateAggregateDtoFileContent(entity, entityRegistry, options = {}) {
     });
     appendEmittedProperties(
       lines,
-      templateProps.map((p) => ({ ...p, isNullable: true, csharpType: `${p.bareType}?` })),
+      templateProps.map((p) => ({ ...p, isNullable: true })),
       { forceNullable: true }
     );
+    appendMasterDetailCreateProperties(lines, navigationProperties, entityShort);
+    appendInverseRbacCreateFields(lines, entityShort);
     appendExtFieldAndRemark(lines);
     lines.push('}');
     lines.push('');
@@ -1340,15 +1340,15 @@ function printUsage() {
 用法: node scripts/generate-dtos-from-entity.cjs [参数]
 
 参数:
-  --<实体名>         仅生成指定实体，如 --Company、--Dept（不可用 --User、--Online、--UserRole）
+  --<实体名>         仅生成指定实体，如 --Company、--Dept（不可用 --User、--Online、--UserRole、--Holiday）
   --force            已废弃（与默认行为相同，仅为兼容 generate-all.cjs 传参保留）
   --dry-run          仅打印将生成的文件，不写入磁盘
 
 说明:
   - 已禁用 --all；每次必须指定一个实体
   - 输出策略：目标 *Dtos.cs 不存在则创建，已存在则整文件覆盖更新（writeGeneratedFile，无需 --force）
-  - 排除：User（密码等）、Online、Message；RBAC 八表（UserRole…EmployeePost）
-  - 对应 TaktUserDtos.cs、TaktOnlineDtos.cs、TaktMessageDtos.cs 及八张关联 *Dtos.cs
+  - 排除：User（密码等）、Online、Message；RBAC 八表（UserRole…EmployeePost）；Holiday（含 TaktHolidayThemeDto 手工 DTO）
+  - 对应 TaktUserDtos.cs、TaktOnlineDtos.cs、TaktMessageDtos.cs、TaktHolidayDtos.cs 及八张关联 *Dtos.cs
   - 主子表：响应 TaktXxxDto 含 List<子Dto>；Create/Update 含 List<子CreateDto>
   - 转置（仅 Translation）：TaktTranslationTransposedDto/Query/Result/Batch
   - 输出目录: backend/src/Takt.Application/Dtos/{与实体相同的模块路径}/
@@ -1367,8 +1367,9 @@ function printUsage() {
   - CreateDto / TemplateDto / ImportDto 字段顺序：
       1) TenantCode；（公司/审批级）CompanyCode
       2) （公司/审批级 CreateDto / ImportDto）CompanyDefaultCulture
-      3) 业务字段
-      4) ExtField、Remark
+      3) 业务字段（TemplateDto / ImportDto 与 CreateDto 全量一致，导入列可空）
+      4) 主子表 List<子CreateDto>?、RBAC 反向 *Ids/*Codes（与 CreateDto 一致）
+      5) ExtField、Remark
     租户级（TaktTenantEntityBase）仅 TenantCode；公司/审批级含 TenantCode + CompanyCode；
     CreateDto / ImportDto 另含 CompanyDefaultCulture（TemplateDto 不含）；
     TenantCode / CompanyCode / CompanyDefaultCulture 由登录或公司切换注入，不加 [Required]
@@ -1393,6 +1394,7 @@ function printUsage() {
 function parseArgs() {
   const options = parseSingleEntityGenerateArgs(printUsage);
   assertNotRbacJunctionEntityCli(options.entityPrefix);
+  assertNotManualDtoEntityCli(options.entityPrefix);
   return options;
 }
 

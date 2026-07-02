@@ -214,18 +214,6 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.iqcorder.judgestatus')"
-                name="judgeStatus"
-              >
-                <a-input-number
-                  v-model:value="formState.judgeStatus"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.iqcorder.judgestatus') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
                 :label="t('entity.iqcorder.judgeby')"
                 name="judgeBy"
               >
@@ -265,13 +253,39 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.iqcorder.extfield')"
-                name="ExtField"
+                :label="t('entity.iqcorder.judgestatus')"
+                name="judgeStatus"
               >
+                <a-input-number
+                  v-model:value="formState.judgeStatus"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.iqcorder.judgestatus') })"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                name="extField"
+                class="takt-form-item-ext-field"
+              >
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t('common.page.entity.extfieldhint')"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ t('common.page.entity.extfield') }}</span>
+                  </span>
+                </template>
                 <a-textarea
-                  v-model:value="formState.ExtField"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.iqcorder.extfield') })"
-                  :rows="2"
+                  v-model:value="formState.extField"
+                  :placeholder="t('common.page.form.placeholder.extfield')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -318,6 +332,7 @@ import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import type { IqcOrderCreate } from '@/types/logistics/quality/operation/iqc-order'
+import { RiQuestionLine } from '@remixicon/vue'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -350,7 +365,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","sourceCode","inspectionDate","iqcOrderCode","supplierCode","totalPurchaseQuantity","totalSampleQuantity","totalQualifiedQuantity","totalUnqualifiedQuantity","totalInspectionReturnQuantity","judgeStatus","judgeBy","judgeDate","judgeDescription","ExtField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","sourceCode","inspectionDate","iqcOrderCode","supplierCode","totalPurchaseQuantity","totalSampleQuantity","totalQualifiedQuantity","totalUnqualifiedQuantity","totalInspectionReturnQuantity","judgeBy","judgeDate","judgeDescription","judgeStatus","extField","remark"]
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
 
@@ -441,7 +456,7 @@ function buildSubmitPayload() {
       tenantCode: tenantStore.tenantCode,
       companyCode: tenantStore.companyCode,
       companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      iqcOrderId: masterId,
+      defectHandlings: masterId,
     })),
   }
 }

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Materials
 // 文件名称：TaktMaterialDtos.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Material 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktMaterial 生成，请按需审阅）
 // 
@@ -56,24 +56,24 @@ public class TaktMaterialDto : TaktTenantDtoBase
     public string? MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行业领域
+    /// 行业领域（字典 logistics_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
     /// </summary>
-    public string? IndustrySector { get; set; } = string.Empty;
+    public string IndustrySector { get; set; } = string.Empty;
 
     /// <summary>
-    /// 品目阶层
+    /// 物料层级
     /// </summary>
     public string? MaterialHierarchy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 品目组代码（关联 TaktMaterialGroup.MaterialGroupCode）
+    /// 物料组（关联 TaktMaterialGroup.MaterialGroupCode，选项 TaktMaterialGroups/options，DictValue=MaterialGroupCode）
     /// </summary>
-    public string? MaterialGroupCode { get; set; } = string.Empty;
+    public string MaterialGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料类型（0=原材料，1=半成品，2=成品，3=辅料，4=包装材料，5=其他）
+    /// 物料类型（字典 logistics_material_type，DictValue=ROH/HALB 等；默认 ROH）
     /// </summary>
-    public int MaterialType { get; set; } = 0;
+    public string MaterialType { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料型号
@@ -86,7 +86,7 @@ public class TaktMaterialDto : TaktTenantDtoBase
     public string? MaterialBrand { get; set; } = string.Empty;
 
     /// <summary>
-    /// 基本单位（主单位）
+    /// 基本单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string BaseUnit { get; set; } = string.Empty;
 
@@ -96,14 +96,9 @@ public class TaktMaterialDto : TaktTenantDtoBase
     public string? Manufacturer { get; set; } = string.Empty;
 
     /// <summary>
-    /// 制造商零件编号
+    /// 制造商物料编码（制造商内部的物料编号）
     /// </summary>
-    public string? ManufacturerPartNumber { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 物料状态（1=启用，0=禁用）
-    /// </summary>
-    public int MaterialStatus { get; set; } = 0;
+    public string? ManufacturerMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料属性（JSON格式，存储物料自定义属性）
@@ -111,14 +106,20 @@ public class TaktMaterialDto : TaktTenantDtoBase
     public string? MaterialAttributes { get; set; } = string.Empty;
 
     /// <summary>
-    /// 停产状态（EOL）
+    /// 停产状态（字典 logistics_material_eol_status，DictValue=01/Z0 等；默认 Z0=计划物料）
     /// </summary>
-    public string? IsEndOfLife { get; set; } = string.Empty;
+    public string IsEndOfLife { get; set; } = string.Empty;
 
     /// <summary>
-    /// 停产日期
+    /// 物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
     /// </summary>
-    public DateTime? EndOfLifeDate { get; set; }
+    public int MaterialStatus { get; set; } = 0;
+
+    /// <summary>
+    /// 全局物料变更记录列表（外键在子表 TaktMaterialChangeLog.MaterialId）
+    /// （子表：TaktMaterialChangeLog）
+    /// </summary>
+    public List<TaktMaterialChangeLogDto>? ChangeLogs { get; set; }
 
 }
 
@@ -158,24 +159,24 @@ public class TaktMaterialQueryDto : TaktPagedQuery
     public string? MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行业领域
+    /// 行业领域（字典 logistics_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
     /// </summary>
     public string? IndustrySector { get; set; } = string.Empty;
 
     /// <summary>
-    /// 品目阶层
+    /// 物料层级
     /// </summary>
     public string? MaterialHierarchy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 品目组代码（关联 TaktMaterialGroup.MaterialGroupCode）
+    /// 物料组（关联 TaktMaterialGroup.MaterialGroupCode，选项 TaktMaterialGroups/options，DictValue=MaterialGroupCode）
     /// </summary>
-    public string? MaterialGroupCode { get; set; } = string.Empty;
+    public string? MaterialGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料类型（0=原材料，1=半成品，2=成品，3=辅料，4=包装材料，5=其他）
+    /// 物料类型（字典 logistics_material_type，DictValue=ROH/HALB 等；默认 ROH）
     /// </summary>
-    public int? MaterialType { get; set; }
+    public string? MaterialType { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料型号
@@ -188,7 +189,7 @@ public class TaktMaterialQueryDto : TaktPagedQuery
     public string? MaterialBrand { get; set; } = string.Empty;
 
     /// <summary>
-    /// 基本单位（主单位）
+    /// 基本单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? BaseUnit { get; set; } = string.Empty;
 
@@ -198,14 +199,9 @@ public class TaktMaterialQueryDto : TaktPagedQuery
     public string? Manufacturer { get; set; } = string.Empty;
 
     /// <summary>
-    /// 制造商零件编号
+    /// 制造商物料编码（制造商内部的物料编号）
     /// </summary>
-    public string? ManufacturerPartNumber { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 物料状态（1=启用，0=禁用）
-    /// </summary>
-    public int? MaterialStatus { get; set; }
+    public string? ManufacturerMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料属性（JSON格式，存储物料自定义属性）
@@ -213,19 +209,14 @@ public class TaktMaterialQueryDto : TaktPagedQuery
     public string? MaterialAttributes { get; set; } = string.Empty;
 
     /// <summary>
-    /// 停产状态（EOL）
+    /// 停产状态（字典 logistics_material_eol_status，DictValue=01/Z0 等；默认 Z0=计划物料）
     /// </summary>
     public string? IsEndOfLife { get; set; } = string.Empty;
 
     /// <summary>
-    /// 停产日期（范围查询-开始）
+    /// 物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
     /// </summary>
-    public DateTime? EndOfLifeDateStart { get; set; }
-
-    /// <summary>
-    /// 停产日期（范围查询-结束）
-    /// </summary>
-    public DateTime? EndOfLifeDateEnd { get; set; }
+    public int? MaterialStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -285,24 +276,27 @@ public class TaktMaterialCreateDto
     public string? MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行业领域
+    /// 行业领域（字典 logistics_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
     /// </summary>
-    public string? IndustrySector { get; set; } = string.Empty;
+    [Required(ErrorMessage = "行业领域（字典 logistics_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）不能为空")]
+    public string IndustrySector { get; set; } = string.Empty;
 
     /// <summary>
-    /// 品目阶层
+    /// 物料层级
     /// </summary>
     public string? MaterialHierarchy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 品目组代码（关联 TaktMaterialGroup.MaterialGroupCode）
+    /// 物料组（关联 TaktMaterialGroup.MaterialGroupCode，选项 TaktMaterialGroups/options，DictValue=MaterialGroupCode）
     /// </summary>
-    public string? MaterialGroupCode { get; set; } = string.Empty;
+    [Required(ErrorMessage = "物料组（关联 TaktMaterialGroup.MaterialGroupCode，选项 TaktMaterialGroups/options，DictValue=MaterialGroupCode）不能为空")]
+    public string MaterialGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料类型（0=原材料，1=半成品，2=成品，3=辅料，4=包装材料，5=其他）
+    /// 物料类型（字典 logistics_material_type，DictValue=ROH/HALB 等；默认 ROH）
     /// </summary>
-    public int MaterialType { get; set; } = 0;
+    [Required(ErrorMessage = "物料类型（字典 logistics_material_type，DictValue=ROH/HALB 等；默认 ROH）不能为空")]
+    public string MaterialType { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料型号
@@ -315,9 +309,9 @@ public class TaktMaterialCreateDto
     public string? MaterialBrand { get; set; } = string.Empty;
 
     /// <summary>
-    /// 基本单位（主单位）
+    /// 基本单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
     /// </summary>
-    [Required(ErrorMessage = "基本单位（主单位）不能为空")]
+    [Required(ErrorMessage = "基本单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）不能为空")]
     public string BaseUnit { get; set; } = string.Empty;
 
     /// <summary>
@@ -326,14 +320,9 @@ public class TaktMaterialCreateDto
     public string? Manufacturer { get; set; } = string.Empty;
 
     /// <summary>
-    /// 制造商零件编号
+    /// 制造商物料编码（制造商内部的物料编号）
     /// </summary>
-    public string? ManufacturerPartNumber { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 物料状态（1=启用，0=禁用）
-    /// </summary>
-    public int MaterialStatus { get; set; } = 0;
+    public string? ManufacturerMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料属性（JSON格式，存储物料自定义属性）
@@ -341,14 +330,20 @@ public class TaktMaterialCreateDto
     public string? MaterialAttributes { get; set; } = string.Empty;
 
     /// <summary>
-    /// 停产状态（EOL）
+    /// 停产状态（字典 logistics_material_eol_status，DictValue=01/Z0 等；默认 Z0=计划物料）
     /// </summary>
-    public string? IsEndOfLife { get; set; } = string.Empty;
+    [Required(ErrorMessage = "停产状态（字典 logistics_material_eol_status，DictValue=01/Z0 等；默认 Z0=计划物料）不能为空")]
+    public string IsEndOfLife { get; set; } = string.Empty;
 
     /// <summary>
-    /// 停产日期
+    /// 物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
     /// </summary>
-    public DateTime? EndOfLifeDate { get; set; }
+    public int MaterialStatus { get; set; } = 0;
+
+    /// <summary>
+    /// 全局物料变更记录列表（外键在子表 TaktMaterialChangeLog.MaterialId）（子表，级联保存）
+    /// </summary>
+    public List<TaktMaterialChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -400,9 +395,9 @@ public class TaktMaterialStatusDto
     public long MaterialId { get; set; }
 
     /// <summary>
-    /// 物料状态（1=启用，0=禁用）
+    /// 物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
     /// </summary>
-    [Required(ErrorMessage = "物料状态（1=启用，0=禁用）不能为空")]
+    [Required(ErrorMessage = "物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）不能为空")]
     public int MaterialStatus { get; set; } = 0;
 }
 
@@ -441,24 +436,24 @@ public class TaktMaterialTemplateDto
     public string? MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行业领域
+    /// 行业领域（字典 logistics_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
     /// </summary>
     public string? IndustrySector { get; set; } = string.Empty;
 
     /// <summary>
-    /// 品目阶层
+    /// 物料层级
     /// </summary>
     public string? MaterialHierarchy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 品目组代码（关联 TaktMaterialGroup.MaterialGroupCode）
+    /// 物料组（关联 TaktMaterialGroup.MaterialGroupCode，选项 TaktMaterialGroups/options，DictValue=MaterialGroupCode）
     /// </summary>
-    public string? MaterialGroupCode { get; set; } = string.Empty;
+    public string? MaterialGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料类型（0=原材料，1=半成品，2=成品，3=辅料，4=包装材料，5=其他）
+    /// 物料类型（字典 logistics_material_type，DictValue=ROH/HALB 等；默认 ROH）
     /// </summary>
-    public int? MaterialType { get; set; }
+    public string? MaterialType { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料型号
@@ -471,7 +466,7 @@ public class TaktMaterialTemplateDto
     public string? MaterialBrand { get; set; } = string.Empty;
 
     /// <summary>
-    /// 基本单位（主单位）
+    /// 基本单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? BaseUnit { get; set; } = string.Empty;
 
@@ -479,6 +474,31 @@ public class TaktMaterialTemplateDto
     /// 制造商
     /// </summary>
     public string? Manufacturer { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 制造商物料编码（制造商内部的物料编号）
+    /// </summary>
+    public string? ManufacturerMaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料属性（JSON格式，存储物料自定义属性）
+    /// </summary>
+    public string? MaterialAttributes { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 停产状态（字典 logistics_material_eol_status，DictValue=01/Z0 等；默认 Z0=计划物料）
+    /// </summary>
+    public string? IsEndOfLife { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// </summary>
+    public int? MaterialStatus { get; set; }
+
+    /// <summary>
+    /// 全局物料变更记录列表（外键在子表 TaktMaterialChangeLog.MaterialId）（子表，级联保存）
+    /// </summary>
+    public List<TaktMaterialChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -523,24 +543,24 @@ public class TaktMaterialImportDto
     public string? MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行业领域
+    /// 行业领域（字典 logistics_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
     /// </summary>
     public string? IndustrySector { get; set; } = string.Empty;
 
     /// <summary>
-    /// 品目阶层
+    /// 物料层级
     /// </summary>
     public string? MaterialHierarchy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 品目组代码（关联 TaktMaterialGroup.MaterialGroupCode）
+    /// 物料组（关联 TaktMaterialGroup.MaterialGroupCode，选项 TaktMaterialGroups/options，DictValue=MaterialGroupCode）
     /// </summary>
-    public string? MaterialGroupCode { get; set; } = string.Empty;
+    public string? MaterialGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料类型（0=原材料，1=半成品，2=成品，3=辅料，4=包装材料，5=其他）
+    /// 物料类型（字典 logistics_material_type，DictValue=ROH/HALB 等；默认 ROH）
     /// </summary>
-    public int? MaterialType { get; set; }
+    public string? MaterialType { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料型号
@@ -553,7 +573,7 @@ public class TaktMaterialImportDto
     public string? MaterialBrand { get; set; } = string.Empty;
 
     /// <summary>
-    /// 基本单位（主单位）
+    /// 基本单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? BaseUnit { get; set; } = string.Empty;
 
@@ -561,6 +581,31 @@ public class TaktMaterialImportDto
     /// 制造商
     /// </summary>
     public string? Manufacturer { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 制造商物料编码（制造商内部的物料编号）
+    /// </summary>
+    public string? ManufacturerMaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料属性（JSON格式，存储物料自定义属性）
+    /// </summary>
+    public string? MaterialAttributes { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 停产状态（字典 logistics_material_eol_status，DictValue=01/Z0 等；默认 Z0=计划物料）
+    /// </summary>
+    public string? IsEndOfLife { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// </summary>
+    public int? MaterialStatus { get; set; }
+
+    /// <summary>
+    /// 全局物料变更记录列表（外键在子表 TaktMaterialChangeLog.MaterialId）（子表，级联保存）
+    /// </summary>
+    public List<TaktMaterialChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -611,24 +656,24 @@ public class TaktMaterialExportDto
     public string? MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行业领域
+    /// 行业领域（字典 logistics_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
     /// </summary>
-    public string? IndustrySector { get; set; } = string.Empty;
+    public string IndustrySector { get; set; } = string.Empty;
 
     /// <summary>
-    /// 品目阶层
+    /// 物料层级
     /// </summary>
     public string? MaterialHierarchy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 品目组代码（关联 TaktMaterialGroup.MaterialGroupCode）
+    /// 物料组（关联 TaktMaterialGroup.MaterialGroupCode，选项 TaktMaterialGroups/options，DictValue=MaterialGroupCode）
     /// </summary>
-    public string? MaterialGroupCode { get; set; } = string.Empty;
+    public string MaterialGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料类型（0=原材料，1=半成品，2=成品，3=辅料，4=包装材料，5=其他）
+    /// 物料类型（字典 logistics_material_type，DictValue=ROH/HALB 等；默认 ROH）
     /// </summary>
-    public int MaterialType { get; set; } = 0;
+    public string MaterialType { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料型号
@@ -641,7 +686,7 @@ public class TaktMaterialExportDto
     public string? MaterialBrand { get; set; } = string.Empty;
 
     /// <summary>
-    /// 基本单位（主单位）
+    /// 基本单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string BaseUnit { get; set; } = string.Empty;
 
@@ -651,14 +696,9 @@ public class TaktMaterialExportDto
     public string? Manufacturer { get; set; } = string.Empty;
 
     /// <summary>
-    /// 制造商零件编号
+    /// 制造商物料编码（制造商内部的物料编号）
     /// </summary>
-    public string? ManufacturerPartNumber { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 物料状态（1=启用，0=禁用）
-    /// </summary>
-    public int MaterialStatus { get; set; } = 0;
+    public string? ManufacturerMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料属性（JSON格式，存储物料自定义属性）
@@ -666,14 +706,14 @@ public class TaktMaterialExportDto
     public string? MaterialAttributes { get; set; } = string.Empty;
 
     /// <summary>
-    /// 停产状态（EOL）
+    /// 停产状态（字典 logistics_material_eol_status，DictValue=01/Z0 等；默认 Z0=计划物料）
     /// </summary>
-    public string? IsEndOfLife { get; set; } = string.Empty;
+    public string IsEndOfLife { get; set; } = string.Empty;
 
     /// <summary>
-    /// 停产日期
+    /// 物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
     /// </summary>
-    public DateTime? EndOfLifeDate { get; set; }
+    public int MaterialStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

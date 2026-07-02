@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/defect
 // 文件名称：pcba-inspection.d.ts
-// 创建时间：2026-06-20
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/defect 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -16,7 +16,7 @@ import type {
 } from '@/types/common';
 
 /**
- * PCBA检查日报实体
+ * PCBA检查日报实体 不良率(%) = 明细不良数量合计 ÷ 明细检查数量合计 × 100%；直行率(%) = (检查数量 - 不良数量) ÷ 检查数量 × 100%。
  * 对应前端 TaktPcbaInspectionDto
  * 继承 TaktCompanyDtoBase
  * 对应前端 PcbaInspection
@@ -29,12 +29,12 @@ export interface PcbaInspection extends CompanyDtoBase {
   pcbaInspectionId: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
   plantCode: string;
 
   /**
-   * 生产类别 RD: 研发 EVT: 工程验证测试 DVT: 设计验证测试 EPP: 工程试产 PP: 试产 FPP: 正式生产 MP: 大规模生产 RPR: 维修生产 RWR: 返工生产
+   * 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
    */
   prodCategory: string;
 
@@ -44,7 +44,7 @@ export interface PcbaInspection extends CompanyDtoBase {
   prodDate: string;
 
   /**
-   * 生产工单号
+   * 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
    */
   prodOrderCode: string;
 
@@ -67,11 +67,6 @@ export interface PcbaInspection extends CompanyDtoBase {
    * 物料编码
    */
   materialCode: string;
-
-  /**
-   * 状态(0=正常 1=停用)
-   */
-  status: number;
 
   /**
    * PCBA检查明细列表 （子表：TaktPcbaInspectionDetail）
@@ -99,12 +94,12 @@ export interface PcbaInspectionQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
   plantCode?: string;
 
   /**
-   * 生产类别 RD: 研发 EVT: 工程验证测试 DVT: 设计验证测试 EPP: 工程试产 PP: 试产 FPP: 正式生产 MP: 大规模生产 RPR: 维修生产 RWR: 返工生产
+   * 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
    */
   prodCategory?: string;
 
@@ -119,7 +114,7 @@ export interface PcbaInspectionQuery extends TaktPagedQuery {
   prodDateEnd?: string;
 
   /**
-   * 生产工单号
+   * 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
    */
   prodOrderCode?: string;
 
@@ -142,11 +137,6 @@ export interface PcbaInspectionQuery extends TaktPagedQuery {
    * 物料编码
    */
   materialCode?: string;
-
-  /**
-   * 状态(0=正常 1=停用)
-   */
-  status?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -188,17 +178,17 @@ export interface PcbaInspectionCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
   plantCode: string;
 
   /**
-   * 生产类别 RD: 研发 EVT: 工程验证测试 DVT: 设计验证测试 EPP: 工程试产 PP: 试产 FPP: 正式生产 MP: 大规模生产 RPR: 维修生产 RWR: 返工生产
+   * 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
    */
   prodCategory: string;
 
@@ -208,7 +198,7 @@ export interface PcbaInspectionCreate {
   prodDate: string;
 
   /**
-   * 生产工单号
+   * 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
    */
   prodOrderCode: string;
 
@@ -231,11 +221,6 @@ export interface PcbaInspectionCreate {
    * 物料编码
    */
   materialCode: string;
-
-  /**
-   * 状态(0=正常 1=停用)
-   */
-  status: number;
 
   /**
    * PCBA检查明细列表（子表，级联保存）
@@ -271,25 +256,6 @@ export interface PcbaInspectionUpdate extends PcbaInspectionCreate {
 
 
 /**
- * PcbaInspection 状态更新 DTO
- * 对应前端 PcbaInspectionStatus
- * @description 对应后端 TaktPcbaInspectionStatusDto
- */
-export interface PcbaInspectionStatus {
-  /**
-   * PcbaInspectionID
-   */
-  pcbaInspectionId: string;
-
-  /**
-   * 状态(0=正常 1=停用)
-   */
-  status: number;
-
-}
-
-
-/**
  * PcbaInspection 导入模板行 DTO
  * 对应前端 PcbaInspectionTemplate
  * @description 对应后端 TaktPcbaInspectionTemplateDto
@@ -306,19 +272,29 @@ export interface PcbaInspectionTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
   plantCode?: string;
 
   /**
-   * 生产类别 RD: 研发 EVT: 工程验证测试 DVT: 设计验证测试 EPP: 工程试产 PP: 试产 FPP: 正式生产 MP: 大规模生产 RPR: 维修生产 RWR: 返工生产
+   * 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
    */
   prodCategory?: string;
 
   /**
-   * 生产工单号
+   * 生产日期
+   */
+  prodDate?: string;
+
+  /**
+   * 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
    */
   prodOrderCode?: string;
+
+  /**
+   * 订单数量
+   */
+  prodOrderQty?: number;
 
   /**
    * 机种
@@ -336,9 +312,9 @@ export interface PcbaInspectionTemplate {
   materialCode?: string;
 
   /**
-   * 状态(0=正常 1=停用)
+   * PCBA检查明细列表（子表，级联保存）
    */
-  status?: number;
+  pcbaInspectionDetails?: PcbaInspectionDetailCreate[];
 
   /**
    * 扩展字段JSON
@@ -370,24 +346,34 @@ export interface PcbaInspectionImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
   plantCode?: string;
 
   /**
-   * 生产类别 RD: 研发 EVT: 工程验证测试 DVT: 设计验证测试 EPP: 工程试产 PP: 试产 FPP: 正式生产 MP: 大规模生产 RPR: 维修生产 RWR: 返工生产
+   * 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
    */
   prodCategory?: string;
 
   /**
-   * 生产工单号
+   * 生产日期
+   */
+  prodDate?: string;
+
+  /**
+   * 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
    */
   prodOrderCode?: string;
+
+  /**
+   * 订单数量
+   */
+  prodOrderQty?: number;
 
   /**
    * 机种
@@ -405,9 +391,9 @@ export interface PcbaInspectionImport {
   materialCode?: string;
 
   /**
-   * 状态(0=正常 1=停用)
+   * PCBA检查明细列表（子表，级联保存）
    */
-  status?: number;
+  pcbaInspectionDetails?: PcbaInspectionDetailCreate[];
 
   /**
    * 扩展字段JSON
@@ -439,12 +425,12 @@ export interface PcbaInspectionExport {
   companyCode: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
   plantCode: string;
 
   /**
-   * 生产类别 RD: 研发 EVT: 工程验证测试 DVT: 设计验证测试 EPP: 工程试产 PP: 试产 FPP: 正式生产 MP: 大规模生产 RPR: 维修生产 RWR: 返工生产
+   * 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
    */
   prodCategory: string;
 
@@ -454,7 +440,7 @@ export interface PcbaInspectionExport {
   prodDate: string;
 
   /**
-   * 生产工单号
+   * 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
    */
   prodOrderCode: string;
 
@@ -477,11 +463,6 @@ export interface PcbaInspectionExport {
    * 物料编码
    */
   materialCode: string;
-
-  /**
-   * 状态(0=正常 1=停用)
-   */
-  status: number;
 
   /**
    * 扩展字段JSON

@@ -179,7 +179,7 @@
           v-model:value="advancedQueryForm.workCenterCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productiondispatch.workcentercode') })"
           show-count
-          :maxlength="40"
+          :maxlength="8"
           allow-clear
         />
       </a-form-item>
@@ -685,7 +685,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: ProductionDispatch, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getProductionDispatchId(selectedRow.value) === getProductionDispatchId(record)) {
+    } else if (selectedRow.value && getProductionDispatchId(selectedRow.value) === getProductionDispatchId(record)) {
       selectedRow.value = null
     }
   },

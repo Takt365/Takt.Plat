@@ -116,10 +116,10 @@
                 :label="t('entity.serialinbound.inboundtype')"
                 name="inboundType"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.inboundType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serialinbound.inboundtype') })"
-                  style="width: 100%"
+                  dict-type="logistics_inbound_type"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serialinbound.inboundtype') })"
                 />
               </a-form-item>
             </a-col>
@@ -175,20 +175,6 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.serialinbound.relatedcompany')"
-                name="relatedCompany"
-              >
-                <a-input
-                  v-model:value="formState.relatedCompany"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serialinbound.relatedcompany') })"
-                  show-count
-                  :maxlength="4"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
             <a-col :span="24">
               <a-form-item
                 name="extField"
@@ -254,11 +240,13 @@
  * 序列号入库主表实体维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/serial/inbound/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import type { SerialInboundCreate } from '@/types/logistics/serial/inbound'
+import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -291,7 +279,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","inboundNo","inboundDate","inboundType","warehouseCode","locationCode","totalQuantity","relatedCompany","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","inboundNo","inboundDate","inboundType","warehouseCode","locationCode","totalQuantity","extField","remark"]
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
 
@@ -394,11 +382,23 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
-/** 表单字段默认值（无字典默认项） */
-function applyFormDefaults(target: Record<string, unknown>) {
-  void target
+/** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
+const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  inboundType: 4
 }
 
+/** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  Object.assign(target, FORM_FIELD_DEFAULTS)
+}
+
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载全量字典 */
+onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
+})
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 serialInboundId 才视为编辑） */
 watch(
@@ -498,14 +498,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       return Promise.resolve()
     },
     trigger: 'change'
-  }],
-  relatedCompany: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.serialinbound.relatedcompany') }),
-      trigger: 'blur'
-    }
-  ],
+  }  ],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */

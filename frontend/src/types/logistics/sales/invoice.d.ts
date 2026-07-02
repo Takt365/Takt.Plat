@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/sales
 // 文件名称：invoice.d.ts
-// 创建时间：2026-06-20
+// 创建时间：2026-07-01
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,22 +29,17 @@ export interface SalesInvoice extends CompanyDtoBase {
   salesInvoiceId: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
   /**
-   * 销售发票编码（唯一索引）
+   * 年度期间（yyyyMM）
    */
-  salesInvoiceCode: string;
+  yearMonth: string;
 
   /**
-   * 关联销售订单编码
-   */
-  salesOrderCode?: string;
-
-  /**
-   * 客户编码
+   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
    */
   customerCode: string;
 
@@ -54,39 +49,9 @@ export interface SalesInvoice extends CompanyDtoBase {
   customerName: string;
 
   /**
-   * 开票日期
+   * 会计凭证编号（租户+公司+工厂内唯一）
    */
-  invoiceDate: string;
-
-  /**
-   * 发票总金额
-   */
-  totalAmount: number;
-
-  /**
-   * 税费
-   */
-  taxAmount: number;
-
-  /**
-   * 发票实付金额
-   */
-  actualAmount: number;
-
-  /**
-   * 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
-   */
-  invoiceStatus: number;
-
-  /**
-   * 收款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
-   */
-  paymentMethod: number;
-
-  /**
-   * 发票号码（税务系统票号）
-   */
-  taxInvoiceNo?: string;
+  accountingDocumentCode: string;
 
   /**
    * 销售发票明细列表（主子表关系，一张发票可有多个明细行） （子表：TaktSalesInvoiceItem）
@@ -114,22 +79,17 @@ export interface SalesInvoiceQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
   /**
-   * 销售发票编码（唯一索引）
+   * 年度期间（yyyyMM）
    */
-  salesInvoiceCode?: string;
+  yearMonth?: string;
 
   /**
-   * 关联销售订单编码
-   */
-  salesOrderCode?: string;
-
-  /**
-   * 客户编码
+   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
    */
   customerCode?: string;
 
@@ -139,44 +99,9 @@ export interface SalesInvoiceQuery extends TaktPagedQuery {
   customerName?: string;
 
   /**
-   * 开票日期（范围查询-开始）
+   * 会计凭证编号（租户+公司+工厂内唯一）
    */
-  invoiceDateStart?: string;
-
-  /**
-   * 开票日期（范围查询-结束）
-   */
-  invoiceDateEnd?: string;
-
-  /**
-   * 发票总金额
-   */
-  totalAmount?: number;
-
-  /**
-   * 税费
-   */
-  taxAmount?: number;
-
-  /**
-   * 发票实付金额
-   */
-  actualAmount?: number;
-
-  /**
-   * 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
-   */
-  invoiceStatus?: number;
-
-  /**
-   * 收款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
-   */
-  paymentMethod?: number;
-
-  /**
-   * 发票号码（税务系统票号）
-   */
-  taxInvoiceNo?: string;
+  accountingDocumentCode?: string;
 
   /**
    * 创建时间（范围查询-开始）
@@ -218,27 +143,22 @@ export interface SalesInvoiceCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
   /**
-   * 销售发票编码（唯一索引）
+   * 年度期间（yyyyMM）
    */
-  salesInvoiceCode: string;
+  yearMonth: string;
 
   /**
-   * 关联销售订单编码
-   */
-  salesOrderCode?: string;
-
-  /**
-   * 客户编码
+   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
    */
   customerCode: string;
 
@@ -248,39 +168,9 @@ export interface SalesInvoiceCreate {
   customerName: string;
 
   /**
-   * 开票日期
+   * 会计凭证编号（租户+公司+工厂内唯一）
    */
-  invoiceDate: string;
-
-  /**
-   * 发票总金额
-   */
-  totalAmount: number;
-
-  /**
-   * 税费
-   */
-  taxAmount: number;
-
-  /**
-   * 发票实付金额
-   */
-  actualAmount: number;
-
-  /**
-   * 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
-   */
-  invoiceStatus: number;
-
-  /**
-   * 收款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
-   */
-  paymentMethod: number;
-
-  /**
-   * 发票号码（税务系统票号）
-   */
-  taxInvoiceNo?: string;
+  accountingDocumentCode: string;
 
   /**
    * 销售发票明细列表（主子表关系，一张发票可有多个明细行）（子表，级联保存）
@@ -316,25 +206,6 @@ export interface SalesInvoiceUpdate extends SalesInvoiceCreate {
 
 
 /**
- * SalesInvoice 状态更新 DTO
- * 对应前端 SalesInvoiceStatus
- * @description 对应后端 TaktSalesInvoiceStatusDto
- */
-export interface SalesInvoiceStatus {
-  /**
-   * SalesInvoiceID
-   */
-  salesInvoiceId: string;
-
-  /**
-   * 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
-   */
-  invoiceStatus: number;
-
-}
-
-
-/**
  * SalesInvoice 导入模板行 DTO
  * 对应前端 SalesInvoiceTemplate
  * @description 对应后端 TaktSalesInvoiceTemplateDto
@@ -351,22 +222,17 @@ export interface SalesInvoiceTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
   /**
-   * 销售发票编码（唯一索引）
+   * 年度期间（yyyyMM）
    */
-  salesInvoiceCode?: string;
+  yearMonth?: string;
 
   /**
-   * 关联销售订单编码
-   */
-  salesOrderCode?: string;
-
-  /**
-   * 客户编码
+   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
    */
   customerCode?: string;
 
@@ -376,19 +242,14 @@ export interface SalesInvoiceTemplate {
   customerName?: string;
 
   /**
-   * 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
+   * 会计凭证编号（租户+公司+工厂内唯一）
    */
-  invoiceStatus?: number;
+  accountingDocumentCode?: string;
 
   /**
-   * 收款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 销售发票明细列表（主子表关系，一张发票可有多个明细行）（子表，级联保存）
    */
-  paymentMethod?: number;
-
-  /**
-   * 发票号码（税务系统票号）
-   */
-  taxInvoiceNo?: string;
+  items?: SalesInvoiceItemCreate[];
 
   /**
    * 扩展字段JSON
@@ -420,27 +281,22 @@ export interface SalesInvoiceImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
   /**
-   * 销售发票编码（唯一索引）
+   * 年度期间（yyyyMM）
    */
-  salesInvoiceCode?: string;
+  yearMonth?: string;
 
   /**
-   * 关联销售订单编码
-   */
-  salesOrderCode?: string;
-
-  /**
-   * 客户编码
+   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
    */
   customerCode?: string;
 
@@ -450,19 +306,14 @@ export interface SalesInvoiceImport {
   customerName?: string;
 
   /**
-   * 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
+   * 会计凭证编号（租户+公司+工厂内唯一）
    */
-  invoiceStatus?: number;
+  accountingDocumentCode?: string;
 
   /**
-   * 收款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 销售发票明细列表（主子表关系，一张发票可有多个明细行）（子表，级联保存）
    */
-  paymentMethod?: number;
-
-  /**
-   * 发票号码（税务系统票号）
-   */
-  taxInvoiceNo?: string;
+  items?: SalesInvoiceItemCreate[];
 
   /**
    * 扩展字段JSON
@@ -494,22 +345,17 @@ export interface SalesInvoiceExport {
   companyCode: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
   /**
-   * 销售发票编码（唯一索引）
+   * 年度期间（yyyyMM）
    */
-  salesInvoiceCode: string;
+  yearMonth: string;
 
   /**
-   * 关联销售订单编码
-   */
-  salesOrderCode?: string;
-
-  /**
-   * 客户编码
+   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
    */
   customerCode: string;
 
@@ -519,39 +365,9 @@ export interface SalesInvoiceExport {
   customerName: string;
 
   /**
-   * 开票日期
+   * 会计凭证编号（租户+公司+工厂内唯一）
    */
-  invoiceDate: string;
-
-  /**
-   * 发票总金额
-   */
-  totalAmount: number;
-
-  /**
-   * 税费
-   */
-  taxAmount: number;
-
-  /**
-   * 发票实付金额
-   */
-  actualAmount: number;
-
-  /**
-   * 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
-   */
-  invoiceStatus: number;
-
-  /**
-   * 收款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
-   */
-  paymentMethod: number;
-
-  /**
-   * 发票号码（税务系统票号）
-   */
-  taxInvoiceNo?: string;
+  accountingDocumentCode: string;
 
   /**
    * 扩展字段JSON

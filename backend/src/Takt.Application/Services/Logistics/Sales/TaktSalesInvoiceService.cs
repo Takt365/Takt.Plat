@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Sales
 // 文件名称：TaktSalesInvoiceService.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-07-01
 // 创建人：Takt365(Cursor AI)
 // 功能描述：销售发票应用服务实现
 // 
@@ -101,13 +101,15 @@ public class TaktSalesInvoiceService : TaktServiceBase, ITaktSalesInvoiceService
     {
         EnsureThreeLayerContext();
         var list = await _salesInvoiceRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.InvoiceStatus == 1,
-            x => x.CustomerName ?? string.Empty,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
+            x => x.AccountingDocumentCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.CustomerName ?? e.Id.ToString(),
+            DictValue = e.AccountingDocumentCode,
+            DictLabel = string.IsNullOrWhiteSpace(e.CustomerName)
+                ? e.AccountingDocumentCode
+                : $"{e.AccountingDocumentCode} {e.CustomerName}",
         }).ToList();
     }
 
@@ -119,13 +121,13 @@ public class TaktSalesInvoiceService : TaktServiceBase, ITaktSalesInvoiceService
     public async Task<TaktSalesInvoiceDto> CreateSalesInvoiceAsync(TaktSalesInvoiceCreateDto dto)
     {
         var entity = dto.Adapt<TaktSalesInvoice>();
-        var isUnique_ix_takt_logistics_sales_invoice_code_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_takt_logistics_sales_invoice_accounting_doc_unique = await _uniqueValidator.IsUniqueAsync(
             _salesInvoiceRepository,
             x => x.PlantCode == entity.PlantCode
-                && x.SalesInvoiceCode == entity.SalesInvoiceCode);
-        if (!isUnique_ix_takt_logistics_sales_invoice_code_unique)
+                && x.AccountingDocumentCode == entity.AccountingDocumentCode);
+        if (!isUnique_ix_takt_logistics_sales_invoice_accounting_doc_unique)
         {
-            throw new TaktBusinessException("销售发票的PlantCode、SalesInvoiceCode已存在");
+            throw new TaktBusinessException("销售发票的PlantCode、AccountingDocumentCode已存在");
         }
         entity = await _salesInvoiceRepository.CreateAsync(entity);
                 await SaveSalesInvoiceChildrenAsync(entity, dto);
@@ -146,14 +148,14 @@ public class TaktSalesInvoiceService : TaktServiceBase, ITaktSalesInvoiceService
             throw new TaktBusinessException("销售发票不存在");
         }
         dto.Adapt(entity);
-        var isUnique_ix_takt_logistics_sales_invoice_code_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_takt_logistics_sales_invoice_accounting_doc_unique = await _uniqueValidator.IsUniqueAsync(
             _salesInvoiceRepository,
             x => x.PlantCode == entity.PlantCode
-                && x.SalesInvoiceCode == entity.SalesInvoiceCode,
+                && x.AccountingDocumentCode == entity.AccountingDocumentCode,
             id);
-        if (!isUnique_ix_takt_logistics_sales_invoice_code_unique)
+        if (!isUnique_ix_takt_logistics_sales_invoice_accounting_doc_unique)
         {
-            throw new TaktBusinessException("销售发票的PlantCode、SalesInvoiceCode已存在");
+            throw new TaktBusinessException("销售发票的PlantCode、AccountingDocumentCode已存在");
         }
         await _salesInvoiceRepository.UpdateAsync(entity);
                 await SaveSalesInvoiceChildrenAsync(entity, dto);
@@ -199,23 +201,6 @@ public class TaktSalesInvoiceService : TaktServiceBase, ITaktSalesInvoiceService
     }
 
     /// <summary>
-    /// 更新销售发票状态
-    /// </summary>
-    /// <param name="dto">状态DTO</param>
-    /// <returns>DTO</returns>
-    public async Task<TaktSalesInvoiceDto> UpdateSalesInvoiceStatusAsync(TaktSalesInvoiceStatusDto dto)
-    {
-        var entity = await _salesInvoiceRepository.GetByIdAsync(dto.SalesInvoiceId);
-        if (entity == null)
-        {
-            throw new TaktBusinessException("销售发票不存在");
-        }
-        entity.InvoiceStatus = dto.InvoiceStatus;
-        await _salesInvoiceRepository.UpdateAsync(entity);
-        return await GetSalesInvoiceByIdAsync(dto.SalesInvoiceId) ?? throw new TaktBusinessException("销售发票不存在");
-    }
-
-    /// <summary>
     /// 获取导入模板
     /// </summary>
     /// <param name="sheetName">工作表名称</param>
@@ -251,18 +236,18 @@ public class TaktSalesInvoiceService : TaktServiceBase, ITaktSalesInvoiceService
             try
             {
                 var entity = rows[i].Adapt<TaktSalesInvoice>();
-                var importKey = $"{entity.PlantCode}|{entity.SalesInvoiceCode}";
+                var importKey = $"{entity.PlantCode}|{entity.AccountingDocumentCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、SalesInvoiceCode）");
+                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、AccountingDocumentCode）");
                 }
-                var isUnique_ix_takt_logistics_sales_invoice_code_unique = await _uniqueValidator.IsUniqueAsync(
+                var isUnique_ix_takt_logistics_sales_invoice_accounting_doc_unique = await _uniqueValidator.IsUniqueAsync(
                     _salesInvoiceRepository,
                     x => x.PlantCode == entity.PlantCode
-                        && x.SalesInvoiceCode == entity.SalesInvoiceCode);
-                if (!isUnique_ix_takt_logistics_sales_invoice_code_unique)
+                        && x.AccountingDocumentCode == entity.AccountingDocumentCode);
+                if (!isUnique_ix_takt_logistics_sales_invoice_accounting_doc_unique)
                 {
-                    throw new TaktBusinessException("销售发票的PlantCode、SalesInvoiceCode已存在");
+                    throw new TaktBusinessException("销售发票的PlantCode、AccountingDocumentCode已存在");
                 }
                 await _salesInvoiceRepository.CreateAsync(entity);
                 success += 1;
@@ -345,7 +330,7 @@ public class TaktSalesInvoiceService : TaktServiceBase, ITaktSalesInvoiceService
             var itemsNeedLine = items.Where(c => c.LineNumber <= 0).ToList();
             if (itemsNeedLine.Count > 0)
             {
-                var businessCode = !string.IsNullOrWhiteSpace(entity.SalesInvoiceCode) ? entity.SalesInvoiceCode : entity.Id.ToString();
+                var businessCode = !string.IsNullOrWhiteSpace(entity.CustomerCode) ? entity.CustomerCode : entity.Id.ToString();
                 var maxLine = await _salesInvoiceItemRepository.GetMaxIntAsync(
                     x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.SalesInvoiceId == entity.Id,
                     x => x.LineNumber);
@@ -402,19 +387,12 @@ public class TaktSalesInvoiceService : TaktServiceBase, ITaktSalesInvoiceService
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
                 (x.PlantCode != null && x.PlantCode.Contains(keywords))
-                || (x.SalesInvoiceCode != null && x.SalesInvoiceCode.Contains(keywords))
-                || (x.SalesOrderCode != null && x.SalesOrderCode.Contains(keywords))
+                || (x.YearMonth != null && x.YearMonth.Contains(keywords))
                 || (x.CustomerCode != null && x.CustomerCode.Contains(keywords))
                 || (x.CustomerName != null && x.CustomerName.Contains(keywords))
-                || SqlFunc.ToString(x.TotalAmount).Contains(keywords)
-                || SqlFunc.ToString(x.TaxAmount).Contains(keywords)
-                || SqlFunc.ToString(x.ActualAmount).Contains(keywords)
-                || SqlFunc.ToString(x.InvoiceStatus).Contains(keywords)
-                || SqlFunc.ToString(x.PaymentMethod).Contains(keywords)
-                || (x.TaxInvoiceNo != null && x.TaxInvoiceNo.Contains(keywords))
+                || (x.AccountingDocumentCode != null && x.AccountingDocumentCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.InvoiceDate).Contains(keywords)
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
@@ -424,14 +402,9 @@ public class TaktSalesInvoiceService : TaktServiceBase, ITaktSalesInvoiceService
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SalesInvoiceCode))
+        if (!string.IsNullOrEmpty(queryDto?.YearMonth))
         {
-            exp = exp.And(x => x.SalesInvoiceCode != null && x.SalesInvoiceCode.Contains(queryDto.SalesInvoiceCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.SalesOrderCode))
-        {
-            exp = exp.And(x => x.SalesOrderCode != null && x.SalesOrderCode.Contains(queryDto.SalesOrderCode));
+            exp = exp.And(x => x.YearMonth != null && x.YearMonth.Contains(queryDto.YearMonth));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.CustomerCode))
@@ -444,34 +417,9 @@ public class TaktSalesInvoiceService : TaktServiceBase, ITaktSalesInvoiceService
             exp = exp.And(x => x.CustomerName != null && x.CustomerName.Contains(queryDto.CustomerName));
         }
 
-        if (queryDto?.TotalAmount.HasValue == true)
+        if (!string.IsNullOrEmpty(queryDto?.AccountingDocumentCode))
         {
-            exp = exp.And(x => x.TotalAmount == queryDto.TotalAmount);
-        }
-
-        if (queryDto?.TaxAmount.HasValue == true)
-        {
-            exp = exp.And(x => x.TaxAmount == queryDto.TaxAmount);
-        }
-
-        if (queryDto?.ActualAmount.HasValue == true)
-        {
-            exp = exp.And(x => x.ActualAmount == queryDto.ActualAmount);
-        }
-
-        if (queryDto?.InvoiceStatus.HasValue == true)
-        {
-            exp = exp.And(x => x.InvoiceStatus == queryDto.InvoiceStatus);
-        }
-
-        if (queryDto?.PaymentMethod.HasValue == true)
-        {
-            exp = exp.And(x => x.PaymentMethod == queryDto.PaymentMethod);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.TaxInvoiceNo))
-        {
-            exp = exp.And(x => x.TaxInvoiceNo != null && x.TaxInvoiceNo.Contains(queryDto.TaxInvoiceNo));
+            exp = exp.And(x => x.AccountingDocumentCode != null && x.AccountingDocumentCode.Contains(queryDto.AccountingDocumentCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))
@@ -482,16 +430,6 @@ public class TaktSalesInvoiceService : TaktServiceBase, ITaktSalesInvoiceService
         if (!string.IsNullOrEmpty(queryDto?.Remark))
         {
             exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
-        }
-
-        if (queryDto?.InvoiceDateStart.HasValue == true)
-        {
-            exp = exp.And(x => x.InvoiceDate >= queryDto.InvoiceDateStart);
-        }
-
-        if (queryDto?.InvoiceDateEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.InvoiceDate <= queryDto.InvoiceDateEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)

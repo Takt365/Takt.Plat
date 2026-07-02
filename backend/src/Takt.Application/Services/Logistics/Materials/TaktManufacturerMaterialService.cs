@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Materials
 // 文件名称：TaktManufacturerMaterialService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：制造商物料明细应用服务实现
 // 
@@ -97,12 +97,12 @@ public class TaktManufacturerMaterialService : TaktServiceBase, ITaktManufacture
         EnsureThreeLayerContext();
         var list = await _manufacturerMaterialRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.ManufacturerMaterialName ?? string.Empty,
+            x => x.ManufacturerMaterialCode,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.ManufacturerMaterialName ?? e.Id.ToString(),
+            DictValue = e.ManufacturerMaterialCode,
+            DictLabel = e.ManufacturerMaterialName ?? e.ManufacturerMaterialCode,
         }).ToList();
     }
 
@@ -332,7 +332,6 @@ public class TaktManufacturerMaterialService : TaktServiceBase, ITaktManufacture
                 SqlFunc.ToString(x.ManufacturerId).Contains(keywords)
                 || (x.ManufacturerCode != null && x.ManufacturerCode.Contains(keywords))
                 || SqlFunc.ToString(x.LineNumber).Contains(keywords)
-                || SqlFunc.ToString(x.MaterialType).Contains(keywords)
                 || (x.ManufacturerMaterialCode != null && x.ManufacturerMaterialCode.Contains(keywords))
                 || (x.ManufacturerMaterialName != null && x.ManufacturerMaterialName.Contains(keywords))
                 || (x.ManufacturerMaterialSpecification != null && x.ManufacturerMaterialSpecification.Contains(keywords))
@@ -356,11 +355,6 @@ public class TaktManufacturerMaterialService : TaktServiceBase, ITaktManufacture
         if (queryDto?.LineNumber.HasValue == true)
         {
             exp = exp.And(x => x.LineNumber == queryDto.LineNumber);
-        }
-
-        if (queryDto?.MaterialType.HasValue == true)
-        {
-            exp = exp.And(x => x.MaterialType == queryDto.MaterialType);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ManufacturerMaterialCode))

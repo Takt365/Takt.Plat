@@ -28,7 +28,7 @@ namespace Takt.Infrastructure.Repositories;
 /// 3. 支持精确控制租户和公司编码
 /// 4. 根据配置处理主键类型
 /// </summary>
-/// <typeparam name="TEntity">实体类型（必须继承TaktTenantEntityBase）</typeparam>
+/// <typeparam name="TEntity">实体类型（必须继承 TaktTenantEntityBase）</typeparam>
 public class TaktTenantSeedRepository<TEntity> : ITaktTenantSeedRepository<TEntity> where TEntity : TaktTenantEntityBase, new()
 {
     /// <summary>
@@ -68,47 +68,9 @@ public class TaktTenantSeedRepository<TEntity> : ITaktTenantSeedRepository<TEnti
     /// <returns>创建后的实体（含生成的主键）</returns>
     public virtual async Task<TEntity> CreateAsync(TEntity entity)
     {
-        // 统一填充审计字段（种子数据使用 900001）
         var now = DateTime.Now;
-        entity.CreatedAt = now;
-        entity.CreatedBy = 900001L;
-        
-        // 根据实体主键字段类型自动判断 ID 生成策略
-        var idProperty = typeof(TEntity).GetProperty("Id");
-        if (idProperty != null)
-        {
-            var idType = idProperty.PropertyType;
-            
-            if (idType == typeof(long) && _primaryKeyTypeOptions.Snowflake.Enabled)
-            {
-                // long 类型 = 雪花ID
-                await Db.Insertable(entity).ExecuteReturnSnowflakeIdAsync();
-            }
-            else if (idType == typeof(Guid) && _primaryKeyTypeOptions.Guid.Enabled)
-            {
-                // Guid 类型 = GUID
-                if ((Guid)idProperty.GetValue(entity)! == Guid.Empty)
-                {
-                    idProperty.SetValue(entity, Guid.NewGuid());
-                }
-                await Db.Insertable(entity).ExecuteCommandAsync();
-            }
-            else if ((idType == typeof(int) || idType == typeof(int?)) && _primaryKeyTypeOptions.Identity.Enabled)
-            {
-                // int 类型 = 数据库自增
-                await Db.Insertable(entity).ExecuteCommandAsync();
-            }
-            else
-            {
-                // 默认处理
-                await Db.Insertable(entity).ExecuteCommandAsync();
-            }
-        }
-        else
-        {
-            await Db.Insertable(entity).ExecuteCommandAsync();
-        }
-        
+        entity.ApplySeedCreate(now);
+        await TaktPrimaryKeyInsertHelper.InsertEntityAsync(Db, entity, _primaryKeyTypeOptions);
         return entity;
     }
 
@@ -122,26 +84,12 @@ public class TaktTenantSeedRepository<TEntity> : ITaktTenantSeedRepository<TEnti
         if (entities.Count == 0) return 0;
         
         var now = DateTime.Now;
-        
-        // 统一填充审计字段（种子数据使用 900001）
         foreach (var entity in entities)
         {
-            entity.CreatedAt = now;
-            entity.CreatedBy = 900001L;
+            entity.ApplySeedCreate(now);
         }
-        
-        // 根据配置的主键类型处理 ID
-        if (_primaryKeyTypeOptions.Snowflake.Enabled)
-        {
-            // 雪花ID：使用 SqlSugar 官方方法自动填充
-            var ids = await Db.Insertable(entities).ExecuteReturnSnowflakeIdListAsync();
-            return ids.Count;
-        }
-        else
-        {
-            // 数据库自增或 GUID：不需要手动设置 ID
-            return await Db.Insertable(entities).ExecuteCommandAsync();
-        }
+
+        return await TaktPrimaryKeyInsertHelper.InsertEntitiesAsync(Db, entities, _primaryKeyTypeOptions);
     }
 
     /// <summary>
@@ -152,28 +100,13 @@ public class TaktTenantSeedRepository<TEntity> : ITaktTenantSeedRepository<TEnti
     public virtual async Task<int> CreateRangeBulkAsync(List<TEntity> entities)
     {
         if (entities.Count == 0) return 0;
-        
         var now = DateTime.Now;
-        
-        // 统一填充审计字段（种子数据使用 900001）
         foreach (var entity in entities)
         {
-            entity.CreatedAt = now;
-            entity.CreatedBy = 900001L;
+            entity.ApplySeedCreate(now);
         }
-        
-        // 根据配置的主键类型处理 ID
-        if (_primaryKeyTypeOptions.Snowflake.Enabled)
-        {
-            // 雪花ID：使用 SqlSugar 官方方法自动填充
-            var ids = await Db.Insertable(entities).ExecuteReturnSnowflakeIdListAsync();
-            return ids.Count;
-        }
-        else
-        {
-            // 数据库自增或 GUID：不需要手动设置 ID
-            return await Db.Insertable(entities).ExecuteCommandAsync();
-        }
+
+        return await TaktPrimaryKeyInsertHelper.InsertEntitiesAsync(Db, entities, _primaryKeyTypeOptions);
     }
 
     // ========================================
@@ -187,10 +120,7 @@ public class TaktTenantSeedRepository<TEntity> : ITaktTenantSeedRepository<TEnti
     /// <returns>是否有行被更新</returns>
     public virtual async Task<bool> UpdateAsync(TEntity entity)
     {
-        // 统一填充更新审计字段（种子数据使用 900001）
-        entity.UpdatedAt = DateTime.Now;
-        entity.UpdatedBy = 900001L;
-        
+        entity.ApplySeedUpdate();
         return await Db.Updateable(entity).ExecuteCommandHasChangeAsync();
     }
 
@@ -202,16 +132,11 @@ public class TaktTenantSeedRepository<TEntity> : ITaktTenantSeedRepository<TEnti
     public virtual async Task<int> UpdateRangeAsync(List<TEntity> entities)
     {
         if (entities.Count == 0) return 0;
-        
         var now = DateTime.Now;
-        
-        // 为每个实体填充更新审计字段（种子数据使用 900001）
         foreach (var entity in entities)
         {
-            entity.UpdatedAt = now;
-            entity.UpdatedBy = 900001L;
+            entity.ApplySeedUpdate(now);
         }
-        
         return await Db.Updateable(entities).ExecuteCommandAsync();
     }
 
@@ -325,30 +250,8 @@ public class TaktCompanySeedRepository<TEntity> : ITaktCompanySeedRepository<TEn
     public virtual async Task<TEntity> CreateAsync(TEntity entity)
     {
         var now = DateTime.Now;
-        entity.CreatedAt = now;
-        entity.CreatedBy = 900001L;
-        
-        var idProperty = typeof(TEntity).GetProperty("Id");
-        if (idProperty != null)
-        {
-            var idType = idProperty.PropertyType;
-            if (idType == typeof(long) && _primaryKeyTypeOptions.Snowflake.Enabled)
-                await Db.Insertable(entity).ExecuteReturnSnowflakeIdAsync();
-            else if (idType == typeof(Guid) && _primaryKeyTypeOptions.Guid.Enabled)
-            {
-                if ((Guid)idProperty.GetValue(entity)! == Guid.Empty)
-                    idProperty.SetValue(entity, Guid.NewGuid());
-                await Db.Insertable(entity).ExecuteCommandAsync();
-            }
-            else if ((idType == typeof(int) || idType == typeof(int?)) && _primaryKeyTypeOptions.Identity.Enabled)
-                await Db.Insertable(entity).ExecuteCommandAsync();
-            else
-                await Db.Insertable(entity).ExecuteCommandAsync();
-        }
-        else
-        {
-            await Db.Insertable(entity).ExecuteCommandAsync();
-        }
+        entity.ApplySeedCreate(now);
+        await TaktPrimaryKeyInsertHelper.InsertEntityAsync(Db, entity, _primaryKeyTypeOptions);
         return entity;
     }
 
@@ -363,15 +266,9 @@ public class TaktCompanySeedRepository<TEntity> : ITaktCompanySeedRepository<TEn
         var now = DateTime.Now;
         foreach (var entity in entities)
         {
-            entity.CreatedAt = now;
-            entity.CreatedBy = 900001L;
+            entity.ApplySeedCreate(now);
         }
-        if (_primaryKeyTypeOptions.Snowflake.Enabled)
-        {
-            var ids = await Db.Insertable(entities).ExecuteReturnSnowflakeIdListAsync();
-            return ids.Count;
-        }
-        return await Db.Insertable(entities).ExecuteCommandAsync();
+        return await TaktPrimaryKeyInsertHelper.InsertEntitiesAsync(Db, entities, _primaryKeyTypeOptions);
     }
 
     /// <summary>
@@ -385,15 +282,9 @@ public class TaktCompanySeedRepository<TEntity> : ITaktCompanySeedRepository<TEn
         var now = DateTime.Now;
         foreach (var entity in entities)
         {
-            entity.CreatedAt = now;
-            entity.CreatedBy = 900001L;
+            entity.ApplySeedCreate(now);
         }
-        if (_primaryKeyTypeOptions.Snowflake.Enabled)
-        {
-            var ids = await Db.Insertable(entities).ExecuteReturnSnowflakeIdListAsync();
-            return ids.Count;
-        }
-        return await Db.Insertable(entities).ExecuteCommandAsync();
+        return await TaktPrimaryKeyInsertHelper.InsertEntitiesAsync(Db, entities, _primaryKeyTypeOptions);
     }
 
     // ========================================
@@ -407,8 +298,7 @@ public class TaktCompanySeedRepository<TEntity> : ITaktCompanySeedRepository<TEn
     /// <returns>是否有行被更新</returns>
     public virtual async Task<bool> UpdateAsync(TEntity entity)
     {
-        entity.UpdatedAt = DateTime.Now;
-        entity.UpdatedBy = 900001L;
+        entity.ApplySeedUpdate();
         return await Db.Updateable(entity).ExecuteCommandHasChangeAsync();
     }
 
@@ -423,8 +313,7 @@ public class TaktCompanySeedRepository<TEntity> : ITaktCompanySeedRepository<TEn
         var now = DateTime.Now;
         foreach (var entity in entities)
         {
-            entity.UpdatedAt = now;
-            entity.UpdatedBy = 900001L;
+            entity.ApplySeedUpdate(now);
         }
         return await Db.Updateable(entities).ExecuteCommandAsync();
     }
@@ -486,7 +375,7 @@ public class TaktCompanySeedRepository<TEntity> : ITaktCompanySeedRepository<TEn
 /// 3. 支持精确控制租户和公司编码
 /// 4. 根据配置处理主键类型
 /// </summary>
-/// <typeparam name="TEntity">实体类型（必须继承TaktApprovalEntityBase）</typeparam>
+/// <typeparam name="TEntity">实体类型（必须继承 TaktApprovalEntityBase）</typeparam>
 public class TaktApprovalSeedRepository<TEntity> : ITaktApprovalSeedRepository<TEntity> where TEntity : TaktApprovalEntityBase, new()
 {
     /// <summary>
@@ -527,30 +416,8 @@ public class TaktApprovalSeedRepository<TEntity> : ITaktApprovalSeedRepository<T
     public virtual async Task<TEntity> CreateAsync(TEntity entity)
     {
         var now = DateTime.Now;
-        entity.CreatedAt = now;
-        entity.CreatedBy = 900001L;
-        
-        var idProperty = typeof(TEntity).GetProperty("Id");
-        if (idProperty != null)
-        {
-            var idType = idProperty.PropertyType;
-            if (idType == typeof(long) && _primaryKeyTypeOptions.Snowflake.Enabled)
-                await Db.Insertable(entity).ExecuteReturnSnowflakeIdAsync();
-            else if (idType == typeof(Guid) && _primaryKeyTypeOptions.Guid.Enabled)
-            {
-                if ((Guid)idProperty.GetValue(entity)! == Guid.Empty)
-                    idProperty.SetValue(entity, Guid.NewGuid());
-                await Db.Insertable(entity).ExecuteCommandAsync();
-            }
-            else if ((idType == typeof(int) || idType == typeof(int?)) && _primaryKeyTypeOptions.Identity.Enabled)
-                await Db.Insertable(entity).ExecuteCommandAsync();
-            else
-                await Db.Insertable(entity).ExecuteCommandAsync();
-        }
-        else
-        {
-            await Db.Insertable(entity).ExecuteCommandAsync();
-        }
+        entity.ApplySeedCreate(now);
+        await TaktPrimaryKeyInsertHelper.InsertEntityAsync(Db, entity, _primaryKeyTypeOptions);
         return entity;
     }
 
@@ -565,15 +432,9 @@ public class TaktApprovalSeedRepository<TEntity> : ITaktApprovalSeedRepository<T
         var now = DateTime.Now;
         foreach (var entity in entities)
         {
-            entity.CreatedAt = now;
-            entity.CreatedBy = 900001L;
+            entity.ApplySeedCreate(now);
         }
-        if (_primaryKeyTypeOptions.Snowflake.Enabled)
-        {
-            var ids = await Db.Insertable(entities).ExecuteReturnSnowflakeIdListAsync();
-            return ids.Count;
-        }
-        return await Db.Insertable(entities).ExecuteCommandAsync();
+        return await TaktPrimaryKeyInsertHelper.InsertEntitiesAsync(Db, entities, _primaryKeyTypeOptions);
     }
 
     /// <summary>
@@ -587,15 +448,9 @@ public class TaktApprovalSeedRepository<TEntity> : ITaktApprovalSeedRepository<T
         var now = DateTime.Now;
         foreach (var entity in entities)
         {
-            entity.CreatedAt = now;
-            entity.CreatedBy = 900001L;
+            entity.ApplySeedCreate(now);
         }
-        if (_primaryKeyTypeOptions.Snowflake.Enabled)
-        {
-            var ids = await Db.Insertable(entities).ExecuteReturnSnowflakeIdListAsync();
-            return ids.Count;
-        }
-        return await Db.Insertable(entities).ExecuteCommandAsync();
+        return await TaktPrimaryKeyInsertHelper.InsertEntitiesAsync(Db, entities, _primaryKeyTypeOptions);
     }
 
     // ========================================
@@ -609,8 +464,7 @@ public class TaktApprovalSeedRepository<TEntity> : ITaktApprovalSeedRepository<T
     /// <returns>是否有行被更新</returns>
     public virtual async Task<bool> UpdateAsync(TEntity entity)
     {
-        entity.UpdatedAt = DateTime.Now;
-        entity.UpdatedBy = 900001L;
+        entity.ApplySeedUpdate();
         return await Db.Updateable(entity).ExecuteCommandHasChangeAsync();
     }
 
@@ -625,8 +479,7 @@ public class TaktApprovalSeedRepository<TEntity> : ITaktApprovalSeedRepository<T
         var now = DateTime.Now;
         foreach (var entity in entities)
         {
-            entity.UpdatedAt = now;
-            entity.UpdatedBy = 900001L;
+            entity.ApplySeedUpdate(now);
         }
         return await Db.Updateable(entities).ExecuteCommandAsync();
     }

@@ -23,7 +23,7 @@ namespace Takt.Domain.Repositories;
 /// 3. 支持精确控制租户和公司编码
 /// 4. 自动填充雪花ID
 /// </summary>
-/// <typeparam name="TEntity">实体类型（必须继承TaktTenantEntityBase）</typeparam>
+/// <typeparam name="TEntity">实体类型（必须继承 TaktTenantEntityBase）</typeparam>
 public interface ITaktTenantSeedRepository<TEntity> where TEntity : TaktTenantEntityBase, new()
 {
     // ========================================
@@ -187,7 +187,7 @@ public interface ITaktCompanySeedRepository<TEntity> where TEntity : TaktCompany
 /// 3. 支持精确控制租户和公司编码
 /// 4. 自动填充雪花ID
 /// </summary>
-/// <typeparam name="TEntity">实体类型（必须继承TaktApprovalEntityBase）</typeparam>
+/// <typeparam name="TEntity">实体类型（必须继承 TaktApprovalEntityBase）</typeparam>
 public interface ITaktApprovalSeedRepository<TEntity> where TEntity : TaktApprovalEntityBase, new()
 {
     /// <summary>

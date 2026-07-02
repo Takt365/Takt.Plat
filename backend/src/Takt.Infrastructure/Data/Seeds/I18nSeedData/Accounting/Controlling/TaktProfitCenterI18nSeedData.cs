@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Controlling
 // 文件名称：TaktProfitCenterI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktProfitCenter 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktProfitCenterI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.profitcenter._self", "zh-HK", "利润中心信息_hk", "实体名称"),
 
             // entity.profitcenter.code
-            new TranslationSeedItem("entity.profitcenter.code", "en-US", "利润中心编码_us", "利润中心编码"),
+            new TranslationSeedItem("entity.profitcenter.code", "en-US", "利润中心编码_us", "利润中心编码（4位，租户+公司内唯一）"),
             // entity.profitcenter.code
-            new TranslationSeedItem("entity.profitcenter.code", "ja-JP", "利润中心编码_jp", "利润中心编码"),
+            new TranslationSeedItem("entity.profitcenter.code", "ja-JP", "利润中心编码_jp", "利润中心编码（4位，租户+公司内唯一）"),
             // entity.profitcenter.code
-            new TranslationSeedItem("entity.profitcenter.code", "zh-CN", "利润中心编码", "利润中心编码"),
+            new TranslationSeedItem("entity.profitcenter.code", "zh-CN", "利润中心编码", "利润中心编码（4位，租户+公司内唯一）"),
             // entity.profitcenter.code
-            new TranslationSeedItem("entity.profitcenter.code", "zh-HK", "利润中心编码_hk", "利润中心编码"),
+            new TranslationSeedItem("entity.profitcenter.code", "zh-HK", "利润中心编码_hk", "利润中心编码（4位，租户+公司内唯一）"),
 
             // entity.profitcenter.name
             new TranslationSeedItem("entity.profitcenter.name", "en-US", "利润中心名称_us", "利润中心名称"),
@@ -162,24 +162,6 @@ public class TaktProfitCenterI18nSeedData : ITaktSeedDataCoordinator
             // entity.profitcenter.level
             new TranslationSeedItem("entity.profitcenter.level", "zh-HK", "利润中心层级_hk", "利润中心层级"),
 
-            // entity.profitcenter.relatedplant
-            new TranslationSeedItem("entity.profitcenter.relatedplant", "en-US", "关联工厂_us", "关联工厂"),
-            // entity.profitcenter.relatedplant
-            new TranslationSeedItem("entity.profitcenter.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂"),
-            // entity.profitcenter.relatedplant
-            new TranslationSeedItem("entity.profitcenter.relatedplant", "zh-CN", "关联工厂", "关联工厂"),
-            // entity.profitcenter.relatedplant
-            new TranslationSeedItem("entity.profitcenter.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂"),
-
-            // entity.profitcenter.status
-            new TranslationSeedItem("entity.profitcenter.status", "en-US", "利润中心状态_us", "利润中心状态（1=启用，0=禁用）"),
-            // entity.profitcenter.status
-            new TranslationSeedItem("entity.profitcenter.status", "ja-JP", "利润中心状态_jp", "利润中心状态（1=启用，0=禁用）"),
-            // entity.profitcenter.status
-            new TranslationSeedItem("entity.profitcenter.status", "zh-CN", "利润中心状态", "利润中心状态（1=启用，0=禁用）"),
-            // entity.profitcenter.status
-            new TranslationSeedItem("entity.profitcenter.status", "zh-HK", "利润中心状态_hk", "利润中心状态（1=启用，0=禁用）"),
-
             // entity.profitcenter.validfrom
             new TranslationSeedItem("entity.profitcenter.validfrom", "en-US", "生效日期_us", "生效日期"),
             // entity.profitcenter.validfrom
@@ -198,6 +180,15 @@ public class TaktProfitCenterI18nSeedData : ITaktSeedDataCoordinator
             // entity.profitcenter.validto
             new TranslationSeedItem("entity.profitcenter.validto", "zh-HK", "失效日期_hk", "失效日期"),
 
+            // entity.profitcenter.relatedplant
+            new TranslationSeedItem("entity.profitcenter.relatedplant", "en-US", "关联工厂_us", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            // entity.profitcenter.relatedplant
+            new TranslationSeedItem("entity.profitcenter.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            // entity.profitcenter.relatedplant
+            new TranslationSeedItem("entity.profitcenter.relatedplant", "zh-CN", "关联工厂", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            // entity.profitcenter.relatedplant
+            new TranslationSeedItem("entity.profitcenter.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+
             // entity.profitcenter.sortorder
             new TranslationSeedItem("entity.profitcenter.sortorder", "en-US", "排序号_us", "排序号"),
             // entity.profitcenter.sortorder
@@ -206,6 +197,15 @@ public class TaktProfitCenterI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.profitcenter.sortorder", "zh-CN", "排序号", "排序号"),
             // entity.profitcenter.sortorder
             new TranslationSeedItem("entity.profitcenter.sortorder", "zh-HK", "排序号_hk", "排序号"),
+
+            // entity.profitcenter.status
+            new TranslationSeedItem("entity.profitcenter.status", "en-US", "利润中心状态_us", "利润中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            // entity.profitcenter.status
+            new TranslationSeedItem("entity.profitcenter.status", "ja-JP", "利润中心状态_jp", "利润中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            // entity.profitcenter.status
+            new TranslationSeedItem("entity.profitcenter.status", "zh-CN", "利润中心状态", "利润中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            // entity.profitcenter.status
+            new TranslationSeedItem("entity.profitcenter.status", "zh-HK", "利润中心状态_hk", "利润中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
 
             // entity.profitcenter.changelogs
             new TranslationSeedItem("entity.profitcenter.changelogs", "en-US", "利润中心变更记录列表_us", "利润中心变更记录列表（外键在子表 TaktProfitCenterChangeLog.ProfitCenterId）"),

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/serial
 // 文件名称：outbound-item.ts
-// 创建时间：2026-06-15
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/serial 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -32,7 +32,7 @@ const SERIAL_OUTBOUND_ITEM_API_BASE = 'TaktSerialOutboundItems';
 // ========================================
 
 /**
- * 获取产品序列号出库明细列表（分页）
+ * 获取序列号出库明细列表（分页）
  * @param {any} queryDto 查询DTO
  * @returns {Promise<TaktPagedResult<SerialOutboundItem>>} 分页结果
  */
@@ -45,9 +45,9 @@ export function getSerialOutboundItemList(queryDto: any): Promise<TaktPagedResul
 }
 
 /**
- * 根据ID获取产品序列号出库明细
- * @param {string} id 产品序列号出库明细ID
- * @returns {Promise<SerialOutboundItem>} 产品序列号出库明细DTO
+ * 根据ID获取序列号出库明细
+ * @param {string} id 序列号出库明细ID
+ * @returns {Promise<SerialOutboundItem>} 序列号出库明细DTO
  */
 export function getSerialOutboundItemById(id: string): Promise<SerialOutboundItem> {
   return request<SerialOutboundItem>({
@@ -57,9 +57,9 @@ export function getSerialOutboundItemById(id: string): Promise<SerialOutboundIte
 }
 
 /**
- * 创建产品序列号出库明细
+ * 创建序列号出库明细
  * @param {SerialOutboundItemCreate} dto 创建DTO
- * @returns {Promise<SerialOutboundItem>} 产品序列号出库明细DTO
+ * @returns {Promise<SerialOutboundItem>} 序列号出库明细DTO
  */
 export function createSerialOutboundItem(dto: SerialOutboundItemCreate): Promise<SerialOutboundItem> {
   return request<SerialOutboundItem>({
@@ -70,10 +70,10 @@ export function createSerialOutboundItem(dto: SerialOutboundItemCreate): Promise
 }
 
 /**
- * 更新产品序列号出库明细
- * @param {string} id 产品序列号出库明细ID
+ * 更新序列号出库明细
+ * @param {string} id 序列号出库明细ID
  * @param {SerialOutboundItemUpdate} dto 更新DTO
- * @returns {Promise<SerialOutboundItem>} 产品序列号出库明细DTO
+ * @returns {Promise<SerialOutboundItem>} 序列号出库明细DTO
  */
 export function updateSerialOutboundItem(id: string, dto: SerialOutboundItemUpdate): Promise<SerialOutboundItem> {
   return request<SerialOutboundItem>({
@@ -84,8 +84,8 @@ export function updateSerialOutboundItem(id: string, dto: SerialOutboundItemUpda
 }
 
 /**
- * 删除产品序列号出库明细
- * @param {string} id 产品序列号出库明细ID
+ * 删除序列号出库明细
+ * @param {string} id 序列号出库明细ID
  * @returns {Promise<void>} 操作结果
  */
 export function deleteSerialOutboundItemById(id: string): Promise<void> {
@@ -96,7 +96,7 @@ export function deleteSerialOutboundItemById(id: string): Promise<void> {
 }
 
 /**
- * 批量删除产品序列号出库明细
+ * 批量删除序列号出库明细
  * @param {string[]} ids ID列表
  * @returns {Promise<void>} 操作结果
  */
@@ -146,7 +146,7 @@ export function getSerialOutboundItemTemplate(sheetName?: string, templateName?:
 }
 
 /**
- * 导入产品序列号出库明细
+ * 导入序列号出库明细
  * @param {globalThis.File} file Excel文件
  * @param {string} sheetName sheetName
  * @returns {Promise<{ success: number; fail: number; errors: string[] }>} 导入结果
@@ -169,7 +169,7 @@ export function importSerialOutboundItem(file: globalThis.File, sheetName?: stri
 }
 
 /**
- * 导出产品序列号出库明细
+ * 导出序列号出库明细
  * @param {any} query query
  * @param {string} sheetName sheetName
  * @param {string} exportName exportName

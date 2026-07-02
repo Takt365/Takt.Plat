@@ -28,13 +28,12 @@ namespace Takt.Domain.Entities.HumanResource.Organization;
 public class TaktEmployeeDept : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 员工ID
+    /// 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [SugarColumn(ColumnName = "employee_id", ColumnDescription = "员工ID", ColumnDataType = "bigint", IsNullable = false)]
     public long EmployeeId { get; set; }
-
     /// <summary>
-    /// 部门ID
+    /// 部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     [SugarColumn(ColumnName = "dept_id", ColumnDescription = "部门ID", ColumnDataType = "bigint", IsNullable = false)]
     public long DeptId { get; set; }
@@ -48,7 +47,6 @@ public class TaktEmployeeDept : TaktCompanyEntityBase
     /// </summary>
     [Navigate(NavigateType.ManyToOne, nameof(EmployeeId), nameof(TaktEmployee.Id))]
     public TaktEmployee Employee { get; set; } = null!;
-
     /// <summary>
     /// 部门（多对一）
     /// </summary>

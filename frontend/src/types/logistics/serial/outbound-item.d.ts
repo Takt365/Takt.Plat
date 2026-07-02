@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/serial
 // 文件名称：outbound-item.d.ts
-// 创建时间：2026-06-15
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/serial 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -16,7 +16,7 @@ import type {
 } from '@/types/common';
 
 /**
- * 产品序列号出库明细实体
+ * 序列号出库明细实体
  * 对应前端 TaktSerialOutboundItemDto
  * 继承 TaktCompanyDtoBase
  * 对应前端 SerialOutboundItem
@@ -188,7 +188,7 @@ export interface SerialOutboundItemCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -312,6 +312,11 @@ export interface SerialOutboundItemTemplate {
   referenceInboundLineNumber?: number;
 
   /**
+   * 出库时间
+   */
+  outboundTime?: string;
+
+  /**
    * 扩展字段JSON
    */
   extField?: string;
@@ -341,7 +346,7 @@ export interface SerialOutboundItemImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -379,6 +384,11 @@ export interface SerialOutboundItemImport {
    * 关联入库行号
    */
   referenceInboundLineNumber?: number;
+
+  /**
+   * 出库时间
+   */
+  outboundTime?: string;
 
   /**
    * 扩展字段JSON

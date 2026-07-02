@@ -29,11 +29,11 @@ public class TaktEcSeizounikaService : TaktEcDeptViewServiceBase, ITaktEcSeizoun
     /// </summary>
     public TaktEcSeizounikaService(
         ITaktCompanyRepository<TaktEcDetail> ecDetailRepository,
-        ITaktCompanyRepository<TaktEcDept> ecDeptRepository,
+        TaktEcExecPersistence ecExecPersistence,
         ITaktLineNumberGenerator lineNumberGenerator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
-        : base(TaktEcDeptCodes.Pcba, ecDetailRepository, ecDeptRepository, lineNumberGenerator, userContext, localizationService)
+        : base(TaktEcDeptCodes.Pcba, ecDetailRepository, ecExecPersistence, lineNumberGenerator, userContext, localizationService)
     {
     }
 

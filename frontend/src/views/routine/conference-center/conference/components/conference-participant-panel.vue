@@ -19,11 +19,11 @@
       @reset="handleQueryReset"
     />
     <TaktToolsBar
-      create-permission="routine:conferencecenter:create"
-      update-permission="routine:conferencecenter:update"
-      delete-permission="routine:conferencecenter:delete"
-      import-permission="routine:conferencecenter:import"
-      export-permission="routine:conferencecenter:export"
+      create-permission="routine:conference:center:create"
+      update-permission="routine:conference:center:update"
+      delete-permission="routine:conference:center:delete"
+      import-permission="routine:conference:center:import"
+      export-permission="routine:conference:center:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -151,8 +151,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.checkInTimeStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.conferenceparticipant.checkintimestart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -162,8 +161,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.checkInTimeEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.conferenceparticipant.checkintimeend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -173,8 +171,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.checkOutTimeStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.conferenceparticipant.checkouttimestart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -184,8 +181,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.checkOutTimeEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.conferenceparticipant.checkouttimeend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -205,7 +201,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -216,7 +212,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -550,7 +546,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'routine:conferencecenter:update',
+        permission: 'routine:conference:center:update',
         onClick: (record: ConferenceParticipant) => void handleEdit(record),
       },
       {
@@ -558,7 +554,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'routine:conferencecenter:delete',
+        permission: 'routine:conference:center:delete',
         onClick: (record: ConferenceParticipant) => void handleDeleteOne(record),
       },
     ],
@@ -575,7 +571,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: ConferenceParticipant, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getConferenceParticipantId(selectedRow.value) === getConferenceParticipantId(record)) {
+    } else if (selectedRow.value && getConferenceParticipantId(selectedRow.value) === getConferenceParticipantId(record)) {
       selectedRow.value = null
     }
   },

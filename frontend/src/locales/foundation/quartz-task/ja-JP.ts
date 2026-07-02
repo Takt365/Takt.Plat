@@ -1,0 +1,80 @@
+// ========================================
+// 项目名称：节拍工厂·Takt Plat
+// 命名空间：frontend/src/locales/foundation/quartz-task
+// 文件名称：ja-JP.ts
+// 创建时间：2026-06-28
+// 创建人：Takt365(Cursor AI)
+// 功能描述：foundation/quartz-task Cron モーダル静的文案；キー foundation.quartz-task.page.cron.*
+//
+// 版权信息：Copyright (c) 2025 Takt  All rights reserved.
+// 免责声明：此软件 use MIT License.
+// ========================================
+
+export default {
+  page: {
+    cron: {
+      modalTitle: 'Cron 式',
+      inputPlaceholder: 'クリックして Cron 式を設定',
+      expressionTitle: '時間式',
+      fullExpression: 'Cron 完全式',
+      ok: '確定',
+      wildcard: '{unit}、ワイルドカード [, - * /] 可',
+      rangeFrom: '周期',
+      rangeTo: 'から',
+      intervalFrom: '',
+      intervalEvery: ' から、',
+      intervalExecute: ' ごとに実行',
+      specify: '指定',
+      nextRuns: '直近 5 回の実行時刻',
+      noNextRuns: '現在の式を解析できません',
+      tab: {
+        second: '秒',
+        minute: '分',
+        hour: '時',
+        day: '日',
+        month: '月',
+        week: '週',
+        year: '年',
+      },
+      field: {
+        second: '秒',
+        minute: '分',
+        hour: '時',
+        day: '日',
+        month: '月',
+        week: '週',
+        year: '年',
+      },
+      everySecond: '毎秒',
+      everyMinute: '毎分',
+      everyHour: '毎時',
+      everyDay: '毎日',
+      everyMonth: '毎月',
+      everyYear: '毎年',
+      everyInterval: '{start} {unit} から {step} {unit} ごと',
+      specificMulti: '特定の{unit}（複数可）',
+      range: '{start} から {end} {unit}',
+      everyWeekInterval: '{start} 週目から {step} 週ごと',
+      specificWeek: '特定の曜日（複数可）',
+      specificDay: '特定の日（複数可）',
+      lastDayOfMonth: '月末最終日',
+      lastWorkdayOfMonth: '月末最終平日',
+      lastWeekdayOfMonth: '月末最終 {weekday}',
+      daysBeforeMonthEnd: '月末 {days} 日前',
+      nearestWeekday: '本月 {day} 日に最も近い平日',
+      nthWeekday: '本月第 {nth} {weekday}',
+      monthRange: '{start} 月から {end} 月まで毎月',
+      yearRange: '{start} 年から {end} 年まで毎年',
+      selectPlaceholder: '選択',
+      weekday: {
+        mon: '月曜日',
+        tue: '火曜日',
+        wed: '水曜日',
+        thu: '木曜日',
+        fri: '金曜日',
+        sat: '土曜日',
+        sun: '日曜日',
+      },
+    },
+  },
+}

@@ -370,7 +370,7 @@ public static class TaktRegexHelper
     /// <summary>
     /// 利润中心编码（数值型字符，最大8位）。
     /// </summary>
-    public static readonly Regex ProfitCenterCode = new(@"^\d{1,8}$", Opt);
+    public static readonly Regex ProfitCenterCode = new(@"^.{1,4}$", Opt);
     /// <summary>
     /// 成本要素编码（数值型字符，最大8位）。
     /// </summary>

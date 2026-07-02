@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Materials
 // 文件名称：TaktWarehouseValidators.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Warehouse 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktWarehouse 生成，请按需审阅）
 // 
@@ -39,21 +39,11 @@ public class TaktWarehouseCreateValidator : AbstractValidator<TaktWarehouseCreat
             .NotEmpty().WithMessage("工厂代码不能为空")
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.WarehouseCode)
-            .NotEmpty().WithMessage("仓库编码不能为空")
-            .MaximumLength(50).WithMessage("仓库编码长度不能超过50个字符");
+            .NotEmpty().WithMessage("存货地点编码不能为空")
+            .MaximumLength(4).WithMessage("存货地点编码长度不能超过4个字符");
         RuleFor(x => x.WarehouseName)
             .NotEmpty().WithMessage("仓库名称不能为空")
-            .MaximumLength(100).WithMessage("仓库名称长度不能超过100个字符");
-        RuleFor(x => x.WarehouseShortName)
-            .MaximumLength(50).WithMessage("仓库简称长度不能超过50个字符");
-        RuleFor(x => x.Address)
-            .MaximumLength(255).WithMessage("仓库地址长度不能超过255个字符");
-        RuleFor(x => x.ContactPerson)
-            .MaximumLength(50).WithMessage("联系人长度不能超过50个字符");
-        RuleFor(x => x.ContactPhone)
-            .MaximumLength(30).WithMessage("联系电话长度不能超过30个字符");
-        RuleFor(x => x.ManagerUserCode)
-            .MaximumLength(50).WithMessage("仓库负责人用户编码长度不能超过50个字符");
+            .MaximumLength(80).WithMessage("仓库名称长度不能超过80个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -77,6 +67,25 @@ public class TaktWarehouseUpdateValidator : AbstractValidator<TaktWarehouseUpdat
     {
         RuleFor(x => x.WarehouseId)
             .GreaterThan(0).WithMessage("WarehouseID无效");
+        RuleFor(x => x.TenantCode)
+            .NotEmpty().WithMessage("租户编码不能为空")
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.CompanyCode)
+            .NotEmpty().WithMessage("公司代码不能为空")
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.PlantCode)
+            .NotEmpty().WithMessage("工厂代码不能为空")
+            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
+        RuleFor(x => x.WarehouseCode)
+            .NotEmpty().WithMessage("存货地点编码不能为空")
+            .MaximumLength(4).WithMessage("存货地点编码长度不能超过4个字符");
+        RuleFor(x => x.WarehouseName)
+            .NotEmpty().WithMessage("仓库名称不能为空")
+            .MaximumLength(80).WithMessage("仓库名称长度不能超过80个字符");
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
     }
 }
 
@@ -102,21 +111,11 @@ public class TaktWarehouseImportValidator : AbstractValidator<TaktWarehouseImpor
             .NotEmpty().WithMessage("工厂代码不能为空")
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.WarehouseCode)
-            .NotEmpty().WithMessage("仓库编码不能为空")
-            .MaximumLength(50).WithMessage("仓库编码长度不能超过50个字符");
+            .NotEmpty().WithMessage("存货地点编码不能为空")
+            .MaximumLength(4).WithMessage("存货地点编码长度不能超过4个字符");
         RuleFor(x => x.WarehouseName)
             .NotEmpty().WithMessage("仓库名称不能为空")
-            .MaximumLength(100).WithMessage("仓库名称长度不能超过100个字符");
-        RuleFor(x => x.WarehouseShortName)
-            .MaximumLength(50).WithMessage("仓库简称长度不能超过50个字符").When(x => !string.IsNullOrWhiteSpace(x.WarehouseShortName));
-        RuleFor(x => x.Address)
-            .MaximumLength(255).WithMessage("仓库地址长度不能超过255个字符").When(x => !string.IsNullOrWhiteSpace(x.Address));
-        RuleFor(x => x.ContactPerson)
-            .MaximumLength(50).WithMessage("联系人长度不能超过50个字符").When(x => !string.IsNullOrWhiteSpace(x.ContactPerson));
-        RuleFor(x => x.ContactPhone)
-            .MaximumLength(30).WithMessage("联系电话长度不能超过30个字符").When(x => !string.IsNullOrWhiteSpace(x.ContactPhone));
-        RuleFor(x => x.ManagerUserCode)
-            .MaximumLength(50).WithMessage("仓库负责人用户编码长度不能超过50个字符").When(x => !string.IsNullOrWhiteSpace(x.ManagerUserCode));
+            .MaximumLength(80).WithMessage("仓库名称长度不能超过80个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

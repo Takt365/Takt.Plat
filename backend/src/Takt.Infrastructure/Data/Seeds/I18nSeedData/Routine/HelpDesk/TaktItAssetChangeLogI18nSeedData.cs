@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.HelpDesk
 // 文件名称：TaktItAssetChangeLogI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktItAssetChangeLog 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktItAssetChangeLogI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.itassetchangelog._self", "zh-HK", "IT 设备保修扩展变更日志信息_hk", "实体名称"),
 
             // entity.itassetchangelog.itassetid
-            new TranslationSeedItem("entity.itassetchangelog.itassetid", "en-US", "IT设备保修扩展ID_us", "IT 设备保修扩展 ID"),
+            new TranslationSeedItem("entity.itassetchangelog.itassetid", "en-US", "IT设备保修扩展ID_us", "IT 设备保修扩展 ID（关联 TaktItAsset.Id，选项 TaktItAssets/options）"),
             // entity.itassetchangelog.itassetid
-            new TranslationSeedItem("entity.itassetchangelog.itassetid", "ja-JP", "IT设备保修扩展ID_jp", "IT 设备保修扩展 ID"),
+            new TranslationSeedItem("entity.itassetchangelog.itassetid", "ja-JP", "IT设备保修扩展ID_jp", "IT 设备保修扩展 ID（关联 TaktItAsset.Id，选项 TaktItAssets/options）"),
             // entity.itassetchangelog.itassetid
-            new TranslationSeedItem("entity.itassetchangelog.itassetid", "zh-CN", "IT设备保修扩展ID", "IT 设备保修扩展 ID"),
+            new TranslationSeedItem("entity.itassetchangelog.itassetid", "zh-CN", "IT设备保修扩展ID", "IT 设备保修扩展 ID（关联 TaktItAsset.Id，选项 TaktItAssets/options）"),
             // entity.itassetchangelog.itassetid
-            new TranslationSeedItem("entity.itassetchangelog.itassetid", "zh-HK", "IT设备保修扩展ID_hk", "IT 设备保修扩展 ID"),
+            new TranslationSeedItem("entity.itassetchangelog.itassetid", "zh-HK", "IT设备保修扩展ID_hk", "IT 设备保修扩展 ID（关联 TaktItAsset.Id，选项 TaktItAssets/options）"),
 
             // entity.itassetchangelog.assetcode
             new TranslationSeedItem("entity.itassetchangelog.assetcode", "en-US", "资产号码_us", "资产号码（冗余）"),
@@ -109,13 +109,13 @@ public class TaktItAssetChangeLogI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.itassetchangelog.assetcode", "zh-HK", "资产号码_hk", "资产号码（冗余）"),
 
             // entity.itassetchangelog.changetype
-            new TranslationSeedItem("entity.itassetchangelog.changetype", "en-US", "变更类型_us", "变更类型（见 TaktHelpDeskChangeType）"),
+            new TranslationSeedItem("entity.itassetchangelog.changetype", "en-US", "变更类型_us", "变更类型（字典 sys_entity_change_type；0=创建 1=更新 2=删除 3=状态变更）"),
             // entity.itassetchangelog.changetype
-            new TranslationSeedItem("entity.itassetchangelog.changetype", "ja-JP", "变更类型_jp", "变更类型（见 TaktHelpDeskChangeType）"),
+            new TranslationSeedItem("entity.itassetchangelog.changetype", "ja-JP", "变更类型_jp", "变更类型（字典 sys_entity_change_type；0=创建 1=更新 2=删除 3=状态变更）"),
             // entity.itassetchangelog.changetype
-            new TranslationSeedItem("entity.itassetchangelog.changetype", "zh-CN", "变更类型", "变更类型（见 TaktHelpDeskChangeType）"),
+            new TranslationSeedItem("entity.itassetchangelog.changetype", "zh-CN", "变更类型", "变更类型（字典 sys_entity_change_type；0=创建 1=更新 2=删除 3=状态变更）"),
             // entity.itassetchangelog.changetype
-            new TranslationSeedItem("entity.itassetchangelog.changetype", "zh-HK", "变更类型_hk", "变更类型（见 TaktHelpDeskChangeType）"),
+            new TranslationSeedItem("entity.itassetchangelog.changetype", "zh-HK", "变更类型_hk", "变更类型（字典 sys_entity_change_type；0=创建 1=更新 2=删除 3=状态变更）"),
 
             // entity.itassetchangelog.changesummary
             new TranslationSeedItem("entity.itassetchangelog.changesummary", "en-US", "修改内容摘要_us", "修改内容摘要"),

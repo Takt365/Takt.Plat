@@ -16,7 +16,6 @@ import type { SignalRMessage } from '@/types/foundation/signal-r';
 import type {
   TAKT_CAPTCHA_DISABLED_HINTS,
   TAKT_IDLE_ACTIVITY_EVENTS,
-  TAKT_SUPPORTED_LOCALES,
   TaktMenuType,
   TaktResultCode,
   TAKT_REMIX_ICON_CLASS,
@@ -63,9 +62,9 @@ export type TaktDictSelectOption = TaktSelectOption & {
 export type SignalRMessageWithId = SignalRMessage & { messageId?: string | number };
 
 /**
- * 支持的语言编码（与 {@link TAKT_SUPPORTED_LOCALES} 一致）
+ * 区域文化编码 BCP47（运行时以租户 GetCultureOptions / cultureOptions 为准）
  */
-export type TaktCultureCode = (typeof TAKT_SUPPORTED_LOCALES)[number];
+export type TaktCultureCode = string;
 
 /**
  * 验证码未启用错误文案片段
@@ -340,7 +339,7 @@ export interface TaktTenantEntityBase {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -408,7 +407,7 @@ export interface TaktCompanyEntityBase {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -476,7 +475,7 @@ export interface TaktApprovalEntityBase {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -484,7 +483,7 @@ export interface TaktApprovalEntityBase {
   remark?: string;
 
   /**
-   * 审批状态（0=待审批，1=审批中，2=已通过，3=已驳回，4=已撤销）
+   * 审批状态（字典 sys_approval_status；0=待审批，1=审批中，2=已通过，3=已驳回，4=已撤回，5=已终止）
    */
   approvalStatus: number;
 

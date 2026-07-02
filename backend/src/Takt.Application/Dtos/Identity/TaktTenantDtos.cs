@@ -67,7 +67,7 @@ public class TaktTenantDto : TaktTenantDtoBase
     public string ContactEmail { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否内置（1=是，0=否） 种子租户（000/500/100）为内置，不允许删除
+    /// 内置（1=是，0=否） 种子租户（000/500/100）为内置，不允许删除
     /// </summary>
     public int IsBuiltIn { get; set; }
 
@@ -140,7 +140,7 @@ public class TaktTenantQueryDto : TaktPagedQuery
     public string? ContactEmail { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否内置（1=是，0=否） 种子租户（000/500/100）为内置，不允许删除
+    /// 内置（1=是，0=否） 种子租户（000/500/100）为内置，不允许删除
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
@@ -217,7 +217,7 @@ public class TaktTenantCreateDto
     public string ContactEmail { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否内置（1=是，0=否） 种子租户（000/500/100）为内置，不允许删除
+    /// 内置（1=是，0=否） 种子租户（000/500/100）为内置，不允许删除
     /// </summary>
     public int IsBuiltIn { get; set; }
 
@@ -322,7 +322,7 @@ public class TaktTenantTemplateDto
     public string? ContactEmail { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否内置（1=是，0=否） 种子租户（000/500/100）为内置，不允许删除
+    /// 内置（1=是，0=否） 种子租户（000/500/100）为内置，不允许删除
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
@@ -374,7 +374,7 @@ public class TaktTenantImportDto
     public string? ContactEmail { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否内置（1=是，0=否） 种子租户（000/500/100）为内置，不允许删除
+    /// 内置（1=是，0=否） 种子租户（000/500/100）为内置，不允许删除
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
@@ -442,7 +442,7 @@ public class TaktTenantExportDto
     public string ContactEmail { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否内置（1=是，0=否） 种子租户（000/500/100）为内置，不允许删除
+    /// 内置（1=是，0=否） 种子租户（000/500/100）为内置，不允许删除
     /// </summary>
     public int IsBuiltIn { get; set; }
 

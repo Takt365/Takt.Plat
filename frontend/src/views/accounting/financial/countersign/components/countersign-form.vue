@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/accounting/financial/countersign/components -->
 <!-- 文件名称：countersign-form.vue -->
-<!-- 功能描述：会签单实体维护弹窗内嵌表单。由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：会签单实体维护弹窗内嵌表单（上主下从级联保存）。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -10,7 +10,7 @@
 <template>
   <a-form
     ref="formRef"
-    class="takt-generated-form"
+    class="takt-generated-form countersign-form flex flex-col min-h-0"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -86,6 +86,73 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
+                :label="t('entity.countersign.purchaseinquiryid')"
+                name="purchaseInquiryId"
+              >
+                <a-input
+                  v-model:value="formState.purchaseInquiryId"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.purchaseinquiryid') })"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.countersign.purchaseinquirycode')"
+                name="purchaseInquiryCode"
+              >
+                <a-input
+                  v-model:value="formState.purchaseInquiryCode"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.purchaseinquirycode') })"
+                  show-count
+                  :maxlength="40"
+                  allow-clear
+                  :disabled="!!formData?.countersignId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.countersign.businesstype')"
+                name="businessType"
+              >
+                <TaktSelect
+                  v-model:value="formState.businessType"
+                  dict-type="logistics_countersign_business_type"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.countersign.businesstype') })"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.countersign.businesskey')"
+                name="businessKey"
+              >
+                <a-input
+                  v-model:value="formState.businessKey"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.businesskey') })"
+                  show-count
+                  :maxlength="80"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.countersign.stepno')"
+                name="stepNo"
+              >
+                <a-input-number
+                  v-model:value="formState.stepNo"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.stepno') })"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
                 :label="t('entity.countersign.depts')"
                 name="countersignDepts"
               >
@@ -98,6 +165,16 @@
                 />
               </a-form-item>
             </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
                 :label="t('entity.countersign.financedept')"
@@ -163,21 +240,11 @@
                   v-model:value="formState.applicationDept"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.applicationdept') })"
                   show-count
-                  :maxlength="100"
+                  :maxlength="40"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
                 :label="t('entity.countersign.costbearerdept')"
@@ -187,7 +254,7 @@
                   v-model:value="formState.costBearerDept"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.costbearerdept') })"
                   show-count
-                  :maxlength="100"
+                  :maxlength="40"
                   allow-clear
                 />
               </a-form-item>
@@ -197,10 +264,10 @@
                 :label="t('entity.countersign.isbudget')"
                 name="isBudget"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.isBudget"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.isbudget') })"
-                  style="width: 100%"
+                  dict-type="sys_yes_no_type"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.countersign.isbudget') })"
                 />
               </a-form-item>
             </a-col>
@@ -242,7 +309,17 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-2"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.countersign.title')"
                 name="countersignTitle"
@@ -256,7 +333,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.countersign.applicationreason')"
                 name="applicationReason"
@@ -282,7 +359,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.countersign.targetandexpectedbenefit')"
                 name="targetAndExpectedBenefit"
@@ -296,7 +373,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.countersign.attachments')"
                 name="attachments"
@@ -310,25 +387,15 @@
                 />
               </a-form-item>
             </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
                 :label="t('entity.countersign.status')"
                 name="countersignStatus"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.countersignStatus"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.status') })"
-                  style="width: 100%"
+                  dict-type="sys_approval_status"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.countersign.status') })"
                 />
               </a-form-item>
             </a-col>
@@ -377,19 +444,33 @@
         </div>
       </a-tab-pane>
     </a-tabs>
+    <!-- 下：子表 countersignDetails -->
+    <TaktEditableTable
+      ref="countersignDetailTableRef"
+      v-model="childCountersignDetailRows"
+      :columns="countersignDetailFormColumns"
+      :title="t('entity.countersigndetail._self')"
+      :add-button-entity="t('entity.countersigndetail._self')"
+      id-field="countersignDetailId"
+      :default-row="createDefaultCountersignDetailRow"
+      :disabled="loading"
+      section-border
+    />
   </a-form>
 </template>
 
 <script setup lang="ts">
 /**
- * 会签单实体维护表单 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
+ * 会签单实体维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/accounting/financial/countersign/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import type { CountersignCreate } from '@/types/accounting/financial/countersign'
+import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -422,8 +503,105 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","countersignCode","countersignDepts","financeDept","budgetReviewComment","executiveOffice","applicantBy","applicationDept","costBearerDept","isBudget","budgetItem","budgetAmount","applicationAmount","countersignTitle","applicationReason","budgetUsageDescription","targetAndExpectedBenefit","attachments","countersignStatus","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","countersignCode","purchaseInquiryId","purchaseInquiryCode","businessType","businessKey","stepNo","countersignDepts","financeDept","budgetReviewComment","executiveOffice","applicantBy","applicationDept","costBearerDept","isBudget","budgetItem","budgetAmount","applicationAmount","countersignTitle","applicationReason","budgetUsageDescription","targetAndExpectedBenefit","attachments","countersignStatus","extField","remark"]
 
+import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+
+const childCountersignDetailRows = ref<Record<string, unknown>[]>([])
+const countersignDetailTableRef = ref<{
+  getRows: () => Record<string, unknown>[]
+  validate: () => Promise<unknown>
+  resetRows: () => void
+} | null>(null)
+
+/** 子表 countersignDetail 可编辑列 */
+const countersignDetailFormColumns = computed<TaktEditableTableColumn[]>(() => [
+  {
+    key: 'lineNumber',
+    title: t('entity.countersigndetail.linenumber'),
+    editor: 'inputNumber',
+    width: 140, summary: 'sum',
+  },
+  {
+    key: 'allocationCategory',
+    title: t('entity.countersigndetail.allocationcategory'),
+    editor: 'input',
+    width: 140,
+  },
+  {
+    key: 'accountTitle',
+    title: t('entity.countersigndetail.accounttitle'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.countersigndetail.accounttitle') }),
+  },
+  {
+    key: 'itemName',
+    title: t('entity.countersigndetail.itemname'),
+    editor: 'input',
+    width: 140,
+  },
+  {
+    key: 'itemDescription',
+    title: t('entity.countersigndetail.itemdescription'),
+    editor: 'textarea',
+    rows: 1,
+    placeholder: t('common.page.form.placeholder.optional', { field: t('entity.countersigndetail.itemdescription') }),
+    width: 140,
+  },
+  {
+    key: 'itemQuantity',
+    title: t('entity.countersigndetail.itemquantity'),
+    editor: 'inputNumber',
+    width: 140,
+  },
+  {
+    key: 'itemAmount',
+    title: t('entity.countersigndetail.itemamount'),
+    editor: 'inputNumber',
+    width: 140,
+  },
+  {
+    key: 'extField',
+    title: t('common.page.entity.extfield'),
+    editor: 'textarea',
+    rows: 2,
+    placeholder: t('common.page.form.placeholder.optional', { field: t('common.page.entity.extfield') }),
+    width: 140,
+  },
+])
+
+/** 编辑态从 formData 同步各子表行 */
+function syncChildRowsFromFormData(val: Partial<CountersignCreate & { countersignId?: string }> | null | undefined) {
+  childCountersignDetailRows.value = ((val as any)?.countersignDetails ?? []) as Record<string, unknown>[]
+}
+
+function createDefaultCountersignDetailRow(): Record<string, unknown> {
+  return {
+    lineNumber: (childCountersignDetailRows.value.length + 1) * 10,
+    allocationCategory: '',
+    accountTitle: '',
+    itemName: '',
+    itemDescription: '',
+    itemQuantity: 0,
+    itemAmount: 0,
+    extField: '',
+  }
+}
+
+/** 组装 Create/Update 载荷（主表 + 子表数组） */
+function buildSubmitPayload() {
+  const masterId = props.formData?.countersignId ?? ''
+  return {
+    ...formState,
+    countersignDetails: countersignDetailTableRef.value?.getRows?.() ?? childCountersignDetailRows.value.map((rest) => ({
+      ...rest,
+      tenantCode: tenantStore.tenantCode,
+      companyCode: tenantStore.companyCode,
+      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+      countersignId: masterId,
+    })),
+  }
+}
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -441,11 +619,24 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
-/** 表单字段默认值（无字典默认项） */
-function applyFormDefaults(target: Record<string, unknown>) {
-  void target
+/** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
+const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  businessType: "inquiry",
+  countersignStatus: 0
 }
 
+/** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  Object.assign(target, FORM_FIELD_DEFAULTS)
+}
+
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载全量字典 */
+onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
+})
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 countersignId 才视为编辑） */
 watch(
@@ -454,9 +645,10 @@ watch(
     if (val?.countersignId) {
       const next = { ...val } as Record<string, unknown>
       Object.keys(formState).forEach((k) => delete formState[k])
-
+    delete (next as any).countersignDetails
       applyScopeDefaults(next)
       Object.assign(formState, next)
+    syncChildRowsFromFormData(val)
       formRef.value?.clearValidate()
     } else {
       Object.keys(formState).forEach((k) => delete formState[k])
@@ -491,6 +683,26 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
+  businessType: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.select', { field: t('entity.countersign.businesstype') }),
+      trigger: 'change'
+    }
+  ],
+  stepNo: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.countersign.stepno') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.countersign.stepno') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
   applicantBy: [
     {
       required: true,
@@ -555,12 +767,17 @@ const rules = computed<Record<string, Rule[]>>(() => ({
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
 async function validate() {
   await formRef.value?.validate()
+  await countersignDetailTableRef.value?.validate?.()
   return formState
 }
 
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
-  const payload = { ...formState }
+  const payload = buildSubmitPayload() as Record<string, unknown>
+  if ('stepNo' in payload) {
+    const rawstepNo = payload.stepNo
+    payload.stepNo = typeof rawstepNo === 'number' ? rawstepNo : Number(rawstepNo)
+  }
   if ('isBudget' in payload) {
     const rawisBudget = payload.isBudget
     payload.isBudget = typeof rawisBudget === 'number' ? rawisBudget : Number(rawisBudget)
@@ -589,7 +806,8 @@ function resetFields() {
   }
   applyFormDefaults(formState)
   applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.countersignId)
-
+  childCountersignDetailRows.value = []
+  countersignDetailTableRef.value?.resetRows?.()
   activeTab.value = 'tab-0'
   formRef.value?.clearValidate()
 }

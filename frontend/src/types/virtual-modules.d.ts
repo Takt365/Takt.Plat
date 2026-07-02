@@ -33,3 +33,10 @@ declare module '@form-create/antd-designer/locale/en.js' {
   const locale: Record<string, unknown>;
   export default locale;
 }
+
+declare module '@form-create/antd-designer' {
+  import type { Plugin } from 'vue';
+
+  const FcDesigner: Plugin & { formCreate: Plugin };
+  export default FcDesigner;
+}

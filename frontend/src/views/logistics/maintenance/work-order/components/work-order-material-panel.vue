@@ -19,11 +19,11 @@
       @reset="handleQueryReset"
     />
     <TaktToolsBar
-      create-permission="logistics:maintenance:workorder:create"
-      update-permission="logistics:maintenance:workorder:update"
-      delete-permission="logistics:maintenance:workorder:delete"
-      import-permission="logistics:maintenance:workorder:import"
-      export-permission="logistics:maintenance:workorder:export"
+      create-permission="logistics:maintenance:work:order:create"
+      update-permission="logistics:maintenance:work:order:update"
+      delete-permission="logistics:maintenance:work:order:delete"
+      import-permission="logistics:maintenance:work:order:import"
+      export-permission="logistics:maintenance:work:order:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -242,8 +242,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.issueTimeStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkordermaterial.issuetimestart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -253,8 +252,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.issueTimeEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkordermaterial.issuetimeend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -265,7 +263,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -276,7 +274,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -628,7 +626,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:maintenance:workorder:update',
+        permission: 'logistics:maintenance:work:order:update',
         onClick: (record: MaintenanceWorkOrderMaterial) => void handleEdit(record),
       },
       {
@@ -636,7 +634,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:maintenance:workorder:delete',
+        permission: 'logistics:maintenance:work:order:delete',
         onClick: (record: MaintenanceWorkOrderMaterial) => void handleDeleteOne(record),
       },
     ],
@@ -653,7 +651,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: MaintenanceWorkOrderMaterial, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getMaintenanceWorkOrderMaterialId(selectedRow.value) === getMaintenanceWorkOrderMaterialId(record)) {
+    } else if (selectedRow.value && getMaintenanceWorkOrderMaterialId(selectedRow.value) === getMaintenanceWorkOrderMaterialId(record)) {
       selectedRow.value = null
     }
   },

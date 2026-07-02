@@ -680,7 +680,7 @@ const handleStatusChange = async (record: DictType, checked: boolean) => {
 }
 
 /**
- * 表格行内切换是否内置（sys_yes_no_type：1=是，0=否）
+ * 表格行内切换内置（sys_yes_no_type：1=是，0=否）
  * @param record 当前行
  * @param checked 开关是否选中（内置）
  */

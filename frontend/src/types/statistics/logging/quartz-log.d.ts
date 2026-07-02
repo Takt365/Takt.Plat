@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/statistics/logging
 // 文件名称：quartz-log.d.ts
-// 创建时间：2026-06-12
+// 创建时间：2026-06-29
 // 创建人：Takt365(Auto Generated)
 // 功能描述：statistics/logging 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -44,14 +44,14 @@ export interface QuartzLog extends CompanyDtoBase {
   taskName: string;
 
   /**
-   * 任务组名（执行时快照）
+   * 任务组名（执行时快照；字典 sys_quartz_job_group 的 DictValue）
    */
-  jobGroup: number;
+  jobGroup: string;
 
   /**
-   * 任务类型（1=程序集 2=网络请求 3=SQL语句）
+   * 任务类型（字典 sys_quartz_task_type 的 DictValue，如 assembly、http、sql）
    */
-  taskType: number;
+  taskType: string;
 
   /**
    * 执行时间
@@ -64,29 +64,29 @@ export interface QuartzLog extends CompanyDtoBase {
   executeDuration: string;
 
   /**
-   * 执行参数
+   * 执行参数（无参数为空串）
    */
-  executeParams?: string;
+  executeParams: string;
 
   /**
-   * 执行消息
+   * 执行消息（无消息为空串）
    */
-  executeMessage?: string;
+  executeMessage: string;
 
   /**
-   * 错误信息
+   * 错误信息（成功为空串）
    */
-  errorInfo?: string;
+  errorInfo: string;
 
   /**
    * 执行机器 IP
    */
-  executeIp?: string;
+  executeIp: string;
 
   /**
    * 执行机器名
    */
-  executeHost?: string;
+  executeHost: string;
 
   /**
    * 执行状态（0=失败，1=成功）
@@ -129,14 +129,14 @@ export interface QuartzLogQuery extends TaktPagedQuery {
   taskName?: string;
 
   /**
-   * 任务组名（执行时快照）
+   * 任务组名（执行时快照；字典 sys_quartz_job_group 的 DictValue）
    */
-  jobGroup?: number;
+  jobGroup?: string;
 
   /**
-   * 任务类型（1=程序集 2=网络请求 3=SQL语句）
+   * 任务类型（字典 sys_quartz_task_type 的 DictValue，如 assembly、http、sql）
    */
-  taskType?: number;
+  taskType?: string;
 
   /**
    * 执行时间（范围查询-开始）
@@ -154,17 +154,17 @@ export interface QuartzLogQuery extends TaktPagedQuery {
   executeDuration?: string;
 
   /**
-   * 执行参数
+   * 执行参数（无参数为空串）
    */
   executeParams?: string;
 
   /**
-   * 执行消息
+   * 执行消息（无消息为空串）
    */
   executeMessage?: string;
 
   /**
-   * 错误信息
+   * 错误信息（成功为空串）
    */
   errorInfo?: string;
 
@@ -196,7 +196,7 @@ export interface QuartzLogQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -223,7 +223,7 @@ export interface QuartzLogCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -238,14 +238,14 @@ export interface QuartzLogCreate {
   taskName: string;
 
   /**
-   * 任务组名（执行时快照）
+   * 任务组名（执行时快照；字典 sys_quartz_job_group 的 DictValue）
    */
-  jobGroup: number;
+  jobGroup: string;
 
   /**
-   * 任务类型（1=程序集 2=网络请求 3=SQL语句）
+   * 任务类型（字典 sys_quartz_task_type 的 DictValue，如 assembly、http、sql）
    */
-  taskType: number;
+  taskType: string;
 
   /**
    * 执行时间
@@ -258,29 +258,29 @@ export interface QuartzLogCreate {
   executeDuration: string;
 
   /**
-   * 执行参数
+   * 执行参数（无参数为空串）
    */
-  executeParams?: string;
+  executeParams: string;
 
   /**
-   * 执行消息
+   * 执行消息（无消息为空串）
    */
-  executeMessage?: string;
+  executeMessage: string;
 
   /**
-   * 错误信息
+   * 错误信息（成功为空串）
    */
-  errorInfo?: string;
+  errorInfo: string;
 
   /**
    * 执行机器 IP
    */
-  executeIp?: string;
+  executeIp: string;
 
   /**
    * 执行机器名
    */
-  executeHost?: string;
+  executeHost: string;
 
   /**
    * 执行状态（0=失败，1=成功）
@@ -290,7 +290,7 @@ export interface QuartzLogCreate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -361,14 +361,14 @@ export interface QuartzLogExport {
   taskName: string;
 
   /**
-   * 任务组名（执行时快照）
+   * 任务组名（执行时快照；字典 sys_quartz_job_group 的 DictValue）
    */
-  jobGroup: number;
+  jobGroup: string;
 
   /**
-   * 任务类型（1=程序集 2=网络请求 3=SQL语句）
+   * 任务类型（字典 sys_quartz_task_type 的 DictValue，如 assembly、http、sql）
    */
-  taskType: number;
+  taskType: string;
 
   /**
    * 执行时间
@@ -381,29 +381,29 @@ export interface QuartzLogExport {
   executeDuration: string;
 
   /**
-   * 执行参数
+   * 执行参数（无参数为空串）
    */
-  executeParams?: string;
+  executeParams: string;
 
   /**
-   * 执行消息
+   * 执行消息（无消息为空串）
    */
-  executeMessage?: string;
+  executeMessage: string;
 
   /**
-   * 错误信息
+   * 错误信息（成功为空串）
    */
-  errorInfo?: string;
+  errorInfo: string;
 
   /**
    * 执行机器 IP
    */
-  executeIp?: string;
+  executeIp: string;
 
   /**
    * 执行机器名
    */
-  executeHost?: string;
+  executeHost: string;
 
   /**
    * 执行状态（0=失败，1=成功）
@@ -413,7 +413,7 @@ export interface QuartzLogExport {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注

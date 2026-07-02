@@ -8,7 +8,7 @@
 <!-- ======================================== -->
 
 <template>
-  <div class="routine-visitor-center-visitor">
+  <div class="p-4 flex flex-col min-h-0 h-full">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -20,17 +20,17 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="routine:visitorcenter:visitor:create"
-      update-permission="routine:visitorcenter:visitor:update"
-      delete-permission="routine:visitorcenter:visitor:delete"
-      import-permission="routine:visitorcenter:visitor:import"
-      export-permission="routine:visitorcenter:visitor:export"
+      create-permission="routine:visitor:center:create"
+      update-permission="routine:visitor:center:update"
+      delete-permission="routine:visitor:center:delete"
+      import-permission="routine:visitor:center:import"
+      export-permission="routine:visitor:center:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
       :show-import="true"
       :show-export="true"
-      :show-expand="true"
+      :show-expand="false"
       :show-advanced-query="true"
       :show-column-setting="true"
       :show-fullscreen="true"
@@ -52,64 +52,46 @@
       @refresh="handleRefresh"
     />
 
-    <!-- 表格 -->
-    <TaktSingleTable
-      :columns="columns"
-      entity-scope="company"
-      :visible-column-keys="visibleColumnKeys"
-      :id-column-key="'visitorId'"
-      table-mode="single"
-      :data-source="dataSource"
-      :loading="loading"
-      :stripe="true"
-      :row-key="getVisitorId"
-      :row-selection="rowSelection"
-      :custom-row="onClickRow"
-
-      :expanded-row-keys="expandedRowKeys"
-      @expand="handleExpand"
-      @change="handleTableChange"
-      @resize-column="handleResizeColumn"
+    <!-- 左主右从 -->
+    <TaktMasterDetailTableLr
+      v-model:master-current="currentPage"
+      v-model:master-page-size="pageSize"
+      v-model:selected-master-key="selectedMasterKey"
+      class="min-h-0 flex-1"
+      :master-columns="columns"
+      :master-data-source="dataSource"
+      :master-loading="loading"
+      :master-row-key="getVisitorId"
+      :master-row-selection="rowSelection"
+      master-id-column-key="visitorId"
+      :master-visible-column-keys="visibleColumnKeys"
+      :master-total="total"
+      master-entity-scope="company"
+      @master-change="handleTableChange"
+      @master-resize-column="handleResizeColumn"
+      @master-pagination-change="handleMasterPaginationChange"
+      @master-select="handleMasterSelect"
     >
-      <!-- 展开行渲染 -->
-      <template #expandedRowRender="{ record }">
-        <div class="p-4">
-          <div class="mb-2 text-sm font-medium">{{ t('entity.visitorCompanion._self') }}</div>
-          <a-table
-            v-if="hasVisitorCompanionRows(record)"
-            :columns="visitorCompanionExpandColumns"
-            :data-source="getVisitorCompanionRows(record)"
-            :row-key="(row: VisitorCompanion, index?: number) => row?.visitorCompanionId || String(index ?? 0)"
-            :pagination="false"
-            size="small"
-            bordered
-            class="mb-4"
-          />
-          <a-empty v-else class="mb-4" />
-        </div>
+      <template #detail>
+        <VisitorCompanionPanel
+          ref="visitorCompanionPanelRef"
+          class="h-full min-h-0 flex-1"
+        />
       </template>
-    </TaktSingleTable>
-
-    <!-- 分页组件 -->
-    <TaktPagination
-      v-model:current="currentPage"
-      v-model:page-size="pageSize"
-      :total="total"
-      @change="handlePaginationChange"
-      @show-size-change="handlePaginationSizeChange"
-    />
+    </TaktMasterDetailTableLr>
 
     <!-- 新增/编辑对话框 -->
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="50%"
+      width="1100px"
       wrap-class-name="takt-form-modal-resizable"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
       @cancel="handleFormCancel"
     >
       <VisitorForm
+        :key="formData?.visitorId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -131,6 +113,8 @@
         <a-input
           v-model:value="advancedQueryForm.visitorCompanyName"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.visitor.companyname') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
@@ -140,8 +124,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.visitStartTimeStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.visitor.visitstarttimestart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -151,8 +134,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.visitStartTimeEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.visitor.visitstarttimeend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -162,8 +144,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.visitEndTimeStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.visitor.visitendtimestart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -173,8 +154,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.visitEndTimeEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.visitor.visitendtimeend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -185,7 +165,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -196,17 +176,36 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('ExtField')">
-      <a-form-item :label="t('common.page.entity.ExtField')">
-        <a-input
-          v-model:value="advancedQueryForm.ExtField"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
-          allow-clear
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
+        <a-textarea
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -215,8 +214,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -260,7 +261,6 @@
 </template>
 
 <script setup lang="ts">
-import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 /**
  * 来访接待主实体管理页 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/routine/visitor-center/visitor
@@ -270,14 +270,15 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import VisitorForm from './components/visitor-form.vue'
+import VisitorCompanionPanel from './components/visitor-companion-panel.vue'
+import { provideVisitorMasterContext } from './composables/use-visitor-master-context'
 import { getVisitorList, getVisitorById, createVisitor, updateVisitor, deleteVisitorById, deleteVisitorBatch, getVisitorTemplate, importVisitor, exportVisitor } from '@/api/routine/visitor-center/visitor'
-import * as visitorCompanionApi from '@/api/routine/visitor-center/visitor-companion'
-import type { VisitorCompanion, VisitorCompanionQuery } from '@/types/routine/visitor-center/visitor-companion'
-import type { Visitor, VisitorQuery, VisitorCreate, VisitorUpdate } from '@/types/routine/visitor-center/visitor'
+import type { Visitor, VisitorQuery } from '@/types/routine/visitor-center/visitor'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -312,11 +313,13 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<Visitor>>({})
+const formData = ref<Partial<Visitor> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
@@ -327,19 +330,19 @@ const advancedQueryForm = ref({
   visitEndTimeEnd: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
   { key: 'visitorCompanyName', label: t('entity.visitor.companyname') },
-  { key: 'visitStartTimeStart', label: t('entity.visitor.visitstarttimestart') },
-  { key: 'visitStartTimeEnd', label: t('entity.visitor.visitstarttimeend') },
-  { key: 'visitEndTimeStart', label: t('entity.visitor.visitendtimestart') },
-  { key: 'visitEndTimeEnd', label: t('entity.visitor.visitendtimeend') },
+  { key: 'visitStartTimeStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.visitor.visitstarttime')) },
+  { key: 'visitStartTimeEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.visitor.visitstarttime')) },
+  { key: 'visitEndTimeStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.visitor.visitendtime')) },
+  { key: 'visitEndTimeEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.visitor.visitendtime')) },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'ExtField', label: t('common.page.entity.ExtField') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -357,58 +360,80 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
-/** 主子表展开行 keys（手风琴，仅一行展开） */
-const expandedRowKeys = ref<string[]>([])
+/** 主表选中行上下文（右侧明细面板读取） */
+const { selectedMasterRow } = provideVisitorMasterContext()
+const visitorCompanionPanelRef = ref<InstanceType<typeof VisitorCompanionPanel> | null>(null)
 
-/** 页面挂载后加载分页列表 */
-onMounted(() => {
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {VisitorQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<VisitorQuery>): VisitorQuery {
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: VisitorQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: keyof VisitorQuery, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v as never
+    }
+  }
+  assignTrimmed('visitorCompanyName', form.visitorCompanyName)
+  assignTrimmed('visitStartTimeStart', form.visitStartTimeStart)
+  assignTrimmed('visitStartTimeEnd', form.visitStartTimeEnd)
+  assignTrimmed('visitEndTimeStart', form.visitEndTimeStart)
+  assignTrimmed('visitEndTimeEnd', form.visitEndTimeEnd)
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('extField', form.extField)
+  assignTrimmed('remark', form.remark)
+  return query
+}
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
   loadData()
 })
 
-/** 展开行预览：visitorCompanion 列 */
-const visitorCompanionExpandColumns = computed(() => [
-  {
-    title: t('entity.visitorCompanion.visitorname'),
-    dataIndex: 'visitorName',
-    key: 'visitorName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.visitorCompanion.department'),
-    dataIndex: 'department',
-    key: 'department',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.visitorCompanion.jobtitle'),
-    dataIndex: 'jobTitle',
-    key: 'jobTitle',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.visitorCompanion.companionname'),
-    dataIndex: 'companionName',
-    key: 'companionName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.visitorCompanion.visitor'),
-    dataIndex: 'visitor',
-    key: 'visitor',
-    ellipsis: true,
-  },
-])
 
-/** 读取主表行上的 visitorCompanion 子表缓存 */
-function getVisitorCompanionRows(record: Visitor): VisitorCompanion[] {
-  return (record as any)?.companions ?? []
+/** 主表行点击选中 key（左右主子表高亮） */
+const selectedMasterKey = ref('')
+
+/** 同步主表选中行到右侧明细（子表由 *-panel watch 自动 reload） */
+function syncMasterSelection(record: Visitor | null) {
+  selectedMasterRow.value = record
+  selectedMasterKey.value = record ? getVisitorId(record) : ''
 }
 
-/** 主表行是否已加载 visitorCompanion 子表 */
-function hasVisitorCompanionRows(record: Visitor): boolean {
-  return getVisitorCompanionRows(record).length > 0
+/**
+ * 左右主子表：主表行选中
+ * @param record 主表行
+ */
+function handleMasterSelect(record: Record<string, unknown>) {
+  const row = record as unknown as Visitor
+  const key = getVisitorId(row)
+  selectedRowKeys.value = [key]
+  selectedRows.value = [row]
+  selectedRow.value = row
+  syncMasterSelection(row)
 }
 
+/**
+ * 主表分页变更（v-model 已同步页码与 pageSize）
+ * @param _page 页码
+ * @param _pageSize 每页条数
+ */
+function handleMasterPaginationChange(_page: number, _pageSize: number) {
+  loadData()
+}
 
 /** 加载主表详情并回填当前页 dataSource */
 async function loadVisitorDetail(record: Visitor): Promise<Visitor | null> {
@@ -427,52 +452,6 @@ async function loadVisitorDetail(record: Visitor): Promise<Visitor | null> {
     message.error(error?.message || t('common.feedback.load.data.failed'))
     return null
   }
-}
-/** 懒加载 visitorCompanion 子表（VisitorCompanionQuery + visitorCompanionApi，与主表 VisitorQuery 分离） */
-async function loadVisitorCompanionForVisitor(record: Visitor): Promise<VisitorCompanion[]> {
-  const masterId = getVisitorId(record)
-  if (!masterId) {
-    return []
-  }
-  try {
-    const childQuery: VisitorCompanionQuery = {
-      pageIndex: 1,
-      pageSize: 500,
-      visitorId: masterId,
-    }
-    const result = await visitorCompanionApi.getVisitorCompanionList(childQuery)
-    const rows = result?.data ?? []
-    const index = dataSource.value.findIndex((row) => getVisitorId(row) === masterId)
-    if (index !== -1) {
-      const row = dataSource.value[index]
-      dataSource.value[index] = { ...row, companions: rows } as Visitor
-    }
-    return rows
-  } catch (error: any) {
-    message.error(error?.message || t('common.feedback.load.data.failed'))
-    return []
-  }
-}
-
-/** 展开前确保各子表已懒加载 */
-async function ensureVisitorChildrenLoaded(record: Visitor) {
-  if (!hasVisitorCompanionRows(record)) {
-    await loadVisitorCompanionForVisitor(record)
-  }
-}
-
-/** 主表展开行：手风琴懒加载子表 */
-async function handleExpand(expanded: boolean, record: Visitor) {
-  const key = getVisitorId(record)
-  if (!expanded || !key) {
-    expandedRowKeys.value = []
-    return
-  }
-  if (expandedRowKeys.value.length > 0 && expandedRowKeys.value[0] !== key) {
-    expandedRowKeys.value = []
-  }
-  await ensureVisitorChildrenLoaded(record)
-  expandedRowKeys.value = [key]
 }
 
 /** 表格列定义（i18n 随 locale 变化） */
@@ -521,7 +500,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'routine:visitorcenter:visitor:update',
+        permission: 'routine:visitor:center:update',
         onClick: (record: Visitor) => handleEdit(record)
       },
       {
@@ -529,7 +508,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'routine:visitorcenter:visitor:delete',
+        permission: 'routine:visitor:center:delete',
         onClick: (record: Visitor) => handleDeleteOne(record)
       }
     ]
@@ -545,6 +524,7 @@ const getVisitorId = (record: any): string => record?.[entityIdName] ?? ''
  */
 const getVisitorField = (record: any, field: string): any => record?.[field]
 
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -552,51 +532,32 @@ const rowSelection = computed(() => ({
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
+    if (rows.length === 1 && rows[0]) {
+      syncMasterSelection(rows[0])
+    } else if (rows.length === 0) {
+      syncMasterSelection(null)
+    }
   },
   onSelect: (record: Visitor, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getVisitorId(selectedRow.value) === getVisitorId(record)) {
+      syncMasterSelection(record)
+    } else if (selectedRow.value && getVisitorId(selectedRow.value) === getVisitorId(record)) {
       selectedRow.value = null
+      syncMasterSelection(null)
     }
   },
   onSelectAll: (selected: boolean, selectedRowsData: Visitor[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
+    syncMasterSelection(selectedRow.value)
   }
 }))
-
-/** 行点击切换选中（与 rowSelection 联动） */
-const onClickRow = (record: Visitor) => ({
-  onClick: () => {
-    const key = getVisitorId(record)
-    const index = selectedRowKeys.value.indexOf(key)
-    if (index > -1) {
-      selectedRowKeys.value.splice(index, 1)
-    } else {
-      selectedRowKeys.value.push(key)
-    }
-    selectedRows.value = dataSource.value.filter((item) => selectedRowKeys.value.includes(getVisitorId(item)))
-    selectedRow.value = selectedRowKeys.value.length === 1 ? (selectedRows.value[0] ?? null) : null
-    if (rowSelection.value.onChange) {
-      rowSelection.value.onChange(selectedRowKeys.value, selectedRows.value)
-    }
-  }
-})
 
 /** 加载分页列表 */
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: VisitorQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getVisitorList(params)
+    const res = await getVisitorList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
@@ -614,7 +575,7 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -629,18 +590,19 @@ function handleReset() {
   visitEndTimeEnd: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
   formTitle.value = t('common.dialog.title.create', { entity: t('entity.visitor._self') })
-  formData.value = {}
+  formData.value = null
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗（主子表：先拉详情含子表） */
 async function handleEdit(record: Visitor) {
@@ -684,6 +646,11 @@ async function handleFormSubmit() {
       message.success(t('common.feedback.created', { target: t('entity.visitor._self') }))
     }
     formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
+    if (selectedMasterKey.value) {
+  visitorCompanionPanelRef.value?.reload?.()
+    }
     loadData()
   } finally {
     formLoading.value = false
@@ -693,6 +660,8 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开导入对话框 */
 function handleImport() {
@@ -724,16 +693,11 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: VisitorQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportVisitor(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportVisitor(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -770,6 +734,10 @@ async function handleDeleteOne(record: Visitor) {
     onOk: async () => {
       await deleteVisitorById((record as any)[entityIdName])
       message.success(t('common.feedback.deleted', { target: t('entity.visitor._self') }))
+      selectedRowKeys.value = []
+      selectedRows.value = []
+      selectedRow.value = null
+      syncMasterSelection(null)
       loadData()
     }
   })
@@ -789,6 +757,10 @@ async function handleDelete() {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteVisitorBatch(ids)
       message.success(t('common.feedback.deleted', { target: t('entity.visitor._self') }))
+      selectedRowKeys.value = []
+      selectedRows.value = []
+      selectedRow.value = null
+      syncMasterSelection(null)
       loadData()
     }
   })
@@ -801,7 +773,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -814,7 +786,7 @@ function handleAdvancedQueryReset() {
   visitEndTimeEnd: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
 }
@@ -843,24 +815,4 @@ function handleRefresh() {
 function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
-/** 分页页码变更 */
-function handlePaginationChange(page: number) {
-  currentPage.value = page
-  loadData()
-}
-/** 分页每页条数变更 */
-function handlePaginationSizeChange(_current: number, size: number) {
-  pageSize.value = size
-  currentPage.value = 1
-  loadData()
-}
 </script>
-
-<style scoped lang="css">
-.routine-visitor-center-visitor {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-</style>

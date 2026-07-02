@@ -240,6 +240,19 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
+                :label="t('entity.conferenceagenda.attachments')"
+                name="attachments"
+              >
+                <a-textarea
+                  v-model:value="formState.attachments"
+                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.conferenceagenda.attachments') })"
+                  :rows="3"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
                 name="extField"
                 class="takt-form-item-ext-field"
               >
@@ -328,7 +341,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","conferenceId","recordType","lineNumber","title","content","summary","presenterId","presenterName","plannedStartTime","durationMinutes","recorderId","recorderName","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","conferenceId","recordType","lineNumber","title","content","summary","presenterId","presenterName","plannedStartTime","durationMinutes","recorderId","recorderName","attachments","extField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */

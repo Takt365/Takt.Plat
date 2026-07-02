@@ -142,8 +142,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.inboundTimeStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serialinbounditem.inboundtimestart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -153,8 +152,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.inboundTimeEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serialinbounditem.inboundtimeend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -165,7 +163,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -176,7 +174,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -503,7 +501,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: SerialInboundItem, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getSerialInboundItemId(selectedRow.value) === getSerialInboundItemId(record)) {
+    } else if (selectedRow.value && getSerialInboundItemId(selectedRow.value) === getSerialInboundItemId(record)) {
       selectedRow.value = null
     }
   },

@@ -42,9 +42,9 @@ public class TaktDeltaLogDto : TaktCompanyDtoBase
     public string UserName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 操作类型（INSERT、UPDATE、DELETE）
+    /// 操作类型（TaktConstants.OperType）
     /// </summary>
-    public TaktDeltaOperType OperType { get; set; }
+    public string OperType { get; set; } = "unknown";
 
     /// <summary>
     /// 数据库表名（SugarTable 物理表名）
@@ -65,32 +65,52 @@ public class TaktDeltaLogDto : TaktCompanyDtoBase
     /// <summary>
     /// 修改前数据 JSON（旧值快照）
     /// </summary>
-    public string? BeforeData { get; set; } = string.Empty;
+    public string BeforeData { get; set; } = string.Empty;
 
     /// <summary>
     /// 修改后数据 JSON（新值快照）
     /// </summary>
-    public string? AfterData { get; set; } = string.Empty;
+    public string AfterData { get; set; } = string.Empty;
 
     /// <summary>
     /// 差异内容 JSON（变更字段及旧/新值明细）
     /// </summary>
-    public string? DiffData { get; set; } = string.Empty;
+    public string DiffData { get; set; } = string.Empty;
 
     /// <summary>
-    /// 执行的 SQL 语句（AOP 捕获，可选）
+    /// 执行的 SQL 语句（AOP 捕获）
     /// </summary>
-    public string? SqlStatement { get; set; } = string.Empty;
+    public string SqlStatement { get; set; } = string.Empty;
 
     /// <summary>
     /// 操作 IP
     /// </summary>
-    public string? OperIp { get; set; } = string.Empty;
+    public string OperIp { get; set; } = string.Empty;
 
     /// <summary>
     /// 操作地点（由 OperIp 解析，如：中国-广东省-深圳市）
     /// </summary>
-    public string? OperLocation { get; set; } = string.Empty;
+    public string OperLocation { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 用户代理（User-Agent）
+    /// </summary>
+    public string UserAgent { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 浏览器（TaktConstants.BrowserType）
+    /// </summary>
+    public string Browser { get; set; } = "unknown";
+
+    /// <summary>
+    /// 操作系统（TaktConstants.OperatingSystem）
+    /// </summary>
+    public string Os { get; set; } = "unknown";
+
+    /// <summary>
+    /// 登录设备（TaktConstants.DeviceType）
+    /// </summary>
+    public string DeviceType { get; set; } = "unknown";
 
     /// <summary>
     /// 操作时间（数据变更发生时刻）
@@ -130,9 +150,9 @@ public class TaktDeltaLogQueryDto : TaktPagedQuery
     public string? UserName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 操作类型（INSERT、UPDATE、DELETE）
+    /// 操作类型（TaktConstants.OperType）
     /// </summary>
-    public TaktDeltaOperType? OperType { get; set; }
+    public string? OperType { get; set; }
 
     /// <summary>
     /// 数据库表名（SugarTable 物理表名）
@@ -174,6 +194,26 @@ public class TaktDeltaLogQueryDto : TaktPagedQuery
     /// 操作地点（由 OperIp 解析，如：中国-广东省-深圳市）
     /// </summary>
     public string? OperLocation { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 用户代理（User-Agent）
+    /// </summary>
+    public string? UserAgent { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 浏览器（TaktConstants.BrowserType，查询条件，可选）
+    /// </summary>
+    public string? Browser { get; set; }
+
+    /// <summary>
+    /// 操作系统（TaktConstants.OperatingSystem，查询条件，可选）
+    /// </summary>
+    public string? Os { get; set; }
+
+    /// <summary>
+    /// 登录设备（TaktConstants.DeviceType，查询条件，可选）
+    /// </summary>
+    public string? DeviceType { get; set; }
 
     /// <summary>
     /// 操作时间（数据变更发生时刻）（范围查询-开始）
@@ -231,7 +271,7 @@ public class TaktDeltaLogCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -242,9 +282,9 @@ public class TaktDeltaLogCreateDto
     public string UserName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 操作类型（INSERT、UPDATE、DELETE）
+    /// 操作类型（TaktConstants.OperType）
     /// </summary>
-    public TaktDeltaOperType OperType { get; set; }
+    public string OperType { get; set; } = "unknown";
 
     /// <summary>
     /// 数据库表名（SugarTable 物理表名）
@@ -261,32 +301,52 @@ public class TaktDeltaLogCreateDto
     /// <summary>
     /// 修改前数据 JSON（旧值快照）
     /// </summary>
-    public string? BeforeData { get; set; } = string.Empty;
+    public string BeforeData { get; set; } = string.Empty;
 
     /// <summary>
     /// 修改后数据 JSON（新值快照）
     /// </summary>
-    public string? AfterData { get; set; } = string.Empty;
+    public string AfterData { get; set; } = string.Empty;
 
     /// <summary>
     /// 差异内容 JSON（变更字段及旧/新值明细）
     /// </summary>
-    public string? DiffData { get; set; } = string.Empty;
+    public string DiffData { get; set; } = string.Empty;
 
     /// <summary>
-    /// 执行的 SQL 语句（AOP 捕获，可选）
+    /// 执行的 SQL 语句（AOP 捕获）
     /// </summary>
-    public string? SqlStatement { get; set; } = string.Empty;
+    public string SqlStatement { get; set; } = string.Empty;
 
     /// <summary>
     /// 操作 IP
     /// </summary>
-    public string? OperIp { get; set; } = string.Empty;
+    public string OperIp { get; set; } = string.Empty;
 
     /// <summary>
     /// 操作地点（由 OperIp 解析，如：中国-广东省-深圳市）
     /// </summary>
-    public string? OperLocation { get; set; } = string.Empty;
+    public string OperLocation { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 用户代理（User-Agent）
+    /// </summary>
+    public string UserAgent { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 浏览器（TaktConstants.BrowserType）
+    /// </summary>
+    public string Browser { get; set; } = "unknown";
+
+    /// <summary>
+    /// 操作系统（TaktConstants.OperatingSystem）
+    /// </summary>
+    public string Os { get; set; } = "unknown";
+
+    /// <summary>
+    /// 登录设备（TaktConstants.DeviceType）
+    /// </summary>
+    public string DeviceType { get; set; } = "unknown";
 
     /// <summary>
     /// 操作时间（数据变更发生时刻）
@@ -357,9 +417,9 @@ public class TaktDeltaLogExportDto
     public string UserName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 操作类型（INSERT、UPDATE、DELETE）
+    /// 操作类型（TaktConstants.OperType）
     /// </summary>
-    public TaktDeltaOperType OperType { get; set; }
+    public string OperType { get; set; } = "unknown";
 
     /// <summary>
     /// 数据库表名（SugarTable 物理表名）
@@ -375,32 +435,52 @@ public class TaktDeltaLogExportDto
     /// <summary>
     /// 修改前数据 JSON（旧值快照）
     /// </summary>
-    public string? BeforeData { get; set; } = string.Empty;
+    public string BeforeData { get; set; } = string.Empty;
 
     /// <summary>
     /// 修改后数据 JSON（新值快照）
     /// </summary>
-    public string? AfterData { get; set; } = string.Empty;
+    public string AfterData { get; set; } = string.Empty;
 
     /// <summary>
     /// 差异内容 JSON（变更字段及旧/新值明细）
     /// </summary>
-    public string? DiffData { get; set; } = string.Empty;
+    public string DiffData { get; set; } = string.Empty;
 
     /// <summary>
-    /// 执行的 SQL 语句（AOP 捕获，可选）
+    /// 执行的 SQL 语句（AOP 捕获）
     /// </summary>
-    public string? SqlStatement { get; set; } = string.Empty;
+    public string SqlStatement { get; set; } = string.Empty;
 
     /// <summary>
     /// 操作 IP
     /// </summary>
-    public string? OperIp { get; set; } = string.Empty;
+    public string OperIp { get; set; } = string.Empty;
 
     /// <summary>
     /// 操作地点（由 OperIp 解析，如：中国-广东省-深圳市）
     /// </summary>
-    public string? OperLocation { get; set; } = string.Empty;
+    public string OperLocation { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 用户代理（User-Agent）
+    /// </summary>
+    public string UserAgent { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 浏览器（TaktConstants.BrowserType）
+    /// </summary>
+    public string Browser { get; set; } = "unknown";
+
+    /// <summary>
+    /// 操作系统（TaktConstants.OperatingSystem）
+    /// </summary>
+    public string Os { get; set; } = "unknown";
+
+    /// <summary>
+    /// 登录设备（TaktConstants.DeviceType）
+    /// </summary>
+    public string DeviceType { get; set; } = "unknown";
 
     /// <summary>
     /// 操作时间（数据变更发生时刻）

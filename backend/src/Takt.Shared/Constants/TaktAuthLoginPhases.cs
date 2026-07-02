@@ -61,4 +61,18 @@ public static class TaktAuthLoginPhases
 
     /// <summary>登录页预览默认语言（租户→用户默认公司→公司 DefaultCulture）</summary>
     public const string LoginPreviewLocale = "login-preview-locale";
+
+    /// <summary>Remark 中登录步骤前缀（落库区分 OAuth 多阶段）</summary>
+    public const string LoginStepRemarkPrefix = "login-step:";
+
+    /// <summary>
+    /// 构建登录日志 Remark（标记认证流程阶段，便于列表/查询区分同一次登录的多条记录）
+    /// </summary>
+    /// <param name="phase">流程阶段常量（TaktAuthLoginPhases）</param>
+    /// <returns>形如 login-step:verify-password</returns>
+    public static string BuildLoginStepRemark(string phase)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(phase);
+        return $"{LoginStepRemarkPrefix}{phase.Trim()}";
+    }
 }

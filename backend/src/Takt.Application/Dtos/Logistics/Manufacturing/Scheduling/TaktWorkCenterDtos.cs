@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Scheduling
 // 文件名称：TaktWorkCenterDtos.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：WorkCenter 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktWorkCenter 生成，请按需审阅）
 // 
@@ -171,7 +171,7 @@ public class TaktWorkCenterCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -321,6 +321,11 @@ public class TaktWorkCenterTemplateDto
     public int? WorkCenterStatus { get; set; }
 
     /// <summary>
+    /// 工作中心资源列表（子表，级联保存）
+    /// </summary>
+    public List<TaktWorkCenterResourceCreateDto>? Resources { get; set; }
+
+    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -348,7 +353,7 @@ public class TaktWorkCenterImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -382,6 +387,11 @@ public class TaktWorkCenterImportDto
     /// 状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int? WorkCenterStatus { get; set; }
+
+    /// <summary>
+    /// 工作中心资源列表（子表，级联保存）
+    /// </summary>
+    public List<TaktWorkCenterResourceCreateDto>? Resources { get; set; }
 
     /// <summary>
     /// 扩展字段JSON

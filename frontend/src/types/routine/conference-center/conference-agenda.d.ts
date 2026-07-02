@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/routine/conference-center
 // 文件名称：conference-agenda.d.ts
-// 创建时间：2026-06-21
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：routine/conference-center 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -51,17 +51,17 @@ export interface ConferenceAgenda extends CompanyDtoBase {
   /**
    * 标题（议程议题或纪要标题）
    */
-  title: string;
+  conferenceAgendaTitle: string;
 
   /**
    * 正文（议程说明或会议纪要富文本 HTML）
    */
-  content?: string;
+  conferenceAgendaContent?: string;
 
   /**
    * 摘要（纪要列表展示用）
    */
-  summary?: string;
+  conferenceAgendaSummary?: string;
 
   /**
    * 主讲人/汇报人 ID（议程项）
@@ -92,6 +92,11 @@ export interface ConferenceAgenda extends CompanyDtoBase {
    * 记录人姓名（会议纪要）
    */
   recorderName?: string;
+
+  /**
+   * 附件 JSON（列表形式，由TaktFile 统一上传到服务器）
+   */
+  attachments?: string;
 
   /**
    * 会议（主表） （主表：TaktConference）
@@ -136,17 +141,17 @@ export interface ConferenceAgendaQuery extends TaktPagedQuery {
   /**
    * 标题（议程议题或纪要标题）
    */
-  title?: string;
+  conferenceAgendaTitle?: string;
 
   /**
    * 正文（议程说明或会议纪要富文本 HTML）
    */
-  content?: string;
+  conferenceAgendaContent?: string;
 
   /**
    * 摘要（纪要列表展示用）
    */
-  summary?: string;
+  conferenceAgendaSummary?: string;
 
   /**
    * 主讲人/汇报人 ID（议程项）
@@ -182,6 +187,11 @@ export interface ConferenceAgendaQuery extends TaktPagedQuery {
    * 记录人姓名（会议纪要）
    */
   recorderName?: string;
+
+  /**
+   * 附件 JSON（列表形式，由TaktFile 统一上传到服务器）
+   */
+  attachments?: string;
 
   /**
    * 创建时间（范围查询-开始）
@@ -223,7 +233,7 @@ export interface ConferenceAgendaCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -245,17 +255,17 @@ export interface ConferenceAgendaCreate {
   /**
    * 标题（议程议题或纪要标题）
    */
-  title: string;
+  conferenceAgendaTitle: string;
 
   /**
    * 正文（议程说明或会议纪要富文本 HTML）
    */
-  content?: string;
+  conferenceAgendaContent?: string;
 
   /**
    * 摘要（纪要列表展示用）
    */
-  summary?: string;
+  conferenceAgendaSummary?: string;
 
   /**
    * 主讲人/汇报人 ID（议程项）
@@ -286,6 +296,11 @@ export interface ConferenceAgendaCreate {
    * 记录人姓名（会议纪要）
    */
   recorderName?: string;
+
+  /**
+   * 附件 JSON（列表形式，由TaktFile 统一上传到服务器）
+   */
+  attachments?: string;
 
   /**
    * 扩展字段JSON
@@ -349,17 +364,17 @@ export interface ConferenceAgendaTemplate {
   /**
    * 标题（议程议题或纪要标题）
    */
-  title?: string;
+  conferenceAgendaTitle?: string;
 
   /**
    * 正文（议程说明或会议纪要富文本 HTML）
    */
-  content?: string;
+  conferenceAgendaContent?: string;
 
   /**
    * 摘要（纪要列表展示用）
    */
-  summary?: string;
+  conferenceAgendaSummary?: string;
 
   /**
    * 主讲人/汇报人 ID（议程项）
@@ -370,6 +385,11 @@ export interface ConferenceAgendaTemplate {
    * 主讲人姓名（议程项）
    */
   presenterName?: string;
+
+  /**
+   * 计划开始时间（议程项）
+   */
+  plannedStartTime?: string;
 
   /**
    * 计划时长（分钟，议程项）
@@ -385,6 +405,11 @@ export interface ConferenceAgendaTemplate {
    * 记录人姓名（会议纪要）
    */
   recorderName?: string;
+
+  /**
+   * 附件 JSON（列表形式，由TaktFile 统一上传到服务器）
+   */
+  attachments?: string;
 
   /**
    * 扩展字段JSON
@@ -416,7 +441,7 @@ export interface ConferenceAgendaImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -438,17 +463,17 @@ export interface ConferenceAgendaImport {
   /**
    * 标题（议程议题或纪要标题）
    */
-  title?: string;
+  conferenceAgendaTitle?: string;
 
   /**
    * 正文（议程说明或会议纪要富文本 HTML）
    */
-  content?: string;
+  conferenceAgendaContent?: string;
 
   /**
    * 摘要（纪要列表展示用）
    */
-  summary?: string;
+  conferenceAgendaSummary?: string;
 
   /**
    * 主讲人/汇报人 ID（议程项）
@@ -459,6 +484,11 @@ export interface ConferenceAgendaImport {
    * 主讲人姓名（议程项）
    */
   presenterName?: string;
+
+  /**
+   * 计划开始时间（议程项）
+   */
+  plannedStartTime?: string;
 
   /**
    * 计划时长（分钟，议程项）
@@ -474,6 +504,11 @@ export interface ConferenceAgendaImport {
    * 记录人姓名（会议纪要）
    */
   recorderName?: string;
+
+  /**
+   * 附件 JSON（列表形式，由TaktFile 统一上传到服务器）
+   */
+  attachments?: string;
 
   /**
    * 扩展字段JSON
@@ -522,17 +557,17 @@ export interface ConferenceAgendaExport {
   /**
    * 标题（议程议题或纪要标题）
    */
-  title: string;
+  conferenceAgendaTitle: string;
 
   /**
    * 正文（议程说明或会议纪要富文本 HTML）
    */
-  content?: string;
+  conferenceAgendaContent?: string;
 
   /**
    * 摘要（纪要列表展示用）
    */
-  summary?: string;
+  conferenceAgendaSummary?: string;
 
   /**
    * 主讲人/汇报人 ID（议程项）
@@ -563,6 +598,11 @@ export interface ConferenceAgendaExport {
    * 记录人姓名（会议纪要）
    */
   recorderName?: string;
+
+  /**
+   * 附件 JSON（列表形式，由TaktFile 统一上传到服务器）
+   */
+  attachments?: string;
 
   /**
    * 扩展字段JSON

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Bom
 // 文件名称：TaktBillOfMaterialItemI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktBillOfMaterialItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -118,13 +118,13 @@ public class TaktBillOfMaterialItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.billofmaterialitem.linenumber", "zh-HK", "行号_hk", "行号（项号，步长10：10/20/30…）"),
 
             // entity.billofmaterialitem.materialid
-            new TranslationSeedItem("entity.billofmaterialitem.materialid", "en-US", "子项物料ID_us", "子项物料ID（关联工厂物料主数据，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.billofmaterialitem.materialid", "en-US", "子项物料ID_us", "子项物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）"),
             // entity.billofmaterialitem.materialid
-            new TranslationSeedItem("entity.billofmaterialitem.materialid", "ja-JP", "子项物料ID_jp", "子项物料ID（关联工厂物料主数据，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.billofmaterialitem.materialid", "ja-JP", "子项物料ID_jp", "子项物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）"),
             // entity.billofmaterialitem.materialid
-            new TranslationSeedItem("entity.billofmaterialitem.materialid", "zh-CN", "子项物料ID", "子项物料ID（关联工厂物料主数据，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.billofmaterialitem.materialid", "zh-CN", "子项物料ID", "子项物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）"),
             // entity.billofmaterialitem.materialid
-            new TranslationSeedItem("entity.billofmaterialitem.materialid", "zh-HK", "子项物料ID_hk", "子项物料ID（关联工厂物料主数据，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.billofmaterialitem.materialid", "zh-HK", "子项物料ID_hk", "子项物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）"),
 
             // entity.billofmaterialitem.materialcode
             new TranslationSeedItem("entity.billofmaterialitem.materialcode", "en-US", "子项物料编码_us", "子项物料编码（冗余，component_item_code）"),
@@ -145,13 +145,13 @@ public class TaktBillOfMaterialItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.billofmaterialitem.usagequantity", "zh-HK", "用量_hk", "用量（quantity）"),
 
             // entity.billofmaterialitem.materialunit
-            new TranslationSeedItem("entity.billofmaterialitem.materialunit", "en-US", "单位_us", "单位（unit）"),
+            new TranslationSeedItem("entity.billofmaterialitem.materialunit", "en-US", "单位_us", "单位（字典 logistics_unit_of_measure_code）"),
             // entity.billofmaterialitem.materialunit
-            new TranslationSeedItem("entity.billofmaterialitem.materialunit", "ja-JP", "单位_jp", "单位（unit）"),
+            new TranslationSeedItem("entity.billofmaterialitem.materialunit", "ja-JP", "单位_jp", "单位（字典 logistics_unit_of_measure_code）"),
             // entity.billofmaterialitem.materialunit
-            new TranslationSeedItem("entity.billofmaterialitem.materialunit", "zh-CN", "单位", "单位（unit）"),
+            new TranslationSeedItem("entity.billofmaterialitem.materialunit", "zh-CN", "单位", "单位（字典 logistics_unit_of_measure_code）"),
             // entity.billofmaterialitem.materialunit
-            new TranslationSeedItem("entity.billofmaterialitem.materialunit", "zh-HK", "单位_hk", "单位（unit）"),
+            new TranslationSeedItem("entity.billofmaterialitem.materialunit", "zh-HK", "单位_hk", "单位（字典 logistics_unit_of_measure_code）"),
 
             // entity.billofmaterialitem.scraprate
             new TranslationSeedItem("entity.billofmaterialitem.scraprate", "en-US", "损耗率_us", "损耗率（0-100，scrap_rate）"),
@@ -181,13 +181,13 @@ public class TaktBillOfMaterialItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.billofmaterialitem.operationseq", "zh-HK", "工序号_hk", "工序号（operation_seq）"),
 
             // entity.billofmaterialitem.workcenter
-            new TranslationSeedItem("entity.billofmaterialitem.workcenter", "en-US", "工作中心_us", "工作中心（work_center）"),
+            new TranslationSeedItem("entity.billofmaterialitem.workcenter", "en-US", "工作中心_us", "工作中心（选项 TaktWorkCenters/options，DictValue=WorkCenterCode）"),
             // entity.billofmaterialitem.workcenter
-            new TranslationSeedItem("entity.billofmaterialitem.workcenter", "ja-JP", "工作中心_jp", "工作中心（work_center）"),
+            new TranslationSeedItem("entity.billofmaterialitem.workcenter", "ja-JP", "工作中心_jp", "工作中心（选项 TaktWorkCenters/options，DictValue=WorkCenterCode）"),
             // entity.billofmaterialitem.workcenter
-            new TranslationSeedItem("entity.billofmaterialitem.workcenter", "zh-CN", "工作中心", "工作中心（work_center）"),
+            new TranslationSeedItem("entity.billofmaterialitem.workcenter", "zh-CN", "工作中心", "工作中心（选项 TaktWorkCenters/options，DictValue=WorkCenterCode）"),
             // entity.billofmaterialitem.workcenter
-            new TranslationSeedItem("entity.billofmaterialitem.workcenter", "zh-HK", "工作中心_hk", "工作中心（work_center）"),
+            new TranslationSeedItem("entity.billofmaterialitem.workcenter", "zh-HK", "工作中心_hk", "工作中心（选项 TaktWorkCenters/options，DictValue=WorkCenterCode）"),
 
             // entity.billofmaterialitem.position
             new TranslationSeedItem("entity.billofmaterialitem.position", "en-US", "位号_us", "位号（position，PCB位号等）"),
@@ -217,22 +217,22 @@ public class TaktBillOfMaterialItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.billofmaterialitem.substitutepriority", "zh-HK", "替代优先级_hk", "替代优先级（组内越小越优先）"),
 
             // entity.billofmaterialitem.isoptional
-            new TranslationSeedItem("entity.billofmaterialitem.isoptional", "en-US", "是否可选件_us", "是否可选件（0=否，1=是，optional_flag）"),
+            new TranslationSeedItem("entity.billofmaterialitem.isoptional", "en-US", "是否可选件_us", "是否可选件（字典 sys_yes_no_type；0=否，1=是）"),
             // entity.billofmaterialitem.isoptional
-            new TranslationSeedItem("entity.billofmaterialitem.isoptional", "ja-JP", "是否可选件_jp", "是否可选件（0=否，1=是，optional_flag）"),
+            new TranslationSeedItem("entity.billofmaterialitem.isoptional", "ja-JP", "是否可选件_jp", "是否可选件（字典 sys_yes_no_type；0=否，1=是）"),
             // entity.billofmaterialitem.isoptional
-            new TranslationSeedItem("entity.billofmaterialitem.isoptional", "zh-CN", "是否可选件", "是否可选件（0=否，1=是，optional_flag）"),
+            new TranslationSeedItem("entity.billofmaterialitem.isoptional", "zh-CN", "是否可选件", "是否可选件（字典 sys_yes_no_type；0=否，1=是）"),
             // entity.billofmaterialitem.isoptional
-            new TranslationSeedItem("entity.billofmaterialitem.isoptional", "zh-HK", "是否可选件_hk", "是否可选件（0=否，1=是，optional_flag）"),
+            new TranslationSeedItem("entity.billofmaterialitem.isoptional", "zh-HK", "是否可选件_hk", "是否可选件（字典 sys_yes_no_type；0=否，1=是）"),
 
             // entity.billofmaterialitem.isphantom
-            new TranslationSeedItem("entity.billofmaterialitem.isphantom", "en-US", "是否虚拟件_us", "是否虚拟件（0=否，1=是，phantom_flag）"),
+            new TranslationSeedItem("entity.billofmaterialitem.isphantom", "en-US", "是否虚拟件_us", "是否虚拟件（字典 sys_yes_no_type；0=否，1=是）"),
             // entity.billofmaterialitem.isphantom
-            new TranslationSeedItem("entity.billofmaterialitem.isphantom", "ja-JP", "是否虚拟件_jp", "是否虚拟件（0=否，1=是，phantom_flag）"),
+            new TranslationSeedItem("entity.billofmaterialitem.isphantom", "ja-JP", "是否虚拟件_jp", "是否虚拟件（字典 sys_yes_no_type；0=否，1=是）"),
             // entity.billofmaterialitem.isphantom
-            new TranslationSeedItem("entity.billofmaterialitem.isphantom", "zh-CN", "是否虚拟件", "是否虚拟件（0=否，1=是，phantom_flag）"),
+            new TranslationSeedItem("entity.billofmaterialitem.isphantom", "zh-CN", "是否虚拟件", "是否虚拟件（字典 sys_yes_no_type；0=否，1=是）"),
             // entity.billofmaterialitem.isphantom
-            new TranslationSeedItem("entity.billofmaterialitem.isphantom", "zh-HK", "是否虚拟件_hk", "是否虚拟件（0=否，1=是，phantom_flag）"),
+            new TranslationSeedItem("entity.billofmaterialitem.isphantom", "zh-HK", "是否虚拟件_hk", "是否虚拟件（字典 sys_yes_no_type；0=否，1=是）"),
 
             // entity.billofmaterialitem.bom
             new TranslationSeedItem("entity.billofmaterialitem.bom", "en-US", "物料清单_us", "物料清单（BOM头）"),

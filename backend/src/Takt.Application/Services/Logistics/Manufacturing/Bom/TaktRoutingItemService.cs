@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Bom
 // 文件名称：TaktRoutingItemService.cs
-// 创建时间：2026-06-15
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：工艺路线明细应用服务实现
 // 
@@ -425,11 +425,11 @@ public class TaktRoutingItemService : TaktServiceBase, ITaktRoutingItemService
                 || (x.TimeUnit != null && x.TimeUnit.Contains(keywords))
                 || SqlFunc.ToString(x.StandardShorts).Contains(keywords)
                 || (x.PointsUnit != null && x.PointsUnit.Contains(keywords))
-                || SqlFunc.ToString(x.PointsToMinutesRate).Contains(keywords)
+                || (x.PointsToMinutesRate != null && x.PointsToMinutesRate.Contains(keywords))
                 || SqlFunc.ToString(x.ConvertedMinutes).Contains(keywords)
                 || SqlFunc.ToString(x.SetupMinutes).Contains(keywords)
                 || SqlFunc.ToString(x.TeardownMinutes).Contains(keywords)
-                || SqlFunc.ToString(x.IsQualityCheck).Contains(keywords)
+                || SqlFunc.ToString(x.IsInspection).Contains(keywords)
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
                 || (x.ProcessDescription != null && x.ProcessDescription.Contains(keywords))
                 || SqlFunc.ToString(x.ProcessSegmentType).Contains(keywords)
@@ -485,7 +485,7 @@ public class TaktRoutingItemService : TaktServiceBase, ITaktRoutingItemService
             exp = exp.And(x => x.PointsUnit != null && x.PointsUnit.Contains(queryDto.PointsUnit));
         }
 
-        if (queryDto?.PointsToMinutesRate.HasValue == true)
+        if (!string.IsNullOrEmpty(queryDto?.PointsToMinutesRate))
         {
             exp = exp.And(x => x.PointsToMinutesRate == queryDto.PointsToMinutesRate);
         }
@@ -505,9 +505,9 @@ public class TaktRoutingItemService : TaktServiceBase, ITaktRoutingItemService
             exp = exp.And(x => x.TeardownMinutes == queryDto.TeardownMinutes);
         }
 
-        if (queryDto?.IsQualityCheck.HasValue == true)
+        if (queryDto?.IsInspection.HasValue == true)
         {
-            exp = exp.And(x => x.IsQualityCheck == queryDto.IsQualityCheck);
+            exp = exp.And(x => x.IsInspection == queryDto.IsInspection);
         }
 
         if (queryDto?.SortOrder.HasValue == true)

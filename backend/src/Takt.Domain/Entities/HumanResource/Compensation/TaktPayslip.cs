@@ -24,7 +24,7 @@ namespace Takt.Domain.Entities.HumanResource.Compensation;
 public class TaktPayslip : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 员工 ID
+    /// 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [SugarColumn(ColumnName = "employee_id", ColumnDescription = "员工ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -95,23 +95,23 @@ public class TaktPayslip : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "net_amount", ColumnDescription = "实发金额", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
     public decimal NetAmount { get; set; }
     /// <summary>
-    /// 关联计算公式方案编码（核算时按 TaktSalaryFormula.set_code 加载步骤并执行）
+    /// 公式方案编码（关联 TaktSalaryFormula.SetCode，核算时按同编码多行步骤顺序执行）
     /// </summary>
     [SugarColumn(ColumnName = "formula_set_code", ColumnDescription = "公式方案编码", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
     public string? FormulaSetCode { get; set; }
-    /// <summary>
-    /// 发放状态（字典 hr_payslip_issue_status：0=待发放 1=已发放 2=已确认）
-    /// </summary>
-    [SugarColumn(ColumnName = "issue_status", ColumnDescription = "发放状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int IssueStatus { get; set; }
     /// <summary>
     /// 发放日期
     /// </summary>
     [SugarColumn(ColumnName = "issue_date", ColumnDescription = "发放日期", ColumnDataType = "date", IsNullable = true)]
     public DateTime? IssueDate { get; set; }
     /// <summary>
-    /// 关联工厂
+    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
-    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = true)]
-    public string? RelatedPlant { get; set; }
+    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
+    public string RelatedPlant { get; set; } = string.Empty;
+    /// <summary>
+    /// 发放状态（字典 hr_payslip_issue_status；0=待发放 1=已发放 2=已确认）
+    /// </summary>
+    [SugarColumn(ColumnName = "issue_status", ColumnDescription = "发放状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int IssueStatus { get; set; }
 }

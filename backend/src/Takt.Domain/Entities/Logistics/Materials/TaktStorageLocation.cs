@@ -26,58 +26,50 @@ namespace Takt.Domain.Entities.Logistics.Materials;
 public class TaktStorageLocation : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 仓库ID（主子表关系，关联 TaktWarehouse 主键）
+    /// 仓库 ID（关联 TaktWarehouse.Id，选项 TaktWarehouses/options）
     /// </summary>
     [SugarColumn(ColumnName = "warehouse_id", ColumnDescription = "仓库ID", ColumnDataType = "bigint", IsNullable = false)]
     public long WarehouseId { get; set; }
-
     /// <summary>
-    /// 工厂代码（冗余字段，便于查询；关联 TaktPlant.PlantCode）
+    /// 工厂代码（冗余；选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false, DefaultValue = "C100")]
-    public string PlantCode { get; set; } = "C100";
-
+    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
+    public string PlantCode { get; set; } = string.Empty;
     /// <summary>
-    /// 仓库编码（冗余字段，便于查询；关联 TaktWarehouse.WarehouseCode）
+    /// 仓库编码（冗余；关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）
     /// </summary>
-    [SugarColumn(ColumnName = "warehouse_code", ColumnDescription = "仓库编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "warehouse_code", ColumnDescription = "存货地点编码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string WarehouseCode { get; set; } = string.Empty;
-
     /// <summary>
-    /// 库位编码（租户+公司+工厂+仓库内唯一；序列号入出库等业务表存此编码）
+    /// 库位编码（40，租户+公司+工厂+仓库内唯一；序列号入出库等业务表存此编码）
     /// </summary>
-    [SugarColumn(ColumnName = "location_code", ColumnDescription = "库位编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "location_code", ColumnDescription = "库位编码", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
     public string LocationCode { get; set; } = string.Empty;
-
     /// <summary>
     /// 库位名称
     /// </summary>
     [SugarColumn(ColumnName = "location_name", ColumnDescription = "库位名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
     public string LocationName { get; set; } = string.Empty;
-
     /// <summary>
-    /// 库位类型（0=存储区，1=拣货区，2=暂存区，3=不良品区，4=其他）
+    /// 库位类型（字典 logistics_storage_location_type）
     /// </summary>
     [SugarColumn(ColumnName = "location_type", ColumnDescription = "库位类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int LocationType { get; set; } = 0;
-
     /// <summary>
-    /// 库位状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
     /// </summary>
-    [SugarColumn(ColumnName = "location_status", ColumnDescription = "库位状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public int LocationStatus { get; set; } = 1;
-
-    /// <summary>
-    /// 是否内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
-    /// </summary>
-    [SugarColumn(ColumnName = "is_built_in", ColumnDescription = "是否内置", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    [SugarColumn(ColumnName = "is_built_in", ColumnDescription = "内置", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsBuiltIn { get; set; } = 0;
-
     /// <summary>
     /// 排序号（越小越靠前）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; } = 0;
+    /// <summary>
+    /// 库位状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// </summary>
+    [SugarColumn(ColumnName = "location_status", ColumnDescription = "库位状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
+    public int LocationStatus { get; set; } = 1;
 
     /// <summary>
     /// 所属仓库（主子表关系）

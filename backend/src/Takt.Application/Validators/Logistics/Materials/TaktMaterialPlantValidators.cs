@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Materials
 // 文件名称：TaktMaterialPlantValidators.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：MaterialPlant 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktMaterialPlant 生成，请按需审阅）
 // 
@@ -44,46 +44,48 @@ public class TaktMaterialPlantCreateValidator : AbstractValidator<TaktMaterialPl
         RuleFor(x => x.MaterialName)
             .NotEmpty().WithMessage("物料名称不能为空")
             .MaximumLength(40).WithMessage("物料名称长度不能超过40个字符");
-        RuleFor(x => x.MaterialSpecification)
-            .MaximumLength(80).WithMessage("物料规格长度不能超过80个字符");
-        RuleFor(x => x.MaterialDescription)
-            .MaximumLength(80).WithMessage("物料描述长度不能超过80个字符");
         RuleFor(x => x.IndustrySector)
-            .MaximumLength(50).WithMessage("行业领域长度不能超过50个字符");
-        RuleFor(x => x.MaterialHierarchy)
-            .MaximumLength(200).WithMessage("品目阶层长度不能超过200个字符");
-        RuleFor(x => x.MaterialGroupCode)
-            .MaximumLength(20).WithMessage("品目组代码长度不能超过20个字符");
-        RuleFor(x => x.MaterialModel)
-            .MaximumLength(100).WithMessage("物料型号长度不能超过100个字符");
-        RuleFor(x => x.MaterialBrand)
-            .MaximumLength(100).WithMessage("物料品牌长度不能超过100个字符");
+            .NotEmpty().WithMessage("行业领域不能为空")
+            .MaximumLength(1).WithMessage("行业领域长度不能超过1个字符");
+        RuleFor(x => x.MaterialGroup)
+            .NotEmpty().WithMessage("物料组不能为空")
+            .MaximumLength(20).WithMessage("物料组长度不能超过20个字符");
+        RuleFor(x => x.MaterialType)
+            .NotEmpty().WithMessage("物料类型不能为空")
+            .MaximumLength(4).WithMessage("物料类型长度不能超过4个字符");
         RuleFor(x => x.BaseUnit)
             .NotEmpty().WithMessage("基本单位不能为空")
-            .MaximumLength(20).WithMessage("基本单位长度不能超过20个字符");
+            .MaximumLength(5).WithMessage("基本单位长度不能超过5个字符");
         RuleFor(x => x.PurchaseGroup)
-            .MaximumLength(50).WithMessage("采购组编码长度不能超过50个字符");
-        RuleFor(x => x.Manufacturer)
-            .MaximumLength(200).WithMessage("制造商长度不能超过200个字符");
-        RuleFor(x => x.ManufacturerPartNumber)
-            .MaximumLength(100).WithMessage("制造商零件编号长度不能超过100个字符");
-        RuleFor(x => x.CurrencyCode)
-            .NotEmpty().WithMessage("币种代码不能为空")
-            .MaximumLength(10).WithMessage("币种代码长度不能超过10个字符");
-        RuleFor(x => x.ValuationCategory)
-            .MaximumLength(50).WithMessage("评估类别代码长度不能超过50个字符");
-        RuleFor(x => x.DifferenceCode)
-            .MaximumLength(50).WithMessage("差异码长度不能超过50个字符");
+            .NotEmpty().WithMessage("采购组不能为空")
+            .MaximumLength(3).WithMessage("采购组长度不能超过3个字符");
+        RuleFor(x => x.PurchaseType)
+            .NotEmpty().WithMessage("采购类型不能为空")
+            .MaximumLength(1).WithMessage("采购类型长度不能超过1个字符");
+        RuleFor(x => x.Currency)
+            .NotEmpty().WithMessage("币种不能为空")
+            .MaximumLength(3).WithMessage("币种长度不能超过3个字符");
+        RuleFor(x => x.PriceControl)
+            .NotEmpty().WithMessage("价格控制不能为空")
+            .MaximumLength(1).WithMessage("价格控制长度不能超过1个字符");
+        RuleFor(x => x.Valuation)
+            .NotEmpty().WithMessage("评估类别不能为空")
+            .MaximumLength(4).WithMessage("评估类别长度不能超过4个字符");
         RuleFor(x => x.ProfitCenter)
-            .MaximumLength(50).WithMessage("利润中心长度不能超过50个字符");
+            .NotEmpty().WithMessage("利润中心不能为空")
+            .MaximumLength(4).WithMessage("利润中心长度不能超过4个字符");
         RuleFor(x => x.ProductionLocation)
-            .MaximumLength(50).WithMessage("生产地点长度不能超过50个字符");
+            .NotEmpty().WithMessage("生产仓储不能为空")
+            .MaximumLength(4).WithMessage("生产仓储长度不能超过4个字符");
         RuleFor(x => x.PurchasingLocation)
-            .MaximumLength(50).WithMessage("采购地点长度不能超过50个字符");
-        RuleFor(x => x.MaterialAttributes)
-            .MaximumLength(4000).WithMessage("物料属性长度不能超过4000个字符");
+            .NotEmpty().WithMessage("采购仓储不能为空")
+            .MaximumLength(4).WithMessage("采购仓储长度不能超过4个字符");
+        RuleFor(x => x.StorageLocation)
+            .NotEmpty().WithMessage("库位不能为空")
+            .MaximumLength(40).WithMessage("库位长度不能超过40个字符");
         RuleFor(x => x.IsEndOfLife)
-            .MaximumLength(10).WithMessage("停产状态长度不能超过10个字符");
+            .NotEmpty().WithMessage("停产状态不能为空")
+            .MaximumLength(4).WithMessage("停产状态长度不能超过4个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -107,6 +109,67 @@ public class TaktMaterialPlantUpdateValidator : AbstractValidator<TaktMaterialPl
     {
         RuleFor(x => x.MaterialPlantId)
             .GreaterThan(0).WithMessage("MaterialPlantID无效");
+        RuleFor(x => x.TenantCode)
+            .NotEmpty().WithMessage("租户编码不能为空")
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.CompanyCode)
+            .NotEmpty().WithMessage("公司代码不能为空")
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.PlantCode)
+            .NotEmpty().WithMessage("工厂代码不能为空")
+            .MaximumLength(50).WithMessage("工厂代码长度不能超过50个字符");
+        RuleFor(x => x.MaterialCode)
+            .NotEmpty().WithMessage("物料编码不能为空")
+            .MaximumLength(20).WithMessage("物料编码长度不能超过20个字符");
+        RuleFor(x => x.MaterialName)
+            .NotEmpty().WithMessage("物料名称不能为空")
+            .MaximumLength(40).WithMessage("物料名称长度不能超过40个字符");
+        RuleFor(x => x.IndustrySector)
+            .NotEmpty().WithMessage("行业领域不能为空")
+            .MaximumLength(1).WithMessage("行业领域长度不能超过1个字符");
+        RuleFor(x => x.MaterialGroup)
+            .NotEmpty().WithMessage("物料组不能为空")
+            .MaximumLength(20).WithMessage("物料组长度不能超过20个字符");
+        RuleFor(x => x.MaterialType)
+            .NotEmpty().WithMessage("物料类型不能为空")
+            .MaximumLength(4).WithMessage("物料类型长度不能超过4个字符");
+        RuleFor(x => x.BaseUnit)
+            .NotEmpty().WithMessage("基本单位不能为空")
+            .MaximumLength(5).WithMessage("基本单位长度不能超过5个字符");
+        RuleFor(x => x.PurchaseGroup)
+            .NotEmpty().WithMessage("采购组不能为空")
+            .MaximumLength(3).WithMessage("采购组长度不能超过3个字符");
+        RuleFor(x => x.PurchaseType)
+            .NotEmpty().WithMessage("采购类型不能为空")
+            .MaximumLength(1).WithMessage("采购类型长度不能超过1个字符");
+        RuleFor(x => x.Currency)
+            .NotEmpty().WithMessage("币种不能为空")
+            .MaximumLength(3).WithMessage("币种长度不能超过3个字符");
+        RuleFor(x => x.PriceControl)
+            .NotEmpty().WithMessage("价格控制不能为空")
+            .MaximumLength(1).WithMessage("价格控制长度不能超过1个字符");
+        RuleFor(x => x.Valuation)
+            .NotEmpty().WithMessage("评估类别不能为空")
+            .MaximumLength(4).WithMessage("评估类别长度不能超过4个字符");
+        RuleFor(x => x.ProfitCenter)
+            .NotEmpty().WithMessage("利润中心不能为空")
+            .MaximumLength(4).WithMessage("利润中心长度不能超过4个字符");
+        RuleFor(x => x.ProductionLocation)
+            .NotEmpty().WithMessage("生产仓储不能为空")
+            .MaximumLength(4).WithMessage("生产仓储长度不能超过4个字符");
+        RuleFor(x => x.PurchasingLocation)
+            .NotEmpty().WithMessage("采购仓储不能为空")
+            .MaximumLength(4).WithMessage("采购仓储长度不能超过4个字符");
+        RuleFor(x => x.StorageLocation)
+            .NotEmpty().WithMessage("库位不能为空")
+            .MaximumLength(40).WithMessage("库位长度不能超过40个字符");
+        RuleFor(x => x.IsEndOfLife)
+            .NotEmpty().WithMessage("停产状态不能为空")
+            .MaximumLength(4).WithMessage("停产状态长度不能超过4个字符");
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
     }
 }
 
@@ -137,23 +200,48 @@ public class TaktMaterialPlantImportValidator : AbstractValidator<TaktMaterialPl
         RuleFor(x => x.MaterialName)
             .NotEmpty().WithMessage("物料名称不能为空")
             .MaximumLength(40).WithMessage("物料名称长度不能超过40个字符");
-        RuleFor(x => x.MaterialSpecification)
-            .MaximumLength(80).WithMessage("物料规格长度不能超过80个字符").When(x => !string.IsNullOrWhiteSpace(x.MaterialSpecification));
-        RuleFor(x => x.MaterialDescription)
-            .MaximumLength(80).WithMessage("物料描述长度不能超过80个字符").When(x => !string.IsNullOrWhiteSpace(x.MaterialDescription));
         RuleFor(x => x.IndustrySector)
-            .MaximumLength(50).WithMessage("行业领域长度不能超过50个字符").When(x => !string.IsNullOrWhiteSpace(x.IndustrySector));
-        RuleFor(x => x.MaterialHierarchy)
-            .MaximumLength(200).WithMessage("品目阶层长度不能超过200个字符").When(x => !string.IsNullOrWhiteSpace(x.MaterialHierarchy));
-        RuleFor(x => x.MaterialGroupCode)
-            .MaximumLength(20).WithMessage("品目组代码长度不能超过20个字符").When(x => !string.IsNullOrWhiteSpace(x.MaterialGroupCode));
-        RuleFor(x => x.MaterialModel)
-            .MaximumLength(100).WithMessage("物料型号长度不能超过100个字符").When(x => !string.IsNullOrWhiteSpace(x.MaterialModel));
-        RuleFor(x => x.MaterialBrand)
-            .MaximumLength(100).WithMessage("物料品牌长度不能超过100个字符").When(x => !string.IsNullOrWhiteSpace(x.MaterialBrand));
+            .NotEmpty().WithMessage("行业领域不能为空")
+            .MaximumLength(1).WithMessage("行业领域长度不能超过1个字符");
+        RuleFor(x => x.MaterialGroup)
+            .NotEmpty().WithMessage("物料组不能为空")
+            .MaximumLength(20).WithMessage("物料组长度不能超过20个字符");
+        RuleFor(x => x.MaterialType)
+            .NotEmpty().WithMessage("物料类型不能为空")
+            .MaximumLength(4).WithMessage("物料类型长度不能超过4个字符");
         RuleFor(x => x.BaseUnit)
             .NotEmpty().WithMessage("基本单位不能为空")
-            .MaximumLength(20).WithMessage("基本单位长度不能超过20个字符");
+            .MaximumLength(5).WithMessage("基本单位长度不能超过5个字符");
+        RuleFor(x => x.PurchaseGroup)
+            .NotEmpty().WithMessage("采购组不能为空")
+            .MaximumLength(3).WithMessage("采购组长度不能超过3个字符");
+        RuleFor(x => x.PurchaseType)
+            .NotEmpty().WithMessage("采购类型不能为空")
+            .MaximumLength(1).WithMessage("采购类型长度不能超过1个字符");
+        RuleFor(x => x.Currency)
+            .NotEmpty().WithMessage("币种不能为空")
+            .MaximumLength(3).WithMessage("币种长度不能超过3个字符");
+        RuleFor(x => x.PriceControl)
+            .NotEmpty().WithMessage("价格控制不能为空")
+            .MaximumLength(1).WithMessage("价格控制长度不能超过1个字符");
+        RuleFor(x => x.Valuation)
+            .NotEmpty().WithMessage("评估类别不能为空")
+            .MaximumLength(4).WithMessage("评估类别长度不能超过4个字符");
+        RuleFor(x => x.ProfitCenter)
+            .NotEmpty().WithMessage("利润中心不能为空")
+            .MaximumLength(4).WithMessage("利润中心长度不能超过4个字符");
+        RuleFor(x => x.ProductionLocation)
+            .NotEmpty().WithMessage("生产仓储不能为空")
+            .MaximumLength(4).WithMessage("生产仓储长度不能超过4个字符");
+        RuleFor(x => x.PurchasingLocation)
+            .NotEmpty().WithMessage("采购仓储不能为空")
+            .MaximumLength(4).WithMessage("采购仓储长度不能超过4个字符");
+        RuleFor(x => x.StorageLocation)
+            .NotEmpty().WithMessage("库位不能为空")
+            .MaximumLength(40).WithMessage("库位长度不能超过40个字符");
+        RuleFor(x => x.IsEndOfLife)
+            .NotEmpty().WithMessage("停产状态不能为空")
+            .MaximumLength(4).WithMessage("停产状态长度不能超过4个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

@@ -19,6 +19,10 @@ namespace Takt.Domain.Entities.Statistics.Logging;
 /// <summary>
 /// Quartz 任务执行日志实体
 /// </summary>
+/// <remarks>
+/// 业务字符串字段均非空：无参数/无错误/无消息时用空串。
+/// JobGroup / TaskType 存字典 DictValue（sys_quartz_job_group、sys_quartz_task_type），由前端选择后写入任务并快照到日志。
+/// </remarks>
 [SugarTable("takt_statistics_logging_quartz_log", "任务执行日志表")]
 [SugarIndex("ix_quartz_log_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_quartz_log_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
@@ -37,20 +41,20 @@ public class TaktQuartzLog : TaktCompanyEntityBase
     /// <summary>
     /// 任务名称（执行时快照）
     /// </summary>
-    [SugarColumn(ColumnName = "task_name", ColumnDescription = "任务名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = false, DefaultValue = "''")]
+    [SugarColumn(ColumnName = "task_name", ColumnDescription = "任务名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
     public string TaskName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 任务组名（执行时快照）
+    /// 任务组名（执行时快照；字典 sys_quartz_job_group 的 DictValue）
     /// </summary>
-    [SugarColumn(ColumnName = "job_group", ColumnDescription = "任务组名", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktQuartzLogJobGroup JobGroup { get; set; } = TaktQuartzLogJobGroup.Unknown;
+    [SugarColumn(ColumnName = "job_group", ColumnDescription = "任务组名", ColumnDataType = "varchar", Length = 40, IsNullable = false, DefaultValue = "default")]
+    public string JobGroup { get; set; } = "default";
 
     /// <summary>
-    /// 任务类型（1=程序集 2=网络请求 3=SQL语句）
+    /// 任务类型（字典 sys_quartz_task_type 的 DictValue，如 assembly、http、sql）
     /// </summary>
-    [SugarColumn(ColumnName = "task_type", ColumnDescription = "任务类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public TaktQuartzTaskType TaskType { get; set; } = TaktQuartzTaskType.Assembly;
+    [SugarColumn(ColumnName = "task_type", ColumnDescription = "任务类型", ColumnDataType = "varchar", Length = 40, IsNullable = false, DefaultValue = "assembly")]
+    public string TaskType { get; set; } = "assembly";
 
     /// <summary>
     /// 执行时间
@@ -65,34 +69,34 @@ public class TaktQuartzLog : TaktCompanyEntityBase
     public long ExecuteDuration { get; set; }
 
     /// <summary>
-    /// 执行参数
+    /// 执行参数（无参数为空串）
     /// </summary>
-    [SugarColumn(ColumnName = "execute_params", ColumnDescription = "执行参数", ColumnDataType = "nvarchar", Length = 1000, IsNullable = true)]
-    public string? ExecuteParams { get; set; }
+    [SugarColumn(ColumnName = "execute_params", ColumnDescription = "执行参数", ColumnDataType = "nvarchar", Length = 1000, IsNullable = false)]
+    public string ExecuteParams { get; set; } = string.Empty;
 
     /// <summary>
-    /// 执行消息
+    /// 执行消息（无消息为空串）
     /// </summary>
-    [SugarColumn(ColumnName = "execute_message", ColumnDescription = "执行消息", ColumnDataType = "nvarchar", Length = 2000, IsNullable = true)]
-    public string? ExecuteMessage { get; set; }
+    [SugarColumn(ColumnName = "execute_message", ColumnDescription = "执行消息", ColumnDataType = "nvarchar", Length = 2000, IsNullable = false)]
+    public string ExecuteMessage { get; set; } = string.Empty;
 
     /// <summary>
-    /// 错误信息
+    /// 错误信息（成功为空串）
     /// </summary>
-    [SugarColumn(ColumnName = "error_info", ColumnDescription = "错误信息", ColumnDataType = "nvarchar", Length = 2000, IsNullable = true)]
-    public string? ErrorInfo { get; set; }
+    [SugarColumn(ColumnName = "error_info", ColumnDescription = "错误信息", ColumnDataType = "nvarchar", Length = 2000, IsNullable = false)]
+    public string ErrorInfo { get; set; } = string.Empty;
 
     /// <summary>
     /// 执行机器 IP
     /// </summary>
-    [SugarColumn(ColumnName = "execute_ip", ColumnDescription = "执行机器IP", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
-    public string? ExecuteIp { get; set; }
+    [SugarColumn(ColumnName = "execute_ip", ColumnDescription = "执行机器IP", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    public string ExecuteIp { get; set; } = string.Empty;
 
     /// <summary>
     /// 执行机器名
     /// </summary>
-    [SugarColumn(ColumnName = "execute_host", ColumnDescription = "执行机器名", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
-    public string? ExecuteHost { get; set; }
+    [SugarColumn(ColumnName = "execute_host", ColumnDescription = "执行机器名", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
+    public string ExecuteHost { get; set; } = string.Empty;
 
     /// <summary>
     /// 执行状态（0=失败，1=成功）

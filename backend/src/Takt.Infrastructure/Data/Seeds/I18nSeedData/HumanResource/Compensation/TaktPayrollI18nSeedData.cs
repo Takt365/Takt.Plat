@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Compensation
 // 文件名称：TaktPayrollI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPayroll 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -109,22 +109,22 @@ public class TaktPayrollI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.payroll.name", "zh-HK", "薪酬体系名称_hk", "薪酬体系名称"),
 
             // entity.payroll.payscaleid
-            new TranslationSeedItem("entity.payroll.payscaleid", "en-US", "薪级表ID_us", "关联薪级表 ID"),
+            new TranslationSeedItem("entity.payroll.payscaleid", "en-US", "薪级表ID_us", "薪级表（关联 TaktPayScale.Id，选项 TaktPayScales/options）"),
             // entity.payroll.payscaleid
-            new TranslationSeedItem("entity.payroll.payscaleid", "ja-JP", "薪级表ID_jp", "关联薪级表 ID"),
+            new TranslationSeedItem("entity.payroll.payscaleid", "ja-JP", "薪级表ID_jp", "薪级表（关联 TaktPayScale.Id，选项 TaktPayScales/options）"),
             // entity.payroll.payscaleid
-            new TranslationSeedItem("entity.payroll.payscaleid", "zh-CN", "薪级表ID", "关联薪级表 ID"),
+            new TranslationSeedItem("entity.payroll.payscaleid", "zh-CN", "薪级表ID", "薪级表（关联 TaktPayScale.Id，选项 TaktPayScales/options）"),
             // entity.payroll.payscaleid
-            new TranslationSeedItem("entity.payroll.payscaleid", "zh-HK", "薪级表ID_hk", "关联薪级表 ID"),
+            new TranslationSeedItem("entity.payroll.payscaleid", "zh-HK", "薪级表ID_hk", "薪级表（关联 TaktPayScale.Id，选项 TaktPayScales/options）"),
 
             // entity.payroll.formulasetcode
-            new TranslationSeedItem("entity.payroll.formulasetcode", "en-US", "公式方案编码_us", "默认公式方案编码（整单工资核算，见 TaktSalaryFormula.set_code）"),
+            new TranslationSeedItem("entity.payroll.formulasetcode", "en-US", "公式方案编码_us", "公式方案编码（关联 TaktSalaryFormula.SetCode，同编码多行步骤；整单工资核算时使用）"),
             // entity.payroll.formulasetcode
-            new TranslationSeedItem("entity.payroll.formulasetcode", "ja-JP", "公式方案编码_jp", "默认公式方案编码（整单工资核算，见 TaktSalaryFormula.set_code）"),
+            new TranslationSeedItem("entity.payroll.formulasetcode", "ja-JP", "公式方案编码_jp", "公式方案编码（关联 TaktSalaryFormula.SetCode，同编码多行步骤；整单工资核算时使用）"),
             // entity.payroll.formulasetcode
-            new TranslationSeedItem("entity.payroll.formulasetcode", "zh-CN", "公式方案编码", "默认公式方案编码（整单工资核算，见 TaktSalaryFormula.set_code）"),
+            new TranslationSeedItem("entity.payroll.formulasetcode", "zh-CN", "公式方案编码", "公式方案编码（关联 TaktSalaryFormula.SetCode，同编码多行步骤；整单工资核算时使用）"),
             // entity.payroll.formulasetcode
-            new TranslationSeedItem("entity.payroll.formulasetcode", "zh-HK", "公式方案编码_hk", "默认公式方案编码（整单工资核算，见 TaktSalaryFormula.set_code）"),
+            new TranslationSeedItem("entity.payroll.formulasetcode", "zh-HK", "公式方案编码_hk", "公式方案编码（关联 TaktSalaryFormula.SetCode，同编码多行步骤；整单工资核算时使用）"),
 
             // entity.payroll.effectivedate
             new TranslationSeedItem("entity.payroll.effectivedate", "en-US", "生效日期_us", "生效日期"),
@@ -144,15 +144,6 @@ public class TaktPayrollI18nSeedData : ITaktSeedDataCoordinator
             // entity.payroll.expirydate
             new TranslationSeedItem("entity.payroll.expirydate", "zh-HK", "失效日期_hk", "失效日期"),
 
-            // entity.payroll.status
-            new TranslationSeedItem("entity.payroll.status", "en-US", "状态_us", "状态（字典 sys_normal_disable_status）"),
-            // entity.payroll.status
-            new TranslationSeedItem("entity.payroll.status", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable_status）"),
-            // entity.payroll.status
-            new TranslationSeedItem("entity.payroll.status", "zh-CN", "状态", "状态（字典 sys_normal_disable_status）"),
-            // entity.payroll.status
-            new TranslationSeedItem("entity.payroll.status", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable_status）"),
-
             // entity.payroll.description
             new TranslationSeedItem("entity.payroll.description", "en-US", "说明_us", "说明"),
             // entity.payroll.description
@@ -163,13 +154,22 @@ public class TaktPayrollI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.payroll.description", "zh-HK", "说明_hk", "说明"),
 
             // entity.payroll.relatedplant
-            new TranslationSeedItem("entity.payroll.relatedplant", "en-US", "关联工厂_us", "关联工厂"),
+            new TranslationSeedItem("entity.payroll.relatedplant", "en-US", "关联工厂_us", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
             // entity.payroll.relatedplant
-            new TranslationSeedItem("entity.payroll.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂"),
+            new TranslationSeedItem("entity.payroll.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
             // entity.payroll.relatedplant
-            new TranslationSeedItem("entity.payroll.relatedplant", "zh-CN", "关联工厂", "关联工厂"),
+            new TranslationSeedItem("entity.payroll.relatedplant", "zh-CN", "关联工厂", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
             // entity.payroll.relatedplant
-            new TranslationSeedItem("entity.payroll.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂"),
+            new TranslationSeedItem("entity.payroll.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+
+            // entity.payroll.status
+            new TranslationSeedItem("entity.payroll.status", "en-US", "状态_us", "状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）"),
+            // entity.payroll.status
+            new TranslationSeedItem("entity.payroll.status", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）"),
+            // entity.payroll.status
+            new TranslationSeedItem("entity.payroll.status", "zh-CN", "状态", "状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）"),
+            // entity.payroll.status
+            new TranslationSeedItem("entity.payroll.status", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）"),
         };
     }
 

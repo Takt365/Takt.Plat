@@ -124,10 +124,21 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('title')">
+      <div v-show="isFieldVisible('announcementCode')">
+      <a-form-item :label="t('entity.announcement.code')">
+        <a-input
+          v-model:value="advancedQueryForm.announcementCode"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.announcement.code') })"
+          show-count
+          :maxlength="50"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('announcementTitle')">
       <a-form-item :label="t('entity.announcement.title')">
         <a-input
-          v-model:value="advancedQueryForm.title"
+          v-model:value="advancedQueryForm.announcementTitle"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.announcement.title') })"
           show-count
           :maxlength="200"
@@ -193,8 +204,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.publishTimeStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.announcement.publishtimestart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -204,8 +214,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.publishTimeEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.announcement.publishtimeend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -242,8 +251,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.expireTimeStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.announcement.expiretimestart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -253,8 +261,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.expireTimeEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.announcement.expiretimeend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -312,10 +319,11 @@
       </div>
       <div v-show="isFieldVisible('approvalStatus')">
       <a-form-item :label="t('entity.announcement.approvalstatus')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.approvalStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.announcement.approvalstatus') })"
-          style="width: 100%"
+          dict-type="sys_approval_status"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.announcement.approvalstatus') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -400,7 +408,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -411,7 +419,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -557,7 +565,8 @@ const formRef = ref()
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
-  title: '',
+  announcementCode: '',
+  announcementTitle: '',
   announcementType: undefined as number | undefined,
   content: '',
   summary: '',
@@ -590,7 +599,8 @@ const advancedQueryForm = ref({
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'title', label: t('entity.announcement.title') },
+  { key: 'announcementCode', label: t('entity.announcement.code') },
+  { key: 'announcementTitle', label: t('entity.announcement.title') },
   { key: 'announcementType', label: t('entity.announcement.type') },
   { key: 'content', label: t('entity.announcement.content') },
   { key: 'summary', label: t('entity.announcement.summary') },
@@ -662,7 +672,8 @@ function buildListQuery(overrides?: Partial<AnnouncementQuery>): AnnouncementQue
       query[key] = v as never
     }
   }
-  assignTrimmed('title', form.title)
+  assignTrimmed('announcementCode', form.announcementCode)
+  assignTrimmed('announcementTitle', form.announcementTitle)
   if (form.announcementType !== undefined && form.announcementType !== null) {
     query.announcementType = form.announcementType
   }
@@ -734,13 +745,22 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getAnnouncementField(record, 'announcementId') ?? ''
   },
   {
-    title: t('entity.announcement.title'),
-    dataIndex: 'title',
-    key: 'title',
+    title: t('entity.announcement.code'),
+    dataIndex: 'announcementCode',
+    key: 'announcementCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getAnnouncementField(record, 'title') ?? ''
+    customRender: ({ record }: { record: any }) => getAnnouncementField(record, 'announcementCode') ?? ''
+  },
+  {
+    title: t('entity.announcement.title'),
+    dataIndex: 'announcementTitle',
+    key: 'announcementTitle',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getAnnouncementField(record, 'announcementTitle') ?? ''
   },
   {
     title: t('entity.announcement.type'),
@@ -918,7 +938,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: Announcement, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getAnnouncementId(selectedRow.value) === getAnnouncementId(record)) {
+    } else if (selectedRow.value && getAnnouncementId(selectedRow.value) === getAnnouncementId(record)) {
       selectedRow.value = null
     }
   },
@@ -975,7 +995,8 @@ function handleSearch() {
 function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
-  title: '',
+  announcementCode: '',
+  announcementTitle: '',
   announcementType: undefined as number | undefined,
   content: '',
   summary: '',
@@ -1175,7 +1196,8 @@ function handleAdvancedQuerySubmit() {
 
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
-  title: '',
+  announcementCode: '',
+  announcementTitle: '',
   announcementType: undefined as number | undefined,
   content: '',
   summary: '',

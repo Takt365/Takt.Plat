@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Performance
 // 文件名称：TaktPerfCycleService.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：绩效周期日程应用服务实现
 // 
@@ -304,7 +304,7 @@ public class TaktPerfCycleService : TaktServiceBase, ITaktPerfCycleService
                 || SqlFunc.ToString(x.CycleYear).Contains(keywords)
                 || SqlFunc.ToString(x.CycleSequence).Contains(keywords)
                 || (x.ApplicableDepartment != null && x.ApplicableDepartment.Contains(keywords))
-                || (x.Description != null && x.Description.Contains(keywords))
+                || (x.PerfCycleDescription != null && x.PerfCycleDescription.Contains(keywords))
                 || SqlFunc.ToString(x.CycleScheduleStatus).Contains(keywords)
                 || (x.RelatedPlant != null && x.RelatedPlant.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
@@ -350,9 +350,9 @@ public class TaktPerfCycleService : TaktServiceBase, ITaktPerfCycleService
             exp = exp.And(x => x.ApplicableDepartment != null && x.ApplicableDepartment.Contains(queryDto.ApplicableDepartment));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Description))
+        if (!string.IsNullOrEmpty(queryDto?.PerfCycleDescription))
         {
-            exp = exp.And(x => x.Description != null && x.Description.Contains(queryDto.Description));
+            exp = exp.And(x => x.PerfCycleDescription != null && x.PerfCycleDescription.Contains(queryDto.PerfCycleDescription));
         }
 
         if (queryDto?.CycleScheduleStatus.HasValue == true)

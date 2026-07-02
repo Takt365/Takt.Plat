@@ -93,7 +93,7 @@
                   v-model:value="formState.workCenterCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.changeovermatrix.workcentercode') })"
                   show-count
-                  :maxlength="40"
+                  :maxlength="8"
                   allow-clear
                   :disabled="!!formData?.changeoverMatrixId"
                 />

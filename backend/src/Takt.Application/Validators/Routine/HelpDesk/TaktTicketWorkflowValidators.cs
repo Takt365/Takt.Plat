@@ -25,7 +25,7 @@ public class TaktTicketSubmitValidator : AbstractValidator<TaktTicketSubmitDto>
     /// </summary>
     public TaktTicketSubmitValidator()
     {
-        RuleFor(x => x.Title)
+        RuleFor(x => x.TicketTitle)
             .NotEmpty().WithMessage("工单标题不能为空")
             .MaximumLength(200).WithMessage("工单标题长度不能超过200个字符");
         RuleFor(x => x.CategoryCode)
@@ -53,7 +53,7 @@ public class TaktTicketCreateFromChannelValidator : AbstractValidator<TaktTicket
     /// </summary>
     public TaktTicketCreateFromChannelValidator()
     {
-        RuleFor(x => x.Title)
+        RuleFor(x => x.TicketTitle)
             .NotEmpty().WithMessage("工单标题不能为空")
             .MaximumLength(200).WithMessage("工单标题长度不能超过200个字符");
         RuleFor(x => x.CategoryCode)
@@ -91,22 +91,7 @@ public class TaktTicketWorkflowActionValidator : AbstractValidator<TaktTicketWor
     }
 }
 
-/// <summary>
-/// 工单回复验证器
-/// </summary>
-public class TaktTicketReplyCreateValidator : AbstractValidator<TaktTicketReplyCreateDto>
-{
-    /// <summary>
-    /// 初始化校验规则
-    /// </summary>
-    public TaktTicketReplyCreateValidator()
-    {
-        RuleFor(x => x.TicketId)
-            .GreaterThan(0).WithMessage("工单ID无效");
-        RuleFor(x => x.Content)
-            .NotEmpty().WithMessage("回复内容不能为空");
-    }
-}
+
 
 /// <summary>
 /// 工单回复查询验证器
@@ -119,6 +104,27 @@ public class TaktTicketReplyQueryValidator : AbstractValidator<TaktTicketReplyQu
     public TaktTicketReplyQueryValidator()
     {
         RuleFor(x => x.TicketId)
+            .Must(id => id.HasValue && id.Value > 0)
+            .WithMessage("工单ID无效");
+    }
+}
+
+/// <summary>
+/// 工单会话回复验证器（工作流入口）
+/// </summary>
+public class TaktTicketSessionReplyCreateValidator : AbstractValidator<TaktTicketSessionReplyCreateDto>
+{
+    /// <summary>
+    /// 初始化校验规则
+    /// </summary>
+    public TaktTicketSessionReplyCreateValidator()
+    {
+        RuleFor(x => x.TicketId)
             .GreaterThan(0).WithMessage("工单ID无效");
+        RuleFor(x => x.TicketContent)
+            .NotEmpty().WithMessage("回复内容不能为空")
+            .MaximumLength(4000).WithMessage("回复内容长度不能超过4000个字符");
+        RuleFor(x => x.IsInternal)
+            .InclusiveBetween(0, 1).WithMessage("内部备注标识须为0或1");
     }
 }

@@ -33,7 +33,7 @@ public interface ITaktVocabularyFilter
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// 过滤文本：命中敏感词时按词条 ReplaceText 替换，为空则用等长 * 替换
+    /// 过滤文本：命中敏感词时按词条 ReplaceText 替换，默认为 *，为空时回退为等长 *
     /// </summary>
     /// <param name="text">待过滤文本</param>
     /// <param name="minFilterLevel">最低过滤等级；为空时匹配全部启用词条</param>

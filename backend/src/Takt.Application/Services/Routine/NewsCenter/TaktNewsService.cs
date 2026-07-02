@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Routine.NewsCenter
 // 文件名称：TaktNewsService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：新闻中心应用服务实现
 // 
@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Services.Routine.NewsCenter;
 
@@ -115,14 +114,14 @@ public class TaktNewsService : TaktServiceBase, ITaktNewsService
         return dto;    }
 
     /// <summary>
-    /// 获取新闻中心主选项列表
+    /// 获取新闻中心选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
     public async Task<List<TaktSelectOption>> GetNewsOptionsAsync()
     {
         EnsureThreeLayerContext();
         var list = await _newsRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.NewsStatus == 1,
             x => x.DeptName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
@@ -150,9 +149,9 @@ public class TaktNewsService : TaktServiceBase, ITaktNewsService
         if (entity.SortOrder <= 0)
         {
             var maxSort = await _newsRepository.GetMaxIntAsync(
-                x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.FlowInstanceId == entity.FlowInstanceId,
+                x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.DeptId == entity.DeptId,
                 x => x.SortOrder);
-            entity.SortOrder = _sortOrderGenerator.GenerateNextForMaster(entity.FlowInstanceId.GetValueOrDefault(), maxSort);
+            entity.SortOrder = _sortOrderGenerator.GenerateNextForMaster(entity.DeptId.GetValueOrDefault(), maxSort);
         }
         entity = await _newsRepository.CreateAsync(entity);
                 await SaveNewsChildrenAsync(entity, dto);
@@ -314,9 +313,9 @@ public class TaktNewsService : TaktServiceBase, ITaktNewsService
                 if (entity.SortOrder <= 0)
                 {
                     var maxSort = await _newsRepository.GetMaxIntAsync(
-                        x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.FlowInstanceId == entity.FlowInstanceId,
+                        x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.DeptId == entity.DeptId,
                         x => x.SortOrder);
-                    entity.SortOrder = _sortOrderGenerator.GenerateNextForMaster(entity.FlowInstanceId.GetValueOrDefault(), maxSort);
+                    entity.SortOrder = _sortOrderGenerator.GenerateNextForMaster(entity.DeptId.GetValueOrDefault(), maxSort);
                 }
                 await _newsRepository.CreateAsync(entity);
                 success += 1;
@@ -599,18 +598,17 @@ public class TaktNewsService : TaktServiceBase, ITaktNewsService
                 || SqlFunc.ToString(x.NewsCategory).Contains(keywords)
                 || (x.NewsTitle != null && x.NewsTitle.Contains(keywords))
                 || (x.NewsSummary != null && x.NewsSummary.Contains(keywords))
-                || (x.Tags != null && x.Tags.Contains(keywords))
+                || (x.NewsTags != null && x.NewsTags.Contains(keywords))
                 || (x.NewsContent != null && x.NewsContent.Contains(keywords))
                 || (x.NewsCoverImage != null && x.NewsCoverImage.Contains(keywords))
-                || SqlFunc.ToString(x.IsTop).Contains(keywords)
-                || SqlFunc.ToString(x.IsRecommended).Contains(keywords)
-                || SqlFunc.ToString(x.ReadCount).Contains(keywords)
-                || SqlFunc.ToString(x.LikeCount).Contains(keywords)
-                || SqlFunc.ToString(x.CommentCount).Contains(keywords)
-                || SqlFunc.ToString(x.FavoriteCount).Contains(keywords)
-                || SqlFunc.ToString(x.ShareCount).Contains(keywords)
-                || SqlFunc.ToString(x.AttachmentCount).Contains(keywords)
-                || SqlFunc.ToString(x.FlowInstanceId).Contains(keywords)
+                || SqlFunc.ToString(x.NewsIsTop).Contains(keywords)
+                || SqlFunc.ToString(x.NewsIsRecommended).Contains(keywords)
+                || SqlFunc.ToString(x.NewsReadCount).Contains(keywords)
+                || SqlFunc.ToString(x.NewsLikeCount).Contains(keywords)
+                || SqlFunc.ToString(x.NewsCommentCount).Contains(keywords)
+                || SqlFunc.ToString(x.NewsFavoriteCount).Contains(keywords)
+                || SqlFunc.ToString(x.NewsShareCount).Contains(keywords)
+                || SqlFunc.ToString(x.NewsAttachmentCount).Contains(keywords)
                 || SqlFunc.ToString(x.DeptId).Contains(keywords)
                 || (x.DeptName != null && x.DeptName.Contains(keywords))
                 || SqlFunc.ToString(x.PublisherId).Contains(keywords)
@@ -619,9 +617,9 @@ public class TaktNewsService : TaktServiceBase, ITaktNewsService
                 || SqlFunc.ToString(x.NewsStatus).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.EffectiveTime).Contains(keywords)
-                || SqlFunc.ToString(x.ExpireTime).Contains(keywords)
-                || SqlFunc.ToString(x.PublishTime).Contains(keywords)
+                || SqlFunc.ToString(x.NewsEffectiveTime).Contains(keywords)
+                || SqlFunc.ToString(x.NewsExpireTime).Contains(keywords)
+                || SqlFunc.ToString(x.NewsPublishTime).Contains(keywords)
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
@@ -646,9 +644,9 @@ public class TaktNewsService : TaktServiceBase, ITaktNewsService
             exp = exp.And(x => x.NewsSummary != null && x.NewsSummary.Contains(queryDto.NewsSummary));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Tags))
+        if (!string.IsNullOrEmpty(queryDto?.NewsTags))
         {
-            exp = exp.And(x => x.Tags != null && x.Tags.Contains(queryDto.Tags));
+            exp = exp.And(x => x.NewsTags != null && x.NewsTags.Contains(queryDto.NewsTags));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.NewsContent))
@@ -661,49 +659,44 @@ public class TaktNewsService : TaktServiceBase, ITaktNewsService
             exp = exp.And(x => x.NewsCoverImage != null && x.NewsCoverImage.Contains(queryDto.NewsCoverImage));
         }
 
-        if (queryDto?.IsTop.HasValue == true)
+        if (queryDto?.NewsIsTop.HasValue == true)
         {
-            exp = exp.And(x => x.IsTop == queryDto.IsTop);
+            exp = exp.And(x => x.NewsIsTop == queryDto.NewsIsTop);
         }
 
-        if (queryDto?.IsRecommended.HasValue == true)
+        if (queryDto?.NewsIsRecommended.HasValue == true)
         {
-            exp = exp.And(x => x.IsRecommended == queryDto.IsRecommended);
+            exp = exp.And(x => x.NewsIsRecommended == queryDto.NewsIsRecommended);
         }
 
-        if (queryDto?.ReadCount.HasValue == true)
+        if (queryDto?.NewsReadCount.HasValue == true)
         {
-            exp = exp.And(x => x.ReadCount == queryDto.ReadCount);
+            exp = exp.And(x => x.NewsReadCount == queryDto.NewsReadCount);
         }
 
-        if (queryDto?.LikeCount.HasValue == true)
+        if (queryDto?.NewsLikeCount.HasValue == true)
         {
-            exp = exp.And(x => x.LikeCount == queryDto.LikeCount);
+            exp = exp.And(x => x.NewsLikeCount == queryDto.NewsLikeCount);
         }
 
-        if (queryDto?.CommentCount.HasValue == true)
+        if (queryDto?.NewsCommentCount.HasValue == true)
         {
-            exp = exp.And(x => x.CommentCount == queryDto.CommentCount);
+            exp = exp.And(x => x.NewsCommentCount == queryDto.NewsCommentCount);
         }
 
-        if (queryDto?.FavoriteCount.HasValue == true)
+        if (queryDto?.NewsFavoriteCount.HasValue == true)
         {
-            exp = exp.And(x => x.FavoriteCount == queryDto.FavoriteCount);
+            exp = exp.And(x => x.NewsFavoriteCount == queryDto.NewsFavoriteCount);
         }
 
-        if (queryDto?.ShareCount.HasValue == true)
+        if (queryDto?.NewsShareCount.HasValue == true)
         {
-            exp = exp.And(x => x.ShareCount == queryDto.ShareCount);
+            exp = exp.And(x => x.NewsShareCount == queryDto.NewsShareCount);
         }
 
-        if (queryDto?.AttachmentCount.HasValue == true)
+        if (queryDto?.NewsAttachmentCount.HasValue == true)
         {
-            exp = exp.And(x => x.AttachmentCount == queryDto.AttachmentCount);
-        }
-
-        if (queryDto?.FlowInstanceId.HasValue == true)
-        {
-            exp = exp.And(x => x.FlowInstanceId == queryDto.FlowInstanceId);
+            exp = exp.And(x => x.NewsAttachmentCount == queryDto.NewsAttachmentCount);
         }
 
         if (queryDto?.DeptId.HasValue == true)
@@ -748,32 +741,32 @@ public class TaktNewsService : TaktServiceBase, ITaktNewsService
 
         if (queryDto?.EffectiveTimeStart.HasValue == true)
         {
-            exp = exp.And(x => x.EffectiveTime >= queryDto.EffectiveTimeStart);
+            exp = exp.And(x => x.NewsEffectiveTime >= queryDto.EffectiveTimeStart);
         }
 
         if (queryDto?.EffectiveTimeEnd.HasValue == true)
         {
-            exp = exp.And(x => x.EffectiveTime <= queryDto.EffectiveTimeEnd);
+            exp = exp.And(x => x.NewsEffectiveTime <= queryDto.EffectiveTimeEnd);
         }
 
         if (queryDto?.ExpireTimeStart.HasValue == true)
         {
-            exp = exp.And(x => x.ExpireTime >= queryDto.ExpireTimeStart);
+            exp = exp.And(x => x.NewsExpireTime >= queryDto.ExpireTimeStart);
         }
 
         if (queryDto?.ExpireTimeEnd.HasValue == true)
         {
-            exp = exp.And(x => x.ExpireTime <= queryDto.ExpireTimeEnd);
+            exp = exp.And(x => x.NewsExpireTime <= queryDto.ExpireTimeEnd);
         }
 
         if (queryDto?.PublishTimeStart.HasValue == true)
         {
-            exp = exp.And(x => x.PublishTime >= queryDto.PublishTimeStart);
+            exp = exp.And(x => x.NewsPublishTime >= queryDto.PublishTimeStart);
         }
 
         if (queryDto?.PublishTimeEnd.HasValue == true)
         {
-            exp = exp.And(x => x.PublishTime <= queryDto.PublishTimeEnd);
+            exp = exp.And(x => x.NewsPublishTime <= queryDto.PublishTimeEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)

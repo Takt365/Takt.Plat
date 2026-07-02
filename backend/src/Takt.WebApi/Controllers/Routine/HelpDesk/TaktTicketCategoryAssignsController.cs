@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Routine.HelpDesk
 // 文件名称：TaktTicketCategoryAssignsController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：工单分类默认处理人控制器
 // 
@@ -41,7 +41,7 @@ public class TaktTicketCategoryAssignsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("routine:helpdesk:ticketcategoryassign:list", "工单分类默认处理人列表")]
+    [TaktPermission("routine:help:desk:ticket:category:assign:list", "工单分类默认处理人列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetTicketCategoryAssignListAsync([FromQuery] TaktTicketCategoryAssignQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktTicketCategoryAssignsController : TaktControllerBase
     /// </summary>
     /// <param name="id">工单分类默认处理人ID</param>
     /// <returns>工单分类默认处理人DTO</returns>
-    [TaktPermission("routine:helpdesk:ticketcategoryassign:query", "工单分类默认处理人详情")]
+    [TaktPermission("routine:help:desk:ticket:category:assign:query", "工单分类默认处理人详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetTicketCategoryAssignByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktTicketCategoryAssignsController : TaktControllerBase
     /// 获取工单分类默认处理人选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("routine:helpdesk:ticketcategoryassign:query", "工单分类默认处理人选项")]
+    [TaktPermission("routine:help:desk:ticket:category:assign:query", "工单分类默认处理人选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetTicketCategoryAssignOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktTicketCategoryAssignsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>工单分类默认处理人DTO</returns>
-    [TaktPermission("routine:helpdesk:ticketcategoryassign:create", "创建工单分类默认处理人")]
+    [TaktPermission("routine:help:desk:ticket:category:assign:create", "创建工单分类默认处理人")]
     [HttpPost]
     public async Task<IActionResult> CreateTicketCategoryAssignAsync([FromBody] TaktTicketCategoryAssignCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktTicketCategoryAssignsController : TaktControllerBase
     /// <param name="id">工单分类默认处理人ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>工单分类默认处理人DTO</returns>
-    [TaktPermission("routine:helpdesk:ticketcategoryassign:update", "更新工单分类默认处理人")]
+    [TaktPermission("routine:help:desk:ticket:category:assign:update", "更新工单分类默认处理人")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateTicketCategoryAssignAsync(long id, [FromBody] TaktTicketCategoryAssignUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktTicketCategoryAssignsController : TaktControllerBase
     /// </summary>
     /// <param name="id">工单分类默认处理人ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("routine:helpdesk:ticketcategoryassign:delete", "删除工单分类默认处理人")]
+    [TaktPermission("routine:help:desk:ticket:category:assign:delete", "删除工单分类默认处理人")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteTicketCategoryAssignByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktTicketCategoryAssignsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("routine:helpdesk:ticketcategoryassign:delete", "批量删除工单分类默认处理人")]
+    [TaktPermission("routine:help:desk:ticket:category:assign:delete", "批量删除工单分类默认处理人")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteTicketCategoryAssignBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktTicketCategoryAssignsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">排序DTO</param>
     /// <returns>工单分类默认处理人DTO</returns>
-    [TaktPermission("routine:helpdesk:ticketcategoryassign:update", "更新工单分类默认处理人排序")]
+    [TaktPermission("routine:help:desk:ticket:category:assign:update", "更新工单分类默认处理人排序")]
     [HttpPut("sort")]
     public async Task<IActionResult> UpdateTicketCategoryAssignSortAsync([FromBody] TaktTicketCategoryAssignSortDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktTicketCategoryAssignsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("routine:helpdesk:ticketcategoryassign:import", "获取工单分类默认处理人导入模板")]
+    [TaktPermission("routine:help:desk:ticket:category:assign:import", "获取工单分类默认处理人导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetTicketCategoryAssignTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +224,7 @@ public class TaktTicketCategoryAssignsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("routine:helpdesk:ticketcategoryassign:import", "导入工单分类默认处理人")]
+    [TaktPermission("routine:help:desk:ticket:category:assign:import", "导入工单分类默认处理人")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportTicketCategoryAssignAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +254,7 @@ public class TaktTicketCategoryAssignsController : TaktControllerBase
     /// 导出工单分类默认处理人
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("routine:helpdesk:ticketcategoryassign:export", "导出工单分类默认处理人")]
+    [TaktPermission("routine:help:desk:ticket:category:assign:export", "导出工单分类默认处理人")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportTicketCategoryAssignAsync([FromQuery] TaktTicketCategoryAssignQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

@@ -25,7 +25,7 @@ namespace Takt.Domain.Entities.Logistics.Materials;
 public class TaktModelDestination : TaktTenantEntityBase
 {
     /// <summary>
-    /// 物料编码
+    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
     /// </summary>
     [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string MaterialCode { get; set; } = string.Empty;
@@ -37,27 +37,27 @@ public class TaktModelDestination : TaktTenantEntityBase
     public string MaterialName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 机种编码
+    /// 机种编码（40）
     /// </summary>
-    [SugarColumn(ColumnName = "model_code", ColumnDescription = "机种编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "model_code", ColumnDescription = "机种编码", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
     public string ModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 机种名称
+    /// 机种名称（80）
     /// </summary>
-    [SugarColumn(ColumnName = "model_name", ColumnDescription = "机种名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = false)]
+    [SugarColumn(ColumnName = "model_name", ColumnDescription = "机种名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = false)]
     public string ModelName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 仕向地编码
+    /// 仕向地编码（40）
     /// </summary>
-    [SugarColumn(ColumnName = "destination_code", ColumnDescription = "仕向地编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "destination_code", ColumnDescription = "仕向地编码", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
     public string DestinationCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 仕向地名称
+    /// 仕向地名称（80）
     /// </summary>
-    [SugarColumn(ColumnName = "destination_name", ColumnDescription = "仕向地名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = false)]
+    [SugarColumn(ColumnName = "destination_name", ColumnDescription = "仕向地名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = false)]
     public string DestinationName { get; set; } = string.Empty;
 
     /// <summary>

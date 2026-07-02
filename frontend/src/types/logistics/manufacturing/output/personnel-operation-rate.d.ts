@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/output
 // 文件名称：personnel-operation-rate.d.ts
-// 创建时间：2026-06-20
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/output 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -61,12 +61,12 @@ export interface PersonnelOperationRate extends CompanyDtoBase {
   /**
    * 生产线
    */
-  productionLine: string;
+  prodTeam: string;
 
   /**
-   * 生产线名称
+   * 生产班组名称
    */
-  productionLineName?: string;
+  prodTeamName?: string;
 
   /**
    * 班次（1=早班，2=中班，3=晚班）
@@ -176,7 +176,12 @@ export interface PersonnelOperationRate extends CompanyDtoBase {
   /**
    * 状态（0=正常，1=停用）
    */
-  status: number;
+  personnelOperationRateStatus: number;
+
+  /**
+   * 人员稼动率变更记录列表（外键在子表 TaktPersonnelOperationRateChangeLog.PersonnelOperationRateId） （子表：TaktPersonnelOperationRateChangeLog）
+   */
+  changeLogs?: PersonnelOperationRateChangeLog[];
 
 }
 
@@ -241,12 +246,12 @@ export interface PersonnelOperationRateQuery extends TaktPagedQuery {
   /**
    * 生产线
    */
-  productionLine?: string;
+  prodTeam?: string;
 
   /**
-   * 生产线名称
+   * 生产班组名称
    */
-  productionLineName?: string;
+  prodTeamName?: string;
 
   /**
    * 班次（1=早班，2=中班，3=晚班）
@@ -356,7 +361,7 @@ export interface PersonnelOperationRateQuery extends TaktPagedQuery {
   /**
    * 状态（0=正常，1=停用）
    */
-  status?: number;
+  personnelOperationRateStatus?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -398,7 +403,7 @@ export interface PersonnelOperationRateCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -435,12 +440,12 @@ export interface PersonnelOperationRateCreate {
   /**
    * 生产线
    */
-  productionLine: string;
+  prodTeam: string;
 
   /**
-   * 生产线名称
+   * 生产班组名称
    */
-  productionLineName?: string;
+  prodTeamName?: string;
 
   /**
    * 班次（1=早班，2=中班，3=晚班）
@@ -550,7 +555,12 @@ export interface PersonnelOperationRateCreate {
   /**
    * 状态（0=正常，1=停用）
    */
-  status: number;
+  personnelOperationRateStatus: number;
+
+  /**
+   * 人员稼动率变更记录列表（外键在子表 TaktPersonnelOperationRateChangeLog.PersonnelOperationRateId）（子表，级联保存）
+   */
+  changeLogs?: PersonnelOperationRateChangeLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -594,7 +604,7 @@ export interface PersonnelOperationRateStatus {
   /**
    * 状态（0=正常，1=停用）
    */
-  status: number;
+  personnelOperationRateStatus: number;
 
 }
 
@@ -626,6 +636,16 @@ export interface PersonnelOperationRateTemplate {
   timeCategory?: number;
 
   /**
+   * 开始日期
+   */
+  startDate?: string;
+
+  /**
+   * 结束日期
+   */
+  endDate?: string;
+
+  /**
    * 周数（1-53）
    */
   weekNumber?: number;
@@ -638,12 +658,12 @@ export interface PersonnelOperationRateTemplate {
   /**
    * 生产线
    */
-  productionLine?: string;
+  prodTeam?: string;
 
   /**
-   * 生产线名称
+   * 生产班组名称
    */
-  productionLineName?: string;
+  prodTeamName?: string;
 
   /**
    * 班次（1=早班，2=中班，3=晚班）
@@ -671,9 +691,94 @@ export interface PersonnelOperationRateTemplate {
   actualIndirectPersonnelCount?: number;
 
   /**
+   * 出勤时间（分钟）。员工在公司的计划工作时间，含休息、待命等。
+   */
+  plannedWorkTime?: number;
+
+  /**
+   * 在岗作业时间（分钟）。员工实际在工位上执行生产任务的时间。
+   */
+  actualWorkTime?: number;
+
+  /**
+   * 休息时间（分钟）
+   */
+  breakTime?: number;
+
+  /**
+   * 空闲时间（分钟）。等料、设备调试等非作业时间。
+   */
+  idleTime?: number;
+
+  /**
+   * 人员稼动率（%）。计算公式：在岗作业时间 ÷ 出勤时间 × 100%（在岗作业率）。
+   */
+  personnelOperationRate?: number;
+
+  /**
+   * 计划产量
+   */
+  plannedOutput?: number;
+
+  /**
+   * 实际产量
+   */
+  actualOutput?: number;
+
+  /**
+   * 合格品数量
+   */
+  qualifiedQuantity?: number;
+
+  /**
+   * 不良品数量
+   */
+  defectiveQuantity?: number;
+
+  /**
+   * 良品率（%）
+   */
+  yieldRate?: number;
+
+  /**
+   * 工作效率（%）
+   */
+  workEfficiency?: number;
+
+  /**
    * 空闲原因类型（1=缺料，2=设备故障，3=换型调试，4=人员调配，5=其他）
    */
   idleReasonType?: number;
+
+  /**
+   * 空闲原因描述
+   */
+  idleReason?: string;
+
+  /**
+   * 加班时间（分钟）
+   */
+  overtimeHours?: number;
+
+  /**
+   * 班组长
+   */
+  teamLeader?: string;
+
+  /**
+   * 主管
+   */
+  supervisor?: string;
+
+  /**
+   * 状态（0=正常，1=停用）
+   */
+  personnelOperationRateStatus?: number;
+
+  /**
+   * 人员稼动率变更记录列表（外键在子表 TaktPersonnelOperationRateChangeLog.PersonnelOperationRateId）（子表，级联保存）
+   */
+  changeLogs?: PersonnelOperationRateChangeLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -705,7 +810,7 @@ export interface PersonnelOperationRateImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -720,6 +825,16 @@ export interface PersonnelOperationRateImport {
   timeCategory?: number;
 
   /**
+   * 开始日期
+   */
+  startDate?: string;
+
+  /**
+   * 结束日期
+   */
+  endDate?: string;
+
+  /**
    * 周数（1-53）
    */
   weekNumber?: number;
@@ -732,12 +847,12 @@ export interface PersonnelOperationRateImport {
   /**
    * 生产线
    */
-  productionLine?: string;
+  prodTeam?: string;
 
   /**
-   * 生产线名称
+   * 生产班组名称
    */
-  productionLineName?: string;
+  prodTeamName?: string;
 
   /**
    * 班次（1=早班，2=中班，3=晚班）
@@ -765,9 +880,94 @@ export interface PersonnelOperationRateImport {
   actualIndirectPersonnelCount?: number;
 
   /**
+   * 出勤时间（分钟）。员工在公司的计划工作时间，含休息、待命等。
+   */
+  plannedWorkTime?: number;
+
+  /**
+   * 在岗作业时间（分钟）。员工实际在工位上执行生产任务的时间。
+   */
+  actualWorkTime?: number;
+
+  /**
+   * 休息时间（分钟）
+   */
+  breakTime?: number;
+
+  /**
+   * 空闲时间（分钟）。等料、设备调试等非作业时间。
+   */
+  idleTime?: number;
+
+  /**
+   * 人员稼动率（%）。计算公式：在岗作业时间 ÷ 出勤时间 × 100%（在岗作业率）。
+   */
+  personnelOperationRate?: number;
+
+  /**
+   * 计划产量
+   */
+  plannedOutput?: number;
+
+  /**
+   * 实际产量
+   */
+  actualOutput?: number;
+
+  /**
+   * 合格品数量
+   */
+  qualifiedQuantity?: number;
+
+  /**
+   * 不良品数量
+   */
+  defectiveQuantity?: number;
+
+  /**
+   * 良品率（%）
+   */
+  yieldRate?: number;
+
+  /**
+   * 工作效率（%）
+   */
+  workEfficiency?: number;
+
+  /**
    * 空闲原因类型（1=缺料，2=设备故障，3=换型调试，4=人员调配，5=其他）
    */
   idleReasonType?: number;
+
+  /**
+   * 空闲原因描述
+   */
+  idleReason?: string;
+
+  /**
+   * 加班时间（分钟）
+   */
+  overtimeHours?: number;
+
+  /**
+   * 班组长
+   */
+  teamLeader?: string;
+
+  /**
+   * 主管
+   */
+  supervisor?: string;
+
+  /**
+   * 状态（0=正常，1=停用）
+   */
+  personnelOperationRateStatus?: number;
+
+  /**
+   * 人员稼动率变更记录列表（外键在子表 TaktPersonnelOperationRateChangeLog.PersonnelOperationRateId）（子表，级联保存）
+   */
+  changeLogs?: PersonnelOperationRateChangeLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -831,12 +1031,12 @@ export interface PersonnelOperationRateExport {
   /**
    * 生产线
    */
-  productionLine: string;
+  prodTeam: string;
 
   /**
-   * 生产线名称
+   * 生产班组名称
    */
-  productionLineName?: string;
+  prodTeamName?: string;
 
   /**
    * 班次（1=早班，2=中班，3=晚班）
@@ -946,7 +1146,7 @@ export interface PersonnelOperationRateExport {
   /**
    * 状态（0=正常，1=停用）
    */
-  status: number;
+  personnelOperationRateStatus: number;
 
   /**
    * 扩展字段JSON

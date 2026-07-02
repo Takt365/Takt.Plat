@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Personnel
 // 文件名称：TaktEmployeeReassignmentService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：员工调动应用服务实现
 // 
@@ -14,7 +14,6 @@ using System.Linq.Expressions;
 using Mapster;
 using SqlSugar;
 using Takt.Application.Dtos.HumanResource.Personnel;
-using Takt.Application.Services.Workflow.FlowEngine.Business;
 using Takt.Domain.Entities.HumanResource.Personnel;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
@@ -22,37 +21,32 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Services.HumanResource.Personnel;
 
 /// <summary>
 /// 员工调动应用服务
 /// </summary>
-public class TaktEmployeeReassignmentService : TaktServiceBase, ITaktEmployeeReassignmentService, ITaktApprovalFlowCompletedContributor
+public class TaktEmployeeReassignmentService : TaktServiceBase, ITaktEmployeeReassignmentService
 {
     private readonly ITaktApprovalRepository<TaktEmployeeReassignment> _employeeReassignmentRepository;
-    private readonly ITaktEmployeeService _employeeService;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="employeeReassignmentRepository">员工调动仓储</param>
-    /// <param name="employeeService">员工应用服务</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktEmployeeReassignmentService(
         ITaktApprovalRepository<TaktEmployeeReassignment> employeeReassignmentRepository,
-        ITaktEmployeeService employeeService,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
         _employeeReassignmentRepository = employeeReassignmentRepository;
-        _employeeService = employeeService;
         _uniqueValidator = uniqueValidator;
     }
 
@@ -363,38 +357,5 @@ public class TaktEmployeeReassignmentService : TaktServiceBase, ITaktEmployeeRea
         }
 
         return exp.ToExpression();
-    }
-
-    /// <inheritdoc />
-    public string RelatedTableName => TaktApprovalEntityTableNames.Of<TaktEmployeeReassignment>();
-
-    /// <inheritdoc />
-    public Task OnApprovalFlowCompletedAsync(TaktApprovalFlowCompletedContext context) =>
-        OnEmployeeReassignmentFlowCompletedAsync(context);
-
-    /// <summary>
-    /// 调动审批通过后回写员工主档任职投影
-    /// </summary>
-    /// <param name="context">回写上下文</param>
-    /// <returns>异步任务</returns>
-    private async Task OnEmployeeReassignmentFlowCompletedAsync(TaktApprovalFlowCompletedContext context)
-    {
-        ArgumentNullException.ThrowIfNull(context);
-        if (context.EntityId <= 0)
-        {
-            return;
-        }
-        var reassignment = await _employeeReassignmentRepository.GetByIdAsync(context.EntityId);
-        if (reassignment == null
-            || reassignment.EmployeeId <= 0
-            || reassignment.TenantCode != context.TenantCode
-            || reassignment.CompanyCode != context.CompanyCode)
-        {
-            return;
-        }
-        await _employeeService.RefreshEmployeePrimaryAssignmentAsync(
-            reassignment.EmployeeId,
-            context.TenantCode,
-            context.CompanyCode);
     }
 }

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.HelpDesk
 // 文件名称：TaktKnowledgeChangeLogI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktKnowledgeChangeLog 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktKnowledgeChangeLogI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.knowledgechangelog._self", "zh-HK", "知识库变更日志信息_hk", "实体名称"),
 
             // entity.knowledgechangelog.knowledgeid
-            new TranslationSeedItem("entity.knowledgechangelog.knowledgeid", "en-US", "知识ID_us", "知识 ID"),
+            new TranslationSeedItem("entity.knowledgechangelog.knowledgeid", "en-US", "知识ID_us", "知识 ID（关联 TaktKnowledge.Id，选项 TaktKnowledges/options）"),
             // entity.knowledgechangelog.knowledgeid
-            new TranslationSeedItem("entity.knowledgechangelog.knowledgeid", "ja-JP", "知识ID_jp", "知识 ID"),
+            new TranslationSeedItem("entity.knowledgechangelog.knowledgeid", "ja-JP", "知识ID_jp", "知识 ID（关联 TaktKnowledge.Id，选项 TaktKnowledges/options）"),
             // entity.knowledgechangelog.knowledgeid
-            new TranslationSeedItem("entity.knowledgechangelog.knowledgeid", "zh-CN", "知识ID", "知识 ID"),
+            new TranslationSeedItem("entity.knowledgechangelog.knowledgeid", "zh-CN", "知识ID", "知识 ID（关联 TaktKnowledge.Id，选项 TaktKnowledges/options）"),
             // entity.knowledgechangelog.knowledgeid
-            new TranslationSeedItem("entity.knowledgechangelog.knowledgeid", "zh-HK", "知识ID_hk", "知识 ID"),
+            new TranslationSeedItem("entity.knowledgechangelog.knowledgeid", "zh-HK", "知识ID_hk", "知识 ID（关联 TaktKnowledge.Id，选项 TaktKnowledges/options）"),
 
             // entity.knowledgechangelog.knowledgetitle
             new TranslationSeedItem("entity.knowledgechangelog.knowledgetitle", "en-US", "知识标题_us", "知识标题（冗余）"),
@@ -109,13 +109,13 @@ public class TaktKnowledgeChangeLogI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.knowledgechangelog.knowledgetitle", "zh-HK", "知识标题_hk", "知识标题（冗余）"),
 
             // entity.knowledgechangelog.changetype
-            new TranslationSeedItem("entity.knowledgechangelog.changetype", "en-US", "变更类型_us", "变更类型（0=创建，1=更新，2=删除）"),
+            new TranslationSeedItem("entity.knowledgechangelog.changetype", "en-US", "变更类型_us", "变更类型（字典 sys_entity_change_type；0=创建 1=更新 2=删除 3=状态变更）"),
             // entity.knowledgechangelog.changetype
-            new TranslationSeedItem("entity.knowledgechangelog.changetype", "ja-JP", "变更类型_jp", "变更类型（0=创建，1=更新，2=删除）"),
+            new TranslationSeedItem("entity.knowledgechangelog.changetype", "ja-JP", "变更类型_jp", "变更类型（字典 sys_entity_change_type；0=创建 1=更新 2=删除 3=状态变更）"),
             // entity.knowledgechangelog.changetype
-            new TranslationSeedItem("entity.knowledgechangelog.changetype", "zh-CN", "变更类型", "变更类型（0=创建，1=更新，2=删除）"),
+            new TranslationSeedItem("entity.knowledgechangelog.changetype", "zh-CN", "变更类型", "变更类型（字典 sys_entity_change_type；0=创建 1=更新 2=删除 3=状态变更）"),
             // entity.knowledgechangelog.changetype
-            new TranslationSeedItem("entity.knowledgechangelog.changetype", "zh-HK", "变更类型_hk", "变更类型（0=创建，1=更新，2=删除）"),
+            new TranslationSeedItem("entity.knowledgechangelog.changetype", "zh-HK", "变更类型_hk", "变更类型（字典 sys_entity_change_type；0=创建 1=更新 2=删除 3=状态变更）"),
 
             // entity.knowledgechangelog.changesummary
             new TranslationSeedItem("entity.knowledgechangelog.changesummary", "en-US", "修改内容摘要_us", "修改内容摘要"),

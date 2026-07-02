@@ -6,6 +6,9 @@
 // 创建时间：2025-02-02
 // 创建人：Takt365(Cursor AI)
 // 功能描述：人员稼动率实体（生产线人员作业效率记录）
+// 计算公式：人员稼动率(%) = 在岗作业时间 ÷ 出勤时间 × 100%（在岗作业率）
+// 辅助关系：出勤时间为计划工作时间（含休息、待命）；空闲时间为等料、设备调试等非作业时间
+// 良品率(%) = 合格品数量 ÷ 实际产量 × 100%
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -23,14 +26,14 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Output;
 [SugarTable("takt_logistics_manufacturing_output_personnel_operation_rate", "人员稼动率表")]
 [SugarIndex("ix_personnel_operation_rate_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_personnel_operation_rate_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_output_personnel_operation_rate_por_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(ProductionLine), OrderByType.Asc, nameof(TimeCategory), OrderByType.Asc, nameof(StartDate), OrderByType.Asc, nameof(ShiftNo), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_output_personnel_operation_rate_por_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(ProdTeam), OrderByType.Asc, nameof(TimeCategory), OrderByType.Asc, nameof(StartDate), OrderByType.Asc, nameof(ShiftNo), OrderByType.Asc, true)]
 [SugarIndex("ix_takt_logistics_manufacturing_output_personnel_operation_rate_plant_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_output_personnel_operation_rate_production_line", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProductionLine), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_output_personnel_operation_rate_prod_team", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProdTeam), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_manufacturing_output_personnel_operation_rate_start_date", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(StartDate), OrderByType.Asc, false)]
 public class TaktPersonnelOperationRate : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
@@ -66,22 +69,22 @@ public class TaktPersonnelOperationRate : TaktCompanyEntityBase
     public int? MonthNumber { get; set; }
 
     /// <summary>
-    /// 生产线
+    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
     /// </summary>
-    [SugarColumn(ColumnName = "production_line", ColumnDescription = "生产线", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
-    public string ProductionLine { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "prod_team", ColumnDescription = "生产班组", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
+    public string ProdTeam { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产线名称
+    /// 生产班组名称
     /// </summary>
-    [SugarColumn(ColumnName = "production_line_name", ColumnDescription = "生产线名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
-    public string? ProductionLineName { get; set; }
+    [SugarColumn(ColumnName = "prod_team_name", ColumnDescription = "生产班组名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
+    public string? ProdTeamName { get; set; }
 
     /// <summary>
-    /// 班次（1=早班，2=中班，3=晚班）
+    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
-    [SugarColumn(ColumnName = "shift_no", ColumnDescription = "班次", ColumnDataType = "int", IsNullable = false)]
-    public int ShiftNo { get; set; }
+    [SugarColumn(ColumnName = "shift_no", ColumnDescription = "班次", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
+    public int ShiftNo { get; set; } = 1;
 
     /// <summary>
     /// 计划直接人员数量
@@ -192,13 +195,13 @@ public class TaktPersonnelOperationRate : TaktCompanyEntityBase
     public decimal OvertimeHours { get; set; } = 0;
 
     /// <summary>
-    /// 班组长
+    /// 班组长（选项 TaktEmployees/options，存员工姓名或工号）
     /// </summary>
     [SugarColumn(ColumnName = "team_leader", ColumnDescription = "班组长", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? TeamLeader { get; set; }
 
     /// <summary>
-    /// 主管
+    /// 主管（选项 TaktEmployees/options，存员工姓名或工号）
     /// </summary>
     [SugarColumn(ColumnName = "supervisor", ColumnDescription = "主管", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? Supervisor { get; set; }
@@ -207,7 +210,7 @@ public class TaktPersonnelOperationRate : TaktCompanyEntityBase
     /// 状态（0=正常，1=停用）
     /// </summary>
     [SugarColumn(ColumnName = "status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int Status { get; set; } = 0;
+    public int PersonnelOperationRateStatus { get; set; } = 0;
 
     /// <summary>
     /// 人员稼动率变更记录列表（外键在子表 TaktPersonnelOperationRateChangeLog.PersonnelOperationRateId）

@@ -8,7 +8,7 @@
 <!-- ======================================== -->
 
 <template>
-  <div class="statistics-logging-delta-log">
+  <div class="p-4">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -59,7 +59,14 @@
       @change="handleTableChange"
       @resize-column="handleResizeColumn"
     >
-
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'operType'">
+          <TaktConstTag
+            category="operType"
+            :value="getDeltaLogField(record, 'operType')"
+          />
+        </template>
+      </template>
     </TaktSingleTable>
 
     <!-- 分页组件 -->
@@ -108,10 +115,11 @@
       </div>
       <div v-show="isFieldVisible('operType')">
       <a-form-item :label="t('entity.deltalog.opertype')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.operType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.deltalog.opertype') })"
-          style="width: 100%"
+          :options="operTypeOptions"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.deltalog.opertype') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -278,6 +286,7 @@
 </template>
 
 <script setup lang="ts">
+import { operTypeOptions } from '@/constants/takt-constants'
 import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 /**
  * 差异日志实体管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
@@ -328,7 +337,7 @@ const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
   userName: '',
-  operType: undefined as number | undefined,
+  operType: undefined as string | undefined,
   tableName: '',
   primaryKeyId: '',
   beforeData: '',
@@ -421,7 +430,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getDeltaLogField(record, 'operType') ?? ''
   },
   {
     title: t('entity.deltalog.tablename'),
@@ -649,7 +657,7 @@ function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
   userName: '',
-  operType: undefined as number | undefined,
+  operType: undefined as string | undefined,
   tableName: '',
   primaryKeyId: '',
   beforeData: '',
@@ -758,7 +766,7 @@ function handleAdvancedQuerySubmit() {
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
   userName: '',
-  operType: undefined as number | undefined,
+  operType: undefined as string | undefined,
   tableName: '',
   primaryKeyId: '',
   beforeData: '',
@@ -813,12 +821,3 @@ function handlePaginationSizeChange(_current: number, size: number) {
   loadData()
 }
 </script>
-
-<style scoped lang="css">
-.statistics-logging-delta-log {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-</style>

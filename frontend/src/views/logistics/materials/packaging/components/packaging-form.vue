@@ -166,7 +166,7 @@
                   v-model:value="formState.originCountryRegionCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.packaging.origincountryregioncode') })"
                   show-count
-                  :maxlength="20"
+                  :maxlength="2"
                   allow-clear
                   :disabled="!!formData?.packagingId"
                 />
@@ -205,7 +205,7 @@
                   v-model:value="formState.destinationCountryRegionCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.packaging.destinationcountryregioncode') })"
                   show-count
-                  :maxlength="20"
+                  :maxlength="2"
                   allow-clear
                   :disabled="!!formData?.packagingId"
                 />

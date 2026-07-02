@@ -77,6 +77,23 @@ public class TaktDatabaseOptions
     public string GetSeedCompanyCode() => CompanyCodes[0];
 
     /// <summary>
+    /// 按 <c>CompanyCodes</c> 与 <c>PlantCodes</c> 同序下标映射工厂代码（如 0001→0001、2300→C100）
+    /// </summary>
+    /// <param name="companyCode">公司编码</param>
+    /// <returns>对应工厂编码</returns>
+    public string GetPlantCodeForCompanyCode(string companyCode)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(companyCode);
+        var normalized = companyCode.Trim();
+        var index = CompanyCodes.FindIndex(code => string.Equals(code, normalized, StringComparison.OrdinalIgnoreCase));
+        if (index < 0)
+        {
+            throw new InvalidOperationException($"Database:CompanyCodes 中未找到公司编码 {normalized}");
+        }
+        return PlantCodes[index];
+    }
+
+    /// <summary>
     /// 获取已解析的 SqlSugar 数据库类型（未缓存时按 DbType 配置即时映射）
     /// </summary>
     /// <returns>SqlSugar DbType</returns>
@@ -128,6 +145,10 @@ public class TaktDatabaseOptions
         if (PlantCodes.Count == 0)
         {
             throw new InvalidOperationException($"{SectionName}:PlantCodes 不能为空");
+        }
+        if (CompanyCodes.Count != PlantCodes.Count)
+        {
+            throw new InvalidOperationException($"{SectionName}:CompanyCodes 与 PlantCodes 数量须一致且同序一一对应");
         }
         if (string.IsNullOrWhiteSpace(ConnectionStringTemplate))
         {

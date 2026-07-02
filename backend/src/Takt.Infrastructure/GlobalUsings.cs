@@ -185,4 +185,5 @@ global using Takt.Application.Services.Statistics.Logging;
 global using Takt.Application.Services.Statistics.Report;
 global using Takt.Application.Services.Workflow;
 
+global using Takt.Infrastructure.Extensions;
 global using Takt.Infrastructure.Data.Context;

@@ -723,11 +723,12 @@
                     :wrapper-col="{ span: 0 }"
                     :rules="genPathRules"
                   >
-                    <a-input
-                      :value="formState.genPath ?? ''"
+                    <TaktSelect
+                      :model-value="formState.genPath ?? ''"
+                      dict-type="gen_path_type"
                       :placeholder="tf('placeholder.genpath')"
-                      allow-clear
-                      @update:value="(v: string) => { formState.genPath = v === '' ? undefined : v }"
+                      style="width: 100%"
+                      @update:model-value="(v: unknown) => { formState.genPath = v === '' || v == null ? undefined : String(v) }"
                     />
                   </a-form-item>
                 </a-col>
@@ -2004,9 +2005,9 @@ const DB_TYPE_TO_CSHARP: Record<string, string> = {
   varchar: 'string'
 }
 
-/** 全部 C#类型选项（来自字典 gen_csharp_type） */
+/** 全部 C#类型选项（来自字典 gen_csharp_data_type） */
 const columnCsharpTypeOptions = computed(() =>
-  getDictSelectOptions('gen_csharp_type').map((o: TaktDictSelectOption) => ({ label: o.label, value: o.value }))
+  getDictSelectOptions('gen_csharp_data_type').map((o: TaktDictSelectOption) => ({ label: o.label, value: o.value }))
 )
 
 /**
@@ -2212,7 +2213,7 @@ const treeParentCodeRules = computed(() =>
 )
 /** 生成方式：选中「自定义路径」(1) 时生成路径必填，zip(0)、当前项目(2) 时可空 */
 const genPathRules = computed(() =>
-  Number(formState.value.genMethod) === 1 ? rq('genpath', 'input') : []
+  Number(formState.value.genMethod) === 1 ? rq('genpath', 'select') : []
 )
 /** 是否生成菜单：选「是」(1) 时上级菜单必填，选「否」(0) 时可空 */
 const parentMenuIdRules = computed(() =>
@@ -2934,11 +2935,14 @@ watch(
   }
 )
 
-/** 生成方式与生成路径：zip(0) 占位 "/"，避免后端 GenPath 必填校验失败 */
+/** 生成方式与生成路径：zip(0) 占位 "/"，自定义路径(1) 默认 solution */
 watch(
   () => formState.value.genMethod,
   (next) => {
     if (next === 0) formState.value.genPath = '/'
+    else if (next === 1 && (!formState.value.genPath?.trim() || formState.value.genPath === '/')) {
+      formState.value.genPath = 'solution'
+    }
   }
 )
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/routine/news-center
 // 文件名称：news.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：routine/news-center 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -51,7 +51,7 @@ export interface News extends ApprovalDtoBase {
   /**
    * 标签（逗号分隔或 JSON 数组存储）
    */
-  tags?: string;
+  newsTags?: string;
 
   /**
    * 新闻内容
@@ -64,64 +64,54 @@ export interface News extends ApprovalDtoBase {
   newsCoverImage?: string;
 
   /**
-   * 是否置顶
+   * 置顶
    */
-  isTop: number;
+  newsIsTop: number;
 
   /**
-   * 是否推荐
+   * 推荐
    */
-  isRecommended: number;
+  newsIsRecommended: number;
 
   /**
    * 生效时间
    */
-  effectiveTime?: string;
+  newsEffectiveTime?: string;
 
   /**
    * 失效时间
    */
-  expireTime?: string;
+  newsExpireTime?: string;
 
   /**
    * 阅读次数
    */
-  readCount: number;
+  newsReadCount: number;
 
   /**
    * 点赞次数
    */
-  likeCount: number;
+  newsLikeCount: number;
 
   /**
    * 评论次数
    */
-  commentCount: number;
+  newsCommentCount: number;
 
   /**
    * 收藏次数
    */
-  favoriteCount: number;
+  newsFavoriteCount: number;
 
   /**
    * 分享次数
    */
-  shareCount: number;
+  newsShareCount: number;
 
   /**
    * 附件数量
    */
-  attachmentCount: number;
-
-  /**
-   * 流程实例 ID（关联工作流，如发布审批流程；流程侧 BusinessType=News、BusinessKey=本表 Id）
-   */
-  flowInstanceId?: string;
-
-  /**
-   * 流程实例 名称（填充字段）
-   */
-  flowInstanceName?: string;
+  newsAttachmentCount: number;
 
   /**
    * 发布部门 ID
@@ -146,7 +136,7 @@ export interface News extends ApprovalDtoBase {
   /**
    * 发布时间
    */
-  publishTime?: string;
+  newsPublishTime?: string;
 
   /**
    * 排序号（越小越靠前）
@@ -231,7 +221,7 @@ export interface NewsQuery extends TaktPagedQuery {
   /**
    * 标签（逗号分隔或 JSON 数组存储）
    */
-  tags?: string;
+  newsTags?: string;
 
   /**
    * 新闻内容
@@ -244,69 +234,64 @@ export interface NewsQuery extends TaktPagedQuery {
   newsCoverImage?: string;
 
   /**
-   * 是否置顶
+   * 置顶
    */
-  isTop?: number;
+  newsIsTop?: number;
 
   /**
-   * 是否推荐
+   * 推荐
    */
-  isRecommended?: number;
+  newsIsRecommended?: number;
 
   /**
    * 生效时间（范围查询-开始）
    */
-  effectiveTimeStart?: string;
+  newsEffectiveTimeStart?: string;
 
   /**
    * 生效时间（范围查询-结束）
    */
-  effectiveTimeEnd?: string;
+  newsEffectiveTimeEnd?: string;
 
   /**
    * 失效时间（范围查询-开始）
    */
-  expireTimeStart?: string;
+  newsExpireTimeStart?: string;
 
   /**
    * 失效时间（范围查询-结束）
    */
-  expireTimeEnd?: string;
+  newsExpireTimeEnd?: string;
 
   /**
    * 阅读次数
    */
-  readCount?: number;
+  newsReadCount?: number;
 
   /**
    * 点赞次数
    */
-  likeCount?: number;
+  newsLikeCount?: number;
 
   /**
    * 评论次数
    */
-  commentCount?: number;
+  newsCommentCount?: number;
 
   /**
    * 收藏次数
    */
-  favoriteCount?: number;
+  newsFavoriteCount?: number;
 
   /**
    * 分享次数
    */
-  shareCount?: number;
+  newsShareCount?: number;
 
   /**
    * 附件数量
    */
-  attachmentCount?: number;
-
-  /**
-   * 流程实例 ID（关联工作流，如发布审批流程；流程侧 BusinessType=News、BusinessKey=本表 Id）
-   */
-  flowInstanceId?: string;
+  newsAttachmentCount?: number;
 
   /**
    * 发布部门 ID
@@ -331,12 +316,12 @@ export interface NewsQuery extends TaktPagedQuery {
   /**
    * 发布时间（范围查询-开始）
    */
-  publishTimeStart?: string;
+  newsPublishTimeStart?: string;
 
   /**
    * 发布时间（范围查询-结束）
    */
-  publishTimeEnd?: string;
+  newsPublishTimeEnd?: string;
 
   /**
    * 排序号（越小越靠前）
@@ -349,7 +334,7 @@ export interface NewsQuery extends TaktPagedQuery {
   newsStatus?: number;
 
   /**
-   * 审批状态（TaktApprovalStatus）
+   * 审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）
    */
   approvalStatus?: number;
 
@@ -384,6 +369,11 @@ export interface NewsQuery extends TaktPagedQuery {
   approvedAtEnd?: string;
 
   /**
+   * 流程实例 ID
+   */
+  flowInstanceId?: string;
+
+  /**
    * 创建时间（范围查询-开始）
    */
   createdAtStart?: string;
@@ -396,7 +386,7 @@ export interface NewsQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -423,7 +413,7 @@ export interface NewsCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -450,7 +440,7 @@ export interface NewsCreate {
   /**
    * 标签（逗号分隔或 JSON 数组存储）
    */
-  tags?: string;
+  newsTags?: string;
 
   /**
    * 新闻内容
@@ -463,59 +453,54 @@ export interface NewsCreate {
   newsCoverImage?: string;
 
   /**
-   * 是否置顶
+   * 置顶
    */
-  isTop: number;
+  newsIsTop: number;
 
   /**
-   * 是否推荐
+   * 推荐
    */
-  isRecommended: number;
+  newsIsRecommended: number;
 
   /**
    * 生效时间
    */
-  effectiveTime?: string;
+  newsEffectiveTime?: string;
 
   /**
    * 失效时间
    */
-  expireTime?: string;
+  newsExpireTime?: string;
 
   /**
    * 阅读次数
    */
-  readCount: number;
+  newsReadCount: number;
 
   /**
    * 点赞次数
    */
-  likeCount: number;
+  newsLikeCount: number;
 
   /**
    * 评论次数
    */
-  commentCount: number;
+  newsCommentCount: number;
 
   /**
    * 收藏次数
    */
-  favoriteCount: number;
+  newsFavoriteCount: number;
 
   /**
    * 分享次数
    */
-  shareCount: number;
+  newsShareCount: number;
 
   /**
    * 附件数量
    */
-  attachmentCount: number;
-
-  /**
-   * 流程实例 ID（关联工作流，如发布审批流程；流程侧 BusinessType=News、BusinessKey=本表 Id）
-   */
-  flowInstanceId?: string;
+  newsAttachmentCount: number;
 
   /**
    * 发布部门 ID
@@ -540,12 +525,7 @@ export interface NewsCreate {
   /**
    * 发布时间
    */
-  publishTime?: string;
-
-  /**
-   * 排序号（越小越靠前）
-   */
-  sortOrder: number;
+  newsPublishTime?: string;
 
   /**
    * 新闻状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）
@@ -585,7 +565,7 @@ export interface NewsCreate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -687,7 +667,7 @@ export interface NewsTemplate {
   /**
    * 标签（逗号分隔或 JSON 数组存储）
    */
-  tags?: string;
+  newsTags?: string;
 
   /**
    * 新闻内容
@@ -700,34 +680,119 @@ export interface NewsTemplate {
   newsCoverImage?: string;
 
   /**
-   * 是否置顶
+   * 置顶
    */
-  isTop?: number;
+  newsIsTop?: number;
 
   /**
-   * 是否推荐
+   * 推荐
    */
-  isRecommended?: number;
+  newsIsRecommended?: number;
+
+  /**
+   * 生效时间
+   */
+  newsEffectiveTime?: string;
+
+  /**
+   * 失效时间
+   */
+  newsExpireTime?: string;
 
   /**
    * 阅读次数
    */
-  readCount?: number;
+  newsReadCount?: number;
 
   /**
    * 点赞次数
    */
-  likeCount?: number;
+  newsLikeCount?: number;
 
   /**
    * 评论次数
    */
-  commentCount?: number;
+  newsCommentCount?: number;
+
+  /**
+   * 收藏次数
+   */
+  newsFavoriteCount?: number;
+
+  /**
+   * 分享次数
+   */
+  newsShareCount?: number;
+
+  /**
+   * 附件数量
+   */
+  newsAttachmentCount?: number;
+
+  /**
+   * 发布部门 ID
+   */
+  deptId?: string;
+
+  /**
+   * 发布部门名称
+   */
+  deptName?: string;
+
+  /**
+   * 发布人 ID
+   */
+  publisherId?: string;
+
+  /**
+   * 发布人姓名
+   */
+  publisherName?: string;
+
+  /**
+   * 发布时间
+   */
+  newsPublishTime?: string;
+
+  /**
+   * 新闻状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）
+   */
+  newsStatus?: number;
+
+  /**
+   * 新闻附件列表（主子表关系）（子表，级联保存）
+   */
+  attachments?: NewsAttachmentCreate[];
+
+  /**
+   * 新闻评论列表（主子表关系）（子表，级联保存）
+   */
+  comments?: NewsCommentCreate[];
+
+  /**
+   * 新闻点赞记录列表（主子表关系）（子表，级联保存）
+   */
+  likes?: NewsLikeCreate[];
+
+  /**
+   * 新闻阅读记录列表（主子表关系）（子表，级联保存）
+   */
+  reads?: NewsReadCreate[];
+
+  /**
+   * 新闻收藏记录列表（主子表关系）（子表，级联保存）
+   */
+  favorites?: NewsFavoriteCreate[];
+
+  /**
+   * 新闻分享记录列表（主子表关系）（子表，级联保存）
+   */
+  shares?: NewsShareCreate[];
 
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -754,7 +819,7 @@ export interface NewsImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -781,7 +846,7 @@ export interface NewsImport {
   /**
    * 标签（逗号分隔或 JSON 数组存储）
    */
-  tags?: string;
+  newsTags?: string;
 
   /**
    * 新闻内容
@@ -794,34 +859,119 @@ export interface NewsImport {
   newsCoverImage?: string;
 
   /**
-   * 是否置顶
+   * 置顶
    */
-  isTop?: number;
+  newsIsTop?: number;
 
   /**
-   * 是否推荐
+   * 推荐
    */
-  isRecommended?: number;
+  newsIsRecommended?: number;
+
+  /**
+   * 生效时间
+   */
+  newsEffectiveTime?: string;
+
+  /**
+   * 失效时间
+   */
+  newsExpireTime?: string;
 
   /**
    * 阅读次数
    */
-  readCount?: number;
+  newsReadCount?: number;
 
   /**
    * 点赞次数
    */
-  likeCount?: number;
+  newsLikeCount?: number;
 
   /**
    * 评论次数
    */
-  commentCount?: number;
+  newsCommentCount?: number;
+
+  /**
+   * 收藏次数
+   */
+  newsFavoriteCount?: number;
+
+  /**
+   * 分享次数
+   */
+  newsShareCount?: number;
+
+  /**
+   * 附件数量
+   */
+  newsAttachmentCount?: number;
+
+  /**
+   * 发布部门 ID
+   */
+  deptId?: string;
+
+  /**
+   * 发布部门名称
+   */
+  deptName?: string;
+
+  /**
+   * 发布人 ID
+   */
+  publisherId?: string;
+
+  /**
+   * 发布人姓名
+   */
+  publisherName?: string;
+
+  /**
+   * 发布时间
+   */
+  newsPublishTime?: string;
+
+  /**
+   * 新闻状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）
+   */
+  newsStatus?: number;
+
+  /**
+   * 新闻附件列表（主子表关系）（子表，级联保存）
+   */
+  attachments?: NewsAttachmentCreate[];
+
+  /**
+   * 新闻评论列表（主子表关系）（子表，级联保存）
+   */
+  comments?: NewsCommentCreate[];
+
+  /**
+   * 新闻点赞记录列表（主子表关系）（子表，级联保存）
+   */
+  likes?: NewsLikeCreate[];
+
+  /**
+   * 新闻阅读记录列表（主子表关系）（子表，级联保存）
+   */
+  reads?: NewsReadCreate[];
+
+  /**
+   * 新闻收藏记录列表（主子表关系）（子表，级联保存）
+   */
+  favorites?: NewsFavoriteCreate[];
+
+  /**
+   * 新闻分享记录列表（主子表关系）（子表，级联保存）
+   */
+  shares?: NewsShareCreate[];
 
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -865,7 +1015,7 @@ export interface NewsExport {
   /**
    * 标签（逗号分隔或 JSON 数组存储）
    */
-  tags?: string;
+  newsTags?: string;
 
   /**
    * 新闻内容
@@ -878,59 +1028,54 @@ export interface NewsExport {
   newsCoverImage?: string;
 
   /**
-   * 是否置顶
+   * 置顶
    */
-  isTop: number;
+  newsIsTop: number;
 
   /**
-   * 是否推荐
+   * 推荐
    */
-  isRecommended: number;
+  newsIsRecommended: number;
 
   /**
    * 生效时间
    */
-  effectiveTime?: string;
+  newsEffectiveTime?: string;
 
   /**
    * 失效时间
    */
-  expireTime?: string;
+  newsExpireTime?: string;
 
   /**
    * 阅读次数
    */
-  readCount: number;
+  newsReadCount: number;
 
   /**
    * 点赞次数
    */
-  likeCount: number;
+  newsLikeCount: number;
 
   /**
    * 评论次数
    */
-  commentCount: number;
+  newsCommentCount: number;
 
   /**
    * 收藏次数
    */
-  favoriteCount: number;
+  newsFavoriteCount: number;
 
   /**
    * 分享次数
    */
-  shareCount: number;
+  newsShareCount: number;
 
   /**
    * 附件数量
    */
-  attachmentCount: number;
-
-  /**
-   * 流程实例 ID（关联工作流，如发布审批流程；流程侧 BusinessType=News、BusinessKey=本表 Id）
-   */
-  flowInstanceId?: string;
+  newsAttachmentCount: number;
 
   /**
    * 发布部门 ID
@@ -955,7 +1100,7 @@ export interface NewsExport {
   /**
    * 发布时间
    */
-  publishTime?: string;
+  newsPublishTime?: string;
 
   /**
    * 排序号（越小越靠前）
@@ -970,7 +1115,7 @@ export interface NewsExport {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注

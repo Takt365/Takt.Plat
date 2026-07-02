@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/serial
 // 文件名称：outbound.d.ts
-// 创建时间：2026-06-15
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/serial 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,12 +29,12 @@ export interface SerialOutbound extends CompanyDtoBase {
   serialOutboundId: string;
 
   /**
-   * 工厂代码(4位字母数字组合)
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
   /**
-   * 出库单号(组合唯一索引:PlantCode + OutboundNo)
+   * 出库单号（租户+公司+工厂内唯一）
    */
   outboundNo: string;
 
@@ -49,39 +49,34 @@ export interface SerialOutbound extends CompanyDtoBase {
   outboundDate: string;
 
   /**
-   * 仕向地(目的地)
+   * 仕向地（选项 TaktModelDestinations/options，DictValue=DestinationCode）
    */
   destination: string;
 
   /**
-   * 运输方式(0=海运,1=空运,2=陆运,3=铁路,4=快递,5=其他)
+   * 运输方式（字典 logistics_shipping_method_type；0=海运 1=空运 2=陆运 3=铁路 4=快递 5=其他）
    */
   shippingMethod: number;
 
   /**
-   * 目的地港
+   * 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
    */
   destinationPort: string;
 
   /**
-   * 出库类型(0=销售出库,1=生产领料,2=退货出库,3=调拨出库,4=报废出库,5=序列号出库,6=其他)
+   * 出库类型（字典 logistics_outbound_type；0=销售出库 1=生产领料 2=退货出库 3=调拨出库 4=报废出库 5=序列号出库 6=其他）
    */
   outboundType: number;
 
   /**
-   * 仓库编码
+   * 仓库编码（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options）
    */
   warehouseCode: string;
 
   /**
-   * 库位编码
+   * 库位编码（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options）
    */
   locationCode: string;
-
-  /**
-   * 关联公司
-   */
-  relatedCompany: string;
 
   /**
    * 总数量
@@ -114,12 +109,12 @@ export interface SerialOutboundQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂代码(4位字母数字组合)
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
   /**
-   * 出库单号(组合唯一索引:PlantCode + OutboundNo)
+   * 出库单号（租户+公司+工厂内唯一）
    */
   outboundNo?: string;
 
@@ -139,39 +134,34 @@ export interface SerialOutboundQuery extends TaktPagedQuery {
   outboundDateEnd?: string;
 
   /**
-   * 仕向地(目的地)
+   * 仕向地（选项 TaktModelDestinations/options，DictValue=DestinationCode）
    */
   destination?: string;
 
   /**
-   * 运输方式(0=海运,1=空运,2=陆运,3=铁路,4=快递,5=其他)
+   * 运输方式（字典 logistics_shipping_method_type；0=海运 1=空运 2=陆运 3=铁路 4=快递 5=其他）
    */
   shippingMethod?: number;
 
   /**
-   * 目的地港
+   * 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
    */
   destinationPort?: string;
 
   /**
-   * 出库类型(0=销售出库,1=生产领料,2=退货出库,3=调拨出库,4=报废出库,5=序列号出库,6=其他)
+   * 出库类型（字典 logistics_outbound_type；0=销售出库 1=生产领料 2=退货出库 3=调拨出库 4=报废出库 5=序列号出库 6=其他）
    */
   outboundType?: number;
 
   /**
-   * 仓库编码
+   * 仓库编码（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options）
    */
   warehouseCode?: string;
 
   /**
-   * 库位编码
+   * 库位编码（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options）
    */
   locationCode?: string;
-
-  /**
-   * 关联公司
-   */
-  relatedCompany?: string;
 
   /**
    * 总数量
@@ -218,17 +208,17 @@ export interface SerialOutboundCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
   /**
-   * 工厂代码(4位字母数字组合)
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
   /**
-   * 出库单号(组合唯一索引:PlantCode + OutboundNo)
+   * 出库单号（租户+公司+工厂内唯一）
    */
   outboundNo: string;
 
@@ -243,39 +233,34 @@ export interface SerialOutboundCreate {
   outboundDate: string;
 
   /**
-   * 仕向地(目的地)
+   * 仕向地（选项 TaktModelDestinations/options，DictValue=DestinationCode）
    */
   destination: string;
 
   /**
-   * 运输方式(0=海运,1=空运,2=陆运,3=铁路,4=快递,5=其他)
+   * 运输方式（字典 logistics_shipping_method_type；0=海运 1=空运 2=陆运 3=铁路 4=快递 5=其他）
    */
   shippingMethod: number;
 
   /**
-   * 目的地港
+   * 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
    */
   destinationPort: string;
 
   /**
-   * 出库类型(0=销售出库,1=生产领料,2=退货出库,3=调拨出库,4=报废出库,5=序列号出库,6=其他)
+   * 出库类型（字典 logistics_outbound_type；0=销售出库 1=生产领料 2=退货出库 3=调拨出库 4=报废出库 5=序列号出库 6=其他）
    */
   outboundType: number;
 
   /**
-   * 仓库编码
+   * 仓库编码（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options）
    */
   warehouseCode: string;
 
   /**
-   * 库位编码
+   * 库位编码（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options）
    */
   locationCode: string;
-
-  /**
-   * 关联公司
-   */
-  relatedCompany: string;
 
   /**
    * 总数量
@@ -332,12 +317,12 @@ export interface SerialOutboundTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码(4位字母数字组合)
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
   /**
-   * 出库单号(组合唯一索引:PlantCode + OutboundNo)
+   * 出库单号（租户+公司+工厂内唯一）
    */
   outboundNo?: string;
 
@@ -347,44 +332,49 @@ export interface SerialOutboundTemplate {
   shippingInvoiceNo?: string;
 
   /**
-   * 仕向地(目的地)
+   * 出库日期
+   */
+  outboundDate?: string;
+
+  /**
+   * 仕向地（选项 TaktModelDestinations/options，DictValue=DestinationCode）
    */
   destination?: string;
 
   /**
-   * 运输方式(0=海运,1=空运,2=陆运,3=铁路,4=快递,5=其他)
+   * 运输方式（字典 logistics_shipping_method_type；0=海运 1=空运 2=陆运 3=铁路 4=快递 5=其他）
    */
   shippingMethod?: number;
 
   /**
-   * 目的地港
+   * 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
    */
   destinationPort?: string;
 
   /**
-   * 出库类型(0=销售出库,1=生产领料,2=退货出库,3=调拨出库,4=报废出库,5=序列号出库,6=其他)
+   * 出库类型（字典 logistics_outbound_type；0=销售出库 1=生产领料 2=退货出库 3=调拨出库 4=报废出库 5=序列号出库 6=其他）
    */
   outboundType?: number;
 
   /**
-   * 仓库编码
+   * 仓库编码（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options）
    */
   warehouseCode?: string;
 
   /**
-   * 库位编码
+   * 库位编码（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options）
    */
   locationCode?: string;
-
-  /**
-   * 关联公司
-   */
-  relatedCompany?: string;
 
   /**
    * 总数量
    */
   totalQuantity?: number;
+
+  /**
+   * 序列号出库明细列表（主子表关系）（子表，级联保存）
+   */
+  items?: SerialOutboundItemCreate[];
 
   /**
    * 扩展字段JSON
@@ -416,17 +406,17 @@ export interface SerialOutboundImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
   /**
-   * 工厂代码(4位字母数字组合)
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
   /**
-   * 出库单号(组合唯一索引:PlantCode + OutboundNo)
+   * 出库单号（租户+公司+工厂内唯一）
    */
   outboundNo?: string;
 
@@ -436,44 +426,49 @@ export interface SerialOutboundImport {
   shippingInvoiceNo?: string;
 
   /**
-   * 仕向地(目的地)
+   * 出库日期
+   */
+  outboundDate?: string;
+
+  /**
+   * 仕向地（选项 TaktModelDestinations/options，DictValue=DestinationCode）
    */
   destination?: string;
 
   /**
-   * 运输方式(0=海运,1=空运,2=陆运,3=铁路,4=快递,5=其他)
+   * 运输方式（字典 logistics_shipping_method_type；0=海运 1=空运 2=陆运 3=铁路 4=快递 5=其他）
    */
   shippingMethod?: number;
 
   /**
-   * 目的地港
+   * 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
    */
   destinationPort?: string;
 
   /**
-   * 出库类型(0=销售出库,1=生产领料,2=退货出库,3=调拨出库,4=报废出库,5=序列号出库,6=其他)
+   * 出库类型（字典 logistics_outbound_type；0=销售出库 1=生产领料 2=退货出库 3=调拨出库 4=报废出库 5=序列号出库 6=其他）
    */
   outboundType?: number;
 
   /**
-   * 仓库编码
+   * 仓库编码（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options）
    */
   warehouseCode?: string;
 
   /**
-   * 库位编码
+   * 库位编码（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options）
    */
   locationCode?: string;
-
-  /**
-   * 关联公司
-   */
-  relatedCompany?: string;
 
   /**
    * 总数量
    */
   totalQuantity?: number;
+
+  /**
+   * 序列号出库明细列表（主子表关系）（子表，级联保存）
+   */
+  items?: SerialOutboundItemCreate[];
 
   /**
    * 扩展字段JSON
@@ -505,12 +500,12 @@ export interface SerialOutboundExport {
   companyCode: string;
 
   /**
-   * 工厂代码(4位字母数字组合)
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
   /**
-   * 出库单号(组合唯一索引:PlantCode + OutboundNo)
+   * 出库单号（租户+公司+工厂内唯一）
    */
   outboundNo: string;
 
@@ -525,39 +520,34 @@ export interface SerialOutboundExport {
   outboundDate: string;
 
   /**
-   * 仕向地(目的地)
+   * 仕向地（选项 TaktModelDestinations/options，DictValue=DestinationCode）
    */
   destination: string;
 
   /**
-   * 运输方式(0=海运,1=空运,2=陆运,3=铁路,4=快递,5=其他)
+   * 运输方式（字典 logistics_shipping_method_type；0=海运 1=空运 2=陆运 3=铁路 4=快递 5=其他）
    */
   shippingMethod: number;
 
   /**
-   * 目的地港
+   * 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
    */
   destinationPort: string;
 
   /**
-   * 出库类型(0=销售出库,1=生产领料,2=退货出库,3=调拨出库,4=报废出库,5=序列号出库,6=其他)
+   * 出库类型（字典 logistics_outbound_type；0=销售出库 1=生产领料 2=退货出库 3=调拨出库 4=报废出库 5=序列号出库 6=其他）
    */
   outboundType: number;
 
   /**
-   * 仓库编码
+   * 仓库编码（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options）
    */
   warehouseCode: string;
 
   /**
-   * 库位编码
+   * 库位编码（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options）
    */
   locationCode: string;
-
-  /**
-   * 关联公司
-   */
-  relatedCompany: string;
 
   /**
    * 总数量

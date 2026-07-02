@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Routine.HelpDesk
 // 文件名称：TaktTicketChangeLogsController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-27
 // 创建人：Takt365(Cursor AI)
 // 功能描述：工单变更日志控制器
 // 
@@ -41,7 +41,7 @@ public class TaktTicketChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("routine:help:desk:ticket:change:log:list", "工单变更日志列表")]
+    [TaktPermission("routine:help:desk:ticket:list", "工单变更日志列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetTicketChangeLogListAsync([FromQuery] TaktTicketChangeLogQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktTicketChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="id">工单变更日志ID</param>
     /// <returns>工单变更日志DTO</returns>
-    [TaktPermission("routine:help:desk:ticket:change:log:query", "工单变更日志详情")]
+    [TaktPermission("routine:help:desk:ticket:query", "工单变更日志详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetTicketChangeLogByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktTicketChangeLogsController : TaktControllerBase
     /// 获取工单变更日志选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("routine:help:desk:ticket:change:log:query", "工单变更日志选项")]
+    [TaktPermission("routine:help:desk:ticket:query", "工单变更日志选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetTicketChangeLogOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktTicketChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>工单变更日志DTO</returns>
-    [TaktPermission("routine:help:desk:ticket:change:log:create", "创建工单变更日志")]
+    [TaktPermission("routine:help:desk:ticket:create", "创建工单变更日志")]
     [HttpPost]
     public async Task<IActionResult> CreateTicketChangeLogAsync([FromBody] TaktTicketChangeLogCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktTicketChangeLogsController : TaktControllerBase
     /// <param name="id">工单变更日志ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>工单变更日志DTO</returns>
-    [TaktPermission("routine:help:desk:ticket:change:log:update", "更新工单变更日志")]
+    [TaktPermission("routine:help:desk:ticket:update", "更新工单变更日志")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateTicketChangeLogAsync(long id, [FromBody] TaktTicketChangeLogUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktTicketChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="id">工单变更日志ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("routine:help:desk:ticket:change:log:delete", "删除工单变更日志")]
+    [TaktPermission("routine:help:desk:ticket:delete", "删除工单变更日志")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteTicketChangeLogByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktTicketChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("routine:help:desk:ticket:change:log:delete", "批量删除工单变更日志")]
+    [TaktPermission("routine:help:desk:ticket:delete", "批量删除工单变更日志")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteTicketChangeLogBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktTicketChangeLogsController : TaktControllerBase
     /// 导出工单变更日志
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("routine:help:desk:ticket:change:log:export", "导出工单变更日志")]
+    [TaktPermission("routine:help:desk:ticket:export", "导出工单变更日志")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportTicketChangeLogAsync([FromQuery] TaktTicketChangeLogQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

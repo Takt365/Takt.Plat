@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Routine.Announcement
 // 文件名称：TaktAnnouncementDtos.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Announcement 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktAnnouncement 生成，请按需审阅）
 // 
@@ -36,9 +36,14 @@ public class TaktAnnouncementDto : TaktApprovalDtoBase
     public long AnnouncementId { get; set; }
 
     /// <summary>
+    /// 公告编码（租户+公司内唯一）
+    /// </summary>
+    public string AnnouncementCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 公告标题
     /// </summary>
-    public string Title { get; set; } = string.Empty;
+    public string AnnouncementTitle { get; set; } = string.Empty;
 
     /// <summary>
     /// 公告类型（字典 sys_announcement_category）
@@ -71,12 +76,12 @@ public class TaktAnnouncementDto : TaktApprovalDtoBase
     public DateTime? PublishTime { get; set; }
 
     /// <summary>
-    /// 是否定时发布（1=是，0=否）
+    /// 定时发布（1=是，0=否）
     /// </summary>
     public int IsScheduled { get; set; } = 0;
 
     /// <summary>
-    /// 是否置顶（1=是，0=否）
+    /// 置顶（1=是，0=否）
     /// </summary>
     public int IsTop { get; set; } = 0;
 
@@ -138,9 +143,14 @@ public class TaktAnnouncementQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 公告编码（租户+公司内唯一）
+    /// </summary>
+    public string? AnnouncementCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 公告标题
     /// </summary>
-    public string? Title { get; set; } = string.Empty;
+    public string? AnnouncementTitle { get; set; } = string.Empty;
 
     /// <summary>
     /// 公告类型（字典 sys_announcement_category）
@@ -178,12 +188,12 @@ public class TaktAnnouncementQueryDto : TaktPagedQuery
     public DateTime? PublishTimeEnd { get; set; }
 
     /// <summary>
-    /// 是否定时发布（1=是，0=否）
+    /// 定时发布（1=是，0=否）
     /// </summary>
     public int? IsScheduled { get; set; }
 
     /// <summary>
-    /// 是否置顶（1=是，0=否）
+    /// 置顶（1=是，0=否）
     /// </summary>
     public int? IsTop { get; set; }
 
@@ -228,7 +238,7 @@ public class TaktAnnouncementQueryDto : TaktPagedQuery
     public int? AnnouncementStatus { get; set; }
 
     /// <summary>
-    /// 审批状态（TaktApprovalStatus）
+    /// 审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）
     /// </summary>
     public TaktApprovalStatus? ApprovalStatus { get; set; }
 
@@ -311,15 +321,21 @@ public class TaktAnnouncementCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 公告编码（租户+公司内唯一）
+    /// </summary>
+    [Required(ErrorMessage = "公告编码（租户+公司内唯一）不能为空")]
+    public string AnnouncementCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 公告标题
     /// </summary>
     [Required(ErrorMessage = "公告标题不能为空")]
-    public string Title { get; set; } = string.Empty;
+    public string AnnouncementTitle { get; set; } = string.Empty;
 
     /// <summary>
     /// 公告类型（字典 sys_announcement_category）
@@ -353,12 +369,12 @@ public class TaktAnnouncementCreateDto
     public DateTime? PublishTime { get; set; }
 
     /// <summary>
-    /// 是否定时发布（1=是，0=否）
+    /// 定时发布（1=是，0=否）
     /// </summary>
     public int IsScheduled { get; set; } = 0;
 
     /// <summary>
-    /// 是否置顶（1=是，0=否）
+    /// 置顶（1=是，0=否）
     /// </summary>
     public int IsTop { get; set; } = 0;
 
@@ -397,6 +413,11 @@ public class TaktAnnouncementCreateDto
     /// 状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）
     /// </summary>
     public int AnnouncementStatus { get; set; } = 0;
+
+    /// <summary>
+    /// 编号规则编码（自动取号时使用）
+    /// </summary>
+    public string? NumberingRuleCode { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -474,9 +495,14 @@ public class TaktAnnouncementTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 公告编码（租户+公司内唯一）
+    /// </summary>
+    public string? AnnouncementCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 公告标题
     /// </summary>
-    public string? Title { get; set; } = string.Empty;
+    public string? AnnouncementTitle { get; set; } = string.Empty;
 
     /// <summary>
     /// 公告类型（字典 sys_announcement_category）
@@ -504,12 +530,17 @@ public class TaktAnnouncementTemplateDto
     public string? Attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否定时发布（1=是，0=否）
+    /// 发布时间（定时发布时使用）
+    /// </summary>
+    public DateTime? PublishTime { get; set; }
+
+    /// <summary>
+    /// 定时发布（1=是，0=否）
     /// </summary>
     public int? IsScheduled { get; set; }
 
     /// <summary>
-    /// 是否置顶（1=是，0=否）
+    /// 置顶（1=是，0=否）
     /// </summary>
     public int? IsTop { get; set; }
 
@@ -517,6 +548,11 @@ public class TaktAnnouncementTemplateDto
     /// 置顶优先级（数字越大越靠前）
     /// </summary>
     public int? TopPriority { get; set; }
+
+    /// <summary>
+    /// 过期时间（过期后自动隐藏）
+    /// </summary>
+    public DateTime? ExpireTime { get; set; }
 
     /// <summary>
     /// 查看次数
@@ -532,6 +568,16 @@ public class TaktAnnouncementTemplateDto
     /// 目标部门编码（多个用逗号分隔，当 target_scope=department 时使用）
     /// </summary>
     public string? TargetDepartments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 目标用户 ID（多个用逗号分隔，当 target_scope=custom 时使用）
+    /// </summary>
+    public string? TargetUsers { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）
+    /// </summary>
+    public int? AnnouncementStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -561,14 +607,19 @@ public class TaktAnnouncementImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
+    /// 公告编码（租户+公司内唯一）
+    /// </summary>
+    public string? AnnouncementCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 公告标题
     /// </summary>
-    public string? Title { get; set; } = string.Empty;
+    public string? AnnouncementTitle { get; set; } = string.Empty;
 
     /// <summary>
     /// 公告类型（字典 sys_announcement_category）
@@ -596,12 +647,17 @@ public class TaktAnnouncementImportDto
     public string? Attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否定时发布（1=是，0=否）
+    /// 发布时间（定时发布时使用）
+    /// </summary>
+    public DateTime? PublishTime { get; set; }
+
+    /// <summary>
+    /// 定时发布（1=是，0=否）
     /// </summary>
     public int? IsScheduled { get; set; }
 
     /// <summary>
-    /// 是否置顶（1=是，0=否）
+    /// 置顶（1=是，0=否）
     /// </summary>
     public int? IsTop { get; set; }
 
@@ -609,6 +665,11 @@ public class TaktAnnouncementImportDto
     /// 置顶优先级（数字越大越靠前）
     /// </summary>
     public int? TopPriority { get; set; }
+
+    /// <summary>
+    /// 过期时间（过期后自动隐藏）
+    /// </summary>
+    public DateTime? ExpireTime { get; set; }
 
     /// <summary>
     /// 查看次数
@@ -624,6 +685,21 @@ public class TaktAnnouncementImportDto
     /// 目标部门编码（多个用逗号分隔，当 target_scope=department 时使用）
     /// </summary>
     public string? TargetDepartments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 目标用户 ID（多个用逗号分隔，当 target_scope=custom 时使用）
+    /// </summary>
+    public string? TargetUsers { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）
+    /// </summary>
+    public int? AnnouncementStatus { get; set; }
+
+    /// <summary>
+    /// 编号规则编码（自动取号时使用）
+    /// </summary>
+    public string? NumberingRuleCode { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -654,9 +730,14 @@ public class TaktAnnouncementExportDto
     public long AnnouncementId { get; set; }
 
     /// <summary>
+    /// 公告编码（租户+公司内唯一）
+    /// </summary>
+    public string AnnouncementCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 公告标题
     /// </summary>
-    public string Title { get; set; } = string.Empty;
+    public string AnnouncementTitle { get; set; } = string.Empty;
 
     /// <summary>
     /// 公告类型（字典 sys_announcement_category）
@@ -689,12 +770,12 @@ public class TaktAnnouncementExportDto
     public DateTime? PublishTime { get; set; }
 
     /// <summary>
-    /// 是否定时发布（1=是，0=否）
+    /// 定时发布（1=是，0=否）
     /// </summary>
     public int IsScheduled { get; set; } = 0;
 
     /// <summary>
-    /// 是否置顶（1=是，0=否）
+    /// 置顶（1=是，0=否）
     /// </summary>
     public int IsTop { get; set; } = 0;
 

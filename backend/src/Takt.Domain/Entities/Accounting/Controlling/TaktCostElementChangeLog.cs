@@ -33,7 +33,7 @@ public class TaktCostElementChangeLog : TaktCompanyEntityBase
     /// <summary>
     /// 成本要素编码（冗余）
     /// </summary>
-    [SugarColumn(ColumnName = "cost_element_code", ColumnDescription = "成本要素编码", ColumnDataType = "varchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "cost_element_code", ColumnDescription = "成本要素编码", ColumnDataType = "varchar", Length = 4, IsNullable = false)]
     public string CostElementCode { get; set; } = string.Empty;
     /// <summary>
     /// 变更字段列表 JSON

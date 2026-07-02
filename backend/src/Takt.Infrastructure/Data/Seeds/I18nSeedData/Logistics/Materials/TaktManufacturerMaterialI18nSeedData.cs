@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Materials
 // 文件名称：TaktManufacturerMaterialI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktManufacturerMaterial 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,22 +91,22 @@ public class TaktManufacturerMaterialI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.manufacturermaterial._self", "zh-HK", "Takt制造商物料明细信息_hk", "实体名称"),
 
             // entity.manufacturermaterial.manufacturerid
-            new TranslationSeedItem("entity.manufacturermaterial.manufacturerid", "en-US", "制造商ID_us", "制造商ID（关联TaktManufacturer主表）"),
+            new TranslationSeedItem("entity.manufacturermaterial.manufacturerid", "en-US", "制造商ID_us", "制造商 ID（关联 TaktManufacturer.Id，选项 TaktManufacturers/options）"),
             // entity.manufacturermaterial.manufacturerid
-            new TranslationSeedItem("entity.manufacturermaterial.manufacturerid", "ja-JP", "制造商ID_jp", "制造商ID（关联TaktManufacturer主表）"),
+            new TranslationSeedItem("entity.manufacturermaterial.manufacturerid", "ja-JP", "制造商ID_jp", "制造商 ID（关联 TaktManufacturer.Id，选项 TaktManufacturers/options）"),
             // entity.manufacturermaterial.manufacturerid
-            new TranslationSeedItem("entity.manufacturermaterial.manufacturerid", "zh-CN", "制造商ID", "制造商ID（关联TaktManufacturer主表）"),
+            new TranslationSeedItem("entity.manufacturermaterial.manufacturerid", "zh-CN", "制造商ID", "制造商 ID（关联 TaktManufacturer.Id，选项 TaktManufacturers/options）"),
             // entity.manufacturermaterial.manufacturerid
-            new TranslationSeedItem("entity.manufacturermaterial.manufacturerid", "zh-HK", "制造商ID_hk", "制造商ID（关联TaktManufacturer主表）"),
+            new TranslationSeedItem("entity.manufacturermaterial.manufacturerid", "zh-HK", "制造商ID_hk", "制造商 ID（关联 TaktManufacturer.Id，选项 TaktManufacturers/options）"),
 
             // entity.manufacturermaterial.manufacturercode
-            new TranslationSeedItem("entity.manufacturermaterial.manufacturercode", "en-US", "制造商编码_us", "制造商编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.manufacturermaterial.manufacturercode", "en-US", "制造商编码_us", "制造商编码（关联 TaktManufacturer.ManufacturerCode，冗余；选项 TaktManufacturers/options，DictValue=ManufacturerCode）"),
             // entity.manufacturermaterial.manufacturercode
-            new TranslationSeedItem("entity.manufacturermaterial.manufacturercode", "ja-JP", "制造商编码_jp", "制造商编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.manufacturermaterial.manufacturercode", "ja-JP", "制造商编码_jp", "制造商编码（关联 TaktManufacturer.ManufacturerCode，冗余；选项 TaktManufacturers/options，DictValue=ManufacturerCode）"),
             // entity.manufacturermaterial.manufacturercode
-            new TranslationSeedItem("entity.manufacturermaterial.manufacturercode", "zh-CN", "制造商编码", "制造商编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.manufacturermaterial.manufacturercode", "zh-CN", "制造商编码", "制造商编码（关联 TaktManufacturer.ManufacturerCode，冗余；选项 TaktManufacturers/options，DictValue=ManufacturerCode）"),
             // entity.manufacturermaterial.manufacturercode
-            new TranslationSeedItem("entity.manufacturermaterial.manufacturercode", "zh-HK", "制造商编码_hk", "制造商编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.manufacturermaterial.manufacturercode", "zh-HK", "制造商编码_hk", "制造商编码（关联 TaktManufacturer.ManufacturerCode，冗余；选项 TaktManufacturers/options，DictValue=ManufacturerCode）"),
 
             // entity.manufacturermaterial.linenumber
             new TranslationSeedItem("entity.manufacturermaterial.linenumber", "en-US", "行号_us", "行号（项号/序号，固定步长=10）"),
@@ -116,15 +116,6 @@ public class TaktManufacturerMaterialI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.manufacturermaterial.linenumber", "zh-CN", "行号", "行号（项号/序号，固定步长=10）"),
             // entity.manufacturermaterial.linenumber
             new TranslationSeedItem("entity.manufacturermaterial.linenumber", "zh-HK", "行号_hk", "行号（项号/序号，固定步长=10）"),
-
-            // entity.manufacturermaterial.materialtype
-            new TranslationSeedItem("entity.manufacturermaterial.materialtype", "en-US", "物料类型_us", "物料类型（0=原材料，1=半成品，2=成品，3=辅料，4=包装材料，5=其他）"),
-            // entity.manufacturermaterial.materialtype
-            new TranslationSeedItem("entity.manufacturermaterial.materialtype", "ja-JP", "物料类型_jp", "物料类型（0=原材料，1=半成品，2=成品，3=辅料，4=包装材料，5=其他）"),
-            // entity.manufacturermaterial.materialtype
-            new TranslationSeedItem("entity.manufacturermaterial.materialtype", "zh-CN", "物料类型", "物料类型（0=原材料，1=半成品，2=成品，3=辅料，4=包装材料，5=其他）"),
-            // entity.manufacturermaterial.materialtype
-            new TranslationSeedItem("entity.manufacturermaterial.materialtype", "zh-HK", "物料类型_hk", "物料类型（0=原材料，1=半成品，2=成品，3=辅料，4=包装材料，5=其他）"),
 
             // entity.manufacturermaterial.code
             new TranslationSeedItem("entity.manufacturermaterial.code", "en-US", "制造商物料编码_us", "制造商物料编码（制造商内部的物料编号）"),
@@ -154,13 +145,13 @@ public class TaktManufacturerMaterialI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.manufacturermaterial.specification", "zh-HK", "制造商物料规格_hk", "制造商物料规格"),
 
             // entity.manufacturermaterial.materialcode
-            new TranslationSeedItem("entity.manufacturermaterial.materialcode", "en-US", "物料编码_us", "物料编码（对应的内部物料编码）"),
+            new TranslationSeedItem("entity.manufacturermaterial.materialcode", "en-US", "物料编码_us", "物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）"),
             // entity.manufacturermaterial.materialcode
-            new TranslationSeedItem("entity.manufacturermaterial.materialcode", "ja-JP", "物料编码_jp", "物料编码（对应的内部物料编码）"),
+            new TranslationSeedItem("entity.manufacturermaterial.materialcode", "ja-JP", "物料编码_jp", "物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）"),
             // entity.manufacturermaterial.materialcode
-            new TranslationSeedItem("entity.manufacturermaterial.materialcode", "zh-CN", "物料编码", "物料编码（对应的内部物料编码）"),
+            new TranslationSeedItem("entity.manufacturermaterial.materialcode", "zh-CN", "物料编码", "物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）"),
             // entity.manufacturermaterial.materialcode
-            new TranslationSeedItem("entity.manufacturermaterial.materialcode", "zh-HK", "物料编码_hk", "物料编码（对应的内部物料编码）"),
+            new TranslationSeedItem("entity.manufacturermaterial.materialcode", "zh-HK", "物料编码_hk", "物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）"),
 
             // entity.manufacturermaterial.manufacturer
             new TranslationSeedItem("entity.manufacturermaterial.manufacturer", "en-US", "导航属性：关联的制造商_us", "导航属性：关联的制造商"),

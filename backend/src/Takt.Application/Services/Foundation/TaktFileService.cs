@@ -138,7 +138,7 @@ public class TaktFileService : TaktServiceBase, ITaktFileService
     /// <param name="entity">文件实体</param>
     private void EnsureFileDownloadAllowed(TaktFile entity)
     {
-        if (!TaktFileStatusHelper.IsEnabled(entity.FileStatus))
+        if (!TaktFileHelper.IsFileStatusEnabled(entity.FileStatus))
         {
             ThrowBusinessExceptionLocalized(TaktValidationI18nKeys.FileDownloadDisabled);
         }
@@ -208,7 +208,7 @@ public class TaktFileService : TaktServiceBase, ITaktFileService
         var list = await _fileRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode
                 && x.CompanyCode == CurrentCompanyCode
-                && x.FileStatus == TaktFileStatusHelper.Enabled
+                && x.FileStatus == TaktFileHelper.FileStatusEnabled
                 && (x.IsPublic == 0 || x.CreatedBy == currentUserId),
             x => x.FileName ?? string.Empty,
             false);
@@ -710,7 +710,7 @@ public class TaktFileService : TaktServiceBase, ITaktFileService
             FileDescription = ResolveUploadFileDescription(stored.FileCode, stored.FileName, meta),
             FileTags = meta?.FileTags ?? string.Empty,
             IsPublic = meta?.IsPublic ?? 0,
-            FileStatus = TaktFileStatusHelper.NormalizeOrDefault(meta?.FileStatus),
+            FileStatus = TaktFileHelper.NormalizeFileStatusOrDefault(meta?.FileStatus),
             IpAddress = ipAddress,
             Location = location,
         };
@@ -729,14 +729,14 @@ public class TaktFileService : TaktServiceBase, ITaktFileService
     }
 
     /// <summary>
-    /// 解析上传落库的 IP 与地理位置（与 TaktOnlineService 一致，经 TaktLocationHelper.ResolveIpAndLocationForLog）
+    /// 解析上传落库的 IP 与地理位置（经 TaktHttpAuditHelper.ResolveLocationFromIp）
     /// </summary>
     /// <param name="clientIp">客户端 IP</param>
     /// <returns>可落库的 IP 与位置</returns>
     private static (string IpAddress, string Location) ResolveUploadIpAndLocation(string? clientIp)
     {
-        var (_, location) = TaktLocationHelper.ResolveIpAndLocationForLog(clientIp, null);
-        return (clientIp ?? string.Empty, location ?? string.Empty);
+        var location = TaktHttpAuditHelper.ResolveLocationFromIp(clientIp, null);
+        return (clientIp ?? string.Empty, location);
     }
 
     /// <summary>

@@ -39,13 +39,13 @@ namespace Takt.Domain.Entities.Logistics.Materials;
 public class TaktManufacturerMaterial : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 制造商ID（关联TaktManufacturer主表）
+    /// 制造商 ID（关联 TaktManufacturer.Id，选项 TaktManufacturers/options）
     /// </summary>
     [SugarColumn(ColumnName = "manufacturer_id", ColumnDescription = "制造商ID", ColumnDataType = "bigint", IsNullable = false)]
     public long ManufacturerId { get; set; }
 
     /// <summary>
-    /// 制造商编码（冗余字段，便于查询）
+    /// 制造商编码（关联 TaktManufacturer.ManufacturerCode，冗余；选项 TaktManufacturers/options，DictValue=ManufacturerCode）
     /// </summary>
     [SugarColumn(ColumnName = "manufacturer_code", ColumnDescription = "制造商编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string ManufacturerCode { get; set; } = string.Empty;
@@ -55,12 +55,6 @@ public class TaktManufacturerMaterial : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "line_number", ColumnDescription = "行号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int LineNumber { get; set; } = 0;
-
-    /// <summary>
-    /// 物料类型（0=原材料，1=半成品，2=成品，3=辅料，4=包装材料，5=其他）
-    /// </summary>
-    [SugarColumn(ColumnName = "material_type", ColumnDescription = "物料类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int MaterialType { get; set; } = 0;
 
     /// <summary>
     /// 制造商物料编码（制造商内部的物料编号）
@@ -81,7 +75,7 @@ public class TaktManufacturerMaterial : TaktCompanyEntityBase
     public string? ManufacturerMaterialSpecification { get; set; }
 
     /// <summary>
-    /// 物料编码（对应的内部物料编码）
+    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
     /// </summary>
     [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string MaterialCode { get; set; } = string.Empty;

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Routine.NewsCenter
 // 文件名称：TaktNewsDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：News 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktNews 生成，请按需审阅）
 // 
@@ -14,7 +14,6 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Dtos.Routine.NewsCenter;
 
@@ -44,7 +43,7 @@ public class TaktNewsDto : TaktApprovalDtoBase
     /// <summary>
     /// 新闻分类
     /// </summary>
-    public int NewsCategory { get; set; }
+    public int NewsCategory { get; set; } = 0;
 
     /// <summary>
     /// 新闻标题
@@ -59,7 +58,7 @@ public class TaktNewsDto : TaktApprovalDtoBase
     /// <summary>
     /// 标签（逗号分隔或 JSON 数组存储）
     /// </summary>
-    public string? Tags { get; set; } = string.Empty;
+    public string? NewsTags { get; set; } = string.Empty;
 
     /// <summary>
     /// 新闻内容
@@ -72,59 +71,54 @@ public class TaktNewsDto : TaktApprovalDtoBase
     public string? NewsCoverImage { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否置顶
+    /// 置顶
     /// </summary>
-    public int IsTop { get; set; }
+    public int NewsIsTop { get; set; } = 0;
 
     /// <summary>
-    /// 是否推荐
+    /// 推荐
     /// </summary>
-    public int IsRecommended { get; set; }
+    public int NewsIsRecommended { get; set; } = 0;
 
     /// <summary>
     /// 生效时间
     /// </summary>
-    public DateTime? EffectiveTime { get; set; }
+    public DateTime? NewsEffectiveTime { get; set; }
 
     /// <summary>
     /// 失效时间
     /// </summary>
-    public DateTime? ExpireTime { get; set; }
+    public DateTime? NewsExpireTime { get; set; }
 
     /// <summary>
     /// 阅读次数
     /// </summary>
-    public int ReadCount { get; set; } = 0;
+    public int NewsReadCount { get; set; } = 0;
 
     /// <summary>
     /// 点赞次数
     /// </summary>
-    public int LikeCount { get; set; } = 0;
+    public int NewsLikeCount { get; set; } = 0;
 
     /// <summary>
     /// 评论次数
     /// </summary>
-    public int CommentCount { get; set; } = 0;
+    public int NewsCommentCount { get; set; } = 0;
 
     /// <summary>
     /// 收藏次数
     /// </summary>
-    public int FavoriteCount { get; set; } = 0;
+    public int NewsFavoriteCount { get; set; } = 0;
 
     /// <summary>
     /// 分享次数
     /// </summary>
-    public int ShareCount { get; set; } = 0;
+    public int NewsShareCount { get; set; } = 0;
 
     /// <summary>
     /// 附件数量
     /// </summary>
-    public int AttachmentCount { get; set; } = 0;
-
-    /// <summary>
-    /// 流程实例 名称（填充字段）
-    /// </summary>
-    public string? FlowInstanceName { get; set; }
+    public int NewsAttachmentCount { get; set; } = 0;
 
     /// <summary>
     /// 发布部门 ID
@@ -151,7 +145,7 @@ public class TaktNewsDto : TaktApprovalDtoBase
     /// <summary>
     /// 发布时间
     /// </summary>
-    public DateTime? PublishTime { get; set; }
+    public DateTime? NewsPublishTime { get; set; }
 
     /// <summary>
     /// 排序号（越小越靠前）
@@ -161,7 +155,7 @@ public class TaktNewsDto : TaktApprovalDtoBase
     /// <summary>
     /// 新闻状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）
     /// </summary>
-    public int NewsStatus { get; set; }
+    public int NewsStatus { get; set; } = 0;
 
     /// <summary>
     /// 新闻附件列表（主子表关系）
@@ -244,7 +238,7 @@ public class TaktNewsQueryDto : TaktPagedQuery
     /// <summary>
     /// 标签（逗号分隔或 JSON 数组存储）
     /// </summary>
-    public string? Tags { get; set; } = string.Empty;
+    public string? NewsTags { get; set; } = string.Empty;
 
     /// <summary>
     /// 新闻内容
@@ -257,70 +251,64 @@ public class TaktNewsQueryDto : TaktPagedQuery
     public string? NewsCoverImage { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否置顶
+    /// 置顶
     /// </summary>
-    public int? IsTop { get; set; }
+    public int? NewsIsTop { get; set; }
 
     /// <summary>
-    /// 是否推荐
+    /// 推荐
     /// </summary>
-    public int? IsRecommended { get; set; }
+    public int? NewsIsRecommended { get; set; }
 
     /// <summary>
     /// 生效时间（范围查询-开始）
     /// </summary>
-    public DateTime? EffectiveTimeStart { get; set; }
+    public DateTime? NewsEffectiveTimeStart { get; set; }
 
     /// <summary>
     /// 生效时间（范围查询-结束）
     /// </summary>
-    public DateTime? EffectiveTimeEnd { get; set; }
+    public DateTime? NewsEffectiveTimeEnd { get; set; }
 
     /// <summary>
     /// 失效时间（范围查询-开始）
     /// </summary>
-    public DateTime? ExpireTimeStart { get; set; }
+    public DateTime? NewsExpireTimeStart { get; set; }
 
     /// <summary>
     /// 失效时间（范围查询-结束）
     /// </summary>
-    public DateTime? ExpireTimeEnd { get; set; }
+    public DateTime? NewsExpireTimeEnd { get; set; }
 
     /// <summary>
     /// 阅读次数
     /// </summary>
-    public int? ReadCount { get; set; }
+    public int? NewsReadCount { get; set; }
 
     /// <summary>
     /// 点赞次数
     /// </summary>
-    public int? LikeCount { get; set; }
+    public int? NewsLikeCount { get; set; }
 
     /// <summary>
     /// 评论次数
     /// </summary>
-    public int? CommentCount { get; set; }
+    public int? NewsCommentCount { get; set; }
 
     /// <summary>
     /// 收藏次数
     /// </summary>
-    public int? FavoriteCount { get; set; }
+    public int? NewsFavoriteCount { get; set; }
 
     /// <summary>
     /// 分享次数
     /// </summary>
-    public int? ShareCount { get; set; }
+    public int? NewsShareCount { get; set; }
 
     /// <summary>
     /// 附件数量
     /// </summary>
-    public int? AttachmentCount { get; set; }
-
-    /// <summary>
-    /// 流程实例 ID（关联工作流，如发布审批流程；流程侧 BusinessType=News、BusinessKey=本表 Id）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
+    public int? NewsAttachmentCount { get; set; }
 
     /// <summary>
     /// 发布部门 ID
@@ -347,12 +335,12 @@ public class TaktNewsQueryDto : TaktPagedQuery
     /// <summary>
     /// 发布时间（范围查询-开始）
     /// </summary>
-    public DateTime? PublishTimeStart { get; set; }
+    public DateTime? NewsPublishTimeStart { get; set; }
 
     /// <summary>
     /// 发布时间（范围查询-结束）
     /// </summary>
-    public DateTime? PublishTimeEnd { get; set; }
+    public DateTime? NewsPublishTimeEnd { get; set; }
 
     /// <summary>
     /// 排序号（越小越靠前）
@@ -365,9 +353,9 @@ public class TaktNewsQueryDto : TaktPagedQuery
     public int? NewsStatus { get; set; }
 
     /// <summary>
-    /// 审批状态（TaktApprovalStatus）
+    /// 审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）
     /// </summary>
-    public int? ApprovalStatus { get; set; }
+    public TaktApprovalStatus? ApprovalStatus { get; set; }
 
     /// <summary>
     /// 发起人ID
@@ -402,6 +390,12 @@ public class TaktNewsQueryDto : TaktPagedQuery
     public DateTime? ApprovedAtEnd { get; set; }
 
     /// <summary>
+    /// 流程实例 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? FlowInstanceId { get; set; }
+
+    /// <summary>
     /// 创建时间（范围查询-开始）
     /// </summary>
     public DateTime? CreatedAtStart { get; set; }
@@ -420,6 +414,60 @@ public class TaktNewsQueryDto : TaktPagedQuery
     /// 备注（模糊查询）
     /// </summary>
     public string? Remark { get; set; }
+
+    /// <summary>
+    /// 生效时间（范围查询-开始）；与 NewsEffectiveTimeStart 同义
+    /// </summary>
+    public DateTime? EffectiveTimeStart
+    {
+        get => NewsEffectiveTimeStart;
+        set => NewsEffectiveTimeStart = value;
+    }
+
+    /// <summary>
+    /// 生效时间（范围查询-结束）；与 NewsEffectiveTimeEnd 同义
+    /// </summary>
+    public DateTime? EffectiveTimeEnd
+    {
+        get => NewsEffectiveTimeEnd;
+        set => NewsEffectiveTimeEnd = value;
+    }
+
+    /// <summary>
+    /// 失效时间（范围查询-开始）；与 NewsExpireTimeStart 同义
+    /// </summary>
+    public DateTime? ExpireTimeStart
+    {
+        get => NewsExpireTimeStart;
+        set => NewsExpireTimeStart = value;
+    }
+
+    /// <summary>
+    /// 失效时间（范围查询-结束）；与 NewsExpireTimeEnd 同义
+    /// </summary>
+    public DateTime? ExpireTimeEnd
+    {
+        get => NewsExpireTimeEnd;
+        set => NewsExpireTimeEnd = value;
+    }
+
+    /// <summary>
+    /// 发布时间（范围查询-开始）；与 NewsPublishTimeStart 同义
+    /// </summary>
+    public DateTime? PublishTimeStart
+    {
+        get => NewsPublishTimeStart;
+        set => NewsPublishTimeStart = value;
+    }
+
+    /// <summary>
+    /// 发布时间（范围查询-结束）；与 NewsPublishTimeEnd 同义
+    /// </summary>
+    public DateTime? PublishTimeEnd
+    {
+        get => NewsPublishTimeEnd;
+        set => NewsPublishTimeEnd = value;
+    }
 }
 
 // ========================================
@@ -442,7 +490,7 @@ public class TaktNewsCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -455,7 +503,7 @@ public class TaktNewsCreateDto
     /// <summary>
     /// 新闻分类
     /// </summary>
-    public int NewsCategory { get; set; }
+    public int NewsCategory { get; set; } = 0;
 
     /// <summary>
     /// 新闻标题
@@ -471,7 +519,7 @@ public class TaktNewsCreateDto
     /// <summary>
     /// 标签（逗号分隔或 JSON 数组存储）
     /// </summary>
-    public string? Tags { get; set; } = string.Empty;
+    public string? NewsTags { get; set; } = string.Empty;
 
     /// <summary>
     /// 新闻内容
@@ -485,60 +533,54 @@ public class TaktNewsCreateDto
     public string? NewsCoverImage { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否置顶
+    /// 置顶
     /// </summary>
-    public int IsTop { get; set; }
+    public int NewsIsTop { get; set; } = 0;
 
     /// <summary>
-    /// 是否推荐
+    /// 推荐
     /// </summary>
-    public int IsRecommended { get; set; }
+    public int NewsIsRecommended { get; set; } = 0;
 
     /// <summary>
     /// 生效时间
     /// </summary>
-    public DateTime? EffectiveTime { get; set; }
+    public DateTime? NewsEffectiveTime { get; set; }
 
     /// <summary>
     /// 失效时间
     /// </summary>
-    public DateTime? ExpireTime { get; set; }
+    public DateTime? NewsExpireTime { get; set; }
 
     /// <summary>
     /// 阅读次数
     /// </summary>
-    public int ReadCount { get; set; } = 0;
+    public int NewsReadCount { get; set; } = 0;
 
     /// <summary>
     /// 点赞次数
     /// </summary>
-    public int LikeCount { get; set; } = 0;
+    public int NewsLikeCount { get; set; } = 0;
 
     /// <summary>
     /// 评论次数
     /// </summary>
-    public int CommentCount { get; set; } = 0;
+    public int NewsCommentCount { get; set; } = 0;
 
     /// <summary>
     /// 收藏次数
     /// </summary>
-    public int FavoriteCount { get; set; } = 0;
+    public int NewsFavoriteCount { get; set; } = 0;
 
     /// <summary>
     /// 分享次数
     /// </summary>
-    public int ShareCount { get; set; } = 0;
+    public int NewsShareCount { get; set; } = 0;
 
     /// <summary>
     /// 附件数量
     /// </summary>
-    public int AttachmentCount { get; set; } = 0;
-
-    /// <summary>
-    /// 流程实例 ID（关联工作流，如发布审批流程；流程侧 BusinessType=News、BusinessKey=本表 Id）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
+    public int NewsAttachmentCount { get; set; } = 0;
 
     /// <summary>
     /// 发布部门 ID
@@ -566,17 +608,12 @@ public class TaktNewsCreateDto
     /// <summary>
     /// 发布时间
     /// </summary>
-    public DateTime? PublishTime { get; set; }
-
-    /// <summary>
-    /// 排序号（越小越靠前）
-    /// </summary>
-    public int SortOrder { get; set; } = 0;
+    public DateTime? NewsPublishTime { get; set; }
 
     /// <summary>
     /// 新闻状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）
     /// </summary>
-    public int NewsStatus { get; set; }
+    public int NewsStatus { get; set; } = 0;
 
     /// <summary>
     /// 新闻附件列表（主子表关系）（子表，级联保存）
@@ -660,8 +697,8 @@ public class TaktNewsStatusDto
     /// <summary>
     /// 新闻状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）
     /// </summary>
-    [Required(ErrorMessage = "新闻状态不能为空")]
-    public int NewsStatus { get; set; }
+    [Required(ErrorMessage = "新闻状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）不能为空")]
+    public int NewsStatus { get; set; } = 0;
 }
 
 // ========================================
@@ -730,7 +767,7 @@ public class TaktNewsTemplateDto
     /// <summary>
     /// 标签（逗号分隔或 JSON 数组存储）
     /// </summary>
-    public string? Tags { get; set; } = string.Empty;
+    public string? NewsTags { get; set; } = string.Empty;
 
     /// <summary>
     /// 新闻内容
@@ -743,29 +780,116 @@ public class TaktNewsTemplateDto
     public string? NewsCoverImage { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否置顶
+    /// 置顶
     /// </summary>
-    public int? IsTop { get; set; }
+    public int? NewsIsTop { get; set; }
 
     /// <summary>
-    /// 是否推荐
+    /// 推荐
     /// </summary>
-    public int? IsRecommended { get; set; }
+    public int? NewsIsRecommended { get; set; }
+
+    /// <summary>
+    /// 生效时间
+    /// </summary>
+    public DateTime? NewsEffectiveTime { get; set; }
+
+    /// <summary>
+    /// 失效时间
+    /// </summary>
+    public DateTime? NewsExpireTime { get; set; }
 
     /// <summary>
     /// 阅读次数
     /// </summary>
-    public int? ReadCount { get; set; }
+    public int? NewsReadCount { get; set; }
 
     /// <summary>
     /// 点赞次数
     /// </summary>
-    public int? LikeCount { get; set; }
+    public int? NewsLikeCount { get; set; }
 
     /// <summary>
     /// 评论次数
     /// </summary>
-    public int? CommentCount { get; set; }
+    public int? NewsCommentCount { get; set; }
+
+    /// <summary>
+    /// 收藏次数
+    /// </summary>
+    public int? NewsFavoriteCount { get; set; }
+
+    /// <summary>
+    /// 分享次数
+    /// </summary>
+    public int? NewsShareCount { get; set; }
+
+    /// <summary>
+    /// 附件数量
+    /// </summary>
+    public int? NewsAttachmentCount { get; set; }
+
+    /// <summary>
+    /// 发布部门 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? DeptId { get; set; }
+
+    /// <summary>
+    /// 发布部门名称
+    /// </summary>
+    public string? DeptName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 发布人 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? PublisherId { get; set; }
+
+    /// <summary>
+    /// 发布人姓名
+    /// </summary>
+    public string? PublisherName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 发布时间
+    /// </summary>
+    public DateTime? NewsPublishTime { get; set; }
+
+    /// <summary>
+    /// 新闻状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）
+    /// </summary>
+    public int? NewsStatus { get; set; }
+
+    /// <summary>
+    /// 新闻附件列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktNewsAttachmentCreateDto>? Attachments { get; set; }
+
+    /// <summary>
+    /// 新闻评论列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktNewsCommentCreateDto>? Comments { get; set; }
+
+    /// <summary>
+    /// 新闻点赞记录列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktNewsLikeCreateDto>? Likes { get; set; }
+
+    /// <summary>
+    /// 新闻阅读记录列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktNewsReadCreateDto>? Reads { get; set; }
+
+    /// <summary>
+    /// 新闻收藏记录列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktNewsFavoriteCreateDto>? Favorites { get; set; }
+
+    /// <summary>
+    /// 新闻分享记录列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktNewsShareCreateDto>? Shares { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -795,7 +919,7 @@ public class TaktNewsImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -822,7 +946,7 @@ public class TaktNewsImportDto
     /// <summary>
     /// 标签（逗号分隔或 JSON 数组存储）
     /// </summary>
-    public string? Tags { get; set; } = string.Empty;
+    public string? NewsTags { get; set; } = string.Empty;
 
     /// <summary>
     /// 新闻内容
@@ -835,29 +959,116 @@ public class TaktNewsImportDto
     public string? NewsCoverImage { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否置顶
+    /// 置顶
     /// </summary>
-    public int? IsTop { get; set; }
+    public int? NewsIsTop { get; set; }
 
     /// <summary>
-    /// 是否推荐
+    /// 推荐
     /// </summary>
-    public int? IsRecommended { get; set; }
+    public int? NewsIsRecommended { get; set; }
+
+    /// <summary>
+    /// 生效时间
+    /// </summary>
+    public DateTime? NewsEffectiveTime { get; set; }
+
+    /// <summary>
+    /// 失效时间
+    /// </summary>
+    public DateTime? NewsExpireTime { get; set; }
 
     /// <summary>
     /// 阅读次数
     /// </summary>
-    public int? ReadCount { get; set; }
+    public int? NewsReadCount { get; set; }
 
     /// <summary>
     /// 点赞次数
     /// </summary>
-    public int? LikeCount { get; set; }
+    public int? NewsLikeCount { get; set; }
 
     /// <summary>
     /// 评论次数
     /// </summary>
-    public int? CommentCount { get; set; }
+    public int? NewsCommentCount { get; set; }
+
+    /// <summary>
+    /// 收藏次数
+    /// </summary>
+    public int? NewsFavoriteCount { get; set; }
+
+    /// <summary>
+    /// 分享次数
+    /// </summary>
+    public int? NewsShareCount { get; set; }
+
+    /// <summary>
+    /// 附件数量
+    /// </summary>
+    public int? NewsAttachmentCount { get; set; }
+
+    /// <summary>
+    /// 发布部门 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? DeptId { get; set; }
+
+    /// <summary>
+    /// 发布部门名称
+    /// </summary>
+    public string? DeptName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 发布人 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? PublisherId { get; set; }
+
+    /// <summary>
+    /// 发布人姓名
+    /// </summary>
+    public string? PublisherName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 发布时间
+    /// </summary>
+    public DateTime? NewsPublishTime { get; set; }
+
+    /// <summary>
+    /// 新闻状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）
+    /// </summary>
+    public int? NewsStatus { get; set; }
+
+    /// <summary>
+    /// 新闻附件列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktNewsAttachmentCreateDto>? Attachments { get; set; }
+
+    /// <summary>
+    /// 新闻评论列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktNewsCommentCreateDto>? Comments { get; set; }
+
+    /// <summary>
+    /// 新闻点赞记录列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktNewsLikeCreateDto>? Likes { get; set; }
+
+    /// <summary>
+    /// 新闻阅读记录列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktNewsReadCreateDto>? Reads { get; set; }
+
+    /// <summary>
+    /// 新闻收藏记录列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktNewsFavoriteCreateDto>? Favorites { get; set; }
+
+    /// <summary>
+    /// 新闻分享记录列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktNewsShareCreateDto>? Shares { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -895,7 +1106,7 @@ public class TaktNewsExportDto
     /// <summary>
     /// 新闻分类
     /// </summary>
-    public int NewsCategory { get; set; }
+    public int NewsCategory { get; set; } = 0;
 
     /// <summary>
     /// 新闻标题
@@ -910,7 +1121,7 @@ public class TaktNewsExportDto
     /// <summary>
     /// 标签（逗号分隔或 JSON 数组存储）
     /// </summary>
-    public string? Tags { get; set; } = string.Empty;
+    public string? NewsTags { get; set; } = string.Empty;
 
     /// <summary>
     /// 新闻内容
@@ -923,60 +1134,54 @@ public class TaktNewsExportDto
     public string? NewsCoverImage { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否置顶
+    /// 置顶
     /// </summary>
-    public int IsTop { get; set; }
+    public int NewsIsTop { get; set; } = 0;
 
     /// <summary>
-    /// 是否推荐
+    /// 推荐
     /// </summary>
-    public int IsRecommended { get; set; }
+    public int NewsIsRecommended { get; set; } = 0;
 
     /// <summary>
     /// 生效时间
     /// </summary>
-    public DateTime? EffectiveTime { get; set; }
+    public DateTime? NewsEffectiveTime { get; set; }
 
     /// <summary>
     /// 失效时间
     /// </summary>
-    public DateTime? ExpireTime { get; set; }
+    public DateTime? NewsExpireTime { get; set; }
 
     /// <summary>
     /// 阅读次数
     /// </summary>
-    public int ReadCount { get; set; } = 0;
+    public int NewsReadCount { get; set; } = 0;
 
     /// <summary>
     /// 点赞次数
     /// </summary>
-    public int LikeCount { get; set; } = 0;
+    public int NewsLikeCount { get; set; } = 0;
 
     /// <summary>
     /// 评论次数
     /// </summary>
-    public int CommentCount { get; set; } = 0;
+    public int NewsCommentCount { get; set; } = 0;
 
     /// <summary>
     /// 收藏次数
     /// </summary>
-    public int FavoriteCount { get; set; } = 0;
+    public int NewsFavoriteCount { get; set; } = 0;
 
     /// <summary>
     /// 分享次数
     /// </summary>
-    public int ShareCount { get; set; } = 0;
+    public int NewsShareCount { get; set; } = 0;
 
     /// <summary>
     /// 附件数量
     /// </summary>
-    public int AttachmentCount { get; set; } = 0;
-
-    /// <summary>
-    /// 流程实例 ID（关联工作流，如发布审批流程；流程侧 BusinessType=News、BusinessKey=本表 Id）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
+    public int NewsAttachmentCount { get; set; } = 0;
 
     /// <summary>
     /// 发布部门 ID
@@ -1003,7 +1208,7 @@ public class TaktNewsExportDto
     /// <summary>
     /// 发布时间
     /// </summary>
-    public DateTime? PublishTime { get; set; }
+    public DateTime? NewsPublishTime { get; set; }
 
     /// <summary>
     /// 排序号（越小越靠前）
@@ -1013,7 +1218,7 @@ public class TaktNewsExportDto
     /// <summary>
     /// 新闻状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）
     /// </summary>
-    public int NewsStatus { get; set; }
+    public int NewsStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

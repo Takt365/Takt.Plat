@@ -19,11 +19,11 @@
       @reset="handleQueryReset"
     />
     <TaktToolsBar
-      create-permission="logistics:manufacturing:bom:standardoperationtime:create"
-      update-permission="logistics:manufacturing:bom:standardoperationtime:update"
-      delete-permission="logistics:manufacturing:bom:standardoperationtime:delete"
+      create-permission="logistics:manufacturing:bom:standard:operation:time:create"
+      update-permission="logistics:manufacturing:bom:standard:operation:time:update"
+      delete-permission="logistics:manufacturing:bom:standard:operation:time:delete"
 
-      export-permission="logistics:manufacturing:bom:standardoperationtime:export"
+      export-permission="logistics:manufacturing:bom:standard:operation:time:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -133,8 +133,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.changeTimeStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.standardoperationtimechangelog.changetimestart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -144,8 +143,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.changeTimeEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.standardoperationtimechangelog.changetimeend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -178,7 +176,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -189,7 +187,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -471,7 +469,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:manufacturing:bom:standardoperationtime:update',
+        permission: 'logistics:manufacturing:bom:standard:operation:time:update',
         onClick: (record: StandardOperationTimeChangeLog) => void handleEdit(record),
       },
       {
@@ -479,7 +477,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:manufacturing:bom:standardoperationtime:delete',
+        permission: 'logistics:manufacturing:bom:standard:operation:time:delete',
         onClick: (record: StandardOperationTimeChangeLog) => void handleDeleteOne(record),
       },
     ],
@@ -496,7 +494,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: StandardOperationTimeChangeLog, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getStandardOperationTimeChangeLogId(selectedRow.value) === getStandardOperationTimeChangeLogId(record)) {
+    } else if (selectedRow.value && getStandardOperationTimeChangeLogId(selectedRow.value) === getStandardOperationTimeChangeLogId(record)) {
       selectedRow.value = null
     }
   },

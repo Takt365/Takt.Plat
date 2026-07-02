@@ -21,7 +21,7 @@ using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
 using Takt.Infrastructure.Services;
-using Takt.Shared.Enums;
+using Takt.Shared.Constants;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.SignalR;
@@ -81,12 +81,8 @@ public class TaktConnectHub : Hub
                 _authService,
                 userId,
                 userName);
-            var (connectIp, connectLocation) = TaktLocationHelper.ResolveClientIpAndLocationForLog(httpContext);
-            var userAgent = httpContext?.Request.Headers["User-Agent"].ToString();
+            var client = TaktHttpAuditHelper.ResolveClientLogContext(httpContext);
             var connectTime = DateTime.Now;
-            var deviceType = ParseDeviceType(userAgent);
-            var browserType = ParseBrowserType(userAgent);
-            var operatingSystem = ParseOperatingSystem(userAgent);
 
             await _onlineService.RegisterOnlineSessionAsync(new TaktOnlineCreateDto
             {
@@ -94,12 +90,12 @@ public class TaktConnectHub : Hub
                 UserName = userName,
                 UserId = userId,
                 OnlineStatus = 0,
-                ConnectIp = connectIp,
-                ConnectLocation = connectLocation,
-                UserAgent = userAgent,
-                DeviceType = deviceType,
-                BrowserType = browserType,
-                OperatingSystem = operatingSystem,
+                ConnectIp = client.Ip,
+                ConnectLocation = client.Location,
+                UserAgent = client.UserAgent,
+                BrowserType = client.Browser,
+                OperatingSystem = client.OperatingSystem,
+                DeviceType = client.DeviceType,
                 ConnectTime = connectTime,
             });
 
@@ -115,9 +111,9 @@ public class TaktConnectHub : Hub
                 UserName = userName,
                 UserId = userIdStr,
                 ConnectTime = connectTime,
-                ConnectIp = connectIp,
-                ConnectLocation = connectLocation,
-                DeviceType = deviceType,
+                ConnectIp = client.Ip,
+                ConnectLocation = client.Location,
+                DeviceType = client.DeviceType,
             });
 
             await Clients.Others.SendAsync("UserConnected", new
@@ -125,8 +121,8 @@ public class TaktConnectHub : Hub
                 UserName = userName,
                 UserId = userIdStr,
                 ConnectTime = connectTime,
-                ConnectIp = connectIp,
-                ConnectLocation = connectLocation,
+                ConnectIp = client.Ip,
+                ConnectLocation = client.Location,
             });
 
             await _signalRDispatchService.PushOnlineStatisticsToUserAsync(companyCode, userName, userId);
@@ -138,8 +134,8 @@ public class TaktConnectHub : Hub
                 userId,
                 companyCode,
                 _userContext.TenantCode,
-                connectIp,
-                connectLocation);
+                client.Ip,
+                client.Location);
             await base.OnConnectedAsync();
         }
         finally
@@ -182,14 +178,12 @@ public class TaktConnectHub : Hub
                     online.ConnectIp = disconnectIp;
                 }
 
-                online.ConnectLocation = TaktLocationHelper.ResolveIpAndLocationForLog(
+                online.ConnectLocation = TaktHttpAuditHelper.ResolveLocationFromIp(
                     online.ConnectIp,
-                    online.ConnectLocation).Location;
+                    online.ConnectLocation);
                 disconnectLocation = online.ConnectLocation;
-                online.DisconnectTime = disconnectTime;
-                online.ConnectionDuration = (int)(disconnectTime - online.ConnectTime).TotalSeconds;
-                online.OnlineStatus = 1;
                 await _onlineRepository.UpdateAsync(online);
+                await _onlineService.CloseOnlineSessionByConnectionIdAsync(connectionId ?? string.Empty, disconnectTime);
             }
 
             if (!string.IsNullOrEmpty(connectionId))
@@ -231,11 +225,9 @@ public class TaktConnectHub : Hub
     {
         RequireResolvedLoginUser();
         var connectionId = Context.ConnectionId;
-        var online = await _onlineRepository.FirstAsync(o => o.ConnectionId == connectionId);
-        if (online != null)
+        if (!string.IsNullOrWhiteSpace(connectionId))
         {
-            online.LastActiveTime = DateTime.Now;
-            await _onlineRepository.UpdateAsync(online);
+            await _onlineService.RefreshOnlineConnectionDurationAsync(connectionId, DateTime.Now);
         }
 
         var userName = _userContext.UserName!.Trim();
@@ -274,7 +266,7 @@ public class TaktConnectHub : Hub
             ConnectTime = u.ConnectTime,
             LastActiveTime = u.LastActiveTime,
             ConnectIp = u.ConnectIp,
-            ConnectLocation = TaktLocationHelper.ResolveIpAndLocationForLog(u.ConnectIp, u.ConnectLocation).Location,
+            ConnectLocation = TaktHttpAuditHelper.ResolveLocationFromIp(u.ConnectIp, u.ConnectLocation),
         }).ToList();
     }
 
@@ -297,114 +289,6 @@ public class TaktConnectHub : Hub
     private (long? UserId, string? UserName) ResolveUserFromContext()
     {
         var principal = Context.User ?? TaktUserContext.HubInvocationPrincipal;
-        var sub = principal?.FindFirst("sub")?.Value ?? principal?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        var name = principal?.FindFirst("name")?.Value ?? principal?.FindFirst(ClaimTypes.Name)?.Value;
-
-        long? userId = long.TryParse(sub, out var parsedId) ? parsedId : _userContext.UserId;
-        var userName = !string.IsNullOrWhiteSpace(name) ? name : _userContext.UserName;
-        return (userId, userName);
-    }
-
-    /// <summary>
-    /// 解析 User-Agent 中的设备类型
-    /// </summary>
-    /// <param name="userAgent">User-Agent 字符串</param>
-    /// <returns>设备类型（PC、Mobile、Tablet 等）</returns>
-    private static int? ParseDeviceType(string? userAgent)
-    {
-        if (string.IsNullOrEmpty(userAgent))
-        {
-            return null;
-        }
-
-        var ua = userAgent.ToLowerInvariant();
-        if (ua.Contains("tablet") || ua.Contains("ipad"))
-        {
-            return 3;
-        }
-
-        if (ua.Contains("mobile") || ua.Contains("android") || ua.Contains("iphone"))
-        {
-            return 2;
-        }
-
-        return 1;
-    }
-
-    /// <summary>
-    /// 解析 User-Agent 中的浏览器类型
-    /// </summary>
-    /// <param name="userAgent">User-Agent 字符串</param>
-    /// <returns>浏览器类型</returns>
-    private static int? ParseBrowserType(string? userAgent)
-    {
-        if (string.IsNullOrEmpty(userAgent))
-        {
-            return null;
-        }
-
-        var ua = userAgent.ToLowerInvariant();
-        if (ua.Contains("chrome") && !ua.Contains("edg"))
-        {
-            return 1;
-        }
-
-        if (ua.Contains("firefox"))
-        {
-            return 2;
-        }
-
-        if (ua.Contains("safari") && !ua.Contains("chrome"))
-        {
-            return 3;
-        }
-
-        if (ua.Contains("edg"))
-        {
-            return 4;
-        }
-
-        return 0;
-    }
-
-    /// <summary>
-    /// 解析 User-Agent 中的操作系统
-    /// </summary>
-    /// <param name="userAgent">User-Agent 字符串</param>
-    /// <returns>操作系统</returns>
-    private static int? ParseOperatingSystem(string? userAgent)
-    {
-        if (string.IsNullOrEmpty(userAgent))
-        {
-            return null;
-        }
-
-        var ua = userAgent.ToLowerInvariant();
-        if (ua.Contains("windows"))
-        {
-            return 1;
-        }
-
-        if (ua.Contains("mac os") || ua.Contains("macos"))
-        {
-            return 2;
-        }
-
-        if (ua.Contains("linux"))
-        {
-            return 3;
-        }
-
-        if (ua.Contains("android"))
-        {
-            return 4;
-        }
-
-        if (ua.Contains("ios") || ua.Contains("iphone") || ua.Contains("ipad"))
-        {
-            return 5;
-        }
-
-        return 0;
+        return TaktUserContext.ResolveUserFromPrincipal(principal, _userContext.UserId, _userContext.UserName);
     }
 }

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Sales
 // 文件名称：TaktSalesPriceScaleValidators.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SalesPriceScale 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktSalesPriceScale 生成，请按需审阅）
 // 
@@ -36,7 +36,7 @@ public class TaktSalesPriceScaleCreateValidator : AbstractValidator<TaktSalesPri
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.ItemId)
-            .GreaterThanOrEqualTo(0).WithMessage("价格明细ID不能为负数");
+            .GreaterThanOrEqualTo(0).WithMessage("价格明细 ID不能为负数");
         RuleFor(x => x.SalesPriceCode)
             .NotEmpty().WithMessage("销售价格编码不能为空")
             .MaximumLength(50).WithMessage("销售价格编码长度不能超过50个字符");
@@ -63,6 +63,21 @@ public class TaktSalesPriceScaleUpdateValidator : AbstractValidator<TaktSalesPri
     {
         RuleFor(x => x.SalesPriceScaleId)
             .GreaterThan(0).WithMessage("SalesPriceScaleID无效");
+        RuleFor(x => x.TenantCode)
+            .NotEmpty().WithMessage("租户编码不能为空")
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.CompanyCode)
+            .NotEmpty().WithMessage("公司代码不能为空")
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.ItemId)
+            .GreaterThanOrEqualTo(0).WithMessage("价格明细 ID不能为负数");
+        RuleFor(x => x.SalesPriceCode)
+            .NotEmpty().WithMessage("销售价格编码不能为空")
+            .MaximumLength(50).WithMessage("销售价格编码长度不能超过50个字符");
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
     }
 }
 
@@ -85,7 +100,7 @@ public class TaktSalesPriceScaleImportValidator : AbstractValidator<TaktSalesPri
         RuleFor(x => x.CompanyCode)
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
         RuleFor(x => x.ItemId)
-            .GreaterThanOrEqualTo(0).WithMessage("价格明细ID不能为负数");
+            .GreaterThanOrEqualTo(0).WithMessage("价格明细 ID不能为负数");
         RuleFor(x => x.SalesPriceCode)
             .NotEmpty().WithMessage("销售价格编码不能为空")
             .MaximumLength(50).WithMessage("销售价格编码长度不能超过50个字符");

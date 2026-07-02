@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/human-resource/attendance
 // 文件名称：overtime-item.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/attendance 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface OvertimeItem extends CompanyDtoBase {
   overtimeItemId: string;
 
   /**
-   * 加班申请单 ID
+   * 加班申请单（关联 TaktOvertime.Id，主子表关系）
    */
   overtimeId: string;
 
@@ -44,7 +44,7 @@ export interface OvertimeItem extends CompanyDtoBase {
   lineNumber: number;
 
   /**
-   * 员工 ID
+   * 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   employeeId: string;
 
@@ -99,7 +99,7 @@ export interface OvertimeItemQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 加班申请单 ID
+   * 加班申请单（关联 TaktOvertime.Id，主子表关系）
    */
   overtimeId?: string;
 
@@ -109,7 +109,7 @@ export interface OvertimeItemQuery extends TaktPagedQuery {
   lineNumber?: number;
 
   /**
-   * 员工 ID
+   * 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   employeeId?: string;
 
@@ -161,7 +161,7 @@ export interface OvertimeItemQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -188,12 +188,12 @@ export interface OvertimeItemCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
   /**
-   * 加班申请单 ID
+   * 加班申请单（关联 TaktOvertime.Id，主子表关系）
    */
   overtimeId: string;
 
@@ -203,7 +203,7 @@ export interface OvertimeItemCreate {
   lineNumber: number;
 
   /**
-   * 员工 ID
+   * 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   employeeId: string;
 
@@ -235,7 +235,7 @@ export interface OvertimeItemCreate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -277,7 +277,7 @@ export interface OvertimeItemTemplate {
   companyCode?: string;
 
   /**
-   * 加班申请单 ID
+   * 加班申请单（关联 TaktOvertime.Id，主子表关系）
    */
   overtimeId?: string;
 
@@ -287,7 +287,7 @@ export interface OvertimeItemTemplate {
   lineNumber?: number;
 
   /**
-   * 员工 ID
+   * 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   employeeId?: string;
 
@@ -297,9 +297,29 @@ export interface OvertimeItemTemplate {
   employeeName?: string;
 
   /**
+   * 计划加班小时数
+   */
+  plannedHours?: number;
+
+  /**
+   * 实际加班开始时间
+   */
+  actualStartTime?: string;
+
+  /**
+   * 实际加班结束时间
+   */
+  actualEndTime?: string;
+
+  /**
+   * 实际加班小时数
+   */
+  actualHours?: number;
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -326,12 +346,12 @@ export interface OvertimeItemImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
   /**
-   * 加班申请单 ID
+   * 加班申请单（关联 TaktOvertime.Id，主子表关系）
    */
   overtimeId?: string;
 
@@ -341,7 +361,7 @@ export interface OvertimeItemImport {
   lineNumber?: number;
 
   /**
-   * 员工 ID
+   * 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   employeeId?: string;
 
@@ -351,9 +371,29 @@ export interface OvertimeItemImport {
   employeeName?: string;
 
   /**
+   * 计划加班小时数
+   */
+  plannedHours?: number;
+
+  /**
+   * 实际加班开始时间
+   */
+  actualStartTime?: string;
+
+  /**
+   * 实际加班结束时间
+   */
+  actualEndTime?: string;
+
+  /**
+   * 实际加班小时数
+   */
+  actualHours?: number;
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -380,7 +420,7 @@ export interface OvertimeItemExport {
   companyCode: string;
 
   /**
-   * 加班申请单 ID
+   * 加班申请单（关联 TaktOvertime.Id，主子表关系）
    */
   overtimeId: string;
 
@@ -390,7 +430,7 @@ export interface OvertimeItemExport {
   lineNumber: number;
 
   /**
-   * 员工 ID
+   * 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   employeeId: string;
 
@@ -422,7 +462,7 @@ export interface OvertimeItemExport {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注

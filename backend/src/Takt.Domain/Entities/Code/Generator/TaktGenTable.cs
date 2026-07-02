@@ -25,13 +25,13 @@ namespace Takt.Domain.Entities.Code.Generator;
 public class TaktGenTable : TaktTenantEntityBase
 {
     /// <summary>
-    /// 数据源（前面是数据库名称，后面是 TenantCode，如：Takt_000_Dev:000，不可空）
+    /// 数据源（选项 TaktDatabaseInfos/list；持久化 displayName:tenantCode）
     /// </summary>
     [SugarColumn(ColumnName = "data_source", ColumnDescription = "数据源", ColumnDataType = "nvarchar", Length = 200, IsNullable = false)]
     public string DataSource { get; set; } = string.Empty;
 
     /// <summary>
-    /// 数据表名称（唯一索引：租户内数据源+表名唯一，见 ix_gen_table_datasource_table_unique）
+    /// 表名称（选项 TaktDatabaseInfos/tables；新建可手输；租户内与 DataSource 唯一）
     /// </summary>
     [SugarColumn(ColumnName = "table_name", ColumnDescription = "表名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = false)]
     public string TableName { get; set; } = string.Empty;
@@ -41,44 +41,45 @@ public class TaktGenTable : TaktTenantEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "table_comment", ColumnDescription = "表描述", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
     public string? TableComment { get; set; }
+
     /// <summary>
-    /// 关联父表名（用于主子表）
+    /// 关联父表（选项 TaktDatabaseInfos/tables 同库其它表；sub 模板必填）
     /// </summary>
     [SugarColumn(ColumnName = "sub_table_name", ColumnDescription = "关联父表", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
     public string? SubTableName { get; set; }
 
     /// <summary>
-    /// 本表关联父表的外键名（用于主子表）
+    /// 关联外键（选项本表 columnList.databaseColumnName；sub 模板必填）
     /// </summary>
     [SugarColumn(ColumnName = "sub_table_fk_name", ColumnDescription = "关联外键", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
     public string? SubTableFkName { get; set; }
 
     /// <summary>
-    /// 树编码字段（用于树形结构）
+    /// 树编码（选项本表 columnList.databaseColumnName；tree 模板必填）
     /// </summary>
     [SugarColumn(ColumnName = "tree_code", ColumnDescription = "树编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? TreeCode { get; set; }
 
     /// <summary>
-    /// 树父编码字段（用于树形结构）
+    /// 树父编码（选项本表 columnList.databaseColumnName；tree 模板必填）
     /// </summary>
     [SugarColumn(ColumnName = "tree_parent_code", ColumnDescription = "树父编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? TreeParentCode { get; set; }
 
     /// <summary>
-    /// 树名称字段（用于树形结构）
+    /// 树名称（选项本表 columnList.databaseColumnName；tree 模板必填）
     /// </summary>
     [SugarColumn(ColumnName = "tree_name", ColumnDescription = "树名称", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? TreeName { get; set; }
 
     /// <summary>
-    /// 是否在数据库中（1=是库表，0=不是库表）
+    /// 库表标识（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "in_database", ColumnDescription = "库表标识", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int InDatabase { get; set; } = 1;
 
     /// <summary>
-    /// 生成模板类型（crud=单表操作，tree=树表操作，sub=主子表操作）
+    /// 生成模板类型（字典 gen_template_type；crud/sub/tree）
     /// </summary>
     [SugarColumn(ColumnName = "gen_template_category", ColumnDescription = "生成模板类型", ColumnDataType = "nvarchar", Length = 50, IsNullable = false, DefaultValue = "crud")]
     public string GenTemplateCategory { get; set; } = "crud";
@@ -108,7 +109,7 @@ public class TaktGenTable : TaktTenantEntityBase
     public string PermsPrefix { get; set; } = string.Empty;
 
     /// <summary>
-    /// 菜单权限组（逗号/JSON；<b>仅</b>用于生成 menu_and_translation.sql 按钮 INSERT，不参与控制器/前端代码生成）
+    /// 菜单权限组（字典 gen_button_category 多选逗号；仅用于生成 menu_and_translation.sql 按钮 INSERT，不参与控制器/前端代码生成）
     /// </summary>
     [SugarColumn(ColumnName = "menu_button_group", ColumnDescription = "菜单权限组", ColumnDataType = "ntext", IsNullable = true)]
     public string? MenuButtonGroup { get; set; }
@@ -174,7 +175,7 @@ public class TaktGenTable : TaktTenantEntityBase
     public string? ControllerClassName { get; set; }
     
     /// <summary>
-    /// 是否生成仓储层（1=是，0=否）
+    /// 仓储层（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_repository", ColumnDescription = "仓储层", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsRepository { get; set; } = 0;
@@ -204,82 +205,76 @@ public class TaktGenTable : TaktTenantEntityBase
     public string? RepositoryClassName { get; set; }
     
     /// <summary>
-    /// 生成功能，JSON 格式。对象形式：{"查看":"View","新增":"Create","更新":"Update","删除":"Delete",...}，键为中文功能名、值为英文标识；也支持数组 ["查询","新增",...] 或逗号分隔。
-    /// <para><b>核心设计</b>：GenFunction 不仅决定生成哪些 Controller Actions 和 Service Methods，还决定生成哪些 DTO 类。功能与 DTO 的映射关系如下：</para>
-    /// <para>- Query → QueryDto（查询传输对象）</para>
-    /// <para>- Create → CreateDto（创建传输对象）</para>
-    /// <para>- Update → UpdateDto（更新传输对象）</para>
-    /// <para>- Status → StatusDto（状态传输对象）</para>
-    /// <para>- Sort → SortDto（排序传输对象）</para>
-    /// <para>- Import → TemplateDto + ImportDto（模板+导入传输对象）</para>
-    /// <para>- Export → ExportDto（导出传输对象）</para>
-    /// <para>- 所有功能 → Dto（基础传输对象，包含所有字段）</para>
+    /// 生成功能（字典 gen_function_type 多选逗号；亦支持 JSON/数组）。
+    /// 核心设计：GenFunction 不仅决定生成哪些 Controller Actions 和 Service Methods，还决定生成哪些 DTO 类。功能与 DTO 的映射关系如下：
+    /// Query → QueryDto；Create → CreateDto；Update → UpdateDto；Status → StatusDto；Sort → SortDto；
+    /// Import → TemplateDto + ImportDto；Export → ExportDto；所有功能 → Dto（基础传输对象，包含所有字段）。
     /// </summary>
     [SugarColumn(ColumnName = "gen_function", ColumnDescription = "生成功能", ColumnDataType = "ntext", IsNullable = true)]
     public string? GenFunction { get; set; }
 
     /// <summary>
-    /// 生成代码方式（0=zip 压缩包，1=自定义路径，2=当前项目）
+    /// 生成方式（字典 gen_method_type；0=zip 1=自定义路径 2=当前项目）
     /// </summary>
     [SugarColumn(ColumnName = "gen_method", ColumnDescription = "生成方式", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int GenMethod { get; set; } = 0;
 
-   /// <summary>
-    /// 生成路径（默认为项目根目录）
+    /// <summary>
+    /// 生成路径（字典 gen_path_type；GenMethod=1 时选择；0 默认 /；2 由 GenMethod 解析）
     /// </summary>
     [SugarColumn(ColumnName = "gen_path", ColumnDescription = "生成路径", ColumnDataType = "nvarchar", Length = 500, IsNullable = false, DefaultValue = "/")]
     public string GenPath { get; set; } = "/";
 
     /// <summary>
-    /// 是否生成菜单（1=是，0=否）
+    /// 生成菜单（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_gen_menu", ColumnDescription = "生成菜单", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int IsGenMenu { get; set; } = 1;
 
-  /// <summary>
-  /// 上级菜单ID
-  /// </summary>
-  [SugarColumn(ColumnName = "parent_menu_id", ColumnDescription = "上级菜单ID", ColumnDataType = "bigint", IsNullable = false, DefaultValue = "0")]
+    /// <summary>
+    /// 上级菜单（关联 TaktMenu.Id，选项 TaktMenus/tree-options）
+    /// </summary>
+    [SugarColumn(ColumnName = "parent_menu_id", ColumnDescription = "上级菜单ID", ColumnDataType = "bigint", IsNullable = false, DefaultValue = "0")]
     public long ParentMenuId { get; set; }
 
     /// <summary>
-    /// 是否生成翻译（1=是，0=否）
+    /// 生成翻译（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_gen_translation", ColumnDescription = "生成翻译", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int IsGenTranslation { get; set; } = 1;
 
     /// <summary>
-    /// 排序字段
+    /// 排序字段（选项本表 columnList.databaseColumnName）
     /// </summary>
     [SugarColumn(ColumnName = "sort_field", ColumnDescription = "排序字段", ColumnDataType = "nvarchar", Length = 100, IsNullable = false, DefaultValue = "")]
     public string SortField { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序类型（asc=升序，desc=降序）
+    /// 排序类型（字典 sys_sort_type；asc=升序 desc=降序）
     /// </summary>
     [SugarColumn(ColumnName = "sort_type", ColumnDescription = "排序类型", ColumnDataType = "nvarchar", Length = 10, IsNullable = false, DefaultValue = "asc")]
     public string SortType { get; set; } = "asc";
 
     /// <summary>
-    /// 前端UI框架（1=element plus，2=ant design vue）
+    /// 前端UI框架（字典 gen_frontend_ui_type；1=element plus 2=ant design vue）
     /// </summary>
     [SugarColumn(ColumnName = "front_ui", ColumnDescription = "前端UI框架", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int FrontUi { get; set; } = 2;
 
     /// <summary>
-    /// 前端表单布局（12=一行一列，24=一行两列）
+    /// 前端表单布局（字典 gen_frontend_form_layout_config；12=一行一列 24=一行两列）
     /// </summary>
     [SugarColumn(ColumnName = "front_form_layout", ColumnDescription = "前端表单布局", ColumnDataType = "int", IsNullable = false, DefaultValue = "24")]
     public int FrontFormLayout { get; set; } = 24;
 
     /// <summary>
-    /// 前端操作按钮样式（0=文本，1=标准）
+    /// 前端按钮样式（字典 gen_button_style_config；0=文本 1=标准）
     /// </summary>
     [SugarColumn(ColumnName = "front_btn_style", ColumnDescription = "前端按钮样式", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int FrontBtnStyle { get; set; } = 1;
 
     /// <summary>
-    /// 是否生成代码（1=是，0=否）
+    /// 是否生成（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_gen_code", ColumnDescription = "是否生成", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsGenCode { get; set; } = 0;
@@ -291,7 +286,7 @@ public class TaktGenTable : TaktTenantEntityBase
     public int GenCodeCount { get; set; } = 0;
 
     /// <summary>
-    /// 是否使用tabs（1=是，0=否）
+    /// 使用tabs（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_use_tabs", ColumnDescription = "使用tabs", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsUseTabs { get; set; } = 1;

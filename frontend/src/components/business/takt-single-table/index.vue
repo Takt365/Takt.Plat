@@ -43,8 +43,21 @@
         @resize-column="handleResizeColumn"
         @expand="(expanded, record) => emit('expand', expanded, record)"
       >
+        <template #bodyCell="slotData">
+          <template v-if="String(slotData.column?.key) === 'approvalStatus' && props.entityScope === 'approval'">
+            <TaktDictTag
+              dict-type="sys_approval_status"
+              :value="slotData.record?.approvalStatus as string | number | undefined"
+            />
+          </template>
+          <slot
+            v-else
+            name="bodyCell"
+            v-bind="slotData"
+          />
+        </template>
         <template
-          v-for="(_, name) in $slots"
+          v-for="(_, name) in passthroughSlotNames"
           #[name]="slotData"
         >
           <slot
@@ -99,7 +112,7 @@ import {
 import { useTaktTableViewportScrollY } from '@/composables/use-takt-table-viewport-scroll-y'
 import { useTaktMasterDetailLrScrollY } from '@/composables/use-takt-master-detail-lr-scroll-y'
 import { useI18n } from 'vue-i18n'
-import { useAttrs, computed, ref } from 'vue'
+import { useAttrs, computed, ref, useSlots } from 'vue'
 
 type TableRecord = Record<string, unknown>
 type TableSorter = {
@@ -165,7 +178,7 @@ interface Props {
   idColumnKey?: string | number
   /** 操作列键（默认 action） */
   actionColumnKey?: string | number
-  /** 单表 8 个业务列 / 左树右表 4 个业务列（默认 single） */
+  /** 单表 8 个业务列 / 树表 4 个 / 主子表左 2 个 / 主子表右 4 个（默认 single） */
   tableMode?: TaktTableLayoutMode
   /** @deprecated 请使用 tableMode；保留兼容旧页，不再从 merge 列截取 */
   largeScreenColumnCount?: number
@@ -214,6 +227,12 @@ const emit = defineEmits<{
 
 const { t } = useI18n()
 const attrs = useAttrs()
+const slots = useSlots()
+
+/** 透传给 a-table 的插槽名（bodyCell 由组件内统一处理 approvalStatus 字典展示） */
+const passthroughSlotNames = computed(() =>
+  Object.keys(slots).filter((name) => name !== 'bodyCell'),
+)
 
 /** 页面传入的 class 挂到根节点（inheritAttrs: false 时不会自动合并） */
 const rootExtraClass = computed(() => attrs.class)

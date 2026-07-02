@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Compensation
 // 文件名称：TaktPayslipDtos.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Payslip 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPayslip 生成，请按需审阅）
 // 
@@ -112,11 +112,6 @@ public class TaktPayslipDto : TaktCompanyDtoBase
     public string? FormulaSetCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 发放状态（字典 hr_payslip_issue_status：0=待发放 1=已发放 2=已确认）
-    /// </summary>
-    public int IssueStatus { get; set; } = 0;
-
-    /// <summary>
     /// 发放日期
     /// </summary>
     public DateTime? IssueDate { get; set; }
@@ -124,7 +119,12 @@ public class TaktPayslipDto : TaktCompanyDtoBase
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 发放状态（字典 hr_payslip_issue_status：0=待发放 1=已发放 2=已确认）
+    /// </summary>
+    public int IssueStatus { get; set; } = 0;
 
 }
 
@@ -225,11 +225,6 @@ public class TaktPayslipQueryDto : TaktPagedQuery
     public string? FormulaSetCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 发放状态（字典 hr_payslip_issue_status：0=待发放 1=已发放 2=已确认）
-    /// </summary>
-    public int? IssueStatus { get; set; }
-
-    /// <summary>
     /// 发放日期（范围查询-开始）
     /// </summary>
     public DateTime? IssueDateStart { get; set; }
@@ -243,6 +238,11 @@ public class TaktPayslipQueryDto : TaktPagedQuery
     /// 关联工厂
     /// </summary>
     public string? RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 发放状态（字典 hr_payslip_issue_status：0=待发放 1=已发放 2=已确认）
+    /// </summary>
+    public int? IssueStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -285,7 +285,7 @@ public class TaktPayslipCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -368,11 +368,6 @@ public class TaktPayslipCreateDto
     public string? FormulaSetCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 发放状态（字典 hr_payslip_issue_status：0=待发放 1=已发放 2=已确认）
-    /// </summary>
-    public int IssueStatus { get; set; } = 0;
-
-    /// <summary>
     /// 发放日期
     /// </summary>
     public DateTime? IssueDate { get; set; }
@@ -380,7 +375,13 @@ public class TaktPayslipCreateDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    [Required(ErrorMessage = "关联工厂不能为空")]
+    public string RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 发放状态（字典 hr_payslip_issue_status：0=待发放 1=已发放 2=已确认）
+    /// </summary>
+    public int IssueStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -474,19 +475,79 @@ public class TaktPayslipTemplateDto
     public string? PayPeriod { get; set; } = string.Empty;
 
     /// <summary>
+    /// 基本工资（元）
+    /// </summary>
+    public decimal? BaseSalary { get; set; }
+
+    /// <summary>
+    /// 岗位工资（元）
+    /// </summary>
+    public decimal? PositionSalary { get; set; }
+
+    /// <summary>
+    /// 绩效/奖金（元）
+    /// </summary>
+    public decimal? BonusAmount { get; set; }
+
+    /// <summary>
+    /// 加班费（元）
+    /// </summary>
+    public decimal? OvertimePay { get; set; }
+
+    /// <summary>
+    /// 津贴合计（元）
+    /// </summary>
+    public decimal? AllowanceTotal { get; set; }
+
+    /// <summary>
+    /// 应发合计（元）
+    /// </summary>
+    public decimal? GrossAmount { get; set; }
+
+    /// <summary>
+    /// 社保扣款（元）
+    /// </summary>
+    public decimal? SocialSecurityDeduction { get; set; }
+
+    /// <summary>
+    /// 公积金扣款（元）
+    /// </summary>
+    public decimal? HousingFundDeduction { get; set; }
+
+    /// <summary>
+    /// 个税扣款（元）
+    /// </summary>
+    public decimal? TaxDeduction { get; set; }
+
+    /// <summary>
+    /// 其他扣款（元）
+    /// </summary>
+    public decimal? OtherDeduction { get; set; }
+
+    /// <summary>
+    /// 实发金额（元）
+    /// </summary>
+    public decimal? NetAmount { get; set; }
+
+    /// <summary>
     /// 关联计算公式方案编码（核算时按 TaktSalaryFormula.set_code 加载步骤并执行）
     /// </summary>
     public string? FormulaSetCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 发放状态（字典 hr_payslip_issue_status：0=待发放 1=已发放 2=已确认）
+    /// 发放日期
     /// </summary>
-    public int? IssueStatus { get; set; }
+    public DateTime? IssueDate { get; set; }
 
     /// <summary>
     /// 关联工厂
     /// </summary>
     public string? RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 发放状态（字典 hr_payslip_issue_status：0=待发放 1=已发放 2=已确认）
+    /// </summary>
+    public int? IssueStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -516,7 +577,7 @@ public class TaktPayslipImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -537,19 +598,79 @@ public class TaktPayslipImportDto
     public string? PayPeriod { get; set; } = string.Empty;
 
     /// <summary>
+    /// 基本工资（元）
+    /// </summary>
+    public decimal? BaseSalary { get; set; }
+
+    /// <summary>
+    /// 岗位工资（元）
+    /// </summary>
+    public decimal? PositionSalary { get; set; }
+
+    /// <summary>
+    /// 绩效/奖金（元）
+    /// </summary>
+    public decimal? BonusAmount { get; set; }
+
+    /// <summary>
+    /// 加班费（元）
+    /// </summary>
+    public decimal? OvertimePay { get; set; }
+
+    /// <summary>
+    /// 津贴合计（元）
+    /// </summary>
+    public decimal? AllowanceTotal { get; set; }
+
+    /// <summary>
+    /// 应发合计（元）
+    /// </summary>
+    public decimal? GrossAmount { get; set; }
+
+    /// <summary>
+    /// 社保扣款（元）
+    /// </summary>
+    public decimal? SocialSecurityDeduction { get; set; }
+
+    /// <summary>
+    /// 公积金扣款（元）
+    /// </summary>
+    public decimal? HousingFundDeduction { get; set; }
+
+    /// <summary>
+    /// 个税扣款（元）
+    /// </summary>
+    public decimal? TaxDeduction { get; set; }
+
+    /// <summary>
+    /// 其他扣款（元）
+    /// </summary>
+    public decimal? OtherDeduction { get; set; }
+
+    /// <summary>
+    /// 实发金额（元）
+    /// </summary>
+    public decimal? NetAmount { get; set; }
+
+    /// <summary>
     /// 关联计算公式方案编码（核算时按 TaktSalaryFormula.set_code 加载步骤并执行）
     /// </summary>
     public string? FormulaSetCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 发放状态（字典 hr_payslip_issue_status：0=待发放 1=已发放 2=已确认）
+    /// 发放日期
     /// </summary>
-    public int? IssueStatus { get; set; }
+    public DateTime? IssueDate { get; set; }
 
     /// <summary>
     /// 关联工厂
     /// </summary>
     public string? RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 发放状态（字典 hr_payslip_issue_status：0=待发放 1=已发放 2=已确认）
+    /// </summary>
+    public int? IssueStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -661,11 +782,6 @@ public class TaktPayslipExportDto
     public string? FormulaSetCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 发放状态（字典 hr_payslip_issue_status：0=待发放 1=已发放 2=已确认）
-    /// </summary>
-    public int IssueStatus { get; set; } = 0;
-
-    /// <summary>
     /// 发放日期
     /// </summary>
     public DateTime? IssueDate { get; set; }
@@ -673,7 +789,12 @@ public class TaktPayslipExportDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 发放状态（字典 hr_payslip_issue_status：0=待发放 1=已发放 2=已确认）
+    /// </summary>
+    public int IssueStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

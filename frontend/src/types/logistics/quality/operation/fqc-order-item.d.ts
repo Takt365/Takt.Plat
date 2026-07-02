@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/quality/operation
 // 文件名称：fqc-order-item.d.ts
-// 创建时间：2026-06-21
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/operation 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,12 +29,12 @@ export interface FqcOrderItem extends CompanyDtoBase {
   fqcOrderItemId: string;
 
   /**
-   * FQC检验单ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * FQC检验单 ID（关联 TaktFqcOrder.Id，选项 TaktFqcOrders/options）
    */
   fqcOrderId: string;
 
   /**
-   * FQC检验单名称（填充字段）
+   * FQC检验单 名称（填充字段）
    */
   fqcOrderName?: string;
 
@@ -49,7 +49,7 @@ export interface FqcOrderItem extends CompanyDtoBase {
   lineNumber: number;
 
   /**
-   * 物料编码
+   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
    */
   materialCode: string;
 
@@ -69,17 +69,17 @@ export interface FqcOrderItem extends CompanyDtoBase {
   warehouseQuantity: number;
 
   /**
-   * 检验标准编码
+   * 检验标准编码（选项 TaktInspectionStandards/options，DictValue=StandardCode）
    */
   standardCode: string;
 
   /**
-   * 抽样方案编码
+   * 抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）
    */
   samplingSchemeCode: string;
 
   /**
-   * 检验方式（0=免检，1=减量，2=正常，3=加严，4=全检）
+   * 检验方式（字典 logistics_quality_inspection_method）
    */
   inspectionMethod: number;
 
@@ -104,11 +104,6 @@ export interface FqcOrderItem extends CompanyDtoBase {
   inspectionReturnQuantity: number;
 
   /**
-   * 判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）
-   */
-  judgeStatus: number;
-
-  /**
    * 抽检序列号
    */
   sampleSerialNo?: string;
@@ -119,7 +114,7 @@ export interface FqcOrderItem extends CompanyDtoBase {
   inspectionDescription?: string;
 
   /**
-   * 检验员（人员代码）
+   * 检验员（选项 TaktEmployees/options，DictValue=EmployeeCode）
    */
   inspectorBy: string;
 
@@ -127,6 +122,11 @@ export interface FqcOrderItem extends CompanyDtoBase {
    * 检验日期
    */
   inspectionDate: string;
+
+  /**
+   * 判定状态（字典 logistics_quality_judge_status）
+   */
+  judgeStatus: number;
 
   /**
    * FQC检验单（主表） （主表：TaktFqcOrder）
@@ -159,7 +159,7 @@ export interface FqcOrderItemQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * FQC检验单ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * FQC检验单 ID（关联 TaktFqcOrder.Id，选项 TaktFqcOrders/options）
    */
   fqcOrderId?: string;
 
@@ -174,7 +174,7 @@ export interface FqcOrderItemQuery extends TaktPagedQuery {
   lineNumber?: number;
 
   /**
-   * 物料编码
+   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
    */
   materialCode?: string;
 
@@ -194,17 +194,17 @@ export interface FqcOrderItemQuery extends TaktPagedQuery {
   warehouseQuantity?: number;
 
   /**
-   * 检验标准编码
+   * 检验标准编码（选项 TaktInspectionStandards/options，DictValue=StandardCode）
    */
   standardCode?: string;
 
   /**
-   * 抽样方案编码
+   * 抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）
    */
   samplingSchemeCode?: string;
 
   /**
-   * 检验方式（0=免检，1=减量，2=正常，3=加严，4=全检）
+   * 检验方式（字典 logistics_quality_inspection_method）
    */
   inspectionMethod?: number;
 
@@ -229,11 +229,6 @@ export interface FqcOrderItemQuery extends TaktPagedQuery {
   inspectionReturnQuantity?: number;
 
   /**
-   * 判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）
-   */
-  judgeStatus?: number;
-
-  /**
    * 抽检序列号
    */
   sampleSerialNo?: string;
@@ -244,7 +239,7 @@ export interface FqcOrderItemQuery extends TaktPagedQuery {
   inspectionDescription?: string;
 
   /**
-   * 检验员（人员代码）
+   * 检验员（选项 TaktEmployees/options，DictValue=EmployeeCode）
    */
   inspectorBy?: string;
 
@@ -257,6 +252,11 @@ export interface FqcOrderItemQuery extends TaktPagedQuery {
    * 检验日期（范围查询-结束）
    */
   inspectionDateEnd?: string;
+
+  /**
+   * 判定状态（字典 logistics_quality_judge_status）
+   */
+  judgeStatus?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -298,12 +298,12 @@ export interface FqcOrderItemCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
   /**
-   * FQC检验单ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * FQC检验单 ID（关联 TaktFqcOrder.Id，选项 TaktFqcOrders/options）
    */
   fqcOrderId: string;
 
@@ -318,7 +318,7 @@ export interface FqcOrderItemCreate {
   lineNumber: number;
 
   /**
-   * 物料编码
+   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
    */
   materialCode: string;
 
@@ -338,17 +338,17 @@ export interface FqcOrderItemCreate {
   warehouseQuantity: number;
 
   /**
-   * 检验标准编码
+   * 检验标准编码（选项 TaktInspectionStandards/options，DictValue=StandardCode）
    */
   standardCode: string;
 
   /**
-   * 抽样方案编码
+   * 抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）
    */
   samplingSchemeCode: string;
 
   /**
-   * 检验方式（0=免检，1=减量，2=正常，3=加严，4=全检）
+   * 检验方式（字典 logistics_quality_inspection_method）
    */
   inspectionMethod: number;
 
@@ -373,11 +373,6 @@ export interface FqcOrderItemCreate {
   inspectionReturnQuantity: number;
 
   /**
-   * 判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）
-   */
-  judgeStatus: number;
-
-  /**
    * 抽检序列号
    */
   sampleSerialNo?: string;
@@ -388,7 +383,7 @@ export interface FqcOrderItemCreate {
   inspectionDescription?: string;
 
   /**
-   * 检验员（人员代码）
+   * 检验员（选项 TaktEmployees/options，DictValue=EmployeeCode）
    */
   inspectorBy: string;
 
@@ -396,6 +391,11 @@ export interface FqcOrderItemCreate {
    * 检验日期
    */
   inspectionDate: string;
+
+  /**
+   * 判定状态（字典 logistics_quality_judge_status）
+   */
+  judgeStatus: number;
 
   /**
    * 不良处理记录列表（主子表关系）（子表，级联保存）
@@ -442,7 +442,7 @@ export interface FqcOrderItemStatus {
   fqcOrderItemId: string;
 
   /**
-   * 判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）
+   * 判定状态（字典 logistics_quality_judge_status）
    */
   judgeStatus: number;
 
@@ -466,7 +466,7 @@ export interface FqcOrderItemTemplate {
   companyCode?: string;
 
   /**
-   * FQC检验单ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * FQC检验单 ID（关联 TaktFqcOrder.Id，选项 TaktFqcOrders/options）
    */
   fqcOrderId?: string;
 
@@ -481,7 +481,7 @@ export interface FqcOrderItemTemplate {
   lineNumber?: number;
 
   /**
-   * 物料编码
+   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
    */
   materialCode?: string;
 
@@ -496,17 +496,22 @@ export interface FqcOrderItemTemplate {
   batchNo?: string;
 
   /**
-   * 检验标准编码
+   * 入库数量
+   */
+  warehouseQuantity?: number;
+
+  /**
+   * 检验标准编码（选项 TaktInspectionStandards/options，DictValue=StandardCode）
    */
   standardCode?: string;
 
   /**
-   * 抽样方案编码
+   * 抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）
    */
   samplingSchemeCode?: string;
 
   /**
-   * 检验方式（0=免检，1=减量，2=正常，3=加严，4=全检）
+   * 检验方式（字典 logistics_quality_inspection_method）
    */
   inspectionMethod?: number;
 
@@ -524,6 +529,41 @@ export interface FqcOrderItemTemplate {
    * 不合格数量
    */
   unqualifiedQuantity?: number;
+
+  /**
+   * 验退数量
+   */
+  inspectionReturnQuantity?: number;
+
+  /**
+   * 抽检序列号
+   */
+  sampleSerialNo?: string;
+
+  /**
+   * 检验说明
+   */
+  inspectionDescription?: string;
+
+  /**
+   * 检验员（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   */
+  inspectorBy?: string;
+
+  /**
+   * 检验日期
+   */
+  inspectionDate?: string;
+
+  /**
+   * 判定状态（字典 logistics_quality_judge_status）
+   */
+  judgeStatus?: number;
+
+  /**
+   * 不良处理记录列表（主子表关系）（子表，级联保存）
+   */
+  defectHandlings?: FqcDefectHandlingCreate[];
 
   /**
    * 扩展字段JSON
@@ -555,12 +595,12 @@ export interface FqcOrderItemImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
   /**
-   * FQC检验单ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * FQC检验单 ID（关联 TaktFqcOrder.Id，选项 TaktFqcOrders/options）
    */
   fqcOrderId?: string;
 
@@ -575,7 +615,7 @@ export interface FqcOrderItemImport {
   lineNumber?: number;
 
   /**
-   * 物料编码
+   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
    */
   materialCode?: string;
 
@@ -590,17 +630,22 @@ export interface FqcOrderItemImport {
   batchNo?: string;
 
   /**
-   * 检验标准编码
+   * 入库数量
+   */
+  warehouseQuantity?: number;
+
+  /**
+   * 检验标准编码（选项 TaktInspectionStandards/options，DictValue=StandardCode）
    */
   standardCode?: string;
 
   /**
-   * 抽样方案编码
+   * 抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）
    */
   samplingSchemeCode?: string;
 
   /**
-   * 检验方式（0=免检，1=减量，2=正常，3=加严，4=全检）
+   * 检验方式（字典 logistics_quality_inspection_method）
    */
   inspectionMethod?: number;
 
@@ -618,6 +663,41 @@ export interface FqcOrderItemImport {
    * 不合格数量
    */
   unqualifiedQuantity?: number;
+
+  /**
+   * 验退数量
+   */
+  inspectionReturnQuantity?: number;
+
+  /**
+   * 抽检序列号
+   */
+  sampleSerialNo?: string;
+
+  /**
+   * 检验说明
+   */
+  inspectionDescription?: string;
+
+  /**
+   * 检验员（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   */
+  inspectorBy?: string;
+
+  /**
+   * 检验日期
+   */
+  inspectionDate?: string;
+
+  /**
+   * 判定状态（字典 logistics_quality_judge_status）
+   */
+  judgeStatus?: number;
+
+  /**
+   * 不良处理记录列表（主子表关系）（子表，级联保存）
+   */
+  defectHandlings?: FqcDefectHandlingCreate[];
 
   /**
    * 扩展字段JSON
@@ -649,7 +729,7 @@ export interface FqcOrderItemExport {
   companyCode: string;
 
   /**
-   * FQC检验单ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * FQC检验单 ID（关联 TaktFqcOrder.Id，选项 TaktFqcOrders/options）
    */
   fqcOrderId: string;
 
@@ -664,7 +744,7 @@ export interface FqcOrderItemExport {
   lineNumber: number;
 
   /**
-   * 物料编码
+   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
    */
   materialCode: string;
 
@@ -684,17 +764,17 @@ export interface FqcOrderItemExport {
   warehouseQuantity: number;
 
   /**
-   * 检验标准编码
+   * 检验标准编码（选项 TaktInspectionStandards/options，DictValue=StandardCode）
    */
   standardCode: string;
 
   /**
-   * 抽样方案编码
+   * 抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）
    */
   samplingSchemeCode: string;
 
   /**
-   * 检验方式（0=免检，1=减量，2=正常，3=加严，4=全检）
+   * 检验方式（字典 logistics_quality_inspection_method）
    */
   inspectionMethod: number;
 
@@ -719,11 +799,6 @@ export interface FqcOrderItemExport {
   inspectionReturnQuantity: number;
 
   /**
-   * 判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）
-   */
-  judgeStatus: number;
-
-  /**
    * 抽检序列号
    */
   sampleSerialNo?: string;
@@ -734,7 +809,7 @@ export interface FqcOrderItemExport {
   inspectionDescription?: string;
 
   /**
-   * 检验员（人员代码）
+   * 检验员（选项 TaktEmployees/options，DictValue=EmployeeCode）
    */
   inspectorBy: string;
 
@@ -742,6 +817,11 @@ export interface FqcOrderItemExport {
    * 检验日期
    */
   inspectionDate: string;
+
+  /**
+   * 判定状态（字典 logistics_quality_judge_status）
+   */
+  judgeStatus: number;
 
   /**
    * 扩展字段JSON

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Procurement
 // 文件名称：TaktPurchaseRequestService.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-24
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购申请应用服务实现
 // 
@@ -110,8 +110,9 @@ public class TaktPurchaseRequestService : TaktServiceBase, ITaktPurchaseRequestS
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.PlantCode ?? e.Id.ToString(),
+            DictValue = e.PurchaseRequestCode,
+            DictLabel = string.IsNullOrWhiteSpace(e.PlantCode) ? e.PurchaseRequestCode : $"{e.PurchaseRequestCode} {e.PlantCode}",
+            ExtValue = e.Id,
         }).ToList();
     }
 
@@ -433,15 +434,17 @@ public class TaktPurchaseRequestService : TaktServiceBase, ITaktPurchaseRequestS
             exp = exp.And(x =>
                 (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.PurchaseRequestCode != null && x.PurchaseRequestCode.Contains(keywords))
+                || SqlFunc.ToString(x.CountersignId).Contains(keywords)
+                || (x.CountersignCode != null && x.CountersignCode.Contains(keywords))
                 || SqlFunc.ToString(x.RequestId).Contains(keywords)
                 || (x.RequestBy != null && x.RequestBy.Contains(keywords))
                 || SqlFunc.ToString(x.TotalQuantity).Contains(keywords)
                 || SqlFunc.ToString(x.TotalAmount).Contains(keywords)
                 || SqlFunc.ToString(x.ConvertedQuantity).Contains(keywords)
                 || SqlFunc.ToString(x.ConvertedAmount).Contains(keywords)
+                || (x.RequestReason != null && x.RequestReason.Contains(keywords))
                 || SqlFunc.ToString(x.RequestStatus).Contains(keywords)
                 || SqlFunc.ToString(x.ConvertedStatus).Contains(keywords)
-                || (x.RequestReason != null && x.RequestReason.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.RequestDate).Contains(keywords)
@@ -458,6 +461,16 @@ public class TaktPurchaseRequestService : TaktServiceBase, ITaktPurchaseRequestS
         if (!string.IsNullOrEmpty(queryDto?.PurchaseRequestCode))
         {
             exp = exp.And(x => x.PurchaseRequestCode != null && x.PurchaseRequestCode.Contains(queryDto.PurchaseRequestCode));
+        }
+
+        if (queryDto?.CountersignId.HasValue == true)
+        {
+            exp = exp.And(x => x.CountersignId == queryDto.CountersignId);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CountersignCode))
+        {
+            exp = exp.And(x => x.CountersignCode != null && x.CountersignCode.Contains(queryDto.CountersignCode));
         }
 
         if (queryDto?.RequestId.HasValue == true)
@@ -490,6 +503,11 @@ public class TaktPurchaseRequestService : TaktServiceBase, ITaktPurchaseRequestS
             exp = exp.And(x => x.ConvertedAmount == queryDto.ConvertedAmount);
         }
 
+        if (!string.IsNullOrEmpty(queryDto?.RequestReason))
+        {
+            exp = exp.And(x => x.RequestReason != null && x.RequestReason.Contains(queryDto.RequestReason));
+        }
+
         if (queryDto?.RequestStatus.HasValue == true)
         {
             exp = exp.And(x => x.RequestStatus == queryDto.RequestStatus);
@@ -498,11 +516,6 @@ public class TaktPurchaseRequestService : TaktServiceBase, ITaktPurchaseRequestS
         if (queryDto?.ConvertedStatus.HasValue == true)
         {
             exp = exp.And(x => x.ConvertedStatus == queryDto.ConvertedStatus);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.RequestReason))
-        {
-            exp = exp.And(x => x.RequestReason != null && x.RequestReason.Contains(queryDto.RequestReason));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

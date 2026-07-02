@@ -16,10 +16,11 @@ const { writeGeneratedFile, getControllerClassName, logGeneratedFileWritePolicy,
 const {
   isRbacJunctionEntity,
   assertNotRbacJunctionEntityCli,
+  assertNotManualDtoEntityCli,
   shouldExcludeStandaloneService,
   RBAC_ASSOCIATION_ENTITY_SHORT_NAMES,
 } = require('./generate-entity-exclusions.cjs');
-const { buildPermissionBase } = require('./permission-base.cjs');
+const { buildPermissionBase, buildControllerPermissionBase } = require('./permission-base.cjs');
 const { transposedClassNames } = require('./generate-transposed-support.cjs');
 const { isSharedEnumType } = require('./generate-enum-common.cjs');
 
@@ -992,7 +993,7 @@ function generateController(interfaceFile, entityName, methods, options) {
   const content = readUtf8(interfaceFile);
   const routeDisplayName = resolveRouteDisplayName(entityName, content);
   const displayName = routeDisplayName;
-  const permissionBase = buildPermissionBase(pathParts, entityShort);
+  const permissionBase = buildControllerPermissionBase(pathParts, entityShort);
   const apiModule = getApiModuleMeta(pathParts);
   const controllerClass = getControllerClassName(entityName);
   const serviceInterface = `I${entityName}Service`;
@@ -1182,6 +1183,7 @@ function printUsage() {
 function parseArgs() {
   const options = parseSingleEntityGenerateArgs(printUsage);
   assertNotRbacJunctionEntityCli(options.entityPrefix);
+  assertNotManualDtoEntityCli(options.entityPrefix);
   return options;
 }
 

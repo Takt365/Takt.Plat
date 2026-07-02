@@ -7,5 +7,5 @@
     "allowSyntheticDefaultImports": true,
     "types": ["node"]
   },
-  "include": ["vite.config.ts", "src/config/vite-dev-plugin.ts"]
+  "include": ["vite.config.ts", "src/config/vite-dev-plugin.ts", "src/config/vite-log-file-writer.ts"]
 }

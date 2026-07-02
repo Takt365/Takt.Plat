@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Accounting.Financial
 // 文件名称：TaktAccountTitleValidators.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：AccountTitle 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktAccountTitle 生成，请按需审阅）
 // 
@@ -35,15 +35,22 @@ public class TaktAccountTitleCreateValidator : AbstractValidator<TaktAccountTitl
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
-        RuleFor(x => x.TitleCode)
+        RuleFor(x => x.AccountTitleCode)
             .NotEmpty().WithMessage("科目编码不能为空")
             .MaximumLength(50).WithMessage("科目编码长度不能超过50个字符");
-        RuleFor(x => x.TitleName)
+        RuleFor(x => x.AccountTitleName)
             .NotEmpty().WithMessage("科目名称不能为空")
             .MaximumLength(200).WithMessage("科目名称长度不能超过200个字符");
         RuleFor(x => x.ParentId)
             .GreaterThanOrEqualTo(0).WithMessage("父级 ID不能为负数");
+        RuleFor(x => x.AccountTitleType)
+            .NotEmpty().WithMessage("科目类型不能为空")
+            .MaximumLength(1).WithMessage("科目类型长度不能超过1个字符");
+        RuleFor(x => x.AuxiliaryType)
+            .NotEmpty().WithMessage("辅助核算类型不能为空")
+            .MaximumLength(1).WithMessage("辅助核算类型长度不能超过1个字符");
         RuleFor(x => x.RelatedPlant)
+            .NotEmpty().WithMessage("关联工厂不能为空")
             .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
@@ -68,6 +75,33 @@ public class TaktAccountTitleUpdateValidator : AbstractValidator<TaktAccountTitl
     {
         RuleFor(x => x.AccountTitleId)
             .GreaterThan(0).WithMessage("AccountTitleID无效");
+        RuleFor(x => x.TenantCode)
+            .NotEmpty().WithMessage("租户编码不能为空")
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.CompanyCode)
+            .NotEmpty().WithMessage("公司代码不能为空")
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.AccountTitleCode)
+            .NotEmpty().WithMessage("科目编码不能为空")
+            .MaximumLength(50).WithMessage("科目编码长度不能超过50个字符");
+        RuleFor(x => x.AccountTitleName)
+            .NotEmpty().WithMessage("科目名称不能为空")
+            .MaximumLength(200).WithMessage("科目名称长度不能超过200个字符");
+        RuleFor(x => x.ParentId)
+            .GreaterThanOrEqualTo(0).WithMessage("父级 ID不能为负数");
+        RuleFor(x => x.AccountTitleType)
+            .NotEmpty().WithMessage("科目类型不能为空")
+            .MaximumLength(1).WithMessage("科目类型长度不能超过1个字符");
+        RuleFor(x => x.AuxiliaryType)
+            .NotEmpty().WithMessage("辅助核算类型不能为空")
+            .MaximumLength(1).WithMessage("辅助核算类型长度不能超过1个字符");
+        RuleFor(x => x.RelatedPlant)
+            .NotEmpty().WithMessage("关联工厂不能为空")
+            .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符");
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
     }
 }
 
@@ -89,14 +123,23 @@ public class TaktAccountTitleImportValidator : AbstractValidator<TaktAccountTitl
             .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
         RuleFor(x => x.CompanyCode)
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
-        RuleFor(x => x.TitleCode)
+        RuleFor(x => x.AccountTitleCode)
             .NotEmpty().WithMessage("科目编码不能为空")
             .MaximumLength(50).WithMessage("科目编码长度不能超过50个字符");
-        RuleFor(x => x.TitleName)
+        RuleFor(x => x.AccountTitleName)
             .NotEmpty().WithMessage("科目名称不能为空")
             .MaximumLength(200).WithMessage("科目名称长度不能超过200个字符");
         RuleFor(x => x.ParentId)
             .GreaterThanOrEqualTo(0).WithMessage("父级 ID不能为负数");
+        RuleFor(x => x.AccountTitleType)
+            .NotEmpty().WithMessage("科目类型不能为空")
+            .MaximumLength(1).WithMessage("科目类型长度不能超过1个字符");
+        RuleFor(x => x.AuxiliaryType)
+            .NotEmpty().WithMessage("辅助核算类型不能为空")
+            .MaximumLength(1).WithMessage("辅助核算类型长度不能超过1个字符");
+        RuleFor(x => x.RelatedPlant)
+            .NotEmpty().WithMessage("关联工厂不能为空")
+            .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

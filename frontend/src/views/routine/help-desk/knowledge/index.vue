@@ -2,13 +2,13 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/routine/help-desk/knowledge -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：服务台知识库实体管理页面，含查询、增删改，由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成 -->
+<!-- 功能描述：服务台知识库实体管理页面，含查询、增删改，由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
 
 <template>
-  <div class="routine-help-desk-knowledge">
+  <div class="p-4">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -30,7 +30,7 @@
       :show-delete="true"
       :show-import="true"
       :show-export="true"
-      :show-expand="true"
+      :show-expand="false"
       :show-advanced-query="true"
       :show-column-setting="true"
       :show-fullscreen="true"
@@ -54,8 +54,8 @@
 
     <!-- 表格 -->
     <TaktSingleTable
-      :columns="columns"
       entity-scope="company"
+      :columns="columns"
       :visible-column-keys="visibleColumnKeys"
       :id-column-key="'knowledgeId'"
       table-mode="single"
@@ -66,31 +66,13 @@
       :row-selection="rowSelection"
       :custom-row="onClickRow"
 
-      :expanded-row-keys="expandedRowKeys"
-      @expand="handleExpand"
       @change="handleTableChange"
       @resize-column="handleResizeColumn"
     >
-      <!-- 展开行渲染 -->
-      <template #expandedRowRender="{ record }">
-        <div class="p-4">
-          <div class="mb-2 text-sm font-medium">{{ t('entity.knowledgeChangeLog._self') }}</div>
-          <a-table
-            v-if="hasKnowledgeChangeLogRows(record)"
-            :columns="knowledgeChangeLogExpandColumns"
-            :data-source="getKnowledgeChangeLogRows(record)"
-            :row-key="(row: KnowledgeChangeLog, index?: number) => row?.knowledgeChangeLogId || String(index ?? 0)"
-            :pagination="false"
-            size="small"
-            bordered
-            class="mb-4"
-          />
-          <a-empty v-else class="mb-4" />
-        </div>
-      </template>
+
     </TaktSingleTable>
 
-    <!-- 分页组件 -->
+    <!-- 分页（服务端分页，外置 TaktPagination） -->
     <TaktPagination
       v-model:current="currentPage"
       v-model:page-size="pageSize"
@@ -110,6 +92,7 @@
       @cancel="handleFormCancel"
     >
       <KnowledgeForm
+        :key="formData?.knowledgeId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -131,6 +114,8 @@
         <a-input
           v-model:value="advancedQueryForm.title"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.knowledge.title') })"
+          show-count
+          :maxlength="200"
           allow-clear
         />
       </a-form-item>
@@ -150,6 +135,8 @@
         <a-input
           v-model:value="advancedQueryForm.summary"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.knowledge.summary') })"
+          show-count
+          :maxlength="1000"
           allow-clear
         />
       </a-form-item>
@@ -159,6 +146,8 @@
         <a-input
           v-model:value="advancedQueryForm.categoryCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.knowledge.categorycode') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
@@ -168,6 +157,17 @@
         <a-input
           v-model:value="advancedQueryForm.tags"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.knowledge.tags') })"
+          show-count
+          :maxlength="500"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('attachments')">
+      <a-form-item :label="t('entity.knowledge.attachments')">
+        <a-input
+          v-model:value="advancedQueryForm.attachments"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.knowledge.attachments') })"
           allow-clear
         />
       </a-form-item>
@@ -177,15 +177,6 @@
         <a-input-number
           v-model:value="advancedQueryForm.knowledgeStatus"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.knowledge.status') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('sortOrder')">
-      <a-form-item :label="t('entity.knowledge.sortorder')">
-        <a-input-number
-          v-model:value="advancedQueryForm.sortOrder"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.knowledge.sortorder') })"
           style="width: 100%"
         />
       </a-form-item>
@@ -240,6 +231,8 @@
         <a-input
           v-model:value="advancedQueryForm.publishedAtStart"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.knowledge.publishedatstart') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -259,6 +252,8 @@
         <a-input
           v-model:value="advancedQueryForm.revisedAtStart"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.knowledge.revisedatstart') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -279,7 +274,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -290,17 +285,36 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('ExtField')">
-      <a-form-item :label="t('common.page.entity.ExtField')">
-        <a-input
-          v-model:value="advancedQueryForm.ExtField"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
-          allow-clear
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
+        <a-textarea
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -309,8 +323,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -354,9 +370,8 @@
 </template>
 
 <script setup lang="ts">
-import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 /**
- * 服务台知识库实体管理页 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
+ * 服务台知识库实体管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/routine/help-desk/knowledge
  */
 import { ref, computed, onMounted } from 'vue'
@@ -364,14 +379,13 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import KnowledgeForm from './components/knowledge-form.vue'
-import { getKnowledgeList, getKnowledgeById, createKnowledge, updateKnowledge, deleteKnowledgeById, deleteKnowledgeBatch, getKnowledgeTemplate, importKnowledge, exportKnowledge } from '@/api/routine/help-desk/knowledge'
-import * as knowledgeChangeLogApi from '@/api/routine/help-desk/knowledge-change-log'
-import type { KnowledgeChangeLog, KnowledgeChangeLogQuery } from '@/types/routine/help-desk/knowledge-change-log'
-import type { Knowledge, KnowledgeQuery, KnowledgeCreate, KnowledgeUpdate } from '@/types/routine/help-desk/knowledge'
+import { getKnowledgeList, getKnowledgeById, createKnowledge, updateKnowledge, deleteKnowledgeById, deleteKnowledgeBatch, getKnowledgeTemplate, importKnowledge, exportKnowledge, updateKnowledgeStatus } from '@/api/routine/help-desk/knowledge'
+import type { Knowledge, KnowledgeQuery } from '@/types/routine/help-desk/knowledge'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -406,11 +420,13 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<Knowledge>>({})
+const formData = ref<Partial<Knowledge> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
@@ -419,8 +435,8 @@ const advancedQueryForm = ref({
   summary: '',
   categoryCode: '',
   tags: '',
+  attachments: '',
   knowledgeStatus: undefined as number | undefined,
-  sortOrder: undefined as number | undefined,
   viewCount: undefined as number | undefined,
   helpfulCount: undefined as number | undefined,
   unhelpfulCount: undefined as number | undefined,
@@ -432,7 +448,7 @@ const advancedQueryForm = ref({
   revisedAtEnd: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
@@ -442,8 +458,8 @@ const queryFieldsMeta = computed(() => [
   { key: 'summary', label: t('entity.knowledge.summary') },
   { key: 'categoryCode', label: t('entity.knowledge.categorycode') },
   { key: 'tags', label: t('entity.knowledge.tags') },
+  { key: 'attachments', label: t('entity.knowledge.attachments') },
   { key: 'knowledgeStatus', label: t('entity.knowledge.status') },
-  { key: 'sortOrder', label: t('entity.knowledge.sortorder') },
   { key: 'viewCount', label: t('entity.knowledge.viewcount') },
   { key: 'helpfulCount', label: t('entity.knowledge.helpfulcount') },
   { key: 'unhelpfulCount', label: t('entity.knowledge.unhelpfulcount') },
@@ -455,7 +471,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'revisedAtEnd', label: t('entity.knowledge.revisedatend') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'ExtField', label: t('common.page.entity.ExtField') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -473,141 +489,75 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
-/** 主子表展开行 keys（手风琴，仅一行展开） */
-const expandedRowKeys = ref<string[]>([])
 
-/** 页面挂载后加载分页列表 */
-onMounted(() => {
+
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {KnowledgeQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<KnowledgeQuery>): KnowledgeQuery {
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: KnowledgeQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: keyof KnowledgeQuery, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v as never
+    }
+  }
+  assignTrimmed('title', form.title)
+  assignTrimmed('content', form.content)
+  assignTrimmed('summary', form.summary)
+  assignTrimmed('categoryCode', form.categoryCode)
+  assignTrimmed('tags', form.tags)
+  assignTrimmed('attachments', form.attachments)
+  if (form.knowledgeStatus !== undefined && form.knowledgeStatus !== null) {
+    query.knowledgeStatus = form.knowledgeStatus
+  }
+  if (form.viewCount !== undefined && form.viewCount !== null) {
+    query.viewCount = form.viewCount
+  }
+  if (form.helpfulCount !== undefined && form.helpfulCount !== null) {
+    query.helpfulCount = form.helpfulCount
+  }
+  if (form.unhelpfulCount !== undefined && form.unhelpfulCount !== null) {
+    query.unhelpfulCount = form.unhelpfulCount
+  }
+  if (form.isPublished !== undefined && form.isPublished !== null) {
+    query.isPublished = form.isPublished
+  }
+  if (form.version !== undefined && form.version !== null) {
+    query.version = form.version
+  }
+  assignTrimmed('publishedAtStart', form.publishedAtStart)
+  assignTrimmed('publishedAtEnd', form.publishedAtEnd)
+  assignTrimmed('revisedAtStart', form.revisedAtStart)
+  assignTrimmed('revisedAtEnd', form.revisedAtEnd)
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('extField', form.extField)
+  assignTrimmed('remark', form.remark)
+  return query
+}
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
   loadData()
 })
 
-/** 展开行预览：knowledgeChangeLog 列 */
-const knowledgeChangeLogExpandColumns = computed(() => [
-  {
-    title: t('entity.knowledgeChangeLog.knowledgename'),
-    dataIndex: 'knowledgeName',
-    key: 'knowledgeName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.knowledgeChangeLog.knowledgetitle'),
-    dataIndex: 'knowledgeTitle',
-    key: 'knowledgeTitle',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.knowledgeChangeLog.changetype'),
-    dataIndex: 'changeType',
-    key: 'changeType',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.knowledgeChangeLog.changesummary'),
-    dataIndex: 'changeSummary',
-    key: 'changeSummary',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.knowledgeChangeLog.changefields'),
-    dataIndex: 'changeFields',
-    key: 'changeFields',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.knowledgeChangeLog.changereason'),
-    dataIndex: 'changeReason',
-    key: 'changeReason',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.knowledgeChangeLog.versionatchange'),
-    dataIndex: 'versionAtChange',
-    key: 'versionAtChange',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.knowledgeChangeLog.knowledge'),
-    dataIndex: 'knowledge',
-    key: 'knowledge',
-    ellipsis: true,
-  },
-])
-
-/** 读取主表行上的 knowledgeChangeLog 子表缓存 */
-function getKnowledgeChangeLogRows(record: Knowledge): KnowledgeChangeLog[] {
-  return (record as any)?.changeLogs ?? []
-}
-
-/** 主表行是否已加载 knowledgeChangeLog 子表 */
-function hasKnowledgeChangeLogRows(record: Knowledge): boolean {
-  return getKnowledgeChangeLogRows(record).length > 0
-}
 
 
-/** 加载主表详情并回填当前页 dataSource */
-async function loadKnowledgeDetail(record: Knowledge): Promise<Knowledge | null> {
-  const id = getKnowledgeId(record)
-  if (!id) {
-    return null
-  }
-  try {
-    const detail = await getKnowledgeById(id)
-    const index = dataSource.value.findIndex((row) => getKnowledgeId(row) === id)
-    if (index !== -1) {
-      dataSource.value[index] = { ...dataSource.value[index], ...detail } as Knowledge
-    }
-    return detail
-  } catch (error: any) {
-    message.error(error?.message || t('common.feedback.load.data.failed'))
-    return null
-  }
-}
-/** 懒加载 knowledgeChangeLog 子表（KnowledgeChangeLogQuery + knowledgeChangeLogApi，与主表 KnowledgeQuery 分离） */
-async function loadKnowledgeChangeLogForKnowledge(record: Knowledge): Promise<KnowledgeChangeLog[]> {
-  const masterId = getKnowledgeId(record)
-  if (!masterId) {
-    return []
-  }
-  try {
-    const childQuery: KnowledgeChangeLogQuery = {
-      pageIndex: 1,
-      pageSize: 500,
-      knowledgeId: masterId,
-    }
-    const result = await knowledgeChangeLogApi.getKnowledgeChangeLogList(childQuery)
-    const rows = result?.data ?? []
-    const index = dataSource.value.findIndex((row) => getKnowledgeId(row) === masterId)
-    if (index !== -1) {
-      const row = dataSource.value[index]
-      dataSource.value[index] = { ...row, changeLogs: rows } as Knowledge
-    }
-    return rows
-  } catch (error: any) {
-    message.error(error?.message || t('common.feedback.load.data.failed'))
-    return []
-  }
-}
 
-/** 展开前确保各子表已懒加载 */
-async function ensureKnowledgeChildrenLoaded(record: Knowledge) {
-  if (!hasKnowledgeChangeLogRows(record)) {
-    await loadKnowledgeChangeLogForKnowledge(record)
-  }
-}
 
-/** 主表展开行：手风琴懒加载子表 */
-async function handleExpand(expanded: boolean, record: Knowledge) {
-  const key = getKnowledgeId(record)
-  if (!expanded || !key) {
-    expandedRowKeys.value = []
-    return
-  }
-  if (expandedRowKeys.value.length > 0 && expandedRowKeys.value[0] !== key) {
-    expandedRowKeys.value = []
-  }
-  await ensureKnowledgeChildrenLoaded(record)
-  expandedRowKeys.value = [key]
-}
+
 
 /** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
@@ -665,6 +615,15 @@ const columns = computed<TableColumnsType>(() => [
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getKnowledgeField(record, 'tags') ?? ''
+  },
+  {
+    title: t('entity.knowledge.attachments'),
+    dataIndex: 'attachments',
+    key: 'attachments',
+    width: 160,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getKnowledgeField(record, 'attachments') ?? ''
   },
   {
     title: t('entity.knowledge.status'),
@@ -769,6 +728,7 @@ const getKnowledgeId = (record: any): string => record?.[entityIdName] ?? ''
  */
 const getKnowledgeField = (record: any, field: string): any => record?.[field]
 
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -780,7 +740,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: Knowledge, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getKnowledgeId(selectedRow.value) === getKnowledgeId(record)) {
+    } else if (selectedRow.value && getKnowledgeId(selectedRow.value) === getKnowledgeId(record)) {
       selectedRow.value = null
     }
   },
@@ -811,16 +771,7 @@ const onClickRow = (record: Knowledge) => ({
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: KnowledgeQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getKnowledgeList(params)
+    const res = await getKnowledgeList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
@@ -838,7 +789,7 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -851,8 +802,8 @@ function handleReset() {
   summary: '',
   categoryCode: '',
   tags: '',
+  attachments: '',
   knowledgeStatus: undefined as number | undefined,
-  sortOrder: undefined as number | undefined,
   viewCount: undefined as number | undefined,
   helpfulCount: undefined as number | undefined,
   unhelpfulCount: undefined as number | undefined,
@@ -864,36 +815,31 @@ function handleReset() {
   revisedAtEnd: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
   formTitle.value = t('common.dialog.title.create', { entity: t('entity.knowledge._self') })
-  formData.value = {}
+  formData.value = null
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
-/** 打开编辑弹窗（主子表：先拉详情含子表） */
-async function handleEdit(record: Knowledge) {
+/** 打开编辑弹窗 */
+function handleEdit(record: Knowledge) {
   formTitle.value = t('common.dialog.title.edit', { entity: t('entity.knowledge._self') })
-  formLoading.value = true
-  try {
-    const detail = await loadKnowledgeDetail(record)
-    formData.value = detail ? { ...detail } : { ...record }
-    formVisible.value = true
-  } finally {
-    formLoading.value = false
-  }
+  formData.value = { ...record }
+  formVisible.value = true
 }
 
 /** 工具栏编辑：打开当前单选行 */
 function handleUpdate() {
   if (selectedRow.value) {
-    void handleEdit(selectedRow.value)
+    handleEdit(selectedRow.value)
   } else {
     message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.knowledge._self') }))
   }
@@ -919,6 +865,8 @@ async function handleFormSubmit() {
       message.success(t('common.feedback.created', { target: t('entity.knowledge._self') }))
     }
     formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
     loadData()
   } finally {
     formLoading.value = false
@@ -928,6 +876,8 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开导入对话框 */
 function handleImport() {
@@ -959,16 +909,11 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: KnowledgeQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportKnowledge(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportKnowledge(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -1036,7 +981,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -1047,8 +992,8 @@ function handleAdvancedQueryReset() {
   summary: '',
   categoryCode: '',
   tags: '',
+  attachments: '',
   knowledgeStatus: undefined as number | undefined,
-  sortOrder: undefined as number | undefined,
   viewCount: undefined as number | undefined,
   helpfulCount: undefined as number | undefined,
   unhelpfulCount: undefined as number | undefined,
@@ -1060,7 +1005,7 @@ function handleAdvancedQueryReset() {
   revisedAtEnd: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
 }
@@ -1090,23 +1035,16 @@ function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
 /** 分页页码变更 */
-function handlePaginationChange(page: number) {
+function handlePaginationChange(page: number, size: number) {
   currentPage.value = page
+  pageSize.value = size
   loadData()
 }
-/** 分页每页条数变更 */
+
+/** 分页每页条数变更（重置到第 1 页） */
 function handlePaginationSizeChange(_current: number, size: number) {
+  currentPage.value = getTaktDefaultPageIndex()
   pageSize.value = size
-  currentPage.value = 1
   loadData()
 }
 </script>
-
-<style scoped lang="css">
-.routine-help-desk-knowledge {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-</style>

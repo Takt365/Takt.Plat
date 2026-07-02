@@ -19,11 +19,11 @@
       @reset="handleQueryReset"
     />
     <TaktToolsBar
-      create-permission="routine:documentcenter:document:create"
-      update-permission="routine:documentcenter:document:update"
-      delete-permission="routine:documentcenter:document:delete"
+      create-permission="routine:document:center:create"
+      update-permission="routine:document:center:update"
+      delete-permission="routine:document:center:delete"
 
-      export-permission="routine:documentcenter:document:export"
+      export-permission="routine:document:center:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -185,7 +185,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -196,18 +196,36 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('ExtField')">
-      <a-form-item :label="t('entity.documentchangelog.extfield')">
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
         <a-textarea
-          v-model:value="advancedQueryForm.ExtField"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.documentchangelog.extfield') })"
-          :rows="2"
-          allow-clear
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -252,7 +270,7 @@ import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-pa
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 import DocumentChangeLogForm from './document-change-log-form.vue'
 import { useDocumentMasterContext } from '../composables/use-document-master-context'
 import {
@@ -302,7 +320,7 @@ const advancedQueryForm = ref({
   versionAtChange: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
 })
 const visibleQueryFieldKeys = ref<string[]>([])
@@ -318,7 +336,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'versionAtChange', label: t('entity.documentchangelog.versionatchange') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'ExtField', label: t('entity.documentchangelog.extfield') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 
@@ -351,7 +369,7 @@ function handleAdvancedQueryReset() {
   versionAtChange: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
 }
@@ -483,7 +501,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'routine:documentcenter:document:update',
+        permission: 'routine:document:center:update',
         onClick: (record: DocumentChangeLog) => void handleEdit(record),
       },
       {
@@ -491,7 +509,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'routine:documentcenter:document:delete',
+        permission: 'routine:document:center:delete',
         onClick: (record: DocumentChangeLog) => void handleDeleteOne(record),
       },
     ],
@@ -508,7 +526,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: DocumentChangeLog, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getDocumentChangeLogId(selectedRow.value) === getDocumentChangeLogId(record)) {
+    } else if (selectedRow.value && getDocumentChangeLogId(selectedRow.value) === getDocumentChangeLogId(record)) {
       selectedRow.value = null
     }
   },
@@ -571,7 +589,7 @@ function buildListQuery(overrides?: Partial<DocumentChangeLogQuery>): DocumentCh
   }
   assignTrimmed('createdAtStart', form.createdAtStart)
   assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('ExtField', form.ExtField)
+  assignTrimmed('extField', form.extField)
   assignTrimmed('remark', form.remark)
   return query
 }

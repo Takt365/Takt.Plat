@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Sales
 // 文件名称：ITaktSalesInvoiceService.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-07-01
 // 创建人：Takt365(Cursor AI)
 // 功能描述：销售发票应用服务接口
 // 
@@ -69,13 +69,6 @@ public interface ITaktSalesInvoiceService
     /// <param name="ids">ID列表</param>
     /// <returns>任务</returns>
     Task DeleteSalesInvoiceBatchAsync(IEnumerable<long> ids);
-
-    /// <summary>
-    /// 更新销售发票状态
-    /// </summary>
-    /// <param name="dto">状态DTO</param>
-    /// <returns>DTO</returns>
-    Task<TaktSalesInvoiceDto> UpdateSalesInvoiceStatusAsync(TaktSalesInvoiceStatusDto dto);
 
     /// <summary>
     /// 获取导入模板

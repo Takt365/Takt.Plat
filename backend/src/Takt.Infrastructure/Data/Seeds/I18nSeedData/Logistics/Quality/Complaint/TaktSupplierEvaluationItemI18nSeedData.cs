@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Complaint
 // 文件名称：TaktSupplierEvaluationItemI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSupplierEvaluationItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktSupplierEvaluationItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.supplierevaluationitem._self", "zh-HK", "供应商评价考核项目明细信息_hk", "实体名称"),
 
             // entity.supplierevaluationitem.evaluationid
-            new TranslationSeedItem("entity.supplierevaluationitem.evaluationid", "en-US", "评价表ID_us", "评价表ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.supplierevaluationitem.evaluationid", "en-US", "评价表ID_us", "评价表 ID（关联 TaktSupplierEvaluation.Id，选项 TaktSupplierEvaluations/options）"),
             // entity.supplierevaluationitem.evaluationid
-            new TranslationSeedItem("entity.supplierevaluationitem.evaluationid", "ja-JP", "评价表ID_jp", "评价表ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.supplierevaluationitem.evaluationid", "ja-JP", "评价表ID_jp", "评价表 ID（关联 TaktSupplierEvaluation.Id，选项 TaktSupplierEvaluations/options）"),
             // entity.supplierevaluationitem.evaluationid
-            new TranslationSeedItem("entity.supplierevaluationitem.evaluationid", "zh-CN", "评价表ID", "评价表ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.supplierevaluationitem.evaluationid", "zh-CN", "评价表ID", "评价表 ID（关联 TaktSupplierEvaluation.Id，选项 TaktSupplierEvaluations/options）"),
             // entity.supplierevaluationitem.evaluationid
-            new TranslationSeedItem("entity.supplierevaluationitem.evaluationid", "zh-HK", "评价表ID_hk", "评价表ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.supplierevaluationitem.evaluationid", "zh-HK", "评价表ID_hk", "评价表 ID（关联 TaktSupplierEvaluation.Id，选项 TaktSupplierEvaluations/options）"),
 
             // entity.supplierevaluationitem.supplierevaluationcode
             new TranslationSeedItem("entity.supplierevaluationitem.supplierevaluationcode", "en-US", "评价表编号_us", "评价表编号（冗余字段，便于查询）"),
@@ -118,13 +118,13 @@ public class TaktSupplierEvaluationItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.supplierevaluationitem.linenumber", "zh-HK", "行号_hk", "行号（项号/序号，固定步长=10）"),
 
             // entity.supplierevaluationitem.categorytype
-            new TranslationSeedItem("entity.supplierevaluationitem.categorytype", "en-US", "评价类别_us", "评价类别类型（0=质量管理，1=交付能力，2=价格水平，3=服务水平，4=技术能力，5=管理体系，6=其他）"),
+            new TranslationSeedItem("entity.supplierevaluationitem.categorytype", "en-US", "评价类别_us", "评价类别类型（字典 logistics_quality_evaluation_category）"),
             // entity.supplierevaluationitem.categorytype
-            new TranslationSeedItem("entity.supplierevaluationitem.categorytype", "ja-JP", "评价类别_jp", "评价类别类型（0=质量管理，1=交付能力，2=价格水平，3=服务水平，4=技术能力，5=管理体系，6=其他）"),
+            new TranslationSeedItem("entity.supplierevaluationitem.categorytype", "ja-JP", "评价类别_jp", "评价类别类型（字典 logistics_quality_evaluation_category）"),
             // entity.supplierevaluationitem.categorytype
-            new TranslationSeedItem("entity.supplierevaluationitem.categorytype", "zh-CN", "评价类别", "评价类别类型（0=质量管理，1=交付能力，2=价格水平，3=服务水平，4=技术能力，5=管理体系，6=其他）"),
+            new TranslationSeedItem("entity.supplierevaluationitem.categorytype", "zh-CN", "评价类别", "评价类别类型（字典 logistics_quality_evaluation_category）"),
             // entity.supplierevaluationitem.categorytype
-            new TranslationSeedItem("entity.supplierevaluationitem.categorytype", "zh-HK", "评价类别_hk", "评价类别类型（0=质量管理，1=交付能力，2=价格水平，3=服务水平，4=技术能力，5=管理体系，6=其他）"),
+            new TranslationSeedItem("entity.supplierevaluationitem.categorytype", "zh-HK", "评价类别_hk", "评价类别类型（字典 logistics_quality_evaluation_category）"),
 
             // entity.supplierevaluationitem.itemname
             new TranslationSeedItem("entity.supplierevaluationitem.itemname", "en-US", "评价项目_us", "评价项目名称"),
@@ -172,13 +172,13 @@ public class TaktSupplierEvaluationItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.supplierevaluationitem.score", "zh-HK", "评分_hk", "评分（0-100分）"),
 
             // entity.supplierevaluationitem.ratinglevel
-            new TranslationSeedItem("entity.supplierevaluationitem.ratinglevel", "en-US", "评级_us", "评级（0=D级-不合格，1=C级-合格，2=B级-良好，3=A级-优秀）"),
+            new TranslationSeedItem("entity.supplierevaluationitem.ratinglevel", "en-US", "评级_us", "评级（字典 logistics_quality_supplier_rating）"),
             // entity.supplierevaluationitem.ratinglevel
-            new TranslationSeedItem("entity.supplierevaluationitem.ratinglevel", "ja-JP", "评级_jp", "评级（0=D级-不合格，1=C级-合格，2=B级-良好，3=A级-优秀）"),
+            new TranslationSeedItem("entity.supplierevaluationitem.ratinglevel", "ja-JP", "评级_jp", "评级（字典 logistics_quality_supplier_rating）"),
             // entity.supplierevaluationitem.ratinglevel
-            new TranslationSeedItem("entity.supplierevaluationitem.ratinglevel", "zh-CN", "评级", "评级（0=D级-不合格，1=C级-合格，2=B级-良好，3=A级-优秀）"),
+            new TranslationSeedItem("entity.supplierevaluationitem.ratinglevel", "zh-CN", "评级", "评级（字典 logistics_quality_supplier_rating）"),
             // entity.supplierevaluationitem.ratinglevel
-            new TranslationSeedItem("entity.supplierevaluationitem.ratinglevel", "zh-HK", "评级_hk", "评级（0=D级-不合格，1=C级-合格，2=B级-良好，3=A级-优秀）"),
+            new TranslationSeedItem("entity.supplierevaluationitem.ratinglevel", "zh-HK", "评级_hk", "评级（字典 logistics_quality_supplier_rating）"),
 
             // entity.supplierevaluationitem.evaluationcomment
             new TranslationSeedItem("entity.supplierevaluationitem.evaluationcomment", "en-US", "评价说明_us", "评价说明/事实依据"),
@@ -226,13 +226,13 @@ public class TaktSupplierEvaluationItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.supplierevaluationitem.rectificationdeadline", "zh-HK", "整改期限_hk", "整改期限"),
 
             // entity.supplierevaluationitem.rectificationstatus
-            new TranslationSeedItem("entity.supplierevaluationitem.rectificationstatus", "en-US", "整改状态_us", "整改状态（0=无需整改，1=待整改，2=整改中，3=已完成，4=未通过）"),
+            new TranslationSeedItem("entity.supplierevaluationitem.rectificationstatus", "en-US", "整改状态_us", "整改状态（字典 logistics_quality_rectification_status）"),
             // entity.supplierevaluationitem.rectificationstatus
-            new TranslationSeedItem("entity.supplierevaluationitem.rectificationstatus", "ja-JP", "整改状态_jp", "整改状态（0=无需整改，1=待整改，2=整改中，3=已完成，4=未通过）"),
+            new TranslationSeedItem("entity.supplierevaluationitem.rectificationstatus", "ja-JP", "整改状态_jp", "整改状态（字典 logistics_quality_rectification_status）"),
             // entity.supplierevaluationitem.rectificationstatus
-            new TranslationSeedItem("entity.supplierevaluationitem.rectificationstatus", "zh-CN", "整改状态", "整改状态（0=无需整改，1=待整改，2=整改中，3=已完成，4=未通过）"),
+            new TranslationSeedItem("entity.supplierevaluationitem.rectificationstatus", "zh-CN", "整改状态", "整改状态（字典 logistics_quality_rectification_status）"),
             // entity.supplierevaluationitem.rectificationstatus
-            new TranslationSeedItem("entity.supplierevaluationitem.rectificationstatus", "zh-HK", "整改状态_hk", "整改状态（0=无需整改，1=待整改，2=整改中，3=已完成，4=未通过）"),
+            new TranslationSeedItem("entity.supplierevaluationitem.rectificationstatus", "zh-HK", "整改状态_hk", "整改状态（字典 logistics_quality_rectification_status）"),
 
             // entity.supplierevaluationitem.evaluation
             new TranslationSeedItem("entity.supplierevaluationitem.evaluation", "en-US", "评价表主表_us", "评价表主表"),

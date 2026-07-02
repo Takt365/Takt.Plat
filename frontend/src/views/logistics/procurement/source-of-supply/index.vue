@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="logistics:procurement:sourceofsupply:create"
-      update-permission="logistics:procurement:sourceofsupply:update"
-      delete-permission="logistics:procurement:sourceofsupply:delete"
-      import-permission="logistics:procurement:sourceofsupply:import"
-      export-permission="logistics:procurement:sourceofsupply:export"
+      create-permission="logistics:procurement:source:of:supply:create"
+      update-permission="logistics:procurement:source:of:supply:update"
+      delete-permission="logistics:procurement:source:of:supply:delete"
+      import-permission="logistics:procurement:source:of:supply:import"
+      export-permission="logistics:procurement:source:of:supply:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -164,17 +164,6 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('materialName')">
-      <a-form-item :label="t('entity.sourceofsupply.materialname')">
-        <a-input
-          v-model:value="advancedQueryForm.materialName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceofsupply.materialname') })"
-          show-count
-          :maxlength="40"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
       <div v-show="isFieldVisible('supplierCode')">
       <a-form-item :label="t('entity.sourceofsupply.suppliercode')">
         <a-input
@@ -186,22 +175,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('supplierName')">
-      <a-form-item :label="t('entity.sourceofsupply.suppliername')">
+      <div v-show="isFieldVisible('purchaseGroup')">
+      <a-form-item :label="t('entity.sourceofsupply.purchasegroup')">
         <a-input
-          v-model:value="advancedQueryForm.supplierName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceofsupply.suppliername') })"
-          show-count
-          :maxlength="80"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('purchaseGroupCode')">
-      <a-form-item :label="t('entity.sourceofsupply.purchasegroupcode')">
-        <a-input
-          v-model:value="advancedQueryForm.purchaseGroupCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceofsupply.purchasegroupcode') })"
+          v-model:value="advancedQueryForm.purchaseGroup"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceofsupply.purchasegroup') })"
           show-count
           :maxlength="50"
           allow-clear
@@ -333,7 +311,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -344,7 +322,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -493,10 +471,8 @@ const advancedQueryForm = ref({
   plantCode: '',
   sourceOfSupplyCode: '',
   materialCode: '',
-  materialName: '',
   supplierCode: '',
-  supplierName: '',
-  purchaseGroupCode: '',
+  purchaseGroup: '',
   validFromStart: '',
   validFromEnd: '',
   validToStart: '',
@@ -519,10 +495,8 @@ const queryFieldsMeta = computed(() => [
   { key: 'plantCode', label: t('entity.sourceofsupply.plantcode') },
   { key: 'sourceOfSupplyCode', label: t('entity.sourceofsupply.code') },
   { key: 'materialCode', label: t('entity.sourceofsupply.materialcode') },
-  { key: 'materialName', label: t('entity.sourceofsupply.materialname') },
   { key: 'supplierCode', label: t('entity.sourceofsupply.suppliercode') },
-  { key: 'supplierName', label: t('entity.sourceofsupply.suppliername') },
-  { key: 'purchaseGroupCode', label: t('entity.sourceofsupply.purchasegroupcode') },
+  { key: 'purchaseGroup', label: t('entity.sourceofsupply.purchasegroup') },
   { key: 'validFromStart', label: t('entity.sourceofsupply.validfromstart') },
   { key: 'validFromEnd', label: t('entity.sourceofsupply.validfromend') },
   { key: 'validToStart', label: t('entity.sourceofsupply.validtostart') },
@@ -584,10 +558,8 @@ function buildListQuery(overrides?: Partial<SourceOfSupplyQuery>): SourceOfSuppl
   assignTrimmed('plantCode', form.plantCode)
   assignTrimmed('sourceOfSupplyCode', form.sourceOfSupplyCode)
   assignTrimmed('materialCode', form.materialCode)
-  assignTrimmed('materialName', form.materialName)
   assignTrimmed('supplierCode', form.supplierCode)
-  assignTrimmed('supplierName', form.supplierName)
-  assignTrimmed('purchaseGroupCode', form.purchaseGroupCode)
+  assignTrimmed('purchaseGroup', form.purchaseGroup)
   assignTrimmed('validFromStart', form.validFromStart)
   assignTrimmed('validFromEnd', form.validFromEnd)
   assignTrimmed('validToStart', form.validToStart)
@@ -671,15 +643,6 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSourceOfSupplyField(record, 'materialCode') ?? ''
   },
   {
-    title: t('entity.sourceofsupply.materialname'),
-    dataIndex: 'materialName',
-    key: 'materialName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSourceOfSupplyField(record, 'materialName') ?? ''
-  },
-  {
     title: t('entity.sourceofsupply.suppliercode'),
     dataIndex: 'supplierCode',
     key: 'supplierCode',
@@ -689,22 +652,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSourceOfSupplyField(record, 'supplierCode') ?? ''
   },
   {
-    title: t('entity.sourceofsupply.suppliername'),
-    dataIndex: 'supplierName',
-    key: 'supplierName',
+    title: t('entity.sourceofsupply.purchasegroup'),
+    dataIndex: 'purchaseGroup',
+    key: 'purchaseGroup',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSourceOfSupplyField(record, 'supplierName') ?? ''
-  },
-  {
-    title: t('entity.sourceofsupply.purchasegroupcode'),
-    dataIndex: 'purchaseGroupCode',
-    key: 'purchaseGroupCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSourceOfSupplyField(record, 'purchaseGroupCode') ?? ''
+    customRender: ({ record }: { record: any }) => getSourceOfSupplyField(record, 'purchaseGroup') ?? ''
   },
   {
     title: t('entity.sourceofsupply.validfrom'),
@@ -800,7 +754,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:procurement:sourceofsupply:update',
+        permission: 'logistics:procurement:source:of:supply:update',
         onClick: (record: SourceOfSupply) => handleEdit(record)
       },
       {
@@ -808,7 +762,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:procurement:sourceofsupply:delete',
+        permission: 'logistics:procurement:source:of:supply:delete',
         onClick: (record: SourceOfSupply) => handleDeleteOne(record)
       }
     ]
@@ -836,7 +790,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: SourceOfSupply, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getSourceOfSupplyId(selectedRow.value) === getSourceOfSupplyId(record)) {
+    } else if (selectedRow.value && getSourceOfSupplyId(selectedRow.value) === getSourceOfSupplyId(record)) {
       selectedRow.value = null
     }
   },
@@ -896,10 +850,8 @@ function handleReset() {
   plantCode: '',
   sourceOfSupplyCode: '',
   materialCode: '',
-  materialName: '',
   supplierCode: '',
-  supplierName: '',
-  purchaseGroupCode: '',
+  purchaseGroup: '',
   validFromStart: '',
   validFromEnd: '',
   validToStart: '',
@@ -1113,10 +1065,8 @@ function handleAdvancedQueryReset() {
   plantCode: '',
   sourceOfSupplyCode: '',
   materialCode: '',
-  materialName: '',
   supplierCode: '',
-  supplierName: '',
-  purchaseGroupCode: '',
+  purchaseGroup: '',
   validFromStart: '',
   validFromEnd: '',
   validToStart: '',

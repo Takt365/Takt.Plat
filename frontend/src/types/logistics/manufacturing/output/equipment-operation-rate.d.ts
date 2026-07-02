@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/output
 // 文件名称：equipment-operation-rate.d.ts
-// 创建时间：2026-06-20
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/output 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -69,14 +69,14 @@ export interface EquipmentOperationRate extends CompanyDtoBase {
   equipmentName: string;
 
   /**
-   * 设备类型（1=生产设备，2=检测设备，3=包装设备，4=其他）
+   * 登录设备（1=生产设备，2=检测设备，3=包装设备，4=其他）
    */
   equipmentType: number;
 
   /**
    * 生产线
    */
-  productionLine?: string;
+  prodTeam?: string;
 
   /**
    * 班次（1=早班，2=中班，3=晚班）
@@ -139,11 +139,6 @@ export interface EquipmentOperationRate extends CompanyDtoBase {
   downtimeReason?: string;
 
   /**
-   * 设备状态（1=正常运行，2=故障停机，3=维护保养，4=换型调试，5=其他）
-   */
-  equipmentStatus: number;
-
-  /**
    * 设备操作员
    */
   equipmentOperator?: string;
@@ -161,7 +156,12 @@ export interface EquipmentOperationRate extends CompanyDtoBase {
   /**
    * 状态（0=正常，1=停用）
    */
-  status: number;
+  equipmentOperationRateStatus: number;
+
+  /**
+   * 机器稼动率变更记录列表（外键在子表 TaktEquipmentOperationRateChangeLog.EquipmentOperationRateId） （子表：TaktEquipmentOperationRateChangeLog）
+   */
+  changeLogs?: EquipmentOperationRateChangeLog[];
 
 }
 
@@ -234,14 +234,14 @@ export interface EquipmentOperationRateQuery extends TaktPagedQuery {
   equipmentName?: string;
 
   /**
-   * 设备类型（1=生产设备，2=检测设备，3=包装设备，4=其他）
+   * 登录设备（1=生产设备，2=检测设备，3=包装设备，4=其他）
    */
   equipmentType?: number;
 
   /**
    * 生产线
    */
-  productionLine?: string;
+  prodTeam?: string;
 
   /**
    * 班次（1=早班，2=中班，3=晚班）
@@ -304,11 +304,6 @@ export interface EquipmentOperationRateQuery extends TaktPagedQuery {
   downtimeReason?: string;
 
   /**
-   * 设备状态（1=正常运行，2=故障停机，3=维护保养，4=换型调试，5=其他）
-   */
-  equipmentStatus?: number;
-
-  /**
    * 设备操作员
    */
   equipmentOperator?: string;
@@ -326,7 +321,7 @@ export interface EquipmentOperationRateQuery extends TaktPagedQuery {
   /**
    * 状态（0=正常，1=停用）
    */
-  status?: number;
+  equipmentOperationRateStatus?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -368,7 +363,7 @@ export interface EquipmentOperationRateCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -413,14 +408,14 @@ export interface EquipmentOperationRateCreate {
   equipmentName: string;
 
   /**
-   * 设备类型（1=生产设备，2=检测设备，3=包装设备，4=其他）
+   * 登录设备（1=生产设备，2=检测设备，3=包装设备，4=其他）
    */
   equipmentType: number;
 
   /**
    * 生产线
    */
-  productionLine?: string;
+  prodTeam?: string;
 
   /**
    * 班次（1=早班，2=中班，3=晚班）
@@ -483,11 +478,6 @@ export interface EquipmentOperationRateCreate {
   downtimeReason?: string;
 
   /**
-   * 设备状态（1=正常运行，2=故障停机，3=维护保养，4=换型调试，5=其他）
-   */
-  equipmentStatus: number;
-
-  /**
    * 设备操作员
    */
   equipmentOperator?: string;
@@ -505,7 +495,12 @@ export interface EquipmentOperationRateCreate {
   /**
    * 状态（0=正常，1=停用）
    */
-  status: number;
+  equipmentOperationRateStatus: number;
+
+  /**
+   * 机器稼动率变更记录列表（外键在子表 TaktEquipmentOperationRateChangeLog.EquipmentOperationRateId）（子表，级联保存）
+   */
+  changeLogs?: EquipmentOperationRateChangeLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -547,9 +542,9 @@ export interface EquipmentOperationRateStatus {
   equipmentOperationRateId: string;
 
   /**
-   * 设备状态（1=正常运行，2=故障停机，3=维护保养，4=换型调试，5=其他）
+   * 状态（0=正常，1=停用）
    */
-  equipmentStatus: number;
+  equipmentOperationRateStatus: number;
 
 }
 
@@ -581,6 +576,16 @@ export interface EquipmentOperationRateTemplate {
   timeCategory?: number;
 
   /**
+   * 开始日期
+   */
+  startDate?: string;
+
+  /**
+   * 结束日期
+   */
+  endDate?: string;
+
+  /**
    * 周数（1-53）
    */
   weekNumber?: number;
@@ -601,19 +606,64 @@ export interface EquipmentOperationRateTemplate {
   equipmentName?: string;
 
   /**
-   * 设备类型（1=生产设备，2=检测设备，3=包装设备，4=其他）
+   * 登录设备（1=生产设备，2=检测设备，3=包装设备，4=其他）
    */
   equipmentType?: number;
 
   /**
    * 生产线
    */
-  productionLine?: string;
+  prodTeam?: string;
 
   /**
    * 班次（1=早班，2=中班，3=晚班）
    */
   shiftNo?: number;
+
+  /**
+   * 负荷时间（分钟）。设备在计划内应运行的总时间，即 计划作业时间 - 计划停机时间。
+   */
+  plannedRuntime?: number;
+
+  /**
+   * 稼动时间（分钟）。设备实际用于生产的时间，即 负荷时间 - 停线损失时间。
+   */
+  actualRuntime?: number;
+
+  /**
+   * 停线损失时间（分钟）。换模/换线、故障、品质异常、缺料等导致的停机。
+   */
+  downtime?: number;
+
+  /**
+   * 时间稼动率（%）。计算公式：稼动时间 ÷ 负荷时间 × 100%。
+   */
+  equipmentOperationRate?: number;
+
+  /**
+   * 计划产量
+   */
+  plannedOutput?: number;
+
+  /**
+   * 实际产量
+   */
+  actualOutput?: number;
+
+  /**
+   * 合格品数量
+   */
+  qualifiedQuantity?: number;
+
+  /**
+   * 不良品数量
+   */
+  defectiveQuantity?: number;
+
+  /**
+   * 良品率（%）
+   */
+  yieldRate?: number;
 
   /**
    * 停机原因类型（1=设备故障，2=换型调试，3=缺料，4=人员不足，5=其他）
@@ -626,9 +676,29 @@ export interface EquipmentOperationRateTemplate {
   downtimeReason?: string;
 
   /**
-   * 设备状态（1=正常运行，2=故障停机，3=维护保养，4=换型调试，5=其他）
+   * 设备操作员
    */
-  equipmentStatus?: number;
+  equipmentOperator?: string;
+
+  /**
+   * 设备维护员
+   */
+  equipmentMaintainer?: string;
+
+  /**
+   * 班组长
+   */
+  teamLeader?: string;
+
+  /**
+   * 状态（0=正常，1=停用）
+   */
+  equipmentOperationRateStatus?: number;
+
+  /**
+   * 机器稼动率变更记录列表（外键在子表 TaktEquipmentOperationRateChangeLog.EquipmentOperationRateId）（子表，级联保存）
+   */
+  changeLogs?: EquipmentOperationRateChangeLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -660,7 +730,7 @@ export interface EquipmentOperationRateImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -673,6 +743,16 @@ export interface EquipmentOperationRateImport {
    * 时间类别（1=天，2=周，3=月）
    */
   timeCategory?: number;
+
+  /**
+   * 开始日期
+   */
+  startDate?: string;
+
+  /**
+   * 结束日期
+   */
+  endDate?: string;
 
   /**
    * 周数（1-53）
@@ -695,19 +775,64 @@ export interface EquipmentOperationRateImport {
   equipmentName?: string;
 
   /**
-   * 设备类型（1=生产设备，2=检测设备，3=包装设备，4=其他）
+   * 登录设备（1=生产设备，2=检测设备，3=包装设备，4=其他）
    */
   equipmentType?: number;
 
   /**
    * 生产线
    */
-  productionLine?: string;
+  prodTeam?: string;
 
   /**
    * 班次（1=早班，2=中班，3=晚班）
    */
   shiftNo?: number;
+
+  /**
+   * 负荷时间（分钟）。设备在计划内应运行的总时间，即 计划作业时间 - 计划停机时间。
+   */
+  plannedRuntime?: number;
+
+  /**
+   * 稼动时间（分钟）。设备实际用于生产的时间，即 负荷时间 - 停线损失时间。
+   */
+  actualRuntime?: number;
+
+  /**
+   * 停线损失时间（分钟）。换模/换线、故障、品质异常、缺料等导致的停机。
+   */
+  downtime?: number;
+
+  /**
+   * 时间稼动率（%）。计算公式：稼动时间 ÷ 负荷时间 × 100%。
+   */
+  equipmentOperationRate?: number;
+
+  /**
+   * 计划产量
+   */
+  plannedOutput?: number;
+
+  /**
+   * 实际产量
+   */
+  actualOutput?: number;
+
+  /**
+   * 合格品数量
+   */
+  qualifiedQuantity?: number;
+
+  /**
+   * 不良品数量
+   */
+  defectiveQuantity?: number;
+
+  /**
+   * 良品率（%）
+   */
+  yieldRate?: number;
 
   /**
    * 停机原因类型（1=设备故障，2=换型调试，3=缺料，4=人员不足，5=其他）
@@ -720,9 +845,29 @@ export interface EquipmentOperationRateImport {
   downtimeReason?: string;
 
   /**
-   * 设备状态（1=正常运行，2=故障停机，3=维护保养，4=换型调试，5=其他）
+   * 设备操作员
    */
-  equipmentStatus?: number;
+  equipmentOperator?: string;
+
+  /**
+   * 设备维护员
+   */
+  equipmentMaintainer?: string;
+
+  /**
+   * 班组长
+   */
+  teamLeader?: string;
+
+  /**
+   * 状态（0=正常，1=停用）
+   */
+  equipmentOperationRateStatus?: number;
+
+  /**
+   * 机器稼动率变更记录列表（外键在子表 TaktEquipmentOperationRateChangeLog.EquipmentOperationRateId）（子表，级联保存）
+   */
+  changeLogs?: EquipmentOperationRateChangeLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -794,14 +939,14 @@ export interface EquipmentOperationRateExport {
   equipmentName: string;
 
   /**
-   * 设备类型（1=生产设备，2=检测设备，3=包装设备，4=其他）
+   * 登录设备（1=生产设备，2=检测设备，3=包装设备，4=其他）
    */
   equipmentType: number;
 
   /**
    * 生产线
    */
-  productionLine?: string;
+  prodTeam?: string;
 
   /**
    * 班次（1=早班，2=中班，3=晚班）
@@ -864,11 +1009,6 @@ export interface EquipmentOperationRateExport {
   downtimeReason?: string;
 
   /**
-   * 设备状态（1=正常运行，2=故障停机，3=维护保养，4=换型调试，5=其他）
-   */
-  equipmentStatus: number;
-
-  /**
    * 设备操作员
    */
   equipmentOperator?: string;
@@ -886,7 +1026,7 @@ export interface EquipmentOperationRateExport {
   /**
    * 状态（0=正常，1=停用）
    */
-  status: number;
+  equipmentOperationRateStatus: number;
 
   /**
    * 扩展字段JSON

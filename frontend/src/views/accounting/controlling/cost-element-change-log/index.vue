@@ -81,6 +81,18 @@
             @change="(checked: unknown) => handleCostElementStatusChange(record, Boolean(checked))"
           />
         </template>
+        <template v-else-if="column.key === 'costElementCategory'">
+          <TaktDictTag
+            :value="getCostElementDictValue(record, 'costElementCategory')"
+            dict-type="accounting_cost_element_category"
+          />
+        </template>
+        <template v-else-if="column.key === 'costElementType'">
+          <TaktDictTag
+            :value="getCostElementDictValue(record, 'costElementType')"
+            dict-type="accounting_cost_element_type"
+          />
+        </template>
       </template>
       <template #detail>
         <CostElementChangeLogPanel
@@ -124,7 +136,7 @@
           v-model:value="advancedQueryForm.costElementCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.costelement.code') })"
           show-count
-          :maxlength="50"
+          :maxlength="4"
           allow-clear
         />
       </a-form-item>
@@ -140,21 +152,23 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('costElementType')">
-      <a-form-item :label="t('entity.costelement.type')">
-        <a-input-number
-          v-model:value="advancedQueryForm.costElementType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.costelement.type') })"
-          style="width: 100%"
+      <div v-show="isFieldVisible('costElementCategory')">
+      <a-form-item :label="t('entity.costelement.category')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.costElementCategory"
+          dict-type="accounting_cost_element_category"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.costelement.category') })"
+          allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('costElementCategory')">
-      <a-form-item :label="t('entity.costelement.category')">
-        <a-input-number
-          v-model:value="advancedQueryForm.costElementCategory"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.costelement.category') })"
-          style="width: 100%"
+      <div v-show="isFieldVisible('costElementType')">
+      <a-form-item :label="t('entity.costelement.type')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.costElementType"
+          dict-type="accounting_cost_element_type"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.costelement.type') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -587,19 +601,17 @@ const columns = computed<TableColumnsType>(() => [
     title: t('entity.costelement.type'),
     dataIndex: 'costElementType',
     key: 'costElementType',
-    width: 120,
+    width: 140,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCostElementField(record, 'costElementType') ?? ''
   },
   {
     title: t('entity.costelement.category'),
     dataIndex: 'costElementCategory',
     key: 'costElementCategory',
-    width: 120,
+    width: 220,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCostElementField(record, 'costElementCategory') ?? ''
   },
   {
     title: t('entity.costelement.parentid'),
@@ -675,6 +687,16 @@ const getCostElementId = (record: any): string => record?.[entityIdName] ?? ''
  * @param field 字段名
  */
 const getCostElementField = (record: any, field: string): any => record?.[field]
+/** 供 TaktDictTag 等组件使用的标量字典值 */
+const getCostElementDictValue = (
+  record: Record<string, unknown>,
+  field: string,
+): string | number | undefined => {
+  const value = record?.[field]
+  if (value === null || value === undefined) return undefined
+  if (typeof value === 'string' || typeof value === 'number') return value
+  return String(value)
+}
 
 
 /** 行选择配置 */
@@ -694,7 +716,7 @@ const rowSelection = computed(() => ({
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
-    } else if (getCostElementId(selectedRow.value) === getCostElementId(record)) {
+    } else if (selectedRow.value && getCostElementId(selectedRow.value) === getCostElementId(record)) {
       selectedRow.value = null
       syncMasterSelection(null)
     }

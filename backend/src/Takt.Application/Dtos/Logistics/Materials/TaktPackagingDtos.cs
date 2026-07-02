@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Materials
 // 文件名称：TaktPackagingDtos.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Packaging 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPackaging 生成，请按需审阅）
 // 
@@ -66,7 +66,7 @@ public class TaktPackagingDto : TaktCompanyDtoBase
     public string? AdditionalCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 原产国/地区编码（用于关税和贸易统计）
+    /// 原产国/地区编码（ISO 3166-1 alpha-2 两位代码，用于关税和贸易统计）
     /// </summary>
     public string? OriginCountryRegionCode { get; set; } = string.Empty;
 
@@ -76,7 +76,7 @@ public class TaktPackagingDto : TaktCompanyDtoBase
     public string? OriginCountryRegionName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目的国/地区编码（用于出口报关和贸易分析）
+    /// 目的国/地区编码（ISO 3166-1 alpha-2 两位代码，用于出口报关和贸易分析）
     /// </summary>
     public string? DestinationCountryRegionCode { get; set; } = string.Empty;
 
@@ -208,7 +208,7 @@ public class TaktPackagingQueryDto : TaktPagedQuery
     public string? AdditionalCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 原产国/地区编码（用于关税和贸易统计）
+    /// 原产国/地区编码（ISO 3166-1 alpha-2 两位代码，用于关税和贸易统计）
     /// </summary>
     public string? OriginCountryRegionCode { get; set; } = string.Empty;
 
@@ -218,7 +218,7 @@ public class TaktPackagingQueryDto : TaktPagedQuery
     public string? OriginCountryRegionName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目的国/地区编码（用于出口报关和贸易分析）
+    /// 目的国/地区编码（ISO 3166-1 alpha-2 两位代码，用于出口报关和贸易分析）
     /// </summary>
     public string? DestinationCountryRegionCode { get; set; } = string.Empty;
 
@@ -338,7 +338,7 @@ public class TaktPackagingCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -376,7 +376,7 @@ public class TaktPackagingCreateDto
     public string? AdditionalCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 原产国/地区编码（用于关税和贸易统计）
+    /// 原产国/地区编码（ISO 3166-1 alpha-2 两位代码，用于关税和贸易统计）
     /// </summary>
     public string? OriginCountryRegionCode { get; set; } = string.Empty;
 
@@ -386,7 +386,7 @@ public class TaktPackagingCreateDto
     public string? OriginCountryRegionName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目的国/地区编码（用于出口报关和贸易分析）
+    /// 目的国/地区编码（ISO 3166-1 alpha-2 两位代码，用于出口报关和贸易分析）
     /// </summary>
     public string? DestinationCountryRegionCode { get; set; } = string.Empty;
 
@@ -570,7 +570,7 @@ public class TaktPackagingTemplateDto
     public string? AdditionalCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 原产国/地区编码（用于关税和贸易统计）
+    /// 原产国/地区编码（ISO 3166-1 alpha-2 两位代码，用于关税和贸易统计）
     /// </summary>
     public string? OriginCountryRegionCode { get; set; } = string.Empty;
 
@@ -580,7 +580,7 @@ public class TaktPackagingTemplateDto
     public string? OriginCountryRegionName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目的国/地区编码（用于出口报关和贸易分析）
+    /// 目的国/地区编码（ISO 3166-1 alpha-2 两位代码，用于出口报关和贸易分析）
     /// </summary>
     public string? DestinationCountryRegionCode { get; set; } = string.Empty;
 
@@ -598,6 +598,61 @@ public class TaktPackagingTemplateDto
     /// 税率/协定税率标识（记录适用的关税税率类型，便于成本核算）
     /// </summary>
     public string? TariffRateType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 毛重（包含包装物的总重量，单位：千克）
+    /// </summary>
+    public decimal? GrossWeight { get; set; }
+
+    /// <summary>
+    /// 净重（不含包装物的净重量，单位：千克）
+    /// </summary>
+    public decimal? NetWeight { get; set; }
+
+    /// <summary>
+    /// 重量单位（如：KG、G、T等）
+    /// </summary>
+    public string? WeightUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 业务量/容积（一个包装单位的体积，单位：立方米）
+    /// </summary>
+    public decimal? BusinessVolume { get; set; }
+
+    /// <summary>
+    /// 体积单位（如：M3、L、ML等）
+    /// </summary>
+    public string? VolumeUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 大小/量纲（尺寸量纲或大小规格）
+    /// </summary>
+    public string? SizeDimension { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 包装类型（如：箱、托盘、袋、桶等，VERP=销售包装）
+    /// </summary>
+    public string? PackagingType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 包装单位（CAR=卡通箱；其他如：个、件等）
+    /// </summary>
+    public string? PackingUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 每包装数量（一个包装包含的基本单位数量）
+    /// </summary>
+    public decimal? QuantityPerPacking { get; set; }
+
+    /// <summary>
+    /// 包装规格
+    /// </summary>
+    public string? PackagingSpec { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 包装描述
+    /// </summary>
+    public string? PackagingDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON
@@ -627,7 +682,7 @@ public class TaktPackagingImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -662,7 +717,7 @@ public class TaktPackagingImportDto
     public string? AdditionalCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 原产国/地区编码（用于关税和贸易统计）
+    /// 原产国/地区编码（ISO 3166-1 alpha-2 两位代码，用于关税和贸易统计）
     /// </summary>
     public string? OriginCountryRegionCode { get; set; } = string.Empty;
 
@@ -672,7 +727,7 @@ public class TaktPackagingImportDto
     public string? OriginCountryRegionName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目的国/地区编码（用于出口报关和贸易分析）
+    /// 目的国/地区编码（ISO 3166-1 alpha-2 两位代码，用于出口报关和贸易分析）
     /// </summary>
     public string? DestinationCountryRegionCode { get; set; } = string.Empty;
 
@@ -690,6 +745,61 @@ public class TaktPackagingImportDto
     /// 税率/协定税率标识（记录适用的关税税率类型，便于成本核算）
     /// </summary>
     public string? TariffRateType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 毛重（包含包装物的总重量，单位：千克）
+    /// </summary>
+    public decimal? GrossWeight { get; set; }
+
+    /// <summary>
+    /// 净重（不含包装物的净重量，单位：千克）
+    /// </summary>
+    public decimal? NetWeight { get; set; }
+
+    /// <summary>
+    /// 重量单位（如：KG、G、T等）
+    /// </summary>
+    public string? WeightUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 业务量/容积（一个包装单位的体积，单位：立方米）
+    /// </summary>
+    public decimal? BusinessVolume { get; set; }
+
+    /// <summary>
+    /// 体积单位（如：M3、L、ML等）
+    /// </summary>
+    public string? VolumeUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 大小/量纲（尺寸量纲或大小规格）
+    /// </summary>
+    public string? SizeDimension { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 包装类型（如：箱、托盘、袋、桶等，VERP=销售包装）
+    /// </summary>
+    public string? PackagingType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 包装单位（CAR=卡通箱；其他如：个、件等）
+    /// </summary>
+    public string? PackingUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 每包装数量（一个包装包含的基本单位数量）
+    /// </summary>
+    public decimal? QuantityPerPacking { get; set; }
+
+    /// <summary>
+    /// 包装规格
+    /// </summary>
+    public string? PackagingSpec { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 包装描述
+    /// </summary>
+    public string? PackagingDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON
@@ -755,7 +865,7 @@ public class TaktPackagingExportDto
     public string? AdditionalCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 原产国/地区编码（用于关税和贸易统计）
+    /// 原产国/地区编码（ISO 3166-1 alpha-2 两位代码，用于关税和贸易统计）
     /// </summary>
     public string? OriginCountryRegionCode { get; set; } = string.Empty;
 
@@ -765,7 +875,7 @@ public class TaktPackagingExportDto
     public string? OriginCountryRegionName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目的国/地区编码（用于出口报关和贸易分析）
+    /// 目的国/地区编码（ISO 3166-1 alpha-2 两位代码，用于出口报关和贸易分析）
     /// </summary>
     public string? DestinationCountryRegionCode { get; set; } = string.Empty;
 

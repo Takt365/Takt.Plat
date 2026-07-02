@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="logistics:quality:complaint:customer:complaint:handling:create"
-      update-permission="logistics:quality:complaint:customer:complaint:handling:update"
-      delete-permission="logistics:quality:complaint:customer:complaint:handling:delete"
-      import-permission="logistics:quality:complaint:customer:complaint:handling:import"
-      export-permission="logistics:quality:complaint:customer:complaint:handling:export"
+      create-permission="logistics:quality:complaint:customer:handling:create"
+      update-permission="logistics:quality:complaint:customer:handling:update"
+      delete-permission="logistics:quality:complaint:customer:handling:delete"
+      import-permission="logistics:quality:complaint:customer:handling:import"
+      export-permission="logistics:quality:complaint:customer:handling:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -364,7 +364,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -375,7 +375,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -888,7 +888,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:quality:complaint:customer:complaint:handling:update',
+        permission: 'logistics:quality:complaint:customer:handling:update',
         onClick: (record: CustomerComplaintHandling) => handleEdit(record)
       },
       {
@@ -896,7 +896,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:quality:complaint:customer:complaint:handling:delete',
+        permission: 'logistics:quality:complaint:customer:handling:delete',
         onClick: (record: CustomerComplaintHandling) => handleDeleteOne(record)
       }
     ]
@@ -924,7 +924,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: CustomerComplaintHandling, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getCustomerComplaintHandlingId(selectedRow.value) === getCustomerComplaintHandlingId(record)) {
+    } else if (selectedRow.value && getCustomerComplaintHandlingId(selectedRow.value) === getCustomerComplaintHandlingId(record)) {
       selectedRow.value = null
     }
   },

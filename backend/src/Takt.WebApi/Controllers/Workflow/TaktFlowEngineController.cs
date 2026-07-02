@@ -83,6 +83,65 @@ public class TaktFlowEngineController : TaktControllerBase
     }
 
     /// <summary>
+    /// 获取工作流待办统计（数据看板）
+    /// </summary>
+    /// <returns>待办统计</returns>
+    [TaktPermission("workflow:todo:list", "工作流待办统计")]
+    [HttpGet("todo-stat")]
+    public async Task<IActionResult> GetWorkflowTodoStatAsync()
+    {
+        try
+        {
+            var result = await _flowEngineService.GetWorkflowTodoStatAsync();
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 获取我发起的流程统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>我发起的流程统计</returns>
+    [TaktPermission("workflow:my:list", "我发起的流程统计")]
+    [HttpGet("my-stat")]
+    public async Task<IActionResult> GetWorkflowMyInstanceStatAsync([FromQuery] TaktWorkflowMyInstanceStatQueryDto queryDto)
+    {
+        try
+        {
+            var result = await _flowEngineService.GetWorkflowMyInstanceStatAsync(queryDto);
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 获取已办任务统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>已办任务统计</returns>
+    [TaktPermission("workflow:processed:list", "已办任务统计")]
+    [HttpGet("processed-stat")]
+    public async Task<IActionResult> GetWorkflowProcessedStatAsync([FromQuery] TaktWorkflowProcessedStatQueryDto queryDto)
+    {
+        try
+        {
+            var result = await _flowEngineService.GetWorkflowProcessedStatAsync(queryDto);
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
     /// 获取待办流程实例运行时详情
     /// </summary>
     /// <param name="id">实例 ID</param>

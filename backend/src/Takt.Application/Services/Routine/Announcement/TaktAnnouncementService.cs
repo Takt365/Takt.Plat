@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Routine.Announcement
 // 文件名称：TaktAnnouncementService.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：公告通知应用服务实现
 // 
@@ -14,6 +14,7 @@ using System.Linq.Expressions;
 using Mapster;
 using SqlSugar;
 using Takt.Application.Dtos.Routine.Announcement;
+using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Entities.Routine.Announcement;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
@@ -31,23 +32,31 @@ public class TaktAnnouncementService : TaktServiceBase, ITaktAnnouncementService
 {
     private readonly ITaktApprovalRepository<TaktAnnouncement> _announcementRepository;
     private readonly ITaktUniqueValidator _uniqueValidator;
+    private readonly ITaktNumberingGenerator _numberingGenerator;
+    private readonly ITaktCompanyRepository<TaktNumbering> _numberingRepository;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="announcementRepository">公告通知仓储</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
+    /// <param name="numberingGenerator">编号生成器</param>
+    /// <param name="numberingRepository">编号规则仓储</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktAnnouncementService(
         ITaktApprovalRepository<TaktAnnouncement> announcementRepository,
         ITaktUniqueValidator uniqueValidator,
+        ITaktNumberingGenerator numberingGenerator,
+        ITaktCompanyRepository<TaktNumbering> numberingRepository,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
         _announcementRepository = announcementRepository;
         _uniqueValidator = uniqueValidator;
+        _numberingGenerator = numberingGenerator;
+        _numberingRepository = numberingRepository;
     }
 
     /// <summary>
@@ -93,12 +102,12 @@ public class TaktAnnouncementService : TaktServiceBase, ITaktAnnouncementService
         EnsureThreeLayerContext();
         var list = await _announcementRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.AnnouncementStatus == 1,
-            x => x.Title ?? string.Empty,
+            x => x.AnnouncementTitle ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
             DictValue = e.Id,
-            DictLabel = e.Title ?? e.Id.ToString(),
+            DictLabel = e.AnnouncementTitle ?? e.Id.ToString(),
         }).ToList();
     }
 
@@ -109,7 +118,16 @@ public class TaktAnnouncementService : TaktServiceBase, ITaktAnnouncementService
     /// <returns>DTO</returns>
     public async Task<TaktAnnouncementDto> CreateAnnouncementAsync(TaktAnnouncementCreateDto dto)
     {
+        EnsureThreeLayerContext();
+        var ruleCode = dto.NumberingRuleCode?.Trim();
         var entity = dto.Adapt<TaktAnnouncement>();
+        entity.TenantCode = CurrentTenantCode;
+        entity.CompanyCode = CurrentCompanyCode;
+        if (string.IsNullOrWhiteSpace(entity.AnnouncementCode))
+        {
+            entity.AnnouncementCode = await GenerateAnnouncementCodeAsync(ruleCode);
+        }
+        await EnsureAnnouncementCodeUniqueAsync(entity.AnnouncementCode);
         entity = await _announcementRepository.CreateAsync(entity);
         return await GetAnnouncementByIdAsync(entity.Id) ?? entity.Adapt<TaktAnnouncementDto>();
     }
@@ -202,6 +220,7 @@ public class TaktAnnouncementService : TaktServiceBase, ITaktAnnouncementService
     /// <returns>导入结果</returns>
     public async Task<(int success, int fail, List<string> errors)> ImportAnnouncementAsync(Stream fileStream, string? sheetName = null)
     {
+        EnsureThreeLayerContext();
         var errors = new List<string>();
         var success = 0;
         var fail = 0;
@@ -211,11 +230,26 @@ public class TaktAnnouncementService : TaktServiceBase, ITaktAnnouncementService
             errors.Add("Excel文件中没有数据");
             return (0, 0, errors);
         }
+        var importSeenKeys = new HashSet<string>(StringComparer.Ordinal);
         for (var i = 0; i < rows.Count; i++)
         {
             try
             {
-                var entity = rows[i].Adapt<TaktAnnouncement>();
+                var row = rows[i];
+                var ruleCode = row.NumberingRuleCode?.Trim();
+                var entity = row.Adapt<TaktAnnouncement>();
+                entity.TenantCode = CurrentTenantCode;
+                entity.CompanyCode = CurrentCompanyCode;
+                if (string.IsNullOrWhiteSpace(entity.AnnouncementCode))
+                {
+                    entity.AnnouncementCode = await GenerateAnnouncementCodeAsync(ruleCode);
+                }
+                var importKey = entity.AnnouncementCode;
+                if (!importSeenKeys.Add(importKey))
+                {
+                    throw new TaktBusinessException("与Excel中其他行重复（AnnouncementCode）");
+                }
+                await EnsureAnnouncementCodeUniqueAsync(entity.AnnouncementCode);
                 await _announcementRepository.CreateAsync(entity);
                 success += 1;
             }
@@ -270,7 +304,8 @@ public class TaktAnnouncementService : TaktServiceBase, ITaktAnnouncementService
         {
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
-                (x.Title != null && x.Title.Contains(keywords))
+                (x.AnnouncementCode != null && x.AnnouncementCode.Contains(keywords))
+                || (x.AnnouncementTitle != null && x.AnnouncementTitle.Contains(keywords))
                 || SqlFunc.ToString(x.AnnouncementType).Contains(keywords)
                 || (x.Content != null && x.Content.Contains(keywords))
                 || (x.Summary != null && x.Summary.Contains(keywords))
@@ -292,9 +327,14 @@ public class TaktAnnouncementService : TaktServiceBase, ITaktAnnouncementService
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Title))
+        if (!string.IsNullOrEmpty(queryDto?.AnnouncementTitle))
         {
-            exp = exp.And(x => x.Title != null && x.Title.Contains(queryDto.Title));
+            exp = exp.And(x => x.AnnouncementTitle != null && x.AnnouncementTitle.Contains(queryDto.AnnouncementTitle));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.AnnouncementCode))
+        {
+            exp = exp.And(x => x.AnnouncementCode != null && x.AnnouncementCode.Contains(queryDto.AnnouncementCode));
         }
 
         if (queryDto?.AnnouncementType.HasValue == true)
@@ -403,5 +443,90 @@ public class TaktAnnouncementService : TaktServiceBase, ITaktAnnouncementService
         }
 
         return exp.ToExpression();
+    }
+
+    // ========================================
+    // 编号生成
+    // ========================================
+
+    /// <summary>
+    /// 按前端选定的编号规则编码生成业务编码
+    /// </summary>
+    /// <param name="ruleCode">编号规则编码（TaktNumbering.RuleCode）</param>
+    /// <returns>公告编码</returns>
+    private async Task<string> GenerateAnnouncementCodeAsync(string? ruleCode)
+    {
+        EnsureThreeLayerContext();
+        var rule = await ResolveActiveNumberingRuleAsync(ruleCode);
+        try
+        {
+            var outcome = await _numberingGenerator.TryGenerateNextAsync(rule.RuleCode);
+            if (outcome == null || string.IsNullOrWhiteSpace(outcome.BusinessCode))
+            {
+                return BuildFallbackAnnouncementCode(rule);
+            }
+            return outcome.BusinessCode;
+        }
+        catch (Exception ex)
+        {
+            LogWarning($"编号规则 {rule.RuleCode} 不可用: {ex.Message}");
+            return BuildFallbackAnnouncementCode(rule);
+        }
+    }
+
+    /// <summary>
+    /// 按 RuleCode 加载当前租户/公司下已启用的编号规则
+    /// </summary>
+    /// <param name="ruleCode">编号规则编码（表单选择器传入）</param>
+    /// <returns>编号规则实体</returns>
+    private async Task<TaktNumbering> ResolveActiveNumberingRuleAsync(string? ruleCode)
+    {
+        if (string.IsNullOrWhiteSpace(ruleCode))
+        {
+            throw new TaktBusinessException("自动取号须选择编号规则（NumberingRuleCode）");
+        }
+        var normalizedRuleCode = ruleCode.Trim();
+        var rule = await _numberingRepository.FirstAsync(x =>
+            x.TenantCode == CurrentTenantCode
+            && x.CompanyCode == CurrentCompanyCode
+            && x.RuleCode == normalizedRuleCode);
+        if (rule == null)
+        {
+            throw new TaktBusinessException($"编号规则「{normalizedRuleCode}」不存在");
+        }
+        if (rule.NumberingStatus != 1)
+        {
+            throw new TaktBusinessException($"编号规则「{normalizedRuleCode}」已禁用");
+        }
+        return rule;
+    }
+
+    /// <summary>
+    /// 编号规则不可用时的兜底公告编码（前缀取自编号规则 PrefixCode）
+    /// </summary>
+    /// <param name="rule">编号规则</param>
+    /// <returns>兜底编码</returns>
+    private static string BuildFallbackAnnouncementCode(TaktNumbering rule)
+    {
+        var prefix = string.IsNullOrWhiteSpace(rule.PrefixCode) ? "ANN" : rule.PrefixCode.Trim();
+        return $"{prefix}{DateTime.Now:yyyyMMddHHmmss}{Random.Shared.Next(1000, 9999)}";
+    }
+
+    /// <summary>
+    /// 校验公告编码唯一
+    /// </summary>
+    /// <param name="announcementCode">公告编码</param>
+    /// <param name="excludeId">排除的主键</param>
+    /// <returns>任务</returns>
+    private async Task EnsureAnnouncementCodeUniqueAsync(string announcementCode, long? excludeId = null)
+    {
+        var isUnique = await _uniqueValidator.IsUniqueAsync(
+            _announcementRepository,
+            x => x.AnnouncementCode == announcementCode,
+            excludeId);
+        if (!isUnique)
+        {
+            ThrowValidationLocalized(TaktValidationI18nKeys.Duplicate, "entity.announcement.code");
+        }
     }
 }

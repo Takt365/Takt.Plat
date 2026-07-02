@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/foundation
 // 文件名称：iso-code.d.ts
-// 创建时间：2026-06-18
+// 创建时间：2026-06-27
 // 创建人：Takt365(Auto Generated)
 // 功能描述：foundation 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface IsoCode extends TenantDtoBase {
   isoCodeId: string;
 
   /**
-   * 编码类别（字典 sys_iso_code_category；1=部门，2=公司，3=产品，4=通用）
+   * 编码类别（字典 sys_iso_code_category；0=不使用，1=部门）
    */
   isoCodeCategory: number;
 
@@ -44,24 +44,24 @@ export interface IsoCode extends TenantDtoBase {
   isoName: string;
 
   /**
+   * 内置（字典 sys_yes_no_type；0=否 1=是，内置项不可删除）
+   */
+  isBuiltIn: number;
+
+  /**
+   * 描述说明
+   */
+  isoCodeDescription?: string;
+
+  /**
    * 排序号
    */
   sortOrder: number;
 
   /**
-   * 是否内置（字典 sys_yes_no_type；0=否 1=是，内置项不可删除）
-   */
-  isBuiltIn: number;
-
-  /**
    * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
    */
-  status: number;
-
-  /**
-   * 描述说明
-   */
-  description?: string;
+  isoCodeStatus: number;
 
 }
 
@@ -79,7 +79,7 @@ export interface IsoCodeQuery extends TaktPagedQuery {
   tenantCode?: string;
 
   /**
-   * 编码类别（字典 sys_iso_code_category；1=部门，2=公司，3=产品，4=通用）
+   * 编码类别（字典 sys_iso_code_category；0=不使用，1=部门）
    */
   isoCodeCategory?: number;
 
@@ -94,24 +94,24 @@ export interface IsoCodeQuery extends TaktPagedQuery {
   isoName?: string;
 
   /**
+   * 内置（字典 sys_yes_no_type；0=否 1=是，内置项不可删除）
+   */
+  isBuiltIn?: number;
+
+  /**
+   * 描述说明
+   */
+  isoCodeDescription?: string;
+
+  /**
    * 排序号
    */
   sortOrder?: number;
 
   /**
-   * 是否内置（字典 sys_yes_no_type；0=否 1=是，内置项不可删除）
-   */
-  isBuiltIn?: number;
-
-  /**
    * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
    */
-  status?: number;
-
-  /**
-   * 描述说明
-   */
-  description?: string;
+  isoCodeStatus?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -148,7 +148,7 @@ export interface IsoCodeCreate {
   tenantCode: string;
 
   /**
-   * 编码类别（字典 sys_iso_code_category；1=部门，2=公司，3=产品，4=通用）
+   * 编码类别（字典 sys_iso_code_category；0=不使用，1=部门）
    */
   isoCodeCategory: number;
 
@@ -163,19 +163,19 @@ export interface IsoCodeCreate {
   isoName: string;
 
   /**
-   * 是否内置（字典 sys_yes_no_type；0=否 1=是，内置项不可删除）
+   * 内置（字典 sys_yes_no_type；0=否 1=是，内置项不可删除）
    */
   isBuiltIn: number;
 
   /**
-   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
-   */
-  status: number;
-
-  /**
    * 描述说明
    */
-  description?: string;
+  isoCodeDescription?: string;
+
+  /**
+   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+   */
+  isoCodeStatus: number;
 
   /**
    * 扩展字段JSON
@@ -219,7 +219,7 @@ export interface IsoCodeStatus {
   /**
    * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
    */
-  status: number;
+  isoCodeStatus: number;
 
 }
 
@@ -255,7 +255,7 @@ export interface IsoCodeTemplate {
   tenantCode?: string;
 
   /**
-   * 编码类别（字典 sys_iso_code_category；1=部门，2=公司，3=产品，4=通用）
+   * 编码类别（字典 sys_iso_code_category；0=不使用，1=部门）
    */
   isoCodeCategory?: number;
 
@@ -270,19 +270,19 @@ export interface IsoCodeTemplate {
   isoName?: string;
 
   /**
-   * 是否内置（字典 sys_yes_no_type；0=否 1=是，内置项不可删除）
+   * 内置（字典 sys_yes_no_type；0=否 1=是，内置项不可删除）
    */
   isBuiltIn?: number;
 
   /**
-   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
-   */
-  status?: number;
-
-  /**
    * 描述说明
    */
-  description?: string;
+  isoCodeDescription?: string;
+
+  /**
+   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+   */
+  isoCodeStatus?: number;
 
   /**
    * 扩展字段JSON
@@ -309,7 +309,7 @@ export interface IsoCodeImport {
   tenantCode?: string;
 
   /**
-   * 编码类别（字典 sys_iso_code_category；1=部门，2=公司，3=产品，4=通用）
+   * 编码类别（字典 sys_iso_code_category；0=不使用，1=部门）
    */
   isoCodeCategory?: number;
 
@@ -324,19 +324,19 @@ export interface IsoCodeImport {
   isoName?: string;
 
   /**
-   * 是否内置（字典 sys_yes_no_type；0=否 1=是，内置项不可删除）
+   * 内置（字典 sys_yes_no_type；0=否 1=是，内置项不可删除）
    */
   isBuiltIn?: number;
 
   /**
-   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
-   */
-  status?: number;
-
-  /**
    * 描述说明
    */
-  description?: string;
+  isoCodeDescription?: string;
+
+  /**
+   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+   */
+  isoCodeStatus?: number;
 
   /**
    * 扩展字段JSON
@@ -363,7 +363,7 @@ export interface IsoCodeExport {
   isoCodeId: string;
 
   /**
-   * 编码类别（字典 sys_iso_code_category；1=部门，2=公司，3=产品，4=通用）
+   * 编码类别（字典 sys_iso_code_category；0=不使用，1=部门）
    */
   isoCodeCategory: number;
 
@@ -378,24 +378,24 @@ export interface IsoCodeExport {
   isoName: string;
 
   /**
+   * 内置（字典 sys_yes_no_type；0=否 1=是，内置项不可删除）
+   */
+  isBuiltIn: number;
+
+  /**
+   * 描述说明
+   */
+  isoCodeDescription?: string;
+
+  /**
    * 排序号
    */
   sortOrder: number;
 
   /**
-   * 是否内置（字典 sys_yes_no_type；0=否 1=是，内置项不可删除）
-   */
-  isBuiltIn: number;
-
-  /**
    * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
    */
-  status: number;
-
-  /**
-   * 描述说明
-   */
-  description?: string;
+  isoCodeStatus: number;
 
   /**
    * 扩展字段JSON

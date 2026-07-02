@@ -408,6 +408,101 @@ function validateEntityMasterDetailAssociations(entityPascal) {
 }
 
 /**
+ * 主实体 OneToMany 子实体列表（级联 generate-all 用；不要求子表 ManyToOne 反向导航）
+ * @param {string} masterPascal
+ * @param {string} [backendRoot]
+ * @returns {object[]}
+ */
+function listOneToManyChildrenForMaster(masterPascal, backendRoot = CONFIG.backendRoot) {
+  const masterFile = findDomainEntityFile(masterPascal, backendRoot);
+  if (!masterFile) {
+    return [];
+  }
+  return parseOneToManyNavigations(masterFile)
+    .filter((nav) => !RBAC_ASSOCIATION_ENTITY_SHORT_NAMES.has(nav.childShort))
+    .map((nav) => ({
+      masterPascal,
+      childPascal: nav.childShort,
+      childEntity: nav.childEntity,
+      masterNavProp: nav.navPropName,
+      fkFieldOnChild: nav.foreignKeyOnChild,
+      fieldName: pascalToCamel(nav.navPropName),
+      moduleDir: resolveEntityModuleDir(masterPascal, backendRoot),
+    }));
+}
+
+/**
+ * 按主表 OneToMany 声明顺序深度优先，收集「全部子表 → 主表」实体短名序列
+ * @param {string} rootMasterPascal 根主实体短名（如 PurchaseOrder）
+ * @param {string} [backendRoot]
+ * @returns {string[]} 如 [PurchaseOrderItem, PurchaseOrderChangeLog, PurchaseOrder]
+ */
+function collectOneToManyCascadeEntityOrder(rootMasterPascal, backendRoot = CONFIG.backendRoot) {
+  /** @type {string[]} */
+  const ordered = [];
+  /** @type {Set<string>} */
+  const visited = new Set();
+
+  /**
+   * @param {string} masterPascal
+   */
+  function walkMaster(masterPascal) {
+    listOneToManyChildrenForMaster(masterPascal, backendRoot).forEach((assoc) => {
+      if (visited.has(assoc.childPascal)) {
+        return;
+      }
+      walkMaster(assoc.childPascal);
+      visited.add(assoc.childPascal);
+      ordered.push(assoc.childPascal);
+    });
+  }
+
+  walkMaster(rootMasterPascal);
+  ordered.push(rootMasterPascal);
+  return ordered;
+}
+
+/**
+ * 格式化 OneToMany 级联树（日志用）
+ * @param {string} rootMasterPascal
+ * @param {string} [backendRoot]
+ * @returns {string[]}
+ */
+function formatOneToManyCascadeTreeLines(rootMasterPascal, backendRoot = CONFIG.backendRoot) {
+  /** @type {string[]} */
+  const lines = [];
+
+  /**
+   * @param {string} masterPascal
+   * @param {number} depth
+   */
+  function walk(masterPascal, depth) {
+    listOneToManyChildrenForMaster(masterPascal, backendRoot).forEach((assoc, index, arr) => {
+      const prefix = depth === 0 ? `${index + 1}/${arr.length}` : `${index + 1}`;
+      lines.push(
+        `${'  '.repeat(depth)}${prefix}. Takt${masterPascal}.${assoc.masterNavProp} → ` +
+        `Takt${assoc.childPascal}（外键 ${assoc.fkFieldOnChild}）`,
+      );
+      walk(assoc.childPascal, depth + 1);
+    });
+  }
+
+  walk(rootMasterPascal, 0);
+  return lines;
+}
+
+/**
+ * 按主表 OneToMany 遍历子实体（generate-all 子表优先流水线）
+ * @param {string} masterPascal
+ * @param {(childPascal: string, assoc: object) => void} callback
+ */
+function forEachOneToManyChildAssociation(masterPascal, callback) {
+  listOneToManyChildrenForMaster(masterPascal).forEach((assoc) => {
+    callback(assoc.childPascal, assoc);
+  });
+}
+
+/**
  * 按主表 OneToMany ↔ 子表 ManyToOne 成对遍历（仅已配对关联）
  * @param {string} masterPascal
  * @param {(childPascal: string, assoc: object) => void} callback
@@ -431,6 +526,10 @@ module.exports = {
   listAssociationsForMaster,
   listAssociationsForChild,
   getOneToManyChildShortNamesForEntity,
+  listOneToManyChildrenForMaster,
+  collectOneToManyCascadeEntityOrder,
+  formatOneToManyCascadeTreeLines,
+  forEachOneToManyChildAssociation,
   isPairedMasterDetailAssociation,
   validateMasterDetailChildrenManyToOnePairs,
   validateEntityMasterDetailAssociations,

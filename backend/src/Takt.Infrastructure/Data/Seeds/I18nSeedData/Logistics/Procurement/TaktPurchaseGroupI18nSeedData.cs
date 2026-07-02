@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Procurement
 // 文件名称：TaktPurchaseGroupI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPurchaseGroup 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -90,14 +90,23 @@ public class TaktPurchaseGroupI18nSeedData : ITaktSeedDataCoordinator
             // entity.purchasegroup._self
             new TranslationSeedItem("entity.purchasegroup._self", "zh-HK", "Takt采购组主数据信息_hk", "实体名称"),
 
+            // entity.purchasegroup.plantcode
+            new TranslationSeedItem("entity.purchasegroup.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            // entity.purchasegroup.plantcode
+            new TranslationSeedItem("entity.purchasegroup.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            // entity.purchasegroup.plantcode
+            new TranslationSeedItem("entity.purchasegroup.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            // entity.purchasegroup.plantcode
+            new TranslationSeedItem("entity.purchasegroup.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+
             // entity.purchasegroup.code
-            new TranslationSeedItem("entity.purchasegroup.code", "en-US", "采购组编码_us", "采购组编码（租户+公司内唯一；与 TaktMaterialPlant.PurchaseGroup、TaktPurchaseOrder.PurchaseGroup 对齐）"),
+            new TranslationSeedItem("entity.purchasegroup.code", "en-US", "采购组编码_us", "采购组编码（3）"),
             // entity.purchasegroup.code
-            new TranslationSeedItem("entity.purchasegroup.code", "ja-JP", "采购组编码_jp", "采购组编码（租户+公司内唯一；与 TaktMaterialPlant.PurchaseGroup、TaktPurchaseOrder.PurchaseGroup 对齐）"),
+            new TranslationSeedItem("entity.purchasegroup.code", "ja-JP", "采购组编码_jp", "采购组编码（3）"),
             // entity.purchasegroup.code
-            new TranslationSeedItem("entity.purchasegroup.code", "zh-CN", "采购组编码", "采购组编码（租户+公司内唯一；与 TaktMaterialPlant.PurchaseGroup、TaktPurchaseOrder.PurchaseGroup 对齐）"),
+            new TranslationSeedItem("entity.purchasegroup.code", "zh-CN", "采购组编码", "采购组编码（3）"),
             // entity.purchasegroup.code
-            new TranslationSeedItem("entity.purchasegroup.code", "zh-HK", "采购组编码_hk", "采购组编码（租户+公司内唯一；与 TaktMaterialPlant.PurchaseGroup、TaktPurchaseOrder.PurchaseGroup 对齐）"),
+            new TranslationSeedItem("entity.purchasegroup.code", "zh-HK", "采购组编码_hk", "采购组编码（3）"),
 
             // entity.purchasegroup.name
             new TranslationSeedItem("entity.purchasegroup.name", "en-US", "采购组名称_us", "采购组名称"),
@@ -118,13 +127,13 @@ public class TaktPurchaseGroupI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.purchasegroup.description", "zh-HK", "采购组描述_hk", "采购组描述"),
 
             // entity.purchasegroup.responsibleuserid
-            new TranslationSeedItem("entity.purchasegroup.responsibleuserid", "en-US", "负责人用户ID_us", "采购组负责人用户ID（可选；关联采购员）"),
+            new TranslationSeedItem("entity.purchasegroup.responsibleuserid", "en-US", "负责人用户ID_us", "采购组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
             // entity.purchasegroup.responsibleuserid
-            new TranslationSeedItem("entity.purchasegroup.responsibleuserid", "ja-JP", "负责人用户ID_jp", "采购组负责人用户ID（可选；关联采购员）"),
+            new TranslationSeedItem("entity.purchasegroup.responsibleuserid", "ja-JP", "负责人用户ID_jp", "采购组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
             // entity.purchasegroup.responsibleuserid
-            new TranslationSeedItem("entity.purchasegroup.responsibleuserid", "zh-CN", "负责人用户ID", "采购组负责人用户ID（可选；关联采购员）"),
+            new TranslationSeedItem("entity.purchasegroup.responsibleuserid", "zh-CN", "负责人用户ID", "采购组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
             // entity.purchasegroup.responsibleuserid
-            new TranslationSeedItem("entity.purchasegroup.responsibleuserid", "zh-HK", "负责人用户ID_hk", "采购组负责人用户ID（可选；关联采购员）"),
+            new TranslationSeedItem("entity.purchasegroup.responsibleuserid", "zh-HK", "负责人用户ID_hk", "采购组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
 
             // entity.purchasegroup.contactphone
             new TranslationSeedItem("entity.purchasegroup.contactphone", "en-US", "联系电话_us", "联系电话"),
@@ -144,23 +153,14 @@ public class TaktPurchaseGroupI18nSeedData : ITaktSeedDataCoordinator
             // entity.purchasegroup.contactemail
             new TranslationSeedItem("entity.purchasegroup.contactemail", "zh-HK", "联系邮箱_hk", "联系邮箱"),
 
-            // entity.purchasegroup.status
-            new TranslationSeedItem("entity.purchasegroup.status", "en-US", "采购组状态_us", "采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
-            // entity.purchasegroup.status
-            new TranslationSeedItem("entity.purchasegroup.status", "ja-JP", "采购组状态_jp", "采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
-            // entity.purchasegroup.status
-            new TranslationSeedItem("entity.purchasegroup.status", "zh-CN", "采购组状态", "采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
-            // entity.purchasegroup.status
-            new TranslationSeedItem("entity.purchasegroup.status", "zh-HK", "采购组状态_hk", "采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
-
             // entity.purchasegroup.isbuiltin
-            new TranslationSeedItem("entity.purchasegroup.isbuiltin", "en-US", "是否内置_us", "是否内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）"),
+            new TranslationSeedItem("entity.purchasegroup.isbuiltin", "en-US", "内置_us", "内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）"),
             // entity.purchasegroup.isbuiltin
-            new TranslationSeedItem("entity.purchasegroup.isbuiltin", "ja-JP", "是否内置_jp", "是否内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）"),
+            new TranslationSeedItem("entity.purchasegroup.isbuiltin", "ja-JP", "内置_jp", "内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）"),
             // entity.purchasegroup.isbuiltin
-            new TranslationSeedItem("entity.purchasegroup.isbuiltin", "zh-CN", "是否内置", "是否内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）"),
+            new TranslationSeedItem("entity.purchasegroup.isbuiltin", "zh-CN", "内置", "内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）"),
             // entity.purchasegroup.isbuiltin
-            new TranslationSeedItem("entity.purchasegroup.isbuiltin", "zh-HK", "是否内置_hk", "是否内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）"),
+            new TranslationSeedItem("entity.purchasegroup.isbuiltin", "zh-HK", "内置_hk", "内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）"),
 
             // entity.purchasegroup.sortorder
             new TranslationSeedItem("entity.purchasegroup.sortorder", "en-US", "排序号_us", "排序号（越小越靠前）"),
@@ -170,6 +170,15 @@ public class TaktPurchaseGroupI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.purchasegroup.sortorder", "zh-CN", "排序号", "排序号（越小越靠前）"),
             // entity.purchasegroup.sortorder
             new TranslationSeedItem("entity.purchasegroup.sortorder", "zh-HK", "排序号_hk", "排序号（越小越靠前）"),
+
+            // entity.purchasegroup.status
+            new TranslationSeedItem("entity.purchasegroup.status", "en-US", "采购组状态_us", "采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            // entity.purchasegroup.status
+            new TranslationSeedItem("entity.purchasegroup.status", "ja-JP", "采购组状态_jp", "采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            // entity.purchasegroup.status
+            new TranslationSeedItem("entity.purchasegroup.status", "zh-CN", "采购组状态", "采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            // entity.purchasegroup.status
+            new TranslationSeedItem("entity.purchasegroup.status", "zh-HK", "采购组状态_hk", "采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
         };
     }
 

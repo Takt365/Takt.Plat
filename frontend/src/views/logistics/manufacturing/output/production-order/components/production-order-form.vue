@@ -74,13 +74,11 @@
                 :label="t('entity.productionorder.plantcode')"
                 name="plantCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.plantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionorder.plantcode') })"
-                  show-count
-                  :maxlength="4"
-                  allow-clear
-                  :disabled="!!formData?.productionOrderId"
+                  api-url="TaktPlants/options"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionorder.plantcode') })"
+                  :disabled="!!formData?.productionOrderId || loading"
                 />
               </a-form-item>
             </a-col>
@@ -89,12 +87,12 @@
                 :label="t('entity.productionorder.prodordertype')"
                 name="prodOrderType"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.prodOrderType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionorder.prodordertype') })"
-                  show-count
-                  :maxlength="10"
-                  allow-clear
+                  dict-type="logistics_prod_order_type"
+                  :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionorder.prodordertype') })"
+                  :disabled="loading"
                 />
               </a-form-item>
             </a-col>
@@ -118,13 +116,12 @@
                 :label="t('entity.productionorder.materialcode')"
                 name="materialCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.materialCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionorder.materialcode') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                  :disabled="!!formData?.productionOrderId"
+                  api-url="TaktMaterials/options"
+                  :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionorder.materialcode') })"
+                  :disabled="!!formData?.productionOrderId || loading"
                 />
               </a-form-item>
             </a-col>
@@ -157,12 +154,12 @@
                 :label="t('entity.productionorder.unitofmeasure')"
                 name="unitOfMeasure"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.unitOfMeasure"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionorder.unitofmeasure') })"
-                  show-count
-                  :maxlength="10"
-                  allow-clear
+                  dict-type="logistics_unit_of_measure_code"
+                  :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionorder.unitofmeasure') })"
+                  :disabled="loading"
                 />
               </a-form-item>
             </a-col>
@@ -207,10 +204,12 @@
                 :label="t('entity.productionorder.priority')"
                 name="priority"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.priority"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionorder.priority') })"
-                  style="width: 100%"
+                  dict-type="sys_priority_level_category"
+                  :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionorder.priority') })"
+                  :disabled="loading"
                 />
               </a-form-item>
             </a-col>
@@ -219,25 +218,12 @@
                 :label="t('entity.productionorder.workcenter')"
                 name="workCenter"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.workCenter"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionorder.workcenter') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.productionorder.prodline')"
-                name="prodLine"
-              >
-                <a-input
-                  v-model:value="formState.prodLine"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionorder.prodline') })"
-                  show-count
-                  :maxlength="20"
+                  :options="filteredWorkCenterOptions"
+                  :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionorder.workcenter') })"
+                  :disabled="loading || !formState.plantCode"
                   allow-clear
                 />
               </a-form-item>
@@ -287,13 +273,81 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.productionorder.status')"
-                name="status"
+                :label="t('entity.productionorder.plannedorderid')"
+                name="plannedOrderId"
               >
-                <a-input-number
-                  v-model:value="formState.status"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionorder.status') })"
+                <TaktSelect
+                  v-model:value="formState.plannedOrderId"
+                  :options="filteredPlannedOrderOptions"
+                  :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionorder.plannedorderid') })"
+                  :disabled="loading || !formState.plantCode"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.productionorder.apsorderid')"
+                name="apsOrderId"
+              >
+                <TaktSelect
+                  v-model:value="formState.apsOrderId"
+                  :options="filteredApsOrderOptions"
+                  :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionorder.apsorderid') })"
+                  :disabled="loading || !formState.plantCode"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-2"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="t('entity.productionorder.plannedstarttime')"
+                name="plannedStartTime"
+              >
+                <a-date-picker
+                  v-model:value="formState.plannedStartTime"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionorder.plannedstarttime') })"
+                  value-format="YYYY-MM-DD"
                   style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="t('entity.productionorder.plannedendtime')"
+                name="plannedEndTime"
+              >
+                <a-date-picker
+                  v-model:value="formState.plannedEndTime"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionorder.plannedendtime') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="t('entity.productionorder.status')"
+                name="productionOrderStatus"
+              >
+                <TaktSelect
+                  v-model:value="formState.productionOrderStatus"
+                  dict-type="logistics_prod_status"
+                  :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionorder.status') })"
+                  :disabled="loading"
                 />
               </a-form-item>
             </a-col>
@@ -323,16 +377,6 @@
                 />
               </a-form-item>
             </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
                 :label="t('common.page.entity.remark')"
@@ -360,21 +404,93 @@
  * 生产工单实体维护表单 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/logistics/manufacturing/output/production-order/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import type { ProductionOrderCreate } from '@/types/logistics/manufacturing/output/production-order'
+import type { TaktSelectOption } from '@/types/common'
+import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
+import { getWorkCenterOptions } from '@/api/logistics/manufacturing/scheduling/work-center'
+import { getPlannedOrderOptions } from '@/api/logistics/manufacturing/planning/planned-order'
+import { getApsOrderOptions } from '@/api/logistics/manufacturing/scheduling/aps-order'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
+
+/** Pinia：字典缓存 */
+const dictDataStore = useDictDataStore()
+/** 工作中心下拉全量选项 */
+const workCenterOptions = ref<TaktSelectOption[]>([])
+/** 计划订单下拉全量选项 */
+const plannedOrderOptions = ref<TaktSelectOption[]>([])
+/** APS 订单下拉全量选项 */
+const apsOrderOptions = ref<TaktSelectOption[]>([])
+/** 按当前工厂过滤的工作中心选项 */
+const filteredWorkCenterOptions = computed(() => {
+  const plantCode = formState.plantCode
+  if (!plantCode) {
+    return []
+  }
+  return workCenterOptions.value.filter((item) => String(item.extValue ?? '') === String(plantCode))
+})
+/** 按当前工厂过滤的计划订单选项 */
+const filteredPlannedOrderOptions = computed(() => {
+  const plantCode = formState.plantCode
+  if (!plantCode) {
+    return []
+  }
+  return plannedOrderOptions.value.filter((item) => String(item.extValue ?? '') === String(plantCode))
+})
+/** 按工厂与已选计划订单过滤的 APS 订单选项 */
+const filteredApsOrderOptions = computed(() => {
+  const plantCode = formState.plantCode
+  if (!plantCode) {
+    return []
+  }
+  return apsOrderOptions.value.filter((item) => {
+    if (String(item.extValue ?? '') !== String(plantCode)) {
+      return false
+    }
+    if (formState.plannedOrderId && item.extLabel) {
+      return String(item.extLabel) === String(formState.plannedOrderId)
+    }
+    return true
+  })
+})
+
+/** 加载工作中心选项 */
+async function loadWorkCenterOptions() {
+  workCenterOptions.value = await getWorkCenterOptions()
+}
+
+/** 加载计划订单选项 */
+async function loadPlannedOrderOptions() {
+  plannedOrderOptions.value = await getPlannedOrderOptions()
+}
+
+/** 加载 APS 订单选项 */
+async function loadApsOrderOptions() {
+  apsOrderOptions.value = await getApsOrderOptions()
+}
 
 /** Pinia：租户/公司上下文 */
 const tenantStore = useTenantStore()
 /** Pinia：用户上下文 */
 const userStore = useUserStore()
+
+/** 表单挂载时预加载字典与班组选项 */
+onMounted(async () => {
+  void dictDataStore.loadAllDictDataAsync()
+  await Promise.all([
+    loadWorkCenterOptions(),
+    loadPlannedOrderOptions(),
+    loadApsOrderOptions(),
+  ])
+})
 
 /**
  * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
@@ -397,7 +513,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","prodOrderType","prodOrderCode","materialCode","prodOrderQty","producedQty","unitOfMeasure","actualStartDate","actualEndDate","priority","workCenter","prodLine","prodBatch","serialNo","routingCode","status","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","prodOrderType","prodOrderCode","materialCode","prodOrderQty","producedQty","unitOfMeasure","actualStartDate","actualEndDate","priority","workCenter","prodBatch","serialNo","routingCode","plannedOrderId","apsOrderId","plannedStartTime","plannedEndTime","productionOrderStatus","extField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -453,6 +569,67 @@ watch(
     const isCreate = !props.formData?.productionOrderId
     if (isCreate) {
       applyScopeDefaults(formState, true)
+    }
+  },
+)
+
+/** 工厂变更时清理无效工作中心与计划/APS 订单 */
+watch(
+  () => formState.plantCode,
+  (plantCode, prevPlantCode) => {
+    if (props.formData?.productionOrderId) {
+      return
+    }
+    if (!plantCode) {
+      formState.workCenter = undefined
+      formState.plannedOrderId = undefined
+      formState.apsOrderId = undefined
+      return
+    }
+    if (prevPlantCode && prevPlantCode !== plantCode) {
+      if (formState.workCenter) {
+        const wcStillValid = filteredWorkCenterOptions.value.some(
+          (item) => String(item.dictValue ?? '') === String(formState.workCenter)
+        )
+        if (!wcStillValid) {
+          formState.workCenter = undefined
+        }
+      }
+      if (formState.plannedOrderId) {
+        const plannedStillValid = filteredPlannedOrderOptions.value.some(
+          (item) => String(item.dictValue ?? '') === String(formState.plannedOrderId)
+        )
+        if (!plannedStillValid) {
+          formState.plannedOrderId = undefined
+        }
+      }
+      if (formState.apsOrderId) {
+        const apsStillValid = filteredApsOrderOptions.value.some(
+          (item) => String(item.dictValue ?? '') === String(formState.apsOrderId)
+        )
+        if (!apsStillValid) {
+          formState.apsOrderId = undefined
+        }
+      }
+    }
+  },
+)
+
+/** 计划订单变更时清理无效 APS 订单 */
+watch(
+  () => formState.plannedOrderId,
+  () => {
+    if (props.formData?.productionOrderId) {
+      return
+    }
+    if (!formState.apsOrderId) {
+      return
+    }
+    const apsStillValid = filteredApsOrderOptions.value.some(
+      (item) => String(item.dictValue ?? '') === String(formState.apsOrderId)
+    )
+    if (!apsStillValid) {
+      formState.apsOrderId = undefined
     }
   },
 )
@@ -533,7 +710,21 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
-  status: [{
+  plannedStartTime: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.select', { field: t('entity.productionorder.plannedstarttime') }),
+      trigger: 'change'
+    }
+  ],
+  plannedEndTime: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.select', { field: t('entity.productionorder.plannedendtime') }),
+      trigger: 'change'
+    }
+  ],
+  productionOrderStatus: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
         return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.productionorder.status') }))
@@ -569,9 +760,9 @@ function getValues(): Record<string, any> {
     const rawpriority = payload.priority
     payload.priority = typeof rawpriority === 'number' ? rawpriority : Number(rawpriority)
   }
-  if ('status' in payload) {
-    const rawstatus = payload.status
-    payload.status = typeof rawstatus === 'number' ? rawstatus : Number(rawstatus)
+  if ('productionOrderStatus' in payload) {
+    const rawStatus = payload.productionOrderStatus
+    payload.productionOrderStatus = typeof rawStatus === 'number' ? rawStatus : Number(rawStatus)
   }
   if ('sortOrder' in payload) delete payload.sortOrder
   return payload

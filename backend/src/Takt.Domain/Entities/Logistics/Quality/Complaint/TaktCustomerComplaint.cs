@@ -21,7 +21,8 @@ namespace Takt.Domain.Entities.Logistics.Quality.Complaint;
 [SugarTable("takt_logistics_quality_customer_complaint", "客诉主表")]
 [SugarIndex("ix_customer_complaint_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_customer_complaint_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_quality_customer_complaint_complaint_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(CustomerComplaintCode), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_quality_customer_complaint_complaint_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(RelatedPlant), OrderByType.Asc, nameof(CustomerComplaintCode), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_quality_customer_complaint_related_plant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(RelatedPlant), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_quality_customer_complaint_complaint_status", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ComplaintStatus), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_quality_customer_complaint_customer_id", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(CustomerId), OrderByType.Asc, false)]
 public class TaktCustomerComplaint : TaktCompanyEntityBase
@@ -31,123 +32,109 @@ public class TaktCustomerComplaint : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "customer_complaint_code", ColumnDescription = "客诉单号", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string CustomerComplaintCode { get; set; } = string.Empty;
-
     /// <summary>
-    /// 客户ID（序列化为string以避免Javascript精度问题）
+    /// 客户 ID（关联 TaktCustomer.Id，选项 TaktCustomers/options）
     /// </summary>
     [SugarColumn(ColumnName = "customer_id", ColumnDescription = "客户ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long CustomerId { get; set; }
-
     /// <summary>
     /// 客户名称
     /// </summary>
     [SugarColumn(ColumnName = "customer_name", ColumnDescription = "客户名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = false)]
     public string CustomerName { get; set; } = string.Empty;
-
     /// <summary>
-    /// 客户编码
+    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
     /// </summary>
     [SugarColumn(ColumnName = "customer_code", ColumnDescription = "客户编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? CustomerCode { get; set; }
-
     /// <summary>
     /// 投诉日期
     /// </summary>
     [SugarColumn(ColumnName = "complaint_date", ColumnDescription = "投诉日期", ColumnDataType = "datetime", IsNullable = false)]
     public DateTime ComplaintDate { get; set; } = DateTime.Today;
-
     /// <summary>
-    /// 投诉方式（0=电话，1=邮件，2=传真，3=现场，4=其他）
+    /// 投诉方式（字典 logistics_quality_complaint_method；0=电话，1=邮件，2=传真，3=现场，4=其他）
     /// </summary>
     [SugarColumn(ColumnName = "complaint_method", ColumnDescription = "投诉方式", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int ComplaintMethod { get; set; } = 0;
-
     /// <summary>
-    /// 投诉类型（0=质量，1=交期，2=服务，3=价格，4=其他）
+    /// 投诉类型（字典 logistics_quality_complaint_type）
     /// </summary>
     [SugarColumn(ColumnName = "complaint_type", ColumnDescription = "投诉类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int ComplaintType { get; set; } = 0;
-
     /// <summary>
-    /// 投诉等级（0=一般，1=重要，2=紧急，3=严重）
+    /// 投诉等级（字典 logistics_quality_complaint_level）
     /// </summary>
     [SugarColumn(ColumnName = "complaint_level", ColumnDescription = "投诉等级", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int ComplaintLevel { get; set; } = 0;
-
     /// <summary>
-    /// 责任部门ID（序列化为string以避免Javascript精度问题）
+    /// 责任部门 ID（关联 TaktDept.Id，选项 TaktDepts/options）
     /// </summary>
     [SugarColumn(ColumnName = "responsible_dept_id", ColumnDescription = "责任部门ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ResponsibleDeptId { get; set; }
-
     /// <summary>
     /// 责任部门名称
     /// </summary>
     [SugarColumn(ColumnName = "responsible_dept_name", ColumnDescription = "责任部门名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
     public string? ResponsibleDeptName { get; set; }
-
     /// <summary>
-    /// 责任人ID（序列化为string以避免Javascript精度问题）
+    /// 责任人 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [SugarColumn(ColumnName = "responsible_person_id", ColumnDescription = "责任人ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ResponsiblePersonId { get; set; }
-
     /// <summary>
     /// 责任人姓名
     /// </summary>
     [SugarColumn(ColumnName = "responsible_person_name", ColumnDescription = "责任人姓名", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? ResponsiblePersonName { get; set; }
-
     /// <summary>
     /// 要求回复日期
     /// </summary>
     [SugarColumn(ColumnName = "required_reply_date", ColumnDescription = "要求回复日期", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? RequiredReplyDate { get; set; }
-
     /// <summary>
     /// 实际回复日期
     /// </summary>
     [SugarColumn(ColumnName = "actual_reply_date", ColumnDescription = "实际回复日期", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? ActualReplyDate { get; set; }
-
-    /// <summary>
-    /// 客诉状态（0=待处理，1=处理中，2=已回复，3=已关闭，4=已驳回）
-    /// </summary>
-    [SugarColumn(ColumnName = "complaint_status", ColumnDescription = "客诉状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int ComplaintStatus { get; set; } = 0;
-
     /// <summary>
     /// 客诉描述
     /// </summary>
     [SugarColumn(ColumnName = "complaint_description", ColumnDescription = "客诉描述", ColumnDataType = "nvarchar", Length = 2000, IsNullable = false)]
     public string ComplaintDescription { get; set; } = string.Empty;
-
     /// <summary>
     /// 处理结果/回复内容
     /// </summary>
     [SugarColumn(ColumnName = "handling_result", ColumnDescription = "处理结果", ColumnDataType = "nvarchar", Length = 2000, IsNullable = true)]
     public string? HandlingResult { get; set; }
-
     /// <summary>
-    /// 客户满意度（0=不满意，1=一般，2=满意，3=非常满意）
+    /// 客户满意度（字典 logistics_quality_customer_satisfaction）
     /// </summary>
     [SugarColumn(ColumnName = "customer_satisfaction", ColumnDescription = "客户满意度", ColumnDataType = "int", IsNullable = true)]
     public int? CustomerSatisfaction { get; set; }
-
     /// <summary>
-    /// 关联工厂
+    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
     /// </summary>
-    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = true)]
-    public string? RelatedPlant { get; set; }
-
+    [SugarColumn(ColumnName = "attachments", ColumnDescription = "附件JSON", ColumnDataType = "nvarchar", Length = -1, IsNullable = true)]
+    public string? Attachments { get; set; }
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options，DictValue=PlantCode）
+    /// </summary>
+    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
+    public string RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 排序号（越小越靠前）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; } = 0;
+    /// <summary>
+    /// 客诉状态（字典 logistics_quality_complaint_status）
+    /// </summary>
+    [SugarColumn(ColumnName = "complaint_status", ColumnDescription = "客诉状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int ComplaintStatus { get; set; } = 0;
 
     /// <summary>
     /// 客诉明细列表（主子表关系）

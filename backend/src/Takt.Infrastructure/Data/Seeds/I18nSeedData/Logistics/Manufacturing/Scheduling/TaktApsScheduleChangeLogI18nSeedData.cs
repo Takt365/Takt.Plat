@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Scheduling
 // 文件名称：TaktApsScheduleChangeLogI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktApsScheduleChangeLog 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -127,13 +127,13 @@ public class TaktApsScheduleChangeLogI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.apsschedulechangelog.changereason", "zh-HK", "变更原因_hk", "变更原因"),
 
             // entity.apsschedulechangelog.changeby
-            new TranslationSeedItem("entity.apsschedulechangelog.changeby", "en-US", "变更人_us", "变更人（人员代码）"),
+            new TranslationSeedItem("entity.apsschedulechangelog.changeby", "en-US", "变更人_us", "变更人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）"),
             // entity.apsschedulechangelog.changeby
-            new TranslationSeedItem("entity.apsschedulechangelog.changeby", "ja-JP", "变更人_jp", "变更人（人员代码）"),
+            new TranslationSeedItem("entity.apsschedulechangelog.changeby", "ja-JP", "变更人_jp", "变更人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）"),
             // entity.apsschedulechangelog.changeby
-            new TranslationSeedItem("entity.apsschedulechangelog.changeby", "zh-CN", "变更人", "变更人（人员代码）"),
+            new TranslationSeedItem("entity.apsschedulechangelog.changeby", "zh-CN", "变更人", "变更人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）"),
             // entity.apsschedulechangelog.changeby
-            new TranslationSeedItem("entity.apsschedulechangelog.changeby", "zh-HK", "变更人_hk", "变更人（人员代码）"),
+            new TranslationSeedItem("entity.apsschedulechangelog.changeby", "zh-HK", "变更人_hk", "变更人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）"),
 
             // entity.apsschedulechangelog.changetime
             new TranslationSeedItem("entity.apsschedulechangelog.changetime", "en-US", "变更时间_us", "变更时间"),

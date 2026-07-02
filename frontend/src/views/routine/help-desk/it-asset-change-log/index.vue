@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="routine:help:desk:it:asset:change:log:create"
-      update-permission="routine:help:desk:it:asset:change:log:update"
-      delete-permission="routine:help:desk:it:asset:change:log:delete"
-      import-permission="routine:help:desk:it:asset:change:log:import"
-      export-permission="routine:help:desk:it:asset:change:log:export"
+      create-permission="routine:help:desk:it:asset:create"
+      update-permission="routine:help:desk:it:asset:update"
+      delete-permission="routine:help:desk:it:asset:delete"
+      import-permission="routine:help:desk:it:asset:import"
+      export-permission="routine:help:desk:it:asset:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -288,7 +288,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -299,18 +299,36 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('ExtField')">
-      <a-form-item :label="t('entity.itasset.extfield')">
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
         <a-textarea
-          v-model:value="advancedQueryForm.ExtField"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.itasset.extfield') })"
-          :rows="2"
-          allow-clear
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -383,7 +401,7 @@ import { getItAssetList, getItAssetById, createItAsset, updateItAsset, deleteItA
 import type { ItAsset, ItAssetQuery } from '@/types/routine/help-desk/it-asset'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -447,7 +465,7 @@ const advancedQueryForm = ref({
   warrantyRemark: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
@@ -471,7 +489,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'warrantyRemark', label: t('entity.itasset.warrantyremark') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'ExtField', label: t('entity.itasset.extfield') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -536,7 +554,7 @@ function buildListQuery(overrides?: Partial<ItAssetQuery>): ItAssetQuery {
   assignTrimmed('warrantyRemark', form.warrantyRemark)
   assignTrimmed('createdAtStart', form.createdAtStart)
   assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('ExtField', form.ExtField)
+  assignTrimmed('extField', form.extField)
   assignTrimmed('remark', form.remark)
   return query
 }
@@ -717,15 +735,6 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getItAssetField(record, 'warrantyRemark') ?? ''
   },
-  {
-    title: t('entity.itasset.tickets'),
-    dataIndex: 'tickets',
-    key: 'tickets',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getItAssetField(record, 'tickets') ?? ''
-  },
   CreateActionColumn({
     actions: [
       {
@@ -733,7 +742,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'routine:help:desk:it:asset:change:log:update',
+        permission: 'routine:help:desk:it:asset:update',
         onClick: (record: ItAsset) => handleEdit(record)
       },
       {
@@ -741,7 +750,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'routine:help:desk:it:asset:change:log:delete',
+        permission: 'routine:help:desk:it:asset:delete',
         onClick: (record: ItAsset) => handleDeleteOne(record)
       }
     ]
@@ -775,7 +784,7 @@ const rowSelection = computed(() => ({
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
-    } else if (getItAssetId(selectedRow.value) === getItAssetId(record)) {
+    } else if (selectedRow.value && getItAssetId(selectedRow.value) === getItAssetId(record)) {
       selectedRow.value = null
       syncMasterSelection(null)
     }
@@ -835,7 +844,7 @@ function handleReset() {
   warrantyRemark: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
   currentPage.value = getTaktDefaultPageIndex()
@@ -1043,7 +1052,7 @@ function handleAdvancedQueryReset() {
   warrantyRemark: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
 }

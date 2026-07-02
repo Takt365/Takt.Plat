@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/sales
 // 文件名称：quotation-item.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-07-01
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,12 +29,12 @@ export interface SalesQuotationItem extends CompanyDtoBase {
   salesQuotationItemId: string;
 
   /**
-   * 销售报价ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 销售报价（关联 TaktSalesQuotation.Id，选项 TaktSalesQuotations/options）
    */
   salesQuotationId: string;
 
   /**
-   * 销售报价名称（填充字段）
+   * 销售报价（关联 TaktSalesQuotation.Id，选项 TaktSalesQuotations/options）
    */
   salesQuotationName?: string;
 
@@ -49,7 +49,7 @@ export interface SalesQuotationItem extends CompanyDtoBase {
   lineNumber: number;
 
   /**
-   * 物料编码
+   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
    */
   materialCode: string;
 
@@ -64,7 +64,7 @@ export interface SalesQuotationItem extends CompanyDtoBase {
   materialSpecification?: string;
 
   /**
-   * 销售单位
+   * 销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   salesUnit: string;
 
@@ -74,12 +74,17 @@ export interface SalesQuotationItem extends CompanyDtoBase {
   quotationQuantity: number;
 
   /**
+   * 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+   */
+  salesPerUnit: number;
+
+  /**
    * 单价
    */
   unitPrice: number;
 
   /**
-   * 折扣率（0-100，表示折扣百分比）
+   * 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
    */
   discountRate: number;
 
@@ -89,7 +94,7 @@ export interface SalesQuotationItem extends CompanyDtoBase {
   discountAmount: number;
 
   /**
-   * 税费率（0-100，表示税费百分比）
+   * 税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）
    */
   taxRate: number;
 
@@ -102,6 +107,11 @@ export interface SalesQuotationItem extends CompanyDtoBase {
    * 小计金额
    */
   subtotalAmount: number;
+
+  /**
+   * 销售报价主表 （主表：TaktSalesQuotation）
+   */
+  salesQuotation?: SalesQuotation;
 
 }
 
@@ -124,7 +134,7 @@ export interface SalesQuotationItemQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 销售报价ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 销售报价（关联 TaktSalesQuotation.Id，选项 TaktSalesQuotations/options）
    */
   salesQuotationId?: string;
 
@@ -139,7 +149,7 @@ export interface SalesQuotationItemQuery extends TaktPagedQuery {
   lineNumber?: number;
 
   /**
-   * 物料编码
+   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
    */
   materialCode?: string;
 
@@ -154,7 +164,7 @@ export interface SalesQuotationItemQuery extends TaktPagedQuery {
   materialSpecification?: string;
 
   /**
-   * 销售单位
+   * 销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   salesUnit?: string;
 
@@ -164,12 +174,17 @@ export interface SalesQuotationItemQuery extends TaktPagedQuery {
   quotationQuantity?: number;
 
   /**
+   * 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+   */
+  salesPerUnit?: number;
+
+  /**
    * 单价
    */
   unitPrice?: number;
 
   /**
-   * 折扣率（0-100，表示折扣百分比）
+   * 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
    */
   discountRate?: number;
 
@@ -179,7 +194,7 @@ export interface SalesQuotationItemQuery extends TaktPagedQuery {
   discountAmount?: number;
 
   /**
-   * 税费率（0-100，表示税费百分比）
+   * 税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）
    */
   taxRate?: number;
 
@@ -206,7 +221,7 @@ export interface SalesQuotationItemQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -233,12 +248,12 @@ export interface SalesQuotationItemCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
   /**
-   * 销售报价ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 销售报价（关联 TaktSalesQuotation.Id，选项 TaktSalesQuotations/options）
    */
   salesQuotationId: string;
 
@@ -253,7 +268,7 @@ export interface SalesQuotationItemCreate {
   lineNumber: number;
 
   /**
-   * 物料编码
+   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
    */
   materialCode: string;
 
@@ -268,7 +283,7 @@ export interface SalesQuotationItemCreate {
   materialSpecification?: string;
 
   /**
-   * 销售单位
+   * 销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   salesUnit: string;
 
@@ -278,12 +293,17 @@ export interface SalesQuotationItemCreate {
   quotationQuantity: number;
 
   /**
+   * 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+   */
+  salesPerUnit: number;
+
+  /**
    * 单价
    */
   unitPrice: number;
 
   /**
-   * 折扣率（0-100，表示折扣百分比）
+   * 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
    */
   discountRate: number;
 
@@ -293,7 +313,7 @@ export interface SalesQuotationItemCreate {
   discountAmount: number;
 
   /**
-   * 税费率（0-100，表示税费百分比）
+   * 税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）
    */
   taxRate: number;
 
@@ -310,7 +330,7 @@ export interface SalesQuotationItemCreate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -352,7 +372,7 @@ export interface SalesQuotationItemTemplate {
   companyCode?: string;
 
   /**
-   * 销售报价ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 销售报价（关联 TaktSalesQuotation.Id，选项 TaktSalesQuotations/options）
    */
   salesQuotationId?: string;
 
@@ -367,7 +387,7 @@ export interface SalesQuotationItemTemplate {
   lineNumber?: number;
 
   /**
-   * 物料编码
+   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
    */
   materialCode?: string;
 
@@ -382,14 +402,54 @@ export interface SalesQuotationItemTemplate {
   materialSpecification?: string;
 
   /**
-   * 销售单位
+   * 销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   salesUnit?: string;
 
   /**
+   * 报价数量（基本单位数量）
+   */
+  quotationQuantity?: number;
+
+  /**
+   * 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+   */
+  salesPerUnit?: number;
+
+  /**
+   * 单价
+   */
+  unitPrice?: number;
+
+  /**
+   * 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
+   */
+  discountRate?: number;
+
+  /**
+   * 折扣金额
+   */
+  discountAmount?: number;
+
+  /**
+   * 税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）
+   */
+  taxRate?: number;
+
+  /**
+   * 税费
+   */
+  taxAmount?: number;
+
+  /**
+   * 小计金额
+   */
+  subtotalAmount?: number;
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -416,12 +476,12 @@ export interface SalesQuotationItemImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
   /**
-   * 销售报价ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 销售报价（关联 TaktSalesQuotation.Id，选项 TaktSalesQuotations/options）
    */
   salesQuotationId?: string;
 
@@ -436,7 +496,7 @@ export interface SalesQuotationItemImport {
   lineNumber?: number;
 
   /**
-   * 物料编码
+   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
    */
   materialCode?: string;
 
@@ -451,14 +511,54 @@ export interface SalesQuotationItemImport {
   materialSpecification?: string;
 
   /**
-   * 销售单位
+   * 销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   salesUnit?: string;
 
   /**
+   * 报价数量（基本单位数量）
+   */
+  quotationQuantity?: number;
+
+  /**
+   * 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+   */
+  salesPerUnit?: number;
+
+  /**
+   * 单价
+   */
+  unitPrice?: number;
+
+  /**
+   * 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
+   */
+  discountRate?: number;
+
+  /**
+   * 折扣金额
+   */
+  discountAmount?: number;
+
+  /**
+   * 税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）
+   */
+  taxRate?: number;
+
+  /**
+   * 税费
+   */
+  taxAmount?: number;
+
+  /**
+   * 小计金额
+   */
+  subtotalAmount?: number;
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -485,7 +585,7 @@ export interface SalesQuotationItemExport {
   companyCode: string;
 
   /**
-   * 销售报价ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 销售报价（关联 TaktSalesQuotation.Id，选项 TaktSalesQuotations/options）
    */
   salesQuotationId: string;
 
@@ -500,7 +600,7 @@ export interface SalesQuotationItemExport {
   lineNumber: number;
 
   /**
-   * 物料编码
+   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
    */
   materialCode: string;
 
@@ -515,7 +615,7 @@ export interface SalesQuotationItemExport {
   materialSpecification?: string;
 
   /**
-   * 销售单位
+   * 销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   salesUnit: string;
 
@@ -525,12 +625,17 @@ export interface SalesQuotationItemExport {
   quotationQuantity: number;
 
   /**
+   * 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+   */
+  salesPerUnit: number;
+
+  /**
    * 单价
    */
   unitPrice: number;
 
   /**
-   * 折扣率（0-100，表示折扣百分比）
+   * 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
    */
   discountRate: number;
 
@@ -540,7 +645,7 @@ export interface SalesQuotationItemExport {
   discountAmount: number;
 
   /**
-   * 税费率（0-100，表示税费百分比）
+   * 税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）
    */
   taxRate: number;
 
@@ -557,7 +662,7 @@ export interface SalesQuotationItemExport {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注

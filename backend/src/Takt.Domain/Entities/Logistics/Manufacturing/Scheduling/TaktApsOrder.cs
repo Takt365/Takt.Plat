@@ -26,7 +26,7 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Scheduling;
 public class TaktApsOrder : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
@@ -51,7 +51,7 @@ public class TaktApsOrder : TaktCompanyEntityBase
     public string? PlannedOrderCode { get; set; }
 
     /// <summary>
-    /// 物料编码
+    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
     /// </summary>
     [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
     public string MaterialCode { get; set; } = string.Empty;
@@ -63,13 +63,13 @@ public class TaktApsOrder : TaktCompanyEntityBase
     public decimal OrderQuantity { get; set; } = 0;
 
     /// <summary>
-    /// 计量单位
+    /// 计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
     /// </summary>
     [SugarColumn(ColumnName = "unit_of_measure", ColumnDescription = "计量单位", ColumnDataType = "nvarchar", Length = 40, IsNullable = false, DefaultValue = "PC")]
     public string UnitOfMeasure { get; set; } = "PC";
 
     /// <summary>
-    /// 工艺路线编码
+    /// 工艺路线编码（关联 TaktRouting.RoutingCode，选项 TaktRoutings/options，DictValue=RoutingCode）
     /// </summary>
     [SugarColumn(ColumnName = "routing_code", ColumnDescription = "工艺路线编码", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
     public string? RoutingCode { get; set; }

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/human-resource/performance
 // 文件名称：perf-assessment.d.ts
-// 创建时间：2026-06-12
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/performance 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -241,7 +241,7 @@ export interface PerfAssessmentQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -268,7 +268,7 @@ export interface PerfAssessmentCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -355,7 +355,7 @@ export interface PerfAssessmentCreate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -431,9 +431,19 @@ export interface PerfAssessmentTemplate {
   assessmentPeriod?: string;
 
   /**
+   * 考核日期
+   */
+  assessmentDate?: string;
+
+  /**
    * 方案指标 ID
    */
   schemeMetricId?: string;
+
+  /**
+   * 自评分数
+   */
+  selfScore?: number;
 
   /**
    * 自评说明
@@ -441,9 +451,19 @@ export interface PerfAssessmentTemplate {
   selfEvaluationNotes?: string;
 
   /**
+   * 主管评分
+   */
+  supervisorScore?: number;
+
+  /**
    * 主管评语
    */
   supervisorComments?: string;
+
+  /**
+   * 综合得分
+   */
+  finalScore?: number;
 
   /**
    * 绩效等级（A/B/C/D/E）
@@ -454,6 +474,11 @@ export interface PerfAssessmentTemplate {
    * 评审人 ID
    */
   reviewerId?: string;
+
+  /**
+   * 面谈日期
+   */
+  interviewDate?: string;
 
   /**
    * 面谈记录
@@ -473,7 +498,7 @@ export interface PerfAssessmentTemplate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -500,7 +525,7 @@ export interface PerfAssessmentImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -520,9 +545,19 @@ export interface PerfAssessmentImport {
   assessmentPeriod?: string;
 
   /**
+   * 考核日期
+   */
+  assessmentDate?: string;
+
+  /**
    * 方案指标 ID
    */
   schemeMetricId?: string;
+
+  /**
+   * 自评分数
+   */
+  selfScore?: number;
 
   /**
    * 自评说明
@@ -530,9 +565,19 @@ export interface PerfAssessmentImport {
   selfEvaluationNotes?: string;
 
   /**
+   * 主管评分
+   */
+  supervisorScore?: number;
+
+  /**
    * 主管评语
    */
   supervisorComments?: string;
+
+  /**
+   * 综合得分
+   */
+  finalScore?: number;
 
   /**
    * 绩效等级（A/B/C/D/E）
@@ -543,6 +588,11 @@ export interface PerfAssessmentImport {
    * 评审人 ID
    */
   reviewerId?: string;
+
+  /**
+   * 面谈日期
+   */
+  interviewDate?: string;
 
   /**
    * 面谈记录
@@ -562,7 +612,7 @@ export interface PerfAssessmentImport {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -671,7 +721,7 @@ export interface PerfAssessmentExport {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注

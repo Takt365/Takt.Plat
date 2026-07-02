@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Controlling
 // 文件名称：TaktCostCenterI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktCostCenter 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktCostCenterI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.costcenter._self", "zh-HK", "成本中心信息_hk", "实体名称"),
 
             // entity.costcenter.code
-            new TranslationSeedItem("entity.costcenter.code", "en-US", "成本中心编码_us", "成本中心编码"),
+            new TranslationSeedItem("entity.costcenter.code", "en-US", "成本中心编码_us", "成本中心编码（4位，租户+公司内唯一）"),
             // entity.costcenter.code
-            new TranslationSeedItem("entity.costcenter.code", "ja-JP", "成本中心编码_jp", "成本中心编码"),
+            new TranslationSeedItem("entity.costcenter.code", "ja-JP", "成本中心编码_jp", "成本中心编码（4位，租户+公司内唯一）"),
             // entity.costcenter.code
-            new TranslationSeedItem("entity.costcenter.code", "zh-CN", "成本中心编码", "成本中心编码"),
+            new TranslationSeedItem("entity.costcenter.code", "zh-CN", "成本中心编码", "成本中心编码（4位，租户+公司内唯一）"),
             // entity.costcenter.code
-            new TranslationSeedItem("entity.costcenter.code", "zh-HK", "成本中心编码_hk", "成本中心编码"),
+            new TranslationSeedItem("entity.costcenter.code", "zh-HK", "成本中心编码_hk", "成本中心编码（4位，租户+公司内唯一）"),
 
             // entity.costcenter.name
             new TranslationSeedItem("entity.costcenter.name", "en-US", "成本中心名称_us", "成本中心名称"),
@@ -171,24 +171,6 @@ public class TaktCostCenterI18nSeedData : ITaktSeedDataCoordinator
             // entity.costcenter.level
             new TranslationSeedItem("entity.costcenter.level", "zh-HK", "成本中心层级_hk", "成本中心层级"),
 
-            // entity.costcenter.relatedplant
-            new TranslationSeedItem("entity.costcenter.relatedplant", "en-US", "关联工厂_us", "关联工厂"),
-            // entity.costcenter.relatedplant
-            new TranslationSeedItem("entity.costcenter.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂"),
-            // entity.costcenter.relatedplant
-            new TranslationSeedItem("entity.costcenter.relatedplant", "zh-CN", "关联工厂", "关联工厂"),
-            // entity.costcenter.relatedplant
-            new TranslationSeedItem("entity.costcenter.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂"),
-
-            // entity.costcenter.status
-            new TranslationSeedItem("entity.costcenter.status", "en-US", "成本中心状态_us", "成本中心状态（1=启用，0=禁用）"),
-            // entity.costcenter.status
-            new TranslationSeedItem("entity.costcenter.status", "ja-JP", "成本中心状态_jp", "成本中心状态（1=启用，0=禁用）"),
-            // entity.costcenter.status
-            new TranslationSeedItem("entity.costcenter.status", "zh-CN", "成本中心状态", "成本中心状态（1=启用，0=禁用）"),
-            // entity.costcenter.status
-            new TranslationSeedItem("entity.costcenter.status", "zh-HK", "成本中心状态_hk", "成本中心状态（1=启用，0=禁用）"),
-
             // entity.costcenter.validfrom
             new TranslationSeedItem("entity.costcenter.validfrom", "en-US", "生效日期_us", "生效日期"),
             // entity.costcenter.validfrom
@@ -207,6 +189,15 @@ public class TaktCostCenterI18nSeedData : ITaktSeedDataCoordinator
             // entity.costcenter.validto
             new TranslationSeedItem("entity.costcenter.validto", "zh-HK", "失效日期_hk", "失效日期"),
 
+            // entity.costcenter.relatedplant
+            new TranslationSeedItem("entity.costcenter.relatedplant", "en-US", "关联工厂_us", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            // entity.costcenter.relatedplant
+            new TranslationSeedItem("entity.costcenter.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            // entity.costcenter.relatedplant
+            new TranslationSeedItem("entity.costcenter.relatedplant", "zh-CN", "关联工厂", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            // entity.costcenter.relatedplant
+            new TranslationSeedItem("entity.costcenter.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+
             // entity.costcenter.sortorder
             new TranslationSeedItem("entity.costcenter.sortorder", "en-US", "排序号_us", "排序号"),
             // entity.costcenter.sortorder
@@ -215,6 +206,15 @@ public class TaktCostCenterI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.costcenter.sortorder", "zh-CN", "排序号", "排序号"),
             // entity.costcenter.sortorder
             new TranslationSeedItem("entity.costcenter.sortorder", "zh-HK", "排序号_hk", "排序号"),
+
+            // entity.costcenter.status
+            new TranslationSeedItem("entity.costcenter.status", "en-US", "成本中心状态_us", "成本中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            // entity.costcenter.status
+            new TranslationSeedItem("entity.costcenter.status", "ja-JP", "成本中心状态_jp", "成本中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            // entity.costcenter.status
+            new TranslationSeedItem("entity.costcenter.status", "zh-CN", "成本中心状态", "成本中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            // entity.costcenter.status
+            new TranslationSeedItem("entity.costcenter.status", "zh-HK", "成本中心状态_hk", "成本中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
 
             // entity.costcenter.changelogs
             new TranslationSeedItem("entity.costcenter.changelogs", "en-US", "成本中心变更记录列表_us", "成本中心变更记录列表（外键在子表 TaktCostCenterChangeLog.CostCenterId）"),

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopDocDtos.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SopDoc 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSopDoc 生成，请按需审阅）
 // 
@@ -36,6 +36,11 @@ public class TaktSopDocDto : TaktApprovalDtoBase
     public long SopDocId { get; set; }
 
     /// <summary>
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// SOP 编码
     /// </summary>
     public string SopCode { get; set; } = string.Empty;
@@ -46,12 +51,12 @@ public class TaktSopDocDto : TaktApprovalDtoBase
     public string SopName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 产品/物料编码
+    /// 产品/物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工艺路线明细 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工艺路线明细 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long RoutingItemId { get; set; }
@@ -62,7 +67,7 @@ public class TaktSopDocDto : TaktApprovalDtoBase
     public string? RoutingItemName { get; set; }
 
     /// <summary>
-    /// 工位 ID（可选，工位级 ESOP；序列化为 string 以避免 Javascript 精度问题）
+    /// 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? WorkstationId { get; set; }
@@ -73,7 +78,7 @@ public class TaktSopDocDto : TaktApprovalDtoBase
     public string? WorkstationName { get; set; }
 
     /// <summary>
-    /// 当前生效版本 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 当前生效版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CurrentRevisionId { get; set; }
@@ -84,12 +89,12 @@ public class TaktSopDocDto : TaktApprovalDtoBase
     public string? CurrentRevisionName { get; set; }
 
     /// <summary>
-    /// 默认语言（zh-CN 简体 / en-US 英文 / ja-JP 日文 / zh-HK 香港繁体；与 TaktCulture.CultureCode 一致）
+    /// 默认语言（选项 TaktCultures/options，DictValue=CultureCode）
     /// </summary>
     public string DefaultLang { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status，0=停用，1=正常）
+    /// 状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
     /// </summary>
     public int SopStatus { get; set; } = 0;
 
@@ -134,6 +139,11 @@ public class TaktSopDocQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// SOP 编码
     /// </summary>
     public string? SopCode { get; set; } = string.Empty;
@@ -144,40 +154,40 @@ public class TaktSopDocQueryDto : TaktPagedQuery
     public string? SopName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 产品/物料编码
+    /// 产品/物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工艺路线明细 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工艺路线明细 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RoutingItemId { get; set; }
 
     /// <summary>
-    /// 工位 ID（可选，工位级 ESOP；序列化为 string 以避免 Javascript 精度问题）
+    /// 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? WorkstationId { get; set; }
 
     /// <summary>
-    /// 当前生效版本 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 当前生效版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CurrentRevisionId { get; set; }
 
     /// <summary>
-    /// 默认语言（zh-CN 简体 / en-US 英文 / ja-JP 日文 / zh-HK 香港繁体；与 TaktCulture.CultureCode 一致）
+    /// 默认语言（选项 TaktCultures/options，DictValue=CultureCode）
     /// </summary>
     public string? DefaultLang { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status，0=停用，1=正常）
+    /// 状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
     /// </summary>
     public int? SopStatus { get; set; }
 
     /// <summary>
-    /// 审批状态（TaktApprovalStatus）
+    /// 审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）
     /// </summary>
     public TaktApprovalStatus? ApprovalStatus { get; set; }
 
@@ -260,9 +270,15 @@ public class TaktSopDocCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// </summary>
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// SOP 编码
@@ -277,37 +293,37 @@ public class TaktSopDocCreateDto
     public string SopName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 产品/物料编码
+    /// 产品/物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
     /// </summary>
-    [Required(ErrorMessage = "产品/物料编码不能为空")]
+    [Required(ErrorMessage = "产品/物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）不能为空")]
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工艺路线明细 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工艺路线明细 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long RoutingItemId { get; set; }
 
     /// <summary>
-    /// 工位 ID（可选，工位级 ESOP；序列化为 string 以避免 Javascript 精度问题）
+    /// 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? WorkstationId { get; set; }
 
     /// <summary>
-    /// 当前生效版本 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 当前生效版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CurrentRevisionId { get; set; }
 
     /// <summary>
-    /// 默认语言（zh-CN 简体 / en-US 英文 / ja-JP 日文 / zh-HK 香港繁体；与 TaktCulture.CultureCode 一致）
+    /// 默认语言（选项 TaktCultures/options，DictValue=CultureCode）
     /// </summary>
-    [Required(ErrorMessage = "默认语言（zh-CN 简体 / en-US 英文 / ja-JP 日文 / zh-HK 香港繁体；与 TaktCulture.CultureCode 一致）不能为空")]
+    [Required(ErrorMessage = "默认语言（选项 TaktCultures/options，DictValue=CultureCode）不能为空")]
     public string DefaultLang { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status，0=停用，1=正常）
+    /// 状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
     /// </summary>
     public int SopStatus { get; set; } = 0;
 
@@ -366,9 +382,9 @@ public class TaktSopDocStatusDto
     public long SopDocId { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status，0=停用，1=正常）
+    /// 状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
     /// </summary>
-    [Required(ErrorMessage = "状态（字典 sys_normal_disable_status，0=停用，1=正常）不能为空")]
+    [Required(ErrorMessage = "状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）不能为空")]
     public int SopStatus { get; set; } = 0;
 }
 
@@ -392,6 +408,11 @@ public class TaktSopDocTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// SOP 编码
     /// </summary>
     public string? SopCode { get; set; } = string.Empty;
@@ -402,37 +423,42 @@ public class TaktSopDocTemplateDto
     public string? SopName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 产品/物料编码
+    /// 产品/物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工艺路线明细 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工艺路线明细 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RoutingItemId { get; set; }
 
     /// <summary>
-    /// 工位 ID（可选，工位级 ESOP；序列化为 string 以避免 Javascript 精度问题）
+    /// 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? WorkstationId { get; set; }
 
     /// <summary>
-    /// 当前生效版本 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 当前生效版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CurrentRevisionId { get; set; }
 
     /// <summary>
-    /// 默认语言（zh-CN 简体 / en-US 英文 / ja-JP 日文 / zh-HK 香港繁体；与 TaktCulture.CultureCode 一致）
+    /// 默认语言（选项 TaktCultures/options，DictValue=CultureCode）
     /// </summary>
     public string? DefaultLang { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status，0=停用，1=正常）
+    /// 状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
     /// </summary>
     public int? SopStatus { get; set; }
+
+    /// <summary>
+    /// 版本列表（子表，级联保存）
+    /// </summary>
+    public List<TaktSopRevisionCreateDto>? Revisions { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -462,9 +488,14 @@ public class TaktSopDocImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// SOP 编码
@@ -477,37 +508,42 @@ public class TaktSopDocImportDto
     public string? SopName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 产品/物料编码
+    /// 产品/物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工艺路线明细 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工艺路线明细 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RoutingItemId { get; set; }
 
     /// <summary>
-    /// 工位 ID（可选，工位级 ESOP；序列化为 string 以避免 Javascript 精度问题）
+    /// 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? WorkstationId { get; set; }
 
     /// <summary>
-    /// 当前生效版本 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 当前生效版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CurrentRevisionId { get; set; }
 
     /// <summary>
-    /// 默认语言（zh-CN 简体 / en-US 英文 / ja-JP 日文 / zh-HK 香港繁体；与 TaktCulture.CultureCode 一致）
+    /// 默认语言（选项 TaktCultures/options，DictValue=CultureCode）
     /// </summary>
     public string? DefaultLang { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status，0=停用，1=正常）
+    /// 状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
     /// </summary>
     public int? SopStatus { get; set; }
+
+    /// <summary>
+    /// 版本列表（子表，级联保存）
+    /// </summary>
+    public List<TaktSopRevisionCreateDto>? Revisions { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -538,6 +574,11 @@ public class TaktSopDocExportDto
     public long SopDocId { get; set; }
 
     /// <summary>
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// SOP 编码
     /// </summary>
     public string SopCode { get; set; } = string.Empty;
@@ -548,35 +589,35 @@ public class TaktSopDocExportDto
     public string SopName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 产品/物料编码
+    /// 产品/物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工艺路线明细 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工艺路线明细 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long RoutingItemId { get; set; }
 
     /// <summary>
-    /// 工位 ID（可选，工位级 ESOP；序列化为 string 以避免 Javascript 精度问题）
+    /// 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? WorkstationId { get; set; }
 
     /// <summary>
-    /// 当前生效版本 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 当前生效版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CurrentRevisionId { get; set; }
 
     /// <summary>
-    /// 默认语言（zh-CN 简体 / en-US 英文 / ja-JP 日文 / zh-HK 香港繁体；与 TaktCulture.CultureCode 一致）
+    /// 默认语言（选项 TaktCultures/options，DictValue=CultureCode）
     /// </summary>
     public string DefaultLang { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status，0=停用，1=正常）
+    /// 状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
     /// </summary>
     public int SopStatus { get; set; } = 0;
 

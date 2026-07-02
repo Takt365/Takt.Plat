@@ -225,8 +225,49 @@ function detectPermissionStemRedundancy(permissionCode, expectedPrefix) {
   return { actualPrefix, suggestedPrefix };
 }
 
+/**
+ * 沿主子表链追溯到根主表实体短名（控制器权限继承用）
+ * @param {string} entityShort
+ * @returns {string}
+ */
+function resolveRootMasterPascal(entityShort) {
+  /** @type {Set<string>} */
+  const seen = new Set();
+  let current = entityShort;
+  while (true) {
+    if (seen.has(current)) {
+      break;
+    }
+    seen.add(current);
+    const masterRef = getMasterDetailChildRegistry().get(current);
+    if (!masterRef || isStandaloneChildVueEntity(current)) {
+      break;
+    }
+    current = masterRef.masterPascal;
+  }
+  return current;
+}
+
+/**
+ * 控制器权限前缀（主子表从实体继承根主表前缀，不含子实体后缀）
+ * @param {string[]} pathParts
+ * @param {string} entityShort
+ * @returns {string}
+ */
+function buildControllerPermissionBase(pathParts, entityShort) {
+  const masterRef = getMasterDetailChildRegistry().get(entityShort);
+  if (masterRef && !isStandaloneChildVueEntity(entityShort)) {
+    const rootMaster = resolveRootMasterPascal(entityShort);
+    return buildPermissionBase(pathParts, rootMaster);
+  }
+
+  // 非主子表从实体：使用自己的权限前缀
+  return buildPermissionBase(pathParts, entityShort);
+}
+
 module.exports = {
   buildPermissionBase,
+  buildControllerPermissionBase,
   buildSpecialPermissionBase,
   buildPermissionBaseDefault,
   buildPermissionBaseFull,

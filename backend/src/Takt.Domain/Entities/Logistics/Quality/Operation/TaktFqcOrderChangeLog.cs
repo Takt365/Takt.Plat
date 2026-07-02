@@ -23,7 +23,7 @@ namespace Takt.Domain.Entities.Logistics.Quality.Operation;
 public class TaktFqcOrderChangeLog : TaktCompanyEntityBase
 {
     /// <summary>
-    /// FQC检验单ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// FQC检验单 ID（关联 TaktFqcOrder.Id，选项 TaktFqcOrders/options）
     /// </summary>
     [SugarColumn(ColumnName = "fqc_order_id", ColumnDescription = "FQC检验单ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]

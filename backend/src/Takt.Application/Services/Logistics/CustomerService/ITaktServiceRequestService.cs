@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.CustomerService
 // 文件名称：ITaktServiceRequestService.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：服务请求应用服务接口
 // 
@@ -108,5 +108,12 @@ public interface ITaktServiceRequestService
     /// <param name="fileName">文件名</param>
     /// <returns>Excel 文件</returns>
     Task<(string fileName, byte[] fileContent)> ExportServiceRequestAsync(TaktServiceRequestQueryDto? query = null, string? sheetName = null, string? fileName = null);
+
+    /// <summary>
+    /// 获取服务请求统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>服务请求统计</returns>
+    Task<TaktServiceRequestStatDto> GetServiceRequestStatAsync(TaktServiceRequestStatQueryDto queryDto);
 
 }

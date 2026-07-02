@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Quality.Operation
 // 文件名称：TaktFqcOrdersController.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-30
 // 创建人：Takt365(Cursor AI)
 // 功能描述：出货检验单控制器
 // 
@@ -49,6 +49,26 @@ public class TaktFqcOrdersController : TaktControllerBase
         {
             var result = await _fqcOrderService.GetFqcOrderListAsync(queryDto);
             return Success(result.Data, result.Total, result.PageIndex, result.PageSize, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 获取 FQC 检验统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>FQC 检验统计</returns>
+    [TaktPermission("logistics:quality:operation:fqc:order:list", "FQC 检验统计")]
+    [HttpGet("inspection-stat")]
+    public async Task<IActionResult> GetFqcOrderStatAsync([FromQuery] TaktQualityStatQueryDto queryDto)
+    {
+        try
+        {
+            var result = await _fqcOrderService.GetFqcOrderStatAsync(queryDto);
+            return Success(result, "查询成功");
         }
         catch (Exception ex)
         {

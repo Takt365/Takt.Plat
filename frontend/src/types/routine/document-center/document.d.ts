@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/routine/document-center
 // 文件名称：document.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：routine/document-center 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -36,7 +36,7 @@ export interface Document extends ApprovalDtoBase {
   /**
    * 文档标题
    */
-  title: string;
+  documentTitle: string;
 
   /**
    * 文档分类
@@ -61,17 +61,17 @@ export interface Document extends ApprovalDtoBase {
   /**
    * 文档内容（富文本 HTML）
    */
-  content?: string;
+  documentContent?: string;
 
   /**
    * 文档摘要（用于列表展示）
    */
-  summary?: string;
+  documentSummary?: string;
 
   /**
    * 标签（逗号分隔或 JSON 数组存储）
    */
-  tags?: string;
+  documentTags?: string;
 
   /**
    * 当前文件 ID
@@ -106,17 +106,17 @@ export interface Document extends ApprovalDtoBase {
   /**
    * 生效时间
    */
-  effectiveTime?: string;
+  documentEffectiveTime?: string;
 
   /**
    * 失效时间
    */
-  expireTime?: string;
+  documentExpireTime?: string;
 
   /**
    * 发布时间
    */
-  publishTime?: string;
+  documentPublishTime?: string;
 
   /**
    * 发布人 ID
@@ -139,9 +139,9 @@ export interface Document extends ApprovalDtoBase {
   deptName?: string;
 
   /**
-   * 是否置顶
+   * 置顶
    */
-  isTop: number;
+  documentIsTop: number;
 
   /**
    * 排序号
@@ -151,7 +151,7 @@ export interface Document extends ApprovalDtoBase {
   /**
    * 浏览次数
    */
-  viewCount: number;
+  documentViewCount: number;
 
   /**
    * 下载次数
@@ -211,7 +211,7 @@ export interface DocumentQuery extends TaktPagedQuery {
   /**
    * 文档标题
    */
-  title?: string;
+  documentTitle?: string;
 
   /**
    * 文档分类
@@ -236,17 +236,17 @@ export interface DocumentQuery extends TaktPagedQuery {
   /**
    * 文档内容（富文本 HTML）
    */
-  content?: string;
+  documentContent?: string;
 
   /**
    * 文档摘要（用于列表展示）
    */
-  summary?: string;
+  documentSummary?: string;
 
   /**
    * 标签（逗号分隔或 JSON 数组存储）
    */
-  tags?: string;
+  documentTags?: string;
 
   /**
    * 当前文件 ID
@@ -281,32 +281,32 @@ export interface DocumentQuery extends TaktPagedQuery {
   /**
    * 生效时间（范围查询-开始）
    */
-  effectiveTimeStart?: string;
+  documentEffectiveTimeStart?: string;
 
   /**
    * 生效时间（范围查询-结束）
    */
-  effectiveTimeEnd?: string;
+  documentEffectiveTimeEnd?: string;
 
   /**
    * 失效时间（范围查询-开始）
    */
-  expireTimeStart?: string;
+  documentExpireTimeStart?: string;
 
   /**
    * 失效时间（范围查询-结束）
    */
-  expireTimeEnd?: string;
+  documentExpireTimeEnd?: string;
 
   /**
    * 发布时间（范围查询-开始）
    */
-  publishTimeStart?: string;
+  documentPublishTimeStart?: string;
 
   /**
    * 发布时间（范围查询-结束）
    */
-  publishTimeEnd?: string;
+  documentPublishTimeEnd?: string;
 
   /**
    * 发布人 ID
@@ -329,9 +329,9 @@ export interface DocumentQuery extends TaktPagedQuery {
   deptName?: string;
 
   /**
-   * 是否置顶
+   * 置顶
    */
-  isTop?: number;
+  documentIsTop?: number;
 
   /**
    * 排序号
@@ -341,7 +341,7 @@ export interface DocumentQuery extends TaktPagedQuery {
   /**
    * 浏览次数
    */
-  viewCount?: number;
+  documentViewCount?: number;
 
   /**
    * 下载次数
@@ -364,7 +364,7 @@ export interface DocumentQuery extends TaktPagedQuery {
   targetUsers?: string;
 
   /**
-   * 审批状态（TaktApprovalStatus）
+   * 审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）
    */
   approvalStatus?: number;
 
@@ -399,6 +399,11 @@ export interface DocumentQuery extends TaktPagedQuery {
   approvedAtEnd?: string;
 
   /**
+   * 流程实例 ID
+   */
+  flowInstanceId?: string;
+
+  /**
    * 创建时间（范围查询-开始）
    */
   createdAtStart?: string;
@@ -411,7 +416,7 @@ export interface DocumentQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -438,7 +443,7 @@ export interface DocumentCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -450,7 +455,7 @@ export interface DocumentCreate {
   /**
    * 文档标题
    */
-  title: string;
+  documentTitle: string;
 
   /**
    * 文档分类
@@ -475,17 +480,17 @@ export interface DocumentCreate {
   /**
    * 文档内容（富文本 HTML）
    */
-  content?: string;
+  documentContent?: string;
 
   /**
    * 文档摘要（用于列表展示）
    */
-  summary?: string;
+  documentSummary?: string;
 
   /**
    * 标签（逗号分隔或 JSON 数组存储）
    */
-  tags?: string;
+  documentTags?: string;
 
   /**
    * 当前文件 ID
@@ -520,17 +525,17 @@ export interface DocumentCreate {
   /**
    * 生效时间
    */
-  effectiveTime?: string;
+  documentEffectiveTime?: string;
 
   /**
    * 失效时间
    */
-  expireTime?: string;
+  documentExpireTime?: string;
 
   /**
    * 发布时间
    */
-  publishTime?: string;
+  documentPublishTime?: string;
 
   /**
    * 发布人 ID
@@ -553,19 +558,14 @@ export interface DocumentCreate {
   deptName?: string;
 
   /**
-   * 是否置顶
+   * 置顶
    */
-  isTop: number;
-
-  /**
-   * 排序号
-   */
-  sortOrder: number;
+  documentIsTop: number;
 
   /**
    * 浏览次数
    */
-  viewCount: number;
+  documentViewCount: number;
 
   /**
    * 下载次数
@@ -600,7 +600,7 @@ export interface DocumentCreate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -687,7 +687,7 @@ export interface DocumentTemplate {
   /**
    * 文档标题
    */
-  title?: string;
+  documentTitle?: string;
 
   /**
    * 文档分类
@@ -712,17 +712,17 @@ export interface DocumentTemplate {
   /**
    * 文档内容（富文本 HTML）
    */
-  content?: string;
+  documentContent?: string;
 
   /**
    * 文档摘要（用于列表展示）
    */
-  summary?: string;
+  documentSummary?: string;
 
   /**
    * 标签（逗号分隔或 JSON 数组存储）
    */
-  tags?: string;
+  documentTags?: string;
 
   /**
    * 当前文件 ID
@@ -740,9 +740,99 @@ export interface DocumentTemplate {
   filePath?: string;
 
   /**
+   * 当前文件大小（字节）
+   */
+  fileSize?: string;
+
+  /**
+   * 当前文件类型（MIME）
+   */
+  fileType?: string;
+
+  /**
+   * 当前文件扩展名
+   */
+  fileExtension?: string;
+
+  /**
+   * 生效时间
+   */
+  documentEffectiveTime?: string;
+
+  /**
+   * 失效时间
+   */
+  documentExpireTime?: string;
+
+  /**
+   * 发布时间
+   */
+  documentPublishTime?: string;
+
+  /**
+   * 发布人 ID
+   */
+  publisherId?: string;
+
+  /**
+   * 发布人姓名
+   */
+  publisherName?: string;
+
+  /**
+   * 归属部门 ID
+   */
+  deptId?: string;
+
+  /**
+   * 归属部门名称
+   */
+  deptName?: string;
+
+  /**
+   * 置顶
+   */
+  documentIsTop?: number;
+
+  /**
+   * 浏览次数
+   */
+  documentViewCount?: number;
+
+  /**
+   * 下载次数
+   */
+  downloadCount?: number;
+
+  /**
+   * 目标范围（all=全员，company=本公司，department=本部门，custom=自定义）
+   */
+  targetScope?: string;
+
+  /**
+   * 目标部门编码（多个用逗号分隔）
+   */
+  targetDepartments?: string;
+
+  /**
+   * 目标用户 ID（多个用逗号分隔）
+   */
+  targetUsers?: string;
+
+  /**
+   * 版本历史列表（主子表关系）（子表，级联保存）
+   */
+  versions?: DocumentVersionCreate[];
+
+  /**
+   * 变更日志列表（主子表关系）（子表，级联保存）
+   */
+  changeLogs?: DocumentChangeLogCreate[];
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -769,7 +859,7 @@ export interface DocumentImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -781,7 +871,7 @@ export interface DocumentImport {
   /**
    * 文档标题
    */
-  title?: string;
+  documentTitle?: string;
 
   /**
    * 文档分类
@@ -806,17 +896,17 @@ export interface DocumentImport {
   /**
    * 文档内容（富文本 HTML）
    */
-  content?: string;
+  documentContent?: string;
 
   /**
    * 文档摘要（用于列表展示）
    */
-  summary?: string;
+  documentSummary?: string;
 
   /**
    * 标签（逗号分隔或 JSON 数组存储）
    */
-  tags?: string;
+  documentTags?: string;
 
   /**
    * 当前文件 ID
@@ -834,9 +924,99 @@ export interface DocumentImport {
   filePath?: string;
 
   /**
+   * 当前文件大小（字节）
+   */
+  fileSize?: string;
+
+  /**
+   * 当前文件类型（MIME）
+   */
+  fileType?: string;
+
+  /**
+   * 当前文件扩展名
+   */
+  fileExtension?: string;
+
+  /**
+   * 生效时间
+   */
+  documentEffectiveTime?: string;
+
+  /**
+   * 失效时间
+   */
+  documentExpireTime?: string;
+
+  /**
+   * 发布时间
+   */
+  documentPublishTime?: string;
+
+  /**
+   * 发布人 ID
+   */
+  publisherId?: string;
+
+  /**
+   * 发布人姓名
+   */
+  publisherName?: string;
+
+  /**
+   * 归属部门 ID
+   */
+  deptId?: string;
+
+  /**
+   * 归属部门名称
+   */
+  deptName?: string;
+
+  /**
+   * 置顶
+   */
+  documentIsTop?: number;
+
+  /**
+   * 浏览次数
+   */
+  documentViewCount?: number;
+
+  /**
+   * 下载次数
+   */
+  downloadCount?: number;
+
+  /**
+   * 目标范围（all=全员，company=本公司，department=本部门，custom=自定义）
+   */
+  targetScope?: string;
+
+  /**
+   * 目标部门编码（多个用逗号分隔）
+   */
+  targetDepartments?: string;
+
+  /**
+   * 目标用户 ID（多个用逗号分隔）
+   */
+  targetUsers?: string;
+
+  /**
+   * 版本历史列表（主子表关系）（子表，级联保存）
+   */
+  versions?: DocumentVersionCreate[];
+
+  /**
+   * 变更日志列表（主子表关系）（子表，级联保存）
+   */
+  changeLogs?: DocumentChangeLogCreate[];
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -865,7 +1045,7 @@ export interface DocumentExport {
   /**
    * 文档标题
    */
-  title: string;
+  documentTitle: string;
 
   /**
    * 文档分类
@@ -890,17 +1070,17 @@ export interface DocumentExport {
   /**
    * 文档内容（富文本 HTML）
    */
-  content?: string;
+  documentContent?: string;
 
   /**
    * 文档摘要（用于列表展示）
    */
-  summary?: string;
+  documentSummary?: string;
 
   /**
    * 标签（逗号分隔或 JSON 数组存储）
    */
-  tags?: string;
+  documentTags?: string;
 
   /**
    * 当前文件 ID
@@ -935,17 +1115,17 @@ export interface DocumentExport {
   /**
    * 生效时间
    */
-  effectiveTime?: string;
+  documentEffectiveTime?: string;
 
   /**
    * 失效时间
    */
-  expireTime?: string;
+  documentExpireTime?: string;
 
   /**
    * 发布时间
    */
-  publishTime?: string;
+  documentPublishTime?: string;
 
   /**
    * 发布人 ID
@@ -968,9 +1148,9 @@ export interface DocumentExport {
   deptName?: string;
 
   /**
-   * 是否置顶
+   * 置顶
    */
-  isTop: number;
+  documentIsTop: number;
 
   /**
    * 排序号
@@ -980,7 +1160,7 @@ export interface DocumentExport {
   /**
    * 浏览次数
    */
-  viewCount: number;
+  documentViewCount: number;
 
   /**
    * 下载次数
@@ -1005,7 +1185,7 @@ export interface DocumentExport {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注

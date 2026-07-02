@@ -14,62 +14,31 @@ using Quartz;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Entities.Statistics.Logging;
 using Takt.Domain.Interfaces;
+using Takt.Shared.Constants;
 using Takt.Shared.Enums;
+using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Quartz;
 
 /// <summary>
-/// Quartz 调度辅助（任务校验、日志构建、JobGroup 映射；无状态纯函数）
+/// Quartz 调度辅助（任务校验、日志构建；无状态纯函数）
 /// </summary>
 public static class TaktQuartzSchedulingHelper
 {
     /// <summary>
-    /// 任务状态：正常
+    /// 任务状态：正常（字典 sys_quartz_task_status；0=正常）
     /// </summary>
     public const int TaskStatusNormal = 0;
 
     /// <summary>
-    /// 任务状态：暂停
+    /// 任务状态：暂停（字典 sys_quartz_task_status；1=暂停）
     /// </summary>
     public const int TaskStatusPaused = 1;
 
     /// <summary>
-    /// 任务类型：程序集
+    /// 系统调度写入日志时的创建人 ID（与 TaktConstants.SystemAuditUser.Id 一致）
     /// </summary>
-    public const int TaskTypeAssembly = 1;
-
-    /// <summary>
-    /// 任务类型：网络请求
-    /// </summary>
-    public const int TaskTypeHttp = 2;
-
-    /// <summary>
-    /// 任务类型：SQL 语句
-    /// </summary>
-    public const int TaskTypeSql = 3;
-
-    /// <summary>
-    /// 系统调度写入日志时的创建人 ID
-    /// </summary>
-    public const long SystemCreatedBy = 999;
-
-    /// <summary>
-    /// 将 TaktQuartzTask.JobGroup 字符串映射为 TaktQuartzLog.JobGroup 快照
-    /// </summary>
-    /// <param name="taskJobGroup">任务 Job 分组</param>
-    /// <returns>日志 JobGroup 枚举</returns>
-    public static TaktQuartzLogJobGroup ResolveQuartzLogJobGroup(string? taskJobGroup)
-    {
-        if (string.IsNullOrWhiteSpace(taskJobGroup))
-        {
-            return TaktQuartzLogJobGroup.Unknown;
-        }
-        if (string.Equals(taskJobGroup.Trim(), "DEFAULT", StringComparison.OrdinalIgnoreCase))
-        {
-            return TaktQuartzLogJobGroup.Default;
-        }
-        return TaktQuartzLogJobGroup.Unknown;
-    }
+    public const long SystemCreatedBy = TaktConstants.SystemAuditUser.Id;
 
     /// <summary>
     /// 校验定时任务是否可执行（按 TaktQuartzTask 字段语义）
@@ -88,15 +57,15 @@ public static class TaktQuartzSchedulingHelper
         {
             throw new InvalidOperationException($"定时任务已暂停：{task.TaskCode}");
         }
-        switch (task.TaskType)
+        switch (task.TaskType.Trim().ToLowerInvariant())
         {
-            case TaskTypeAssembly:
+            case "assembly":
                 ArgumentException.ThrowIfNullOrWhiteSpace(task.ClassName);
                 break;
-            case TaskTypeHttp:
+            case "http":
                 ArgumentException.ThrowIfNullOrWhiteSpace(task.ApiUrl);
                 break;
-            case TaskTypeSql:
+            case "sql":
                 ArgumentException.ThrowIfNullOrWhiteSpace(task.SqlScript);
                 break;
             default:
@@ -146,14 +115,14 @@ public static class TaktQuartzSchedulingHelper
     {
         ArgumentNullException.ThrowIfNull(task);
         var now = DateTime.Now;
-        return new TaktQuartzLog
+        var log = new TaktQuartzLog
         {
             TenantCode = task.TenantCode,
             CompanyCode = task.CompanyCode,
             QuartzTaskId = task.Id,
-            TaskName = Truncate(task.TaskName, 100) ?? string.Empty,
-            JobGroup = ResolveQuartzLogJobGroup(task.JobGroup),
-            TaskType = (TaktQuartzTaskType)task.TaskType,
+            TaskName = Truncate(task.TaskName, 100),
+            JobGroup = Truncate(task.JobGroup?.Trim(), TaktQuartzConstants.MaxJobGroupLength),
+            TaskType = task.TaskType?.Trim() ?? string.Empty,
             ExecuteTime = executeTime,
             ExecuteDuration = durationMs,
             ExecuteParams = Truncate(executeParams, 1000),
@@ -164,17 +133,16 @@ public static class TaktQuartzSchedulingHelper
             ExecuteStatus = executeStatus,
             ExtField = task.ExtField,
             Remark = task.Remark,
-            CreatedBy = SystemCreatedBy,
-            CreatedAt = now,
-            IsDeleted = 0,
         };
+        log.ApplyCreate(TaktConstants.SystemAuditUser.Id, now);
+        return log;
     }
 
     /// <summary>
-    /// 从 Quartz 触发器解析任务下次执行时间
+    /// 从 Quartz 触发器解析任务下次执行
     /// </summary>
     /// <param name="context">Quartz 执行上下文</param>
-    /// <returns>下次执行时间（本地时间），无则 null</returns>
+    /// <returns>下次执行（本地时间），无则 null</returns>
     public static DateTime? ResolveNextRunAt(IJobExecutionContext context)
     {
         ArgumentNullException.ThrowIfNull(context);
@@ -213,12 +181,12 @@ public static class TaktQuartzSchedulingHelper
     /// </summary>
     /// <param name="value">原始值</param>
     /// <param name="maxLength">最大长度</param>
-    /// <returns>截断后的字符串或 null</returns>
-    public static string? Truncate(string? value, int maxLength)
+    /// <returns>截断后的字符串；null/空输入返回空串</returns>
+    public static string Truncate(string? value, int maxLength)
     {
         if (string.IsNullOrEmpty(value))
         {
-            return value;
+            return string.Empty;
         }
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(maxLength);
         return value.Length <= maxLength ? value : value[..maxLength];

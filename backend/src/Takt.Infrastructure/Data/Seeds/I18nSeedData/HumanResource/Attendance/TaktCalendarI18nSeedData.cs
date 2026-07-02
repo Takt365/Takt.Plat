@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Attendance
 // 文件名称：TaktCalendarI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktCalendar 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,40 +100,40 @@ public class TaktCalendarI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.calendar.date", "zh-HK", "日历日期_hk", "日历日期"),
 
             // entity.calendar.isworkingday
-            new TranslationSeedItem("entity.calendar.isworkingday", "en-US", "是否工作日_us", "是否工作日（0=非工作日 1=工作日 2=调休工作日等）"),
+            new TranslationSeedItem("entity.calendar.isworkingday", "en-US", "是否工作日_us", "是否工作日（字典 hr_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）"),
             // entity.calendar.isworkingday
-            new TranslationSeedItem("entity.calendar.isworkingday", "ja-JP", "是否工作日_jp", "是否工作日（0=非工作日 1=工作日 2=调休工作日等）"),
+            new TranslationSeedItem("entity.calendar.isworkingday", "ja-JP", "是否工作日_jp", "是否工作日（字典 hr_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）"),
             // entity.calendar.isworkingday
-            new TranslationSeedItem("entity.calendar.isworkingday", "zh-CN", "是否工作日", "是否工作日（0=非工作日 1=工作日 2=调休工作日等）"),
+            new TranslationSeedItem("entity.calendar.isworkingday", "zh-CN", "是否工作日", "是否工作日（字典 hr_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）"),
             // entity.calendar.isworkingday
-            new TranslationSeedItem("entity.calendar.isworkingday", "zh-HK", "是否工作日_hk", "是否工作日（0=非工作日 1=工作日 2=调休工作日等）"),
+            new TranslationSeedItem("entity.calendar.isworkingday", "zh-HK", "是否工作日_hk", "是否工作日（字典 hr_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）"),
 
             // entity.calendar.holidayid
-            new TranslationSeedItem("entity.calendar.holidayid", "en-US", "关联假日ID_us", "关联假日 ID（TaktHoliday）"),
+            new TranslationSeedItem("entity.calendar.holidayid", "en-US", "关联假日ID_us", "关联假日（关联 TaktHoliday.Id，选项 TaktHolidays/options）"),
             // entity.calendar.holidayid
-            new TranslationSeedItem("entity.calendar.holidayid", "ja-JP", "关联假日ID_jp", "关联假日 ID（TaktHoliday）"),
+            new TranslationSeedItem("entity.calendar.holidayid", "ja-JP", "关联假日ID_jp", "关联假日（关联 TaktHoliday.Id，选项 TaktHolidays/options）"),
             // entity.calendar.holidayid
-            new TranslationSeedItem("entity.calendar.holidayid", "zh-CN", "关联假日ID", "关联假日 ID（TaktHoliday）"),
+            new TranslationSeedItem("entity.calendar.holidayid", "zh-CN", "关联假日ID", "关联假日（关联 TaktHoliday.Id，选项 TaktHolidays/options）"),
             // entity.calendar.holidayid
-            new TranslationSeedItem("entity.calendar.holidayid", "zh-HK", "关联假日ID_hk", "关联假日 ID（TaktHoliday）"),
+            new TranslationSeedItem("entity.calendar.holidayid", "zh-HK", "关联假日ID_hk", "关联假日（关联 TaktHoliday.Id，选项 TaktHolidays/options）"),
 
             // entity.calendar.shiftid
-            new TranslationSeedItem("entity.calendar.shiftid", "en-US", "关联班次ID_us", "关联班次 ID（TaktWorkShift）"),
+            new TranslationSeedItem("entity.calendar.shiftid", "en-US", "关联班次ID_us", "关联班次（关联 TaktWorkShift.Id，选项 TaktWorkShifts/options）"),
             // entity.calendar.shiftid
-            new TranslationSeedItem("entity.calendar.shiftid", "ja-JP", "关联班次ID_jp", "关联班次 ID（TaktWorkShift）"),
+            new TranslationSeedItem("entity.calendar.shiftid", "ja-JP", "关联班次ID_jp", "关联班次（关联 TaktWorkShift.Id，选项 TaktWorkShifts/options）"),
             // entity.calendar.shiftid
-            new TranslationSeedItem("entity.calendar.shiftid", "zh-CN", "关联班次ID", "关联班次 ID（TaktWorkShift）"),
+            new TranslationSeedItem("entity.calendar.shiftid", "zh-CN", "关联班次ID", "关联班次（关联 TaktWorkShift.Id，选项 TaktWorkShifts/options）"),
             // entity.calendar.shiftid
-            new TranslationSeedItem("entity.calendar.shiftid", "zh-HK", "关联班次ID_hk", "关联班次 ID（TaktWorkShift）"),
+            new TranslationSeedItem("entity.calendar.shiftid", "zh-HK", "关联班次ID_hk", "关联班次（关联 TaktWorkShift.Id，选项 TaktWorkShifts/options）"),
 
             // entity.calendar.relatedplant
-            new TranslationSeedItem("entity.calendar.relatedplant", "en-US", "关联工厂_us", "关联工厂（为空表示公司级通用日历）"),
+            new TranslationSeedItem("entity.calendar.relatedplant", "en-US", "关联工厂_us", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
             // entity.calendar.relatedplant
-            new TranslationSeedItem("entity.calendar.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（为空表示公司级通用日历）"),
+            new TranslationSeedItem("entity.calendar.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
             // entity.calendar.relatedplant
-            new TranslationSeedItem("entity.calendar.relatedplant", "zh-CN", "关联工厂", "关联工厂（为空表示公司级通用日历）"),
+            new TranslationSeedItem("entity.calendar.relatedplant", "zh-CN", "关联工厂", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
             // entity.calendar.relatedplant
-            new TranslationSeedItem("entity.calendar.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（为空表示公司级通用日历）"),
+            new TranslationSeedItem("entity.calendar.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
         };
     }
 

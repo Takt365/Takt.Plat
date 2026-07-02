@@ -26,21 +26,21 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Sop;
 public class TaktSopContent : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 版本 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
     /// </summary>
     [SugarColumn(ColumnName = "revision_id", ColumnDescription = "版本ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long RevisionId { get; set; }
 
     /// <summary>
-    /// SOP 主档 ID（冗余，序列化为 string 以避免 Javascript 精度问题）
+    /// SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
     /// </summary>
     [SugarColumn(ColumnName = "sop_id", ColumnDescription = "SOP主档ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SopId { get; set; }
 
     /// <summary>
-    /// 正文语言（zh-CN 简体 / en-US 英文 / ja-JP 日文 / zh-HK 香港繁体；与 TaktCulture.CultureCode 一致）
+    /// 正文语言（选项 TaktCultures/options，DictValue=CultureCode）
     /// </summary>
     [SugarColumn(ColumnName = "content_lang", ColumnDescription = "正文语言", ColumnDataType = "varchar", Length = 10, IsNullable = false, DefaultValue = "zh-CN")]
     public string ContentLang { get; set; } = "zh-CN";

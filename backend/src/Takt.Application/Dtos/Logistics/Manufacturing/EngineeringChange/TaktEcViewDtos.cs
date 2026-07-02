@@ -28,7 +28,7 @@ public class TaktEcDeptViewDto : TaktCompanyDtoBase
 {
     /// <summary>部门记录 ID；未创建时为空</summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? EcDeptId { get; set; }
+    public long? EcExecId { get; set; }
     /// <summary>设变明细 ID</summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EcDetailId { get; set; }
@@ -39,10 +39,8 @@ public class TaktEcDeptViewDto : TaktCompanyDtoBase
     public string EcNo { get; set; } = string.Empty;
     /// <summary>明细行号</summary>
     public int LineNumber { get; set; }
-    /// <summary>型号</summary>
+    /// <summary>机种（Ec_model）</summary>
     public string EcModel { get; set; } = string.Empty;
-    /// <summary>变更内容</summary>
-    public string? EcChange { get; set; }
     /// <summary>旧料号</summary>
     public string? EcOldItem { get; set; }
     /// <summary>新料号</summary>
@@ -57,6 +55,10 @@ public class TaktEcDeptViewDto : TaktCompanyDtoBase
     public int IsImplemented { get; set; }
     /// <summary>内容</summary>
     public string? Content { get; set; }
+    /// <summary>录入日期</summary>
+    public DateTime? EntryDate { get; set; }
+    /// <summary>担当（EcLeader）</summary>
+    public string? EcLeader { get; set; }
     /// <summary>预计生产日期</summary>
     public DateTime? ScheduledProductionDate { get; set; }
     /// <summary>预定批次</summary>
@@ -91,10 +93,14 @@ public class TaktEcDeptViewDto : TaktCompanyDtoBase
     public string? ProductionTeam { get; set; }
     /// <summary>实施日期</summary>
     public DateTime? ImplementationDate { get; set; }
+    /// <summary>实施批次</summary>
+    public string? ImplementationBatch { get; set; }
     /// <summary>检验批次</summary>
     public string? InspectionBatch { get; set; }
     /// <summary>抽样号码</summary>
     public string? SamplingNo { get; set; }
+    /// <summary>确认日期</summary>
+    public DateTime? ConfirmationDate { get; set; }
     /// <summary>是否更新 SOP（0=否 1=是）</summary>
     public int IsSopUpdated { get; set; }
 }
@@ -106,7 +112,7 @@ public class TaktEcDeptViewQueryDto : TaktPagedQuery
 {
     /// <summary>设变单号</summary>
     public string? EcNo { get; set; }
-    /// <summary>型号</summary>
+    /// <summary>机种（Ec_model）</summary>
     public string? EcModel { get; set; }
     /// <summary>是否实施</summary>
     public int? IsImplemented { get; set; }
@@ -128,6 +134,10 @@ public class TaktEcDeptViewUpdateDto
     public int IsImplemented { get; set; }
     /// <summary>内容</summary>
     public string? Content { get; set; }
+    /// <summary>录入日期</summary>
+    public DateTime? EntryDate { get; set; }
+    /// <summary>担当（EcLeader）</summary>
+    public string? EcLeader { get; set; }
     /// <summary>预计生产日期</summary>
     public DateTime? ScheduledProductionDate { get; set; }
     /// <summary>预定批次</summary>
@@ -162,14 +172,93 @@ public class TaktEcDeptViewUpdateDto
     public string? ProductionTeam { get; set; }
     /// <summary>实施日期</summary>
     public DateTime? ImplementationDate { get; set; }
+    /// <summary>实施批次</summary>
+    public string? ImplementationBatch { get; set; }
     /// <summary>检验批次</summary>
     public string? InspectionBatch { get; set; }
     /// <summary>抽样号码</summary>
     public string? SamplingNo { get; set; }
+    /// <summary>确认日期</summary>
+    public DateTime? ConfirmationDate { get; set; }
     /// <summary>是否更新 SOP</summary>
     public int IsSopUpdated { get; set; }
     /// <summary>备注</summary>
     public string? Remark { get; set; }
+}
+
+/// <summary>
+/// 设变部门视图导入模板 DTO
+/// </summary>
+public class TaktEcDeptViewTemplateDto
+{
+    /// <summary>设变明细 ID（与 EcNo+LineNumber 二选一）</summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? EcDetailId { get; set; }
+    /// <summary>设变单号</summary>
+    public string? EcNo { get; set; }
+    /// <summary>设变明细行号</summary>
+    public int? LineNumber { get; set; }
+    /// <summary>是否实施</summary>
+    public int? IsImplemented { get; set; }
+    /// <summary>内容</summary>
+    public string? Content { get; set; }
+    /// <summary>录入日期</summary>
+    public DateTime? EntryDate { get; set; }
+    /// <summary>担当（EcLeader）</summary>
+    public string? EcLeader { get; set; }
+    /// <summary>预计生产日期</summary>
+    public DateTime? ScheduledProductionDate { get; set; }
+    /// <summary>预定批次</summary>
+    public string? ScheduledBatch { get; set; }
+    /// <summary>Po残</summary>
+    public string? PoRemainder { get; set; }
+    /// <summary>结余</summary>
+    public string? Balance { get; set; }
+    /// <summary>旧品处理</summary>
+    public string? OldProductHandling { get; set; }
+    /// <summary>采购订单发行日期</summary>
+    public DateTime? PurchaseOrderIssueDate { get; set; }
+    /// <summary>供应商</summary>
+    public string? Supplier { get; set; }
+    /// <summary>采购订单号码</summary>
+    public string? PurchaseOrderNo { get; set; }
+    /// <summary>受检单号</summary>
+    public string? IqcOrderNo { get; set; }
+    /// <summary>检验日期</summary>
+    public DateTime? InspectionDate { get; set; }
+    /// <summary>出库批次</summary>
+    public string? OutboundBatch { get; set; }
+    /// <summary>出库日期</summary>
+    public DateTime? OutboundDate { get; set; }
+    /// <summary>生产日期</summary>
+    public DateTime? ProductionDate { get; set; }
+    /// <summary>生产批次</summary>
+    public string? ProductionBatch { get; set; }
+    /// <summary>出库单号</summary>
+    public string? OutboundOrderNo { get; set; }
+    /// <summary>生产班组</summary>
+    public string? ProductionTeam { get; set; }
+    /// <summary>实施日期</summary>
+    public DateTime? ImplementationDate { get; set; }
+    /// <summary>实施批次</summary>
+    public string? ImplementationBatch { get; set; }
+    /// <summary>检验批次</summary>
+    public string? InspectionBatch { get; set; }
+    /// <summary>抽样号码</summary>
+    public string? SamplingNo { get; set; }
+    /// <summary>确认日期</summary>
+    public DateTime? ConfirmationDate { get; set; }
+    /// <summary>是否更新 SOP</summary>
+    public int? IsSopUpdated { get; set; }
+    /// <summary>备注</summary>
+    public string? Remark { get; set; }
+}
+
+/// <summary>
+/// 设变部门视图导入 DTO
+/// </summary>
+public class TaktEcDeptViewImportDto : TaktEcDeptViewTemplateDto
+{
 }
 
 // ========================================
@@ -187,7 +276,7 @@ public class TaktEcKanbanDto : TaktCompanyDtoBase
     public long EcId { get; set; }
     /// <summary>设变单号</summary>
     public string EcNo { get; set; } = string.Empty;
-    /// <summary>设变主题</summary>
+    /// <summary>设变标题</summary>
     public string EcTitle { get; set; } = string.Empty;
     /// <summary>变更状态</summary>
     public int ChangeStatus { get; set; }
@@ -195,12 +284,18 @@ public class TaktEcKanbanDto : TaktCompanyDtoBase
     public int EcStatus { get; set; }
     /// <summary>负责人</summary>
     public string EcLeader { get; set; } = string.Empty;
-    /// <summary>生效日期</summary>
-    public DateTime EffectiveDate { get; set; }
     /// <summary>明细行数</summary>
     public int DetailCount { get; set; }
     /// <summary>各部门实施汇总</summary>
     public List<TaktEcKanbanDeptStageDto> DeptStages { get; set; } = [];
+    /// <summary>当前待实施部门编码（路径上首个未全部完成的部门；字典 logistics_ec_dept_code）</summary>
+    public string? CurrentDeptCode { get; set; }
+    /// <summary>当前部门待实施明细数</summary>
+    public int PendingAtCurrentDeptCount { get; set; }
+    /// <summary>实施路径状态（0 未开始 1 实施中 2 正式完成 3 全部完成）</summary>
+    public int ImplementationStatus { get; set; }
+    /// <summary>品管课是否已全部实施（正式完成）</summary>
+    public int IsOfficiallyCompleted { get; set; }
 }
 
 /// <summary>
@@ -227,6 +322,12 @@ public class TaktEcKanbanQueryDto : TaktPagedQuery
     public int? ChangeStatus { get; set; }
     /// <summary>设变状态</summary>
     public int? EcStatus { get; set; }
+    /// <summary>当前待实施部门编码</summary>
+    public string? CurrentDeptCode { get; set; }
+    /// <summary>实施路径状态（0 未开始 1 实施中 2 正式完成 3 全部完成）</summary>
+    public int? ImplementationStatus { get; set; }
+    /// <summary>仅未正式完成（品管课未全部实施）</summary>
+    public int? OnlyNotOfficiallyCompleted { get; set; }
 }
 
 // ========================================
@@ -246,7 +347,7 @@ public class TaktEcBatchDto : TaktCompanyDtoBase
     public string EcNo { get; set; } = string.Empty;
     /// <summary>行号</summary>
     public int LineNumber { get; set; }
-    /// <summary>型号</summary>
+    /// <summary>机种（Ec_model）</summary>
     public string EcModel { get; set; } = string.Empty;
     /// <summary>新料号</summary>
     public string? EcNewItem { get; set; }
@@ -269,7 +370,7 @@ public class TaktEcBatchQueryDto : TaktPagedQuery
     public string? EcNo { get; set; }
     /// <summary>批次号（预定/生产批次模糊）</summary>
     public string? BatchNo { get; set; }
-    /// <summary>型号</summary>
+    /// <summary>机种（Ec_model）</summary>
     public string? EcModel { get; set; }
 }
 
@@ -308,20 +409,20 @@ public class TaktEcKakuninDto : TaktCompanyDtoBase
     public string EcNo { get; set; } = string.Empty;
     /// <summary>行号</summary>
     public int LineNumber { get; set; }
-    /// <summary>型号</summary>
+    /// <summary>机种（Ec_model）</summary>
     public string EcModel { get; set; } = string.Empty;
     /// <summary>旧料号</summary>
     public string? EcOldItem { get; set; }
     /// <summary>新料号</summary>
     public string? EcNewItem { get; set; }
-    /// <summary>是否检查（0=否 1=是）</summary>
-    public int IsCheck { get; set; }
-    /// <summary>是否采购（0=否 1=是）</summary>
-    public int IsProcurement { get; set; }
-    /// <summary>变更内容</summary>
-    public string? EcChange { get; set; }
-    /// <summary>备注</summary>
-    public string? EcNote { get; set; }
+    /// <summary>旧品是否采购（0=否 1=是）</summary>
+    public int IsOldProcurement { get; set; }
+    /// <summary>旧品是否检查（0=否 1=是）</summary>
+    public int IsOldCheck { get; set; }
+    /// <summary>新品是否采购（0=否 1=是）</summary>
+    public int IsNewProcurement { get; set; }
+    /// <summary>新品是否检查（0=否 1=是）</summary>
+    public int IsNewCheck { get; set; }
 }
 
 /// <summary>
@@ -331,9 +432,11 @@ public class TaktEcKakuninQueryDto : TaktPagedQuery
 {
     /// <summary>设变单号</summary>
     public string? EcNo { get; set; }
-    /// <summary>是否检查</summary>
-    public int? IsCheck { get; set; }
-    /// <summary>型号</summary>
+    /// <summary>旧品是否检查</summary>
+    public int? IsOldCheck { get; set; }
+    /// <summary>新品是否检查</summary>
+    public int? IsNewCheck { get; set; }
+    /// <summary>机种（Ec_model）</summary>
     public string? EcModel { get; set; }
     /// <summary>新料号</summary>
     public string? EcNewItem { get; set; }
@@ -347,12 +450,14 @@ public class TaktEcKakuninUpdateDto
     /// <summary>设变明细 ID</summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EcDetailId { get; set; }
-    /// <summary>是否检查</summary>
-    public int IsCheck { get; set; }
-    /// <summary>是否采购</summary>
-    public int IsProcurement { get; set; }
-    /// <summary>备注</summary>
-    public string? EcNote { get; set; }
+    /// <summary>旧品是否采购（0=否 1=是）</summary>
+    public int IsOldProcurement { get; set; }
+    /// <summary>旧品是否检查（0=否 1=是）</summary>
+    public int IsOldCheck { get; set; }
+    /// <summary>新品是否采购（0=否 1=是）</summary>
+    public int IsNewProcurement { get; set; }
+    /// <summary>新品是否检查（0=否 1=是）</summary>
+    public int IsNewCheck { get; set; }
 }
 
 // ========================================
@@ -372,19 +477,19 @@ public class TaktEcLegacyProductDto : TaktCompanyDtoBase
     public string EcNo { get; set; } = string.Empty;
     /// <summary>行号</summary>
     public int LineNumber { get; set; }
-    /// <summary>型号</summary>
+    /// <summary>机种（Ec_model）</summary>
     public string EcModel { get; set; } = string.Empty;
     /// <summary>旧料号</summary>
     public string? EcOldItem { get; set; }
     /// <summary>旧料号描述</summary>
     public string? EcOldText { get; set; }
-    /// <summary>旧数量</summary>
-    public decimal? EcOldQty { get; set; }
+    /// <summary>旧用量</summary>
+    public decimal? EcOldUsage { get; set; }
     /// <summary>新料号</summary>
     public string? EcNewItem { get; set; }
     /// <summary>旧品处理（生管部门字段）</summary>
     public string? OldProductHandling { get; set; }
-    /// <summary>EOL（0=否 1=是）</summary>
+    /// <summary>停产状态（EOL，0=否 1=是，字典 logistics_material_eol_status）</summary>
     public int IsEndOfLine { get; set; }
 }
 
@@ -397,7 +502,7 @@ public class TaktEcLegacyProductQueryDto : TaktPagedQuery
     public string? EcNo { get; set; }
     /// <summary>旧料号</summary>
     public string? EcOldItem { get; set; }
-    /// <summary>型号</summary>
+    /// <summary>机种（Ec_model）</summary>
     public string? EcModel { get; set; }
 }
 
@@ -411,7 +516,7 @@ public class TaktEcLegacyProductUpdateDto
     public long EcDetailId { get; set; }
     /// <summary>旧品处理</summary>
     public string? OldProductHandling { get; set; }
-    /// <summary>EOL</summary>
+    /// <summary>停产状态（EOL，0=否 1=是，字典 logistics_material_eol_status）</summary>
     public int IsEndOfLine { get; set; }
     /// <summary>备注</summary>
     public string? Remark { get; set; }

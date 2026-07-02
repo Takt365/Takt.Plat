@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Foundation
 // 文件名称：TaktTranslationsController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-27
 // 创建人：Takt365(Cursor AI)
 // 功能描述：翻译控制器
 // 
@@ -10,6 +10,7 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Takt.Application.Dtos.Foundation;
 using Takt.Application.Services.Foundation;
@@ -252,7 +253,7 @@ public class TaktTranslationsController : TaktControllerBase
     /// <summary>
     /// 获取翻译转置列表（分页）
     /// </summary>
-    [TaktPermission("foundation:i18n:list", "查询翻译转置列表")]
+    [TaktPermission("foundation:i18n:query", "查询翻译转置列表")]
     [HttpGet("transposed")]
     public async Task<IActionResult> GetTranslationTransposedListAsync([FromQuery] TaktTranslationTransposedQueryDto queryDto)
     {
@@ -288,7 +289,7 @@ public class TaktTranslationsController : TaktControllerBase
     /// <summary>
     /// 获取指定区域文化的前端扁平翻译消息
     /// </summary>
-    /// <param name="cultureCode">区域文化编码 BCP47（如 zh-CN）</param>
+    /// <param name="cultureCode">文化编码 BCP47（如 zh-CN）</param>
     /// <returns>扁平 i18n 键值</returns>
     [AllowAnonymous]
     [HttpGet("messages")]

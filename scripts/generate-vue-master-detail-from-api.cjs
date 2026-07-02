@@ -32,7 +32,6 @@ const {
   renderFormItemOpening,
   buildExtFieldIconImportLine,
   buildRemixIconImportLine,
-  buildQueryFieldMetaLine,
   computeFormTabCount,
   buildFormTabLabelAttr,
   buildFormContentClassComputedExpr,
@@ -57,6 +56,17 @@ const {
   buildServerPagedOnMountedBlock,
   buildServerPagedPaginationHandlersBlock,
   buildFormResetScopeDefaultsBlock,
+  buildVueImportResultUtilImportLine,
+  buildImportModalVueBlock,
+  buildImportHandlersScriptBlock,
+  buildEntityI18nComposableFile,
+  buildEntityI18nIndexImportBlock,
+  buildEntityI18nFormImportBlock,
+  buildAdvancedQueryFactoryBlock,
+  buildEntityDictValueHelper,
+  buildEntityNumericCoerceHelper,
+  entityRowRecordTypeName,
+  entityI18nComposableFileName,
 } = require('./generate-vue-common.cjs');
 const {
   generateMasterDetailLrIndexScript,
@@ -79,6 +89,11 @@ const {
 function buildViewBundle(baseBundle, viewModulePath, fields) {
   const viewDir = path.join(CONFIG.frontendRoot, CONFIG.viewsDir, viewModulePath);
   const masterFormKebab = baseBundle.fullCtx.viewEntityKebab;
+  const i18nComposablePath = path.join(
+    viewDir,
+    'composables',
+    entityI18nComposableFileName(masterFormKebab),
+  );
   return {
     ...baseBundle,
     fullCtx: {
@@ -89,6 +104,7 @@ function buildViewBundle(baseBundle, viewModulePath, fields) {
     },
     indexPath: path.join(viewDir, 'index.vue'),
     formPath: path.join(viewDir, 'components', `${masterFormKebab}-form.vue`),
+    i18nComposablePath,
   };
 }
 
@@ -102,7 +118,20 @@ function writeSingleMasterDetailView(bundle, ctx, options) {
   writeMasterDetailLayoutOutputs(bundle, ctx, options);
   const indexContent = generateMasterDetailIndexVue(ctx);
   const formContent = bundle.needsForm ? generateMasterDetailFormVue(ctx) : '';
-  return writeVueModuleOutputs(bundle, indexContent, formContent, options);
+  const listCols = ctx.fields.listFields.filter((f) => f.name !== ctx.caps.entityIdName);
+  const i18nComposableContent = buildEntityI18nComposableFile({
+    entityPascal: ctx.entityPascal,
+    entityI18nSlug: ctx.entityI18nSlug,
+    entityKebab: ctx.entityKebab,
+    viewModulePath: ctx.viewModulePath,
+    viewEntityKebab: ctx.viewEntityKebab,
+    modulePath: ctx.modulePath,
+    listFields: listCols,
+    formFields: ctx.fields.formFields,
+    queryFields: ctx.fields.queryFields,
+    comment: ctx.comment,
+  });
+  return writeVueModuleOutputs(bundle, indexContent, formContent, options, i18nComposableContent);
 }
 
 /**
@@ -270,14 +299,21 @@ function generateMasterDetailIndexVue(ctx) {
   const indexDictOnMounted = needsDictInIndex ? '  void dictDataStore.loadAllDictDataAsync()\n' : '';
   const resetPeriodListMapperBlock = buildResetPeriodListMapperScriptBlock(dictTagListCols);
   const dictBodyCellBlock = buildListBodyCellBlock(dictTagListCols, switchListCols, entityPascal);
+  const rowRecordType = entityRowRecordTypeName(entityPascal);
+  const dictValueHelperBlock = [
+    (dictTagListCols.length > 0 || switchListCols.length > 0)
+      ? buildEntityDictValueHelper(entityPascal, rowRecordType)
+      : '',
+    switchListCols.length > 0 ? buildEntityNumericCoerceHelper(entityPascal) : '',
+  ].filter(Boolean).join('\n');
   const listSwitchHandlersBlock = buildListSwitchHandlersBlock(switchListCols, entityPascal, caps);
   const queryItems = fields.queryFields.map((f) => renderQueryFormItem(f)).join('\n');
-  const queryFieldsMetaBlock = fields.queryFields.map((f) => buildQueryFieldMetaLine(f, entityI18nSlug)).join('\n');
-  const queryFieldStorageKey = `takt-query-fields-${viewModulePath.replace(/\//g, '-')}`;
+  const queryFactoryBlock = buildAdvancedQueryFactoryBlock(entityPascal, fields.queryFields);
   const queryInit = fields.queryFields.map((f) => {
     const val = f.type === 'number' ? 'undefined as number | undefined' : "''";
     return `  ${f.name}: ${val},`;
   }).join('\n');
+  const queryFieldStorageKey = `takt-query-fields-${viewModulePath.replace(/\//g, '-')}`;
   const columnBlocks = listCols.map((f) => {
     if (f.dictType) {
       return `  {
@@ -307,7 +343,7 @@ function generateMasterDetailIndexVue(ctx) {
         shape: 'plain',
         icon: RiEditLine,
         permission: '${permissionPrefix}:update',
-        onClick: (record: ${entityPascal}) => handleEdit(record)
+        onClick: (record: ${rowRecordType}) => handleEdit(record)
       },`);
   }
   if (caps.hasDelete) {
@@ -317,7 +353,7 @@ function generateMasterDetailIndexVue(ctx) {
         shape: 'plain',
         icon: RiDeleteBinLine,
         permission: '${permissionPrefix}:delete',
-        onClick: (record: ${entityPascal}) => handleDeleteOne(record)
+        onClick: (record: ${rowRecordType}) => handleDeleteOne(record)
       }`);
   }
   const formBlock = (caps.hasCreate || caps.hasUpdate) ? `
@@ -338,28 +374,9 @@ function generateMasterDetailIndexVue(ctx) {
         :loading="formLoading"
       />
     </TaktModal>` : '';
-  const importBlock = (caps.hasImport && caps.hasGetTemplate) ? `
-    <!-- 导入对话框 -->
-    <TaktModal
-      v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.${entityI18nSlug}._self') })"
-      :width="600"
-      :footer="null"
-      :cancel-text="t('common.page.button.close')"
-      @cancel="handleImportCancel"
-    >
-      <TaktImportFile
-        entity-i18n-key="entity.${entityI18nSlug}._self"
-        file-type="xlsx"
-        :sheet-name="excelNames.sheet"
-        :template-file-name="excelNames.fileBase"
-        :download-template="handleDownloadTemplate"
-        :import-file="handleImportFile"
-        :max-size="10"
-        :max-rows="1000"
-        @success="handleImportSuccess"
-      />
-    </TaktModal>` : '';
+  const importBlock = (caps.hasImport && caps.hasGetTemplate)
+    ? buildImportModalVueBlock(entityPascal)
+    : '';
   const formImports = (caps.hasCreate || caps.hasUpdate)
     ? `import ${entityPascal}Form from './components/${viewEntityKebab}-form.vue'\n`
     : '';
@@ -373,35 +390,38 @@ function generateMasterDetailIndexVue(ctx) {
   const exportImport = caps.hasExport
     ? "import { resolveExportDownloadFileName } from '@/utils/export-download-name'\n"
     : '';
+  const importResultImport = (caps.hasImport && caps.hasGetTemplate)
+    ? buildVueImportResultUtilImportLine()
+    : '';
   const excelConst = (caps.hasImport || caps.hasExport)
     ? `/** Excel 导入/导出默认 sheet 名与文件名前缀 */
 const excelNames = taktExcelEntityNames('${caps.entityClassName}')
 `
     : '';
+  const entityI18nIndexImport = buildEntityI18nIndexImportBlock(entityPascal, viewEntityKebab);
   const singleStateBlock = buildSingleIndexStateRefs(entityPascal, {
     hasForm: caps.hasCreate || caps.hasUpdate,
     hasImport: caps.hasImport && caps.hasGetTemplate,
     hasUpdate: caps.hasUpdate,
     hasDelete: caps.hasDelete || caps.hasDeleteBatch,
     queryInit,
-    queryFieldsMetaBlock,
+    queryFactoryBlock,
+    entityPascal,
     entityIdName: caps.entityIdName,
-    entityCamel,
-    entityI18nSlug,
     excelConst,
   });
   const formStateBlock = '';
   const createHandler = caps.hasCreate ? `
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.${entityI18nSlug}._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = null
   formVisible.value = true${INDEX_FORM_RESET_NEXT_TICK}
 }` : '';
   const updateHandler = caps.hasUpdate ? (hasMasterDetail && caps.hasGetById ? `
 /** 打开编辑弹窗（主子表：先拉详情含子表） */
-async function handleEdit(record: ${entityPascal}) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.${entityI18nSlug}._self') })
+async function handleEdit(record: ${rowRecordType}) {
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
   formLoading.value = true
   try {
     const detail = await load${entityPascal}Detail(record)
@@ -417,12 +437,12 @@ function handleUpdate() {
   if (selectedRow.value) {
     void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.${entityI18nSlug}._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
   }
 }` : `
 /** 打开编辑弹窗 */
-function handleEdit(record: ${entityPascal}) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.${entityI18nSlug}._self') })
+function handleEdit(record: ${rowRecordType}) {
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
   formData.value = { ...record }
   formVisible.value = true
 }
@@ -432,7 +452,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.${entityI18nSlug}._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
   }
 }`) : '';
   const formSubmitHandler = (caps.hasCreate || caps.hasUpdate) ? `
@@ -450,9 +470,9 @@ async function handleFormSubmit() {
     const payload = refInst.getValues?.() ?? { ...(formData.value as any) }
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
-${caps.hasUpdate ? `      await ${caps.apiUpdate}(id, payload as any)\n      message.success(t('common.feedback.updated', { target: t('entity.${entityI18nSlug}._self') }))` : ''}
+${caps.hasUpdate ? `      await ${caps.apiUpdate}(id, payload as any)\n      message.success(t('common.feedback.updated', { target: pi.self() }))` : ''}
     } else {
-${caps.hasCreate ? `      await ${caps.apiCreate}(payload as any)\n      message.success(t('common.feedback.created', { target: t('entity.${entityI18nSlug}._self') }))` : ''}
+${caps.hasCreate ? `      await ${caps.apiCreate}(payload as any)\n      message.success(t('common.feedback.created', { target: pi.self() }))` : ''}
     }
     formVisible.value = false
     formData.value = null${INDEX_FORM_RESET_NEXT_TICK}${mdParts.formSubmitReload}
@@ -467,33 +487,13 @@ function handleFormCancel() {
   formVisible.value = false
   formData.value = null${INDEX_FORM_RESET_NEXT_TICK}
 }` : '';
-  const importHandlers = (caps.hasImport && caps.hasGetTemplate) ? `
-/** 打开导入对话框 */
-function handleImport() {
-  importVisible.value = true
-}
-
-/** 下载导入模板 Excel */
-async function handleDownloadTemplate(sheetName?: string, fileName?: string): Promise<Blob> {
-  const res = await ${caps.apiGetTemplate}(sheetName, fileName)
-  return (res as any)?.data ?? res
-}
-
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await ${caps.apiImport}(file, sheetName)
-}
-
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
-  loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
-}
-
-/** 关闭导入对话框 */
-function handleImportCancel() {
-  importVisible.value = false
-}` : '';
+  const importHandlers = (caps.hasImport && caps.hasGetTemplate)
+    ? buildImportHandlersScriptBlock({
+      apiGetTemplate: caps.apiGetTemplate,
+      apiImport: caps.apiImport,
+      successExtraBody: mdParts.formSubmitReload || '',
+    })
+    : '';
   const exportHandler = caps.hasExport ? `
 /** 导出当前查询条件下的 Excel */
 async function handleExport() {
@@ -518,25 +518,25 @@ ${buildServerPagedExportApiCall(caps.apiExport)}
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.${entityI18nSlug}._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: any) {
     logger.error('[${entityPascal}] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.${entityI18nSlug}._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }
 }` : '';
   const deleteOneHandler = caps.hasDelete ? `
 /** 删除单行 */
-async function handleDeleteOne(record: ${entityPascal}) {
+async function handleDeleteOne(record: ${rowRecordType}) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.${entityI18nSlug}._self'), name: t('common.tip.this.target', { target: t('entity.${entityI18nSlug}._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await ${caps.apiDelete}((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.${entityI18nSlug}._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
 ${mdParts.deleteClearSelection}
       loadData()
     }
@@ -546,18 +546,18 @@ ${mdParts.deleteClearSelection}
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.${entityI18nSlug}._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.${entityI18nSlug}._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await ${caps.apiDeleteBatch}(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.${entityI18nSlug}._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
 ${mdParts.deleteClearSelection}
       loadData()
     }
@@ -634,6 +634,8 @@ ${caps.hasExport ? '      @export="handleExport"' : ''}
       :master-row-selection="rowSelection"
       master-id-column-key="${caps.entityIdName}"
       :master-visible-column-keys="visibleColumnKeys"
+      master-table-mode="masterDetailMaster"
+      master-scroll-layout="masterDetailLr"
       :master-total="total"
       master-entity-scope="${entityScope}"
       @master-change="handleTableChange"
@@ -667,7 +669,7 @@ ${importBlock}
       :id-column-key="'${caps.entityIdName}'"
       :action-column-key="'action'"
       entity-scope="${entityScope}"
-      table-mode="single"
+      table-mode="masterDetailMaster"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -689,7 +691,8 @@ ${formImports}${mdParts.panelImports}
 ${mdParts.composableImport}
 import { ${importApiNames.join(', ')} } from '@/api/${modulePath}/${entityKebab}'
 import type { ${typeImports.join(', ')} } from '@/types/${modulePath}/${entityKebab}'
-${indexDictImport}${excelImport}${exportImport}${iconImports}
+${indexDictImport}${excelImport}${exportImport}${importResultImport}${iconImports}
+${entityI18nIndexImport}
 ${singleStateBlock}
 ${indexDictSetup}${mdParts.composableSetup}
 ${mdParts.panelRefs}
@@ -717,34 +720,38 @@ ${actionItems.join('\n')}
 ])
 
 /** 表格 row-key（优先实体主键字段） */
-const get${entityPascal}Id = (record: any): string => record?.[entityIdName] ?? ''
+const get${entityPascal}Id = (record: ${rowRecordType}): string => {
+  const id = (record as Record<string, unknown>)?.[entityIdName]
+  return id != null ? String(id) : ''
+}
 /**
  * 读取行字段值
  * @param record 行数据
  * @param field 字段名
  */
 const get${entityPascal}Field = (record: any, field: string): any => record?.[field]
+${dictValueHelperBlock}
 ${resetPeriodListMapperBlock}
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: ${entityPascal}[]) => {
+  onChange: (keys: (string | number)[], rows: ${rowRecordType}[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
 ${mdParts.rowSelectionPatch}
   },
-  onSelect: (record: ${entityPascal}, selected: boolean) => {
+  onSelect: (record: ${rowRecordType}, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
-    } else if (get${entityPascal}Id(selectedRow.value) === get${entityPascal}Id(record)) {
+    } else if (selectedRow.value && get${entityPascal}Id(selectedRow.value) === get${entityPascal}Id(record)) {
       selectedRow.value = null
       syncMasterSelection(null)
     }
   },
-  onSelectAll: (selected: boolean, selectedRowsData: ${entityPascal}[]) => {
+  onSelectAll: (selected: boolean, selectedRowsData: ${rowRecordType}[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
     syncMasterSelection(selectedRow.value)
   }
@@ -972,6 +979,7 @@ ${formTemplateBody}
 ${formScriptFragments.vueImportLine}
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+${buildEntityI18nFormImportBlock(entityPascal, viewEntityKebab)}
 ${masterTypeImport}
 ${taktSelectImport}${extFieldIconImport}${formScriptFragments.dictImportLine}${scopeStoreImports}
 ${formScriptState}

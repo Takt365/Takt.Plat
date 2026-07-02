@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Materials
 // 文件名称：TaktStorageLocationI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktStorageLocation 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,40 +91,40 @@ public class TaktStorageLocationI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.storagelocation._self", "zh-HK", "Takt库位主数据信息_hk", "实体名称"),
 
             // entity.storagelocation.warehouseid
-            new TranslationSeedItem("entity.storagelocation.warehouseid", "en-US", "仓库ID_us", "仓库ID（主子表关系，关联 TaktWarehouse 主键）"),
+            new TranslationSeedItem("entity.storagelocation.warehouseid", "en-US", "仓库ID_us", "仓库 ID（关联 TaktWarehouse.Id，选项 TaktWarehouses/options）"),
             // entity.storagelocation.warehouseid
-            new TranslationSeedItem("entity.storagelocation.warehouseid", "ja-JP", "仓库ID_jp", "仓库ID（主子表关系，关联 TaktWarehouse 主键）"),
+            new TranslationSeedItem("entity.storagelocation.warehouseid", "ja-JP", "仓库ID_jp", "仓库 ID（关联 TaktWarehouse.Id，选项 TaktWarehouses/options）"),
             // entity.storagelocation.warehouseid
-            new TranslationSeedItem("entity.storagelocation.warehouseid", "zh-CN", "仓库ID", "仓库ID（主子表关系，关联 TaktWarehouse 主键）"),
+            new TranslationSeedItem("entity.storagelocation.warehouseid", "zh-CN", "仓库ID", "仓库 ID（关联 TaktWarehouse.Id，选项 TaktWarehouses/options）"),
             // entity.storagelocation.warehouseid
-            new TranslationSeedItem("entity.storagelocation.warehouseid", "zh-HK", "仓库ID_hk", "仓库ID（主子表关系，关联 TaktWarehouse 主键）"),
+            new TranslationSeedItem("entity.storagelocation.warehouseid", "zh-HK", "仓库ID_hk", "仓库 ID（关联 TaktWarehouse.Id，选项 TaktWarehouses/options）"),
 
             // entity.storagelocation.plantcode
-            new TranslationSeedItem("entity.storagelocation.plantcode", "en-US", "工厂代码_us", "工厂代码（冗余字段，便于查询；关联 TaktPlant.PlantCode）"),
+            new TranslationSeedItem("entity.storagelocation.plantcode", "en-US", "工厂代码_us", "工厂代码（冗余；选项 TaktPlants/options，DictValue=PlantCode）"),
             // entity.storagelocation.plantcode
-            new TranslationSeedItem("entity.storagelocation.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（冗余字段，便于查询；关联 TaktPlant.PlantCode）"),
+            new TranslationSeedItem("entity.storagelocation.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（冗余；选项 TaktPlants/options，DictValue=PlantCode）"),
             // entity.storagelocation.plantcode
-            new TranslationSeedItem("entity.storagelocation.plantcode", "zh-CN", "工厂代码", "工厂代码（冗余字段，便于查询；关联 TaktPlant.PlantCode）"),
+            new TranslationSeedItem("entity.storagelocation.plantcode", "zh-CN", "工厂代码", "工厂代码（冗余；选项 TaktPlants/options，DictValue=PlantCode）"),
             // entity.storagelocation.plantcode
-            new TranslationSeedItem("entity.storagelocation.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（冗余字段，便于查询；关联 TaktPlant.PlantCode）"),
+            new TranslationSeedItem("entity.storagelocation.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（冗余；选项 TaktPlants/options，DictValue=PlantCode）"),
 
             // entity.storagelocation.warehousecode
-            new TranslationSeedItem("entity.storagelocation.warehousecode", "en-US", "仓库编码_us", "仓库编码（冗余字段，便于查询；关联 TaktWarehouse.WarehouseCode）"),
+            new TranslationSeedItem("entity.storagelocation.warehousecode", "en-US", "存货地点编码_us", "仓库编码（冗余；关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）"),
             // entity.storagelocation.warehousecode
-            new TranslationSeedItem("entity.storagelocation.warehousecode", "ja-JP", "仓库编码_jp", "仓库编码（冗余字段，便于查询；关联 TaktWarehouse.WarehouseCode）"),
+            new TranslationSeedItem("entity.storagelocation.warehousecode", "ja-JP", "存货地点编码_jp", "仓库编码（冗余；关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）"),
             // entity.storagelocation.warehousecode
-            new TranslationSeedItem("entity.storagelocation.warehousecode", "zh-CN", "仓库编码", "仓库编码（冗余字段，便于查询；关联 TaktWarehouse.WarehouseCode）"),
+            new TranslationSeedItem("entity.storagelocation.warehousecode", "zh-CN", "存货地点编码", "仓库编码（冗余；关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）"),
             // entity.storagelocation.warehousecode
-            new TranslationSeedItem("entity.storagelocation.warehousecode", "zh-HK", "仓库编码_hk", "仓库编码（冗余字段，便于查询；关联 TaktWarehouse.WarehouseCode）"),
+            new TranslationSeedItem("entity.storagelocation.warehousecode", "zh-HK", "存货地点编码_hk", "仓库编码（冗余；关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）"),
 
             // entity.storagelocation.locationcode
-            new TranslationSeedItem("entity.storagelocation.locationcode", "en-US", "库位编码_us", "库位编码（租户+公司+工厂+仓库内唯一；序列号入出库等业务表存此编码）"),
+            new TranslationSeedItem("entity.storagelocation.locationcode", "en-US", "库位编码_us", "库位编码（40，租户+公司+工厂+仓库内唯一；序列号入出库等业务表存此编码）"),
             // entity.storagelocation.locationcode
-            new TranslationSeedItem("entity.storagelocation.locationcode", "ja-JP", "库位编码_jp", "库位编码（租户+公司+工厂+仓库内唯一；序列号入出库等业务表存此编码）"),
+            new TranslationSeedItem("entity.storagelocation.locationcode", "ja-JP", "库位编码_jp", "库位编码（40，租户+公司+工厂+仓库内唯一；序列号入出库等业务表存此编码）"),
             // entity.storagelocation.locationcode
-            new TranslationSeedItem("entity.storagelocation.locationcode", "zh-CN", "库位编码", "库位编码（租户+公司+工厂+仓库内唯一；序列号入出库等业务表存此编码）"),
+            new TranslationSeedItem("entity.storagelocation.locationcode", "zh-CN", "库位编码", "库位编码（40，租户+公司+工厂+仓库内唯一；序列号入出库等业务表存此编码）"),
             // entity.storagelocation.locationcode
-            new TranslationSeedItem("entity.storagelocation.locationcode", "zh-HK", "库位编码_hk", "库位编码（租户+公司+工厂+仓库内唯一；序列号入出库等业务表存此编码）"),
+            new TranslationSeedItem("entity.storagelocation.locationcode", "zh-HK", "库位编码_hk", "库位编码（40，租户+公司+工厂+仓库内唯一；序列号入出库等业务表存此编码）"),
 
             // entity.storagelocation.locationname
             new TranslationSeedItem("entity.storagelocation.locationname", "en-US", "库位名称_us", "库位名称"),
@@ -136,31 +136,22 @@ public class TaktStorageLocationI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.storagelocation.locationname", "zh-HK", "库位名称_hk", "库位名称"),
 
             // entity.storagelocation.locationtype
-            new TranslationSeedItem("entity.storagelocation.locationtype", "en-US", "库位类型_us", "库位类型（0=存储区，1=拣货区，2=暂存区，3=不良品区，4=其他）"),
+            new TranslationSeedItem("entity.storagelocation.locationtype", "en-US", "库位类型_us", "库位类型（字典 logistics_storage_location_type）"),
             // entity.storagelocation.locationtype
-            new TranslationSeedItem("entity.storagelocation.locationtype", "ja-JP", "库位类型_jp", "库位类型（0=存储区，1=拣货区，2=暂存区，3=不良品区，4=其他）"),
+            new TranslationSeedItem("entity.storagelocation.locationtype", "ja-JP", "库位类型_jp", "库位类型（字典 logistics_storage_location_type）"),
             // entity.storagelocation.locationtype
-            new TranslationSeedItem("entity.storagelocation.locationtype", "zh-CN", "库位类型", "库位类型（0=存储区，1=拣货区，2=暂存区，3=不良品区，4=其他）"),
+            new TranslationSeedItem("entity.storagelocation.locationtype", "zh-CN", "库位类型", "库位类型（字典 logistics_storage_location_type）"),
             // entity.storagelocation.locationtype
-            new TranslationSeedItem("entity.storagelocation.locationtype", "zh-HK", "库位类型_hk", "库位类型（0=存储区，1=拣货区，2=暂存区，3=不良品区，4=其他）"),
-
-            // entity.storagelocation.locationstatus
-            new TranslationSeedItem("entity.storagelocation.locationstatus", "en-US", "库位状态_us", "库位状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
-            // entity.storagelocation.locationstatus
-            new TranslationSeedItem("entity.storagelocation.locationstatus", "ja-JP", "库位状态_jp", "库位状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
-            // entity.storagelocation.locationstatus
-            new TranslationSeedItem("entity.storagelocation.locationstatus", "zh-CN", "库位状态", "库位状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
-            // entity.storagelocation.locationstatus
-            new TranslationSeedItem("entity.storagelocation.locationstatus", "zh-HK", "库位状态_hk", "库位状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.storagelocation.locationtype", "zh-HK", "库位类型_hk", "库位类型（字典 logistics_storage_location_type）"),
 
             // entity.storagelocation.isbuiltin
-            new TranslationSeedItem("entity.storagelocation.isbuiltin", "en-US", "是否内置_us", "是否内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）"),
+            new TranslationSeedItem("entity.storagelocation.isbuiltin", "en-US", "内置_us", "内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）"),
             // entity.storagelocation.isbuiltin
-            new TranslationSeedItem("entity.storagelocation.isbuiltin", "ja-JP", "是否内置_jp", "是否内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）"),
+            new TranslationSeedItem("entity.storagelocation.isbuiltin", "ja-JP", "内置_jp", "内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）"),
             // entity.storagelocation.isbuiltin
-            new TranslationSeedItem("entity.storagelocation.isbuiltin", "zh-CN", "是否内置", "是否内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）"),
+            new TranslationSeedItem("entity.storagelocation.isbuiltin", "zh-CN", "内置", "内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）"),
             // entity.storagelocation.isbuiltin
-            new TranslationSeedItem("entity.storagelocation.isbuiltin", "zh-HK", "是否内置_hk", "是否内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）"),
+            new TranslationSeedItem("entity.storagelocation.isbuiltin", "zh-HK", "内置_hk", "内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）"),
 
             // entity.storagelocation.sortorder
             new TranslationSeedItem("entity.storagelocation.sortorder", "en-US", "排序号_us", "排序号（越小越靠前）"),
@@ -170,6 +161,15 @@ public class TaktStorageLocationI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.storagelocation.sortorder", "zh-CN", "排序号", "排序号（越小越靠前）"),
             // entity.storagelocation.sortorder
             new TranslationSeedItem("entity.storagelocation.sortorder", "zh-HK", "排序号_hk", "排序号（越小越靠前）"),
+
+            // entity.storagelocation.locationstatus
+            new TranslationSeedItem("entity.storagelocation.locationstatus", "en-US", "库位状态_us", "库位状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）"),
+            // entity.storagelocation.locationstatus
+            new TranslationSeedItem("entity.storagelocation.locationstatus", "ja-JP", "库位状态_jp", "库位状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）"),
+            // entity.storagelocation.locationstatus
+            new TranslationSeedItem("entity.storagelocation.locationstatus", "zh-CN", "库位状态", "库位状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）"),
+            // entity.storagelocation.locationstatus
+            new TranslationSeedItem("entity.storagelocation.locationstatus", "zh-HK", "库位状态_hk", "库位状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）"),
 
             // entity.storagelocation.warehouse
             new TranslationSeedItem("entity.storagelocation.warehouse", "en-US", "所属仓库_us", "所属仓库（主子表关系）"),

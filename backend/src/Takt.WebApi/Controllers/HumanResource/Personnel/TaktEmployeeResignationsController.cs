@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.HumanResource.Personnel
 // 文件名称：TaktEmployeeResignationsController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：员工离职控制器
 // 
@@ -41,7 +41,7 @@ public class TaktEmployeeResignationsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("human:resource:personnel:employeeresignation:list", "员工离职列表")]
+    [TaktPermission("human:resource:personnel:employee:resignation:list", "员工离职列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetEmployeeResignationListAsync([FromQuery] TaktEmployeeResignationQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktEmployeeResignationsController : TaktControllerBase
     /// </summary>
     /// <param name="id">员工离职ID</param>
     /// <returns>员工离职DTO</returns>
-    [TaktPermission("human:resource:personnel:employeeresignation:query", "员工离职详情")]
+    [TaktPermission("human:resource:personnel:employee:resignation:query", "员工离职详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetEmployeeResignationByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktEmployeeResignationsController : TaktControllerBase
     /// 获取员工离职选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("human:resource:personnel:employeeresignation:query", "员工离职选项")]
+    [TaktPermission("human:resource:personnel:employee:resignation:query", "员工离职选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetEmployeeResignationOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktEmployeeResignationsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>员工离职DTO</returns>
-    [TaktPermission("human:resource:personnel:employeeresignation:create", "创建员工离职")]
+    [TaktPermission("human:resource:personnel:employee:resignation:create", "创建员工离职")]
     [HttpPost]
     public async Task<IActionResult> CreateEmployeeResignationAsync([FromBody] TaktEmployeeResignationCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktEmployeeResignationsController : TaktControllerBase
     /// <param name="id">员工离职ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>员工离职DTO</returns>
-    [TaktPermission("human:resource:personnel:employeeresignation:update", "更新员工离职")]
+    [TaktPermission("human:resource:personnel:employee:resignation:update", "更新员工离职")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateEmployeeResignationAsync(long id, [FromBody] TaktEmployeeResignationUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktEmployeeResignationsController : TaktControllerBase
     /// </summary>
     /// <param name="id">员工离职ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("human:resource:personnel:employeeresignation:delete", "删除员工离职")]
+    [TaktPermission("human:resource:personnel:employee:resignation:delete", "删除员工离职")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteEmployeeResignationByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktEmployeeResignationsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("human:resource:personnel:employeeresignation:delete", "批量删除员工离职")]
+    [TaktPermission("human:resource:personnel:employee:resignation:delete", "批量删除员工离职")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteEmployeeResignationBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktEmployeeResignationsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("human:resource:personnel:employeeresignation:import", "获取员工离职导入模板")]
+    [TaktPermission("human:resource:personnel:employee:resignation:import", "获取员工离职导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetEmployeeResignationTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -204,7 +204,7 @@ public class TaktEmployeeResignationsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("human:resource:personnel:employeeresignation:import", "导入员工离职")]
+    [TaktPermission("human:resource:personnel:employee:resignation:import", "导入员工离职")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportEmployeeResignationAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -234,7 +234,7 @@ public class TaktEmployeeResignationsController : TaktControllerBase
     /// 导出员工离职
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("human:resource:personnel:employeeresignation:export", "导出员工离职")]
+    [TaktPermission("human:resource:personnel:employee:resignation:export", "导出员工离职")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportEmployeeResignationAsync([FromQuery] TaktEmployeeResignationQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

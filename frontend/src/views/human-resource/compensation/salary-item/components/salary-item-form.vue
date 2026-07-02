@@ -10,6 +10,7 @@
 <template>
   <a-form
     ref="formRef"
+    class="takt-generated-form"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -34,8 +35,9 @@
                 <a-input
                   v-model:value="formState.tenantCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -47,8 +49,9 @@
                 <a-input
                   v-model:value="formState.companyCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -60,8 +63,9 @@
                 <a-input
                   v-model:value="formState.companyDefaultCulture"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -73,8 +77,10 @@
                 <a-input
                   v-model:value="formState.itemCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salaryitem.itemcode') })"
-                  size="small"
+                  show-count
+                  :maxlength="40"
                   allow-clear
+                  :disabled="!!formData?.salaryItemId"
                 />
               </a-form-item>
             </a-col>
@@ -86,7 +92,8 @@
                 <a-input
                   v-model:value="formState.itemName"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salaryitem.itemname') })"
-                  size="small"
+                  show-count
+                  :maxlength="80"
                   allow-clear
                 />
               </a-form-item>
@@ -99,7 +106,8 @@
                 <a-input
                   v-model:value="formState.shortName"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salaryitem.shortname') })"
-                  size="small"
+                  show-count
+                  :maxlength="40"
                   allow-clear
                 />
               </a-form-item>
@@ -113,7 +121,6 @@
                   v-model:value="formState.itemType"
                   dict-type="hr_salary_item_type"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salaryitem.itemtype') })"
-                  size="small"
                 />
               </a-form-item>
             </a-col>
@@ -126,7 +133,6 @@
                   v-model:value="formState.calcMethod"
                   dict-type="hr_salary_calc_method_type"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salaryitem.calcmethod') })"
-                  size="small"
                 />
               </a-form-item>
             </a-col>
@@ -138,7 +144,8 @@
                 <a-input
                   v-model:value="formState.salaryFormulaId"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salaryitem.salaryformulaid') })"
-                  size="small"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
@@ -151,7 +158,6 @@
                 <a-input-number
                   v-model:value="formState.defaultAmount"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salaryitem.defaultamount') })"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -174,7 +180,6 @@
                 <a-input-number
                   v-model:value="formState.defaultRate"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salaryitem.defaultrate') })"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -187,7 +192,6 @@
                 <a-input-number
                   v-model:value="formState.strikePrice"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salaryitem.strikeprice') })"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -200,7 +204,6 @@
                 <a-input-number
                   v-model:value="formState.vestingYears"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salaryitem.vestingyears') })"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -214,7 +217,6 @@
                   v-model:value="formState.isDeduction"
                   dict-type="sys_yes_no_type"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salaryitem.isdeduction') })"
-                  size="small"
                 />
               </a-form-item>
             </a-col>
@@ -227,7 +229,6 @@
                   v-model:value="formState.isTaxable"
                   dict-type="sys_yes_no_type"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salaryitem.istaxable') })"
-                  size="small"
                 />
               </a-form-item>
             </a-col>
@@ -240,7 +241,6 @@
                   v-model:value="formState.includeSocialSecurityBase"
                   dict-type="sys_yes_no_type"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salaryitem.includesocialsecuritybase') })"
-                  size="small"
                 />
               </a-form-item>
             </a-col>
@@ -253,20 +253,6 @@
                   v-model:value="formState.includeHousingFundBase"
                   dict-type="sys_yes_no_type"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salaryitem.includehousingfundbase') })"
-                  size="small"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.salaryitem.sortorder')"
-                name="sortOrder"
-              >
-                <a-input-number
-                  v-model:value="formState.sortOrder"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salaryitem.sortorder') })"
-                  size="small"
-                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
@@ -279,7 +265,6 @@
                   v-model:value="formState.itemStatus"
                   dict-type="sys_normal_disable_status"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salaryitem.itemstatus') })"
-                  size="small"
                 />
               </a-form-item>
             </a-col>
@@ -291,7 +276,34 @@
                 <a-input
                   v-model:value="formState.relatedPlant"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salaryitem.relatedplant') })"
-                  size="small"
+                  show-count
+                  :maxlength="4"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                name="extField"
+                class="takt-form-item-ext-field"
+              >
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t('common.page.entity.extfieldhint')"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ t('common.page.entity.extfield') }}</span>
+                  </span>
+                </template>
+                <a-textarea
+                  v-model:value="formState.extField"
+                  :placeholder="t('common.page.form.placeholder.extfield')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
                   allow-clear
                 />
               </a-form-item>
@@ -306,19 +318,6 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.ExtField')"
-                name="ExtField"
-              >
-                <a-input
-                  v-model:value="formState.ExtField"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
-                  size="small"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
             <a-col :span="24">
               <a-form-item
                 :label="t('common.page.entity.remark')"
@@ -327,15 +326,16 @@
                 <a-textarea
                   v-model:value="formState.remark"
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                  :rows="2"
-                  size="small"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
           </a-row>
         </div>
       </a-tab-pane>
-
     </a-tabs>
   </a-form>
 </template>
@@ -345,11 +345,13 @@
  * 薪资项目维护表单 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/human-resource/compensation/salary-item/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import type { SalaryItemCreate } from '@/types/human-resource/compensation/salary-item'
 import TaktSelect from '@/components/business/takt-select/index.vue'
+import { RiQuestionLine } from '@remixicon/vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -382,7 +384,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","itemCode","itemName","shortName","itemType","calcMethod","salaryFormulaId","defaultAmount","defaultRate","strikePrice","vestingYears","isDeduction","isTaxable","includeSocialSecurityBase","includeHousingFundBase","sortOrder","itemStatus","relatedPlant","ExtField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","itemCode","itemName","shortName","itemType","calcMethod","salaryFormulaId","defaultAmount","defaultRate","strikePrice","vestingYears","isDeduction","isTaxable","includeSocialSecurityBase","includeHousingFundBase","itemStatus","relatedPlant","extField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -393,7 +395,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  formData: () => ({}),
+  formData: null,
   loading: false,
 })
 
@@ -401,18 +403,47 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
+/** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
+const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  itemType: 1,
+  calcMethod: 1
+}
 
-/** 编辑态灌入 formData；新增态 reset */
+/** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  Object.assign(target, FORM_FIELD_DEFAULTS)
+}
+
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载全量字典 */
+onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
+})
+
+/** 编辑态灌入 formData；新增态恢复默认值（须含 salaryItemId 才视为编辑） */
 watch(
   () => props.formData,
   (val) => {
-    const next = val ? { ...val } : {}
-    Object.keys(formState).forEach((k) => delete formState[k])
+    if (val?.salaryItemId) {
+      const next = { ...val } as Record<string, unknown>
+      Object.keys(formState).forEach((k) => delete formState[k])
 
-    applyScopeDefaults(next)
-    Object.assign(formState, next)
+      applyScopeDefaults(next)
+      Object.assign(formState, next)
+      formRef.value?.clearValidate()
+    } else {
+      Object.keys(formState).forEach((k) => delete formState[k])
+      if (val && typeof val === 'object' && Object.keys(val).length > 0) {
+        Object.assign(formState, val)
+      }
+      applyFormDefaults(formState)
+      applyScopeDefaults(formState as Record<string, unknown>, true)
+      formRef.value?.clearValidate()
+    }
   },
-  { immediate: true, deep: true }
+  { immediate: true }
 )
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
@@ -442,90 +473,149 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
-  itemType: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.salaryitem.itemtype') }),
-      trigger: 'change'
-    }
-  ],
-  calcMethod: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.salaryitem.calcmethod') }),
-      trigger: 'change'
-    }
-  ],
-  defaultAmount: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.salaryitem.defaultamount') }),
-      trigger: 'change'
-    }
-  ],
-  defaultRate: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.salaryitem.defaultrate') }),
-      trigger: 'change'
-    }
-  ],
-  strikePrice: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.salaryitem.strikeprice') }),
-      trigger: 'change'
-    }
-  ],
-  vestingYears: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.salaryitem.vestingyears') }),
-      trigger: 'change'
-    }
-  ],
-  isDeduction: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.salaryitem.isdeduction') }),
-      trigger: 'change'
-    }
-  ],
-  isTaxable: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.salaryitem.istaxable') }),
-      trigger: 'change'
-    }
-  ],
-  includeSocialSecurityBase: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.salaryitem.includesocialsecuritybase') }),
-      trigger: 'change'
-    }
-  ],
-  includeHousingFundBase: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.salaryitem.includehousingfundbase') }),
-      trigger: 'change'
-    }
-  ],
-  sortOrder: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.salaryitem.sortorder') }),
-      trigger: 'change'
-    }
-  ],
-  itemStatus: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.salaryitem.itemstatus') }),
-      trigger: 'change'
-    }
-  ],
+  itemType: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salaryitem.itemtype') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salaryitem.itemtype') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  calcMethod: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salaryitem.calcmethod') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salaryitem.calcmethod') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  defaultAmount: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salaryitem.defaultamount') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salaryitem.defaultamount') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  defaultRate: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salaryitem.defaultrate') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salaryitem.defaultrate') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  strikePrice: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salaryitem.strikeprice') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salaryitem.strikeprice') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  vestingYears: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salaryitem.vestingyears') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salaryitem.vestingyears') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  isDeduction: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salaryitem.isdeduction') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salaryitem.isdeduction') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  isTaxable: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salaryitem.istaxable') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salaryitem.istaxable') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  includeSocialSecurityBase: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salaryitem.includesocialsecuritybase') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salaryitem.includesocialsecuritybase') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  includeHousingFundBase: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salaryitem.includehousingfundbase') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salaryitem.includehousingfundbase') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  itemStatus: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salaryitem.itemstatus') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salaryitem.itemstatus') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -536,15 +626,66 @@ async function validate() {
 
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
-  return { ...formState }
+  const payload = { ...formState }
+  if ('itemType' in payload) {
+    const rawitemType = payload.itemType
+    payload.itemType = typeof rawitemType === 'number' ? rawitemType : Number(rawitemType)
+  }
+  if ('calcMethod' in payload) {
+    const rawcalcMethod = payload.calcMethod
+    payload.calcMethod = typeof rawcalcMethod === 'number' ? rawcalcMethod : Number(rawcalcMethod)
+  }
+  if ('defaultAmount' in payload) {
+    const rawdefaultAmount = payload.defaultAmount
+    payload.defaultAmount = typeof rawdefaultAmount === 'number' ? rawdefaultAmount : Number(rawdefaultAmount)
+  }
+  if ('defaultRate' in payload) {
+    const rawdefaultRate = payload.defaultRate
+    payload.defaultRate = typeof rawdefaultRate === 'number' ? rawdefaultRate : Number(rawdefaultRate)
+  }
+  if ('strikePrice' in payload) {
+    const rawstrikePrice = payload.strikePrice
+    payload.strikePrice = typeof rawstrikePrice === 'number' ? rawstrikePrice : Number(rawstrikePrice)
+  }
+  if ('vestingYears' in payload) {
+    const rawvestingYears = payload.vestingYears
+    payload.vestingYears = typeof rawvestingYears === 'number' ? rawvestingYears : Number(rawvestingYears)
+  }
+  if ('isDeduction' in payload) {
+    const rawisDeduction = payload.isDeduction
+    payload.isDeduction = typeof rawisDeduction === 'number' ? rawisDeduction : Number(rawisDeduction)
+  }
+  if ('isTaxable' in payload) {
+    const rawisTaxable = payload.isTaxable
+    payload.isTaxable = typeof rawisTaxable === 'number' ? rawisTaxable : Number(rawisTaxable)
+  }
+  if ('includeSocialSecurityBase' in payload) {
+    const rawincludeSocialSecurityBase = payload.includeSocialSecurityBase
+    payload.includeSocialSecurityBase = typeof rawincludeSocialSecurityBase === 'number' ? rawincludeSocialSecurityBase : Number(rawincludeSocialSecurityBase)
+  }
+  if ('includeHousingFundBase' in payload) {
+    const rawincludeHousingFundBase = payload.includeHousingFundBase
+    payload.includeHousingFundBase = typeof rawincludeHousingFundBase === 'number' ? rawincludeHousingFundBase : Number(rawincludeHousingFundBase)
+  }
+  if ('itemStatus' in payload) {
+    const rawitemStatus = payload.itemStatus
+    payload.itemStatus = typeof rawitemStatus === 'number' ? rawitemStatus : Number(rawitemStatus)
+  }
+  if ('sortOrder' in payload) delete payload.sortOrder
+  return payload
 }
 
-/** 重置表单与子表行 */
+/** 重置表单与子表行（弹窗未 destroy 时父级 nextTick 也会调用） */
 function resetFields() {
-  formRef.value?.resetFields()
   Object.keys(formState).forEach((k) => delete formState[k])
+  if (props.formData && typeof props.formData === 'object') {
+    Object.assign(formState, props.formData)
+  }
+  applyFormDefaults(formState)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.salaryItemId)
 
   activeTab.value = 'tab-0'
+  formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Output
 // 文件名称：TaktProductionTeamDtos.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ProductionTeam 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktProductionTeam 生成，请按需审阅）
 // 
@@ -51,40 +51,26 @@ public class TaktProductionTeamDto : TaktCompanyDtoBase
     public string TeamName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 班组分类编码（M=组立，P=PCBA，S=SMT，Q=质检，O=其他）
+    /// 班组分类（字典 logistics_team_category）
     /// </summary>
-    public string? TeamCategory { get; set; } = string.Empty;
+    public string TeamCategory { get; set; } = "A";
 
     /// <summary>
-    /// 班组分类名称（如：组立、PCBA、SMT、质检等）
+    /// 班组长
     /// </summary>
-    public string? TeamCategoryName { get; set; } = string.Empty;
+    [AdaptMember("TeamLeaderName")]
+    public string? TeamLeader { get; set; }
 
     /// <summary>
-    /// 生产线代码（如：SMT1、ASSY1 等，与 TeamCode 区分，TeamCode 可包含班组信息）
+    /// 班次（字典 logistics_shift_category）
     /// </summary>
-    public string? ProductionLine { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 班组长员工Id
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? TeamLeaderId { get; set; }
-
-    /// <summary>
-    /// 班组长姓名
-    /// </summary>
-    public string? TeamLeaderName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 班次（1=早班，2=中班，3=晚班）
-    /// </summary>
-    public int? ShiftNo { get; set; }
+    public int ShiftNo { get; set; } = 1;
 
     /// <summary>
     /// 启用状态（1=启用，0=禁用）
     /// </summary>
-    public int Status { get; set; } = 0;
+    [AdaptMember("Status")]
+    public int ProductionTeamStatus { get; set; } = 0;
 
 }
 
@@ -124,40 +110,26 @@ public class TaktProductionTeamQueryDto : TaktPagedQuery
     public string? TeamName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 班组分类编码（M=组立，P=PCBA，S=SMT，Q=质检，O=其他）
+    /// 班组分类（字典 logistics_team_category）
     /// </summary>
-    public string? TeamCategory { get; set; } = string.Empty;
+    public string? TeamCategory { get; set; }
 
     /// <summary>
-    /// 班组分类名称（如：组立、PCBA、SMT、质检等）
+    /// 班组长
     /// </summary>
-    public string? TeamCategoryName { get; set; } = string.Empty;
+    [AdaptMember("TeamLeaderName")]
+    public string? TeamLeader { get; set; }
 
     /// <summary>
-    /// 生产线代码（如：SMT1、ASSY1 等，与 TeamCode 区分，TeamCode 可包含班组信息）
-    /// </summary>
-    public string? ProductionLine { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 班组长员工Id
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? TeamLeaderId { get; set; }
-
-    /// <summary>
-    /// 班组长姓名
-    /// </summary>
-    public string? TeamLeaderName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 班次（1=早班，2=中班，3=晚班）
+    /// 班次（字典 logistics_shift_category）
     /// </summary>
     public int? ShiftNo { get; set; }
 
     /// <summary>
     /// 启用状态（1=启用，0=禁用）
     /// </summary>
-    public int? Status { get; set; }
+    [AdaptMember("Status")]
+    public int? ProductionTeamStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -200,7 +172,7 @@ public class TaktProductionTeamCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -223,40 +195,28 @@ public class TaktProductionTeamCreateDto
     public string TeamName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 班组分类编码（M=组立，P=PCBA，S=SMT，Q=质检，O=其他）
+    /// 班组分类（字典 logistics_team_category）
     /// </summary>
-    public string? TeamCategory { get; set; } = string.Empty;
+    [Required(ErrorMessage = "班组分类不能为空")]
+    public string TeamCategory { get; set; } = "A";
 
     /// <summary>
-    /// 班组分类名称（如：组立、PCBA、SMT、质检等）
+    /// 班组长
     /// </summary>
-    public string? TeamCategoryName { get; set; } = string.Empty;
+    [AdaptMember("TeamLeaderName")]
+    public string? TeamLeader { get; set; }
 
     /// <summary>
-    /// 生产线代码（如：SMT1、ASSY1 等，与 TeamCode 区分，TeamCode 可包含班组信息）
+    /// 班次（字典 logistics_shift_category）
     /// </summary>
-    public string? ProductionLine { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 班组长员工Id
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? TeamLeaderId { get; set; }
-
-    /// <summary>
-    /// 班组长姓名
-    /// </summary>
-    public string? TeamLeaderName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 班次（1=早班，2=中班，3=晚班）
-    /// </summary>
-    public int? ShiftNo { get; set; }
+    [Required(ErrorMessage = "班次不能为空")]
+    public int ShiftNo { get; set; } = 1;
 
     /// <summary>
     /// 启用状态（1=启用，0=禁用）
     /// </summary>
-    public int Status { get; set; } = 0;
+    [AdaptMember("Status")]
+    public int ProductionTeamStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -311,7 +271,7 @@ public class TaktProductionTeamStatusDto
     /// 启用状态（1=启用，0=禁用）
     /// </summary>
     [Required(ErrorMessage = "启用状态（1=启用，0=禁用）不能为空")]
-    public int Status { get; set; } = 0;
+    public int ProductionTeamStatus { get; set; } = 0;
 }
 
 // ========================================
@@ -349,40 +309,26 @@ public class TaktProductionTeamTemplateDto
     public string? TeamName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 班组分类编码（M=组立，P=PCBA，S=SMT，Q=质检，O=其他）
+    /// 班组分类（字典 logistics_team_category）
     /// </summary>
-    public string? TeamCategory { get; set; } = string.Empty;
+    public string? TeamCategory { get; set; }
 
     /// <summary>
-    /// 班组分类名称（如：组立、PCBA、SMT、质检等）
+    /// 班组长
     /// </summary>
-    public string? TeamCategoryName { get; set; } = string.Empty;
+    [AdaptMember("TeamLeaderName")]
+    public string? TeamLeader { get; set; }
 
     /// <summary>
-    /// 生产线代码（如：SMT1、ASSY1 等，与 TeamCode 区分，TeamCode 可包含班组信息）
-    /// </summary>
-    public string? ProductionLine { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 班组长员工Id
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? TeamLeaderId { get; set; }
-
-    /// <summary>
-    /// 班组长姓名
-    /// </summary>
-    public string? TeamLeaderName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 班次（1=早班，2=中班，3=晚班）
+    /// 班次（字典 logistics_shift_category）
     /// </summary>
     public int? ShiftNo { get; set; }
 
     /// <summary>
     /// 启用状态（1=启用，0=禁用）
     /// </summary>
-    public int? Status { get; set; }
+    [AdaptMember("Status")]
+    public int? ProductionTeamStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -412,7 +358,7 @@ public class TaktProductionTeamImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -432,40 +378,26 @@ public class TaktProductionTeamImportDto
     public string? TeamName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 班组分类编码（M=组立，P=PCBA，S=SMT，Q=质检，O=其他）
+    /// 班组分类（字典 logistics_team_category）
     /// </summary>
-    public string? TeamCategory { get; set; } = string.Empty;
+    public string? TeamCategory { get; set; }
 
     /// <summary>
-    /// 班组分类名称（如：组立、PCBA、SMT、质检等）
+    /// 班组长
     /// </summary>
-    public string? TeamCategoryName { get; set; } = string.Empty;
+    [AdaptMember("TeamLeaderName")]
+    public string? TeamLeader { get; set; }
 
     /// <summary>
-    /// 生产线代码（如：SMT1、ASSY1 等，与 TeamCode 区分，TeamCode 可包含班组信息）
-    /// </summary>
-    public string? ProductionLine { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 班组长员工Id
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? TeamLeaderId { get; set; }
-
-    /// <summary>
-    /// 班组长姓名
-    /// </summary>
-    public string? TeamLeaderName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 班次（1=早班，2=中班，3=晚班）
+    /// 班次（字典 logistics_shift_category）
     /// </summary>
     public int? ShiftNo { get; set; }
 
     /// <summary>
     /// 启用状态（1=启用，0=禁用）
     /// </summary>
-    public int? Status { get; set; }
+    [AdaptMember("Status")]
+    public int? ProductionTeamStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -516,40 +448,26 @@ public class TaktProductionTeamExportDto
     public string TeamName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 班组分类编码（M=组立，P=PCBA，S=SMT，Q=质检，O=其他）
+    /// 班组分类（字典 logistics_team_category）
     /// </summary>
-    public string? TeamCategory { get; set; } = string.Empty;
+    public string TeamCategory { get; set; } = "A";
 
     /// <summary>
-    /// 班组分类名称（如：组立、PCBA、SMT、质检等）
+    /// 班组长
     /// </summary>
-    public string? TeamCategoryName { get; set; } = string.Empty;
+    [AdaptMember("TeamLeaderName")]
+    public string? TeamLeader { get; set; }
 
     /// <summary>
-    /// 生产线代码（如：SMT1、ASSY1 等，与 TeamCode 区分，TeamCode 可包含班组信息）
+    /// 班次（字典 logistics_shift_category）
     /// </summary>
-    public string? ProductionLine { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 班组长员工Id
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? TeamLeaderId { get; set; }
-
-    /// <summary>
-    /// 班组长姓名
-    /// </summary>
-    public string? TeamLeaderName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 班次（1=早班，2=中班，3=晚班）
-    /// </summary>
-    public int? ShiftNo { get; set; }
+    public int ShiftNo { get; set; } = 1;
 
     /// <summary>
     /// 启用状态（1=启用，0=禁用）
     /// </summary>
-    public int Status { get; set; } = 0;
+    [AdaptMember("Status")]
+    public int ProductionTeamStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

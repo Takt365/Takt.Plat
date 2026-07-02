@@ -17,6 +17,7 @@ using Takt.Application.Dtos.Statistics.Logging;
 using Takt.Domain.Entities.Statistics.Logging;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
+using Takt.Shared.Constants;
 using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
@@ -63,8 +64,13 @@ public class TaktOperLogService : TaktServiceBase, ITaktOperLogService
             queryDto.PageIndex,
             queryDto.PageSize,
             predicate);
+        var dtos = data.Adapt<List<TaktOperLogDto>>();
+        foreach (var dto in dtos)
+        {
+            EnrichOperLogDto(dto);
+        }
         return TaktPagedResult<TaktOperLogDto>.Create(
-            data.Adapt<List<TaktOperLogDto>>(),
+            dtos,
             total,
             queryDto.PageIndex,
             queryDto.PageSize);
@@ -82,7 +88,9 @@ public class TaktOperLogService : TaktServiceBase, ITaktOperLogService
         {
             return null;
         }
-        return entity.Adapt<TaktOperLogDto>();
+        var dto = entity.Adapt<TaktOperLogDto>();
+        EnrichOperLogDto(dto);
+        return dto;
     }
 
     /// <summary>
@@ -111,6 +119,7 @@ public class TaktOperLogService : TaktServiceBase, ITaktOperLogService
     public async Task<TaktOperLogDto> CreateOperLogAsync(TaktOperLogCreateDto dto)
     {
         var entity = dto.Adapt<TaktOperLog>();
+        ApplyClientUserAgentProfile(entity);
         entity = await _operLogRepository.CreateAsync(entity);
         return await GetOperLogByIdAsync(entity.Id) ?? entity.Adapt<TaktOperLogDto>();
     }
@@ -129,6 +138,7 @@ public class TaktOperLogService : TaktServiceBase, ITaktOperLogService
             throw new TaktBusinessException("操作日志不存在");
         }
         dto.Adapt(entity);
+        ApplyClientUserAgentProfile(entity);
         await _operLogRepository.UpdateAsync(entity);
         return await GetOperLogByIdAsync(id) ?? throw new TaktBusinessException("操作日志不存在");
     }
@@ -226,7 +236,7 @@ public class TaktOperLogService : TaktServiceBase, ITaktOperLogService
             exp = exp.And(x =>
                 (x.UserName != null && x.UserName.Contains(keywords))
                 || (x.OperModule != null && x.OperModule.Contains(keywords))
-                || SqlFunc.ToString(x.OperType).Contains(keywords)
+                || x.OperType.Contains(keywords)
                 || (x.OperMethod != null && x.OperMethod.Contains(keywords))
                 || (x.RequestMethod != null && x.RequestMethod.Contains(keywords))
                 || (x.OperUrl != null && x.OperUrl.Contains(keywords))
@@ -254,9 +264,10 @@ public class TaktOperLogService : TaktServiceBase, ITaktOperLogService
             exp = exp.And(x => x.OperModule != null && x.OperModule.Contains(queryDto.OperModule));
         }
 
-        if (queryDto?.OperType.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.OperType))
         {
-            exp = exp.And(x => x.OperType == queryDto.OperType);
+            var operType = queryDto.OperType.Trim();
+            exp = exp.And(x => x.OperType == operType);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.OperMethod))
@@ -340,5 +351,43 @@ public class TaktOperLogService : TaktServiceBase, ITaktOperLogService
         }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 列表/详情展示时根据 User-Agent 回填 Browser/Os/DeviceType
+    /// </summary>
+    /// <param name="dto">操作日志 DTO</param>
+    private static void EnrichOperLogDto(TaktOperLogDto dto)
+    {
+        if (string.IsNullOrWhiteSpace(dto.OperType)
+            || string.Equals(dto.OperType, TaktConstants.OperType.Unknown, StringComparison.OrdinalIgnoreCase))
+        {
+            dto.OperType = TaktHttpAuditHelper.ResolveOperType(dto.RequestMethod, dto.OperUrl);
+        }
+
+        if (string.IsNullOrWhiteSpace(dto.OperModule))
+        {
+            dto.OperModule = TaktHttpAuditHelper.ResolveOperModule(dto.OperUrl);
+        }
+
+        dto.OperLocation = TaktHttpAuditHelper.ResolveLocationFromIp(dto.OperIp, dto.OperLocation);
+        (dto.Browser, dto.Os, dto.DeviceType) = TaktUserAgentHelper.FillMissingFromUserAgent(
+            dto.UserAgent,
+            dto.Browser ?? TaktConstants.BrowserType.Unknown,
+            dto.Os ?? TaktConstants.OperatingSystem.Unknown,
+            dto.DeviceType ?? TaktConstants.DeviceType.Unknown);
+    }
+
+    /// <summary>
+    /// 根据 User-Agent 回填 Browser/Os/DeviceType（显式 unknown 时解析）
+    /// </summary>
+    /// <param name="entity">操作日志实体</param>
+    private static void ApplyClientUserAgentProfile(TaktOperLog entity)
+    {
+        (entity.Browser, entity.Os, entity.DeviceType) = TaktUserAgentHelper.FillMissingFromUserAgent(
+            entity.UserAgent,
+            entity.Browser,
+            entity.Os,
+            entity.DeviceType);
     }
 }

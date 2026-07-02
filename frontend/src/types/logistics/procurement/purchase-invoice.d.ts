@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/procurement
 // 文件名称：purchase-invoice.d.ts
-// 创建时间：2026-06-21
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/procurement 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -84,7 +84,7 @@ export interface PurchaseInvoice extends CompanyDtoBase {
   invoiceStatus: number;
 
   /**
-   * 付款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
    */
   paymentMethod: number;
 
@@ -179,7 +179,7 @@ export interface PurchaseInvoiceQuery extends TaktPagedQuery {
   invoiceStatus?: number;
 
   /**
-   * 付款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
    */
   paymentMethod?: number;
 
@@ -228,7 +228,7 @@ export interface PurchaseInvoiceCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -288,7 +288,7 @@ export interface PurchaseInvoiceCreate {
   invoiceStatus: number;
 
   /**
-   * 付款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
    */
   paymentMethod: number;
 
@@ -391,12 +391,37 @@ export interface PurchaseInvoiceTemplate {
   supplierName?: string;
 
   /**
+   * 开票日期
+   */
+  invoiceDate?: string;
+
+  /**
+   * 发票总金额
+   */
+  totalAmount?: number;
+
+  /**
+   * 税费
+   */
+  taxAmount?: number;
+
+  /**
+   * 发票应付金额
+   */
+  actualAmount?: number;
+
+  /**
+   * 已付款金额
+   */
+  paidAmount?: number;
+
+  /**
    * 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
    */
   invoiceStatus?: number;
 
   /**
-   * 付款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
    */
   paymentMethod?: number;
 
@@ -404,6 +429,11 @@ export interface PurchaseInvoiceTemplate {
    * 税务发票号码
    */
   taxInvoiceNo?: string;
+
+  /**
+   * 采购发票明细列表（主子表关系，一张发票可有多个明细行）（子表，级联保存）
+   */
+  items?: PurchaseInvoiceItemCreate[];
 
   /**
    * 扩展字段JSON
@@ -435,7 +465,7 @@ export interface PurchaseInvoiceImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -465,12 +495,37 @@ export interface PurchaseInvoiceImport {
   supplierName?: string;
 
   /**
+   * 开票日期
+   */
+  invoiceDate?: string;
+
+  /**
+   * 发票总金额
+   */
+  totalAmount?: number;
+
+  /**
+   * 税费
+   */
+  taxAmount?: number;
+
+  /**
+   * 发票应付金额
+   */
+  actualAmount?: number;
+
+  /**
+   * 已付款金额
+   */
+  paidAmount?: number;
+
+  /**
    * 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
    */
   invoiceStatus?: number;
 
   /**
-   * 付款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
    */
   paymentMethod?: number;
 
@@ -478,6 +533,11 @@ export interface PurchaseInvoiceImport {
    * 税务发票号码
    */
   taxInvoiceNo?: string;
+
+  /**
+   * 采购发票明细列表（主子表关系，一张发票可有多个明细行）（子表，级联保存）
+   */
+  items?: PurchaseInvoiceItemCreate[];
 
   /**
    * 扩展字段JSON
@@ -564,7 +624,7 @@ export interface PurchaseInvoiceExport {
   invoiceStatus: number;
 
   /**
-   * 付款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
    */
   paymentMethod: number;
 

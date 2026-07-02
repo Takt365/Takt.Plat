@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/sales
 // 文件名称：client.d.ts
-// 创建时间：2026-06-20
+// 创建时间：2026-07-01
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface Client extends CompanyDtoBase {
   clientId: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -49,7 +49,7 @@ export interface Client extends CompanyDtoBase {
   clientShortName?: string;
 
   /**
-   * 客户端类型（字典 logistics_client_category；0=终端客户，1=分销商，2=零售商，3=电商平台，4=其他）
+   * 客户端类型（字典 logistics_client_category；0=终端客户 1=分销商 2=零售商 3=电商平台 4=其他）
    */
   clientType: number;
 
@@ -62,6 +62,11 @@ export interface Client extends CompanyDtoBase {
    * 客户端标识（税务登记证号/统一社会信用代码）
    */
   clientTaxNumber?: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等）
+   */
+  taxRate: number;
 
   /**
    * 注册国家（ISO 3166-1 alpha-2两位代码）
@@ -124,12 +129,12 @@ export interface Client extends CompanyDtoBase {
   currencyCode: string;
 
   /**
-   * 付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
+   * 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
    */
-  paymentTerms: number;
+  paymentTerms: string;
 
   /**
-   * 销售渠道（字典 logistics_sales_channel_type；0=直销，1=经销，2=代销，3=电商，4=其他）
+   * 销售渠道（字典 logistics_sales_channel_type；0=直销 1=经销 2=代销 3=电商 4=其他）
    */
   salesChannel: number;
 
@@ -144,7 +149,7 @@ export interface Client extends CompanyDtoBase {
   storeName?: string;
 
   /**
-   * 客户端等级（字典 logistics_customer_level_category；0=普通，1=重要，2=VIP，3=战略）
+   * 客户端等级（字典 logistics_customer_level_category；0=普通 1=重要 2=VIP 3=战略）
    */
   clientLevel: number;
 
@@ -154,19 +159,14 @@ export interface Client extends CompanyDtoBase {
   evaluationScore: number;
 
   /**
-   * 是否合格客户端（0=否，1=是）
-   */
-  isQualified: number;
-
-  /**
-   * 客户端状态（1=启用，0=禁用）
-   */
-  clientStatus: number;
-
-  /**
    * 排序号（越小越靠前）
    */
   sortOrder: number;
+
+  /**
+   * 客户端状态（字典 sys_normal_disable_status）
+   */
+  clientStatus: number;
 
 }
 
@@ -189,7 +189,7 @@ export interface ClientQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -209,7 +209,7 @@ export interface ClientQuery extends TaktPagedQuery {
   clientShortName?: string;
 
   /**
-   * 客户端类型（字典 logistics_client_category；0=终端客户，1=分销商，2=零售商，3=电商平台，4=其他）
+   * 客户端类型（字典 logistics_client_category；0=终端客户 1=分销商 2=零售商 3=电商平台 4=其他）
    */
   clientType?: number;
 
@@ -222,6 +222,11 @@ export interface ClientQuery extends TaktPagedQuery {
    * 客户端标识（税务登记证号/统一社会信用代码）
    */
   clientTaxNumber?: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等）
+   */
+  taxRate?: number;
 
   /**
    * 注册国家（ISO 3166-1 alpha-2两位代码）
@@ -284,12 +289,12 @@ export interface ClientQuery extends TaktPagedQuery {
   currencyCode?: string;
 
   /**
-   * 付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
+   * 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
    */
-  paymentTerms?: number;
+  paymentTerms?: string;
 
   /**
-   * 销售渠道（字典 logistics_sales_channel_type；0=直销，1=经销，2=代销，3=电商，4=其他）
+   * 销售渠道（字典 logistics_sales_channel_type；0=直销 1=经销 2=代销 3=电商 4=其他）
    */
   salesChannel?: number;
 
@@ -304,7 +309,7 @@ export interface ClientQuery extends TaktPagedQuery {
   storeName?: string;
 
   /**
-   * 客户端等级（字典 logistics_customer_level_category；0=普通，1=重要，2=VIP，3=战略）
+   * 客户端等级（字典 logistics_customer_level_category；0=普通 1=重要 2=VIP 3=战略）
    */
   clientLevel?: number;
 
@@ -314,19 +319,14 @@ export interface ClientQuery extends TaktPagedQuery {
   evaluationScore?: number;
 
   /**
-   * 是否合格客户端（0=否，1=是）
-   */
-  isQualified?: number;
-
-  /**
-   * 客户端状态（1=启用，0=禁用）
-   */
-  clientStatus?: number;
-
-  /**
    * 排序号（越小越靠前）
    */
   sortOrder?: number;
+
+  /**
+   * 客户端状态（字典 sys_normal_disable_status）
+   */
+  clientStatus?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -368,12 +368,12 @@ export interface ClientCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -393,7 +393,7 @@ export interface ClientCreate {
   clientShortName?: string;
 
   /**
-   * 客户端类型（字典 logistics_client_category；0=终端客户，1=分销商，2=零售商，3=电商平台，4=其他）
+   * 客户端类型（字典 logistics_client_category；0=终端客户 1=分销商 2=零售商 3=电商平台 4=其他）
    */
   clientType: number;
 
@@ -406,6 +406,11 @@ export interface ClientCreate {
    * 客户端标识（税务登记证号/统一社会信用代码）
    */
   clientTaxNumber?: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等）
+   */
+  taxRate: number;
 
   /**
    * 注册国家（ISO 3166-1 alpha-2两位代码）
@@ -468,12 +473,12 @@ export interface ClientCreate {
   currencyCode: string;
 
   /**
-   * 付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
+   * 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
    */
-  paymentTerms: number;
+  paymentTerms: string;
 
   /**
-   * 销售渠道（字典 logistics_sales_channel_type；0=直销，1=经销，2=代销，3=电商，4=其他）
+   * 销售渠道（字典 logistics_sales_channel_type；0=直销 1=经销 2=代销 3=电商 4=其他）
    */
   salesChannel: number;
 
@@ -488,7 +493,7 @@ export interface ClientCreate {
   storeName?: string;
 
   /**
-   * 客户端等级（字典 logistics_customer_level_category；0=普通，1=重要，2=VIP，3=战略）
+   * 客户端等级（字典 logistics_customer_level_category；0=普通 1=重要 2=VIP 3=战略）
    */
   clientLevel: number;
 
@@ -498,12 +503,7 @@ export interface ClientCreate {
   evaluationScore: number;
 
   /**
-   * 是否合格客户端（0=否，1=是）
-   */
-  isQualified: number;
-
-  /**
-   * 客户端状态（1=启用，0=禁用）
+   * 客户端状态（字典 sys_normal_disable_status）
    */
   clientStatus: number;
 
@@ -547,7 +547,7 @@ export interface ClientStatus {
   clientId: string;
 
   /**
-   * 客户端状态（1=启用，0=禁用）
+   * 客户端状态（字典 sys_normal_disable_status）
    */
   clientStatus: number;
 
@@ -590,7 +590,7 @@ export interface ClientTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -610,7 +610,7 @@ export interface ClientTemplate {
   clientShortName?: string;
 
   /**
-   * 客户端类型（字典 logistics_client_category；0=终端客户，1=分销商，2=零售商，3=电商平台，4=其他）
+   * 客户端类型（字典 logistics_client_category；0=终端客户 1=分销商 2=零售商 3=电商平台 4=其他）
    */
   clientType?: number;
 
@@ -623,6 +623,11 @@ export interface ClientTemplate {
    * 客户端标识（税务登记证号/统一社会信用代码）
    */
   clientTaxNumber?: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等）
+   */
+  taxRate?: number;
 
   /**
    * 注册国家（ISO 3166-1 alpha-2两位代码）
@@ -648,6 +653,76 @@ export interface ClientTemplate {
    * 客户端电话
    */
   clientPhone?: string;
+
+  /**
+   * 客户端传真
+   */
+  clientFax?: string;
+
+  /**
+   * 客户端邮箱
+   */
+  clientEmail?: string;
+
+  /**
+   * 客户端网站
+   */
+  clientWebsite?: string;
+
+  /**
+   * 联系人
+   */
+  contactPerson?: string;
+
+  /**
+   * 联系人电话
+   */
+  contactPhone?: string;
+
+  /**
+   * 联系人邮箱
+   */
+  contactEmail?: string;
+
+  /**
+   * 结算币种代码
+   */
+  currencyCode?: string;
+
+  /**
+   * 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
+   */
+  paymentTerms?: string;
+
+  /**
+   * 销售渠道（字典 logistics_sales_channel_type；0=直销 1=经销 2=代销 3=电商 4=其他）
+   */
+  salesChannel?: number;
+
+  /**
+   * 平台名称（电商平台名称）
+   */
+  platformName?: string;
+
+  /**
+   * 店铺名称
+   */
+  storeName?: string;
+
+  /**
+   * 客户端等级（字典 logistics_customer_level_category；0=普通 1=重要 2=VIP 3=战略）
+   */
+  clientLevel?: number;
+
+  /**
+   * 评价分数（0-100分）
+   */
+  evaluationScore?: number;
+
+  /**
+   * 客户端状态（字典 sys_normal_disable_status）
+   */
+  clientStatus?: number;
 
   /**
    * 扩展字段JSON
@@ -679,12 +754,12 @@ export interface ClientImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -704,7 +779,7 @@ export interface ClientImport {
   clientShortName?: string;
 
   /**
-   * 客户端类型（字典 logistics_client_category；0=终端客户，1=分销商，2=零售商，3=电商平台，4=其他）
+   * 客户端类型（字典 logistics_client_category；0=终端客户 1=分销商 2=零售商 3=电商平台 4=其他）
    */
   clientType?: number;
 
@@ -717,6 +792,11 @@ export interface ClientImport {
    * 客户端标识（税务登记证号/统一社会信用代码）
    */
   clientTaxNumber?: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等）
+   */
+  taxRate?: number;
 
   /**
    * 注册国家（ISO 3166-1 alpha-2两位代码）
@@ -742,6 +822,76 @@ export interface ClientImport {
    * 客户端电话
    */
   clientPhone?: string;
+
+  /**
+   * 客户端传真
+   */
+  clientFax?: string;
+
+  /**
+   * 客户端邮箱
+   */
+  clientEmail?: string;
+
+  /**
+   * 客户端网站
+   */
+  clientWebsite?: string;
+
+  /**
+   * 联系人
+   */
+  contactPerson?: string;
+
+  /**
+   * 联系人电话
+   */
+  contactPhone?: string;
+
+  /**
+   * 联系人邮箱
+   */
+  contactEmail?: string;
+
+  /**
+   * 结算币种代码
+   */
+  currencyCode?: string;
+
+  /**
+   * 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
+   */
+  paymentTerms?: string;
+
+  /**
+   * 销售渠道（字典 logistics_sales_channel_type；0=直销 1=经销 2=代销 3=电商 4=其他）
+   */
+  salesChannel?: number;
+
+  /**
+   * 平台名称（电商平台名称）
+   */
+  platformName?: string;
+
+  /**
+   * 店铺名称
+   */
+  storeName?: string;
+
+  /**
+   * 客户端等级（字典 logistics_customer_level_category；0=普通 1=重要 2=VIP 3=战略）
+   */
+  clientLevel?: number;
+
+  /**
+   * 评价分数（0-100分）
+   */
+  evaluationScore?: number;
+
+  /**
+   * 客户端状态（字典 sys_normal_disable_status）
+   */
+  clientStatus?: number;
 
   /**
    * 扩展字段JSON
@@ -773,7 +923,7 @@ export interface ClientExport {
   companyCode: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -793,7 +943,7 @@ export interface ClientExport {
   clientShortName?: string;
 
   /**
-   * 客户端类型（字典 logistics_client_category；0=终端客户，1=分销商，2=零售商，3=电商平台，4=其他）
+   * 客户端类型（字典 logistics_client_category；0=终端客户 1=分销商 2=零售商 3=电商平台 4=其他）
    */
   clientType: number;
 
@@ -806,6 +956,11 @@ export interface ClientExport {
    * 客户端标识（税务登记证号/统一社会信用代码）
    */
   clientTaxNumber?: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等）
+   */
+  taxRate: number;
 
   /**
    * 注册国家（ISO 3166-1 alpha-2两位代码）
@@ -868,12 +1023,12 @@ export interface ClientExport {
   currencyCode: string;
 
   /**
-   * 付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
+   * 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
    */
-  paymentTerms: number;
+  paymentTerms: string;
 
   /**
-   * 销售渠道（字典 logistics_sales_channel_type；0=直销，1=经销，2=代销，3=电商，4=其他）
+   * 销售渠道（字典 logistics_sales_channel_type；0=直销 1=经销 2=代销 3=电商 4=其他）
    */
   salesChannel: number;
 
@@ -888,7 +1043,7 @@ export interface ClientExport {
   storeName?: string;
 
   /**
-   * 客户端等级（字典 logistics_customer_level_category；0=普通，1=重要，2=VIP，3=战略）
+   * 客户端等级（字典 logistics_customer_level_category；0=普通 1=重要 2=VIP 3=战略）
    */
   clientLevel: number;
 
@@ -898,19 +1053,14 @@ export interface ClientExport {
   evaluationScore: number;
 
   /**
-   * 是否合格客户端（0=否，1=是）
-   */
-  isQualified: number;
-
-  /**
-   * 客户端状态（1=启用，0=禁用）
-   */
-  clientStatus: number;
-
-  /**
    * 排序号（越小越靠前）
    */
   sortOrder: number;
+
+  /**
+   * 客户端状态（字典 sys_normal_disable_status）
+   */
+  clientStatus: number;
 
   /**
    * 扩展字段JSON

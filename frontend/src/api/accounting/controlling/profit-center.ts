@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/accounting/controlling
 // 文件名称：profit-center.ts
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：accounting/controlling 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -159,7 +159,7 @@ export function updateProfitCenterSort(dto: ProfitCenterSort): Promise<ProfitCen
 // ========================================
 
 /**
- * 获取利润中心树形选项列表
+ * 获取利润中心树形选项列表（DictValue 为 ProfitCenterCode，DictLabel 为利润中心名称）
  * @returns {Promise<TaktTreeSelectOption[]>} 树形选项
  */
 export function getProfitCenterTreeOptions(): Promise<TaktTreeSelectOption[]> {

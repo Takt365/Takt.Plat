@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Sales
 // 文件名称：TaktSalesPriceChangeLogI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSalesPriceChangeLog 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktSalesPriceChangeLogI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salespricechangelog._self", "zh-HK", "销售价格变更记录信息_hk", "实体名称"),
 
             // entity.salespricechangelog.salespriceid
-            new TranslationSeedItem("entity.salespricechangelog.salespriceid", "en-US", "销售价格ID_us", "销售价格ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.salespricechangelog.salespriceid", "en-US", "销售价格ID_us", "销售价格（关联 TaktSalesPrice.Id，选项 TaktSalesPrices/options）"),
             // entity.salespricechangelog.salespriceid
-            new TranslationSeedItem("entity.salespricechangelog.salespriceid", "ja-JP", "销售价格ID_jp", "销售价格ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.salespricechangelog.salespriceid", "ja-JP", "销售价格ID_jp", "销售价格（关联 TaktSalesPrice.Id，选项 TaktSalesPrices/options）"),
             // entity.salespricechangelog.salespriceid
-            new TranslationSeedItem("entity.salespricechangelog.salespriceid", "zh-CN", "销售价格ID", "销售价格ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.salespricechangelog.salespriceid", "zh-CN", "销售价格ID", "销售价格（关联 TaktSalesPrice.Id，选项 TaktSalesPrices/options）"),
             // entity.salespricechangelog.salespriceid
-            new TranslationSeedItem("entity.salespricechangelog.salespriceid", "zh-HK", "销售价格ID_hk", "销售价格ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.salespricechangelog.salespriceid", "zh-HK", "销售价格ID_hk", "销售价格（关联 TaktSalesPrice.Id，选项 TaktSalesPrices/options）"),
 
             // entity.salespricechangelog.changefields
             new TranslationSeedItem("entity.salespricechangelog.changefields", "en-US", "变更字段列表_us", "变更字段列表（JSON数组格式，记录同一时间点修改的所有字段及其旧值、新值） 格式：[{\"field\":\"FieldName\",\"description\":\"字段描述\",\"oldValue\":\"旧值\",\"newValue\":\"新值\"}]"),

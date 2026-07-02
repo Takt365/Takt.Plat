@@ -28,18 +28,18 @@ namespace Takt.Domain.Entities.HumanResource.Attendance;
 public class TaktShiftSchedule : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 排班类别（0=部门 1=人员）
+    /// 排班类别（字典 hr_schedule_type；0=部门 1=人员）
     /// </summary>
     [SugarColumn(ColumnName = "schedule_type", ColumnDescription = "排班类别", ColumnDataType = "tinyint", IsNullable = false)]
     public int ScheduleType { get; set; }
     /// <summary>
-    /// 部门 ID（ScheduleType=0 时必填）
+    /// 部门（关联 TaktDept.Id，选项 TaktDepts/tree-options；ScheduleType=0 时必填）
     /// </summary>
     [SugarColumn(ColumnName = "dept_id", ColumnDescription = "部门ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
     /// <summary>
-    /// 员工 ID（ScheduleType=1 时必填）
+    /// 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options；ScheduleType=1 时必填）
     /// </summary>
     [SugarColumn(ColumnName = "employee_id", ColumnDescription = "员工ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -50,14 +50,14 @@ public class TaktShiftSchedule : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "schedule_date", ColumnDescription = "排班日期", ColumnDataType = "date", IsNullable = false)]
     public DateTime ScheduleDate { get; set; }
     /// <summary>
-    /// 班次 ID（<see cref="TaktWorkShift"/>）
+    /// 班次（关联 TaktWorkShift.Id，选项 TaktWorkShifts/options）
     /// </summary>
     [SugarColumn(ColumnName = "shift_id", ColumnDescription = "班次ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ShiftId { get; set; }
     /// <summary>
-    /// 关联工厂
+    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
-    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = true)]
-    public string? RelatedPlant { get; set; }
+    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
+    public string RelatedPlant { get; set; } = string.Empty;
 }

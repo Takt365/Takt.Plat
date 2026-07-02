@@ -1,0 +1,80 @@
+// ========================================
+// 项目名称：节拍工厂·Takt Plat
+// 命名空间：frontend/src/locales/foundation/quartz-task
+// 文件名称：en-US.ts
+// 创建时间：2026-06-28
+// 创建人：Takt365(Cursor AI)
+// 功能描述：foundation/quartz-task cron modal static copy; keys foundation.quartz-task.page.cron.*
+//
+// 版权信息：Copyright (c) 2025 Takt  All rights reserved.
+// 免责声明：此软件 use MIT License.
+// ========================================
+
+export default {
+  page: {
+    cron: {
+      modalTitle: 'Cron Expression',
+      inputPlaceholder: 'Click to configure cron expression',
+      expressionTitle: 'Time Expression',
+      fullExpression: 'Full Cron Expression',
+      ok: 'OK',
+      wildcard: '{unit}, allowed wildcards [, - * /]',
+      rangeFrom: 'Cycle from',
+      rangeTo: 'to',
+      intervalFrom: 'From',
+      intervalEvery: ', every',
+      intervalExecute: ' execute once',
+      specify: 'Specify',
+      nextRuns: 'Next 5 Run Times',
+      noNextRuns: 'Unable to parse current expression',
+      tab: {
+        second: 'Second',
+        minute: 'Minute',
+        hour: 'Hour',
+        day: 'Day',
+        month: 'Month',
+        week: 'Week',
+        year: 'Year',
+      },
+      field: {
+        second: 'Sec',
+        minute: 'Min',
+        hour: 'Hour',
+        day: 'Day',
+        month: 'Month',
+        week: 'Week',
+        year: 'Year',
+      },
+      everySecond: 'Every second',
+      everyMinute: 'Every minute',
+      everyHour: 'Every hour',
+      everyDay: 'Every day',
+      everyMonth: 'Every month',
+      everyYear: 'Every year',
+      everyInterval: 'Every {step} {unit}(s), starting at {start}',
+      specificMulti: 'Specific {unit}(s)',
+      range: 'From {start} to {end} {unit}(s)',
+      everyWeekInterval: 'Every {step} week(s), starting at week {start}',
+      specificWeek: 'Specific weekday(s)',
+      specificDay: 'Specific day(s) of month',
+      lastDayOfMonth: 'Last day of month',
+      lastWorkdayOfMonth: 'Last weekday of month',
+      lastWeekdayOfMonth: 'Last {weekday} of month',
+      daysBeforeMonthEnd: '{days} day(s) before month end',
+      nearestWeekday: 'Nearest weekday to day {day} of month',
+      nthWeekday: 'The {nth} {weekday} of month',
+      monthRange: 'Every month from {start} to {end}',
+      yearRange: 'Every year from {start} to {end}',
+      selectPlaceholder: 'Select',
+      weekday: {
+        mon: 'Monday',
+        tue: 'Tuesday',
+        wed: 'Wednesday',
+        thu: 'Thursday',
+        fri: 'Friday',
+        sat: 'Saturday',
+        sun: 'Sunday',
+      },
+    },
+  },
+}

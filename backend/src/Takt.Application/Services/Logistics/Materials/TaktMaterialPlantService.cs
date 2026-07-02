@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Materials
 // 文件名称：TaktMaterialPlantService.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-30
 // 创建人：Takt365(Cursor AI)
 // 功能描述：工厂物料应用服务实现
 // 
@@ -30,23 +30,27 @@ namespace Takt.Application.Services.Logistics.Materials;
 public class TaktMaterialPlantService : TaktServiceBase, ITaktMaterialPlantService
 {
     private readonly ITaktCompanyRepository<TaktMaterialPlant> _materialPlantRepository;
+    private readonly ITaktCompanyRepository<TaktMaterialPlantChangeLog> _materialPlantChangeLogRepository;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="materialPlantRepository">工厂物料仓储</param>
+    /// <param name="materialPlantChangeLogRepository">MaterialPlantChangeLog仓储</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktMaterialPlantService(
         ITaktCompanyRepository<TaktMaterialPlant> materialPlantRepository,
+        ITaktCompanyRepository<TaktMaterialPlantChangeLog> materialPlantChangeLogRepository,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
         _materialPlantRepository = materialPlantRepository;
+        _materialPlantChangeLogRepository = materialPlantChangeLogRepository;
         _uniqueValidator = uniqueValidator;
     }
 
@@ -81,8 +85,9 @@ public class TaktMaterialPlantService : TaktServiceBase, ITaktMaterialPlantServi
         {
             return null;
         }
-        return entity.Adapt<TaktMaterialPlantDto>();
-    }
+        var dto = entity.Adapt<TaktMaterialPlantDto>();
+        await FillMaterialPlantDetailsAsync(dto, entity);
+        return dto;    }
 
     /// <summary>
     /// 获取工厂物料选项列表
@@ -98,7 +103,11 @@ public class TaktMaterialPlantService : TaktServiceBase, ITaktMaterialPlantServi
         return list.Select(e => new TaktSelectOption
         {
             DictValue = e.Id,
-            DictLabel = e.MaterialName ?? e.Id.ToString(),
+            DictLabel = string.IsNullOrWhiteSpace(e.MaterialCode)
+                ? (e.MaterialName ?? e.Id.ToString())
+                : $"{e.MaterialCode} - {e.MaterialName}",
+            ExtValue = e.PlantCode,
+            ExtLabel = e.MaterialCode,
         }).ToList();
     }
 
@@ -119,6 +128,7 @@ public class TaktMaterialPlantService : TaktServiceBase, ITaktMaterialPlantServi
             throw new TaktBusinessException("工厂物料的PlantCode、MaterialCode已存在");
         }
         entity = await _materialPlantRepository.CreateAsync(entity);
+                await SaveMaterialPlantChildrenAsync(entity, dto);
         return await GetMaterialPlantByIdAsync(entity.Id) ?? entity.Adapt<TaktMaterialPlantDto>();
     }
 
@@ -146,6 +156,7 @@ public class TaktMaterialPlantService : TaktServiceBase, ITaktMaterialPlantServi
             throw new TaktBusinessException("工厂物料的PlantCode、MaterialCode已存在");
         }
         await _materialPlantRepository.UpdateAsync(entity);
+                await SaveMaterialPlantChildrenAsync(entity, dto);
         return await GetMaterialPlantByIdAsync(id) ?? throw new TaktBusinessException("工厂物料不存在");
     }
 
@@ -156,6 +167,12 @@ public class TaktMaterialPlantService : TaktServiceBase, ITaktMaterialPlantServi
     /// <returns>任务</returns>
     public async Task DeleteMaterialPlantByIdAsync(long id)
     {
+        var entity = await _materialPlantRepository.GetByIdAsync(id);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("工厂物料不存在或已删除");
+        }
+        await _materialPlantChangeLogRepository.DeleteAsync(x => x.MaterialPlantId == entity.Id);
         var deleted = await _materialPlantRepository.DeleteAsync(id);
         if (!deleted)
         {
@@ -285,6 +302,54 @@ public class TaktMaterialPlantService : TaktServiceBase, ITaktMaterialPlantServi
     }
 
     // ========================================
+    // 主子表级联（OneToMany）
+    // ========================================
+
+    /// <summary>
+    /// 填充工厂物料详情（加载 OneToMany 子表：工厂物料变更记录）
+    /// </summary>
+    /// <param name="dto">响应 DTO</param>
+    /// <param name="entity">主表实体</param>
+    /// <returns>任务</returns>
+    private async Task FillMaterialPlantDetailsAsync(TaktMaterialPlantDto dto, TaktMaterialPlant entity)
+    {
+        if (dto == null)
+        {
+            return;
+        }
+        // 工厂物料变更记录 → dto.ChangeLogs
+        var changelogs = await _materialPlantChangeLogRepository.GetListAsync(x => x.MaterialPlantId == entity.Id);
+        dto.ChangeLogs = changelogs.Adapt<List<TaktMaterialPlantChangeLogDto>>();
+    }
+
+    /// <summary>
+    /// 保存工厂物料子表级联（工厂物料变更记录；Create/Update 后按主表 Id 先删后插）
+    /// </summary>
+    /// <param name="entity">主表实体</param>
+    /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
+    /// <returns>任务</returns>
+    private async Task SaveMaterialPlantChildrenAsync(TaktMaterialPlant entity, TaktMaterialPlantCreateDto dto)
+    {
+        // 工厂物料变更记录（ChangeLogs）
+        if (dto.ChangeLogs is not { Count: > 0 })
+        {
+            await _materialPlantChangeLogRepository.DeleteAsync(x => x.MaterialPlantId == entity.Id);
+        }
+        else
+        {
+            var changelogs = dto.ChangeLogs.Adapt<List<TaktMaterialPlantChangeLog>>();
+            foreach (var child in changelogs)
+            {
+                child.MaterialPlantId = entity.Id;
+            }
+            await _materialPlantChangeLogRepository.DeleteAsync(x => x.MaterialPlantId == entity.Id);
+            foreach (var child in changelogs)
+            {
+            }
+            await _materialPlantChangeLogRepository.CreateRangeAsync(changelogs);
+        }
+    }
+    // ========================================
     // 查询表达式
     // ========================================
 
@@ -308,13 +373,11 @@ public class TaktMaterialPlantService : TaktServiceBase, ITaktMaterialPlantServi
                 || (x.MaterialDescription != null && x.MaterialDescription.Contains(keywords))
                 || (x.IndustrySector != null && x.IndustrySector.Contains(keywords))
                 || (x.MaterialHierarchy != null && x.MaterialHierarchy.Contains(keywords))
-                || (x.MaterialGroupCode != null && x.MaterialGroupCode.Contains(keywords))
-                || SqlFunc.ToString(x.MaterialType).Contains(keywords)
-                || (x.MaterialModel != null && x.MaterialModel.Contains(keywords))
-                || (x.MaterialBrand != null && x.MaterialBrand.Contains(keywords))
+                || (x.MaterialGroup != null && x.MaterialGroup.Contains(keywords))
+                || (x.MaterialType != null && x.MaterialType.Contains(keywords))
                 || (x.BaseUnit != null && x.BaseUnit.Contains(keywords))
                 || (x.PurchaseGroup != null && x.PurchaseGroup.Contains(keywords))
-                || SqlFunc.ToString(x.PurchaseType).Contains(keywords)
+                || (x.PurchaseType != null && x.PurchaseType.Contains(keywords))
                 || SqlFunc.ToString(x.SpecialProcurement).Contains(keywords)
                 || SqlFunc.ToString(x.IsBulk).Contains(keywords)
                 || SqlFunc.ToString(x.MinOrderQuantity).Contains(keywords)
@@ -322,31 +385,24 @@ public class TaktMaterialPlantService : TaktServiceBase, ITaktMaterialPlantServi
                 || SqlFunc.ToString(x.PlannedDeliveryTimeDays).Contains(keywords)
                 || SqlFunc.ToString(x.InHouseProductionDays).Contains(keywords)
                 || (x.Manufacturer != null && x.Manufacturer.Contains(keywords))
-                || (x.ManufacturerPartNumber != null && x.ManufacturerPartNumber.Contains(keywords))
-                || (x.CurrencyCode != null && x.CurrencyCode.Contains(keywords))
-                || SqlFunc.ToString(x.PriceControl).Contains(keywords)
+                || (x.ManufacturerMaterialCode != null && x.ManufacturerMaterialCode.Contains(keywords))
+                || (x.Currency != null && x.Currency.Contains(keywords))
+                || (x.PriceControl != null && x.PriceControl.Contains(keywords))
                 || SqlFunc.ToString(x.PriceUnit).Contains(keywords)
-                || (x.ValuationCategory != null && x.ValuationCategory.Contains(keywords))
+                || (x.Valuation != null && x.Valuation.Contains(keywords))
+                || SqlFunc.ToString(x.MovingPrice).Contains(keywords)
                 || (x.DifferenceCode != null && x.DifferenceCode.Contains(keywords))
                 || (x.ProfitCenter != null && x.ProfitCenter.Contains(keywords))
-                || SqlFunc.ToString(x.LatestPurchasePrice).Contains(keywords)
-                || SqlFunc.ToString(x.SalesPrice).Contains(keywords)
-                || SqlFunc.ToString(x.SafetyStock).Contains(keywords)
-                || SqlFunc.ToString(x.MaxStock).Contains(keywords)
-                || SqlFunc.ToString(x.MinStock).Contains(keywords)
                 || SqlFunc.ToString(x.CurrentStock).Contains(keywords)
                 || (x.ProductionLocation != null && x.ProductionLocation.Contains(keywords))
                 || (x.PurchasingLocation != null && x.PurchasingLocation.Contains(keywords))
-                || SqlFunc.ToString(x.InspectionRequired).Contains(keywords)
+                || (x.StorageLocation != null && x.StorageLocation.Contains(keywords))
+                || SqlFunc.ToString(x.IsInspection).Contains(keywords)
                 || SqlFunc.ToString(x.IsBatch).Contains(keywords)
-                || SqlFunc.ToString(x.IsExpiry).Contains(keywords)
-                || SqlFunc.ToString(x.ExpiryDays).Contains(keywords)
-                || SqlFunc.ToString(x.MaterialStatus).Contains(keywords)
-                || (x.MaterialAttributes != null && x.MaterialAttributes.Contains(keywords))
                 || (x.IsEndOfLife != null && x.IsEndOfLife.Contains(keywords))
+                || SqlFunc.ToString(x.MaterialStatus).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.EndOfLifeDate).Contains(keywords)
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
@@ -386,24 +442,14 @@ public class TaktMaterialPlantService : TaktServiceBase, ITaktMaterialPlantServi
             exp = exp.And(x => x.MaterialHierarchy != null && x.MaterialHierarchy.Contains(queryDto.MaterialHierarchy));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaterialGroupCode))
+        if (!string.IsNullOrEmpty(queryDto?.MaterialGroup))
         {
-            exp = exp.And(x => x.MaterialGroupCode != null && x.MaterialGroupCode.Contains(queryDto.MaterialGroupCode));
+            exp = exp.And(x => x.MaterialGroup != null && x.MaterialGroup.Contains(queryDto.MaterialGroup));
         }
 
-        if (queryDto?.MaterialType.HasValue == true)
+        if (!string.IsNullOrEmpty(queryDto?.MaterialType))
         {
-            exp = exp.And(x => x.MaterialType == queryDto.MaterialType);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.MaterialModel))
-        {
-            exp = exp.And(x => x.MaterialModel != null && x.MaterialModel.Contains(queryDto.MaterialModel));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.MaterialBrand))
-        {
-            exp = exp.And(x => x.MaterialBrand != null && x.MaterialBrand.Contains(queryDto.MaterialBrand));
+            exp = exp.And(x => x.MaterialType != null && x.MaterialType.Contains(queryDto.MaterialType));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.BaseUnit))
@@ -416,9 +462,9 @@ public class TaktMaterialPlantService : TaktServiceBase, ITaktMaterialPlantServi
             exp = exp.And(x => x.PurchaseGroup != null && x.PurchaseGroup.Contains(queryDto.PurchaseGroup));
         }
 
-        if (queryDto?.PurchaseType.HasValue == true)
+        if (!string.IsNullOrEmpty(queryDto?.PurchaseType))
         {
-            exp = exp.And(x => x.PurchaseType == queryDto.PurchaseType);
+            exp = exp.And(x => x.PurchaseType != null && x.PurchaseType.Contains(queryDto.PurchaseType));
         }
 
         if (queryDto?.SpecialProcurement.HasValue == true)
@@ -456,19 +502,19 @@ public class TaktMaterialPlantService : TaktServiceBase, ITaktMaterialPlantServi
             exp = exp.And(x => x.Manufacturer != null && x.Manufacturer.Contains(queryDto.Manufacturer));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ManufacturerPartNumber))
+        if (!string.IsNullOrEmpty(queryDto?.ManufacturerMaterialCode))
         {
-            exp = exp.And(x => x.ManufacturerPartNumber != null && x.ManufacturerPartNumber.Contains(queryDto.ManufacturerPartNumber));
+            exp = exp.And(x => x.ManufacturerMaterialCode != null && x.ManufacturerMaterialCode.Contains(queryDto.ManufacturerMaterialCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CurrencyCode))
+        if (!string.IsNullOrEmpty(queryDto?.Currency))
         {
-            exp = exp.And(x => x.CurrencyCode != null && x.CurrencyCode.Contains(queryDto.CurrencyCode));
+            exp = exp.And(x => x.Currency != null && x.Currency.Contains(queryDto.Currency));
         }
 
-        if (queryDto?.PriceControl.HasValue == true)
+        if (!string.IsNullOrEmpty(queryDto?.PriceControl))
         {
-            exp = exp.And(x => x.PriceControl == queryDto.PriceControl);
+            exp = exp.And(x => x.PriceControl != null && x.PriceControl.Contains(queryDto.PriceControl));
         }
 
         if (queryDto?.PriceUnit.HasValue == true)
@@ -476,9 +522,14 @@ public class TaktMaterialPlantService : TaktServiceBase, ITaktMaterialPlantServi
             exp = exp.And(x => x.PriceUnit == queryDto.PriceUnit);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ValuationCategory))
+        if (!string.IsNullOrEmpty(queryDto?.Valuation))
         {
-            exp = exp.And(x => x.ValuationCategory != null && x.ValuationCategory.Contains(queryDto.ValuationCategory));
+            exp = exp.And(x => x.Valuation != null && x.Valuation.Contains(queryDto.Valuation));
+        }
+
+        if (queryDto?.MovingPrice.HasValue == true)
+        {
+            exp = exp.And(x => x.MovingPrice == queryDto.MovingPrice);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.DifferenceCode))
@@ -489,31 +540,6 @@ public class TaktMaterialPlantService : TaktServiceBase, ITaktMaterialPlantServi
         if (!string.IsNullOrEmpty(queryDto?.ProfitCenter))
         {
             exp = exp.And(x => x.ProfitCenter != null && x.ProfitCenter.Contains(queryDto.ProfitCenter));
-        }
-
-        if (queryDto?.LatestPurchasePrice.HasValue == true)
-        {
-            exp = exp.And(x => x.LatestPurchasePrice == queryDto.LatestPurchasePrice);
-        }
-
-        if (queryDto?.SalesPrice.HasValue == true)
-        {
-            exp = exp.And(x => x.SalesPrice == queryDto.SalesPrice);
-        }
-
-        if (queryDto?.SafetyStock.HasValue == true)
-        {
-            exp = exp.And(x => x.SafetyStock == queryDto.SafetyStock);
-        }
-
-        if (queryDto?.MaxStock.HasValue == true)
-        {
-            exp = exp.And(x => x.MaxStock == queryDto.MaxStock);
-        }
-
-        if (queryDto?.MinStock.HasValue == true)
-        {
-            exp = exp.And(x => x.MinStock == queryDto.MinStock);
         }
 
         if (queryDto?.CurrentStock.HasValue == true)
@@ -531,9 +557,14 @@ public class TaktMaterialPlantService : TaktServiceBase, ITaktMaterialPlantServi
             exp = exp.And(x => x.PurchasingLocation != null && x.PurchasingLocation.Contains(queryDto.PurchasingLocation));
         }
 
-        if (queryDto?.InspectionRequired.HasValue == true)
+        if (!string.IsNullOrEmpty(queryDto?.StorageLocation))
         {
-            exp = exp.And(x => x.InspectionRequired == queryDto.InspectionRequired);
+            exp = exp.And(x => x.StorageLocation != null && x.StorageLocation.Contains(queryDto.StorageLocation));
+        }
+
+        if (queryDto?.IsInspection.HasValue == true)
+        {
+            exp = exp.And(x => x.IsInspection == queryDto.IsInspection);
         }
 
         if (queryDto?.IsBatch.HasValue == true)
@@ -541,29 +572,14 @@ public class TaktMaterialPlantService : TaktServiceBase, ITaktMaterialPlantServi
             exp = exp.And(x => x.IsBatch == queryDto.IsBatch);
         }
 
-        if (queryDto?.IsExpiry.HasValue == true)
+        if (!string.IsNullOrEmpty(queryDto?.IsEndOfLife))
         {
-            exp = exp.And(x => x.IsExpiry == queryDto.IsExpiry);
-        }
-
-        if (queryDto?.ExpiryDays.HasValue == true)
-        {
-            exp = exp.And(x => x.ExpiryDays == queryDto.ExpiryDays);
+            exp = exp.And(x => x.IsEndOfLife != null && x.IsEndOfLife.Contains(queryDto.IsEndOfLife));
         }
 
         if (queryDto?.MaterialStatus.HasValue == true)
         {
             exp = exp.And(x => x.MaterialStatus == queryDto.MaterialStatus);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.MaterialAttributes))
-        {
-            exp = exp.And(x => x.MaterialAttributes != null && x.MaterialAttributes.Contains(queryDto.MaterialAttributes));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.IsEndOfLife))
-        {
-            exp = exp.And(x => x.IsEndOfLife != null && x.IsEndOfLife.Contains(queryDto.IsEndOfLife));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))
@@ -574,16 +590,6 @@ public class TaktMaterialPlantService : TaktServiceBase, ITaktMaterialPlantServi
         if (!string.IsNullOrEmpty(queryDto?.Remark))
         {
             exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
-        }
-
-        if (queryDto?.EndOfLifeDateStart.HasValue == true)
-        {
-            exp = exp.And(x => x.EndOfLifeDate >= queryDto.EndOfLifeDateStart);
-        }
-
-        if (queryDto?.EndOfLifeDateEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.EndOfLifeDate <= queryDto.EndOfLifeDateEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)

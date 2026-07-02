@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/service/service-request/components -->
 <!-- 文件名称：service-request-form.vue -->
-<!-- 功能描述：服务请求实体维护弹窗内嵌表单（上主下从级联保存）。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：服务请求实体维护弹窗内嵌表单。由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -10,7 +10,7 @@
 <template>
   <a-form
     ref="formRef"
-    class="takt-generated-form service-request-form flex flex-col min-h-0"
+    class="takt-generated-form"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -378,12 +378,11 @@
                 :label="t('entity.servicerequest.assignedat')"
                 name="assignedAt"
               >
-                <a-input
+                <a-date-picker
                   v-model:value="formState.assignedAt"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.servicerequest.assignedat') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.servicerequest.assignedat') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
@@ -392,12 +391,11 @@
                 :label="t('entity.servicerequest.closedat')"
                 name="closedAt"
               >
-                <a-input
+                <a-date-picker
                   v-model:value="formState.closedAt"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.servicerequest.closedat') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.servicerequest.closedat') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
@@ -446,24 +444,12 @@
         </div>
       </a-tab-pane>
     </a-tabs>
-    <!-- 下：子表 tickets -->
-    <TaktEditableTable
-      ref="serviceTicketTableRef"
-      v-model="childServiceTicketRows"
-      :columns="serviceTicketFormColumns"
-      :title="t('entity.serviceticket._self')"
-      :add-button-entity="t('entity.serviceticket._self')"
-      id-field="serviceTicketId"
-      :default-row="createDefaultServiceTicketRow"
-      :disabled="loading"
-      section-border
-    />
   </a-form>
 </template>
 
 <script setup lang="ts">
 /**
- * 服务请求实体维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
+ * 服务请求实体维护表单 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/logistics/service/service-request/components
  */
 import { reactive, watch, computed, ref, onMounted } from 'vue'
@@ -507,99 +493,6 @@ const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
 const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","serviceRequestCode","clientId","clientCode","clientName","serviceContractId","serviceContractCode","requestDate","expectedServiceDate","requestType","sourceChannel","priority","requestStatus","requestSubject","requestDescription","contactPerson","contactPhone","contactEmail","serviceAddress","assignedEmployeeId","assignedEmployeeName","assignedAt","closedAt","extField","remark"]
 
-import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
-
-const childServiceTicketRows = ref<Record<string, unknown>[]>([])
-const serviceTicketTableRef = ref<{
-  getRows: () => Record<string, unknown>[]
-  validate: () => Promise<unknown>
-  resetRows: () => void
-} | null>(null)
-
-/** 子表 serviceTicket 可编辑列 */
-const serviceTicketFormColumns = computed<TaktEditableTableColumn[]>(() => [
-  {
-    key: 'plantCode',
-    title: t('entity.serviceticket.plantcode'),
-    editor: 'input',
-    width: 140,
-  },
-  {
-    key: 'serviceTicketCode',
-    title: t('entity.serviceticket.code'),
-    editor: 'input',
-    width: 140,
-  },
-  {
-    key: 'clientId',
-    title: t('entity.serviceticket.clientid'),
-    editor: 'input',
-    width: 140,
-  },
-  {
-    key: 'clientCode',
-    title: t('entity.serviceticket.clientcode'),
-    editor: 'input',
-    width: 140,
-  },
-  {
-    key: 'clientName',
-    title: t('entity.serviceticket.clientname'),
-    editor: 'input',
-    width: 140,
-  },
-  {
-    key: 'serviceOrderId',
-    title: t('entity.serviceticket.serviceorderid'),
-    editor: 'input',
-    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.serviceticket.serviceorderid') }),
-  },
-  {
-    key: 'serviceOrderCode',
-    title: t('entity.serviceticket.serviceordercode'),
-    editor: 'input',
-    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.serviceticket.serviceordercode') }),
-  },
-  {
-    key: 'serviceContractId',
-    title: t('entity.serviceticket.servicecontractid'),
-    editor: 'input',
-    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.serviceticket.servicecontractid') }),
-  },
-])
-
-/** 编辑态从 formData 同步各子表行 */
-function syncChildRowsFromFormData(val: Partial<ServiceRequestCreate & { serviceRequestId?: string }> | null | undefined) {
-  childServiceTicketRows.value = ((val as any)?.tickets ?? []) as Record<string, unknown>[]
-}
-
-function createDefaultServiceTicketRow(): Record<string, unknown> {
-  return {
-    plantCode: '',
-    serviceTicketCode: '',
-    clientId: '',
-    clientCode: '',
-    clientName: '',
-    serviceOrderId: '',
-    serviceOrderCode: '',
-    serviceContractId: '',
-  }
-}
-
-/** 组装 Create/Update 载荷（主表 + 子表数组） */
-function buildSubmitPayload() {
-  const masterId = props.formData?.serviceRequestId ?? ''
-  return {
-    ...formState,
-    tickets: serviceTicketTableRef.value?.getRows?.() ?? childServiceTicketRows.value.map((rest) => ({
-      ...rest,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      serviceRequestId: masterId,
-    })),
-  }
-}
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -642,10 +535,9 @@ watch(
     if (val?.serviceRequestId) {
       const next = { ...val } as Record<string, unknown>
       Object.keys(formState).forEach((k) => delete formState[k])
-    delete (next as any).tickets
+
       applyScopeDefaults(next)
       Object.assign(formState, next)
-    syncChildRowsFromFormData(val)
       formRef.value?.clearValidate()
     } else {
       Object.keys(formState).forEach((k) => delete formState[k])
@@ -786,13 +678,12 @@ const rules = computed<Record<string, Rule[]>>(() => ({
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
 async function validate() {
   await formRef.value?.validate()
-  await serviceTicketTableRef.value?.validate?.()
   return formState
 }
 
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
-  const payload = buildSubmitPayload() as Record<string, unknown>
+  const payload = { ...formState }
   if ('requestType' in payload) {
     const rawrequestType = payload.requestType
     payload.requestType = typeof rawrequestType === 'number' ? rawrequestType : Number(rawrequestType)
@@ -821,8 +712,7 @@ function resetFields() {
   }
   applyFormDefaults(formState)
   applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.serviceRequestId)
-  childServiceTicketRows.value = []
-  serviceTicketTableRef.value?.resetRows?.()
+
   activeTab.value = 'tab-0'
   formRef.value?.clearValidate()
 }

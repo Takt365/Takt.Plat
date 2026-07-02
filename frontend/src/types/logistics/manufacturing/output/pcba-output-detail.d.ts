@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/output
 // 文件名称：pcba-output-detail.d.ts
-// 创建时间：2026-06-20
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/output 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -54,17 +54,17 @@ export interface PcbaOutputDetail extends CompanyDtoBase {
   timePeriod: string;
 
   /**
-   * 班组
+   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo: number;
 
   /**
-   * 板别（PCB板别）
+   * PCB板别（字典 logistics_pcba_panel_category，存 DictValue）
    */
   pcbBoardType: string;
 
   /**
-   * 面板别
+   * 面板别（字典 logistics_pcba_side_category，存 DictValue：b= B面 t= T面）
    */
   panelSide: string;
 
@@ -84,7 +84,7 @@ export interface PcbaOutputDetail extends CompanyDtoBase {
   totalCompletedQty: number;
 
   /**
-   * 完成状态（0=未完成 1=部分完成 2=已完成）
+   * 完成状态（字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成）
    */
   completedStatus: number;
 
@@ -129,7 +129,7 @@ export interface PcbaOutputDetail extends CompanyDtoBase {
   totalMinutes: number;
 
   /**
-   * 未达成原因
+   * 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
    */
   unachievedReason?: string;
 
@@ -184,17 +184,17 @@ export interface PcbaOutputDetailQuery extends TaktPagedQuery {
   timePeriod?: string;
 
   /**
-   * 班组
+   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo?: number;
 
   /**
-   * 板别（PCB板别）
+   * PCB板别（字典 logistics_pcba_panel_category，存 DictValue）
    */
   pcbBoardType?: string;
 
   /**
-   * 面板别
+   * 面板别（字典 logistics_pcba_side_category，存 DictValue：b= B面 t= T面）
    */
   panelSide?: string;
 
@@ -214,7 +214,7 @@ export interface PcbaOutputDetailQuery extends TaktPagedQuery {
   totalCompletedQty?: number;
 
   /**
-   * 完成状态（0=未完成 1=部分完成 2=已完成）
+   * 完成状态（字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成）
    */
   completedStatus?: number;
 
@@ -259,7 +259,7 @@ export interface PcbaOutputDetailQuery extends TaktPagedQuery {
   totalMinutes?: number;
 
   /**
-   * 未达成原因
+   * 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
    */
   unachievedReason?: string;
 
@@ -308,7 +308,7 @@ export interface PcbaOutputDetailCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -333,17 +333,17 @@ export interface PcbaOutputDetailCreate {
   timePeriod: string;
 
   /**
-   * 班组
+   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo: number;
 
   /**
-   * 板别（PCB板别）
+   * PCB板别（字典 logistics_pcba_panel_category，存 DictValue）
    */
   pcbBoardType: string;
 
   /**
-   * 面板别
+   * 面板别（字典 logistics_pcba_side_category，存 DictValue：b= B面 t= T面）
    */
   panelSide: string;
 
@@ -363,7 +363,7 @@ export interface PcbaOutputDetailCreate {
   totalCompletedQty: number;
 
   /**
-   * 完成状态（0=未完成 1=部分完成 2=已完成）
+   * 完成状态（字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成）
    */
   completedStatus: number;
 
@@ -408,7 +408,7 @@ export interface PcbaOutputDetailCreate {
   totalMinutes: number;
 
   /**
-   * 未达成原因
+   * 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
    */
   unachievedReason?: string;
 
@@ -457,7 +457,7 @@ export interface PcbaOutputDetailStatus {
   pcbaOutputDetailId: string;
 
   /**
-   * 完成状态（0=未完成 1=部分完成 2=已完成）
+   * 完成状态（字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成）
    */
   completedStatus: number;
 
@@ -501,22 +501,37 @@ export interface PcbaOutputDetailTemplate {
   timePeriod?: string;
 
   /**
-   * 班组
+   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo?: number;
 
   /**
-   * 板别（PCB板别）
+   * PCB板别（字典 logistics_pcba_panel_category，存 DictValue）
    */
   pcbBoardType?: string;
 
   /**
-   * 面板别
+   * 面板别（字典 logistics_pcba_side_category，存 DictValue：b= B面 t= T面）
    */
   panelSide?: string;
 
   /**
-   * 完成状态（0=未完成 1=部分完成 2=已完成）
+   * 批次数量
+   */
+  batchQty?: number;
+
+  /**
+   * 当日完成数
+   */
+  dailyCompletedQty?: number;
+
+  /**
+   * 累计完成数
+   */
+  totalCompletedQty?: number;
+
+  /**
+   * 完成状态（字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成）
    */
   completedStatus?: number;
 
@@ -531,14 +546,44 @@ export interface PcbaOutputDetailTemplate {
   defectCount?: number;
 
   /**
+   * 投入工数(分钟)
+   */
+  inputMinutes?: number;
+
+  /**
+   * 修工数(分钟)
+   */
+  repairMinutes?: number;
+
+  /**
    * 切换次数
    */
   switchCount?: number;
 
   /**
-   * 未达成原因
+   * 切换时间(分钟)
+   */
+  switchTime?: number;
+
+  /**
+   * 切停机时间(分钟)
+   */
+  stopTime?: number;
+
+  /**
+   * 总工数(分钟)
+   */
+  totalMinutes?: number;
+
+  /**
+   * 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
    */
   unachievedReason?: string;
+
+  /**
+   * 未达成说明
+   */
+  unachievedDescription?: string;
 
   /**
    * 扩展字段JSON
@@ -570,7 +615,7 @@ export interface PcbaOutputDetailImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -595,22 +640,37 @@ export interface PcbaOutputDetailImport {
   timePeriod?: string;
 
   /**
-   * 班组
+   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo?: number;
 
   /**
-   * 板别（PCB板别）
+   * PCB板别（字典 logistics_pcba_panel_category，存 DictValue）
    */
   pcbBoardType?: string;
 
   /**
-   * 面板别
+   * 面板别（字典 logistics_pcba_side_category，存 DictValue：b= B面 t= T面）
    */
   panelSide?: string;
 
   /**
-   * 完成状态（0=未完成 1=部分完成 2=已完成）
+   * 批次数量
+   */
+  batchQty?: number;
+
+  /**
+   * 当日完成数
+   */
+  dailyCompletedQty?: number;
+
+  /**
+   * 累计完成数
+   */
+  totalCompletedQty?: number;
+
+  /**
+   * 完成状态（字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成）
    */
   completedStatus?: number;
 
@@ -625,14 +685,44 @@ export interface PcbaOutputDetailImport {
   defectCount?: number;
 
   /**
+   * 投入工数(分钟)
+   */
+  inputMinutes?: number;
+
+  /**
+   * 修工数(分钟)
+   */
+  repairMinutes?: number;
+
+  /**
    * 切换次数
    */
   switchCount?: number;
 
   /**
-   * 未达成原因
+   * 切换时间(分钟)
+   */
+  switchTime?: number;
+
+  /**
+   * 切停机时间(分钟)
+   */
+  stopTime?: number;
+
+  /**
+   * 总工数(分钟)
+   */
+  totalMinutes?: number;
+
+  /**
+   * 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
    */
   unachievedReason?: string;
+
+  /**
+   * 未达成说明
+   */
+  unachievedDescription?: string;
 
   /**
    * 扩展字段JSON
@@ -684,17 +774,17 @@ export interface PcbaOutputDetailExport {
   timePeriod: string;
 
   /**
-   * 班组
+   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo: number;
 
   /**
-   * 板别（PCB板别）
+   * PCB板别（字典 logistics_pcba_panel_category，存 DictValue）
    */
   pcbBoardType: string;
 
   /**
-   * 面板别
+   * 面板别（字典 logistics_pcba_side_category，存 DictValue：b= B面 t= T面）
    */
   panelSide: string;
 
@@ -714,7 +804,7 @@ export interface PcbaOutputDetailExport {
   totalCompletedQty: number;
 
   /**
-   * 完成状态（0=未完成 1=部分完成 2=已完成）
+   * 完成状态（字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成）
    */
   completedStatus: number;
 
@@ -759,7 +849,7 @@ export interface PcbaOutputDetailExport {
   totalMinutes: number;
 
   /**
-   * 未达成原因
+   * 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
    */
   unachievedReason?: string;
 

@@ -6,6 +6,7 @@
 // biome-ignore lint: disable
 export {}
 declare global {
+  const EC_NOTIFICATION_TABLE_NAME: typeof import('./composables/use-ec-change-signalr-refresh').EC_NOTIFICATION_TABLE_NAME
   const EffectScope: typeof import('vue').EffectScope
   const Modal: typeof import('ant-design-vue').Modal
   const QUARTZ_TABLE_NAME: typeof import('./composables/use-quartz-signalr-refresh').QUARTZ_TABLE_NAME
@@ -86,6 +87,9 @@ declare global {
   const useCssModule: typeof import('vue').useCssModule
   const useCssVars: typeof import('vue').useCssVars
   const useDatabaseInfoCatalog: typeof import('./composables/use-database-info-catalog').useDatabaseInfoCatalog
+  const useEcChangeSignalRRefresh: typeof import('./composables/use-ec-change-signalr-refresh').useEcChangeSignalRRefresh
+  const useEcExecSignalRGroup: typeof import('./composables/use-ec-dept-signalr-group').useEcExecSignalRGroup
+  const useEntityFieldI18n: typeof import('./composables/use-entity-field-i18n').useEntityFieldI18n
   const useId: typeof import('vue').useId
   const useLink: typeof import('vue-router').useLink
   const useLoginFieldSync: typeof import('./composables/use-login-field-sync').useLoginFieldSync
@@ -117,6 +121,9 @@ declare global {
   export type { Component, Slot, Slots, ComponentPublicInstance, ComputedRef, DirectiveBinding, ExtractDefaultPropTypes, ExtractPropTypes, ExtractPublicPropTypes, InjectionKey, PropType, Ref, ShallowRef, MaybeRef, MaybeRefOrGetter, VNode, WritableComputedRef } from 'vue'
   import('vue')
   // @ts-ignore
+  export type { EntityFieldPlaceholderKind } from './composables/use-entity-field-i18n'
+  import('./composables/use-entity-field-i18n')
+  // @ts-ignore
   export type { UseLoginFieldSyncOptions } from './composables/use-login-field-sync'
   import('./composables/use-login-field-sync')
   // @ts-ignore
@@ -132,6 +139,7 @@ import { UnwrapRef } from 'vue'
 declare module 'vue' {
   interface GlobalComponents {}
   interface ComponentCustomProperties {
+    readonly EC_NOTIFICATION_TABLE_NAME: UnwrapRef<typeof import('./composables/use-ec-change-signalr-refresh')['EC_NOTIFICATION_TABLE_NAME']>
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
     readonly Modal: UnwrapRef<typeof import('ant-design-vue')['Modal']>
     readonly QUARTZ_TABLE_NAME: UnwrapRef<typeof import('./composables/use-quartz-signalr-refresh')['QUARTZ_TABLE_NAME']>
@@ -212,6 +220,9 @@ declare module 'vue' {
     readonly useCssModule: UnwrapRef<typeof import('vue')['useCssModule']>
     readonly useCssVars: UnwrapRef<typeof import('vue')['useCssVars']>
     readonly useDatabaseInfoCatalog: UnwrapRef<typeof import('./composables/use-database-info-catalog')['useDatabaseInfoCatalog']>
+    readonly useEcChangeSignalRRefresh: UnwrapRef<typeof import('./composables/use-ec-change-signalr-refresh')['useEcChangeSignalRRefresh']>
+    readonly useEcExecSignalRGroup: UnwrapRef<typeof import('./composables/use-ec-dept-signalr-group')['useEcExecSignalRGroup']>
+    readonly useEntityFieldI18n: UnwrapRef<typeof import('./composables/use-entity-field-i18n')['useEntityFieldI18n']>
     readonly useId: UnwrapRef<typeof import('vue')['useId']>
     readonly useLink: UnwrapRef<typeof import('vue-router')['useLink']>
     readonly useLoginFieldSync: UnwrapRef<typeof import('./composables/use-login-field-sync')['useLoginFieldSync']>

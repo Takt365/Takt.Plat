@@ -50,7 +50,7 @@
                   v-model:value="formState.locationCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.storagelocation.locationcode') })"
                   show-count
-                  :maxlength="20"
+                  :maxlength="40"
                   allow-clear
                   :disabled="!!formData?.storageLocationId"
                 />

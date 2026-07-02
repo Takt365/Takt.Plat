@@ -93,7 +93,7 @@
                   v-model:value="formState.workCenter"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routing.workcenter') })"
                   show-count
-                  :maxlength="20"
+                  :maxlength="8"
                   allow-clear
                 />
               </a-form-item>
@@ -388,7 +388,7 @@ const routingItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
     key: 'pointsToMinutesRate',
     title: t('entity.routingitem.pointstominutesrate'),
-    editor: 'inputNumber',
+    editor: 'input',
     width: 140,
   },
 ])
@@ -407,7 +407,7 @@ function createDefaultRoutingItemRow(): Record<string, unknown> {
     timeUnit: '',
     standardShorts: 0,
     pointsUnit: '',
-    pointsToMinutesRate: 0,
+    pointsToMinutesRate: '1',
   }
 }
 

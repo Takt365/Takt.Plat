@@ -12,10 +12,11 @@
 
 const fs = require('fs');
 const path = require('path');
-const { writeGeneratedFile, logGeneratedFileWritePolicy, parseSingleEntityGenerateArgsFromArgv } = require('./generate-script-common.cjs');
+const { writeGeneratedFile, logGeneratedFileWritePolicy, parseSingleEntityGenerateArgsFromArgv, parseEntityBaseFromCsFile } = require('./generate-script-common.cjs');
 const {
   isRbacJunctionEntity,
   assertNotRbacJunctionEntityCli,
+  assertNotManualDtoEntityCli,
   shouldExcludeDtoFile: shouldExcludeRbacDtoFile,
   shouldExcludeStandaloneService,
   RBAC_ASSOCIATION_ENTITY_SHORT_NAMES,
@@ -499,14 +500,7 @@ function findEntityFile(entityName) {
 }
 
 function parseEntityBase(entityFile) {
-  const content = readUtf8(entityFile);
-  if (content.includes(': TaktApprovalEntityBase')) {
-    return 'TaktApprovalEntityBase';
-  }
-  if (content.includes(': TaktCompanyEntityBase')) {
-    return 'TaktCompanyEntityBase';
-  }
-  return 'TaktTenantEntityBase';
+  return parseEntityBaseFromCsFile(entityFile);
 }
 
 /**
@@ -3532,6 +3526,7 @@ function parseArgs() {
   const options = parseSingleEntityGenerateArgsFromArgv(args, printUsage);
   options.refreshOptions = refreshOptions;
   assertNotRbacJunctionEntityCli(options.entityPrefix);
+  assertNotManualDtoEntityCli(options.entityPrefix);
   return options;
 }
 

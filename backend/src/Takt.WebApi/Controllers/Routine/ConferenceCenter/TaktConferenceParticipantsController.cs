@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Routine.ConferenceCenter
 // 文件名称：TaktConferenceParticipantsController.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-27
 // 创建人：Takt365(Cursor AI)
 // 功能描述：会议参与人控制器
 // 
@@ -41,7 +41,7 @@ public class TaktConferenceParticipantsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("routine:conferencecenter:list", "会议参与人列表")]
+    [TaktPermission("routine:conference:center:list", "会议参与人列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetConferenceParticipantListAsync([FromQuery] TaktConferenceParticipantQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktConferenceParticipantsController : TaktControllerBase
     /// </summary>
     /// <param name="id">会议参与人ID</param>
     /// <returns>会议参与人DTO</returns>
-    [TaktPermission("routine:conferencecenter:query", "会议参与人详情")]
+    [TaktPermission("routine:conference:center:query", "会议参与人详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetConferenceParticipantByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktConferenceParticipantsController : TaktControllerBase
     /// 获取会议参与人选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("routine:conferencecenter:query", "会议参与人选项")]
+    [TaktPermission("routine:conference:center:query", "会议参与人选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetConferenceParticipantOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktConferenceParticipantsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>会议参与人DTO</returns>
-    [TaktPermission("routine:conferencecenter:create", "创建会议参与人")]
+    [TaktPermission("routine:conference:center:create", "创建会议参与人")]
     [HttpPost]
     public async Task<IActionResult> CreateConferenceParticipantAsync([FromBody] TaktConferenceParticipantCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktConferenceParticipantsController : TaktControllerBase
     /// <param name="id">会议参与人ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>会议参与人DTO</returns>
-    [TaktPermission("routine:conferencecenter:update", "更新会议参与人")]
+    [TaktPermission("routine:conference:center:update", "更新会议参与人")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateConferenceParticipantAsync(long id, [FromBody] TaktConferenceParticipantUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktConferenceParticipantsController : TaktControllerBase
     /// </summary>
     /// <param name="id">会议参与人ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("routine:conferencecenter:delete", "删除会议参与人")]
+    [TaktPermission("routine:conference:center:delete", "删除会议参与人")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteConferenceParticipantByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktConferenceParticipantsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("routine:conferencecenter:delete", "批量删除会议参与人")]
+    [TaktPermission("routine:conference:center:delete", "批量删除会议参与人")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteConferenceParticipantBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktConferenceParticipantsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO</param>
     /// <returns>会议参与人DTO</returns>
-    [TaktPermission("routine:conferencecenter:update", "更新会议参与人状态")]
+    [TaktPermission("routine:conference:center:update", "更新会议参与人状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateConferenceParticipantStatusAsync([FromBody] TaktConferenceParticipantStatusDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktConferenceParticipantsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("routine:conferencecenter:import", "获取会议参与人导入模板")]
+    [TaktPermission("routine:conference:center:import", "获取会议参与人导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetConferenceParticipantTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +224,7 @@ public class TaktConferenceParticipantsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("routine:conferencecenter:import", "导入会议参与人")]
+    [TaktPermission("routine:conference:center:import", "导入会议参与人")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportConferenceParticipantAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +254,7 @@ public class TaktConferenceParticipantsController : TaktControllerBase
     /// 导出会议参与人
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("routine:conferencecenter:export", "导出会议参与人")]
+    [TaktPermission("routine:conference:center:export", "导出会议参与人")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportConferenceParticipantAsync([FromQuery] TaktConferenceParticipantQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

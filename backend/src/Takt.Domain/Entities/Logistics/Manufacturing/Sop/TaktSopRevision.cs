@@ -26,7 +26,7 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Sop;
 public class TaktSopRevision : TaktCompanyEntityBase
 {
     /// <summary>
-    /// SOP 文档头 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// SOP 文档头 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
     /// </summary>
     [SugarColumn(ColumnName = "sop_id", ColumnDescription = "SOP文档头ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -51,32 +51,32 @@ public class TaktSopRevision : TaktCompanyEntityBase
     public string? ChangeDesc { get; set; }
 
     /// <summary>
-    /// 关联 ECN 主表 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 关联 ECN 主表 ID（关联 TaktEc.Id，选项 TaktEcs/options）
     /// </summary>
     [SugarColumn(ColumnName = "ecn_id", ColumnDescription = "ECN主表ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EcnId { get; set; }
 
     /// <summary>
-    /// 是否锁定（ECN 后旧版锁定；字典 sys_yes_no_type，0=否，1=是）
+    /// 是否锁定（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_locked", ColumnDescription = "是否锁定", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsLocked { get; set; } = 0;
 
     /// <summary>
-    /// 是否强制班组长确认（新版本弹窗；字典 sys_yes_no_type，0=否，1=是）
+    /// 是否强制班组长确认（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     [SugarColumn(ColumnName = "force_leader_ack", ColumnDescription = "是否强制班组长确认", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int ForceLeaderAck { get; set; } = 0;
 
     /// <summary>
-    /// 版本状态（字典 sys_lifecycle_status）
+    /// 版本状态（字典 sys_lifecycle_status；1=编制中，2=审核中，3=已生效，4=已废止）
     /// </summary>
     [SugarColumn(ColumnName = "revision_status", ColumnDescription = "版本状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int RevisionStatus { get; set; } = 1;
 
     /// <summary>
-    /// 生效规则（1=立即生效，2=按工单生效；字典 logistics_sop_effective_rule）
+    /// 生效规则（字典 logistics_sop_effective_rule；1=立即生效，2=按工单生效）
     /// </summary>
     [SugarColumn(ColumnName = "effective_rule", ColumnDescription = "生效规则", ColumnDataType = "int", IsNullable = false, DefaultValue = "2")]
     public int EffectiveRule { get; set; } = 2;

@@ -34,7 +34,7 @@ public class TaktPerfCycle : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "cycle_name", ColumnDescription = "周期名称", ColumnDataType = "nvarchar", Length = 128, IsNullable = false)]
     public string CycleName { get; set; } = string.Empty;
     /// <summary>
-    /// 周期类型（月度/季度/半年度/年度）
+    /// 周期类型（字典 hr_perf_cycle_type；列存 DictValue：MONTH/QUARTER/HALFYEAR/YEAR）
     /// </summary>
     [SugarColumn(ColumnName = "cycle_type", ColumnDescription = "周期类型", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string CycleType { get; set; } = string.Empty;
@@ -91,16 +91,16 @@ public class TaktPerfCycle : TaktCompanyEntityBase
     /// <summary>
     /// 周期说明
     /// </summary>
-    [SugarColumn(ColumnName = "description", ColumnDescription = "周期说明", ColumnDataType = "nvarchar", Length = 500, IsNullable = false)]
-    public string Description { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "perf_cycle_description", ColumnDescription = "周期说明", ColumnDataType = "nvarchar", Length = 500, IsNullable = false)]
+    public string PerfCycleDescription { get; set; } = string.Empty;
     /// <summary>
-    /// 状态（0=待启动 1=目标设定中 2=进行中 3=评审中 4=已完成 5=已归档）
+    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// </summary>
+    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
+    public string RelatedPlant { get; set; } = string.Empty;
+    /// <summary>
+    /// 状态（字典 hr_perf_cycle_schedule_status；0=待启动 1=目标设定中 2=进行中 3=评审中 4=已完成 5=已归档）
     /// </summary>
     [SugarColumn(ColumnName = "cycle_schedule_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int CycleScheduleStatus { get; set; }
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = true)]
-    public string? RelatedPlant { get; set; }
 }

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Organization
 // 文件名称：ITaktPostService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：岗位应用服务接口
 // 
@@ -76,13 +76,6 @@ public interface ITaktPostService
     /// <param name="dto">状态DTO</param>
     /// <returns>DTO</returns>
     Task<TaktPostDto> UpdatePostStatusAsync(TaktPostStatusDto dto);
-
-    /// <summary>
-    /// 更新岗位是否内置
-    /// </summary>
-    /// <param name="dto">是否内置 DTO</param>
-    /// <returns>DTO</returns>
-    Task<TaktPostDto> UpdatePostBuiltInAsync(TaktPostBuiltInDto dto);
 
     /// <summary>
     /// 更新岗位排序

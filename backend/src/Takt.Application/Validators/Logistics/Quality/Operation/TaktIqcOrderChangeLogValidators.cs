@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Quality.Operation
 // 文件名称：TaktIqcOrderChangeLogValidators.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：IqcOrderChangeLog 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktIqcOrderChangeLog 生成，请按需审阅）
 // 
@@ -36,13 +36,7 @@ public class TaktIqcOrderChangeLogCreateValidator : AbstractValidator<TaktIqcOrd
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.IqcOrderId)
-            .GreaterThanOrEqualTo(0).WithMessage("IQC检验单ID不能为负数");
-        RuleFor(x => x.ChangeFields)
-            .MaximumLength(4000).WithMessage("变更字段列表长度不能超过4000个字符");
-        RuleFor(x => x.ChangeReason)
-            .MaximumLength(1000).WithMessage("变更原因长度不能超过1000个字符");
-        RuleFor(x => x.ChangeBy)
-            .MaximumLength(50).WithMessage("变更人长度不能超过50个字符");
+            .GreaterThanOrEqualTo(0).WithMessage("IQC检验单 ID不能为负数");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -66,5 +60,17 @@ public class TaktIqcOrderChangeLogUpdateValidator : AbstractValidator<TaktIqcOrd
     {
         RuleFor(x => x.IqcOrderChangeLogId)
             .GreaterThan(0).WithMessage("IqcOrderChangeLogID无效");
+        RuleFor(x => x.TenantCode)
+            .NotEmpty().WithMessage("租户编码不能为空")
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.CompanyCode)
+            .NotEmpty().WithMessage("公司代码不能为空")
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.IqcOrderId)
+            .GreaterThanOrEqualTo(0).WithMessage("IQC检验单 ID不能为负数");
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
     }
 }

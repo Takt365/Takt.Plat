@@ -34,13 +34,13 @@ public class TaktPayroll : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "payroll_name", ColumnDescription = "薪酬体系名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = false)]
     public string PayrollName { get; set; } = string.Empty;
     /// <summary>
-    /// 关联薪级表 ID
+    /// 薪级表（关联 TaktPayScale.Id，选项 TaktPayScales/options）
     /// </summary>
     [SugarColumn(ColumnName = "pay_scale_id", ColumnDescription = "薪级表ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PayScaleId { get; set; }
     /// <summary>
-    /// 默认公式方案编码（整单工资核算，见 TaktSalaryFormula.set_code）
+    /// 公式方案编码（关联 TaktSalaryFormula.SetCode，同编码多行步骤；整单工资核算时使用）
     /// </summary>
     [SugarColumn(ColumnName = "formula_set_code", ColumnDescription = "公式方案编码", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
     public string? FormulaSetCode { get; set; }
@@ -55,18 +55,18 @@ public class TaktPayroll : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "expiry_date", ColumnDescription = "失效日期", ColumnDataType = "date", IsNullable = true)]
     public DateTime? ExpiryDate { get; set; }
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 说明
+    /// </summary>
+    [SugarColumn(ColumnName = "payroll_description", ColumnDescription = "说明", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
+    public string? PayrollDescription { get; set; }
+    /// <summary>
+    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// </summary>
+    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
+    public string RelatedPlant { get; set; } = string.Empty;
+    /// <summary>
+    /// 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
     /// </summary>
     [SugarColumn(ColumnName = "payroll_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int PayrollStatus { get; set; } = 1;
-    /// <summary>
-    /// 说明
-    /// </summary>
-    [SugarColumn(ColumnName = "description", ColumnDescription = "说明", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
-    public string? Description { get; set; }
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = true)]
-    public string? RelatedPlant { get; set; }
 }

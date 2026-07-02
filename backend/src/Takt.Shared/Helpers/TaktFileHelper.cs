@@ -4,7 +4,7 @@
 // 文件名称：TaktFileHelper.cs
 // 创建时间：2025-01-22
 // 创建人：Takt365(Cursor AI)
-// 功能描述：Takt文件帮助类，提供通用的文件增删改查操作
+// 功能描述：Takt 文件帮助类（I/O、分类、状态、访问判定、分片计划、存储配置解析）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -13,13 +13,16 @@
 using System.Security.Cryptography;
 using System.Text;
 using MimeKit;
+using Newtonsoft.Json;
+using Takt.Shared.Models;
+using Takt.Shared.Options;
 
 namespace Takt.Shared.Helpers;
 
 /// <summary>
-/// Takt文件帮助类
+/// Takt 文件帮助类（I/O、状态、访问、分片计划、存储配置）
 /// </summary>
-/// <remarks>文件系统 I/O 网关；读写/删除方法名与 XML 均明示副作用。</remarks>
+/// <remarks>含文件系统 I/O 网关；读写/删除方法名与 XML 均明示副作用。</remarks>
 public static class TaktFileHelper
 {
     /// <summary>
@@ -57,6 +60,309 @@ public static class TaktFileHelper
         /// </summary>
         Other = 5
     }
+
+    #region 文件状态
+
+    /// <summary>禁用（字典 sys_normal_disable_status=0）</summary>
+    public const int FileStatusDisabled = 0;
+
+    /// <summary>启用（字典 sys_normal_disable_status=1）</summary>
+    public const int FileStatusEnabled = 1;
+
+    /// <summary>锁定（字典 sys_normal_disable_status=2）</summary>
+    public const int FileStatusLocked = 2;
+
+    /// <summary>
+    /// 文件是否为启用态（仅 1 可下载）
+    /// </summary>
+    /// <param name="fileStatus">文件状态</param>
+    /// <returns>启用返回 true</returns>
+    public static bool IsFileStatusEnabled(int fileStatus) => fileStatus == FileStatusEnabled;
+
+    /// <summary>
+    /// 是否为合法文件状态字典值（0/1/2）
+    /// </summary>
+    /// <param name="fileStatus">文件状态</param>
+    /// <returns>合法返回 true</returns>
+    public static bool IsValidFileStatus(int fileStatus) =>
+        fileStatus is FileStatusDisabled or FileStatusEnabled or FileStatusLocked;
+
+    /// <summary>
+    /// 解析上传/表单传入的文件状态；非法或未传时默认启用
+    /// </summary>
+    /// <param name="fileStatus">可选状态</param>
+    /// <returns>有效状态值</returns>
+    public static int NormalizeFileStatusOrDefault(int? fileStatus)
+    {
+        if (!fileStatus.HasValue || !IsValidFileStatus(fileStatus.Value))
+        {
+            return FileStatusEnabled;
+        }
+
+        return fileStatus.Value;
+    }
+
+    #endregion
+
+    #region 文件访问
+
+    /// <summary>
+    /// 当前用户是否可访问该文件（IsPublic 字典 sys_is_public_type：0=公开，1=私有；不含 RBAC）
+    /// </summary>
+    /// <param name="isPublic">公开（0=公开，1=私有）</param>
+    /// <param name="createdBy">文件创建人用户 ID</param>
+    /// <param name="currentUserId">当前登录用户 ID</param>
+    /// <returns>公开文件为 true；私有文件仅创建人为 true</returns>
+    public static bool CanAccessFile(int isPublic, long createdBy, long? currentUserId)
+    {
+        if (isPublic == 0)
+        {
+            return true;
+        }
+
+        return currentUserId is > 0 && createdBy == currentUserId.Value;
+    }
+
+    #endregion
+
+    #region 存储配置
+
+    /// <summary>本地存储（字典 sys_storage_type=0）</summary>
+    public const int StorageTypeLocal = 0;
+
+    /// <summary>OSS 对象存储（字典 sys_storage_type=1）</summary>
+    public const int StorageTypeOss = 1;
+
+    /// <summary>FTP 存储（字典 sys_storage_type=2）</summary>
+    public const int StorageTypeFtp = 2;
+
+    /// <summary>默认 OSS 提供商标识（字典 sys_oss_provider_type=aliyun）</summary>
+    public const string DefaultOssProvider = "aliyun";
+
+    /// <summary>默认 FTP 提供商标识（字典 sys_ftp_provider_type=teac_cn）</summary>
+    public const string DefaultFtpProvider = "teac_cn";
+
+    /// <summary>
+    /// 从 StorageConfig JSON 解析存储配置载荷
+    /// </summary>
+    /// <param name="jsonConfig">StorageConfig 原始 JSON</param>
+    /// <returns>解析结果；非法 JSON 返回空载荷</returns>
+    public static TaktFileStorageConfigPayload ParseStorageConfig(string? jsonConfig)
+    {
+        if (string.IsNullOrWhiteSpace(jsonConfig))
+        {
+            return new TaktFileStorageConfigPayload();
+        }
+
+        try
+        {
+            var parsed = JsonConvert.DeserializeObject<TaktFileStorageConfigPayload>(jsonConfig);
+            return parsed ?? new TaktFileStorageConfigPayload();
+        }
+        catch (JsonException ex)
+        {
+            TaktLogger.Warning(ex, "[TaktFileHelper] StorageConfig JSON 解析失败");
+            return new TaktFileStorageConfigPayload();
+        }
+    }
+
+    /// <summary>
+    /// 解析 OSS 提供商标识
+    /// </summary>
+    /// <param name="jsonConfig">StorageConfig JSON</param>
+    /// <returns>提供商标识（小写）</returns>
+    public static string ResolveOssProvider(string? jsonConfig)
+    {
+        var payload = ParseStorageConfig(jsonConfig);
+        var provider = string.IsNullOrWhiteSpace(payload.OssProvider)
+            ? DefaultOssProvider
+            : payload.OssProvider.Trim();
+        return provider.ToLowerInvariant();
+    }
+
+    /// <summary>
+    /// 解析 FTP 提供商标识
+    /// </summary>
+    /// <param name="jsonConfig">StorageConfig JSON</param>
+    /// <returns>提供商标识（小写）</returns>
+    public static string ResolveFtpProvider(string? jsonConfig)
+    {
+        var payload = ParseStorageConfig(jsonConfig);
+        var provider = string.IsNullOrWhiteSpace(payload.FtpProvider)
+            ? DefaultFtpProvider
+            : payload.FtpProvider.Trim();
+        return provider.ToLowerInvariant();
+    }
+
+    /// <summary>
+    /// 规范化远程对象/文件键（统一斜杠、去首尾 /、禁止 ..）
+    /// </summary>
+    /// <param name="relativePath">相对存储路径</param>
+    /// <returns>安全远程键</returns>
+    /// <exception cref="ArgumentException">路径非法</exception>
+    public static string NormalizeRemoteObjectKey(string relativePath)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(relativePath);
+        var normalized = relativePath.Replace('\\', '/').TrimStart('/');
+        if (normalized.Contains("..", StringComparison.Ordinal))
+        {
+            throw new ArgumentException("远程存储路径非法");
+        }
+
+        return normalized;
+    }
+
+    #endregion
+
+    #region 分片上传计划
+
+    /// <summary>
+    /// 根据文件总大小与上传配置生成分片计划
+    /// </summary>
+    /// <param name="options">FileUpload 配置</param>
+    /// <param name="totalSizeBytes">文件总大小（字节）</param>
+    /// <returns>分片计划</returns>
+    /// <exception cref="ArgumentNullException">options 为 null</exception>
+    /// <exception cref="ArgumentOutOfRangeException">totalSizeBytes 非法或超过 MaxFileSizeBytes</exception>
+    public static TaktFileChunkPlan ResolveChunkPlan(TaktFileUploadOptions options, long totalSizeBytes)
+    {
+        ArgumentNullException.ThrowIfNull(options);
+        if (totalSizeBytes <= 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(totalSizeBytes), "文件总大小必须大于 0");
+        }
+
+        if (totalSizeBytes > options.MaxFileSizeBytes)
+        {
+            throw new ArgumentOutOfRangeException(nameof(totalSizeBytes), "文件总大小超过 MaxFileSizeBytes");
+        }
+
+        var maxChunkCount = Math.Max(1, options.MaxChunkCount);
+        var defaultChunkSize = Math.Max(1L, options.DefaultChunkSizeBytes);
+        var threshold = Math.Max(1L, options.ChunkThresholdBytes);
+
+        if (totalSizeBytes <= threshold)
+        {
+            return BuildChunkPlan(
+                totalSizeBytes,
+                useChunkUpload: false,
+                chunkSizeBytes: totalSizeBytes,
+                totalChunks: 1,
+                options,
+                maxChunkCount,
+                defaultChunkSize,
+                threshold);
+        }
+
+        var chunkSize = defaultChunkSize;
+        var totalChunks = checked((int)Math.Ceiling((double)totalSizeBytes / chunkSize));
+        if (totalChunks > maxChunkCount)
+        {
+            chunkSize = (long)Math.Ceiling((double)totalSizeBytes / maxChunkCount);
+            if (chunkSize < 1)
+            {
+                chunkSize = 1;
+            }
+
+            totalChunks = checked((int)Math.Ceiling((double)totalSizeBytes / chunkSize));
+        }
+
+        if (totalChunks > maxChunkCount)
+        {
+            throw new InvalidOperationException("无法在 MaxChunkCount 限制内切分分片");
+        }
+
+        return BuildChunkPlan(
+            totalSizeBytes,
+            useChunkUpload: true,
+            chunkSizeBytes: chunkSize,
+            totalChunks: totalChunks,
+            options,
+            maxChunkCount,
+            defaultChunkSize,
+            threshold);
+    }
+
+    /// <summary>
+    /// 获取指定序号分片的期望大小（最后一片为余数）
+    /// </summary>
+    /// <param name="plan">分片计划</param>
+    /// <param name="chunkNumber">分片序号（从 1 开始）</param>
+    /// <returns>期望字节数</returns>
+    /// <exception cref="ArgumentNullException">plan 为 null</exception>
+    /// <exception cref="ArgumentOutOfRangeException">chunkNumber 超出范围</exception>
+    public static long GetExpectedChunkSize(TaktFileChunkPlan plan, int chunkNumber)
+    {
+        ArgumentNullException.ThrowIfNull(plan);
+        if (chunkNumber < 1 || chunkNumber > plan.TotalChunks)
+        {
+            throw new ArgumentOutOfRangeException(nameof(chunkNumber));
+        }
+
+        if (chunkNumber < plan.TotalChunks)
+        {
+            return plan.ChunkSizeBytes;
+        }
+
+        var remainder = checked(plan.TotalSizeBytes - ((long)(plan.TotalChunks - 1) * plan.ChunkSizeBytes));
+        return remainder > 0 ? remainder : plan.ChunkSizeBytes;
+    }
+
+    /// <summary>
+    /// 校验客户端声明的分片元数据是否与计划一致
+    /// </summary>
+    /// <param name="plan">分片计划</param>
+    /// <param name="totalChunks">客户端声明总分片数</param>
+    /// <param name="chunkNumber">分片序号</param>
+    /// <param name="declaredChunkSize">客户端声明分片大小</param>
+    /// <param name="actualChunkSize">实际上传字节数</param>
+    /// <returns>元数据是否与计划一致</returns>
+    public static bool IsChunkMetadataValid(
+        TaktFileChunkPlan plan,
+        int totalChunks,
+        int chunkNumber,
+        long declaredChunkSize,
+        long actualChunkSize)
+    {
+        ArgumentNullException.ThrowIfNull(plan);
+        if (totalChunks != plan.TotalChunks)
+        {
+            return false;
+        }
+
+        if (chunkNumber < 1 || chunkNumber > plan.TotalChunks)
+        {
+            return false;
+        }
+
+        var expected = GetExpectedChunkSize(plan, chunkNumber);
+        return declaredChunkSize == expected && actualChunkSize == expected;
+    }
+
+    private static TaktFileChunkPlan BuildChunkPlan(
+        long totalSizeBytes,
+        bool useChunkUpload,
+        long chunkSizeBytes,
+        int totalChunks,
+        TaktFileUploadOptions options,
+        int maxChunkCount,
+        long defaultChunkSize,
+        long threshold)
+    {
+        return new TaktFileChunkPlan
+        {
+            TotalSizeBytes = totalSizeBytes,
+            UseChunkUpload = useChunkUpload,
+            ChunkSizeBytes = chunkSizeBytes,
+            TotalChunks = totalChunks,
+            MaxFileSizeBytes = options.MaxFileSizeBytes,
+            MaxChunkCount = maxChunkCount,
+            ChunkThresholdBytes = threshold,
+            DefaultChunkSizeBytes = defaultChunkSize,
+        };
+    }
+
+    #endregion
 
     #region 文件读取
 
@@ -1087,6 +1393,61 @@ public static class TaktFileHelper
         {
             Directory.CreateDirectory(directoryPath);
         }
+    }
+
+    /// <summary>
+    /// 解析可选配置路径（绝对路径或相对 ContentRoot）
+    /// </summary>
+    /// <param name="contentRootPath">Web ContentRoot 绝对路径</param>
+    /// <param name="configuredRootPath">配置路径（可空）</param>
+    /// <returns>规范化绝对路径</returns>
+    /// <exception cref="ArgumentException">contentRootPath 为空</exception>
+    public static string ResolveConfiguredStorageRootPath(string contentRootPath, string configuredRootPath)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(contentRootPath);
+        ArgumentException.ThrowIfNullOrWhiteSpace(configuredRootPath);
+        var configured = configuredRootPath.Trim();
+        return Path.IsPathRooted(configured)
+            ? Path.GetFullPath(configured)
+            : Path.GetFullPath(Path.Combine(contentRootPath, configured));
+    }
+
+    /// <summary>
+    /// 解析分片临时根目录（默认 wwwroot；仅配置 ChunkStorageRootPath 时覆盖）
+    /// </summary>
+    /// <param name="contentRootPath">Web ContentRoot 绝对路径</param>
+    /// <param name="configuredRootPath">配置项 ChunkStorageRootPath（可空）</param>
+    /// <returns>分片根目录绝对路径（其下再拼 ChunkRelativePath）</returns>
+    /// <exception cref="ArgumentException">contentRootPath 为空</exception>
+    public static string ResolveChunkStorageRootPath(string contentRootPath, string? configuredRootPath = null)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(contentRootPath);
+        if (!string.IsNullOrWhiteSpace(configuredRootPath))
+        {
+            return ResolveConfiguredStorageRootPath(contentRootPath, configuredRootPath);
+        }
+
+        return GetWwwRootPath(contentRootPath);
+    }
+
+    /// <summary>
+    /// 解析本地正式文件存储根目录（默认 wwwroot；仅配置 UploadStorageRootPath 时覆盖）
+    /// </summary>
+    /// <param name="contentRootPath">Web ContentRoot 绝对路径</param>
+    /// <param name="configuredUploadStorageRootPath">配置项 UploadStorageRootPath（可空）</param>
+    /// <returns>本地正式文件存储根目录绝对路径</returns>
+    /// <exception cref="ArgumentException">contentRootPath 为空</exception>
+    public static string ResolveLocalUploadStorageRootPath(
+        string contentRootPath,
+        string? configuredUploadStorageRootPath = null)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(contentRootPath);
+        if (!string.IsNullOrWhiteSpace(configuredUploadStorageRootPath))
+        {
+            return ResolveConfiguredStorageRootPath(contentRootPath, configuredUploadStorageRootPath);
+        }
+
+        return GetWwwRootPath(contentRootPath);
     }
 
     /// <summary>

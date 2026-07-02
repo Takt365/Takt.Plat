@@ -16,7 +16,7 @@ using Takt.Domain.Entities;
 namespace Takt.Domain.Entities.HumanResource.Personnel;
 
 /// <summary>
-/// 员工调动记录（审批单，状态见 <see cref="TaktApprovalEntityBase.ApprovalStatus"/>）
+/// 员工调动记录（审批单；审批态见基类 ApprovalStatus，字典 sys_approval_status）
 /// </summary>
 [SugarTable("takt_human_resource_personnel_employee_reassignment", "员工调动表")]
 [SugarIndex("ix_employee_reassignment_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
@@ -25,71 +25,60 @@ namespace Takt.Domain.Entities.HumanResource.Personnel;
 public class TaktEmployeeReassignment : TaktApprovalEntityBase
 {
     /// <summary>
-    /// 员工ID
+    /// 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [SugarColumn(ColumnName = "employee_id", ColumnDescription = "员工ID", ColumnDataType = "bigint", IsNullable = false)]
     public long EmployeeId { get; set; }
-
     /// <summary>
-    /// 调动类型（0=转岗，1=调岗）
+    /// 调动类型（字典 hr_reassignment_type；0=转岗 1=调岗）
     /// </summary>
     [SugarColumn(ColumnName = "reassignment_type", ColumnDescription = "调动类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int ReassignmentType { get; set; }
-
     /// <summary>
-    /// 调出部门ID
+    /// 调出部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     [SugarColumn(ColumnName = "from_dept_id", ColumnDescription = "调出部门ID", ColumnDataType = "bigint", IsNullable = false)]
     public long FromDeptId { get; set; }
-
     /// <summary>
     /// 调出部门名称
     /// </summary>
     [SugarColumn(ColumnName = "from_dept_name", ColumnDescription = "调出部门名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
     public string FromDeptName { get; set; } = string.Empty;
-
     /// <summary>
-    /// 调出岗位ID
+    /// 调出岗位（关联 TaktPost.Id，选项 TaktPosts/options）
     /// </summary>
     [SugarColumn(ColumnName = "from_post_id", ColumnDescription = "调出岗位ID", ColumnDataType = "bigint", IsNullable = true)]
     public long? FromPostId { get; set; }
-
     /// <summary>
     /// 调出岗位名称
     /// </summary>
     [SugarColumn(ColumnName = "from_post_name", ColumnDescription = "调出岗位名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
     public string? FromPostName { get; set; }
-
     /// <summary>
-    /// 调入部门ID
+    /// 调入部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     [SugarColumn(ColumnName = "to_dept_id", ColumnDescription = "调入部门ID", ColumnDataType = "bigint", IsNullable = false)]
     public long ToDeptId { get; set; }
-
     /// <summary>
     /// 调入部门名称
     /// </summary>
     [SugarColumn(ColumnName = "to_dept_name", ColumnDescription = "调入部门名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
     public string ToDeptName { get; set; } = string.Empty;
-
     /// <summary>
-    /// 调入岗位ID
+    /// 调入岗位（关联 TaktPost.Id，选项 TaktPosts/options）
     /// </summary>
     [SugarColumn(ColumnName = "to_post_id", ColumnDescription = "调入岗位ID", ColumnDataType = "bigint", IsNullable = true)]
     public long? ToPostId { get; set; }
-
     /// <summary>
     /// 调入岗位名称
     /// </summary>
     [SugarColumn(ColumnName = "to_post_name", ColumnDescription = "调入岗位名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
     public string? ToPostName { get; set; }
-
     /// <summary>
     /// 生效日期
     /// </summary>
     [SugarColumn(ColumnName = "effective_date", ColumnDescription = "生效日期", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? EffectiveDate { get; set; }
-
     /// <summary>
     /// 调动原因
     /// </summary>

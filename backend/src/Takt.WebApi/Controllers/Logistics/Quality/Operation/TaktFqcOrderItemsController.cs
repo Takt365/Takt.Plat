@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Quality.Operation
 // 文件名称：TaktFqcOrderItemsController.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-30
 // 创建人：Takt365(Cursor AI)
 // 功能描述：出货检验单明细控制器
 // 
@@ -41,7 +41,7 @@ public class TaktFqcOrderItemsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:quality:operation:fqcorder:list", "出货检验单明细列表")]
+    [TaktPermission("logistics:quality:operation:fqc:order:list", "出货检验单明细列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetFqcOrderItemListAsync([FromQuery] TaktFqcOrderItemQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktFqcOrderItemsController : TaktControllerBase
     /// </summary>
     /// <param name="id">出货检验单明细ID</param>
     /// <returns>出货检验单明细DTO</returns>
-    [TaktPermission("logistics:quality:operation:fqcorder:query", "出货检验单明细详情")]
+    [TaktPermission("logistics:quality:operation:fqc:order:query", "出货检验单明细详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetFqcOrderItemByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktFqcOrderItemsController : TaktControllerBase
     /// 获取出货检验单明细选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:quality:operation:fqcorder:query", "出货检验单明细选项")]
+    [TaktPermission("logistics:quality:operation:fqc:order:query", "出货检验单明细选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetFqcOrderItemOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktFqcOrderItemsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>出货检验单明细DTO</returns>
-    [TaktPermission("logistics:quality:operation:fqcorder:create", "创建出货检验单明细")]
+    [TaktPermission("logistics:quality:operation:fqc:order:create", "创建出货检验单明细")]
     [HttpPost]
     public async Task<IActionResult> CreateFqcOrderItemAsync([FromBody] TaktFqcOrderItemCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktFqcOrderItemsController : TaktControllerBase
     /// <param name="id">出货检验单明细ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>出货检验单明细DTO</returns>
-    [TaktPermission("logistics:quality:operation:fqcorder:update", "更新出货检验单明细")]
+    [TaktPermission("logistics:quality:operation:fqc:order:update", "更新出货检验单明细")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateFqcOrderItemAsync(long id, [FromBody] TaktFqcOrderItemUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktFqcOrderItemsController : TaktControllerBase
     /// </summary>
     /// <param name="id">出货检验单明细ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:quality:operation:fqcorder:delete", "删除出货检验单明细")]
+    [TaktPermission("logistics:quality:operation:fqc:order:delete", "删除出货检验单明细")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteFqcOrderItemByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktFqcOrderItemsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:quality:operation:fqcorder:delete", "批量删除出货检验单明细")]
+    [TaktPermission("logistics:quality:operation:fqc:order:delete", "批量删除出货检验单明细")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteFqcOrderItemBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktFqcOrderItemsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO</param>
     /// <returns>出货检验单明细DTO</returns>
-    [TaktPermission("logistics:quality:operation:fqcorder:update", "更新出货检验单明细状态")]
+    [TaktPermission("logistics:quality:operation:fqc:order:update", "更新出货检验单明细状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateFqcOrderItemStatusAsync([FromBody] TaktFqcOrderItemStatusDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktFqcOrderItemsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:quality:operation:fqcorder:import", "获取出货检验单明细导入模板")]
+    [TaktPermission("logistics:quality:operation:fqc:order:import", "获取出货检验单明细导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetFqcOrderItemTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +224,7 @@ public class TaktFqcOrderItemsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:quality:operation:fqcorder:import", "导入出货检验单明细")]
+    [TaktPermission("logistics:quality:operation:fqc:order:import", "导入出货检验单明细")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportFqcOrderItemAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +254,7 @@ public class TaktFqcOrderItemsController : TaktControllerBase
     /// 导出出货检验单明细
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:quality:operation:fqcorder:export", "导出出货检验单明细")]
+    [TaktPermission("logistics:quality:operation:fqc:order:export", "导出出货检验单明细")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportFqcOrderItemAsync([FromQuery] TaktFqcOrderItemQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

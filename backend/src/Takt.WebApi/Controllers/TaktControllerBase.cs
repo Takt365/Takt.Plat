@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Takt.Domain.Interfaces;
+using Takt.Infrastructure.Services;
 using Takt.WebApi.Filters;
 using Takt.Shared.Enums;
 using Takt.Shared.Exceptions;
@@ -81,12 +82,14 @@ public abstract class TaktControllerBase : ControllerBase
     /// <summary>
     /// 获取当前租户编码（从用户上下文或请求头）
     /// </summary>
-    protected string? CurrentTenantCode => _userContext?.TenantCode ?? Request.Headers["X-Tenant-Code"].FirstOrDefault();
+    protected string? CurrentTenantCode =>
+        _userContext?.TenantCode ?? TaktUserContext.TryResolveTenantCode(HttpContext);
 
     /// <summary>
     /// 获取当前公司编码（从用户上下文或请求头）
     /// </summary>
-    protected string? CurrentCompanyCode => _userContext?.CompanyCode ?? Request.Headers["X-Company-Code"].FirstOrDefault();
+    protected string? CurrentCompanyCode =>
+        _userContext?.CompanyCode ?? TaktUserContext.TryResolveCompanyCode(HttpContext);
 
     /// <summary>
     /// 获取当前用户ID（从用户上下文或 JWT Token）
@@ -100,10 +103,8 @@ public abstract class TaktControllerBase : ControllerBase
             {
                 return _userContext.UserId;
             }
-            
-            // 从 JWT Token 中解析（向后兼容）
-            var userIdClaim = User.FindFirst("sub")?.Value;
-            return long.TryParse(userIdClaim, out var userId) ? userId : null;
+
+            return TaktUserContext.TryResolveUserId(User);
         }
     }
 
@@ -119,9 +120,8 @@ public abstract class TaktControllerBase : ControllerBase
             {
                 return _userContext.UserName;
             }
-            
-            // 从 JWT Token 中解析（向后兼容）
-            return User.FindFirst("name")?.Value;
+
+            return TaktUserContext.TryResolveUserName(User);
         }
     }
 
@@ -316,7 +316,7 @@ public abstract class TaktControllerBase : ControllerBase
             return BadRequest("租户编码不能为空");
         }
 
-        var headerTenant = Request.Headers["X-Tenant-Code"].FirstOrDefault()?.Trim();
+        var headerTenant = TaktUserContext.TryResolveTenantCode(HttpContext);
         if (string.IsNullOrWhiteSpace(headerTenant))
         {
             return BadRequest("缺少 X-Tenant-Code 请求头");

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Sales
 // 文件名称：TaktSalesPriceItemDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-07-01
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SalesPriceItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSalesPriceItem 生成，请按需审阅）
 // 
@@ -36,13 +36,13 @@ public class TaktSalesPriceItemDto : TaktCompanyDtoBase
     public long SalesPriceItemId { get; set; }
 
     /// <summary>
-    /// 销售价格ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 销售价格（关联 TaktSalesPrice.Id，选项 TaktSalesPrices/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SalesPriceId { get; set; }
 
     /// <summary>
-    /// 销售价格名称（填充字段）
+    /// 销售价格（关联 TaktSalesPrice.Id，选项 TaktSalesPrices/options）
     /// </summary>
     public string? SalesPriceName { get; set; }
 
@@ -57,29 +57,34 @@ public class TaktSalesPriceItemDto : TaktCompanyDtoBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 物料编码
+    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售单位
+    /// 销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string SalesUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售价格（精确到分，存储为整数，单位为分）
+    /// 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+    /// </summary>
+    public int SalesPerUnit { get; set; } = 0;
+
+    /// <summary>
+    /// 销售价格（decimal(18,5)）
     /// </summary>
     public decimal SalesPrice { get; set; }
 
     /// <summary>
-    /// 最小订购量（基本单位数量）
+    /// 最小订购量（基本单位数量，整数）
     /// </summary>
-    public decimal MinOrderQuantity { get; set; }
+    public int MinOrderQuantity { get; set; } = 0;
 
     /// <summary>
-    /// 最大订购量（基本单位数量，0表示无限制）
+    /// 最大订购量（基本单位数量，0表示无限制，整数）
     /// </summary>
-    public decimal MaxOrderQuantity { get; set; }
+    public int MaxOrderQuantity { get; set; } = 0;
 
     /// <summary>
     /// 价格阶梯列表（主子表关系，一个物料价格可以有多个阶梯）
@@ -116,7 +121,7 @@ public class TaktSalesPriceItemQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售价格ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 销售价格（关联 TaktSalesPrice.Id，选项 TaktSalesPrices/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SalesPriceId { get; set; }
@@ -132,29 +137,34 @@ public class TaktSalesPriceItemQueryDto : TaktPagedQuery
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 物料编码
+    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售单位
+    /// 销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? SalesUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售价格（精确到分，存储为整数，单位为分）
+    /// 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+    /// </summary>
+    public int? SalesPerUnit { get; set; }
+
+    /// <summary>
+    /// 销售价格（decimal(18,5)）
     /// </summary>
     public decimal? SalesPrice { get; set; }
 
     /// <summary>
-    /// 最小订购量（基本单位数量）
+    /// 最小订购量（基本单位数量，整数）
     /// </summary>
-    public decimal? MinOrderQuantity { get; set; }
+    public int? MinOrderQuantity { get; set; }
 
     /// <summary>
-    /// 最大订购量（基本单位数量，0表示无限制）
+    /// 最大订购量（基本单位数量，0表示无限制，整数）
     /// </summary>
-    public decimal? MaxOrderQuantity { get; set; }
+    public int? MaxOrderQuantity { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -197,12 +207,12 @@ public class TaktSalesPriceItemCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售价格ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 销售价格（关联 TaktSalesPrice.Id，选项 TaktSalesPrices/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SalesPriceId { get; set; }
@@ -219,31 +229,36 @@ public class TaktSalesPriceItemCreateDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 物料编码
+    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
     /// </summary>
-    [Required(ErrorMessage = "物料编码不能为空")]
+    [Required(ErrorMessage = "物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）不能为空")]
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售单位
+    /// 销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
     /// </summary>
-    [Required(ErrorMessage = "销售单位不能为空")]
+    [Required(ErrorMessage = "销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）不能为空")]
     public string SalesUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售价格（精确到分，存储为整数，单位为分）
+    /// 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+    /// </summary>
+    public int SalesPerUnit { get; set; } = 0;
+
+    /// <summary>
+    /// 销售价格（decimal(18,5)）
     /// </summary>
     public decimal SalesPrice { get; set; }
 
     /// <summary>
-    /// 最小订购量（基本单位数量）
+    /// 最小订购量（基本单位数量，整数）
     /// </summary>
-    public decimal MinOrderQuantity { get; set; }
+    public int MinOrderQuantity { get; set; } = 0;
 
     /// <summary>
-    /// 最大订购量（基本单位数量，0表示无限制）
+    /// 最大订购量（基本单位数量，0表示无限制，整数）
     /// </summary>
-    public decimal MaxOrderQuantity { get; set; }
+    public int MaxOrderQuantity { get; set; } = 0;
 
     /// <summary>
     /// 价格阶梯列表（主子表关系，一个物料价格可以有多个阶梯）（子表，级联保存）
@@ -302,7 +317,7 @@ public class TaktSalesPriceItemTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售价格ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 销售价格（关联 TaktSalesPrice.Id，选项 TaktSalesPrices/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SalesPriceId { get; set; }
@@ -318,14 +333,39 @@ public class TaktSalesPriceItemTemplateDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 物料编码
+    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售单位
+    /// 销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? SalesUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+    /// </summary>
+    public int? SalesPerUnit { get; set; }
+
+    /// <summary>
+    /// 销售价格（decimal(18,5)）
+    /// </summary>
+    public decimal? SalesPrice { get; set; }
+
+    /// <summary>
+    /// 最小订购量（基本单位数量，整数）
+    /// </summary>
+    public int? MinOrderQuantity { get; set; }
+
+    /// <summary>
+    /// 最大订购量（基本单位数量，0表示无限制，整数）
+    /// </summary>
+    public int? MaxOrderQuantity { get; set; }
+
+    /// <summary>
+    /// 价格阶梯列表（主子表关系，一个物料价格可以有多个阶梯）（子表，级联保存）
+    /// </summary>
+    public List<TaktSalesPriceScaleCreateDto>? Scales { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -355,12 +395,12 @@ public class TaktSalesPriceItemImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售价格ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 销售价格（关联 TaktSalesPrice.Id，选项 TaktSalesPrices/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SalesPriceId { get; set; }
@@ -376,14 +416,39 @@ public class TaktSalesPriceItemImportDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 物料编码
+    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售单位
+    /// 销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? SalesUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+    /// </summary>
+    public int? SalesPerUnit { get; set; }
+
+    /// <summary>
+    /// 销售价格（decimal(18,5)）
+    /// </summary>
+    public decimal? SalesPrice { get; set; }
+
+    /// <summary>
+    /// 最小订购量（基本单位数量，整数）
+    /// </summary>
+    public int? MinOrderQuantity { get; set; }
+
+    /// <summary>
+    /// 最大订购量（基本单位数量，0表示无限制，整数）
+    /// </summary>
+    public int? MaxOrderQuantity { get; set; }
+
+    /// <summary>
+    /// 价格阶梯列表（主子表关系，一个物料价格可以有多个阶梯）（子表，级联保存）
+    /// </summary>
+    public List<TaktSalesPriceScaleCreateDto>? Scales { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -419,7 +484,7 @@ public class TaktSalesPriceItemExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售价格ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 销售价格（关联 TaktSalesPrice.Id，选项 TaktSalesPrices/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SalesPriceId { get; set; }
@@ -435,29 +500,34 @@ public class TaktSalesPriceItemExportDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 物料编码
+    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售单位
+    /// 销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string SalesUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售价格（精确到分，存储为整数，单位为分）
+    /// 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+    /// </summary>
+    public int SalesPerUnit { get; set; } = 0;
+
+    /// <summary>
+    /// 销售价格（decimal(18,5)）
     /// </summary>
     public decimal SalesPrice { get; set; }
 
     /// <summary>
-    /// 最小订购量（基本单位数量）
+    /// 最小订购量（基本单位数量，整数）
     /// </summary>
-    public decimal MinOrderQuantity { get; set; }
+    public int MinOrderQuantity { get; set; } = 0;
 
     /// <summary>
-    /// 最大订购量（基本单位数量，0表示无限制）
+    /// 最大订购量（基本单位数量，0表示无限制，整数）
     /// </summary>
-    public decimal MaxOrderQuantity { get; set; }
+    public int MaxOrderQuantity { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

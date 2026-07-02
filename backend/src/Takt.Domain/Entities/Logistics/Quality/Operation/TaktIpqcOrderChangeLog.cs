@@ -23,7 +23,7 @@ namespace Takt.Domain.Entities.Logistics.Quality.Operation;
 public class TaktIpqcOrderChangeLog : TaktCompanyEntityBase
 {
     /// <summary>
-    /// IPQC检验单ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// IPQC检验单 ID（关联 TaktIpqcOrder.Id，选项 TaktIpqcOrders/options）
     /// </summary>
     [SugarColumn(ColumnName = "ipqc_order_id", ColumnDescription = "IPQC检验单ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]

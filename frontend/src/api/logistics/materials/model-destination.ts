@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/materials
 // 文件名称：model-destination.ts
-// 创建时间：2026-06-20
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/materials 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -134,6 +134,21 @@ export function getModelDestinationOptions(): Promise<TaktSelectOption[]> {
   return request<TaktSelectOption[]>({
     url: `${MODEL_DESTINATION_API_BASE}/options`,
     method: 'get',
+  });
+}
+
+/**
+ * 根据物料编码获取机种名称与仕向地信息
+ * @param {string} materialCode 物料编码
+ * @returns {Promise<ModelDestination | null>} 型号目的地 DTO；未匹配时为 null
+ */
+export function getModelDestinationByMaterial(materialCode: string): Promise<ModelDestination | null> {
+  return request<ModelDestination | null>({
+    url: `${MODEL_DESTINATION_API_BASE}/by-material`,
+    method: 'get',
+    params: {
+      materialCode,
+    },
   });
 }
 

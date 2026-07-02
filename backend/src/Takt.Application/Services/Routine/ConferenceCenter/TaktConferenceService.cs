@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Routine.ConferenceCenter
 // 文件名称：TaktConferenceService.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：会议中心应用服务实现
 // 
@@ -378,15 +378,15 @@ public class TaktConferenceService : TaktServiceBase, ITaktConferenceService
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
                 (x.ConferenceCode != null && x.ConferenceCode.Contains(keywords))
-                || (x.Title != null && x.Title.Contains(keywords))
+                || (x.ConferenceTitle != null && x.ConferenceTitle.Contains(keywords))
                 || SqlFunc.ToString(x.ConferenceType).Contains(keywords)
                 || SqlFunc.ToString(x.ConferenceStatus).Contains(keywords)
                 || (x.Location != null && x.Location.Contains(keywords))
                 || (x.MeetingLink != null && x.MeetingLink.Contains(keywords))
                 || (x.Agenda != null && x.Agenda.Contains(keywords))
-                || (x.Content != null && x.Content.Contains(keywords))
-                || (x.Summary != null && x.Summary.Contains(keywords))
-                || (x.Tags != null && x.Tags.Contains(keywords))
+                || (x.ConferenceContent != null && x.ConferenceContent.Contains(keywords))
+                || (x.ConferenceSummary != null && x.ConferenceSummary.Contains(keywords))
+                || (x.ConferenceTags != null && x.ConferenceTags.Contains(keywords))
                 || SqlFunc.ToString(x.OrganizerId).Contains(keywords)
                 || (x.OrganizerName != null && x.OrganizerName.Contains(keywords))
                 || SqlFunc.ToString(x.DeptId).Contains(keywords)
@@ -408,9 +408,9 @@ public class TaktConferenceService : TaktServiceBase, ITaktConferenceService
             exp = exp.And(x => x.ConferenceCode != null && x.ConferenceCode.Contains(queryDto.ConferenceCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Title))
+        if (!string.IsNullOrEmpty(queryDto?.ConferenceTitle))
         {
-            exp = exp.And(x => x.Title != null && x.Title.Contains(queryDto.Title));
+            exp = exp.And(x => x.ConferenceTitle != null && x.ConferenceTitle.Contains(queryDto.ConferenceTitle));
         }
 
         if (queryDto?.ConferenceType.HasValue == true)
@@ -438,19 +438,19 @@ public class TaktConferenceService : TaktServiceBase, ITaktConferenceService
             exp = exp.And(x => x.Agenda != null && x.Agenda.Contains(queryDto.Agenda));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Content))
+        if (!string.IsNullOrEmpty(queryDto?.ConferenceContent))
         {
-            exp = exp.And(x => x.Content != null && x.Content.Contains(queryDto.Content));
+            exp = exp.And(x => x.ConferenceContent != null && x.ConferenceContent.Contains(queryDto.ConferenceContent));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Summary))
+        if (!string.IsNullOrEmpty(queryDto?.ConferenceSummary))
         {
-            exp = exp.And(x => x.Summary != null && x.Summary.Contains(queryDto.Summary));
+            exp = exp.And(x => x.ConferenceSummary != null && x.ConferenceSummary.Contains(queryDto.ConferenceSummary));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Tags))
+        if (!string.IsNullOrEmpty(queryDto?.ConferenceTags))
         {
-            exp = exp.And(x => x.Tags != null && x.Tags.Contains(queryDto.Tags));
+            exp = exp.And(x => x.ConferenceTags != null && x.ConferenceTags.Contains(queryDto.ConferenceTags));
         }
 
         if (queryDto?.OrganizerId.HasValue == true)

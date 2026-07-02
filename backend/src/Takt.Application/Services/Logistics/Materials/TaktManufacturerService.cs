@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Materials
 // 文件名称：TaktManufacturerService.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：制造商信息应用服务实现
 // 
@@ -463,7 +463,6 @@ public class TaktManufacturerService : TaktServiceBase, ITaktManufacturerService
                 || SqlFunc.ToString(x.ManufacturerLevel).Contains(keywords)
                 || SqlFunc.ToString(x.QualityCertification).Contains(keywords)
                 || SqlFunc.ToString(x.EvaluationScore).Contains(keywords)
-                || SqlFunc.ToString(x.IsQualified).Contains(keywords)
                 || SqlFunc.ToString(x.ManufacturerStatus).Contains(keywords)
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
@@ -570,11 +569,6 @@ public class TaktManufacturerService : TaktServiceBase, ITaktManufacturerService
         if (queryDto?.EvaluationScore.HasValue == true)
         {
             exp = exp.And(x => x.EvaluationScore == queryDto.EvaluationScore);
-        }
-
-        if (queryDto?.IsQualified.HasValue == true)
-        {
-            exp = exp.And(x => x.IsQualified == queryDto.IsQualified);
         }
 
         if (queryDto?.ManufacturerStatus.HasValue == true)

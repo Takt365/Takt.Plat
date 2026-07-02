@@ -2,13 +2,13 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/service/service-contract -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：服务合同实体管理页面，含查询、增删改，由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成 -->
+<!-- 功能描述：服务合同实体管理页面，含查询、增删改，由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
 
 <template>
-  <div class="p-4 flex flex-col min-h-0 h-full">
+  <div class="p-4">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -52,39 +52,40 @@
       @refresh="handleRefresh"
     />
 
-    <!-- 左主右从 -->
-    <TaktMasterDetailTableLr
-      v-model:master-current="currentPage"
-      v-model:master-page-size="pageSize"
-      v-model:selected-master-key="selectedMasterKey"
-      class="min-h-0 flex-1"
-      :master-columns="columns"
-      :master-data-source="dataSource"
-      :master-loading="loading"
-      :master-row-key="getServiceContractId"
-      :master-row-selection="rowSelection"
-      master-id-column-key="serviceContractId"
-      :master-visible-column-keys="visibleColumnKeys"
-      :master-total="total"
-      master-entity-scope="company"
-      @master-change="handleTableChange"
-      @master-resize-column="handleResizeColumn"
-      @master-pagination-change="handleMasterPaginationChange"
-      @master-select="handleMasterSelect"
+    <!-- 表格 -->
+    <TaktSingleTable
+      entity-scope="company"
+      :columns="columns"
+      :visible-column-keys="visibleColumnKeys"
+      :id-column-key="'serviceContractId'"
+      table-mode="single"
+      :data-source="dataSource"
+      :loading="loading"
+      :stripe="true"
+      :row-key="getServiceContractId"
+      :row-selection="rowSelection"
+      :custom-row="onClickRow"
+
+      @change="handleTableChange"
+      @resize-column="handleResizeColumn"
     >
-      <template #detail>
-        <ServiceOrderPanel
-          ref="serviceOrderPanelRef"
-          class="h-full min-h-0 flex-1"
-        />
-      </template>
-    </TaktMasterDetailTableLr>
+
+    </TaktSingleTable>
+
+    <!-- 分页（服务端分页，外置 TaktPagination） -->
+    <TaktPagination
+      v-model:current="currentPage"
+      v-model:page-size="pageSize"
+      :total="total"
+      @change="handlePaginationChange"
+      @show-size-change="handlePaginationSizeChange"
+    />
 
     <!-- 新增/编辑对话框 -->
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="1100px"
+      width="50%"
       wrap-class-name="takt-form-modal-resizable"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
@@ -267,7 +268,7 @@
           v-model:value="advancedQueryForm.currencyCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.servicecontract.currencycode') })"
           show-count
-          :maxlength="10"
+          :maxlength="3"
           allow-clear
         />
       </a-form-item>
@@ -326,7 +327,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -337,7 +338,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -423,7 +424,7 @@
 
 <script setup lang="ts">
 /**
- * 服务合同实体管理页 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
+ * 服务合同实体管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/logistics/service/service-contract
  */
 import { ref, computed, onMounted } from 'vue'
@@ -433,8 +434,6 @@ import { CreateActionColumn } from '@/components/business/takt-action-column/ind
 import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import ServiceContractForm from './components/service-contract-form.vue'
-import ServiceOrderPanel from './components/service-order-panel.vue'
-import { provideServiceContractMasterContext } from './composables/use-service-contract-master-context'
 import { getServiceContractList, getServiceContractById, createServiceContract, updateServiceContract, deleteServiceContractById, deleteServiceContractBatch, getServiceContractTemplate, importServiceContract, exportServiceContract, updateServiceContractStatus } from '@/api/logistics/customer-service/service-contract'
 import type { ServiceContract, ServiceContractQuery } from '@/types/logistics/customer-service/service-contract'
 import { taktExcelEntityNames } from '@/utils/naming'
@@ -553,9 +552,7 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
-/** 主表选中行上下文（右侧明细面板读取） */
-const { selectedMasterRow } = provideServiceContractMasterContext()
-const serviceOrderPanelRef = ref<InstanceType<typeof ServiceOrderPanel> | null>(null)
+
 
 /**
  * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
@@ -625,55 +622,10 @@ onMounted(async () => {
 })
 
 
-/** 主表行点击选中 key（左右主子表高亮） */
-const selectedMasterKey = ref('')
 
-/** 同步主表选中行到右侧明细（子表由 *-panel watch 自动 reload） */
-function syncMasterSelection(record: ServiceContract | null) {
-  selectedMasterRow.value = record
-  selectedMasterKey.value = record ? getServiceContractId(record) : ''
-}
 
-/**
- * 左右主子表：主表行选中
- * @param record 主表行
- */
-function handleMasterSelect(record: Record<string, unknown>) {
-  const row = record as unknown as ServiceContract
-  const key = getServiceContractId(row)
-  selectedRowKeys.value = [key]
-  selectedRows.value = [row]
-  selectedRow.value = row
-  syncMasterSelection(row)
-}
 
-/**
- * 主表分页变更（v-model 已同步页码与 pageSize）
- * @param _page 页码
- * @param _pageSize 每页条数
- */
-function handleMasterPaginationChange(_page: number, _pageSize: number) {
-  loadData()
-}
 
-/** 加载主表详情并回填当前页 dataSource */
-async function loadServiceContractDetail(record: ServiceContract): Promise<ServiceContract | null> {
-  const id = getServiceContractId(record)
-  if (!id) {
-    return null
-  }
-  try {
-    const detail = await getServiceContractById(id)
-    const index = dataSource.value.findIndex((row) => getServiceContractId(row) === id)
-    if (index !== -1) {
-      dataSource.value[index] = { ...dataSource.value[index], ...detail } as ServiceContract
-    }
-    return detail
-  } catch (error: any) {
-    message.error(error?.message || t('common.feedback.load.data.failed'))
-    return null
-  }
-}
 
 /** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
@@ -888,26 +840,36 @@ const rowSelection = computed(() => ({
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
-    if (rows.length === 1 && rows[0]) {
-      syncMasterSelection(rows[0])
-    } else if (rows.length === 0) {
-      syncMasterSelection(null)
-    }
   },
   onSelect: (record: ServiceContract, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-      syncMasterSelection(record)
-    } else if (getServiceContractId(selectedRow.value) === getServiceContractId(record)) {
+    } else if (selectedRow.value && getServiceContractId(selectedRow.value) === getServiceContractId(record)) {
       selectedRow.value = null
-      syncMasterSelection(null)
     }
   },
   onSelectAll: (selected: boolean, selectedRowsData: ServiceContract[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
-    syncMasterSelection(selectedRow.value)
   }
 }))
+
+/** 行点击切换选中（与 rowSelection 联动） */
+const onClickRow = (record: ServiceContract) => ({
+  onClick: () => {
+    const key = getServiceContractId(record)
+    const index = selectedRowKeys.value.indexOf(key)
+    if (index > -1) {
+      selectedRowKeys.value.splice(index, 1)
+    } else {
+      selectedRowKeys.value.push(key)
+    }
+    selectedRows.value = dataSource.value.filter((item) => selectedRowKeys.value.includes(getServiceContractId(item)))
+    selectedRow.value = selectedRowKeys.value.length === 1 ? (selectedRows.value[0] ?? null) : null
+    if (rowSelection.value.onChange) {
+      rowSelection.value.onChange(selectedRowKeys.value, selectedRows.value)
+    }
+  }
+})
 
 /** 加载分页列表 */
 async function loadData() {
@@ -976,23 +938,17 @@ function handleCreate() {
   formVisible.value = true
   nextTick(() => formRef.value?.resetFields())
 }
-/** 打开编辑弹窗（主子表：先拉详情含子表） */
-async function handleEdit(record: ServiceContract) {
+/** 打开编辑弹窗 */
+function handleEdit(record: ServiceContract) {
   formTitle.value = t('common.dialog.title.edit', { entity: t('entity.servicecontract._self') })
-  formLoading.value = true
-  try {
-    const detail = await loadServiceContractDetail(record)
-    formData.value = detail ? { ...detail } : { ...record }
-    formVisible.value = true
-  } finally {
-    formLoading.value = false
-  }
+  formData.value = { ...record }
+  formVisible.value = true
 }
 
 /** 工具栏编辑：打开当前单选行 */
 function handleUpdate() {
   if (selectedRow.value) {
-    void handleEdit(selectedRow.value)
+    handleEdit(selectedRow.value)
   } else {
     message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.servicecontract._self') }))
   }
@@ -1020,9 +976,6 @@ async function handleFormSubmit() {
     formVisible.value = false
     formData.value = null
   nextTick(() => formRef.value?.resetFields())
-    if (selectedMasterKey.value) {
-  serviceOrderPanelRef.value?.reload?.()
-    }
     loadData()
   } finally {
     formLoading.value = false
@@ -1106,10 +1059,6 @@ async function handleDeleteOne(record: ServiceContract) {
     onOk: async () => {
       await deleteServiceContractById((record as any)[entityIdName])
       message.success(t('common.feedback.deleted', { target: t('entity.servicecontract._self') }))
-      selectedRowKeys.value = []
-      selectedRows.value = []
-      selectedRow.value = null
-      syncMasterSelection(null)
       loadData()
     }
   })
@@ -1129,10 +1078,6 @@ async function handleDelete() {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteServiceContractBatch(ids)
       message.success(t('common.feedback.deleted', { target: t('entity.servicecontract._self') }))
-      selectedRowKeys.value = []
-      selectedRows.value = []
-      selectedRow.value = null
-      syncMasterSelection(null)
       loadData()
     }
   })
@@ -1203,4 +1148,17 @@ function handleRefresh() {
 function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
+/** 分页页码变更 */
+function handlePaginationChange(page: number, size: number) {
+  currentPage.value = page
+  pageSize.value = size
+  loadData()
+}
+
+/** 分页每页条数变更（重置到第 1 页） */
+function handlePaginationSizeChange(_current: number, size: number) {
+  currentPage.value = getTaktDefaultPageIndex()
+  pageSize.value = size
+  loadData()
+}
 </script>

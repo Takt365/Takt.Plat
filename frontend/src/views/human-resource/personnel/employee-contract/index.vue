@@ -54,8 +54,8 @@
 
     <!-- 表格 -->
     <TaktSingleTable
-      :columns="columns"
       entity-scope="company"
+      :columns="columns"
       :visible-column-keys="visibleColumnKeys"
       :id-column-key="'employeeContractId'"
       table-mode="single"
@@ -72,7 +72,7 @@
 
     </TaktSingleTable>
 
-    <!-- 分页组件 -->
+    <!-- 分页（服务端分页，外置 TaktPagination） -->
     <TaktPagination
       v-model:current="currentPage"
       v-model:page-size="pageSize"
@@ -92,6 +92,7 @@
       @cancel="handleFormCancel"
     >
       <EmployeeContractForm
+        :key="formData?.employeeContractId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -109,126 +110,132 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('employeeId')">
-      <a-form-item :label="t('entity.employeeContract.employeeid')">
+      <a-form-item :label="t('entity.employeecontract.employeeid')">
         <a-input
           v-model:value="advancedQueryForm.employeeId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeContract.employeeid') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeecontract.employeeid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('contractNo')">
-      <a-form-item :label="t('entity.employeeContract.contractno')">
+      <a-form-item :label="t('entity.employeecontract.contractno')">
         <a-input
           v-model:value="advancedQueryForm.contractNo"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeContract.contractno') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeecontract.contractno') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('contractType')">
-      <a-form-item :label="t('entity.employeeContract.contracttype')">
+      <a-form-item :label="t('entity.employeecontract.contracttype')">
         <a-input-number
           v-model:value="advancedQueryForm.contractType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeContract.contracttype') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeecontract.contracttype') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('contractStatus')">
-      <a-form-item :label="t('entity.employeeContract.contractstatus')">
+      <a-form-item :label="t('entity.employeecontract.contractstatus')">
         <a-input-number
           v-model:value="advancedQueryForm.contractStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeContract.contractstatus') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeecontract.contractstatus') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('startDateStart')">
-      <a-form-item :label="t('entity.employeeContract.startdatestart')">
+      <a-form-item :label="t('entity.employeecontract.startdatestart')">
         <a-date-picker
           v-model:value="advancedQueryForm.startDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeContract.startdatestart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeecontract.startdatestart') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('startDateEnd')">
-      <a-form-item :label="t('entity.employeeContract.startdateend')">
+      <a-form-item :label="t('entity.employeecontract.startdateend')">
         <a-date-picker
           v-model:value="advancedQueryForm.startDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeContract.startdateend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeecontract.startdateend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('endDateStart')">
-      <a-form-item :label="t('entity.employeeContract.enddatestart')">
+      <a-form-item :label="t('entity.employeecontract.enddatestart')">
         <a-date-picker
           v-model:value="advancedQueryForm.endDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeContract.enddatestart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeecontract.enddatestart') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('endDateEnd')">
-      <a-form-item :label="t('entity.employeeContract.enddateend')">
+      <a-form-item :label="t('entity.employeecontract.enddateend')">
         <a-date-picker
           v-model:value="advancedQueryForm.endDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeContract.enddateend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeecontract.enddateend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('probationEndDateStart')">
-      <a-form-item :label="t('entity.employeeContract.probationenddatestart')">
+      <a-form-item :label="t('entity.employeecontract.probationenddatestart')">
         <a-date-picker
           v-model:value="advancedQueryForm.probationEndDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeContract.probationenddatestart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeecontract.probationenddatestart') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('probationEndDateEnd')">
-      <a-form-item :label="t('entity.employeeContract.probationenddateend')">
+      <a-form-item :label="t('entity.employeecontract.probationenddateend')">
         <a-date-picker
           v-model:value="advancedQueryForm.probationEndDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeContract.probationenddateend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeecontract.probationenddateend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('signDateStart')">
-      <a-form-item :label="t('entity.employeeContract.signdatestart')">
+      <a-form-item :label="t('entity.employeecontract.signdatestart')">
         <a-date-picker
           v-model:value="advancedQueryForm.signDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeContract.signdatestart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeecontract.signdatestart') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('signDateEnd')">
-      <a-form-item :label="t('entity.employeeContract.signdateend')">
+      <a-form-item :label="t('entity.employeecontract.signdateend')">
         <a-date-picker
           v-model:value="advancedQueryForm.signDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeContract.signdateend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeecontract.signdateend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('signCompany')">
-      <a-form-item :label="t('entity.employeeContract.signcompany')">
+      <a-form-item :label="t('entity.employeecontract.signcompany')">
         <a-input
           v-model:value="advancedQueryForm.signCompany"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeContract.signcompany') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeecontract.signcompany') })"
+          show-count
+          :maxlength="200"
           allow-clear
         />
       </a-form-item>
@@ -239,7 +246,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -250,17 +257,36 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('ExtField')">
-      <a-form-item :label="t('common.page.entity.ExtField')">
-        <a-input
-          v-model:value="advancedQueryForm.ExtField"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
-          allow-clear
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
+        <a-textarea
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -269,8 +295,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -280,14 +308,14 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.employeeContract._self') })"
+      :title="t('common.dialog.title.import', { entity: t('entity.employeecontract._self') })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.employeeContract._self"
+        entity-i18n-key="entity.employeecontract._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -314,7 +342,6 @@
 </template>
 
 <script setup lang="ts">
-import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 /**
  * 员工劳动合同管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/human-resource/personnel/employee-contract
@@ -324,12 +351,13 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import EmployeeContractForm from './components/employee-contract-form.vue'
-import { getEmployeeContractList, getEmployeeContractById, createEmployeeContract, updateEmployeeContract, deleteEmployeeContractById, deleteEmployeeContractBatch, getEmployeeContractTemplate, importEmployeeContract, exportEmployeeContract } from '@/api/human-resource/personnel/employee-contract'
-import type { EmployeeContract, EmployeeContractQuery, EmployeeContractCreate, EmployeeContractUpdate } from '@/types/human-resource/personnel/employee-contract'
+import { getEmployeeContractList, getEmployeeContractById, createEmployeeContract, updateEmployeeContract, deleteEmployeeContractById, deleteEmployeeContractBatch, getEmployeeContractTemplate, importEmployeeContract, exportEmployeeContract, updateEmployeeContractStatus } from '@/api/human-resource/personnel/employee-contract'
+import type { EmployeeContract, EmployeeContractQuery } from '@/types/human-resource/personnel/employee-contract'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -337,7 +365,7 @@ const { t } = useI18n()
 const excelNames = taktExcelEntityNames('TaktEmployeeContract')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.employeeContract._self') })
+  () => t('common.page.form.placeholder.search', { keyword: t('entity.employeecontract._self') })
 )
 
 /** 快捷查询关键字 */
@@ -364,11 +392,12 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<EmployeeContract>>({})
+const formData = ref<Partial<EmployeeContract> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
 const formRef = ref()
+
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
@@ -388,27 +417,27 @@ const advancedQueryForm = ref({
   signCompany: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'employeeId', label: t('entity.employeeContract.employeeid') },
-  { key: 'contractNo', label: t('entity.employeeContract.contractno') },
-  { key: 'contractType', label: t('entity.employeeContract.contracttype') },
-  { key: 'contractStatus', label: t('entity.employeeContract.contractstatus') },
-  { key: 'startDateStart', label: t('entity.employeeContract.startdatestart') },
-  { key: 'startDateEnd', label: t('entity.employeeContract.startdateend') },
-  { key: 'endDateStart', label: t('entity.employeeContract.enddatestart') },
-  { key: 'endDateEnd', label: t('entity.employeeContract.enddateend') },
-  { key: 'probationEndDateStart', label: t('entity.employeeContract.probationenddatestart') },
-  { key: 'probationEndDateEnd', label: t('entity.employeeContract.probationenddateend') },
-  { key: 'signDateStart', label: t('entity.employeeContract.signdatestart') },
-  { key: 'signDateEnd', label: t('entity.employeeContract.signdateend') },
-  { key: 'signCompany', label: t('entity.employeeContract.signcompany') },
+  { key: 'employeeId', label: t('entity.employeecontract.employeeid') },
+  { key: 'contractNo', label: t('entity.employeecontract.contractno') },
+  { key: 'contractType', label: t('entity.employeecontract.contracttype') },
+  { key: 'contractStatus', label: t('entity.employeecontract.contractstatus') },
+  { key: 'startDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.employeecontract.startdate')) },
+  { key: 'startDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.employeecontract.startdate')) },
+  { key: 'endDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.employeecontract.enddate')) },
+  { key: 'endDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.employeecontract.enddate')) },
+  { key: 'probationEndDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.employeecontract.probationenddate')) },
+  { key: 'probationEndDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.employeecontract.probationenddate')) },
+  { key: 'signDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.employeecontract.signdate')) },
+  { key: 'signDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.employeecontract.signdate')) },
+  { key: 'signCompany', label: t('entity.employeecontract.signcompany') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'ExtField', label: t('common.page.entity.ExtField') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -426,22 +455,7 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
-type EmployeeContractQueryTrimmedKey =
-  | 'employeeId'
-  | 'contractNo'
-  | 'startDateStart'
-  | 'startDateEnd'
-  | 'endDateStart'
-  | 'endDateEnd'
-  | 'probationEndDateStart'
-  | 'probationEndDateEnd'
-  | 'signDateStart'
-  | 'signDateEnd'
-  | 'signCompany'
-  | 'createdAtStart'
-  | 'createdAtEnd'
-  | 'ExtField'
-  | 'remark'
+
 
 /**
  * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
@@ -459,14 +473,20 @@ function buildListQuery(overrides?: Partial<EmployeeContractQuery>): EmployeeCon
   if (kw.length > 0) {
     query.keyWords = kw
   }
-  const assignTrimmed = (key: EmployeeContractQueryTrimmedKey, value: string | undefined) => {
+  const assignTrimmed = (key: keyof EmployeeContractQuery, value: string | undefined) => {
     const v = (value ?? '').trim()
     if (v.length > 0) {
-      query[key] = v
+      query[key] = v as never
     }
   }
   assignTrimmed('employeeId', form.employeeId)
   assignTrimmed('contractNo', form.contractNo)
+  if (form.contractType !== undefined && form.contractType !== null) {
+    query.contractType = form.contractType
+  }
+  if (form.contractStatus !== undefined && form.contractStatus !== null) {
+    query.contractStatus = form.contractStatus
+  }
   assignTrimmed('startDateStart', form.startDateStart)
   assignTrimmed('startDateEnd', form.startDateEnd)
   assignTrimmed('endDateStart', form.endDateStart)
@@ -478,22 +498,16 @@ function buildListQuery(overrides?: Partial<EmployeeContractQuery>): EmployeeCon
   assignTrimmed('signCompany', form.signCompany)
   assignTrimmed('createdAtStart', form.createdAtStart)
   assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('ExtField', form.ExtField)
+  assignTrimmed('extField', form.extField)
   assignTrimmed('remark', form.remark)
-  if (form.contractType !== undefined && form.contractType !== null) {
-    query.contractType = form.contractType
-  }
-  if (form.contractStatus !== undefined && form.contractStatus !== null) {
-    query.contractStatus = form.contractStatus
-  }
   return query
 }
-
-/** 页面挂载：加载分页配置后拉列表 */
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
   loadData()
 })
+
 
 
 
@@ -513,7 +527,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeContractField(record, 'employeeContractId') ?? ''
   },
   {
-    title: t('entity.employeeContract.employeeid'),
+    title: t('entity.employeecontract.employeeid'),
     dataIndex: 'employeeId',
     key: 'employeeId',
     width: 120,
@@ -522,16 +536,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeContractField(record, 'employeeId') ?? ''
   },
   {
-    title: t('entity.employeeContract.employeename'),
-    dataIndex: 'employeeName',
-    key: 'employeeName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmployeeContractField(record, 'employeeName') ?? ''
-  },
-  {
-    title: t('entity.employeeContract.contractno'),
+    title: t('entity.employeecontract.contractno'),
     dataIndex: 'contractNo',
     key: 'contractNo',
     width: 120,
@@ -540,7 +545,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeContractField(record, 'contractNo') ?? ''
   },
   {
-    title: t('entity.employeeContract.contracttype'),
+    title: t('entity.employeecontract.contracttype'),
     dataIndex: 'contractType',
     key: 'contractType',
     width: 120,
@@ -549,7 +554,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeContractField(record, 'contractType') ?? ''
   },
   {
-    title: t('entity.employeeContract.contractstatus'),
+    title: t('entity.employeecontract.contractstatus'),
     dataIndex: 'contractStatus',
     key: 'contractStatus',
     width: 120,
@@ -558,7 +563,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeContractField(record, 'contractStatus') ?? ''
   },
   {
-    title: t('entity.employeeContract.startdate'),
+    title: t('entity.employeecontract.startdate'),
     dataIndex: 'startDate',
     key: 'startDate',
     width: 120,
@@ -567,7 +572,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeContractField(record, 'startDate') ?? ''
   },
   {
-    title: t('entity.employeeContract.enddate'),
+    title: t('entity.employeecontract.enddate'),
     dataIndex: 'endDate',
     key: 'endDate',
     width: 120,
@@ -576,7 +581,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeContractField(record, 'endDate') ?? ''
   },
   {
-    title: t('entity.employeeContract.probationenddate'),
+    title: t('entity.employeecontract.probationenddate'),
     dataIndex: 'probationEndDate',
     key: 'probationEndDate',
     width: 120,
@@ -585,7 +590,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeContractField(record, 'probationEndDate') ?? ''
   },
   {
-    title: t('entity.employeeContract.signdate'),
+    title: t('entity.employeecontract.signdate'),
     dataIndex: 'signDate',
     key: 'signDate',
     width: 120,
@@ -594,7 +599,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeContractField(record, 'signDate') ?? ''
   },
   {
-    title: t('entity.employeeContract.signcompany'),
+    title: t('entity.employeecontract.signcompany'),
     dataIndex: 'signCompany',
     key: 'signCompany',
     width: 120,
@@ -633,6 +638,7 @@ const getEmployeeContractId = (record: any): string => record?.[entityIdName] ??
  */
 const getEmployeeContractField = (record: any, field: string): any => record?.[field]
 
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -644,7 +650,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: EmployeeContract, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getEmployeeContractId(selectedRow.value) === getEmployeeContractId(record)) {
+    } else if (selectedRow.value && getEmployeeContractId(selectedRow.value) === getEmployeeContractId(record)) {
       selectedRow.value = null
     }
   },
@@ -716,7 +722,7 @@ function handleReset() {
   signCompany: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
   currentPage.value = getTaktDefaultPageIndex()
@@ -725,13 +731,14 @@ function handleReset() {
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.employeeContract._self') })
-  formData.value = {}
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.employeecontract._self') })
+  formData.value = null
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗 */
 function handleEdit(record: EmployeeContract) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.employeeContract._self') })
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.employeecontract._self') })
   formData.value = { ...record }
   formVisible.value = true
 }
@@ -741,7 +748,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.employeeContract._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.employeecontract._self') }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -759,12 +766,14 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateEmployeeContract(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.employeeContract._self') }))
+      message.success(t('common.feedback.updated', { target: t('entity.employeecontract._self') }))
     } else {
       await createEmployeeContract(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.employeeContract._self') }))
+      message.success(t('common.feedback.created', { target: t('entity.employeecontract._self') }))
     }
     formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
     loadData()
   } finally {
     formLoading.value = false
@@ -774,6 +783,8 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开导入对话框 */
 function handleImport() {
@@ -828,10 +839,10 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.employeeContract._self') }))
+    message.success(t('common.feedback.export.success', { target: t('entity.employeecontract._self') }))
   } catch (error: any) {
     logger.error('[EmployeeContract] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.employeeContract._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.employeecontract._self') }))
   } finally {
     loading.value = false
   }
@@ -840,12 +851,12 @@ async function handleExport() {
 async function handleDeleteOne(record: EmployeeContract) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.employeeContract._self'), name: t('common.tip.this.target', { target: t('entity.employeeContract._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: t('entity.employeecontract._self'), name: t('common.tip.this.target', { target: t('entity.employeecontract._self') }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteEmployeeContractById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.employeeContract._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.employeecontract._self') }))
       loadData()
     }
   })
@@ -853,18 +864,18 @@ async function handleDeleteOne(record: EmployeeContract) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.employeeContract._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.employeecontract._self') }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.employeeContract._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: t('entity.employeecontract._self'), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteEmployeeContractBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.employeeContract._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.employeecontract._self') }))
       loadData()
     }
   })
@@ -898,7 +909,7 @@ function handleAdvancedQueryReset() {
   signCompany: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
 }
@@ -928,11 +939,13 @@ function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
 /** 分页页码变更 */
-function handlePaginationChange(page: number) {
+function handlePaginationChange(page: number, size: number) {
   currentPage.value = page
+  pageSize.value = size
   loadData()
 }
-/** 分页每页条数变更 */
+
+/** 分页每页条数变更（重置到第 1 页） */
 function handlePaginationSizeChange(_current: number, size: number) {
   currentPage.value = getTaktDefaultPageIndex()
   pageSize.value = size

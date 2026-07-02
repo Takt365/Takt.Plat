@@ -286,7 +286,7 @@ async function validate() {
   return formState
 }
 
-/** 映射为 Create/Update DTO（含主表外键 ipqcOrderId） */
+/** 映射为 Create/Update DTO（含主表外键 defectHandlings） */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
   if ('lineNumber' in payload) {
@@ -302,7 +302,7 @@ function getValues(): Record<string, any> {
     payload.inspectionMethod = typeof rawinspectionMethod === 'number' ? rawinspectionMethod : Number(rawinspectionMethod)
   }
   if ('sortOrder' in payload) delete payload.sortOrder
-  payload.ipqcOrderId = props.masterId
+  payload.defectHandlings = props.masterId
   return payload
 }
 

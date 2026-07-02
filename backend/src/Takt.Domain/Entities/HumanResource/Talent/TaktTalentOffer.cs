@@ -17,7 +17,7 @@ using Takt.Domain.Entities.HumanResource.Personnel;
 namespace Takt.Domain.Entities.HumanResource.Talent;
 
 /// <summary>
-/// 录用信息（审批单，状态见 TaktApprovalEntityBase.ApprovalStatus）
+/// 录用信息（审批单；审批态见基类 ApprovalStatus，字典 sys_approval_status）
 /// </summary>
 [SugarTable("takt_human_resource_talent_offer", "录用信息表")]
 [SugarIndex("ix_talent_offer_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
@@ -26,53 +26,45 @@ namespace Takt.Domain.Entities.HumanResource.Talent;
 public class TaktTalentOffer : TaktApprovalEntityBase
 {
     /// <summary>
-    /// 职位发布ID（用人需求→职位发布→录用）
+    /// 职位发布（关联 TaktTalentJobPosting.Id，选项 TaktTalentJobPostings/options）
     /// </summary>
     [SugarColumn(ColumnName = "job_posting_id", ColumnDescription = "职位发布ID", ColumnDataType = "bigint", IsNullable = false)]
     public long JobPostingId { get; set; }
-
     /// <summary>
     /// 录用编号（租户+公司内业务编号）
     /// </summary>
     [SugarColumn(ColumnName = "offer_no", ColumnDescription = "录用编号", ColumnDataType = "varchar", Length = 20, IsNullable = false)]
     public string OfferNo { get; set; } = string.Empty;
-
     /// <summary>
-    /// 录用日期（HireDate：确认录用/发 offer）
+    /// 录用日期（确认录用/发 offer）
     /// </summary>
     [SugarColumn(ColumnName = "hire_date", ColumnDescription = "录用日期", ColumnDataType = "datetime", IsNullable = false)]
     public DateTime HireDate { get; set; }
-
     /// <summary>
-    /// 关联员工ID（录用通过并建档后回填，可空）
+    /// 关联员工（关联 TaktEmployee.Id，选项 TaktEmployees/options；录用通过并建档后回填，可空）
     /// </summary>
     [SugarColumn(ColumnName = "employee_id", ColumnDescription = "关联员工ID", ColumnDataType = "bigint", IsNullable = true)]
     public long? EmployeeId { get; set; }
-
     /// <summary>
-    /// 拟录用部门ID
+    /// 拟录用部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     [SugarColumn(ColumnName = "dept_id", ColumnDescription = "拟录用部门ID", ColumnDataType = "bigint", IsNullable = false)]
     public long DeptId { get; set; }
-
     /// <summary>
     /// 拟录用部门名称
     /// </summary>
     [SugarColumn(ColumnName = "dept_name", ColumnDescription = "拟录用部门名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
     public string DeptName { get; set; } = string.Empty;
-
     /// <summary>
-    /// 拟录用岗位ID
+    /// 拟录用岗位（关联 TaktPost.Id，选项 TaktPosts/options，可空）
     /// </summary>
     [SugarColumn(ColumnName = "post_id", ColumnDescription = "拟录用岗位ID", ColumnDataType = "bigint", IsNullable = true)]
     public long? PostId { get; set; }
-
     /// <summary>
     /// 拟录用岗位名称
     /// </summary>
     [SugarColumn(ColumnName = "post_name", ColumnDescription = "拟录用岗位名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
     public string? PostName { get; set; }
-
     /// <summary>
     /// 录用说明
     /// </summary>

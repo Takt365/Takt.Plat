@@ -58,12 +58,10 @@
                 :label="t('entity.pcbarepairdetail.pcbaboardtype')"
                 name="pcbaBoardType"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.pcbaBoardType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbarepairdetail.pcbaboardtype') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  dict-type="logistics_pcba_panel_category"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbarepairdetail.pcbaboardtype') })"
                 />
               </a-form-item>
             </a-col>
@@ -81,12 +79,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.pcbarepairdetail.prodline')"
-                name="prodLine"
+                :label="t('entity.pcbarepairdetail.prodteam')"
+                name="prodTeam"
               >
                 <a-input
-                  v-model:value="formState.prodLine"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbarepairdetail.prodline') })"
+                  v-model:value="formState.prodTeam"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbarepairdetail.prodteam') })"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -126,12 +124,10 @@
                 :label="t('entity.pcbarepairdetail.defectengineering')"
                 name="defectEngineering"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.defectEngineering"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbarepairdetail.defectengineering') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  dict-type="logistics_defect_category"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbarepairdetail.defectengineering') })"
                 />
               </a-form-item>
             </a-col>
@@ -147,10 +143,12 @@
  * PCBA改修日报实体子表 pcbaRepairDetail 维护表单 · 由 generate-vue-master-detail-from-api.cjs 生成
  * @module views/logistics/manufacturing/defect/pcba-repair/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import type { PcbaRepairDetailCreate } from '@/types/logistics/manufacturing/defect/pcba-repair-detail'
+import TaktSelect from '@/components/business/takt-select/index.vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -159,7 +157,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["prodOrderCode","lineNumber","pcbaBoardType","prodActualQty","prodLine","cardNo","defectSymptom","defectEngineering"]
+const formFields = ["prodOrderCode","lineNumber","pcbaBoardType","prodActualQty","prodTeam","cardNo","defectSymptom","defectEngineering"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -186,6 +184,13 @@ function applyFormDefaults(target: Record<string, unknown>) {
   void target
 }
 
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载全量字典 */
+onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
+})
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 pcbaRepairDetailId 才视为编辑） */
 watch(

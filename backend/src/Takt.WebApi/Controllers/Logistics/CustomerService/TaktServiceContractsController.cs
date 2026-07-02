@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.CustomerService
 // 文件名称：TaktServiceContractsController.cs
-// 创建时间：2026-06-16
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：服务合同控制器
 // 
@@ -49,6 +49,26 @@ public class TaktServiceContractsController : TaktControllerBase
         {
             var result = await _serviceContractService.GetServiceContractListAsync(queryDto);
             return Success(result.Data, result.Total, result.PageIndex, result.PageSize, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 获取服务合同统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>服务合同统计</returns>
+    [TaktPermission("logistics:service:contract:list", "服务合同统计")]
+    [HttpGet("contract-stat")]
+    public async Task<IActionResult> GetServiceContractStatAsync([FromQuery] TaktServiceContractStatQueryDto queryDto)
+    {
+        try
+        {
+            var result = await _serviceContractService.GetServiceContractStatAsync(queryDto);
+            return Success(result, "查询成功");
         }
         catch (Exception ex)
         {

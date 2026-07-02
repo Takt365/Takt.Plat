@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Output
 // 文件名称：TaktPersonnelOperationRateChangeLogService.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：人员稼动率变更记录应用服务实现
 // 
@@ -97,12 +97,12 @@ public class TaktPersonnelOperationRateChangeLogService : TaktServiceBase, ITakt
         EnsureThreeLayerContext();
         var list = await _personnelOperationRateChangeLogRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.ProductionLine ?? string.Empty,
+            x => x.ProdTeam ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
             DictValue = e.Id,
-            DictLabel = e.ProductionLine ?? e.Id.ToString(),
+            DictLabel = e.ProdTeam ?? e.Id.ToString(),
         }).ToList();
     }
 
@@ -236,7 +236,7 @@ public class TaktPersonnelOperationRateChangeLogService : TaktServiceBase, ITakt
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
                 SqlFunc.ToString(x.PersonnelOperationRateId).Contains(keywords)
-                || (x.ProductionLine != null && x.ProductionLine.Contains(keywords))
+                || (x.ProdTeam != null && x.ProdTeam.Contains(keywords))
                 || (x.ChangeFields != null && x.ChangeFields.Contains(keywords))
                 || (x.ChangeBy != null && x.ChangeBy.Contains(keywords))
                 || (x.ChangeReason != null && x.ChangeReason.Contains(keywords))
@@ -252,9 +252,9 @@ public class TaktPersonnelOperationRateChangeLogService : TaktServiceBase, ITakt
             exp = exp.And(x => x.PersonnelOperationRateId == queryDto.PersonnelOperationRateId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ProductionLine))
+        if (!string.IsNullOrEmpty(queryDto?.ProdTeam))
         {
-            exp = exp.And(x => x.ProductionLine != null && x.ProductionLine.Contains(queryDto.ProductionLine));
+            exp = exp.And(x => x.ProdTeam != null && x.ProdTeam.Contains(queryDto.ProdTeam));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ChangeFields))

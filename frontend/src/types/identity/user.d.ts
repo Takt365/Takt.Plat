@@ -91,7 +91,7 @@ export interface User extends TenantDtoBase {
   lockedUntil?: string;
 
   /**
-   * 默认区域文化编码（BCP47，对齐 TaktCulture.CultureCode）
+   * 区域文化编码（BCP47，对齐 TaktCulture.CultureCode）
    */
   defaultCulture: string;
 
@@ -146,7 +146,7 @@ export interface UserQuery extends TaktPagedQuery {
   userStatus?: number;
 
   /**
-   * 默认区域文化编码（模糊查询）
+   * 区域文化编码（模糊查询）
    */
   defaultCulture?: string;
 
@@ -215,7 +215,7 @@ export interface CreateUser {
   userStatus: number;
 
   /**
-   * 默认区域文化编码（BCP47，对齐 TaktCulture.CultureCode）
+   * 区域文化编码（BCP47，对齐 TaktCulture.CultureCode）
    */
   defaultCulture: string;
 

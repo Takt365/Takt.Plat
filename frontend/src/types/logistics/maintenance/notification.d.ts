@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/maintenance
 // 文件名称：notification.d.ts
-// 创建时间：2026-06-20
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/maintenance 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -264,7 +264,7 @@ export interface MaintenanceNotificationQuery extends TaktPagedQuery {
   notificationImages?: string;
 
   /**
-   * 审批状态（TaktApprovalStatus）
+   * 审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）
    */
   approvalStatus?: number;
 
@@ -343,7 +343,7 @@ export interface MaintenanceNotificationCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -546,6 +546,21 @@ export interface MaintenanceNotificationTemplate {
   faultDescription?: string;
 
   /**
+   * 发现时间
+   */
+  discoveredAt?: string;
+
+  /**
+   * 故障开始时间
+   */
+  breakdownStartTime?: string;
+
+  /**
+   * 故障结束时间
+   */
+  breakdownEndTime?: string;
+
+  /**
    * 报告人（人员编码）
    */
   reportedBy?: string;
@@ -559,6 +574,21 @@ export interface MaintenanceNotificationTemplate {
    * 责任成本中心编码（冗余）
    */
   costCenterCode?: string;
+
+  /**
+   * 关联维护工单ID（转工单后回填，序列化为string以避免Javascript精度问题）
+   */
+  maintenanceWorkOrderId?: string;
+
+  /**
+   * 关联维护工单号（冗余）
+   */
+  maintenanceWorkOrderCode?: string;
+
+  /**
+   * 通知图片（JSON格式，存储图片URL列表）
+   */
+  notificationImages?: string;
 
   /**
    * 扩展字段JSON
@@ -590,7 +620,7 @@ export interface MaintenanceNotificationImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -640,6 +670,21 @@ export interface MaintenanceNotificationImport {
   faultDescription?: string;
 
   /**
+   * 发现时间
+   */
+  discoveredAt?: string;
+
+  /**
+   * 故障开始时间
+   */
+  breakdownStartTime?: string;
+
+  /**
+   * 故障结束时间
+   */
+  breakdownEndTime?: string;
+
+  /**
    * 报告人（人员编码）
    */
   reportedBy?: string;
@@ -653,6 +698,21 @@ export interface MaintenanceNotificationImport {
    * 责任成本中心编码（冗余）
    */
   costCenterCode?: string;
+
+  /**
+   * 关联维护工单ID（转工单后回填，序列化为string以避免Javascript精度问题）
+   */
+  maintenanceWorkOrderId?: string;
+
+  /**
+   * 关联维护工单号（冗余）
+   */
+  maintenanceWorkOrderCode?: string;
+
+  /**
+   * 通知图片（JSON格式，存储图片URL列表）
+   */
+  notificationImages?: string;
 
   /**
    * 扩展字段JSON

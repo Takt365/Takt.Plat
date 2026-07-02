@@ -78,6 +78,84 @@
             @change="(checked: unknown) => handleMaterialStatusChange(record, Boolean(checked))"
           />
         </template>
+        <template v-else-if="column.key === 'industrySector'">
+          <TaktDictTag
+            :value="getMaterialPlantField(record, 'industrySector')"
+            dict-type="logistics_industry_sector"
+          />
+        </template>
+        <template v-else-if="column.key === 'materialType'">
+          <TaktDictTag
+            :value="getMaterialPlantField(record, 'materialType')"
+            dict-type="logistics_material_type"
+          />
+        </template>
+        <template v-else-if="column.key === 'baseUnit'">
+          <TaktDictTag
+            :value="getMaterialPlantField(record, 'baseUnit')"
+            dict-type="logistics_unit_of_measure_code"
+          />
+        </template>
+        <template v-else-if="column.key === 'purchaseType'">
+          <TaktDictTag
+            :value="getMaterialPlantField(record, 'purchaseType')"
+            dict-type="logistics_procurement_type"
+          />
+        </template>
+        <template v-else-if="column.key === 'specialProcurement'">
+          <TaktDictTag
+            :value="getMaterialPlantField(record, 'specialProcurement')"
+            dict-type="logistics_special_procurement_type"
+          />
+        </template>
+        <template v-else-if="column.key === 'isBulk'">
+          <TaktDictTag
+            :value="getMaterialPlantField(record, 'isBulk')"
+            dict-type="logistics_bulk_material_type"
+          />
+        </template>
+        <template v-else-if="column.key === 'currency'">
+          <TaktDictTag
+            :value="getMaterialPlantField(record, 'currency')"
+            dict-type="accounting_currency_code"
+          />
+        </template>
+        <template v-else-if="column.key === 'priceControl'">
+          <TaktDictTag
+            :value="getMaterialPlantField(record, 'priceControl')"
+            dict-type="logistics_price_control_type"
+          />
+        </template>
+        <template v-else-if="column.key === 'priceUnit'">
+          <TaktDictTag
+            :value="getMaterialPlantField(record, 'priceUnit')"
+            dict-type="logistics_price_unit_param"
+          />
+        </template>
+        <template v-else-if="column.key === 'valuation'">
+          <TaktDictTag
+            :value="getMaterialPlantField(record, 'valuation')"
+            dict-type="logistics_valuation_class_category"
+          />
+        </template>
+        <template v-else-if="column.key === 'isInspection'">
+          <TaktDictTag
+            :value="getMaterialPlantField(record, 'isInspection')"
+            dict-type="sys_yes_no_type"
+          />
+        </template>
+        <template v-else-if="column.key === 'isBatch'">
+          <TaktDictTag
+            :value="getMaterialPlantField(record, 'isBatch')"
+            dict-type="sys_yes_no_type"
+          />
+        </template>
+        <template v-else-if="column.key === 'isEndOfLife'">
+          <TaktDictTag
+            :value="getMaterialPlantField(record, 'isEndOfLife')"
+            dict-type="logistics_material_eol_status"
+          />
+        </template>
       </template>
 
     </TaktSingleTable>
@@ -175,11 +253,10 @@
       </div>
       <div v-show="isFieldVisible('industrySector')">
       <a-form-item :label="t('entity.materialplant.industrysector')">
-        <a-input
+        <TaktSelect
           v-model:value="advancedQueryForm.industrySector"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.industrysector') })"
-          show-count
-          :maxlength="50"
+          dict-type="logistics_industry_sector"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplant.industrysector') })"
           allow-clear
         />
       </a-form-item>
@@ -195,11 +272,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('materialGroupCode')">
-      <a-form-item :label="t('entity.materialplant.materialgroupcode')">
+      <div v-show="isFieldVisible('materialGroup')">
+      <a-form-item :label="t('entity.materialplant.materialgroup')">
         <a-input
-          v-model:value="advancedQueryForm.materialGroupCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.materialgroupcode') })"
+          v-model:value="advancedQueryForm.materialGroup"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.materialgroup') })"
           show-count
           :maxlength="20"
           allow-clear
@@ -208,42 +285,20 @@
       </div>
       <div v-show="isFieldVisible('materialType')">
       <a-form-item :label="t('entity.materialplant.materialtype')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.materialType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.materialtype') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('materialModel')">
-      <a-form-item :label="t('entity.materialplant.materialmodel')">
-        <a-input
-          v-model:value="advancedQueryForm.materialModel"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.materialmodel') })"
-          show-count
-          :maxlength="100"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('materialBrand')">
-      <a-form-item :label="t('entity.materialplant.materialbrand')">
-        <a-input
-          v-model:value="advancedQueryForm.materialBrand"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.materialbrand') })"
-          show-count
-          :maxlength="100"
+          dict-type="logistics_material_type"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplant.materialtype') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('baseUnit')">
       <a-form-item :label="t('entity.materialplant.baseunit')">
-        <a-input
+        <TaktSelect
           v-model:value="advancedQueryForm.baseUnit"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.baseunit') })"
-          show-count
-          :maxlength="20"
+          dict-type="logistics_unit_of_measure_code"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplant.baseunit') })"
           allow-clear
         />
       </a-form-item>
@@ -254,35 +309,38 @@
           v-model:value="advancedQueryForm.purchaseGroup"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.purchasegroup') })"
           show-count
-          :maxlength="50"
+          :maxlength="3"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('purchaseType')">
       <a-form-item :label="t('entity.materialplant.purchasetype')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.purchaseType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.purchasetype') })"
-          style="width: 100%"
+          dict-type="logistics_procurement_type"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplant.purchasetype') })"
+          allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('specialProcurement')">
       <a-form-item :label="t('entity.materialplant.specialprocurement')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.specialProcurement"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.specialprocurement') })"
-          style="width: 100%"
+          dict-type="logistics_special_procurement_type"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplant.specialprocurement') })"
+          allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('isBulk')">
       <a-form-item :label="t('entity.materialplant.isbulk')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.isBulk"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.isbulk') })"
-          style="width: 100%"
+          dict-type="logistics_bulk_material_type"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplant.isbulk') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -290,6 +348,9 @@
       <a-form-item :label="t('entity.materialplant.minorderquantity')">
         <a-input-number
           v-model:value="advancedQueryForm.minOrderQuantity"
+          :min="0"
+          :precision="0"
+          :step="1"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.minorderquantity') })"
           style="width: 100%"
         />
@@ -299,6 +360,9 @@
       <a-form-item :label="t('entity.materialplant.roundingvalue')">
         <a-input-number
           v-model:value="advancedQueryForm.roundingValue"
+          :min="0"
+          :precision="0"
+          :step="1"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.roundingvalue') })"
           style="width: 100%"
         />
@@ -308,6 +372,9 @@
       <a-form-item :label="t('entity.materialplant.planneddeliverytimedays')">
         <a-input-number
           v-model:value="advancedQueryForm.plannedDeliveryTimeDays"
+          :min="0"
+          :precision="0"
+          :step="1"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.planneddeliverytimedays') })"
           style="width: 100%"
         />
@@ -317,6 +384,9 @@
       <a-form-item :label="t('entity.materialplant.inhouseproductiondays')">
         <a-input-number
           v-model:value="advancedQueryForm.inHouseProductionDays"
+          :min="0"
+          :precision="1"
+          :step="0.5"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.inhouseproductiondays') })"
           style="width: 100%"
         />
@@ -333,54 +403,65 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('manufacturerPartNumber')">
-      <a-form-item :label="t('entity.materialplant.manufacturerpartnumber')">
-        <a-input
-          v-model:value="advancedQueryForm.manufacturerPartNumber"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.manufacturerpartnumber') })"
-          show-count
-          :maxlength="100"
+      <div v-show="isFieldVisible('manufacturerMaterialCode')">
+      <a-form-item :label="t('entity.materialplant.manufacturermaterialcode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.manufacturerMaterialCode"
+          api-url="TaktManufacturerMaterials/options"
+          :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplant.manufacturermaterialcode') })"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('currencyCode')">
-      <a-form-item :label="t('entity.materialplant.currencycode')">
-        <a-input
-          v-model:value="advancedQueryForm.currencyCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.currencycode') })"
-          show-count
-          :maxlength="10"
+      <div v-show="isFieldVisible('currency')">
+      <a-form-item :label="t('entity.materialplant.currency')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.currency"
+          dict-type="accounting_currency_code"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplant.currency') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('priceControl')">
       <a-form-item :label="t('entity.materialplant.pricecontrol')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.priceControl"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.pricecontrol') })"
-          style="width: 100%"
+          dict-type="logistics_price_control_type"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplant.pricecontrol') })"
+          allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('priceUnit')">
       <a-form-item :label="t('entity.materialplant.priceunit')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.priceUnit"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.priceunit') })"
-          style="width: 100%"
+          dict-type="logistics_price_unit_param"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplant.priceunit') })"
+          allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('valuationCategory')">
-      <a-form-item :label="t('entity.materialplant.valuationcategory')">
-        <a-input
-          v-model:value="advancedQueryForm.valuationCategory"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.valuationcategory') })"
-          show-count
-          :maxlength="50"
+      <div v-show="isFieldVisible('valuation')">
+      <a-form-item :label="t('entity.materialplant.valuation')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.valuation"
+          dict-type="logistics_valuation_class_category"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplant.valuation') })"
           allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('movingPrice')">
+      <a-form-item :label="t('entity.materialplant.movingprice')">
+        <a-input-number
+          v-model:value="advancedQueryForm.movingPrice"
+          :precision="4"
+          :step="0.0001"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.movingprice') })"
+          style="width: 100%"
         />
       </a-form-item>
       </div>
@@ -390,7 +471,7 @@
           v-model:value="advancedQueryForm.differenceCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.differencecode') })"
           show-count
-          :maxlength="50"
+          :maxlength="6"
           allow-clear
         />
       </a-form-item>
@@ -401,53 +482,8 @@
           v-model:value="advancedQueryForm.profitCenter"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.profitcenter') })"
           show-count
-          :maxlength="50"
+          :maxlength="4"
           allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('latestPurchasePrice')">
-      <a-form-item :label="t('entity.materialplant.latestpurchaseprice')">
-        <a-input-number
-          v-model:value="advancedQueryForm.latestPurchasePrice"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.latestpurchaseprice') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('salesPrice')">
-      <a-form-item :label="t('entity.materialplant.salesprice')">
-        <a-input-number
-          v-model:value="advancedQueryForm.salesPrice"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.salesprice') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('safetyStock')">
-      <a-form-item :label="t('entity.materialplant.safetystock')">
-        <a-input-number
-          v-model:value="advancedQueryForm.safetyStock"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.safetystock') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('maxStock')">
-      <a-form-item :label="t('entity.materialplant.maxstock')">
-        <a-input-number
-          v-model:value="advancedQueryForm.maxStock"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.maxstock') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('minStock')">
-      <a-form-item :label="t('entity.materialplant.minstock')">
-        <a-input-number
-          v-model:value="advancedQueryForm.minStock"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.minstock') })"
-          style="width: 100%"
         />
       </a-form-item>
       </div>
@@ -455,6 +491,8 @@
       <a-form-item :label="t('entity.materialplant.currentstock')">
         <a-input-number
           v-model:value="advancedQueryForm.currentStock"
+          :precision="4"
+          :step="0.0001"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.currentstock') })"
           style="width: 100%"
         />
@@ -466,7 +504,7 @@
           v-model:value="advancedQueryForm.productionLocation"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.productionlocation') })"
           show-count
-          :maxlength="50"
+          :maxlength="4"
           allow-clear
         />
       </a-form-item>
@@ -477,44 +515,49 @@
           v-model:value="advancedQueryForm.purchasingLocation"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.purchasinglocation') })"
           show-count
-          :maxlength="50"
+          :maxlength="4"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('inspectionRequired')">
-      <a-form-item :label="t('entity.materialplant.inspectionrequired')">
-        <a-input-number
-          v-model:value="advancedQueryForm.inspectionRequired"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.inspectionrequired') })"
-          style="width: 100%"
+      <div v-show="isFieldVisible('storageLocation')">
+      <a-form-item :label="t('entity.materialplant.storagelocation')">
+        <a-input
+          v-model:value="advancedQueryForm.storageLocation"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.storagelocation') })"
+          show-count
+          :maxlength="40"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('isInspection')">
+      <a-form-item :label="t('entity.materialplant.isinspection')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.isInspection"
+          dict-type="sys_yes_no_type"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplant.isinspection') })"
+          allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('isBatch')">
       <a-form-item :label="t('entity.materialplant.isbatch')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.isBatch"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.isbatch') })"
-          style="width: 100%"
+          dict-type="sys_yes_no_type"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplant.isbatch') })"
+          allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('isExpiry')">
-      <a-form-item :label="t('entity.materialplant.isexpiry')">
-        <a-input-number
-          v-model:value="advancedQueryForm.isExpiry"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.isexpiry') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('expiryDays')">
-      <a-form-item :label="t('entity.materialplant.expirydays')">
-        <a-input-number
-          v-model:value="advancedQueryForm.expiryDays"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.expirydays') })"
-          style="width: 100%"
+      <div v-show="isFieldVisible('isEndOfLife')">
+      <a-form-item :label="t('entity.materialplant.isendoflife')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.isEndOfLife"
+          dict-type="logistics_material_eol_status"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplant.isendoflife') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -528,55 +571,13 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('materialAttributes')">
-      <a-form-item :label="t('entity.materialplant.materialattributes')">
-        <a-input
-          v-model:value="advancedQueryForm.materialAttributes"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.materialattributes') })"
-          show-count
-          :maxlength="4000"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('isEndOfLife')">
-      <a-form-item :label="t('entity.materialplant.isendoflife')">
-        <a-input
-          v-model:value="advancedQueryForm.isEndOfLife"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.isendoflife') })"
-          show-count
-          :maxlength="10"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('endOfLifeDateStart')">
-      <a-form-item :label="t('entity.materialplant.endoflifedatestart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.endOfLifeDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplant.endoflifedatestart') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('endOfLifeDateEnd')">
-      <a-form-item :label="t('entity.materialplant.endoflifedateend')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.endOfLifeDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplant.endoflifedateend') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
       <div v-show="isFieldVisible('createdAtStart')">
       <a-form-item :label="t('common.page.entity.createdatstart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -587,7 +588,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -645,6 +646,7 @@
       @cancel="handleImportCancel"
     >
       <TaktImportFile
+        v-if="importVisible"
         entity-i18n-key="entity.materialplant._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
@@ -688,6 +690,7 @@ import type { MaterialPlant, MaterialPlantQuery } from '@/types/logistics/materi
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
@@ -740,13 +743,11 @@ const advancedQueryForm = ref({
   materialDescription: '',
   industrySector: '',
   materialHierarchy: '',
-  materialGroupCode: '',
-  materialType: undefined as number | undefined,
-  materialModel: '',
-  materialBrand: '',
+  materialGroup: '',
+  materialType: '',
   baseUnit: '',
   purchaseGroup: '',
-  purchaseType: undefined as number | undefined,
+  purchaseType: '',
   specialProcurement: undefined as number | undefined,
   isBulk: undefined as number | undefined,
   minOrderQuantity: undefined as number | undefined,
@@ -754,30 +755,22 @@ const advancedQueryForm = ref({
   plannedDeliveryTimeDays: undefined as number | undefined,
   inHouseProductionDays: undefined as number | undefined,
   manufacturer: '',
-  manufacturerPartNumber: '',
-  currencyCode: '',
-  priceControl: undefined as number | undefined,
+  manufacturerMaterialCode: '',
+  currency: '',
+  priceControl: '',
   priceUnit: undefined as number | undefined,
-  valuationCategory: '',
+  valuation: '',
+  movingPrice: undefined as number | undefined,
   differenceCode: '',
   profitCenter: '',
-  latestPurchasePrice: undefined as number | undefined,
-  salesPrice: undefined as number | undefined,
-  safetyStock: undefined as number | undefined,
-  maxStock: undefined as number | undefined,
-  minStock: undefined as number | undefined,
   currentStock: undefined as number | undefined,
   productionLocation: '',
   purchasingLocation: '',
-  inspectionRequired: undefined as number | undefined,
+  storageLocation: '',
+  isInspection: undefined as number | undefined,
   isBatch: undefined as number | undefined,
-  isExpiry: undefined as number | undefined,
-  expiryDays: undefined as number | undefined,
-  materialStatus: undefined as number | undefined,
-  materialAttributes: '',
   isEndOfLife: '',
-  endOfLifeDateStart: '',
-  endOfLifeDateEnd: '',
+  materialStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -792,10 +785,8 @@ const queryFieldsMeta = computed(() => [
   { key: 'materialDescription', label: t('entity.materialplant.materialdescription') },
   { key: 'industrySector', label: t('entity.materialplant.industrysector') },
   { key: 'materialHierarchy', label: t('entity.materialplant.materialhierarchy') },
-  { key: 'materialGroupCode', label: t('entity.materialplant.materialgroupcode') },
+  { key: 'materialGroup', label: t('entity.materialplant.materialgroup') },
   { key: 'materialType', label: t('entity.materialplant.materialtype') },
-  { key: 'materialModel', label: t('entity.materialplant.materialmodel') },
-  { key: 'materialBrand', label: t('entity.materialplant.materialbrand') },
   { key: 'baseUnit', label: t('entity.materialplant.baseunit') },
   { key: 'purchaseGroup', label: t('entity.materialplant.purchasegroup') },
   { key: 'purchaseType', label: t('entity.materialplant.purchasetype') },
@@ -806,30 +797,22 @@ const queryFieldsMeta = computed(() => [
   { key: 'plannedDeliveryTimeDays', label: t('entity.materialplant.planneddeliverytimedays') },
   { key: 'inHouseProductionDays', label: t('entity.materialplant.inhouseproductiondays') },
   { key: 'manufacturer', label: t('entity.materialplant.manufacturer') },
-  { key: 'manufacturerPartNumber', label: t('entity.materialplant.manufacturerpartnumber') },
-  { key: 'currencyCode', label: t('entity.materialplant.currencycode') },
+  { key: 'manufacturerMaterialCode', label: t('entity.materialplant.manufacturermaterialcode') },
+  { key: 'currency', label: t('entity.materialplant.currency') },
   { key: 'priceControl', label: t('entity.materialplant.pricecontrol') },
   { key: 'priceUnit', label: t('entity.materialplant.priceunit') },
-  { key: 'valuationCategory', label: t('entity.materialplant.valuationcategory') },
+  { key: 'valuation', label: t('entity.materialplant.valuation') },
+  { key: 'movingPrice', label: t('entity.materialplant.movingprice') },
   { key: 'differenceCode', label: t('entity.materialplant.differencecode') },
   { key: 'profitCenter', label: t('entity.materialplant.profitcenter') },
-  { key: 'latestPurchasePrice', label: t('entity.materialplant.latestpurchaseprice') },
-  { key: 'salesPrice', label: t('entity.materialplant.salesprice') },
-  { key: 'safetyStock', label: t('entity.materialplant.safetystock') },
-  { key: 'maxStock', label: t('entity.materialplant.maxstock') },
-  { key: 'minStock', label: t('entity.materialplant.minstock') },
   { key: 'currentStock', label: t('entity.materialplant.currentstock') },
   { key: 'productionLocation', label: t('entity.materialplant.productionlocation') },
   { key: 'purchasingLocation', label: t('entity.materialplant.purchasinglocation') },
-  { key: 'inspectionRequired', label: t('entity.materialplant.inspectionrequired') },
+  { key: 'storageLocation', label: t('entity.materialplant.storagelocation') },
+  { key: 'isInspection', label: t('entity.materialplant.isinspection') },
   { key: 'isBatch', label: t('entity.materialplant.isbatch') },
-  { key: 'isExpiry', label: t('entity.materialplant.isexpiry') },
-  { key: 'expiryDays', label: t('entity.materialplant.expirydays') },
-  { key: 'materialStatus', label: t('entity.materialplant.materialstatus') },
-  { key: 'materialAttributes', label: t('entity.materialplant.materialattributes') },
   { key: 'isEndOfLife', label: t('entity.materialplant.isendoflife') },
-  { key: 'endOfLifeDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.materialplant.endoflifedate')) },
-  { key: 'endOfLifeDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.materialplant.endoflifedate')) },
+  { key: 'materialStatus', label: t('entity.materialplant.materialstatus') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extField', label: t('common.page.entity.extfield') },
@@ -883,17 +866,11 @@ function buildListQuery(overrides?: Partial<MaterialPlantQuery>): MaterialPlantQ
   assignTrimmed('materialDescription', form.materialDescription)
   assignTrimmed('industrySector', form.industrySector)
   assignTrimmed('materialHierarchy', form.materialHierarchy)
-  assignTrimmed('materialGroupCode', form.materialGroupCode)
-  if (form.materialType !== undefined && form.materialType !== null) {
-    query.materialType = form.materialType
-  }
-  assignTrimmed('materialModel', form.materialModel)
-  assignTrimmed('materialBrand', form.materialBrand)
+  assignTrimmed('materialGroup', form.materialGroup)
+  assignTrimmed('materialType', form.materialType)
   assignTrimmed('baseUnit', form.baseUnit)
   assignTrimmed('purchaseGroup', form.purchaseGroup)
-  if (form.purchaseType !== undefined && form.purchaseType !== null) {
-    query.purchaseType = form.purchaseType
-  }
+  assignTrimmed('purchaseType', form.purchaseType)
   if (form.specialProcurement !== undefined && form.specialProcurement !== null) {
     query.specialProcurement = form.specialProcurement
   }
@@ -901,68 +878,46 @@ function buildListQuery(overrides?: Partial<MaterialPlantQuery>): MaterialPlantQ
     query.isBulk = form.isBulk
   }
   if (form.minOrderQuantity !== undefined && form.minOrderQuantity !== null) {
-    query.minOrderQuantity = form.minOrderQuantity
+    query.minOrderQuantity = Math.trunc(form.minOrderQuantity)
   }
   if (form.roundingValue !== undefined && form.roundingValue !== null) {
-    query.roundingValue = form.roundingValue
+    query.roundingValue = Math.trunc(form.roundingValue)
   }
   if (form.plannedDeliveryTimeDays !== undefined && form.plannedDeliveryTimeDays !== null) {
-    query.plannedDeliveryTimeDays = form.plannedDeliveryTimeDays
+    query.plannedDeliveryTimeDays = Math.trunc(form.plannedDeliveryTimeDays)
   }
   if (form.inHouseProductionDays !== undefined && form.inHouseProductionDays !== null) {
-    query.inHouseProductionDays = form.inHouseProductionDays
+    query.inHouseProductionDays = Math.round(form.inHouseProductionDays * 10) / 10
   }
   assignTrimmed('manufacturer', form.manufacturer)
-  assignTrimmed('manufacturerPartNumber', form.manufacturerPartNumber)
-  assignTrimmed('currencyCode', form.currencyCode)
-  if (form.priceControl !== undefined && form.priceControl !== null) {
-    query.priceControl = form.priceControl
-  }
+  assignTrimmed('manufacturerMaterialCode', form.manufacturerMaterialCode)
+  assignTrimmed('currency', form.currency)
+  assignTrimmed('priceControl', form.priceControl)
   if (form.priceUnit !== undefined && form.priceUnit !== null) {
     query.priceUnit = form.priceUnit
   }
-  assignTrimmed('valuationCategory', form.valuationCategory)
+  assignTrimmed('valuation', form.valuation)
+  if (form.movingPrice !== undefined && form.movingPrice !== null) {
+    query.movingPrice = Math.round(form.movingPrice * 10000) / 10000
+  }
   assignTrimmed('differenceCode', form.differenceCode)
   assignTrimmed('profitCenter', form.profitCenter)
-  if (form.latestPurchasePrice !== undefined && form.latestPurchasePrice !== null) {
-    query.latestPurchasePrice = form.latestPurchasePrice
-  }
-  if (form.salesPrice !== undefined && form.salesPrice !== null) {
-    query.salesPrice = form.salesPrice
-  }
-  if (form.safetyStock !== undefined && form.safetyStock !== null) {
-    query.safetyStock = form.safetyStock
-  }
-  if (form.maxStock !== undefined && form.maxStock !== null) {
-    query.maxStock = form.maxStock
-  }
-  if (form.minStock !== undefined && form.minStock !== null) {
-    query.minStock = form.minStock
-  }
   if (form.currentStock !== undefined && form.currentStock !== null) {
-    query.currentStock = form.currentStock
+    query.currentStock = Math.round(form.currentStock * 10000) / 10000
   }
   assignTrimmed('productionLocation', form.productionLocation)
   assignTrimmed('purchasingLocation', form.purchasingLocation)
-  if (form.inspectionRequired !== undefined && form.inspectionRequired !== null) {
-    query.inspectionRequired = form.inspectionRequired
+  assignTrimmed('storageLocation', form.storageLocation)
+  if (form.isInspection !== undefined && form.isInspection !== null) {
+    query.isInspection = form.isInspection
   }
   if (form.isBatch !== undefined && form.isBatch !== null) {
     query.isBatch = form.isBatch
   }
-  if (form.isExpiry !== undefined && form.isExpiry !== null) {
-    query.isExpiry = form.isExpiry
-  }
-  if (form.expiryDays !== undefined && form.expiryDays !== null) {
-    query.expiryDays = form.expiryDays
-  }
+  assignTrimmed('isEndOfLife', form.isEndOfLife)
   if (form.materialStatus !== undefined && form.materialStatus !== null) {
     query.materialStatus = form.materialStatus
   }
-  assignTrimmed('materialAttributes', form.materialAttributes)
-  assignTrimmed('isEndOfLife', form.isEndOfLife)
-  assignTrimmed('endOfLifeDateStart', form.endOfLifeDateStart)
-  assignTrimmed('endOfLifeDateEnd', form.endOfLifeDateEnd)
   assignTrimmed('createdAtStart', form.createdAtStart)
   assignTrimmed('createdAtEnd', form.createdAtEnd)
   assignTrimmed('extField', form.extField)
@@ -1046,7 +1001,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'industrySector') ?? ''
   },
   {
     title: t('entity.materialplant.materialhierarchy'),
@@ -1058,13 +1012,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'materialHierarchy') ?? ''
   },
   {
-    title: t('entity.materialplant.materialgroupcode'),
-    dataIndex: 'materialGroupCode',
-    key: 'materialGroupCode',
+    title: t('entity.materialplant.materialgroup'),
+    dataIndex: 'materialGroup',
+    key: 'materialGroup',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'materialGroupCode') ?? ''
+    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'materialGroup') ?? ''
   },
   {
     title: t('entity.materialplant.materialtype'),
@@ -1073,25 +1027,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'materialType') ?? ''
-  },
-  {
-    title: t('entity.materialplant.materialmodel'),
-    dataIndex: 'materialModel',
-    key: 'materialModel',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'materialModel') ?? ''
-  },
-  {
-    title: t('entity.materialplant.materialbrand'),
-    dataIndex: 'materialBrand',
-    key: 'materialBrand',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'materialBrand') ?? ''
   },
   {
     title: t('entity.materialplant.baseunit'),
@@ -1100,7 +1035,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'baseUnit') ?? ''
   },
   {
     title: t('entity.materialplant.purchasegroup'),
@@ -1118,7 +1052,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'purchaseType') ?? ''
   },
   {
     title: t('entity.materialplant.specialprocurement'),
@@ -1127,7 +1060,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'specialProcurement') ?? ''
   },
   {
     title: t('entity.materialplant.isbulk'),
@@ -1136,7 +1068,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'isBulk') ?? ''
   },
   {
     title: t('entity.materialplant.minorderquantity'),
@@ -1184,22 +1115,21 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'manufacturer') ?? ''
   },
   {
-    title: t('entity.materialplant.manufacturerpartnumber'),
-    dataIndex: 'manufacturerPartNumber',
-    key: 'manufacturerPartNumber',
+    title: t('entity.materialplant.manufacturermaterialcode'),
+    dataIndex: 'manufacturerMaterialCode',
+    key: 'manufacturerMaterialCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'manufacturerPartNumber') ?? ''
+    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'manufacturerMaterialCode') ?? ''
   },
   {
-    title: t('entity.materialplant.currencycode'),
-    dataIndex: 'currencyCode',
-    key: 'currencyCode',
+    title: t('entity.materialplant.currency'),
+    dataIndex: 'currency',
+    key: 'currency',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'currencyCode') ?? ''
   },
   {
     title: t('entity.materialplant.pricecontrol'),
@@ -1208,7 +1138,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'priceControl') ?? ''
   },
   {
     title: t('entity.materialplant.priceunit'),
@@ -1217,16 +1146,23 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'priceUnit') ?? ''
   },
   {
-    title: t('entity.materialplant.valuationcategory'),
-    dataIndex: 'valuationCategory',
-    key: 'valuationCategory',
+    title: t('entity.materialplant.valuation'),
+    dataIndex: 'valuation',
+    key: 'valuation',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'valuationCategory') ?? ''
+  },
+  {
+    title: t('entity.materialplant.movingprice'),
+    dataIndex: 'movingPrice',
+    key: 'movingPrice',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'movingPrice') ?? ''
   },
   {
     title: t('entity.materialplant.differencecode'),
@@ -1245,51 +1181,6 @@ const columns = computed<TableColumnsType>(() => [
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'profitCenter') ?? ''
-  },
-  {
-    title: t('entity.materialplant.latestpurchaseprice'),
-    dataIndex: 'latestPurchasePrice',
-    key: 'latestPurchasePrice',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'latestPurchasePrice') ?? ''
-  },
-  {
-    title: t('entity.materialplant.salesprice'),
-    dataIndex: 'salesPrice',
-    key: 'salesPrice',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'salesPrice') ?? ''
-  },
-  {
-    title: t('entity.materialplant.safetystock'),
-    dataIndex: 'safetyStock',
-    key: 'safetyStock',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'safetyStock') ?? ''
-  },
-  {
-    title: t('entity.materialplant.maxstock'),
-    dataIndex: 'maxStock',
-    key: 'maxStock',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'maxStock') ?? ''
-  },
-  {
-    title: t('entity.materialplant.minstock'),
-    dataIndex: 'minStock',
-    key: 'minStock',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'minStock') ?? ''
   },
   {
     title: t('entity.materialplant.currentstock'),
@@ -1319,13 +1210,21 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'purchasingLocation') ?? ''
   },
   {
-    title: t('entity.materialplant.inspectionrequired'),
-    dataIndex: 'inspectionRequired',
-    key: 'inspectionRequired',
+    title: t('entity.materialplant.storagelocation'),
+    dataIndex: 'storageLocation',
+    key: 'storageLocation',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'inspectionRequired') ?? ''
+    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'storageLocation') ?? ''
+  },
+  {
+    title: t('entity.materialplant.isinspection'),
+    dataIndex: 'isInspection',
+    key: 'isInspection',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
   },
   {
     title: t('entity.materialplant.isbatch'),
@@ -1334,42 +1233,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'isBatch') ?? ''
-  },
-  {
-    title: t('entity.materialplant.isexpiry'),
-    dataIndex: 'isExpiry',
-    key: 'isExpiry',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'isExpiry') ?? ''
-  },
-  {
-    title: t('entity.materialplant.expirydays'),
-    dataIndex: 'expiryDays',
-    key: 'expiryDays',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'expiryDays') ?? ''
-  },
-  {
-    title: t('entity.materialplant.materialstatus'),
-    dataIndex: 'materialStatus',
-    key: 'materialStatus',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: t('entity.materialplant.materialattributes'),
-    dataIndex: 'materialAttributes',
-    key: 'materialAttributes',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'materialAttributes') ?? ''
   },
   {
     title: t('entity.materialplant.isendoflife'),
@@ -1378,16 +1241,14 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'isEndOfLife') ?? ''
   },
   {
-    title: t('entity.materialplant.endoflifedate'),
-    dataIndex: 'endOfLifeDate',
-    key: 'endOfLifeDate',
+    title: t('entity.materialplant.materialstatus'),
+    dataIndex: 'materialStatus',
+    key: 'materialStatus',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'endOfLifeDate') ?? ''
   },
   CreateActionColumn({
     actions: [
@@ -1432,7 +1293,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: MaterialPlant, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getMaterialPlantId(selectedRow.value) === getMaterialPlantId(record)) {
+    } else if (selectedRow.value && getMaterialPlantId(selectedRow.value) === getMaterialPlantId(record)) {
       selectedRow.value = null
     }
   },
@@ -1496,13 +1357,11 @@ function handleReset() {
   materialDescription: '',
   industrySector: '',
   materialHierarchy: '',
-  materialGroupCode: '',
-  materialType: undefined as number | undefined,
-  materialModel: '',
-  materialBrand: '',
+  materialGroup: '',
+  materialType: '',
   baseUnit: '',
   purchaseGroup: '',
-  purchaseType: undefined as number | undefined,
+  purchaseType: '',
   specialProcurement: undefined as number | undefined,
   isBulk: undefined as number | undefined,
   minOrderQuantity: undefined as number | undefined,
@@ -1510,30 +1369,22 @@ function handleReset() {
   plannedDeliveryTimeDays: undefined as number | undefined,
   inHouseProductionDays: undefined as number | undefined,
   manufacturer: '',
-  manufacturerPartNumber: '',
-  currencyCode: '',
-  priceControl: undefined as number | undefined,
+  manufacturerMaterialCode: '',
+  currency: '',
+  priceControl: '',
   priceUnit: undefined as number | undefined,
-  valuationCategory: '',
+  valuation: '',
+  movingPrice: undefined as number | undefined,
   differenceCode: '',
   profitCenter: '',
-  latestPurchasePrice: undefined as number | undefined,
-  salesPrice: undefined as number | undefined,
-  safetyStock: undefined as number | undefined,
-  maxStock: undefined as number | undefined,
-  minStock: undefined as number | undefined,
   currentStock: undefined as number | undefined,
   productionLocation: '',
   purchasingLocation: '',
-  inspectionRequired: undefined as number | undefined,
+  storageLocation: '',
+  isInspection: undefined as number | undefined,
   isBatch: undefined as number | undefined,
-  isExpiry: undefined as number | undefined,
-  expiryDays: undefined as number | undefined,
-  materialStatus: undefined as number | undefined,
-  materialAttributes: '',
   isEndOfLife: '',
-  endOfLifeDateStart: '',
-  endOfLifeDateEnd: '',
+  materialStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -1611,15 +1462,18 @@ async function handleDownloadTemplate(sheetName?: string, fileName?: string): Pr
   return (res as any)?.data ?? res
 }
 
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importMaterialPlant(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importMaterialPlant(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
+  }
 }
 
 /** 关闭导入对话框 */
@@ -1739,13 +1593,11 @@ function handleAdvancedQueryReset() {
   materialDescription: '',
   industrySector: '',
   materialHierarchy: '',
-  materialGroupCode: '',
-  materialType: undefined as number | undefined,
-  materialModel: '',
-  materialBrand: '',
+  materialGroup: '',
+  materialType: '',
   baseUnit: '',
   purchaseGroup: '',
-  purchaseType: undefined as number | undefined,
+  purchaseType: '',
   specialProcurement: undefined as number | undefined,
   isBulk: undefined as number | undefined,
   minOrderQuantity: undefined as number | undefined,
@@ -1753,30 +1605,22 @@ function handleAdvancedQueryReset() {
   plannedDeliveryTimeDays: undefined as number | undefined,
   inHouseProductionDays: undefined as number | undefined,
   manufacturer: '',
-  manufacturerPartNumber: '',
-  currencyCode: '',
-  priceControl: undefined as number | undefined,
+  manufacturerMaterialCode: '',
+  currency: '',
+  priceControl: '',
   priceUnit: undefined as number | undefined,
-  valuationCategory: '',
+  valuation: '',
+  movingPrice: undefined as number | undefined,
   differenceCode: '',
   profitCenter: '',
-  latestPurchasePrice: undefined as number | undefined,
-  salesPrice: undefined as number | undefined,
-  safetyStock: undefined as number | undefined,
-  maxStock: undefined as number | undefined,
-  minStock: undefined as number | undefined,
   currentStock: undefined as number | undefined,
   productionLocation: '',
   purchasingLocation: '',
-  inspectionRequired: undefined as number | undefined,
+  storageLocation: '',
+  isInspection: undefined as number | undefined,
   isBatch: undefined as number | undefined,
-  isExpiry: undefined as number | undefined,
-  expiryDays: undefined as number | undefined,
-  materialStatus: undefined as number | undefined,
-  materialAttributes: '',
   isEndOfLife: '',
-  endOfLifeDateStart: '',
-  endOfLifeDateEnd: '',
+  materialStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',

@@ -26,7 +26,7 @@ namespace Takt.Domain.Entities.Routine.HelpDesk;
 public class TaktItAssetChangeLog : TaktCompanyEntityBase
 {
     /// <summary>
-    /// IT 设备保修扩展 ID
+    /// IT 设备保修扩展 ID（关联 TaktItAsset.Id，选项 TaktItAssets/options）
     /// </summary>
     [SugarColumn(ColumnName = "it_asset_id", ColumnDescription = "IT设备保修扩展ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -39,7 +39,7 @@ public class TaktItAssetChangeLog : TaktCompanyEntityBase
     public string? AssetCode { get; set; }
 
     /// <summary>
-    /// 变更类型（见 TaktHelpDeskChangeType）
+    /// 变更类型（字典 sys_entity_change_type；0=创建 1=更新 2=删除 3=状态变更）
     /// </summary>
     [SugarColumn(ColumnName = "change_type", ColumnDescription = "变更类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int ChangeType { get; set; } = 1;

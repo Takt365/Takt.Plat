@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/customer-service
 // 文件名称：service-order.d.ts
-// 创建时间：2026-06-21
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/customer-service 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -152,6 +152,16 @@ export interface ServiceOrder extends CompanyDtoBase {
    * 排序号（越小越靠前）
    */
   sortOrder: number;
+
+  /**
+   * 关联服务合同 （主表：TaktServiceContract）
+   */
+  serviceContract?: ServiceContract;
+
+  /**
+   * 关联服务请求 （主表：TaktServiceRequest）
+   */
+  serviceRequest?: ServiceRequest;
 
   /**
    * 服务工单列表（外键在子表 TaktServiceTicket.ServiceOrderId） （子表：TaktServiceTicket）
@@ -358,7 +368,7 @@ export interface ServiceOrderCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -605,6 +615,11 @@ export interface ServiceOrderTemplate {
   serviceRequestCode?: string;
 
   /**
+   * 订单日期
+   */
+  orderDate?: string;
+
+  /**
    * 订单类型（0=现场服务，1=远程支持，2=备件更换，3=安装调试，4=其他）
    */
   orderType?: number;
@@ -615,9 +630,59 @@ export interface ServiceOrderTemplate {
   orderStatus?: number;
 
   /**
+   * 订单总金额
+   */
+  totalAmount?: number;
+
+  /**
+   * 折扣金额
+   */
+  discountAmount?: number;
+
+  /**
+   * 税费
+   */
+  taxAmount?: number;
+
+  /**
+   * 订单实付金额
+   */
+  actualAmount?: number;
+
+  /**
    * 结算币种代码
    */
   currencyCode?: string;
+
+  /**
+   * 计划开始日期
+   */
+  plannedStartDate?: string;
+
+  /**
+   * 计划结束日期
+   */
+  plannedEndDate?: string;
+
+  /**
+   * 实际开始日期
+   */
+  actualStartDate?: string;
+
+  /**
+   * 实际结束日期
+   */
+  actualEndDate?: string;
+
+  /**
+   * 服务负责人（人员代码）
+   */
+  serviceBy?: string;
+
+  /**
+   * 服务工单列表（外键在子表 TaktServiceTicket.ServiceOrderId）（子表，级联保存）
+   */
+  tickets?: ServiceTicketCreate[];
 
   /**
    * 扩展字段JSON
@@ -649,7 +714,7 @@ export interface ServiceOrderImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -699,6 +764,11 @@ export interface ServiceOrderImport {
   serviceRequestCode?: string;
 
   /**
+   * 订单日期
+   */
+  orderDate?: string;
+
+  /**
    * 订单类型（0=现场服务，1=远程支持，2=备件更换，3=安装调试，4=其他）
    */
   orderType?: number;
@@ -709,9 +779,59 @@ export interface ServiceOrderImport {
   orderStatus?: number;
 
   /**
+   * 订单总金额
+   */
+  totalAmount?: number;
+
+  /**
+   * 折扣金额
+   */
+  discountAmount?: number;
+
+  /**
+   * 税费
+   */
+  taxAmount?: number;
+
+  /**
+   * 订单实付金额
+   */
+  actualAmount?: number;
+
+  /**
    * 结算币种代码
    */
   currencyCode?: string;
+
+  /**
+   * 计划开始日期
+   */
+  plannedStartDate?: string;
+
+  /**
+   * 计划结束日期
+   */
+  plannedEndDate?: string;
+
+  /**
+   * 实际开始日期
+   */
+  actualStartDate?: string;
+
+  /**
+   * 实际结束日期
+   */
+  actualEndDate?: string;
+
+  /**
+   * 服务负责人（人员代码）
+   */
+  serviceBy?: string;
+
+  /**
+   * 服务工单列表（外键在子表 TaktServiceTicket.ServiceOrderId）（子表，级联保存）
+   */
+  tickets?: ServiceTicketCreate[];
 
   /**
    * 扩展字段JSON

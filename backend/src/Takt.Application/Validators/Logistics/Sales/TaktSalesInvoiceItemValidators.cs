@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Sales
 // 文件名称：TaktSalesInvoiceItemValidators.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SalesInvoiceItem 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktSalesInvoiceItem 生成，请按需审阅）
 // 
@@ -36,21 +36,28 @@ public class TaktSalesInvoiceItemCreateValidator : AbstractValidator<TaktSalesIn
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.SalesInvoiceId)
-            .GreaterThanOrEqualTo(0).WithMessage("销售发票ID不能为负数");
-        RuleFor(x => x.SalesInvoiceCode)
-            .NotEmpty().WithMessage("销售发票编码不能为空")
-            .MaximumLength(50).WithMessage("销售发票编码长度不能超过50个字符");
+            .GreaterThanOrEqualTo(0).WithMessage("销售发票不能为负数");
+        RuleFor(x => x.AccountingDocumentCode)
+            .NotEmpty().WithMessage("会计凭证编号不能为空")
+            .MaximumLength(40).WithMessage("会计凭证编号长度不能超过40个字符");
+        RuleFor(x => x.Currency)
+            .NotEmpty().WithMessage("货币不能为空")
+            .MaximumLength(3).WithMessage("货币长度不能超过3个字符");
         RuleFor(x => x.MaterialCode)
             .NotEmpty().WithMessage("物料编码不能为空")
             .MaximumLength(20).WithMessage("物料编码长度不能超过20个字符");
+        RuleFor(x => x.MaterialType)
+            .NotEmpty().WithMessage("物料类型不能为空")
+            .MaximumLength(4).WithMessage("物料类型长度不能超过4个字符");
         RuleFor(x => x.MaterialName)
             .NotEmpty().WithMessage("物料名称不能为空")
             .MaximumLength(40).WithMessage("物料名称长度不能超过40个字符");
-        RuleFor(x => x.MaterialSpecification)
-            .MaximumLength(80).WithMessage("物料规格长度不能超过80个字符");
-        RuleFor(x => x.SalesUnit)
-            .NotEmpty().WithMessage("销售单位不能为空")
-            .MaximumLength(20).WithMessage("销售单位长度不能超过20个字符");
+        RuleFor(x => x.Unit)
+            .NotEmpty().WithMessage("单位不能为空")
+            .MaximumLength(20).WithMessage("单位长度不能超过20个字符");
+        RuleFor(x => x.DocumentType)
+            .NotEmpty().WithMessage("凭证类型不能为空")
+            .MaximumLength(2).WithMessage("凭证类型长度不能超过2个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -74,6 +81,39 @@ public class TaktSalesInvoiceItemUpdateValidator : AbstractValidator<TaktSalesIn
     {
         RuleFor(x => x.SalesInvoiceItemId)
             .GreaterThan(0).WithMessage("SalesInvoiceItemID无效");
+        RuleFor(x => x.TenantCode)
+            .NotEmpty().WithMessage("租户编码不能为空")
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.CompanyCode)
+            .NotEmpty().WithMessage("公司代码不能为空")
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.SalesInvoiceId)
+            .GreaterThanOrEqualTo(0).WithMessage("销售发票不能为负数");
+        RuleFor(x => x.AccountingDocumentCode)
+            .NotEmpty().WithMessage("会计凭证编号不能为空")
+            .MaximumLength(40).WithMessage("会计凭证编号长度不能超过40个字符");
+        RuleFor(x => x.Currency)
+            .NotEmpty().WithMessage("货币不能为空")
+            .MaximumLength(3).WithMessage("货币长度不能超过3个字符");
+        RuleFor(x => x.MaterialCode)
+            .NotEmpty().WithMessage("物料编码不能为空")
+            .MaximumLength(20).WithMessage("物料编码长度不能超过20个字符");
+        RuleFor(x => x.MaterialType)
+            .NotEmpty().WithMessage("物料类型不能为空")
+            .MaximumLength(4).WithMessage("物料类型长度不能超过4个字符");
+        RuleFor(x => x.MaterialName)
+            .NotEmpty().WithMessage("物料名称不能为空")
+            .MaximumLength(40).WithMessage("物料名称长度不能超过40个字符");
+        RuleFor(x => x.Unit)
+            .NotEmpty().WithMessage("单位不能为空")
+            .MaximumLength(20).WithMessage("单位长度不能超过20个字符");
+        RuleFor(x => x.DocumentType)
+            .NotEmpty().WithMessage("凭证类型不能为空")
+            .MaximumLength(2).WithMessage("凭证类型长度不能超过2个字符");
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
     }
 }
 
@@ -96,21 +136,28 @@ public class TaktSalesInvoiceItemImportValidator : AbstractValidator<TaktSalesIn
         RuleFor(x => x.CompanyCode)
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
         RuleFor(x => x.SalesInvoiceId)
-            .GreaterThanOrEqualTo(0).WithMessage("销售发票ID不能为负数");
-        RuleFor(x => x.SalesInvoiceCode)
-            .NotEmpty().WithMessage("销售发票编码不能为空")
-            .MaximumLength(50).WithMessage("销售发票编码长度不能超过50个字符");
+            .GreaterThanOrEqualTo(0).WithMessage("销售发票不能为负数");
+        RuleFor(x => x.AccountingDocumentCode)
+            .NotEmpty().WithMessage("会计凭证编号不能为空")
+            .MaximumLength(40).WithMessage("会计凭证编号长度不能超过40个字符");
+        RuleFor(x => x.Currency)
+            .NotEmpty().WithMessage("货币不能为空")
+            .MaximumLength(3).WithMessage("货币长度不能超过3个字符");
         RuleFor(x => x.MaterialCode)
             .NotEmpty().WithMessage("物料编码不能为空")
             .MaximumLength(20).WithMessage("物料编码长度不能超过20个字符");
+        RuleFor(x => x.MaterialType)
+            .NotEmpty().WithMessage("物料类型不能为空")
+            .MaximumLength(4).WithMessage("物料类型长度不能超过4个字符");
         RuleFor(x => x.MaterialName)
             .NotEmpty().WithMessage("物料名称不能为空")
             .MaximumLength(40).WithMessage("物料名称长度不能超过40个字符");
-        RuleFor(x => x.MaterialSpecification)
-            .MaximumLength(80).WithMessage("物料规格长度不能超过80个字符").When(x => !string.IsNullOrWhiteSpace(x.MaterialSpecification));
-        RuleFor(x => x.SalesUnit)
-            .NotEmpty().WithMessage("销售单位不能为空")
-            .MaximumLength(20).WithMessage("销售单位长度不能超过20个字符");
+        RuleFor(x => x.Unit)
+            .NotEmpty().WithMessage("单位不能为空")
+            .MaximumLength(20).WithMessage("单位长度不能超过20个字符");
+        RuleFor(x => x.DocumentType)
+            .NotEmpty().WithMessage("凭证类型不能为空")
+            .MaximumLength(2).WithMessage("凭证类型长度不能超过2个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

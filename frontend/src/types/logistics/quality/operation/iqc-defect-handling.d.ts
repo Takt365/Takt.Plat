@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/quality/operation
 // 文件名称：iqc-defect-handling.d.ts
-// 创建时间：2026-06-21
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/operation 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -34,12 +34,12 @@ export interface IqcDefectHandling extends CompanyDtoBase {
   iqcDefectHandlingCode: string;
 
   /**
-   * IQC检验单明细ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * IQC检验单明细 ID（关联 TaktIqcOrderItem.Id，选项 TaktIqcOrderItems/options）
    */
   iqcOrderItemId: string;
 
   /**
-   * IQC检验单明细名称（填充字段）
+   * IQC检验单明细 名称（填充字段）
    */
   iqcOrderItemName?: string;
 
@@ -104,11 +104,6 @@ export interface IqcDefectHandling extends CompanyDtoBase {
   handlingAt?: string;
 
   /**
-   * 处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）
-   */
-  handlingStatus: number;
-
-  /**
    * 预防措施/纠正措施
    */
   correctiveAction?: string;
@@ -117,6 +112,16 @@ export interface IqcDefectHandling extends CompanyDtoBase {
    * 不良图片（JSON格式，存储不良图片URL列表）
    */
   defectImages?: string;
+
+  /**
+   * 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+   */
+  attachments?: string;
+
+  /**
+   * 处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）
+   */
+  handlingStatus: number;
 
   /**
    * IQC检验单明细（主表） （主表：TaktIqcOrderItem）
@@ -149,7 +154,7 @@ export interface IqcDefectHandlingQuery extends TaktPagedQuery {
   iqcDefectHandlingCode?: string;
 
   /**
-   * IQC检验单明细ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * IQC检验单明细 ID（关联 TaktIqcOrderItem.Id，选项 TaktIqcOrderItems/options）
    */
   iqcOrderItemId?: string;
 
@@ -219,11 +224,6 @@ export interface IqcDefectHandlingQuery extends TaktPagedQuery {
   handlingAtEnd?: string;
 
   /**
-   * 处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）
-   */
-  handlingStatus?: number;
-
-  /**
    * 预防措施/纠正措施
    */
   correctiveAction?: string;
@@ -232,6 +232,16 @@ export interface IqcDefectHandlingQuery extends TaktPagedQuery {
    * 不良图片（JSON格式，存储不良图片URL列表）
    */
   defectImages?: string;
+
+  /**
+   * 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+   */
+  attachments?: string;
+
+  /**
+   * 处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）
+   */
+  handlingStatus?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -273,7 +283,7 @@ export interface IqcDefectHandlingCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -283,7 +293,7 @@ export interface IqcDefectHandlingCreate {
   iqcDefectHandlingCode: string;
 
   /**
-   * IQC检验单明细ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * IQC检验单明细 ID（关联 TaktIqcOrderItem.Id，选项 TaktIqcOrderItems/options）
    */
   iqcOrderItemId: string;
 
@@ -348,11 +358,6 @@ export interface IqcDefectHandlingCreate {
   handlingAt?: string;
 
   /**
-   * 处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）
-   */
-  handlingStatus: number;
-
-  /**
    * 预防措施/纠正措施
    */
   correctiveAction?: string;
@@ -361,6 +366,16 @@ export interface IqcDefectHandlingCreate {
    * 不良图片（JSON格式，存储不良图片URL列表）
    */
   defectImages?: string;
+
+  /**
+   * 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+   */
+  attachments?: string;
+
+  /**
+   * 处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）
+   */
+  handlingStatus: number;
 
   /**
    * 扩展字段JSON
@@ -431,7 +446,7 @@ export interface IqcDefectHandlingTemplate {
   iqcDefectHandlingCode?: string;
 
   /**
-   * IQC检验单明细ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * IQC检验单明细 ID（关联 TaktIqcOrderItem.Id，选项 TaktIqcOrderItems/options）
    */
   iqcOrderItemId?: string;
 
@@ -484,6 +499,36 @@ export interface IqcDefectHandlingTemplate {
    * 责任人（人员代码）
    */
   responsibleBy?: string;
+
+  /**
+   * 处理人（人员代码）
+   */
+  handlerBy?: string;
+
+  /**
+   * 处理时间
+   */
+  handlingAt?: string;
+
+  /**
+   * 预防措施/纠正措施
+   */
+  correctiveAction?: string;
+
+  /**
+   * 不良图片（JSON格式，存储不良图片URL列表）
+   */
+  defectImages?: string;
+
+  /**
+   * 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+   */
+  attachments?: string;
+
+  /**
+   * 处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）
+   */
+  handlingStatus?: number;
 
   /**
    * 扩展字段JSON
@@ -515,7 +560,7 @@ export interface IqcDefectHandlingImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -525,7 +570,7 @@ export interface IqcDefectHandlingImport {
   iqcDefectHandlingCode?: string;
 
   /**
-   * IQC检验单明细ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * IQC检验单明细 ID（关联 TaktIqcOrderItem.Id，选项 TaktIqcOrderItems/options）
    */
   iqcOrderItemId?: string;
 
@@ -578,6 +623,36 @@ export interface IqcDefectHandlingImport {
    * 责任人（人员代码）
    */
   responsibleBy?: string;
+
+  /**
+   * 处理人（人员代码）
+   */
+  handlerBy?: string;
+
+  /**
+   * 处理时间
+   */
+  handlingAt?: string;
+
+  /**
+   * 预防措施/纠正措施
+   */
+  correctiveAction?: string;
+
+  /**
+   * 不良图片（JSON格式，存储不良图片URL列表）
+   */
+  defectImages?: string;
+
+  /**
+   * 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+   */
+  attachments?: string;
+
+  /**
+   * 处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）
+   */
+  handlingStatus?: number;
 
   /**
    * 扩展字段JSON
@@ -614,7 +689,7 @@ export interface IqcDefectHandlingExport {
   iqcDefectHandlingCode: string;
 
   /**
-   * IQC检验单明细ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * IQC检验单明细 ID（关联 TaktIqcOrderItem.Id，选项 TaktIqcOrderItems/options）
    */
   iqcOrderItemId: string;
 
@@ -679,11 +754,6 @@ export interface IqcDefectHandlingExport {
   handlingAt?: string;
 
   /**
-   * 处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）
-   */
-  handlingStatus: number;
-
-  /**
    * 预防措施/纠正措施
    */
   correctiveAction?: string;
@@ -692,6 +762,16 @@ export interface IqcDefectHandlingExport {
    * 不良图片（JSON格式，存储不良图片URL列表）
    */
   defectImages?: string;
+
+  /**
+   * 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+   */
+  attachments?: string;
+
+  /**
+   * 处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）
+   */
+  handlingStatus: number;
 
   /**
    * 扩展字段JSON

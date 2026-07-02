@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Routine.DocumentCenter
 // 文件名称：TaktDocumentChangeLogDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：DocumentChangeLog 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktDocumentChangeLog 生成，请按需审阅）
 // 
@@ -14,7 +14,6 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Dtos.Routine.DocumentCenter;
 
@@ -60,7 +59,7 @@ public class TaktDocumentChangeLogDto : TaktCompanyDtoBase
     /// <summary>
     /// 变更类型
     /// </summary>
-    public int ChangeType { get; set; }
+    public int ChangeType { get; set; } = 0;
 
     /// <summary>
     /// 变更内容摘要
@@ -192,7 +191,7 @@ public class TaktDocumentChangeLogCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -215,7 +214,7 @@ public class TaktDocumentChangeLogCreateDto
     /// <summary>
     /// 变更类型
     /// </summary>
-    public int ChangeType { get; set; }
+    public int ChangeType { get; set; } = 0;
 
     /// <summary>
     /// 变更内容摘要
@@ -309,7 +308,7 @@ public class TaktDocumentChangeLogExportDto
     /// <summary>
     /// 变更类型
     /// </summary>
-    public int ChangeType { get; set; }
+    public int ChangeType { get; set; } = 0;
 
     /// <summary>
     /// 变更内容摘要

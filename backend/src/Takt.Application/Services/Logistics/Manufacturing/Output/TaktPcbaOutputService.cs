@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Output
 // 文件名称：TaktPcbaOutputService.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-30
 // 创建人：Takt365(Cursor AI)
 // 功能描述：PCBA日报应用服务实现
 // 
@@ -124,12 +124,12 @@ public class TaktPcbaOutputService : TaktServiceBase, ITaktPcbaOutputService
             x => x.PlantCode == entity.PlantCode
                 && x.ProdCategory == entity.ProdCategory
                 && x.ProdDate == entity.ProdDate
-                && x.ProdLine == entity.ProdLine
+                && x.ProdTeam == entity.ProdTeam
                 && x.ShiftNo == entity.ShiftNo
                 && x.ProdOrderCode == entity.ProdOrderCode);
         if (!isUnique_ix_takt_logistics_manufacturing_output_pcba_unique)
         {
-            throw new TaktBusinessException("PCBA日报的PlantCode、ProdCategory、ProdDate、ProdLine、ShiftNo、ProdOrderCode已存在");
+            throw new TaktBusinessException("PCBA日报的PlantCode、ProdCategory、ProdDate、ProdTeam、ShiftNo、ProdOrderCode已存在");
         }
         entity = await _pcbaOutputRepository.CreateAsync(entity);
                 await SavePcbaOutputChildrenAsync(entity, dto);
@@ -155,13 +155,13 @@ public class TaktPcbaOutputService : TaktServiceBase, ITaktPcbaOutputService
             x => x.PlantCode == entity.PlantCode
                 && x.ProdCategory == entity.ProdCategory
                 && x.ProdDate == entity.ProdDate
-                && x.ProdLine == entity.ProdLine
+                && x.ProdTeam == entity.ProdTeam
                 && x.ShiftNo == entity.ShiftNo
                 && x.ProdOrderCode == entity.ProdOrderCode,
             id);
         if (!isUnique_ix_takt_logistics_manufacturing_output_pcba_unique)
         {
-            throw new TaktBusinessException("PCBA日报的PlantCode、ProdCategory、ProdDate、ProdLine、ShiftNo、ProdOrderCode已存在");
+            throw new TaktBusinessException("PCBA日报的PlantCode、ProdCategory、ProdDate、ProdTeam、ShiftNo、ProdOrderCode已存在");
         }
         await _pcbaOutputRepository.UpdateAsync(entity);
                 await SavePcbaOutputChildrenAsync(entity, dto);
@@ -242,22 +242,22 @@ public class TaktPcbaOutputService : TaktServiceBase, ITaktPcbaOutputService
             try
             {
                 var entity = rows[i].Adapt<TaktPcbaOutput>();
-                var importKey = $"{entity.PlantCode}|{entity.ProdCategory}|{entity.ProdDate}|{entity.ProdLine}|{entity.ShiftNo}|{entity.ProdOrderCode}";
+                var importKey = $"{entity.PlantCode}|{entity.ProdCategory}|{entity.ProdDate}|{entity.ProdTeam}|{entity.ShiftNo}|{entity.ProdOrderCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、ProdCategory、ProdDate、ProdLine、ShiftNo、ProdOrderCode）");
+                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、ProdCategory、ProdDate、ProdTeam、ShiftNo、ProdOrderCode）");
                 }
                 var isUnique_ix_takt_logistics_manufacturing_output_pcba_unique = await _uniqueValidator.IsUniqueAsync(
                     _pcbaOutputRepository,
                     x => x.PlantCode == entity.PlantCode
                         && x.ProdCategory == entity.ProdCategory
                         && x.ProdDate == entity.ProdDate
-                        && x.ProdLine == entity.ProdLine
+                        && x.ProdTeam == entity.ProdTeam
                         && x.ShiftNo == entity.ShiftNo
                         && x.ProdOrderCode == entity.ProdOrderCode);
                 if (!isUnique_ix_takt_logistics_manufacturing_output_pcba_unique)
                 {
-                    throw new TaktBusinessException("PCBA日报的PlantCode、ProdCategory、ProdDate、ProdLine、ShiftNo、ProdOrderCode已存在");
+                    throw new TaktBusinessException("PCBA日报的PlantCode、ProdCategory、ProdDate、ProdTeam、ShiftNo、ProdOrderCode已存在");
                 }
                 await _pcbaOutputRepository.CreateAsync(entity);
                 success += 1;
@@ -379,6 +379,60 @@ public class TaktPcbaOutputService : TaktServiceBase, ITaktPcbaOutputService
             await _pcbaOutputDetailRepository.CreateRangeAsync(pcbaoutputdetails);
         }
     }
+
+    /// <summary>
+    /// 获取 PCBA 生产统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>生产统计</returns>
+    public async Task<TaktPcbaOutputProductionStatDto> GetPcbaOutputProductionStatAsync(TaktOutputProductionStatQueryDto queryDto)
+    {
+        EnsureThreeLayerContext();
+        var (start, end, statMonth) = TaktStatMonthRangeHelper.ResolveMonthRange(
+            queryDto.ProdDateStart,
+            queryDto.ProdDateEnd);
+        var tenantCode = CurrentTenantCode;
+        var companyCode = CurrentCompanyCode;
+        Expression<Func<TaktPcbaOutput, bool>> mainPredicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.ProdDate >= start
+            && x.ProdDate <= end;
+        var monthStdCapacity = await _pcbaOutputRepository.SumAsync(x => x.StdCapacity, mainPredicate);
+        var outputs = await _pcbaOutputRepository.GetListAsync(mainPredicate);
+        if (outputs.Count == 0)
+        {
+            return new TaktPcbaOutputProductionStatDto
+            {
+                StatMonth = statMonth,
+                MonthStdCapacity = monthStdCapacity,
+            };
+        }
+        var outputIds = outputs.Select(x => x.Id).ToList();
+        Expression<Func<TaktPcbaOutputDetail, bool>> detailPredicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && outputIds.Contains(x.PcbaOutputId);
+        var monthProdActualQty = await _pcbaOutputDetailRepository.SumAsync(x => x.DailyCompletedQty, detailPredicate);
+        var monthStopTime = await _pcbaOutputDetailRepository.SumAsync(x => x.StopTime, detailPredicate);
+        var monthSwitchTime = await _pcbaOutputDetailRepository.SumAsync(x => x.SwitchTime, detailPredicate);
+        var monthInputMinutes = await _pcbaOutputDetailRepository.SumAsync(x => x.InputMinutes, detailPredicate);
+        var monthRepairMinutes = await _pcbaOutputDetailRepository.SumAsync(x => x.RepairMinutes, detailPredicate);
+        var monthProdMinutes = await _pcbaOutputDetailRepository.SumAsync(x => x.TotalMinutes, detailPredicate);
+        var monthAchievementRate = TaktProductionStatHelper.CalculateAchievementRatePercent(monthProdActualQty, monthStdCapacity);
+        return new TaktPcbaOutputProductionStatDto
+        {
+            StatMonth = statMonth,
+            MonthStdCapacity = monthStdCapacity,
+            MonthProdActualQty = monthProdActualQty,
+            MonthAchievementRate = monthAchievementRate,
+            MonthDowntimeMinutes = monthStopTime + monthSwitchTime,
+            MonthInputMinutes = monthInputMinutes,
+            MonthProdMinutes = monthProdMinutes,
+            MonthActualMinutes = monthInputMinutes + monthRepairMinutes,
+        };
+    }
+
     // ========================================
     // 查询表达式
     // ========================================
@@ -398,7 +452,7 @@ public class TaktPcbaOutputService : TaktServiceBase, ITaktPcbaOutputService
             exp = exp.And(x =>
                 (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.ProdCategory != null && x.ProdCategory.Contains(keywords))
-                || (x.ProdLine != null && x.ProdLine.Contains(keywords))
+                || (x.ProdTeam != null && x.ProdTeam.Contains(keywords))
                 || SqlFunc.ToString(x.ShiftNo).Contains(keywords)
                 || (x.ProdOrderCode != null && x.ProdOrderCode.Contains(keywords))
                 || (x.ModelCode != null && x.ModelCode.Contains(keywords))
@@ -425,9 +479,9 @@ public class TaktPcbaOutputService : TaktServiceBase, ITaktPcbaOutputService
             exp = exp.And(x => x.ProdCategory != null && x.ProdCategory.Contains(queryDto.ProdCategory));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ProdLine))
+        if (!string.IsNullOrEmpty(queryDto?.ProdTeam))
         {
-            exp = exp.And(x => x.ProdLine != null && x.ProdLine.Contains(queryDto.ProdLine));
+            exp = exp.And(x => x.ProdTeam != null && x.ProdTeam.Contains(queryDto.ProdTeam));
         }
 
         if (queryDto?.ShiftNo.HasValue == true)

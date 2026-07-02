@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Procurement
 // 文件名称：TaktPurchasePriceChangeLogI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPurchasePriceChangeLog 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktPurchasePriceChangeLogI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.purchasepricechangelog._self", "zh-HK", "采购价格变更记录信息_hk", "实体名称"),
 
             // entity.purchasepricechangelog.purchasepriceid
-            new TranslationSeedItem("entity.purchasepricechangelog.purchasepriceid", "en-US", "采购价格ID_us", "采购价格ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.purchasepricechangelog.purchasepriceid", "en-US", "采购价格ID_us", "采购价格 ID（关联 TaktPurchasePrice.Id，选项 TaktPurchasePrices/options）"),
             // entity.purchasepricechangelog.purchasepriceid
-            new TranslationSeedItem("entity.purchasepricechangelog.purchasepriceid", "ja-JP", "采购价格ID_jp", "采购价格ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.purchasepricechangelog.purchasepriceid", "ja-JP", "采购价格ID_jp", "采购价格 ID（关联 TaktPurchasePrice.Id，选项 TaktPurchasePrices/options）"),
             // entity.purchasepricechangelog.purchasepriceid
-            new TranslationSeedItem("entity.purchasepricechangelog.purchasepriceid", "zh-CN", "采购价格ID", "采购价格ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.purchasepricechangelog.purchasepriceid", "zh-CN", "采购价格ID", "采购价格 ID（关联 TaktPurchasePrice.Id，选项 TaktPurchasePrices/options）"),
             // entity.purchasepricechangelog.purchasepriceid
-            new TranslationSeedItem("entity.purchasepricechangelog.purchasepriceid", "zh-HK", "采购价格ID_hk", "采购价格ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.purchasepricechangelog.purchasepriceid", "zh-HK", "采购价格ID_hk", "采购价格 ID（关联 TaktPurchasePrice.Id，选项 TaktPurchasePrices/options）"),
 
             // entity.purchasepricechangelog.changefields
             new TranslationSeedItem("entity.purchasepricechangelog.changefields", "en-US", "变更字段列表_us", "变更字段列表（JSON数组格式，记录同一时间点修改的所有字段及其旧值、新值） 格式：[{\"field\":\"FieldName\",\"description\":\"字段描述\",\"oldValue\":\"旧值\",\"newValue\":\"新值\"}]"),

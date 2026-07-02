@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/quality/operation/iqc-order/components -->
 <!-- 文件名称：iqc-order-item-panel.vue -->
-<!-- 功能描述：IQC进货检验单实体主表实体右侧明细 iqcOrderItem 独立 CRUD（按主表选中 iqcOrderId 分页） -->
+<!-- 功能描述：IQC进货检验单实体主表实体右侧明细 iqcOrderItem 独立 CRUD（按主表选中 defectHandlings 分页） -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- ======================================== -->
 
@@ -19,11 +19,11 @@
       @reset="handleQueryReset"
     />
     <TaktToolsBar
-      create-permission="logistics:quality:operation:iqcorder:create"
-      update-permission="logistics:quality:operation:iqcorder:update"
-      delete-permission="logistics:quality:operation:iqcorder:delete"
-      import-permission="logistics:quality:operation:iqcorder:import"
-      export-permission="logistics:quality:operation:iqcorder:export"
+      create-permission="logistics:quality:operation:iqc:order:create"
+      update-permission="logistics:quality:operation:iqc:order:update"
+      delete-permission="logistics:quality:operation:iqc:order:delete"
+      import-permission="logistics:quality:operation:iqc:order:import"
+      export-permission="logistics:quality:operation:iqc:order:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -73,7 +73,7 @@
         v-model:page-size="pageSize"
         :total="total"
         scroll-layout="masterDetailLr"
-        table-mode="single"
+        table-mode="masterDetailDetail"
         :show-row-selection="true"
         @change="handleTableChange"
         @pagination-change="handleMasterDetailPaginationChange"
@@ -235,15 +235,6 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('judgeStatus')">
-      <a-form-item :label="t('entity.iqcorderitem.judgestatus')">
-        <a-input-number
-          v-model:value="advancedQueryForm.judgeStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.iqcorderitem.judgestatus') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
       <div v-show="isFieldVisible('sampleSerialNo')">
       <a-form-item :label="t('entity.iqcorderitem.sampleserialno')">
         <a-input
@@ -296,13 +287,22 @@
         />
       </a-form-item>
       </div>
+      <div v-show="isFieldVisible('judgeStatus')">
+      <a-form-item :label="t('entity.iqcorderitem.judgestatus')">
+        <a-input-number
+          v-model:value="advancedQueryForm.judgeStatus"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.iqcorderitem.judgestatus') })"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('createdAtStart')">
       <a-form-item :label="t('common.page.entity.createdatstart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -313,18 +313,36 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('ExtField')">
-      <a-form-item :label="t('entity.iqcorderitem.extfield')">
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
         <a-textarea
-          v-model:value="advancedQueryForm.ExtField"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.iqcorderitem.extfield') })"
-          :rows="2"
-          allow-clear
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -342,6 +360,7 @@
       </div>
       </template>
     </TaktQueryDrawer>
+    <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
       :title="t('common.dialog.title.import', { entity: t('entity.iqcorderitem._self') })"
@@ -351,6 +370,7 @@
       @cancel="handleImportCancel"
     >
       <TaktImportFile
+        v-if="importVisible"
         entity-i18n-key="entity.iqcorderitem._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
@@ -369,7 +389,7 @@
       id-column-key="iqcOrderItemId"
       action-column-key="action"
       entity-scope="company"
-      table-mode="single"
+      table-mode="masterDetailDetail"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -388,8 +408,9 @@ import { useI18n } from 'vue-i18n'
 import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 import IqcOrderItemForm from './iqc-order-item-form.vue'
 import { useIqcOrderMasterContext } from '../composables/use-iqc-order-master-context'
 import {
@@ -445,15 +466,15 @@ const advancedQueryForm = ref({
   qualifiedQuantity: undefined as number | undefined,
   unqualifiedQuantity: undefined as number | undefined,
   inspectionReturnQuantity: undefined as number | undefined,
-  judgeStatus: undefined as number | undefined,
   sampleSerialNo: '',
   inspectionDescription: '',
   inspectorBy: '',
   inspectionDateStart: '',
   inspectionDateEnd: '',
+  judgeStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
 })
 const visibleQueryFieldKeys = ref<string[]>([])
@@ -473,15 +494,15 @@ const queryFieldsMeta = computed(() => [
   { key: 'qualifiedQuantity', label: t('entity.iqcorderitem.qualifiedquantity') },
   { key: 'unqualifiedQuantity', label: t('entity.iqcorderitem.unqualifiedquantity') },
   { key: 'inspectionReturnQuantity', label: t('entity.iqcorderitem.inspectionreturnquantity') },
-  { key: 'judgeStatus', label: t('entity.iqcorderitem.judgestatus') },
   { key: 'sampleSerialNo', label: t('entity.iqcorderitem.sampleserialno') },
   { key: 'inspectionDescription', label: t('entity.iqcorderitem.inspectiondescription') },
   { key: 'inspectorBy', label: t('entity.iqcorderitem.inspectorby') },
   { key: 'inspectionDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.iqcorderitem.inspectiondate')) },
   { key: 'inspectionDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.iqcorderitem.inspectiondate')) },
+  { key: 'judgeStatus', label: t('entity.iqcorderitem.judgestatus') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'ExtField', label: t('entity.iqcorderitem.extfield') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 
@@ -518,19 +539,20 @@ function handleAdvancedQueryReset() {
   qualifiedQuantity: undefined as number | undefined,
   unqualifiedQuantity: undefined as number | undefined,
   inspectionReturnQuantity: undefined as number | undefined,
-  judgeStatus: undefined as number | undefined,
   sampleSerialNo: '',
   inspectionDescription: '',
   inspectorBy: '',
   inspectionDateStart: '',
   inspectionDateEnd: '',
+  judgeStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
 }
 const columnSettingVisible = ref(false)
+/** 表格当前可见列 key（空数组时按 tableMode=masterDetailDetail 默认 id+4 业务列） */
 const visibleColumnKeys = ref<string[]>([])
 
 function handleColumnSetting() {
@@ -652,6 +674,126 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: IqcOrderItem }) =>
       String(getIqcOrderItemField(record, 'samplingSchemeCode') ?? ''),
   },
+  {
+    title: t('entity.iqcorderitem.inspectionmethod'),
+    dataIndex: 'inspectionMethod',
+    key: 'inspectionMethod',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: IqcOrderItem }) =>
+      String(getIqcOrderItemField(record, 'inspectionMethod') ?? ''),
+  },
+  {
+    title: t('entity.iqcorderitem.samplequantity'),
+    dataIndex: 'sampleQuantity',
+    key: 'sampleQuantity',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: IqcOrderItem }) =>
+      String(getIqcOrderItemField(record, 'sampleQuantity') ?? ''),
+  },
+  {
+    title: t('entity.iqcorderitem.qualifiedquantity'),
+    dataIndex: 'qualifiedQuantity',
+    key: 'qualifiedQuantity',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: IqcOrderItem }) =>
+      String(getIqcOrderItemField(record, 'qualifiedQuantity') ?? ''),
+  },
+  {
+    title: t('entity.iqcorderitem.unqualifiedquantity'),
+    dataIndex: 'unqualifiedQuantity',
+    key: 'unqualifiedQuantity',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: IqcOrderItem }) =>
+      String(getIqcOrderItemField(record, 'unqualifiedQuantity') ?? ''),
+  },
+  {
+    title: t('entity.iqcorderitem.inspectionreturnquantity'),
+    dataIndex: 'inspectionReturnQuantity',
+    key: 'inspectionReturnQuantity',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: IqcOrderItem }) =>
+      String(getIqcOrderItemField(record, 'inspectionReturnQuantity') ?? ''),
+  },
+  {
+    title: t('entity.iqcorderitem.sampleserialno'),
+    dataIndex: 'sampleSerialNo',
+    key: 'sampleSerialNo',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: IqcOrderItem }) =>
+      String(getIqcOrderItemField(record, 'sampleSerialNo') ?? ''),
+  },
+  {
+    title: t('entity.iqcorderitem.inspectiondescription'),
+    dataIndex: 'inspectionDescription',
+    key: 'inspectionDescription',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: IqcOrderItem }) =>
+      String(getIqcOrderItemField(record, 'inspectionDescription') ?? ''),
+  },
+  {
+    title: t('entity.iqcorderitem.inspectorby'),
+    dataIndex: 'inspectorBy',
+    key: 'inspectorBy',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: IqcOrderItem }) =>
+      String(getIqcOrderItemField(record, 'inspectorBy') ?? ''),
+  },
+  {
+    title: t('entity.iqcorderitem.inspectiondate'),
+    dataIndex: 'inspectionDate',
+    key: 'inspectionDate',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: IqcOrderItem }) =>
+      String(getIqcOrderItemField(record, 'inspectionDate') ?? ''),
+  },
+  {
+    title: t('entity.iqcorderitem.judgestatus'),
+    dataIndex: 'judgeStatus',
+    key: 'judgeStatus',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: IqcOrderItem }) =>
+      String(getIqcOrderItemField(record, 'judgeStatus') ?? ''),
+  },
+  {
+    title: t('entity.iqcorderitem.order'),
+    dataIndex: 'order',
+    key: 'order',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: IqcOrderItem }) =>
+      String(getIqcOrderItemField(record, 'order') ?? ''),
+  },
+  {
+    title: t('entity.iqcorderitem.defecthandlings'),
+    dataIndex: 'defectHandlings',
+    key: 'defectHandlings',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: IqcOrderItem }) =>
+      String(getIqcOrderItemField(record, 'defectHandlings') ?? ''),
+  },
   CreateActionColumn({
     actions: [
       {
@@ -659,7 +801,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:quality:operation:iqcorder:update',
+        permission: 'logistics:quality:operation:iqc:order:update',
         onClick: (record: IqcOrderItem) => void handleEdit(record),
       },
       {
@@ -667,7 +809,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:quality:operation:iqcorder:delete',
+        permission: 'logistics:quality:operation:iqc:order:delete',
         onClick: (record: IqcOrderItem) => void handleDeleteOne(record),
       },
     ],
@@ -684,7 +826,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: IqcOrderItem, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getIqcOrderItemId(selectedRow.value) === getIqcOrderItemId(record)) {
+    } else if (selectedRow.value && getIqcOrderItemId(selectedRow.value) === getIqcOrderItemId(record)) {
       selectedRow.value = null
     }
   },
@@ -722,7 +864,7 @@ function buildListQuery(overrides?: Partial<IqcOrderItemQuery>): IqcOrderItemQue
   const query: IqcOrderItemQuery = {
     pageIndex: currentPage.value,
     pageSize: pageSize.value,
-    iqcOrderId: masterIqcOrderId.value,
+    defectHandlings: masterIqcOrderId.value,
     ...overrides,
   }
   if (kw.length > 0) {
@@ -761,17 +903,17 @@ function buildListQuery(overrides?: Partial<IqcOrderItemQuery>): IqcOrderItemQue
   if (form.inspectionReturnQuantity !== undefined && form.inspectionReturnQuantity !== null) {
     query.inspectionReturnQuantity = form.inspectionReturnQuantity
   }
-  if (form.judgeStatus !== undefined && form.judgeStatus !== null) {
-    query.judgeStatus = form.judgeStatus
-  }
   assignTrimmed('sampleSerialNo', form.sampleSerialNo)
   assignTrimmed('inspectionDescription', form.inspectionDescription)
   assignTrimmed('inspectorBy', form.inspectorBy)
   assignTrimmed('inspectionDateStart', form.inspectionDateStart)
   assignTrimmed('inspectionDateEnd', form.inspectionDateEnd)
+  if (form.judgeStatus !== undefined && form.judgeStatus !== null) {
+    query.judgeStatus = form.judgeStatus
+  }
   assignTrimmed('createdAtStart', form.createdAtStart)
   assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('ExtField', form.ExtField)
+  assignTrimmed('extField', form.extField)
   assignTrimmed('remark', form.remark)
   return query
 }
@@ -933,35 +1075,36 @@ function handleRefresh() {
   void loadData()
 }
 
+/** 打开导入对话框 */
 function handleImport() {
   if (!hasMasterSelection.value) {
-    message.warning(t('common.status.empty'))
-    return
-  }
+      message.warning(t('common.status.empty'))
+      return
+    }
   importVisible.value = true
 }
 
+/** 下载导入模板 Excel */
 async function handleDownloadTemplate(sheetName?: string, fileName?: string): Promise<Blob> {
   const res = await getIqcOrderItemTemplate(sheetName, fileName)
-  return (res as { data?: Blob }).data ?? (res as Blob)
+  return (res as any)?.data ?? res
 }
 
-async function handleImportFile(
-  file: File,
-  sheetName?: string,
-): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importIqcOrderItem(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importIqcOrderItem(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   void loadData()
-  if (result.fail === 0) {
-    setTimeout(() => {
-      importVisible.value = false
-    }, 2000)
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
   }
 }
 
+/** 关闭导入对话框 */
 function handleImportCancel() {
   importVisible.value = false
 }

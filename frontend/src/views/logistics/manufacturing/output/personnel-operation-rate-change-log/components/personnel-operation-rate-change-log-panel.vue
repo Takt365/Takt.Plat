@@ -19,11 +19,11 @@
       @reset="handleQueryReset"
     />
     <TaktToolsBar
-      create-permission="logistics:manufacturing:output:personneloperationrate:create"
-      update-permission="logistics:manufacturing:output:personneloperationrate:update"
-      delete-permission="logistics:manufacturing:output:personneloperationrate:delete"
+      create-permission="logistics:manufacturing:output:personnel:operation:rate:create"
+      update-permission="logistics:manufacturing:output:personnel:operation:rate:update"
+      delete-permission="logistics:manufacturing:output:personnel:operation:rate:delete"
 
-      export-permission="logistics:manufacturing:output:personneloperationrate:export"
+      export-permission="logistics:manufacturing:output:personnel:operation:rate:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -106,11 +106,11 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('productionLine')">
-      <a-form-item :label="t('entity.personneloperationratechangelog.productionline')">
+      <div v-show="isFieldVisible('prodTeam')">
+      <a-form-item :label="t('entity.personneloperationratechangelog.prodteam')">
         <a-input
-          v-model:value="advancedQueryForm.productionLine"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationratechangelog.productionline') })"
+          v-model:value="advancedQueryForm.prodTeam"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationratechangelog.prodteam') })"
           show-count
           :maxlength="20"
           allow-clear
@@ -133,8 +133,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.changeTimeStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.personneloperationratechangelog.changetimestart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -144,8 +143,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.changeTimeEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.personneloperationratechangelog.changetimeend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -178,7 +176,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -189,7 +187,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -304,7 +302,7 @@ const formRef = ref()
 
 const advancedQueryVisible = ref(false)
 const advancedQueryForm = ref({
-  productionLine: '',
+  prodTeam: '',
   changeFields: '',
   changeTimeStart: '',
   changeTimeEnd: '',
@@ -319,7 +317,7 @@ const visibleQueryFieldKeys = ref<string[]>([])
 
 /** 高级查询字段元数据 */
 const queryFieldsMeta = computed(() => [
-  { key: 'productionLine', label: t('entity.personneloperationratechangelog.productionline') },
+  { key: 'prodTeam', label: t('entity.personneloperationratechangelog.prodteam') },
   { key: 'changeFields', label: t('entity.personneloperationratechangelog.changefields') },
   { key: 'changeTimeStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.personneloperationratechangelog.changetime')) },
   { key: 'changeTimeEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.personneloperationratechangelog.changetime')) },
@@ -351,7 +349,7 @@ function handleAdvancedQuerySubmit() {
 
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
-  productionLine: '',
+  prodTeam: '',
   changeFields: '',
   changeTimeStart: '',
   changeTimeEnd: '',
@@ -405,14 +403,14 @@ const columns = computed<TableColumnsType>(() => [
       String(getPersonnelOperationRateChangeLogField(record, 'personnelOperationRateChangeLogId') ?? ''),
   },
   {
-    title: t('entity.personneloperationratechangelog.productionline'),
-    dataIndex: 'productionLine',
-    key: 'productionLine',
+    title: t('entity.personneloperationratechangelog.prodteam'),
+    dataIndex: 'prodTeam',
+    key: 'prodTeam',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: PersonnelOperationRateChangeLog }) =>
-      String(getPersonnelOperationRateChangeLogField(record, 'productionLine') ?? ''),
+      String(getPersonnelOperationRateChangeLogField(record, 'prodTeam') ?? ''),
   },
   {
     title: t('entity.personneloperationratechangelog.changefields'),
@@ -471,7 +469,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:manufacturing:output:personneloperationrate:update',
+        permission: 'logistics:manufacturing:output:personnel:operation:rate:update',
         onClick: (record: PersonnelOperationRateChangeLog) => void handleEdit(record),
       },
       {
@@ -479,7 +477,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:manufacturing:output:personneloperationrate:delete',
+        permission: 'logistics:manufacturing:output:personnel:operation:rate:delete',
         onClick: (record: PersonnelOperationRateChangeLog) => void handleDeleteOne(record),
       },
     ],
@@ -496,7 +494,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: PersonnelOperationRateChangeLog, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getPersonnelOperationRateChangeLogId(selectedRow.value) === getPersonnelOperationRateChangeLogId(record)) {
+    } else if (selectedRow.value && getPersonnelOperationRateChangeLogId(selectedRow.value) === getPersonnelOperationRateChangeLogId(record)) {
       selectedRow.value = null
     }
   },
@@ -546,7 +544,7 @@ function buildListQuery(overrides?: Partial<PersonnelOperationRateChangeLogQuery
       query[key] = v as never
     }
   }
-  assignTrimmed('productionLine', form.productionLine)
+  assignTrimmed('prodTeam', form.prodTeam)
   assignTrimmed('changeFields', form.changeFields)
   assignTrimmed('changeTimeStart', form.changeTimeStart)
   assignTrimmed('changeTimeEnd', form.changeTimeEnd)

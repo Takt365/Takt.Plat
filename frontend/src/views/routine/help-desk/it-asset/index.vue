@@ -2,13 +2,13 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/routine/help-desk/it-asset -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：服务台 IT 设备保修扩展实体管理页面，含查询、增删改，由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成 -->
+<!-- 功能描述：服务台 IT 设备保修扩展实体管理页面，含查询、增删改，由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
 
 <template>
-  <div class="routine-help-desk-it-asset">
+  <div class="p-4">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -30,7 +30,7 @@
       :show-delete="true"
       :show-import="true"
       :show-export="true"
-      :show-expand="true"
+      :show-expand="false"
       :show-advanced-query="true"
       :show-column-setting="true"
       :show-fullscreen="true"
@@ -54,8 +54,8 @@
 
     <!-- 表格 -->
     <TaktSingleTable
-      :columns="columns"
       entity-scope="company"
+      :columns="columns"
       :visible-column-keys="visibleColumnKeys"
       :id-column-key="'itAssetId'"
       table-mode="single"
@@ -66,43 +66,13 @@
       :row-selection="rowSelection"
       :custom-row="onClickRow"
 
-      :expanded-row-keys="expandedRowKeys"
-      @expand="handleExpand"
       @change="handleTableChange"
       @resize-column="handleResizeColumn"
     >
-      <!-- 展开行渲染 -->
-      <template #expandedRowRender="{ record }">
-        <div class="p-4">
-          <div class="mb-2 text-sm font-medium">{{ t('entity.itAssetChangeLog._self') }}</div>
-          <a-table
-            v-if="hasItAssetChangeLogRows(record)"
-            :columns="itAssetChangeLogExpandColumns"
-            :data-source="getItAssetChangeLogRows(record)"
-            :row-key="(row: ItAssetChangeLog, index?: number) => row?.itAssetChangeLogId || String(index ?? 0)"
-            :pagination="false"
-            size="small"
-            bordered
-            class="mb-4"
-          />
-          <a-empty v-else class="mb-4" />
-          <div class="mb-2 text-sm font-medium">{{ t('entity.ticket._self') }}</div>
-          <a-table
-            v-if="hasTicketRows(record)"
-            :columns="ticketExpandColumns"
-            :data-source="getTicketRows(record)"
-            :row-key="(row: Ticket, index?: number) => row?.ticketId || String(index ?? 0)"
-            :pagination="false"
-            size="small"
-            bordered
-            class="mb-4"
-          />
-          <a-empty v-else class="mb-4" />
-        </div>
-      </template>
+
     </TaktSingleTable>
 
-    <!-- 分页组件 -->
+    <!-- 分页（服务端分页，外置 TaktPagination） -->
     <TaktPagination
       v-model:current="currentPage"
       v-model:page-size="pageSize"
@@ -122,6 +92,7 @@
       @cancel="handleFormCancel"
     >
       <ItAssetForm
+        :key="formData?.itAssetId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -139,164 +110,174 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('assetCode')">
-      <a-form-item :label="t('entity.itAsset.assetcode')">
+      <a-form-item :label="t('entity.itasset.assetcode')">
         <a-input
           v-model:value="advancedQueryForm.assetCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.itAsset.assetcode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.itasset.assetcode') })"
+          show-count
+          :maxlength="40"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('warrantyType')">
-      <a-form-item :label="t('entity.itAsset.warrantytype')">
+      <a-form-item :label="t('entity.itasset.warrantytype')">
         <a-input-number
           v-model:value="advancedQueryForm.warrantyType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.itAsset.warrantytype') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.itasset.warrantytype') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('warrantyStartDateStart')">
-      <a-form-item :label="t('entity.itAsset.warrantystartdatestart')">
+      <a-form-item :label="t('entity.itasset.warrantystartdatestart')">
         <a-date-picker
           v-model:value="advancedQueryForm.warrantyStartDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.itAsset.warrantystartdatestart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.itasset.warrantystartdatestart') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('warrantyStartDateEnd')">
-      <a-form-item :label="t('entity.itAsset.warrantystartdateend')">
+      <a-form-item :label="t('entity.itasset.warrantystartdateend')">
         <a-date-picker
           v-model:value="advancedQueryForm.warrantyStartDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.itAsset.warrantystartdateend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.itasset.warrantystartdateend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('warrantyExpiryDateStart')">
-      <a-form-item :label="t('entity.itAsset.warrantyexpirydatestart')">
+      <a-form-item :label="t('entity.itasset.warrantyexpirydatestart')">
         <a-date-picker
           v-model:value="advancedQueryForm.warrantyExpiryDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.itAsset.warrantyexpirydatestart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.itasset.warrantyexpirydatestart') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('warrantyExpiryDateEnd')">
-      <a-form-item :label="t('entity.itAsset.warrantyexpirydateend')">
+      <a-form-item :label="t('entity.itasset.warrantyexpirydateend')">
         <a-date-picker
           v-model:value="advancedQueryForm.warrantyExpiryDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.itAsset.warrantyexpirydateend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.itasset.warrantyexpirydateend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('warrantyProvider')">
-      <a-form-item :label="t('entity.itAsset.warrantyprovider')">
+      <a-form-item :label="t('entity.itasset.warrantyprovider')">
         <a-input
           v-model:value="advancedQueryForm.warrantyProvider"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.itAsset.warrantyprovider') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.itasset.warrantyprovider') })"
+          show-count
+          :maxlength="200"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('warrantyContractNo')">
-      <a-form-item :label="t('entity.itAsset.warrantycontractno')">
+      <a-form-item :label="t('entity.itasset.warrantycontractno')">
         <a-input
           v-model:value="advancedQueryForm.warrantyContractNo"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.itAsset.warrantycontractno') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.itasset.warrantycontractno') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('serviceHotline')">
-      <a-form-item :label="t('entity.itAsset.servicehotline')">
+      <a-form-item :label="t('entity.itasset.servicehotline')">
         <a-input
           v-model:value="advancedQueryForm.serviceHotline"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.itAsset.servicehotline') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.itasset.servicehotline') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('serviceEmail')">
-      <a-form-item :label="t('entity.itAsset.serviceemail')">
+      <a-form-item :label="t('entity.itasset.serviceemail')">
         <a-input
           v-model:value="advancedQueryForm.serviceEmail"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.itAsset.serviceemail') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.itasset.serviceemail') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('maintenanceExpiryDateStart')">
-      <a-form-item :label="t('entity.itAsset.maintenanceexpirydatestart')">
+      <a-form-item :label="t('entity.itasset.maintenanceexpirydatestart')">
         <a-date-picker
           v-model:value="advancedQueryForm.maintenanceExpiryDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.itAsset.maintenanceexpirydatestart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.itasset.maintenanceexpirydatestart') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('maintenanceExpiryDateEnd')">
-      <a-form-item :label="t('entity.itAsset.maintenanceexpirydateend')">
+      <a-form-item :label="t('entity.itasset.maintenanceexpirydateend')">
         <a-date-picker
           v-model:value="advancedQueryForm.maintenanceExpiryDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.itAsset.maintenanceexpirydateend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.itasset.maintenanceexpirydateend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('lastMaintenanceDateStart')">
-      <a-form-item :label="t('entity.itAsset.lastmaintenancedatestart')">
+      <a-form-item :label="t('entity.itasset.lastmaintenancedatestart')">
         <a-date-picker
           v-model:value="advancedQueryForm.lastMaintenanceDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.itAsset.lastmaintenancedatestart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.itasset.lastmaintenancedatestart') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('lastMaintenanceDateEnd')">
-      <a-form-item :label="t('entity.itAsset.lastmaintenancedateend')">
+      <a-form-item :label="t('entity.itasset.lastmaintenancedateend')">
         <a-date-picker
           v-model:value="advancedQueryForm.lastMaintenanceDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.itAsset.lastmaintenancedateend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.itasset.lastmaintenancedateend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('nextMaintenanceDateStart')">
-      <a-form-item :label="t('entity.itAsset.nextmaintenancedatestart')">
+      <a-form-item :label="t('entity.itasset.nextmaintenancedatestart')">
         <a-date-picker
           v-model:value="advancedQueryForm.nextMaintenanceDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.itAsset.nextmaintenancedatestart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.itasset.nextmaintenancedatestart') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('nextMaintenanceDateEnd')">
-      <a-form-item :label="t('entity.itAsset.nextmaintenancedateend')">
+      <a-form-item :label="t('entity.itasset.nextmaintenancedateend')">
         <a-date-picker
           v-model:value="advancedQueryForm.nextMaintenanceDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.itAsset.nextmaintenancedateend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.itasset.nextmaintenancedateend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('warrantyRemark')">
-      <a-form-item :label="t('entity.itAsset.warrantyremark')">
+      <a-form-item :label="t('entity.itasset.warrantyremark')">
         <a-textarea
           v-model:value="advancedQueryForm.warrantyRemark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.itAsset.warrantyremark') })"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.itasset.warrantyremark') })"
           :rows="2"
           allow-clear
         />
@@ -308,7 +289,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -319,17 +300,36 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('ExtField')">
-      <a-form-item :label="t('common.page.entity.ExtField')">
-        <a-input
-          v-model:value="advancedQueryForm.ExtField"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
-          allow-clear
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
+        <a-textarea
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -338,8 +338,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -349,14 +351,14 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.itAsset._self') })"
+      :title="t('common.dialog.title.import', { entity: t('entity.itasset._self') })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.itAsset._self"
+        entity-i18n-key="entity.itasset._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -383,9 +385,8 @@
 </template>
 
 <script setup lang="ts">
-import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 /**
- * 服务台 IT 设备保修扩展实体管理页 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
+ * 服务台 IT 设备保修扩展实体管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/routine/help-desk/it-asset
  */
 import { ref, computed, onMounted } from 'vue'
@@ -393,15 +394,13 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import ItAssetForm from './components/it-asset-form.vue'
 import { getItAssetList, getItAssetById, createItAsset, updateItAsset, deleteItAssetById, deleteItAssetBatch, getItAssetTemplate, importItAsset, exportItAsset } from '@/api/routine/help-desk/it-asset'
-import * as ticketApi from '@/api/routine/help-desk/ticket'
-import type { ItAssetChangeLog } from '@/types/routine/help-desk/it-asset-change-log'
-import type { Ticket, TicketQuery } from '@/types/routine/help-desk/ticket'
-import type { ItAsset, ItAssetQuery, ItAssetCreate, ItAssetUpdate } from '@/types/routine/help-desk/it-asset'
+import type { ItAsset, ItAssetQuery } from '@/types/routine/help-desk/it-asset'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -409,7 +408,7 @@ const { t } = useI18n()
 const excelNames = taktExcelEntityNames('TaktItAsset')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.itAsset._self') })
+  () => t('common.page.form.placeholder.search', { keyword: t('entity.itasset._self') })
 )
 
 /** 快捷查询关键字 */
@@ -436,11 +435,13 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<ItAsset>>({})
+const formData = ref<Partial<ItAsset> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
@@ -463,31 +464,31 @@ const advancedQueryForm = ref({
   warrantyRemark: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'assetCode', label: t('entity.itAsset.assetcode') },
-  { key: 'warrantyType', label: t('entity.itAsset.warrantytype') },
-  { key: 'warrantyStartDateStart', label: t('entity.itAsset.warrantystartdatestart') },
-  { key: 'warrantyStartDateEnd', label: t('entity.itAsset.warrantystartdateend') },
-  { key: 'warrantyExpiryDateStart', label: t('entity.itAsset.warrantyexpirydatestart') },
-  { key: 'warrantyExpiryDateEnd', label: t('entity.itAsset.warrantyexpirydateend') },
-  { key: 'warrantyProvider', label: t('entity.itAsset.warrantyprovider') },
-  { key: 'warrantyContractNo', label: t('entity.itAsset.warrantycontractno') },
-  { key: 'serviceHotline', label: t('entity.itAsset.servicehotline') },
-  { key: 'serviceEmail', label: t('entity.itAsset.serviceemail') },
-  { key: 'maintenanceExpiryDateStart', label: t('entity.itAsset.maintenanceexpirydatestart') },
-  { key: 'maintenanceExpiryDateEnd', label: t('entity.itAsset.maintenanceexpirydateend') },
-  { key: 'lastMaintenanceDateStart', label: t('entity.itAsset.lastmaintenancedatestart') },
-  { key: 'lastMaintenanceDateEnd', label: t('entity.itAsset.lastmaintenancedateend') },
-  { key: 'nextMaintenanceDateStart', label: t('entity.itAsset.nextmaintenancedatestart') },
-  { key: 'nextMaintenanceDateEnd', label: t('entity.itAsset.nextmaintenancedateend') },
-  { key: 'warrantyRemark', label: t('entity.itAsset.warrantyremark') },
+  { key: 'assetCode', label: t('entity.itasset.assetcode') },
+  { key: 'warrantyType', label: t('entity.itasset.warrantytype') },
+  { key: 'warrantyStartDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.itasset.warrantystartdate')) },
+  { key: 'warrantyStartDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.itasset.warrantystartdate')) },
+  { key: 'warrantyExpiryDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.itasset.warrantyexpirydate')) },
+  { key: 'warrantyExpiryDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.itasset.warrantyexpirydate')) },
+  { key: 'warrantyProvider', label: t('entity.itasset.warrantyprovider') },
+  { key: 'warrantyContractNo', label: t('entity.itasset.warrantycontractno') },
+  { key: 'serviceHotline', label: t('entity.itasset.servicehotline') },
+  { key: 'serviceEmail', label: t('entity.itasset.serviceemail') },
+  { key: 'maintenanceExpiryDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.itasset.maintenanceexpirydate')) },
+  { key: 'maintenanceExpiryDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.itasset.maintenanceexpirydate')) },
+  { key: 'lastMaintenanceDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.itasset.lastmaintenancedate')) },
+  { key: 'lastMaintenanceDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.itasset.lastmaintenancedate')) },
+  { key: 'nextMaintenanceDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.itasset.nextmaintenancedate')) },
+  { key: 'nextMaintenanceDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.itasset.nextmaintenancedate')) },
+  { key: 'warrantyRemark', label: t('entity.itasset.warrantyremark') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'ExtField', label: t('common.page.entity.ExtField') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -505,165 +506,66 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
-/** 主子表展开行 keys（手风琴，仅一行展开） */
-const expandedRowKeys = ref<string[]>([])
 
-/** 页面挂载后加载分页列表 */
-onMounted(() => {
+
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {ItAssetQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<ItAssetQuery>): ItAssetQuery {
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: ItAssetQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: keyof ItAssetQuery, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v as never
+    }
+  }
+  assignTrimmed('assetCode', form.assetCode)
+  if (form.warrantyType !== undefined && form.warrantyType !== null) {
+    query.warrantyType = form.warrantyType
+  }
+  assignTrimmed('warrantyStartDateStart', form.warrantyStartDateStart)
+  assignTrimmed('warrantyStartDateEnd', form.warrantyStartDateEnd)
+  assignTrimmed('warrantyExpiryDateStart', form.warrantyExpiryDateStart)
+  assignTrimmed('warrantyExpiryDateEnd', form.warrantyExpiryDateEnd)
+  assignTrimmed('warrantyProvider', form.warrantyProvider)
+  assignTrimmed('warrantyContractNo', form.warrantyContractNo)
+  assignTrimmed('serviceHotline', form.serviceHotline)
+  assignTrimmed('serviceEmail', form.serviceEmail)
+  assignTrimmed('maintenanceExpiryDateStart', form.maintenanceExpiryDateStart)
+  assignTrimmed('maintenanceExpiryDateEnd', form.maintenanceExpiryDateEnd)
+  assignTrimmed('lastMaintenanceDateStart', form.lastMaintenanceDateStart)
+  assignTrimmed('lastMaintenanceDateEnd', form.lastMaintenanceDateEnd)
+  assignTrimmed('nextMaintenanceDateStart', form.nextMaintenanceDateStart)
+  assignTrimmed('nextMaintenanceDateEnd', form.nextMaintenanceDateEnd)
+  assignTrimmed('warrantyRemark', form.warrantyRemark)
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('extField', form.extField)
+  assignTrimmed('remark', form.remark)
+  return query
+}
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
   loadData()
 })
 
-/** 展开行预览：itAssetChangeLog 列 */
-const itAssetChangeLogExpandColumns = computed(() => [
-
-])
-
-/** 展开行预览：ticket 列 */
-const ticketExpandColumns = computed(() => [
-  {
-    title: t('entity.ticket.no'),
-    dataIndex: 'ticketNo',
-    key: 'ticketNo',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.ticket.title'),
-    dataIndex: 'title',
-    key: 'title',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.ticket.content'),
-    dataIndex: 'content',
-    key: 'content',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.ticket.attachmentsjson'),
-    dataIndex: 'attachmentsJson',
-    key: 'attachmentsJson',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.ticket.status'),
-    dataIndex: 'ticketStatus',
-    key: 'ticketStatus',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.ticket.priority'),
-    dataIndex: 'priority',
-    key: 'priority',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.ticket.categorycode'),
-    dataIndex: 'categoryCode',
-    key: 'categoryCode',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.ticket.assetcode'),
-    dataIndex: 'assetCode',
-    key: 'assetCode',
-    ellipsis: true,
-  },
-])
-
-/** 读取主表行上的 itAssetChangeLog 子表缓存 */
-function getItAssetChangeLogRows(record: ItAsset): ItAssetChangeLog[] {
-  return (record as any)?.changeLogs ?? []
-}
-
-/** 主表行是否已加载 itAssetChangeLog 子表 */
-function hasItAssetChangeLogRows(record: ItAsset): boolean {
-  return getItAssetChangeLogRows(record).length > 0
-}
-
-/** 读取主表行上的 ticket 子表缓存 */
-function getTicketRows(record: ItAsset): Ticket[] {
-  return (record as any)?.tickets ?? []
-}
-
-/** 主表行是否已加载 ticket 子表 */
-function hasTicketRows(record: ItAsset): boolean {
-  return getTicketRows(record).length > 0
-}
 
 
-/** 加载主表详情并回填当前页 dataSource */
-async function loadItAssetDetail(record: ItAsset): Promise<ItAsset | null> {
-  const id = getItAssetId(record)
-  if (!id) {
-    return null
-  }
-  try {
-    const detail = await getItAssetById(id)
-    const index = dataSource.value.findIndex((row) => getItAssetId(row) === id)
-    if (index !== -1) {
-      dataSource.value[index] = { ...dataSource.value[index], ...detail } as ItAsset
-    }
-    return detail
-  } catch (error: any) {
-    message.error(error?.message || t('common.feedback.load.data.failed'))
-    return null
-  }
-}
-/** 通过主表详情接口加载 itAssetChangeLog 子表 */
-async function loadItAssetChangeLogForItAsset(record: ItAsset): Promise<ItAssetChangeLog[]> {
-  const detail = await loadItAssetDetail(record)
-  return detail?.changeLogs ?? []
-}
 
-/** 懒加载 ticket 子表（TicketQuery + ticketApi，与主表 ItAssetQuery 分离） */
-async function loadTicketForItAsset(record: ItAsset): Promise<Ticket[]> {
-  const masterId = getItAssetId(record)
-  if (!masterId) {
-    return []
-  }
-  try {
-    const childQuery: TicketQuery = {
-      pageIndex: 1,
-      pageSize: 500,
-      itAssetId: masterId,
-    }
-    const result = await ticketApi.getTicketList(childQuery)
-    const rows = result?.data ?? []
-    const index = dataSource.value.findIndex((row) => getItAssetId(row) === masterId)
-    if (index !== -1) {
-      const row = dataSource.value[index]
-      dataSource.value[index] = { ...row, tickets: rows } as ItAsset
-    }
-    return rows
-  } catch (error: any) {
-    message.error(error?.message || t('common.feedback.load.data.failed'))
-    return []
-  }
-}
 
-/** 展开前确保各子表已懒加载 */
-async function ensureItAssetChildrenLoaded(record: ItAsset) {
-  if (!hasItAssetChangeLogRows(record)) {
-    await loadItAssetChangeLogForItAsset(record)
-  }
-  if (!hasTicketRows(record)) {
-    await loadTicketForItAsset(record)
-  }
-}
 
-/** 主表展开行：手风琴懒加载子表 */
-async function handleExpand(expanded: boolean, record: ItAsset) {
-  const key = getItAssetId(record)
-  if (!expanded || !key) {
-    expandedRowKeys.value = []
-    return
-  }
-  if (expandedRowKeys.value.length > 0 && expandedRowKeys.value[0] !== key) {
-    expandedRowKeys.value = []
-  }
-  await ensureItAssetChildrenLoaded(record)
-  expandedRowKeys.value = [key]
-}
 
 /** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
@@ -678,7 +580,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getItAssetField(record, 'itAssetId') ?? ''
   },
   {
-    title: t('entity.itAsset.assetcode'),
+    title: t('entity.itasset.assetcode'),
     dataIndex: 'assetCode',
     key: 'assetCode',
     width: 120,
@@ -687,7 +589,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getItAssetField(record, 'assetCode') ?? ''
   },
   {
-    title: t('entity.itAsset.warrantytype'),
+    title: t('entity.itasset.warrantytype'),
     dataIndex: 'warrantyType',
     key: 'warrantyType',
     width: 120,
@@ -696,7 +598,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getItAssetField(record, 'warrantyType') ?? ''
   },
   {
-    title: t('entity.itAsset.warrantystartdate'),
+    title: t('entity.itasset.warrantystartdate'),
     dataIndex: 'warrantyStartDate',
     key: 'warrantyStartDate',
     width: 120,
@@ -705,7 +607,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getItAssetField(record, 'warrantyStartDate') ?? ''
   },
   {
-    title: t('entity.itAsset.warrantyexpirydate'),
+    title: t('entity.itasset.warrantyexpirydate'),
     dataIndex: 'warrantyExpiryDate',
     key: 'warrantyExpiryDate',
     width: 120,
@@ -714,7 +616,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getItAssetField(record, 'warrantyExpiryDate') ?? ''
   },
   {
-    title: t('entity.itAsset.warrantyprovider'),
+    title: t('entity.itasset.warrantyprovider'),
     dataIndex: 'warrantyProvider',
     key: 'warrantyProvider',
     width: 120,
@@ -723,7 +625,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getItAssetField(record, 'warrantyProvider') ?? ''
   },
   {
-    title: t('entity.itAsset.warrantycontractno'),
+    title: t('entity.itasset.warrantycontractno'),
     dataIndex: 'warrantyContractNo',
     key: 'warrantyContractNo',
     width: 120,
@@ -732,7 +634,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getItAssetField(record, 'warrantyContractNo') ?? ''
   },
   {
-    title: t('entity.itAsset.servicehotline'),
+    title: t('entity.itasset.servicehotline'),
     dataIndex: 'serviceHotline',
     key: 'serviceHotline',
     width: 120,
@@ -741,7 +643,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getItAssetField(record, 'serviceHotline') ?? ''
   },
   {
-    title: t('entity.itAsset.serviceemail'),
+    title: t('entity.itasset.serviceemail'),
     dataIndex: 'serviceEmail',
     key: 'serviceEmail',
     width: 120,
@@ -750,7 +652,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getItAssetField(record, 'serviceEmail') ?? ''
   },
   {
-    title: t('entity.itAsset.maintenanceexpirydate'),
+    title: t('entity.itasset.maintenanceexpirydate'),
     dataIndex: 'maintenanceExpiryDate',
     key: 'maintenanceExpiryDate',
     width: 120,
@@ -759,7 +661,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getItAssetField(record, 'maintenanceExpiryDate') ?? ''
   },
   {
-    title: t('entity.itAsset.lastmaintenancedate'),
+    title: t('entity.itasset.lastmaintenancedate'),
     dataIndex: 'lastMaintenanceDate',
     key: 'lastMaintenanceDate',
     width: 120,
@@ -768,7 +670,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getItAssetField(record, 'lastMaintenanceDate') ?? ''
   },
   {
-    title: t('entity.itAsset.nextmaintenancedate'),
+    title: t('entity.itasset.nextmaintenancedate'),
     dataIndex: 'nextMaintenanceDate',
     key: 'nextMaintenanceDate',
     width: 120,
@@ -777,7 +679,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getItAssetField(record, 'nextMaintenanceDate') ?? ''
   },
   {
-    title: t('entity.itAsset.warrantyremark'),
+    title: t('entity.itasset.warrantyremark'),
     dataIndex: 'warrantyRemark',
     key: 'warrantyRemark',
     width: 120,
@@ -816,6 +718,7 @@ const getItAssetId = (record: any): string => record?.[entityIdName] ?? ''
  */
 const getItAssetField = (record: any, field: string): any => record?.[field]
 
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -827,7 +730,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: ItAsset, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getItAssetId(selectedRow.value) === getItAssetId(record)) {
+    } else if (selectedRow.value && getItAssetId(selectedRow.value) === getItAssetId(record)) {
       selectedRow.value = null
     }
   },
@@ -858,16 +761,7 @@ const onClickRow = (record: ItAsset) => ({
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: ItAssetQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getItAssetList(params)
+    const res = await getItAssetList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
@@ -885,7 +779,7 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -912,38 +806,33 @@ function handleReset() {
   warrantyRemark: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.itAsset._self') })
-  formData.value = {}
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.itasset._self') })
+  formData.value = null
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
-/** 打开编辑弹窗（主子表：先拉详情含子表） */
-async function handleEdit(record: ItAsset) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.itAsset._self') })
-  formLoading.value = true
-  try {
-    const detail = await loadItAssetDetail(record)
-    formData.value = detail ? { ...detail } : { ...record }
-    formVisible.value = true
-  } finally {
-    formLoading.value = false
-  }
+/** 打开编辑弹窗 */
+function handleEdit(record: ItAsset) {
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.itasset._self') })
+  formData.value = { ...record }
+  formVisible.value = true
 }
 
 /** 工具栏编辑：打开当前单选行 */
 function handleUpdate() {
   if (selectedRow.value) {
-    void handleEdit(selectedRow.value)
+    handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.itAsset._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.itasset._self') }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -961,12 +850,14 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateItAsset(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.itAsset._self') }))
+      message.success(t('common.feedback.updated', { target: t('entity.itasset._self') }))
     } else {
       await createItAsset(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.itAsset._self') }))
+      message.success(t('common.feedback.created', { target: t('entity.itasset._self') }))
     }
     formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
     loadData()
   } finally {
     formLoading.value = false
@@ -976,6 +867,8 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开导入对话框 */
 function handleImport() {
@@ -1007,16 +900,11 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: ItAssetQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportItAsset(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportItAsset(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -1035,10 +923,10 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.itAsset._self') }))
+    message.success(t('common.feedback.export.success', { target: t('entity.itasset._self') }))
   } catch (error: any) {
     logger.error('[ItAsset] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.itAsset._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.itasset._self') }))
   } finally {
     loading.value = false
   }
@@ -1047,12 +935,12 @@ async function handleExport() {
 async function handleDeleteOne(record: ItAsset) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.itAsset._self'), name: t('common.tip.this.target', { target: t('entity.itAsset._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: t('entity.itasset._self'), name: t('common.tip.this.target', { target: t('entity.itasset._self') }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteItAssetById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.itAsset._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.itasset._self') }))
       loadData()
     }
   })
@@ -1060,18 +948,18 @@ async function handleDeleteOne(record: ItAsset) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.itAsset._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.itasset._self') }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.itAsset._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: t('entity.itasset._self'), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteItAssetBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.itAsset._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.itasset._self') }))
       loadData()
     }
   })
@@ -1084,7 +972,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -1109,7 +997,7 @@ function handleAdvancedQueryReset() {
   warrantyRemark: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
 }
@@ -1139,23 +1027,16 @@ function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
 /** 分页页码变更 */
-function handlePaginationChange(page: number) {
+function handlePaginationChange(page: number, size: number) {
   currentPage.value = page
+  pageSize.value = size
   loadData()
 }
-/** 分页每页条数变更 */
+
+/** 分页每页条数变更（重置到第 1 页） */
 function handlePaginationSizeChange(_current: number, size: number) {
+  currentPage.value = getTaktDefaultPageIndex()
   pageSize.value = size
-  currentPage.value = 1
   loadData()
 }
 </script>
-
-<style scoped lang="css">
-.routine-help-desk-it-asset {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-</style>

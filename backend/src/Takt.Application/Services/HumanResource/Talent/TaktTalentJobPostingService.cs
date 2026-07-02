@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Talent
 // 文件名称：TaktTalentJobPostingService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：职位发布应用服务实现
 // 
@@ -14,7 +14,6 @@ using System.Linq.Expressions;
 using Mapster;
 using SqlSugar;
 using Takt.Application.Dtos.HumanResource.Talent;
-using Takt.Domain.Entities.HumanResource.Personnel;
 using Takt.Domain.Entities.HumanResource.Talent;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
@@ -32,22 +31,19 @@ public class TaktTalentJobPostingService : TaktServiceBase, ITaktTalentJobPostin
 {
     private readonly ITaktCompanyRepository<TaktTalentJobPosting> _talentJobPostingRepository;
     private readonly ITaktApprovalRepository<TaktTalentOffer> _talentOfferRepository;
-    private readonly ITaktCompanyRepository<TaktEmployeeOnboarding> _employeeOnboardingRepository;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="talentJobPostingRepository">职位发布仓储</param>
-    /// <param name="talentOfferRepository">录用信息仓储</param>
-    /// <param name="employeeOnboardingRepository">入职待办仓储</param>
+    /// <param name="talentOfferRepository">TalentOffer仓储</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktTalentJobPostingService(
         ITaktCompanyRepository<TaktTalentJobPosting> talentJobPostingRepository,
         ITaktApprovalRepository<TaktTalentOffer> talentOfferRepository,
-        ITaktCompanyRepository<TaktEmployeeOnboarding> employeeOnboardingRepository,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
@@ -55,7 +51,6 @@ public class TaktTalentJobPostingService : TaktServiceBase, ITaktTalentJobPostin
     {
         _talentJobPostingRepository = talentJobPostingRepository;
         _talentOfferRepository = talentOfferRepository;
-        _employeeOnboardingRepository = employeeOnboardingRepository;
         _uniqueValidator = uniqueValidator;
     }
 
@@ -91,6 +86,7 @@ public class TaktTalentJobPostingService : TaktServiceBase, ITaktTalentJobPostin
             return null;
         }
         var dto = entity.Adapt<TaktTalentJobPostingDto>();
+        await FillTalentJobPostingDetailsAsync(dto, entity);
         return dto;    }
 
     /// <summary>
@@ -101,7 +97,7 @@ public class TaktTalentJobPostingService : TaktServiceBase, ITaktTalentJobPostin
     {
         EnsureThreeLayerContext();
         var list = await _talentJobPostingRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.PostingStatus == 1,
             x => x.PostingCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
@@ -127,6 +123,7 @@ public class TaktTalentJobPostingService : TaktServiceBase, ITaktTalentJobPostin
             throw new TaktBusinessException("职位发布的PostingCode已存在");
         }
         entity = await _talentJobPostingRepository.CreateAsync(entity);
+                await SaveTalentJobPostingChildrenAsync(entity, dto);
         return await GetTalentJobPostingByIdAsync(entity.Id) ?? entity.Adapt<TaktTalentJobPostingDto>();
     }
 
@@ -153,6 +150,7 @@ public class TaktTalentJobPostingService : TaktServiceBase, ITaktTalentJobPostin
             throw new TaktBusinessException("职位发布的PostingCode已存在");
         }
         await _talentJobPostingRepository.UpdateAsync(entity);
+                await SaveTalentJobPostingChildrenAsync(entity, dto);
         return await GetTalentJobPostingByIdAsync(id) ?? throw new TaktBusinessException("职位发布不存在");
     }
 
@@ -168,7 +166,7 @@ public class TaktTalentJobPostingService : TaktServiceBase, ITaktTalentJobPostin
         {
             throw new TaktBusinessException("职位发布不存在或已删除");
         }
-        await DeleteTalentJobPostingChildrenAsync(entity.Id);
+        await _talentOfferRepository.DeleteAsync(x => x.JobPostingId == entity.Id);
         var deleted = await _talentJobPostingRepository.DeleteAsync(id);
         if (!deleted)
         {
@@ -296,22 +294,54 @@ public class TaktTalentJobPostingService : TaktServiceBase, ITaktTalentJobPostin
             fileName ?? "职位发布导出.xlsx");
     }
 
+    // ========================================
+    // 主子表级联（OneToMany）
+    // ========================================
+
     /// <summary>
-    /// 删除职位发布关联录用及入职待办
+    /// 填充职位发布详情（加载 OneToMany 子表：录用信息）
     /// </summary>
-    /// <param name="jobPostingId">职位发布ID</param>
+    /// <param name="dto">响应 DTO</param>
+    /// <param name="entity">主表实体</param>
     /// <returns>任务</returns>
-    private async Task DeleteTalentJobPostingChildrenAsync(long jobPostingId)
+    private async Task FillTalentJobPostingDetailsAsync(TaktTalentJobPostingDto dto, TaktTalentJobPosting entity)
     {
-        var offers = await _talentOfferRepository.GetListAsync(x => x.JobPostingId == jobPostingId);
-        var offerIds = offers.Select(x => x.Id).ToList();
-        if (offerIds.Count > 0)
+        if (dto == null)
         {
-            await _employeeOnboardingRepository.DeleteAsync(x => offerIds.Contains(x.OfferId));
-            await _talentOfferRepository.DeleteAsync(x => x.JobPostingId == jobPostingId);
+            return;
         }
+        // 录用信息 → dto.TalentOffers
+        var talentoffers = await _talentOfferRepository.GetListAsync(x => x.JobPostingId == entity.Id);
+        dto.TalentOffers = talentoffers.Adapt<List<TaktTalentOfferDto>>();
     }
 
+    /// <summary>
+    /// 保存职位发布子表级联（录用信息；Create/Update 后按主表 Id 先删后插）
+    /// </summary>
+    /// <param name="entity">主表实体</param>
+    /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
+    /// <returns>任务</returns>
+    private async Task SaveTalentJobPostingChildrenAsync(TaktTalentJobPosting entity, TaktTalentJobPostingCreateDto dto)
+    {
+        // 录用信息（TalentOffers）
+        if (dto.TalentOffers is not { Count: > 0 })
+        {
+            await _talentOfferRepository.DeleteAsync(x => x.JobPostingId == entity.Id);
+        }
+        else
+        {
+            var talentoffers = dto.TalentOffers.Adapt<List<TaktTalentOffer>>();
+            foreach (var child in talentoffers)
+            {
+                child.JobPostingId = entity.Id;
+            }
+            await _talentOfferRepository.DeleteAsync(x => x.JobPostingId == entity.Id);
+            foreach (var child in talentoffers)
+            {
+            }
+            await _talentOfferRepository.CreateRangeAsync(talentoffers);
+        }
+    }
     // ========================================
     // 查询表达式
     // ========================================
@@ -331,7 +361,7 @@ public class TaktTalentJobPostingService : TaktServiceBase, ITaktTalentJobPostin
             exp = exp.And(x =>
                 SqlFunc.ToString(x.StaffingRequirementId).Contains(keywords)
                 || (x.PostingCode != null && x.PostingCode.Contains(keywords))
-                || (x.Title != null && x.Title.Contains(keywords))
+                || (x.TalentJobPostingTitle != null && x.TalentJobPostingTitle.Contains(keywords))
                 || SqlFunc.ToString(x.PostingStatus).Contains(keywords)
                 || SqlFunc.ToString(x.PublishChannel).Contains(keywords)
                 || (x.Reason != null && x.Reason.Contains(keywords))
@@ -354,9 +384,9 @@ public class TaktTalentJobPostingService : TaktServiceBase, ITaktTalentJobPostin
             exp = exp.And(x => x.PostingCode != null && x.PostingCode.Contains(queryDto.PostingCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Title))
+        if (!string.IsNullOrEmpty(queryDto?.TalentJobPostingTitle))
         {
-            exp = exp.And(x => x.Title != null && x.Title.Contains(queryDto.Title));
+            exp = exp.And(x => x.TalentJobPostingTitle != null && x.TalentJobPostingTitle.Contains(queryDto.TalentJobPostingTitle));
         }
 
         if (queryDto?.PostingStatus.HasValue == true)

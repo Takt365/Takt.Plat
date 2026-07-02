@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopDocService.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-30
 // 创建人：Takt365(Cursor AI)
 // 功能描述：SOP文档头应用服务实现
 // 
@@ -117,10 +117,11 @@ public class TaktSopDocService : TaktServiceBase, ITaktSopDocService
         var entity = dto.Adapt<TaktSopDoc>();
         var isUnique_ix_takt_logistics_manufacturing_sop_doc_code_unique = await _uniqueValidator.IsUniqueAsync(
             _sopDocRepository,
-            x => x.SopCode == entity.SopCode);
+            x => x.PlantCode == entity.PlantCode
+                && x.SopCode == entity.SopCode);
         if (!isUnique_ix_takt_logistics_manufacturing_sop_doc_code_unique)
         {
-            throw new TaktBusinessException("SOP文档头的SopCode已存在");
+            throw new TaktBusinessException("SOP文档头的PlantCode、SopCode已存在");
         }
         entity = await _sopDocRepository.CreateAsync(entity);
                 await SaveSopDocChildrenAsync(entity, dto);
@@ -143,11 +144,12 @@ public class TaktSopDocService : TaktServiceBase, ITaktSopDocService
         dto.Adapt(entity);
         var isUnique_ix_takt_logistics_manufacturing_sop_doc_code_unique = await _uniqueValidator.IsUniqueAsync(
             _sopDocRepository,
-            x => x.SopCode == entity.SopCode,
+            x => x.PlantCode == entity.PlantCode
+                && x.SopCode == entity.SopCode,
             id);
         if (!isUnique_ix_takt_logistics_manufacturing_sop_doc_code_unique)
         {
-            throw new TaktBusinessException("SOP文档头的SopCode已存在");
+            throw new TaktBusinessException("SOP文档头的PlantCode、SopCode已存在");
         }
         await _sopDocRepository.UpdateAsync(entity);
                 await SaveSopDocChildrenAsync(entity, dto);
@@ -245,17 +247,18 @@ public class TaktSopDocService : TaktServiceBase, ITaktSopDocService
             try
             {
                 var entity = rows[i].Adapt<TaktSopDoc>();
-                var importKey = $"{entity.SopCode}";
+                var importKey = $"{entity.PlantCode}|{entity.SopCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（SopCode）");
+                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、SopCode）");
                 }
                 var isUnique_ix_takt_logistics_manufacturing_sop_doc_code_unique = await _uniqueValidator.IsUniqueAsync(
                     _sopDocRepository,
-                    x => x.SopCode == entity.SopCode);
+                    x => x.PlantCode == entity.PlantCode
+                        && x.SopCode == entity.SopCode);
                 if (!isUnique_ix_takt_logistics_manufacturing_sop_doc_code_unique)
                 {
-                    throw new TaktBusinessException("SOP文档头的SopCode已存在");
+                    throw new TaktBusinessException("SOP文档头的PlantCode、SopCode已存在");
                 }
                 await _sopDocRepository.CreateAsync(entity);
                 success += 1;
@@ -377,7 +380,8 @@ public class TaktSopDocService : TaktServiceBase, ITaktSopDocService
         {
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
-                (x.SopCode != null && x.SopCode.Contains(keywords))
+                (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                || (x.SopCode != null && x.SopCode.Contains(keywords))
                 || (x.SopName != null && x.SopName.Contains(keywords))
                 || (x.MaterialCode != null && x.MaterialCode.Contains(keywords))
                 || SqlFunc.ToString(x.RoutingItemId).Contains(keywords)
@@ -389,6 +393,11 @@ public class TaktSopDocService : TaktServiceBase, ITaktSopDocService
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
+        {
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.SopCode))

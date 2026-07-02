@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Manufacturing.Defect
 // 文件名称：TaktPcbaRepairsController.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-30
 // 创建人：Takt365(Cursor AI)
 // 功能描述：PCBA改修日报控制器
 // 
@@ -49,6 +49,26 @@ public class TaktPcbaRepairsController : TaktControllerBase
         {
             var result = await _pcbaRepairService.GetPcbaRepairListAsync(queryDto);
             return Success(result.Data, result.Total, result.PageIndex, result.PageSize, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 获取 PCBA 改修统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>不良统计</returns>
+    [TaktPermission("logistics:manufacturing:defect:pcba:repair:list", "PCBA改修统计")]
+    [HttpGet("defect-stat")]
+    public async Task<IActionResult> GetPcbaRepairStatAsync([FromQuery] TaktDefectStatQueryDto queryDto)
+    {
+        try
+        {
+            var result = await _pcbaRepairService.GetPcbaRepairStatAsync(queryDto);
+            return Success(result, "查询成功");
         }
         catch (Exception ex)
         {
@@ -173,26 +193,6 @@ public class TaktPcbaRepairsController : TaktControllerBase
         {
             await _pcbaRepairService.DeletePcbaRepairBatchAsync(ids);
             return Success("删除成功");
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
-    }
-
-    /// <summary>
-    /// 更新PCBA改修日报状态
-    /// </summary>
-    /// <param name="dto">状态 DTO</param>
-    /// <returns>PCBA改修日报DTO</returns>
-    [TaktPermission("logistics:manufacturing:defect:pcba:repair:update", "更新PCBA改修日报状态")]
-    [HttpPut("status")]
-    public async Task<IActionResult> UpdatePcbaRepairStatusAsync([FromBody] TaktPcbaRepairStatusDto dto)
-    {
-        try
-        {
-            var result = await _pcbaRepairService.UpdatePcbaRepairStatusAsync(dto);
-            return Success(result, "更新成功");
         }
         catch (Exception ex)
         {

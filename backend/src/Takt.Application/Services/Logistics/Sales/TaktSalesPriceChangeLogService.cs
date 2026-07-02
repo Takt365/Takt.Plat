@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Sales
 // 文件名称：TaktSalesPriceChangeLogService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-07-01
 // 创建人：Takt365(Cursor AI)
 // 功能描述：销售价格变更记录应用服务实现
 // 
@@ -30,23 +30,27 @@ namespace Takt.Application.Services.Logistics.Sales;
 public class TaktSalesPriceChangeLogService : TaktServiceBase, ITaktSalesPriceChangeLogService
 {
     private readonly ITaktCompanyRepository<TaktSalesPriceChangeLog> _salesPriceChangeLogRepository;
+    private readonly ITaktCompanyRepository<TaktSalesPrice> _salesPriceRepository;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="salesPriceChangeLogRepository">销售价格变更记录仓储</param>
+    /// <param name="salesPriceRepository">销售价格仓储</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktSalesPriceChangeLogService(
         ITaktCompanyRepository<TaktSalesPriceChangeLog> salesPriceChangeLogRepository,
+        ITaktCompanyRepository<TaktSalesPrice> salesPriceRepository,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
         _salesPriceChangeLogRepository = salesPriceChangeLogRepository;
+        _salesPriceRepository = salesPriceRepository;
         _uniqueValidator = uniqueValidator;
     }
 
@@ -110,6 +114,7 @@ public class TaktSalesPriceChangeLogService : TaktServiceBase, ITaktSalesPriceCh
     public async Task<TaktSalesPriceChangeLogDto> CreateSalesPriceChangeLogAsync(TaktSalesPriceChangeLogCreateDto dto)
     {
         var entity = dto.Adapt<TaktSalesPriceChangeLog>();
+        await StampSalesPriceChangeLogSalesPriceAsync(entity, dto);
         entity = await _salesPriceChangeLogRepository.CreateAsync(entity);
         return await GetSalesPriceChangeLogByIdAsync(entity.Id) ?? entity.Adapt<TaktSalesPriceChangeLogDto>();
     }
@@ -128,6 +133,7 @@ public class TaktSalesPriceChangeLogService : TaktServiceBase, ITaktSalesPriceCh
             throw new TaktBusinessException("销售价格变更记录不存在");
         }
         dto.Adapt(entity);
+        await StampSalesPriceChangeLogSalesPriceAsync(entity, dto);
         await _salesPriceChangeLogRepository.UpdateAsync(entity);
         return await GetSalesPriceChangeLogByIdAsync(id) ?? throw new TaktBusinessException("销售价格变更记录不存在");
     }
@@ -189,6 +195,29 @@ public class TaktSalesPriceChangeLogService : TaktServiceBase, ITaktSalesPriceCh
             fileName ?? "销售价格变更记录导出.xlsx");
     }
 
+    // ========================================
+    // 主表外键同步（ManyToOne）
+    // ========================================
+
+    /// <summary>
+    /// 同步销售价格变更记录主表外键（ManyToOne → 销售价格）
+    /// </summary>
+    /// <param name="entity">当前实体</param>
+    /// <param name="dto">创建 DTO</param>
+    /// <returns>任务</returns>
+    private async Task StampSalesPriceChangeLogSalesPriceAsync(TaktSalesPriceChangeLog entity, TaktSalesPriceChangeLogCreateDto dto)
+    {
+        if (dto.SalesPriceId <= 0)
+        {
+            return;
+        }
+        var master = await _salesPriceRepository.GetByIdAsync(dto.SalesPriceId);
+        if (master == null)
+        {
+            throw new TaktBusinessException("销售价格不存在");
+        }
+        entity.SalesPriceId = master.Id;
+    }
     // ========================================
     // 查询表达式
     // ========================================

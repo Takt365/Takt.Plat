@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Scheduling
 // 文件名称：TaktApsScheduleItemService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-30
 // 创建人：Takt365(Cursor AI)
 // 功能描述：APS排程明细应用服务实现
 // 
@@ -100,7 +100,7 @@ public class TaktApsScheduleItemService : TaktServiceBase, ITaktApsScheduleItemS
     {
         EnsureThreeLayerContext();
         var list = await _apsScheduleItemRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ProcessStatus == 1,
             x => x.ProductName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
@@ -354,6 +354,9 @@ public class TaktApsScheduleItemService : TaktServiceBase, ITaktApsScheduleItemS
             exp = exp.And(x =>
                 SqlFunc.ToString(x.ApsScheduleId).Contains(keywords)
                 || (x.ApsScheduleCode != null && x.ApsScheduleCode.Contains(keywords))
+                || SqlFunc.ToString(x.ApsOrderId).Contains(keywords)
+                || SqlFunc.ToString(x.ApsOperationId).Contains(keywords)
+                || SqlFunc.ToString(x.RoutingItemId).Contains(keywords)
                 || SqlFunc.ToString(x.LineNumber).Contains(keywords)
                 || (x.WorkOrderCode != null && x.WorkOrderCode.Contains(keywords))
                 || (x.ProductCode != null && x.ProductCode.Contains(keywords))
@@ -387,6 +390,21 @@ public class TaktApsScheduleItemService : TaktServiceBase, ITaktApsScheduleItemS
         if (!string.IsNullOrEmpty(queryDto?.ApsScheduleCode))
         {
             exp = exp.And(x => x.ApsScheduleCode != null && x.ApsScheduleCode.Contains(queryDto.ApsScheduleCode));
+        }
+
+        if (queryDto?.ApsOrderId.HasValue == true)
+        {
+            exp = exp.And(x => x.ApsOrderId == queryDto.ApsOrderId);
+        }
+
+        if (queryDto?.ApsOperationId.HasValue == true)
+        {
+            exp = exp.And(x => x.ApsOperationId == queryDto.ApsOperationId);
+        }
+
+        if (queryDto?.RoutingItemId.HasValue == true)
+        {
+            exp = exp.And(x => x.RoutingItemId == queryDto.RoutingItemId);
         }
 
         if (queryDto?.LineNumber.HasValue == true)

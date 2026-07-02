@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/sop
 // 文件名称：content.d.ts
-// 创建时间：2026-06-20
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/sop 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface SopContent extends CompanyDtoBase {
   sopContentId: string;
 
   /**
-   * 版本 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
    */
   revisionId: string;
 
@@ -39,7 +39,7 @@ export interface SopContent extends CompanyDtoBase {
   revisionName?: string;
 
   /**
-   * SOP 主档 ID（冗余，序列化为 string 以避免 Javascript 精度问题）
+   * SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
    */
   sopId: string;
 
@@ -49,7 +49,7 @@ export interface SopContent extends CompanyDtoBase {
   sopName?: string;
 
   /**
-   * 正文语言（zh-CN 简体 / en-US 英文 / ja-JP 日文 / zh-HK 香港繁体；与 TaktCulture.CultureCode 一致）
+   * 正文语言（选项 TaktCultures/options，DictValue=CultureCode）
    */
   contentLang: string;
 
@@ -89,17 +89,17 @@ export interface SopContentQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 版本 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
    */
   revisionId?: string;
 
   /**
-   * SOP 主档 ID（冗余，序列化为 string 以避免 Javascript 精度问题）
+   * SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
    */
   sopId?: string;
 
   /**
-   * 正文语言（zh-CN 简体 / en-US 英文 / ja-JP 日文 / zh-HK 香港繁体；与 TaktCulture.CultureCode 一致）
+   * 正文语言（选项 TaktCultures/options，DictValue=CultureCode）
    */
   contentLang?: string;
 
@@ -148,22 +148,22 @@ export interface SopContentCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
   /**
-   * 版本 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
    */
   revisionId: string;
 
   /**
-   * SOP 主档 ID（冗余，序列化为 string 以避免 Javascript 精度问题）
+   * SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
    */
   sopId: string;
 
   /**
-   * 正文语言（zh-CN 简体 / en-US 英文 / ja-JP 日文 / zh-HK 香港繁体；与 TaktCulture.CultureCode 一致）
+   * 正文语言（选项 TaktCultures/options，DictValue=CultureCode）
    */
   contentLang: string;
 
@@ -222,17 +222,17 @@ export interface SopContentTemplate {
   companyCode?: string;
 
   /**
-   * 版本 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
    */
   revisionId?: string;
 
   /**
-   * SOP 主档 ID（冗余，序列化为 string 以避免 Javascript 精度问题）
+   * SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
    */
   sopId?: string;
 
   /**
-   * 正文语言（zh-CN 简体 / en-US 英文 / ja-JP 日文 / zh-HK 香港繁体；与 TaktCulture.CultureCode 一致）
+   * 正文语言（选项 TaktCultures/options，DictValue=CultureCode）
    */
   contentLang?: string;
 
@@ -240,6 +240,11 @@ export interface SopContentTemplate {
    * 正文标题
    */
   contentTitle?: string;
+
+  /**
+   * 工步列表（子表，级联保存）
+   */
+  steps?: SopStepCreate[];
 
   /**
    * 扩展字段JSON
@@ -271,22 +276,22 @@ export interface SopContentImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
   /**
-   * 版本 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
    */
   revisionId?: string;
 
   /**
-   * SOP 主档 ID（冗余，序列化为 string 以避免 Javascript 精度问题）
+   * SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
    */
   sopId?: string;
 
   /**
-   * 正文语言（zh-CN 简体 / en-US 英文 / ja-JP 日文 / zh-HK 香港繁体；与 TaktCulture.CultureCode 一致）
+   * 正文语言（选项 TaktCultures/options，DictValue=CultureCode）
    */
   contentLang?: string;
 
@@ -294,6 +299,11 @@ export interface SopContentImport {
    * 正文标题
    */
   contentTitle?: string;
+
+  /**
+   * 工步列表（子表，级联保存）
+   */
+  steps?: SopStepCreate[];
 
   /**
    * 扩展字段JSON
@@ -325,17 +335,17 @@ export interface SopContentExport {
   companyCode: string;
 
   /**
-   * 版本 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
    */
   revisionId: string;
 
   /**
-   * SOP 主档 ID（冗余，序列化为 string 以避免 Javascript 精度问题）
+   * SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
    */
   sopId: string;
 
   /**
-   * 正文语言（zh-CN 简体 / en-US 英文 / ja-JP 日文 / zh-HK 香港繁体；与 TaktCulture.CultureCode 一致）
+   * 正文语言（选项 TaktCultures/options，DictValue=CultureCode）
    */
   contentLang: string;
 

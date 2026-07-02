@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/procurement
 // 文件名称：purchase-order.d.ts
-// 创建时间：2026-06-21
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/procurement 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -37,6 +37,21 @@ export interface PurchaseOrder extends CompanyDtoBase {
    * 采购订单编码（唯一索引）
    */
   purchaseOrderCode: string;
+
+  /**
+   * 来源采购申请 ID（采购链路自动生成时写入）
+   */
+  purchaseRequestId?: string;
+
+  /**
+   * 来源采购申请 名称（填充字段）
+   */
+  purchaseRequestName?: string;
+
+  /**
+   * 来源采购申请编码（冗余）
+   */
+  purchaseRequestCode?: string;
 
   /**
    * 供应商编码
@@ -109,17 +124,7 @@ export interface PurchaseOrder extends CompanyDtoBase {
   paidAmount: number;
 
   /**
-   * 订单状态（1=启用，0=禁用）
-   */
-  orderStatus: number;
-
-  /**
-   * 交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
-   */
-  deliveryStatus: number;
-
-  /**
-   * 支付方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 支付方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
    */
   paymentMethod: number;
 
@@ -132,6 +137,16 @@ export interface PurchaseOrder extends CompanyDtoBase {
    * 交货地址
    */
   deliveryAddress?: string;
+
+  /**
+   * 订单状态（1=启用，0=禁用）
+   */
+  orderStatus: number;
+
+  /**
+   * 交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
+   */
+  deliveryStatus: number;
 
   /**
    * 订单明细列表（主子表关系，一个订单可以有多个明细） （子表：TaktPurchaseOrderItem）
@@ -172,6 +187,16 @@ export interface PurchaseOrderQuery extends TaktPagedQuery {
    * 采购订单编码（唯一索引）
    */
   purchaseOrderCode?: string;
+
+  /**
+   * 来源采购申请 ID（采购链路自动生成时写入）
+   */
+  purchaseRequestId?: string;
+
+  /**
+   * 来源采购申请编码（冗余）
+   */
+  purchaseRequestCode?: string;
 
   /**
    * 供应商编码
@@ -259,17 +284,7 @@ export interface PurchaseOrderQuery extends TaktPagedQuery {
   paidAmount?: number;
 
   /**
-   * 订单状态（1=启用，0=禁用）
-   */
-  orderStatus?: number;
-
-  /**
-   * 交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
-   */
-  deliveryStatus?: number;
-
-  /**
-   * 支付方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 支付方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
    */
   paymentMethod?: number;
 
@@ -282,6 +297,16 @@ export interface PurchaseOrderQuery extends TaktPagedQuery {
    * 交货地址
    */
   deliveryAddress?: string;
+
+  /**
+   * 订单状态（1=启用，0=禁用）
+   */
+  orderStatus?: number;
+
+  /**
+   * 交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
+   */
+  deliveryStatus?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -323,7 +348,7 @@ export interface PurchaseOrderCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -336,6 +361,16 @@ export interface PurchaseOrderCreate {
    * 采购订单编码（唯一索引）
    */
   purchaseOrderCode: string;
+
+  /**
+   * 来源采购申请 ID（采购链路自动生成时写入）
+   */
+  purchaseRequestId?: string;
+
+  /**
+   * 来源采购申请编码（冗余）
+   */
+  purchaseRequestCode?: string;
 
   /**
    * 供应商编码
@@ -408,17 +443,7 @@ export interface PurchaseOrderCreate {
   paidAmount: number;
 
   /**
-   * 订单状态（1=启用，0=禁用）
-   */
-  orderStatus: number;
-
-  /**
-   * 交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
-   */
-  deliveryStatus: number;
-
-  /**
-   * 支付方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 支付方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
    */
   paymentMethod: number;
 
@@ -431,6 +456,16 @@ export interface PurchaseOrderCreate {
    * 交货地址
    */
   deliveryAddress?: string;
+
+  /**
+   * 订单状态（1=启用，0=禁用）
+   */
+  orderStatus: number;
+
+  /**
+   * 交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
+   */
+  deliveryStatus: number;
 
   /**
    * 订单明细列表（主子表关系，一个订单可以有多个明细）（子表，级联保存）
@@ -516,6 +551,16 @@ export interface PurchaseOrderTemplate {
   purchaseOrderCode?: string;
 
   /**
+   * 来源采购申请 ID（采购链路自动生成时写入）
+   */
+  purchaseRequestId?: string;
+
+  /**
+   * 来源采购申请编码（冗余）
+   */
+  purchaseRequestCode?: string;
+
+  /**
    * 供应商编码
    */
   supplierCode?: string;
@@ -526,22 +571,67 @@ export interface PurchaseOrderTemplate {
   supplierName?: string;
 
   /**
+   * 订单日期
+   */
+  orderDate?: string;
+
+  /**
+   * 要求到货日期
+   */
+  requiredArrivalDate?: string;
+
+  /**
+   * 实际到货日期
+   */
+  actualArrivalDate?: string;
+
+  /**
    * 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
    */
   purchaseGroup?: string;
 
   /**
-   * 订单状态（1=启用，0=禁用）
+   * 订单总数量（基本单位数量）
    */
-  orderStatus?: number;
+  totalQuantity?: number;
 
   /**
-   * 交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
+   * 订单总金额（精确到分，存储为整数，单位为分）
    */
-  deliveryStatus?: number;
+  totalAmount?: number;
 
   /**
-   * 支付方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 折扣金额（精确到分，存储为整数，单位为分）
+   */
+  discountAmount?: number;
+
+  /**
+   * 税费（精确到分，存储为整数，单位为分）
+   */
+  taxAmount?: number;
+
+  /**
+   * 订单实付金额（精确到分，存储为整数，单位为分）
+   */
+  actualAmount?: number;
+
+  /**
+   * 已入库数量（基本单位数量）
+   */
+  receivedQuantity?: number;
+
+  /**
+   * 已入库金额（精确到分，存储为整数，单位为分）
+   */
+  receivedAmount?: number;
+
+  /**
+   * 已付款金额（精确到分，存储为整数，单位为分）
+   */
+  paidAmount?: number;
+
+  /**
+   * 支付方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
    */
   paymentMethod?: number;
 
@@ -554,6 +644,26 @@ export interface PurchaseOrderTemplate {
    * 交货地址
    */
   deliveryAddress?: string;
+
+  /**
+   * 订单状态（1=启用，0=禁用）
+   */
+  orderStatus?: number;
+
+  /**
+   * 交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
+   */
+  deliveryStatus?: number;
+
+  /**
+   * 订单明细列表（主子表关系，一个订单可以有多个明细）（子表，级联保存）
+   */
+  items?: PurchaseOrderItemCreate[];
+
+  /**
+   * 采购订单变更记录列表（外键在子表 TaktPurchaseOrderChangeLog.OrderId）（子表，级联保存）
+   */
+  changeLogs?: PurchaseOrderChangeLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -585,7 +695,7 @@ export interface PurchaseOrderImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -600,6 +710,16 @@ export interface PurchaseOrderImport {
   purchaseOrderCode?: string;
 
   /**
+   * 来源采购申请 ID（采购链路自动生成时写入）
+   */
+  purchaseRequestId?: string;
+
+  /**
+   * 来源采购申请编码（冗余）
+   */
+  purchaseRequestCode?: string;
+
+  /**
    * 供应商编码
    */
   supplierCode?: string;
@@ -610,22 +730,67 @@ export interface PurchaseOrderImport {
   supplierName?: string;
 
   /**
+   * 订单日期
+   */
+  orderDate?: string;
+
+  /**
+   * 要求到货日期
+   */
+  requiredArrivalDate?: string;
+
+  /**
+   * 实际到货日期
+   */
+  actualArrivalDate?: string;
+
+  /**
    * 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
    */
   purchaseGroup?: string;
 
   /**
-   * 订单状态（1=启用，0=禁用）
+   * 订单总数量（基本单位数量）
    */
-  orderStatus?: number;
+  totalQuantity?: number;
 
   /**
-   * 交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
+   * 订单总金额（精确到分，存储为整数，单位为分）
    */
-  deliveryStatus?: number;
+  totalAmount?: number;
 
   /**
-   * 支付方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 折扣金额（精确到分，存储为整数，单位为分）
+   */
+  discountAmount?: number;
+
+  /**
+   * 税费（精确到分，存储为整数，单位为分）
+   */
+  taxAmount?: number;
+
+  /**
+   * 订单实付金额（精确到分，存储为整数，单位为分）
+   */
+  actualAmount?: number;
+
+  /**
+   * 已入库数量（基本单位数量）
+   */
+  receivedQuantity?: number;
+
+  /**
+   * 已入库金额（精确到分，存储为整数，单位为分）
+   */
+  receivedAmount?: number;
+
+  /**
+   * 已付款金额（精确到分，存储为整数，单位为分）
+   */
+  paidAmount?: number;
+
+  /**
+   * 支付方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
    */
   paymentMethod?: number;
 
@@ -638,6 +803,26 @@ export interface PurchaseOrderImport {
    * 交货地址
    */
   deliveryAddress?: string;
+
+  /**
+   * 订单状态（1=启用，0=禁用）
+   */
+  orderStatus?: number;
+
+  /**
+   * 交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
+   */
+  deliveryStatus?: number;
+
+  /**
+   * 订单明细列表（主子表关系，一个订单可以有多个明细）（子表，级联保存）
+   */
+  items?: PurchaseOrderItemCreate[];
+
+  /**
+   * 采购订单变更记录列表（外键在子表 TaktPurchaseOrderChangeLog.OrderId）（子表，级联保存）
+   */
+  changeLogs?: PurchaseOrderChangeLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -677,6 +862,16 @@ export interface PurchaseOrderExport {
    * 采购订单编码（唯一索引）
    */
   purchaseOrderCode: string;
+
+  /**
+   * 来源采购申请 ID（采购链路自动生成时写入）
+   */
+  purchaseRequestId?: string;
+
+  /**
+   * 来源采购申请编码（冗余）
+   */
+  purchaseRequestCode?: string;
 
   /**
    * 供应商编码
@@ -749,17 +944,7 @@ export interface PurchaseOrderExport {
   paidAmount: number;
 
   /**
-   * 订单状态（1=启用，0=禁用）
-   */
-  orderStatus: number;
-
-  /**
-   * 交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
-   */
-  deliveryStatus: number;
-
-  /**
-   * 支付方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 支付方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
    */
   paymentMethod: number;
 
@@ -772,6 +957,16 @@ export interface PurchaseOrderExport {
    * 交货地址
    */
   deliveryAddress?: string;
+
+  /**
+   * 订单状态（1=启用，0=禁用）
+   */
+  orderStatus: number;
+
+  /**
+   * 交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
+   */
+  deliveryStatus: number;
 
   /**
    * 扩展字段JSON

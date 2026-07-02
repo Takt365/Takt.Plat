@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/routine/news-center
 // 文件名称：news-comment.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：routine/news-center 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -129,7 +129,7 @@ export function deleteNewsCommentBatch(ids: string[]): Promise<void> {
 
 /**
  * 更新新闻中心评论状态
- * @param {NewsCommentStatus} dto 状态 DTO（TaktNewsCommentStatus 枚举）
+ * @param {NewsCommentStatus} dto 状态 DTO
  * @returns {Promise<NewsComment>} 新闻中心评论DTO
  */
 export function updateNewsCommentStatus(dto: NewsCommentStatus): Promise<NewsComment> {

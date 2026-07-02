@@ -19,11 +19,11 @@
       @reset="handleQueryReset"
     />
     <TaktToolsBar
-      create-permission="logistics:manufacturing:output:standardoperationrate:create"
-      update-permission="logistics:manufacturing:output:standardoperationrate:update"
-      delete-permission="logistics:manufacturing:output:standardoperationrate:delete"
+      create-permission="logistics:manufacturing:output:standard:operation:rate:create"
+      update-permission="logistics:manufacturing:output:standard:operation:rate:update"
+      delete-permission="logistics:manufacturing:output:standard:operation:rate:delete"
 
-      export-permission="logistics:manufacturing:output:standardoperationrate:export"
+      export-permission="logistics:manufacturing:output:standard:operation:rate:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -73,7 +73,7 @@
         v-model:page-size="pageSize"
         :total="total"
         scroll-layout="masterDetailLr"
-        table-mode="single"
+        table-mode="masterDetailDetail"
         :show-row-selection="true"
         @change="handleTableChange"
         @pagination-change="handleMasterDetailPaginationChange"
@@ -133,8 +133,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.changeTimeStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.standardoperationratechangelog.changetimestart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -144,8 +143,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.changeTimeEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.standardoperationratechangelog.changetimeend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -178,7 +176,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -189,7 +187,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -243,7 +241,7 @@
       id-column-key="standardOperationRateChangeLogId"
       action-column-key="action"
       entity-scope="company"
-      table-mode="single"
+      table-mode="masterDetailDetail"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -364,6 +362,7 @@ function handleAdvancedQueryReset() {
   }
 }
 const columnSettingVisible = ref(false)
+/** 表格当前可见列 key（空数组时按 tableMode=masterDetailDetail 默认 id+4 业务列） */
 const visibleColumnKeys = ref<string[]>([])
 
 function handleColumnSetting() {
@@ -471,7 +470,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:manufacturing:output:standardoperationrate:update',
+        permission: 'logistics:manufacturing:output:standard:operation:rate:update',
         onClick: (record: StandardOperationRateChangeLog) => void handleEdit(record),
       },
       {
@@ -479,7 +478,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:manufacturing:output:standardoperationrate:delete',
+        permission: 'logistics:manufacturing:output:standard:operation:rate:delete',
         onClick: (record: StandardOperationRateChangeLog) => void handleDeleteOne(record),
       },
     ],
@@ -496,7 +495,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: StandardOperationRateChangeLog, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getStandardOperationRateChangeLogId(selectedRow.value) === getStandardOperationRateChangeLogId(record)) {
+    } else if (selectedRow.value && getStandardOperationRateChangeLogId(selectedRow.value) === getStandardOperationRateChangeLogId(record)) {
       selectedRow.value = null
     }
   },

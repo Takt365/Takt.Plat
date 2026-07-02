@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Operation
 // 文件名称：TaktFqcDefectHandlingService.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-30
 // 创建人：Takt365(Cursor AI)
 // 功能描述：出货检验不良处理记录应用服务实现
 // 
@@ -368,9 +368,10 @@ public class TaktFqcDefectHandlingService : TaktServiceBase, ITaktFqcDefectHandl
                 || (x.ResponsibleDept != null && x.ResponsibleDept.Contains(keywords))
                 || (x.ResponsibleBy != null && x.ResponsibleBy.Contains(keywords))
                 || (x.HandlerBy != null && x.HandlerBy.Contains(keywords))
-                || SqlFunc.ToString(x.HandlingStatus).Contains(keywords)
                 || (x.CorrectiveAction != null && x.CorrectiveAction.Contains(keywords))
                 || (x.DefectImages != null && x.DefectImages.Contains(keywords))
+                || (x.Attachments != null && x.Attachments.Contains(keywords))
+                || SqlFunc.ToString(x.HandlingStatus).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.HandlingAt).Contains(keywords)
@@ -443,11 +444,6 @@ public class TaktFqcDefectHandlingService : TaktServiceBase, ITaktFqcDefectHandl
             exp = exp.And(x => x.HandlerBy != null && x.HandlerBy.Contains(queryDto.HandlerBy));
         }
 
-        if (queryDto?.HandlingStatus.HasValue == true)
-        {
-            exp = exp.And(x => x.HandlingStatus == queryDto.HandlingStatus);
-        }
-
         if (!string.IsNullOrEmpty(queryDto?.CorrectiveAction))
         {
             exp = exp.And(x => x.CorrectiveAction != null && x.CorrectiveAction.Contains(queryDto.CorrectiveAction));
@@ -456,6 +452,16 @@ public class TaktFqcDefectHandlingService : TaktServiceBase, ITaktFqcDefectHandl
         if (!string.IsNullOrEmpty(queryDto?.DefectImages))
         {
             exp = exp.And(x => x.DefectImages != null && x.DefectImages.Contains(queryDto.DefectImages));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.Attachments))
+        {
+            exp = exp.And(x => x.Attachments != null && x.Attachments.Contains(queryDto.Attachments));
+        }
+
+        if (queryDto?.HandlingStatus.HasValue == true)
+        {
+            exp = exp.And(x => x.HandlingStatus == queryDto.HandlingStatus);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

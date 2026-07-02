@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Manufacturing.Scheduling
 // 文件名称：TaktApsOrdersController.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-06-30
 // 创建人：Takt365(Cursor AI)
 // 功能描述：APS排程订单控制器
 // 
@@ -41,7 +41,7 @@ public class TaktApsOrdersController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:manufacturing:scheduling:aps:order:list", "APS排程订单列表")]
+    [TaktPermission("logistics:manufacturing:scheduling:aps:schedule:list", "APS排程订单列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetApsOrderListAsync([FromQuery] TaktApsOrderQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktApsOrdersController : TaktControllerBase
     /// </summary>
     /// <param name="id">APS排程订单ID</param>
     /// <returns>APS排程订单DTO</returns>
-    [TaktPermission("logistics:manufacturing:scheduling:aps:order:query", "APS排程订单详情")]
+    [TaktPermission("logistics:manufacturing:scheduling:aps:schedule:query", "APS排程订单详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetApsOrderByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktApsOrdersController : TaktControllerBase
     /// 获取APS排程订单选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:manufacturing:scheduling:aps:order:query", "APS排程订单选项")]
+    [TaktPermission("logistics:manufacturing:scheduling:aps:schedule:query", "APS排程订单选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetApsOrderOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktApsOrdersController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>APS排程订单DTO</returns>
-    [TaktPermission("logistics:manufacturing:scheduling:aps:order:create", "创建APS排程订单")]
+    [TaktPermission("logistics:manufacturing:scheduling:aps:schedule:create", "创建APS排程订单")]
     [HttpPost]
     public async Task<IActionResult> CreateApsOrderAsync([FromBody] TaktApsOrderCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktApsOrdersController : TaktControllerBase
     /// <param name="id">APS排程订单ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>APS排程订单DTO</returns>
-    [TaktPermission("logistics:manufacturing:scheduling:aps:order:update", "更新APS排程订单")]
+    [TaktPermission("logistics:manufacturing:scheduling:aps:schedule:update", "更新APS排程订单")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateApsOrderAsync(long id, [FromBody] TaktApsOrderUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktApsOrdersController : TaktControllerBase
     /// </summary>
     /// <param name="id">APS排程订单ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:scheduling:aps:order:delete", "删除APS排程订单")]
+    [TaktPermission("logistics:manufacturing:scheduling:aps:schedule:delete", "删除APS排程订单")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteApsOrderByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktApsOrdersController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:scheduling:aps:order:delete", "批量删除APS排程订单")]
+    [TaktPermission("logistics:manufacturing:scheduling:aps:schedule:delete", "批量删除APS排程订单")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteApsOrderBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktApsOrdersController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO</param>
     /// <returns>APS排程订单DTO</returns>
-    [TaktPermission("logistics:manufacturing:scheduling:aps:order:update", "更新APS排程订单状态")]
+    [TaktPermission("logistics:manufacturing:scheduling:aps:schedule:update", "更新APS排程订单状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateApsOrderStatusAsync([FromBody] TaktApsOrderStatusDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktApsOrdersController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:scheduling:aps:order:import", "获取APS排程订单导入模板")]
+    [TaktPermission("logistics:manufacturing:scheduling:aps:schedule:import", "获取APS排程订单导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetApsOrderTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +224,7 @@ public class TaktApsOrdersController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:manufacturing:scheduling:aps:order:import", "导入APS排程订单")]
+    [TaktPermission("logistics:manufacturing:scheduling:aps:schedule:import", "导入APS排程订单")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportApsOrderAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +254,7 @@ public class TaktApsOrdersController : TaktControllerBase
     /// 导出APS排程订单
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:scheduling:aps:order:export", "导出APS排程订单")]
+    [TaktPermission("logistics:manufacturing:scheduling:aps:schedule:export", "导出APS排程订单")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportApsOrderAsync([FromQuery] TaktApsOrderQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/human-resource/attendance
 // 文件名称：holiday.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/attendance 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -34,7 +34,7 @@ export interface Holiday extends CompanyDtoBase {
   holidayName: string;
 
   /**
-   * 假日类型（字典 hr_holiday_category）
+   * 假日类型（字典 hr_holiday_category；0=法定 1=调休 2=公司）
    */
   holidayType: number;
 
@@ -49,7 +49,7 @@ export interface Holiday extends CompanyDtoBase {
   endDate: string;
 
   /**
-   * 是否工作日（字典 hr_holiday_working_day_type）
+   * 是否工作日（字典 hr_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
    */
   isWorkingDay: number;
 
@@ -94,7 +94,7 @@ export interface HolidayQuery extends TaktPagedQuery {
   holidayName?: string;
 
   /**
-   * 假日类型（字典 hr_holiday_category）
+   * 假日类型（字典 hr_holiday_category；0=法定 1=调休 2=公司）
    */
   holidayType?: number;
 
@@ -119,7 +119,7 @@ export interface HolidayQuery extends TaktPagedQuery {
   endDateEnd?: string;
 
   /**
-   * 是否工作日（字典 hr_holiday_working_day_type）
+   * 是否工作日（字典 hr_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
    */
   isWorkingDay?: number;
 
@@ -151,7 +151,7 @@ export interface HolidayQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -178,7 +178,7 @@ export interface HolidayCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -188,7 +188,7 @@ export interface HolidayCreate {
   holidayName: string;
 
   /**
-   * 假日类型（字典 hr_holiday_category）
+   * 假日类型（字典 hr_holiday_category；0=法定 1=调休 2=公司）
    */
   holidayType: number;
 
@@ -203,7 +203,7 @@ export interface HolidayCreate {
   endDate: string;
 
   /**
-   * 是否工作日（字典 hr_holiday_working_day_type）
+   * 是否工作日（字典 hr_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
    */
   isWorkingDay: number;
 
@@ -225,7 +225,7 @@ export interface HolidayCreate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -272,12 +272,22 @@ export interface HolidayTemplate {
   holidayName?: string;
 
   /**
-   * 假日类型（字典 hr_holiday_category）
+   * 假日类型（字典 hr_holiday_category；0=法定 1=调休 2=公司）
    */
   holidayType?: number;
 
   /**
-   * 是否工作日（字典 hr_holiday_working_day_type）
+   * 假日开始日期
+   */
+  startDate?: string;
+
+  /**
+   * 假日结束日期
+   */
+  endDate?: string;
+
+  /**
+   * 是否工作日（字典 hr_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
    */
   isWorkingDay?: number;
 
@@ -299,7 +309,7 @@ export interface HolidayTemplate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -326,7 +336,7 @@ export interface HolidayImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -336,12 +346,22 @@ export interface HolidayImport {
   holidayName?: string;
 
   /**
-   * 假日类型（字典 hr_holiday_category）
+   * 假日类型（字典 hr_holiday_category；0=法定 1=调休 2=公司）
    */
   holidayType?: number;
 
   /**
-   * 是否工作日（字典 hr_holiday_working_day_type）
+   * 假日开始日期
+   */
+  startDate?: string;
+
+  /**
+   * 假日结束日期
+   */
+  endDate?: string;
+
+  /**
+   * 是否工作日（字典 hr_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
    */
   isWorkingDay?: number;
 
@@ -363,7 +383,7 @@ export interface HolidayImport {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -395,7 +415,7 @@ export interface HolidayExport {
   holidayName: string;
 
   /**
-   * 假日类型（字典 hr_holiday_category）
+   * 假日类型（字典 hr_holiday_category；0=法定 1=调休 2=公司）
    */
   holidayType: number;
 
@@ -410,7 +430,7 @@ export interface HolidayExport {
   endDate: string;
 
   /**
-   * 是否工作日（字典 hr_holiday_working_day_type）
+   * 是否工作日（字典 hr_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
    */
   isWorkingDay: number;
 
@@ -432,7 +452,7 @@ export interface HolidayExport {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -462,7 +482,7 @@ export interface HolidayTheme {
   holidayName: string;
 
   /**
-   * 假日类型（字典 hr_holiday_category）
+   * 假日类型（字典 hr_holiday_category；0=法定 1=调休 2=公司）
    */
   holidayType: number;
 
@@ -477,7 +497,7 @@ export interface HolidayTheme {
   endDate: string;
 
   /**
-   * 是否工作日（字典 hr_holiday_working_day_type）
+   * 是否工作日（字典 hr_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
    */
   isWorkingDay: number;
 
@@ -501,4 +521,3 @@ export interface HolidayTheme {
    */
   isHolidayToday: boolean;
 }
-

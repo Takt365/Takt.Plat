@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Foundation
 // 文件名称：ITaktIsoCodeService.cs
-// 创建时间：2026-06-18
+// 创建时间：2026-06-27
 // 创建人：Takt365(Cursor AI)
 // 功能描述：ISO编码应用服务接口
 // 

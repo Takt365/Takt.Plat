@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Output
 // 文件名称：TaktStandardOperationRateService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-30
 // 创建人：Takt365(Cursor AI)
 // 功能描述：标准生产稼动率应用服务实现
 // 
@@ -30,23 +30,27 @@ namespace Takt.Application.Services.Logistics.Manufacturing.Output;
 public class TaktStandardOperationRateService : TaktServiceBase, ITaktStandardOperationRateService
 {
     private readonly ITaktCompanyRepository<TaktStandardOperationRate> _standardOperationRateRepository;
+    private readonly ITaktCompanyRepository<TaktStandardOperationRateChangeLog> _standardOperationRateChangeLogRepository;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="standardOperationRateRepository">标准生产稼动率仓储</param>
+    /// <param name="standardOperationRateChangeLogRepository">StandardOperationRateChangeLog仓储</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktStandardOperationRateService(
         ITaktCompanyRepository<TaktStandardOperationRate> standardOperationRateRepository,
+        ITaktCompanyRepository<TaktStandardOperationRateChangeLog> standardOperationRateChangeLogRepository,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
         _standardOperationRateRepository = standardOperationRateRepository;
+        _standardOperationRateChangeLogRepository = standardOperationRateChangeLogRepository;
         _uniqueValidator = uniqueValidator;
     }
 
@@ -81,8 +85,9 @@ public class TaktStandardOperationRateService : TaktServiceBase, ITaktStandardOp
         {
             return null;
         }
-        return entity.Adapt<TaktStandardOperationRateDto>();
-    }
+        var dto = entity.Adapt<TaktStandardOperationRateDto>();
+        await FillStandardOperationRateDetailsAsync(dto, entity);
+        return dto;    }
 
     /// <summary>
     /// 获取标准生产稼动率选项列表
@@ -92,7 +97,7 @@ public class TaktStandardOperationRateService : TaktServiceBase, ITaktStandardOp
     {
         EnsureThreeLayerContext();
         var list = await _standardOperationRateRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.StandardOperationRateStatus == 1,
             x => x.PlantCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
@@ -120,6 +125,7 @@ public class TaktStandardOperationRateService : TaktServiceBase, ITaktStandardOp
             throw new TaktBusinessException("标准生产稼动率的PlantCode、FinancialYear、OperationType已存在");
         }
         entity = await _standardOperationRateRepository.CreateAsync(entity);
+                await SaveStandardOperationRateChildrenAsync(entity, dto);
         return await GetStandardOperationRateByIdAsync(entity.Id) ?? entity.Adapt<TaktStandardOperationRateDto>();
     }
 
@@ -148,6 +154,7 @@ public class TaktStandardOperationRateService : TaktServiceBase, ITaktStandardOp
             throw new TaktBusinessException("标准生产稼动率的PlantCode、FinancialYear、OperationType已存在");
         }
         await _standardOperationRateRepository.UpdateAsync(entity);
+                await SaveStandardOperationRateChildrenAsync(entity, dto);
         return await GetStandardOperationRateByIdAsync(id) ?? throw new TaktBusinessException("标准生产稼动率不存在");
     }
 
@@ -158,6 +165,12 @@ public class TaktStandardOperationRateService : TaktServiceBase, ITaktStandardOp
     /// <returns>任务</returns>
     public async Task DeleteStandardOperationRateByIdAsync(long id)
     {
+        var entity = await _standardOperationRateRepository.GetByIdAsync(id);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("标准生产稼动率不存在或已删除");
+        }
+        await _standardOperationRateChangeLogRepository.DeleteAsync(x => x.StandardOperationRateId == entity.Id);
         var deleted = await _standardOperationRateRepository.DeleteAsync(id);
         if (!deleted)
         {
@@ -195,7 +208,7 @@ public class TaktStandardOperationRateService : TaktServiceBase, ITaktStandardOp
         {
             throw new TaktBusinessException("标准生产稼动率不存在");
         }
-        entity.Status = dto.Status;
+        entity.StandardOperationRateStatus = dto.StandardOperationRateStatus;
         await _standardOperationRateRepository.UpdateAsync(entity);
         return await GetStandardOperationRateByIdAsync(dto.StandardOperationRateId) ?? throw new TaktBusinessException("标准生产稼动率不存在");
     }
@@ -288,6 +301,54 @@ public class TaktStandardOperationRateService : TaktServiceBase, ITaktStandardOp
     }
 
     // ========================================
+    // 主子表级联（OneToMany）
+    // ========================================
+
+    /// <summary>
+    /// 填充标准生产稼动率详情（加载 OneToMany 子表：标准生产稼动率变更记录）
+    /// </summary>
+    /// <param name="dto">响应 DTO</param>
+    /// <param name="entity">主表实体</param>
+    /// <returns>任务</returns>
+    private async Task FillStandardOperationRateDetailsAsync(TaktStandardOperationRateDto dto, TaktStandardOperationRate entity)
+    {
+        if (dto == null)
+        {
+            return;
+        }
+        // 标准生产稼动率变更记录 → dto.ChangeLogs
+        var changelogs = await _standardOperationRateChangeLogRepository.GetListAsync(x => x.StandardOperationRateId == entity.Id);
+        dto.ChangeLogs = changelogs.Adapt<List<TaktStandardOperationRateChangeLogDto>>();
+    }
+
+    /// <summary>
+    /// 保存标准生产稼动率子表级联（标准生产稼动率变更记录；Create/Update 后按主表 Id 先删后插）
+    /// </summary>
+    /// <param name="entity">主表实体</param>
+    /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
+    /// <returns>任务</returns>
+    private async Task SaveStandardOperationRateChildrenAsync(TaktStandardOperationRate entity, TaktStandardOperationRateCreateDto dto)
+    {
+        // 标准生产稼动率变更记录（ChangeLogs）
+        if (dto.ChangeLogs is not { Count: > 0 })
+        {
+            await _standardOperationRateChangeLogRepository.DeleteAsync(x => x.StandardOperationRateId == entity.Id);
+        }
+        else
+        {
+            var changelogs = dto.ChangeLogs.Adapt<List<TaktStandardOperationRateChangeLog>>();
+            foreach (var child in changelogs)
+            {
+                child.StandardOperationRateId = entity.Id;
+            }
+            await _standardOperationRateChangeLogRepository.DeleteAsync(x => x.StandardOperationRateId == entity.Id);
+            foreach (var child in changelogs)
+            {
+            }
+            await _standardOperationRateChangeLogRepository.CreateRangeAsync(changelogs);
+        }
+    }
+    // ========================================
     // 查询表达式
     // ========================================
 
@@ -308,7 +369,7 @@ public class TaktStandardOperationRateService : TaktServiceBase, ITaktStandardOp
                 || (x.FinancialYear != null && x.FinancialYear.Contains(keywords))
                 || SqlFunc.ToString(x.OperationType).Contains(keywords)
                 || SqlFunc.ToString(x.OperationRate).Contains(keywords)
-                || SqlFunc.ToString(x.Status).Contains(keywords)
+                || SqlFunc.ToString(x.StandardOperationRateStatus).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.EffectiveDate).Contains(keywords)
@@ -337,9 +398,9 @@ public class TaktStandardOperationRateService : TaktServiceBase, ITaktStandardOp
             exp = exp.And(x => x.OperationRate == queryDto.OperationRate);
         }
 
-        if (queryDto?.Status.HasValue == true)
+        if (queryDto?.StandardOperationRateStatus.HasValue == true)
         {
-            exp = exp.And(x => x.Status == queryDto.Status);
+            exp = exp.And(x => x.StandardOperationRateStatus == queryDto.StandardOperationRateStatus);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

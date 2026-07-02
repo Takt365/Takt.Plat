@@ -42,11 +42,43 @@ public interface ITaktOnlineService
     Task<List<TaktSelectOption>> GetOnlineOptionsAsync();
 
     /// <summary>
-    /// 注册 SignalR 在线会话（同租户+公司+用户复用主记录；其它仍 Online 的会话标为离线）
+    /// 注册 SignalR 在线会话（租户+公司+UserId 唯一一行：存在则更新，不存在则插入）
     /// </summary>
     /// <param name="dto">连接信息</param>
     /// <returns>在线用户 DTO</returns>
     Task<TaktOnlineDto> RegisterOnlineSessionAsync(TaktOnlineCreateDto dto);
+
+    /// <summary>
+    /// SignalR Heartbeat 累计 ConnectionDuration（写入逻辑见 TaktOnlineService 私有方法）
+    /// </summary>
+    /// <param name="connectionId">SignalR 连接 ID</param>
+    /// <param name="activeAt">活跃时刻</param>
+    /// <returns>是否成功累计</returns>
+    Task<bool> RefreshOnlineConnectionDurationAsync(string connectionId, DateTime activeAt);
+
+    /// <summary>
+    /// 按 ConnectionId 关闭在线会话（仅写 DisconnectTime/OnlineStatus，保留已累计 ConnectionDuration）
+    /// </summary>
+    /// <param name="connectionId">SignalR 连接 ID</param>
+    /// <param name="disconnectTime">断开时间</param>
+    /// <param name="onlineStatus">离线状态（默认 1=离线；强退可传 2=离开）</param>
+    /// <returns>是否更新到记录</returns>
+    Task<bool> CloseOnlineSessionByConnectionIdAsync(
+        string connectionId,
+        DateTime disconnectTime,
+        int onlineStatus = 1);
+
+    /// <summary>
+    /// 按用户 ID 关闭当前租户+公司下所有在线会话（HTTP 登出时 SignalR 可能尚未断开）
+    /// </summary>
+    /// <param name="userId">用户 ID</param>
+    /// <param name="disconnectTime">断开/登出时刻</param>
+    /// <param name="onlineStatus">离线状态（默认 1=离线）</param>
+    /// <returns>关闭的会话数</returns>
+    Task<int> CloseOnlineSessionsByUserIdAsync(
+        long userId,
+        DateTime disconnectTime,
+        int onlineStatus = 1);
 
     /// <summary>
     /// 删除在线用户
@@ -79,17 +111,16 @@ public interface ITaktOnlineService
     Task<(string fileName, byte[] fileContent)> ExportOnlineAsync(TaktOnlineQueryDto? query = null, string? sheetName = null, string? fileName = null);
 
     /// <summary>
-    /// 获取当前登录用户在线统计（在线连接数、在线时长：当前/当天/当月）
+    /// 获取在线时长统计（唯一入口：当前/当天/本周日均/本月日均；可选 UserName，为空取当前登录用户）
     /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
     /// <returns>统计 DTO</returns>
-    Task<TaktOnlineStatisticsDto> GetOnlineStatisticsAsync();
+    Task<TaktOnlineStatisticsDto> GetOnlineStatisticsAsync(TaktOnlineStatisticsQueryDto? queryDto = null);
 
     /// <summary>
-    /// 获取指定用户在线统计（SignalR 实时推送调用）
+    /// 获取在线看板统计（公司维度：在线人数、当日总访问量、当前会话）
     /// </summary>
-    /// <param name="userName">用户名</param>
-    /// <param name="userId">用户 ID</param>
-    /// <returns>统计 DTO</returns>
-    Task<TaktOnlineStatisticsDto> GetOnlineStatisticsByUserNameAsync(string userName, long? userId = null);
+    /// <returns>看板统计 DTO</returns>
+    Task<TaktOnlineDashboardStatisticsDto> GetOnlineDashboardStatisticsAsync();
 
 }

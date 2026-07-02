@@ -2,7 +2,7 @@
 // 项目名称：节拍数字工厂 · Takt Plat (TDF)
 // 命名空间：@/views/logistics/manufacturing/output/pcba-output/composables
 // 文件名称：use-pcba-output-master-context.ts
-// 功能描述：PCBA日报实体主表选中行上下文（供右侧明细面板读取）
+// 功能描述：PCBA日报实体 达成率主表选中行上下文（供右侧明细面板读取）
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // ========================================
 

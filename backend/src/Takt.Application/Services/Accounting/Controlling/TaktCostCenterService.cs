@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Accounting.Controlling
 // 文件名称：TaktCostCenterService.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-07-02
 // 创建人：Takt365(Cursor AI)
 // 功能描述：成本中心应用服务实现
 // 
@@ -94,7 +94,7 @@ public class TaktCostCenterService : TaktServiceBase, ITaktCostCenterService
         return dto;    }
 
     /// <summary>
-    /// 获取成本中心树形选项列表
+    /// 获取成本中心树形选项列表（DictValue 为 CostCenterCode，DictLabel 为成本中心名称）
     /// </summary>
     /// <returns>树形选项</returns>
     public async Task<List<TaktTreeSelectOption>> GetCostCenterTreeOptionsAsync()
@@ -460,8 +460,8 @@ public class TaktCostCenterService : TaktServiceBase, ITaktCostCenterService
                 || (x.DeptName != null && x.DeptName.Contains(keywords))
                 || SqlFunc.ToString(x.CostCenterLevel).Contains(keywords)
                 || (x.RelatedPlant != null && x.RelatedPlant.Contains(keywords))
-                || SqlFunc.ToString(x.CostCenterStatus).Contains(keywords)
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
+                || SqlFunc.ToString(x.CostCenterStatus).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.ValidFrom).Contains(keywords)
@@ -520,14 +520,14 @@ public class TaktCostCenterService : TaktServiceBase, ITaktCostCenterService
             exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(queryDto.RelatedPlant));
         }
 
-        if (queryDto?.CostCenterStatus.HasValue == true)
-        {
-            exp = exp.And(x => x.CostCenterStatus == queryDto.CostCenterStatus);
-        }
-
         if (queryDto?.SortOrder.HasValue == true)
         {
             exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
+        }
+
+        if (queryDto?.CostCenterStatus.HasValue == true)
+        {
+            exp = exp.And(x => x.CostCenterStatus == queryDto.CostCenterStatus);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Foundation
 // 文件名称：TaktDictTypeDtos.cs
-// 创建时间：2026-06-02
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：DictType 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktDictType 生成，请按需审阅）
 // 
@@ -14,7 +14,6 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Dtos.Foundation;
 
@@ -37,24 +36,29 @@ public class TaktDictTypeDto : TaktTenantDtoBase
     public long DictTypeId { get; set; }
 
     /// <summary>
-    /// 字典类型编码（唯一索引：租户内 DictTypeCode+DictTypeName 组合唯一，见 ix_dict_type_code_name_unique；如 order_status, user_type）
+    /// 字典类型编码（租户内唯一；命名：{领域}_{业务项}_后缀，如 sys_equipment_status、logistics_supplier_category）
     /// </summary>
     public string DictTypeCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 字典类型名称（唯一索引：租户内 DictTypeCode+DictTypeName 组合唯一，见 ix_dict_type_code_name_unique；如：订单状态、用户类型）
+    /// 字典类型名称（如：订单状态、用户类型）
     /// </summary>
     public string DictTypeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 数据源（0=表数据，1=SQL脚本）
+    /// 数据源（字典 sys_data_source_type；0=系统表 1=SQL查询）
     /// </summary>
-    public int DataSource { get; set; }
+    public int DataSource { get; set; } = 0;
 
     /// <summary>
-    /// 动态字典SQL脚本（仅当DataSource=SqlScript时使用） SQL必须返回DictValue和DictLabel列，可选返回ListClass、CssClass、SortOrder
+    /// SQL脚本（仅当DataSource=SqlScript时使用） SQL必须返回DictValue和DictLabel列，可选返回ListClass、CssClass、SortOrder
     /// </summary>
     public string? DictScript { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 内置（字典 sys_yes_no_type；0=否 1=是）
+    /// </summary>
+    public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
     /// 排序号
@@ -62,14 +66,9 @@ public class TaktDictTypeDto : TaktTenantDtoBase
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 是否内置（1=是，0=否） 内置字典不允许删除和修改核心字段
+    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
     /// </summary>
-    public int IsBuiltIn { get; set; }
-
-    /// <summary>
-    /// 状态（1=启用，0=禁用）
-    /// </summary>
-    public int DictStatus { get; set; }
+    public int DictStatus { get; set; } = 0;
 
     /// <summary>
     /// 字典数据列表（一对多关联）
@@ -95,24 +94,29 @@ public class TaktDictTypeQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 字典类型编码（唯一索引：租户内 DictTypeCode+DictTypeName 组合唯一，见 ix_dict_type_code_name_unique；如 order_status, user_type）
+    /// 字典类型编码（租户内唯一；命名：{领域}_{业务项}_后缀，如 sys_equipment_status、logistics_supplier_category）
     /// </summary>
     public string? DictTypeCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 字典类型名称（唯一索引：租户内 DictTypeCode+DictTypeName 组合唯一，见 ix_dict_type_code_name_unique；如：订单状态、用户类型）
+    /// 字典类型名称（如：订单状态、用户类型）
     /// </summary>
     public string? DictTypeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 数据源（0=表数据，1=SQL脚本）
+    /// 数据源（字典 sys_data_source_type；0=系统表 1=SQL查询）
     /// </summary>
     public int? DataSource { get; set; }
 
     /// <summary>
-    /// 动态字典SQL脚本（仅当DataSource=SqlScript时使用） SQL必须返回DictValue和DictLabel列，可选返回ListClass、CssClass、SortOrder
+    /// SQL脚本（仅当DataSource=SqlScript时使用） SQL必须返回DictValue和DictLabel列，可选返回ListClass、CssClass、SortOrder
     /// </summary>
     public string? DictScript { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 内置（字典 sys_yes_no_type；0=否 1=是）
+    /// </summary>
+    public int? IsBuiltIn { get; set; }
 
     /// <summary>
     /// 排序号
@@ -120,12 +124,7 @@ public class TaktDictTypeQueryDto : TaktPagedQuery
     public int? SortOrder { get; set; }
 
     /// <summary>
-    /// 是否内置（1=是，0=否） 内置字典不允许删除和修改核心字段
-    /// </summary>
-    public int? IsBuiltIn { get; set; }
-
-    /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
     /// </summary>
     public int? DictStatus { get; set; }
 
@@ -160,41 +159,41 @@ public class TaktDictTypeQueryDto : TaktPagedQuery
 public class TaktDictTypeCreateDto
 {
     /// <summary>
-    /// 字典类型编码（唯一索引：租户内 DictTypeCode+DictTypeName 组合唯一，见 ix_dict_type_code_name_unique；如 order_status, user_type）
+    /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
     /// </summary>
-    [Required(ErrorMessage = "字典类型编码（唯一索引：租户内 DictTypeCode+DictTypeName 组合唯一，见 ix_dict_type_code_name_unique；如 order_status, user_type）不能为空")]
+    public string TenantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 字典类型编码（租户内唯一；命名：{领域}_{业务项}_后缀，如 sys_equipment_status、logistics_supplier_category）
+    /// </summary>
+    [Required(ErrorMessage = "字典类型编码（租户内唯一；命名：{领域}_{业务项}_后缀，如 sys_equipment_status、logistics_supplier_category）不能为空")]
     public string DictTypeCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 字典类型名称（唯一索引：租户内 DictTypeCode+DictTypeName 组合唯一，见 ix_dict_type_code_name_unique；如：订单状态、用户类型）
+    /// 字典类型名称（如：订单状态、用户类型）
     /// </summary>
-    [Required(ErrorMessage = "字典类型名称（唯一索引：租户内 DictTypeCode+DictTypeName 组合唯一，见 ix_dict_type_code_name_unique；如：订单状态、用户类型）不能为空")]
+    [Required(ErrorMessage = "字典类型名称（如：订单状态、用户类型）不能为空")]
     public string DictTypeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 数据源（0=表数据，1=SQL脚本）
+    /// 数据源（字典 sys_data_source_type；0=系统表 1=SQL查询）
     /// </summary>
-    public int DataSource { get; set; }
+    public int DataSource { get; set; } = 0;
 
     /// <summary>
-    /// 动态字典SQL脚本（仅当DataSource=SqlScript时使用） SQL必须返回DictValue和DictLabel列，可选返回ListClass、CssClass、SortOrder
+    /// SQL脚本（仅当DataSource=SqlScript时使用） SQL必须返回DictValue和DictLabel列，可选返回ListClass、CssClass、SortOrder
     /// </summary>
     public string? DictScript { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号
+    /// 内置（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
-    public int SortOrder { get; set; } = 0;
+    public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 是否内置（1=是，0=否） 内置字典不允许删除和修改核心字段
+    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
     /// </summary>
-    public int IsBuiltIn { get; set; }
-
-    /// <summary>
-    /// 状态（1=启用，0=禁用）
-    /// </summary>
-    public int DictStatus { get; set; }
+    public int DictStatus { get; set; } = 0;
 
     /// <summary>
     /// 字典数据列表（一对多关联）（子表，级联保存）
@@ -251,18 +250,18 @@ public class TaktDictTypeStatusDto
     public long DictTypeId { get; set; }
 
     /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
     /// </summary>
-    [Required(ErrorMessage = "状态（1=启用，0=禁用）不能为空")]
-    public int DictStatus { get; set; }
+    [Required(ErrorMessage = "状态（字典 sys_normal_disable_status；1=启用 0=禁用）不能为空")]
+    public int DictStatus { get; set; } = 0;
 }
 
 // ========================================
-// DictType 是否内置 DTO
+// DictType 内置 DTO
 // ========================================
 
 /// <summary>
-/// DictType 是否内置更新 DTO
+/// DictType 内置更新 DTO
 /// </summary>
 public class TaktDictTypeBuiltInDto
 {
@@ -275,10 +274,10 @@ public class TaktDictTypeBuiltInDto
     public long DictTypeId { get; set; }
 
     /// <summary>
-    /// 是否内置（字典 sys_yes_no_type；1=是，0=否）
+    /// 内置（字典 sys_yes_no_type；1=是，0=否）
     /// </summary>
-    [Required(ErrorMessage = "是否内置不能为空")]
-    public int IsBuiltIn { get; set; }
+    [Required(ErrorMessage = "内置不能为空")]
+    public int IsBuiltIn { get; set; } = 0;
 }
 
 // ========================================
@@ -315,39 +314,44 @@ public class TaktDictTypeSortDto
 public class TaktDictTypeTemplateDto
 {
     /// <summary>
-    /// 字典类型编码（唯一索引：租户内 DictTypeCode+DictTypeName 组合唯一，见 ix_dict_type_code_name_unique；如 order_status, user_type）
+    /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
+    /// </summary>
+    public string? TenantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 字典类型编码（租户内唯一；命名：{领域}_{业务项}_后缀，如 sys_equipment_status、logistics_supplier_category）
     /// </summary>
     public string? DictTypeCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 字典类型名称（唯一索引：租户内 DictTypeCode+DictTypeName 组合唯一，见 ix_dict_type_code_name_unique；如：订单状态、用户类型）
+    /// 字典类型名称（如：订单状态、用户类型）
     /// </summary>
     public string? DictTypeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 数据源（0=表数据，1=SQL脚本）
+    /// 数据源（字典 sys_data_source_type；0=系统表 1=SQL查询）
     /// </summary>
     public int? DataSource { get; set; }
 
     /// <summary>
-    /// 动态字典SQL脚本（仅当DataSource=SqlScript时使用） SQL必须返回DictValue和DictLabel列，可选返回ListClass、CssClass、SortOrder
+    /// SQL脚本（仅当DataSource=SqlScript时使用） SQL必须返回DictValue和DictLabel列，可选返回ListClass、CssClass、SortOrder
     /// </summary>
     public string? DictScript { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号
-    /// </summary>
-    public int? SortOrder { get; set; }
-
-    /// <summary>
-    /// 是否内置（1=是，0=否） 内置字典不允许删除和修改核心字段
+    /// 内置（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
     /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
     /// </summary>
     public int? DictStatus { get; set; }
+
+    /// <summary>
+    /// 字典数据列表（一对多关联）（子表，级联保存）
+    /// </summary>
+    public List<TaktDictDataCreateDto>? DictDataList { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -367,39 +371,44 @@ public class TaktDictTypeTemplateDto
 public class TaktDictTypeImportDto
 {
     /// <summary>
-    /// 字典类型编码（唯一索引：租户内 DictTypeCode+DictTypeName 组合唯一，见 ix_dict_type_code_name_unique；如 order_status, user_type）
+    /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
+    /// </summary>
+    public string? TenantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 字典类型编码（租户内唯一；命名：{领域}_{业务项}_后缀，如 sys_equipment_status、logistics_supplier_category）
     /// </summary>
     public string? DictTypeCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 字典类型名称（唯一索引：租户内 DictTypeCode+DictTypeName 组合唯一，见 ix_dict_type_code_name_unique；如：订单状态、用户类型）
+    /// 字典类型名称（如：订单状态、用户类型）
     /// </summary>
     public string? DictTypeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 数据源（0=表数据，1=SQL脚本）
+    /// 数据源（字典 sys_data_source_type；0=系统表 1=SQL查询）
     /// </summary>
     public int? DataSource { get; set; }
 
     /// <summary>
-    /// 动态字典SQL脚本（仅当DataSource=SqlScript时使用） SQL必须返回DictValue和DictLabel列，可选返回ListClass、CssClass、SortOrder
+    /// SQL脚本（仅当DataSource=SqlScript时使用） SQL必须返回DictValue和DictLabel列，可选返回ListClass、CssClass、SortOrder
     /// </summary>
     public string? DictScript { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号
-    /// </summary>
-    public int? SortOrder { get; set; }
-
-    /// <summary>
-    /// 是否内置（1=是，0=否） 内置字典不允许删除和修改核心字段
+    /// 内置（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
     /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
     /// </summary>
     public int? DictStatus { get; set; }
+
+    /// <summary>
+    /// 字典数据列表（一对多关联）（子表，级联保存）
+    /// </summary>
+    public List<TaktDictDataCreateDto>? DictDataList { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -430,24 +439,29 @@ public class TaktDictTypeExportDto
     public long DictTypeId { get; set; }
 
     /// <summary>
-    /// 字典类型编码（唯一索引：租户内 DictTypeCode+DictTypeName 组合唯一，见 ix_dict_type_code_name_unique；如 order_status, user_type）
+    /// 字典类型编码（租户内唯一；命名：{领域}_{业务项}_后缀，如 sys_equipment_status、logistics_supplier_category）
     /// </summary>
     public string DictTypeCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 字典类型名称（唯一索引：租户内 DictTypeCode+DictTypeName 组合唯一，见 ix_dict_type_code_name_unique；如：订单状态、用户类型）
+    /// 字典类型名称（如：订单状态、用户类型）
     /// </summary>
     public string DictTypeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 数据源（0=表数据，1=SQL脚本）
+    /// 数据源（字典 sys_data_source_type；0=系统表 1=SQL查询）
     /// </summary>
-    public int DataSource { get; set; }
+    public int DataSource { get; set; } = 0;
 
     /// <summary>
-    /// 动态字典SQL脚本（仅当DataSource=SqlScript时使用） SQL必须返回DictValue和DictLabel列，可选返回ListClass、CssClass、SortOrder
+    /// SQL脚本（仅当DataSource=SqlScript时使用） SQL必须返回DictValue和DictLabel列，可选返回ListClass、CssClass、SortOrder
     /// </summary>
     public string? DictScript { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 内置（字典 sys_yes_no_type；0=否 1=是）
+    /// </summary>
+    public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
     /// 排序号
@@ -455,14 +469,9 @@ public class TaktDictTypeExportDto
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 是否内置（1=是，0=否） 内置字典不允许删除和修改核心字段
+    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
     /// </summary>
-    public int IsBuiltIn { get; set; }
-
-    /// <summary>
-    /// 状态（1=启用，0=禁用）
-    /// </summary>
-    public int DictStatus { get; set; }
+    public int DictStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

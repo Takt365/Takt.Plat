@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Materials
 // 文件名称：TaktPlantDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-07-01
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Plant 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPlant 生成，请按需审阅）
 // 
@@ -14,7 +14,6 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Dtos.Logistics.Materials;
 
@@ -57,34 +56,24 @@ public class TaktPlantDto : TaktTenantDtoBase
     public string CodeAlias { get; set; } = string.Empty;
 
     /// <summary>
-    /// 默认区域文化编码（BCP47，如 zh-CN、en-US、ja-JP、zh-HK）
+    /// 区域文化编码（字典 sys_culture_code，选项 TaktCultures/options，DictValue=CultureCode）
     /// </summary>
     public string DefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂类型
+    /// 企业性质（字典 sys_enterprise_nature_type，DictValue=150 等）
     /// </summary>
-    public int PlantType { get; set; }
+    public string EnterpriseNature { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联公司代码（如 2300、2400；与公司 RelatedPlant 对称）
+    /// 行业属性（字典 sys_industry_attribute_type，DictValue=C 等）
     /// </summary>
-    public string RelatedCompany { get; set; } = string.Empty;
+    public string IndustryAttribute { get; set; } = string.Empty;
 
     /// <summary>
-    /// 企业性质（统计用登记注册类型代码，国统字〔1998〕200号）
+    /// 企业规模（字典 sys_enterprise_scale_type，DictValue=M 等）
     /// </summary>
-    public int EnterpriseNature { get; set; }
-
-    /// <summary>
-    /// 行业属性（GB/T 4754-2017 国民经济行业分类门类）
-    /// </summary>
-    public int IndustryAttribute { get; set; }
-
-    /// <summary>
-    /// 企业规模（统计上大中小微型划分代码 1–4）
-    /// </summary>
-    public int EnterpriseScale { get; set; }
+    public string EnterpriseScale { get; set; } = string.Empty;
 
     /// <summary>
     /// 经营范围
@@ -222,19 +211,24 @@ public class TaktPlantDto : TaktTenantDtoBase
     public DateTime? ClosingDate { get; set; }
 
     /// <summary>
-    /// 存续状态（市场主体登记状态）
+    /// 存续状态（字典 sys_entity_existence_status；1=存续（在营），2=吊销，3=注销，4=迁出，5=停业）
     /// </summary>
-    public int PlantExistence { get; set; }
+    public int PlantExistence { get; set; } = 0;
 
     /// <summary>
-    /// 工厂状态
+    /// 关联公司（关联 TaktCompany.CompanyCode，选项 TaktCompanies/options）
     /// </summary>
-    public int PlantStatus { get; set; }
+    public string RelatedCompany { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
+
+    /// <summary>
+    /// 工厂状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// </summary>
+    public int PlantStatus { get; set; } = 0;
 
 }
 
@@ -274,34 +268,24 @@ public class TaktPlantQueryDto : TaktPagedQuery
     public string? CodeAlias { get; set; } = string.Empty;
 
     /// <summary>
-    /// 默认区域文化编码（BCP47，如 zh-CN、en-US、ja-JP、zh-HK）
+    /// 区域文化编码（字典 sys_culture_code，选项 TaktCultures/options，DictValue=CultureCode）
     /// </summary>
     public string? DefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂类型
+    /// 企业性质（字典 sys_enterprise_nature_type，DictValue=150 等）
     /// </summary>
-    public int? PlantType { get; set; }
+    public string? EnterpriseNature { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联公司代码（如 2300、2400；与公司 RelatedPlant 对称）
+    /// 行业属性（字典 sys_industry_attribute_type，DictValue=C 等）
     /// </summary>
-    public string? RelatedCompany { get; set; } = string.Empty;
+    public string? IndustryAttribute { get; set; } = string.Empty;
 
     /// <summary>
-    /// 企业性质（统计用登记注册类型代码，国统字〔1998〕200号）
+    /// 企业规模（字典 sys_enterprise_scale_type，DictValue=M 等）
     /// </summary>
-    public int? EnterpriseNature { get; set; }
-
-    /// <summary>
-    /// 行业属性（GB/T 4754-2017 国民经济行业分类门类）
-    /// </summary>
-    public int? IndustryAttribute { get; set; }
-
-    /// <summary>
-    /// 企业规模（统计上大中小微型划分代码 1–4）
-    /// </summary>
-    public int? EnterpriseScale { get; set; }
+    public string? EnterpriseScale { get; set; } = string.Empty;
 
     /// <summary>
     /// 经营范围
@@ -449,19 +433,24 @@ public class TaktPlantQueryDto : TaktPagedQuery
     public DateTime? ClosingDateEnd { get; set; }
 
     /// <summary>
-    /// 存续状态（市场主体登记状态）
+    /// 存续状态（字典 sys_entity_existence_status；1=存续（在营），2=吊销，3=注销，4=迁出，5=停业）
     /// </summary>
     public int? PlantExistence { get; set; }
 
     /// <summary>
-    /// 工厂状态
+    /// 关联公司（关联 TaktCompany.CompanyCode，选项 TaktCompanies/options）
     /// </summary>
-    public int? PlantStatus { get; set; }
+    public string? RelatedCompany { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号（越小越靠前）
     /// </summary>
     public int? SortOrder { get; set; }
+
+    /// <summary>
+    /// 工厂状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// </summary>
+    public int? PlantStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -523,36 +512,28 @@ public class TaktPlantCreateDto
     public string CodeAlias { get; set; } = string.Empty;
 
     /// <summary>
-    /// 默认区域文化编码（BCP47，如 zh-CN、en-US、ja-JP、zh-HK）
+    /// 区域文化编码（字典 sys_culture_code，选项 TaktCultures/options，DictValue=CultureCode）
     /// </summary>
-    [Required(ErrorMessage = "默认区域文化编码（BCP47，如 zh-CN、en-US、ja-JP、zh-HK）不能为空")]
+    [Required(ErrorMessage = "区域文化编码（字典 sys_culture_code，选项 TaktCultures/options，DictValue=CultureCode）不能为空")]
     public string DefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂类型
+    /// 企业性质（字典 sys_enterprise_nature_type，DictValue=150 等）
     /// </summary>
-    public int PlantType { get; set; }
+    [Required(ErrorMessage = "企业性质（字典 sys_enterprise_nature_type，DictValue=150 等）不能为空")]
+    public string EnterpriseNature { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联公司代码（如 2300、2400；与公司 RelatedPlant 对称）
+    /// 行业属性（字典 sys_industry_attribute_type，DictValue=C 等）
     /// </summary>
-    [Required(ErrorMessage = "关联公司代码（如 2300、2400；与公司 RelatedPlant 对称）不能为空")]
-    public string RelatedCompany { get; set; } = string.Empty;
+    [Required(ErrorMessage = "行业属性（字典 sys_industry_attribute_type，DictValue=C 等）不能为空")]
+    public string IndustryAttribute { get; set; } = string.Empty;
 
     /// <summary>
-    /// 企业性质（统计用登记注册类型代码，国统字〔1998〕200号）
+    /// 企业规模（字典 sys_enterprise_scale_type，DictValue=M 等）
     /// </summary>
-    public int EnterpriseNature { get; set; }
-
-    /// <summary>
-    /// 行业属性（GB/T 4754-2017 国民经济行业分类门类）
-    /// </summary>
-    public int IndustryAttribute { get; set; }
-
-    /// <summary>
-    /// 企业规模（统计上大中小微型划分代码 1–4）
-    /// </summary>
-    public int EnterpriseScale { get; set; }
+    [Required(ErrorMessage = "企业规模（字典 sys_enterprise_scale_type，DictValue=M 等）不能为空")]
+    public string EnterpriseScale { get; set; } = string.Empty;
 
     /// <summary>
     /// 经营范围
@@ -707,19 +688,20 @@ public class TaktPlantCreateDto
     public DateTime? ClosingDate { get; set; }
 
     /// <summary>
-    /// 存续状态（市场主体登记状态）
+    /// 存续状态（字典 sys_entity_existence_status；1=存续（在营），2=吊销，3=注销，4=迁出，5=停业）
     /// </summary>
-    public int PlantExistence { get; set; }
+    public int PlantExistence { get; set; } = 0;
 
     /// <summary>
-    /// 工厂状态
+    /// 关联公司（关联 TaktCompany.CompanyCode，选项 TaktCompanies/options）
     /// </summary>
-    public int PlantStatus { get; set; }
+    [Required(ErrorMessage = "关联公司（关联 TaktCompany.CompanyCode，选项 TaktCompanies/options）不能为空")]
+    public string RelatedCompany { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 工厂状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
     /// </summary>
-    public int SortOrder { get; set; } = 0;
+    public int PlantStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -771,10 +753,10 @@ public class TaktPlantStatusDto
     public long PlantId { get; set; }
 
     /// <summary>
-    /// 工厂状态
+    /// 工厂状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
     /// </summary>
-    [Required(ErrorMessage = "工厂状态不能为空")]
-    public int PlantStatus { get; set; }
+    [Required(ErrorMessage = "工厂状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）不能为空")]
+    public int PlantStatus { get; set; } = 0;
 }
 
 // ========================================
@@ -818,7 +800,7 @@ public class TaktPlantTemplateDto
     /// <summary>
     /// 工厂代码（唯一索引：租户内唯一，见 ix_plant_code_unique）
     /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工厂名称
@@ -836,34 +818,24 @@ public class TaktPlantTemplateDto
     public string? CodeAlias { get; set; } = string.Empty;
 
     /// <summary>
-    /// 默认区域文化编码（BCP47，如 zh-CN、en-US、ja-JP、zh-HK）
+    /// 区域文化编码（字典 sys_culture_code，选项 TaktCultures/options，DictValue=CultureCode）
     /// </summary>
     public string? DefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂类型
+    /// 企业性质（字典 sys_enterprise_nature_type，DictValue=150 等）
     /// </summary>
-    public int? PlantType { get; set; }
+    public string? EnterpriseNature { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联公司代码（如 2300、2400；与公司 RelatedPlant 对称）
+    /// 行业属性（字典 sys_industry_attribute_type，DictValue=C 等）
     /// </summary>
-    public string? RelatedCompany { get; set; } = string.Empty;
+    public string? IndustryAttribute { get; set; } = string.Empty;
 
     /// <summary>
-    /// 企业性质（统计用登记注册类型代码，国统字〔1998〕200号）
+    /// 企业规模（字典 sys_enterprise_scale_type，DictValue=M 等）
     /// </summary>
-    public int? EnterpriseNature { get; set; }
-
-    /// <summary>
-    /// 行业属性（GB/T 4754-2017 国民经济行业分类门类）
-    /// </summary>
-    public int? IndustryAttribute { get; set; }
-
-    /// <summary>
-    /// 企业规模（统计上大中小微型划分代码 1–4）
-    /// </summary>
-    public int? EnterpriseScale { get; set; }
+    public string? EnterpriseScale { get; set; } = string.Empty;
 
     /// <summary>
     /// 经营范围
@@ -874,6 +846,146 @@ public class TaktPlantTemplateDto
     /// 注册地址1
     /// </summary>
     public string? RegistrationAddress1 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 注册地址2
+    /// </summary>
+    public string? RegistrationAddress2 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 注册地址3
+    /// </summary>
+    public string? RegistrationAddress3 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 注册国家
+    /// </summary>
+    public string? RegistrationRegion { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 注册省
+    /// </summary>
+    public string? RegistrationProvince { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 注册市
+    /// </summary>
+    public string? RegistrationCity { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 经营国家
+    /// </summary>
+    public string? BusinessRegion { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 经营地区-省
+    /// </summary>
+    public string? BusinessProvince { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 经营地区-市
+    /// </summary>
+    public string? BusinessCity { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 经营地址1
+    /// </summary>
+    public string? BusinessAddress1 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 经营地址2
+    /// </summary>
+    public string? BusinessAddress2 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 经营地址3
+    /// </summary>
+    public string? BusinessAddress3 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂地址1
+    /// </summary>
+    public string? PlantAddress1 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂地址2
+    /// </summary>
+    public string? PlantAddress2 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂地址3
+    /// </summary>
+    public string? PlantAddress3 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂电话
+    /// </summary>
+    public string? PlantPhone { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂邮箱
+    /// </summary>
+    public string? PlantEmail { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂传真
+    /// </summary>
+    public string? PlantFax { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂网站
+    /// </summary>
+    public string? PlantWebsite { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 统一社会信用代码
+    /// </summary>
+    public string? UnifiedSocialCreditCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 税务登记号
+    /// </summary>
+    public string? TaxRegistrationNumber { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 法定代表人
+    /// </summary>
+    public string? LegalRepresentative { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂负责人
+    /// </summary>
+    public string? PlantManager { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 注册资本（万元）
+    /// </summary>
+    public decimal? RegisteredCapital { get; set; }
+
+    /// <summary>
+    /// 成立日期
+    /// </summary>
+    public DateTime? EstablishmentDate { get; set; }
+
+    /// <summary>
+    /// 关闭日期（注销/停业；未关闭则为 null）
+    /// </summary>
+    public DateTime? ClosingDate { get; set; }
+
+    /// <summary>
+    /// 存续状态（字典 sys_entity_existence_status；1=存续（在营），2=吊销，3=注销，4=迁出，5=停业）
+    /// </summary>
+    public int? PlantExistence { get; set; }
+
+    /// <summary>
+    /// 关联公司（关联 TaktCompany.CompanyCode，选项 TaktCompanies/options）
+    /// </summary>
+    public string? RelatedCompany { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// </summary>
+    public int? PlantStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -900,7 +1012,7 @@ public class TaktPlantImportDto
     /// <summary>
     /// 工厂代码（唯一索引：租户内唯一，见 ix_plant_code_unique）
     /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工厂名称
@@ -918,34 +1030,24 @@ public class TaktPlantImportDto
     public string? CodeAlias { get; set; } = string.Empty;
 
     /// <summary>
-    /// 默认区域文化编码（BCP47，如 zh-CN、en-US、ja-JP、zh-HK）
+    /// 区域文化编码（字典 sys_culture_code，选项 TaktCultures/options，DictValue=CultureCode）
     /// </summary>
     public string? DefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂类型
+    /// 企业性质（字典 sys_enterprise_nature_type，DictValue=150 等）
     /// </summary>
-    public int? PlantType { get; set; }
+    public string? EnterpriseNature { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联公司代码（如 2300、2400；与公司 RelatedPlant 对称）
+    /// 行业属性（字典 sys_industry_attribute_type，DictValue=C 等）
     /// </summary>
-    public string? RelatedCompany { get; set; } = string.Empty;
+    public string? IndustryAttribute { get; set; } = string.Empty;
 
     /// <summary>
-    /// 企业性质（统计用登记注册类型代码，国统字〔1998〕200号）
+    /// 企业规模（字典 sys_enterprise_scale_type，DictValue=M 等）
     /// </summary>
-    public int? EnterpriseNature { get; set; }
-
-    /// <summary>
-    /// 行业属性（GB/T 4754-2017 国民经济行业分类门类）
-    /// </summary>
-    public int? IndustryAttribute { get; set; }
-
-    /// <summary>
-    /// 企业规模（统计上大中小微型划分代码 1–4）
-    /// </summary>
-    public int? EnterpriseScale { get; set; }
+    public string? EnterpriseScale { get; set; } = string.Empty;
 
     /// <summary>
     /// 经营范围
@@ -956,6 +1058,146 @@ public class TaktPlantImportDto
     /// 注册地址1
     /// </summary>
     public string? RegistrationAddress1 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 注册地址2
+    /// </summary>
+    public string? RegistrationAddress2 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 注册地址3
+    /// </summary>
+    public string? RegistrationAddress3 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 注册国家
+    /// </summary>
+    public string? RegistrationRegion { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 注册省
+    /// </summary>
+    public string? RegistrationProvince { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 注册市
+    /// </summary>
+    public string? RegistrationCity { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 经营国家
+    /// </summary>
+    public string? BusinessRegion { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 经营地区-省
+    /// </summary>
+    public string? BusinessProvince { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 经营地区-市
+    /// </summary>
+    public string? BusinessCity { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 经营地址1
+    /// </summary>
+    public string? BusinessAddress1 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 经营地址2
+    /// </summary>
+    public string? BusinessAddress2 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 经营地址3
+    /// </summary>
+    public string? BusinessAddress3 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂地址1
+    /// </summary>
+    public string? PlantAddress1 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂地址2
+    /// </summary>
+    public string? PlantAddress2 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂地址3
+    /// </summary>
+    public string? PlantAddress3 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂电话
+    /// </summary>
+    public string? PlantPhone { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂邮箱
+    /// </summary>
+    public string? PlantEmail { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂传真
+    /// </summary>
+    public string? PlantFax { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂网站
+    /// </summary>
+    public string? PlantWebsite { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 统一社会信用代码
+    /// </summary>
+    public string? UnifiedSocialCreditCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 税务登记号
+    /// </summary>
+    public string? TaxRegistrationNumber { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 法定代表人
+    /// </summary>
+    public string? LegalRepresentative { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂负责人
+    /// </summary>
+    public string? PlantManager { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 注册资本（万元）
+    /// </summary>
+    public decimal? RegisteredCapital { get; set; }
+
+    /// <summary>
+    /// 成立日期
+    /// </summary>
+    public DateTime? EstablishmentDate { get; set; }
+
+    /// <summary>
+    /// 关闭日期（注销/停业；未关闭则为 null）
+    /// </summary>
+    public DateTime? ClosingDate { get; set; }
+
+    /// <summary>
+    /// 存续状态（字典 sys_entity_existence_status；1=存续（在营），2=吊销，3=注销，4=迁出，5=停业）
+    /// </summary>
+    public int? PlantExistence { get; set; }
+
+    /// <summary>
+    /// 关联公司（关联 TaktCompany.CompanyCode，选项 TaktCompanies/options）
+    /// </summary>
+    public string? RelatedCompany { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// </summary>
+    public int? PlantStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -1006,34 +1248,24 @@ public class TaktPlantExportDto
     public string CodeAlias { get; set; } = string.Empty;
 
     /// <summary>
-    /// 默认区域文化编码（BCP47，如 zh-CN、en-US、ja-JP、zh-HK）
+    /// 区域文化编码（字典 sys_culture_code，选项 TaktCultures/options，DictValue=CultureCode）
     /// </summary>
     public string DefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂类型
+    /// 企业性质（字典 sys_enterprise_nature_type，DictValue=150 等）
     /// </summary>
-    public int PlantType { get; set; }
+    public string EnterpriseNature { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联公司代码（如 2300、2400；与公司 RelatedPlant 对称）
+    /// 行业属性（字典 sys_industry_attribute_type，DictValue=C 等）
     /// </summary>
-    public string RelatedCompany { get; set; } = string.Empty;
+    public string IndustryAttribute { get; set; } = string.Empty;
 
     /// <summary>
-    /// 企业性质（统计用登记注册类型代码，国统字〔1998〕200号）
+    /// 企业规模（字典 sys_enterprise_scale_type，DictValue=M 等）
     /// </summary>
-    public int EnterpriseNature { get; set; }
-
-    /// <summary>
-    /// 行业属性（GB/T 4754-2017 国民经济行业分类门类）
-    /// </summary>
-    public int IndustryAttribute { get; set; }
-
-    /// <summary>
-    /// 企业规模（统计上大中小微型划分代码 1–4）
-    /// </summary>
-    public int EnterpriseScale { get; set; }
+    public string EnterpriseScale { get; set; } = string.Empty;
 
     /// <summary>
     /// 经营范围
@@ -1171,19 +1403,24 @@ public class TaktPlantExportDto
     public DateTime? ClosingDate { get; set; }
 
     /// <summary>
-    /// 存续状态（市场主体登记状态）
+    /// 存续状态（字典 sys_entity_existence_status；1=存续（在营），2=吊销，3=注销，4=迁出，5=停业）
     /// </summary>
-    public int PlantExistence { get; set; }
+    public int PlantExistence { get; set; } = 0;
 
     /// <summary>
-    /// 工厂状态
+    /// 关联公司（关联 TaktCompany.CompanyCode，选项 TaktCompanies/options）
     /// </summary>
-    public int PlantStatus { get; set; }
+    public string RelatedCompany { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
+
+    /// <summary>
+    /// 工厂状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// </summary>
+    public int PlantStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

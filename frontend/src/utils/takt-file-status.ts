@@ -4,7 +4,7 @@
 // 文件名称：takt-file-status.ts
 // 创建时间：2026-06-13
 // 创建人：Takt
-// 功能描述：文件状态常量与判定（字典 sys_normal_disable_status；与后端 TaktFileStatusHelper 对齐）
+// 功能描述：文件状态常量与判定（字典 sys_normal_disable_status；与后端 TaktFileHelper 对齐）
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================

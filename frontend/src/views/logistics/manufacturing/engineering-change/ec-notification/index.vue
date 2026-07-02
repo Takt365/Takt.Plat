@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/engineering-change/ec-notification -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：工程变更通知单实体管理页面，含查询、增删改，由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成 -->
+<!-- 功能描述：工程变更通知单管理页面，含查询、增删改，由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="logistics:manufacturing:engineering:change:ec:notification:create"
-      update-permission="logistics:manufacturing:engineering:change:ec:notification:update"
-      delete-permission="logistics:manufacturing:engineering:change:ec:notification:delete"
-      import-permission="logistics:manufacturing:engineering:change:ec:notification:import"
-      export-permission="logistics:manufacturing:engineering:change:ec:notification:export"
+      create-permission="logistics:manufacturing:engineering:change:gijutsu:create"
+      update-permission="logistics:manufacturing:engineering:change:gijutsu:update"
+      delete-permission="logistics:manufacturing:engineering:change:gijutsu:delete"
+      import-permission="logistics:manufacturing:engineering:change:gijutsu:import"
+      export-permission="logistics:manufacturing:engineering:change:gijutsu:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -248,10 +248,11 @@
       </div>
       <div v-show="isFieldVisible('approvalStatus')">
       <a-form-item :label="t('entity.ecnotification.approvalstatus')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.approvalStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecnotification.approvalstatus') })"
-          style="width: 100%"
+          dict-type="sys_approval_status"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ecnotification.approvalstatus') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -336,7 +337,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -347,7 +348,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -405,6 +406,7 @@
       @cancel="handleImportCancel"
     >
       <TaktImportFile
+        v-if="importVisible"
         entity-i18n-key="entity.ecnotification._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
@@ -433,7 +435,7 @@
 
 <script setup lang="ts">
 /**
- * 工程变更通知单实体管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
+ * 工程变更通知单管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/logistics/manufacturing/engineering-change/ec-notification
  */
 import { ref, computed, onMounted } from 'vue'
@@ -447,6 +449,7 @@ import { getEcNotificationList, getEcNotificationById, createEcNotification, upd
 import type { EcNotification, EcNotificationQuery } from '@/types/logistics/manufacturing/engineering-change/ec-notification'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
@@ -525,8 +528,8 @@ const queryFieldsMeta = computed(() => [
   { key: 'ecId', label: t('entity.ecnotification.ecid') },
   { key: 'ecNo', label: t('entity.ecnotification.ecno') },
   { key: 'ecTitle', label: t('entity.ecnotification.ectitle') },
-  { key: 'ecNotificationDateStart', label: t('entity.ecnotification.datestart') },
-  { key: 'ecNotificationDateEnd', label: t('entity.ecnotification.dateend') },
+  { key: 'ecNotificationDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.ecnotification.date')) },
+  { key: 'ecNotificationDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.ecnotification.date')) },
   { key: 'ecNotificationDeptCodes', label: t('entity.ecnotification.deptcodes') },
   { key: 'ecNotificationDeptNames', label: t('entity.ecnotification.deptnames') },
   { key: 'ecNotificationNotifierId', label: t('entity.ecnotification.notifierid') },
@@ -751,13 +754,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEcNotificationField(record, 'ecNotificationStatus') ?? ''
   },
   {
-    title: t('entity.ecnotification.ec'),
-    dataIndex: 'ec',
-    key: 'ec',
+    title: t('entity.ecnotification.eceng'),
+    dataIndex: 'ecEng',
+    key: 'ecEng',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEcNotificationField(record, 'ec') ?? ''
+    customRender: ({ record }: { record: any }) => getEcNotificationField(record, 'ecEng') ?? ''
   },
   CreateActionColumn({
     actions: [
@@ -766,7 +769,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:manufacturing:engineering:change:ec:notification:update',
+        permission: 'logistics:manufacturing:engineering:change:gijutsu:update',
         onClick: (record: EcNotification) => handleEdit(record)
       },
       {
@@ -774,7 +777,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:manufacturing:engineering:change:ec:notification:delete',
+        permission: 'logistics:manufacturing:engineering:change:gijutsu:delete',
         onClick: (record: EcNotification) => handleDeleteOne(record)
       }
     ]
@@ -802,7 +805,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: EcNotification, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getEcNotificationId(selectedRow.value) === getEcNotificationId(record)) {
+    } else if (selectedRow.value && getEcNotificationId(selectedRow.value) === getEcNotificationId(record)) {
       selectedRow.value = null
     }
   },
@@ -957,15 +960,18 @@ async function handleDownloadTemplate(sheetName?: string, fileName?: string): Pr
   return (res as any)?.data ?? res
 }
 
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importEcNotification(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importEcNotification(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
+  }
 }
 
 /** 关闭导入对话框 */

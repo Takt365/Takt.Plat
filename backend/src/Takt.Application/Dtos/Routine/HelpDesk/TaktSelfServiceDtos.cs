@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Routine.HelpDesk
 // 文件名称：TaktSelfServiceDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SelfService 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSelfService 生成，请按需审阅）
 // 
@@ -14,7 +14,6 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Dtos.Routine.HelpDesk;
 
@@ -49,7 +48,7 @@ public class TaktSelfServiceDto : TaktCompanyDtoBase
     /// <summary>
     /// 描述
     /// </summary>
-    public string? Description { get; set; } = string.Empty;
+    public string? SelfServiceDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 链接地址或表单编码
@@ -62,14 +61,19 @@ public class TaktSelfServiceDto : TaktCompanyDtoBase
     public string? IconUrl { get; set; } = string.Empty;
 
     /// <summary>
-    /// 自助服务状态（1=启用，0=禁用）
+    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
     /// </summary>
-    public int SelfServiceStatus { get; set; }
+    public string? Attachments { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
+
+    /// <summary>
+    /// 自助服务状态（1=启用，0=禁用）
+    /// </summary>
+    public int SelfServiceStatus { get; set; } = 0;
 
 }
 
@@ -106,7 +110,7 @@ public class TaktSelfServiceQueryDto : TaktPagedQuery
     /// <summary>
     /// 描述
     /// </summary>
-    public string? Description { get; set; } = string.Empty;
+    public string? SelfServiceDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 链接地址或表单编码
@@ -119,14 +123,19 @@ public class TaktSelfServiceQueryDto : TaktPagedQuery
     public string? IconUrl { get; set; } = string.Empty;
 
     /// <summary>
-    /// 自助服务状态（1=启用，0=禁用）
+    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
     /// </summary>
-    public int? SelfServiceStatus { get; set; }
+    public string? Attachments { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号（越小越靠前）
     /// </summary>
     public int? SortOrder { get; set; }
+
+    /// <summary>
+    /// 自助服务状态（1=启用，0=禁用）
+    /// </summary>
+    public int? SelfServiceStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -169,7 +178,7 @@ public class TaktSelfServiceCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -187,7 +196,7 @@ public class TaktSelfServiceCreateDto
     /// <summary>
     /// 描述
     /// </summary>
-    public string? Description { get; set; } = string.Empty;
+    public string? SelfServiceDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 链接地址或表单编码
@@ -200,14 +209,14 @@ public class TaktSelfServiceCreateDto
     public string? IconUrl { get; set; } = string.Empty;
 
     /// <summary>
-    /// 自助服务状态（1=启用，0=禁用）
+    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
     /// </summary>
-    public int SelfServiceStatus { get; set; }
+    public string? Attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 自助服务状态（1=启用，0=禁用）
     /// </summary>
-    public int SortOrder { get; set; } = 0;
+    public int SelfServiceStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -262,7 +271,7 @@ public class TaktSelfServiceStatusDto
     /// 自助服务状态（1=启用，0=禁用）
     /// </summary>
     [Required(ErrorMessage = "自助服务状态（1=启用，0=禁用）不能为空")]
-    public int SelfServiceStatus { get; set; }
+    public int SelfServiceStatus { get; set; } = 0;
 }
 
 // ========================================
@@ -321,7 +330,7 @@ public class TaktSelfServiceTemplateDto
     /// <summary>
     /// 描述
     /// </summary>
-    public string? Description { get; set; } = string.Empty;
+    public string? SelfServiceDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 链接地址或表单编码
@@ -334,14 +343,14 @@ public class TaktSelfServiceTemplateDto
     public string? IconUrl { get; set; } = string.Empty;
 
     /// <summary>
+    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// </summary>
+    public string? Attachments { get; set; } = string.Empty;
+
+    /// <summary>
     /// 自助服务状态（1=启用，0=禁用）
     /// </summary>
     public int? SelfServiceStatus { get; set; }
-
-    /// <summary>
-    /// 排序号（越小越靠前）
-    /// </summary>
-    public int? SortOrder { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -371,7 +380,7 @@ public class TaktSelfServiceImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -388,7 +397,7 @@ public class TaktSelfServiceImportDto
     /// <summary>
     /// 描述
     /// </summary>
-    public string? Description { get; set; } = string.Empty;
+    public string? SelfServiceDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 链接地址或表单编码
@@ -401,14 +410,14 @@ public class TaktSelfServiceImportDto
     public string? IconUrl { get; set; } = string.Empty;
 
     /// <summary>
+    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// </summary>
+    public string? Attachments { get; set; } = string.Empty;
+
+    /// <summary>
     /// 自助服务状态（1=启用，0=禁用）
     /// </summary>
     public int? SelfServiceStatus { get; set; }
-
-    /// <summary>
-    /// 排序号（越小越靠前）
-    /// </summary>
-    public int? SortOrder { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -456,7 +465,7 @@ public class TaktSelfServiceExportDto
     /// <summary>
     /// 描述
     /// </summary>
-    public string? Description { get; set; } = string.Empty;
+    public string? SelfServiceDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 链接地址或表单编码
@@ -469,14 +478,19 @@ public class TaktSelfServiceExportDto
     public string? IconUrl { get; set; } = string.Empty;
 
     /// <summary>
-    /// 自助服务状态（1=启用，0=禁用）
+    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
     /// </summary>
-    public int SelfServiceStatus { get; set; }
+    public string? Attachments { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
+
+    /// <summary>
+    /// 自助服务状态（1=启用，0=禁用）
+    /// </summary>
+    public int SelfServiceStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

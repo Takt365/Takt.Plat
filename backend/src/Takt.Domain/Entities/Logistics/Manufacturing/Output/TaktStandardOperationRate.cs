@@ -5,6 +5,8 @@
 // 创建时间：2025-02-02
 // 创建人：Takt365(Cursor AI)
 // 功能描述：标准生产稼动率实体，定义工厂/年度/稼动率类型下的标准稼动率
+// 计算公式：OperationRate 为标准对标目标值（人工维护，非本表字段推导）；按 工厂 + 财务年度 + 稼动率类型 唯一维护
+// 对比参考：达成率(%) = 实际稼动率 ÷ 标准稼动率 × 100%（实际值取自人员/设备稼动率实绩）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -17,6 +19,7 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Output;
 
 /// <summary>
 /// 标准生产稼动率实体
+/// OperationRate 为标准对标目标值；对比参考：达成率(%) = 实际稼动率 ÷ 标准稼动率 × 100%。
 /// </summary>
 [SugarTable("takt_logistics_manufacturing_output_standard_operation_rate", "标准生产稼动率表")]
 [SugarIndex("ix_standard_operation_rate_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
@@ -25,7 +28,7 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Output;
 public class TaktStandardOperationRate : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
@@ -61,10 +64,10 @@ public class TaktStandardOperationRate : TaktCompanyEntityBase
     public DateTime? ExpiryDate { get; set; }
 
     /// <summary>
-    /// 状态
+    /// 状态（字典 sys_normal_disable_status；0=禁用，1=启用）
     /// </summary>
-    [SugarColumn(ColumnName = "status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int Status { get; set; } = 0;
+    [SugarColumn(ColumnName = "status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
+    public int StandardOperationRateStatus { get; set; } = 1;
 
     /// <summary>
     /// 标准生产稼动率变更记录列表（外键在子表 TaktStandardOperationRateChangeLog.StandardOperationRateId）

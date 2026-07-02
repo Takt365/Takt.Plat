@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/sales/order/components -->
 <!-- 文件名称：order-form.vue -->
-<!-- 功能描述：Takt采购订单实体维护弹窗内嵌表单（上主下从级联保存）。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：Takt销售订单实体维护弹窗内嵌表单（上主下从级联保存）。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -29,12 +29,12 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.tenantcode')"
+                :label="pi.label('tenantCode')"
                 name="tenantCode"
               >
                 <a-input
                   v-model:value="formState.tenantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
+                  :placeholder="pi.ph('tenantCode')"
                   show-count
                   :maxlength="20"
                   disabled
@@ -43,12 +43,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.companycode')"
+                :label="pi.label('companyCode')"
                 name="companyCode"
               >
                 <a-input
                   v-model:value="formState.companyCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
+                  :placeholder="pi.ph('companyCode')"
                   show-count
                   :maxlength="20"
                   disabled
@@ -57,12 +57,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.companydefaultculture')"
+                :label="pi.label('companyDefaultCulture')"
                 name="companyDefaultCulture"
               >
                 <a-input
                   v-model:value="formState.companyDefaultCulture"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
+                  :placeholder="pi.ph('companyDefaultCulture')"
                   show-count
                   :maxlength="20"
                   disabled
@@ -71,57 +71,53 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.purchaseorder.plantcode')"
+                :label="pi.label('plantCode')"
                 name="plantCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.plantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorder.plantcode') })"
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('plantCode')"
+                  :disabled="!!formData?.salesOrderId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('salesOrderCode')"
+                name="salesOrderCode"
+              >
+                <a-input
+                  v-model:value="formState.salesOrderCode"
+                  :placeholder="pi.ph('salesOrderCode')"
                   show-count
                   :maxlength="50"
                   allow-clear
-                  :disabled="!!formData?.purchaseOrderId"
+                  :disabled="!!formData?.salesOrderId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.purchaseorder.code')"
-                name="purchaseOrderCode"
+                :label="pi.label('customerCode')"
+                name="customerCode"
               >
-                <a-input
-                  v-model:value="formState.purchaseOrderCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorder.code') })"
-                  show-count
-                  :maxlength="10"
-                  allow-clear
-                  :disabled="!!formData?.purchaseOrderId"
+                <TaktSelect
+                  v-model:value="formState.customerCode"
+                  api-url="TaktCustomers/options"
+                  :placeholder="pi.ph('customerCode')"
+                  :disabled="!!formData?.salesOrderId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.purchaseorder.suppliercode')"
-                name="supplierCode"
+                :label="pi.label('customerName')"
+                name="customerName"
               >
                 <a-input
-                  v-model:value="formState.supplierCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorder.suppliercode') })"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
-                  :disabled="!!formData?.purchaseOrderId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.purchaseorder.suppliername')"
-                name="supplierName"
-              >
-                <a-input
-                  v-model:value="formState.supplierName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorder.suppliername') })"
+                  v-model:value="formState.customerName"
+                  :placeholder="pi.ph('customerName')"
                   show-count
                   :maxlength="200"
                   allow-clear
@@ -130,12 +126,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.purchaseorder.orderdate')"
+                :label="pi.label('orderDate')"
                 name="orderDate"
               >
                 <a-date-picker
                   v-model:value="formState.orderDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.orderdate') })"
+                  :placeholder="pi.ph('orderDate')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
@@ -143,12 +139,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.purchaseorder.requiredarrivaldate')"
-                name="requiredArrivalDate"
+                :label="pi.label('requiredDeliveryDate')"
+                name="requiredDeliveryDate"
               >
                 <a-date-picker
-                  v-model:value="formState.requiredArrivalDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.requiredarrivaldate') })"
+                  v-model:value="formState.requiredDeliveryDate"
+                  :placeholder="pi.ph('requiredDeliveryDate')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
@@ -156,12 +152,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.purchaseorder.actualarrivaldate')"
-                name="actualArrivalDate"
+                :label="pi.label('actualDeliveryDate')"
+                name="actualDeliveryDate"
               >
                 <a-date-picker
-                  v-model:value="formState.actualArrivalDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.actualarrivaldate') })"
+                  v-model:value="formState.actualDeliveryDate"
+                  :placeholder="pi.ph('actualDeliveryDate')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
@@ -179,123 +175,121 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.purchaseorder.purchasegroup')"
-                name="purchaseGroup"
+                :label="pi.label('salesBy')"
+                name="salesBy"
               >
-                <a-input
-                  v-model:value="formState.purchaseGroup"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorder.purchasegroup') })"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
+                <TaktSelect
+                  v-model:value="formState.salesBy"
+                  api-url="TaktEmployees/options"
+                  :placeholder="pi.ph('salesBy')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.purchaseorder.totalquantity')"
+                :label="pi.label('totalQuantity')"
                 name="totalQuantity"
               >
                 <a-input-number
                   v-model:value="formState.totalQuantity"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorder.totalquantity') })"
+                  :placeholder="pi.ph('totalQuantity')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.purchaseorder.totalamount')"
+                :label="pi.label('totalAmount')"
                 name="totalAmount"
               >
                 <a-input-number
                   v-model:value="formState.totalAmount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorder.totalamount') })"
+                  :placeholder="pi.ph('totalAmount')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.purchaseorder.discountamount')"
+                :label="pi.label('discountAmount')"
                 name="discountAmount"
               >
                 <a-input-number
                   v-model:value="formState.discountAmount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorder.discountamount') })"
+                  :placeholder="pi.ph('discountAmount')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.purchaseorder.taxamount')"
+                :label="pi.label('taxAmount')"
                 name="taxAmount"
               >
                 <a-input-number
                   v-model:value="formState.taxAmount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorder.taxamount') })"
+                  :placeholder="pi.ph('taxAmount')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.purchaseorder.actualamount')"
+                :label="pi.label('actualAmount')"
                 name="actualAmount"
               >
                 <a-input-number
                   v-model:value="formState.actualAmount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorder.actualamount') })"
+                  :placeholder="pi.ph('actualAmount')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.purchaseorder.receivedquantity')"
-                name="receivedQuantity"
+                :label="pi.label('shippedQuantity')"
+                name="shippedQuantity"
               >
                 <a-input-number
-                  v-model:value="formState.receivedQuantity"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorder.receivedquantity') })"
+                  v-model:value="formState.shippedQuantity"
+                  :placeholder="pi.ph('shippedQuantity')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.purchaseorder.receivedamount')"
+                :label="pi.label('shippedAmount')"
+                name="shippedAmount"
+              >
+                <a-input-number
+                  v-model:value="formState.shippedAmount"
+                  :placeholder="pi.ph('shippedAmount')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('receivedAmount')"
                 name="receivedAmount"
               >
                 <a-input-number
                   v-model:value="formState.receivedAmount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorder.receivedamount') })"
+                  :placeholder="pi.ph('receivedAmount')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.purchaseorder.paidamount')"
-                name="paidAmount"
-              >
-                <a-input-number
-                  v-model:value="formState.paidAmount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorder.paidamount') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.purchaseorder.orderstatus')"
-                name="orderStatus"
+                :label="pi.label('deliveryMethod')"
+                name="deliveryMethod"
               >
                 <TaktSelect
-                  v-model:value="formState.orderStatus"
-                  dict-type="sys_normal_disable_status"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.orderstatus') })"
+                  v-model:value="formState.deliveryMethod"
+                  dict-type="logistics_delivery_method_type"
+                  :placeholder="pi.ph('deliveryMethod')"
                 />
               </a-form-item>
             </a-col>
@@ -311,72 +305,86 @@
           <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.purchaseorder.deliverystatus')"
-                name="deliveryStatus"
-              >
-                <a-input-number
-                  v-model:value="formState.deliveryStatus"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorder.deliverystatus') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.purchaseorder.paymentmethod')"
+                :label="pi.label('paymentMethod')"
                 name="paymentMethod"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.paymentMethod"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorder.paymentmethod') })"
-                  style="width: 100%"
+                  dict-type="accounting_payment_method_type"
+                  :placeholder="pi.ph('paymentMethod')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.purchaseorder.deliverymethod')"
-                name="deliveryMethod"
-              >
-                <a-input-number
-                  v-model:value="formState.deliveryMethod"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorder.deliverymethod') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.purchaseorder.deliveryaddress')"
+                :label="pi.label('deliveryAddress')"
                 name="deliveryAddress"
               >
                 <a-textarea
                   v-model:value="formState.deliveryAddress"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.purchaseorder.deliveryaddress') })"
+                  :placeholder="pi.ph('deliveryAddress')"
                   :rows="2"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.purchaseorder.extfield')"
-                name="ExtField"
+                :label="pi.label('orderStatus')"
+                name="orderStatus"
               >
-                <a-textarea
-                  v-model:value="formState.ExtField"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.purchaseorder.extfield') })"
-                  :rows="2"
+                <TaktSelect
+                  v-model:value="formState.orderStatus"
+                  dict-type="sys_normal_disable_status"
+                  :placeholder="pi.ph('orderStatus')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.remark')"
+                :label="pi.label('deliveryStatus')"
+                name="deliveryStatus"
+              >
+                <TaktSelect
+                  v-model:value="formState.deliveryStatus"
+                  dict-type="logistics_delivery_status"
+                  :placeholder="pi.ph('deliveryStatus')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                name="extField"
+                class="takt-form-item-ext-field"
+              >
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t('common.page.entity.extfieldhint')"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ pi.label('extField') }}</span>
+                  </span>
+                </template>
+                <a-textarea
+                  v-model:value="formState.extField"
+                  :placeholder="t('common.page.form.placeholder.extfield')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('remark')"
                 name="remark"
               >
                 <a-textarea
                   v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+                  :placeholder="pi.ph('remark')"
                   :rows="4"
                   show-count
                   :maxlength="400"
@@ -390,13 +398,13 @@
     </a-tabs>
     <!-- 下：子表 items -->
     <TaktEditableTable
-      ref="purchaseOrderItemTableRef"
-      v-model="childPurchaseOrderItemRows"
-      :columns="purchaseOrderItemFormColumns"
-      :title="t('entity.purchaseorderitem._self')"
-      :add-button-entity="t('entity.purchaseorderitem._self')"
-      id-field="purchaseOrderItemId"
-      :default-row="createDefaultPurchaseOrderItemRow"
+      ref="salesOrderItemTableRef"
+      v-model="childSalesOrderItemRows"
+      :columns="salesOrderItemFormColumns"
+      :title="salesOrderItemPi.self()"
+      :add-button-entity="salesOrderItemPi.self()"
+      id-field="salesOrderItemId"
+      :default-row="createDefaultSalesOrderItemRow"
       :disabled="loading"
       section-border
     />
@@ -405,14 +413,20 @@
 
 <script setup lang="ts">
 /**
- * Takt采购订单实体维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
+ * Takt销售订单实体维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/sales/order/components
  */
 import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
-import type { PurchaseOrderCreate } from '@/types/logistics/procurement/order'
+import { useSalesOrderI18n } from '../composables/use-order-i18n'
+
+/** 实体字段 i18n */
+const pi = useSalesOrderI18n()
+
+import type { SalesOrderCreate } from '@/types/logistics/sales/order'
 import TaktSelect from '@/components/business/takt-select/index.vue'
+import { RiQuestionLine } from '@remixicon/vue'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
@@ -446,105 +460,109 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","purchaseOrderCode","supplierCode","supplierName","orderDate","requiredArrivalDate","actualArrivalDate","purchaseGroup","totalQuantity","totalAmount","discountAmount","taxAmount","actualAmount","receivedQuantity","receivedAmount","paidAmount","orderStatus","deliveryStatus","paymentMethod","deliveryMethod","deliveryAddress","ExtField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","salesOrderCode","customerCode","customerName","orderDate","requiredDeliveryDate","actualDeliveryDate","salesBy","totalQuantity","totalAmount","discountAmount","taxAmount","actualAmount","shippedQuantity","shippedAmount","receivedAmount","deliveryMethod","paymentMethod","deliveryAddress","orderStatus","deliveryStatus","extField","remark"]
+
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+import { useSalesOrderItemI18n } from '../composables/use-order-item-i18n'
 
-const childPurchaseOrderItemRows = ref<Record<string, unknown>[]>([])
-const purchaseOrderItemTableRef = ref<{
+const salesOrderItemPi = useSalesOrderItemI18n()
+
+const childSalesOrderItemRows = ref<Record<string, unknown>[]>([])
+const salesOrderItemTableRef = ref<{
   getRows: () => Record<string, unknown>[]
   validate: () => Promise<unknown>
   resetRows: () => void
 } | null>(null)
 
-/** 子表 purchaseOrderItem 可编辑列 */
-const purchaseOrderItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
+/** 子表 salesOrderItem 可编辑列 */
+const salesOrderItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
     key: 'lineNumber',
-    title: t('entity.purchaseorderitem.linenumber'),
+    title: salesOrderItemPi.label('lineNumber'),
     editor: 'inputNumber',
     width: 140, summary: 'sum',
   },
   {
-    key: 'requestCode',
-    title: t('entity.purchaseorderitem.requestcode'),
-    editor: 'input',
-    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.purchaseorderitem.requestcode') }),
-  },
-  {
-    key: 'requestLineNumber',
-    title: t('entity.purchaseorderitem.requestlinenumber'),
-    editor: 'inputNumber',
-    width: 140,
-  },
-  {
     key: 'materialCode',
-    title: t('entity.purchaseorderitem.materialcode'),
+    title: salesOrderItemPi.label('materialCode'),
     editor: 'input',
     width: 140,
   },
   {
     key: 'materialName',
-    title: t('entity.purchaseorderitem.materialname'),
+    title: salesOrderItemPi.label('materialName'),
     editor: 'input',
     width: 140,
   },
   {
     key: 'materialSpecification',
-    title: t('entity.purchaseorderitem.materialspecification'),
+    title: salesOrderItemPi.label('materialSpecification'),
     editor: 'input',
-    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.purchaseorderitem.materialspecification') }),
+    width: 140, allowClear: true, placeholder: salesOrderItemPi.ph('materialSpecification'),
   },
   {
-    key: 'purchaseUnit',
-    title: t('entity.purchaseorderitem.purchaseunit'),
+    key: 'salesUnit',
+    title: salesOrderItemPi.label('salesUnit'),
     editor: 'input',
     width: 140,
   },
   {
     key: 'orderQuantity',
-    title: t('entity.purchaseorderitem.orderquantity'),
+    title: salesOrderItemPi.label('orderQuantity'),
+    editor: 'inputNumber',
+    width: 140,
+  },
+  {
+    key: 'shippedQuantity',
+    title: salesOrderItemPi.label('shippedQuantity'),
+    editor: 'inputNumber',
+    width: 140,
+  },
+  {
+    key: 'salesPerUnit',
+    title: salesOrderItemPi.label('salesPerUnit'),
     editor: 'inputNumber',
     width: 140,
   },
 ])
 
 /** 编辑态从 formData 同步各子表行 */
-function syncChildRowsFromFormData(val: Partial<PurchaseOrderCreate & { purchaseOrderId?: string }> | null | undefined) {
-  childPurchaseOrderItemRows.value = ((val as any)?.items ?? []) as Record<string, unknown>[]
+function syncChildRowsFromFormData(val: Partial<SalesOrderCreate & { salesOrderId?: string }> | null | undefined) {
+  childSalesOrderItemRows.value = ((val as any)?.items ?? []) as Record<string, unknown>[]
 }
 
-function createDefaultPurchaseOrderItemRow(): Record<string, unknown> {
+function createDefaultSalesOrderItemRow(): Record<string, unknown> {
   return {
-    lineNumber: (childPurchaseOrderItemRows.value.length + 1) * 10,
-    requestCode: '',
-    requestLineNumber: 0,
+    lineNumber: (childSalesOrderItemRows.value.length + 1) * 10,
     materialCode: '',
     materialName: '',
     materialSpecification: '',
-    purchaseUnit: '',
+    salesUnit: '',
     orderQuantity: 0,
+    shippedQuantity: 0,
+    salesPerUnit: 0,
   }
 }
 
 /** 组装 Create/Update 载荷（主表 + 子表数组） */
 function buildSubmitPayload() {
-  const masterId = props.formData?.purchaseOrderId ?? ''
+  const masterId = props.formData?.salesOrderId ?? ''
   return {
     ...formState,
-    items: purchaseOrderItemTableRef.value?.getRows?.() ?? childPurchaseOrderItemRows.value.map((rest) => ({
+    items: salesOrderItemTableRef.value?.getRows?.() ?? childSalesOrderItemRows.value.map((rest) => ({
       ...rest,
       tenantCode: tenantStore.tenantCode,
       companyCode: tenantStore.companyCode,
       companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      purchaseOrderId: masterId,
+      salesOrderId: masterId,
     })),
   }
 }
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
-  formData?: Partial<PurchaseOrderCreate & { purchaseOrderId?: string }> | null
+  formData?: Partial<SalesOrderCreate & { salesOrderId?: string }> | null
   /** 父级提交 loading，禁用表单项 */
   loading?: boolean
 }
@@ -560,7 +578,10 @@ const formRef = ref()
 const formState = reactive<Record<string, any>>({})
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
-  orderStatus: 1
+  deliveryMethod: 0,
+  paymentMethod: 0,
+  orderStatus: 1,
+  deliveryStatus: 0
 }
 
 /** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
@@ -576,11 +597,11 @@ onMounted(() => {
   void dictDataStore.loadAllDictDataAsync()
 })
 
-/** 编辑态灌入 formData；新增态恢复默认值（须含 purchaseOrderId 才视为编辑） */
+/** 编辑态灌入 formData；新增态恢复默认值（须含 salesOrderId 才视为编辑） */
 watch(
   () => props.formData,
   (val) => {
-    if (val?.purchaseOrderId) {
+    if (val?.salesOrderId) {
       const next = { ...val } as Record<string, unknown>
       Object.keys(formState).forEach((k) => delete formState[k])
     delete (next as any).items
@@ -605,7 +626,7 @@ watch(
 watch(
   () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
   () => {
-    const isCreate = !props.formData?.purchaseOrderId
+    const isCreate = !props.formData?.salesOrderId
     if (isCreate) {
       applyScopeDefaults(formState, true)
     }
@@ -617,46 +638,46 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   plantCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.purchaseorder.plantcode') }),
+      message: pi.ph('plantCode'),
+      trigger: 'change'
+    }
+  ],
+  salesOrderCode: [
+    {
+      required: true,
+      message: pi.ph('salesOrderCode'),
       trigger: 'blur'
     }
   ],
-  purchaseOrderCode: [
+  customerCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.purchaseorder.code') }),
-      trigger: 'blur'
+      message: pi.ph('customerCode'),
+      trigger: 'change'
     }
   ],
-  supplierCode: [
+  customerName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.purchaseorder.suppliercode') }),
-      trigger: 'blur'
-    }
-  ],
-  supplierName: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.purchaseorder.suppliername') }),
+      message: pi.ph('customerName'),
       trigger: 'blur'
     }
   ],
   orderDate: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.orderdate') }),
+      message: pi.ph('orderDate'),
       trigger: 'change'
     }
   ],
   totalQuantity: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.totalquantity') }))
+        return Promise.reject(pi.ph('totalQuantity'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.totalquantity') }))
+        return Promise.reject(pi.ph('totalQuantity'))
       }
       return Promise.resolve()
     },
@@ -665,11 +686,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   totalAmount: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.totalamount') }))
+        return Promise.reject(pi.ph('totalAmount'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.totalamount') }))
+        return Promise.reject(pi.ph('totalAmount'))
       }
       return Promise.resolve()
     },
@@ -678,11 +699,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   discountAmount: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.discountamount') }))
+        return Promise.reject(pi.ph('discountAmount'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.discountamount') }))
+        return Promise.reject(pi.ph('discountAmount'))
       }
       return Promise.resolve()
     },
@@ -691,11 +712,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   taxAmount: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.taxamount') }))
+        return Promise.reject(pi.ph('taxAmount'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.taxamount') }))
+        return Promise.reject(pi.ph('taxAmount'))
       }
       return Promise.resolve()
     },
@@ -704,24 +725,37 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   actualAmount: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.actualamount') }))
+        return Promise.reject(pi.ph('actualAmount'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.actualamount') }))
+        return Promise.reject(pi.ph('actualAmount'))
       }
       return Promise.resolve()
     },
     trigger: 'change'
   }],
-  receivedQuantity: [{
+  shippedQuantity: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.receivedquantity') }))
+        return Promise.reject(pi.ph('shippedQuantity'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.receivedquantity') }))
+        return Promise.reject(pi.ph('shippedQuantity'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  shippedAmount: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('shippedAmount'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('shippedAmount'))
       }
       return Promise.resolve()
     },
@@ -730,63 +764,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   receivedAmount: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.receivedamount') }))
+        return Promise.reject(pi.ph('receivedAmount'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.receivedamount') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  paidAmount: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.paidamount') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.paidamount') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  orderStatus: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.orderstatus') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.orderstatus') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  deliveryStatus: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.deliverystatus') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.deliverystatus') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  paymentMethod: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.paymentmethod') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.paymentmethod') }))
+        return Promise.reject(pi.ph('receivedAmount'))
       }
       return Promise.resolve()
     },
@@ -795,11 +777,50 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   deliveryMethod: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.deliverymethod') }))
+        return Promise.reject(pi.ph('deliveryMethod'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.deliverymethod') }))
+        return Promise.reject(pi.ph('deliveryMethod'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  paymentMethod: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('paymentMethod'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('paymentMethod'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  orderStatus: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('orderStatus'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('orderStatus'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  deliveryStatus: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('deliveryStatus'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('deliveryStatus'))
       }
       return Promise.resolve()
     },
@@ -810,7 +831,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
 async function validate() {
   await formRef.value?.validate()
-  await purchaseOrderItemTableRef.value?.validate?.()
+  await salesOrderItemTableRef.value?.validate?.()
   return formState
 }
 
@@ -837,17 +858,25 @@ function getValues(): Record<string, any> {
     const rawactualAmount = payload.actualAmount
     payload.actualAmount = typeof rawactualAmount === 'number' ? rawactualAmount : Number(rawactualAmount)
   }
-  if ('receivedQuantity' in payload) {
-    const rawreceivedQuantity = payload.receivedQuantity
-    payload.receivedQuantity = typeof rawreceivedQuantity === 'number' ? rawreceivedQuantity : Number(rawreceivedQuantity)
+  if ('shippedQuantity' in payload) {
+    const rawshippedQuantity = payload.shippedQuantity
+    payload.shippedQuantity = typeof rawshippedQuantity === 'number' ? rawshippedQuantity : Number(rawshippedQuantity)
+  }
+  if ('shippedAmount' in payload) {
+    const rawshippedAmount = payload.shippedAmount
+    payload.shippedAmount = typeof rawshippedAmount === 'number' ? rawshippedAmount : Number(rawshippedAmount)
   }
   if ('receivedAmount' in payload) {
     const rawreceivedAmount = payload.receivedAmount
     payload.receivedAmount = typeof rawreceivedAmount === 'number' ? rawreceivedAmount : Number(rawreceivedAmount)
   }
-  if ('paidAmount' in payload) {
-    const rawpaidAmount = payload.paidAmount
-    payload.paidAmount = typeof rawpaidAmount === 'number' ? rawpaidAmount : Number(rawpaidAmount)
+  if ('deliveryMethod' in payload) {
+    const rawdeliveryMethod = payload.deliveryMethod
+    payload.deliveryMethod = typeof rawdeliveryMethod === 'number' ? rawdeliveryMethod : Number(rawdeliveryMethod)
+  }
+  if ('paymentMethod' in payload) {
+    const rawpaymentMethod = payload.paymentMethod
+    payload.paymentMethod = typeof rawpaymentMethod === 'number' ? rawpaymentMethod : Number(rawpaymentMethod)
   }
   if ('orderStatus' in payload) {
     const raworderStatus = payload.orderStatus
@@ -856,14 +885,6 @@ function getValues(): Record<string, any> {
   if ('deliveryStatus' in payload) {
     const rawdeliveryStatus = payload.deliveryStatus
     payload.deliveryStatus = typeof rawdeliveryStatus === 'number' ? rawdeliveryStatus : Number(rawdeliveryStatus)
-  }
-  if ('paymentMethod' in payload) {
-    const rawpaymentMethod = payload.paymentMethod
-    payload.paymentMethod = typeof rawpaymentMethod === 'number' ? rawpaymentMethod : Number(rawpaymentMethod)
-  }
-  if ('deliveryMethod' in payload) {
-    const rawdeliveryMethod = payload.deliveryMethod
-    payload.deliveryMethod = typeof rawdeliveryMethod === 'number' ? rawdeliveryMethod : Number(rawdeliveryMethod)
   }
   if ('sortOrder' in payload) delete payload.sortOrder
   return payload
@@ -876,9 +897,9 @@ function resetFields() {
     Object.assign(formState, props.formData)
   }
   applyFormDefaults(formState)
-  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.purchaseOrderId)
-  childPurchaseOrderItemRows.value = []
-  purchaseOrderItemTableRef.value?.resetRows?.()
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.salesOrderId)
+  childSalesOrderItemRows.value = []
+  salesOrderItemTableRef.value?.resetRows?.()
   activeTab.value = 'tab-0'
   formRef.value?.clearValidate()
 }

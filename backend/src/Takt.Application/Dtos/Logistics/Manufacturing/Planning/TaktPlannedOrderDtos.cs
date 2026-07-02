@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Planning
 // 文件名称：TaktPlannedOrderDtos.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PlannedOrder 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPlannedOrder 生成，请按需审阅）
 // 
@@ -232,7 +232,7 @@ public class TaktPlannedOrderCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -400,9 +400,24 @@ public class TaktPlannedOrderTemplateDto
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 计划数量
+    /// </summary>
+    public decimal? PlannedQuantity { get; set; }
+
+    /// <summary>
     /// 计量单位
     /// </summary>
     public string? UnitOfMeasure { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 计划开始时间
+    /// </summary>
+    public DateTime? PlannedStartTime { get; set; }
+
+    /// <summary>
+    /// 计划结束时间
+    /// </summary>
+    public DateTime? PlannedEndTime { get; set; }
 
     /// <summary>
     /// 工艺路线编码（关联 TaktRouting.RoutingCode）
@@ -442,7 +457,7 @@ public class TaktPlannedOrderImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -474,9 +489,24 @@ public class TaktPlannedOrderImportDto
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 计划数量
+    /// </summary>
+    public decimal? PlannedQuantity { get; set; }
+
+    /// <summary>
     /// 计量单位
     /// </summary>
     public string? UnitOfMeasure { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 计划开始时间
+    /// </summary>
+    public DateTime? PlannedStartTime { get; set; }
+
+    /// <summary>
+    /// 计划结束时间
+    /// </summary>
+    public DateTime? PlannedEndTime { get; set; }
 
     /// <summary>
     /// 工艺路线编码（关联 TaktRouting.RoutingCode）

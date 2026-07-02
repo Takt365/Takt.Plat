@@ -22,12 +22,14 @@ function buildTreeIndexStateRefs(entityPascal, options) {
     idField,
     titleField,
     queryInit,
-    queryFieldsMetaBlock,
-    searchPlaceholderFields,
+    queryFactoryBlock,
+    searchFieldLabelExprs,
     needsUserStore,
     needsExcelNames,
     entityClassName,
+    entityPascal: entityPascalOpt,
   } = options;
+  const i18nPrefix = (entityPascalOpt || entityPascal).toUpperCase();
   const formBlock = hasForm ? `
 /** 新增/编辑弹窗是否打开 */
 const formVisible = ref(false)
@@ -52,7 +54,7 @@ const excelNames = taktExcelEntityNames('${entityClassName}')
 ` : ''}/** 右侧树表快捷查询占位文案 */
 const tableSearchPlaceholder = computed(() =>
   t('common.page.form.placeholder.search', {
-    keyword: [${searchPlaceholderFields}].join(' / '),
+    keyword: [${searchFieldLabelExprs}].join(' / '),
   })
 )
 
@@ -79,22 +81,22 @@ const entityTreeData = ref<TreeDataItem[]>([])
 /** 左侧树当前选中的节点 key 列表 */
 const selectedTreeKeys = ref<(string | number)[]>([])
 /** 工具栏单选时当前行（编辑/删除） */
-const selectedRow = ref<${entityPascal} | null>(null)
+const selectedRow = ref<${entityPascal}RowRecord | null>(null)
 /** 表格多选行 */
-const selectedRows = ref<${entityPascal}[]>([])
+const selectedRows = ref<${entityPascal}RowRecord[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 ${formBlock}
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
-/** 高级查询表单模型 */
-const advancedQueryForm = ref({
+${queryFactoryBlock ? `${queryFactoryBlock}\n` : ''}/** 高级查询表单模型 */
+const advancedQueryForm = ref(${queryFactoryBlock ? 'createEmptyAdvancedQueryForm()' : `{
 ${queryInit}
-})
+}`})
 /** 高级查询字段元数据（列显隐配置） */
-const queryFieldsMeta = computed(() => [
-${queryFieldsMetaBlock}
-])
+const queryFieldsMeta = computed(() =>
+  ${i18nPrefix}_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 ${importLine}/** 列设置抽屉是否打开 */
@@ -120,10 +122,13 @@ function buildSingleIndexStateRefs(entityPascal, options) {
     hasUpdate,
     hasDelete,
     queryInit,
-    queryFieldsMetaBlock,
+    queryFactoryBlock,
+    entityPascal: entityPascalOpt,
     entityIdName,
     excelConst,
+    defaultVisibleColumnKeysLiteral,
   } = options;
+  const i18nPrefix = (entityPascalOpt || entityPascal).toUpperCase();
   const formBlock = hasForm ? `
 /** 新增/编辑弹窗是否打开 */
 const formVisible = ref(false)
@@ -145,11 +150,21 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
   const deleteDisabled = hasDelete ? `/** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 ` : '';
+  const visibleColumnKeysBlock = defaultVisibleColumnKeysLiteral
+    ? `/** 默认可见列（id + 前 8 个业务列 + 操作列，与 CRUD 单表一致） */
+const DEFAULT_VISIBLE_COLUMN_KEYS: string[] = ${defaultVisibleColumnKeysLiteral}
+
+/** 表格当前可见列 key */
+const visibleColumnKeys = ref<string[]>([...DEFAULT_VISIBLE_COLUMN_KEYS])
+`
+    : `/** 表格当前可见列 key */
+const visibleColumnKeys = ref<string[]>([])
+`;
   return `/** i18n 翻译函数 */
 const { t } = useI18n()
 ${excelConst}/** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.${options.entityI18nSlug || options.entityCamel}._self') })
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() })
 )
 
 /** 快捷查询关键字 */
@@ -165,29 +180,27 @@ const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
-const selectedRow = ref<${entityPascal} | null>(null)
+const selectedRow = ref<${entityPascal}RowRecord | null>(null)
 /** 表格多选行 */
-const selectedRows = ref<${entityPascal}[]>([])
+const selectedRows = ref<${entityPascal}RowRecord[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 ${formBlock}
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
-/** 高级查询表单模型 */
-const advancedQueryForm = ref({
+${queryFactoryBlock ? `${queryFactoryBlock}\n` : ''}/** 高级查询表单模型 */
+const advancedQueryForm = ref(${queryFactoryBlock ? 'createEmptyAdvancedQueryForm()' : `{
 ${queryInit}
-})
+}`})
 /** 高级查询字段元数据（列显隐配置） */
-const queryFieldsMeta = computed(() => [
-${queryFieldsMetaBlock}
-])
+const queryFieldsMeta = computed(() =>
+  ${i18nPrefix}_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
 const columnSettingVisible = ref(false)
-${importLine}/** 表格当前可见列 key */
-const visibleColumnKeys = ref<string[]>([])
-/** 实体主键字段名（row-key、API 路径参数） */
+${importLine}${visibleColumnKeysBlock}/** 实体主键字段名（row-key、API 路径参数） */
 const entityIdName = '${entityIdName}'
 ${updateDisabled}${deleteDisabled}`;
 }
@@ -197,19 +210,30 @@ ${updateDisabled}${deleteDisabled}`;
  * @param {object} options
  */
 function buildFormScriptStateBlock(options) {
-  const { formContentClassExpr, formFieldsJson, mdScript, scopeStoreScript, useFormTabs = true } = options;
+  const {
+    formContentClassExpr,
+    formFieldsJson,
+    mdScript,
+    scopeStoreScript,
+    useFormTabs = true,
+    omitFormFieldsArray = false,
+  } = options;
   const formContentScript = useFormTabs
-    ? `/** 表单内容区高度 class（字段多时 tab-10 行） */
+    ? `/** 表单内容区高度 class${omitFormFieldsArray ? '（多 Tab 大表单固定 10 行高度）' : '（字段多时 tab-10 行）'} */
 const formContentClass = ${formContentClassExpr}
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 `
     : '';
+  const formFieldsBlock = omitFormFieldsArray
+    ? ''
+    : `/** CreateDto 字段名列表（与 formState 键对齐） */
+const formFields = ${formFieldsJson}
+
+`;
   return `/** i18n 翻译函数 */
 const { t } = useI18n()
-${scopeStoreScript || ''}${formContentScript}/** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ${formFieldsJson}
-${mdScript}
+${scopeStoreScript || ''}${formContentScript}${formFieldsBlock}${mdScript}
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {

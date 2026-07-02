@@ -106,11 +106,11 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('titleCode')">
-      <a-form-item :label="t('entity.accounttitlechangelog.titlecode')">
+      <div v-show="isFieldVisible('accountTitleCode')">
+      <a-form-item :label="t('entity.accounttitlechangelog.code')">
         <a-input
-          v-model:value="advancedQueryForm.titleCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accounttitlechangelog.titlecode') })"
+          v-model:value="advancedQueryForm.accountTitleCode"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accounttitlechangelog.code') })"
           show-count
           :maxlength="50"
           allow-clear
@@ -302,7 +302,7 @@ const formRef = ref()
 
 const advancedQueryVisible = ref(false)
 const advancedQueryForm = ref({
-  titleCode: '',
+  accountTitleCode: '',
   changeFields: '',
   changeTimeStart: '',
   changeTimeEnd: '',
@@ -317,7 +317,7 @@ const visibleQueryFieldKeys = ref<string[]>([])
 
 /** 高级查询字段元数据 */
 const queryFieldsMeta = computed(() => [
-  { key: 'titleCode', label: t('entity.accounttitlechangelog.titlecode') },
+  { key: 'accountTitleCode', label: t('entity.accounttitlechangelog.code') },
   { key: 'changeFields', label: t('entity.accounttitlechangelog.changefields') },
   { key: 'changeTimeStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.accounttitlechangelog.changetime')) },
   { key: 'changeTimeEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.accounttitlechangelog.changetime')) },
@@ -349,7 +349,7 @@ function handleAdvancedQuerySubmit() {
 
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
-  titleCode: '',
+  accountTitleCode: '',
   changeFields: '',
   changeTimeStart: '',
   changeTimeEnd: '',
@@ -403,14 +403,14 @@ const columns = computed<TableColumnsType>(() => [
       String(getAccountTitleChangeLogField(record, 'accountTitleChangeLogId') ?? ''),
   },
   {
-    title: t('entity.accounttitlechangelog.titlecode'),
-    dataIndex: 'titleCode',
-    key: 'titleCode',
+    title: t('entity.accounttitlechangelog.code'),
+    dataIndex: 'accountTitleCode',
+    key: 'accountTitleCode',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: AccountTitleChangeLog }) =>
-      String(getAccountTitleChangeLogField(record, 'titleCode') ?? ''),
+      String(getAccountTitleChangeLogField(record, 'accountTitleCode') ?? ''),
   },
   {
     title: t('entity.accounttitlechangelog.changefields'),
@@ -494,7 +494,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: AccountTitleChangeLog, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getAccountTitleChangeLogId(selectedRow.value) === getAccountTitleChangeLogId(record)) {
+    } else if (selectedRow.value && getAccountTitleChangeLogId(selectedRow.value) === getAccountTitleChangeLogId(record)) {
       selectedRow.value = null
     }
   },
@@ -544,7 +544,7 @@ function buildListQuery(overrides?: Partial<AccountTitleChangeLogQuery>): Accoun
       query[key] = v as never
     }
   }
-  assignTrimmed('titleCode', form.titleCode)
+  assignTrimmed('accountTitleCode', form.accountTitleCode)
   assignTrimmed('changeFields', form.changeFields)
   assignTrimmed('changeTimeStart', form.changeTimeStart)
   assignTrimmed('changeTimeEnd', form.changeTimeEnd)

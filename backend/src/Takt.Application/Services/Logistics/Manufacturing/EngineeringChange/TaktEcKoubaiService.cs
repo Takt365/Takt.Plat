@@ -29,11 +29,11 @@ public class TaktEcKoubaiService : TaktEcDeptViewServiceBase, ITaktEcKoubaiServi
     /// </summary>
     public TaktEcKoubaiService(
         ITaktCompanyRepository<TaktEcDetail> ecDetailRepository,
-        ITaktCompanyRepository<TaktEcDept> ecDeptRepository,
+        TaktEcExecPersistence ecExecPersistence,
         ITaktLineNumberGenerator lineNumberGenerator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
-        : base(TaktEcDeptCodes.Mp, ecDetailRepository, ecDeptRepository, lineNumberGenerator, userContext, localizationService)
+        : base(TaktEcDeptCodes.Mp, ecDetailRepository, ecExecPersistence, lineNumberGenerator, userContext, localizationService)
     {
     }
 

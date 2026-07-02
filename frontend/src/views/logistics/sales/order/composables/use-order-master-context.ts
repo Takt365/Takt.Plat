@@ -2,40 +2,43 @@
 // 项目名称：节拍数字工厂 · Takt Plat (TDF)
 // 命名空间：@/views/logistics/sales/order/composables
 // 文件名称：use-order-master-context.ts
-// 功能描述：Takt采购订单实体主表选中行上下文（供右侧明细面板读取）
+// 功能描述：Takt销售订单实体主表选中行上下文（供右侧明细面板读取）
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // ========================================
 
 import { inject, provide, type InjectionKey, type Ref, ref } from 'vue'
-import type { PurchaseOrder } from '@/types/logistics/procurement/order'
+import type { SalesOrder } from '@/types/logistics/sales/order'
+
+/** 表格行类型（与 index 列表行、TaktSingleTable slot record 一致） */
+export type SalesOrderRowRecord = SalesOrder | Record<string, unknown>
 
 /** 主表选中行上下文 */
-export interface PurchaseOrderMasterContext {
+export interface SalesOrderMasterContext {
   /** 当前选中的主表行（右侧明细依赖） */
-  selectedMasterRow: Ref<PurchaseOrder | null>
+  selectedMasterRow: Ref<SalesOrderRowRecord | null>
 }
 
-const purchaseOrderMasterContextKey: InjectionKey<PurchaseOrderMasterContext> = Symbol('orderMasterContext')
+const salesOrderMasterContextKey: InjectionKey<SalesOrderMasterContext> = Symbol('orderMasterContext')
 
 /**
  * 在主表页 provide 选中行上下文
- * @returns {PurchaseOrderMasterContext} 主表上下文
+ * @returns {SalesOrderMasterContext} 主表上下文
  */
-export function providePurchaseOrderMasterContext(): PurchaseOrderMasterContext {
-  const selectedMasterRow = ref<PurchaseOrder | null>(null)
-  const ctx: PurchaseOrderMasterContext = { selectedMasterRow }
-  provide(purchaseOrderMasterContextKey, ctx)
+export function provideSalesOrderMasterContext(): SalesOrderMasterContext {
+  const selectedMasterRow = ref<SalesOrderRowRecord | null>(null)
+  const ctx: SalesOrderMasterContext = { selectedMasterRow }
+  provide(salesOrderMasterContextKey, ctx)
   return ctx
 }
 
 /**
  * 在明细面板 inject 主表选中行
- * @returns {PurchaseOrderMasterContext} 主表上下文
+ * @returns {SalesOrderMasterContext} 主表上下文
  */
-export function usePurchaseOrderMasterContext(): PurchaseOrderMasterContext {
-  const ctx = inject(purchaseOrderMasterContextKey)
+export function useSalesOrderMasterContext(): SalesOrderMasterContext {
+  const ctx = inject(salesOrderMasterContextKey)
   if (!ctx) {
-    throw new Error('usePurchaseOrderMasterContext must be used within order index')
+    throw new Error('useSalesOrderMasterContext must be used within order index')
   }
   return ctx
 }

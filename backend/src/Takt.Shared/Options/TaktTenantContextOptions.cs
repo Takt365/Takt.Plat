@@ -10,6 +10,8 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
+using Takt.Shared.Constants;
+
 namespace Takt.Shared.Options;
 
 /// <summary>
@@ -22,12 +24,12 @@ public class TaktTenantContextOptions
     /// <summary>
     /// 租户请求头名称
     /// </summary>
-    public string TenantHeaderName { get; set; } = "X-Tenant-Code";
+    public string TenantHeaderName { get; set; } = TaktHttpHeaderNames.TenantCode;
 
     /// <summary>
     /// 公司请求头名称
     /// </summary>
-    public string CompanyHeaderName { get; set; } = "X-Company-Code";
+    public string CompanyHeaderName { get; set; } = TaktHttpHeaderNames.CompanyCode;
 
     /// <summary>
     /// 验证配置是否完整

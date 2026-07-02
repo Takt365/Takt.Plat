@@ -228,7 +228,7 @@ export function exportTranslation(
 
 /**
  * 获取指定区域文化的前端扁平翻译消息（登录后供 vue-i18n 动态合并）
- * @param {string} cultureCode 区域文化编码 BCP47（如 zh-CN）
+ * @param {string} cultureCode 文化编码 BCP47（如 zh-CN）
  * @returns {Promise<TranslationMessages>} 扁平 i18n 键值
  */
 export function getTranslationMessages(cultureCode: string): Promise<TranslationMessages> {

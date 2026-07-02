@@ -161,7 +161,7 @@
                   v-model:value="formState.unitOfMeasure"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionorder.unitofmeasure') })"
                   show-count
-                  :maxlength="10"
+                  :maxlength="5"
                   allow-clear
                 />
               </a-form-item>
@@ -223,19 +223,19 @@
                   v-model:value="formState.workCenter"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionorder.workcenter') })"
                   show-count
-                  :maxlength="20"
+                  :maxlength="8"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.productionorder.prodline')"
-                name="prodLine"
+                :label="t('entity.productionorder.prodteam')"
+                name="prodTeam"
               >
                 <a-input
-                  v-model:value="formState.prodLine"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionorder.prodline') })"
+                  v-model:value="formState.prodTeam"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionorder.prodteam') })"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -287,6 +287,70 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
+                :label="t('entity.productionorder.plannedorderid')"
+                name="plannedOrderId"
+              >
+                <a-input
+                  v-model:value="formState.plannedOrderId"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionorder.plannedorderid') })"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.productionorder.apsorderid')"
+                name="apsOrderId"
+              >
+                <a-input
+                  v-model:value="formState.apsOrderId"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionorder.apsorderid') })"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-2"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="t('entity.productionorder.plannedstarttime')"
+                name="plannedStartTime"
+              >
+                <a-date-picker
+                  v-model:value="formState.plannedStartTime"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionorder.plannedstarttime') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="t('entity.productionorder.plannedendtime')"
+                name="plannedEndTime"
+              >
+                <a-date-picker
+                  v-model:value="formState.plannedEndTime"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionorder.plannedendtime') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
                 :label="t('entity.productionorder.status')"
                 name="status"
               >
@@ -323,16 +387,6 @@
                 />
               </a-form-item>
             </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
                 :label="t('common.page.entity.remark')"
@@ -409,7 +463,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","prodOrderType","prodOrderCode","materialCode","prodOrderQty","producedQty","unitOfMeasure","actualStartDate","actualEndDate","priority","workCenter","prodLine","prodBatch","serialNo","routingCode","status","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","prodOrderType","prodOrderCode","materialCode","prodOrderQty","producedQty","unitOfMeasure","actualStartDate","actualEndDate","priority","workCenter","prodTeam","prodBatch","serialNo","routingCode","plannedOrderId","apsOrderId","plannedStartTime","plannedEndTime","status","extField","remark"]
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
 

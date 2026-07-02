@@ -2,73 +2,79 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Identity
 // 文件名称：TaktUserDtos.cs
-// 创建时间：2025-01-20
-// 创建人：Takt365(Cursor AI)
-// 功能描述：用户管理相关 DTO（查询、创建、更新、状态、导入、导出）
+// 创建时间：2026-06-24
+// 创建人：Takt365(Auto Generated)
+// 功能描述：User 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktUser 生成，请按需审阅）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
-using Takt.Shared.Constants;
-using Takt.Shared.Enums;
+using System.ComponentModel.DataAnnotations;
+using Mapster;
+using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 
 namespace Takt.Application.Dtos.Identity;
 
 // ========================================
-// 用户响应 DTO
+// User 响应 DTO
 // ========================================
 
 /// <summary>
-/// 用户响应 DTO
+/// 用户实体 代表系统登录账号（身份认证域） 注意：用户与员工档案分离，用户仅用于认证和权限控制
 /// 对应前端 TaktUserDto
-/// 继承 TaktTenantDtoBase（租户级实体）
+/// 继承 TaktTenantDtoBase
 /// </summary>
 public class TaktUserDto : TaktTenantDtoBase
 {
     /// <summary>
-    /// 用户ID（适配字段，序列化为string以避免Javascript精度问题）
+    /// UserID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long UserId { get; set; }
 
     /// <summary>
-    /// 用户名（登录账号）
+    /// 用户名（唯一索引：租户内唯一，见 ix_user_username_unique；登录账号，最长 20 位，与 varchar(20) 一致）
     /// </summary>
     public string Username { get; set; } = string.Empty;
 
     /// <summary>
-    /// 昵称（显示名称）
+    /// 昵称（显示名称，2–40 位，与 nvarchar(40) 一致）
     /// </summary>
-    public string? Nickname { get; set; }
+    public string Nickname { get; set; } = string.Empty;
 
     /// <summary>
-    /// 用户类型
+    /// 用户类型（字典 sys_user_type）
     /// </summary>
-    public int UserType { get; set; }
+    public int UserType { get; set; } = 0;
 
     /// <summary>
-    /// 密码哈希值（加密后，不返回明文）
+    /// 密码哈希值（bcrypt加密）
     /// </summary>
     public string PasswordHash { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联的员工ID
+    /// 关联的员工ID（必须关联人事档案）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EmployeeId { get; set; }
 
     /// <summary>
-    /// 员工姓名（填充字段）
+    /// 关联的员工名称（填充字段）
     /// </summary>
     public string? EmployeeName { get; set; }
 
     /// <summary>
-    /// 状态
+    /// 区域文化编码（BCP47，对齐 TaktCulture.CultureCode，如 zh-CN、en-US、ja-JP、zh-HK）
     /// </summary>
-    public int UserStatus { get; set; }
+    public string DefaultCulture { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 内置（字典 sys_yes_no_type；种子用户 admin/guest/demo 为内置，不允许删除）
+    /// </summary>
+    public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
     /// 最后登录时间
@@ -78,95 +84,164 @@ public class TaktUserDto : TaktTenantDtoBase
     /// <summary>
     /// 最后登录IP
     /// </summary>
-    public string? LastLoginIp { get; set; }
+    public string? LastLoginIp { get; set; } = string.Empty;
 
     /// <summary>
     /// 登录次数
     /// </summary>
-    public int LoginCount { get; set; }
+    public int LoginCount { get; set; } = 0;
 
     /// <summary>
-    /// 密码过期天数（0=永不过期）
+    /// 密码过期天数（0=永不过期，30=30天后过期）
     /// </summary>
-    public int PasswordExpireDays { get; set; }
+    public int PasswordExpireDays { get; set; } = 0;
 
     /// <summary>
     /// 失败登录次数
     /// </summary>
-    public int LoginFailCount { get; set; }
+    public int LoginFailCount { get; set; } = 0;
 
     /// <summary>
-    /// 锁定时间
+    /// 锁定时间（登录失败过多时锁定）
     /// </summary>
     public DateTime? LockedUntil { get; set; }
 
     /// <summary>
-    /// 默认区域文化编码（BCP47，对齐 TaktCulture.CultureCode）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
-    public string DefaultCulture { get; set; } = "en-US";
+    public int UserStatus { get; set; } = 0;
 
     /// <summary>
-    /// 已分配角色 ID 列表（查询填充）
+    /// 用户角色关联（RBAC，表 takt_identity_user_role）
+    /// （子表：TaktUserRole）
     /// </summary>
+    public List<TaktUserRoleDto>? UserRoles { get; set; }
+
+    /// <summary>
+    /// 用户可访问租户关联（RBAC，表 takt_identity_user_tenant）
+    /// （子表：TaktUserTenant）
+    /// </summary>
+    public List<TaktUserTenantDto>? UserTenants { get; set; }
+
+    /// <summary>
+    /// 用户可访问公司关联（RBAC，表 takt_identity_user_company）
+    /// （子表：TaktUserCompany）
+    /// </summary>
+    public List<TaktUserCompanyDto>? UserCompanies { get; set; }
+
+    /// <summary>
+    /// 角色 ID 列表（填充字段）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
     public long[]? RoleIds { get; set; }
 
     /// <summary>
-    /// 已分配角色名称列表（查询填充）
+    /// 角色名称列表（填充字段）
     /// </summary>
-    public List<string>? RoleNames { get; set; }
+    public string[]? RoleNames { get; set; }
 
     /// <summary>
-    /// 可访问公司编码列表（查询填充）
+    /// 可访问公司编码列表（填充字段）
     /// </summary>
     public string[]? CompanyCodes { get; set; }
+
 }
 
 // ========================================
-// 用户查询 DTO
+// User 查询 DTO
 // ========================================
 
 /// <summary>
-/// 用户分页查询 DTO
+/// User 分页查询 DTO
 /// 继承 TaktPagedQuery
 /// </summary>
 public class TaktUserQueryDto : TaktPagedQuery
 {
     /// <summary>
-    /// 用户名（模糊查询）
+    /// 租户编码
     /// </summary>
-    public string? Username { get; set; }
+    public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 昵称（模糊查询）
+    /// 用户名（唯一索引：租户内唯一，见 ix_user_username_unique；登录账号，最长 20 位，与 varchar(20) 一致）
     /// </summary>
-    public string? Nickname { get; set; }
+    public string? Username { get; set; } = string.Empty;
 
     /// <summary>
-    /// 用户类型
+    /// 昵称（显示名称，2–40 位，与 nvarchar(40) 一致）
+    /// </summary>
+    public string Nickname { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 用户类型（字典 sys_user_type）
     /// </summary>
     public int? UserType { get; set; }
 
     /// <summary>
-    /// 关联的员工ID
+    /// 密码哈希值（bcrypt加密）
+    /// </summary>
+    public string? PasswordHash { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 关联的员工ID（必须关联人事档案）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
 
     /// <summary>
-    /// 状态
+    /// 区域文化编码（BCP47，对齐 TaktCulture.CultureCode，如 zh-CN、en-US、ja-JP、zh-HK）
+    /// </summary>
+    public string? DefaultCulture { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 内置（字典 sys_yes_no_type；种子用户 admin/guest/demo 为内置，不允许删除）
+    /// </summary>
+    public int? IsBuiltIn { get; set; }
+
+    /// <summary>
+    /// 最后登录时间（范围查询-开始）
+    /// </summary>
+    public DateTime? LastLoginAtStart { get; set; }
+
+    /// <summary>
+    /// 最后登录时间（范围查询-结束）
+    /// </summary>
+    public DateTime? LastLoginAtEnd { get; set; }
+
+    /// <summary>
+    /// 最后登录IP
+    /// </summary>
+    public string? LastLoginIp { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 登录次数
+    /// </summary>
+    public int? LoginCount { get; set; }
+
+    /// <summary>
+    /// 密码过期天数（0=永不过期，30=30天后过期）
+    /// </summary>
+    public int? PasswordExpireDays { get; set; }
+
+    /// <summary>
+    /// 失败登录次数
+    /// </summary>
+    public int? LoginFailCount { get; set; }
+
+    /// <summary>
+    /// 锁定时间（登录失败过多时锁定）（范围查询-开始）
+    /// </summary>
+    public DateTime? LockedUntilStart { get; set; }
+
+    /// <summary>
+    /// 锁定时间（登录失败过多时锁定）（范围查询-结束）
+    /// </summary>
+    public DateTime? LockedUntilEnd { get; set; }
+
+    /// <summary>
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int? UserStatus { get; set; }
-
-    /// <summary>
-    /// 默认区域文化编码（模糊查询）
-    /// </summary>
-    public string? DefaultCulture { get; set; }
-
-    /// <summary>
-    /// 创建人ID
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? CreatedBy { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -187,413 +262,403 @@ public class TaktUserQueryDto : TaktPagedQuery
     /// 备注（模糊查询）
     /// </summary>
     public string? Remark { get; set; }
-}
-
-// ========================================
-// 创建用户 DTO
-// ========================================
-
-/// <summary>
-/// 创建用户 DTO
-/// </summary>
-public class TaktCreateUserDto
-{
-    /// <summary>
-    /// 用户名（登录账号，20位）
-    /// </summary>
-    public string Username { get; set; } = string.Empty;
 
     /// <summary>
-    /// 昵称（显示名称，20位）
-    /// </summary>
-    public string? Nickname { get; set; }
-
-    /// <summary>
-    /// 用户类型
-    /// </summary>
-    public int UserType { get; set; } = 0;
-
-    /// <summary>
-    /// 密码哈希值（加密后的密码）
-    /// </summary>
-    public string PasswordHash { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 关联的员工ID（必填）
+    /// 创建人 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long EmployeeId { get; set; }
-
-    /// <summary>
-    /// 状态
-    /// </summary>
-    public int UserStatus { get; set; } = 1;
-
-    /// <summary>
-    /// 默认区域文化编码（BCP47，对齐 TaktCulture.CultureCode）
-    /// </summary>
-    public string DefaultCulture { get; set; } = "en-US";
-
-    /// <summary>
-    /// 扩展字段JSON
-    /// </summary>
-    public string? ExtField { get; set; }
-
-    /// <summary>
-    /// 备注
-    /// </summary>
-    public string? Remark { get; set; }
-
-    /// <summary>
-    /// 角色 ID 列表（全量覆盖，分配走 ITaktRbacService.AssignUserRolesAsync；null 表示创建/更新时不改角色）
-    /// </summary>
-    public long[]? RoleIds { get; set; }
-
-    /// <summary>
-    /// 可访问公司编码列表（全量覆盖，分配走 ITaktRbacService.AssignUserCompaniesAsync；null 表示不改公司范围）
-    /// </summary>
-    public string[]? CompanyCodes { get; set; }
+    public long? CreatedBy { get; set; }
 }
 
 // ========================================
-// 更新用户 DTO
+// 创建User DTO
 // ========================================
 
 /// <summary>
-/// 更新用户 DTO
-/// 继承 TaktCreateUserDto，添加 UserId 字段
+/// 创建User DTO
 /// </summary>
-public class TaktUpdateUserDto : TaktCreateUserDto
+public class TaktUserCreateDto
 {
     /// <summary>
-    /// 用户ID（标识要更新的实体）
-    /// </summary>
-    [AdaptMember("Id")]
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long UserId { get; set; }
-}
-
-// ========================================
-// 用户状态 DTO
-// ========================================
-
-/// <summary>
-/// 用户状态更新 DTO
-/// </summary>
-public class TaktUserStatusDto
-{
-    /// <summary>
-    /// 用户ID
-    /// </summary>
-    [AdaptMember("Id")]
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long UserId { get; set; }
-
-    /// <summary>
-    /// 状态（1=启用，0=禁用）
-    /// </summary>
-    public int UserStatus { get; set; }
-}
-
-// ========================================
-// 密码管理 DTO
-// ========================================
-
-/// <summary>
-/// 重置密码 DTO（管理员重置指定用户密码，或按 UserId 重置）
-/// </summary>
-public class TaktResetPasswordDto
-{
-    /// <summary>
-    /// 用户ID
-    /// </summary>
-    [AdaptMember("Id")]
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long UserId { get; set; }
-
-    /// <summary>
-    /// 新密码
-    /// </summary>
-    public string NewPassword { get; set; } = string.Empty;
-}
-
-/// <summary>
-/// 修改密码 DTO（用户修改自己的密码）
-/// </summary>
-public class TaktChangePasswordDto
-{
-    /// <summary>
-    /// 旧密码
-    /// </summary>
-    public string OldPassword { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 新密码
-    /// </summary>
-    public string NewPassword { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 确认新密码
-    /// </summary>
-    public string ConfirmPassword { get; set; } = string.Empty;
-}
-
-/// <summary>
-/// 忘记密码 DTO
-/// </summary>
-public class TaktForgotPasswordDto
-{
-    /// <summary>
-    /// 用户名或邮箱
-    /// </summary>
-    public string UsernameOrEmail { get; set; } = string.Empty;
-}
-
-/// <summary>
-/// 忘记密码结果 DTO
-/// </summary>
-public class TaktForgotPasswordResultDto
-{
-    /// <summary>
-    /// 是否成功
-    /// </summary>
-    public bool Success { get; set; }
-
-    /// <summary>
-    /// 错误码（Success 为 false 时有效）
-    /// EmailNotFound = 邮箱未找到, ProtectedUser = 保护用户
-    /// </summary>
-    public string? Code { get; set; }
-
-    /// <summary>
-    /// 错误信息
-    /// </summary>
-    public string? Message { get; set; }
-}
-
-/// <summary>
-/// 解锁用户 DTO
-/// </summary>
-public class TaktUserUnlockDto
-{
-    /// <summary>
-    /// 用户ID
-    /// </summary>
-    [AdaptMember("Id")]
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long UserId { get; set; }
-
-    /// <summary>
-    /// 解锁原因
-    /// </summary>
-    public string? Reason { get; set; }
-}
-
-// ========================================
-// 用户导入模板 DTO
-// ========================================
-
-/// <summary>
-/// 用户导入模板 DTO（用于生成 Excel 导入模板）
-/// </summary>
-public class TaktUserTemplateDto
-{
-    /// <summary>
-    /// 用户名（登录账号，20位）
-    /// </summary>
-    public string Username { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 昵称（显示名称）
-    /// </summary>
-    public string? Nickname { get; set; }
-
-    /// <summary>
-    /// 用户类型数值（Excel 填 0/1/2；与 UserTypeName 二选一，文本列优先）
-    /// </summary>
-    public int UserType { get; set; } = 0;
-
-    /// <summary>
-    /// 用户类型名称（Excel 填文本时优先；字典 sys_user_type DictLabel）
-    /// </summary>
-    public string? UserTypeName { get; set; }
-
-    /// <summary>
-    /// 初始密码（Excel 填明文；留空时导入使用系统默认密码）
-    /// </summary>
-    public string? PasswordHash { get; set; }
-
-    /// <summary>
-    /// 员工ID
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long EmployeeId { get; set; }
-
-    /// <summary>
-    /// 状态数值（Excel 填 0/1；与 StatusName 二选一，文本列优先）
-    /// </summary>
-    public int UserStatus { get; set; } = 1;
-
-    /// <summary>
-    /// 状态名称（Excel 填文本时优先；字典 sys_yes_no_type DictLabel）
-    /// </summary>
-    public string? StatusName { get; set; }
-
-    /// <summary>
-    /// 默认区域文化编码（BCP47，对齐 TaktCulture.CultureCode）
-    /// </summary>
-    public string DefaultCulture { get; set; } = "en-US";
-
-    /// <summary>
-    /// 扩展字段JSON
-    /// </summary>
-    public string? ExtField { get; set; }
-
-    /// <summary>
-    /// 备注
-    /// </summary>
-    public string? Remark { get; set; }
-}
-
-// ========================================
-// 用户导入 DTO
-// ========================================
-
-/// <summary>
-/// 用户导入 DTO（Excel 导入数据）
-/// </summary>
-public class TaktUserImportDto
-{
-    /// <summary>
-    /// 用户名（登录账号，20位）
-    /// </summary>
-    public string Username { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 昵称（显示名称）
-    /// </summary>
-    public string? Nickname { get; set; }
-
-    /// <summary>
-    /// 员工编号（用于查找员工）
-    /// </summary>
-    public string EmployeeCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 用户类型数值（Excel 填 0/1/2；与 UserTypeName 二选一，文本列优先）
-    /// </summary>
-    public int UserType { get; set; } = 0;
-
-    /// <summary>
-    /// 用户类型名称（Excel 填文本时优先；字典 sys_user_type DictLabel）
-    /// </summary>
-    public string? UserTypeName { get; set; }
-
-    /// <summary>
-    /// 初始密码（Excel 填明文；留空时导入使用系统默认密码）
-    /// </summary>
-    public string? PasswordHash { get; set; }
-
-    /// <summary>
-    /// 员工ID（可选，与员工编号二选一；填写时优先使用）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long EmployeeId { get; set; }
-
-    /// <summary>
-    /// 状态数值（Excel 填 0/1；与 StatusName 二选一，文本列优先）
-    /// </summary>
-    public int UserStatus { get; set; } = 1;
-
-    /// <summary>
-    /// 状态名称（Excel 填文本时优先；字典 sys_yes_no_type DictLabel）
-    /// </summary>
-    public string? StatusName { get; set; }
-
-    /// <summary>
-    /// 默认区域文化编码（BCP47，对齐 TaktCulture.CultureCode）
-    /// </summary>
-    public string DefaultCulture { get; set; } = "en-US";
-
-    /// <summary>
-    /// 扩展字段JSON
-    /// </summary>
-    public string? ExtField { get; set; }
-
-    /// <summary>
-    /// 备注
-    /// </summary>
-    public string? Remark { get; set; }
-}
-
-// ========================================
-// 用户导出 DTO
-// ========================================
-
-/// <summary>
-/// 用户导出 DTO
-/// </summary>
-public class TaktUserExportDto
-{
-    /// <summary>
-    /// 用户ID（适配字段，序列化为string以避免Javascript精度问题）
-    /// </summary>
-    [AdaptMember("Id")]
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long UserId { get; set; }
-
-    /// <summary>
-    /// 租户编码
+    /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
     /// </summary>
     public string TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 用户名（登录账号）
+    /// 用户名（唯一索引：租户内唯一，见 ix_user_username_unique；登录账号，最长 20 位，与 varchar(20) 一致）
     /// </summary>
+    [Required(ErrorMessage = "用户名（唯一索引：租户内唯一，见 ix_user_username_unique；登录账号，最长 20 位，与 varchar(20) 一致）不能为空")]
     public string Username { get; set; } = string.Empty;
 
     /// <summary>
-    /// 昵称（显示名称）
+    /// 昵称（显示名称，2–40 位，与 nvarchar(40) 一致）
     /// </summary>
-    public string? Nickname { get; set; }
+    public string Nickname { get; set; } = string.Empty;
 
     /// <summary>
-    /// 用户类型
+    /// 用户类型（字典 sys_user_type）
     /// </summary>
-    public int UserType { get; set; }
+    public int UserType { get; set; } = 0;
 
     /// <summary>
-    /// 用户类型名称（导出用；字典 sys_user_type）
+    /// 密码哈希值（bcrypt加密）
     /// </summary>
-    [TaktDictType("sys_user_type")]
-    public string UserTypeName { get; set; } = string.Empty;
+    public string PasswordHash { get; set; } = string.Empty;
 
     /// <summary>
-    /// 员工ID
+    /// 关联的员工ID（必须关联人事档案）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EmployeeId { get; set; }
 
     /// <summary>
-    /// 员工姓名（导出用）
+    /// 区域文化编码（BCP47，对齐 TaktCulture.CultureCode，如 zh-CN、en-US、ja-JP、zh-HK）
     /// </summary>
-    public string EmployeeName { get; set; } = string.Empty;
+    [Required(ErrorMessage = "区域文化编码（BCP47，对齐 TaktCulture.CultureCode，如 zh-CN、en-US、ja-JP、zh-HK）不能为空")]
+    public string DefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 角色名称（导出用，逗号分隔）
+    /// 内置（字典 sys_yes_no_type；种子用户 admin/guest/demo 为内置，不允许删除）
     /// </summary>
-    public string RoleNames { get; set; } = string.Empty;
+    public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 状态
+    /// 密码过期天数（0=永不过期，30=30天后过期）
     /// </summary>
-    public int UserStatus { get; set; }
+    public int PasswordExpireDays { get; set; } = 0;
 
     /// <summary>
-    /// 状态名称（导出用；字典 sys_yes_no_type）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
-    [TaktDictType("sys_yes_no_type")]
-    public string StatusName { get; set; } = string.Empty;
+    public int UserStatus { get; set; } = 0;
+
+    /// <summary>
+    /// 用户角色关联（RBAC 全量覆盖，分配走 ITaktRbacService）
+    /// </summary>
+    public long[]? RoleIds { get; set; }
+
+    /// <summary>
+    /// 用户可访问租户关联（RBAC 全量覆盖，分配走 ITaktRbacService）
+    /// </summary>
+    public string[]? TenantCodes { get; set; }
+
+    /// <summary>
+    /// 用户可访问公司关联（RBAC 全量覆盖，分配走 ITaktRbacService）
+    /// </summary>
+    public string[]? CompanyCodes { get; set; }
+
+    /// <summary>
+    /// 扩展字段JSON
+    /// </summary>
+    public string? ExtField { get; set; }
+
+    /// <summary>
+    /// 备注
+    /// </summary>
+    public string? Remark { get; set; }
+
+}
+
+// ========================================
+// 更新User DTO
+// ========================================
+
+/// <summary>
+/// 更新User DTO
+/// 继承 TaktUserCreateDto，添加 UserId 字段
+/// </summary>
+public class TaktUserUpdateDto : TaktUserCreateDto
+{
+    /// <summary>
+    /// UserID（标识要更新的实体）
+    /// </summary>
+    [Required(ErrorMessage = "ID不能为空")]
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long UserId { get; set; }
+
+}
+
+// ========================================
+// User 状态 DTO
+// ========================================
+
+/// <summary>
+/// User 状态更新 DTO
+/// </summary>
+public class TaktUserStatusDto
+{
+    /// <summary>
+    /// UserID
+    /// </summary>
+    [Required(ErrorMessage = "ID不能为空")]
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long UserId { get; set; }
+
+    /// <summary>
+    /// 状态（字典 sys_normal_disable_status）
+    /// </summary>
+    [Required(ErrorMessage = "状态（字典 sys_normal_disable_status）不能为空")]
+    public int UserStatus { get; set; } = 0;
+}
+
+// ========================================
+// 导入 DTO
+// ========================================
+
+/// <summary>
+/// User 导入模板行 DTO
+/// </summary>
+public class TaktUserTemplateDto
+{
+    /// <summary>
+    /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
+    /// </summary>
+    public string? TenantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 用户名（唯一索引：租户内唯一，见 ix_user_username_unique；登录账号，最长 20 位，与 varchar(20) 一致）
+    /// </summary>
+    public string? Username { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 昵称（显示名称，2–40 位，与 nvarchar(40) 一致）
+    /// </summary>
+    public string Nickname { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 用户类型（字典 sys_user_type）
+    /// </summary>
+    public int? UserType { get; set; }
+
+    /// <summary>
+    /// 密码哈希值（bcrypt加密）
+    /// </summary>
+    public string? PasswordHash { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 关联的员工ID（必须关联人事档案）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? EmployeeId { get; set; }
+
+    /// <summary>
+    /// 区域文化编码（BCP47，对齐 TaktCulture.CultureCode，如 zh-CN、en-US、ja-JP、zh-HK）
+    /// </summary>
+    public string? DefaultCulture { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 内置（字典 sys_yes_no_type；种子用户 admin/guest/demo 为内置，不允许删除）
+    /// </summary>
+    public int? IsBuiltIn { get; set; }
+
+    /// <summary>
+    /// 密码过期天数（0=永不过期，30=30天后过期）
+    /// </summary>
+    public int? PasswordExpireDays { get; set; }
+
+    /// <summary>
+    /// 状态（字典 sys_normal_disable_status）
+    /// </summary>
+    public int? UserStatus { get; set; }
+
+    /// <summary>
+    /// 用户角色关联（RBAC 全量覆盖，分配走 ITaktRbacService）
+    /// </summary>
+    public long[]? RoleIds { get; set; }
+
+    /// <summary>
+    /// 用户可访问租户关联（RBAC 全量覆盖，分配走 ITaktRbacService）
+    /// </summary>
+    public string[]? TenantCodes { get; set; }
+
+    /// <summary>
+    /// 用户可访问公司关联（RBAC 全量覆盖，分配走 ITaktRbacService）
+    /// </summary>
+    public string[]? CompanyCodes { get; set; }
+
+    /// <summary>
+    /// 扩展字段JSON
+    /// </summary>
+    public string? ExtField { get; set; }
+
+    /// <summary>
+    /// 备注
+    /// </summary>
+    public string? Remark { get; set; }
+
+}
+
+/// <summary>
+/// User 导入 DTO（独立实现，不继承 TemplateDto）
+/// </summary>
+public class TaktUserImportDto
+{
+    /// <summary>
+    /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
+    /// </summary>
+    public string? TenantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 用户名（唯一索引：租户内唯一，见 ix_user_username_unique；登录账号，最长 20 位，与 varchar(20) 一致）
+    /// </summary>
+    public string? Username { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 昵称（显示名称，2–40 位，与 nvarchar(40) 一致）
+    /// </summary>
+    public string Nickname { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 用户类型（字典 sys_user_type）
+    /// </summary>
+    public int? UserType { get; set; }
+
+    /// <summary>
+    /// 密码哈希值（bcrypt加密）
+    /// </summary>
+    public string? PasswordHash { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 关联的员工ID（必须关联人事档案）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? EmployeeId { get; set; }
+
+    /// <summary>
+    /// 员工编号（导入时按编号匹配人事档案）
+    /// </summary>
+    public string? EmployeeCode { get; set; }
+
+    /// <summary>
+    /// 用户类型名称（导入 Excel 字典标签）
+    /// </summary>
+    public string? UserTypeName { get; set; }
+
+    /// <summary>
+    /// 状态名称（导入 Excel 字典标签）
+    /// </summary>
+    public string? StatusName { get; set; }
+
+    /// <summary>
+    /// 区域文化编码（BCP47，对齐 TaktCulture.CultureCode，如 zh-CN、en-US、ja-JP、zh-HK）
+    /// </summary>
+    public string? DefaultCulture { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 内置（字典 sys_yes_no_type；种子用户 admin/guest/demo 为内置，不允许删除）
+    /// </summary>
+    public int? IsBuiltIn { get; set; }
+
+    /// <summary>
+    /// 密码过期天数（0=永不过期，30=30天后过期）
+    /// </summary>
+    public int? PasswordExpireDays { get; set; }
+
+    /// <summary>
+    /// 状态（字典 sys_normal_disable_status）
+    /// </summary>
+    public int? UserStatus { get; set; }
+
+    /// <summary>
+    /// 用户角色关联（RBAC 全量覆盖，分配走 ITaktRbacService）
+    /// </summary>
+    public long[]? RoleIds { get; set; }
+
+    /// <summary>
+    /// 用户可访问租户关联（RBAC 全量覆盖，分配走 ITaktRbacService）
+    /// </summary>
+    public string[]? TenantCodes { get; set; }
+
+    /// <summary>
+    /// 用户可访问公司关联（RBAC 全量覆盖，分配走 ITaktRbacService）
+    /// </summary>
+    public string[]? CompanyCodes { get; set; }
+
+    /// <summary>
+    /// 扩展字段JSON
+    /// </summary>
+    public string? ExtField { get; set; }
+
+    /// <summary>
+    /// 备注
+    /// </summary>
+    public string? Remark { get; set; }
+
+}
+
+// ========================================
+// 导出 DTO
+// ========================================
+
+/// <summary>
+/// User 导出 DTO（独立实现，不继承响应 Dto）
+/// </summary>
+public class TaktUserExportDto
+{
+    /// <summary>
+    /// UserID
+    /// </summary>
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long UserId { get; set; }
+
+    /// <summary>
+    /// 用户名（唯一索引：租户内唯一，见 ix_user_username_unique；登录账号，最长 20 位，与 varchar(20) 一致）
+    /// </summary>
+    public string Username { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 昵称（显示名称，2–40 位，与 nvarchar(40) 一致）
+    /// </summary>
+    public string Nickname { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 用户类型（字典 sys_user_type）
+    /// </summary>
+    public int UserType { get; set; } = 0;
+
+    /// <summary>
+    /// 密码哈希值（bcrypt加密）
+    /// </summary>
+    public string PasswordHash { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 关联的员工ID（必须关联人事档案）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long EmployeeId { get; set; }
+
+    /// <summary>
+    /// 关联的员工名称（填充字段）
+    /// </summary>
+    public string? EmployeeName { get; set; }
+
+    /// <summary>
+    /// 用户类型名称（导出字典标签）
+    /// </summary>
+    public string? UserTypeName { get; set; }
+
+    /// <summary>
+    /// 状态名称（导出字典标签）
+    /// </summary>
+    public string? StatusName { get; set; }
+
+    /// <summary>
+    /// 角色名称（导出填充，逗号分隔）
+    /// </summary>
+    public string? RoleNames { get; set; }
+
+    /// <summary>
+    /// 区域文化编码（BCP47，对齐 TaktCulture.CultureCode，如 zh-CN、en-US、ja-JP、zh-HK）
+    /// </summary>
+    public string DefaultCulture { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 内置（字典 sys_yes_no_type；种子用户 admin/guest/demo 为内置，不允许删除）
+    /// </summary>
+    public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
     /// 最后登录时间
@@ -603,32 +668,32 @@ public class TaktUserExportDto
     /// <summary>
     /// 最后登录IP
     /// </summary>
-    public string? LastLoginIp { get; set; }
+    public string? LastLoginIp { get; set; } = string.Empty;
 
     /// <summary>
     /// 登录次数
     /// </summary>
-    public int LoginCount { get; set; }
+    public int LoginCount { get; set; } = 0;
 
     /// <summary>
-    /// 密码过期天数
+    /// 密码过期天数（0=永不过期，30=30天后过期）
     /// </summary>
-    public int PasswordExpireDays { get; set; }
+    public int PasswordExpireDays { get; set; } = 0;
 
     /// <summary>
     /// 失败登录次数
     /// </summary>
-    public int LoginFailCount { get; set; }
+    public int LoginFailCount { get; set; } = 0;
 
     /// <summary>
-    /// 锁定时间
+    /// 锁定时间（登录失败过多时锁定）
     /// </summary>
     public DateTime? LockedUntil { get; set; }
 
     /// <summary>
-    /// 默认区域文化编码（BCP47，对齐 TaktCulture.CultureCode）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
-    public string DefaultCulture { get; set; } = "en-US";
+    public int UserStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -644,4 +709,116 @@ public class TaktUserExportDto
     /// 创建时间
     /// </summary>
     public DateTime CreatedAt { get; set; }
+}
+
+// ========================================
+// 用户创建/更新别名与密码 DTO
+// ========================================
+
+/// <summary>
+/// 创建用户 DTO（与 TaktUserCreateDto 同义，供服务/控制器引用）
+/// </summary>
+public class TaktCreateUserDto : TaktUserCreateDto
+{
+}
+
+/// <summary>
+/// 更新用户 DTO（与 TaktUserUpdateDto 同义，供服务/控制器引用）
+/// </summary>
+public class TaktUpdateUserDto : TaktUserUpdateDto
+{
+}
+
+/// <summary>
+/// 重置密码 DTO（管理员按 UserId 重置）
+/// </summary>
+public class TaktResetPasswordDto
+{
+    /// <summary>
+    /// 用户 ID
+    /// </summary>
+    [Required(ErrorMessage = "用户ID不能为空")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long UserId { get; set; }
+
+    /// <summary>
+    /// 新密码
+    /// </summary>
+    [Required(ErrorMessage = "新密码不能为空")]
+    public string NewPassword { get; set; } = string.Empty;
+}
+
+/// <summary>
+/// 修改密码 DTO（当前登录用户修改自己的密码）
+/// </summary>
+public class TaktChangePasswordDto
+{
+    /// <summary>
+    /// 旧密码
+    /// </summary>
+    [Required(ErrorMessage = "旧密码不能为空")]
+    public string OldPassword { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 新密码
+    /// </summary>
+    [Required(ErrorMessage = "新密码不能为空")]
+    public string NewPassword { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 确认新密码
+    /// </summary>
+    [Required(ErrorMessage = "确认密码不能为空")]
+    public string ConfirmPassword { get; set; } = string.Empty;
+}
+
+/// <summary>
+/// 忘记密码 DTO
+/// </summary>
+public class TaktForgotPasswordDto
+{
+    /// <summary>
+    /// 用户名或邮箱
+    /// </summary>
+    [Required(ErrorMessage = "用户名或邮箱不能为空")]
+    public string UsernameOrEmail { get; set; } = string.Empty;
+}
+
+/// <summary>
+/// 忘记密码结果 DTO
+/// </summary>
+public class TaktForgotPasswordResultDto
+{
+    /// <summary>
+    /// 是否成功
+    /// </summary>
+    public bool Success { get; set; }
+
+    /// <summary>
+    /// 错误码（Success 为 false 时有效）
+    /// </summary>
+    public string? Code { get; set; }
+
+    /// <summary>
+    /// 提示信息
+    /// </summary>
+    public string? Message { get; set; }
+}
+
+/// <summary>
+/// 解锁用户 DTO
+/// </summary>
+public class TaktUserUnlockDto
+{
+    /// <summary>
+    /// 用户 ID
+    /// </summary>
+    [Required(ErrorMessage = "用户ID不能为空")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long UserId { get; set; }
+
+    /// <summary>
+    /// 解锁原因
+    /// </summary>
+    public string? Reason { get; set; }
 }

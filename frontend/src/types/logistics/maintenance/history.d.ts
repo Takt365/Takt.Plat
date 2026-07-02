@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/maintenance
 // 文件名称：history.d.ts
-// 创建时间：2026-06-20
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/maintenance 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -398,7 +398,7 @@ export interface MaintenanceHistoryCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -636,6 +636,21 @@ export interface MaintenanceHistoryTemplate {
   maintenanceTechnician?: string;
 
   /**
+   * 维护日期（归档基准日，通常取工单完工时间）
+   */
+  maintenanceDate?: string;
+
+  /**
+   * 维护开始时间
+   */
+  maintenanceStartTime?: string;
+
+  /**
+   * 维护结束时间
+   */
+  maintenanceEndTime?: string;
+
+  /**
    * 维护内容描述
    */
   maintenanceContent?: string;
@@ -654,6 +669,61 @@ export interface MaintenanceHistoryTemplate {
    * 使用配件（JSON，由工单领料明细汇总）
    */
   usedParts?: string;
+
+  /**
+   * 维护费用（工单总成本快照）
+   */
+  maintenanceCost?: number;
+
+  /**
+   * 维护结果（0=正常，1=待观察，2=需再次维修，3=已报废）
+   */
+  maintenanceResult?: number;
+
+  /**
+   * 履历状态（固定为 2=已完成，归档写入）
+   */
+  maintenanceStatus?: number;
+
+  /**
+   * 下次维护日期
+   */
+  nextMaintenanceDate?: string;
+
+  /**
+   * 维护周期（天）
+   */
+  maintenanceCycleDays?: number;
+
+  /**
+   * 维护文档（JSON格式，存储维护文档ID列表）
+   */
+  maintenanceDocuments?: string;
+
+  /**
+   * 维护图片（JSON格式，存储维护图片URL列表）
+   */
+  maintenanceImages?: string;
+
+  /**
+   * 验收总结
+   */
+  acceptedSummary?: string;
+
+  /**
+   * 验收人（人员编码）
+   */
+  acceptedBy?: string;
+
+  /**
+   * 验收时间
+   */
+  acceptedAt?: string;
+
+  /**
+   * 归档时间
+   */
+  archivedAt?: string;
 
   /**
    * 扩展字段JSON
@@ -685,7 +755,7 @@ export interface MaintenanceHistoryImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -730,6 +800,21 @@ export interface MaintenanceHistoryImport {
   maintenanceTechnician?: string;
 
   /**
+   * 维护日期（归档基准日，通常取工单完工时间）
+   */
+  maintenanceDate?: string;
+
+  /**
+   * 维护开始时间
+   */
+  maintenanceStartTime?: string;
+
+  /**
+   * 维护结束时间
+   */
+  maintenanceEndTime?: string;
+
+  /**
    * 维护内容描述
    */
   maintenanceContent?: string;
@@ -748,6 +833,61 @@ export interface MaintenanceHistoryImport {
    * 使用配件（JSON，由工单领料明细汇总）
    */
   usedParts?: string;
+
+  /**
+   * 维护费用（工单总成本快照）
+   */
+  maintenanceCost?: number;
+
+  /**
+   * 维护结果（0=正常，1=待观察，2=需再次维修，3=已报废）
+   */
+  maintenanceResult?: number;
+
+  /**
+   * 履历状态（固定为 2=已完成，归档写入）
+   */
+  maintenanceStatus?: number;
+
+  /**
+   * 下次维护日期
+   */
+  nextMaintenanceDate?: string;
+
+  /**
+   * 维护周期（天）
+   */
+  maintenanceCycleDays?: number;
+
+  /**
+   * 维护文档（JSON格式，存储维护文档ID列表）
+   */
+  maintenanceDocuments?: string;
+
+  /**
+   * 维护图片（JSON格式，存储维护图片URL列表）
+   */
+  maintenanceImages?: string;
+
+  /**
+   * 验收总结
+   */
+  acceptedSummary?: string;
+
+  /**
+   * 验收人（人员编码）
+   */
+  acceptedBy?: string;
+
+  /**
+   * 验收时间
+   */
+  acceptedAt?: string;
+
+  /**
+   * 归档时间
+   */
+  archivedAt?: string;
 
   /**
    * 扩展字段JSON

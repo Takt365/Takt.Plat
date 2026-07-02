@@ -11,7 +11,6 @@
 // ========================================
 
 using Takt.Domain.Entities;
-using Takt.Shared.Enums;
 
 namespace Takt.Domain.Entities.HumanResource.Training;
 
@@ -35,12 +34,12 @@ public class TaktTrainingCourse : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "course_name", ColumnDescription = "课程名称", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
     public string CourseName { get; set; } = string.Empty;
     /// <summary>
-    /// 课程类型（入职培训/技能培训/管理培训/安全培训/专业培训）
+    /// 课程类型（字典 hr_training_course_type；列存 DictValue：ONBOARD/SKILL/MANAGEMENT/SAFETY/PROFESSIONAL）
     /// </summary>
     [SugarColumn(ColumnName = "course_type", ColumnDescription = "课程类型", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string CourseType { get; set; } = string.Empty;
     /// <summary>
-    /// 课程级别（初级/中级/高级/专家）
+    /// 课程级别（字典 hr_training_course_level；列存 DictValue：BEGINNER/INTERMEDIATE/ADVANCED/EXPERT）
     /// </summary>
     [SugarColumn(ColumnName = "course_level", ColumnDescription = "课程级别", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string CourseLevel { get; set; } = string.Empty;
@@ -65,12 +64,12 @@ public class TaktTrainingCourse : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "main_instructor", ColumnDescription = "主讲讲师", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string MainInstructor { get; set; } = string.Empty;
     /// <summary>
-    /// 培训方式（线下/线上/混合）
+    /// 培训方式（字典 hr_training_method_type；列存 DictValue：OFFLINE/ONLINE/HYBRID）
     /// </summary>
     [SugarColumn(ColumnName = "training_method", ColumnDescription = "培训方式", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string TrainingMethod { get; set; } = string.Empty;
     /// <summary>
-    /// 考核方式（考试/实操/作业/无）
+    /// 考核方式（字典 hr_training_assessment_method_type；列存 DictValue：EXAM/PRACTICAL/ASSIGNMENT/NONE）
     /// </summary>
     [SugarColumn(ColumnName = "assessment_method", ColumnDescription = "考核方式", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string AssessmentMethod { get; set; } = string.Empty;
@@ -80,18 +79,18 @@ public class TaktTrainingCourse : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "passing_score", ColumnDescription = "及格分数线", ColumnDataType = "decimal", Length = 5, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
     public decimal PassingScore { get; set; } = 0m;
     /// <summary>
+    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// </summary>
+    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
+    public string RelatedPlant { get; set; } = string.Empty;
+    /// <summary>
     /// 排序号
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; } = 0;
     /// <summary>
-    /// 状态（1=启用 0=禁用）
+    /// 课程状态（字典 sys_normal_disable_status；1=启用 0=禁用）
     /// </summary>
     [SugarColumn(ColumnName = "training_course_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int TrainingCourseStatus { get; set; } = 1;
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = true)]
-    public string? RelatedPlant { get; set; }
 }

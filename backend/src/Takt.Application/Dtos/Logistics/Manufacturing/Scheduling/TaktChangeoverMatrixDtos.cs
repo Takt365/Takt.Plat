@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Scheduling
 // 文件名称：TaktChangeoverMatrixDtos.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ChangeoverMatrix 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktChangeoverMatrix 生成，请按需审阅）
 // 
@@ -158,7 +158,7 @@ public class TaktChangeoverMatrixCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -292,6 +292,11 @@ public class TaktChangeoverMatrixTemplateDto
     public string? ToMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 换型时间（分钟）
+    /// </summary>
+    public decimal? ChangeoverMinutes { get; set; }
+
+    /// <summary>
     /// 状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int? MatrixStatus { get; set; }
@@ -324,7 +329,7 @@ public class TaktChangeoverMatrixImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -347,6 +352,11 @@ public class TaktChangeoverMatrixImportDto
     /// 换型后物料编码
     /// </summary>
     public string? ToMaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 换型时间（分钟）
+    /// </summary>
+    public decimal? ChangeoverMinutes { get; set; }
 
     /// <summary>
     /// 状态（字典 sys_normal_disable；1=启用，0=禁用）

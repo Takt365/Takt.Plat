@@ -19,11 +19,11 @@
       @reset="handleQueryReset"
     />
     <TaktToolsBar
-      create-permission="logistics:manufacturing:scheduling:apsschedule:create"
-      update-permission="logistics:manufacturing:scheduling:apsschedule:update"
-      delete-permission="logistics:manufacturing:scheduling:apsschedule:delete"
-      import-permission="logistics:manufacturing:scheduling:apsschedule:import"
-      export-permission="logistics:manufacturing:scheduling:apsschedule:export"
+      create-permission="logistics:manufacturing:scheduling:aps:schedule:create"
+      update-permission="logistics:manufacturing:scheduling:aps:schedule:update"
+      delete-permission="logistics:manufacturing:scheduling:aps:schedule:delete"
+      import-permission="logistics:manufacturing:scheduling:aps:schedule:import"
+      export-permission="logistics:manufacturing:scheduling:aps:schedule:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -73,7 +73,7 @@
         v-model:page-size="pageSize"
         :total="total"
         scroll-layout="masterDetailLr"
-        table-mode="single"
+        table-mode="masterDetailDetail"
         :show-row-selection="true"
         @change="handleTableChange"
         @pagination-change="handleMasterDetailPaginationChange"
@@ -111,6 +111,39 @@
         <a-input
           v-model:value="advancedQueryForm.apsScheduleCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsscheduleitem.apsschedulecode') })"
+          show-count
+          :maxlength="20"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('apsOrderId')">
+      <a-form-item :label="t('entity.apsscheduleitem.apsorderid')">
+        <a-input
+          v-model:value="advancedQueryForm.apsOrderId"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsscheduleitem.apsorderid') })"
+          show-count
+          :maxlength="20"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('apsOperationId')">
+      <a-form-item :label="t('entity.apsscheduleitem.apsoperationid')">
+        <a-input
+          v-model:value="advancedQueryForm.apsOperationId"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsscheduleitem.apsoperationid') })"
+          show-count
+          :maxlength="20"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('routingItemId')">
+      <a-form-item :label="t('entity.apsscheduleitem.routingitemid')">
+        <a-input
+          v-model:value="advancedQueryForm.routingItemId"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsscheduleitem.routingitemid') })"
           show-count
           :maxlength="20"
           allow-clear
@@ -253,8 +286,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.planStartTimeStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.apsscheduleitem.planstarttimestart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -264,8 +296,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.planStartTimeEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.apsscheduleitem.planstarttimeend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -275,8 +306,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.planEndTimeStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.apsscheduleitem.planendtimestart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -286,8 +316,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.planEndTimeEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.apsscheduleitem.planendtimeend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -297,8 +326,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.actualStartTimeStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.apsscheduleitem.actualstarttimestart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -308,8 +336,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.actualStartTimeEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.apsscheduleitem.actualstarttimeend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -319,8 +346,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.actualEndTimeStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.apsscheduleitem.actualendtimestart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -330,8 +356,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.actualEndTimeEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.apsscheduleitem.actualendtimeend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -360,7 +385,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -371,18 +396,36 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('ExtField')">
-      <a-form-item :label="t('entity.apsscheduleitem.extfield')">
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
         <a-textarea
-          v-model:value="advancedQueryForm.ExtField"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.apsscheduleitem.extfield') })"
-          :rows="2"
-          allow-clear
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -400,6 +443,7 @@
       </div>
       </template>
     </TaktQueryDrawer>
+    <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
       :title="t('common.dialog.title.import', { entity: t('entity.apsscheduleitem._self') })"
@@ -409,6 +453,7 @@
       @cancel="handleImportCancel"
     >
       <TaktImportFile
+        v-if="importVisible"
         entity-i18n-key="entity.apsscheduleitem._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
@@ -427,7 +472,7 @@
       id-column-key="apsScheduleItemId"
       action-column-key="action"
       entity-scope="company"
-      table-mode="single"
+      table-mode="masterDetailDetail"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -446,8 +491,9 @@ import { useI18n } from 'vue-i18n'
 import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 import ApsScheduleItemForm from './aps-schedule-item-form.vue'
 import { useApsScheduleMasterContext } from '../composables/use-aps-schedule-master-context'
 import {
@@ -491,6 +537,9 @@ const formRef = ref()
 const advancedQueryVisible = ref(false)
 const advancedQueryForm = ref({
   apsScheduleCode: '',
+  apsOrderId: '',
+  apsOperationId: '',
+  routingItemId: '',
   lineNumber: undefined as number | undefined,
   workOrderCode: '',
   productCode: '',
@@ -516,7 +565,7 @@ const advancedQueryForm = ref({
   priority: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
 })
 const visibleQueryFieldKeys = ref<string[]>([])
@@ -524,6 +573,9 @@ const visibleQueryFieldKeys = ref<string[]>([])
 /** 高级查询字段元数据 */
 const queryFieldsMeta = computed(() => [
   { key: 'apsScheduleCode', label: t('entity.apsscheduleitem.apsschedulecode') },
+  { key: 'apsOrderId', label: t('entity.apsscheduleitem.apsorderid') },
+  { key: 'apsOperationId', label: t('entity.apsscheduleitem.apsoperationid') },
+  { key: 'routingItemId', label: t('entity.apsscheduleitem.routingitemid') },
   { key: 'lineNumber', label: t('entity.apsscheduleitem.linenumber') },
   { key: 'workOrderCode', label: t('entity.apsscheduleitem.workordercode') },
   { key: 'productCode', label: t('entity.apsscheduleitem.productcode') },
@@ -549,7 +601,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'priority', label: t('entity.apsscheduleitem.priority') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'ExtField', label: t('entity.apsscheduleitem.extfield') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 
@@ -574,6 +626,9 @@ function handleAdvancedQuerySubmit() {
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
   apsScheduleCode: '',
+  apsOrderId: '',
+  apsOperationId: '',
+  routingItemId: '',
   lineNumber: undefined as number | undefined,
   workOrderCode: '',
   productCode: '',
@@ -599,11 +654,12 @@ function handleAdvancedQueryReset() {
   priority: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
 }
 const columnSettingVisible = ref(false)
+/** 表格当前可见列 key（空数组时按 tableMode=masterDetailDetail 默认 id+4 业务列） */
 const visibleColumnKeys = ref<string[]>([])
 
 function handleColumnSetting() {
@@ -654,6 +710,36 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
     customRender: ({ record }: { record: ApsScheduleItem }) =>
       String(getApsScheduleItemField(record, 'apsScheduleCode') ?? ''),
+  },
+  {
+    title: t('entity.apsscheduleitem.apsorderid'),
+    dataIndex: 'apsOrderId',
+    key: 'apsOrderId',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: ApsScheduleItem }) =>
+      String(getApsScheduleItemField(record, 'apsOrderId') ?? ''),
+  },
+  {
+    title: t('entity.apsscheduleitem.apsoperationid'),
+    dataIndex: 'apsOperationId',
+    key: 'apsOperationId',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: ApsScheduleItem }) =>
+      String(getApsScheduleItemField(record, 'apsOperationId') ?? ''),
+  },
+  {
+    title: t('entity.apsscheduleitem.routingitemid'),
+    dataIndex: 'routingItemId',
+    key: 'routingItemId',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: ApsScheduleItem }) =>
+      String(getApsScheduleItemField(record, 'routingItemId') ?? ''),
   },
   {
     title: t('entity.apsscheduleitem.linenumber'),
@@ -725,6 +811,136 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: ApsScheduleItem }) =>
       String(getApsScheduleItemField(record, 'processCode') ?? ''),
   },
+  {
+    title: t('entity.apsscheduleitem.processname'),
+    dataIndex: 'processName',
+    key: 'processName',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: ApsScheduleItem }) =>
+      String(getApsScheduleItemField(record, 'processName') ?? ''),
+  },
+  {
+    title: t('entity.apsscheduleitem.processsequence'),
+    dataIndex: 'processSequence',
+    key: 'processSequence',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: ApsScheduleItem }) =>
+      String(getApsScheduleItemField(record, 'processSequence') ?? ''),
+  },
+  {
+    title: t('entity.apsscheduleitem.processstandardst'),
+    dataIndex: 'processStandardST',
+    key: 'processStandardST',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: ApsScheduleItem }) =>
+      String(getApsScheduleItemField(record, 'processStandardST') ?? ''),
+  },
+  {
+    title: t('entity.apsscheduleitem.processstandardstunit'),
+    dataIndex: 'processStandardSTUnit',
+    key: 'processStandardSTUnit',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: ApsScheduleItem }) =>
+      String(getApsScheduleItemField(record, 'processStandardSTUnit') ?? ''),
+  },
+  {
+    title: t('entity.apsscheduleitem.extraminutes'),
+    dataIndex: 'extraMinutes',
+    key: 'extraMinutes',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: ApsScheduleItem }) =>
+      String(getApsScheduleItemField(record, 'extraMinutes') ?? ''),
+  },
+  {
+    title: t('entity.apsscheduleitem.planquantity'),
+    dataIndex: 'planQuantity',
+    key: 'planQuantity',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: ApsScheduleItem }) =>
+      String(getApsScheduleItemField(record, 'planQuantity') ?? ''),
+  },
+  {
+    title: t('entity.apsscheduleitem.planstarttime'),
+    dataIndex: 'planStartTime',
+    key: 'planStartTime',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: ApsScheduleItem }) =>
+      String(getApsScheduleItemField(record, 'planStartTime') ?? ''),
+  },
+  {
+    title: t('entity.apsscheduleitem.planendtime'),
+    dataIndex: 'planEndTime',
+    key: 'planEndTime',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: ApsScheduleItem }) =>
+      String(getApsScheduleItemField(record, 'planEndTime') ?? ''),
+  },
+  {
+    title: t('entity.apsscheduleitem.actualstarttime'),
+    dataIndex: 'actualStartTime',
+    key: 'actualStartTime',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: ApsScheduleItem }) =>
+      String(getApsScheduleItemField(record, 'actualStartTime') ?? ''),
+  },
+  {
+    title: t('entity.apsscheduleitem.actualendtime'),
+    dataIndex: 'actualEndTime',
+    key: 'actualEndTime',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: ApsScheduleItem }) =>
+      String(getApsScheduleItemField(record, 'actualEndTime') ?? ''),
+  },
+  {
+    title: t('entity.apsscheduleitem.processstatus'),
+    dataIndex: 'processStatus',
+    key: 'processStatus',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: ApsScheduleItem }) =>
+      String(getApsScheduleItemField(record, 'processStatus') ?? ''),
+  },
+  {
+    title: t('entity.apsscheduleitem.priority'),
+    dataIndex: 'priority',
+    key: 'priority',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: ApsScheduleItem }) =>
+      String(getApsScheduleItemField(record, 'priority') ?? ''),
+  },
+  {
+    title: t('entity.apsscheduleitem.schedule'),
+    dataIndex: 'schedule',
+    key: 'schedule',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: ApsScheduleItem }) =>
+      String(getApsScheduleItemField(record, 'schedule') ?? ''),
+  },
   CreateActionColumn({
     actions: [
       {
@@ -732,7 +948,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:manufacturing:scheduling:apsschedule:update',
+        permission: 'logistics:manufacturing:scheduling:aps:schedule:update',
         onClick: (record: ApsScheduleItem) => void handleEdit(record),
       },
       {
@@ -740,7 +956,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:manufacturing:scheduling:apsschedule:delete',
+        permission: 'logistics:manufacturing:scheduling:aps:schedule:delete',
         onClick: (record: ApsScheduleItem) => void handleDeleteOne(record),
       },
     ],
@@ -757,7 +973,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: ApsScheduleItem, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getApsScheduleItemId(selectedRow.value) === getApsScheduleItemId(record)) {
+    } else if (selectedRow.value && getApsScheduleItemId(selectedRow.value) === getApsScheduleItemId(record)) {
       selectedRow.value = null
     }
   },
@@ -808,6 +1024,9 @@ function buildListQuery(overrides?: Partial<ApsScheduleItemQuery>): ApsScheduleI
     }
   }
   assignTrimmed('apsScheduleCode', form.apsScheduleCode)
+  assignTrimmed('apsOrderId', form.apsOrderId)
+  assignTrimmed('apsOperationId', form.apsOperationId)
+  assignTrimmed('routingItemId', form.routingItemId)
   if (form.lineNumber !== undefined && form.lineNumber !== null) {
     query.lineNumber = form.lineNumber
   }
@@ -849,7 +1068,7 @@ function buildListQuery(overrides?: Partial<ApsScheduleItemQuery>): ApsScheduleI
   }
   assignTrimmed('createdAtStart', form.createdAtStart)
   assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('ExtField', form.ExtField)
+  assignTrimmed('extField', form.extField)
   assignTrimmed('remark', form.remark)
   return query
 }
@@ -1011,35 +1230,36 @@ function handleRefresh() {
   void loadData()
 }
 
+/** 打开导入对话框 */
 function handleImport() {
   if (!hasMasterSelection.value) {
-    message.warning(t('common.status.empty'))
-    return
-  }
+      message.warning(t('common.status.empty'))
+      return
+    }
   importVisible.value = true
 }
 
+/** 下载导入模板 Excel */
 async function handleDownloadTemplate(sheetName?: string, fileName?: string): Promise<Blob> {
   const res = await getApsScheduleItemTemplate(sheetName, fileName)
-  return (res as { data?: Blob }).data ?? (res as Blob)
+  return (res as any)?.data ?? res
 }
 
-async function handleImportFile(
-  file: File,
-  sheetName?: string,
-): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importApsScheduleItem(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importApsScheduleItem(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   void loadData()
-  if (result.fail === 0) {
-    setTimeout(() => {
-      importVisible.value = false
-    }, 2000)
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
   }
 }
 
+/** 关闭导入对话框 */
 function handleImportCancel() {
   importVisible.value = false
 }

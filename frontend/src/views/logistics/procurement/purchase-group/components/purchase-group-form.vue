@@ -78,7 +78,7 @@
                   v-model:value="formState.purchaseGroupCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchasegroup.code') })"
                   show-count
-                  :maxlength="50"
+                  :maxlength="3"
                   allow-clear
                   :disabled="!!formData?.purchaseGroupId"
                 />

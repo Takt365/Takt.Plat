@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Workflow
 // 文件名称：TaktFlowInstanceI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktFlowInstance 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -144,15 +144,6 @@ public class TaktFlowInstanceI18nSeedData : ITaktSeedDataCoordinator
             // entity.flowinstance.processtitle
             new TranslationSeedItem("entity.flowinstance.processtitle", "zh-HK", "申请标题_hk", "申请标题"),
 
-            // entity.flowinstance.instancestatus
-            new TranslationSeedItem("entity.flowinstance.instancestatus", "en-US", "实例状态_us", "实例状态"),
-            // entity.flowinstance.instancestatus
-            new TranslationSeedItem("entity.flowinstance.instancestatus", "ja-JP", "实例状态_jp", "实例状态"),
-            // entity.flowinstance.instancestatus
-            new TranslationSeedItem("entity.flowinstance.instancestatus", "zh-CN", "实例状态", "实例状态"),
-            // entity.flowinstance.instancestatus
-            new TranslationSeedItem("entity.flowinstance.instancestatus", "zh-HK", "实例状态_hk", "实例状态"),
-
             // entity.flowinstance.currentactivityid
             new TranslationSeedItem("entity.flowinstance.currentactivityid", "en-US", "当前节点ID_us", "当前节点 ID（设计器 nodeId）"),
             // entity.flowinstance.currentactivityid
@@ -253,13 +244,13 @@ public class TaktFlowInstanceI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.flowinstance.deletereason", "zh-HK", "终止原因_hk", "终止原因"),
 
             // entity.flowinstance.frmdata
-            new TranslationSeedItem("entity.flowinstance.frmdata", "en-US", "表单数据JSON_us", "表单数据 JSON（前端 frmData；细粒度字段可同步至 TaktFlowVariable）"),
+            new TranslationSeedItem("entity.flowinstance.frmdata", "en-US", "表单数据_us", "表单数据 JSON（前端 frmData；细粒度字段可同步至 TaktFlowVariable）"),
             // entity.flowinstance.frmdata
-            new TranslationSeedItem("entity.flowinstance.frmdata", "ja-JP", "表单数据JSON_jp", "表单数据 JSON（前端 frmData；细粒度字段可同步至 TaktFlowVariable）"),
+            new TranslationSeedItem("entity.flowinstance.frmdata", "ja-JP", "表单数据_jp", "表单数据 JSON（前端 frmData；细粒度字段可同步至 TaktFlowVariable）"),
             // entity.flowinstance.frmdata
-            new TranslationSeedItem("entity.flowinstance.frmdata", "zh-CN", "表单数据JSON", "表单数据 JSON（前端 frmData；细粒度字段可同步至 TaktFlowVariable）"),
+            new TranslationSeedItem("entity.flowinstance.frmdata", "zh-CN", "表单数据", "表单数据 JSON（前端 frmData；细粒度字段可同步至 TaktFlowVariable）"),
             // entity.flowinstance.frmdata
-            new TranslationSeedItem("entity.flowinstance.frmdata", "zh-HK", "表单数据JSON_hk", "表单数据 JSON（前端 frmData；细粒度字段可同步至 TaktFlowVariable）"),
+            new TranslationSeedItem("entity.flowinstance.frmdata", "zh-HK", "表单数据_hk", "表单数据 JSON（前端 frmData；细粒度字段可同步至 TaktFlowVariable）"),
 
             // entity.flowinstance.formid
             new TranslationSeedItem("entity.flowinstance.formid", "en-US", "表单ID_us", "关联表单 ID"),
@@ -287,6 +278,15 @@ public class TaktFlowInstanceI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.flowinstance.processcontentsnapshot", "zh-CN", "流程设计快照", "流程设计快照（启动时复制，避免定义变更影响在途实例）"),
             // entity.flowinstance.processcontentsnapshot
             new TranslationSeedItem("entity.flowinstance.processcontentsnapshot", "zh-HK", "流程设计快照_hk", "流程设计快照（启动时复制，避免定义变更影响在途实例）"),
+
+            // entity.flowinstance.instancestatus
+            new TranslationSeedItem("entity.flowinstance.instancestatus", "en-US", "实例状态_us", "实例状态"),
+            // entity.flowinstance.instancestatus
+            new TranslationSeedItem("entity.flowinstance.instancestatus", "ja-JP", "实例状态_jp", "实例状态"),
+            // entity.flowinstance.instancestatus
+            new TranslationSeedItem("entity.flowinstance.instancestatus", "zh-CN", "实例状态", "实例状态"),
+            // entity.flowinstance.instancestatus
+            new TranslationSeedItem("entity.flowinstance.instancestatus", "zh-HK", "实例状态_hk", "实例状态"),
 
             // entity.flowinstance.processdefinition
             new TranslationSeedItem("entity.flowinstance.processdefinition", "en-US", "流程定义_us", "流程定义"),

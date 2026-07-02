@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/output
 // 文件名称：assy-output-detail.d.ts
-// 创建时间：2026-06-20
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/output 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -64,7 +64,7 @@ export interface AssyOutputDetail extends CompanyDtoBase {
   downtimeMinutes: number;
 
   /**
-   * 停线原因
+   * 停线原因（字典 logistics_stop_reason_category，存 DictValue）
    */
   downtimeReason?: string;
 
@@ -74,7 +74,7 @@ export interface AssyOutputDetail extends CompanyDtoBase {
   downtimeDescription?: string;
 
   /**
-   * 未达成原因
+   * 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
    */
   unachievedReason?: string;
 
@@ -159,7 +159,7 @@ export interface AssyOutputDetailQuery extends TaktPagedQuery {
   downtimeMinutes?: number;
 
   /**
-   * 停线原因
+   * 停线原因（字典 logistics_stop_reason_category，存 DictValue）
    */
   downtimeReason?: string;
 
@@ -169,7 +169,7 @@ export interface AssyOutputDetailQuery extends TaktPagedQuery {
   downtimeDescription?: string;
 
   /**
-   * 未达成原因
+   * 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
    */
   unachievedReason?: string;
 
@@ -238,7 +238,7 @@ export interface AssyOutputDetailCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -273,7 +273,7 @@ export interface AssyOutputDetailCreate {
   downtimeMinutes: number;
 
   /**
-   * 停线原因
+   * 停线原因（字典 logistics_stop_reason_category，存 DictValue）
    */
   downtimeReason?: string;
 
@@ -283,7 +283,7 @@ export interface AssyOutputDetailCreate {
   downtimeDescription?: string;
 
   /**
-   * 未达成原因
+   * 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
    */
   unachievedReason?: string;
 
@@ -377,12 +377,17 @@ export interface AssyOutputDetailTemplate {
   timePeriod?: string;
 
   /**
+   * 实际生产数量
+   */
+  prodActualQty?: number;
+
+  /**
    * 停线时间(分钟)
    */
   downtimeMinutes?: number;
 
   /**
-   * 停线原因
+   * 停线原因（字典 logistics_stop_reason_category，存 DictValue）
    */
   downtimeReason?: string;
 
@@ -392,7 +397,7 @@ export interface AssyOutputDetailTemplate {
   downtimeDescription?: string;
 
   /**
-   * 未达成原因
+   * 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
    */
   unachievedReason?: string;
 
@@ -400,6 +405,26 @@ export interface AssyOutputDetailTemplate {
    * 未达成说明
    */
   unachievedDescription?: string;
+
+  /**
+   * 投入工时(分钟)
+   */
+  inputMinutes?: number;
+
+  /**
+   * 生产工时(分钟)
+   */
+  prodMinutes?: number;
+
+  /**
+   * 实际工时(分钟)
+   */
+  actualMinutes?: number;
+
+  /**
+   * 达成率(%)
+   */
+  achievementRate?: number;
 
   /**
    * 扩展字段JSON
@@ -431,7 +456,7 @@ export interface AssyOutputDetailImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -456,12 +481,17 @@ export interface AssyOutputDetailImport {
   timePeriod?: string;
 
   /**
+   * 实际生产数量
+   */
+  prodActualQty?: number;
+
+  /**
    * 停线时间(分钟)
    */
   downtimeMinutes?: number;
 
   /**
-   * 停线原因
+   * 停线原因（字典 logistics_stop_reason_category，存 DictValue）
    */
   downtimeReason?: string;
 
@@ -471,7 +501,7 @@ export interface AssyOutputDetailImport {
   downtimeDescription?: string;
 
   /**
-   * 未达成原因
+   * 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
    */
   unachievedReason?: string;
 
@@ -479,6 +509,26 @@ export interface AssyOutputDetailImport {
    * 未达成说明
    */
   unachievedDescription?: string;
+
+  /**
+   * 投入工时(分钟)
+   */
+  inputMinutes?: number;
+
+  /**
+   * 生产工时(分钟)
+   */
+  prodMinutes?: number;
+
+  /**
+   * 实际工时(分钟)
+   */
+  actualMinutes?: number;
+
+  /**
+   * 达成率(%)
+   */
+  achievementRate?: number;
 
   /**
    * 扩展字段JSON
@@ -540,7 +590,7 @@ export interface AssyOutputDetailExport {
   downtimeMinutes: number;
 
   /**
-   * 停线原因
+   * 停线原因（字典 logistics_stop_reason_category，存 DictValue）
    */
   downtimeReason?: string;
 
@@ -550,7 +600,7 @@ export interface AssyOutputDetailExport {
   downtimeDescription?: string;
 
   /**
-   * 未达成原因
+   * 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
    */
   unachievedReason?: string;
 

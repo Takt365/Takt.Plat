@@ -132,7 +132,7 @@
           v-model:value="advancedQueryForm.baseUnit"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routingitem.baseunit') })"
           show-count
-          :maxlength="20"
+          :maxlength="5"
           allow-clear
         />
       </a-form-item>
@@ -188,10 +188,11 @@
       </div>
       <div v-show="isFieldVisible('pointsToMinutesRate')">
       <a-form-item :label="t('entity.routingitem.pointstominutesrate')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.pointsToMinutesRate"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routingitem.pointstominutesrate') })"
-          style="width: 100%"
+          dict-type="logistics_points_to_minutes_rate"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.routingitem.pointstominutesrate') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -222,13 +223,12 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('isQualityCheck')">
-      <a-form-item :label="t('entity.routingitem.isqualitycheck')">
-        <a-input
-          v-model:value="advancedQueryForm.isQualityCheck"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routingitem.isqualitycheck') })"
-          show-count
-          :maxlength="20"
+      <div v-show="isFieldVisible('isInspection')">
+      <a-form-item :label="t('entity.routingitem.isinspection')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.isInspection"
+          dict-type="sys_yes_no_type"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.routingitem.isinspection') })"
           allow-clear
         />
       </a-form-item>
@@ -270,7 +270,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -281,7 +281,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -426,11 +426,11 @@ const advancedQueryForm = ref({
   timeUnit: '',
   standardShorts: undefined as number | undefined,
   pointsUnit: '',
-  pointsToMinutesRate: undefined as number | undefined,
+  pointsToMinutesRate: '' as string,
   convertedMinutes: undefined as number | undefined,
   setupMinutes: undefined as number | undefined,
   teardownMinutes: undefined as number | undefined,
-  isQualityCheck: '',
+  isInspection: undefined as number | undefined,
   processDescription: '',
   processSegmentType: undefined as number | undefined,
   extJson: '',
@@ -455,7 +455,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'convertedMinutes', label: t('entity.routingitem.convertedminutes') },
   { key: 'setupMinutes', label: t('entity.routingitem.setupminutes') },
   { key: 'teardownMinutes', label: t('entity.routingitem.teardownminutes') },
-  { key: 'isQualityCheck', label: t('entity.routingitem.isqualitycheck') },
+  { key: 'isInspection', label: t('entity.routingitem.isinspection') },
   { key: 'processDescription', label: t('entity.routingitem.processdescription') },
   { key: 'processSegmentType', label: t('entity.routingitem.processsegmenttype') },
   { key: 'extJson', label: t('entity.routingitem.extjson') },
@@ -493,11 +493,11 @@ function handleAdvancedQueryReset() {
   timeUnit: '',
   standardShorts: undefined as number | undefined,
   pointsUnit: '',
-  pointsToMinutesRate: undefined as number | undefined,
+  pointsToMinutesRate: '' as string,
   convertedMinutes: undefined as number | undefined,
   setupMinutes: undefined as number | undefined,
   teardownMinutes: undefined as number | undefined,
-  isQualityCheck: '',
+  isInspection: undefined as number | undefined,
   processDescription: '',
   processSegmentType: undefined as number | undefined,
   extJson: '',
@@ -661,7 +661,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: RoutingItem, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getRoutingItemId(selectedRow.value) === getRoutingItemId(record)) {
+    } else if (selectedRow.value && getRoutingItemId(selectedRow.value) === getRoutingItemId(record)) {
       selectedRow.value = null
     }
   },
@@ -727,9 +727,7 @@ function buildListQuery(overrides?: Partial<RoutingItemQuery>): RoutingItemQuery
     query.standardShorts = form.standardShorts
   }
   assignTrimmed('pointsUnit', form.pointsUnit)
-  if (form.pointsToMinutesRate !== undefined && form.pointsToMinutesRate !== null) {
-    query.pointsToMinutesRate = form.pointsToMinutesRate
-  }
+  assignTrimmed('pointsToMinutesRate', form.pointsToMinutesRate)
   if (form.convertedMinutes !== undefined && form.convertedMinutes !== null) {
     query.convertedMinutes = form.convertedMinutes
   }
@@ -739,7 +737,9 @@ function buildListQuery(overrides?: Partial<RoutingItemQuery>): RoutingItemQuery
   if (form.teardownMinutes !== undefined && form.teardownMinutes !== null) {
     query.teardownMinutes = form.teardownMinutes
   }
-  assignTrimmed('isQualityCheck', form.isQualityCheck)
+  if (form.isInspection !== undefined && form.isInspection !== null) {
+    query.isInspection = form.isInspection
+  }
   assignTrimmed('processDescription', form.processDescription)
   if (form.processSegmentType !== undefined && form.processSegmentType !== null) {
     query.processSegmentType = form.processSegmentType

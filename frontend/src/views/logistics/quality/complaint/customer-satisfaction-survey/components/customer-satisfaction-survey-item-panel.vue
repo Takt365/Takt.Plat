@@ -19,11 +19,11 @@
       @reset="handleQueryReset"
     />
     <TaktToolsBar
-      create-permission="logistics:quality:complaint:customersatisfactionsurvey:create"
-      update-permission="logistics:quality:complaint:customersatisfactionsurvey:update"
-      delete-permission="logistics:quality:complaint:customersatisfactionsurvey:delete"
-      import-permission="logistics:quality:complaint:customersatisfactionsurvey:import"
-      export-permission="logistics:quality:complaint:customersatisfactionsurvey:export"
+      create-permission="logistics:quality:complaint:customer:satisfaction:survey:create"
+      update-permission="logistics:quality:complaint:customer:satisfaction:survey:update"
+      delete-permission="logistics:quality:complaint:customer:satisfaction:survey:delete"
+      import-permission="logistics:quality:complaint:customer:satisfaction:survey:import"
+      export-permission="logistics:quality:complaint:customer:satisfaction:survey:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -231,7 +231,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -242,7 +242,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -585,7 +585,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:quality:complaint:customersatisfactionsurvey:update',
+        permission: 'logistics:quality:complaint:customer:satisfaction:survey:update',
         onClick: (record: CustomerSatisfactionSurveyItem) => void handleEdit(record),
       },
       {
@@ -593,7 +593,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:quality:complaint:customersatisfactionsurvey:delete',
+        permission: 'logistics:quality:complaint:customer:satisfaction:survey:delete',
         onClick: (record: CustomerSatisfactionSurveyItem) => void handleDeleteOne(record),
       },
     ],
@@ -610,7 +610,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: CustomerSatisfactionSurveyItem, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getCustomerSatisfactionSurveyItemId(selectedRow.value) === getCustomerSatisfactionSurveyItemId(record)) {
+    } else if (selectedRow.value && getCustomerSatisfactionSurveyItemId(selectedRow.value) === getCustomerSatisfactionSurveyItemId(record)) {
       selectedRow.value = null
     }
   },

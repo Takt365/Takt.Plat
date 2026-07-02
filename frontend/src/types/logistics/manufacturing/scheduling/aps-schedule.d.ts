@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/scheduling
 // 文件名称：aps-schedule.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/scheduling 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface ApsSchedule extends CompanyDtoBase {
   apsScheduleId: string;
 
   /**
-   * 工厂编码（不可空）
+   * 工厂编码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -79,12 +79,12 @@ export interface ApsSchedule extends CompanyDtoBase {
   workshopName?: string;
 
   /**
-   * 生产线编码
+   * 生产班组编码
    */
   productionLineCode?: string;
 
   /**
-   * 生产线名称
+   * 生产班组名称
    */
   productionLineName?: string;
 
@@ -109,7 +109,7 @@ export interface ApsSchedule extends CompanyDtoBase {
   scheduleStatus: number;
 
   /**
-   * 计划员ID
+   * 计划员ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   plannerId?: string;
 
@@ -124,7 +124,7 @@ export interface ApsSchedule extends CompanyDtoBase {
   publishTime?: string;
 
   /**
-   * 发布人ID
+   * 发布人ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   publishUserId?: string;
 
@@ -137,6 +137,11 @@ export interface ApsSchedule extends CompanyDtoBase {
    * 排程说明
    */
   scheduleDescription?: string;
+
+  /**
+   * APS 排程订单列表（排程批次关联的订单） （子表：TaktApsOrder）
+   */
+  orders?: ApsOrder[];
 
   /**
    * 排程明细列表（主子表关系） （子表：TaktApsScheduleItem）
@@ -169,7 +174,7 @@ export interface ApsScheduleQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂编码（不可空）
+   * 工厂编码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -234,12 +239,12 @@ export interface ApsScheduleQuery extends TaktPagedQuery {
   workshopName?: string;
 
   /**
-   * 生产线编码
+   * 生产班组编码
    */
   productionLineCode?: string;
 
   /**
-   * 生产线名称
+   * 生产班组名称
    */
   productionLineName?: string;
 
@@ -264,7 +269,7 @@ export interface ApsScheduleQuery extends TaktPagedQuery {
   scheduleStatus?: number;
 
   /**
-   * 计划员ID
+   * 计划员ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   plannerId?: string;
 
@@ -284,7 +289,7 @@ export interface ApsScheduleQuery extends TaktPagedQuery {
   publishTimeEnd?: string;
 
   /**
-   * 发布人ID
+   * 发布人ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   publishUserId?: string;
 
@@ -311,7 +316,7 @@ export interface ApsScheduleQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -338,12 +343,12 @@ export interface ApsScheduleCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
   /**
-   * 工厂编码（不可空）
+   * 工厂编码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -393,12 +398,12 @@ export interface ApsScheduleCreate {
   workshopName?: string;
 
   /**
-   * 生产线编码
+   * 生产班组编码
    */
   productionLineCode?: string;
 
   /**
-   * 生产线名称
+   * 生产班组名称
    */
   productionLineName?: string;
 
@@ -423,7 +428,7 @@ export interface ApsScheduleCreate {
   scheduleStatus: number;
 
   /**
-   * 计划员ID
+   * 计划员ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   plannerId?: string;
 
@@ -438,7 +443,7 @@ export interface ApsScheduleCreate {
   publishTime?: string;
 
   /**
-   * 发布人ID
+   * 发布人ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   publishUserId?: string;
 
@@ -453,6 +458,11 @@ export interface ApsScheduleCreate {
   scheduleDescription?: string;
 
   /**
+   * APS 排程订单列表（排程批次关联的订单）（子表，级联保存）
+   */
+  orders?: ApsOrderCreate[];
+
+  /**
    * 排程明细列表（主子表关系）（子表，级联保存）
    */
   items?: ApsScheduleItemCreate[];
@@ -465,7 +475,7 @@ export interface ApsScheduleCreate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -526,7 +536,7 @@ export interface ApsScheduleTemplate {
   companyCode?: string;
 
   /**
-   * 工厂编码（不可空）
+   * 工厂编码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -546,6 +556,21 @@ export interface ApsScheduleTemplate {
   scheduleType?: number;
 
   /**
+   * 计划日期
+   */
+  planDate?: string;
+
+  /**
+   * 计划开始时间
+   */
+  planStartTime?: string;
+
+  /**
+   * 计划结束时间
+   */
+  planEndTime?: string;
+
+  /**
    * 计划周期（0=日计划，1=周计划，2=月计划）
    */
   planCycle?: number;
@@ -561,12 +586,12 @@ export interface ApsScheduleTemplate {
   workshopName?: string;
 
   /**
-   * 生产线编码
+   * 生产班组编码
    */
   productionLineCode?: string;
 
   /**
-   * 生产线名称
+   * 生产班组名称
    */
   productionLineName?: string;
 
@@ -586,9 +611,59 @@ export interface ApsScheduleTemplate {
   optimizationObjective?: number;
 
   /**
+   * 排程状态（0=草稿，1=计算中，2=已计算，3=已发布，4=执行中，5=已完成，6=已取消）
+   */
+  scheduleStatus?: number;
+
+  /**
+   * 计划员ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   */
+  plannerId?: string;
+
+  /**
+   * 计划员姓名
+   */
+  plannerName?: string;
+
+  /**
+   * 发布时间
+   */
+  publishTime?: string;
+
+  /**
+   * 发布人ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   */
+  publishUserId?: string;
+
+  /**
+   * 发布人姓名
+   */
+  publishUserName?: string;
+
+  /**
+   * 排程说明
+   */
+  scheduleDescription?: string;
+
+  /**
+   * APS 排程订单列表（排程批次关联的订单）（子表，级联保存）
+   */
+  orders?: ApsOrderCreate[];
+
+  /**
+   * 排程明细列表（主子表关系）（子表，级联保存）
+   */
+  items?: ApsScheduleItemCreate[];
+
+  /**
+   * 变更日志列表（主子表关系）（子表，级联保存）
+   */
+  changeLogs?: ApsScheduleChangeLogCreate[];
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -615,12 +690,12 @@ export interface ApsScheduleImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
   /**
-   * 工厂编码（不可空）
+   * 工厂编码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -640,6 +715,21 @@ export interface ApsScheduleImport {
   scheduleType?: number;
 
   /**
+   * 计划日期
+   */
+  planDate?: string;
+
+  /**
+   * 计划开始时间
+   */
+  planStartTime?: string;
+
+  /**
+   * 计划结束时间
+   */
+  planEndTime?: string;
+
+  /**
    * 计划周期（0=日计划，1=周计划，2=月计划）
    */
   planCycle?: number;
@@ -655,12 +745,12 @@ export interface ApsScheduleImport {
   workshopName?: string;
 
   /**
-   * 生产线编码
+   * 生产班组编码
    */
   productionLineCode?: string;
 
   /**
-   * 生产线名称
+   * 生产班组名称
    */
   productionLineName?: string;
 
@@ -680,9 +770,59 @@ export interface ApsScheduleImport {
   optimizationObjective?: number;
 
   /**
+   * 排程状态（0=草稿，1=计算中，2=已计算，3=已发布，4=执行中，5=已完成，6=已取消）
+   */
+  scheduleStatus?: number;
+
+  /**
+   * 计划员ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   */
+  plannerId?: string;
+
+  /**
+   * 计划员姓名
+   */
+  plannerName?: string;
+
+  /**
+   * 发布时间
+   */
+  publishTime?: string;
+
+  /**
+   * 发布人ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   */
+  publishUserId?: string;
+
+  /**
+   * 发布人姓名
+   */
+  publishUserName?: string;
+
+  /**
+   * 排程说明
+   */
+  scheduleDescription?: string;
+
+  /**
+   * APS 排程订单列表（排程批次关联的订单）（子表，级联保存）
+   */
+  orders?: ApsOrderCreate[];
+
+  /**
+   * 排程明细列表（主子表关系）（子表，级联保存）
+   */
+  items?: ApsScheduleItemCreate[];
+
+  /**
+   * 变更日志列表（主子表关系）（子表，级联保存）
+   */
+  changeLogs?: ApsScheduleChangeLogCreate[];
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -709,7 +849,7 @@ export interface ApsScheduleExport {
   companyCode: string;
 
   /**
-   * 工厂编码（不可空）
+   * 工厂编码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -759,12 +899,12 @@ export interface ApsScheduleExport {
   workshopName?: string;
 
   /**
-   * 生产线编码
+   * 生产班组编码
    */
   productionLineCode?: string;
 
   /**
-   * 生产线名称
+   * 生产班组名称
    */
   productionLineName?: string;
 
@@ -789,7 +929,7 @@ export interface ApsScheduleExport {
   scheduleStatus: number;
 
   /**
-   * 计划员ID
+   * 计划员ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   plannerId?: string;
 
@@ -804,7 +944,7 @@ export interface ApsScheduleExport {
   publishTime?: string;
 
   /**
-   * 发布人ID
+   * 发布人ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   publishUserId?: string;
 
@@ -821,7 +961,7 @@ export interface ApsScheduleExport {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注

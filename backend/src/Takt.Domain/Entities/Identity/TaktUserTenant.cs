@@ -16,7 +16,7 @@ namespace Takt.Domain.Entities.Identity;
 
 /// <summary>
 /// 用户-租户关联实体
-/// 一个用户可关联多个租户；<see cref="TaktTenantEntityBase.TenantCode"/> 即为关联的租户编码。
+/// 一个用户可关联多个租户；TenantCode 即为关联的租户编码。
 /// </summary>
 [SugarTable("takt_identity_user_tenant", "用户-租户关联表")]
 [SugarIndex("ix_user_tenant_tenant", nameof(TenantCode), OrderByType.Asc, false)]
@@ -49,7 +49,7 @@ public class TaktUserTenant : TaktTenantEntityBase
     public TaktUser User { get; set; } = null!;
 
     /// <summary>
-    /// 可访问租户（多对一，按 <see cref="TenantCode"/> 关联）
+    /// 可访问租户（多对一，按 TenantCode 关联）
     /// </summary>
     [Navigate(NavigateType.ManyToOne, nameof(TenantCode), nameof(TaktTenant.TenantCode))]
     public TaktTenant Tenant { get; set; } = null!;

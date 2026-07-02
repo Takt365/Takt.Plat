@@ -274,7 +274,7 @@
           v-model:value="advancedQueryForm.currencyCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceorder.currencycode') })"
           show-count
-          :maxlength="10"
+          :maxlength="3"
           allow-clear
         />
       </a-form-item>

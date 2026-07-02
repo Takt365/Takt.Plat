@@ -72,10 +72,12 @@
                 :label="t('entity.inspectionstandarditem.itemtype')"
                 name="itemType"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.itemType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionstandarditem.itemtype') })"
-                  style="width: 100%"
+                  dict-type="logistics_quality_inspection_item_type"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.inspectionstandarditem.itemtype') })"
+                  :disabled="loading"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -84,11 +86,11 @@
                 :label="t('entity.inspectionstandarditem.defectlevel')"
                 name="defectLevel"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.defectLevel"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionstandarditem.defectlevel') })"
-                  show-count
-                  :maxlength="20"
+                  dict-type="logistics_quality_defect_severity_code"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.inspectionstandarditem.defectlevel') })"
+                  :disabled="loading"
                   allow-clear
                 />
               </a-form-item>
@@ -98,10 +100,12 @@
                 :label="t('entity.inspectionstandarditem.inspectionmode')"
                 name="inspectionMode"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.inspectionMode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionstandarditem.inspectionmode') })"
-                  style="width: 100%"
+                  dict-type="logistics_quality_inspection_mode"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.inspectionstandarditem.inspectionmode') })"
+                  :disabled="loading"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopExecScanI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSopExecScan 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,31 +91,31 @@ public class TaktSopExecScanI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.sopexecscan._self", "zh-HK", "SOP 物料扫码记录信息_hk", "实体名称"),
 
             // entity.sopexecscan.execid
-            new TranslationSeedItem("entity.sopexecscan.execid", "en-US", "执行追溯ID_us", "执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.sopexecscan.execid", "en-US", "执行追溯ID_us", "执行追溯 ID（关联 TaktSopExec.Id，选项 TaktSopExecs/options）"),
             // entity.sopexecscan.execid
-            new TranslationSeedItem("entity.sopexecscan.execid", "ja-JP", "执行追溯ID_jp", "执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.sopexecscan.execid", "ja-JP", "执行追溯ID_jp", "执行追溯 ID（关联 TaktSopExec.Id，选项 TaktSopExecs/options）"),
             // entity.sopexecscan.execid
-            new TranslationSeedItem("entity.sopexecscan.execid", "zh-CN", "执行追溯ID", "执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.sopexecscan.execid", "zh-CN", "执行追溯ID", "执行追溯 ID（关联 TaktSopExec.Id，选项 TaktSopExecs/options）"),
             // entity.sopexecscan.execid
-            new TranslationSeedItem("entity.sopexecscan.execid", "zh-HK", "执行追溯ID_hk", "执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.sopexecscan.execid", "zh-HK", "执行追溯ID_hk", "执行追溯 ID（关联 TaktSopExec.Id，选项 TaktSopExecs/options）"),
 
             // entity.sopexecscan.execstepid
-            new TranslationSeedItem("entity.sopexecscan.execstepid", "en-US", "工步执行明细ID_us", "工步执行明细 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.sopexecscan.execstepid", "en-US", "工步执行明细ID_us", "工步执行明细 ID（关联 TaktSopExecStep.Id，选项 TaktSopExecSteps/options）"),
             // entity.sopexecscan.execstepid
-            new TranslationSeedItem("entity.sopexecscan.execstepid", "ja-JP", "工步执行明细ID_jp", "工步执行明细 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.sopexecscan.execstepid", "ja-JP", "工步执行明细ID_jp", "工步执行明细 ID（关联 TaktSopExecStep.Id，选项 TaktSopExecSteps/options）"),
             // entity.sopexecscan.execstepid
-            new TranslationSeedItem("entity.sopexecscan.execstepid", "zh-CN", "工步执行明细ID", "工步执行明细 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.sopexecscan.execstepid", "zh-CN", "工步执行明细ID", "工步执行明细 ID（关联 TaktSopExecStep.Id，选项 TaktSopExecSteps/options）"),
             // entity.sopexecscan.execstepid
-            new TranslationSeedItem("entity.sopexecscan.execstepid", "zh-HK", "工步执行明细ID_hk", "工步执行明细 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.sopexecscan.execstepid", "zh-HK", "工步执行明细ID_hk", "工步执行明细 ID（关联 TaktSopExecStep.Id，选项 TaktSopExecSteps/options）"),
 
             // entity.sopexecscan.stepid
-            new TranslationSeedItem("entity.sopexecscan.stepid", "en-US", "工步ID_us", "工步 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.sopexecscan.stepid", "en-US", "工步ID_us", "工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）"),
             // entity.sopexecscan.stepid
-            new TranslationSeedItem("entity.sopexecscan.stepid", "ja-JP", "工步ID_jp", "工步 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.sopexecscan.stepid", "ja-JP", "工步ID_jp", "工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）"),
             // entity.sopexecscan.stepid
-            new TranslationSeedItem("entity.sopexecscan.stepid", "zh-CN", "工步ID", "工步 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.sopexecscan.stepid", "zh-CN", "工步ID", "工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）"),
             // entity.sopexecscan.stepid
-            new TranslationSeedItem("entity.sopexecscan.stepid", "zh-HK", "工步ID_hk", "工步 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.sopexecscan.stepid", "zh-HK", "工步ID_hk", "工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）"),
 
             // entity.sopexecscan.scannedbarcode
             new TranslationSeedItem("entity.sopexecscan.scannedbarcode", "en-US", "扫描条码_us", "扫描条码"),
@@ -127,22 +127,22 @@ public class TaktSopExecScanI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.sopexecscan.scannedbarcode", "zh-HK", "扫描条码_hk", "扫描条码"),
 
             // entity.sopexecscan.expectedmaterialcode
-            new TranslationSeedItem("entity.sopexecscan.expectedmaterialcode", "en-US", "期望物料编码_us", "期望物料编码"),
+            new TranslationSeedItem("entity.sopexecscan.expectedmaterialcode", "en-US", "期望物料编码_us", "期望物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）"),
             // entity.sopexecscan.expectedmaterialcode
-            new TranslationSeedItem("entity.sopexecscan.expectedmaterialcode", "ja-JP", "期望物料编码_jp", "期望物料编码"),
+            new TranslationSeedItem("entity.sopexecscan.expectedmaterialcode", "ja-JP", "期望物料编码_jp", "期望物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）"),
             // entity.sopexecscan.expectedmaterialcode
-            new TranslationSeedItem("entity.sopexecscan.expectedmaterialcode", "zh-CN", "期望物料编码", "期望物料编码"),
+            new TranslationSeedItem("entity.sopexecscan.expectedmaterialcode", "zh-CN", "期望物料编码", "期望物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）"),
             // entity.sopexecscan.expectedmaterialcode
-            new TranslationSeedItem("entity.sopexecscan.expectedmaterialcode", "zh-HK", "期望物料编码_hk", "期望物料编码"),
+            new TranslationSeedItem("entity.sopexecscan.expectedmaterialcode", "zh-HK", "期望物料编码_hk", "期望物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）"),
 
             // entity.sopexecscan.scanresult
-            new TranslationSeedItem("entity.sopexecscan.scanresult", "en-US", "扫码结果_us", "扫码结果（1=PASS，2=NG；字典 logistics_sop_scan_result_type）"),
+            new TranslationSeedItem("entity.sopexecscan.scanresult", "en-US", "扫码结果_us", "扫码结果（字典 logistics_sop_scan_result_type；1=PASS，2=NG）"),
             // entity.sopexecscan.scanresult
-            new TranslationSeedItem("entity.sopexecscan.scanresult", "ja-JP", "扫码结果_jp", "扫码结果（1=PASS，2=NG；字典 logistics_sop_scan_result_type）"),
+            new TranslationSeedItem("entity.sopexecscan.scanresult", "ja-JP", "扫码结果_jp", "扫码结果（字典 logistics_sop_scan_result_type；1=PASS，2=NG）"),
             // entity.sopexecscan.scanresult
-            new TranslationSeedItem("entity.sopexecscan.scanresult", "zh-CN", "扫码结果", "扫码结果（1=PASS，2=NG；字典 logistics_sop_scan_result_type）"),
+            new TranslationSeedItem("entity.sopexecscan.scanresult", "zh-CN", "扫码结果", "扫码结果（字典 logistics_sop_scan_result_type；1=PASS，2=NG）"),
             // entity.sopexecscan.scanresult
-            new TranslationSeedItem("entity.sopexecscan.scanresult", "zh-HK", "扫码结果_hk", "扫码结果（1=PASS，2=NG；字典 logistics_sop_scan_result_type）"),
+            new TranslationSeedItem("entity.sopexecscan.scanresult", "zh-HK", "扫码结果_hk", "扫码结果（字典 logistics_sop_scan_result_type；1=PASS，2=NG）"),
 
             // entity.sopexecscan.matchmessage
             new TranslationSeedItem("entity.sopexecscan.matchmessage", "en-US", "比对说明_us", "比对说明"),

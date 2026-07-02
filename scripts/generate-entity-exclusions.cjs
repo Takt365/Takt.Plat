@@ -38,6 +38,14 @@ const MANUAL_STANDALONE_SERVICE_ENTITY_NAMES = new Set([
 ]);
 
 /**
+ * 手工维护 DTO 的实体（含脚本无法生成的附加 DTO 类，禁止 generate-dtos-from-entity 覆盖）
+ * TaktHoliday：TaktHolidayThemeDto（登录前假日主题预览，与实体字段并列但非实体映射）
+ */
+const MANUAL_DTO_ENTITY_SHORT_NAMES = new Set([
+  'Holiday',
+]);
+
+/**
  * OneToMany 从实体但仍保留独立 CRUD 菜单页（不因 masterDetailChildRegistry 跳过 Vue 生成）
  * 例：TaktQuartzTask.QuartzLogs 与 statistics/logging/quartz-log 独立页并存
  */
@@ -54,6 +62,30 @@ const STANDALONE_CHILD_VUE_ENTITY_SHORT_NAMES = new Set([
  */
 function isRbacJunctionEntity(entityShort) {
   return RBAC_ASSOCIATION_ENTITY_SHORT_NAMES.has(entityShort);
+}
+
+/**
+ * 是否为手工维护 DTO 的实体（禁止 DTO/前端 types/i18n 流水脚本覆盖）
+ * @param {string} entityShort
+ * @returns {boolean}
+ */
+function isManualDtoEntity(entityShort) {
+  return MANUAL_DTO_ENTITY_SHORT_NAMES.has(entityShort);
+}
+
+/**
+ * 单实体 CLI：禁止对手工维护实体运行任何代码生成流水脚本
+ * @param {string} entityShort
+ */
+function assertNotManualDtoEntityCli(entityShort) {
+  if (!isManualDtoEntity(entityShort)) {
+    return;
+  }
+  console.error(
+    `❌ 实体 ${entityShort} 为手工维护模块（含附加 DTO/业务逻辑），禁止代码生成流水脚本（generate-all / generate-dtos / generate-from-backend / generate-services / generate-controllers / generate-vue-* 等）。`,
+  );
+  console.error('   例：TaktHoliday 含 TaktHolidayThemeDto 与主题预览 API，须手工同步实体、DTO、服务、i18n 种子与前端 types/api/views。');
+  process.exit(1);
 }
 
 /**
@@ -99,7 +131,10 @@ function shouldExcludeStandaloneService(entityName) {
  */
 function shouldExcludeDtoFile(dtoFile) {
   const entityShort = entityShortFromDtoFileName(path.basename(dtoFile));
-  return entityShort != null && isRbacJunctionEntity(entityShort);
+  if (entityShort != null && isRbacJunctionEntity(entityShort)) {
+    return true;
+  }
+  return entityShort != null && isManualDtoEntity(entityShort);
 }
 
 /**
@@ -109,7 +144,10 @@ function shouldExcludeDtoFile(dtoFile) {
  */
 function shouldExcludeDtoSourceBase(sourceFileBase) {
   const entityShort = entityShortFromDtoFileName(`${sourceFileBase}.cs`);
-  return entityShort != null && isRbacJunctionEntity(entityShort);
+  if (entityShort != null && isRbacJunctionEntity(entityShort)) {
+    return true;
+  }
+  return entityShort != null && isManualDtoEntity(entityShort);
 }
 
 /**
@@ -159,15 +197,21 @@ function isStandaloneChildVueEntity(entityShort) {
  * @returns {boolean}
  */
 function shouldExcludeVueGeneration(_apiRelPath, entityShort) {
-  return isChangeLogEntity(entityShort);
+  if (isChangeLogEntity(entityShort)) {
+    return true;
+  }
+  return isManualDtoEntity(entityShort);
 }
 
 module.exports = {
   RBAC_ASSOCIATION_ENTITY_SHORT_NAMES,
   MANUAL_STANDALONE_SERVICE_ENTITY_NAMES,
+  MANUAL_DTO_ENTITY_SHORT_NAMES,
   STANDALONE_CHILD_VUE_ENTITY_SHORT_NAMES,
   isRbacJunctionEntity,
+  isManualDtoEntity,
   assertNotRbacJunctionEntityCli,
+  assertNotManualDtoEntityCli,
   shouldExcludeStandaloneService,
   shouldExcludeDtoFile,
   shouldExcludeDtoSourceBase,

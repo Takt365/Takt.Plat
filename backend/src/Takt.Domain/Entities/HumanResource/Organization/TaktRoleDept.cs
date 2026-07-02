@@ -4,7 +4,7 @@
 // 文件名称：TaktRoleDept.cs
 // 创建时间：2025-01-20
 // 创建人：Takt365(Cursor AI)
-// 功能描述：角色-部门关联实体，用于自定义数据权限范围（DataScope=5）
+// 功能描述：角色-部门关联实体，用于自定义数据权限范围（DataScope=4）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -17,8 +17,7 @@ namespace Takt.Domain.Entities.HumanResource.Organization;
 
 /// <summary>
 /// 角色-部门关联实体
-/// 用于自定义数据权限范围（当角色的 DataScope=5 时）
-/// 定义角色可以访问哪些部门的数据
+/// 当角色 DataScope=4（字典 sys_data_scope_type 自定义数据范围）时，定义角色可访问的部门数据范围
 /// </summary>
 [SugarTable("takt_human_resource_organization_role_dept", "角色-部门关联表")]
 [SugarIndex("ix_role_dept_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
@@ -29,13 +28,12 @@ namespace Takt.Domain.Entities.HumanResource.Organization;
 public class TaktRoleDept : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 角色ID
+    /// 角色（关联 TaktRole.Id，选项 TaktRoles/options）
     /// </summary>
     [SugarColumn(ColumnName = "role_id", ColumnDescription = "角色ID", ColumnDataType = "bigint", IsNullable = false)]
     public long RoleId { get; set; }
-
     /// <summary>
-    /// 部门ID
+    /// 部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     [SugarColumn(ColumnName = "dept_id", ColumnDescription = "部门ID", ColumnDataType = "bigint", IsNullable = false)]
     public long DeptId { get; set; }
@@ -49,7 +47,6 @@ public class TaktRoleDept : TaktCompanyEntityBase
     /// </summary>
     [Navigate(NavigateType.ManyToOne, nameof(RoleId), nameof(TaktRole.Id))]
     public TaktRole Role { get; set; } = null!;
-
     /// <summary>
     /// 部门（多对一）
     /// </summary>

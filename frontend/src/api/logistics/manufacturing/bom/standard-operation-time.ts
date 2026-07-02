@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/manufacturing/bom
 // 文件名称：standard-operation-time.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/bom 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -53,6 +53,23 @@ export function getStandardOperationTimeById(id: string): Promise<StandardOperat
   return request<StandardOperationTime>({
     url: `${STANDARD_OPERATION_TIME_API_BASE}/${id}`,
     method: 'get',
+  });
+}
+
+/**
+ * 根据物料编码获取当前有效的标准工序时间列表
+ * @param {string} materialCode 物料编码
+ * @param {string} plantCode 工厂代码（可选）
+ * @returns {Promise<StandardOperationTime[]>} 标准工序时间 DTO 列表
+ */
+export function getStandardOperationTimeByMaterial(materialCode: string, plantCode?: string): Promise<StandardOperationTime[]> {
+  return request<StandardOperationTime[]>({
+    url: `${STANDARD_OPERATION_TIME_API_BASE}/by-material`,
+    method: 'get',
+    params: {
+      materialCode,
+      plantCode
+    },
   });
 }
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Maintenance
 // 文件名称：TaktEquipmentI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEquipment 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -118,13 +118,13 @@ public class TaktEquipmentI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.equipment.name", "zh-HK", "设备名称_hk", "设备名称"),
 
             // entity.equipment.type
-            new TranslationSeedItem("entity.equipment.type", "en-US", "设备类型_us", "设备类型（0=生产设备，1=检测设备，2=辅助设备，3=办公设备，4=其他设备）"),
+            new TranslationSeedItem("entity.equipment.type", "en-US", "登录设备_us", "登录设备（0=生产设备，1=检测设备，2=辅助设备，3=办公设备，4=其他设备）"),
             // entity.equipment.type
-            new TranslationSeedItem("entity.equipment.type", "ja-JP", "设备类型_jp", "设备类型（0=生产设备，1=检测设备，2=辅助设备，3=办公设备，4=其他设备）"),
+            new TranslationSeedItem("entity.equipment.type", "ja-JP", "登录设备_jp", "登录设备（0=生产设备，1=检测设备，2=辅助设备，3=办公设备，4=其他设备）"),
             // entity.equipment.type
-            new TranslationSeedItem("entity.equipment.type", "zh-CN", "设备类型", "设备类型（0=生产设备，1=检测设备，2=辅助设备，3=办公设备，4=其他设备）"),
+            new TranslationSeedItem("entity.equipment.type", "zh-CN", "登录设备", "登录设备（0=生产设备，1=检测设备，2=辅助设备，3=办公设备，4=其他设备）"),
             // entity.equipment.type
-            new TranslationSeedItem("entity.equipment.type", "zh-HK", "设备类型_hk", "设备类型（0=生产设备，1=检测设备，2=辅助设备，3=办公设备，4=其他设备）"),
+            new TranslationSeedItem("entity.equipment.type", "zh-HK", "登录设备_hk", "登录设备（0=生产设备，1=检测设备，2=辅助设备，3=办公设备，4=其他设备）"),
 
             // entity.equipment.model
             new TranslationSeedItem("entity.equipment.model", "en-US", "设备型号_us", "设备型号"),

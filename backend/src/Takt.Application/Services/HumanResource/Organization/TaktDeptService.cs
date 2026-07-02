@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Organization
 // 文件名称：TaktDeptService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：部门应用服务实现
 // 
@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Shared.Enums;
 using Takt.Application.Services.Identity;
 
 namespace Takt.Application.Services.HumanResource.Organization;
@@ -346,31 +345,6 @@ public class TaktDeptService : TaktServiceBase, ITaktDeptService
     }
 
     /// <summary>
-    /// 更新部门是否内置
-    /// </summary>
-    /// <param name="dto">是否内置 DTO</param>
-    /// <returns>DTO</returns>
-    public async Task<TaktDeptDto> UpdateDeptBuiltInAsync(TaktDeptBuiltInDto dto)
-    {
-        var entity = await _deptRepository.GetByIdAsync(dto.DeptId);
-        if (entity == null)
-        {
-            throw new TaktBusinessException("部门不存在");
-        }
-        if (dto.IsBuiltIn is not 0 and not 1)
-        {
-            throw new TaktBusinessException("是否内置必须为字典 sys_yes_no_type 合法值（0=否，1=是）");
-        }
-        if (entity.IsBuiltIn == 1 && dto.IsBuiltIn != 1)
-        {
-            throw new TaktBusinessException("不允许取消内置部门标识");
-        }
-        entity.IsBuiltIn = dto.IsBuiltIn;
-        await _deptRepository.UpdateAsync(entity);
-        return await GetDeptByIdAsync(dto.DeptId) ?? throw new TaktBusinessException("部门不存在");
-    }
-
-    /// <summary>
     /// 更新部门排序
     /// </summary>
     /// <param name="dto">排序DTO</param>
@@ -512,7 +486,7 @@ public class TaktDeptService : TaktServiceBase, ITaktDeptService
                 || SqlFunc.ToString(x.DeptStatus).Contains(keywords)
                 || SqlFunc.ToString(x.IsBuiltIn).Contains(keywords)
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
-                || (x.Description != null && x.Description.Contains(keywords))
+                || (x.DeptDescription != null && x.DeptDescription.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
@@ -594,9 +568,9 @@ public class TaktDeptService : TaktServiceBase, ITaktDeptService
             exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Description))
+        if (!string.IsNullOrEmpty(queryDto?.DeptDescription))
         {
-            exp = exp.And(x => x.Description != null && x.Description.Contains(queryDto.Description));
+            exp = exp.And(x => x.DeptDescription != null && x.DeptDescription.Contains(queryDto.DeptDescription));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

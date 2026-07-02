@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Sales
 // 文件名称：TaktSalesQuotationItemService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-07-01
 // 创建人：Takt365(Cursor AI)
 // 功能描述：销售报价明细应用服务实现
 // 
@@ -30,6 +30,7 @@ namespace Takt.Application.Services.Logistics.Sales;
 public class TaktSalesQuotationItemService : TaktServiceBase, ITaktSalesQuotationItemService
 {
     private readonly ITaktCompanyRepository<TaktSalesQuotationItem> _salesQuotationItemRepository;
+    private readonly ITaktCompanyRepository<TaktSalesQuotation> _salesQuotationRepository;
     private readonly ITaktLineNumberGenerator _lineNumberGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
@@ -37,12 +38,14 @@ public class TaktSalesQuotationItemService : TaktServiceBase, ITaktSalesQuotatio
     /// 构造函数
     /// </summary>
     /// <param name="salesQuotationItemRepository">销售报价明细仓储</param>
+    /// <param name="salesQuotationRepository">销售报价仓储</param>
     /// <param name="lineNumberGenerator">明细行号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktSalesQuotationItemService(
         ITaktCompanyRepository<TaktSalesQuotationItem> salesQuotationItemRepository,
+        ITaktCompanyRepository<TaktSalesQuotation> salesQuotationRepository,
         ITaktLineNumberGenerator lineNumberGenerator,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
@@ -50,6 +53,7 @@ public class TaktSalesQuotationItemService : TaktServiceBase, ITaktSalesQuotatio
         : base(userContext, localizationService)
     {
         _salesQuotationItemRepository = salesQuotationItemRepository;
+        _salesQuotationRepository = salesQuotationRepository;
         _lineNumberGenerator = lineNumberGenerator;
         _uniqueValidator = uniqueValidator;
     }
@@ -114,6 +118,7 @@ public class TaktSalesQuotationItemService : TaktServiceBase, ITaktSalesQuotatio
     public async Task<TaktSalesQuotationItemDto> CreateSalesQuotationItemAsync(TaktSalesQuotationItemCreateDto dto)
     {
         var entity = dto.Adapt<TaktSalesQuotationItem>();
+        await StampSalesQuotationItemSalesQuotationAsync(entity, dto);
         var isUnique_ix_takt_logistics_sales_quotation_item_line_unique = await _uniqueValidator.IsUniqueAsync(
             _salesQuotationItemRepository,
             x => x.SalesQuotationId == entity.SalesQuotationId
@@ -148,6 +153,7 @@ public class TaktSalesQuotationItemService : TaktServiceBase, ITaktSalesQuotatio
             throw new TaktBusinessException("销售报价明细不存在");
         }
         dto.Adapt(entity);
+        await StampSalesQuotationItemSalesQuotationAsync(entity, dto);
         var isUnique_ix_takt_logistics_sales_quotation_item_line_unique = await _uniqueValidator.IsUniqueAsync(
             _salesQuotationItemRepository,
             x => x.SalesQuotationId == entity.SalesQuotationId
@@ -229,6 +235,8 @@ public class TaktSalesQuotationItemService : TaktServiceBase, ITaktSalesQuotatio
             try
             {
                 var entity = rows[i].Adapt<TaktSalesQuotationItem>();
+                var importDto = rows[i].Adapt<TaktSalesQuotationItemCreateDto>();
+                await StampSalesQuotationItemSalesQuotationAsync(entity, importDto);
                 var importKey = $"{entity.SalesQuotationId}|{entity.LineNumber}";
                 if (!importSeenKeys.Add(importKey))
                 {
@@ -288,6 +296,29 @@ public class TaktSalesQuotationItemService : TaktServiceBase, ITaktSalesQuotatio
     }
 
     // ========================================
+    // 主表外键同步（ManyToOne）
+    // ========================================
+
+    /// <summary>
+    /// 同步销售报价明细主表外键（ManyToOne → 销售报价）
+    /// </summary>
+    /// <param name="entity">当前实体</param>
+    /// <param name="dto">创建 DTO</param>
+    /// <returns>任务</returns>
+    private async Task StampSalesQuotationItemSalesQuotationAsync(TaktSalesQuotationItem entity, TaktSalesQuotationItemCreateDto dto)
+    {
+        if (dto.SalesQuotationId <= 0)
+        {
+            return;
+        }
+        var master = await _salesQuotationRepository.GetByIdAsync(dto.SalesQuotationId);
+        if (master == null)
+        {
+            throw new TaktBusinessException("销售报价不存在");
+        }
+        entity.SalesQuotationId = master.Id;
+    }
+    // ========================================
     // 查询表达式
     // ========================================
 
@@ -312,6 +343,7 @@ public class TaktSalesQuotationItemService : TaktServiceBase, ITaktSalesQuotatio
                 || (x.MaterialSpecification != null && x.MaterialSpecification.Contains(keywords))
                 || (x.SalesUnit != null && x.SalesUnit.Contains(keywords))
                 || SqlFunc.ToString(x.QuotationQuantity).Contains(keywords)
+                || SqlFunc.ToString(x.SalesPerUnit).Contains(keywords)
                 || SqlFunc.ToString(x.UnitPrice).Contains(keywords)
                 || SqlFunc.ToString(x.DiscountRate).Contains(keywords)
                 || SqlFunc.ToString(x.DiscountAmount).Contains(keywords)
@@ -362,6 +394,11 @@ public class TaktSalesQuotationItemService : TaktServiceBase, ITaktSalesQuotatio
         if (queryDto?.QuotationQuantity.HasValue == true)
         {
             exp = exp.And(x => x.QuotationQuantity == queryDto.QuotationQuantity);
+        }
+
+        if (queryDto?.SalesPerUnit.HasValue == true)
+        {
+            exp = exp.And(x => x.SalesPerUnit == queryDto.SalesPerUnit);
         }
 
         if (queryDto?.UnitPrice.HasValue == true)

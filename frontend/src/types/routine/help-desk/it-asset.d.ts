@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/routine/help-desk
 // 文件名称：it-asset.d.ts
-// 创建时间：2026-06-10
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：routine/help-desk 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -92,11 +92,6 @@ export interface ItAsset extends CompanyDtoBase {
    * IT 设备保修变更日志列表 （子表：TaktItAssetChangeLog）
    */
   changeLogs?: ItAssetChangeLog[];
-
-  /**
-   * 关联工单列表（一对多；外键：本表 Id = 工单 TaktTicket.ItAssetId） （子表：TaktTicket）
-   */
-  tickets?: Ticket[];
 
 }
 
@@ -216,7 +211,7 @@ export interface ItAssetQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -243,7 +238,7 @@ export interface ItAssetCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -313,14 +308,9 @@ export interface ItAssetCreate {
   changeLogs?: ItAssetChangeLogCreate[];
 
   /**
-   * 关联工单列表（一对多；外键：本表 Id = 工单 TaktTicket.ItAssetId）（子表，级联保存）
-   */
-  tickets?: TicketCreate[];
-
-  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -372,6 +362,16 @@ export interface ItAssetTemplate {
   warrantyType?: number;
 
   /**
+   * 保修开始日期
+   */
+  warrantyStartDate?: string;
+
+  /**
+   * 保修到期日
+   */
+  warrantyExpiryDate?: string;
+
+  /**
    * 保修服务商/厂商
    */
   warrantyProvider?: string;
@@ -392,14 +392,34 @@ export interface ItAssetTemplate {
   serviceEmail?: string;
 
   /**
+   * 维保到期日
+   */
+  maintenanceExpiryDate?: string;
+
+  /**
+   * 上次维保日期
+   */
+  lastMaintenanceDate?: string;
+
+  /**
+   * 下次维保日期
+   */
+  nextMaintenanceDate?: string;
+
+  /**
    * 保修/维保说明
    */
   warrantyRemark?: string;
 
   /**
+   * IT 设备保修变更日志列表（子表，级联保存）
+   */
+  changeLogs?: ItAssetChangeLogCreate[];
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -426,7 +446,7 @@ export interface ItAssetImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -439,6 +459,16 @@ export interface ItAssetImport {
    * 保修类型（见 TaktWarrantyType）
    */
   warrantyType?: number;
+
+  /**
+   * 保修开始日期
+   */
+  warrantyStartDate?: string;
+
+  /**
+   * 保修到期日
+   */
+  warrantyExpiryDate?: string;
 
   /**
    * 保修服务商/厂商
@@ -461,14 +491,34 @@ export interface ItAssetImport {
   serviceEmail?: string;
 
   /**
+   * 维保到期日
+   */
+  maintenanceExpiryDate?: string;
+
+  /**
+   * 上次维保日期
+   */
+  lastMaintenanceDate?: string;
+
+  /**
+   * 下次维保日期
+   */
+  nextMaintenanceDate?: string;
+
+  /**
    * 保修/维保说明
    */
   warrantyRemark?: string;
 
   /**
+   * IT 设备保修变更日志列表（子表，级联保存）
+   */
+  changeLogs?: ItAssetChangeLogCreate[];
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -557,7 +607,7 @@ export interface ItAssetExport {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注

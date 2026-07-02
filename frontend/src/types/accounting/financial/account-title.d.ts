@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/accounting/financial
 // 文件名称：account-title.d.ts
-// 创建时间：2026-06-22
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：accounting/financial 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -31,12 +31,12 @@ export interface AccountTitle extends CompanyDtoBase {
   /**
    * 科目编码
    */
-  titleCode: string;
+  accountTitleCode: string;
 
   /**
    * 科目名称
    */
-  titleName: string;
+  accountTitleName: string;
 
   /**
    * 父级 ID
@@ -44,9 +44,9 @@ export interface AccountTitle extends CompanyDtoBase {
   parentId: string;
 
   /**
-   * 科目类型
+   * 科目类型（字典 accounting_account_title_type；SAP X/P/S/N/C）
    */
-  titleType: number;
+  accountTitleType: string;
 
   /**
    * 余额方向（0=借方，1=贷方）
@@ -56,52 +56,52 @@ export interface AccountTitle extends CompanyDtoBase {
   /**
    * 科目层级
    */
-  titleLevel: number;
+  accountTitleLevel: number;
 
   /**
-   * 是否末级科目
+   * 末级科目（字典 sys_yes_no_type；1=是，0=否）
    */
   isLeaf: number;
 
   /**
-   * 是否辅助核算
+   * 辅助核算（字典 sys_yes_no_type；1=是，0=否）
    */
   isAuxiliary: number;
 
   /**
-   * 辅助核算类型
+   * 辅助核算类型（字典 accounting_auxiliary_type；SAP D/K/A/S/M）
    */
-  auxiliaryType: number;
+  auxiliaryType: string;
 
   /**
-   * 是否数量核算
+   * 数量核算（字典 sys_yes_no_type；1=是，0=否）
    */
   isQuantity: number;
 
   /**
-   * 是否外币核算
+   * 外币核算（字典 sys_yes_no_type；1=是，0=否）
    */
   isCurrency: number;
 
   /**
-   * 是否现金科目
+   * 现金科目（字典 sys_yes_no_type；1=是，0=否）
    */
   isCash: number;
 
   /**
-   * 是否银行科目
+   * 银行科目（字典 sys_yes_no_type；1=是，0=否）
    */
   isBank: number;
 
   /**
-   * 关联工厂
+   * 关联工厂（关联 TaktPlant.PlantCode）
    */
   relatedPlant?: string;
 
   /**
-   * 科目状态（1=启用，0=禁用）
+   * 科目状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
-  titleStatus: number;
+  accountTitleStatus: number;
 
   /**
    * 生效日期
@@ -161,12 +161,12 @@ export interface AccountTitleQuery extends TaktPagedQuery {
   /**
    * 科目编码
    */
-  titleCode?: string;
+  accountTitleCode?: string;
 
   /**
    * 科目名称
    */
-  titleName?: string;
+  accountTitleName?: string;
 
   /**
    * 父级 ID
@@ -174,9 +174,9 @@ export interface AccountTitleQuery extends TaktPagedQuery {
   parentId?: string;
 
   /**
-   * 科目类型
+   * 科目类型（字典 accounting_account_title_type；SAP X/P/S/N/C）
    */
-  titleType?: number;
+  accountTitleType?: string;
 
   /**
    * 余额方向（0=借方，1=贷方）
@@ -186,52 +186,52 @@ export interface AccountTitleQuery extends TaktPagedQuery {
   /**
    * 科目层级
    */
-  titleLevel?: number;
+  accountTitleLevel?: number;
 
   /**
-   * 是否末级科目
+   * 末级科目（字典 sys_yes_no_type；1=是，0=否）
    */
   isLeaf?: number;
 
   /**
-   * 是否辅助核算
+   * 辅助核算（字典 sys_yes_no_type；1=是，0=否）
    */
   isAuxiliary?: number;
 
   /**
-   * 辅助核算类型
+   * 辅助核算类型（字典 accounting_auxiliary_type；SAP D/K/A/S/M）
    */
-  auxiliaryType?: number;
+  auxiliaryType?: string;
 
   /**
-   * 是否数量核算
+   * 数量核算（字典 sys_yes_no_type；1=是，0=否）
    */
   isQuantity?: number;
 
   /**
-   * 是否外币核算
+   * 外币核算（字典 sys_yes_no_type；1=是，0=否）
    */
   isCurrency?: number;
 
   /**
-   * 是否现金科目
+   * 现金科目（字典 sys_yes_no_type；1=是，0=否）
    */
   isCash?: number;
 
   /**
-   * 是否银行科目
+   * 银行科目（字典 sys_yes_no_type；1=是，0=否）
    */
   isBank?: number;
 
   /**
-   * 关联工厂
+   * 关联工厂（关联 TaktPlant.PlantCode）
    */
   relatedPlant?: string;
 
   /**
-   * 科目状态（1=启用，0=禁用）
+   * 科目状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
-  titleStatus?: number;
+  accountTitleStatus?: number;
 
   /**
    * 生效日期（范围查询-开始）
@@ -298,19 +298,19 @@ export interface AccountTitleCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
   /**
    * 科目编码
    */
-  titleCode: string;
+  accountTitleCode: string;
 
   /**
    * 科目名称
    */
-  titleName: string;
+  accountTitleName: string;
 
   /**
    * 父级 ID
@@ -318,9 +318,9 @@ export interface AccountTitleCreate {
   parentId: string;
 
   /**
-   * 科目类型
+   * 科目类型（字典 accounting_account_title_type；SAP X/P/S/N/C）
    */
-  titleType: number;
+  accountTitleType: string;
 
   /**
    * 余额方向（0=借方，1=贷方）
@@ -330,47 +330,47 @@ export interface AccountTitleCreate {
   /**
    * 科目层级
    */
-  titleLevel: number;
+  accountTitleLevel: number;
 
   /**
-   * 是否辅助核算
+   * 辅助核算（字典 sys_yes_no_type；1=是，0=否）
    */
   isAuxiliary: number;
 
   /**
-   * 辅助核算类型
+   * 辅助核算类型（字典 accounting_auxiliary_type；SAP D/K/A/S/M）
    */
-  auxiliaryType: number;
+  auxiliaryType: string;
 
   /**
-   * 是否数量核算
+   * 数量核算（字典 sys_yes_no_type；1=是，0=否）
    */
   isQuantity: number;
 
   /**
-   * 是否外币核算
+   * 外币核算（字典 sys_yes_no_type；1=是，0=否）
    */
   isCurrency: number;
 
   /**
-   * 是否现金科目
+   * 现金科目（字典 sys_yes_no_type；1=是，0=否）
    */
   isCash: number;
 
   /**
-   * 是否银行科目
+   * 银行科目（字典 sys_yes_no_type；1=是，0=否）
    */
   isBank: number;
 
   /**
-   * 关联工厂
+   * 关联工厂（关联 TaktPlant.PlantCode）
    */
   relatedPlant?: string;
 
   /**
-   * 科目状态（1=启用，0=禁用）
+   * 科目状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
-  titleStatus: number;
+  accountTitleStatus: number;
 
   /**
    * 生效日期
@@ -427,9 +427,9 @@ export interface AccountTitleStatus {
   accountTitleId: string;
 
   /**
-   * 科目状态（1=启用，0=禁用）
+   * 科目状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
-  titleStatus: number;
+  accountTitleStatus: number;
 
 }
 
@@ -472,12 +472,12 @@ export interface AccountTitleTemplate {
   /**
    * 科目编码
    */
-  titleCode?: string;
+  accountTitleCode?: string;
 
   /**
    * 科目名称
    */
-  titleName?: string;
+  accountTitleName?: string;
 
   /**
    * 父级 ID
@@ -485,9 +485,9 @@ export interface AccountTitleTemplate {
   parentId?: string;
 
   /**
-   * 科目类型
+   * 科目类型（字典 accounting_account_title_type；SAP X/P/S/N/C）
    */
-  titleType?: number;
+  accountTitleType?: string;
 
   /**
    * 余额方向（0=借方，1=贷方）
@@ -497,37 +497,62 @@ export interface AccountTitleTemplate {
   /**
    * 科目层级
    */
-  titleLevel?: number;
+  accountTitleLevel?: number;
 
   /**
-   * 是否辅助核算
+   * 辅助核算（字典 sys_yes_no_type；1=是，0=否）
    */
   isAuxiliary?: number;
 
   /**
-   * 辅助核算类型
+   * 辅助核算类型（字典 accounting_auxiliary_type；SAP D/K/A/S/M）
    */
-  auxiliaryType?: number;
+  auxiliaryType?: string;
 
   /**
-   * 是否数量核算
+   * 数量核算（字典 sys_yes_no_type；1=是，0=否）
    */
   isQuantity?: number;
 
   /**
-   * 是否外币核算
+   * 外币核算（字典 sys_yes_no_type；1=是，0=否）
    */
   isCurrency?: number;
 
   /**
-   * 是否现金科目
+   * 现金科目（字典 sys_yes_no_type；1=是，0=否）
    */
   isCash?: number;
 
   /**
-   * 是否银行科目
+   * 银行科目（字典 sys_yes_no_type；1=是，0=否）
    */
   isBank?: number;
+
+  /**
+   * 关联工厂（关联 TaktPlant.PlantCode）
+   */
+  relatedPlant?: string;
+
+  /**
+   * 科目状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   */
+  accountTitleStatus?: number;
+
+  /**
+   * 生效日期
+   */
+  validFrom?: string;
+
+  /**
+   * 失效日期
+   */
+  validTo?: string;
+
+  /**
+   * 会计科目变更记录列表（外键在子表 TaktAccountTitleChangeLog.AccountTitleId）（子表，级联保存）
+   */
+  changeLogs?: AccountTitleChangeLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -559,19 +584,19 @@ export interface AccountTitleImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
   /**
    * 科目编码
    */
-  titleCode?: string;
+  accountTitleCode?: string;
 
   /**
    * 科目名称
    */
-  titleName?: string;
+  accountTitleName?: string;
 
   /**
    * 父级 ID
@@ -579,9 +604,9 @@ export interface AccountTitleImport {
   parentId?: string;
 
   /**
-   * 科目类型
+   * 科目类型（字典 accounting_account_title_type；SAP X/P/S/N/C）
    */
-  titleType?: number;
+  accountTitleType?: string;
 
   /**
    * 余额方向（0=借方，1=贷方）
@@ -591,37 +616,62 @@ export interface AccountTitleImport {
   /**
    * 科目层级
    */
-  titleLevel?: number;
+  accountTitleLevel?: number;
 
   /**
-   * 是否辅助核算
+   * 辅助核算（字典 sys_yes_no_type；1=是，0=否）
    */
   isAuxiliary?: number;
 
   /**
-   * 辅助核算类型
+   * 辅助核算类型（字典 accounting_auxiliary_type；SAP D/K/A/S/M）
    */
-  auxiliaryType?: number;
+  auxiliaryType?: string;
 
   /**
-   * 是否数量核算
+   * 数量核算（字典 sys_yes_no_type；1=是，0=否）
    */
   isQuantity?: number;
 
   /**
-   * 是否外币核算
+   * 外币核算（字典 sys_yes_no_type；1=是，0=否）
    */
   isCurrency?: number;
 
   /**
-   * 是否现金科目
+   * 现金科目（字典 sys_yes_no_type；1=是，0=否）
    */
   isCash?: number;
 
   /**
-   * 是否银行科目
+   * 银行科目（字典 sys_yes_no_type；1=是，0=否）
    */
   isBank?: number;
+
+  /**
+   * 关联工厂（关联 TaktPlant.PlantCode）
+   */
+  relatedPlant?: string;
+
+  /**
+   * 科目状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   */
+  accountTitleStatus?: number;
+
+  /**
+   * 生效日期
+   */
+  validFrom?: string;
+
+  /**
+   * 失效日期
+   */
+  validTo?: string;
+
+  /**
+   * 会计科目变更记录列表（外键在子表 TaktAccountTitleChangeLog.AccountTitleId）（子表，级联保存）
+   */
+  changeLogs?: AccountTitleChangeLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -655,12 +705,12 @@ export interface AccountTitleExport {
   /**
    * 科目编码
    */
-  titleCode: string;
+  accountTitleCode: string;
 
   /**
    * 科目名称
    */
-  titleName: string;
+  accountTitleName: string;
 
   /**
    * 父级 ID
@@ -668,9 +718,9 @@ export interface AccountTitleExport {
   parentId: string;
 
   /**
-   * 科目类型
+   * 科目类型（字典 accounting_account_title_type；SAP X/P/S/N/C）
    */
-  titleType: number;
+  accountTitleType: string;
 
   /**
    * 余额方向（0=借方，1=贷方）
@@ -680,52 +730,52 @@ export interface AccountTitleExport {
   /**
    * 科目层级
    */
-  titleLevel: number;
+  accountTitleLevel: number;
 
   /**
-   * 是否末级科目
+   * 末级科目（字典 sys_yes_no_type；1=是，0=否）
    */
   isLeaf: number;
 
   /**
-   * 是否辅助核算
+   * 辅助核算（字典 sys_yes_no_type；1=是，0=否）
    */
   isAuxiliary: number;
 
   /**
-   * 辅助核算类型
+   * 辅助核算类型（字典 accounting_auxiliary_type；SAP D/K/A/S/M）
    */
-  auxiliaryType: number;
+  auxiliaryType: string;
 
   /**
-   * 是否数量核算
+   * 数量核算（字典 sys_yes_no_type；1=是，0=否）
    */
   isQuantity: number;
 
   /**
-   * 是否外币核算
+   * 外币核算（字典 sys_yes_no_type；1=是，0=否）
    */
   isCurrency: number;
 
   /**
-   * 是否现金科目
+   * 现金科目（字典 sys_yes_no_type；1=是，0=否）
    */
   isCash: number;
 
   /**
-   * 是否银行科目
+   * 银行科目（字典 sys_yes_no_type；1=是，0=否）
    */
   isBank: number;
 
   /**
-   * 关联工厂
+   * 关联工厂（关联 TaktPlant.PlantCode）
    */
   relatedPlant?: string;
 
   /**
-   * 科目状态（1=启用，0=禁用）
+   * 科目状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
-  titleStatus: number;
+  accountTitleStatus: number;
 
   /**
    * 生效日期

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.CustomerService
 // 文件名称：TaktServiceTicketService.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：服务工单应用服务实现
 // 
@@ -404,6 +404,51 @@ public class TaktServiceTicketService : TaktServiceBase, ITaktServiceTicketServi
         }
         entity.ServiceContractId = master.Id;
     }
+
+    /// <summary>
+    /// 获取服务工单统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>服务工单统计</returns>
+    public async Task<TaktServiceTicketStatDto> GetServiceTicketStatAsync(TaktServiceTicketStatQueryDto queryDto)
+    {
+        EnsureThreeLayerContext();
+        var (start, end, statMonth) = TaktStatMonthRangeHelper.ResolveMonthRange(
+            queryDto.CreatedAtStart,
+            queryDto.CreatedAtEnd);
+        var tenantCode = CurrentTenantCode;
+        var companyCode = CurrentCompanyCode;
+        Expression<Func<TaktServiceTicket, bool>> predicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.CreatedAt >= start
+            && x.CreatedAt <= end;
+        var monthTicketCount = await _serviceTicketRepository.CountAsync(predicate);
+        Expression<Func<TaktServiceTicket, bool>> openPredicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.CreatedAt >= start
+            && x.CreatedAt <= end
+            && x.TicketStatus >= 0
+            && x.TicketStatus <= 3;
+        var monthOpenTicketCount = await _serviceTicketRepository.CountAsync(openPredicate);
+        Expression<Func<TaktServiceTicket, bool>> closedPredicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.CreatedAt >= start
+            && x.CreatedAt <= end
+            && x.TicketStatus >= 4
+            && x.TicketStatus <= 5;
+        var monthClosedTicketCount = await _serviceTicketRepository.CountAsync(closedPredicate);
+        return new TaktServiceTicketStatDto
+        {
+            StatMonth = statMonth,
+            MonthTicketCount = monthTicketCount,
+            MonthOpenTicketCount = monthOpenTicketCount,
+            MonthClosedTicketCount = monthClosedTicketCount,
+        };
+    }
+
     // ========================================
     // 查询表达式
     // ========================================

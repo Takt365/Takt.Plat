@@ -135,7 +135,7 @@ public class TaktMenuLevel2SeedData
         }
 
         // ========== 日常事务下的二级菜单 (SortOrder: 3) ==========
-        // 顺序：公告通知 → 会议中心 → 文管中心 → 新闻中心 → 服务台（目录） → 访客中心
+        // 顺序：公告通知 → 会议中心 → 文管中心（目录） → 新闻中心 → 服务台（目录） → 访客中心
         if (routineMenu != null)
         {
             var (insert1, update1) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "ROUTINE_ANNOUNCEMENT", menu =>
@@ -167,8 +167,8 @@ public class TaktMenuLevel2SeedData
                 menu.ParentId = routineMenu.Id;
                 menu.MenuType = 1;
                 menu.Permission = "routine:conference:center:list";
-                menu.RoutePath = "/routine/conference-center";
-                menu.ComponentPath = "routine/conference-center/index";
+                menu.RoutePath = "/routine/conference-center/conference";
+                menu.ComponentPath = "routine/conference-center/conference/index";
                 menu.SortOrder = 2;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
@@ -182,13 +182,12 @@ public class TaktMenuLevel2SeedData
             {
                 menu.MenuName = "文管中心";
                 menu.MenuCode = "ROUTINE_DOCUMENT_CENTER";
-                menu.I18nKey = "menu.routine.document.center";
+                menu.I18nKey = "menu.routine.document.center._self";
                 menu.Icon = "RiFileTextLine";
                 menu.ParentId = routineMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "routine:document:center:list";
+                menu.MenuType = 0;
                 menu.RoutePath = "/routine/document-center";
-                menu.ComponentPath = "routine/document-center/index";
+                menu.ComponentPath = "routine/document-center";
                 menu.SortOrder = 3;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
@@ -207,8 +206,8 @@ public class TaktMenuLevel2SeedData
                 menu.ParentId = routineMenu.Id;
                 menu.MenuType = 1;
                 menu.Permission = "routine:news:center:list";
-                menu.RoutePath = "/routine/news-center";
-                menu.ComponentPath = "routine/news-center/index";
+                menu.RoutePath = "/routine/news-center/news";
+                menu.ComponentPath = "routine/news-center/news/index";
                 menu.SortOrder = 4;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
@@ -246,8 +245,8 @@ public class TaktMenuLevel2SeedData
                 menu.ParentId = routineMenu.Id;
                 menu.MenuType = 1;
                 menu.Permission = "routine:visitor:center:list";
-                menu.RoutePath = "/routine/visitor-center";
-                menu.ComponentPath = "routine/visitor-center/index";
+                menu.RoutePath = "/routine/visitor-center/visitor";
+                menu.ComponentPath = "routine/visitor-center/visitor/index";
                 menu.SortOrder = 6;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
@@ -904,7 +903,7 @@ public class TaktMenuLevel2SeedData
             updateCount += updateCodeDataClone;
         }
 
-        // ========== 基础设置下的二级菜单 (SortOrder: 10) ==========
+        // ========== 基础数据下的二级菜单 (SortOrder: 10) ==========
         if (foundationMenu != null)
         {
             var (insertFoundation1, updateFoundation1) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "FOUNDATION_NUMBERING", menu =>
@@ -1107,6 +1106,26 @@ public class TaktMenuLevel2SeedData
             });
             insertCount += insertFoundation10;
             updateCount += updateFoundation10;
+
+            var (insertFoundationQuartzTask, updateFoundationQuartzTask) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "FOUNDATION_QUARTZ_TASK", menu =>
+            {
+                menu.MenuName = "定时任务";
+                menu.MenuCode = "FOUNDATION_QUARTZ_TASK";
+                menu.I18nKey = "menu.foundation.quartz.task";
+                menu.Icon = "RiTimerLine";
+                menu.ParentId = foundationMenu.Id;
+                menu.MenuType = 1;
+                menu.Permission = "foundation:quartz:task:list";
+                menu.RoutePath = "/foundation/quartz-task";
+                menu.ComponentPath = "foundation/quartz-task/index";
+                menu.SortOrder = 11;
+                menu.MenuStatus = 1;
+                menu.IsVisible = 1;
+                menu.IsCached = 0;
+                menu.IsExternal = 0;
+            });
+            insertCount += insertFoundationQuartzTask;
+            updateCount += updateFoundationQuartzTask;
         }
 
         // ========== 统计看板下的二级菜单 (SortOrder: 11) ==========

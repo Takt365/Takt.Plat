@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Materials
 // 文件名称：TaktMaterialService.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-30
 // 创建人：Takt365(Cursor AI)
 // 功能描述：全局物料应用服务实现
 // 
@@ -30,23 +30,27 @@ namespace Takt.Application.Services.Logistics.Materials;
 public class TaktMaterialService : TaktServiceBase, ITaktMaterialService
 {
     private readonly ITaktTenantRepository<TaktMaterial> _materialRepository;
+    private readonly ITaktTenantRepository<TaktMaterialChangeLog> _materialChangeLogRepository;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="materialRepository">全局物料仓储</param>
+    /// <param name="materialChangeLogRepository">MaterialChangeLog仓储</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktMaterialService(
         ITaktTenantRepository<TaktMaterial> materialRepository,
+        ITaktTenantRepository<TaktMaterialChangeLog> materialChangeLogRepository,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
         _materialRepository = materialRepository;
+        _materialChangeLogRepository = materialChangeLogRepository;
         _uniqueValidator = uniqueValidator;
     }
 
@@ -81,8 +85,9 @@ public class TaktMaterialService : TaktServiceBase, ITaktMaterialService
         {
             return null;
         }
-        return entity.Adapt<TaktMaterialDto>();
-    }
+        var dto = entity.Adapt<TaktMaterialDto>();
+        await FillMaterialDetailsAsync(dto, entity);
+        return dto;    }
 
     /// <summary>
     /// 获取全局物料选项列表
@@ -96,8 +101,8 @@ public class TaktMaterialService : TaktServiceBase, ITaktMaterialService
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.MaterialName ?? e.Id.ToString(),
+            DictValue = e.MaterialCode,
+            DictLabel = e.MaterialName ?? e.MaterialCode,
         }).ToList();
     }
 
@@ -117,6 +122,7 @@ public class TaktMaterialService : TaktServiceBase, ITaktMaterialService
             throw new TaktBusinessException("全局物料的MaterialCode已存在");
         }
         entity = await _materialRepository.CreateAsync(entity);
+                await SaveMaterialChildrenAsync(entity, dto);
         return await GetMaterialByIdAsync(entity.Id) ?? entity.Adapt<TaktMaterialDto>();
     }
 
@@ -143,6 +149,7 @@ public class TaktMaterialService : TaktServiceBase, ITaktMaterialService
             throw new TaktBusinessException("全局物料的MaterialCode已存在");
         }
         await _materialRepository.UpdateAsync(entity);
+                await SaveMaterialChildrenAsync(entity, dto);
         return await GetMaterialByIdAsync(id) ?? throw new TaktBusinessException("全局物料不存在");
     }
 
@@ -153,6 +160,12 @@ public class TaktMaterialService : TaktServiceBase, ITaktMaterialService
     /// <returns>任务</returns>
     public async Task DeleteMaterialByIdAsync(long id)
     {
+        var entity = await _materialRepository.GetByIdAsync(id);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("全局物料不存在或已删除");
+        }
+        await _materialChangeLogRepository.DeleteAsync(x => x.MaterialId == entity.Id);
         var deleted = await _materialRepository.DeleteAsync(id);
         if (!deleted)
         {
@@ -281,6 +294,54 @@ public class TaktMaterialService : TaktServiceBase, ITaktMaterialService
     }
 
     // ========================================
+    // 主子表级联（OneToMany）
+    // ========================================
+
+    /// <summary>
+    /// 填充全局物料详情（加载 OneToMany 子表：全局物料变更记录）
+    /// </summary>
+    /// <param name="dto">响应 DTO</param>
+    /// <param name="entity">主表实体</param>
+    /// <returns>任务</returns>
+    private async Task FillMaterialDetailsAsync(TaktMaterialDto dto, TaktMaterial entity)
+    {
+        if (dto == null)
+        {
+            return;
+        }
+        // 全局物料变更记录 → dto.ChangeLogs
+        var changelogs = await _materialChangeLogRepository.GetListAsync(x => x.MaterialId == entity.Id);
+        dto.ChangeLogs = changelogs.Adapt<List<TaktMaterialChangeLogDto>>();
+    }
+
+    /// <summary>
+    /// 保存全局物料子表级联（全局物料变更记录；Create/Update 后按主表 Id 先删后插）
+    /// </summary>
+    /// <param name="entity">主表实体</param>
+    /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
+    /// <returns>任务</returns>
+    private async Task SaveMaterialChildrenAsync(TaktMaterial entity, TaktMaterialCreateDto dto)
+    {
+        // 全局物料变更记录（ChangeLogs）
+        if (dto.ChangeLogs is not { Count: > 0 })
+        {
+            await _materialChangeLogRepository.DeleteAsync(x => x.MaterialId == entity.Id);
+        }
+        else
+        {
+            var changelogs = dto.ChangeLogs.Adapt<List<TaktMaterialChangeLog>>();
+            foreach (var child in changelogs)
+            {
+                child.MaterialId = entity.Id;
+            }
+            await _materialChangeLogRepository.DeleteAsync(x => x.MaterialId == entity.Id);
+            foreach (var child in changelogs)
+            {
+            }
+            await _materialChangeLogRepository.CreateRangeAsync(changelogs);
+        }
+    }
+    // ========================================
     // 查询表达式
     // ========================================
 
@@ -303,19 +364,18 @@ public class TaktMaterialService : TaktServiceBase, ITaktMaterialService
                 || (x.MaterialDescription != null && x.MaterialDescription.Contains(keywords))
                 || (x.IndustrySector != null && x.IndustrySector.Contains(keywords))
                 || (x.MaterialHierarchy != null && x.MaterialHierarchy.Contains(keywords))
-                || (x.MaterialGroupCode != null && x.MaterialGroupCode.Contains(keywords))
-                || SqlFunc.ToString(x.MaterialType).Contains(keywords)
+                || (x.MaterialGroup != null && x.MaterialGroup.Contains(keywords))
+                || (x.MaterialType != null && x.MaterialType.Contains(keywords))
                 || (x.MaterialModel != null && x.MaterialModel.Contains(keywords))
                 || (x.MaterialBrand != null && x.MaterialBrand.Contains(keywords))
                 || (x.BaseUnit != null && x.BaseUnit.Contains(keywords))
                 || (x.Manufacturer != null && x.Manufacturer.Contains(keywords))
-                || (x.ManufacturerPartNumber != null && x.ManufacturerPartNumber.Contains(keywords))
-                || SqlFunc.ToString(x.MaterialStatus).Contains(keywords)
+                || (x.ManufacturerMaterialCode != null && x.ManufacturerMaterialCode.Contains(keywords))
                 || (x.MaterialAttributes != null && x.MaterialAttributes.Contains(keywords))
                 || (x.IsEndOfLife != null && x.IsEndOfLife.Contains(keywords))
+                || SqlFunc.ToString(x.MaterialStatus).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.EndOfLifeDate).Contains(keywords)
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
@@ -350,14 +410,14 @@ public class TaktMaterialService : TaktServiceBase, ITaktMaterialService
             exp = exp.And(x => x.MaterialHierarchy != null && x.MaterialHierarchy.Contains(queryDto.MaterialHierarchy));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaterialGroupCode))
+        if (!string.IsNullOrEmpty(queryDto?.MaterialGroup))
         {
-            exp = exp.And(x => x.MaterialGroupCode != null && x.MaterialGroupCode.Contains(queryDto.MaterialGroupCode));
+            exp = exp.And(x => x.MaterialGroup != null && x.MaterialGroup.Contains(queryDto.MaterialGroup));
         }
 
-        if (queryDto?.MaterialType.HasValue == true)
+        if (!string.IsNullOrEmpty(queryDto?.MaterialType))
         {
-            exp = exp.And(x => x.MaterialType == queryDto.MaterialType);
+            exp = exp.And(x => x.MaterialType != null && x.MaterialType.Contains(queryDto.MaterialType));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.MaterialModel))
@@ -380,14 +440,9 @@ public class TaktMaterialService : TaktServiceBase, ITaktMaterialService
             exp = exp.And(x => x.Manufacturer != null && x.Manufacturer.Contains(queryDto.Manufacturer));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ManufacturerPartNumber))
+        if (!string.IsNullOrEmpty(queryDto?.ManufacturerMaterialCode))
         {
-            exp = exp.And(x => x.ManufacturerPartNumber != null && x.ManufacturerPartNumber.Contains(queryDto.ManufacturerPartNumber));
-        }
-
-        if (queryDto?.MaterialStatus.HasValue == true)
-        {
-            exp = exp.And(x => x.MaterialStatus == queryDto.MaterialStatus);
+            exp = exp.And(x => x.ManufacturerMaterialCode != null && x.ManufacturerMaterialCode.Contains(queryDto.ManufacturerMaterialCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.MaterialAttributes))
@@ -400,6 +455,11 @@ public class TaktMaterialService : TaktServiceBase, ITaktMaterialService
             exp = exp.And(x => x.IsEndOfLife != null && x.IsEndOfLife.Contains(queryDto.IsEndOfLife));
         }
 
+        if (queryDto?.MaterialStatus.HasValue == true)
+        {
+            exp = exp.And(x => x.MaterialStatus == queryDto.MaterialStatus);
+        }
+
         if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
             exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
@@ -408,16 +468,6 @@ public class TaktMaterialService : TaktServiceBase, ITaktMaterialService
         if (!string.IsNullOrEmpty(queryDto?.Remark))
         {
             exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
-        }
-
-        if (queryDto?.EndOfLifeDateStart.HasValue == true)
-        {
-            exp = exp.And(x => x.EndOfLifeDate >= queryDto.EndOfLifeDateStart);
-        }
-
-        if (queryDto?.EndOfLifeDateEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.EndOfLifeDate <= queryDto.EndOfLifeDateEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)

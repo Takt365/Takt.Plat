@@ -49,7 +49,7 @@ public class TaktApsScheduleChangeLog : TaktCompanyEntityBase
     public string? ChangeReason { get; set; }
 
     /// <summary>
-    /// 变更人（人员代码）
+    /// 变更人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
     /// </summary>
     [SugarColumn(ColumnName = "change_by", ColumnDescription = "变更人", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? ChangeBy { get; set; }

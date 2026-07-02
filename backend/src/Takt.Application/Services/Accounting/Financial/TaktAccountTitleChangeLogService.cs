@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Accounting.Financial
 // 文件名称：TaktAccountTitleChangeLogService.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：会计科目变更记录应用服务实现
 // 
@@ -97,12 +97,12 @@ public class TaktAccountTitleChangeLogService : TaktServiceBase, ITaktAccountTit
         EnsureThreeLayerContext();
         var list = await _accountTitleChangeLogRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.TitleCode ?? string.Empty,
+            x => x.AccountTitleCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
             DictValue = e.Id,
-            DictLabel = e.TitleCode ?? e.Id.ToString(),
+            DictLabel = e.AccountTitleCode ?? e.Id.ToString(),
         }).ToList();
     }
 
@@ -236,7 +236,7 @@ public class TaktAccountTitleChangeLogService : TaktServiceBase, ITaktAccountTit
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
                 SqlFunc.ToString(x.AccountTitleId).Contains(keywords)
-                || (x.TitleCode != null && x.TitleCode.Contains(keywords))
+                || (x.AccountTitleCode != null && x.AccountTitleCode.Contains(keywords))
                 || (x.ChangeFields != null && x.ChangeFields.Contains(keywords))
                 || (x.ChangeBy != null && x.ChangeBy.Contains(keywords))
                 || (x.ChangeReason != null && x.ChangeReason.Contains(keywords))
@@ -252,9 +252,9 @@ public class TaktAccountTitleChangeLogService : TaktServiceBase, ITaktAccountTit
             exp = exp.And(x => x.AccountTitleId == queryDto.AccountTitleId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.TitleCode))
+        if (!string.IsNullOrEmpty(queryDto?.AccountTitleCode))
         {
-            exp = exp.And(x => x.TitleCode != null && x.TitleCode.Contains(queryDto.TitleCode));
+            exp = exp.And(x => x.AccountTitleCode != null && x.AccountTitleCode.Contains(queryDto.AccountTitleCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ChangeFields))

@@ -113,12 +113,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.pcbaoutput.prodline')"
-                name="prodLine"
+                :label="t('entity.pcbaoutput.prodteam')"
+                name="prodTeam"
               >
                 <a-input
-                  v-model:value="formState.prodLine"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaoutput.prodline') })"
+                  v-model:value="formState.prodTeam"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaoutput.prodteam') })"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -356,7 +356,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","prodCategory","prodDate","prodLine","shiftNo","prodOrderCode","modelCode","batchNo","materialCode","prodOrderQty","stdMinutes","stdShorts","stdCapacity","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","prodCategory","prodDate","prodTeam","shiftNo","prodOrderCode","modelCode","batchNo","materialCode","prodOrderQty","stdMinutes","stdShorts","stdCapacity","extField","remark"]
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
 
@@ -533,10 +533,10 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'change'
     }
   ],
-  prodLine: [
+  prodTeam: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.pcbaoutput.prodline') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.pcbaoutput.prodteam') }),
       trigger: 'blur'
     }
   ],

@@ -8,7 +8,7 @@
 <!-- ======================================== -->
 
 <template>
-  <div class="human-resource-compensation-bonus-plan">
+  <div class="p-4">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="human:resource:performance:assessment:create"
-      update-permission="human:resource:performance:assessment:update"
-      delete-permission="human:resource:performance:assessment:delete"
-      import-permission="human:resource:performance:assessment:import"
-      export-permission="human:resource:performance:assessment:export"
+      create-permission="human:resource:compensation:bonus:plan:create"
+      update-permission="human:resource:compensation:bonus:plan:update"
+      delete-permission="human:resource:compensation:bonus:plan:delete"
+      import-permission="human:resource:compensation:bonus:plan:import"
+      export-permission="human:resource:compensation:bonus:plan:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -54,8 +54,8 @@
 
     <!-- 表格 -->
     <TaktSingleTable
-      :columns="columns"
       entity-scope="company"
+      :columns="columns"
       :visible-column-keys="visibleColumnKeys"
       :id-column-key="'bonusPlanId'"
       table-mode="single"
@@ -69,9 +69,16 @@
       @change="handleTableChange"
       @resize-column="handleResizeColumn"
     >
-      <!-- 字典列渲染 -->
+      <!-- 字典/开关列渲染 -->
       <template #bodyCell="{ column, record }">
-        <template v-if="column.key === 'bonusType'">
+        <template v-if="column.key === 'planStatus'">
+          <a-switch
+            :checked="getBonusPlanField(record, 'planStatus') === 1"
+            :checked-children="t('common.page.button.enable')" :un-checked-children="t('common.page.button.disable')"
+            @change="(checked: unknown) => handlePlanStatusChange(record, Boolean(checked))"
+          />
+        </template>
+        <template v-else-if="column.key === 'bonusType'">
           <TaktDictTag
             :value="getBonusPlanField(record, 'bonusType')"
             dict-type="hr_comp_bonus_type"
@@ -83,17 +90,11 @@
             dict-type="hr_comp_bonus_calc_method_type"
           />
         </template>
-        <template v-else-if="column.key === 'planStatus'">
-          <TaktDictTag
-            :value="getBonusPlanField(record, 'planStatus')"
-            dict-type="sys_normal_disable_status"
-          />
-        </template>
       </template>
 
     </TaktSingleTable>
 
-    <!-- 分页组件 -->
+    <!-- 分页（服务端分页，外置 TaktPagination） -->
     <TaktPagination
       v-model:current="currentPage"
       v-model:page-size="pageSize"
@@ -113,6 +114,7 @@
       @cancel="handleFormCancel"
     >
       <BonusPlanForm
+        :key="formData?.bonusPlanId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -134,6 +136,8 @@
         <a-input
           v-model:value="advancedQueryForm.planCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.bonusplan.plancode') })"
+          show-count
+          :maxlength="40"
           allow-clear
         />
       </a-form-item>
@@ -143,6 +147,8 @@
         <a-input
           v-model:value="advancedQueryForm.planName"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.bonusplan.planname') })"
+          show-count
+          :maxlength="80"
           allow-clear
         />
       </a-form-item>
@@ -172,6 +178,8 @@
         <a-input
           v-model:value="advancedQueryForm.salaryFormulaId"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.bonusplan.salaryformulaid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -230,6 +238,8 @@
         <a-input
           v-model:value="advancedQueryForm.relatedPlant"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.bonusplan.relatedplant') })"
+          show-count
+          :maxlength="4"
           allow-clear
         />
       </a-form-item>
@@ -240,7 +250,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -251,17 +261,36 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('ExtField')">
-      <a-form-item :label="t('common.page.entity.ExtField')">
-        <a-input
-          v-model:value="advancedQueryForm.ExtField"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
-          allow-clear
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
+        <a-textarea
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -270,8 +299,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -315,7 +346,6 @@
 </template>
 
 <script setup lang="ts">
-import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 /**
  * 奖金方案管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/human-resource/compensation/bonus-plan
@@ -325,12 +355,14 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import BonusPlanForm from './components/bonus-plan-form.vue'
-import { getBonusPlanList, getBonusPlanById, createBonusPlan, updateBonusPlan, deleteBonusPlanById, deleteBonusPlanBatch, getBonusPlanTemplate, importBonusPlan, exportBonusPlan } from '@/api/human-resource/compensation/bonus-plan'
-import type { BonusPlan, BonusPlanQuery, BonusPlanCreate, BonusPlanUpdate } from '@/types/human-resource/compensation/bonus-plan'
+import { getBonusPlanList, getBonusPlanById, createBonusPlan, updateBonusPlan, deleteBonusPlanById, deleteBonusPlanBatch, getBonusPlanTemplate, importBonusPlan, exportBonusPlan, updateBonusPlanStatus } from '@/api/human-resource/compensation/bonus-plan'
+import type { BonusPlan, BonusPlanQuery } from '@/types/human-resource/compensation/bonus-plan'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -365,11 +397,13 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<BonusPlan>>({})
+const formData = ref<Partial<BonusPlan> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
@@ -386,7 +420,7 @@ const advancedQueryForm = ref({
   relatedPlant: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
@@ -397,14 +431,14 @@ const queryFieldsMeta = computed(() => [
   { key: 'calcMethod', label: t('entity.bonusplan.calcmethod') },
   { key: 'salaryFormulaId', label: t('entity.bonusplan.salaryformulaid') },
   { key: 'defaultAmount', label: t('entity.bonusplan.defaultamount') },
-  { key: 'effectiveDateStart', label: t('entity.bonusplan.effectivedatestart') },
-  { key: 'effectiveDateEnd', label: t('entity.bonusplan.effectivedateend') },
+  { key: 'effectiveDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.bonusplan.effectivedate')) },
+  { key: 'effectiveDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.bonusplan.effectivedate')) },
   { key: 'planStatus', label: t('entity.bonusplan.planstatus') },
   { key: 'description', label: t('entity.bonusplan.description') },
   { key: 'relatedPlant', label: t('entity.bonusplan.relatedplant') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'ExtField', label: t('common.page.entity.ExtField') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -422,11 +456,64 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
+/** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
+const dictDataStore = useDictDataStore()
 
-/** 页面挂载后加载分页列表 */
-onMounted(() => {
+
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {BonusPlanQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<BonusPlanQuery>): BonusPlanQuery {
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: BonusPlanQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: keyof BonusPlanQuery, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v as never
+    }
+  }
+  assignTrimmed('planCode', form.planCode)
+  assignTrimmed('planName', form.planName)
+  if (form.bonusType !== undefined && form.bonusType !== null) {
+    query.bonusType = form.bonusType
+  }
+  if (form.calcMethod !== undefined && form.calcMethod !== null) {
+    query.calcMethod = form.calcMethod
+  }
+  assignTrimmed('salaryFormulaId', form.salaryFormulaId)
+  if (form.defaultAmount !== undefined && form.defaultAmount !== null) {
+    query.defaultAmount = form.defaultAmount
+  }
+  assignTrimmed('effectiveDateStart', form.effectiveDateStart)
+  assignTrimmed('effectiveDateEnd', form.effectiveDateEnd)
+  if (form.planStatus !== undefined && form.planStatus !== null) {
+    query.planStatus = form.planStatus
+  }
+  assignTrimmed('description', form.description)
+  assignTrimmed('relatedPlant', form.relatedPlant)
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('extField', form.extField)
+  assignTrimmed('remark', form.remark)
+  return query
+}
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
+  void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
+
 
 
 
@@ -539,7 +626,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'human:resource:performance:assessment:update',
+        permission: 'human:resource:compensation:bonus:plan:update',
         onClick: (record: BonusPlan) => handleEdit(record)
       },
       {
@@ -547,7 +634,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'human:resource:performance:assessment:delete',
+        permission: 'human:resource:compensation:bonus:plan:delete',
         onClick: (record: BonusPlan) => handleDeleteOne(record)
       }
     ]
@@ -563,6 +650,7 @@ const getBonusPlanId = (record: any): string => record?.[entityIdName] ?? ''
  */
 const getBonusPlanField = (record: any, field: string): any => record?.[field]
 
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -574,7 +662,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: BonusPlan, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getBonusPlanId(selectedRow.value) === getBonusPlanId(record)) {
+    } else if (selectedRow.value && getBonusPlanId(selectedRow.value) === getBonusPlanId(record)) {
       selectedRow.value = null
     }
   },
@@ -605,16 +693,7 @@ const onClickRow = (record: BonusPlan) => ({
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: BonusPlanQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getBonusPlanList(params)
+    const res = await getBonusPlanList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
@@ -632,7 +711,7 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -653,18 +732,19 @@ function handleReset() {
   relatedPlant: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
   formTitle.value = t('common.dialog.title.create', { entity: t('entity.bonusplan._self') })
-  formData.value = {}
+  formData.value = null
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗 */
 function handleEdit(record: BonusPlan) {
@@ -702,6 +782,8 @@ async function handleFormSubmit() {
       message.success(t('common.feedback.created', { target: t('entity.bonusplan._self') }))
     }
     formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
     loadData()
   } finally {
     formLoading.value = false
@@ -711,6 +793,8 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开导入对话框 */
 function handleImport() {
@@ -742,16 +826,11 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: BonusPlanQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportBonusPlan(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportBonusPlan(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -811,6 +890,30 @@ async function handleDelete() {
     }
   })
 }
+/**
+ * 行内状态切换
+ * @param record 当前行
+ * @param checked 是否启用
+ */
+async function handlePlanStatusChange(record: BonusPlan, checked: boolean) {
+  const newVal = checked ? 1 : 0
+  const oldVal = getBonusPlanField(record, 'planStatus')
+  const id = getBonusPlanId(record)
+  const row = dataSource.value.find((item) => getBonusPlanId(item) === id)
+  if (row) {
+    row.planStatus = newVal
+  }
+  try {
+    await updateBonusPlanStatus({ bonusPlanId: id, planStatus: newVal })
+    message.success(t('common.feedback.updated'))
+    
+  } catch (error: unknown) {
+    if (row) {
+      row.planStatus = oldVal
+    }
+    message.error(t('common.feedback.failed'))
+  }
+}
 /** 打开高级查询抽屉 */
 function handleAdvancedQuery() {
   advancedQueryVisible.value = true
@@ -819,7 +922,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -838,7 +941,7 @@ function handleAdvancedQueryReset() {
   relatedPlant: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
 }
@@ -868,23 +971,16 @@ function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
 /** 分页页码变更 */
-function handlePaginationChange(page: number) {
+function handlePaginationChange(page: number, size: number) {
   currentPage.value = page
+  pageSize.value = size
   loadData()
 }
-/** 分页每页条数变更 */
+
+/** 分页每页条数变更（重置到第 1 页） */
 function handlePaginationSizeChange(_current: number, size: number) {
+  currentPage.value = getTaktDefaultPageIndex()
   pageSize.value = size
-  currentPage.value = 1
   loadData()
 }
 </script>
-
-<style scoped lang="css">
-.human-resource-compensation-bonus-plan {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-</style>

@@ -25,14 +25,19 @@ namespace Takt.WebApi.Controllers.Logistics.Manufacturing.EngineeringChange;
 public class TaktEcBukansController : TaktControllerBase
 {
     private readonly ITaktEcBukanService _service;
+    private readonly ITaktEcDeptMatrixService _deptMatrixService;
 
     /// <summary>
     /// 构造函数
     /// </summary>
-    public TaktEcBukansController(ITaktEcBukanService service) => _service = service;
+    public TaktEcBukansController(ITaktEcBukanService service, ITaktEcDeptMatrixService deptMatrixService)
+    {
+        _service = service;
+        _deptMatrixService = deptMatrixService;
+    }
 
     /// <summary>获取部管部门列表（分页）</summary>
-    [TaktPermission("logistics:manufacturing:engineeringchange:bukan:list", "部管部门列表")]
+    [TaktPermission("logistics:manufacturing:engineering:change:bukan:list", "部管部门列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetEcBukanListAsync([FromQuery] TaktEcDeptViewQueryDto queryDto)
     {
@@ -41,7 +46,7 @@ public class TaktEcBukansController : TaktControllerBase
     }
 
     /// <summary>根据设变明细 ID 获取部管部门行</summary>
-    [TaktPermission("logistics:manufacturing:engineeringchange:bukan:query", "部管部门详情")]
+    [TaktPermission("logistics:manufacturing:engineering:change:bukan:query", "部管部门详情")]
     [HttpGet("detail/{ecDetailId}")]
     public async Task<IActionResult> GetEcBukanByEcDetailIdAsync(long ecDetailId)
     {
@@ -50,7 +55,7 @@ public class TaktEcBukansController : TaktControllerBase
     }
 
     /// <summary>更新部管部门</summary>
-    [TaktPermission("logistics:manufacturing:engineeringchange:bukan:update", "更新部管部门")]
+    [TaktPermission("logistics:manufacturing:engineering:change:bukan:update", "更新部管部门")]
     [HttpPut("detail/{ecDetailId}")]
     public async Task<IActionResult> UpdateEcBukanAsync(long ecDetailId, [FromBody] TaktEcDeptViewUpdateDto dto)
     {
@@ -59,11 +64,20 @@ public class TaktEcBukansController : TaktControllerBase
     }
 
     /// <summary>导出部管部门</summary>
-    [TaktPermission("logistics:manufacturing:engineeringchange:bukan:export", "导出部管部门")]
+    [TaktPermission("logistics:manufacturing:engineering:change:bukan:export", "导出部管部门")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportEcBukanAsync([FromQuery] TaktEcDeptViewQueryDto? query)
     {
         try { var (fileName, fileContent) = await _service.ExportEcBukanAsync(query); return File(fileContent, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName); }
+        catch (Exception ex) { return HandleException(ex); }
+    }
+
+    /// <summary>获取设变部门执行转置列表（分页；行=设变明细，列=各部门实施状态）</summary>
+    [TaktPermission("logistics:manufacturing:engineering:change:bukan:list", "设变部门执行转置列表")]
+    [HttpGet("transposed")]
+    public async Task<IActionResult> GetEcDeptTransposedListAsync([FromQuery] TaktEcExecTransposedQueryDto queryDto)
+    {
+        try { var result = await _deptMatrixService.GetEcDeptTransposedListAsync(queryDto); return Success(result, "查询成功"); }
         catch (Exception ex) { return HandleException(ex); }
     }
 }

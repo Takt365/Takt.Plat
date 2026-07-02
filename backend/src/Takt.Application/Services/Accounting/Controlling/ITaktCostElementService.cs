@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Accounting.Controlling
 // 文件名称：ITaktCostElementService.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：成本要素应用服务接口
 // 
@@ -36,10 +36,16 @@ public interface ITaktCostElementService
     Task<TaktCostElementDto?> GetCostElementByIdAsync(long id);
 
     /// <summary>
-    /// 获取成本要素树形选项列表
+    /// 获取成本要素树形选项列表（DictValue 为 CostElementCode，DictLabel 为成本要素名称）
     /// </summary>
     /// <returns>树形选项</returns>
     Task<List<TaktTreeSelectOption>> GetCostElementTreeOptionsAsync();
+
+    /// <summary>
+    /// 获取成本要素父级树形选项列表（DictValue 为 Id，用于 ParentId 选择）
+    /// </summary>
+    /// <returns>树形选项</returns>
+    Task<List<TaktTreeSelectOption>> GetCostElementParentTreeOptionsAsync();
 
     /// <summary>
     /// 获取成本要素树形列表

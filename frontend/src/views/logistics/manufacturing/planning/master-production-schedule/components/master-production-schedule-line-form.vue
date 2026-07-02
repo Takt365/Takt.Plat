@@ -26,7 +26,112 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.masterproductionscheduleline.mpscode')"
+                name="mpsCode"
+              >
+                <a-input
+                  v-model:value="formState.mpsCode"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.masterproductionscheduleline.mpscode') })"
+                  show-count
+                  :maxlength="40"
+                  allow-clear
+                  :disabled="!!formData?.masterProductionScheduleLineId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.masterproductionscheduleline.masterdemandschedulelineid')"
+                name="masterDemandScheduleLineId"
+              >
+                <a-input
+                  v-model:value="formState.masterDemandScheduleLineId"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.masterproductionscheduleline.masterdemandschedulelineid') })"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.masterproductionscheduleline.materialcode')"
+                name="materialCode"
+              >
+                <a-input
+                  v-model:value="formState.materialCode"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.masterproductionscheduleline.materialcode') })"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                  :disabled="!!formData?.masterProductionScheduleLineId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.masterproductionscheduleline.bucketstart')"
+                name="bucketStart"
+              >
+                <a-date-picker
+                  v-model:value="formState.bucketStart"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.masterproductionscheduleline.bucketstart') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.masterproductionscheduleline.bucketend')"
+                name="bucketEnd"
+              >
+                <a-date-picker
+                  v-model:value="formState.bucketEnd"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.masterproductionscheduleline.bucketend') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.masterproductionscheduleline.grossrequirement')"
+                name="grossRequirement"
+              >
+                <a-input-number
+                  v-model:value="formState.grossRequirement"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.masterproductionscheduleline.grossrequirement') })"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.masterproductionscheduleline.scheduledreceipts')"
+                name="scheduledReceipts"
+              >
+                <a-input-number
+                  v-model:value="formState.scheduledReceipts"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.masterproductionscheduleline.scheduledreceipts') })"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.masterproductionscheduleline.projectedonhand')"
+                name="projectedOnHand"
+              >
+                <a-input-number
+                  v-model:value="formState.projectedOnHand"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.masterproductionscheduleline.projectedonhand') })"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
           </a-row>
         </div>
       </a-tab-pane>
@@ -51,7 +156,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = []
+const formFields = ["mpsCode","masterDemandScheduleLineId","materialCode","bucketStart","bucketEnd","grossRequirement","scheduledReceipts","projectedOnHand"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -103,7 +208,73 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-
+  mpsCode: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.required', { field: t('entity.masterproductionscheduleline.mpscode') }),
+      trigger: 'blur'
+    }
+  ],
+  materialCode: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.required', { field: t('entity.masterproductionscheduleline.materialcode') }),
+      trigger: 'blur'
+    }
+  ],
+  bucketStart: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.select', { field: t('entity.masterproductionscheduleline.bucketstart') }),
+      trigger: 'change'
+    }
+  ],
+  bucketEnd: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.select', { field: t('entity.masterproductionscheduleline.bucketend') }),
+      trigger: 'change'
+    }
+  ],
+  grossRequirement: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.masterproductionscheduleline.grossrequirement') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.masterproductionscheduleline.grossrequirement') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  scheduledReceipts: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.masterproductionscheduleline.scheduledreceipts') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.masterproductionscheduleline.scheduledreceipts') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  projectedOnHand: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.masterproductionscheduleline.projectedonhand') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.masterproductionscheduleline.projectedonhand') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -115,6 +286,18 @@ async function validate() {
 /** 映射为 Create/Update DTO（含主表外键 masterProductionScheduleId） */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
+  if ('grossRequirement' in payload) {
+    const rawgrossRequirement = payload.grossRequirement
+    payload.grossRequirement = typeof rawgrossRequirement === 'number' ? rawgrossRequirement : Number(rawgrossRequirement)
+  }
+  if ('scheduledReceipts' in payload) {
+    const rawscheduledReceipts = payload.scheduledReceipts
+    payload.scheduledReceipts = typeof rawscheduledReceipts === 'number' ? rawscheduledReceipts : Number(rawscheduledReceipts)
+  }
+  if ('projectedOnHand' in payload) {
+    const rawprojectedOnHand = payload.projectedOnHand
+    payload.projectedOnHand = typeof rawprojectedOnHand === 'number' ? rawprojectedOnHand : Number(rawprojectedOnHand)
+  }
   if ('sortOrder' in payload) delete payload.sortOrder
   payload.masterProductionScheduleId = props.masterId
   return payload

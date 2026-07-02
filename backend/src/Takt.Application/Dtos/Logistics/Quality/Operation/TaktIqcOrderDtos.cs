@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Operation
 // 文件名称：TaktIqcOrderDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：IqcOrder 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktIqcOrder 生成，请按需审阅）
 // 
@@ -36,12 +36,12 @@ public class TaktIqcOrderDto : TaktCompanyDtoBase
     public long IqcOrderId { get; set; }
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源单号（采购订单编码）
+    /// 来源单号（选项 TaktPurchaseOrders/options，DictValue=PurchaseOrderCode）
     /// </summary>
     public string SourceCode { get; set; } = string.Empty;
 
@@ -56,7 +56,7 @@ public class TaktIqcOrderDto : TaktCompanyDtoBase
     public string IqcOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供应商编码
+    /// 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
     /// </summary>
     public string SupplierCode { get; set; } = string.Empty;
 
@@ -86,11 +86,6 @@ public class TaktIqcOrderDto : TaktCompanyDtoBase
     public decimal TotalInspectionReturnQuantity { get; set; }
 
     /// <summary>
-    /// 判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）
-    /// </summary>
-    public int JudgeStatus { get; set; } = 0;
-
-    /// <summary>
     /// 判定人（人员代码）
     /// </summary>
     public string? JudgeBy { get; set; } = string.Empty;
@@ -104,6 +99,11 @@ public class TaktIqcOrderDto : TaktCompanyDtoBase
     /// 判定说明
     /// </summary>
     public string? JudgeDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）
+    /// </summary>
+    public int JudgeStatus { get; set; } = 0;
 
     /// <summary>
     /// IQC检验单明细列表（主子表关系）
@@ -140,12 +140,12 @@ public class TaktIqcOrderQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源单号（采购订单编码）
+    /// 来源单号（选项 TaktPurchaseOrders/options，DictValue=PurchaseOrderCode）
     /// </summary>
     public string? SourceCode { get; set; } = string.Empty;
 
@@ -165,7 +165,7 @@ public class TaktIqcOrderQueryDto : TaktPagedQuery
     public string? IqcOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供应商编码
+    /// 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
     /// </summary>
     public string? SupplierCode { get; set; } = string.Empty;
 
@@ -195,11 +195,6 @@ public class TaktIqcOrderQueryDto : TaktPagedQuery
     public decimal? TotalInspectionReturnQuantity { get; set; }
 
     /// <summary>
-    /// 判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）
-    /// </summary>
-    public int? JudgeStatus { get; set; }
-
-    /// <summary>
     /// 判定人（人员代码）
     /// </summary>
     public string? JudgeBy { get; set; } = string.Empty;
@@ -218,6 +213,11 @@ public class TaktIqcOrderQueryDto : TaktPagedQuery
     /// 判定说明
     /// </summary>
     public string? JudgeDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）
+    /// </summary>
+    public int? JudgeStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -260,20 +260,20 @@ public class TaktIqcOrderCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码不能为空")]
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源单号（采购订单编码）
+    /// 来源单号（选项 TaktPurchaseOrders/options，DictValue=PurchaseOrderCode）
     /// </summary>
-    [Required(ErrorMessage = "来源单号（采购订单编码）不能为空")]
+    [Required(ErrorMessage = "来源单号（选项 TaktPurchaseOrders/options，DictValue=PurchaseOrderCode）不能为空")]
     public string SourceCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -288,9 +288,9 @@ public class TaktIqcOrderCreateDto
     public string IqcOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供应商编码
+    /// 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
     /// </summary>
-    [Required(ErrorMessage = "供应商编码不能为空")]
+    [Required(ErrorMessage = "供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）不能为空")]
     public string SupplierCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -319,11 +319,6 @@ public class TaktIqcOrderCreateDto
     public decimal TotalInspectionReturnQuantity { get; set; }
 
     /// <summary>
-    /// 判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）
-    /// </summary>
-    public int JudgeStatus { get; set; } = 0;
-
-    /// <summary>
     /// 判定人（人员代码）
     /// </summary>
     public string? JudgeBy { get; set; } = string.Empty;
@@ -337,6 +332,11 @@ public class TaktIqcOrderCreateDto
     /// 判定说明
     /// </summary>
     public string? JudgeDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）
+    /// </summary>
+    public int JudgeStatus { get; set; } = 0;
 
     /// <summary>
     /// IQC检验单明细列表（主子表关系）（子表，级联保存）
@@ -424,14 +424,19 @@ public class TaktIqcOrderTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源单号（采购订单编码）
+    /// 来源单号（选项 TaktPurchaseOrders/options，DictValue=PurchaseOrderCode）
     /// </summary>
     public string? SourceCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 检验日期
+    /// </summary>
+    public DateTime? InspectionDate { get; set; }
 
     /// <summary>
     /// IQC检验单编码（唯一索引，根据来源单号自动生成）
@@ -439,9 +444,14 @@ public class TaktIqcOrderTemplateDto
     public string? IqcOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供应商编码
+    /// 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
     /// </summary>
     public string? SupplierCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 进货总数
+    /// </summary>
+    public decimal? TotalPurchaseQuantity { get; set; }
 
     /// <summary>
     /// 总抽样数量（自动计算 = 各明细抽样数量合计）
@@ -459,9 +469,9 @@ public class TaktIqcOrderTemplateDto
     public int? TotalUnqualifiedQuantity { get; set; }
 
     /// <summary>
-    /// 判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）
+    /// 总验退数量（自动计算 = 各明细验退数量合计）
     /// </summary>
-    public int? JudgeStatus { get; set; }
+    public decimal? TotalInspectionReturnQuantity { get; set; }
 
     /// <summary>
     /// 判定人（人员代码）
@@ -469,9 +479,29 @@ public class TaktIqcOrderTemplateDto
     public string? JudgeBy { get; set; } = string.Empty;
 
     /// <summary>
+    /// 判定日期
+    /// </summary>
+    public DateTime? JudgeDate { get; set; }
+
+    /// <summary>
     /// 判定说明
     /// </summary>
     public string? JudgeDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）
+    /// </summary>
+    public int? JudgeStatus { get; set; }
+
+    /// <summary>
+    /// IQC检验单明细列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktIqcOrderItemCreateDto>? Items { get; set; }
+
+    /// <summary>
+    /// 变更日志列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktIqcOrderChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -501,19 +531,24 @@ public class TaktIqcOrderImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源单号（采购订单编码）
+    /// 来源单号（选项 TaktPurchaseOrders/options，DictValue=PurchaseOrderCode）
     /// </summary>
     public string? SourceCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 检验日期
+    /// </summary>
+    public DateTime? InspectionDate { get; set; }
 
     /// <summary>
     /// IQC检验单编码（唯一索引，根据来源单号自动生成）
@@ -521,9 +556,14 @@ public class TaktIqcOrderImportDto
     public string? IqcOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供应商编码
+    /// 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
     /// </summary>
     public string? SupplierCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 进货总数
+    /// </summary>
+    public decimal? TotalPurchaseQuantity { get; set; }
 
     /// <summary>
     /// 总抽样数量（自动计算 = 各明细抽样数量合计）
@@ -541,9 +581,9 @@ public class TaktIqcOrderImportDto
     public int? TotalUnqualifiedQuantity { get; set; }
 
     /// <summary>
-    /// 判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）
+    /// 总验退数量（自动计算 = 各明细验退数量合计）
     /// </summary>
-    public int? JudgeStatus { get; set; }
+    public decimal? TotalInspectionReturnQuantity { get; set; }
 
     /// <summary>
     /// 判定人（人员代码）
@@ -551,9 +591,29 @@ public class TaktIqcOrderImportDto
     public string? JudgeBy { get; set; } = string.Empty;
 
     /// <summary>
+    /// 判定日期
+    /// </summary>
+    public DateTime? JudgeDate { get; set; }
+
+    /// <summary>
     /// 判定说明
     /// </summary>
     public string? JudgeDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）
+    /// </summary>
+    public int? JudgeStatus { get; set; }
+
+    /// <summary>
+    /// IQC检验单明细列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktIqcOrderItemCreateDto>? Items { get; set; }
+
+    /// <summary>
+    /// 变更日志列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktIqcOrderChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -589,12 +649,12 @@ public class TaktIqcOrderExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源单号（采购订单编码）
+    /// 来源单号（选项 TaktPurchaseOrders/options，DictValue=PurchaseOrderCode）
     /// </summary>
     public string SourceCode { get; set; } = string.Empty;
 
@@ -609,7 +669,7 @@ public class TaktIqcOrderExportDto
     public string IqcOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供应商编码
+    /// 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
     /// </summary>
     public string SupplierCode { get; set; } = string.Empty;
 
@@ -639,11 +699,6 @@ public class TaktIqcOrderExportDto
     public decimal TotalInspectionReturnQuantity { get; set; }
 
     /// <summary>
-    /// 判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）
-    /// </summary>
-    public int JudgeStatus { get; set; } = 0;
-
-    /// <summary>
     /// 判定人（人员代码）
     /// </summary>
     public string? JudgeBy { get; set; } = string.Empty;
@@ -657,6 +712,11 @@ public class TaktIqcOrderExportDto
     /// 判定说明
     /// </summary>
     public string? JudgeDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）
+    /// </summary>
+    public int JudgeStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

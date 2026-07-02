@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Materials
 // 文件名称：TaktWarehouseService.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：仓库主数据应用服务实现
 // 
@@ -94,7 +94,7 @@ public class TaktWarehouseService : TaktServiceBase, ITaktWarehouseService
         return dto;    }
 
     /// <summary>
-    /// 获取仓库主数据选项列表
+    /// 获取仓库主数据选项列表（DictValue 为 WarehouseCode，DictLabel 为仓库名称）
     /// </summary>
     /// <returns>下拉选项</returns>
     public async Task<List<TaktSelectOption>> GetWarehouseOptionsAsync()
@@ -102,12 +102,14 @@ public class TaktWarehouseService : TaktServiceBase, ITaktWarehouseService
         EnsureThreeLayerContext();
         var list = await _warehouseRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.WarehouseStatus == 1,
-            x => x.WarehouseName ?? string.Empty,
+            x => x.SortOrder,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.WarehouseName ?? e.Id.ToString(),
+            DictValue = e.WarehouseCode,
+            DictLabel = string.IsNullOrWhiteSpace(e.WarehouseName) ? e.WarehouseCode : e.WarehouseName,
+            ExtLabel = e.WarehouseCode,
+            SortOrder = e.SortOrder,
         }).ToList();
     }
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Bom
 // 文件名称：TaktRoutingItemArgumentI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktRoutingItemArgument 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -118,13 +118,13 @@ public class TaktRoutingItemArgumentI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.routingitemargument.paramname", "zh-HK", "参数名称_hk", "参数名称"),
 
             // entity.routingitemargument.paramunit
-            new TranslationSeedItem("entity.routingitemargument.paramunit", "en-US", "单位_us", "单位"),
+            new TranslationSeedItem("entity.routingitemargument.paramunit", "en-US", "单位_us", "单位（字典 logistics_unit_of_measure_code）"),
             // entity.routingitemargument.paramunit
-            new TranslationSeedItem("entity.routingitemargument.paramunit", "ja-JP", "单位_jp", "单位"),
+            new TranslationSeedItem("entity.routingitemargument.paramunit", "ja-JP", "单位_jp", "单位（字典 logistics_unit_of_measure_code）"),
             // entity.routingitemargument.paramunit
-            new TranslationSeedItem("entity.routingitemargument.paramunit", "zh-CN", "单位", "单位"),
+            new TranslationSeedItem("entity.routingitemargument.paramunit", "zh-CN", "单位", "单位（字典 logistics_unit_of_measure_code）"),
             // entity.routingitemargument.paramunit
-            new TranslationSeedItem("entity.routingitemargument.paramunit", "zh-HK", "单位_hk", "单位"),
+            new TranslationSeedItem("entity.routingitemargument.paramunit", "zh-HK", "单位_hk", "单位（字典 logistics_unit_of_measure_code）"),
 
             // entity.routingitemargument.standardvalue
             new TranslationSeedItem("entity.routingitemargument.standardvalue", "en-US", "标准值_us", "标准值"),

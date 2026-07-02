@@ -72,6 +72,27 @@
       @master-pagination-change="handleMasterPaginationChange"
       @master-select="handleMasterSelect"
     >
+      <!-- 字典/开关列渲染 -->
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'shippingMethod'">
+          <TaktDictTag
+            :value="getSerialOutboundField(record, 'shippingMethod')"
+            dict-type="logistics_shipping_method_type"
+          />
+        </template>
+        <template v-else-if="column.key === 'outboundType'">
+          <TaktDictTag
+            :value="getSerialOutboundField(record, 'outboundType')"
+            dict-type="logistics_outbound_type"
+          />
+        </template>
+        <template v-else-if="column.key === 'destinationPort'">
+          <TaktDictTag
+            :value="getSerialOutboundField(record, 'destinationPort')"
+            dict-type="logistics_destination_port_code"
+          />
+        </template>
+      </template>
       <template #detail>
         <SerialOutboundItemPanel
           ref="serialOutboundItemPanelRef"
@@ -163,41 +184,41 @@
       </div>
       <div v-show="isFieldVisible('destination')">
       <a-form-item :label="t('entity.serialoutbound.destination')">
-        <a-input
+        <TaktSelect
           v-model:value="advancedQueryForm.destination"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serialoutbound.destination') })"
-          show-count
-          :maxlength="200"
+          api-url="/api/TaktModelDestinations/options"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serialoutbound.destination') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('shippingMethod')">
       <a-form-item :label="t('entity.serialoutbound.shippingmethod')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.shippingMethod"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serialoutbound.shippingmethod') })"
-          style="width: 100%"
+          dict-type="logistics_shipping_method_type"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serialoutbound.shippingmethod') })"
+          allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('destinationPort')">
       <a-form-item :label="t('entity.serialoutbound.destinationport')">
-        <a-input
+        <TaktSelect
           v-model:value="advancedQueryForm.destinationPort"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serialoutbound.destinationport') })"
-          show-count
-          :maxlength="200"
+          dict-type="logistics_destination_port_code"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serialoutbound.destinationport') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('outboundType')">
       <a-form-item :label="t('entity.serialoutbound.outboundtype')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.outboundType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serialoutbound.outboundtype') })"
-          style="width: 100%"
+          dict-type="logistics_outbound_type"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serialoutbound.outboundtype') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -223,17 +244,6 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('relatedCompany')">
-      <a-form-item :label="t('entity.serialoutbound.relatedcompany')">
-        <a-input
-          v-model:value="advancedQueryForm.relatedCompany"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serialoutbound.relatedcompany') })"
-          show-count
-          :maxlength="4"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
       <div v-show="isFieldVisible('totalQuantity')">
       <a-form-item :label="t('entity.serialoutbound.totalquantity')">
         <a-input-number
@@ -249,7 +259,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -260,7 +270,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -360,6 +370,7 @@ import SerialOutboundItemPanel from './components/outbound-item-panel.vue'
 import { provideSerialOutboundMasterContext } from './composables/use-outbound-master-context'
 import { getSerialOutboundList, getSerialOutboundById, createSerialOutbound, updateSerialOutbound, deleteSerialOutboundById, deleteSerialOutboundBatch, getSerialOutboundTemplate, importSerialOutbound, exportSerialOutbound } from '@/api/logistics/serial/outbound'
 import type { SerialOutbound, SerialOutboundQuery } from '@/types/logistics/serial/outbound'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
@@ -418,7 +429,6 @@ const advancedQueryForm = ref({
   outboundType: undefined as number | undefined,
   warehouseCode: '',
   locationCode: '',
-  relatedCompany: '',
   totalQuantity: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
@@ -438,7 +448,6 @@ const queryFieldsMeta = computed(() => [
   { key: 'outboundType', label: t('entity.serialoutbound.outboundtype') },
   { key: 'warehouseCode', label: t('entity.serialoutbound.warehousecode') },
   { key: 'locationCode', label: t('entity.serialoutbound.locationcode') },
-  { key: 'relatedCompany', label: t('entity.serialoutbound.relatedcompany') },
   { key: 'totalQuantity', label: t('entity.serialoutbound.totalquantity') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
@@ -460,6 +469,8 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
+/** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
+const dictDataStore = useDictDataStore()
 /** 主表选中行上下文（右侧明细面板读取） */
 const { selectedMasterRow } = provideSerialOutboundMasterContext()
 const serialOutboundItemPanelRef = ref<InstanceType<typeof SerialOutboundItemPanel> | null>(null)
@@ -501,7 +512,6 @@ function buildListQuery(overrides?: Partial<SerialOutboundQuery>): SerialOutboun
   }
   assignTrimmed('warehouseCode', form.warehouseCode)
   assignTrimmed('locationCode', form.locationCode)
-  assignTrimmed('relatedCompany', form.relatedCompany)
   if (form.totalQuantity !== undefined && form.totalQuantity !== null) {
     query.totalQuantity = form.totalQuantity
   }
@@ -514,6 +524,7 @@ function buildListQuery(overrides?: Partial<SerialOutboundQuery>): SerialOutboun
 /** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
+  void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
 
@@ -632,7 +643,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSerialOutboundField(record, 'shippingMethod') ?? ''
   },
   {
     title: t('entity.serialoutbound.destinationport'),
@@ -641,7 +651,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSerialOutboundField(record, 'destinationPort') ?? ''
   },
   {
     title: t('entity.serialoutbound.outboundtype'),
@@ -650,7 +659,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSerialOutboundField(record, 'outboundType') ?? ''
   },
   {
     title: t('entity.serialoutbound.warehousecode'),
@@ -669,15 +677,6 @@ const columns = computed<TableColumnsType>(() => [
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getSerialOutboundField(record, 'locationCode') ?? ''
-  },
-  {
-    title: t('entity.serialoutbound.relatedcompany'),
-    dataIndex: 'relatedCompany',
-    key: 'relatedCompany',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSerialOutboundField(record, 'relatedCompany') ?? ''
   },
   {
     title: t('entity.serialoutbound.totalquantity'),
@@ -737,7 +736,7 @@ const rowSelection = computed(() => ({
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
-    } else if (getSerialOutboundId(selectedRow.value) === getSerialOutboundId(record)) {
+    } else if (selectedRow.value && getSerialOutboundId(selectedRow.value) === getSerialOutboundId(record)) {
       selectedRow.value = null
       syncMasterSelection(null)
     }
@@ -789,7 +788,6 @@ function handleReset() {
   outboundType: undefined as number | undefined,
   warehouseCode: '',
   locationCode: '',
-  relatedCompany: '',
   totalQuantity: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
@@ -993,7 +991,6 @@ function handleAdvancedQueryReset() {
   outboundType: undefined as number | undefined,
   warehouseCode: '',
   locationCode: '',
-  relatedCompany: '',
   totalQuantity: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',

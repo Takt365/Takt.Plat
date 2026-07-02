@@ -15,12 +15,14 @@ using Takt.Application.Dtos.Foundation;
 using Takt.Application.Services.Foundation;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
-using Takt.Shared.Models.Foundation;
-using Takt.Shared.Models.Workflow;
 using Takt.Domain.Repositories;
+using Takt.Shared.Constants;
 using Takt.Shared.Enums;
 using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
+using Takt.Shared.Models.Foundation;
+using Takt.Shared.Models.Logistics.Manufacturing;
+using Takt.Shared.Models.Workflow;
 
 namespace Takt.Infrastructure.SignalR;
 
@@ -31,9 +33,11 @@ public class TaktSignalRDispatchService : ITaktSignalRDispatchService
 {
     private readonly IHubContext<TaktConnectHub> _connectHubContext;
     private readonly IHubContext<TaktNotificationHub> _notificationHubContext;
+    private readonly IHubContext<TaktEcChangeHub> _ecChangeHubContext;
     private readonly ITaktCompanyRepository<TaktOnline> _onlineRepository;
     private readonly ITaktOnlineService _onlineService;
     private readonly Lazy<ITaktMessageService> _messageService;
+    private readonly ITaktUserContext _userContext;
 
     /// <summary>
     /// 构造函数
@@ -43,18 +47,23 @@ public class TaktSignalRDispatchService : ITaktSignalRDispatchService
     /// <param name="onlineRepository">在线用户仓储</param>
     /// <param name="onlineService">在线用户服务</param>
     /// <param name="messageService">在线消息服务（延迟解析，避免与 TaktMessageService 循环依赖）</param>
+    /// <param name="userContext">当前登录用户上下文（强退操作者）</param>
     public TaktSignalRDispatchService(
         IHubContext<TaktConnectHub> connectHubContext,
         IHubContext<TaktNotificationHub> notificationHubContext,
+        IHubContext<TaktEcChangeHub> ecChangeHubContext,
         ITaktCompanyRepository<TaktOnline> onlineRepository,
         ITaktOnlineService onlineService,
-        Lazy<ITaktMessageService> messageService)
+        Lazy<ITaktMessageService> messageService,
+        ITaktUserContext userContext)
     {
         _connectHubContext = connectHubContext;
         _notificationHubContext = notificationHubContext;
+        _ecChangeHubContext = ecChangeHubContext;
         _onlineRepository = onlineRepository;
         _onlineService = onlineService;
         _messageService = messageService;
+        _userContext = userContext;
     }
 
     /// <summary>
@@ -63,8 +72,9 @@ public class TaktSignalRDispatchService : ITaktSignalRDispatchService
     /// <param name="onlineId">在线用户记录 ID</param>
     /// <param name="reason">强退原因</param>
     /// <param name="connectionId">SignalR 连接 ID（主键查无记录时回退定位）</param>
+    /// <param name="delaySeconds">延迟强退秒数（0 表示立即强退）</param>
     /// <returns>任务</returns>
-    public async Task ForceKickOnlineAsync(long onlineId, string? reason = null, string? connectionId = null)
+    public async Task ForceKickOnlineAsync(long onlineId, string? reason = null, string? connectionId = null, int delaySeconds = 0)
     {
         var online = await ResolveOnlineForForceKickAsync(onlineId, connectionId);
 
@@ -73,42 +83,34 @@ public class TaktSignalRDispatchService : ITaktSignalRDispatchService
             throw new TaktBusinessException("该用户已不在线，无法强退");
         }
 
+        var delay = Math.Clamp(delaySeconds, 0, TaktOnlineConstants.MaxDelayedKickSeconds);
+        var (operatorUserId, operatorUserName) = ResolveKickOperator();
+        if (delay > 0)
+        {
+            await SendForceLogoutScheduledAsync(online, reason, delay, operatorUserId, operatorUserName);
+            _ = ExecuteDelayedForceKickAsync(
+                online.Id,
+                reason,
+                online.ConnectionId,
+                delay,
+                operatorUserId,
+                operatorUserName);
+            TaktLogger.Information(
+                "已安排延迟强退，用户: {UserName}, ConnectionId: {ConnectionId}, DelaySeconds: {DelaySeconds}",
+                online.UserName,
+                online.ConnectionId,
+                delay);
+            return;
+        }
+
         var kickReason = string.IsNullOrWhiteSpace(reason) ? "您已被管理员强制下线" : reason.Trim();
-        var payload = new
-        {
-            Message = kickReason,
-            OnlineId = online.Id.ToString(),
-            ConnectionId = online.ConnectionId,
-            UserName = online.UserName,
-            ForceKickTime = DateTime.Now,
-        };
-
-        var userGroup = TaktSignalRGroupNames.UserGroup(online.CompanyCode, online.UserName);
-        var onlineConnectionId = online.ConnectionId?.Trim();
-        // 强退仅经 ConnectHub 推送一次（Client 与 Group 二选一，避免同连接重复投递）
-        if (!string.IsNullOrEmpty(onlineConnectionId))
-        {
-            await _connectHubContext.Clients.Client(onlineConnectionId).SendAsync("ForceLogout", payload);
-        }
-        else
-        {
-            await _connectHubContext.Clients.Group(userGroup).SendAsync("ForceLogout", payload);
-        }
-
-        var disconnectTime = DateTime.Now;
-        online.ConnectLocation = TaktLocationHelper.ResolveIpAndLocationForLog(
-            online.ConnectIp,
-            online.ConnectLocation).Location;
-        online.OnlineStatus = 2;
-        online.DisconnectTime = disconnectTime;
-        online.ConnectionDuration = (int)(disconnectTime - online.ConnectTime).TotalSeconds;
-        online.Remark = $"强退: {kickReason}";
-        online.UpdatedAt = disconnectTime;
-        await _onlineRepository.UpdateAsync(online);
-
-        await PushOnlineStatisticsToUserAsync(online.CompanyCode, online.UserName, online.UserId);
-
-        TaktLogger.Information("强退在线用户成功，用户: {UserName}, ConnectionId: {ConnectionId}", online.UserName, online.ConnectionId);
+        await TryPersistKickMessageAsync(
+            online,
+            kickReason,
+            TaktOnlineConstants.KickExecuteMessageGroup,
+            operatorUserId,
+            operatorUserName);
+        await ExecuteForceKickCoreAsync(online, reason);
     }
 
     /// <summary>
@@ -116,15 +118,16 @@ public class TaktSignalRDispatchService : ITaktSignalRDispatchService
     /// </summary>
     /// <param name="onlineIds">在线用户记录 ID 列表</param>
     /// <param name="reason">强退原因</param>
+    /// <param name="delaySeconds">延迟强退秒数（0 表示立即强退）</param>
     /// <returns>任务</returns>
-    public async Task ForceKickOnlineBatchAsync(IEnumerable<long> onlineIds, string? reason = null)
+    public async Task ForceKickOnlineBatchAsync(IEnumerable<long> onlineIds, string? reason = null, int delaySeconds = 0)
     {
         var idList = onlineIds?.Distinct().ToList() ?? new List<long>();
         foreach (var onlineId in idList)
         {
             try
             {
-                await ForceKickOnlineAsync(onlineId, reason, null);
+                await ForceKickOnlineAsync(onlineId, reason, null, delaySeconds);
             }
             catch (TaktBusinessException ex)
             {
@@ -152,6 +155,7 @@ public class TaktSignalRDispatchService : ITaktSignalRDispatchService
             MessageId = message.MessageId.ToString(),
             message.FromUserName,
             FromUserId = message.FromUserId?.ToString(),
+            message.FromUserNickname,
             ToUserName = toUserName,
             ToUserId = message.ToUserId?.ToString(),
             message.MessageTitle,
@@ -252,7 +256,10 @@ public class TaktSignalRDispatchService : ITaktSignalRDispatchService
             return;
         }
 
-        var statistics = await _onlineService.GetOnlineStatisticsByUserNameAsync(userName, userId);
+        var statistics = await _onlineService.GetOnlineStatisticsAsync(new TaktOnlineStatisticsQueryDto
+        {
+            UserName = userName,
+        });
         var payload = ToOnlineStatisticsPayload(statistics);
         var userGroup = TaktSignalRGroupNames.UserGroup(companyCode, userName);
 
@@ -448,6 +455,228 @@ public class TaktSignalRDispatchService : ITaktSignalRDispatchService
         TaktSignalRLogging.LogQuartzPushed("task-executed", companyCode, push.TaskCode);
     }
 
+    /// <inheritdoc />
+    public async Task PushEcChangeNotificationAsync(TaktEcChangeNotificationPush push)
+    {
+        ArgumentNullException.ThrowIfNull(push);
+        var companyCode = push.CompanyCode.Trim();
+        var group = TaktEcHelper.DeptGroup(companyCode, push.DeptCode);
+        await _ecChangeHubContext.Clients.Group(group).SendAsync("ChangeNotification", push);
+    }
+
+    /// <inheritdoc />
+    public async Task PushEcExecutionTaskAssignedAsync(TaktEcExecutionTaskAssignedPush push)
+    {
+        ArgumentNullException.ThrowIfNull(push);
+        var companyCode = push.CompanyCode.Trim();
+        var deptGroup = TaktEcHelper.DeptGroup(companyCode, push.DeptCode);
+        var taskGroup = TaktEcHelper.TaskGroup(companyCode, push.TaskId);
+        await _ecChangeHubContext.Clients.Group(deptGroup).SendAsync("TaskAssigned", push);
+        await _ecChangeHubContext.Clients.Group(taskGroup).SendAsync("TaskAssigned", push);
+    }
+
+    /// <inheritdoc />
+    public async Task PushEcExecutionTaskProgressAsync(TaktEcExecutionTaskProgressPush push)
+    {
+        ArgumentNullException.ThrowIfNull(push);
+        var companyCode = push.CompanyCode.Trim();
+        var deptGroup = TaktEcHelper.DeptGroup(companyCode, push.DeptCode);
+        var taskGroup = TaktEcHelper.TaskGroup(companyCode, push.TaskId);
+        await _ecChangeHubContext.Clients.Group(taskGroup).SendAsync("TaskProgress", push);
+        await _ecChangeHubContext.Clients.Group(deptGroup).SendAsync("TaskProgress", push);
+    }
+
+    /// <inheritdoc />
+    public async Task PushEcChangeClosedAsync(TaktEcChangeClosedPush push)
+    {
+        ArgumentNullException.ThrowIfNull(push);
+        var companyCode = push.CompanyCode.Trim();
+        await _ecChangeHubContext.Clients
+            .Group(TaktSignalRGroupNames.NotificationsGroup(companyCode))
+            .SendAsync("ChangeClosed", push);
+    }
+
+    /// <inheritdoc />
+    public async Task PushEcExecutionTaskAlertAsync(TaktEcExecutionTaskAlertPush push)
+    {
+        ArgumentNullException.ThrowIfNull(push);
+        var companyCode = push.CompanyCode.Trim();
+        var deptGroup = TaktEcHelper.DeptGroup(companyCode, push.DeptCode);
+        var taskGroup = TaktEcHelper.TaskGroup(companyCode, push.TaskId);
+        await _ecChangeHubContext.Clients.Group(deptGroup).SendAsync("TaskAlert", push);
+        await _ecChangeHubContext.Clients.Group(taskGroup).SendAsync("TaskAlert", push);
+        await _notificationHubContext.Clients
+            .Group(TaktSignalRGroupNames.NotificationsGroup(companyCode))
+            .SendAsync("TaskAlert", push);
+    }
+
+    /// <inheritdoc />
+    public async Task PushEcNotificationConfirmedToUserAsync(string companyCode, string userName, object payload)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(companyCode);
+        ArgumentException.ThrowIfNullOrWhiteSpace(userName);
+        var userGroup = TaktSignalRGroupNames.UserGroup(companyCode, userName);
+        await _ecChangeHubContext.Clients.Group(userGroup).SendAsync("NotificationConfirmed", payload);
+    }
+
+    /// <inheritdoc />
+    public async Task PushEcChangeClosedToUserAsync(string companyCode, string userName, TaktEcChangeClosedPush push)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(companyCode);
+        ArgumentException.ThrowIfNullOrWhiteSpace(userName);
+        var userGroup = TaktSignalRGroupNames.UserGroup(companyCode, userName);
+        await _ecChangeHubContext.Clients.Group(userGroup).SendAsync("ChangeClosed", push);
+    }
+
+    /// <summary>
+    /// 立即强退在线用户（推送 ForceLogout 并关闭会话）
+    /// </summary>
+    /// <param name="online">在线实体</param>
+    /// <param name="reason">强退原因</param>
+    /// <returns>任务</returns>
+    private async Task ExecuteForceKickCoreAsync(TaktOnline online, string? reason)
+    {
+        var kickReason = string.IsNullOrWhiteSpace(reason) ? "您已被管理员强制下线" : reason.Trim();
+        var payload = new
+        {
+            Message = kickReason,
+            OnlineId = online.Id.ToString(),
+            ConnectionId = online.ConnectionId,
+            UserName = online.UserName,
+            ForceKickTime = DateTime.Now,
+        };
+
+        await SendConnectHubEventToOnlineAsync(online, "ForceLogout", payload);
+
+        var disconnectTime = DateTime.Now;
+        online.ConnectLocation = TaktHttpAuditHelper.ResolveLocationFromIp(
+            online.ConnectIp,
+            online.ConnectLocation);
+        online.Remark = $"强退: {kickReason}";
+        online.UpdatedAt = disconnectTime;
+        await _onlineRepository.UpdateAsync(online);
+        var onlineConnectionId = online.ConnectionId?.Trim();
+        if (!string.IsNullOrEmpty(onlineConnectionId))
+        {
+            await _onlineService.CloseOnlineSessionByConnectionIdAsync(
+                onlineConnectionId,
+                disconnectTime,
+                onlineStatus: 2);
+        }
+        online = await _onlineRepository.GetByIdAsync(online.Id) ?? online;
+
+        await PushOnlineStatisticsToUserAsync(online.CompanyCode, online.UserName, online.UserId);
+
+        TaktLogger.Information("强退在线用户成功，用户: {UserName}, ConnectionId: {ConnectionId}", online.UserName, online.ConnectionId);
+    }
+
+    /// <summary>
+    /// 推送延迟强退预告（不关闭会话）
+    /// </summary>
+    /// <param name="online">在线实体</param>
+    /// <param name="reason">强退原因</param>
+    /// <param name="delaySeconds">延迟秒数</param>
+    /// <param name="fromUserId">强退操作者用户 ID</param>
+    /// <param name="fromUserName">强退操作者登录名</param>
+    /// <returns>任务</returns>
+    private async Task SendForceLogoutScheduledAsync(
+        TaktOnline online,
+        string? reason,
+        int delaySeconds,
+        long? fromUserId,
+        string? fromUserName)
+    {
+        var kickAt = DateTime.Now.AddSeconds(delaySeconds);
+        var scheduleMessage = string.IsNullOrWhiteSpace(reason)
+            ? $"您将在 {delaySeconds / 60} 分钟后被强制下线，请尽快保存工作"
+            : reason.Trim();
+        var payload = new
+        {
+            Message = scheduleMessage,
+            DelaySeconds = delaySeconds,
+            KickAt = kickAt,
+            OnlineId = online.Id.ToString(),
+            ConnectionId = online.ConnectionId,
+            UserName = online.UserName,
+        };
+
+        await SendConnectHubEventToOnlineAsync(online, "ForceLogoutScheduled", payload);
+        await TryPersistKickMessageAsync(
+            online,
+            scheduleMessage,
+            TaktOnlineConstants.KickScheduleMessageGroup,
+            fromUserId,
+            fromUserName);
+    }
+
+    /// <summary>
+    /// 延迟到期后执行强退
+    /// </summary>
+    /// <param name="onlineId">在线用户记录 ID</param>
+    /// <param name="reason">强退原因</param>
+    /// <param name="connectionId">SignalR 连接 ID</param>
+    /// <param name="delaySeconds">延迟秒数</param>
+    /// <param name="fromUserId">强退操作者用户 ID</param>
+    /// <param name="fromUserName">强退操作者登录名</param>
+    /// <returns>任务</returns>
+    private async Task ExecuteDelayedForceKickAsync(
+        long onlineId,
+        string? reason,
+        string? connectionId,
+        int delaySeconds,
+        long? fromUserId,
+        string? fromUserName)
+    {
+        try
+        {
+            await Task.Delay(TimeSpan.FromSeconds(delaySeconds));
+            var online = await ResolveOnlineForForceKickAsync(onlineId, connectionId);
+            if (online.OnlineStatus != 0)
+            {
+                TaktLogger.Information("延迟强退已跳过（用户已离线），OnlineId: {OnlineId}", onlineId);
+                return;
+            }
+
+            var kickReason = string.IsNullOrWhiteSpace(reason) ? "您已被管理员强制下线" : reason.Trim();
+            await TryPersistKickMessageAsync(
+                online,
+                kickReason,
+                TaktOnlineConstants.KickExecuteMessageGroup,
+                fromUserId,
+                fromUserName);
+            await ExecuteForceKickCoreAsync(online, kickReason);
+        }
+        catch (TaktBusinessException ex)
+        {
+            TaktLogger.Warning("延迟强退失败 OnlineId: {OnlineId}: {Message}", onlineId, ex.Message);
+        }
+        catch (Exception ex)
+        {
+            TaktLogger.Error(ex, "延迟强退执行异常 OnlineId: {OnlineId}", onlineId);
+        }
+    }
+
+    /// <summary>
+    /// 向在线用户 ConnectHub 连接投递事件（Client 与 Group 二选一）
+    /// </summary>
+    /// <param name="online">在线实体</param>
+    /// <param name="eventName">Hub 事件名</param>
+    /// <param name="payload">载荷</param>
+    /// <returns>任务</returns>
+    private async Task SendConnectHubEventToOnlineAsync(TaktOnline online, string eventName, object payload)
+    {
+        var userGroup = TaktSignalRGroupNames.UserGroup(online.CompanyCode, online.UserName);
+        var onlineConnectionId = online.ConnectionId?.Trim();
+        if (!string.IsNullOrEmpty(onlineConnectionId))
+        {
+            await _connectHubContext.Clients.Client(onlineConnectionId).SendAsync(eventName, payload);
+        }
+        else
+        {
+            await _connectHubContext.Clients.Group(userGroup).SendAsync(eventName, payload);
+        }
+    }
+
     /// <summary>
     /// 解析强退目标在线记录（主键优先，可选按 ConnectionId 回退）
     /// </summary>
@@ -479,6 +708,57 @@ public class TaktSignalRDispatchService : ITaktSignalRDispatchService
     }
 
     /// <summary>
+    /// 解析当前强退操作者（HTTP 请求内有效；延迟任务须调度时传入）
+    /// </summary>
+    /// <returns>操作者 ID 与登录名</returns>
+    private (long? UserId, string? UserName) ResolveKickOperator()
+    {
+        if (_userContext.IsAuthenticated
+            && _userContext.UserId.HasValue
+            && _userContext.UserId.Value > 0)
+        {
+            return (_userContext.UserId, _userContext.UserName);
+        }
+
+        return (null, null);
+    }
+
+    /// <summary>
+    /// 强退通知落库并 SignalR 私信推送（失败仅记日志，不阻断强退）
+    /// </summary>
+    /// <param name="online">目标在线用户</param>
+    /// <param name="messageContent">消息正文</param>
+    /// <param name="messageGroup">消息分组 DictValue</param>
+    /// <param name="fromUserId">操作者用户 ID</param>
+    /// <param name="fromUserName">操作者登录名</param>
+    /// <returns>任务</returns>
+    private async Task TryPersistKickMessageAsync(
+        TaktOnline online,
+        string messageContent,
+        string messageGroup,
+        long? fromUserId,
+        string? fromUserName)
+    {
+        try
+        {
+            await _messageService.Value.CreateAndSendOnlineKickMessageAsync(
+                online,
+                messageContent,
+                messageGroup,
+                fromUserId,
+                fromUserName);
+        }
+        catch (Exception ex)
+        {
+            TaktLogger.Warning(
+                ex,
+                "强退消息落库/推送失败，用户: {UserName}, OnlineId: {OnlineId}",
+                online.UserName,
+                online.Id);
+        }
+    }
+
+    /// <summary>
     /// 映射在线统计为 SignalR 推送载荷
     /// </summary>
     /// <param name="statistics">统计 DTO</param>
@@ -492,7 +772,10 @@ public class TaktSignalRDispatchService : ITaktSignalRDispatchService
             statistics.OnlineCount,
             statistics.CurrentDurationSeconds,
             statistics.TodayDurationSeconds,
+            statistics.WeekTotalDurationSeconds,
+            statistics.WeekAverageDurationSeconds,
             statistics.MonthDurationSeconds,
+            statistics.MonthAverageDurationSeconds,
         };
     }
 

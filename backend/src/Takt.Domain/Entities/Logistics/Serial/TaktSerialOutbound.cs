@@ -5,7 +5,7 @@
 // 创建时间：2026-05-11
 // 创建人：Takt365(Cursor AI)
 // 功能描述：序列号出库主表实体，记录序列号出库的基本信息
-// 
+//
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
@@ -22,80 +22,69 @@ namespace Takt.Domain.Entities.Logistics.Serial;
 [SugarIndex("ix_serial_outbound_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_serial_outbound_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_serial_outbound_outbound_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(OutboundNo), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_serial_outbound_plant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_serial_outbound_outbound_date", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(OutboundDate), OrderByType.Asc, false)]
 public class TaktSerialOutbound : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码(4位字母数字组合)
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false, DefaultValue = "C100")]
-    public string PlantCode { get; set; } = "C100";
-
+    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
+    public string PlantCode { get; set; } = string.Empty;
     /// <summary>
-    /// 出库单号(组合唯一索引:PlantCode + OutboundNo)
+    /// 出库单号（租户+公司+工厂内唯一）
     /// </summary>
     [SugarColumn(ColumnName = "outbound_no", ColumnDescription = "出库单号", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string OutboundNo { get; set; } = string.Empty;
-
     /// <summary>
     /// 出货发票号
     /// </summary>
     [SugarColumn(ColumnName = "shipping_invoice_no", ColumnDescription = "出货发票号", ColumnDataType = "nvarchar", Length = 50, IsNullable = false, DefaultValue = "")]
     public string ShippingInvoiceNo { get; set; } = string.Empty;
-
     /// <summary>
     /// 出库日期
     /// </summary>
     [SugarColumn(ColumnName = "outbound_date", ColumnDescription = "出库日期", ColumnDataType = "datetime", IsNullable = false)]
     public DateTime OutboundDate { get; set; } = DateTime.Today;
-
     /// <summary>
-    /// 仕向地(目的地)
+    /// 仕向地（选项 TaktModelDestinations/options，DictValue=DestinationCode）
     /// </summary>
-    [SugarColumn(ColumnName = "destination", ColumnDescription = "仕向地", ColumnDataType = "nvarchar", Length = 200, IsNullable = false, DefaultValue = "")]
+    [SugarColumn(ColumnName = "destination", ColumnDescription = "仕向地", ColumnDataType = "nvarchar", Length = 40, IsNullable = false, DefaultValue = "")]
     public string Destination { get; set; } = string.Empty;
-
     /// <summary>
-    /// 运输方式（字典 logistics_shipping_method_type；0=海运，1=空运，2=陆运，3=铁路，4=快递，5=其他）
+    /// 运输方式（字典 logistics_shipping_method_type；0=海运 1=空运 2=陆运 3=铁路 4=快递 5=其他）
     /// </summary>
     [SugarColumn(ColumnName = "shipping_method", ColumnDescription = "运输方式", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int ShippingMethod { get; set; } = 0;
-
     /// <summary>
-    /// 目的地港
+    /// 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
     /// </summary>
-    [SugarColumn(ColumnName = "destination_port", ColumnDescription = "目的地港", ColumnDataType = "nvarchar", Length = 200, IsNullable = false, DefaultValue = "")]
+    [SugarColumn(ColumnName = "destination_port", ColumnDescription = "目的地港", ColumnDataType = "nvarchar", Length = 40, IsNullable = false, DefaultValue = "")]
     public string DestinationPort { get; set; } = string.Empty;
-
     /// <summary>
-    /// 出库类型（字典 logistics_outbound_type；0=销售出库，1=生产领料，2=退货出库，3=调拨出库，4=报废出库，5=序列号出库，6=其他）
+    /// 出库类型（字典 logistics_outbound_type；0=销售出库 1=生产领料 2=退货出库 3=调拨出库 4=报废出库 5=序列号出库 6=其他）
     /// </summary>
     [SugarColumn(ColumnName = "outbound_type", ColumnDescription = "出库类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "5")]
     public int OutboundType { get; set; } = 5;
-
     /// <summary>
-    /// 仓库编码（关联 Materials 模块 TaktWarehouse.WarehouseCode）
+    /// 仓库编码（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options）
     /// </summary>
     [SugarColumn(ColumnName = "warehouse_code", ColumnDescription = "仓库编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false, DefaultValue = "C008")]
     public string WarehouseCode { get; set; } = "C008";
-
     /// <summary>
-    /// 库位编码（关联 Materials 模块 TaktStorageLocation.LocationCode）
+    /// 库位编码（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options）
     /// </summary>
-    [SugarColumn(ColumnName = "location_code", ColumnDescription = "库位编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false, DefaultValue = "1F-2")]
+    [SugarColumn(ColumnName = "location_code", ColumnDescription = "库位编码", ColumnDataType = "nvarchar", Length = 40, IsNullable = false, DefaultValue = "1F-2")]
     public string LocationCode { get; set; } = "1F-2";
-
-    /// <summary>
-    /// 关联公司
-    /// </summary>
-    [SugarColumn(ColumnName = "related_company", ColumnDescription = "关联公司", ColumnDataType = "nvarchar", Length = 4, IsNullable = false, DefaultValue = "2300")]
-    public string RelatedCompany { get; set; } = "2300";
-
     /// <summary>
     /// 总数量
     /// </summary>
     [SugarColumn(ColumnName = "total_quantity", ColumnDescription = "总数量", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int TotalQuantity { get; set; } = 0;
+
+    // ========================================
+    // 导航属性区域
+    // ========================================
 
     /// <summary>
     /// 序列号出库明细列表（主子表关系）

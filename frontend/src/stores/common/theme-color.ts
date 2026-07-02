@@ -12,14 +12,29 @@
 
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
+import type { AppSetting, ThemeColor } from '@/types/setting';
+import { useSettingStore } from '@/stores/common/setting';
+import { useUserStore } from '@/stores/identity/user';
 import { EventBus } from '@/utils/event-bus';
 import { TAKT_THEME_COLOR_STORAGE_KEY } from '@/utils/common';
 import {
   getThemeColorValue,
+  presetToAppSettingThemeColor,
   readStoredThemeColorPreset,
+  resolveEffectiveColorPreset,
+  resolveEffectiveColorPrimary,
+  systemDefaultThemeColorConfig,
   themeColorPresetKeys,
   type TaktThemeColorPreset,
 } from '@/utils/theme';
+
+/** setColorPreset 选项 */
+export interface TaktSetColorPresetOptions {
+  /** 是否为用户主动切换（false 时仅同步 preset，不锁定假日主题） */
+  userInitiated?: boolean;
+  /** 为 true 时不广播 theme-color:change（applySettings 同步用） */
+  silent?: boolean;
+}
 
 /**
  * 主题色预设状态管理
@@ -29,30 +44,69 @@ export const useThemeColorStore = defineStore('theme-color', () => {
   const preset = ref<TaktThemeColorPreset>(readStoredThemeColorPreset());
 
   /**
-   * 当前主色色值
+   * 实际生效主色（叠加：系统默认 → 假日适配 → 用户自定义）
    */
   const colorPrimary = computed(() => {
-    // 由预设键映射为 hex 主色
-    return getThemeColorValue(preset.value);
+    const settingStore = useSettingStore();
+    const userStore = useUserStore();
+    return resolveEffectiveColorPrimary(
+      settingStore.setting,
+      userStore.holidayFromToken,
+      systemDefaultThemeColorConfig,
+    );
+  });
+
+  /**
+   * 色板选中态 preset（与 colorPrimary 同源优先级）
+   */
+  const effectivePreset = computed(() => {
+    const settingStore = useSettingStore();
+    const userStore = useUserStore();
+    return resolveEffectiveColorPreset(
+      settingStore.setting,
+      userStore.holidayFromToken,
+      preset.value,
+    );
   });
 
   /**
    * 设置主题色预设
    * @param {TaktThemeColorPreset} next 预设键名
+   * @param {TaktSetColorPresetOptions} options 是否用户主动切换
    * @returns {void}
    */
-  function setColorPreset(next: TaktThemeColorPreset): void {
-    // 相同预设不重复写入与广播
+  function setColorPreset(next: TaktThemeColorPreset, options?: TaktSetColorPresetOptions): void {
+    const userInitiated = options?.userInitiated !== false;
+    const silent = options?.silent === true;
+    const settingStore = useSettingStore();
+
     if (preset.value === next) {
+      if (userInitiated && !settingStore.setting.appearanceUserOverride) {
+        settingStore.patchSetting({ appearanceUserOverride: true });
+      }
       return;
     }
 
-    // 更新响应式预设
     preset.value = next;
-    // 持久化到 localStorage
     localStorage.setItem(TAKT_THEME_COLOR_STORAGE_KEY, next);
-    // 广播主题色变更，apply-settings 等可同步 CSS 变量
-    EventBus.emit('theme-color:change', { preset: next, color: getThemeColorValue(next) });
+
+    const shortKey = presetToAppSettingThemeColor[next];
+    if (shortKey && userInitiated) {
+      settingStore.patchSetting({
+        themeColor: { type: shortKey as ThemeColor },
+        appearanceUserOverride: true,
+      });
+    } else if (shortKey && !userInitiated && settingStore.setting.themeColor.type !== shortKey) {
+      settingStore.patchSetting({
+        themeColor: { type: shortKey as ThemeColor },
+      });
+    } else if (userInitiated) {
+      settingStore.patchSetting({ appearanceUserOverride: true });
+    }
+
+    if (!silent) {
+      EventBus.emit('theme-color:change', { preset: next, color: getThemeColorValue(next) });
+    }
   }
 
   /**
@@ -66,13 +120,13 @@ export const useThemeColorStore = defineStore('theme-color', () => {
     const next = themeColorPresetKeys[(currentIndex + 1) % themeColorPresetKeys.length];
 
     if (next) {
-      // 应用下一预设
       setColorPreset(next);
     }
   }
 
   return {
     preset,
+    effectivePreset,
     colorPrimary,
     setColorPreset,
     toggleColorPreset,

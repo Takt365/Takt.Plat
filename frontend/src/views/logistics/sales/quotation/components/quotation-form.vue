@@ -29,12 +29,12 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.tenantcode')"
+                :label="pi.label('tenantCode')"
                 name="tenantCode"
               >
                 <a-input
                   v-model:value="formState.tenantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
+                  :placeholder="pi.ph('tenantCode')"
                   show-count
                   :maxlength="20"
                   disabled
@@ -43,12 +43,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.companycode')"
+                :label="pi.label('companyCode')"
                 name="companyCode"
               >
                 <a-input
                   v-model:value="formState.companyCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
+                  :placeholder="pi.ph('companyCode')"
                   show-count
                   :maxlength="20"
                   disabled
@@ -57,12 +57,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.companydefaultculture')"
+                :label="pi.label('companyDefaultCulture')"
                 name="companyDefaultCulture"
               >
                 <a-input
                   v-model:value="formState.companyDefaultCulture"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
+                  :placeholder="pi.ph('companyDefaultCulture')"
                   show-count
                   :maxlength="20"
                   disabled
@@ -71,27 +71,25 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesquotation.plantcode')"
+                :label="pi.label('plantCode')"
                 name="plantCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.plantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesquotation.plantcode') })"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('plantCode')"
                   :disabled="!!formData?.salesQuotationId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesquotation.code')"
+                :label="pi.label('salesQuotationCode')"
                 name="salesQuotationCode"
               >
                 <a-input
                   v-model:value="formState.salesQuotationCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesquotation.code') })"
+                  :placeholder="pi.ph('salesQuotationCode')"
                   show-count
                   :maxlength="50"
                   allow-clear
@@ -101,27 +99,25 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesquotation.customercode')"
+                :label="pi.label('customerCode')"
                 name="customerCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.customerCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesquotation.customercode') })"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
+                  api-url="TaktCustomers/options"
+                  :placeholder="pi.ph('customerCode')"
                   :disabled="!!formData?.salesQuotationId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesquotation.customername')"
+                :label="pi.label('customerName')"
                 name="customerName"
               >
                 <a-input
                   v-model:value="formState.customerName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesquotation.customername') })"
+                  :placeholder="pi.ph('customerName')"
                   show-count
                   :maxlength="200"
                   allow-clear
@@ -130,12 +126,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesquotation.quotationdate')"
+                :label="pi.label('quotationDate')"
                 name="quotationDate"
               >
                 <a-date-picker
                   v-model:value="formState.quotationDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesquotation.quotationdate') })"
+                  :placeholder="pi.ph('quotationDate')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
@@ -143,12 +139,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesquotation.validuntildate')"
+                :label="pi.label('validUntilDate')"
                 name="validUntilDate"
               >
                 <a-date-picker
                   v-model:value="formState.validUntilDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesquotation.validuntildate') })"
+                  :placeholder="pi.ph('validUntilDate')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
@@ -156,15 +152,13 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesquotation.salesby')"
+                :label="pi.label('salesBy')"
                 name="salesBy"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.salesBy"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesquotation.salesby') })"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
+                  api-url="TaktEmployees/options"
+                  :placeholder="pi.ph('salesBy')"
                 />
               </a-form-item>
             </a-col>
@@ -180,111 +174,123 @@
           <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.salesquotation.totalquantity')"
+                :label="pi.label('totalQuantity')"
                 name="totalQuantity"
               >
                 <a-input-number
                   v-model:value="formState.totalQuantity"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesquotation.totalquantity') })"
+                  :placeholder="pi.ph('totalQuantity')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.salesquotation.totalamount')"
+                :label="pi.label('totalAmount')"
                 name="totalAmount"
               >
                 <a-input-number
                   v-model:value="formState.totalAmount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesquotation.totalamount') })"
+                  :placeholder="pi.ph('totalAmount')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.salesquotation.discountamount')"
+                :label="pi.label('discountAmount')"
                 name="discountAmount"
               >
                 <a-input-number
                   v-model:value="formState.discountAmount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesquotation.discountamount') })"
+                  :placeholder="pi.ph('discountAmount')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.salesquotation.taxamount')"
+                :label="pi.label('taxAmount')"
                 name="taxAmount"
               >
                 <a-input-number
                   v-model:value="formState.taxAmount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesquotation.taxamount') })"
+                  :placeholder="pi.ph('taxAmount')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.salesquotation.actualamount')"
+                :label="pi.label('actualAmount')"
                 name="actualAmount"
               >
                 <a-input-number
                   v-model:value="formState.actualAmount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesquotation.actualamount') })"
+                  :placeholder="pi.ph('actualAmount')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.salesquotation.quotationstatus')"
-                name="quotationStatus"
-              >
-                <a-input-number
-                  v-model:value="formState.quotationStatus"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesquotation.quotationstatus') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.salesquotation.salesordercode')"
+                :label="pi.label('salesOrderCode')"
                 name="salesOrderCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.salesOrderCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesquotation.salesordercode') })"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
+                  api-url="TaktSalesOrders/options"
+                  :placeholder="pi.ph('salesOrderCode')"
                   :disabled="!!formData?.salesQuotationId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.salesquotation.extfield')"
-                name="ExtField"
+                :label="pi.label('quotationStatus')"
+                name="quotationStatus"
               >
-                <a-textarea
-                  v-model:value="formState.ExtField"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.salesquotation.extfield') })"
-                  :rows="2"
+                <TaktSelect
+                  v-model:value="formState.quotationStatus"
+                  dict-type="logistics_quotation_status"
+                  :placeholder="pi.ph('quotationStatus')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.remark')"
+                name="extField"
+                class="takt-form-item-ext-field"
+              >
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t('common.page.entity.extfieldhint')"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ pi.label('extField') }}</span>
+                  </span>
+                </template>
+                <a-textarea
+                  v-model:value="formState.extField"
+                  :placeholder="t('common.page.form.placeholder.extfield')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('remark')"
                 name="remark"
               >
                 <a-textarea
                   v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+                  :placeholder="pi.ph('remark')"
                   :rows="4"
                   show-count
                   :maxlength="400"
@@ -301,8 +307,8 @@
       ref="salesQuotationItemTableRef"
       v-model="childSalesQuotationItemRows"
       :columns="salesQuotationItemFormColumns"
-      :title="t('entity.salesquotationitem._self')"
-      :add-button-entity="t('entity.salesquotationitem._self')"
+      :title="salesQuotationItemPi.self()"
+      :add-button-entity="salesQuotationItemPi.self()"
       id-field="salesQuotationItemId"
       :default-row="createDefaultSalesQuotationItemRow"
       :disabled="loading"
@@ -316,10 +322,18 @@
  * Takt销售报价实体维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/sales/quotation/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useSalesQuotationI18n } from '../composables/use-quotation-i18n'
+
+/** 实体字段 i18n */
+const pi = useSalesQuotationI18n()
+
 import type { SalesQuotationCreate } from '@/types/logistics/sales/quotation'
+import TaktSelect from '@/components/business/takt-select/index.vue'
+import { RiQuestionLine } from '@remixicon/vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -352,9 +366,13 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","salesQuotationCode","customerCode","customerName","quotationDate","validUntilDate","salesBy","totalQuantity","totalAmount","discountAmount","taxAmount","actualAmount","quotationStatus","salesOrderCode","ExtField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","salesQuotationCode","customerCode","customerName","quotationDate","validUntilDate","salesBy","totalQuantity","totalAmount","discountAmount","taxAmount","actualAmount","salesOrderCode","quotationStatus","extField","remark"]
+
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+import { useSalesQuotationItemI18n } from '../composables/use-quotation-item-i18n'
+
+const salesQuotationItemPi = useSalesQuotationItemI18n()
 
 const childSalesQuotationItemRows = ref<Record<string, unknown>[]>([])
 const salesQuotationItemTableRef = ref<{
@@ -367,49 +385,49 @@ const salesQuotationItemTableRef = ref<{
 const salesQuotationItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
     key: 'lineNumber',
-    title: t('entity.salesquotationitem.linenumber'),
+    title: salesQuotationItemPi.label('lineNumber'),
     editor: 'inputNumber',
     width: 140, summary: 'sum',
   },
   {
     key: 'materialCode',
-    title: t('entity.salesquotationitem.materialcode'),
+    title: salesQuotationItemPi.label('materialCode'),
     editor: 'input',
     width: 140,
   },
   {
     key: 'materialName',
-    title: t('entity.salesquotationitem.materialname'),
+    title: salesQuotationItemPi.label('materialName'),
     editor: 'input',
     width: 140,
   },
   {
     key: 'materialSpecification',
-    title: t('entity.salesquotationitem.materialspecification'),
+    title: salesQuotationItemPi.label('materialSpecification'),
     editor: 'input',
-    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.salesquotationitem.materialspecification') }),
+    width: 140, allowClear: true, placeholder: salesQuotationItemPi.ph('materialSpecification'),
   },
   {
     key: 'salesUnit',
-    title: t('entity.salesquotationitem.salesunit'),
+    title: salesQuotationItemPi.label('salesUnit'),
     editor: 'input',
     width: 140,
   },
   {
     key: 'quotationQuantity',
-    title: t('entity.salesquotationitem.quotationquantity'),
+    title: salesQuotationItemPi.label('quotationQuantity'),
+    editor: 'inputNumber',
+    width: 140,
+  },
+  {
+    key: 'salesPerUnit',
+    title: salesQuotationItemPi.label('salesPerUnit'),
     editor: 'inputNumber',
     width: 140,
   },
   {
     key: 'unitPrice',
-    title: t('entity.salesquotationitem.unitprice'),
-    editor: 'inputNumber',
-    width: 140,
-  },
-  {
-    key: 'discountRate',
-    title: t('entity.salesquotationitem.discountrate'),
+    title: salesQuotationItemPi.label('unitPrice'),
     editor: 'inputNumber',
     width: 140,
   },
@@ -428,8 +446,8 @@ function createDefaultSalesQuotationItemRow(): Record<string, unknown> {
     materialSpecification: '',
     salesUnit: '',
     quotationQuantity: 0,
+    salesPerUnit: 0,
     unitPrice: 0,
-    discountRate: 0,
   }
 }
 
@@ -464,11 +482,23 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
-/** 表单字段默认值（无字典默认项） */
-function applyFormDefaults(target: Record<string, unknown>) {
-  void target
+/** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
+const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  quotationStatus: 0
 }
 
+/** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  Object.assign(target, FORM_FIELD_DEFAULTS)
+}
+
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载全量字典 */
+onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
+})
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 salesQuotationId 才视为编辑） */
 watch(
@@ -508,42 +538,49 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
+  plantCode: [
+    {
+      required: true,
+      message: pi.ph('plantCode'),
+      trigger: 'change'
+    }
+  ],
   salesQuotationCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.salesquotation.code') }),
+      message: pi.ph('salesQuotationCode'),
       trigger: 'blur'
     }
   ],
   customerCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.salesquotation.customercode') }),
-      trigger: 'blur'
+      message: pi.ph('customerCode'),
+      trigger: 'change'
     }
   ],
   customerName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.salesquotation.customername') }),
+      message: pi.ph('customerName'),
       trigger: 'blur'
     }
   ],
   quotationDate: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.salesquotation.quotationdate') }),
+      message: pi.ph('quotationDate'),
       trigger: 'change'
     }
   ],
   totalQuantity: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salesquotation.totalquantity') }))
+        return Promise.reject(pi.ph('totalQuantity'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salesquotation.totalquantity') }))
+        return Promise.reject(pi.ph('totalQuantity'))
       }
       return Promise.resolve()
     },
@@ -552,11 +589,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   totalAmount: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salesquotation.totalamount') }))
+        return Promise.reject(pi.ph('totalAmount'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salesquotation.totalamount') }))
+        return Promise.reject(pi.ph('totalAmount'))
       }
       return Promise.resolve()
     },
@@ -565,11 +602,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   discountAmount: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salesquotation.discountamount') }))
+        return Promise.reject(pi.ph('discountAmount'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salesquotation.discountamount') }))
+        return Promise.reject(pi.ph('discountAmount'))
       }
       return Promise.resolve()
     },
@@ -578,11 +615,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   taxAmount: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salesquotation.taxamount') }))
+        return Promise.reject(pi.ph('taxAmount'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salesquotation.taxamount') }))
+        return Promise.reject(pi.ph('taxAmount'))
       }
       return Promise.resolve()
     },
@@ -591,11 +628,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   actualAmount: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salesquotation.actualamount') }))
+        return Promise.reject(pi.ph('actualAmount'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salesquotation.actualamount') }))
+        return Promise.reject(pi.ph('actualAmount'))
       }
       return Promise.resolve()
     },
@@ -604,11 +641,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   quotationStatus: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salesquotation.quotationstatus') }))
+        return Promise.reject(pi.ph('quotationStatus'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salesquotation.quotationstatus') }))
+        return Promise.reject(pi.ph('quotationStatus'))
       }
       return Promise.resolve()
     },

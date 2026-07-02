@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Personnel
 // 文件名称：TaktEmployeeJoinedDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：EmployeeJoined 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktEmployeeJoined 生成，请按需审阅）
 // 
@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.HumanResource.Personnel;
 // ========================================
 
 /// <summary>
-/// 员工入职上岗办理记录（审批单，Joined=实际上班；状态见 TaktApprovalEntityBase.ApprovalStatus）
+/// 员工入职上岗办理记录（审批单，Joined=实际上班；审批状态见 TaktApprovalDtoBase.ApprovalStatus）
 /// 对应前端 TaktEmployeeJoinedDto
 /// 继承 TaktApprovalDtoBase
 /// </summary>
@@ -233,9 +233,9 @@ public class TaktEmployeeJoinedQueryDto : TaktPagedQuery
     public string? DirectManagerName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 审批状态（TaktApprovalStatus）
+    /// 审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）
     /// </summary>
-    public int? ApprovalStatus { get; set; }
+    public TaktApprovalStatus? ApprovalStatus { get; set; }
 
     /// <summary>
     /// 发起人ID
@@ -268,6 +268,12 @@ public class TaktEmployeeJoinedQueryDto : TaktPagedQuery
     /// 最终审批时间（范围查询-结束）
     /// </summary>
     public DateTime? ApprovedAtEnd { get; set; }
+
+    /// <summary>
+    /// 流程实例 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? FlowInstanceId { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -310,7 +316,7 @@ public class TaktEmployeeJoinedCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -454,6 +460,21 @@ public class TaktEmployeeJoinedTemplateDto
     public long? OnboardingId { get; set; }
 
     /// <summary>
+    /// 实际上岗日期（JoinedDate：我去上班）
+    /// </summary>
+    public DateTime? JoinedDate { get; set; }
+
+    /// <summary>
+    /// 试用期结束日期
+    /// </summary>
+    public DateTime? ProbationEndDate { get; set; }
+
+    /// <summary>
+    /// 转正日期
+    /// </summary>
+    public DateTime? RegularDate { get; set; }
+
+    /// <summary>
     /// 上岗部门ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -529,7 +550,7 @@ public class TaktEmployeeJoinedImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -544,6 +565,21 @@ public class TaktEmployeeJoinedImportDto
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? OnboardingId { get; set; }
+
+    /// <summary>
+    /// 实际上岗日期（JoinedDate：我去上班）
+    /// </summary>
+    public DateTime? JoinedDate { get; set; }
+
+    /// <summary>
+    /// 试用期结束日期
+    /// </summary>
+    public DateTime? ProbationEndDate { get; set; }
+
+    /// <summary>
+    /// 转正日期
+    /// </summary>
+    public DateTime? RegularDate { get; set; }
 
     /// <summary>
     /// 上岗部门ID

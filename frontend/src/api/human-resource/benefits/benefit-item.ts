@@ -1,8 +1,8 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/human-resource/benefits
-// 文件名称：benefit.ts
-// 创建时间：2026-06-12
+// 文件名称：benefit-item.ts
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/benefits 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -112,7 +112,7 @@ export function deleteBenefitItemBatch(ids: string[]): Promise<void> {
 
 /**
  * 更新福利项目状态
- * @param {ItemStatus} dto 状态 DTO
+ * @param {BenefitItemStatus} dto 状态 DTO
  * @returns {Promise<BenefitItem>} 福利项目DTO
  */
 export function updateBenefitItemStatus(dto: BenefitItemStatus): Promise<BenefitItem> {

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Foundation
 // 文件名称：TaktIsoCodeDtos.cs
-// 创建时间：2026-06-18
+// 创建时间：2026-06-27
 // 创建人：Takt365(Auto Generated)
 // 功能描述：IsoCode 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktIsoCode 生成，请按需审阅）
 // 
@@ -36,7 +36,7 @@ public class TaktIsoCodeDto : TaktTenantDtoBase
     public long IsoCodeId { get; set; }
 
     /// <summary>
-    /// 编码类别（字典 sys_iso_code_category；1=部门，2=公司，3=产品，4=通用）
+    /// 编码类别（字典 sys_iso_code_category；0=不使用，1=部门）
     /// </summary>
     public int IsoCodeCategory { get; set; } = 0;
 
@@ -51,24 +51,24 @@ public class TaktIsoCodeDto : TaktTenantDtoBase
     public string IsoName { get; set; } = string.Empty;
 
     /// <summary>
+    /// 内置（字典 sys_yes_no_type；0=否 1=是，内置项不可删除）
+    /// </summary>
+    public int IsBuiltIn { get; set; } = 0;
+
+    /// <summary>
+    /// 描述说明
+    /// </summary>
+    public string? IsoCodeDescription { get; set; } = string.Empty;
+
+    /// <summary>
     /// 排序号
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 是否内置（字典 sys_yes_no_type；0=否 1=是，内置项不可删除）
-    /// </summary>
-    public int IsBuiltIn { get; set; } = 0;
-
-    /// <summary>
     /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
     /// </summary>
-    public int Status { get; set; } = 0;
-
-    /// <summary>
-    /// 描述说明
-    /// </summary>
-    public string? Description { get; set; } = string.Empty;
+    public int IsoCodeStatus { get; set; } = 0;
 
 }
 
@@ -88,7 +88,7 @@ public class TaktIsoCodeQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 编码类别（字典 sys_iso_code_category；1=部门，2=公司，3=产品，4=通用）
+    /// 编码类别（字典 sys_iso_code_category；0=不使用，1=部门）
     /// </summary>
     public int? IsoCodeCategory { get; set; }
 
@@ -103,24 +103,24 @@ public class TaktIsoCodeQueryDto : TaktPagedQuery
     public string? IsoName { get; set; } = string.Empty;
 
     /// <summary>
+    /// 内置（字典 sys_yes_no_type；0=否 1=是，内置项不可删除）
+    /// </summary>
+    public int? IsBuiltIn { get; set; }
+
+    /// <summary>
+    /// 描述说明
+    /// </summary>
+    public string? IsoCodeDescription { get; set; } = string.Empty;
+
+    /// <summary>
     /// 排序号
     /// </summary>
     public int? SortOrder { get; set; }
 
     /// <summary>
-    /// 是否内置（字典 sys_yes_no_type；0=否 1=是，内置项不可删除）
-    /// </summary>
-    public int? IsBuiltIn { get; set; }
-
-    /// <summary>
     /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
     /// </summary>
-    public int? Status { get; set; }
-
-    /// <summary>
-    /// 描述说明
-    /// </summary>
-    public string? Description { get; set; } = string.Empty;
+    public int? IsoCodeStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -158,7 +158,7 @@ public class TaktIsoCodeCreateDto
     public string TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 编码类别（字典 sys_iso_code_category；1=部门，2=公司，3=产品，4=通用）
+    /// 编码类别（字典 sys_iso_code_category；0=不使用，1=部门）
     /// </summary>
     public int IsoCodeCategory { get; set; } = 0;
 
@@ -175,19 +175,19 @@ public class TaktIsoCodeCreateDto
     public string IsoName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否内置（字典 sys_yes_no_type；0=否 1=是，内置项不可删除）
+    /// 内置（字典 sys_yes_no_type；0=否 1=是，内置项不可删除）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
-    /// </summary>
-    public int Status { get; set; } = 0;
-
-    /// <summary>
     /// 描述说明
     /// </summary>
-    public string? Description { get; set; } = string.Empty;
+    public string? IsoCodeDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+    /// </summary>
+    public int IsoCodeStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -242,7 +242,7 @@ public class TaktIsoCodeStatusDto
     /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
     /// </summary>
     [Required(ErrorMessage = "状态（字典 sys_normal_disable_status；1=启用 0=禁用）不能为空")]
-    public int Status { get; set; } = 0;
+    public int IsoCodeStatus { get; set; } = 0;
 }
 
 // ========================================
@@ -284,7 +284,7 @@ public class TaktIsoCodeTemplateDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 编码类别（字典 sys_iso_code_category；1=部门，2=公司，3=产品，4=通用）
+    /// 编码类别（字典 sys_iso_code_category；0=不使用，1=部门）
     /// </summary>
     public int? IsoCodeCategory { get; set; }
 
@@ -299,19 +299,19 @@ public class TaktIsoCodeTemplateDto
     public string? IsoName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否内置（字典 sys_yes_no_type；0=否 1=是，内置项不可删除）
+    /// 内置（字典 sys_yes_no_type；0=否 1=是，内置项不可删除）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
-    /// </summary>
-    public int? Status { get; set; }
-
-    /// <summary>
     /// 描述说明
     /// </summary>
-    public string? Description { get; set; } = string.Empty;
+    public string? IsoCodeDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+    /// </summary>
+    public int? IsoCodeStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -336,7 +336,7 @@ public class TaktIsoCodeImportDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 编码类别（字典 sys_iso_code_category；1=部门，2=公司，3=产品，4=通用）
+    /// 编码类别（字典 sys_iso_code_category；0=不使用，1=部门）
     /// </summary>
     public int? IsoCodeCategory { get; set; }
 
@@ -351,19 +351,19 @@ public class TaktIsoCodeImportDto
     public string? IsoName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否内置（字典 sys_yes_no_type；0=否 1=是，内置项不可删除）
+    /// 内置（字典 sys_yes_no_type；0=否 1=是，内置项不可删除）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
-    /// </summary>
-    public int? Status { get; set; }
-
-    /// <summary>
     /// 描述说明
     /// </summary>
-    public string? Description { get; set; } = string.Empty;
+    public string? IsoCodeDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+    /// </summary>
+    public int? IsoCodeStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -394,7 +394,7 @@ public class TaktIsoCodeExportDto
     public long IsoCodeId { get; set; }
 
     /// <summary>
-    /// 编码类别（字典 sys_iso_code_category；1=部门，2=公司，3=产品，4=通用）
+    /// 编码类别（字典 sys_iso_code_category；0=不使用，1=部门）
     /// </summary>
     public int IsoCodeCategory { get; set; } = 0;
 
@@ -409,24 +409,24 @@ public class TaktIsoCodeExportDto
     public string IsoName { get; set; } = string.Empty;
 
     /// <summary>
+    /// 内置（字典 sys_yes_no_type；0=否 1=是，内置项不可删除）
+    /// </summary>
+    public int IsBuiltIn { get; set; } = 0;
+
+    /// <summary>
+    /// 描述说明
+    /// </summary>
+    public string? IsoCodeDescription { get; set; } = string.Empty;
+
+    /// <summary>
     /// 排序号
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 是否内置（字典 sys_yes_no_type；0=否 1=是，内置项不可删除）
-    /// </summary>
-    public int IsBuiltIn { get; set; } = 0;
-
-    /// <summary>
     /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
     /// </summary>
-    public int Status { get; set; } = 0;
-
-    /// <summary>
-    /// 描述说明
-    /// </summary>
-    public string? Description { get; set; } = string.Empty;
+    public int IsoCodeStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

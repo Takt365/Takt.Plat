@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Identity
 // 文件名称：TaktRoleValidators.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Role 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktRole 生成，请按需审阅）
 // 
@@ -38,10 +38,6 @@ public class TaktRoleCreateValidator : AbstractValidator<TaktRoleCreateDto>
         RuleFor(x => x.RoleName)
             .NotEmpty().WithMessage("角色名称不能为空")
             .MaximumLength(100).WithMessage("角色名称长度不能超过100个字符");
-        RuleFor(x => x.SortOrder)
-            .GreaterThanOrEqualTo(0).WithMessage("排序号不能为负数");
-        RuleFor(x => x.Description)
-            .MaximumLength(500).WithMessage("角色描述长度不能超过500个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -65,6 +61,19 @@ public class TaktRoleUpdateValidator : AbstractValidator<TaktRoleUpdateDto>
     {
         RuleFor(x => x.RoleId)
             .GreaterThan(0).WithMessage("RoleID无效");
+        RuleFor(x => x.TenantCode)
+            .NotEmpty().WithMessage("租户编码不能为空")
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.RoleCode)
+            .NotEmpty().WithMessage("角色编码不能为空")
+            .MaximumLength(50).WithMessage("角色编码长度不能超过50个字符");
+        RuleFor(x => x.RoleName)
+            .NotEmpty().WithMessage("角色名称不能为空")
+            .MaximumLength(100).WithMessage("角色名称长度不能超过100个字符");
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
     }
 }
 
@@ -90,10 +99,6 @@ public class TaktRoleImportValidator : AbstractValidator<TaktRoleImportDto>
         RuleFor(x => x.RoleName)
             .NotEmpty().WithMessage("角色名称不能为空")
             .MaximumLength(100).WithMessage("角色名称长度不能超过100个字符");
-        RuleFor(x => x.SortOrder)
-            .GreaterThanOrEqualTo(0).WithMessage("排序号不能为负数");
-        RuleFor(x => x.Description)
-            .MaximumLength(500).WithMessage("角色描述长度不能超过500个字符").When(x => !string.IsNullOrWhiteSpace(x.Description));
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

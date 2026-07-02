@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Maintenance
 // 文件名称：TaktMaintenanceNotificationService.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：维护通知单应用服务实现
 // 
@@ -342,6 +342,33 @@ public class TaktMaintenanceNotificationService : TaktServiceBase, ITaktMaintena
         }
         entity.MaintenanceWorkOrderId = master.Id;
     }
+
+    /// <summary>
+    /// 获取维护通知单统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>维护通知单统计</returns>
+    public async Task<TaktMaintenanceNotificationStatDto> GetMaintenanceNotificationStatAsync(TaktMaintenanceNotificationStatQueryDto queryDto)
+    {
+        EnsureThreeLayerContext();
+        var (start, end, statMonth) = TaktStatMonthRangeHelper.ResolveMonthRange(
+            queryDto.DiscoveredAtStart,
+            queryDto.DiscoveredAtEnd);
+        var tenantCode = CurrentTenantCode;
+        var companyCode = CurrentCompanyCode;
+        Expression<Func<TaktMaintenanceNotification, bool>> predicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.DiscoveredAt >= start
+            && x.DiscoveredAt <= end;
+        var monthNotificationCount = await _maintenanceNotificationRepository.CountAsync(predicate);
+        return new TaktMaintenanceNotificationStatDto
+        {
+            StatMonth = statMonth,
+            MonthNotificationCount = monthNotificationCount,
+        };
+    }
+
     // ========================================
     // 查询表达式
     // ========================================

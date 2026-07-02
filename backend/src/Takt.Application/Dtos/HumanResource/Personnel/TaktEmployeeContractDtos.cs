@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Personnel
 // 文件名称：TaktEmployeeContractDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：EmployeeContract 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktEmployeeContract 生成，请按需审阅）
 // 
@@ -57,11 +57,6 @@ public class TaktEmployeeContractDto : TaktCompanyDtoBase
     public int ContractType { get; set; } = 0;
 
     /// <summary>
-    /// 合同状态（0=草稿，1=生效，2=到期，3=终止）
-    /// </summary>
-    public int ContractStatus { get; set; } = 0;
-
-    /// <summary>
     /// 合同开始日期
     /// </summary>
     public DateTime StartDate { get; set; }
@@ -85,6 +80,11 @@ public class TaktEmployeeContractDto : TaktCompanyDtoBase
     /// 签约单位
     /// </summary>
     public string? SignCompany { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 合同状态（0=草稿，1=生效，2=到期，3=终止）
+    /// </summary>
+    public int ContractStatus { get; set; } = 0;
 
 }
 
@@ -123,11 +123,6 @@ public class TaktEmployeeContractQueryDto : TaktPagedQuery
     /// 合同类型（0=固定期限，1=无固定期限，2=以完成一定工作任务为期限，3=实习）
     /// </summary>
     public int? ContractType { get; set; }
-
-    /// <summary>
-    /// 合同状态（0=草稿，1=生效，2=到期，3=终止）
-    /// </summary>
-    public int? ContractStatus { get; set; }
 
     /// <summary>
     /// 合同开始日期（范围查询-开始）
@@ -175,6 +170,11 @@ public class TaktEmployeeContractQueryDto : TaktPagedQuery
     public string? SignCompany { get; set; } = string.Empty;
 
     /// <summary>
+    /// 合同状态（0=草稿，1=生效，2=到期，3=终止）
+    /// </summary>
+    public int? ContractStatus { get; set; }
+
+    /// <summary>
     /// 创建时间（范围查询-开始）
     /// </summary>
     public DateTime? CreatedAtStart { get; set; }
@@ -215,7 +215,7 @@ public class TaktEmployeeContractCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -235,11 +235,6 @@ public class TaktEmployeeContractCreateDto
     /// 合同类型（0=固定期限，1=无固定期限，2=以完成一定工作任务为期限，3=实习）
     /// </summary>
     public int ContractType { get; set; } = 0;
-
-    /// <summary>
-    /// 合同状态（0=草稿，1=生效，2=到期，3=终止）
-    /// </summary>
-    public int ContractStatus { get; set; } = 0;
 
     /// <summary>
     /// 合同开始日期
@@ -265,6 +260,11 @@ public class TaktEmployeeContractCreateDto
     /// 签约单位
     /// </summary>
     public string? SignCompany { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 合同状态（0=草稿，1=生效，2=到期，3=终止）
+    /// </summary>
+    public int ContractStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -358,14 +358,34 @@ public class TaktEmployeeContractTemplateDto
     public int? ContractType { get; set; }
 
     /// <summary>
-    /// 合同状态（0=草稿，1=生效，2=到期，3=终止）
+    /// 合同开始日期
     /// </summary>
-    public int? ContractStatus { get; set; }
+    public DateTime? StartDate { get; set; }
+
+    /// <summary>
+    /// 合同结束日期
+    /// </summary>
+    public DateTime? EndDate { get; set; }
+
+    /// <summary>
+    /// 试用期结束日期
+    /// </summary>
+    public DateTime? ProbationEndDate { get; set; }
+
+    /// <summary>
+    /// 签订日期
+    /// </summary>
+    public DateTime? SignDate { get; set; }
 
     /// <summary>
     /// 签约单位
     /// </summary>
     public string? SignCompany { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 合同状态（0=草稿，1=生效，2=到期，3=终止）
+    /// </summary>
+    public int? ContractStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -395,7 +415,7 @@ public class TaktEmployeeContractImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -416,14 +436,34 @@ public class TaktEmployeeContractImportDto
     public int? ContractType { get; set; }
 
     /// <summary>
-    /// 合同状态（0=草稿，1=生效，2=到期，3=终止）
+    /// 合同开始日期
     /// </summary>
-    public int? ContractStatus { get; set; }
+    public DateTime? StartDate { get; set; }
+
+    /// <summary>
+    /// 合同结束日期
+    /// </summary>
+    public DateTime? EndDate { get; set; }
+
+    /// <summary>
+    /// 试用期结束日期
+    /// </summary>
+    public DateTime? ProbationEndDate { get; set; }
+
+    /// <summary>
+    /// 签订日期
+    /// </summary>
+    public DateTime? SignDate { get; set; }
 
     /// <summary>
     /// 签约单位
     /// </summary>
     public string? SignCompany { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 合同状态（0=草稿，1=生效，2=到期，3=终止）
+    /// </summary>
+    public int? ContractStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -475,11 +515,6 @@ public class TaktEmployeeContractExportDto
     public int ContractType { get; set; } = 0;
 
     /// <summary>
-    /// 合同状态（0=草稿，1=生效，2=到期，3=终止）
-    /// </summary>
-    public int ContractStatus { get; set; } = 0;
-
-    /// <summary>
     /// 合同开始日期
     /// </summary>
     public DateTime StartDate { get; set; }
@@ -503,6 +538,11 @@ public class TaktEmployeeContractExportDto
     /// 签约单位
     /// </summary>
     public string? SignCompany { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 合同状态（0=草稿，1=生效，2=到期，3=终止）
+    /// </summary>
+    public int ContractStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

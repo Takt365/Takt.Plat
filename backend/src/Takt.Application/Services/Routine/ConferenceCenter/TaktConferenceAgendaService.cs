@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Routine.ConferenceCenter
 // 文件名称：TaktConferenceAgendaService.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：会议议程纪要应用服务实现
 // 
@@ -307,14 +307,15 @@ public class TaktConferenceAgendaService : TaktServiceBase, ITaktConferenceAgend
                 SqlFunc.ToString(x.ConferenceId).Contains(keywords)
                 || SqlFunc.ToString(x.RecordType).Contains(keywords)
                 || SqlFunc.ToString(x.LineNumber).Contains(keywords)
-                || (x.Title != null && x.Title.Contains(keywords))
-                || (x.Content != null && x.Content.Contains(keywords))
-                || (x.Summary != null && x.Summary.Contains(keywords))
+                || (x.ConferenceAgendaTitle != null && x.ConferenceAgendaTitle.Contains(keywords))
+                || (x.ConferenceAgendaContent != null && x.ConferenceAgendaContent.Contains(keywords))
+                || (x.ConferenceAgendaSummary != null && x.ConferenceAgendaSummary.Contains(keywords))
                 || SqlFunc.ToString(x.PresenterId).Contains(keywords)
                 || (x.PresenterName != null && x.PresenterName.Contains(keywords))
                 || SqlFunc.ToString(x.DurationMinutes).Contains(keywords)
                 || SqlFunc.ToString(x.RecorderId).Contains(keywords)
                 || (x.RecorderName != null && x.RecorderName.Contains(keywords))
+                || (x.Attachments != null && x.Attachments.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.PlannedStartTime).Contains(keywords)
@@ -337,19 +338,19 @@ public class TaktConferenceAgendaService : TaktServiceBase, ITaktConferenceAgend
             exp = exp.And(x => x.LineNumber == queryDto.LineNumber);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Title))
+        if (!string.IsNullOrEmpty(queryDto?.ConferenceAgendaTitle))
         {
-            exp = exp.And(x => x.Title != null && x.Title.Contains(queryDto.Title));
+            exp = exp.And(x => x.ConferenceAgendaTitle != null && x.ConferenceAgendaTitle.Contains(queryDto.ConferenceAgendaTitle));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Content))
+        if (!string.IsNullOrEmpty(queryDto?.ConferenceAgendaContent))
         {
-            exp = exp.And(x => x.Content != null && x.Content.Contains(queryDto.Content));
+            exp = exp.And(x => x.ConferenceAgendaContent != null && x.ConferenceAgendaContent.Contains(queryDto.ConferenceAgendaContent));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Summary))
+        if (!string.IsNullOrEmpty(queryDto?.ConferenceAgendaSummary))
         {
-            exp = exp.And(x => x.Summary != null && x.Summary.Contains(queryDto.Summary));
+            exp = exp.And(x => x.ConferenceAgendaSummary != null && x.ConferenceAgendaSummary.Contains(queryDto.ConferenceAgendaSummary));
         }
 
         if (queryDto?.PresenterId.HasValue == true)
@@ -375,6 +376,11 @@ public class TaktConferenceAgendaService : TaktServiceBase, ITaktConferenceAgend
         if (!string.IsNullOrEmpty(queryDto?.RecorderName))
         {
             exp = exp.And(x => x.RecorderName != null && x.RecorderName.Contains(queryDto.RecorderName));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.Attachments))
+        {
+            exp = exp.And(x => x.Attachments != null && x.Attachments.Contains(queryDto.Attachments));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

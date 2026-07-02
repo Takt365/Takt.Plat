@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Manufacturing.Planning
 // 文件名称：TaktMasterDemandSchedulesController.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：主需求计划MDS头控制器
 // 

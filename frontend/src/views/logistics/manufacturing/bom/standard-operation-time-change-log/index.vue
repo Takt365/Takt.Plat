@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="logistics:manufacturing:bom:standard:operation:time:change:log:create"
-      update-permission="logistics:manufacturing:bom:standard:operation:time:change:log:update"
-      delete-permission="logistics:manufacturing:bom:standard:operation:time:change:log:delete"
-      import-permission="logistics:manufacturing:bom:standard:operation:time:change:log:import"
-      export-permission="logistics:manufacturing:bom:standard:operation:time:change:log:export"
+      create-permission="logistics:manufacturing:bom:standard:operation:time:create"
+      update-permission="logistics:manufacturing:bom:standard:operation:time:update"
+      delete-permission="logistics:manufacturing:bom:standard:operation:time:delete"
+      import-permission="logistics:manufacturing:bom:standard:operation:time:import"
+      export-permission="logistics:manufacturing:bom:standard:operation:time:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -194,10 +194,11 @@
       </div>
       <div v-show="isFieldVisible('pointsToMinutesRate')">
       <a-form-item :label="t('entity.standardoperationtime.pointstominutesrate')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.pointsToMinutesRate"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardoperationtime.pointstominutesrate') })"
-          style="width: 100%"
+          dict-type="logistics_points_to_minutes_rate"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.standardoperationtime.pointstominutesrate') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -252,10 +253,11 @@
       </div>
       <div v-show="isFieldVisible('approvalStatus')">
       <a-form-item :label="t('entity.standardoperationtime.approvalstatus')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.approvalStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardoperationtime.approvalstatus') })"
-          style="width: 100%"
+          dict-type="sys_approval_status"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.standardoperationtime.approvalstatus') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -323,13 +325,24 @@
         />
       </a-form-item>
       </div>
+      <div v-show="isFieldVisible('flowInstanceId')">
+      <a-form-item :label="t('entity.standardoperationtime.flowinstanceid')">
+        <a-input
+          v-model:value="advancedQueryForm.flowInstanceId"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardoperationtime.flowinstanceid') })"
+          show-count
+          :maxlength="20"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('createdAtStart')">
       <a-form-item :label="t('common.page.entity.createdatstart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -340,18 +353,36 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('ExtField')">
-      <a-form-item :label="t('entity.standardoperationtime.extfield')">
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
         <a-textarea
-          v-model:value="advancedQueryForm.ExtField"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.standardoperationtime.extfield') })"
-          :rows="2"
-          allow-clear
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -411,9 +442,10 @@
  * 标准工序时间实体管理页 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/manufacturing/bom/standard-operation-time-change-log
  */
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, h } from 'vue'
 import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
+import TaktDictTag from '@/components/common/takt-dict-tag/index.vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
@@ -424,7 +456,7 @@ import { getStandardOperationTimeList, getStandardOperationTimeById, createStand
 import type { StandardOperationTime, StandardOperationTimeQuery } from '@/types/logistics/manufacturing/bom/standard-operation-time'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -477,7 +509,7 @@ const advancedQueryForm = ref({
   timeUnit: '',
   standardShorts: undefined as number | undefined,
   pointsUnit: '',
-  pointsToMinutesRate: undefined as number | undefined,
+  pointsToMinutesRate: '' as string,
   convertedMinutes: undefined as number | undefined,
   effectiveDateStart: '',
   effectiveDateEnd: '',
@@ -490,9 +522,10 @@ const advancedQueryForm = ref({
   approvedBy: '',
   approvedAtStart: '',
   approvedAtEnd: '',
+  flowInstanceId: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
@@ -518,9 +551,10 @@ const queryFieldsMeta = computed(() => [
   { key: 'approvedBy', label: t('entity.standardoperationtime.approvedby') },
   { key: 'approvedAtStart', label: t('entity.standardoperationtime.approvedatstart') },
   { key: 'approvedAtEnd', label: t('entity.standardoperationtime.approvedatend') },
+  { key: 'flowInstanceId', label: t('entity.standardoperationtime.flowinstanceid') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'ExtField', label: t('entity.standardoperationtime.extfield') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -576,9 +610,7 @@ function buildListQuery(overrides?: Partial<StandardOperationTimeQuery>): Standa
     query.standardShorts = form.standardShorts
   }
   assignTrimmed('pointsUnit', form.pointsUnit)
-  if (form.pointsToMinutesRate !== undefined && form.pointsToMinutesRate !== null) {
-    query.pointsToMinutesRate = form.pointsToMinutesRate
-  }
+  assignTrimmed('pointsToMinutesRate', form.pointsToMinutesRate)
   if (form.convertedMinutes !== undefined && form.convertedMinutes !== null) {
     query.convertedMinutes = form.convertedMinutes
   }
@@ -595,9 +627,10 @@ function buildListQuery(overrides?: Partial<StandardOperationTimeQuery>): Standa
   assignTrimmed('approvedBy', form.approvedBy)
   assignTrimmed('approvedAtStart', form.approvedAtStart)
   assignTrimmed('approvedAtEnd', form.approvedAtEnd)
+  assignTrimmed('flowInstanceId', form.flowInstanceId)
   assignTrimmed('createdAtStart', form.createdAtStart)
   assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('ExtField', form.ExtField)
+  assignTrimmed('extField', form.extField)
   assignTrimmed('remark', form.remark)
   return query
 }
@@ -749,7 +782,10 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getStandardOperationTimeField(record, 'pointsToMinutesRate') ?? ''
+    customRender: ({ record }: { record: any }) => h(TaktDictTag, {
+      value: getStandardOperationTimeField(record, 'pointsToMinutesRate'),
+      dictType: 'logistics_points_to_minutes_rate',
+    }),
   },
   {
     title: t('entity.standardoperationtime.convertedminutes'),
@@ -785,7 +821,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:manufacturing:bom:standard:operation:time:change:log:update',
+        permission: 'logistics:manufacturing:bom:standard:operation:time:update',
         onClick: (record: StandardOperationTime) => handleEdit(record)
       },
       {
@@ -793,7 +829,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:manufacturing:bom:standard:operation:time:change:log:delete',
+        permission: 'logistics:manufacturing:bom:standard:operation:time:delete',
         onClick: (record: StandardOperationTime) => handleDeleteOne(record)
       }
     ]
@@ -827,7 +863,7 @@ const rowSelection = computed(() => ({
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
-    } else if (getStandardOperationTimeId(selectedRow.value) === getStandardOperationTimeId(record)) {
+    } else if (selectedRow.value && getStandardOperationTimeId(selectedRow.value) === getStandardOperationTimeId(record)) {
       selectedRow.value = null
       syncMasterSelection(null)
     }
@@ -876,7 +912,7 @@ function handleReset() {
   timeUnit: '',
   standardShorts: undefined as number | undefined,
   pointsUnit: '',
-  pointsToMinutesRate: undefined as number | undefined,
+  pointsToMinutesRate: '' as string,
   convertedMinutes: undefined as number | undefined,
   effectiveDateStart: '',
   effectiveDateEnd: '',
@@ -889,9 +925,10 @@ function handleReset() {
   approvedBy: '',
   approvedAtStart: '',
   approvedAtEnd: '',
+  flowInstanceId: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
   currentPage.value = getTaktDefaultPageIndex()
@@ -1088,7 +1125,7 @@ function handleAdvancedQueryReset() {
   timeUnit: '',
   standardShorts: undefined as number | undefined,
   pointsUnit: '',
-  pointsToMinutesRate: undefined as number | undefined,
+  pointsToMinutesRate: '' as string,
   convertedMinutes: undefined as number | undefined,
   effectiveDateStart: '',
   effectiveDateEnd: '',
@@ -1101,9 +1138,10 @@ function handleAdvancedQueryReset() {
   approvedBy: '',
   approvedAtStart: '',
   approvedAtEnd: '',
+  flowInstanceId: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
 }

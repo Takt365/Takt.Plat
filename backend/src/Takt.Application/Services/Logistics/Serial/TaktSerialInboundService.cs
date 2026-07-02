@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Serial
 // 文件名称：TaktSerialInboundService.cs
-// 创建时间：2026-06-16
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：序列号入库应用服务实现
 // 
@@ -366,6 +366,35 @@ public class TaktSerialInboundService : TaktServiceBase, ITaktSerialInboundServi
             await _serialInboundItemRepository.CreateRangeAsync(items);
         }
     }
+
+    /// <summary>
+    /// 获取序列号入库统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>序列号入库统计</returns>
+    public async Task<TaktSerialInboundStatDto> GetSerialInboundStatAsync(TaktSerialInboundStatQueryDto queryDto)
+    {
+        EnsureThreeLayerContext();
+        var (start, end, statMonth) = TaktStatMonthRangeHelper.ResolveMonthRange(
+            queryDto.InboundDateStart,
+            queryDto.InboundDateEnd);
+        var tenantCode = CurrentTenantCode;
+        var companyCode = CurrentCompanyCode;
+        Expression<Func<TaktSerialInbound, bool>> predicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.InboundDate >= start
+            && x.InboundDate <= end;
+        var monthInboundCount = await _serialInboundRepository.CountAsync(predicate);
+        var monthTotalQuantity = await _serialInboundRepository.SumAsync(x => x.TotalQuantity, predicate);
+        return new TaktSerialInboundStatDto
+        {
+            StatMonth = statMonth,
+            MonthInboundCount = monthInboundCount,
+            MonthTotalQuantity = monthTotalQuantity,
+        };
+    }
+
     // ========================================
     // 查询表达式
     // ========================================
@@ -389,7 +418,6 @@ public class TaktSerialInboundService : TaktServiceBase, ITaktSerialInboundServi
                 || (x.WarehouseCode != null && x.WarehouseCode.Contains(keywords))
                 || (x.LocationCode != null && x.LocationCode.Contains(keywords))
                 || SqlFunc.ToString(x.TotalQuantity).Contains(keywords)
-                || (x.RelatedCompany != null && x.RelatedCompany.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.InboundDate).Contains(keywords)
@@ -425,11 +453,6 @@ public class TaktSerialInboundService : TaktServiceBase, ITaktSerialInboundServi
         if (queryDto?.TotalQuantity.HasValue == true)
         {
             exp = exp.And(x => x.TotalQuantity == queryDto.TotalQuantity);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.RelatedCompany))
-        {
-            exp = exp.And(x => x.RelatedCompany != null && x.RelatedCompany.Contains(queryDto.RelatedCompany));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

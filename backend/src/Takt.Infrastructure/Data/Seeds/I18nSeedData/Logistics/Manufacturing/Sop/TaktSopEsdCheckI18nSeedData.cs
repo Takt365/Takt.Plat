@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopEsdCheckI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSopEsdCheck 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -90,32 +90,41 @@ public class TaktSopEsdCheckI18nSeedData : ITaktSeedDataCoordinator
             // entity.sopesdcheck._self
             new TranslationSeedItem("entity.sopesdcheck._self", "zh-HK", "SOP ESD 检查信息_hk", "实体名称"),
 
+            // entity.sopesdcheck.plantcode
+            new TranslationSeedItem("entity.sopesdcheck.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            // entity.sopesdcheck.plantcode
+            new TranslationSeedItem("entity.sopesdcheck.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            // entity.sopesdcheck.plantcode
+            new TranslationSeedItem("entity.sopesdcheck.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            // entity.sopesdcheck.plantcode
+            new TranslationSeedItem("entity.sopesdcheck.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+
             // entity.sopesdcheck.workstationid
-            new TranslationSeedItem("entity.sopesdcheck.workstationid", "en-US", "工位ID_us", "工位 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.sopesdcheck.workstationid", "en-US", "工位ID_us", "工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）"),
             // entity.sopesdcheck.workstationid
-            new TranslationSeedItem("entity.sopesdcheck.workstationid", "ja-JP", "工位ID_jp", "工位 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.sopesdcheck.workstationid", "ja-JP", "工位ID_jp", "工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）"),
             // entity.sopesdcheck.workstationid
-            new TranslationSeedItem("entity.sopesdcheck.workstationid", "zh-CN", "工位ID", "工位 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.sopesdcheck.workstationid", "zh-CN", "工位ID", "工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）"),
             // entity.sopesdcheck.workstationid
-            new TranslationSeedItem("entity.sopesdcheck.workstationid", "zh-HK", "工位ID_hk", "工位 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.sopesdcheck.workstationid", "zh-HK", "工位ID_hk", "工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）"),
 
             // entity.sopesdcheck.execid
-            new TranslationSeedItem("entity.sopesdcheck.execid", "en-US", "执行追溯ID_us", "执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.sopesdcheck.execid", "en-US", "执行追溯ID_us", "执行追溯 ID（关联 TaktSopExec.Id，选项 TaktSopExecs/options）"),
             // entity.sopesdcheck.execid
-            new TranslationSeedItem("entity.sopesdcheck.execid", "ja-JP", "执行追溯ID_jp", "执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.sopesdcheck.execid", "ja-JP", "执行追溯ID_jp", "执行追溯 ID（关联 TaktSopExec.Id，选项 TaktSopExecs/options）"),
             // entity.sopesdcheck.execid
-            new TranslationSeedItem("entity.sopesdcheck.execid", "zh-CN", "执行追溯ID", "执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.sopesdcheck.execid", "zh-CN", "执行追溯ID", "执行追溯 ID（关联 TaktSopExec.Id，选项 TaktSopExecs/options）"),
             // entity.sopesdcheck.execid
-            new TranslationSeedItem("entity.sopesdcheck.execid", "zh-HK", "执行追溯ID_hk", "执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.sopesdcheck.execid", "zh-HK", "执行追溯ID_hk", "执行追溯 ID（关联 TaktSopExec.Id，选项 TaktSopExecs/options）"),
 
             // entity.sopesdcheck.employeeid
-            new TranslationSeedItem("entity.sopesdcheck.employeeid", "en-US", "员工ID_us", "员工 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.sopesdcheck.employeeid", "en-US", "员工ID_us", "员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
             // entity.sopesdcheck.employeeid
-            new TranslationSeedItem("entity.sopesdcheck.employeeid", "ja-JP", "员工ID_jp", "员工 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.sopesdcheck.employeeid", "ja-JP", "员工ID_jp", "员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
             // entity.sopesdcheck.employeeid
-            new TranslationSeedItem("entity.sopesdcheck.employeeid", "zh-CN", "员工ID", "员工 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.sopesdcheck.employeeid", "zh-CN", "员工ID", "员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
             // entity.sopesdcheck.employeeid
-            new TranslationSeedItem("entity.sopesdcheck.employeeid", "zh-HK", "员工ID_hk", "员工 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.sopesdcheck.employeeid", "zh-HK", "员工ID_hk", "员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
 
             // entity.sopesdcheck.devicecode
             new TranslationSeedItem("entity.sopesdcheck.devicecode", "en-US", "监测设备编码_us", "监测设备编码"),
@@ -136,22 +145,22 @@ public class TaktSopEsdCheckI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.sopesdcheck.resistancevalue", "zh-HK", "阻值兆欧_hk", "阻值（兆欧）"),
 
             // entity.sopesdcheck.iscompliant
-            new TranslationSeedItem("entity.sopesdcheck.iscompliant", "en-US", "是否达标_us", "是否达标（字典 sys_yes_no_type，0=否，1=是）"),
+            new TranslationSeedItem("entity.sopesdcheck.iscompliant", "en-US", "达标_us", "达标（字典 sys_yes_no_type；0=否，1=是）"),
             // entity.sopesdcheck.iscompliant
-            new TranslationSeedItem("entity.sopesdcheck.iscompliant", "ja-JP", "是否达标_jp", "是否达标（字典 sys_yes_no_type，0=否，1=是）"),
+            new TranslationSeedItem("entity.sopesdcheck.iscompliant", "ja-JP", "达标_jp", "达标（字典 sys_yes_no_type；0=否，1=是）"),
             // entity.sopesdcheck.iscompliant
-            new TranslationSeedItem("entity.sopesdcheck.iscompliant", "zh-CN", "是否达标", "是否达标（字典 sys_yes_no_type，0=否，1=是）"),
+            new TranslationSeedItem("entity.sopesdcheck.iscompliant", "zh-CN", "达标", "达标（字典 sys_yes_no_type；0=否，1=是）"),
             // entity.sopesdcheck.iscompliant
-            new TranslationSeedItem("entity.sopesdcheck.iscompliant", "zh-HK", "是否达标_hk", "是否达标（字典 sys_yes_no_type，0=否，1=是）"),
+            new TranslationSeedItem("entity.sopesdcheck.iscompliant", "zh-HK", "达标_hk", "达标（字典 sys_yes_no_type；0=否，1=是）"),
 
             // entity.sopesdcheck.lockscreentriggered
-            new TranslationSeedItem("entity.sopesdcheck.lockscreentriggered", "en-US", "是否触发锁屏_us", "是否触发锁屏（字典 sys_yes_no_type，0=否，1=是）"),
+            new TranslationSeedItem("entity.sopesdcheck.lockscreentriggered", "en-US", "锁屏_us", "锁屏（字典 sys_yes_no_type；0=否，1=是）"),
             // entity.sopesdcheck.lockscreentriggered
-            new TranslationSeedItem("entity.sopesdcheck.lockscreentriggered", "ja-JP", "是否触发锁屏_jp", "是否触发锁屏（字典 sys_yes_no_type，0=否，1=是）"),
+            new TranslationSeedItem("entity.sopesdcheck.lockscreentriggered", "ja-JP", "锁屏_jp", "锁屏（字典 sys_yes_no_type；0=否，1=是）"),
             // entity.sopesdcheck.lockscreentriggered
-            new TranslationSeedItem("entity.sopesdcheck.lockscreentriggered", "zh-CN", "是否触发锁屏", "是否触发锁屏（字典 sys_yes_no_type，0=否，1=是）"),
+            new TranslationSeedItem("entity.sopesdcheck.lockscreentriggered", "zh-CN", "锁屏", "锁屏（字典 sys_yes_no_type；0=否，1=是）"),
             // entity.sopesdcheck.lockscreentriggered
-            new TranslationSeedItem("entity.sopesdcheck.lockscreentriggered", "zh-HK", "是否触发锁屏_hk", "是否触发锁屏（字典 sys_yes_no_type，0=否，1=是）"),
+            new TranslationSeedItem("entity.sopesdcheck.lockscreentriggered", "zh-HK", "锁屏_hk", "锁屏（字典 sys_yes_no_type；0=否，1=是）"),
 
             // entity.sopesdcheck.checkedat
             new TranslationSeedItem("entity.sopesdcheck.checkedat", "en-US", "检查时间_us", "检查时间"),

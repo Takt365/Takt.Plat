@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Cost
 // 文件名称：TaktQualityIssuePcbaReworkDtos.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：QualityIssuePcbaRework 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktQualityIssuePcbaRework 生成，请按需审阅）
 // 
@@ -36,13 +36,13 @@ public class TaktQualityIssuePcbaReworkDto : TaktCompanyDtoBase
     public long QualityIssuePcbaReworkId { get; set; }
 
     /// <summary>
-    /// 品质问题主表ID(主子表关系,序列化为string以避免Javascript精度问题)
+    /// 品质问题主表 ID（关联 TaktQualityIssue.Id，选项 TaktQualityIssues/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long QualityIssueId { get; set; }
 
     /// <summary>
-    /// 品质问题主表名称（填充字段）
+    /// 品质问题主表 名称（填充字段）
     /// </summary>
     public string? QualityIssueName { get; set; }
 
@@ -155,7 +155,7 @@ public class TaktQualityIssuePcbaReworkQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 品质问题主表ID(主子表关系,序列化为string以避免Javascript精度问题)
+    /// 品质问题主表 ID（关联 TaktQualityIssue.Id，选项 TaktQualityIssues/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? QualityIssueId { get; set; }
@@ -281,12 +281,12 @@ public class TaktQualityIssuePcbaReworkCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 品质问题主表ID(主子表关系,序列化为string以避免Javascript精度问题)
+    /// 品质问题主表 ID（关联 TaktQualityIssue.Id，选项 TaktQualityIssues/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long QualityIssueId { get; set; }
@@ -424,7 +424,7 @@ public class TaktQualityIssuePcbaReworkTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 品质问题主表ID(主子表关系,序列化为string以避免Javascript精度问题)
+    /// 品质问题主表 ID（关联 TaktQualityIssue.Id，选项 TaktQualityIssues/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? QualityIssueId { get; set; }
@@ -445,6 +445,11 @@ public class TaktQualityIssuePcbaReworkTemplateDto
     public string? PcbaDefectParts { get; set; } = string.Empty;
 
     /// <summary>
+    /// PCBA选别・改修费用（元）
+    /// </summary>
+    public decimal? PcbaReworkCost { get; set; }
+
+    /// <summary>
     /// PCBA选别・改修时间（分钟）
     /// </summary>
     public int? PcbaReworkTimeMinutes { get; set; }
@@ -455,9 +460,29 @@ public class TaktQualityIssuePcbaReworkTemplateDto
     public int? PcbaReinspectionTimeMinutes { get; set; }
 
     /// <summary>
+    /// PCBA交通费、旅费（元）
+    /// </summary>
+    public decimal? PcbaTravelCost { get; set; }
+
+    /// <summary>
+    /// PCBA仓库管理费（元）
+    /// </summary>
+    public decimal? PcbaWarehouseCost { get; set; }
+
+    /// <summary>
+    /// PCBA选别・改修其他费用（元）
+    /// </summary>
+    public decimal? PcbaOtherExpenses { get; set; }
+
+    /// <summary>
     /// PCBA选别・改修备注
     /// </summary>
     public string? PcbaReworkNote { get; set; } = string.Empty;
+
+    /// <summary>
+    /// PCBA向顾客的费用请求（元）
+    /// </summary>
+    public decimal? PcbaScrapCost { get; set; }
 
     /// <summary>
     /// PCBA顾客名
@@ -468,6 +493,11 @@ public class TaktQualityIssuePcbaReworkTemplateDto
     /// PCBA Debit Note No
     /// </summary>
     public string? PcbaDebitNoteNo { get; set; } = string.Empty;
+
+    /// <summary>
+    /// PCBA其他费用（元）
+    /// </summary>
+    public decimal? PcbaOtherExpenses2 { get; set; }
 
     /// <summary>
     /// PCBA备注
@@ -507,12 +537,12 @@ public class TaktQualityIssuePcbaReworkImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 品质问题主表ID(主子表关系,序列化为string以避免Javascript精度问题)
+    /// 品质问题主表 ID（关联 TaktQualityIssue.Id，选项 TaktQualityIssues/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? QualityIssueId { get; set; }
@@ -533,6 +563,11 @@ public class TaktQualityIssuePcbaReworkImportDto
     public string? PcbaDefectParts { get; set; } = string.Empty;
 
     /// <summary>
+    /// PCBA选别・改修费用（元）
+    /// </summary>
+    public decimal? PcbaReworkCost { get; set; }
+
+    /// <summary>
     /// PCBA选别・改修时间（分钟）
     /// </summary>
     public int? PcbaReworkTimeMinutes { get; set; }
@@ -543,9 +578,29 @@ public class TaktQualityIssuePcbaReworkImportDto
     public int? PcbaReinspectionTimeMinutes { get; set; }
 
     /// <summary>
+    /// PCBA交通费、旅费（元）
+    /// </summary>
+    public decimal? PcbaTravelCost { get; set; }
+
+    /// <summary>
+    /// PCBA仓库管理费（元）
+    /// </summary>
+    public decimal? PcbaWarehouseCost { get; set; }
+
+    /// <summary>
+    /// PCBA选别・改修其他费用（元）
+    /// </summary>
+    public decimal? PcbaOtherExpenses { get; set; }
+
+    /// <summary>
     /// PCBA选别・改修备注
     /// </summary>
     public string? PcbaReworkNote { get; set; } = string.Empty;
+
+    /// <summary>
+    /// PCBA向顾客的费用请求（元）
+    /// </summary>
+    public decimal? PcbaScrapCost { get; set; }
 
     /// <summary>
     /// PCBA顾客名
@@ -556,6 +611,11 @@ public class TaktQualityIssuePcbaReworkImportDto
     /// PCBA Debit Note No
     /// </summary>
     public string? PcbaDebitNoteNo { get; set; } = string.Empty;
+
+    /// <summary>
+    /// PCBA其他费用（元）
+    /// </summary>
+    public decimal? PcbaOtherExpenses2 { get; set; }
 
     /// <summary>
     /// PCBA备注
@@ -601,7 +661,7 @@ public class TaktQualityIssuePcbaReworkExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 品质问题主表ID(主子表关系,序列化为string以避免Javascript精度问题)
+    /// 品质问题主表 ID（关联 TaktQualityIssue.Id，选项 TaktQualityIssues/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long QualityIssueId { get; set; }

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Quality.Cost
 // 文件名称：TaktQualityIssueAssyReworkValidators.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：QualityIssueAssyRework 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktQualityIssueAssyRework 生成，请按需审阅）
 // 
@@ -36,16 +36,10 @@ public class TaktQualityIssueAssyReworkCreateValidator : AbstractValidator<TaktQ
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.QualityIssueId)
-            .GreaterThanOrEqualTo(0).WithMessage("品质问题主表ID不能为负数");
+            .GreaterThanOrEqualTo(0).WithMessage("品质问题主表 ID不能为负数");
         RuleFor(x => x.QualityIssueCode)
             .NotEmpty().WithMessage("品质问题编码不能为空")
             .MaximumLength(30).WithMessage("品质问题编码长度不能超过30个字符");
-        RuleFor(x => x.AssyCustomerName)
-            .MaximumLength(50).WithMessage("组装顾客名长度不能超过50个字符");
-        RuleFor(x => x.AssyDebitNoteNo)
-            .MaximumLength(30).WithMessage("组装 Debit Note No长度不能超过30个字符");
-        RuleFor(x => x.AssyRecorder)
-            .MaximumLength(30).WithMessage("组装不良改修应对记录者长度不能超过30个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -69,6 +63,21 @@ public class TaktQualityIssueAssyReworkUpdateValidator : AbstractValidator<TaktQ
     {
         RuleFor(x => x.QualityIssueAssyReworkId)
             .GreaterThan(0).WithMessage("QualityIssueAssyReworkID无效");
+        RuleFor(x => x.TenantCode)
+            .NotEmpty().WithMessage("租户编码不能为空")
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.CompanyCode)
+            .NotEmpty().WithMessage("公司代码不能为空")
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.QualityIssueId)
+            .GreaterThanOrEqualTo(0).WithMessage("品质问题主表 ID不能为负数");
+        RuleFor(x => x.QualityIssueCode)
+            .NotEmpty().WithMessage("品质问题编码不能为空")
+            .MaximumLength(30).WithMessage("品质问题编码长度不能超过30个字符");
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
     }
 }
 
@@ -91,16 +100,10 @@ public class TaktQualityIssueAssyReworkImportValidator : AbstractValidator<TaktQ
         RuleFor(x => x.CompanyCode)
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
         RuleFor(x => x.QualityIssueId)
-            .GreaterThanOrEqualTo(0).WithMessage("品质问题主表ID不能为负数");
+            .GreaterThanOrEqualTo(0).WithMessage("品质问题主表 ID不能为负数");
         RuleFor(x => x.QualityIssueCode)
             .NotEmpty().WithMessage("品质问题编码不能为空")
             .MaximumLength(30).WithMessage("品质问题编码长度不能超过30个字符");
-        RuleFor(x => x.AssyCustomerName)
-            .MaximumLength(50).WithMessage("组装顾客名长度不能超过50个字符").When(x => !string.IsNullOrWhiteSpace(x.AssyCustomerName));
-        RuleFor(x => x.AssyDebitNoteNo)
-            .MaximumLength(30).WithMessage("组装 Debit Note No长度不能超过30个字符").When(x => !string.IsNullOrWhiteSpace(x.AssyDebitNoteNo));
-        RuleFor(x => x.AssyRecorder)
-            .MaximumLength(30).WithMessage("组装不良改修应对记录者长度不能超过30个字符").When(x => !string.IsNullOrWhiteSpace(x.AssyRecorder));
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

@@ -23,11 +23,17 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Sop;
 [SugarTable("takt_logistics_manufacturing_sop_doc", "SOP文档头表")]
 [SugarIndex("ix_sop_doc_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_sop_doc_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_sop_doc_code_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(SopCode), OrderByType.Asc, true)]
-[SugarIndex("ix_takt_logistics_manufacturing_sop_doc_product_step", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(MaterialCode), OrderByType.Asc, nameof(RoutingItemId), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_sop_doc_code_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(SopCode), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_sop_doc_product_step", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(MaterialCode), OrderByType.Asc, nameof(RoutingItemId), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_manufacturing_sop_doc_flow_instance_id", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(FlowInstanceId), OrderByType.Asc, false)]
 public class TaktSopDoc : TaktApprovalEntityBase
 {
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// </summary>
+    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
+    public string PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// SOP 编码
     /// </summary>
@@ -41,40 +47,40 @@ public class TaktSopDoc : TaktApprovalEntityBase
     public string SopName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 产品/物料编码
+    /// 产品/物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
     /// </summary>
-    [SugarColumn(ColumnName = "material_code", ColumnDescription = "产品物料编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工艺路线明细 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工艺路线明细 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
     /// </summary>
     [SugarColumn(ColumnName = "routing_item_id", ColumnDescription = "工序ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long RoutingItemId { get; set; }
 
     /// <summary>
-    /// 工位 ID（可选，工位级 ESOP；序列化为 string 以避免 Javascript 精度问题）
+    /// 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
     /// </summary>
     [SugarColumn(ColumnName = "workstation_id", ColumnDescription = "工位ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? WorkstationId { get; set; }
 
     /// <summary>
-    /// 当前生效版本 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 当前生效版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
     /// </summary>
     [SugarColumn(ColumnName = "current_revision_id", ColumnDescription = "当前版本ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CurrentRevisionId { get; set; }
 
     /// <summary>
-    /// 默认语言（zh-CN 简体 / en-US 英文 / ja-JP 日文 / zh-HK 香港繁体；与 TaktCulture.CultureCode 一致）
+    /// 默认语言（选项 TaktCultures/options，DictValue=CultureCode）
     /// </summary>
     [SugarColumn(ColumnName = "default_lang", ColumnDescription = "默认语言", ColumnDataType = "varchar", Length = 10, IsNullable = false, DefaultValue = "zh-CN")]
     public string DefaultLang { get; set; } = "zh-CN";
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status，0=停用，1=正常）
+    /// 状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
     /// </summary>
     [SugarColumn(ColumnName = "sop_status", ColumnDescription = "文档状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int SopStatus { get; set; } = 1;

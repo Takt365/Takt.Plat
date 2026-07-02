@@ -265,22 +265,9 @@ public class TaktTenantRepository<TEntity> : ITaktTenantRepository<TEntity> wher
         }
 
         // 自动设置审计字段
-        var now = DateTime.Now;
-        entity.CreatedAt = now;
-        entity.UpdatedAt = now;
-        entity.CreatedBy = CurrentUserId ?? 0;
-        entity.UpdatedBy = CurrentUserId ?? 0;
-        entity.IsDeleted = 0;
+        entity.ApplyCreate(CurrentUserId);
 
-        // 根据配置的主键类型处理 ID
-        if (_primaryKeyTypeOptions.Snowflake.Enabled)
-        {
-            await Db.Insertable(entity).ExecuteReturnSnowflakeIdAsync();
-        }
-        else
-        {
-            await Db.Insertable(entity).ExecuteCommandAsync();
-        }
+        await TaktPrimaryKeyInsertHelper.InsertEntityAsync(Db, entity, _primaryKeyTypeOptions);
 
         return entity;
     }
@@ -299,23 +286,10 @@ public class TaktTenantRepository<TEntity> : ITaktTenantRepository<TEntity> wher
                 entity.TenantCode = CurrentTenantCode;
             }
 
-            entity.CreatedAt = now;
-            entity.UpdatedAt = now;
-            entity.CreatedBy = CurrentUserId ?? 0;
-            entity.UpdatedBy = CurrentUserId ?? 0;
-            entity.IsDeleted = 0;
+            entity.ApplyCreate(CurrentUserId, now);
         }
 
-        // 根据配置的主键类型处理 ID
-        if (_primaryKeyTypeOptions.Snowflake.Enabled)
-        {
-            var ids = await Db.Insertable(entities).ExecuteReturnSnowflakeIdListAsync();
-            return ids.Count;
-        }
-        else
-        {
-            return await Db.Insertable(entities).ExecuteCommandAsync();
-        }
+        return await TaktPrimaryKeyInsertHelper.InsertEntitiesAsync(Db, entities, _primaryKeyTypeOptions);
     }
 
     // ========================================
@@ -328,8 +302,7 @@ public class TaktTenantRepository<TEntity> : ITaktTenantRepository<TEntity> wher
     public virtual async Task<bool> UpdateAsync(TEntity entity)
     {
         // 自动设置审计字段
-        entity.UpdatedAt = DateTime.Now;
-        entity.UpdatedBy = CurrentUserId ?? 0;
+        entity.ApplyUpdate(CurrentUserId);
 
         var rows = await Db.Updateable(entity).ExecuteCommandAsync();
         return rows > 0;
@@ -343,8 +316,7 @@ public class TaktTenantRepository<TEntity> : ITaktTenantRepository<TEntity> wher
         var now = DateTime.Now;
         foreach (var entity in entities)
         {
-            entity.UpdatedAt = now;
-            entity.UpdatedBy = CurrentUserId ?? 0;
+            entity.ApplyUpdate(CurrentUserId, now);
         }
 
         return await Db.Updateable(entities).ExecuteCommandAsync();
@@ -384,13 +356,15 @@ public class TaktTenantRepository<TEntity> : ITaktTenantRepository<TEntity> wher
             return false;
         }
         var now = DateTime.Now;
+        var operatorUserId = TaktEntityAuditExtensions.ResolveOperatorUserId(CurrentUserId);
         var rows = await Db.Updateable<TEntity>()
             .SetColumns(x => new TEntity
             {
                 IsDeleted = 1,
                 UpdatedAt = now,
+                UpdatedBy = operatorUserId,
                 DeletedAt = now,
-                DeletedBy = CurrentUserId ?? 0
+                DeletedBy = operatorUserId
             })
             .Where(x => x.Id == id)
             .Where(x => x.TenantCode == CurrentTenantCode)
@@ -406,13 +380,15 @@ public class TaktTenantRepository<TEntity> : ITaktTenantRepository<TEntity> wher
     public virtual async Task<int> DeleteAsync(Expression<Func<TEntity, bool>> predicate)
     {
         var now = DateTime.Now;
+        var operatorUserId = TaktEntityAuditExtensions.ResolveOperatorUserId(CurrentUserId);
         return await Db.Updateable<TEntity>()
             .SetColumns(x => new TEntity
             {
                 IsDeleted = 1,
                 UpdatedAt = now,
+                UpdatedBy = operatorUserId,
                 DeletedAt = now,
-                DeletedBy = CurrentUserId ?? 0
+                DeletedBy = operatorUserId
             })
             .Where(predicate)
             .Where(x => x.TenantCode == CurrentTenantCode)

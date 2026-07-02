@@ -10,7 +10,18 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
-import i18n from '@/locales';
+import type { I18n } from 'vue-i18n';
+
+/** 由 locales/index 在 createI18n 后注册，避免 locales ↔ 本模块循环依赖 */
+let registeredI18n: I18n | undefined;
+
+/**
+ * 注册全局 i18n 实例（须在 createI18n 之后、任意 translateLocaleMessage 调用之前）
+ * @param instance vue-i18n 实例
+ */
+export function registerTaktI18n(instance: I18n): void {
+  registeredI18n = instance;
+}
 
 /**
  * vue-i18n 消息树节点（接口以支持递归，避免 type 别名循环引用）
@@ -30,7 +41,10 @@ interface TaktI18nRuntimeGlobal {
  * @returns 当前语言包嵌套对象
  */
 function readCurrentLocaleMessageTree(): TaktLocaleMessageTree | undefined {
-  const global = i18n.global as TaktI18nRuntimeGlobal;
+  if (!registeredI18n) {
+    return undefined;
+  }
+  const global = registeredI18n.global as TaktI18nRuntimeGlobal;
   return global.messages.value[global.locale.value];
 }
 

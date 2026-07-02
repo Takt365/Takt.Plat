@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/human-resource/personnel
 // 文件名称：employee-contract.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/personnel 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -176,7 +176,7 @@ export interface EmployeeContractQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -203,7 +203,7 @@ export interface EmployeeContractCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -255,7 +255,7 @@ export interface EmployeeContractCreate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -336,6 +336,26 @@ export interface EmployeeContractTemplate {
   contractStatus?: number;
 
   /**
+   * 合同开始日期
+   */
+  startDate?: string;
+
+  /**
+   * 合同结束日期
+   */
+  endDate?: string;
+
+  /**
+   * 试用期结束日期
+   */
+  probationEndDate?: string;
+
+  /**
+   * 签订日期
+   */
+  signDate?: string;
+
+  /**
    * 签约单位
    */
   signCompany?: string;
@@ -343,7 +363,7 @@ export interface EmployeeContractTemplate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -370,7 +390,7 @@ export interface EmployeeContractImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -395,6 +415,26 @@ export interface EmployeeContractImport {
   contractStatus?: number;
 
   /**
+   * 合同开始日期
+   */
+  startDate?: string;
+
+  /**
+   * 合同结束日期
+   */
+  endDate?: string;
+
+  /**
+   * 试用期结束日期
+   */
+  probationEndDate?: string;
+
+  /**
+   * 签订日期
+   */
+  signDate?: string;
+
+  /**
    * 签约单位
    */
   signCompany?: string;
@@ -402,7 +442,7 @@ export interface EmployeeContractImport {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -476,7 +516,7 @@ export interface EmployeeContractExport {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注

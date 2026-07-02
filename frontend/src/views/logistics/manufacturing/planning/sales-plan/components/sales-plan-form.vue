@@ -117,12 +117,11 @@
                 :label="t('entity.salesplan.planperiodstart')"
                 name="planPeriodStart"
               >
-                <a-input
+                <a-date-picker
                   v-model:value="formState.planPeriodStart"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesplan.planperiodstart') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesplan.planperiodstart') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
@@ -131,12 +130,11 @@
                 :label="t('entity.salesplan.planperiodend')"
                 name="planPeriodEnd"
               >
-                <a-input
+                <a-date-picker
                   v-model:value="formState.planPeriodEnd"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesplan.planperiodend') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesplan.planperiodend') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
@@ -272,10 +270,11 @@
                 :label="t('entity.salesplan.convertedstatus')"
                 name="convertedStatus"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.convertedStatus"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesplan.convertedstatus') })"
-                  style="width: 100%"
+                  dict-type="sys_convert_status"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesplan.convertedstatus') })"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -597,15 +596,15 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   planPeriodStart: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.salesplan.planperiodstart') }),
-      trigger: 'blur'
+      message: t('common.page.form.placeholder.select', { field: t('entity.salesplan.planperiodstart') }),
+      trigger: 'change'
     }
   ],
   planPeriodEnd: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.salesplan.planperiodend') }),
-      trigger: 'blur'
+      message: t('common.page.form.placeholder.select', { field: t('entity.salesplan.planperiodend') }),
+      trigger: 'change'
     }
   ],
   planBy: [

@@ -428,13 +428,13 @@ public class TaktTranslationService : TaktServiceBase, ITaktTranslationService
     /// <summary>
     /// 获取指定区域文化的前端扁平翻译消息（ResourceType=frontend）
     /// </summary>
-    /// <param name="cultureCode">区域文化编码 BCP47</param>
+    /// <param name="cultureCode">文化编码 BCP47</param>
     /// <returns>扁平键值 DTO</returns>
     public async Task<TaktTranslationMessagesDto> GetTranslationMessagesAsync(string cultureCode)
     {
         if (string.IsNullOrWhiteSpace(cultureCode))
         {
-            ThrowBusinessException("区域文化编码不能为空");
+            ThrowBusinessException("文化编码不能为空");
         }
         var trimmedCulture = cultureCode.Trim();
         var list = await _translationRepository.GetListAsync(

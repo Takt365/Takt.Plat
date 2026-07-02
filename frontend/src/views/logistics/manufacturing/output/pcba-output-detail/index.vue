@@ -150,11 +150,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('prodLine')">
-      <a-form-item :label="t('entity.pcbaoutput.prodline')">
+      <div v-show="isFieldVisible('prodTeam')">
+      <a-form-item :label="t('entity.pcbaoutput.prodteam')">
         <a-input
-          v-model:value="advancedQueryForm.prodLine"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaoutput.prodline') })"
+          v-model:value="advancedQueryForm.prodTeam"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaoutput.prodteam') })"
           show-count
           :maxlength="20"
           allow-clear
@@ -418,7 +418,7 @@ const advancedQueryForm = ref({
   prodCategory: '',
   prodDateStart: '',
   prodDateEnd: '',
-  prodLine: '',
+  prodTeam: '',
   shiftNo: undefined as number | undefined,
   prodOrderCode: '',
   modelCode: '',
@@ -439,7 +439,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'prodCategory', label: t('entity.pcbaoutput.prodcategory') },
   { key: 'prodDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.pcbaoutput.proddate')) },
   { key: 'prodDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.pcbaoutput.proddate')) },
-  { key: 'prodLine', label: t('entity.pcbaoutput.prodline') },
+  { key: 'prodTeam', label: t('entity.pcbaoutput.prodteam') },
   { key: 'shiftNo', label: t('entity.pcbaoutput.shiftno') },
   { key: 'prodOrderCode', label: t('entity.pcbaoutput.prodordercode') },
   { key: 'modelCode', label: t('entity.pcbaoutput.modelcode') },
@@ -499,7 +499,7 @@ function buildListQuery(overrides?: Partial<PcbaOutputQuery>): PcbaOutputQuery {
   assignTrimmed('prodCategory', form.prodCategory)
   assignTrimmed('prodDateStart', form.prodDateStart)
   assignTrimmed('prodDateEnd', form.prodDateEnd)
-  assignTrimmed('prodLine', form.prodLine)
+  assignTrimmed('prodTeam', form.prodTeam)
   if (form.shiftNo !== undefined && form.shiftNo !== null) {
     query.shiftNo = form.shiftNo
   }
@@ -622,13 +622,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPcbaOutputField(record, 'prodDate') ?? ''
   },
   {
-    title: t('entity.pcbaoutput.prodline'),
-    dataIndex: 'prodLine',
-    key: 'prodLine',
+    title: t('entity.pcbaoutput.prodteam'),
+    dataIndex: 'prodTeam',
+    key: 'prodTeam',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPcbaOutputField(record, 'prodLine') ?? ''
+    customRender: ({ record }: { record: any }) => getPcbaOutputField(record, 'prodTeam') ?? ''
   },
   {
     title: t('entity.pcbaoutput.shiftno'),
@@ -805,7 +805,7 @@ function handleReset() {
   prodCategory: '',
   prodDateStart: '',
   prodDateEnd: '',
-  prodLine: '',
+  prodTeam: '',
   shiftNo: undefined as number | undefined,
   prodOrderCode: '',
   modelCode: '',
@@ -1010,7 +1010,7 @@ function handleAdvancedQueryReset() {
   prodCategory: '',
   prodDateStart: '',
   prodDateEnd: '',
-  prodLine: '',
+  prodTeam: '',
   shiftNo: undefined as number | undefined,
   prodOrderCode: '',
   modelCode: '',

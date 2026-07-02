@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/human-resource/compensation
 // 文件名称：bonus-plan.d.ts
-// 创建时间：2026-06-12
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/compensation 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -76,7 +76,7 @@ export interface BonusPlan extends CompanyDtoBase {
   /**
    * 方案说明
    */
-  description?: string;
+  bonusPlanDescription?: string;
 
   /**
    * 关联工厂
@@ -151,7 +151,7 @@ export interface BonusPlanQuery extends TaktPagedQuery {
   /**
    * 方案说明
    */
-  description?: string;
+  bonusPlanDescription?: string;
 
   /**
    * 关联工厂
@@ -171,7 +171,7 @@ export interface BonusPlanQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -198,7 +198,7 @@ export interface BonusPlanCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -245,7 +245,7 @@ export interface BonusPlanCreate {
   /**
    * 方案说明
    */
-  description?: string;
+  bonusPlanDescription?: string;
 
   /**
    * 关联工厂
@@ -255,7 +255,7 @@ export interface BonusPlanCreate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -341,6 +341,16 @@ export interface BonusPlanTemplate {
   salaryFormulaId?: string;
 
   /**
+   * 默认奖金金额或基数（元）
+   */
+  defaultAmount?: number;
+
+  /**
+   * 生效日期
+   */
+  effectiveDate?: string;
+
+  /**
    * 状态（字典 sys_normal_disable_status）
    */
   planStatus?: number;
@@ -348,7 +358,7 @@ export interface BonusPlanTemplate {
   /**
    * 方案说明
    */
-  description?: string;
+  bonusPlanDescription?: string;
 
   /**
    * 关联工厂
@@ -358,7 +368,7 @@ export interface BonusPlanTemplate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -385,7 +395,7 @@ export interface BonusPlanImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -415,6 +425,16 @@ export interface BonusPlanImport {
   salaryFormulaId?: string;
 
   /**
+   * 默认奖金金额或基数（元）
+   */
+  defaultAmount?: number;
+
+  /**
+   * 生效日期
+   */
+  effectiveDate?: string;
+
+  /**
    * 状态（字典 sys_normal_disable_status）
    */
   planStatus?: number;
@@ -422,7 +442,7 @@ export interface BonusPlanImport {
   /**
    * 方案说明
    */
-  description?: string;
+  bonusPlanDescription?: string;
 
   /**
    * 关联工厂
@@ -432,7 +452,7 @@ export interface BonusPlanImport {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -501,7 +521,7 @@ export interface BonusPlanExport {
   /**
    * 方案说明
    */
-  description?: string;
+  bonusPlanDescription?: string;
 
   /**
    * 关联工厂
@@ -511,7 +531,7 @@ export interface BonusPlanExport {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注

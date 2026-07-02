@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Materials
 // 文件名称：TaktModelDestinationDtos.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ModelDestination 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktModelDestination 生成，请按需审阅）
 // 
@@ -46,22 +46,22 @@ public class TaktModelDestinationDto : TaktTenantDtoBase
     public string MaterialName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 机种编码
+    /// 机种编码（40）
     /// </summary>
     public string ModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 机种名称
+    /// 机种名称（80）
     /// </summary>
     public string ModelName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 仕向地编码
+    /// 仕向地编码（40）
     /// </summary>
     public string DestinationCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 仕向地名称
+    /// 仕向地名称（80）
     /// </summary>
     public string DestinationName { get; set; } = string.Empty;
 
@@ -98,22 +98,22 @@ public class TaktModelDestinationQueryDto : TaktPagedQuery
     public string? MaterialName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 机种编码
+    /// 机种编码（40）
     /// </summary>
     public string? ModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 机种名称
+    /// 机种名称（80）
     /// </summary>
     public string? ModelName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 仕向地编码
+    /// 仕向地编码（40）
     /// </summary>
     public string? DestinationCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 仕向地名称
+    /// 仕向地名称（80）
     /// </summary>
     public string? DestinationName { get; set; } = string.Empty;
 
@@ -170,25 +170,25 @@ public class TaktModelDestinationCreateDto
     public string MaterialName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 机种编码
+    /// 机种编码（40）
     /// </summary>
     [Required(ErrorMessage = "机种编码不能为空")]
     public string ModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 机种名称
+    /// 机种名称（80）
     /// </summary>
     [Required(ErrorMessage = "机种名称不能为空")]
     public string ModelName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 仕向地编码
+    /// 仕向地编码（40）
     /// </summary>
     [Required(ErrorMessage = "仕向地编码不能为空")]
     public string DestinationCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 仕向地名称
+    /// 仕向地名称（80）
     /// </summary>
     [Required(ErrorMessage = "仕向地名称不能为空")]
     public string DestinationName { get; set; } = string.Empty;
@@ -274,22 +274,22 @@ public class TaktModelDestinationTemplateDto
     public string? MaterialName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 机种编码
+    /// 机种编码（40）
     /// </summary>
     public string? ModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 机种名称
+    /// 机种名称（80）
     /// </summary>
     public string? ModelName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 仕向地编码
+    /// 仕向地编码（40）
     /// </summary>
     public string? DestinationCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 仕向地名称
+    /// 仕向地名称（80）
     /// </summary>
     public string? DestinationName { get; set; } = string.Empty;
 
@@ -326,22 +326,22 @@ public class TaktModelDestinationImportDto
     public string? MaterialName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 机种编码
+    /// 机种编码（40）
     /// </summary>
     public string? ModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 机种名称
+    /// 机种名称（80）
     /// </summary>
     public string? ModelName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 仕向地编码
+    /// 仕向地编码（40）
     /// </summary>
     public string? DestinationCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 仕向地名称
+    /// 仕向地名称（80）
     /// </summary>
     public string? DestinationName { get; set; } = string.Empty;
 
@@ -384,22 +384,22 @@ public class TaktModelDestinationExportDto
     public string MaterialName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 机种编码
+    /// 机种编码（40）
     /// </summary>
     public string ModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 机种名称
+    /// 机种名称（80）
     /// </summary>
     public string ModelName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 仕向地编码
+    /// 仕向地编码（40）
     /// </summary>
     public string DestinationCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 仕向地名称
+    /// 仕向地名称（80）
     /// </summary>
     public string DestinationName { get; set; } = string.Empty;
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Procurement
 // 文件名称：TaktPurchaseGroupService.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购组主数据应用服务实现
 // 
@@ -97,12 +97,14 @@ public class TaktPurchaseGroupService : TaktServiceBase, ITaktPurchaseGroupServi
         EnsureThreeLayerContext();
         var list = await _purchaseGroupRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.PurchaseGroupStatus == 1,
-            x => x.PurchaseGroupName ?? string.Empty,
+            x => x.SortOrder,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.PurchaseGroupName ?? e.Id.ToString(),
+            DictValue = e.PurchaseGroupCode,
+            DictLabel = string.IsNullOrWhiteSpace(e.PurchaseGroupName) ? e.PurchaseGroupCode : e.PurchaseGroupName,
+            ExtLabel = e.PurchaseGroupCode,
+            SortOrder = e.SortOrder,
         }).ToList();
     }
 
@@ -354,7 +356,8 @@ public class TaktPurchaseGroupService : TaktServiceBase, ITaktPurchaseGroupServi
         {
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
-                (x.PurchaseGroupCode != null && x.PurchaseGroupCode.Contains(keywords))
+                (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                || (x.PurchaseGroupCode != null && x.PurchaseGroupCode.Contains(keywords))
                 || (x.PurchaseGroupName != null && x.PurchaseGroupName.Contains(keywords))
                 || (x.PurchaseGroupDescription != null && x.PurchaseGroupDescription.Contains(keywords))
                 || SqlFunc.ToString(x.ResponsibleUserId).Contains(keywords)
@@ -367,6 +370,11 @@ public class TaktPurchaseGroupService : TaktServiceBase, ITaktPurchaseGroupServi
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
+        {
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.PurchaseGroupCode))

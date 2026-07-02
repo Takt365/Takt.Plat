@@ -26,7 +26,10 @@ const {
   buildTranslationResourceGroup,
   TRANSLATION_RESOURCE_TYPE_FRONTEND,
   parseAllOnlyGenerateArgs,
+  parseEntityClassHeaderFromCsContent,
+  ENTITY_CLASS_HEADER_REGEX,
 } = require('./generate-script-common.cjs');
+const { isManualDtoEntity } = require('./generate-entity-exclusions.cjs');
 
 const CONFIG = {
   backendRoot: path.resolve(__dirname, '../backend/src'),
@@ -497,14 +500,15 @@ function resolveSeedOutput(entity) {
 
 function parseEntityFile(filePath) {
   const content = fs.readFileSync(filePath, 'utf-8');
-  const classHeaderMatch = content.match(/public\s+class\s+(Takt\w+)\s*:\s*(Takt\w+EntityBase)\s*\{/);
-  if (!classHeaderMatch) {
+  const classHeader = parseEntityClassHeaderFromCsContent(content);
+  if (!classHeader) {
     return null;
   }
 
   const namespaceMatch = content.match(/namespace\s+([\w.]+);/);
   const entityNamespace = namespaceMatch ? namespaceMatch[1] : '';
-  const className = classHeaderMatch[1];
+  const className = classHeader.className;
+  const classHeaderMatch = content.match(ENTITY_CLASS_HEADER_REGEX);
   const openBraceIndex = classHeaderMatch.index + classHeaderMatch[0].length - 1;
   const classBody = extractClassBody(content, openBraceIndex);
   const beforeClass = content.slice(0, classHeaderMatch.index);
@@ -873,6 +877,11 @@ function scanEntities() {
         return;
       }
       if (!entry.name.startsWith('Takt') || !entry.name.endsWith('.cs')) {
+        return;
+      }
+      const entityShort = entry.name.replace(/^Takt/, '').replace(/\.cs$/, '');
+      if (isManualDtoEntity(entityShort)) {
+        console.log(`⏭️  跳过手工维护 i18n: Takt${entityShort}`);
         return;
       }
       const parsed = parseEntityFile(full);

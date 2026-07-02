@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/sop
 // 文件名称：step-media.d.ts
-// 创建时间：2026-06-20
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/sop 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface SopStepMedia extends CompanyDtoBase {
   sopStepMediaId: string;
 
   /**
-   * 工步 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
    */
   stepId: string;
 
@@ -39,7 +39,7 @@ export interface SopStepMedia extends CompanyDtoBase {
   stepName?: string;
 
   /**
-   * 媒体类型（1=图片JPG/PNG，2=视频MP4，3=PDF，4=3D轻量化；字典 logistics_sop_media_type）
+   * 媒体类型（字典 logistics_sop_media_type；1=图片JPG/PNG，2=视频MP4，3=PDF，4=3D轻量化）
    */
   mediaType: number;
 
@@ -84,12 +84,12 @@ export interface SopStepMediaQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工步 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
    */
   stepId?: string;
 
   /**
-   * 媒体类型（1=图片JPG/PNG，2=视频MP4，3=PDF，4=3D轻量化；字典 logistics_sop_media_type）
+   * 媒体类型（字典 logistics_sop_media_type；1=图片JPG/PNG，2=视频MP4，3=PDF，4=3D轻量化）
    */
   mediaType?: number;
 
@@ -148,17 +148,17 @@ export interface SopStepMediaCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
   /**
-   * 工步 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
    */
   stepId: string;
 
   /**
-   * 媒体类型（1=图片JPG/PNG，2=视频MP4，3=PDF，4=3D轻量化；字典 logistics_sop_media_type）
+   * 媒体类型（字典 logistics_sop_media_type；1=图片JPG/PNG，2=视频MP4，3=PDF，4=3D轻量化）
    */
   mediaType: number;
 
@@ -236,12 +236,12 @@ export interface SopStepMediaTemplate {
   companyCode?: string;
 
   /**
-   * 工步 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
    */
   stepId?: string;
 
   /**
-   * 媒体类型（1=图片JPG/PNG，2=视频MP4，3=PDF，4=3D轻量化；字典 logistics_sop_media_type）
+   * 媒体类型（字典 logistics_sop_media_type；1=图片JPG/PNG，2=视频MP4，3=PDF，4=3D轻量化）
    */
   mediaType?: number;
 
@@ -285,17 +285,17 @@ export interface SopStepMediaImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
   /**
-   * 工步 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
    */
   stepId?: string;
 
   /**
-   * 媒体类型（1=图片JPG/PNG，2=视频MP4，3=PDF，4=3D轻量化；字典 logistics_sop_media_type）
+   * 媒体类型（字典 logistics_sop_media_type；1=图片JPG/PNG，2=视频MP4，3=PDF，4=3D轻量化）
    */
   mediaType?: number;
 
@@ -339,12 +339,12 @@ export interface SopStepMediaExport {
   companyCode: string;
 
   /**
-   * 工步 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
    */
   stepId: string;
 
   /**
-   * 媒体类型（1=图片JPG/PNG，2=视频MP4，3=PDF，4=3D轻量化；字典 logistics_sop_media_type）
+   * 媒体类型（字典 logistics_sop_media_type；1=图片JPG/PNG，2=视频MP4，3=PDF，4=3D轻量化）
    */
   mediaType: number;
 

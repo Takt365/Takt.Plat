@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="logistics:quality:operation:ipqc:order:change:log:create"
-      update-permission="logistics:quality:operation:ipqc:order:change:log:update"
-      delete-permission="logistics:quality:operation:ipqc:order:change:log:delete"
-      import-permission="logistics:quality:operation:ipqc:order:change:log:import"
-      export-permission="logistics:quality:operation:ipqc:order:change:log:export"
+      create-permission="logistics:quality:operation:ipqc:order:create"
+      update-permission="logistics:quality:operation:ipqc:order:update"
+      delete-permission="logistics:quality:operation:ipqc:order:delete"
+      import-permission="logistics:quality:operation:ipqc:order:import"
+      export-permission="logistics:quality:operation:ipqc:order:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -65,6 +65,8 @@
       :master-row-selection="rowSelection"
       master-id-column-key="ipqcOrderId"
       :master-visible-column-keys="visibleColumnKeys"
+      master-table-mode="masterDetailMaster"
+      master-scroll-layout="masterDetailLr"
       :master-total="total"
       master-entity-scope="company"
       @master-change="handleTableChange"
@@ -228,15 +230,6 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('judgeStatus')">
-      <a-form-item :label="t('entity.ipqcorder.judgestatus')">
-        <a-input-number
-          v-model:value="advancedQueryForm.judgeStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ipqcorder.judgestatus') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
       <div v-show="isFieldVisible('judgeBy')">
       <a-form-item :label="t('entity.ipqcorder.judgeby')">
         <a-input
@@ -278,13 +271,22 @@
         />
       </a-form-item>
       </div>
+      <div v-show="isFieldVisible('judgeStatus')">
+      <a-form-item :label="t('entity.ipqcorder.judgestatus')">
+        <a-input-number
+          v-model:value="advancedQueryForm.judgeStatus"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ipqcorder.judgestatus') })"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('createdAtStart')">
       <a-form-item :label="t('common.page.entity.createdatstart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -295,18 +297,36 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('ExtField')">
-      <a-form-item :label="t('entity.ipqcorder.extfield')">
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
         <a-textarea
-          v-model:value="advancedQueryForm.ExtField"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.ipqcorder.extfield') })"
-          :rows="2"
-          allow-clear
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -335,6 +355,7 @@
       @cancel="handleImportCancel"
     >
       <TaktImportFile
+        v-if="importVisible"
         entity-i18n-key="entity.ipqcorder._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
@@ -354,7 +375,7 @@
       :id-column-key="'ipqcOrderId'"
       :action-column-key="'action'"
       entity-scope="company"
-      table-mode="single"
+      table-mode="masterDetailMaster"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -379,7 +400,8 @@ import { getIpqcOrderList, getIpqcOrderById, createIpqcOrder, updateIpqcOrder, d
 import type { IpqcOrder, IpqcOrderQuery } from '@/types/logistics/quality/operation/ipqc-order'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -436,14 +458,14 @@ const advancedQueryForm = ref({
   totalQualifiedQuantity: undefined as number | undefined,
   totalUnqualifiedQuantity: undefined as number | undefined,
   totalInspectionReturnQuantity: undefined as number | undefined,
-  judgeStatus: undefined as number | undefined,
   judgeBy: '',
   judgeDateStart: '',
   judgeDateEnd: '',
   judgeDescription: '',
+  judgeStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
@@ -460,14 +482,14 @@ const queryFieldsMeta = computed(() => [
   { key: 'totalQualifiedQuantity', label: t('entity.ipqcorder.totalqualifiedquantity') },
   { key: 'totalUnqualifiedQuantity', label: t('entity.ipqcorder.totalunqualifiedquantity') },
   { key: 'totalInspectionReturnQuantity', label: t('entity.ipqcorder.totalinspectionreturnquantity') },
-  { key: 'judgeStatus', label: t('entity.ipqcorder.judgestatus') },
   { key: 'judgeBy', label: t('entity.ipqcorder.judgeby') },
   { key: 'judgeDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.ipqcorder.judgedate')) },
   { key: 'judgeDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.ipqcorder.judgedate')) },
   { key: 'judgeDescription', label: t('entity.ipqcorder.judgedescription') },
+  { key: 'judgeStatus', label: t('entity.ipqcorder.judgestatus') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'ExtField', label: t('entity.ipqcorder.extfield') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -533,16 +555,16 @@ function buildListQuery(overrides?: Partial<IpqcOrderQuery>): IpqcOrderQuery {
   if (form.totalInspectionReturnQuantity !== undefined && form.totalInspectionReturnQuantity !== null) {
     query.totalInspectionReturnQuantity = form.totalInspectionReturnQuantity
   }
-  if (form.judgeStatus !== undefined && form.judgeStatus !== null) {
-    query.judgeStatus = form.judgeStatus
-  }
   assignTrimmed('judgeBy', form.judgeBy)
   assignTrimmed('judgeDateStart', form.judgeDateStart)
   assignTrimmed('judgeDateEnd', form.judgeDateEnd)
   assignTrimmed('judgeDescription', form.judgeDescription)
+  if (form.judgeStatus !== undefined && form.judgeStatus !== null) {
+    query.judgeStatus = form.judgeStatus
+  }
   assignTrimmed('createdAtStart', form.createdAtStart)
   assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('ExtField', form.ExtField)
+  assignTrimmed('extField', form.extField)
   assignTrimmed('remark', form.remark)
   return query
 }
@@ -715,15 +737,6 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getIpqcOrderField(record, 'totalInspectionReturnQuantity') ?? ''
   },
   {
-    title: t('entity.ipqcorder.judgestatus'),
-    dataIndex: 'judgeStatus',
-    key: 'judgeStatus',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getIpqcOrderField(record, 'judgeStatus') ?? ''
-  },
-  {
     title: t('entity.ipqcorder.judgeby'),
     dataIndex: 'judgeBy',
     key: 'judgeBy',
@@ -750,6 +763,15 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getIpqcOrderField(record, 'judgeDescription') ?? ''
   },
+  {
+    title: t('entity.ipqcorder.judgestatus'),
+    dataIndex: 'judgeStatus',
+    key: 'judgeStatus',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getIpqcOrderField(record, 'judgeStatus') ?? ''
+  },
   CreateActionColumn({
     actions: [
       {
@@ -757,7 +779,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:quality:operation:ipqc:order:change:log:update',
+        permission: 'logistics:quality:operation:ipqc:order:update',
         onClick: (record: IpqcOrder) => handleEdit(record)
       },
       {
@@ -765,7 +787,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:quality:operation:ipqc:order:change:log:delete',
+        permission: 'logistics:quality:operation:ipqc:order:delete',
         onClick: (record: IpqcOrder) => handleDeleteOne(record)
       }
     ]
@@ -799,7 +821,7 @@ const rowSelection = computed(() => ({
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
-    } else if (getIpqcOrderId(selectedRow.value) === getIpqcOrderId(record)) {
+    } else if (selectedRow.value && getIpqcOrderId(selectedRow.value) === getIpqcOrderId(record)) {
       selectedRow.value = null
       syncMasterSelection(null)
     }
@@ -852,14 +874,14 @@ function handleReset() {
   totalQualifiedQuantity: undefined as number | undefined,
   totalUnqualifiedQuantity: undefined as number | undefined,
   totalInspectionReturnQuantity: undefined as number | undefined,
-  judgeStatus: undefined as number | undefined,
   judgeBy: '',
   judgeDateStart: '',
   judgeDateEnd: '',
   judgeDescription: '',
+  judgeStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
   currentPage.value = getTaktDefaultPageIndex()
@@ -943,15 +965,22 @@ async function handleDownloadTemplate(sheetName?: string, fileName?: string): Pr
   return (res as any)?.data ?? res
 }
 
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importIpqcOrder(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importIpqcOrder(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
+
+      if (selectedMasterKey.value) {
+    ipqcOrderChangeLogPanelRef.value?.reload?.()
+      }
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
+  }
 }
 
 /** 关闭导入对话框 */
@@ -1060,14 +1089,14 @@ function handleAdvancedQueryReset() {
   totalQualifiedQuantity: undefined as number | undefined,
   totalUnqualifiedQuantity: undefined as number | undefined,
   totalInspectionReturnQuantity: undefined as number | undefined,
-  judgeStatus: undefined as number | undefined,
   judgeBy: '',
   judgeDateStart: '',
   judgeDateEnd: '',
   judgeDescription: '',
+  judgeStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
 }

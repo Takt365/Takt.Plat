@@ -27,7 +27,7 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Sop;
 public class TaktSopWorkstation : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
@@ -45,31 +45,31 @@ public class TaktSopWorkstation : TaktCompanyEntityBase
     public string WorkstationName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作中心
+    /// 工作中心（关联 TaktWorkCenter.WorkCenterCode，选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
     /// </summary>
     [SugarColumn(ColumnName = "work_center", ColumnDescription = "工作中心", ColumnDataType = "nvarchar", Length = 20, IsNullable = true)]
     public string? WorkCenter { get; set; }
 
     /// <summary>
-    /// 生产线
+    /// 生产班组
     /// </summary>
-    [SugarColumn(ColumnName = "production_line", ColumnDescription = "生产线", ColumnDataType = "nvarchar", Length = 20, IsNullable = true)]
+    [SugarColumn(ColumnName = "production_line", ColumnDescription = "生产班组", ColumnDataType = "nvarchar", Length = 20, IsNullable = true)]
     public string? ProductionLine { get; set; }
 
     /// <summary>
-    /// 工位类型（1=装配，2=检验，3=包装，4=测试，5=其他；字典 sys_workstation_type）
+    /// 工位类型（字典 sys_workstation_type；1=装配，2=检验，3=包装，4=测试，5=其他）
     /// </summary>
     [SugarColumn(ColumnName = "workstation_type", ColumnDescription = "工位类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int WorkstationType { get; set; } = 1;
 
     /// <summary>
-    /// 工艺段类型（1=SMT，2=自插，3=手插，4=修正，5=总装；字典 logistics_process_segment_type）
+    /// 工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
     /// </summary>
     [SugarColumn(ColumnName = "process_segment_type", ColumnDescription = "工艺段类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int ProcessSegmentType { get; set; } = 1;
 
     /// <summary>
-    /// 启用状态（字典 sys_normal_disable_status，0=停用，1=启用）
+    /// 启用状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
     /// </summary>
     [SugarColumn(ColumnName = "workstation_status", ColumnDescription = "启用状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int WorkstationStatus { get; set; } = 1;

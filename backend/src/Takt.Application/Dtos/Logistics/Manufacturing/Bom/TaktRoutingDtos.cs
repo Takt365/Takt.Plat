@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Bom
 // 文件名称：TaktRoutingDtos.cs
-// 创建时间：2026-06-15
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Routing 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktRouting 生成，请按需审阅）
 // 
@@ -71,11 +71,6 @@ public class TaktRoutingDto : TaktApprovalDtoBase
     public string Version { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（1=生成的，2=对订单下达，3=对成本核算下达，4=下达的（通用））
-    /// </summary>
-    public int RoutingStatus { get; set; } = 0;
-
-    /// <summary>
     /// 生效日期
     /// </summary>
     public DateTime? EffectiveDate { get; set; }
@@ -89,6 +84,11 @@ public class TaktRoutingDto : TaktApprovalDtoBase
     /// 工艺路线说明
     /// </summary>
     public string? RoutingDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 状态（1=生成的，2=对订单下达，3=对成本核算下达，4=下达的（通用））
+    /// </summary>
+    public int RoutingStatus { get; set; } = 0;
 
     /// <summary>
     /// 工艺路线明细列表（主子表关系）
@@ -160,11 +160,6 @@ public class TaktRoutingQueryDto : TaktPagedQuery
     public string? Version { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（1=生成的，2=对订单下达，3=对成本核算下达，4=下达的（通用））
-    /// </summary>
-    public int? RoutingStatus { get; set; }
-
-    /// <summary>
     /// 生效日期（范围查询-开始）
     /// </summary>
     public DateTime? EffectiveDateStart { get; set; }
@@ -190,7 +185,12 @@ public class TaktRoutingQueryDto : TaktPagedQuery
     public string? RoutingDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 审批状态（TaktApprovalStatus）
+    /// 状态（1=生成的，2=对订单下达，3=对成本核算下达，4=下达的（通用））
+    /// </summary>
+    public int? RoutingStatus { get; set; }
+
+    /// <summary>
+    /// 审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）
     /// </summary>
     public TaktApprovalStatus? ApprovalStatus { get; set; }
 
@@ -273,7 +273,7 @@ public class TaktRoutingCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -319,11 +319,6 @@ public class TaktRoutingCreateDto
     public string Version { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（1=生成的，2=对订单下达，3=对成本核算下达，4=下达的（通用））
-    /// </summary>
-    public int RoutingStatus { get; set; } = 0;
-
-    /// <summary>
     /// 生效日期
     /// </summary>
     public DateTime? EffectiveDate { get; set; }
@@ -337,6 +332,11 @@ public class TaktRoutingCreateDto
     /// 工艺路线说明
     /// </summary>
     public string? RoutingDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 状态（1=生成的，2=对订单下达，3=对成本核算下达，4=下达的（通用））
+    /// </summary>
+    public int RoutingStatus { get; set; } = 0;
 
     /// <summary>
     /// 工艺路线明细列表（主子表关系）（子表，级联保存）
@@ -459,14 +459,34 @@ public class TaktRoutingTemplateDto
     public string? Version { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（1=生成的，2=对订单下达，3=对成本核算下达，4=下达的（通用））
+    /// 生效日期
     /// </summary>
-    public int? RoutingStatus { get; set; }
+    public DateTime? EffectiveDate { get; set; }
+
+    /// <summary>
+    /// 失效日期
+    /// </summary>
+    public DateTime? ExpiryDate { get; set; }
 
     /// <summary>
     /// 工艺路线说明
     /// </summary>
     public string? RoutingDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 状态（1=生成的，2=对订单下达，3=对成本核算下达，4=下达的（通用））
+    /// </summary>
+    public int? RoutingStatus { get; set; }
+
+    /// <summary>
+    /// 工艺路线明细列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktRoutingItemCreateDto>? Items { get; set; }
+
+    /// <summary>
+    /// 变更日志列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktRoutingChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -496,7 +516,7 @@ public class TaktRoutingImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -536,14 +556,34 @@ public class TaktRoutingImportDto
     public string? Version { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（1=生成的，2=对订单下达，3=对成本核算下达，4=下达的（通用））
+    /// 生效日期
     /// </summary>
-    public int? RoutingStatus { get; set; }
+    public DateTime? EffectiveDate { get; set; }
+
+    /// <summary>
+    /// 失效日期
+    /// </summary>
+    public DateTime? ExpiryDate { get; set; }
 
     /// <summary>
     /// 工艺路线说明
     /// </summary>
     public string? RoutingDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 状态（1=生成的，2=对订单下达，3=对成本核算下达，4=下达的（通用））
+    /// </summary>
+    public int? RoutingStatus { get; set; }
+
+    /// <summary>
+    /// 工艺路线明细列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktRoutingItemCreateDto>? Items { get; set; }
+
+    /// <summary>
+    /// 变更日志列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktRoutingChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -609,11 +649,6 @@ public class TaktRoutingExportDto
     public string Version { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（1=生成的，2=对订单下达，3=对成本核算下达，4=下达的（通用））
-    /// </summary>
-    public int RoutingStatus { get; set; } = 0;
-
-    /// <summary>
     /// 生效日期
     /// </summary>
     public DateTime? EffectiveDate { get; set; }
@@ -627,6 +662,11 @@ public class TaktRoutingExportDto
     /// 工艺路线说明
     /// </summary>
     public string? RoutingDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 状态（1=生成的，2=对订单下达，3=对成本核算下达，4=下达的（通用））
+    /// </summary>
+    public int RoutingStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

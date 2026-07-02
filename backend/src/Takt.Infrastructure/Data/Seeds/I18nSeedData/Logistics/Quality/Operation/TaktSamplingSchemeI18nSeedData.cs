@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Operation
 // 文件名称：TaktSamplingSchemeI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSamplingScheme 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktSamplingSchemeI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.samplingscheme._self", "zh-HK", "Takt抽样方案信息_hk", "实体名称"),
 
             // entity.samplingscheme.plantcode
-            new TranslationSeedItem("entity.samplingscheme.plantcode", "en-US", "工厂代码_us", "工厂代码"),
+            new TranslationSeedItem("entity.samplingscheme.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
             // entity.samplingscheme.plantcode
-            new TranslationSeedItem("entity.samplingscheme.plantcode", "ja-JP", "工厂代码_jp", "工厂代码"),
+            new TranslationSeedItem("entity.samplingscheme.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
             // entity.samplingscheme.plantcode
-            new TranslationSeedItem("entity.samplingscheme.plantcode", "zh-CN", "工厂代码", "工厂代码"),
+            new TranslationSeedItem("entity.samplingscheme.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
             // entity.samplingscheme.plantcode
-            new TranslationSeedItem("entity.samplingscheme.plantcode", "zh-HK", "工厂代码_hk", "工厂代码"),
+            new TranslationSeedItem("entity.samplingscheme.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
 
             // entity.samplingscheme.code
             new TranslationSeedItem("entity.samplingscheme.code", "en-US", "抽样方案编码_us", "抽样方案编码（唯一索引）"),
@@ -118,31 +118,31 @@ public class TaktSamplingSchemeI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.samplingscheme.name", "zh-HK", "抽样方案名称_hk", "抽样方案名称"),
 
             // entity.samplingscheme.type
-            new TranslationSeedItem("entity.samplingscheme.type", "en-US", "抽样方案类型_us", "抽样方案类型（0=计数型，1=计量型，2=计数调整型，3=计量调整型）"),
+            new TranslationSeedItem("entity.samplingscheme.type", "en-US", "抽样方案类型_us", "抽样方案类型（字典 logistics_quality_sampling_scheme_type）"),
             // entity.samplingscheme.type
-            new TranslationSeedItem("entity.samplingscheme.type", "ja-JP", "抽样方案类型_jp", "抽样方案类型（0=计数型，1=计量型，2=计数调整型，3=计量调整型）"),
+            new TranslationSeedItem("entity.samplingscheme.type", "ja-JP", "抽样方案类型_jp", "抽样方案类型（字典 logistics_quality_sampling_scheme_type）"),
             // entity.samplingscheme.type
-            new TranslationSeedItem("entity.samplingscheme.type", "zh-CN", "抽样方案类型", "抽样方案类型（0=计数型，1=计量型，2=计数调整型，3=计量调整型）"),
+            new TranslationSeedItem("entity.samplingscheme.type", "zh-CN", "抽样方案类型", "抽样方案类型（字典 logistics_quality_sampling_scheme_type）"),
             // entity.samplingscheme.type
-            new TranslationSeedItem("entity.samplingscheme.type", "zh-HK", "抽样方案类型_hk", "抽样方案类型（0=计数型，1=计量型，2=计数调整型，3=计量调整型）"),
+            new TranslationSeedItem("entity.samplingscheme.type", "zh-HK", "抽样方案类型_hk", "抽样方案类型（字典 logistics_quality_sampling_scheme_type）"),
 
             // entity.samplingscheme.samplingstandard
-            new TranslationSeedItem("entity.samplingscheme.samplingstandard", "en-US", "抽样标准_us", "抽样标准（0=GB/T 2828.1，1=GB/T 6378，2=MIL-STD-105E，3=ANSI/ASQ Z1.4，4=ISO 2859-1，5=自定义）"),
+            new TranslationSeedItem("entity.samplingscheme.samplingstandard", "en-US", "抽样标准_us", "抽样标准（字典 logistics_quality_sampling_standard）"),
             // entity.samplingscheme.samplingstandard
-            new TranslationSeedItem("entity.samplingscheme.samplingstandard", "ja-JP", "抽样标准_jp", "抽样标准（0=GB/T 2828.1，1=GB/T 6378，2=MIL-STD-105E，3=ANSI/ASQ Z1.4，4=ISO 2859-1，5=自定义）"),
+            new TranslationSeedItem("entity.samplingscheme.samplingstandard", "ja-JP", "抽样标准_jp", "抽样标准（字典 logistics_quality_sampling_standard）"),
             // entity.samplingscheme.samplingstandard
-            new TranslationSeedItem("entity.samplingscheme.samplingstandard", "zh-CN", "抽样标准", "抽样标准（0=GB/T 2828.1，1=GB/T 6378，2=MIL-STD-105E，3=ANSI/ASQ Z1.4，4=ISO 2859-1，5=自定义）"),
+            new TranslationSeedItem("entity.samplingscheme.samplingstandard", "zh-CN", "抽样标准", "抽样标准（字典 logistics_quality_sampling_standard）"),
             // entity.samplingscheme.samplingstandard
-            new TranslationSeedItem("entity.samplingscheme.samplingstandard", "zh-HK", "抽样标准_hk", "抽样标准（0=GB/T 2828.1，1=GB/T 6378，2=MIL-STD-105E，3=ANSI/ASQ Z1.4，4=ISO 2859-1，5=自定义）"),
+            new TranslationSeedItem("entity.samplingscheme.samplingstandard", "zh-HK", "抽样标准_hk", "抽样标准（字典 logistics_quality_sampling_standard）"),
 
             // entity.samplingscheme.inspectionlevel
-            new TranslationSeedItem("entity.samplingscheme.inspectionlevel", "en-US", "检验水平_us", "检验水平（0=I，1=II，2=III，3=S-1，4=S-2，5=S-3，6=S-4）"),
+            new TranslationSeedItem("entity.samplingscheme.inspectionlevel", "en-US", "检验水平_us", "检验水平（字典 logistics_quality_inspection_level）"),
             // entity.samplingscheme.inspectionlevel
-            new TranslationSeedItem("entity.samplingscheme.inspectionlevel", "ja-JP", "检验水平_jp", "检验水平（0=I，1=II，2=III，3=S-1，4=S-2，5=S-3，6=S-4）"),
+            new TranslationSeedItem("entity.samplingscheme.inspectionlevel", "ja-JP", "检验水平_jp", "检验水平（字典 logistics_quality_inspection_level）"),
             // entity.samplingscheme.inspectionlevel
-            new TranslationSeedItem("entity.samplingscheme.inspectionlevel", "zh-CN", "检验水平", "检验水平（0=I，1=II，2=III，3=S-1，4=S-2，5=S-3，6=S-4）"),
+            new TranslationSeedItem("entity.samplingscheme.inspectionlevel", "zh-CN", "检验水平", "检验水平（字典 logistics_quality_inspection_level）"),
             // entity.samplingscheme.inspectionlevel
-            new TranslationSeedItem("entity.samplingscheme.inspectionlevel", "zh-HK", "检验水平_hk", "检验水平（0=I，1=II，2=III，3=S-1，4=S-2，5=S-3，6=S-4）"),
+            new TranslationSeedItem("entity.samplingscheme.inspectionlevel", "zh-HK", "检验水平_hk", "检验水平（字典 logistics_quality_inspection_level）"),
 
             // entity.samplingscheme.aqlvalue
             new TranslationSeedItem("entity.samplingscheme.aqlvalue", "en-US", "AQL值_us", "AQL值（可接受质量水平，0.010-1000，存储为小数）"),
@@ -199,13 +199,13 @@ public class TaktSamplingSchemeI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.samplingscheme.rejectionnumber", "zh-HK", "拒收数_hk", "拒收数（Re，Rejection Number）"),
 
             // entity.samplingscheme.inspectionstrictness
-            new TranslationSeedItem("entity.samplingscheme.inspectionstrictness", "en-US", "检验严格度_us", "检验严格度（0=正常检验，1=加严检验，2=放宽检验）"),
+            new TranslationSeedItem("entity.samplingscheme.inspectionstrictness", "en-US", "检验严格度_us", "检验严格度（字典 logistics_quality_inspection_strictness）"),
             // entity.samplingscheme.inspectionstrictness
-            new TranslationSeedItem("entity.samplingscheme.inspectionstrictness", "ja-JP", "检验严格度_jp", "检验严格度（0=正常检验，1=加严检验，2=放宽检验）"),
+            new TranslationSeedItem("entity.samplingscheme.inspectionstrictness", "ja-JP", "检验严格度_jp", "检验严格度（字典 logistics_quality_inspection_strictness）"),
             // entity.samplingscheme.inspectionstrictness
-            new TranslationSeedItem("entity.samplingscheme.inspectionstrictness", "zh-CN", "检验严格度", "检验严格度（0=正常检验，1=加严检验，2=放宽检验）"),
+            new TranslationSeedItem("entity.samplingscheme.inspectionstrictness", "zh-CN", "检验严格度", "检验严格度（字典 logistics_quality_inspection_strictness）"),
             // entity.samplingscheme.inspectionstrictness
-            new TranslationSeedItem("entity.samplingscheme.inspectionstrictness", "zh-HK", "检验严格度_hk", "检验严格度（0=正常检验，1=加严检验，2=放宽检验）"),
+            new TranslationSeedItem("entity.samplingscheme.inspectionstrictness", "zh-HK", "检验严格度_hk", "检验严格度（字典 logistics_quality_inspection_strictness）"),
 
             // entity.samplingscheme.istransferruleenabled
             new TranslationSeedItem("entity.samplingscheme.istransferruleenabled", "en-US", "是否支持转移规则_us", "是否支持转移规则（0=否，1=是）"),
@@ -225,15 +225,6 @@ public class TaktSamplingSchemeI18nSeedData : ITaktSeedDataCoordinator
             // entity.samplingscheme.transferruleconfig
             new TranslationSeedItem("entity.samplingscheme.transferruleconfig", "zh-HK", "转移规则配置_hk", "转移规则配置（JSON格式，存储正常/加严/放宽检验的转移条件）"),
 
-            // entity.samplingscheme.status
-            new TranslationSeedItem("entity.samplingscheme.status", "en-US", "抽样方案状态_us", "抽样方案状态（0=草稿，1=已发布，2=已停用）"),
-            // entity.samplingscheme.status
-            new TranslationSeedItem("entity.samplingscheme.status", "ja-JP", "抽样方案状态_jp", "抽样方案状态（0=草稿，1=已发布，2=已停用）"),
-            // entity.samplingscheme.status
-            new TranslationSeedItem("entity.samplingscheme.status", "zh-CN", "抽样方案状态", "抽样方案状态（0=草稿，1=已发布，2=已停用）"),
-            // entity.samplingscheme.status
-            new TranslationSeedItem("entity.samplingscheme.status", "zh-HK", "抽样方案状态_hk", "抽样方案状态（0=草稿，1=已发布，2=已停用）"),
-
             // entity.samplingscheme.schemedescription
             new TranslationSeedItem("entity.samplingscheme.schemedescription", "en-US", "抽样方案描述_us", "抽样方案描述"),
             // entity.samplingscheme.schemedescription
@@ -242,6 +233,15 @@ public class TaktSamplingSchemeI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.samplingscheme.schemedescription", "zh-CN", "抽样方案描述", "抽样方案描述"),
             // entity.samplingscheme.schemedescription
             new TranslationSeedItem("entity.samplingscheme.schemedescription", "zh-HK", "抽样方案描述_hk", "抽样方案描述"),
+
+            // entity.samplingscheme.status
+            new TranslationSeedItem("entity.samplingscheme.status", "en-US", "抽样方案状态_us", "抽样方案状态（字典 logistics_quality_standard_status）"),
+            // entity.samplingscheme.status
+            new TranslationSeedItem("entity.samplingscheme.status", "ja-JP", "抽样方案状态_jp", "抽样方案状态（字典 logistics_quality_standard_status）"),
+            // entity.samplingscheme.status
+            new TranslationSeedItem("entity.samplingscheme.status", "zh-CN", "抽样方案状态", "抽样方案状态（字典 logistics_quality_standard_status）"),
+            // entity.samplingscheme.status
+            new TranslationSeedItem("entity.samplingscheme.status", "zh-HK", "抽样方案状态_hk", "抽样方案状态（字典 logistics_quality_standard_status）"),
 
             // entity.samplingscheme.inspectionstandards
             new TranslationSeedItem("entity.samplingscheme.inspectionstandards", "en-US", "检验标准列表_us", "检验标准列表（主子表关系）"),

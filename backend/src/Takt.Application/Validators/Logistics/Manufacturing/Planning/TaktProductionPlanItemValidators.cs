@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Manufacturing.Planning
 // 文件名称：TaktProductionPlanItemValidators.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ProductionPlanItem 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktProductionPlanItem 生成，请按需审阅）
 // 
@@ -42,16 +42,12 @@ public class TaktProductionPlanItemCreateValidator : AbstractValidator<TaktProdu
             .MaximumLength(10).WithMessage("生产计划编码长度不能超过10个字符");
         RuleFor(x => x.SalesPlanId)
             .GreaterThanOrEqualTo(0).WithMessage("来源销售计划ID不能为负数");
-        RuleFor(x => x.SalesPlanCode)
-            .MaximumLength(10).WithMessage("来源销售计划编码长度不能超过10个字符");
         RuleFor(x => x.MaterialCode)
             .NotEmpty().WithMessage("物料编码不能为空")
             .MaximumLength(20).WithMessage("物料编码长度不能超过20个字符");
         RuleFor(x => x.MaterialName)
             .NotEmpty().WithMessage("物料名称不能为空")
             .MaximumLength(40).WithMessage("物料名称长度不能超过40个字符");
-        RuleFor(x => x.MaterialSpecification)
-            .MaximumLength(80).WithMessage("物料规格长度不能超过80个字符");
         RuleFor(x => x.PlanUnit)
             .NotEmpty().WithMessage("计划单位不能为空")
             .MaximumLength(20).WithMessage("计划单位长度不能超过20个字符");
@@ -78,6 +74,32 @@ public class TaktProductionPlanItemUpdateValidator : AbstractValidator<TaktProdu
     {
         RuleFor(x => x.ProductionPlanItemId)
             .GreaterThan(0).WithMessage("ProductionPlanItemID无效");
+        RuleFor(x => x.TenantCode)
+            .NotEmpty().WithMessage("租户编码不能为空")
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.CompanyCode)
+            .NotEmpty().WithMessage("公司代码不能为空")
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.ProductionPlanId)
+            .GreaterThanOrEqualTo(0).WithMessage("生产计划ID不能为负数");
+        RuleFor(x => x.ProductionPlanCode)
+            .NotEmpty().WithMessage("生产计划编码不能为空")
+            .MaximumLength(10).WithMessage("生产计划编码长度不能超过10个字符");
+        RuleFor(x => x.SalesPlanId)
+            .GreaterThanOrEqualTo(0).WithMessage("来源销售计划ID不能为负数");
+        RuleFor(x => x.MaterialCode)
+            .NotEmpty().WithMessage("物料编码不能为空")
+            .MaximumLength(20).WithMessage("物料编码长度不能超过20个字符");
+        RuleFor(x => x.MaterialName)
+            .NotEmpty().WithMessage("物料名称不能为空")
+            .MaximumLength(40).WithMessage("物料名称长度不能超过40个字符");
+        RuleFor(x => x.PlanUnit)
+            .NotEmpty().WithMessage("计划单位不能为空")
+            .MaximumLength(20).WithMessage("计划单位长度不能超过20个字符");
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
     }
 }
 
@@ -106,16 +128,12 @@ public class TaktProductionPlanItemImportValidator : AbstractValidator<TaktProdu
             .MaximumLength(10).WithMessage("生产计划编码长度不能超过10个字符");
         RuleFor(x => x.SalesPlanId)
             .GreaterThanOrEqualTo(0).WithMessage("来源销售计划ID不能为负数");
-        RuleFor(x => x.SalesPlanCode)
-            .MaximumLength(10).WithMessage("来源销售计划编码长度不能超过10个字符").When(x => !string.IsNullOrWhiteSpace(x.SalesPlanCode));
         RuleFor(x => x.MaterialCode)
             .NotEmpty().WithMessage("物料编码不能为空")
             .MaximumLength(20).WithMessage("物料编码长度不能超过20个字符");
         RuleFor(x => x.MaterialName)
             .NotEmpty().WithMessage("物料名称不能为空")
             .MaximumLength(40).WithMessage("物料名称长度不能超过40个字符");
-        RuleFor(x => x.MaterialSpecification)
-            .MaximumLength(80).WithMessage("物料规格长度不能超过80个字符").When(x => !string.IsNullOrWhiteSpace(x.MaterialSpecification));
         RuleFor(x => x.PlanUnit)
             .NotEmpty().WithMessage("计划单位不能为空")
             .MaximumLength(20).WithMessage("计划单位长度不能超过20个字符");

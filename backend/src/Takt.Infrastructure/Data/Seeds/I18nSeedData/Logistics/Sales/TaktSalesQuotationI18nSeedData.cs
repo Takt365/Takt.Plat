@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Sales
 // 文件名称：TaktSalesQuotationI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSalesQuotation 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktSalesQuotationI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salesquotation._self", "zh-HK", "Takt销售报价信息_hk", "实体名称"),
 
             // entity.salesquotation.plantcode
-            new TranslationSeedItem("entity.salesquotation.plantcode", "en-US", "工厂代码_us", "工厂代码"),
+            new TranslationSeedItem("entity.salesquotation.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
             // entity.salesquotation.plantcode
-            new TranslationSeedItem("entity.salesquotation.plantcode", "ja-JP", "工厂代码_jp", "工厂代码"),
+            new TranslationSeedItem("entity.salesquotation.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
             // entity.salesquotation.plantcode
-            new TranslationSeedItem("entity.salesquotation.plantcode", "zh-CN", "工厂代码", "工厂代码"),
+            new TranslationSeedItem("entity.salesquotation.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
             // entity.salesquotation.plantcode
-            new TranslationSeedItem("entity.salesquotation.plantcode", "zh-HK", "工厂代码_hk", "工厂代码"),
+            new TranslationSeedItem("entity.salesquotation.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
 
             // entity.salesquotation.code
             new TranslationSeedItem("entity.salesquotation.code", "en-US", "销售报价编码_us", "销售报价编码（唯一索引）"),
@@ -109,13 +109,13 @@ public class TaktSalesQuotationI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salesquotation.code", "zh-HK", "销售报价编码_hk", "销售报价编码（唯一索引）"),
 
             // entity.salesquotation.customercode
-            new TranslationSeedItem("entity.salesquotation.customercode", "en-US", "客户编码_us", "客户编码"),
+            new TranslationSeedItem("entity.salesquotation.customercode", "en-US", "客户编码_us", "客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）"),
             // entity.salesquotation.customercode
-            new TranslationSeedItem("entity.salesquotation.customercode", "ja-JP", "客户编码_jp", "客户编码"),
+            new TranslationSeedItem("entity.salesquotation.customercode", "ja-JP", "客户编码_jp", "客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）"),
             // entity.salesquotation.customercode
-            new TranslationSeedItem("entity.salesquotation.customercode", "zh-CN", "客户编码", "客户编码"),
+            new TranslationSeedItem("entity.salesquotation.customercode", "zh-CN", "客户编码", "客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）"),
             // entity.salesquotation.customercode
-            new TranslationSeedItem("entity.salesquotation.customercode", "zh-HK", "客户编码_hk", "客户编码"),
+            new TranslationSeedItem("entity.salesquotation.customercode", "zh-HK", "客户编码_hk", "客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）"),
 
             // entity.salesquotation.customername
             new TranslationSeedItem("entity.salesquotation.customername", "en-US", "客户名称_us", "客户名称"),
@@ -145,13 +145,13 @@ public class TaktSalesQuotationI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salesquotation.validuntildate", "zh-HK", "报价有效期至_hk", "报价有效期至"),
 
             // entity.salesquotation.salesby
-            new TranslationSeedItem("entity.salesquotation.salesby", "en-US", "销售员_us", "销售员（人员代码）"),
+            new TranslationSeedItem("entity.salesquotation.salesby", "en-US", "销售员_us", "销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）"),
             // entity.salesquotation.salesby
-            new TranslationSeedItem("entity.salesquotation.salesby", "ja-JP", "销售员_jp", "销售员（人员代码）"),
+            new TranslationSeedItem("entity.salesquotation.salesby", "ja-JP", "销售员_jp", "销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）"),
             // entity.salesquotation.salesby
-            new TranslationSeedItem("entity.salesquotation.salesby", "zh-CN", "销售员", "销售员（人员代码）"),
+            new TranslationSeedItem("entity.salesquotation.salesby", "zh-CN", "销售员", "销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）"),
             // entity.salesquotation.salesby
-            new TranslationSeedItem("entity.salesquotation.salesby", "zh-HK", "销售员_hk", "销售员（人员代码）"),
+            new TranslationSeedItem("entity.salesquotation.salesby", "zh-HK", "销售员_hk", "销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）"),
 
             // entity.salesquotation.totalquantity
             new TranslationSeedItem("entity.salesquotation.totalquantity", "en-US", "报价总数量_us", "报价总数量（基本单位数量）"),
@@ -198,23 +198,23 @@ public class TaktSalesQuotationI18nSeedData : ITaktSeedDataCoordinator
             // entity.salesquotation.actualamount
             new TranslationSeedItem("entity.salesquotation.actualamount", "zh-HK", "报价实付金额_hk", "报价实付金额"),
 
-            // entity.salesquotation.quotationstatus
-            new TranslationSeedItem("entity.salesquotation.quotationstatus", "en-US", "报价状态_us", "报价状态（字典 logistics_quotation_status；0=草稿，1=已发送，2=已接受，3=已拒绝，4=已过期，5=已作废）"),
-            // entity.salesquotation.quotationstatus
-            new TranslationSeedItem("entity.salesquotation.quotationstatus", "ja-JP", "报价状态_jp", "报价状态（字典 logistics_quotation_status；0=草稿，1=已发送，2=已接受，3=已拒绝，4=已过期，5=已作废）"),
-            // entity.salesquotation.quotationstatus
-            new TranslationSeedItem("entity.salesquotation.quotationstatus", "zh-CN", "报价状态", "报价状态（字典 logistics_quotation_status；0=草稿，1=已发送，2=已接受，3=已拒绝，4=已过期，5=已作废）"),
-            // entity.salesquotation.quotationstatus
-            new TranslationSeedItem("entity.salesquotation.quotationstatus", "zh-HK", "报价状态_hk", "报价状态（字典 logistics_quotation_status；0=草稿，1=已发送，2=已接受，3=已拒绝，4=已过期，5=已作废）"),
+            // entity.salesquotation.salesordercode
+            new TranslationSeedItem("entity.salesquotation.salesordercode", "en-US", "销售订单编码_us", "关联销售订单编码（报价转订单后回填；选项 TaktSalesOrders/options，DictValue=SalesOrderCode）"),
+            // entity.salesquotation.salesordercode
+            new TranslationSeedItem("entity.salesquotation.salesordercode", "ja-JP", "销售订单编码_jp", "关联销售订单编码（报价转订单后回填；选项 TaktSalesOrders/options，DictValue=SalesOrderCode）"),
+            // entity.salesquotation.salesordercode
+            new TranslationSeedItem("entity.salesquotation.salesordercode", "zh-CN", "销售订单编码", "关联销售订单编码（报价转订单后回填；选项 TaktSalesOrders/options，DictValue=SalesOrderCode）"),
+            // entity.salesquotation.salesordercode
+            new TranslationSeedItem("entity.salesquotation.salesordercode", "zh-HK", "销售订单编码_hk", "关联销售订单编码（报价转订单后回填；选项 TaktSalesOrders/options，DictValue=SalesOrderCode）"),
 
-            // entity.salesquotation.salesordercode
-            new TranslationSeedItem("entity.salesquotation.salesordercode", "en-US", "销售订单编码_us", "关联销售订单编码（报价转订单后回填）"),
-            // entity.salesquotation.salesordercode
-            new TranslationSeedItem("entity.salesquotation.salesordercode", "ja-JP", "销售订单编码_jp", "关联销售订单编码（报价转订单后回填）"),
-            // entity.salesquotation.salesordercode
-            new TranslationSeedItem("entity.salesquotation.salesordercode", "zh-CN", "销售订单编码", "关联销售订单编码（报价转订单后回填）"),
-            // entity.salesquotation.salesordercode
-            new TranslationSeedItem("entity.salesquotation.salesordercode", "zh-HK", "销售订单编码_hk", "关联销售订单编码（报价转订单后回填）"),
+            // entity.salesquotation.quotationstatus
+            new TranslationSeedItem("entity.salesquotation.quotationstatus", "en-US", "报价状态_us", "报价状态（字典 logistics_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）"),
+            // entity.salesquotation.quotationstatus
+            new TranslationSeedItem("entity.salesquotation.quotationstatus", "ja-JP", "报价状态_jp", "报价状态（字典 logistics_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）"),
+            // entity.salesquotation.quotationstatus
+            new TranslationSeedItem("entity.salesquotation.quotationstatus", "zh-CN", "报价状态", "报价状态（字典 logistics_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）"),
+            // entity.salesquotation.quotationstatus
+            new TranslationSeedItem("entity.salesquotation.quotationstatus", "zh-HK", "报价状态_hk", "报价状态（字典 logistics_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）"),
 
             // entity.salesquotation.items
             new TranslationSeedItem("entity.salesquotation.items", "en-US", "销售报价明细列表_us", "销售报价明细列表（主子表关系）"),

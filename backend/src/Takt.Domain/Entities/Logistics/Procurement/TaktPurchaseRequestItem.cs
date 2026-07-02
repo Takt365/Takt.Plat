@@ -26,7 +26,7 @@ namespace Takt.Domain.Entities.Logistics.Procurement;
 public class TaktPurchaseRequestItem : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 采购申请ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 采购申请 ID（关联 TaktPurchaseRequest.Id，选项 TaktPurchaseRequests/options）
     /// </summary>
     [SugarColumn(ColumnName = "purchase_request_id", ColumnDescription = "采购申请ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -43,12 +43,16 @@ public class TaktPurchaseRequestItem : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "line_number", ColumnDescription = "行号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int LineNumber { get; set; } = 0;
-
+    /// <summary>
+    /// 分配类别（字典 logistics_allocation_category：A=资产，K=成本中心，F=订单；会签明细、采购申请明细、费用单明细共用）
+    /// </summary>
+    [SugarColumn(ColumnName = "allocation_category", ColumnDescription = "分配类别", ColumnDataType = "varchar", Length = 40, IsNullable = false)]
+    public string AllocationCategory { get; set; } = string.Empty;
     /// <summary>
     /// 物料编码
     /// </summary>
-    [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
-    public string MaterialCode { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = true)]
+    public string? MaterialCode { get; set; }
 
     /// <summary>
     /// 物料名称
@@ -71,25 +75,31 @@ public class TaktPurchaseRequestItem : TaktCompanyEntityBase
     /// <summary>
     /// 申请数量（基本单位数量）
     /// </summary>
-    [SugarColumn(ColumnName = "request_quantity", ColumnDescription = "申请数量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 4, IsNullable = false, DefaultValue = "0")]
+    [SugarColumn(ColumnName = "request_quantity", ColumnDescription = "申请数量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "0")]
     public decimal RequestQuantity { get; set; } = 0;
 
     /// <summary>
     /// 已转订单数量（基本单位数量）
     /// </summary>
-    [SugarColumn(ColumnName = "converted_quantity", ColumnDescription = "已转订单数量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 4, IsNullable = false, DefaultValue = "0")]
+    [SugarColumn(ColumnName = "converted_quantity", ColumnDescription = "已转订单数量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "0")]
     public decimal ConvertedQuantity { get; set; } = 0;
+
+    /// <summary>
+    /// 价格单位（字典 logistics_price_unit_param：1/100/1000/10000；默认 1000）
+    /// </summary>
+    [SugarColumn(ColumnName = "purchase_per_unit", ColumnDescription = "价格单位", ColumnDataType = "int", IsNullable = false, DefaultValue = "1000")]
+    public int PurchasePerUnit { get; set; } = 1000;
 
     /// <summary>
     /// 预计单价（精确到分，存储为整数，单位为分）
     /// </summary>
-    [SugarColumn(ColumnName = "estimated_unit_price", ColumnDescription = "预计单价", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
+    [SugarColumn(ColumnName = "estimated_unit_price", ColumnDescription = "预计单价", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "0")]
     public decimal EstimatedUnitPrice { get; set; } = 0;
 
     /// <summary>
     /// 预计金额（精确到分，存储为整数，单位为分）
     /// </summary>
-    [SugarColumn(ColumnName = "estimated_amount", ColumnDescription = "预计金额", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
+    [SugarColumn(ColumnName = "estimated_amount", ColumnDescription = "预计金额", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "0")]
     public decimal EstimatedAmount { get; set; } = 0;
 
     /// <summary>

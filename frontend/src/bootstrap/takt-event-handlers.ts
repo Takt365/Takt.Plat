@@ -31,6 +31,7 @@ import {
   performHardLogoutRedirect,
   runServerSignOutIfLoggedInAsync,
   TAKT_LOGOUT_FLASH_STORAGE_KEY,
+  TAKT_TABS_STORAGE_KEY,
   withLogoutInProgress,
 } from '@/bootstrap/takt-logout-flow';
 
@@ -116,6 +117,7 @@ function performLogout(
   useHeaderNotificationStore().resetHeaderNotifications();
 
   resetRouterDynamicRoutes();
+  localStorage.removeItem(TAKT_TABS_STORAGE_KEY);
 
   redirectToLoginPage(false);
 
@@ -161,16 +163,49 @@ function showAntdMessage(type: NotificationType, content: string, description?: 
  * @returns {Promise<void>}
  */
 export async function executeIdleLogoutAsync(message?: string): Promise<void> {
+  if (isLogoutInProgress()) {
+    return;
+  }
+
+  const logoutMessage = message ?? translateLocaleMessage('common.tip.session.idle.logout');
+  await runServerSignOutIfLoggedInAsync();
   await withLogoutInProgress(async () => {
-    const logoutMessage = message ?? translateLocaleMessage('common.tip.session.idle.logout');
+    performHardLogoutRedirect(logoutMessage, 'warning');
+  });
+}
+
+/**
+ * 主动登出（手动 / EventBus user:logout）：先服务端 signOut，再清前端
+ * @param payload 登出选项
+ * @returns {Promise<void>}
+ */
+export async function executeUserLogoutAsync(
+  payload?: import('@/types/event').Events['user:logout'],
+): Promise<void> {
+  if (isLogoutInProgress()) {
+    return;
+  }
+
+  EventBus.emit('user:logout', payload);
+
+  const hardRedirect = payload?.hardRedirect === true;
+  if (!hardRedirect) {
     await runServerSignOutIfLoggedInAsync();
-    performLogout(logoutMessage, 'warning', { hardRedirect: true });
+  }
+
+  await withLogoutInProgress(async () => {
+    const toastMessage = payload?.message;
+    performLogout(
+      toastMessage,
+      toastMessage ? 'warning' : 'error',
+      hardRedirect ? { hardRedirect: true } : undefined,
+    );
   });
 }
 
 /**
  * 注册全局事件订阅（在 createApp 且 app.use(pinia)、app.use(router) 之后调用一次）
- * @description 订阅 auth:session-expired、auth:idle-timeout、user:logout、notification:show、
+ * @description 订阅 auth:session-expired、auth:idle-timeout、notification:show、
  *   user:login、menu:refresh、tenant:change、company:change、theme:change、locale:change
  * @returns {void}
  */
@@ -190,28 +225,19 @@ export function registerTaktEventHandlers(): void {
       return;
     }
 
-    void withLogoutInProgress(async () => {
-      performLogout(logoutMessage, 'error', { hardRedirect: true });
-    });
+    void (async () => {
+      if (isLogoutInProgress()) {
+        return;
+      }
+      await runServerSignOutIfLoggedInAsync();
+      await withLogoutInProgress(async () => {
+        performLogout(logoutMessage, 'error', { hardRedirect: true });
+      });
+    })();
   });
 
   EventBus.on('auth:idle-timeout', (payload) => {
     void executeIdleLogoutAsync(payload?.message);
-  });
-
-  EventBus.on('user:logout', (payload) => {
-    void withLogoutInProgress(async () => {
-      const hardRedirect = payload?.hardRedirect === true;
-      if (!hardRedirect) {
-        await runServerSignOutIfLoggedInAsync();
-      }
-      const message = payload?.message;
-      performLogout(
-        message,
-        message ? 'warning' : 'error',
-        hardRedirect ? { hardRedirect: true } : undefined,
-      );
-    });
   });
 
   // 全局 Toast：request / Store 等非 UI 层通过 EventBus 触发

@@ -138,8 +138,8 @@ public sealed class TaktOpenIddictLogHandler
         string tenantCode,
         string? companyCode,
         string username,
-        TaktLoginType loginType,
-        TaktLoginResult loginResult,
+        string loginType,
+        string loginResult,
         string? loginMessage = null,
         long? userId = null,
         long? elapsedMs = null)
@@ -173,7 +173,7 @@ public sealed class TaktOpenIddictLogHandler
     {
         return claim.Type switch
         {
-            Claims.Name when claim.Subject!.HasScope(Scopes.Profile)
+            Claims.Name or Claims.PreferredUsername
                 => new[] { Destinations.AccessToken, Destinations.IdentityToken },
 
             Claims.Email when claim.Subject!.HasScope(Scopes.Email)

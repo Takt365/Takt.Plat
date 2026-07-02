@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Planning
 // 文件名称：TaktMasterDemandScheduleDtos.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：MasterDemandSchedule 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktMasterDemandSchedule 生成，请按需审阅）
 // 
@@ -134,7 +134,7 @@ public class TaktMasterDemandScheduleQueryDto : TaktPagedQuery
     public int? ScheduleStatus { get; set; }
 
     /// <summary>
-    /// 审批状态（TaktApprovalStatus）
+    /// 审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）
     /// </summary>
     public TaktApprovalStatus? ApprovalStatus { get; set; }
 
@@ -217,7 +217,7 @@ public class TaktMasterDemandScheduleCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -344,6 +344,16 @@ public class TaktMasterDemandScheduleTemplateDto
     public string? MdsCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 计划周期开始
+    /// </summary>
+    public DateTime? PlanPeriodStart { get; set; }
+
+    /// <summary>
+    /// 计划周期结束
+    /// </summary>
+    public DateTime? PlanPeriodEnd { get; set; }
+
+    /// <summary>
     /// 时间桶粒度（字典 mps_time_bucket_type；0=日，1=周，2=月）
     /// </summary>
     public int? BucketType { get; set; }
@@ -352,6 +362,11 @@ public class TaktMasterDemandScheduleTemplateDto
     /// 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
     public int? ScheduleStatus { get; set; }
+
+    /// <summary>
+    /// MDS 明细行（按物料与时间桶）（子表，级联保存）
+    /// </summary>
+    public List<TaktMasterDemandScheduleLineCreateDto>? Lines { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -381,7 +396,7 @@ public class TaktMasterDemandScheduleImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -396,6 +411,16 @@ public class TaktMasterDemandScheduleImportDto
     public string? MdsCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 计划周期开始
+    /// </summary>
+    public DateTime? PlanPeriodStart { get; set; }
+
+    /// <summary>
+    /// 计划周期结束
+    /// </summary>
+    public DateTime? PlanPeriodEnd { get; set; }
+
+    /// <summary>
     /// 时间桶粒度（字典 mps_time_bucket_type；0=日，1=周，2=月）
     /// </summary>
     public int? BucketType { get; set; }
@@ -404,6 +429,11 @@ public class TaktMasterDemandScheduleImportDto
     /// 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
     public int? ScheduleStatus { get; set; }
+
+    /// <summary>
+    /// MDS 明细行（按物料与时间桶）（子表，级联保存）
+    /// </summary>
+    public List<TaktMasterDemandScheduleLineCreateDto>? Lines { get; set; }
 
     /// <summary>
     /// 扩展字段JSON

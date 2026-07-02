@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/materials
 // 文件名称：storage-location.d.ts
-// 创建时间：2026-06-21
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/materials 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -69,7 +69,7 @@ export interface StorageLocation extends CompanyDtoBase {
   locationStatus: number;
 
   /**
-   * 是否内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+   * 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
    */
   isBuiltIn: number;
 
@@ -139,7 +139,7 @@ export interface StorageLocationQuery extends TaktPagedQuery {
   locationStatus?: number;
 
   /**
-   * 是否内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+   * 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
    */
   isBuiltIn?: number;
 
@@ -188,7 +188,7 @@ export interface StorageLocationCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -228,7 +228,7 @@ export interface StorageLocationCreate {
   locationStatus: number;
 
   /**
-   * 是否内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+   * 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
    */
   isBuiltIn: number;
 
@@ -350,7 +350,7 @@ export interface StorageLocationTemplate {
   locationStatus?: number;
 
   /**
-   * 是否内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+   * 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
    */
   isBuiltIn?: number;
 
@@ -384,7 +384,7 @@ export interface StorageLocationImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -424,7 +424,7 @@ export interface StorageLocationImport {
   locationStatus?: number;
 
   /**
-   * 是否内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+   * 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
    */
   isBuiltIn?: number;
 
@@ -493,7 +493,7 @@ export interface StorageLocationExport {
   locationStatus: number;
 
   /**
-   * 是否内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+   * 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
    */
   isBuiltIn: number;
 

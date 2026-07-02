@@ -54,18 +54,18 @@ public class TaktPayScale : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "max_salary", ColumnDescription = "上限金额", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
     public decimal MaxSalary { get; set; }
     /// <summary>
+    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// </summary>
+    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
+    public string RelatedPlant { get; set; } = string.Empty;
+    /// <summary>
     /// 排序号
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; }
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
     /// </summary>
     [SugarColumn(ColumnName = "scale_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int ScaleStatus { get; set; } = 1;
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = true)]
-    public string? RelatedPlant { get; set; }
 }

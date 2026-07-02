@@ -23,41 +23,35 @@ namespace Takt.Domain.Entities.HumanResource.Personnel;
 public class TaktEmployeeSkill : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 员工ID
+    /// 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [SugarColumn(ColumnName = "employee_id", ColumnDescription = "员工ID", ColumnDataType = "bigint", IsNullable = false)]
     public long EmployeeId { get; set; }
-
     /// <summary>
     /// 技能名称
     /// </summary>
     [SugarColumn(ColumnName = "skill_name", ColumnDescription = "技能名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
     public string SkillName { get; set; } = string.Empty;
-
     /// <summary>
-    /// 技能等级（0=入门，1=熟练，2=精通，3=专家）
+    /// 技能等级（字典 hr_employee_skill_level；0=入门 1=熟练 2=精通 3=专家）
     /// </summary>
     [SugarColumn(ColumnName = "skill_level", ColumnDescription = "技能等级", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SkillLevel { get; set; }
-
     /// <summary>
     /// 证书名称
     /// </summary>
     [SugarColumn(ColumnName = "certificate_name", ColumnDescription = "证书名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
     public string? CertificateName { get; set; }
-
     /// <summary>
     /// 证书编号
     /// </summary>
     [SugarColumn(ColumnName = "certificate_no", ColumnDescription = "证书编号", ColumnDataType = "varchar", Length = 100, IsNullable = true)]
     public string? CertificateNo { get; set; }
-
     /// <summary>
     /// 取得日期
     /// </summary>
     [SugarColumn(ColumnName = "obtained_date", ColumnDescription = "取得日期", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? ObtainedDate { get; set; }
-
     /// <summary>
     /// 到期日期
     /// </summary>

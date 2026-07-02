@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Accounting.Controlling
 // 文件名称：TaktCostCenterChangeLogsController.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-07-02
 // 创建人：Takt365(Cursor AI)
 // 功能描述：成本中心变更记录控制器
 // 
@@ -41,7 +41,7 @@ public class TaktCostCenterChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("accounting:controlling:cost:center:change:log:list", "成本中心变更记录列表")]
+    [TaktPermission("accounting:controlling:cost:center:list", "成本中心变更记录列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetCostCenterChangeLogListAsync([FromQuery] TaktCostCenterChangeLogQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktCostCenterChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="id">成本中心变更记录ID</param>
     /// <returns>成本中心变更记录DTO</returns>
-    [TaktPermission("accounting:controlling:cost:center:change:log:query", "成本中心变更记录详情")]
+    [TaktPermission("accounting:controlling:cost:center:query", "成本中心变更记录详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetCostCenterChangeLogByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktCostCenterChangeLogsController : TaktControllerBase
     /// 获取成本中心变更记录选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("accounting:controlling:cost:center:change:log:query", "成本中心变更记录选项")]
+    [TaktPermission("accounting:controlling:cost:center:query", "成本中心变更记录选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetCostCenterChangeLogOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktCostCenterChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>成本中心变更记录DTO</returns>
-    [TaktPermission("accounting:controlling:cost:center:change:log:create", "创建成本中心变更记录")]
+    [TaktPermission("accounting:controlling:cost:center:create", "创建成本中心变更记录")]
     [HttpPost]
     public async Task<IActionResult> CreateCostCenterChangeLogAsync([FromBody] TaktCostCenterChangeLogCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktCostCenterChangeLogsController : TaktControllerBase
     /// <param name="id">成本中心变更记录ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>成本中心变更记录DTO</returns>
-    [TaktPermission("accounting:controlling:cost:center:change:log:update", "更新成本中心变更记录")]
+    [TaktPermission("accounting:controlling:cost:center:update", "更新成本中心变更记录")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateCostCenterChangeLogAsync(long id, [FromBody] TaktCostCenterChangeLogUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktCostCenterChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="id">成本中心变更记录ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("accounting:controlling:cost:center:change:log:delete", "删除成本中心变更记录")]
+    [TaktPermission("accounting:controlling:cost:center:delete", "删除成本中心变更记录")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteCostCenterChangeLogByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktCostCenterChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("accounting:controlling:cost:center:change:log:delete", "批量删除成本中心变更记录")]
+    [TaktPermission("accounting:controlling:cost:center:delete", "批量删除成本中心变更记录")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteCostCenterChangeLogBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktCostCenterChangeLogsController : TaktControllerBase
     /// 导出成本中心变更记录
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("accounting:controlling:cost:center:change:log:export", "导出成本中心变更记录")]
+    [TaktPermission("accounting:controlling:cost:center:export", "导出成本中心变更记录")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportCostCenterChangeLogAsync([FromQuery] TaktCostCenterChangeLogQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

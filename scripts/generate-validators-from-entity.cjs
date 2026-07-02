@@ -17,8 +17,10 @@ const {
   logGeneratedFileWritePolicy,
   parseAllOnlyGenerateArgs,
   sanitizeXmlDocPlainText,
+  parseEntityClassHeaderFromCsContent,
+  ENTITY_CLASS_HEADER_REGEX,
 } = require('./generate-script-common.cjs');
-const { isRbacJunctionEntity } = require('./generate-entity-exclusions.cjs');
+const { isRbacJunctionEntity, isManualDtoEntity } = require('./generate-entity-exclusions.cjs');
 
 // ========================================
 // 配置（与 generate-dtos-from-entity.cjs 对齐）
@@ -120,10 +122,13 @@ function shouldUseRelationValidator(entityShort, dtoContent) {
   return isRelationDtoFile(dtoContent, entityShort);
 }
 
+/**
+ * 导入校验用业务字段（与 CreateDto 业务标量字段一致）
+ * @param {object[]} createProps
+ * @returns {object[]}
+ */
 function getTemplateImportProps(createProps) {
-  return createProps
-    .filter((p) => p.bareType === 'string' || p.bareType.startsWith('Takt') || p.bareType === 'int' || p.bareType === 'long')
-    .slice(0, 12);
+  return createProps;
 }
 
 function isCreateRequiredString(prop) {
@@ -234,6 +239,25 @@ function extractClassBlock(content, className) {
 }
 
 /**
+ * 解析 DTO 类声明中的基类名（TaktCreateUserDto : TaktUserCreateDto）
+ * @param {string} content
+ * @param {string} className
+ * @returns {string|null}
+ */
+function extractDtoBaseClassName(content, className) {
+  const headerRegex = new RegExp(
+    `public\\s+(?:partial\\s+)?class\\s+${className}\\b([^\\{]*)\\{`,
+    's',
+  );
+  const headerMatch = headerRegex.exec(content);
+  if (!headerMatch) {
+    return null;
+  }
+  const inheritMatch = headerMatch[1].match(/:\s*(Takt\w+)/);
+  return inheritMatch ? inheritMatch[1] : null;
+}
+
+/**
  * 提取 DTO 类属性名（含基类继承字段）
  * @param {string} dtoContent
  * @param {string} className
@@ -241,19 +265,14 @@ function extractClassBlock(content, className) {
  */
 function extractDtoPropertyNames(dtoContent, className) {
   const names = new Set();
-  const startRegex = new RegExp(`public\\s+(?:partial\\s+)?class\\s+${className}\\b[^\\{]*(?::\\s*(\\w+))?`);
-  const startMatch = startRegex.exec(dtoContent);
-  if (!startMatch) {
-    return names;
-  }
-  const baseClass = startMatch[1];
+  const baseClass = extractDtoBaseClassName(dtoContent, className);
   if (baseClass) {
     for (const name of extractDtoPropertyNames(dtoContent, baseClass)) {
       names.add(name);
     }
   }
   const block = extractClassBlock(dtoContent, className);
-  const propRegex = /public\s+[\w?<>,\s]+\s+(\w+)\s*\{/g;
+  const propRegex = /public\s+[\w?<>,\s\[\]]+\s+(\w+)\s*\{/g;
   let m;
   while ((m = propRegex.exec(block)) !== null) {
     names.add(m[1]);
@@ -298,13 +317,28 @@ function resolveDtoClassNames(entityShort, dtoContent) {
 /**
  * 按 DTO 实际字段过滤实体属性（仅生成 DTO 上存在的校验）
  * @param {object[]} entityProps
- * @param {Set<string>} dtoPropNames
+ * @param {Set<string>|null} dtoPropNames
  */
 function filterPropsForDto(entityProps, dtoPropNames) {
-  if (!dtoPropNames || dtoPropNames.size === 0) {
+  if (dtoPropNames === null || dtoPropNames === undefined) {
     return entityProps;
   }
+  if (dtoPropNames.size === 0) {
+    return [];
+  }
   return entityProps.filter((p) => dtoPropNames.has(p.name));
+}
+
+/**
+ * 实体 string? 不参与 Create/Update 校验；非空 string 必须校验
+ * @param {object} prop
+ * @returns {boolean}
+ */
+function shouldValidateProperty(prop) {
+  if (prop.bareType === 'string' && prop.isNullable) {
+    return false;
+  }
+  return true;
 }
 
 function buildEntityPropMap(entity) {
@@ -313,13 +347,14 @@ function buildEntityPropMap(entity) {
 
 function parseEntityFile(filePath) {
   const content = fs.readFileSync(filePath, 'utf-8');
-  const classHeaderMatch = content.match(/public\s+class\s+(Takt\w+)\s*:\s*(Takt\w+EntityBase)\s*\{/);
-  if (!classHeaderMatch) {
+  const classHeader = parseEntityClassHeaderFromCsContent(content);
+  if (!classHeader) {
     return null;
   }
 
-  const className = classHeaderMatch[1];
-  const entityBase = classHeaderMatch[2];
+  const className = classHeader.className;
+  const entityBase = classHeader.entityBase;
+  const classHeaderMatch = content.match(ENTITY_CLASS_HEADER_REGEX);
   const openBraceIndex = classHeaderMatch.index + classHeaderMatch[0].length - 1;
   const classBody = extractClassBody(content, openBraceIndex);
   const namespaceMatch = content.match(/namespace\s+([\w.]+);/);
@@ -374,6 +409,9 @@ function parseEntityFile(filePath) {
  */
 function buildValidationRules(prop, options) {
   const { mode = 'create', required = false } = options;
+  if (!shouldValidateProperty(prop)) {
+    return [];
+  }
   const label = escapeCsharpString(fieldLabel(prop));
   const rules = [];
 
@@ -563,6 +601,9 @@ function generateValidatorFileContent(entity) {
   const createRules = [];
   createRules.push(...emitTenantCompanyScopeRules(entity.entityBase, 'create', createDtoPropNames));
   createProps.forEach((prop) => {
+    if (!shouldValidateProperty(prop)) {
+      return;
+    }
     const required = isCreateRequiredString(prop);
     const rule = emitRuleFor(prop, { mode: 'create', required });
     if (rule) {
@@ -602,6 +643,9 @@ function generateValidatorFileContent(entity) {
     const updateEntityProps = filterPropsForDto(entityCreateProps, updateDtoPropNames);
     const updateFieldRules = [];
     updateEntityProps.forEach((prop) => {
+      if (!shouldValidateProperty(prop)) {
+        return;
+      }
       const required = isCreateRequiredString(prop);
       const rule = emitRuleFor(prop, { mode: 'create', required });
       if (rule) {
@@ -653,6 +697,9 @@ function generateValidatorFileContent(entity) {
     const importRules = [];
     importRules.push(...emitTenantCompanyScopeRules(entity.entityBase, 'import', importDtoPropNames));
     importProps.forEach((prop) => {
+      if (!shouldValidateProperty(prop)) {
+        return;
+      }
       const required = isCreateRequiredString(prop);
       const rule = emitRuleFor(prop, { mode: 'import', required });
       if (rule) {
@@ -768,6 +815,11 @@ function scanEntities() {
         return;
       }
       if (!entry.name.startsWith('Takt') || !entry.name.endsWith('.cs') || entry.name === 'TaktCompanyEntityBase.cs') {
+        return;
+      }
+      const entityShort = entry.name.replace(/^Takt/, '').replace(/\.cs$/, '');
+      if (isManualDtoEntity(entityShort)) {
+        console.log(`⏭️  跳过手工维护验证器: Takt${entityShort}`);
         return;
       }
       const parsed = parseEntityFile(fullPath);

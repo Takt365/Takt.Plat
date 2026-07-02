@@ -267,18 +267,6 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.iqcorderitem.judgestatus')"
-                name="judgeStatus"
-              >
-                <a-input-number
-                  v-model:value="formState.judgeStatus"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.iqcorderitem.judgestatus') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
                 :label="t('entity.iqcorderitem.sampleserialno')"
                 name="sampleSerialNo"
               >
@@ -303,17 +291,7 @@
                 />
               </a-form-item>
             </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
                 :label="t('entity.iqcorderitem.inspectorby')"
                 name="inspectorBy"
@@ -327,6 +305,16 @@
                 />
               </a-form-item>
             </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-2"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
                 :label="t('entity.iqcorderitem.inspectiondate')"
@@ -342,13 +330,39 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.iqcorderitem.extfield')"
-                name="ExtField"
+                :label="t('entity.iqcorderitem.judgestatus')"
+                name="judgeStatus"
               >
+                <a-input-number
+                  v-model:value="formState.judgeStatus"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.iqcorderitem.judgestatus') })"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                name="extField"
+                class="takt-form-item-ext-field"
+              >
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t('common.page.entity.extfieldhint')"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ t('common.page.entity.extfield') }}</span>
+                  </span>
+                </template>
                 <a-textarea
-                  v-model:value="formState.ExtField"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.iqcorderitem.extfield') })"
-                  :rows="2"
+                  v-model:value="formState.extField"
+                  :placeholder="t('common.page.form.placeholder.extfield')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -395,6 +409,7 @@ import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import type { IqcOrderItemCreate } from '@/types/logistics/quality/operation/iqc-order-item'
+import { RiQuestionLine } from '@remixicon/vue'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -427,7 +442,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","iqcOrderId","iqcOrderCode","lineNumber","materialCode","materialName","batchNo","purchaseQuantity","standardCode","samplingSchemeCode","inspectionMethod","sampleQuantity","qualifiedQuantity","unqualifiedQuantity","inspectionReturnQuantity","judgeStatus","sampleSerialNo","inspectionDescription","inspectorBy","inspectionDate","ExtField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","iqcOrderId","iqcOrderCode","lineNumber","materialCode","materialName","batchNo","purchaseQuantity","standardCode","samplingSchemeCode","inspectionMethod","sampleQuantity","qualifiedQuantity","unqualifiedQuantity","inspectionReturnQuantity","sampleSerialNo","inspectionDescription","inspectorBy","inspectionDate","judgeStatus","extField","remark"]
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
 
@@ -718,19 +733,6 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
-  judgeStatus: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.iqcorderitem.judgestatus') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.iqcorderitem.judgestatus') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
   inspectorBy: [
     {
       required: true,
@@ -745,6 +747,19 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'change'
     }
   ],
+  judgeStatus: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.iqcorderitem.judgestatus') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.iqcorderitem.judgestatus') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */

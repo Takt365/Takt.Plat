@@ -130,12 +130,10 @@
                 :label="t('entity.serialoutbound.destination')"
                 name="destination"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.destination"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serialoutbound.destination') })"
-                  show-count
-                  :maxlength="200"
-                  allow-clear
+                  api-url="/api/TaktModelDestinations/options"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serialoutbound.destination') })"
                 />
               </a-form-item>
             </a-col>
@@ -144,10 +142,10 @@
                 :label="t('entity.serialoutbound.shippingmethod')"
                 name="shippingMethod"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.shippingMethod"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serialoutbound.shippingmethod') })"
-                  style="width: 100%"
+                  dict-type="logistics_shipping_method_type"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serialoutbound.shippingmethod') })"
                 />
               </a-form-item>
             </a-col>
@@ -156,12 +154,10 @@
                 :label="t('entity.serialoutbound.destinationport')"
                 name="destinationPort"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.destinationPort"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serialoutbound.destinationport') })"
-                  show-count
-                  :maxlength="200"
-                  allow-clear
+                  dict-type="logistics_destination_port_code"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serialoutbound.destinationport') })"
                 />
               </a-form-item>
             </a-col>
@@ -180,10 +176,10 @@
                 :label="t('entity.serialoutbound.outboundtype')"
                 name="outboundType"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.outboundType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serialoutbound.outboundtype') })"
-                  style="width: 100%"
+                  dict-type="logistics_outbound_type"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serialoutbound.outboundtype') })"
                 />
               </a-form-item>
             </a-col>
@@ -214,20 +210,6 @@
                   :maxlength="50"
                   allow-clear
                   :disabled="!!formData?.serialOutboundId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.serialoutbound.relatedcompany')"
-                name="relatedCompany"
-              >
-                <a-input
-                  v-model:value="formState.relatedCompany"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serialoutbound.relatedcompany') })"
-                  show-count
-                  :maxlength="4"
-                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -308,11 +290,13 @@
  * 序列号出库主表实体维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/serial/outbound/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import type { SerialOutboundCreate } from '@/types/logistics/serial/outbound'
+import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -345,7 +329,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","outboundNo","shippingInvoiceNo","outboundDate","destination","shippingMethod","destinationPort","outboundType","warehouseCode","locationCode","relatedCompany","totalQuantity","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","outboundNo","shippingInvoiceNo","outboundDate","destination","shippingMethod","destinationPort","outboundType","warehouseCode","locationCode","totalQuantity","extField","remark"]
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
 
@@ -460,11 +444,24 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
-/** 表单字段默认值（无字典默认项） */
-function applyFormDefaults(target: Record<string, unknown>) {
-  void target
+/** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
+const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  shippingMethod: 0,
+  outboundType: 5
 }
 
+/** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  Object.assign(target, FORM_FIELD_DEFAULTS)
+}
+
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载全量字典 */
+onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
+})
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 serialOutboundId 才视为编辑） */
 watch(
@@ -555,8 +552,8 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   destinationPort: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.serialoutbound.destinationport') }),
-      trigger: 'blur'
+      message: t('common.page.form.placeholder.select', { field: t('entity.serialoutbound.destinationport') }),
+      trigger: 'change'
     }
   ],
   outboundType: [{
@@ -583,13 +580,6 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     {
       required: true,
       message: t('common.page.form.placeholder.required', { field: t('entity.serialoutbound.locationcode') }),
-      trigger: 'blur'
-    }
-  ],
-  relatedCompany: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.serialoutbound.relatedcompany') }),
       trigger: 'blur'
     }
   ],

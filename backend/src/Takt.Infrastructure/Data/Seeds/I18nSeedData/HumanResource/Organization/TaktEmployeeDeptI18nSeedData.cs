@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Organization
 // 文件名称：TaktEmployeeDeptI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployeeDept 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,22 +91,22 @@ public class TaktEmployeeDeptI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.employeedept._self", "zh-HK", "员工-部门关联信息_hk", "实体名称"),
 
             // entity.employeedept.employeeid
-            new TranslationSeedItem("entity.employeedept.employeeid", "en-US", "员工ID_us", "员工ID"),
+            new TranslationSeedItem("entity.employeedept.employeeid", "en-US", "员工ID_us", "员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
             // entity.employeedept.employeeid
-            new TranslationSeedItem("entity.employeedept.employeeid", "ja-JP", "员工ID_jp", "员工ID"),
+            new TranslationSeedItem("entity.employeedept.employeeid", "ja-JP", "员工ID_jp", "员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
             // entity.employeedept.employeeid
-            new TranslationSeedItem("entity.employeedept.employeeid", "zh-CN", "员工ID", "员工ID"),
+            new TranslationSeedItem("entity.employeedept.employeeid", "zh-CN", "员工ID", "员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
             // entity.employeedept.employeeid
-            new TranslationSeedItem("entity.employeedept.employeeid", "zh-HK", "员工ID_hk", "员工ID"),
+            new TranslationSeedItem("entity.employeedept.employeeid", "zh-HK", "员工ID_hk", "员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
 
             // entity.employeedept.deptid
-            new TranslationSeedItem("entity.employeedept.deptid", "en-US", "部门ID_us", "部门ID"),
+            new TranslationSeedItem("entity.employeedept.deptid", "en-US", "部门ID_us", "部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
             // entity.employeedept.deptid
-            new TranslationSeedItem("entity.employeedept.deptid", "ja-JP", "部门ID_jp", "部门ID"),
+            new TranslationSeedItem("entity.employeedept.deptid", "ja-JP", "部门ID_jp", "部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
             // entity.employeedept.deptid
-            new TranslationSeedItem("entity.employeedept.deptid", "zh-CN", "部门ID", "部门ID"),
+            new TranslationSeedItem("entity.employeedept.deptid", "zh-CN", "部门ID", "部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
             // entity.employeedept.deptid
-            new TranslationSeedItem("entity.employeedept.deptid", "zh-HK", "部门ID_hk", "部门ID"),
+            new TranslationSeedItem("entity.employeedept.deptid", "zh-HK", "部门ID_hk", "部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
 
             // entity.employeedept.employee
             new TranslationSeedItem("entity.employeedept.employee", "en-US", "员工_us", "员工（多对一）"),

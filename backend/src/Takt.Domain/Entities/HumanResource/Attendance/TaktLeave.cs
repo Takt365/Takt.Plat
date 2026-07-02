@@ -29,7 +29,7 @@ namespace Takt.Domain.Entities.HumanResource.Attendance;
 public class TaktLeave : TaktApprovalEntityBase
 {
     /// <summary>
-    /// 员工 ID（请假归属员工）
+    /// 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [SugarColumn(ColumnName = "employee_id", ColumnDescription = "员工ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -40,7 +40,7 @@ public class TaktLeave : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "employee_name", ColumnDescription = "员工姓名", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string EmployeeName { get; set; } = string.Empty;
     /// <summary>
-    /// 部门 ID
+    /// 部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     [SugarColumn(ColumnName = "dept_id", ColumnDescription = "部门ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -51,7 +51,7 @@ public class TaktLeave : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "dept_name", ColumnDescription = "部门名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
     public string? DeptName { get; set; }
     /// <summary>
-    /// 请假类型（字典 sys_leave_type）
+    /// 请假类型（字典 sys_leave_type；列存 DictValue）
     /// </summary>
     [SugarColumn(ColumnName = "leave_type", ColumnDescription = "请假类型", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string LeaveType { get; set; } = string.Empty;
@@ -71,17 +71,12 @@ public class TaktLeave : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "reason", ColumnDescription = "请假事由", ColumnDataType = "nvarchar", Length = 500, IsNullable = false, DefaultValue = "")]
     public string Reason { get; set; } = string.Empty;
     /// <summary>
-    /// 关联工厂
+    /// 证明附件（JSON 列表，由 TaktFile 统一上传）
     /// </summary>
-    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = true)]
-    public string? RelatedPlant { get; set; }
+    [SugarColumn(ColumnName = "attachments", ColumnDescription = "证明附件JSON", ColumnDataType = "nvarchar", Length = -1, IsNullable = true)]
+    public string? Attachments { get; set; }
     /// <summary>
-    /// 证明附件 JSON（与 TaktFile 字段对齐的数组）
-    /// </summary>
-    [SugarColumn(ColumnName = "proof_attachments_json", ColumnDescription = "证明附件JSON", ColumnDataType = "nvarchar", Length = -1, IsNullable = true)]
-    public string? ProofAttachmentsJson { get; set; }
-    /// <summary>
-    /// 经办人（关联 TaktEmployee）
+    /// 经办人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [SugarColumn(ColumnName = "handling_by", ColumnDescription = "经办人", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -97,7 +92,12 @@ public class TaktLeave : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "handling_comment", ColumnDescription = "经办备注", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
     public string? HandlingComment { get; set; }
     /// <summary>
-    /// 请假状态（字典 sys_approval_status；与 ApprovalStatus 取值一致：0=待审批 1=审批中 2=已通过 3=已驳回 4=已撤回 5=已终止）
+    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// </summary>
+    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
+    public string RelatedPlant { get; set; } = string.Empty;
+    /// <summary>
+    /// 请假状态（字典 sys_approval_status；0=待审批 1=审批中 2=已通过 3=已驳回 4=已撤回 5=已终止）
     /// </summary>
     [SugarColumn(ColumnName = "leave_status", ColumnDescription = "请假状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int LeaveStatus { get; set; }

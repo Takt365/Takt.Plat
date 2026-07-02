@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Sales
 // 文件名称：TaktCustomerService.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-07-01
 // 创建人：Takt365(Cursor AI)
 // 功能描述：客户信息应用服务实现
 // 
@@ -116,10 +116,11 @@ public class TaktCustomerService : TaktServiceBase, ITaktCustomerService
         var entity = dto.Adapt<TaktCustomer>();
         var isUnique_ix_takt_logistics_sales_customer_customer_code_unique = await _uniqueValidator.IsUniqueAsync(
             _customerRepository,
-            x => x.CustomerCode == entity.CustomerCode);
+            x => x.PlantCode == entity.PlantCode
+                && x.CustomerCode == entity.CustomerCode);
         if (!isUnique_ix_takt_logistics_sales_customer_customer_code_unique)
         {
-            throw new TaktBusinessException("客户信息的CustomerCode已存在");
+            throw new TaktBusinessException("客户信息的PlantCode、CustomerCode已存在");
         }
         if (entity.SortOrder <= 0)
         {
@@ -148,11 +149,12 @@ public class TaktCustomerService : TaktServiceBase, ITaktCustomerService
         dto.Adapt(entity);
         var isUnique_ix_takt_logistics_sales_customer_customer_code_unique = await _uniqueValidator.IsUniqueAsync(
             _customerRepository,
-            x => x.CustomerCode == entity.CustomerCode,
+            x => x.PlantCode == entity.PlantCode
+                && x.CustomerCode == entity.CustomerCode,
             id);
         if (!isUnique_ix_takt_logistics_sales_customer_customer_code_unique)
         {
-            throw new TaktBusinessException("客户信息的CustomerCode已存在");
+            throw new TaktBusinessException("客户信息的PlantCode、CustomerCode已存在");
         }
         await _customerRepository.UpdateAsync(entity);
         return await GetCustomerByIdAsync(id) ?? throw new TaktBusinessException("客户信息不存在");
@@ -263,17 +265,18 @@ public class TaktCustomerService : TaktServiceBase, ITaktCustomerService
             try
             {
                 var entity = rows[i].Adapt<TaktCustomer>();
-                var importKey = $"{entity.CustomerCode}";
+                var importKey = $"{entity.PlantCode}|{entity.CustomerCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（CustomerCode）");
+                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、CustomerCode）");
                 }
                 var isUnique_ix_takt_logistics_sales_customer_customer_code_unique = await _uniqueValidator.IsUniqueAsync(
                     _customerRepository,
-                    x => x.CustomerCode == entity.CustomerCode);
+                    x => x.PlantCode == entity.PlantCode
+                        && x.CustomerCode == entity.CustomerCode);
                 if (!isUnique_ix_takt_logistics_sales_customer_customer_code_unique)
                 {
-                    throw new TaktBusinessException("客户信息的CustomerCode已存在");
+                    throw new TaktBusinessException("客户信息的PlantCode、CustomerCode已存在");
                 }
                 if (entity.SortOrder <= 0)
                 {
@@ -341,6 +344,7 @@ public class TaktCustomerService : TaktServiceBase, ITaktCustomerService
                 || SqlFunc.ToString(x.CustomerType).Contains(keywords)
                 || (x.IndustrySector != null && x.IndustrySector.Contains(keywords))
                 || (x.CustomerTaxNumber != null && x.CustomerTaxNumber.Contains(keywords))
+                || SqlFunc.ToString(x.TaxRate).Contains(keywords)
                 || (x.RegistrationCountry != null && x.RegistrationCountry.Contains(keywords))
                 || (x.RegistrationAddress1 != null && x.RegistrationAddress1.Contains(keywords))
                 || (x.RegistrationAddress2 != null && x.RegistrationAddress2.Contains(keywords))
@@ -353,16 +357,15 @@ public class TaktCustomerService : TaktServiceBase, ITaktCustomerService
                 || (x.ContactPhone != null && x.ContactPhone.Contains(keywords))
                 || (x.ContactEmail != null && x.ContactEmail.Contains(keywords))
                 || (x.CurrencyCode != null && x.CurrencyCode.Contains(keywords))
-                || SqlFunc.ToString(x.PaymentTerms).Contains(keywords)
+                || (x.PaymentTerms != null && x.PaymentTerms.Contains(keywords))
                 || SqlFunc.ToString(x.CreditLevel).Contains(keywords)
                 || SqlFunc.ToString(x.CreditAmount).Contains(keywords)
                 || SqlFunc.ToString(x.DiscountRate).Contains(keywords)
                 || (x.SalesBy != null && x.SalesBy.Contains(keywords))
                 || SqlFunc.ToString(x.CustomerLevel).Contains(keywords)
                 || SqlFunc.ToString(x.EvaluationScore).Contains(keywords)
-                || SqlFunc.ToString(x.IsQualified).Contains(keywords)
-                || SqlFunc.ToString(x.CustomerStatus).Contains(keywords)
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
+                || SqlFunc.ToString(x.CustomerStatus).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
@@ -402,6 +405,11 @@ public class TaktCustomerService : TaktServiceBase, ITaktCustomerService
         if (!string.IsNullOrEmpty(queryDto?.CustomerTaxNumber))
         {
             exp = exp.And(x => x.CustomerTaxNumber != null && x.CustomerTaxNumber.Contains(queryDto.CustomerTaxNumber));
+        }
+
+        if (queryDto?.TaxRate.HasValue == true)
+        {
+            exp = exp.And(x => x.TaxRate == queryDto.TaxRate);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.RegistrationCountry))
@@ -464,9 +472,9 @@ public class TaktCustomerService : TaktServiceBase, ITaktCustomerService
             exp = exp.And(x => x.CurrencyCode != null && x.CurrencyCode.Contains(queryDto.CurrencyCode));
         }
 
-        if (queryDto?.PaymentTerms.HasValue == true)
+        if (!string.IsNullOrEmpty(queryDto?.PaymentTerms))
         {
-            exp = exp.And(x => x.PaymentTerms == queryDto.PaymentTerms);
+            exp = exp.And(x => x.PaymentTerms != null && x.PaymentTerms.Contains(queryDto.PaymentTerms));
         }
 
         if (queryDto?.CreditLevel.HasValue == true)
@@ -499,19 +507,14 @@ public class TaktCustomerService : TaktServiceBase, ITaktCustomerService
             exp = exp.And(x => x.EvaluationScore == queryDto.EvaluationScore);
         }
 
-        if (queryDto?.IsQualified.HasValue == true)
+        if (queryDto?.SortOrder.HasValue == true)
         {
-            exp = exp.And(x => x.IsQualified == queryDto.IsQualified);
+            exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
         }
 
         if (queryDto?.CustomerStatus.HasValue == true)
         {
             exp = exp.And(x => x.CustomerStatus == queryDto.CustomerStatus);
-        }
-
-        if (queryDto?.SortOrder.HasValue == true)
-        {
-            exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

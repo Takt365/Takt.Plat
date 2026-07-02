@@ -69,7 +69,7 @@
                   v-model:value="formState.modelCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.modeldestination.modelcode') })"
                   show-count
-                  :maxlength="50"
+                  :maxlength="40"
                   allow-clear
                   :disabled="!!formData?.modelDestinationId"
                 />
@@ -84,7 +84,7 @@
                   v-model:value="formState.modelName"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.modeldestination.modelname') })"
                   show-count
-                  :maxlength="200"
+                  :maxlength="80"
                   allow-clear
                 />
               </a-form-item>
@@ -98,7 +98,7 @@
                   v-model:value="formState.destinationCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.modeldestination.destinationcode') })"
                   show-count
-                  :maxlength="50"
+                  :maxlength="40"
                   allow-clear
                   :disabled="!!formData?.modelDestinationId"
                 />
@@ -113,7 +113,7 @@
                   v-model:value="formState.destinationName"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.modeldestination.destinationname') })"
                   show-count
-                  :maxlength="200"
+                  :maxlength="80"
                   allow-clear
                 />
               </a-form-item>

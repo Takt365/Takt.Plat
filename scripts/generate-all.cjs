@@ -40,15 +40,15 @@ const {
 
   validateEntityMasterDetailAssociations,
 
-  listAssociationsForMaster,
+  collectOneToManyCascadeEntityOrder,
 
-  forEachPairedChildAssociation,
+  formatOneToManyCascadeTreeLines,
+
+  listOneToManyChildrenForMaster,
 
 } = require('./generate-master-detail-associations.cjs');
 
-
-
-/** 手工独立服务/控制器（单实体生成时须 --force 才覆盖） */
+const { assertNotManualDtoEntityCli } = require('./generate-entity-exclusions.cjs');
 
 const EXISTING_MANUAL_SERVICE_ENTITIES = ['TaktAuth', 'TaktRbac', 'TaktFlowEngine'];
 
@@ -226,13 +226,13 @@ function printUsage() {
 
   node scripts/generate-all.cjs --CostCenter
 
-  node scripts/generate-all.cjs --Holiday [--force] [--dry-run]
+  node scripts/generate-all.cjs --Calendar [--force] [--dry-run]
 
 
 
 参数:
 
-  --<实体名>         单实体生成，如 --Holiday、--Dept（不要带 Takt 前缀）
+  --<实体名>         单实体生成，如 --Calendar、--Dept（不要带 Takt 前缀；不可用 --Holiday）
 
   --force            已废弃（普通文件默认覆盖；仅 TaktAuth/TaktRbac 手工服务须 --force 才覆盖）
 
@@ -244,7 +244,9 @@ function printUsage() {
 
   - 已禁用 --all；每次必须指定一个实体
 
-  - 主实体 OneToMany 子表将级联执行完整流水线（DTO/服务/控制器/types/api/Vue），须与子表 ManyToOne 成对
+  - 排除 Holiday：TaktHolidayDtos.cs 含手工 TaktHolidayThemeDto，禁止 dto/types/i18n 流水覆盖
+
+  - 主实体含多个 OneToMany 时，**按导航声明顺序依次**生成各子表（DTO/服务/控制器/types/api/Vue），全部子表完成后再生成主表
 
 
 
@@ -274,7 +276,7 @@ function printUsage() {
 
 示例:
 
-  node scripts/generate-all.cjs --Holiday
+  node scripts/generate-all.cjs --Calendar
 
   node scripts/generate-all.cjs --CostCenter
 
@@ -324,6 +326,24 @@ function runPipelineStep(step, options) {
 
 
 
+/**
+ * 在级联序列中查找子实体的直接主表
+ * @param {string} childPascal 子实体短名
+ * @param {string[]} cascadeOrder 级联实体序列
+ * @returns {string} 主实体短名
+ */
+function findOneToManyParentForChild(childPascal, cascadeOrder) {
+  for (const candidate of cascadeOrder) {
+    const matched = listOneToManyChildrenForMaster(candidate).find((item) => item.childPascal === childPascal);
+    if (matched) {
+      return candidate;
+    }
+  }
+  return cascadeOrder[cascadeOrder.length - 1] || childPascal;
+}
+
+
+
 // ========================================
 
 // 主流程
@@ -341,6 +361,8 @@ logGeneratedFileWritePolicy();
 try {
 
   const options = parseSingleEntityGenerateArgs(printUsage);
+
+  assertNotManualDtoEntityCli(options.entityPrefix);
 
   const childArgs = buildSingleEntityChildArgs(options);
 
@@ -366,42 +388,52 @@ try {
 
   const summary = { ran: 0, skipped: 0 };
 
-  /** @type {Set<string>} */
-  const processedEntities = new Set();
+  const cascadeOrder = collectOneToManyCascadeEntityOrder(options.entityPrefix);
+  const childEntityCount = cascadeOrder.length - 1;
 
-  /**
-   * 单实体 + OneToMany 级联子实体完整流水线
-   * @param {string} entityPrefix
-   */
-  function runFullPipelineForEntity(entityPrefix) {
-    if (processedEntities.has(entityPrefix)) {
-      console.log(`⏭️  已执行过 Takt${entityPrefix}，跳过重复级联`);
-      return;
+  cascadeOrder.forEach((entityPrefix) => validateEntityMasterDetailAssociations(entityPrefix));
+
+  if (childEntityCount > 0) {
+    console.log(`\n${'─'.repeat(60)}`);
+    console.log(`🔗 Takt${options.entityPrefix} OneToMany 级联（${childEntityCount} 个子表，按导航顺序依次处理）`);
+    formatOneToManyCascadeTreeLines(options.entityPrefix).forEach((line) => console.log(line));
+    console.log(
+      `   流水线实体顺序: ${cascadeOrder.map((name) => `Takt${name}`).join(' → ')}\n` +
+      `${'─'.repeat(60)}`,
+    );
+  }
+
+  for (const step of PIPELINE) {
+    if (step.alwaysAll) {
+      const status = runPipelineStep(step, options);
+      if (status === 'skipped') {
+        summary.skipped += 1;
+      } else {
+        summary.ran += 1;
+      }
+      continue;
     }
-    processedEntities.add(entityPrefix);
-    validateEntityMasterDetailAssociations(entityPrefix);
-    console.log(`\n${'═'.repeat(60)}`);
-    console.log(`📦 实体 Takt${entityPrefix}`);
-    console.log(`${'═'.repeat(60)}\n`);
-    const entityOptions = { ...options, entityPrefix };
-    for (const step of PIPELINE) {
-      const status = runPipelineStep(step, entityOptions);
+    for (let index = 0; index < cascadeOrder.length; index += 1) {
+      const entityPrefix = cascadeOrder[index];
+      const isChild = index < childEntityCount;
+      if (isChild) {
+        const parentPrefix = findOneToManyParentForChild(entityPrefix, cascadeOrder);
+        const assoc = listOneToManyChildrenForMaster(parentPrefix).find((item) => item.childPascal === entityPrefix);
+        console.log(
+          `\n── 步骤「${step.label}」OneToMany 子表 ${index + 1}/${childEntityCount}: ` +
+          `Takt${parentPrefix}.${assoc?.masterNavProp ?? '?'} → Takt${entityPrefix} ──\n`,
+        );
+      } else if (childEntityCount > 0) {
+        console.log(`\n── 步骤「${step.label}」主表 Takt${entityPrefix} ──\n`);
+      }
+      const status = runPipelineStep(step, { ...options, entityPrefix });
       if (status === 'skipped') {
         summary.skipped += 1;
       } else {
         summary.ran += 1;
       }
     }
-    forEachPairedChildAssociation(entityPrefix, (childShort, assoc) => {
-      console.log(
-        `\n── 关联对 [OneToMany ↔ ManyToOne] Takt${assoc.masterPascal}.${assoc.masterNavProp} → ` +
-        `Takt${assoc.childPascal}.${assoc.childNavProp}（外键 ${assoc.fkFieldOnChild}）完整流水线 ──\n`,
-      );
-      runFullPipelineForEntity(childShort);
-    });
   }
-
-  runFullPipelineForEntity(options.entityPrefix);
 
 
 

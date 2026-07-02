@@ -136,7 +136,7 @@
           v-model:value="advancedQueryForm.workCenterCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.changeovermatrix.workcentercode') })"
           show-count
-          :maxlength="40"
+          :maxlength="8"
           allow-clear
         />
       </a-form-item>
@@ -547,7 +547,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: ChangeoverMatrix, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getChangeoverMatrixId(selectedRow.value) === getChangeoverMatrixId(record)) {
+    } else if (selectedRow.value && getChangeoverMatrixId(selectedRow.value) === getChangeoverMatrixId(record)) {
       selectedRow.value = null
     }
   },

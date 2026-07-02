@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Maintenance
 // 文件名称：TaktMaintenanceWorkOrderMaterialDtos.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：MaintenanceWorkOrderMaterial 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktMaintenanceWorkOrderMaterial 生成，请按需审阅）
 // 
@@ -108,14 +108,14 @@ public class TaktMaintenanceWorkOrderMaterialDto : TaktCompanyDtoBase
     public string? StorageLocation { get; set; } = string.Empty;
 
     /// <summary>
-    /// 领料状态（0=待领料，1=部分领料，2=已领料）
-    /// </summary>
-    public int IssueStatus { get; set; } = 0;
-
-    /// <summary>
     /// 领料时间
     /// </summary>
     public DateTime? IssueTime { get; set; }
+
+    /// <summary>
+    /// 领料状态（0=待领料，1=部分领料，2=已领料）
+    /// </summary>
+    public int IssueStatus { get; set; } = 0;
 
     /// <summary>
     /// 维护工单（主表）
@@ -219,11 +219,6 @@ public class TaktMaintenanceWorkOrderMaterialQueryDto : TaktPagedQuery
     public string? StorageLocation { get; set; } = string.Empty;
 
     /// <summary>
-    /// 领料状态（0=待领料，1=部分领料，2=已领料）
-    /// </summary>
-    public int? IssueStatus { get; set; }
-
-    /// <summary>
     /// 领料时间（范围查询-开始）
     /// </summary>
     public DateTime? IssueTimeStart { get; set; }
@@ -232,6 +227,11 @@ public class TaktMaintenanceWorkOrderMaterialQueryDto : TaktPagedQuery
     /// 领料时间（范围查询-结束）
     /// </summary>
     public DateTime? IssueTimeEnd { get; set; }
+
+    /// <summary>
+    /// 领料状态（0=待领料，1=部分领料，2=已领料）
+    /// </summary>
+    public int? IssueStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -274,7 +274,7 @@ public class TaktMaintenanceWorkOrderMaterialCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -350,14 +350,14 @@ public class TaktMaintenanceWorkOrderMaterialCreateDto
     public string? StorageLocation { get; set; } = string.Empty;
 
     /// <summary>
-    /// 领料状态（0=待领料，1=部分领料，2=已领料）
-    /// </summary>
-    public int IssueStatus { get; set; } = 0;
-
-    /// <summary>
     /// 领料时间
     /// </summary>
     public DateTime? IssueTime { get; set; }
+
+    /// <summary>
+    /// 领料状态（0=待领料，1=部分领料，2=已领料）
+    /// </summary>
+    public int IssueStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -467,9 +467,29 @@ public class TaktMaintenanceWorkOrderMaterialTemplateDto
     public string? MaterialName { get; set; } = string.Empty;
 
     /// <summary>
+    /// 需求数量
+    /// </summary>
+    public decimal? RequiredQuantity { get; set; }
+
+    /// <summary>
+    /// 已领数量
+    /// </summary>
+    public decimal? IssuedQuantity { get; set; }
+
+    /// <summary>
     /// 单位
     /// </summary>
     public string? MaterialUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 单价
+    /// </summary>
+    public decimal? UnitPrice { get; set; }
+
+    /// <summary>
+    /// 金额
+    /// </summary>
+    public decimal? Amount { get; set; }
 
     /// <summary>
     /// 仓库编码
@@ -480,6 +500,11 @@ public class TaktMaintenanceWorkOrderMaterialTemplateDto
     /// 库位
     /// </summary>
     public string? StorageLocation { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 领料时间
+    /// </summary>
+    public DateTime? IssueTime { get; set; }
 
     /// <summary>
     /// 领料状态（0=待领料，1=部分领料，2=已领料）
@@ -514,7 +539,7 @@ public class TaktMaintenanceWorkOrderMaterialImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -551,9 +576,29 @@ public class TaktMaintenanceWorkOrderMaterialImportDto
     public string? MaterialName { get; set; } = string.Empty;
 
     /// <summary>
+    /// 需求数量
+    /// </summary>
+    public decimal? RequiredQuantity { get; set; }
+
+    /// <summary>
+    /// 已领数量
+    /// </summary>
+    public decimal? IssuedQuantity { get; set; }
+
+    /// <summary>
     /// 单位
     /// </summary>
     public string? MaterialUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 单价
+    /// </summary>
+    public decimal? UnitPrice { get; set; }
+
+    /// <summary>
+    /// 金额
+    /// </summary>
+    public decimal? Amount { get; set; }
 
     /// <summary>
     /// 仓库编码
@@ -564,6 +609,11 @@ public class TaktMaintenanceWorkOrderMaterialImportDto
     /// 库位
     /// </summary>
     public string? StorageLocation { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 领料时间
+    /// </summary>
+    public DateTime? IssueTime { get; set; }
 
     /// <summary>
     /// 领料状态（0=待领料，1=部分领料，2=已领料）
@@ -671,14 +721,14 @@ public class TaktMaintenanceWorkOrderMaterialExportDto
     public string? StorageLocation { get; set; } = string.Empty;
 
     /// <summary>
-    /// 领料状态（0=待领料，1=部分领料，2=已领料）
-    /// </summary>
-    public int IssueStatus { get; set; } = 0;
-
-    /// <summary>
     /// 领料时间
     /// </summary>
     public DateTime? IssueTime { get; set; }
+
+    /// <summary>
+    /// 领料状态（0=待领料，1=部分领料，2=已领料）
+    /// </summary>
+    public int IssueStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

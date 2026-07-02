@@ -237,8 +237,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.breakdownStartTimeStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenancenotification.breakdownstarttimestart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -248,8 +247,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.breakdownStartTimeEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenancenotification.breakdownstarttimeend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -259,8 +257,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.breakdownEndTimeStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenancenotification.breakdownendtimestart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -270,8 +267,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.breakdownEndTimeEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenancenotification.breakdownendtimeend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -304,7 +300,7 @@
           v-model:value="advancedQueryForm.costCenterCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenancenotification.costcentercode') })"
           show-count
-          :maxlength="50"
+          :maxlength="4"
           allow-clear
         />
       </a-form-item>
@@ -344,10 +340,11 @@
       </div>
       <div v-show="isFieldVisible('approvalStatus')">
       <a-form-item :label="t('entity.maintenancenotification.approvalstatus')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.approvalStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenancenotification.approvalstatus') })"
-          style="width: 100%"
+          dict-type="sys_approval_status"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenancenotification.approvalstatus') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -432,7 +429,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -443,7 +440,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -990,7 +987,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: MaintenanceNotification, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getMaintenanceNotificationId(selectedRow.value) === getMaintenanceNotificationId(record)) {
+    } else if (selectedRow.value && getMaintenanceNotificationId(selectedRow.value) === getMaintenanceNotificationId(record)) {
       selectedRow.value = null
     }
   },

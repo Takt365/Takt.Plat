@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcNotificationDtos.cs
-// 创建时间：2026-06-16
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：EcNotification 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktEcNotification 生成，请按需审阅）
 // 
@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.Logistics.Manufacturing.EngineeringChange;
 // ========================================
 
 /// <summary>
-/// 工程变更通知单实体（EC Notification）。FlowInstanceId 由业务在发起流程后写入；流程引擎通过 BusinessKey/BusinessType 与本模块对接。
+/// 工程变更通知单（技术阶段一 ④，隶属 TaktEcGijutsu）。技术完成 ①主表 ②附件 ③明细 保存后由 TaktEcGijutsuService 自动生成并派发； 各部门确认后在 TaktEcExec* 执行，技术通过看板/批次监控。FlowInstanceId 由通知审批流程写入（可选）。
 /// 对应前端 TaktEcNotificationDto
 /// 继承 TaktApprovalDtoBase
 /// </summary>
@@ -62,7 +62,7 @@ public class TaktEcNotificationDto : TaktApprovalDtoBase
     public string EcNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设变主题（冗余字段）
+    /// 设变标题（冗余字段）
     /// </summary>
     public string? EcTitle { get; set; } = string.Empty;
 
@@ -104,9 +104,9 @@ public class TaktEcNotificationDto : TaktApprovalDtoBase
 
     /// <summary>
     /// 关联的设变主表
-    /// （主表：TaktEc）
+    /// （主表：TaktEcGijutsu）
     /// </summary>
-    public TaktEcDto? Ec { get; set; }
+    public TaktEcGijutsuDto? EcGijutsu { get; set; }
 
 }
 
@@ -152,7 +152,7 @@ public class TaktEcNotificationQueryDto : TaktPagedQuery
     public string? EcNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设变主题（冗余字段）
+    /// 设变标题（冗余字段）
     /// </summary>
     public string? EcTitle { get; set; } = string.Empty;
 
@@ -198,7 +198,7 @@ public class TaktEcNotificationQueryDto : TaktPagedQuery
     public int? EcNotificationStatus { get; set; }
 
     /// <summary>
-    /// 审批状态（TaktApprovalStatus）
+    /// 审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）
     /// </summary>
     public TaktApprovalStatus? ApprovalStatus { get; set; }
 
@@ -281,7 +281,7 @@ public class TaktEcNotificationCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -310,7 +310,7 @@ public class TaktEcNotificationCreateDto
     public string EcNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设变主题（冗余字段）
+    /// 设变标题（冗余字段）
     /// </summary>
     public string? EcTitle { get; set; } = string.Empty;
 
@@ -447,9 +447,14 @@ public class TaktEcNotificationTemplateDto
     public string? EcNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设变主题（冗余字段）
+    /// 设变标题（冗余字段）
     /// </summary>
     public string? EcTitle { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 通知日期
+    /// </summary>
+    public DateTime? EcNotificationDate { get; set; }
 
     /// <summary>
     /// 通知部门编码（多个部门用逗号分隔，如：Assy,PCBA,QC）
@@ -510,7 +515,7 @@ public class TaktEcNotificationImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -536,9 +541,14 @@ public class TaktEcNotificationImportDto
     public string? EcNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设变主题（冗余字段）
+    /// 设变标题（冗余字段）
     /// </summary>
     public string? EcTitle { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 通知日期
+    /// </summary>
+    public DateTime? EcNotificationDate { get; set; }
 
     /// <summary>
     /// 通知部门编码（多个部门用逗号分隔，如：Assy,PCBA,QC）
@@ -621,7 +631,7 @@ public class TaktEcNotificationExportDto
     public string EcNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设变主题（冗余字段）
+    /// 设变标题（冗余字段）
     /// </summary>
     public string? EcTitle { get; set; } = string.Empty;
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Routine.NewsCenter
 // 文件名称：TaktNewsCommentDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：NewsComment 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktNewsComment 生成，请按需审阅）
 // 
@@ -14,7 +14,6 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Dtos.Routine.NewsCenter;
 
@@ -93,7 +92,7 @@ public class TaktNewsCommentDto : TaktApprovalDtoBase
     /// <summary>
     /// 点赞次数
     /// </summary>
-    public int LikeCount { get; set; } = 0;
+    public int NewsCommentLikeCount { get; set; } = 0;
 
     /// <summary>
     /// 回复次数（子评论数量）
@@ -106,14 +105,9 @@ public class TaktNewsCommentDto : TaktApprovalDtoBase
     public int CommentLevel { get; set; } = 0;
 
     /// <summary>
-    /// 流程实例 名称（填充字段）
-    /// </summary>
-    public string? FlowInstanceName { get; set; }
-
-    /// <summary>
     /// 评论状态
     /// </summary>
-    public int CommentStatus { get; set; }
+    public int CommentStatus { get; set; } = 0;
 
     /// <summary>
     /// 新闻（主表）
@@ -222,7 +216,7 @@ public class TaktNewsCommentQueryDto : TaktPagedQuery
     /// <summary>
     /// 点赞次数
     /// </summary>
-    public int? LikeCount { get; set; }
+    public int? NewsCommentLikeCount { get; set; }
 
     /// <summary>
     /// 回复次数（子评论数量）
@@ -235,20 +229,14 @@ public class TaktNewsCommentQueryDto : TaktPagedQuery
     public int? CommentLevel { get; set; }
 
     /// <summary>
-    /// 流程实例 ID（评论审核工作流）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
-
-    /// <summary>
     /// 评论状态
     /// </summary>
     public int? CommentStatus { get; set; }
 
     /// <summary>
-    /// 审批状态（TaktApprovalStatus）
+    /// 审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）
     /// </summary>
-    public int? ApprovalStatus { get; set; }
+    public TaktApprovalStatus? ApprovalStatus { get; set; }
 
     /// <summary>
     /// 发起人ID
@@ -281,6 +269,12 @@ public class TaktNewsCommentQueryDto : TaktPagedQuery
     /// 最终审批时间（范围查询-结束）
     /// </summary>
     public DateTime? ApprovedAtEnd { get; set; }
+
+    /// <summary>
+    /// 流程实例 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? FlowInstanceId { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -323,7 +317,7 @@ public class TaktNewsCommentCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -381,7 +375,7 @@ public class TaktNewsCommentCreateDto
     /// <summary>
     /// 点赞次数
     /// </summary>
-    public int LikeCount { get; set; } = 0;
+    public int NewsCommentLikeCount { get; set; } = 0;
 
     /// <summary>
     /// 回复次数（子评论数量）
@@ -394,15 +388,9 @@ public class TaktNewsCommentCreateDto
     public int CommentLevel { get; set; } = 0;
 
     /// <summary>
-    /// 流程实例 ID（评论审核工作流）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
-
-    /// <summary>
     /// 评论状态
     /// </summary>
-    public int CommentStatus { get; set; }
+    public int CommentStatus { get; set; } = 0;
 
     /// <summary>
     /// 评论点赞记录列表（主子表关系）（子表，级联保存）
@@ -462,7 +450,7 @@ public class TaktNewsCommentStatusDto
     /// 评论状态
     /// </summary>
     [Required(ErrorMessage = "评论状态不能为空")]
-    public int CommentStatus { get; set; }
+    public int CommentStatus { get; set; } = 0;
 }
 
 // ========================================
@@ -529,9 +517,14 @@ public class TaktNewsCommentTemplateDto
     public string? CommentContent { get; set; } = string.Empty;
 
     /// <summary>
+    /// 评论时间
+    /// </summary>
+    public DateTime? CommentTime { get; set; }
+
+    /// <summary>
     /// 点赞次数
     /// </summary>
-    public int? LikeCount { get; set; }
+    public int? NewsCommentLikeCount { get; set; }
 
     /// <summary>
     /// 回复次数（子评论数量）
@@ -544,10 +537,14 @@ public class TaktNewsCommentTemplateDto
     public int? CommentLevel { get; set; }
 
     /// <summary>
-    /// 流程实例 ID（评论审核工作流）
+    /// 评论状态
     /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
+    public int? CommentStatus { get; set; }
+
+    /// <summary>
+    /// 评论点赞记录列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktNewsCommentLikeCreateDto>? Likes { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -577,7 +574,7 @@ public class TaktNewsCommentImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -626,9 +623,14 @@ public class TaktNewsCommentImportDto
     public string? CommentContent { get; set; } = string.Empty;
 
     /// <summary>
+    /// 评论时间
+    /// </summary>
+    public DateTime? CommentTime { get; set; }
+
+    /// <summary>
     /// 点赞次数
     /// </summary>
-    public int? LikeCount { get; set; }
+    public int? NewsCommentLikeCount { get; set; }
 
     /// <summary>
     /// 回复次数（子评论数量）
@@ -641,10 +643,14 @@ public class TaktNewsCommentImportDto
     public int? CommentLevel { get; set; }
 
     /// <summary>
-    /// 流程实例 ID（评论审核工作流）
+    /// 评论状态
     /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
+    public int? CommentStatus { get; set; }
+
+    /// <summary>
+    /// 评论点赞记录列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktNewsCommentLikeCreateDto>? Likes { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -726,7 +732,7 @@ public class TaktNewsCommentExportDto
     /// <summary>
     /// 点赞次数
     /// </summary>
-    public int LikeCount { get; set; } = 0;
+    public int NewsCommentLikeCount { get; set; } = 0;
 
     /// <summary>
     /// 回复次数（子评论数量）
@@ -739,15 +745,9 @@ public class TaktNewsCommentExportDto
     public int CommentLevel { get; set; } = 0;
 
     /// <summary>
-    /// 流程实例 ID（评论审核工作流）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
-
-    /// <summary>
     /// 评论状态
     /// </summary>
-    public int CommentStatus { get; set; }
+    public int CommentStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Accounting.Financial
 // 文件名称：TaktAssetChangeLogService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：资产变更记录应用服务实现
 // 
@@ -30,23 +30,27 @@ namespace Takt.Application.Services.Accounting.Financial;
 public class TaktAssetChangeLogService : TaktServiceBase, ITaktAssetChangeLogService
 {
     private readonly ITaktCompanyRepository<TaktAssetChangeLog> _assetChangeLogRepository;
+    private readonly ITaktCompanyRepository<TaktAsset> _assetRepository;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="assetChangeLogRepository">资产变更记录仓储</param>
+    /// <param name="assetRepository">资产仓储</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktAssetChangeLogService(
         ITaktCompanyRepository<TaktAssetChangeLog> assetChangeLogRepository,
+        ITaktCompanyRepository<TaktAsset> assetRepository,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
         _assetChangeLogRepository = assetChangeLogRepository;
+        _assetRepository = assetRepository;
         _uniqueValidator = uniqueValidator;
     }
 
@@ -110,6 +114,7 @@ public class TaktAssetChangeLogService : TaktServiceBase, ITaktAssetChangeLogSer
     public async Task<TaktAssetChangeLogDto> CreateAssetChangeLogAsync(TaktAssetChangeLogCreateDto dto)
     {
         var entity = dto.Adapt<TaktAssetChangeLog>();
+        await StampAssetChangeLogAssetAsync(entity, dto);
         entity = await _assetChangeLogRepository.CreateAsync(entity);
         return await GetAssetChangeLogByIdAsync(entity.Id) ?? entity.Adapt<TaktAssetChangeLogDto>();
     }
@@ -128,6 +133,7 @@ public class TaktAssetChangeLogService : TaktServiceBase, ITaktAssetChangeLogSer
             throw new TaktBusinessException("资产变更记录不存在");
         }
         dto.Adapt(entity);
+        await StampAssetChangeLogAssetAsync(entity, dto);
         await _assetChangeLogRepository.UpdateAsync(entity);
         return await GetAssetChangeLogByIdAsync(id) ?? throw new TaktBusinessException("资产变更记录不存在");
     }
@@ -189,6 +195,29 @@ public class TaktAssetChangeLogService : TaktServiceBase, ITaktAssetChangeLogSer
             fileName ?? "资产变更记录导出.xlsx");
     }
 
+    // ========================================
+    // 主表外键同步（ManyToOne）
+    // ========================================
+
+    /// <summary>
+    /// 同步资产变更记录主表外键（ManyToOne → 资产）
+    /// </summary>
+    /// <param name="entity">当前实体</param>
+    /// <param name="dto">创建 DTO</param>
+    /// <returns>任务</returns>
+    private async Task StampAssetChangeLogAssetAsync(TaktAssetChangeLog entity, TaktAssetChangeLogCreateDto dto)
+    {
+        if (dto.AssetId <= 0)
+        {
+            return;
+        }
+        var master = await _assetRepository.GetByIdAsync(dto.AssetId);
+        if (master == null)
+        {
+            throw new TaktBusinessException("资产不存在");
+        }
+        entity.AssetId = master.Id;
+    }
     // ========================================
     // 查询表达式
     // ========================================

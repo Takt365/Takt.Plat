@@ -74,8 +74,8 @@ public class TaktCultureSeedData : ITaktSeedDataCoordinator
     {
         return
         [
-            new TaktCultureSeedItem("en-US", "English(US)", "English (US)", "fi-us", 1, true),
-            new TaktCultureSeedItem("ja-JP", "日本語", "日本語", "fi-jp", 2, false),
+            new TaktCultureSeedItem("en-US", "English(US)", "English(US)", "fi-us", 1, true),
+            new TaktCultureSeedItem("ja-JP", "日本語(JP)", "日本語(JP)", "fi-jp", 2, false),
             new TaktCultureSeedItem("zh-HK", "中文(香港)", "中文(香港)", "fi-hk", 3, false),
             new TaktCultureSeedItem("zh-CN", "中文(简体)", "中文 (简体)", "fi-cn", 4, false),
         ];
@@ -122,12 +122,12 @@ public class TaktCultureSeedData : ITaktSeedDataCoordinator
     /// <summary>
     /// 区域文化种子项
     /// </summary>
-    /// <param name="CultureCode">区域编码</param>
+    /// <param name="CultureCode">文化编码</param>
     /// <param name="LanguageName">语言名称</param>
     /// <param name="NativeName">本地化名称</param>
     /// <param name="Icon">flag-icons 类后缀（fi-cn / fi-us / fi-jp / fi-hk）</param>
     /// <param name="SortOrder">排序号</param>
-    /// <param name="IsDefault">是否默认语言</param>
+    /// <param name="IsDefault">默认语言</param>
     private sealed record TaktCultureSeedItem(
         string CultureCode,
         string LanguageName,

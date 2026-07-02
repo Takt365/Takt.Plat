@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Personnel
 // 文件名称：TaktEmployeeOnboardingService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：入职待办应用服务实现
 // 
@@ -101,7 +101,7 @@ public class TaktEmployeeOnboardingService : TaktServiceBase, ITaktEmployeeOnboa
     {
         EnsureThreeLayerContext();
         var list = await _employeeOnboardingRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.TodoStatus == 1,
             x => x.CandidateName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption

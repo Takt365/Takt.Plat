@@ -8,7 +8,7 @@
 <!-- ======================================== -->
 
 <template>
-  <div class="routine-news-center-news">
+  <div class="p-4 flex flex-col min-h-0 h-full">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -20,17 +20,17 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="routine:newscenter:news:create"
-      update-permission="routine:newscenter:news:update"
-      delete-permission="routine:newscenter:news:delete"
-      import-permission="routine:newscenter:news:import"
-      export-permission="routine:newscenter:news:export"
+      create-permission="routine:news:center:create"
+      update-permission="routine:news:center:update"
+      delete-permission="routine:news:center:delete"
+      import-permission="routine:news:center:import"
+      export-permission="routine:news:center:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
       :show-import="true"
       :show-export="true"
-      :show-expand="true"
+      :show-expand="false"
       :show-advanced-query="true"
       :show-column-setting="true"
       :show-fullscreen="true"
@@ -52,102 +52,27 @@
       @refresh="handleRefresh"
     />
 
-    <!-- 表格 -->
-    <TaktSingleTable
-      :columns="columns"
-      entity-scope="approval"
-      :visible-column-keys="visibleColumnKeys"
-      :id-column-key="'newsId'"
-      table-mode="single"
-      :data-source="dataSource"
-      :loading="loading"
-      :stripe="true"
-      :row-key="getNewsId"
-      :row-selection="rowSelection"
-      :custom-row="onClickRow"
-
-      :expanded-row-keys="expandedRowKeys"
-      @expand="handleExpand"
-      @change="handleTableChange"
-      @resize-column="handleResizeColumn"
+    <!-- 左主右从 -->
+    <TaktMasterDetailTableLr
+      v-model:master-current="currentPage"
+      v-model:master-page-size="pageSize"
+      v-model:selected-master-key="selectedMasterKey"
+      class="min-h-0 flex-1"
+      :master-columns="columns"
+      :master-data-source="dataSource"
+      :master-loading="loading"
+      :master-row-key="getNewsId"
+      :master-row-selection="rowSelection"
+      master-id-column-key="newsId"
+      :master-visible-column-keys="visibleColumnKeys"
+      :master-total="total"
+      master-entity-scope="approval"
+      @master-change="handleTableChange"
+      @master-resize-column="handleResizeColumn"
+      @master-pagination-change="handleMasterPaginationChange"
+      @master-select="handleMasterSelect"
     >
-      <!-- 展开行渲染 -->
-      <template #expandedRowRender="{ record }">
-        <div class="p-4">
-          <div class="mb-2 text-sm font-medium">{{ t('entity.newsAttachment._self') }}</div>
-          <a-table
-            v-if="hasNewsAttachmentRows(record)"
-            :columns="newsAttachmentExpandColumns"
-            :data-source="getNewsAttachmentRows(record)"
-            :row-key="(row: NewsAttachment, index?: number) => row?.newsAttachmentId || String(index ?? 0)"
-            :pagination="false"
-            size="small"
-            bordered
-            class="mb-4"
-          />
-          <a-empty v-else class="mb-4" />
-          <div class="mb-2 text-sm font-medium">{{ t('entity.newsComment._self') }}</div>
-          <a-table
-            v-if="hasNewsCommentRows(record)"
-            :columns="newsCommentExpandColumns"
-            :data-source="getNewsCommentRows(record)"
-            :row-key="(row: NewsComment, index?: number) => row?.newsCommentId || String(index ?? 0)"
-            :pagination="false"
-            size="small"
-            bordered
-            class="mb-4"
-          />
-          <a-empty v-else class="mb-4" />
-          <div class="mb-2 text-sm font-medium">{{ t('entity.newsLike._self') }}</div>
-          <a-table
-            v-if="hasNewsLikeRows(record)"
-            :columns="newsLikeExpandColumns"
-            :data-source="getNewsLikeRows(record)"
-            :row-key="(row: NewsLike, index?: number) => row?.newsLikeId || String(index ?? 0)"
-            :pagination="false"
-            size="small"
-            bordered
-            class="mb-4"
-          />
-          <a-empty v-else class="mb-4" />
-          <div class="mb-2 text-sm font-medium">{{ t('entity.newsRead._self') }}</div>
-          <a-table
-            v-if="hasNewsReadRows(record)"
-            :columns="newsReadExpandColumns"
-            :data-source="getNewsReadRows(record)"
-            :row-key="(row: NewsRead, index?: number) => row?.newsReadId || String(index ?? 0)"
-            :pagination="false"
-            size="small"
-            bordered
-            class="mb-4"
-          />
-          <a-empty v-else class="mb-4" />
-          <div class="mb-2 text-sm font-medium">{{ t('entity.newsFavorite._self') }}</div>
-          <a-table
-            v-if="hasNewsFavoriteRows(record)"
-            :columns="newsFavoriteExpandColumns"
-            :data-source="getNewsFavoriteRows(record)"
-            :row-key="(row: NewsFavorite, index?: number) => row?.newsFavoriteId || String(index ?? 0)"
-            :pagination="false"
-            size="small"
-            bordered
-            class="mb-4"
-          />
-          <a-empty v-else class="mb-4" />
-          <div class="mb-2 text-sm font-medium">{{ t('entity.newsShare._self') }}</div>
-          <a-table
-            v-if="hasNewsShareRows(record)"
-            :columns="newsShareExpandColumns"
-            :data-source="getNewsShareRows(record)"
-            :row-key="(row: NewsShare, index?: number) => row?.newsShareId || String(index ?? 0)"
-            :pagination="false"
-            size="small"
-            bordered
-            class="mb-4"
-          />
-          <a-empty v-else class="mb-4" />
-        </div>
-      </template>
+      <!-- 字典/开关列渲染 -->
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'newsStatus'">
           <TaktDictTag
@@ -156,28 +81,26 @@
           />
         </template>
       </template>
-    </TaktSingleTable>
-
-    <!-- 分页组件 -->
-    <TaktPagination
-      v-model:current="currentPage"
-      v-model:page-size="pageSize"
-      :total="total"
-      @change="handlePaginationChange"
-      @show-size-change="handlePaginationSizeChange"
-    />
+      <template #detail>
+        <NewsAttachmentPanel
+          ref="newsAttachmentPanelRef"
+          class="h-full min-h-0 flex-1"
+        />
+      </template>
+    </TaktMasterDetailTableLr>
 
     <!-- 新增/编辑对话框 -->
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="50%"
+      width="1100px"
       wrap-class-name="takt-form-modal-resizable"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
       @cancel="handleFormCancel"
     >
       <NewsForm
+        :key="formData?.newsId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -199,6 +122,8 @@
         <a-input
           v-model:value="advancedQueryForm.newsCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.code') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
@@ -217,6 +142,8 @@
         <a-input
           v-model:value="advancedQueryForm.newsTitle"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.title') })"
+          show-count
+          :maxlength="200"
           allow-clear
         />
       </a-form-item>
@@ -226,6 +153,8 @@
         <a-input
           v-model:value="advancedQueryForm.newsSummary"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.summary') })"
+          show-count
+          :maxlength="2000"
           allow-clear
         />
       </a-form-item>
@@ -235,6 +164,8 @@
         <a-input
           v-model:value="advancedQueryForm.tags"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.tags') })"
+          show-count
+          :maxlength="500"
           allow-clear
         />
       </a-form-item>
@@ -254,6 +185,8 @@
         <a-input
           v-model:value="advancedQueryForm.newsCoverImage"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.coverimage') })"
+          show-count
+          :maxlength="500"
           allow-clear
         />
       </a-form-item>
@@ -281,8 +214,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.effectiveTimeStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.news.effectivetimestart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -292,8 +224,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.effectiveTimeEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.news.effectivetimeend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -303,8 +234,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.expireTimeStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.news.expiretimestart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -314,8 +244,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.expireTimeEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.news.expiretimeend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -374,20 +303,13 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('flowInstanceId')">
-      <a-form-item :label="t('entity.news.flowinstanceid')">
-        <a-input
-          v-model:value="advancedQueryForm.flowInstanceId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.flowinstanceid') })"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
       <div v-show="isFieldVisible('deptId')">
       <a-form-item :label="t('entity.news.deptid')">
         <a-input
           v-model:value="advancedQueryForm.deptId"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.deptid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -397,6 +319,8 @@
         <a-input
           v-model:value="advancedQueryForm.deptName"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.deptname') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
@@ -406,6 +330,8 @@
         <a-input
           v-model:value="advancedQueryForm.publisherId"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.publisherid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -415,6 +341,8 @@
         <a-input
           v-model:value="advancedQueryForm.publisherName"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.publishername') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -424,8 +352,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.publishTimeStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.news.publishtimestart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -435,17 +362,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.publishTimeEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.news.publishtimeend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('sortOrder')">
-      <a-form-item :label="t('entity.news.sortorder')">
-        <a-input-number
-          v-model:value="advancedQueryForm.sortOrder"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.sortorder') })"
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -462,10 +379,11 @@
       </div>
       <div v-show="isFieldVisible('approvalStatus')">
       <a-form-item :label="t('entity.news.approvalstatus')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.approvalStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.approvalstatus') })"
-          style="width: 100%"
+          dict-type="sys_approval_status"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.news.approvalstatus') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -474,6 +392,8 @@
         <a-input
           v-model:value="advancedQueryForm.initiatorId"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.initiatorid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -483,6 +403,8 @@
         <a-input
           v-model:value="advancedQueryForm.initiatedAtStart"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.initiatedatstart') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -502,6 +424,8 @@
         <a-input
           v-model:value="advancedQueryForm.approvedBy"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.approvedby') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -511,6 +435,8 @@
         <a-input
           v-model:value="advancedQueryForm.approvedAtStart"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.approvedatstart') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -525,13 +451,24 @@
         />
       </a-form-item>
       </div>
+      <div v-show="isFieldVisible('flowInstanceId')">
+      <a-form-item :label="t('entity.news.flowinstanceid')">
+        <a-input
+          v-model:value="advancedQueryForm.flowInstanceId"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.flowinstanceid') })"
+          show-count
+          :maxlength="20"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('createdAtStart')">
       <a-form-item :label="t('common.page.entity.createdatstart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -542,17 +479,36 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('ExtField')">
-      <a-form-item :label="t('common.page.entity.ExtField')">
-        <a-input
-          v-model:value="advancedQueryForm.ExtField"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
-          allow-clear
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
+        <a-textarea
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -561,8 +517,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -606,7 +564,6 @@
 </template>
 
 <script setup lang="ts">
-import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 /**
  * 新闻中心主实体 支持分类、置顶、推荐、社交统计管理页 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/routine/news-center/news
@@ -616,24 +573,16 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import NewsForm from './components/news-form.vue'
-import { getNewsList, getNewsById, createNews, updateNews, deleteNewsById, deleteNewsBatch, getNewsTemplate, importNews, exportNews } from '@/api/routine/news-center/news'
-import * as newsAttachmentApi from '@/api/routine/news-center/news-attachment'
-import * as newsCommentApi from '@/api/routine/news-center/news-comment'
-import * as newsLikeApi from '@/api/routine/news-center/news-like'
-import * as newsReadApi from '@/api/routine/news-center/news-read'
-import * as newsFavoriteApi from '@/api/routine/news-center/news-favorite'
-import * as newsShareApi from '@/api/routine/news-center/news-share'
-import type { NewsAttachment, NewsAttachmentQuery } from '@/types/routine/news-center/news-attachment'
-import type { NewsComment, NewsCommentQuery } from '@/types/routine/news-center/news-comment'
-import type { NewsLike, NewsLikeQuery } from '@/types/routine/news-center/news-like'
-import type { NewsRead, NewsReadQuery } from '@/types/routine/news-center/news-read'
-import type { NewsFavorite, NewsFavoriteQuery } from '@/types/routine/news-center/news-favorite'
-import type { NewsShare, NewsShareQuery } from '@/types/routine/news-center/news-share'
-import type { News, NewsQuery, NewsCreate, NewsUpdate } from '@/types/routine/news-center/news'
+import NewsAttachmentPanel from './components/news-attachment-panel.vue'
+import { provideNewsMasterContext } from './composables/use-news-master-context'
+import { getNewsList, getNewsById, createNews, updateNews, deleteNewsById, deleteNewsBatch, getNewsTemplate, importNews, exportNews, updateNewsStatus } from '@/api/routine/news-center/news'
+import type { News, NewsQuery } from '@/types/routine/news-center/news'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -668,11 +617,13 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<News>>({})
+const formData = ref<Partial<News> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
@@ -695,14 +646,12 @@ const advancedQueryForm = ref({
   favoriteCount: undefined as number | undefined,
   shareCount: undefined as number | undefined,
   attachmentCount: undefined as number | undefined,
-  flowInstanceId: '',
   deptId: '',
   deptName: '',
   publisherId: '',
   publisherName: '',
   publishTimeStart: '',
   publishTimeEnd: '',
-  sortOrder: undefined as number | undefined,
   newsStatus: undefined as number | undefined,
   approvalStatus: undefined as number | undefined,
   initiatorId: '',
@@ -711,9 +660,10 @@ const advancedQueryForm = ref({
   approvedBy: '',
   approvedAtStart: '',
   approvedAtEnd: '',
+  flowInstanceId: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
@@ -727,24 +677,22 @@ const queryFieldsMeta = computed(() => [
   { key: 'newsCoverImage', label: t('entity.news.coverimage') },
   { key: 'isTop', label: t('entity.news.istop') },
   { key: 'isRecommended', label: t('entity.news.isrecommended') },
-  { key: 'effectiveTimeStart', label: t('entity.news.effectivetimestart') },
-  { key: 'effectiveTimeEnd', label: t('entity.news.effectivetimeend') },
-  { key: 'expireTimeStart', label: t('entity.news.expiretimestart') },
-  { key: 'expireTimeEnd', label: t('entity.news.expiretimeend') },
+  { key: 'effectiveTimeStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.news.effectivetime')) },
+  { key: 'effectiveTimeEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.news.effectivetime')) },
+  { key: 'expireTimeStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.news.expiretime')) },
+  { key: 'expireTimeEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.news.expiretime')) },
   { key: 'readCount', label: t('entity.news.readcount') },
   { key: 'likeCount', label: t('entity.news.likecount') },
   { key: 'commentCount', label: t('entity.news.commentcount') },
   { key: 'favoriteCount', label: t('entity.news.favoritecount') },
   { key: 'shareCount', label: t('entity.news.sharecount') },
   { key: 'attachmentCount', label: t('entity.news.attachmentcount') },
-  { key: 'flowInstanceId', label: t('entity.news.flowinstanceid') },
   { key: 'deptId', label: t('entity.news.deptid') },
   { key: 'deptName', label: t('entity.news.deptname') },
   { key: 'publisherId', label: t('entity.news.publisherid') },
   { key: 'publisherName', label: t('entity.news.publishername') },
-  { key: 'publishTimeStart', label: t('entity.news.publishtimestart') },
-  { key: 'publishTimeEnd', label: t('entity.news.publishtimeend') },
-  { key: 'sortOrder', label: t('entity.news.sortorder') },
+  { key: 'publishTimeStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.news.publishtime')) },
+  { key: 'publishTimeEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.news.publishtime')) },
   { key: 'newsStatus', label: t('entity.news.status') },
   { key: 'approvalStatus', label: t('entity.news.approvalstatus') },
   { key: 'initiatorId', label: t('entity.news.initiatorid') },
@@ -753,9 +701,10 @@ const queryFieldsMeta = computed(() => [
   { key: 'approvedBy', label: t('entity.news.approvedby') },
   { key: 'approvedAtStart', label: t('entity.news.approvedatstart') },
   { key: 'approvedAtEnd', label: t('entity.news.approvedatend') },
+  { key: 'flowInstanceId', label: t('entity.news.flowinstanceid') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'ExtField', label: t('common.page.entity.ExtField') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -773,320 +722,134 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
-/** 主子表展开行 keys（手风琴，仅一行展开） */
-const expandedRowKeys = ref<string[]>([])
+/** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
+const dictDataStore = useDictDataStore()
+/** 主表选中行上下文（右侧明细面板读取） */
+const { selectedMasterRow } = provideNewsMasterContext()
+const newsAttachmentPanelRef = ref<InstanceType<typeof NewsAttachmentPanel> | null>(null)
 
-/** 页面挂载后加载分页列表 */
-onMounted(() => {
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {NewsQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<NewsQuery>): NewsQuery {
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: NewsQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: keyof NewsQuery, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v as never
+    }
+  }
+  assignTrimmed('newsCode', form.newsCode)
+  if (form.newsCategory !== undefined && form.newsCategory !== null) {
+    query.newsCategory = form.newsCategory
+  }
+  assignTrimmed('newsTitle', form.newsTitle)
+  assignTrimmed('newsSummary', form.newsSummary)
+  assignTrimmed('tags', form.tags)
+  assignTrimmed('newsContent', form.newsContent)
+  assignTrimmed('newsCoverImage', form.newsCoverImage)
+  if (form.isTop !== undefined && form.isTop !== null) {
+    query.isTop = form.isTop
+  }
+  if (form.isRecommended !== undefined && form.isRecommended !== null) {
+    query.isRecommended = form.isRecommended
+  }
+  assignTrimmed('effectiveTimeStart', form.effectiveTimeStart)
+  assignTrimmed('effectiveTimeEnd', form.effectiveTimeEnd)
+  assignTrimmed('expireTimeStart', form.expireTimeStart)
+  assignTrimmed('expireTimeEnd', form.expireTimeEnd)
+  if (form.readCount !== undefined && form.readCount !== null) {
+    query.readCount = form.readCount
+  }
+  if (form.likeCount !== undefined && form.likeCount !== null) {
+    query.likeCount = form.likeCount
+  }
+  if (form.commentCount !== undefined && form.commentCount !== null) {
+    query.commentCount = form.commentCount
+  }
+  if (form.favoriteCount !== undefined && form.favoriteCount !== null) {
+    query.favoriteCount = form.favoriteCount
+  }
+  if (form.shareCount !== undefined && form.shareCount !== null) {
+    query.shareCount = form.shareCount
+  }
+  if (form.attachmentCount !== undefined && form.attachmentCount !== null) {
+    query.attachmentCount = form.attachmentCount
+  }
+  assignTrimmed('deptId', form.deptId)
+  assignTrimmed('deptName', form.deptName)
+  assignTrimmed('publisherId', form.publisherId)
+  assignTrimmed('publisherName', form.publisherName)
+  assignTrimmed('publishTimeStart', form.publishTimeStart)
+  assignTrimmed('publishTimeEnd', form.publishTimeEnd)
+  if (form.newsStatus !== undefined && form.newsStatus !== null) {
+    query.newsStatus = form.newsStatus
+  }
+  if (form.approvalStatus !== undefined && form.approvalStatus !== null) {
+    query.approvalStatus = form.approvalStatus
+  }
+  assignTrimmed('initiatorId', form.initiatorId)
+  assignTrimmed('initiatedAtStart', form.initiatedAtStart)
+  assignTrimmed('initiatedAtEnd', form.initiatedAtEnd)
+  assignTrimmed('approvedBy', form.approvedBy)
+  assignTrimmed('approvedAtStart', form.approvedAtStart)
+  assignTrimmed('approvedAtEnd', form.approvedAtEnd)
+  assignTrimmed('flowInstanceId', form.flowInstanceId)
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('extField', form.extField)
+  assignTrimmed('remark', form.remark)
+  return query
+}
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
+  void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
 
-/** 展开行预览：newsAttachment 列 */
-const newsAttachmentExpandColumns = computed(() => [
-  {
-    title: t('entity.newsAttachment.newsname'),
-    dataIndex: 'newsName',
-    key: 'newsName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.newsAttachment.fileid'),
-    dataIndex: 'fileId',
-    key: 'fileId',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.newsAttachment.filename'),
-    dataIndex: 'fileName',
-    key: 'fileName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.newsAttachment.filepath'),
-    dataIndex: 'filePath',
-    key: 'filePath',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.newsAttachment.filesize'),
-    dataIndex: 'fileSize',
-    key: 'fileSize',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.newsAttachment.filetype'),
-    dataIndex: 'fileType',
-    key: 'fileType',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.newsAttachment.fileextension'),
-    dataIndex: 'fileExtension',
-    key: 'fileExtension',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.newsAttachment.news'),
-    dataIndex: 'news',
-    key: 'news',
-    ellipsis: true,
-  },
-])
 
-/** 展开行预览：newsComment 列 */
-const newsCommentExpandColumns = computed(() => [
-  {
-    title: t('entity.newsComment.newsname'),
-    dataIndex: 'newsName',
-    key: 'newsName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.newsComment.parentid'),
-    dataIndex: 'parentId',
-    key: 'parentId',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.newsComment.userid'),
-    dataIndex: 'userId',
-    key: 'userId',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.newsComment.username'),
-    dataIndex: 'userName',
-    key: 'userName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.newsComment.useravatar'),
-    dataIndex: 'userAvatar',
-    key: 'userAvatar',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.newsComment.replytouserid'),
-    dataIndex: 'replyToUserId',
-    key: 'replyToUserId',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.newsComment.replytousername'),
-    dataIndex: 'replyToUserName',
-    key: 'replyToUserName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.newsComment.commentcontent'),
-    dataIndex: 'commentContent',
-    key: 'commentContent',
-    ellipsis: true,
-  },
-])
+/** 主表行点击选中 key（左右主子表高亮） */
+const selectedMasterKey = ref('')
 
-/** 展开行预览：newsLike 列 */
-const newsLikeExpandColumns = computed(() => [
-  {
-    title: t('entity.newsLike.newsname'),
-    dataIndex: 'newsName',
-    key: 'newsName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.newsLike.userid'),
-    dataIndex: 'userId',
-    key: 'userId',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.newsLike.username'),
-    dataIndex: 'userName',
-    key: 'userName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.newsLike.liketime'),
-    dataIndex: 'likeTime',
-    key: 'likeTime',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.newsLike.news'),
-    dataIndex: 'news',
-    key: 'news',
-    ellipsis: true,
-  },
-])
-
-/** 展开行预览：newsRead 列 */
-const newsReadExpandColumns = computed(() => [
-  {
-    title: t('entity.newsRead.newsname'),
-    dataIndex: 'newsName',
-    key: 'newsName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.newsRead.userid'),
-    dataIndex: 'userId',
-    key: 'userId',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.newsRead.username'),
-    dataIndex: 'userName',
-    key: 'userName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.newsRead.readtime'),
-    dataIndex: 'readTime',
-    key: 'readTime',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.newsRead.news'),
-    dataIndex: 'news',
-    key: 'news',
-    ellipsis: true,
-  },
-])
-
-/** 展开行预览：newsFavorite 列 */
-const newsFavoriteExpandColumns = computed(() => [
-  {
-    title: t('entity.newsFavorite.newsname'),
-    dataIndex: 'newsName',
-    key: 'newsName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.newsFavorite.userid'),
-    dataIndex: 'userId',
-    key: 'userId',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.newsFavorite.username'),
-    dataIndex: 'userName',
-    key: 'userName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.newsFavorite.favoritetime'),
-    dataIndex: 'favoriteTime',
-    key: 'favoriteTime',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.newsFavorite.news'),
-    dataIndex: 'news',
-    key: 'news',
-    ellipsis: true,
-  },
-])
-
-/** 展开行预览：newsShare 列 */
-const newsShareExpandColumns = computed(() => [
-  {
-    title: t('entity.newsShare.newsname'),
-    dataIndex: 'newsName',
-    key: 'newsName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.newsShare.userid'),
-    dataIndex: 'userId',
-    key: 'userId',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.newsShare.username'),
-    dataIndex: 'userName',
-    key: 'userName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.newsShare.sharechannel'),
-    dataIndex: 'shareChannel',
-    key: 'shareChannel',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.newsShare.sharetime'),
-    dataIndex: 'shareTime',
-    key: 'shareTime',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.newsShare.news'),
-    dataIndex: 'news',
-    key: 'news',
-    ellipsis: true,
-  },
-])
-
-/** 读取主表行上的 newsAttachment 子表缓存 */
-function getNewsAttachmentRows(record: News): NewsAttachment[] {
-  return (record as any)?.attachments ?? []
+/** 同步主表选中行到右侧明细（子表由 *-panel watch 自动 reload） */
+function syncMasterSelection(record: News | null) {
+  selectedMasterRow.value = record
+  selectedMasterKey.value = record ? getNewsId(record) : ''
 }
 
-/** 主表行是否已加载 newsAttachment 子表 */
-function hasNewsAttachmentRows(record: News): boolean {
-  return getNewsAttachmentRows(record).length > 0
+/**
+ * 左右主子表：主表行选中
+ * @param record 主表行
+ */
+function handleMasterSelect(record: Record<string, unknown>) {
+  const row = record as unknown as News
+  const key = getNewsId(row)
+  selectedRowKeys.value = [key]
+  selectedRows.value = [row]
+  selectedRow.value = row
+  syncMasterSelection(row)
 }
 
-/** 读取主表行上的 newsComment 子表缓存 */
-function getNewsCommentRows(record: News): NewsComment[] {
-  return (record as any)?.comments ?? []
+/**
+ * 主表分页变更（v-model 已同步页码与 pageSize）
+ * @param _page 页码
+ * @param _pageSize 每页条数
+ */
+function handleMasterPaginationChange(_page: number, _pageSize: number) {
+  loadData()
 }
-
-/** 主表行是否已加载 newsComment 子表 */
-function hasNewsCommentRows(record: News): boolean {
-  return getNewsCommentRows(record).length > 0
-}
-
-/** 读取主表行上的 newsLike 子表缓存 */
-function getNewsLikeRows(record: News): NewsLike[] {
-  return (record as any)?.likes ?? []
-}
-
-/** 主表行是否已加载 newsLike 子表 */
-function hasNewsLikeRows(record: News): boolean {
-  return getNewsLikeRows(record).length > 0
-}
-
-/** 读取主表行上的 newsRead 子表缓存 */
-function getNewsReadRows(record: News): NewsRead[] {
-  return (record as any)?.reads ?? []
-}
-
-/** 主表行是否已加载 newsRead 子表 */
-function hasNewsReadRows(record: News): boolean {
-  return getNewsReadRows(record).length > 0
-}
-
-/** 读取主表行上的 newsFavorite 子表缓存 */
-function getNewsFavoriteRows(record: News): NewsFavorite[] {
-  return (record as any)?.favorites ?? []
-}
-
-/** 主表行是否已加载 newsFavorite 子表 */
-function hasNewsFavoriteRows(record: News): boolean {
-  return getNewsFavoriteRows(record).length > 0
-}
-
-/** 读取主表行上的 newsShare 子表缓存 */
-function getNewsShareRows(record: News): NewsShare[] {
-  return (record as any)?.shares ?? []
-}
-
-/** 主表行是否已加载 newsShare 子表 */
-function hasNewsShareRows(record: News): boolean {
-  return getNewsShareRows(record).length > 0
-}
-
 
 /** 加载主表详情并回填当前页 dataSource */
 async function loadNewsDetail(record: News): Promise<News | null> {
@@ -1105,197 +868,6 @@ async function loadNewsDetail(record: News): Promise<News | null> {
     message.error(error?.message || t('common.feedback.load.data.failed'))
     return null
   }
-}
-/** 懒加载 newsAttachment 子表（NewsAttachmentQuery + newsAttachmentApi，与主表 NewsQuery 分离） */
-async function loadNewsAttachmentForNews(record: News): Promise<NewsAttachment[]> {
-  const masterId = getNewsId(record)
-  if (!masterId) {
-    return []
-  }
-  try {
-    const childQuery: NewsAttachmentQuery = {
-      pageIndex: 1,
-      pageSize: 500,
-      newsId: masterId,
-    }
-    const result = await newsAttachmentApi.getNewsAttachmentList(childQuery)
-    const rows = result?.data ?? []
-    const index = dataSource.value.findIndex((row) => getNewsId(row) === masterId)
-    if (index !== -1) {
-      const row = dataSource.value[index]
-      dataSource.value[index] = { ...row, attachments: rows } as News
-    }
-    return rows
-  } catch (error: any) {
-    message.error(error?.message || t('common.feedback.load.data.failed'))
-    return []
-  }
-}
-
-/** 懒加载 newsComment 子表（NewsCommentQuery + newsCommentApi，与主表 NewsQuery 分离） */
-async function loadNewsCommentForNews(record: News): Promise<NewsComment[]> {
-  const masterId = getNewsId(record)
-  if (!masterId) {
-    return []
-  }
-  try {
-    const childQuery: NewsCommentQuery = {
-      pageIndex: 1,
-      pageSize: 500,
-      newsId: masterId,
-    }
-    const result = await newsCommentApi.getNewsCommentList(childQuery)
-    const rows = result?.data ?? []
-    const index = dataSource.value.findIndex((row) => getNewsId(row) === masterId)
-    if (index !== -1) {
-      const row = dataSource.value[index]
-      dataSource.value[index] = { ...row, comments: rows } as News
-    }
-    return rows
-  } catch (error: any) {
-    message.error(error?.message || t('common.feedback.load.data.failed'))
-    return []
-  }
-}
-
-/** 懒加载 newsLike 子表（NewsLikeQuery + newsLikeApi，与主表 NewsQuery 分离） */
-async function loadNewsLikeForNews(record: News): Promise<NewsLike[]> {
-  const masterId = getNewsId(record)
-  if (!masterId) {
-    return []
-  }
-  try {
-    const childQuery: NewsLikeQuery = {
-      pageIndex: 1,
-      pageSize: 500,
-      newsId: masterId,
-    }
-    const result = await newsLikeApi.getNewsLikeList(childQuery)
-    const rows = result?.data ?? []
-    const index = dataSource.value.findIndex((row) => getNewsId(row) === masterId)
-    if (index !== -1) {
-      const row = dataSource.value[index]
-      dataSource.value[index] = { ...row, likes: rows } as News
-    }
-    return rows
-  } catch (error: any) {
-    message.error(error?.message || t('common.feedback.load.data.failed'))
-    return []
-  }
-}
-
-/** 懒加载 newsRead 子表（NewsReadQuery + newsReadApi，与主表 NewsQuery 分离） */
-async function loadNewsReadForNews(record: News): Promise<NewsRead[]> {
-  const masterId = getNewsId(record)
-  if (!masterId) {
-    return []
-  }
-  try {
-    const childQuery: NewsReadQuery = {
-      pageIndex: 1,
-      pageSize: 500,
-      newsId: masterId,
-    }
-    const result = await newsReadApi.getNewsReadList(childQuery)
-    const rows = result?.data ?? []
-    const index = dataSource.value.findIndex((row) => getNewsId(row) === masterId)
-    if (index !== -1) {
-      const row = dataSource.value[index]
-      dataSource.value[index] = { ...row, reads: rows } as News
-    }
-    return rows
-  } catch (error: any) {
-    message.error(error?.message || t('common.feedback.load.data.failed'))
-    return []
-  }
-}
-
-/** 懒加载 newsFavorite 子表（NewsFavoriteQuery + newsFavoriteApi，与主表 NewsQuery 分离） */
-async function loadNewsFavoriteForNews(record: News): Promise<NewsFavorite[]> {
-  const masterId = getNewsId(record)
-  if (!masterId) {
-    return []
-  }
-  try {
-    const childQuery: NewsFavoriteQuery = {
-      pageIndex: 1,
-      pageSize: 500,
-      newsId: masterId,
-    }
-    const result = await newsFavoriteApi.getNewsFavoriteList(childQuery)
-    const rows = result?.data ?? []
-    const index = dataSource.value.findIndex((row) => getNewsId(row) === masterId)
-    if (index !== -1) {
-      const row = dataSource.value[index]
-      dataSource.value[index] = { ...row, favorites: rows } as News
-    }
-    return rows
-  } catch (error: any) {
-    message.error(error?.message || t('common.feedback.load.data.failed'))
-    return []
-  }
-}
-
-/** 懒加载 newsShare 子表（NewsShareQuery + newsShareApi，与主表 NewsQuery 分离） */
-async function loadNewsShareForNews(record: News): Promise<NewsShare[]> {
-  const masterId = getNewsId(record)
-  if (!masterId) {
-    return []
-  }
-  try {
-    const childQuery: NewsShareQuery = {
-      pageIndex: 1,
-      pageSize: 500,
-      newsId: masterId,
-    }
-    const result = await newsShareApi.getNewsShareList(childQuery)
-    const rows = result?.data ?? []
-    const index = dataSource.value.findIndex((row) => getNewsId(row) === masterId)
-    if (index !== -1) {
-      const row = dataSource.value[index]
-      dataSource.value[index] = { ...row, shares: rows } as News
-    }
-    return rows
-  } catch (error: any) {
-    message.error(error?.message || t('common.feedback.load.data.failed'))
-    return []
-  }
-}
-
-/** 展开前确保各子表已懒加载 */
-async function ensureNewsChildrenLoaded(record: News) {
-  if (!hasNewsAttachmentRows(record)) {
-    await loadNewsAttachmentForNews(record)
-  }
-  if (!hasNewsCommentRows(record)) {
-    await loadNewsCommentForNews(record)
-  }
-  if (!hasNewsLikeRows(record)) {
-    await loadNewsLikeForNews(record)
-  }
-  if (!hasNewsReadRows(record)) {
-    await loadNewsReadForNews(record)
-  }
-  if (!hasNewsFavoriteRows(record)) {
-    await loadNewsFavoriteForNews(record)
-  }
-  if (!hasNewsShareRows(record)) {
-    await loadNewsShareForNews(record)
-  }
-}
-
-/** 主表展开行：手风琴懒加载子表 */
-async function handleExpand(expanded: boolean, record: News) {
-  const key = getNewsId(record)
-  if (!expanded || !key) {
-    expandedRowKeys.value = []
-    return
-  }
-  if (expandedRowKeys.value.length > 0 && expandedRowKeys.value[0] !== key) {
-    expandedRowKeys.value = []
-  }
-  await ensureNewsChildrenLoaded(record)
-  expandedRowKeys.value = [key]
 }
 
 /** 表格列定义（i18n 随 locale 变化） */
@@ -1464,24 +1036,6 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getNewsField(record, 'attachmentCount') ?? ''
   },
   {
-    title: t('entity.news.flowinstanceid'),
-    dataIndex: 'flowInstanceId',
-    key: 'flowInstanceId',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getNewsField(record, 'flowInstanceId') ?? ''
-  },
-  {
-    title: t('entity.news.flowinstancename'),
-    dataIndex: 'flowInstanceName',
-    key: 'flowInstanceName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getNewsField(record, 'flowInstanceName') ?? ''
-  },
-  {
     title: t('entity.news.deptid'),
     dataIndex: 'deptId',
     key: 'deptId',
@@ -1541,7 +1095,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'routine:newscenter:news:update',
+        permission: 'routine:news:center:update',
         onClick: (record: News) => handleEdit(record)
       },
       {
@@ -1549,7 +1103,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'routine:newscenter:news:delete',
+        permission: 'routine:news:center:delete',
         onClick: (record: News) => handleDeleteOne(record)
       }
     ]
@@ -1565,6 +1119,7 @@ const getNewsId = (record: any): string => record?.[entityIdName] ?? ''
  */
 const getNewsField = (record: any, field: string): any => record?.[field]
 
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -1572,51 +1127,32 @@ const rowSelection = computed(() => ({
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
+    if (rows.length === 1 && rows[0]) {
+      syncMasterSelection(rows[0])
+    } else if (rows.length === 0) {
+      syncMasterSelection(null)
+    }
   },
   onSelect: (record: News, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getNewsId(selectedRow.value) === getNewsId(record)) {
+      syncMasterSelection(record)
+    } else if (selectedRow.value && getNewsId(selectedRow.value) === getNewsId(record)) {
       selectedRow.value = null
+      syncMasterSelection(null)
     }
   },
   onSelectAll: (selected: boolean, selectedRowsData: News[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
+    syncMasterSelection(selectedRow.value)
   }
 }))
-
-/** 行点击切换选中（与 rowSelection 联动） */
-const onClickRow = (record: News) => ({
-  onClick: () => {
-    const key = getNewsId(record)
-    const index = selectedRowKeys.value.indexOf(key)
-    if (index > -1) {
-      selectedRowKeys.value.splice(index, 1)
-    } else {
-      selectedRowKeys.value.push(key)
-    }
-    selectedRows.value = dataSource.value.filter((item) => selectedRowKeys.value.includes(getNewsId(item)))
-    selectedRow.value = selectedRowKeys.value.length === 1 ? (selectedRows.value[0] ?? null) : null
-    if (rowSelection.value.onChange) {
-      rowSelection.value.onChange(selectedRowKeys.value, selectedRows.value)
-    }
-  }
-})
 
 /** 加载分页列表 */
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: NewsQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getNewsList(params)
+    const res = await getNewsList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
@@ -1634,7 +1170,7 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -1661,14 +1197,12 @@ function handleReset() {
   favoriteCount: undefined as number | undefined,
   shareCount: undefined as number | undefined,
   attachmentCount: undefined as number | undefined,
-  flowInstanceId: '',
   deptId: '',
   deptName: '',
   publisherId: '',
   publisherName: '',
   publishTimeStart: '',
   publishTimeEnd: '',
-  sortOrder: undefined as number | undefined,
   newsStatus: undefined as number | undefined,
   approvalStatus: undefined as number | undefined,
   initiatorId: '',
@@ -1677,20 +1211,22 @@ function handleReset() {
   approvedBy: '',
   approvedAtStart: '',
   approvedAtEnd: '',
+  flowInstanceId: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
   formTitle.value = t('common.dialog.title.create', { entity: t('entity.news._self') })
-  formData.value = {}
+  formData.value = null
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗（主子表：先拉详情含子表） */
 async function handleEdit(record: News) {
@@ -1734,6 +1270,11 @@ async function handleFormSubmit() {
       message.success(t('common.feedback.created', { target: t('entity.news._self') }))
     }
     formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
+    if (selectedMasterKey.value) {
+  newsAttachmentPanelRef.value?.reload?.()
+    }
     loadData()
   } finally {
     formLoading.value = false
@@ -1743,6 +1284,8 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开导入对话框 */
 function handleImport() {
@@ -1774,16 +1317,11 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: NewsQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportNews(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportNews(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -1820,6 +1358,10 @@ async function handleDeleteOne(record: News) {
     onOk: async () => {
       await deleteNewsById((record as any)[entityIdName])
       message.success(t('common.feedback.deleted', { target: t('entity.news._self') }))
+      selectedRowKeys.value = []
+      selectedRows.value = []
+      selectedRow.value = null
+      syncMasterSelection(null)
       loadData()
     }
   })
@@ -1839,6 +1381,10 @@ async function handleDelete() {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteNewsBatch(ids)
       message.success(t('common.feedback.deleted', { target: t('entity.news._self') }))
+      selectedRowKeys.value = []
+      selectedRows.value = []
+      selectedRow.value = null
+      syncMasterSelection(null)
       loadData()
     }
   })
@@ -1851,7 +1397,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -1876,14 +1422,12 @@ function handleAdvancedQueryReset() {
   favoriteCount: undefined as number | undefined,
   shareCount: undefined as number | undefined,
   attachmentCount: undefined as number | undefined,
-  flowInstanceId: '',
   deptId: '',
   deptName: '',
   publisherId: '',
   publisherName: '',
   publishTimeStart: '',
   publishTimeEnd: '',
-  sortOrder: undefined as number | undefined,
   newsStatus: undefined as number | undefined,
   approvalStatus: undefined as number | undefined,
   initiatorId: '',
@@ -1892,9 +1436,10 @@ function handleAdvancedQueryReset() {
   approvedBy: '',
   approvedAtStart: '',
   approvedAtEnd: '',
+  flowInstanceId: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
 }
@@ -1923,24 +1468,4 @@ function handleRefresh() {
 function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
-/** 分页页码变更 */
-function handlePaginationChange(page: number) {
-  currentPage.value = page
-  loadData()
-}
-/** 分页每页条数变更 */
-function handlePaginationSizeChange(_current: number, size: number) {
-  pageSize.value = size
-  currentPage.value = 1
-  loadData()
-}
 </script>
-
-<style scoped lang="css">
-.routine-news-center-news {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-</style>

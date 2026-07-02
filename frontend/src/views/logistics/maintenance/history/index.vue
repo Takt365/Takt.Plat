@@ -235,8 +235,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.maintenanceStartTimeStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenancehistory.maintenancestarttimestart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -246,8 +245,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.maintenanceStartTimeEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenancehistory.maintenancestarttimeend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -257,8 +255,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.maintenanceEndTimeStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenancehistory.maintenanceendtimestart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -268,8 +265,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.maintenanceEndTimeEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenancehistory.maintenanceendtimeend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -464,7 +460,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -475,7 +471,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -1106,7 +1102,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: MaintenanceHistory, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getMaintenanceHistoryId(selectedRow.value) === getMaintenanceHistoryId(record)) {
+    } else if (selectedRow.value && getMaintenanceHistoryId(selectedRow.value) === getMaintenanceHistoryId(record)) {
       selectedRow.value = null
     }
   },

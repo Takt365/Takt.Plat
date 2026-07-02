@@ -118,10 +118,12 @@
                 :label="t('entity.inspectionstandard.inspectiontype')"
                 name="inspectionType"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.inspectionType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionstandard.inspectiontype') })"
-                  style="width: 100%"
+                  dict-type="logistics_quality_inspection_type"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.inspectionstandard.inspectiontype') })"
+                  :disabled="loading"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -195,25 +197,15 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.inspectionstandard.isenabled')"
-                name="isEnabled"
-              >
-                <a-input-number
-                  v-model:value="formState.isEnabled"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionstandard.isenabled') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
                 :label="t('entity.inspectionstandard.standardstatus')"
                 name="standardStatus"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.standardStatus"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionstandard.standardstatus') })"
-                  style="width: 100%"
+                  dict-type="logistics_quality_standard_status"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.inspectionstandard.standardstatus') })"
+                  :disabled="loading"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -331,7 +323,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","standardCode","standardName","inspectionType","materialCategoryCode","materialCategoryName","samplingSchemeCode","samplingSchemeName","isEnabled","standardStatus","standardDescription","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","standardCode","standardName","inspectionType","materialCategoryCode","materialCategoryName","samplingSchemeCode","samplingSchemeName","standardStatus","standardDescription","extField","remark"]
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
 
@@ -535,19 +527,6 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
-  isEnabled: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.inspectionstandard.isenabled') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.inspectionstandard.isenabled') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
   standardStatus: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
@@ -576,10 +555,6 @@ function getValues(): Record<string, any> {
   if ('inspectionType' in payload) {
     const rawinspectionType = payload.inspectionType
     payload.inspectionType = typeof rawinspectionType === 'number' ? rawinspectionType : Number(rawinspectionType)
-  }
-  if ('isEnabled' in payload) {
-    const rawisEnabled = payload.isEnabled
-    payload.isEnabled = typeof rawisEnabled === 'number' ? rawisEnabled : Number(rawisEnabled)
   }
   if ('standardStatus' in payload) {
     const rawstandardStatus = payload.standardStatus

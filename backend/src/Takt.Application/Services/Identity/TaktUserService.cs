@@ -700,8 +700,8 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
                         continue;
                     }
 
-                    if (!dictSnapshot.TryResolveImportCode("sys_user_type", row.UserType, row.UserTypeName, out var userType, out var dictError)
-                        || !dictSnapshot.TryResolveImportCode("sys_yes_no_type", row.UserStatus, row.StatusName, out var userStatus, out dictError))
+                    if (!dictSnapshot.TryResolveImportCode("sys_user_type", row.UserType ?? 0, row.UserTypeName, out var userType, out var dictError)
+                        || !dictSnapshot.TryResolveImportCode("sys_yes_no_type", row.UserStatus ?? 0, row.StatusName, out var userStatus, out dictError))
                     {
                         errors.Add($"第{rowNumber}行：{dictError}");
                         fail++;
@@ -714,7 +714,7 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
                         Username = row.Username,
                         Nickname = row.Nickname,
                         UserType = userType,
-                        EmployeeId = row.EmployeeId > 0 ? row.EmployeeId : employee.Id,
+                        EmployeeId = row.EmployeeId is > 0 ? row.EmployeeId.Value : employee.Id,
                         UserStatus = userStatus,
                         PasswordHash = TaktEncryptHelper.HashPassword(plainPassword),
                         TenantCode = CurrentTenantCode,
@@ -779,7 +779,7 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
         var employees = employeeIds.Count > 0
             ? await _employeeRepository.GetListAsync(e => employeeIds.Contains(e.Id))
             : [];
-        var employeeNameMap = employees.ToDictionary(e => e.Id, e => e.Name ?? string.Empty);
+        var employeeNameMap = employees.ToDictionary(e => e.Id, e => e.EmployeeName ?? string.Empty);
         var userIds = list.Select(u => u.Id).ToList();
         var roleNamesMap = await _rbacService.GetUserRoleNamesMapAsync(userIds);
         var exportData = new List<TaktUserExportDto>(list.Count);
@@ -849,7 +849,7 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
             var employee = await _employeeRepository.GetByIdAsync(user.EmployeeId);
             if (employee != null)
             {
-                dto.EmployeeName = employee.Name;
+                dto.EmployeeName = employee.EmployeeName;
             }
         }
 
@@ -861,7 +861,7 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
                 .Select(ur => ur.RoleName)
                 .Where(name => !string.IsNullOrWhiteSpace(name))
                 .Select(name => name!)
-                .ToList();
+                .ToArray();
         }
 
         var userCompanies = await _rbacService.GetUserCompanyIdsAsync(user.Id);

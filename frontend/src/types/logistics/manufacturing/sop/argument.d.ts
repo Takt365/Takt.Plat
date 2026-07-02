@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/sop
 // 文件名称：argument.d.ts
-// 创建时间：2026-06-20
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/sop 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -183,7 +183,7 @@ export interface SopArgumentCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -287,9 +287,19 @@ export interface SopArgumentTemplate {
   paramCode?: string;
 
   /**
+   * 实际值
+   */
+  actualValue?: number;
+
+  /**
    * 是否超差（字典 sys_yes_no_type，0=否，1=是）
    */
   isOutOfRange?: number;
+
+  /**
+   * 记录时间
+   */
+  recordedAt?: string;
 
   /**
    * 扩展字段JSON
@@ -321,7 +331,7 @@ export interface SopArgumentImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -346,9 +356,19 @@ export interface SopArgumentImport {
   paramCode?: string;
 
   /**
+   * 实际值
+   */
+  actualValue?: number;
+
+  /**
    * 是否超差（字典 sys_yes_no_type，0=否，1=是）
    */
   isOutOfRange?: number;
+
+  /**
+   * 记录时间
+   */
+  recordedAt?: string;
 
   /**
    * 扩展字段JSON

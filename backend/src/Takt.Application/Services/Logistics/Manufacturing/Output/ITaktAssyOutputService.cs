@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Output
 // 文件名称：ITaktAssyOutputService.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-30
 // 创建人：Takt365(Cursor AI)
 // 功能描述：组立日报应用服务接口
 // 
@@ -71,13 +71,6 @@ public interface ITaktAssyOutputService
     Task DeleteAssyOutputBatchAsync(IEnumerable<long> ids);
 
     /// <summary>
-    /// 更新组立日报状态
-    /// </summary>
-    /// <param name="dto">状态DTO</param>
-    /// <returns>DTO</returns>
-    Task<TaktAssyOutputDto> UpdateAssyOutputStatusAsync(TaktAssyOutputStatusDto dto);
-
-    /// <summary>
     /// 获取导入模板
     /// </summary>
     /// <param name="sheetName">工作表名称</param>
@@ -101,5 +94,12 @@ public interface ITaktAssyOutputService
     /// <param name="fileName">文件名</param>
     /// <returns>Excel 文件</returns>
     Task<(string fileName, byte[] fileContent)> ExportAssyOutputAsync(TaktAssyOutputQueryDto? query = null, string? sheetName = null, string? fileName = null);
+
+    /// <summary>
+    /// 获取组立生产统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>生产统计</returns>
+    Task<TaktAssyOutputProductionStatDto> GetAssyOutputProductionStatAsync(TaktOutputProductionStatQueryDto queryDto);
 
 }

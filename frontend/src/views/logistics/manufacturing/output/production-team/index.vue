@@ -78,6 +78,18 @@
             @change="(checked: unknown) => handleStatusChange(record, Boolean(checked))"
           />
         </template>
+        <template v-else-if="column.key === 'teamCategory'">
+          <TaktDictTag
+            :value="getProductionTeamField(record, 'teamCategory')"
+            dict-type="logistics_team_category"
+          />
+        </template>
+        <template v-else-if="column.key === 'shiftNo'">
+          <TaktDictTag
+            :value="getProductionTeamField(record, 'shiftNo')"
+            dict-type="logistics_shift_category"
+          />
+        </template>
       </template>
 
     </TaktSingleTable>
@@ -147,60 +159,27 @@
           v-model:value="advancedQueryForm.teamName"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionteam.teamname') })"
           show-count
-          :maxlength="64"
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('teamCategory')">
       <a-form-item :label="t('entity.productionteam.teamcategory')">
-        <a-input
+        <TaktSelect
           v-model:value="advancedQueryForm.teamCategory"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionteam.teamcategory') })"
-          show-count
-          :maxlength="10"
+          dict-type="logistics_team_category"
+          :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionteam.teamcategory') })"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('teamCategoryName')">
-      <a-form-item :label="t('entity.productionteam.teamcategoryname')">
+      <div v-show="isFieldVisible('teamLeader')">
+      <a-form-item :label="t('entity.productionteam.teamleader')">
         <a-input
-          v-model:value="advancedQueryForm.teamCategoryName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionteam.teamcategoryname') })"
-          show-count
-          :maxlength="50"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('productionLine')">
-      <a-form-item :label="t('entity.productionteam.productionline')">
-        <a-input
-          v-model:value="advancedQueryForm.productionLine"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionteam.productionline') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('teamLeaderId')">
-      <a-form-item :label="t('entity.productionteam.teamleaderid')">
-        <a-input
-          v-model:value="advancedQueryForm.teamLeaderId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionteam.teamleaderid') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('teamLeaderName')">
-      <a-form-item :label="t('entity.productionteam.teamleadername')">
-        <a-input
-          v-model:value="advancedQueryForm.teamLeaderName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionteam.teamleadername') })"
+          v-model:value="advancedQueryForm.teamLeader"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.productionteam.teamleader') })"
           show-count
           :maxlength="50"
           allow-clear
@@ -209,10 +188,11 @@
       </div>
       <div v-show="isFieldVisible('shiftNo')">
       <a-form-item :label="t('entity.productionteam.shiftno')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.shiftNo"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionteam.shiftno') })"
-          style="width: 100%"
+          dict-type="logistics_shift_category"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionteam.shiftno') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -232,7 +212,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -243,7 +223,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -393,10 +373,7 @@ const advancedQueryForm = ref({
   teamCode: '',
   teamName: '',
   teamCategory: '',
-  teamCategoryName: '',
-  productionLine: '',
-  teamLeaderId: '',
-  teamLeaderName: '',
+  teamLeader: '',
   shiftNo: undefined as number | undefined,
   status: undefined as number | undefined,
   createdAtStart: '',
@@ -410,10 +387,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'teamCode', label: t('entity.productionteam.teamcode') },
   { key: 'teamName', label: t('entity.productionteam.teamname') },
   { key: 'teamCategory', label: t('entity.productionteam.teamcategory') },
-  { key: 'teamCategoryName', label: t('entity.productionteam.teamcategoryname') },
-  { key: 'productionLine', label: t('entity.productionteam.productionline') },
-  { key: 'teamLeaderId', label: t('entity.productionteam.teamleaderid') },
-  { key: 'teamLeaderName', label: t('entity.productionteam.teamleadername') },
+  { key: 'teamLeader', label: t('entity.productionteam.teamleader') },
   { key: 'shiftNo', label: t('entity.productionteam.shiftno') },
   { key: 'status', label: t('entity.productionteam.status') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
@@ -465,11 +439,10 @@ function buildListQuery(overrides?: Partial<ProductionTeamQuery>): ProductionTea
   assignTrimmed('plantCode', form.plantCode)
   assignTrimmed('teamCode', form.teamCode)
   assignTrimmed('teamName', form.teamName)
-  assignTrimmed('teamCategory', form.teamCategory)
-  assignTrimmed('teamCategoryName', form.teamCategoryName)
-  assignTrimmed('productionLine', form.productionLine)
-  assignTrimmed('teamLeaderId', form.teamLeaderId)
-  assignTrimmed('teamLeaderName', form.teamLeaderName)
+  if (form.teamCategory !== undefined && form.teamCategory !== null && String(form.teamCategory).trim() !== '') {
+    query.teamCategory = String(form.teamCategory).trim()
+  }
+  assignTrimmed('teamLeader', form.teamLeader)
   if (form.shiftNo !== undefined && form.shiftNo !== null) {
     query.shiftNo = form.shiftNo
   }
@@ -541,43 +514,15 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getProductionTeamField(record, 'teamCategory') ?? ''
   },
   {
-    title: t('entity.productionteam.teamcategoryname'),
-    dataIndex: 'teamCategoryName',
-    key: 'teamCategoryName',
+    title: t('entity.productionteam.teamleader'),
+    dataIndex: 'teamLeader',
+    key: 'teamLeader',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getProductionTeamField(record, 'teamCategoryName') ?? ''
-  },
-  {
-    title: t('entity.productionteam.productionline'),
-    dataIndex: 'productionLine',
-    key: 'productionLine',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getProductionTeamField(record, 'productionLine') ?? ''
-  },
-  {
-    title: t('entity.productionteam.teamleaderid'),
-    dataIndex: 'teamLeaderId',
-    key: 'teamLeaderId',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getProductionTeamField(record, 'teamLeaderId') ?? ''
-  },
-  {
-    title: t('entity.productionteam.teamleadername'),
-    dataIndex: 'teamLeaderName',
-    key: 'teamLeaderName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getProductionTeamField(record, 'teamLeaderName') ?? ''
+    customRender: ({ record }: { record: any }) => getProductionTeamField(record, 'teamLeader') ?? ''
   },
   {
     title: t('entity.productionteam.shiftno'),
@@ -586,7 +531,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getProductionTeamField(record, 'shiftNo') ?? ''
   },
   {
     title: t('entity.productionteam.status'),
@@ -639,7 +583,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: ProductionTeam, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getProductionTeamId(selectedRow.value) === getProductionTeamId(record)) {
+    } else if (selectedRow.value && getProductionTeamId(selectedRow.value) === getProductionTeamId(record)) {
       selectedRow.value = null
     }
   },
@@ -700,10 +644,7 @@ function handleReset() {
   teamCode: '',
   teamName: '',
   teamCategory: '',
-  teamCategoryName: '',
-  productionLine: '',
-  teamLeaderId: '',
-  teamLeaderName: '',
+  teamLeader: '',
   shiftNo: undefined as number | undefined,
   status: undefined as number | undefined,
   createdAtStart: '',
@@ -908,10 +849,7 @@ function handleAdvancedQueryReset() {
   teamCode: '',
   teamName: '',
   teamCategory: '',
-  teamCategoryName: '',
-  productionLine: '',
-  teamLeaderId: '',
-  teamLeaderName: '',
+  teamLeader: '',
   shiftNo: undefined as number | undefined,
   status: undefined as number | undefined,
   createdAtStart: '',

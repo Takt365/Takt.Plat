@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/routine/conference-center
 // 文件名称：conference-participant.d.ts
-// 创建时间：2026-06-21
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：routine/conference-center 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -188,7 +188,7 @@ export interface ConferenceParticipantCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -321,6 +321,16 @@ export interface ConferenceParticipantTemplate {
   attendanceStatus?: number;
 
   /**
+   * 签到时间
+   */
+  checkInTime?: string;
+
+  /**
+   * 签退时间
+   */
+  checkOutTime?: string;
+
+  /**
    * 签到方式（0=手动，1=扫码，2=人脸等）
    */
   checkInMethod?: number;
@@ -355,7 +365,7 @@ export interface ConferenceParticipantImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -383,6 +393,16 @@ export interface ConferenceParticipantImport {
    * 出席状态
    */
   attendanceStatus?: number;
+
+  /**
+   * 签到时间
+   */
+  checkInTime?: string;
+
+  /**
+   * 签退时间
+   */
+  checkOutTime?: string;
 
   /**
    * 签到方式（0=手动，1=扫码，2=人脸等）

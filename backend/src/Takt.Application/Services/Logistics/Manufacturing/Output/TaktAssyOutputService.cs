@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Output
 // 文件名称：TaktAssyOutputService.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-30
 // 创建人：Takt365(Cursor AI)
 // 功能描述：组立日报应用服务实现
 // 
@@ -101,7 +101,7 @@ public class TaktAssyOutputService : TaktServiceBase, ITaktAssyOutputService
     {
         EnsureThreeLayerContext();
         var list = await _assyOutputRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.Status == 1,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
             x => x.PlantCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
@@ -124,12 +124,12 @@ public class TaktAssyOutputService : TaktServiceBase, ITaktAssyOutputService
             x => x.PlantCode == entity.PlantCode
                 && x.ProdCategory == entity.ProdCategory
                 && x.ProdDate == entity.ProdDate
-                && x.ProdLine == entity.ProdLine
+                && x.ProdTeam == entity.ProdTeam
                 && x.ShiftNo == entity.ShiftNo
                 && x.ProdOrderCode == entity.ProdOrderCode);
         if (!isUnique_ix_takt_logistics_manufacturing_output_assy_unique)
         {
-            throw new TaktBusinessException("组立日报的PlantCode、ProdCategory、ProdDate、ProdLine、ShiftNo、ProdOrderCode已存在");
+            throw new TaktBusinessException("组立日报的PlantCode、ProdCategory、ProdDate、ProdTeam、ShiftNo、ProdOrderCode已存在");
         }
         entity = await _assyOutputRepository.CreateAsync(entity);
                 await SaveAssyOutputChildrenAsync(entity, dto);
@@ -155,13 +155,13 @@ public class TaktAssyOutputService : TaktServiceBase, ITaktAssyOutputService
             x => x.PlantCode == entity.PlantCode
                 && x.ProdCategory == entity.ProdCategory
                 && x.ProdDate == entity.ProdDate
-                && x.ProdLine == entity.ProdLine
+                && x.ProdTeam == entity.ProdTeam
                 && x.ShiftNo == entity.ShiftNo
                 && x.ProdOrderCode == entity.ProdOrderCode,
             id);
         if (!isUnique_ix_takt_logistics_manufacturing_output_assy_unique)
         {
-            throw new TaktBusinessException("组立日报的PlantCode、ProdCategory、ProdDate、ProdLine、ShiftNo、ProdOrderCode已存在");
+            throw new TaktBusinessException("组立日报的PlantCode、ProdCategory、ProdDate、ProdTeam、ShiftNo、ProdOrderCode已存在");
         }
         await _assyOutputRepository.UpdateAsync(entity);
                 await SaveAssyOutputChildrenAsync(entity, dto);
@@ -207,23 +207,6 @@ public class TaktAssyOutputService : TaktServiceBase, ITaktAssyOutputService
     }
 
     /// <summary>
-    /// 更新组立日报状态
-    /// </summary>
-    /// <param name="dto">状态DTO</param>
-    /// <returns>DTO</returns>
-    public async Task<TaktAssyOutputDto> UpdateAssyOutputStatusAsync(TaktAssyOutputStatusDto dto)
-    {
-        var entity = await _assyOutputRepository.GetByIdAsync(dto.AssyOutputId);
-        if (entity == null)
-        {
-            throw new TaktBusinessException("组立日报不存在");
-        }
-        entity.Status = dto.Status;
-        await _assyOutputRepository.UpdateAsync(entity);
-        return await GetAssyOutputByIdAsync(dto.AssyOutputId) ?? throw new TaktBusinessException("组立日报不存在");
-    }
-
-    /// <summary>
     /// 获取导入模板
     /// </summary>
     /// <param name="sheetName">工作表名称</param>
@@ -259,22 +242,22 @@ public class TaktAssyOutputService : TaktServiceBase, ITaktAssyOutputService
             try
             {
                 var entity = rows[i].Adapt<TaktAssyOutput>();
-                var importKey = $"{entity.PlantCode}|{entity.ProdCategory}|{entity.ProdDate}|{entity.ProdLine}|{entity.ShiftNo}|{entity.ProdOrderCode}";
+                var importKey = $"{entity.PlantCode}|{entity.ProdCategory}|{entity.ProdDate}|{entity.ProdTeam}|{entity.ShiftNo}|{entity.ProdOrderCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、ProdCategory、ProdDate、ProdLine、ShiftNo、ProdOrderCode）");
+                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、ProdCategory、ProdDate、ProdTeam、ShiftNo、ProdOrderCode）");
                 }
                 var isUnique_ix_takt_logistics_manufacturing_output_assy_unique = await _uniqueValidator.IsUniqueAsync(
                     _assyOutputRepository,
                     x => x.PlantCode == entity.PlantCode
                         && x.ProdCategory == entity.ProdCategory
                         && x.ProdDate == entity.ProdDate
-                        && x.ProdLine == entity.ProdLine
+                        && x.ProdTeam == entity.ProdTeam
                         && x.ShiftNo == entity.ShiftNo
                         && x.ProdOrderCode == entity.ProdOrderCode);
                 if (!isUnique_ix_takt_logistics_manufacturing_output_assy_unique)
                 {
-                    throw new TaktBusinessException("组立日报的PlantCode、ProdCategory、ProdDate、ProdLine、ShiftNo、ProdOrderCode已存在");
+                    throw new TaktBusinessException("组立日报的PlantCode、ProdCategory、ProdDate、ProdTeam、ShiftNo、ProdOrderCode已存在");
                 }
                 await _assyOutputRepository.CreateAsync(entity);
                 success += 1;
@@ -396,6 +379,59 @@ public class TaktAssyOutputService : TaktServiceBase, ITaktAssyOutputService
             await _assyOutputDetailRepository.CreateRangeAsync(assyoutputdetails);
         }
     }
+
+    /// <summary>
+    /// 获取组立生产统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>生产统计</returns>
+    public async Task<TaktAssyOutputProductionStatDto> GetAssyOutputProductionStatAsync(TaktOutputProductionStatQueryDto queryDto)
+    {
+        EnsureThreeLayerContext();
+        var (start, end, statMonth) = TaktStatMonthRangeHelper.ResolveMonthRange(
+            queryDto.ProdDateStart,
+            queryDto.ProdDateEnd);
+        var tenantCode = CurrentTenantCode;
+        var companyCode = CurrentCompanyCode;
+        Expression<Func<TaktAssyOutput, bool>> mainPredicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.ProdDate >= start
+            && x.ProdDate <= end;
+        var monthStdCapacity = await _assyOutputRepository.SumAsync(x => x.StdCapacity, mainPredicate);
+        var outputs = await _assyOutputRepository.GetListAsync(mainPredicate);
+        if (outputs.Count == 0)
+        {
+            return new TaktAssyOutputProductionStatDto
+            {
+                StatMonth = statMonth,
+                MonthStdCapacity = monthStdCapacity,
+            };
+        }
+        var outputIds = outputs.Select(x => x.Id).ToList();
+        Expression<Func<TaktAssyOutputDetail, bool>> detailPredicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && outputIds.Contains(x.AssyOutputId);
+        var monthProdActualQty = await _assyOutputDetailRepository.SumAsync(x => x.ProdActualQty, detailPredicate);
+        var monthDowntimeMinutes = await _assyOutputDetailRepository.SumAsync(x => x.DowntimeMinutes, detailPredicate);
+        var monthInputMinutes = await _assyOutputDetailRepository.SumAsync(x => x.InputMinutes, detailPredicate);
+        var monthProdMinutes = await _assyOutputDetailRepository.SumAsync(x => x.ProdMinutes, detailPredicate);
+        var monthActualMinutes = await _assyOutputDetailRepository.SumAsync(x => x.ActualMinutes, detailPredicate);
+        var monthAchievementRate = TaktProductionStatHelper.CalculateAchievementRatePercent(monthProdActualQty, monthStdCapacity);
+        return new TaktAssyOutputProductionStatDto
+        {
+            StatMonth = statMonth,
+            MonthStdCapacity = monthStdCapacity,
+            MonthProdActualQty = monthProdActualQty,
+            MonthAchievementRate = monthAchievementRate,
+            MonthDowntimeMinutes = monthDowntimeMinutes,
+            MonthInputMinutes = monthInputMinutes,
+            MonthProdMinutes = monthProdMinutes,
+            MonthActualMinutes = monthActualMinutes,
+        };
+    }
+
     // ========================================
     // 查询表达式
     // ========================================
@@ -415,7 +451,7 @@ public class TaktAssyOutputService : TaktServiceBase, ITaktAssyOutputService
             exp = exp.And(x =>
                 (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.ProdCategory != null && x.ProdCategory.Contains(keywords))
-                || (x.ProdLine != null && x.ProdLine.Contains(keywords))
+                || (x.ProdTeam != null && x.ProdTeam.Contains(keywords))
                 || SqlFunc.ToString(x.DirectLabor).Contains(keywords)
                 || SqlFunc.ToString(x.IndirectLabor).Contains(keywords)
                 || SqlFunc.ToString(x.ShiftNo).Contains(keywords)
@@ -427,7 +463,6 @@ public class TaktAssyOutputService : TaktServiceBase, ITaktAssyOutputService
                 || SqlFunc.ToString(x.ProdOrderQty).Contains(keywords)
                 || SqlFunc.ToString(x.StdMinutes).Contains(keywords)
                 || SqlFunc.ToString(x.StdCapacity).Contains(keywords)
-                || SqlFunc.ToString(x.Status).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.ProdDate).Contains(keywords)
@@ -445,9 +480,9 @@ public class TaktAssyOutputService : TaktServiceBase, ITaktAssyOutputService
             exp = exp.And(x => x.ProdCategory != null && x.ProdCategory.Contains(queryDto.ProdCategory));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ProdLine))
+        if (!string.IsNullOrEmpty(queryDto?.ProdTeam))
         {
-            exp = exp.And(x => x.ProdLine != null && x.ProdLine.Contains(queryDto.ProdLine));
+            exp = exp.And(x => x.ProdTeam != null && x.ProdTeam.Contains(queryDto.ProdTeam));
         }
 
         if (queryDto?.DirectLabor.HasValue == true)
@@ -503,11 +538,6 @@ public class TaktAssyOutputService : TaktServiceBase, ITaktAssyOutputService
         if (queryDto?.StdCapacity.HasValue == true)
         {
             exp = exp.And(x => x.StdCapacity == queryDto.StdCapacity);
-        }
-
-        if (queryDto?.Status.HasValue == true)
-        {
-            exp = exp.And(x => x.Status == queryDto.Status);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

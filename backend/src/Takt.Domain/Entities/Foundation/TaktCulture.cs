@@ -26,43 +26,36 @@ namespace Takt.Domain.Entities.Foundation;
 [SugarIndex("ix_culture_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
 [SugarIndex("ix_culture_culture_unique", nameof(TenantCode), OrderByType.Asc, nameof(CultureCode), OrderByType.Asc, true)]
 public class TaktCulture : TaktTenantEntityBase
-{
-    /// <summary>
-    /// 区域文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）
+{    /// <summary>
+    /// 文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）
     /// </summary>
-    [SugarColumn(ColumnName = "culture_code", ColumnDescription = "区域编码", ColumnDataType = "varchar", Length = 5, IsNullable = false)]
+    [SugarColumn(ColumnName = "culture_code", ColumnDescription = "文化编码", ColumnDataType = "varchar", Length = 5, IsNullable = false)]
     public string CultureCode { get; set; } = string.Empty;
-
     /// <summary>
     /// 语言名称（如：简体中文、English）
     /// </summary>
     [SugarColumn(ColumnName = "language_name", ColumnDescription = "语言名称", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string LanguageName { get; set; } = string.Empty;
-
     /// <summary>
     /// 本地化名称（用该语言显示的自身名称，如：中文、English）
     /// </summary>
     [SugarColumn(ColumnName = "native_name", ColumnDescription = "本地化名称", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string NativeName { get; set; } = string.Empty;
-
     /// <summary>
     /// 语言图标（flag-icons：fi-cn / fi-us / fi-jp，前端解析为 fi fi-xx）
     /// </summary>
     [SugarColumn(ColumnName = "icon", ColumnDescription = "语言图标", ColumnDataType = "varchar", Length = 50, IsNullable = true)]
     public string? Icon { get; set; }
-
+    /// <summary>
+    /// 默认语言（字典 sys_yes_no_type；1=是 0=否）
+    /// </summary>
+    [SugarColumn(ColumnName = "is_default", ColumnDescription = "默认语言", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int IsDefault { get; set; } = 0;
     /// <summary>
     /// 排序号
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; } = 0;
-
-    /// <summary>
-    /// 是否默认语言（1=是，0=否）
-    /// </summary>
-    [SugarColumn(ColumnName = "is_default", ColumnDescription = "是否默认语言", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int IsDefault { get; set; } = 0;
-
     /// <summary>
     /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
     /// </summary>

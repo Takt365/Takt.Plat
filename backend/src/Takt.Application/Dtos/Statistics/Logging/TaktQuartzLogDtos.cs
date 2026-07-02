@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Statistics.Logging
 // 文件名称：TaktQuartzLogDtos.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-29
 // 创建人：Takt365(Auto Generated)
 // 功能描述：QuartzLog 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktQuartzLog 生成，请按需审阅）
 // 
@@ -53,14 +53,14 @@ public class TaktQuartzLogDto : TaktCompanyDtoBase
     public string TaskName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 任务组名（执行时快照）
+    /// 任务组名（执行时快照；字典 sys_quartz_job_group 的 DictValue）
     /// </summary>
-    public TaktQuartzLogJobGroup JobGroup { get; set; }
+    public string JobGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 任务类型（1=程序集 2=网络请求 3=SQL语句）
+    /// 任务类型（字典 sys_quartz_task_type 的 DictValue，如 assembly、http、sql）
     /// </summary>
-    public TaktQuartzTaskType TaskType { get; set; }
+    public string TaskType { get; set; } = string.Empty;
 
     /// <summary>
     /// 执行时间
@@ -74,29 +74,29 @@ public class TaktQuartzLogDto : TaktCompanyDtoBase
     public long ExecuteDuration { get; set; }
 
     /// <summary>
-    /// 执行参数
+    /// 执行参数（无参数为空串）
     /// </summary>
-    public string? ExecuteParams { get; set; } = string.Empty;
+    public string ExecuteParams { get; set; } = string.Empty;
 
     /// <summary>
-    /// 执行消息
+    /// 执行消息（无消息为空串）
     /// </summary>
-    public string? ExecuteMessage { get; set; } = string.Empty;
+    public string ExecuteMessage { get; set; } = string.Empty;
 
     /// <summary>
-    /// 错误信息
+    /// 错误信息（成功为空串）
     /// </summary>
-    public string? ErrorInfo { get; set; } = string.Empty;
+    public string ErrorInfo { get; set; } = string.Empty;
 
     /// <summary>
     /// 执行机器 IP
     /// </summary>
-    public string? ExecuteIp { get; set; } = string.Empty;
+    public string ExecuteIp { get; set; } = string.Empty;
 
     /// <summary>
     /// 执行机器名
     /// </summary>
-    public string? ExecuteHost { get; set; } = string.Empty;
+    public string ExecuteHost { get; set; } = string.Empty;
 
     /// <summary>
     /// 执行状态（0=失败，1=成功）
@@ -143,14 +143,14 @@ public class TaktQuartzLogQueryDto : TaktPagedQuery
     public string? TaskName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 任务组名（执行时快照）
+    /// 任务组名（执行时快照；字典 sys_quartz_job_group 的 DictValue）
     /// </summary>
-    public TaktQuartzLogJobGroup? JobGroup { get; set; }
+    public string? JobGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 任务类型（1=程序集 2=网络请求 3=SQL语句）
+    /// 任务类型（字典 sys_quartz_task_type 的 DictValue，如 assembly、http、sql）
     /// </summary>
-    public TaktQuartzTaskType? TaskType { get; set; }
+    public string? TaskType { get; set; } = string.Empty;
 
     /// <summary>
     /// 执行时间（范围查询-开始）
@@ -169,17 +169,17 @@ public class TaktQuartzLogQueryDto : TaktPagedQuery
     public long? ExecuteDuration { get; set; }
 
     /// <summary>
-    /// 执行参数
+    /// 执行参数（无参数为空串）
     /// </summary>
     public string? ExecuteParams { get; set; } = string.Empty;
 
     /// <summary>
-    /// 执行消息
+    /// 执行消息（无消息为空串）
     /// </summary>
     public string? ExecuteMessage { get; set; } = string.Empty;
 
     /// <summary>
-    /// 错误信息
+    /// 错误信息（成功为空串）
     /// </summary>
     public string? ErrorInfo { get; set; } = string.Empty;
 
@@ -239,7 +239,7 @@ public class TaktQuartzLogCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -256,14 +256,16 @@ public class TaktQuartzLogCreateDto
     public string TaskName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 任务组名（执行时快照）
+    /// 任务组名（执行时快照；字典 sys_quartz_job_group 的 DictValue）
     /// </summary>
-    public TaktQuartzLogJobGroup JobGroup { get; set; }
+    [Required(ErrorMessage = "任务组名（执行时快照；字典 sys_quartz_job_group 的 DictValue）不能为空")]
+    public string JobGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 任务类型（1=程序集 2=网络请求 3=SQL语句）
+    /// 任务类型（字典 sys_quartz_task_type 的 DictValue，如 assembly、http、sql）
     /// </summary>
-    public TaktQuartzTaskType TaskType { get; set; }
+    [Required(ErrorMessage = "任务类型（字典 sys_quartz_task_type 的 DictValue，如 assembly、http、sql）不能为空")]
+    public string TaskType { get; set; } = string.Empty;
 
     /// <summary>
     /// 执行时间
@@ -277,29 +279,34 @@ public class TaktQuartzLogCreateDto
     public long ExecuteDuration { get; set; }
 
     /// <summary>
-    /// 执行参数
+    /// 执行参数（无参数为空串）
     /// </summary>
-    public string? ExecuteParams { get; set; } = string.Empty;
+    [Required(ErrorMessage = "执行参数（无参数为空串）不能为空")]
+    public string ExecuteParams { get; set; } = string.Empty;
 
     /// <summary>
-    /// 执行消息
+    /// 执行消息（无消息为空串）
     /// </summary>
-    public string? ExecuteMessage { get; set; } = string.Empty;
+    [Required(ErrorMessage = "执行消息（无消息为空串）不能为空")]
+    public string ExecuteMessage { get; set; } = string.Empty;
 
     /// <summary>
-    /// 错误信息
+    /// 错误信息（成功为空串）
     /// </summary>
-    public string? ErrorInfo { get; set; } = string.Empty;
+    [Required(ErrorMessage = "错误信息（成功为空串）不能为空")]
+    public string ErrorInfo { get; set; } = string.Empty;
 
     /// <summary>
     /// 执行机器 IP
     /// </summary>
-    public string? ExecuteIp { get; set; } = string.Empty;
+    [Required(ErrorMessage = "执行机器 IP不能为空")]
+    public string ExecuteIp { get; set; } = string.Empty;
 
     /// <summary>
     /// 执行机器名
     /// </summary>
-    public string? ExecuteHost { get; set; } = string.Empty;
+    [Required(ErrorMessage = "执行机器名不能为空")]
+    public string ExecuteHost { get; set; } = string.Empty;
 
     /// <summary>
     /// 执行状态（0=失败，1=成功）
@@ -395,14 +402,14 @@ public class TaktQuartzLogExportDto
     public string TaskName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 任务组名（执行时快照）
+    /// 任务组名（执行时快照；字典 sys_quartz_job_group 的 DictValue）
     /// </summary>
-    public TaktQuartzLogJobGroup JobGroup { get; set; }
+    public string JobGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 任务类型（1=程序集 2=网络请求 3=SQL语句）
+    /// 任务类型（字典 sys_quartz_task_type 的 DictValue，如 assembly、http、sql）
     /// </summary>
-    public TaktQuartzTaskType TaskType { get; set; }
+    public string TaskType { get; set; } = string.Empty;
 
     /// <summary>
     /// 执行时间
@@ -416,29 +423,29 @@ public class TaktQuartzLogExportDto
     public long ExecuteDuration { get; set; }
 
     /// <summary>
-    /// 执行参数
+    /// 执行参数（无参数为空串）
     /// </summary>
-    public string? ExecuteParams { get; set; } = string.Empty;
+    public string ExecuteParams { get; set; } = string.Empty;
 
     /// <summary>
-    /// 执行消息
+    /// 执行消息（无消息为空串）
     /// </summary>
-    public string? ExecuteMessage { get; set; } = string.Empty;
+    public string ExecuteMessage { get; set; } = string.Empty;
 
     /// <summary>
-    /// 错误信息
+    /// 错误信息（成功为空串）
     /// </summary>
-    public string? ErrorInfo { get; set; } = string.Empty;
+    public string ErrorInfo { get; set; } = string.Empty;
 
     /// <summary>
     /// 执行机器 IP
     /// </summary>
-    public string? ExecuteIp { get; set; } = string.Empty;
+    public string ExecuteIp { get; set; } = string.Empty;
 
     /// <summary>
     /// 执行机器名
     /// </summary>
-    public string? ExecuteHost { get; set; } = string.Empty;
+    public string ExecuteHost { get; set; } = string.Empty;
 
     /// <summary>
     /// 执行状态（0=失败，1=成功）

@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="human:resource:personnel:employeedelegation:create"
-      update-permission="human:resource:personnel:employeedelegation:update"
-      delete-permission="human:resource:personnel:employeedelegation:delete"
-      import-permission="human:resource:personnel:employeedelegation:import"
-      export-permission="human:resource:personnel:employeedelegation:export"
+      create-permission="human:resource:personnel:employee:delegation:create"
+      update-permission="human:resource:personnel:employee:delegation:update"
+      delete-permission="human:resource:personnel:employee:delegation:delete"
+      import-permission="human:resource:personnel:employee:delegation:import"
+      export-permission="human:resource:personnel:employee:delegation:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -54,8 +54,8 @@
 
     <!-- 表格 -->
     <TaktSingleTable
-      :columns="columns"
       entity-scope="company"
+      :columns="columns"
       :visible-column-keys="visibleColumnKeys"
       :id-column-key="'employeeDelegationId'"
       table-mode="single"
@@ -72,7 +72,7 @@
 
     </TaktSingleTable>
 
-    <!-- 分页组件 -->
+    <!-- 分页（服务端分页，外置 TaktPagination） -->
     <TaktPagination
       v-model:current="currentPage"
       v-model:page-size="pageSize"
@@ -92,6 +92,7 @@
       @cancel="handleFormCancel"
     >
       <EmployeeDelegationForm
+        :key="formData?.employeeDelegationId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -109,96 +110,102 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('proxyEmployeeId')">
-      <a-form-item :label="t('entity.employeeDelegation.proxyemployeeid')">
+      <a-form-item :label="t('entity.employeedelegation.proxyemployeeid')">
         <a-input
           v-model:value="advancedQueryForm.proxyEmployeeId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeDelegation.proxyemployeeid') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeedelegation.proxyemployeeid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('originalEmployeeId')">
-      <a-form-item :label="t('entity.employeeDelegation.originalemployeeid')">
+      <a-form-item :label="t('entity.employeedelegation.originalemployeeid')">
         <a-input
           v-model:value="advancedQueryForm.originalEmployeeId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeDelegation.originalemployeeid') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeedelegation.originalemployeeid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('delegationType')">
-      <a-form-item :label="t('entity.employeeDelegation.delegationtype')">
+      <a-form-item :label="t('entity.employeedelegation.delegationtype')">
         <a-input-number
           v-model:value="advancedQueryForm.delegationType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeDelegation.delegationtype') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeedelegation.delegationtype') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('scopeType')">
-      <a-form-item :label="t('entity.employeeDelegation.scopetype')">
+      <a-form-item :label="t('entity.employeedelegation.scopetype')">
         <a-textarea
           v-model:value="advancedQueryForm.scopeType"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.employeeDelegation.scopetype') })"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.employeedelegation.scopetype') })"
           :rows="2"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('scopeId')">
-      <a-form-item :label="t('entity.employeeDelegation.scopeid')">
+      <a-form-item :label="t('entity.employeedelegation.scopeid')">
         <a-textarea
           v-model:value="advancedQueryForm.scopeId"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.employeeDelegation.scopeid') })"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.employeedelegation.scopeid') })"
           :rows="2"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('reason')">
-      <a-form-item :label="t('entity.employeeDelegation.reason')">
+      <a-form-item :label="t('entity.employeedelegation.reason')">
         <a-input
           v-model:value="advancedQueryForm.reason"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeDelegation.reason') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeedelegation.reason') })"
+          show-count
+          :maxlength="200"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('startDateStart')">
-      <a-form-item :label="t('entity.employeeDelegation.startdatestart')">
+      <a-form-item :label="t('entity.employeedelegation.startdatestart')">
         <a-date-picker
           v-model:value="advancedQueryForm.startDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeDelegation.startdatestart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeedelegation.startdatestart') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('startDateEnd')">
-      <a-form-item :label="t('entity.employeeDelegation.startdateend')">
+      <a-form-item :label="t('entity.employeedelegation.startdateend')">
         <a-date-picker
           v-model:value="advancedQueryForm.startDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeDelegation.startdateend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeedelegation.startdateend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('endDateStart')">
-      <a-form-item :label="t('entity.employeeDelegation.enddatestart')">
+      <a-form-item :label="t('entity.employeedelegation.enddatestart')">
         <a-date-picker
           v-model:value="advancedQueryForm.endDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeDelegation.enddatestart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeedelegation.enddatestart') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('endDateEnd')">
-      <a-form-item :label="t('entity.employeeDelegation.enddateend')">
+      <a-form-item :label="t('entity.employeedelegation.enddateend')">
         <a-date-picker
           v-model:value="advancedQueryForm.endDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeDelegation.enddateend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeedelegation.enddateend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
@@ -210,7 +217,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -221,17 +228,36 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('ExtField')">
-      <a-form-item :label="t('common.page.entity.ExtField')">
-        <a-input
-          v-model:value="advancedQueryForm.ExtField"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
-          allow-clear
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
+        <a-textarea
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -240,8 +266,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -251,14 +279,14 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.employeeDelegation._self') })"
+      :title="t('common.dialog.title.import', { entity: t('entity.employeedelegation._self') })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.employeeDelegation._self"
+        entity-i18n-key="entity.employeedelegation._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -285,7 +313,6 @@
 </template>
 
 <script setup lang="ts">
-import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 /**
  * 员工代理关系实体 独立记录所有代理场景管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/human-resource/personnel/employee-delegation
@@ -295,12 +322,13 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import EmployeeDelegationForm from './components/employee-delegation-form.vue'
 import { getEmployeeDelegationList, getEmployeeDelegationById, createEmployeeDelegation, updateEmployeeDelegation, deleteEmployeeDelegationById, deleteEmployeeDelegationBatch, getEmployeeDelegationTemplate, importEmployeeDelegation, exportEmployeeDelegation } from '@/api/human-resource/personnel/employee-delegation'
-import type { EmployeeDelegation, EmployeeDelegationQuery, EmployeeDelegationCreate, EmployeeDelegationUpdate } from '@/types/human-resource/personnel/employee-delegation'
+import type { EmployeeDelegation, EmployeeDelegationQuery } from '@/types/human-resource/personnel/employee-delegation'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -308,7 +336,7 @@ const { t } = useI18n()
 const excelNames = taktExcelEntityNames('TaktEmployeeDelegation')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.employeeDelegation._self') })
+  () => t('common.page.form.placeholder.search', { keyword: t('entity.employeedelegation._self') })
 )
 
 /** 快捷查询关键字 */
@@ -335,11 +363,12 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<EmployeeDelegation>>({})
+const formData = ref<Partial<EmployeeDelegation> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
 const formRef = ref()
+
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
@@ -356,24 +385,24 @@ const advancedQueryForm = ref({
   endDateEnd: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'proxyEmployeeId', label: t('entity.employeeDelegation.proxyemployeeid') },
-  { key: 'originalEmployeeId', label: t('entity.employeeDelegation.originalemployeeid') },
-  { key: 'delegationType', label: t('entity.employeeDelegation.delegationtype') },
-  { key: 'scopeType', label: t('entity.employeeDelegation.scopetype') },
-  { key: 'scopeId', label: t('entity.employeeDelegation.scopeid') },
-  { key: 'reason', label: t('entity.employeeDelegation.reason') },
-  { key: 'startDateStart', label: t('entity.employeeDelegation.startdatestart') },
-  { key: 'startDateEnd', label: t('entity.employeeDelegation.startdateend') },
-  { key: 'endDateStart', label: t('entity.employeeDelegation.enddatestart') },
-  { key: 'endDateEnd', label: t('entity.employeeDelegation.enddateend') },
+  { key: 'proxyEmployeeId', label: t('entity.employeedelegation.proxyemployeeid') },
+  { key: 'originalEmployeeId', label: t('entity.employeedelegation.originalemployeeid') },
+  { key: 'delegationType', label: t('entity.employeedelegation.delegationtype') },
+  { key: 'scopeType', label: t('entity.employeedelegation.scopetype') },
+  { key: 'scopeId', label: t('entity.employeedelegation.scopeid') },
+  { key: 'reason', label: t('entity.employeedelegation.reason') },
+  { key: 'startDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.employeedelegation.startdate')) },
+  { key: 'startDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.employeedelegation.startdate')) },
+  { key: 'endDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.employeedelegation.enddate')) },
+  { key: 'endDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.employeedelegation.enddate')) },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'ExtField', label: t('common.page.entity.ExtField') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -391,19 +420,7 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
-type EmployeeDelegationQueryTrimmedKey =
-  | 'proxyEmployeeId'
-  | 'originalEmployeeId'
-  | 'scopeId'
-  | 'reason'
-  | 'startDateStart'
-  | 'startDateEnd'
-  | 'endDateStart'
-  | 'endDateEnd'
-  | 'createdAtStart'
-  | 'createdAtEnd'
-  | 'ExtField'
-  | 'remark'
+
 
 /**
  * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
@@ -421,14 +438,20 @@ function buildListQuery(overrides?: Partial<EmployeeDelegationQuery>): EmployeeD
   if (kw.length > 0) {
     query.keyWords = kw
   }
-  const assignTrimmed = (key: EmployeeDelegationQueryTrimmedKey, value: string | undefined) => {
+  const assignTrimmed = (key: keyof EmployeeDelegationQuery, value: string | undefined) => {
     const v = (value ?? '').trim()
     if (v.length > 0) {
-      query[key] = v
+      query[key] = v as never
     }
   }
   assignTrimmed('proxyEmployeeId', form.proxyEmployeeId)
   assignTrimmed('originalEmployeeId', form.originalEmployeeId)
+  if (form.delegationType !== undefined && form.delegationType !== null) {
+    query.delegationType = form.delegationType
+  }
+  if (form.scopeType !== undefined && form.scopeType !== null) {
+    query.scopeType = form.scopeType
+  }
   assignTrimmed('scopeId', form.scopeId)
   assignTrimmed('reason', form.reason)
   assignTrimmed('startDateStart', form.startDateStart)
@@ -437,22 +460,16 @@ function buildListQuery(overrides?: Partial<EmployeeDelegationQuery>): EmployeeD
   assignTrimmed('endDateEnd', form.endDateEnd)
   assignTrimmed('createdAtStart', form.createdAtStart)
   assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('ExtField', form.ExtField)
+  assignTrimmed('extField', form.extField)
   assignTrimmed('remark', form.remark)
-  if (form.delegationType !== undefined && form.delegationType !== null) {
-    query.delegationType = form.delegationType
-  }
-  if (form.scopeType !== undefined && form.scopeType !== null) {
-    query.scopeType = form.scopeType
-  }
   return query
 }
-
-/** 页面挂载：加载分页配置后拉列表 */
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
   loadData()
 })
+
 
 
 
@@ -472,7 +489,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeDelegationField(record, 'employeeDelegationId') ?? ''
   },
   {
-    title: t('entity.employeeDelegation.proxyemployeeid'),
+    title: t('entity.employeedelegation.proxyemployeeid'),
     dataIndex: 'proxyEmployeeId',
     key: 'proxyEmployeeId',
     width: 120,
@@ -481,16 +498,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeDelegationField(record, 'proxyEmployeeId') ?? ''
   },
   {
-    title: t('entity.employeeDelegation.proxyemployeename'),
-    dataIndex: 'proxyEmployeeName',
-    key: 'proxyEmployeeName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmployeeDelegationField(record, 'proxyEmployeeName') ?? ''
-  },
-  {
-    title: t('entity.employeeDelegation.originalemployeeid'),
+    title: t('entity.employeedelegation.originalemployeeid'),
     dataIndex: 'originalEmployeeId',
     key: 'originalEmployeeId',
     width: 120,
@@ -499,16 +507,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeDelegationField(record, 'originalEmployeeId') ?? ''
   },
   {
-    title: t('entity.employeeDelegation.originalemployeename'),
-    dataIndex: 'originalEmployeeName',
-    key: 'originalEmployeeName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmployeeDelegationField(record, 'originalEmployeeName') ?? ''
-  },
-  {
-    title: t('entity.employeeDelegation.delegationtype'),
+    title: t('entity.employeedelegation.delegationtype'),
     dataIndex: 'delegationType',
     key: 'delegationType',
     width: 120,
@@ -517,7 +516,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeDelegationField(record, 'delegationType') ?? ''
   },
   {
-    title: t('entity.employeeDelegation.scopetype'),
+    title: t('entity.employeedelegation.scopetype'),
     dataIndex: 'scopeType',
     key: 'scopeType',
     width: 120,
@@ -526,7 +525,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeDelegationField(record, 'scopeType') ?? ''
   },
   {
-    title: t('entity.employeeDelegation.scopeid'),
+    title: t('entity.employeedelegation.scopeid'),
     dataIndex: 'scopeId',
     key: 'scopeId',
     width: 120,
@@ -535,16 +534,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeDelegationField(record, 'scopeId') ?? ''
   },
   {
-    title: t('entity.employeeDelegation.scopename'),
-    dataIndex: 'scopeName',
-    key: 'scopeName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmployeeDelegationField(record, 'scopeName') ?? ''
-  },
-  {
-    title: t('entity.employeeDelegation.reason'),
+    title: t('entity.employeedelegation.reason'),
     dataIndex: 'reason',
     key: 'reason',
     width: 120,
@@ -553,7 +543,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeDelegationField(record, 'reason') ?? ''
   },
   {
-    title: t('entity.employeeDelegation.startdate'),
+    title: t('entity.employeedelegation.startdate'),
     dataIndex: 'startDate',
     key: 'startDate',
     width: 120,
@@ -562,7 +552,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeDelegationField(record, 'startDate') ?? ''
   },
   {
-    title: t('entity.employeeDelegation.enddate'),
+    title: t('entity.employeedelegation.enddate'),
     dataIndex: 'endDate',
     key: 'endDate',
     width: 120,
@@ -577,7 +567,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'human:resource:personnel:employeedelegation:update',
+        permission: 'human:resource:personnel:employee:delegation:update',
         onClick: (record: EmployeeDelegation) => handleEdit(record)
       },
       {
@@ -585,7 +575,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'human:resource:personnel:employeedelegation:delete',
+        permission: 'human:resource:personnel:employee:delegation:delete',
         onClick: (record: EmployeeDelegation) => handleDeleteOne(record)
       }
     ]
@@ -601,6 +591,7 @@ const getEmployeeDelegationId = (record: any): string => record?.[entityIdName] 
  */
 const getEmployeeDelegationField = (record: any, field: string): any => record?.[field]
 
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -612,7 +603,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: EmployeeDelegation, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getEmployeeDelegationId(selectedRow.value) === getEmployeeDelegationId(record)) {
+    } else if (selectedRow.value && getEmployeeDelegationId(selectedRow.value) === getEmployeeDelegationId(record)) {
       selectedRow.value = null
     }
   },
@@ -681,7 +672,7 @@ function handleReset() {
   endDateEnd: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
   currentPage.value = getTaktDefaultPageIndex()
@@ -690,13 +681,14 @@ function handleReset() {
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.employeeDelegation._self') })
-  formData.value = {}
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.employeedelegation._self') })
+  formData.value = null
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗 */
 function handleEdit(record: EmployeeDelegation) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.employeeDelegation._self') })
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.employeedelegation._self') })
   formData.value = { ...record }
   formVisible.value = true
 }
@@ -706,7 +698,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.employeeDelegation._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.employeedelegation._self') }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -724,12 +716,14 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateEmployeeDelegation(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.employeeDelegation._self') }))
+      message.success(t('common.feedback.updated', { target: t('entity.employeedelegation._self') }))
     } else {
       await createEmployeeDelegation(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.employeeDelegation._self') }))
+      message.success(t('common.feedback.created', { target: t('entity.employeedelegation._self') }))
     }
     formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
     loadData()
   } finally {
     formLoading.value = false
@@ -739,6 +733,8 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开导入对话框 */
 function handleImport() {
@@ -793,10 +789,10 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.employeeDelegation._self') }))
+    message.success(t('common.feedback.export.success', { target: t('entity.employeedelegation._self') }))
   } catch (error: any) {
     logger.error('[EmployeeDelegation] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.employeeDelegation._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.employeedelegation._self') }))
   } finally {
     loading.value = false
   }
@@ -805,12 +801,12 @@ async function handleExport() {
 async function handleDeleteOne(record: EmployeeDelegation) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.employeeDelegation._self'), name: t('common.tip.this.target', { target: t('entity.employeeDelegation._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: t('entity.employeedelegation._self'), name: t('common.tip.this.target', { target: t('entity.employeedelegation._self') }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteEmployeeDelegationById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.employeeDelegation._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.employeedelegation._self') }))
       loadData()
     }
   })
@@ -818,18 +814,18 @@ async function handleDeleteOne(record: EmployeeDelegation) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.employeeDelegation._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.employeedelegation._self') }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.employeeDelegation._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: t('entity.employeedelegation._self'), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteEmployeeDelegationBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.employeeDelegation._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.employeedelegation._self') }))
       loadData()
     }
   })
@@ -860,7 +856,7 @@ function handleAdvancedQueryReset() {
   endDateEnd: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
 }
@@ -890,11 +886,13 @@ function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
 /** 分页页码变更 */
-function handlePaginationChange(page: number) {
+function handlePaginationChange(page: number, size: number) {
   currentPage.value = page
+  pageSize.value = size
   loadData()
 }
-/** 分页每页条数变更 */
+
+/** 分页每页条数变更（重置到第 1 页） */
 function handlePaginationSizeChange(_current: number, size: number) {
   currentPage.value = getTaktDefaultPageIndex()
   pageSize.value = size

@@ -10,6 +10,7 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
+using SqlSugar;
 using Takt.Domain.Entities;
 
 namespace Takt.Domain.Entities.Routine.NewsCenter;
@@ -17,6 +18,7 @@ namespace Takt.Domain.Entities.Routine.NewsCenter;
 /// <summary>
 /// 新闻中心评论实体
 /// 支持多级回复；需审批通过后展示
+/// 审批态见基类 ApprovalStatus，字典 sys_approval_status
 /// </summary>
 [SugarTable("takt_routine_news_center_comment", "新闻中心评论表")]
 [SugarIndex("ix_news_comment_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
@@ -30,19 +32,19 @@ namespace Takt.Domain.Entities.Routine.NewsCenter;
 public class TaktNewsComment : TaktApprovalEntityBase
 {
     /// <summary>
-    /// 新闻 ID
+    /// 新闻 ID（关联 TaktNews.Id，选项 TaktNews/options）
     /// </summary>
     [SugarColumn(ColumnName = "news_id", ColumnDescription = "新闻ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long NewsId { get; set; }
     /// <summary>
-    /// 父评论 ID（0 表示顶级评论）
+    /// 父评论 ID（关联 TaktNewsComment.Id，选项 TaktNewsComments/options；0 表示顶级评论）
     /// </summary>
     [SugarColumn(ColumnName = "parent_id", ColumnDescription = "父评论ID", ColumnDataType = "bigint", IsNullable = false, DefaultValue = "0")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ParentId { get; set; } = 0;
     /// <summary>
-    /// 评论人 ID
+    /// 评论人 ID（关联 TaktUser.Id，选项 TaktUsers/options）
     /// </summary>
     [SugarColumn(ColumnName = "user_id", ColumnDescription = "评论人ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -58,7 +60,7 @@ public class TaktNewsComment : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "user_avatar", ColumnDescription = "评论人头像URL", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
     public string? UserAvatar { get; set; }
     /// <summary>
-    /// 被回复人 ID
+    /// 被回复人 ID（关联 TaktUser.Id，选项 TaktUsers/options）
     /// </summary>
     [SugarColumn(ColumnName = "reply_to_user_id", ColumnDescription = "被回复人ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -81,8 +83,8 @@ public class TaktNewsComment : TaktApprovalEntityBase
     /// <summary>
     /// 点赞次数
     /// </summary>
-    [SugarColumn(ColumnName = "like_count", ColumnDescription = "点赞次数", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int LikeCount { get; set; } = 0;
+    [SugarColumn(ColumnName = "news_comment_like_count", ColumnDescription = "点赞次数", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int NewsCommentLikeCount { get; set; } = 0;
     /// <summary>
     /// 回复次数（子评论数量）
     /// </summary>
@@ -94,10 +96,14 @@ public class TaktNewsComment : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "comment_level", ColumnDescription = "评论层级", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int CommentLevel { get; set; } = 0;
     /// <summary>
-    /// 评论状态
+    /// 评论展示状态（字典 routine_news_comment_status；0=待展示 1=已展示 2=已隐藏）
     /// </summary>
     [SugarColumn(ColumnName = "comment_status", ColumnDescription = "评论状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int CommentStatus { get; set; } = 0;
+
+    // ========================================
+    // 导航属性区域
+    // ========================================
     /// <summary>
     /// 新闻（主表）
     /// </summary>

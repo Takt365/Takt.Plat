@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Workflow
 // 文件名称：TaktFlowTaskI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktFlowTask 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -144,15 +144,6 @@ public class TaktFlowTaskI18nSeedData : ITaktSeedDataCoordinator
             // entity.flowtask.owneruserid
             new TranslationSeedItem("entity.flowtask.owneruserid", "zh-HK", "任务所有者ID_hk", "任务所有者 ID（转办前原办理人）"),
 
-            // entity.flowtask.taskstatus
-            new TranslationSeedItem("entity.flowtask.taskstatus", "en-US", "任务状态_us", "任务状态"),
-            // entity.flowtask.taskstatus
-            new TranslationSeedItem("entity.flowtask.taskstatus", "ja-JP", "任务状态_jp", "任务状态"),
-            // entity.flowtask.taskstatus
-            new TranslationSeedItem("entity.flowtask.taskstatus", "zh-CN", "任务状态", "任务状态"),
-            // entity.flowtask.taskstatus
-            new TranslationSeedItem("entity.flowtask.taskstatus", "zh-HK", "任务状态_hk", "任务状态"),
-
             // entity.flowtask.signtype
             new TranslationSeedItem("entity.flowtask.signtype", "en-US", "会签类型_us", "会签类型"),
             // entity.flowtask.signtype
@@ -216,6 +207,15 @@ public class TaktFlowTaskI18nSeedData : ITaktSeedDataCoordinator
             // entity.flowtask.addsignid
             new TranslationSeedItem("entity.flowtask.addsignid", "zh-HK", "加签记录ID_hk", "加签记录 ID（TaktFlowAddSign）"),
 
+            // entity.flowtask.comment
+            new TranslationSeedItem("entity.flowtask.comment", "en-US", "审批意见_us", "审批意见"),
+            // entity.flowtask.comment
+            new TranslationSeedItem("entity.flowtask.comment", "ja-JP", "审批意见_jp", "审批意见"),
+            // entity.flowtask.comment
+            new TranslationSeedItem("entity.flowtask.comment", "zh-CN", "审批意见", "审批意见"),
+            // entity.flowtask.comment
+            new TranslationSeedItem("entity.flowtask.comment", "zh-HK", "审批意见_hk", "审批意见"),
+
             // entity.flowtask.sortorder
             new TranslationSeedItem("entity.flowtask.sortorder", "en-US", "序号_us", "多实例序号"),
             // entity.flowtask.sortorder
@@ -225,14 +225,14 @@ public class TaktFlowTaskI18nSeedData : ITaktSeedDataCoordinator
             // entity.flowtask.sortorder
             new TranslationSeedItem("entity.flowtask.sortorder", "zh-HK", "序号_hk", "多实例序号"),
 
-            // entity.flowtask.comment
-            new TranslationSeedItem("entity.flowtask.comment", "en-US", "审批意见_us", "审批意见"),
-            // entity.flowtask.comment
-            new TranslationSeedItem("entity.flowtask.comment", "ja-JP", "审批意见_jp", "审批意见"),
-            // entity.flowtask.comment
-            new TranslationSeedItem("entity.flowtask.comment", "zh-CN", "审批意见", "审批意见"),
-            // entity.flowtask.comment
-            new TranslationSeedItem("entity.flowtask.comment", "zh-HK", "审批意见_hk", "审批意见"),
+            // entity.flowtask.taskstatus
+            new TranslationSeedItem("entity.flowtask.taskstatus", "en-US", "任务状态_us", "任务状态"),
+            // entity.flowtask.taskstatus
+            new TranslationSeedItem("entity.flowtask.taskstatus", "ja-JP", "任务状态_jp", "任务状态"),
+            // entity.flowtask.taskstatus
+            new TranslationSeedItem("entity.flowtask.taskstatus", "zh-CN", "任务状态", "任务状态"),
+            // entity.flowtask.taskstatus
+            new TranslationSeedItem("entity.flowtask.taskstatus", "zh-HK", "任务状态_hk", "任务状态"),
 
             // entity.flowtask.instance
             new TranslationSeedItem("entity.flowtask.instance", "en-US", "所属流程实例_us", "所属流程实例"),

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Materials
 // 文件名称：TaktMaterialChangeLogI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktMaterialChangeLog 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,22 +91,22 @@ public class TaktMaterialChangeLogI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.materialchangelog._self", "zh-HK", "全局物料变更记录信息_hk", "实体名称"),
 
             // entity.materialchangelog.materialid
-            new TranslationSeedItem("entity.materialchangelog.materialid", "en-US", "全局物料ID_us", "全局物料ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.materialchangelog.materialid", "en-US", "全局物料ID_us", "全局物料 ID（关联 TaktMaterial.Id，选项 TaktMaterials/options）"),
             // entity.materialchangelog.materialid
-            new TranslationSeedItem("entity.materialchangelog.materialid", "ja-JP", "全局物料ID_jp", "全局物料ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.materialchangelog.materialid", "ja-JP", "全局物料ID_jp", "全局物料 ID（关联 TaktMaterial.Id，选项 TaktMaterials/options）"),
             // entity.materialchangelog.materialid
-            new TranslationSeedItem("entity.materialchangelog.materialid", "zh-CN", "全局物料ID", "全局物料ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.materialchangelog.materialid", "zh-CN", "全局物料ID", "全局物料 ID（关联 TaktMaterial.Id，选项 TaktMaterials/options）"),
             // entity.materialchangelog.materialid
-            new TranslationSeedItem("entity.materialchangelog.materialid", "zh-HK", "全局物料ID_hk", "全局物料ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.materialchangelog.materialid", "zh-HK", "全局物料ID_hk", "全局物料 ID（关联 TaktMaterial.Id，选项 TaktMaterials/options）"),
 
             // entity.materialchangelog.materialcode
-            new TranslationSeedItem("entity.materialchangelog.materialcode", "en-US", "物料编码_us", "物料编码"),
+            new TranslationSeedItem("entity.materialchangelog.materialcode", "en-US", "物料编码_us", "物料编码（关联 TaktMaterial.MaterialCode，冗余；选项 TaktMaterials/options）"),
             // entity.materialchangelog.materialcode
-            new TranslationSeedItem("entity.materialchangelog.materialcode", "ja-JP", "物料编码_jp", "物料编码"),
+            new TranslationSeedItem("entity.materialchangelog.materialcode", "ja-JP", "物料编码_jp", "物料编码（关联 TaktMaterial.MaterialCode，冗余；选项 TaktMaterials/options）"),
             // entity.materialchangelog.materialcode
-            new TranslationSeedItem("entity.materialchangelog.materialcode", "zh-CN", "物料编码", "物料编码"),
+            new TranslationSeedItem("entity.materialchangelog.materialcode", "zh-CN", "物料编码", "物料编码（关联 TaktMaterial.MaterialCode，冗余；选项 TaktMaterials/options）"),
             // entity.materialchangelog.materialcode
-            new TranslationSeedItem("entity.materialchangelog.materialcode", "zh-HK", "物料编码_hk", "物料编码"),
+            new TranslationSeedItem("entity.materialchangelog.materialcode", "zh-HK", "物料编码_hk", "物料编码（关联 TaktMaterial.MaterialCode，冗余；选项 TaktMaterials/options）"),
 
             // entity.materialchangelog.changefields
             new TranslationSeedItem("entity.materialchangelog.changefields", "en-US", "变更字段列表_us", "变更字段列表（JSON数组格式，记录同一时间点修改的所有字段及其旧值、新值） 格式：[{\"field\":\"FieldName\",\"description\":\"字段描述\",\"oldValue\":\"旧值\",\"newValue\":\"新值\"}]"),
@@ -127,13 +127,13 @@ public class TaktMaterialChangeLogI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.materialchangelog.changetime", "zh-HK", "变更时间_hk", "变更时间"),
 
             // entity.materialchangelog.changeby
-            new TranslationSeedItem("entity.materialchangelog.changeby", "en-US", "变更人_us", "变更人（人员代码）"),
+            new TranslationSeedItem("entity.materialchangelog.changeby", "en-US", "变更人_us", "变更人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）"),
             // entity.materialchangelog.changeby
-            new TranslationSeedItem("entity.materialchangelog.changeby", "ja-JP", "变更人_jp", "变更人（人员代码）"),
+            new TranslationSeedItem("entity.materialchangelog.changeby", "ja-JP", "变更人_jp", "变更人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）"),
             // entity.materialchangelog.changeby
-            new TranslationSeedItem("entity.materialchangelog.changeby", "zh-CN", "变更人", "变更人（人员代码）"),
+            new TranslationSeedItem("entity.materialchangelog.changeby", "zh-CN", "变更人", "变更人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）"),
             // entity.materialchangelog.changeby
-            new TranslationSeedItem("entity.materialchangelog.changeby", "zh-HK", "变更人_hk", "变更人（人员代码）"),
+            new TranslationSeedItem("entity.materialchangelog.changeby", "zh-HK", "变更人_hk", "变更人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）"),
 
             // entity.materialchangelog.changereason
             new TranslationSeedItem("entity.materialchangelog.changereason", "en-US", "变更原因_us", "变更原因"),

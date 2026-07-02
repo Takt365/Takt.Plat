@@ -188,7 +188,7 @@
           v-model:value="advancedQueryForm.costCurrency"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityassurance.costcurrency') })"
           show-count
-          :maxlength="10"
+          :maxlength="3"
           allow-clear
         />
       </a-form-item>
@@ -199,7 +199,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -210,7 +210,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -632,7 +632,7 @@ const rowSelection = computed(() => ({
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
-    } else if (getQualityAssuranceId(selectedRow.value) === getQualityAssuranceId(record)) {
+    } else if (selectedRow.value && getQualityAssuranceId(selectedRow.value) === getQualityAssuranceId(record)) {
       selectedRow.value = null
       syncMasterSelection(null)
     }

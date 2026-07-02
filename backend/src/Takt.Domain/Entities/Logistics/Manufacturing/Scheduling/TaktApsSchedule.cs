@@ -25,7 +25,7 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Scheduling;
 public class TaktApsSchedule : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂编码（不可空）
+    /// 工厂编码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂编码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
@@ -85,15 +85,15 @@ public class TaktApsSchedule : TaktCompanyEntityBase
     public string? WorkshopName { get; set; }
 
     /// <summary>
-    /// 生产线编码
+    /// 生产班组编码
     /// </summary>
     [SugarColumn(ColumnName = "production_line_code", ColumnDescription = "生产线编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? ProductionLineCode { get; set; }
 
     /// <summary>
-    /// 生产线名称
+    /// 生产班组名称
     /// </summary>
-    [SugarColumn(ColumnName = "production_line_name", ColumnDescription = "生产线名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
+    [SugarColumn(ColumnName = "production_line_name", ColumnDescription = "生产班组名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
     public string? ProductionLineName { get; set; }
 
     /// <summary>
@@ -121,7 +121,7 @@ public class TaktApsSchedule : TaktCompanyEntityBase
     public int ScheduleStatus { get; set; } = 0;
 
     /// <summary>
-    /// 计划员ID
+    /// 计划员ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [SugarColumn(ColumnName = "planner_id", ColumnDescription = "计划员ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -140,7 +140,7 @@ public class TaktApsSchedule : TaktCompanyEntityBase
     public DateTime? PublishTime { get; set; }
 
     /// <summary>
-    /// 发布人ID
+    /// 发布人ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [SugarColumn(ColumnName = "publish_user_id", ColumnDescription = "发布人ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]

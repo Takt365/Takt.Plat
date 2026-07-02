@@ -24,8 +24,8 @@ namespace Takt.Infrastructure.Data.Schema;
 /// 代码生成工作流数据库元数据提供者
 /// 实现 ITaktDatabaseSchemaProvider，通过 SqlSugar 对租户业务库做 Schema introspect
 /// 连接来源：TaktConfigurationExtensions.GetTenantConnections（Database:TenantCodes 配置节）
-/// 实体类型扫描：Takt.Domain 中继承 TaktTenantEntityBase、TaktCompanyEntityBase、
-/// TaktApprovalEntityBase 的非抽象类，供 CodeFirst 建表与代码生成选型
+/// 实体类型扫描：Takt.Domain 中继承 TaktTenantEntityScopeBase、TaktCompanyEntityScopeBase、
+/// TaktApprovalEntityScopeBase 的非抽象类
 /// 消费方：TaktDatabaseInfoService、
 /// TaktGenWorkflowService
 /// </summary>
@@ -37,9 +37,9 @@ public class TaktDatabaseSchemaProvider : ITaktDatabaseSchemaProvider
     private static readonly Type[] EntityTypes = typeof(TaktTenantEntityBase).Assembly
         .GetTypes()
         .Where(t => t.IsClass && !t.IsAbstract &&
-                    (typeof(TaktTenantEntityBase).IsAssignableFrom(t) ||
-                     typeof(TaktCompanyEntityBase).IsAssignableFrom(t) ||
-                     typeof(TaktApprovalEntityBase).IsAssignableFrom(t)))
+                    (typeof(TaktTenantEntityScopeBase).IsAssignableFrom(t) ||
+                     typeof(TaktCompanyEntityScopeBase).IsAssignableFrom(t) ||
+                     typeof(TaktApprovalEntityScopeBase).IsAssignableFrom(t)))
         .OrderBy(t => t.FullName, StringComparer.Ordinal)
         .ToArray();
 
@@ -145,8 +145,8 @@ public class TaktDatabaseSchemaProvider : ITaktDatabaseSchemaProvider
 
     /// <summary>
     /// 获取 Domain 已加载的实体基类派生类型全名
-    /// 范围：继承 TaktTenantEntityBase、TaktCompanyEntityBase、
-    /// TaktApprovalEntityBase 的非抽象类，按全名字典序
+    /// 范围：继承 TaktTenantEntityBase、TaktCompanyEntityBase、TaktApprovalEntityBase、
+    /// TaktTenantEntityScopeBase / TaktCompanyEntityScopeBase / TaktApprovalEntityScopeBase 的非抽象类，按全名字典序
     /// </summary>
     /// <returns>可用于 CodeFirst 建表与代码生成选型的类型全名列表</returns>
     public Task<IReadOnlyList<string>> GetAvailableEntityTypeFullNamesAsync()

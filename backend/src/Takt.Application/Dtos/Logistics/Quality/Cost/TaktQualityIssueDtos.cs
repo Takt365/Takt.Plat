@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Cost
 // 文件名称：TaktQualityIssueDtos.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：QualityIssue 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktQualityIssue 生成，请按需审阅）
 // 
@@ -36,7 +36,7 @@ public class TaktQualityIssueDto : TaktCompanyDtoBase
     public long QualityIssueId { get; set; }
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -131,7 +131,7 @@ public class TaktQualityIssueQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -231,14 +231,14 @@ public class TaktQualityIssueCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码不能为空")]
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -362,7 +362,7 @@ public class TaktQualityIssueTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -370,6 +370,11 @@ public class TaktQualityIssueTemplateDto
     /// 品质问题编码（唯一，如：QF-2026-0001）
     /// </summary>
     public string? QualityIssueCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 问题日期
+    /// </summary>
+    public DateTime? IssueDate { get; set; }
 
     /// <summary>
     /// 机种/产品型号
@@ -402,9 +407,29 @@ public class TaktQualityIssueTemplateDto
     public int? TotalTimeMinutes { get; set; }
 
     /// <summary>
+    /// 总费用(元,自动计算 = 各子表费用合计)
+    /// </summary>
+    public decimal? TotalCost { get; set; }
+
+    /// <summary>
     /// 成本币种（CNY/USD/JPY等）
     /// </summary>
     public string? CostCurrency { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会议/调查/试验费用明细列表（子表，级联保存）
+    /// </summary>
+    public List<TaktQualityIssueMeetingCreateDto>? MeetingItems { get; set; }
+
+    /// <summary>
+    /// 组装不良改修应对明细列表（子表，级联保存）
+    /// </summary>
+    public List<TaktQualityIssueAssyReworkCreateDto>? AssyReworkItems { get; set; }
+
+    /// <summary>
+    /// PCBA不良改修应对明细列表（子表，级联保存）
+    /// </summary>
+    public List<TaktQualityIssuePcbaReworkCreateDto>? PcbaReworkItems { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -434,12 +459,12 @@ public class TaktQualityIssueImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -447,6 +472,11 @@ public class TaktQualityIssueImportDto
     /// 品质问题编码（唯一，如：QF-2026-0001）
     /// </summary>
     public string? QualityIssueCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 问题日期
+    /// </summary>
+    public DateTime? IssueDate { get; set; }
 
     /// <summary>
     /// 机种/产品型号
@@ -479,9 +509,29 @@ public class TaktQualityIssueImportDto
     public int? TotalTimeMinutes { get; set; }
 
     /// <summary>
+    /// 总费用(元,自动计算 = 各子表费用合计)
+    /// </summary>
+    public decimal? TotalCost { get; set; }
+
+    /// <summary>
     /// 成本币种（CNY/USD/JPY等）
     /// </summary>
     public string? CostCurrency { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会议/调查/试验费用明细列表（子表，级联保存）
+    /// </summary>
+    public List<TaktQualityIssueMeetingCreateDto>? MeetingItems { get; set; }
+
+    /// <summary>
+    /// 组装不良改修应对明细列表（子表，级联保存）
+    /// </summary>
+    public List<TaktQualityIssueAssyReworkCreateDto>? AssyReworkItems { get; set; }
+
+    /// <summary>
+    /// PCBA不良改修应对明细列表（子表，级联保存）
+    /// </summary>
+    public List<TaktQualityIssuePcbaReworkCreateDto>? PcbaReworkItems { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -517,7 +567,7 @@ public class TaktQualityIssueExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 

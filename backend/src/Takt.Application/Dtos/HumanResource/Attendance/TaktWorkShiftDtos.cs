@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Attendance
 // 文件名称：TaktWorkShiftDtos.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：WorkShift 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktWorkShift 生成，请按需审阅）
 // 
@@ -56,19 +56,19 @@ public class TaktWorkShiftDto : TaktCompanyDtoBase
     public string EndTime { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否跨自然日（0=否 1=是）
+    /// 是否跨自然日（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     public int CrossMidnight { get; set; } = 0;
+
+    /// <summary>
+    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// </summary>
+    public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号
     /// </summary>
     public int SortOrder { get; set; } = 0;
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
 
 }
 
@@ -113,19 +113,19 @@ public class TaktWorkShiftQueryDto : TaktPagedQuery
     public string? EndTime { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否跨自然日（0=否 1=是）
+    /// 是否跨自然日（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     public int? CrossMidnight { get; set; }
+
+    /// <summary>
+    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号
     /// </summary>
     public int? SortOrder { get; set; }
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -168,7 +168,7 @@ public class TaktWorkShiftCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -197,14 +197,15 @@ public class TaktWorkShiftCreateDto
     public string EndTime { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否跨自然日（0=否 1=是）
+    /// 是否跨自然日（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     public int CrossMidnight { get; set; } = 0;
 
     /// <summary>
-    /// 关联工厂
+    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    [Required(ErrorMessage = "关联工厂不能为空")]
+    public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON
@@ -302,12 +303,12 @@ public class TaktWorkShiftTemplateDto
     public string? EndTime { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否跨自然日（0=否 1=是）
+    /// 是否跨自然日（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     public int? CrossMidnight { get; set; }
 
     /// <summary>
-    /// 关联工厂
+    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
     public string? RelatedPlant { get; set; } = string.Empty;
 
@@ -339,7 +340,7 @@ public class TaktWorkShiftImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -364,12 +365,12 @@ public class TaktWorkShiftImportDto
     public string? EndTime { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否跨自然日（0=否 1=是）
+    /// 是否跨自然日（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     public int? CrossMidnight { get; set; }
 
     /// <summary>
-    /// 关联工厂
+    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
     public string? RelatedPlant { get; set; } = string.Empty;
 
@@ -427,19 +428,19 @@ public class TaktWorkShiftExportDto
     public string EndTime { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否跨自然日（0=否 1=是）
+    /// 是否跨自然日（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     public int CrossMidnight { get; set; } = 0;
+
+    /// <summary>
+    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// </summary>
+    public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号
     /// </summary>
     public int SortOrder { get; set; } = 0;
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON

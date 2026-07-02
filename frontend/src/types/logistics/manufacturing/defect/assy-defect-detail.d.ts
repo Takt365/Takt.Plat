@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/defect
 // 文件名称：assy-defect-detail.d.ts
-// 创建时间：2026-06-20
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/defect 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -49,7 +49,7 @@ export interface AssyDefectDetail extends CompanyDtoBase {
   lineNumber: number;
 
   /**
-   * 不良区分
+   * 不良区分（字典 logistics_defect_category，存 DictValue）
    */
   defectCategory?: string;
 
@@ -84,7 +84,7 @@ export interface AssyDefectDetail extends CompanyDtoBase {
   defectSymptom?: string;
 
   /**
-   * 不良个所
+   * 不良个所（字典 logistics_pcb_location_category，存 DictValue）
    */
   defectLocation?: string;
 
@@ -94,7 +94,7 @@ export interface AssyDefectDetail extends CompanyDtoBase {
   defectReason?: string;
 
   /**
-   * 修理员
+   * 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   repairOperator?: string;
 
@@ -139,7 +139,7 @@ export interface AssyDefectDetailQuery extends TaktPagedQuery {
   lineNumber?: number;
 
   /**
-   * 不良区分
+   * 不良区分（字典 logistics_defect_category，存 DictValue）
    */
   defectCategory?: string;
 
@@ -174,7 +174,7 @@ export interface AssyDefectDetailQuery extends TaktPagedQuery {
   defectSymptom?: string;
 
   /**
-   * 不良个所
+   * 不良个所（字典 logistics_pcb_location_category，存 DictValue）
    */
   defectLocation?: string;
 
@@ -184,7 +184,7 @@ export interface AssyDefectDetailQuery extends TaktPagedQuery {
   defectReason?: string;
 
   /**
-   * 修理员
+   * 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   repairOperator?: string;
 
@@ -228,7 +228,7 @@ export interface AssyDefectDetailCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -248,7 +248,7 @@ export interface AssyDefectDetailCreate {
   lineNumber: number;
 
   /**
-   * 不良区分
+   * 不良区分（字典 logistics_defect_category，存 DictValue）
    */
   defectCategory?: string;
 
@@ -283,7 +283,7 @@ export interface AssyDefectDetailCreate {
   defectSymptom?: string;
 
   /**
-   * 不良个所
+   * 不良个所（字典 logistics_pcb_location_category，存 DictValue）
    */
   defectLocation?: string;
 
@@ -293,7 +293,7 @@ export interface AssyDefectDetailCreate {
   defectReason?: string;
 
   /**
-   * 修理员
+   * 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   repairOperator?: string;
 
@@ -357,9 +357,19 @@ export interface AssyDefectDetailTemplate {
   lineNumber?: number;
 
   /**
-   * 不良区分
+   * 不良区分（字典 logistics_defect_category，存 DictValue）
    */
   defectCategory?: string;
+
+  /**
+   * 不良数量
+   */
+  defectQty?: number;
+
+  /**
+   * 累计不良
+   */
+  cumulativeDefectQty?: number;
 
   /**
    * 随机卡号
@@ -382,7 +392,7 @@ export interface AssyDefectDetailTemplate {
   defectSymptom?: string;
 
   /**
-   * 不良个所
+   * 不良个所（字典 logistics_pcb_location_category，存 DictValue）
    */
   defectLocation?: string;
 
@@ -392,7 +402,7 @@ export interface AssyDefectDetailTemplate {
   defectReason?: string;
 
   /**
-   * 修理员
+   * 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   repairOperator?: string;
 
@@ -426,7 +436,7 @@ export interface AssyDefectDetailImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -446,9 +456,19 @@ export interface AssyDefectDetailImport {
   lineNumber?: number;
 
   /**
-   * 不良区分
+   * 不良区分（字典 logistics_defect_category，存 DictValue）
    */
   defectCategory?: string;
+
+  /**
+   * 不良数量
+   */
+  defectQty?: number;
+
+  /**
+   * 累计不良
+   */
+  cumulativeDefectQty?: number;
 
   /**
    * 随机卡号
@@ -471,7 +491,7 @@ export interface AssyDefectDetailImport {
   defectSymptom?: string;
 
   /**
-   * 不良个所
+   * 不良个所（字典 logistics_pcb_location_category，存 DictValue）
    */
   defectLocation?: string;
 
@@ -481,7 +501,7 @@ export interface AssyDefectDetailImport {
   defectReason?: string;
 
   /**
-   * 修理员
+   * 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   repairOperator?: string;
 
@@ -530,7 +550,7 @@ export interface AssyDefectDetailExport {
   lineNumber: number;
 
   /**
-   * 不良区分
+   * 不良区分（字典 logistics_defect_category，存 DictValue）
    */
   defectCategory?: string;
 
@@ -565,7 +585,7 @@ export interface AssyDefectDetailExport {
   defectSymptom?: string;
 
   /**
-   * 不良个所
+   * 不良个所（字典 logistics_pcb_location_category，存 DictValue）
    */
   defectLocation?: string;
 
@@ -575,7 +595,7 @@ export interface AssyDefectDetailExport {
   defectReason?: string;
 
   /**
-   * 修理员
+   * 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   repairOperator?: string;
 

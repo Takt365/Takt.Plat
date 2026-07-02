@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Performance
 // 文件名称：TaktPerfObjectiveDtos.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PerfObjective 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPerfObjective 生成，请按需审阅）
 // 
@@ -103,14 +103,14 @@ public class TaktPerfObjectiveDto : TaktApprovalDtoBase
     public string AchievementNotes { get; set; } = string.Empty;
 
     /// <summary>
+    /// 关联工厂
+    /// </summary>
+    public string RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
     /// 业务状态（0=待确认 1=进行中 2=已完成）
     /// </summary>
     public int ObjectiveStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
 
 }
 
@@ -207,17 +207,17 @@ public class TaktPerfObjectiveQueryDto : TaktPagedQuery
     public string? AchievementNotes { get; set; } = string.Empty;
 
     /// <summary>
-    /// 业务状态（0=待确认 1=进行中 2=已完成）
-    /// </summary>
-    public int? ObjectiveStatus { get; set; }
-
-    /// <summary>
     /// 关联工厂
     /// </summary>
     public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
-    /// 审批状态（TaktApprovalStatus）
+    /// 业务状态（0=待确认 1=进行中 2=已完成）
+    /// </summary>
+    public int? ObjectiveStatus { get; set; }
+
+    /// <summary>
+    /// 审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）
     /// </summary>
     public TaktApprovalStatus? ApprovalStatus { get; set; }
 
@@ -300,7 +300,7 @@ public class TaktPerfObjectiveCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -371,14 +371,15 @@ public class TaktPerfObjectiveCreateDto
     public string AchievementNotes { get; set; } = string.Empty;
 
     /// <summary>
+    /// 关联工厂
+    /// </summary>
+    [Required(ErrorMessage = "关联工厂不能为空")]
+    public string RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
     /// 业务状态（0=待确认 1=进行中 2=已完成）
     /// </summary>
     public int ObjectiveStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON
@@ -483,19 +484,49 @@ public class TaktPerfObjectiveTemplateDto
     public string? ObjectiveDescription { get; set; } = string.Empty;
 
     /// <summary>
+    /// 目标值
+    /// </summary>
+    public decimal? TargetValue { get; set; }
+
+    /// <summary>
+    /// 实际完成值
+    /// </summary>
+    public decimal? ActualValue { get; set; }
+
+    /// <summary>
+    /// 完成百分比（%）
+    /// </summary>
+    public decimal? CompletionPercentage { get; set; }
+
+    /// <summary>
+    /// 目标权重（%）
+    /// </summary>
+    public decimal? ObjectiveWeight { get; set; }
+
+    /// <summary>
+    /// 开始日期
+    /// </summary>
+    public DateTime? StartDate { get; set; }
+
+    /// <summary>
+    /// 截止日期
+    /// </summary>
+    public DateTime? DueDate { get; set; }
+
+    /// <summary>
     /// 目标达成说明
     /// </summary>
     public string? AchievementNotes { get; set; } = string.Empty;
 
     /// <summary>
-    /// 业务状态（0=待确认 1=进行中 2=已完成）
-    /// </summary>
-    public int? ObjectiveStatus { get; set; }
-
-    /// <summary>
     /// 关联工厂
     /// </summary>
     public string? RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 业务状态（0=待确认 1=进行中 2=已完成）
+    /// </summary>
+    public int? ObjectiveStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -525,7 +556,7 @@ public class TaktPerfObjectiveImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -557,19 +588,49 @@ public class TaktPerfObjectiveImportDto
     public string? ObjectiveDescription { get; set; } = string.Empty;
 
     /// <summary>
+    /// 目标值
+    /// </summary>
+    public decimal? TargetValue { get; set; }
+
+    /// <summary>
+    /// 实际完成值
+    /// </summary>
+    public decimal? ActualValue { get; set; }
+
+    /// <summary>
+    /// 完成百分比（%）
+    /// </summary>
+    public decimal? CompletionPercentage { get; set; }
+
+    /// <summary>
+    /// 目标权重（%）
+    /// </summary>
+    public decimal? ObjectiveWeight { get; set; }
+
+    /// <summary>
+    /// 开始日期
+    /// </summary>
+    public DateTime? StartDate { get; set; }
+
+    /// <summary>
+    /// 截止日期
+    /// </summary>
+    public DateTime? DueDate { get; set; }
+
+    /// <summary>
     /// 目标达成说明
     /// </summary>
     public string? AchievementNotes { get; set; } = string.Empty;
 
     /// <summary>
-    /// 业务状态（0=待确认 1=进行中 2=已完成）
-    /// </summary>
-    public int? ObjectiveStatus { get; set; }
-
-    /// <summary>
     /// 关联工厂
     /// </summary>
     public string? RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 业务状态（0=待确认 1=进行中 2=已完成）
+    /// </summary>
+    public int? ObjectiveStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -662,14 +723,14 @@ public class TaktPerfObjectiveExportDto
     public string AchievementNotes { get; set; } = string.Empty;
 
     /// <summary>
+    /// 关联工厂
+    /// </summary>
+    public string RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
     /// 业务状态（0=待确认 1=进行中 2=已完成）
     /// </summary>
     public int ObjectiveStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON

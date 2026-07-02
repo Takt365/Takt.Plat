@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Operation
 // 文件名称：TaktSamplingSchemeDtos.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SamplingScheme 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSamplingScheme 生成，请按需审阅）
 // 
@@ -36,7 +36,7 @@ public class TaktSamplingSchemeDto : TaktCompanyDtoBase
     public long SamplingSchemeId { get; set; }
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -51,17 +51,17 @@ public class TaktSamplingSchemeDto : TaktCompanyDtoBase
     public string SamplingSchemeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 抽样方案类型（0=计数型，1=计量型，2=计数调整型，3=计量调整型）
+    /// 抽样方案类型（字典 logistics_quality_sampling_scheme_type）
     /// </summary>
     public int SamplingSchemeType { get; set; } = 0;
 
     /// <summary>
-    /// 抽样标准（0=GB/T 2828.1，1=GB/T 6378，2=MIL-STD-105E，3=ANSI/ASQ Z1.4，4=ISO 2859-1，5=自定义）
+    /// 抽样标准（字典 logistics_quality_sampling_standard）
     /// </summary>
     public int SamplingStandard { get; set; } = 0;
 
     /// <summary>
-    /// 检验水平（0=I，1=II，2=III，3=S-1，4=S-2，5=S-3，6=S-4）
+    /// 检验水平（字典 logistics_quality_inspection_level）
     /// </summary>
     public int InspectionLevel { get; set; } = 0;
 
@@ -96,7 +96,7 @@ public class TaktSamplingSchemeDto : TaktCompanyDtoBase
     public int RejectionNumber { get; set; } = 0;
 
     /// <summary>
-    /// 检验严格度（0=正常检验，1=加严检验，2=放宽检验）
+    /// 检验严格度（字典 logistics_quality_inspection_strictness）
     /// </summary>
     public int InspectionStrictness { get; set; } = 0;
 
@@ -111,14 +111,14 @@ public class TaktSamplingSchemeDto : TaktCompanyDtoBase
     public string? TransferRuleConfig { get; set; } = string.Empty;
 
     /// <summary>
-    /// 抽样方案状态（0=草稿，1=已发布，2=已停用）
-    /// </summary>
-    public int SamplingSchemeStatus { get; set; } = 0;
-
-    /// <summary>
     /// 抽样方案描述
     /// </summary>
     public string? SchemeDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 抽样方案状态（字典 logistics_quality_standard_status）
+    /// </summary>
+    public int SamplingSchemeStatus { get; set; } = 0;
 
 }
 
@@ -143,7 +143,7 @@ public class TaktSamplingSchemeQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -158,17 +158,17 @@ public class TaktSamplingSchemeQueryDto : TaktPagedQuery
     public string? SamplingSchemeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 抽样方案类型（0=计数型，1=计量型，2=计数调整型，3=计量调整型）
+    /// 抽样方案类型（字典 logistics_quality_sampling_scheme_type）
     /// </summary>
     public int? SamplingSchemeType { get; set; }
 
     /// <summary>
-    /// 抽样标准（0=GB/T 2828.1，1=GB/T 6378，2=MIL-STD-105E，3=ANSI/ASQ Z1.4，4=ISO 2859-1，5=自定义）
+    /// 抽样标准（字典 logistics_quality_sampling_standard）
     /// </summary>
     public int? SamplingStandard { get; set; }
 
     /// <summary>
-    /// 检验水平（0=I，1=II，2=III，3=S-1，4=S-2，5=S-3，6=S-4）
+    /// 检验水平（字典 logistics_quality_inspection_level）
     /// </summary>
     public int? InspectionLevel { get; set; }
 
@@ -203,7 +203,7 @@ public class TaktSamplingSchemeQueryDto : TaktPagedQuery
     public int? RejectionNumber { get; set; }
 
     /// <summary>
-    /// 检验严格度（0=正常检验，1=加严检验，2=放宽检验）
+    /// 检验严格度（字典 logistics_quality_inspection_strictness）
     /// </summary>
     public int? InspectionStrictness { get; set; }
 
@@ -218,14 +218,14 @@ public class TaktSamplingSchemeQueryDto : TaktPagedQuery
     public string? TransferRuleConfig { get; set; } = string.Empty;
 
     /// <summary>
-    /// 抽样方案状态（0=草稿，1=已发布，2=已停用）
-    /// </summary>
-    public int? SamplingSchemeStatus { get; set; }
-
-    /// <summary>
     /// 抽样方案描述
     /// </summary>
     public string? SchemeDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 抽样方案状态（字典 logistics_quality_standard_status）
+    /// </summary>
+    public int? SamplingSchemeStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -268,14 +268,14 @@ public class TaktSamplingSchemeCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码不能为空")]
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -291,17 +291,17 @@ public class TaktSamplingSchemeCreateDto
     public string SamplingSchemeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 抽样方案类型（0=计数型，1=计量型，2=计数调整型，3=计量调整型）
+    /// 抽样方案类型（字典 logistics_quality_sampling_scheme_type）
     /// </summary>
     public int SamplingSchemeType { get; set; } = 0;
 
     /// <summary>
-    /// 抽样标准（0=GB/T 2828.1，1=GB/T 6378，2=MIL-STD-105E，3=ANSI/ASQ Z1.4，4=ISO 2859-1，5=自定义）
+    /// 抽样标准（字典 logistics_quality_sampling_standard）
     /// </summary>
     public int SamplingStandard { get; set; } = 0;
 
     /// <summary>
-    /// 检验水平（0=I，1=II，2=III，3=S-1，4=S-2，5=S-3，6=S-4）
+    /// 检验水平（字典 logistics_quality_inspection_level）
     /// </summary>
     public int InspectionLevel { get; set; } = 0;
 
@@ -336,7 +336,7 @@ public class TaktSamplingSchemeCreateDto
     public int RejectionNumber { get; set; } = 0;
 
     /// <summary>
-    /// 检验严格度（0=正常检验，1=加严检验，2=放宽检验）
+    /// 检验严格度（字典 logistics_quality_inspection_strictness）
     /// </summary>
     public int InspectionStrictness { get; set; } = 0;
 
@@ -351,14 +351,14 @@ public class TaktSamplingSchemeCreateDto
     public string? TransferRuleConfig { get; set; } = string.Empty;
 
     /// <summary>
-    /// 抽样方案状态（0=草稿，1=已发布，2=已停用）
-    /// </summary>
-    public int SamplingSchemeStatus { get; set; } = 0;
-
-    /// <summary>
     /// 抽样方案描述
     /// </summary>
     public string? SchemeDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 抽样方案状态（字典 logistics_quality_standard_status）
+    /// </summary>
+    public int SamplingSchemeStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -410,9 +410,9 @@ public class TaktSamplingSchemeStatusDto
     public long SamplingSchemeId { get; set; }
 
     /// <summary>
-    /// 抽样方案状态（0=草稿，1=已发布，2=已停用）
+    /// 抽样方案状态（字典 logistics_quality_standard_status）
     /// </summary>
-    [Required(ErrorMessage = "抽样方案状态（0=草稿，1=已发布，2=已停用）不能为空")]
+    [Required(ErrorMessage = "抽样方案状态（字典 logistics_quality_standard_status）不能为空")]
     public int SamplingSchemeStatus { get; set; } = 0;
 }
 
@@ -436,7 +436,7 @@ public class TaktSamplingSchemeTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -451,19 +451,24 @@ public class TaktSamplingSchemeTemplateDto
     public string? SamplingSchemeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 抽样方案类型（0=计数型，1=计量型，2=计数调整型，3=计量调整型）
+    /// 抽样方案类型（字典 logistics_quality_sampling_scheme_type）
     /// </summary>
     public int? SamplingSchemeType { get; set; }
 
     /// <summary>
-    /// 抽样标准（0=GB/T 2828.1，1=GB/T 6378，2=MIL-STD-105E，3=ANSI/ASQ Z1.4，4=ISO 2859-1，5=自定义）
+    /// 抽样标准（字典 logistics_quality_sampling_standard）
     /// </summary>
     public int? SamplingStandard { get; set; }
 
     /// <summary>
-    /// 检验水平（0=I，1=II，2=III，3=S-1，4=S-2，5=S-3，6=S-4）
+    /// 检验水平（字典 logistics_quality_inspection_level）
     /// </summary>
     public int? InspectionLevel { get; set; }
+
+    /// <summary>
+    /// AQL值（可接受质量水平，0.010-1000，存储为小数）
+    /// </summary>
+    public decimal? AqlValue { get; set; }
 
     /// <summary>
     /// 批量范围最小值
@@ -491,9 +496,29 @@ public class TaktSamplingSchemeTemplateDto
     public int? RejectionNumber { get; set; }
 
     /// <summary>
-    /// 检验严格度（0=正常检验，1=加严检验，2=放宽检验）
+    /// 检验严格度（字典 logistics_quality_inspection_strictness）
     /// </summary>
     public int? InspectionStrictness { get; set; }
+
+    /// <summary>
+    /// 是否支持转移规则（0=否，1=是）
+    /// </summary>
+    public int? IsTransferRuleEnabled { get; set; }
+
+    /// <summary>
+    /// 转移规则配置（JSON格式，存储正常/加严/放宽检验的转移条件）
+    /// </summary>
+    public string? TransferRuleConfig { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 抽样方案描述
+    /// </summary>
+    public string? SchemeDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 抽样方案状态（字典 logistics_quality_standard_status）
+    /// </summary>
+    public int? SamplingSchemeStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -523,12 +548,12 @@ public class TaktSamplingSchemeImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -543,19 +568,24 @@ public class TaktSamplingSchemeImportDto
     public string? SamplingSchemeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 抽样方案类型（0=计数型，1=计量型，2=计数调整型，3=计量调整型）
+    /// 抽样方案类型（字典 logistics_quality_sampling_scheme_type）
     /// </summary>
     public int? SamplingSchemeType { get; set; }
 
     /// <summary>
-    /// 抽样标准（0=GB/T 2828.1，1=GB/T 6378，2=MIL-STD-105E，3=ANSI/ASQ Z1.4，4=ISO 2859-1，5=自定义）
+    /// 抽样标准（字典 logistics_quality_sampling_standard）
     /// </summary>
     public int? SamplingStandard { get; set; }
 
     /// <summary>
-    /// 检验水平（0=I，1=II，2=III，3=S-1，4=S-2，5=S-3，6=S-4）
+    /// 检验水平（字典 logistics_quality_inspection_level）
     /// </summary>
     public int? InspectionLevel { get; set; }
+
+    /// <summary>
+    /// AQL值（可接受质量水平，0.010-1000，存储为小数）
+    /// </summary>
+    public decimal? AqlValue { get; set; }
 
     /// <summary>
     /// 批量范围最小值
@@ -583,9 +613,29 @@ public class TaktSamplingSchemeImportDto
     public int? RejectionNumber { get; set; }
 
     /// <summary>
-    /// 检验严格度（0=正常检验，1=加严检验，2=放宽检验）
+    /// 检验严格度（字典 logistics_quality_inspection_strictness）
     /// </summary>
     public int? InspectionStrictness { get; set; }
+
+    /// <summary>
+    /// 是否支持转移规则（0=否，1=是）
+    /// </summary>
+    public int? IsTransferRuleEnabled { get; set; }
+
+    /// <summary>
+    /// 转移规则配置（JSON格式，存储正常/加严/放宽检验的转移条件）
+    /// </summary>
+    public string? TransferRuleConfig { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 抽样方案描述
+    /// </summary>
+    public string? SchemeDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 抽样方案状态（字典 logistics_quality_standard_status）
+    /// </summary>
+    public int? SamplingSchemeStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -621,7 +671,7 @@ public class TaktSamplingSchemeExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -636,17 +686,17 @@ public class TaktSamplingSchemeExportDto
     public string SamplingSchemeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 抽样方案类型（0=计数型，1=计量型，2=计数调整型，3=计量调整型）
+    /// 抽样方案类型（字典 logistics_quality_sampling_scheme_type）
     /// </summary>
     public int SamplingSchemeType { get; set; } = 0;
 
     /// <summary>
-    /// 抽样标准（0=GB/T 2828.1，1=GB/T 6378，2=MIL-STD-105E，3=ANSI/ASQ Z1.4，4=ISO 2859-1，5=自定义）
+    /// 抽样标准（字典 logistics_quality_sampling_standard）
     /// </summary>
     public int SamplingStandard { get; set; } = 0;
 
     /// <summary>
-    /// 检验水平（0=I，1=II，2=III，3=S-1，4=S-2，5=S-3，6=S-4）
+    /// 检验水平（字典 logistics_quality_inspection_level）
     /// </summary>
     public int InspectionLevel { get; set; } = 0;
 
@@ -681,7 +731,7 @@ public class TaktSamplingSchemeExportDto
     public int RejectionNumber { get; set; } = 0;
 
     /// <summary>
-    /// 检验严格度（0=正常检验，1=加严检验，2=放宽检验）
+    /// 检验严格度（字典 logistics_quality_inspection_strictness）
     /// </summary>
     public int InspectionStrictness { get; set; } = 0;
 
@@ -696,14 +746,14 @@ public class TaktSamplingSchemeExportDto
     public string? TransferRuleConfig { get; set; } = string.Empty;
 
     /// <summary>
-    /// 抽样方案状态（0=草稿，1=已发布，2=已停用）
-    /// </summary>
-    public int SamplingSchemeStatus { get; set; } = 0;
-
-    /// <summary>
     /// 抽样方案描述
     /// </summary>
     public string? SchemeDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 抽样方案状态（字典 logistics_quality_standard_status）
+    /// </summary>
+    public int SamplingSchemeStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

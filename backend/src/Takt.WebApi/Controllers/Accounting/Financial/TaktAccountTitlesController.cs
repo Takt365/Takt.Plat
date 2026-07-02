@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Accounting.Financial
 // 文件名称：TaktAccountTitlesController.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：会计科目控制器
 // 
@@ -91,6 +91,44 @@ public class TaktAccountTitlesController : TaktControllerBase
         try
         {
             var result = await _accountTitleService.GetAccountTitleTreeOptionsAsync();
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 获取会计科目父级树形选项列表
+    /// </summary>
+    /// <returns>树形选项</returns>
+    [TaktPermission("accounting:financial:account:title:query", "会计科目父级树形选项")]
+    [HttpGet("parent-tree-options")]
+    public async Task<IActionResult> GetAccountTitleParentTreeOptionsAsync()
+    {
+        try
+        {
+            var result = await _accountTitleService.GetAccountTitleParentTreeOptionsAsync();
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 获取会计科目选项列表
+    /// </summary>
+    /// <returns>下拉选项</returns>
+    [TaktPermission("accounting:financial:account:title:query", "会计科目选项")]
+    [HttpGet("options")]
+    public async Task<IActionResult> GetAccountTitleOptionsAsync()
+    {
+        try
+        {
+            var result = await _accountTitleService.GetAccountTitleOptionsAsync();
             return Success(result, "查询成功");
         }
         catch (Exception ex)

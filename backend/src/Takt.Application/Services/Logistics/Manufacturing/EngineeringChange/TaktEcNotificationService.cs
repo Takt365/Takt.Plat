@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcNotificationService.cs
-// 创建时间：2026-06-16
+// 创建时间：2026-06-30
 // 创建人：Takt365(Cursor AI)
 // 功能描述：工程变更通知单应用服务实现
 // 
@@ -30,27 +30,27 @@ namespace Takt.Application.Services.Logistics.Manufacturing.EngineeringChange;
 public class TaktEcNotificationService : TaktServiceBase, ITaktEcNotificationService
 {
     private readonly ITaktApprovalRepository<TaktEcNotification> _ecNotificationRepository;
-    private readonly ITaktCompanyRepository<TaktEc> _ecRepository;
+    private readonly ITaktCompanyRepository<TaktEcGijutsu> _ecEngRepository;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="ecNotificationRepository">工程变更通知单仓储</param>
-    /// <param name="ecRepository">设变主仓储</param>
+    /// <param name="ecEngRepository">设变技术课主仓储</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktEcNotificationService(
         ITaktApprovalRepository<TaktEcNotification> ecNotificationRepository,
-        ITaktCompanyRepository<TaktEc> ecRepository,
+        ITaktCompanyRepository<TaktEcGijutsu> ecEngRepository,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
         _ecNotificationRepository = ecNotificationRepository;
-        _ecRepository = ecRepository;
+        _ecEngRepository = ecEngRepository;
         _uniqueValidator = uniqueValidator;
     }
 
@@ -114,7 +114,7 @@ public class TaktEcNotificationService : TaktServiceBase, ITaktEcNotificationSer
     public async Task<TaktEcNotificationDto> CreateEcNotificationAsync(TaktEcNotificationCreateDto dto)
     {
         var entity = dto.Adapt<TaktEcNotification>();
-        await StampEcNotificationEcAsync(entity, dto);
+        await StampEcNotificationEcGijutsuAsync(entity, dto);
         var isUnique_ix_takt_logistics_manufacturing_ec_notification_no_unique = await _uniqueValidator.IsUniqueAsync(
             _ecNotificationRepository,
             x => x.EcNotificationNo == entity.EcNotificationNo);
@@ -140,7 +140,7 @@ public class TaktEcNotificationService : TaktServiceBase, ITaktEcNotificationSer
             throw new TaktBusinessException("工程变更通知单不存在");
         }
         dto.Adapt(entity);
-        await StampEcNotificationEcAsync(entity, dto);
+        await StampEcNotificationEcGijutsuAsync(entity, dto);
         var isUnique_ix_takt_logistics_manufacturing_ec_notification_no_unique = await _uniqueValidator.IsUniqueAsync(
             _ecNotificationRepository,
             x => x.EcNotificationNo == entity.EcNotificationNo,
@@ -239,7 +239,7 @@ public class TaktEcNotificationService : TaktServiceBase, ITaktEcNotificationSer
             {
                 var entity = rows[i].Adapt<TaktEcNotification>();
                 var importDto = rows[i].Adapt<TaktEcNotificationCreateDto>();
-                await StampEcNotificationEcAsync(entity, importDto);
+                await StampEcNotificationEcGijutsuAsync(entity, importDto);
                 var importKey = $"{entity.EcNotificationNo}";
                 if (!importSeenKeys.Add(importKey))
                 {
@@ -294,21 +294,21 @@ public class TaktEcNotificationService : TaktServiceBase, ITaktEcNotificationSer
     // ========================================
 
     /// <summary>
-    /// 同步工程变更通知单主表外键（ManyToOne → 设变主）
+    /// 同步工程变更通知单主表外键（ManyToOne → 设变技术课主）
     /// </summary>
     /// <param name="entity">当前实体</param>
     /// <param name="dto">创建 DTO</param>
     /// <returns>任务</returns>
-    private async Task StampEcNotificationEcAsync(TaktEcNotification entity, TaktEcNotificationCreateDto dto)
+    private async Task StampEcNotificationEcGijutsuAsync(TaktEcNotification entity, TaktEcNotificationCreateDto dto)
     {
         if (dto.EcId <= 0)
         {
             return;
         }
-        var master = await _ecRepository.GetByIdAsync(dto.EcId);
+        var master = await _ecEngRepository.GetByIdAsync(dto.EcId);
         if (master == null)
         {
-            throw new TaktBusinessException("设变主不存在");
+            throw new TaktBusinessException("设变技术课主不存在");
         }
         entity.EcId = master.Id;
     }

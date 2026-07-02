@@ -226,9 +226,9 @@ public class TaktDictTypeService : TaktServiceBase, ITaktDictTypeService
     }
 
     /// <summary>
-    /// 更新字典类型是否内置
+    /// 更新字典类型内置
     /// </summary>
-    /// <param name="dto">是否内置 DTO</param>
+    /// <param name="dto">内置 DTO</param>
     /// <returns>DTO</returns>
     public async Task<TaktDictTypeDto> UpdateDictTypeBuiltInAsync(TaktDictTypeBuiltInDto dto)
     {
@@ -239,7 +239,7 @@ public class TaktDictTypeService : TaktServiceBase, ITaktDictTypeService
         }
         if (dto.IsBuiltIn is not 0 and not 1)
         {
-            throw new TaktBusinessException("是否内置必须为字典 sys_yes_no_type 合法值（0=否，1=是）");
+            throw new TaktBusinessException("内置必须为字典 sys_yes_no_type 合法值（0=否，1=是）");
         }
         if (entity.IsBuiltIn == 1 && dto.IsBuiltIn != 1)
         {

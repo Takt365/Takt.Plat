@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="logistics:materials:material:change:log:create"
-      update-permission="logistics:materials:material:change:log:update"
-      delete-permission="logistics:materials:material:change:log:delete"
-      import-permission="logistics:materials:material:change:log:import"
-      export-permission="logistics:materials:material:change:log:export"
+      create-permission="logistics:materials:material:create"
+      update-permission="logistics:materials:material:update"
+      delete-permission="logistics:materials:material:delete"
+      import-permission="logistics:materials:material:import"
+      export-permission="logistics:materials:material:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -65,6 +65,8 @@
       :master-row-selection="rowSelection"
       master-id-column-key="materialId"
       :master-visible-column-keys="visibleColumnKeys"
+      master-table-mode="masterDetailMaster"
+      master-scroll-layout="masterDetailLr"
       :master-total="total"
       master-entity-scope="tenant"
       @master-change="handleTableChange"
@@ -79,6 +81,30 @@
             :checked="getMaterialField(record, 'materialStatus') === 1"
             :checked-children="t('common.page.button.enable')" :un-checked-children="t('common.page.button.disable')"
             @change="(checked: unknown) => handleMaterialStatusChange(record, Boolean(checked))"
+          />
+        </template>
+        <template v-else-if="column.key === 'industrySector'">
+          <TaktDictTag
+            :value="getMaterialField(record, 'industrySector')"
+            dict-type="logistics_industry_sector"
+          />
+        </template>
+        <template v-else-if="column.key === 'materialType'">
+          <TaktDictTag
+            :value="getMaterialField(record, 'materialType')"
+            dict-type="logistics_material_type"
+          />
+        </template>
+        <template v-else-if="column.key === 'baseUnit'">
+          <TaktDictTag
+            :value="getMaterialField(record, 'baseUnit')"
+            dict-type="logistics_unit_of_measure_code"
+          />
+        </template>
+        <template v-else-if="column.key === 'isEndOfLife'">
+          <TaktDictTag
+            :value="getMaterialField(record, 'isEndOfLife')"
+            dict-type="logistics_material_eol_status"
           />
         </template>
       </template>
@@ -163,11 +189,10 @@
       </div>
       <div v-show="isFieldVisible('industrySector')">
       <a-form-item :label="t('entity.material.industrysector')">
-        <a-input
+        <TaktSelect
           v-model:value="advancedQueryForm.industrySector"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.industrysector') })"
-          show-count
-          :maxlength="50"
+          dict-type="logistics_industry_sector"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.material.industrysector') })"
           allow-clear
         />
       </a-form-item>
@@ -183,11 +208,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('materialGroupCode')">
-      <a-form-item :label="t('entity.material.groupcode')">
+      <div v-show="isFieldVisible('materialGroup')">
+      <a-form-item :label="t('entity.material.group')">
         <a-input
-          v-model:value="advancedQueryForm.materialGroupCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.groupcode') })"
+          v-model:value="advancedQueryForm.materialGroup"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.group') })"
           show-count
           :maxlength="20"
           allow-clear
@@ -196,10 +221,11 @@
       </div>
       <div v-show="isFieldVisible('materialType')">
       <a-form-item :label="t('entity.material.type')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.materialType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.type') })"
-          style="width: 100%"
+          dict-type="logistics_material_type"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.material.type') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -227,11 +253,10 @@
       </div>
       <div v-show="isFieldVisible('baseUnit')">
       <a-form-item :label="t('entity.material.baseunit')">
-        <a-input
+        <TaktSelect
           v-model:value="advancedQueryForm.baseUnit"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.baseunit') })"
-          show-count
-          :maxlength="20"
+          dict-type="logistics_unit_of_measure_code"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.material.baseunit') })"
           allow-clear
         />
       </a-form-item>
@@ -247,23 +272,13 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('manufacturerPartNumber')">
-      <a-form-item :label="t('entity.material.manufacturerpartnumber')">
+      <div v-show="isFieldVisible('manufacturerMaterialCode')">
+      <a-form-item :label="t('entity.material.manufacturermaterialcode')">
         <a-input
-          v-model:value="advancedQueryForm.manufacturerPartNumber"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.manufacturerpartnumber') })"
+          v-model:value="advancedQueryForm.manufacturerMaterialCode"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.manufacturermaterialcode') })"
           show-count
-          :maxlength="100"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('materialStatus')">
-      <a-form-item :label="t('entity.material.status')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.materialStatus"
-          dict-type="sys_normal_disable_status"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.material.status') })"
+          :maxlength="40"
           allow-clear
         />
       </a-form-item>
@@ -281,32 +296,21 @@
       </div>
       <div v-show="isFieldVisible('isEndOfLife')">
       <a-form-item :label="t('entity.material.isendoflife')">
-        <a-input
+        <TaktSelect
           v-model:value="advancedQueryForm.isEndOfLife"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.isendoflife') })"
-          show-count
-          :maxlength="10"
+          dict-type="logistics_material_eol_status"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.material.isendoflife') })"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('endOfLifeDateStart')">
-      <a-form-item :label="t('entity.material.endoflifedatestart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.endOfLifeDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.material.endoflifedatestart') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('endOfLifeDateEnd')">
-      <a-form-item :label="t('entity.material.endoflifedateend')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.endOfLifeDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.material.endoflifedateend') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
+      <div v-show="isFieldVisible('materialStatus')">
+      <a-form-item :label="t('entity.material.status')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.materialStatus"
+          dict-type="sys_normal_disable_status"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.material.status') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -316,7 +320,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -327,7 +331,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -385,6 +389,7 @@
       @cancel="handleImportCancel"
     >
       <TaktImportFile
+        v-if="importVisible"
         entity-i18n-key="entity.material._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
@@ -404,7 +409,7 @@
       :id-column-key="'materialId'"
       :action-column-key="'action'"
       entity-scope="tenant"
-      table-mode="single"
+      table-mode="masterDetailMaster"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -430,6 +435,7 @@ import type { Material, MaterialQuery } from '@/types/logistics/materials/materi
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
@@ -481,18 +487,16 @@ const advancedQueryForm = ref({
   materialDescription: '',
   industrySector: '',
   materialHierarchy: '',
-  materialGroupCode: '',
-  materialType: undefined as number | undefined,
+  materialGroup: '',
+  materialType: '',
   materialModel: '',
   materialBrand: '',
   baseUnit: '',
   manufacturer: '',
-  manufacturerPartNumber: '',
-  materialStatus: undefined as number | undefined,
+  manufacturerMaterialCode: '',
   materialAttributes: '',
   isEndOfLife: '',
-  endOfLifeDateStart: '',
-  endOfLifeDateEnd: '',
+  materialStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -506,18 +510,16 @@ const queryFieldsMeta = computed(() => [
   { key: 'materialDescription', label: t('entity.material.description') },
   { key: 'industrySector', label: t('entity.material.industrysector') },
   { key: 'materialHierarchy', label: t('entity.material.hierarchy') },
-  { key: 'materialGroupCode', label: t('entity.material.groupcode') },
+  { key: 'materialGroup', label: t('entity.material.group') },
   { key: 'materialType', label: t('entity.material.type') },
   { key: 'materialModel', label: t('entity.material.model') },
   { key: 'materialBrand', label: t('entity.material.brand') },
   { key: 'baseUnit', label: t('entity.material.baseunit') },
   { key: 'manufacturer', label: t('entity.material.manufacturer') },
-  { key: 'manufacturerPartNumber', label: t('entity.material.manufacturerpartnumber') },
-  { key: 'materialStatus', label: t('entity.material.status') },
+  { key: 'manufacturerMaterialCode', label: t('entity.material.manufacturermaterialcode') },
   { key: 'materialAttributes', label: t('entity.material.attributes') },
   { key: 'isEndOfLife', label: t('entity.material.isendoflife') },
-  { key: 'endOfLifeDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.material.endoflifedate')) },
-  { key: 'endOfLifeDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.material.endoflifedate')) },
+  { key: 'materialStatus', label: t('entity.material.status') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extField', label: t('common.page.entity.extfield') },
@@ -572,22 +574,18 @@ function buildListQuery(overrides?: Partial<MaterialQuery>): MaterialQuery {
   assignTrimmed('materialDescription', form.materialDescription)
   assignTrimmed('industrySector', form.industrySector)
   assignTrimmed('materialHierarchy', form.materialHierarchy)
-  assignTrimmed('materialGroupCode', form.materialGroupCode)
-  if (form.materialType !== undefined && form.materialType !== null) {
-    query.materialType = form.materialType
-  }
+  assignTrimmed('materialGroup', form.materialGroup)
+  assignTrimmed('materialType', form.materialType)
   assignTrimmed('materialModel', form.materialModel)
   assignTrimmed('materialBrand', form.materialBrand)
   assignTrimmed('baseUnit', form.baseUnit)
   assignTrimmed('manufacturer', form.manufacturer)
-  assignTrimmed('manufacturerPartNumber', form.manufacturerPartNumber)
+  assignTrimmed('manufacturerMaterialCode', form.manufacturerMaterialCode)
+  assignTrimmed('materialAttributes', form.materialAttributes)
+  assignTrimmed('isEndOfLife', form.isEndOfLife)
   if (form.materialStatus !== undefined && form.materialStatus !== null) {
     query.materialStatus = form.materialStatus
   }
-  assignTrimmed('materialAttributes', form.materialAttributes)
-  assignTrimmed('isEndOfLife', form.isEndOfLife)
-  assignTrimmed('endOfLifeDateStart', form.endOfLifeDateStart)
-  assignTrimmed('endOfLifeDateEnd', form.endOfLifeDateEnd)
   assignTrimmed('createdAtStart', form.createdAtStart)
   assignTrimmed('createdAtEnd', form.createdAtEnd)
   assignTrimmed('extField', form.extField)
@@ -707,7 +705,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'industrySector') ?? ''
   },
   {
     title: t('entity.material.hierarchy'),
@@ -719,13 +716,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getMaterialField(record, 'materialHierarchy') ?? ''
   },
   {
-    title: t('entity.material.groupcode'),
-    dataIndex: 'materialGroupCode',
-    key: 'materialGroupCode',
+    title: t('entity.material.group'),
+    dataIndex: 'materialGroup',
+    key: 'materialGroup',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'materialGroupCode') ?? ''
+    customRender: ({ record }: { record: any }) => getMaterialField(record, 'materialGroup') ?? ''
   },
   {
     title: t('entity.material.type'),
@@ -734,7 +731,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'materialType') ?? ''
   },
   {
     title: t('entity.material.model'),
@@ -761,7 +757,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'baseUnit') ?? ''
   },
   {
     title: t('entity.material.manufacturer'),
@@ -773,21 +768,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getMaterialField(record, 'manufacturer') ?? ''
   },
   {
-    title: t('entity.material.manufacturerpartnumber'),
-    dataIndex: 'manufacturerPartNumber',
-    key: 'manufacturerPartNumber',
+    title: t('entity.material.manufacturermaterialcode'),
+    dataIndex: 'manufacturerMaterialCode',
+    key: 'manufacturerMaterialCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'manufacturerPartNumber') ?? ''
-  },
-  {
-    title: t('entity.material.status'),
-    dataIndex: 'materialStatus',
-    key: 'materialStatus',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getMaterialField(record, 'manufacturerMaterialCode') ?? ''
   },
   {
     title: t('entity.material.attributes'),
@@ -805,16 +792,14 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'isEndOfLife') ?? ''
   },
   {
-    title: t('entity.material.endoflifedate'),
-    dataIndex: 'endOfLifeDate',
-    key: 'endOfLifeDate',
+    title: t('entity.material.status'),
+    dataIndex: 'materialStatus',
+    key: 'materialStatus',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'endOfLifeDate') ?? ''
   },
   CreateActionColumn({
     actions: [
@@ -823,7 +808,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:materials:material:change:log:update',
+        permission: 'logistics:materials:material:update',
         onClick: (record: Material) => handleEdit(record)
       },
       {
@@ -831,7 +816,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:materials:material:change:log:delete',
+        permission: 'logistics:materials:material:delete',
         onClick: (record: Material) => handleDeleteOne(record)
       }
     ]
@@ -865,7 +850,7 @@ const rowSelection = computed(() => ({
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
-    } else if (getMaterialId(selectedRow.value) === getMaterialId(record)) {
+    } else if (selectedRow.value && getMaterialId(selectedRow.value) === getMaterialId(record)) {
       selectedRow.value = null
       syncMasterSelection(null)
     }
@@ -912,18 +897,16 @@ function handleReset() {
   materialDescription: '',
   industrySector: '',
   materialHierarchy: '',
-  materialGroupCode: '',
-  materialType: undefined as number | undefined,
+  materialGroup: '',
+  materialType: '',
   materialModel: '',
   materialBrand: '',
   baseUnit: '',
   manufacturer: '',
-  manufacturerPartNumber: '',
-  materialStatus: undefined as number | undefined,
+  manufacturerMaterialCode: '',
   materialAttributes: '',
   isEndOfLife: '',
-  endOfLifeDateStart: '',
-  endOfLifeDateEnd: '',
+  materialStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -1010,15 +993,22 @@ async function handleDownloadTemplate(sheetName?: string, fileName?: string): Pr
   return (res as any)?.data ?? res
 }
 
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importMaterial(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importMaterial(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
+
+      if (selectedMasterKey.value) {
+    materialChangeLogPanelRef.value?.reload?.()
+      }
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
+  }
 }
 
 /** 关闭导入对话框 */
@@ -1145,18 +1135,16 @@ function handleAdvancedQueryReset() {
   materialDescription: '',
   industrySector: '',
   materialHierarchy: '',
-  materialGroupCode: '',
-  materialType: undefined as number | undefined,
+  materialGroup: '',
+  materialType: '',
   materialModel: '',
   materialBrand: '',
   baseUnit: '',
   manufacturer: '',
-  manufacturerPartNumber: '',
-  materialStatus: undefined as number | undefined,
+  manufacturerMaterialCode: '',
   materialAttributes: '',
   isEndOfLife: '',
-  endOfLifeDateStart: '',
-  endOfLifeDateEnd: '',
+  materialStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',

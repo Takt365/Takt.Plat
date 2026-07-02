@@ -288,7 +288,7 @@ export interface UserInfoResponse {
   email?: string;
 
   /**
-   * 用户头像 URL（来自员工档案 photo_url）
+   * 用户头像 URL（来自员工档案 avatar）
    */
   avatar?: string;
 
@@ -303,12 +303,12 @@ export interface UserInfoResponse {
   companyCode: string;
 
   /**
-   * 用户默认区域文化 BCP47（takt_identity_user.default_culture）
+   * 用户区域文化 BCP47（takt_identity_user.default_culture）
    */
   defaultCulture: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（takt_company.default_culture）
+   * 当前公司区域文化 BCP47（takt_company.default_culture）
    */
   companyDefaultCulture: string;
 
@@ -412,12 +412,12 @@ export interface LoginPreviewLocale {
   companyCode: string;
 
   /**
-   * 用户默认区域文化 BCP47（takt_identity_user.default_culture，用于界面语言）
+   * 用户区域文化 BCP47（takt_identity_user.default_culture，用于界面语言）
    */
   defaultCulture: string;
 
   /**
-   * 公司默认区域文化 BCP47（takt_company.default_culture，用于业务数据 CRUD 语言校验）
+   * 公司区域文化 BCP47（takt_company.default_culture，用于业务数据 CRUD 语言校验）
    */
   companyDefaultCulture: string;
 

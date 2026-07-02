@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Accounting.Financial
 // 文件名称：TaktCountersignDtos.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Countersign 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktCountersign 生成，请按需审阅）
 // 
@@ -41,6 +41,37 @@ public class TaktCountersignDto : TaktApprovalDtoBase
     public string CountersignCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 来源采购询价 ID（采购链路自动生成时写入）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? PurchaseInquiryId { get; set; }
+
+    /// <summary>
+    /// 来源采购询价 名称（填充字段）
+    /// </summary>
+    public string? PurchaseInquiryName { get; set; }
+
+    /// <summary>
+    /// 来源采购询价编码（冗余）
+    /// </summary>
+    public string? PurchaseInquiryCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会签业务类型（字典 logistics_countersign_business_type：inquiry/pr/expense/standalone）
+    /// </summary>
+    public string BusinessType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会签业务键（如 inquiry:123、pr:456、expense:789）
+    /// </summary>
+    public string? BusinessKey { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会签步骤序号（询价=1，PR=2，报销=3）
+    /// </summary>
+    public int StepNo { get; set; } = 0;
+
+    /// <summary>
     /// 会签部门 JSON
     /// </summary>
     public string? CountersignDepts { get; set; } = string.Empty;
@@ -61,23 +92,23 @@ public class TaktCountersignDto : TaktApprovalDtoBase
     public string? ExecutiveOffice { get; set; } = string.Empty;
 
     /// <summary>
-    /// 申请人（员工 ID）
+    /// 申请人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ApplicantBy { get; set; }
 
     /// <summary>
-    /// 申请部门
+    /// 申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     public string? ApplicationDept { get; set; } = string.Empty;
 
     /// <summary>
-    /// 经费负担部门
+    /// 经费负担部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     public string? CostBearerDept { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否有预算
+    /// 预算否（字典 sys_yes_no_type）
     /// </summary>
     public int IsBudget { get; set; } = 0;
 
@@ -122,9 +153,15 @@ public class TaktCountersignDto : TaktApprovalDtoBase
     public string? Attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会签单业务状态（0=草稿，1=审批中，2=已承认，3=已驳回）
+    /// 会签单状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）
     /// </summary>
     public int CountersignStatus { get; set; } = 0;
+
+    /// <summary>
+    /// 会签单明细列表（主子表关系）
+    /// （子表：TaktCountersignDetail）
+    /// </summary>
+    public List<TaktCountersignDetailDto>? CountersignDetails { get; set; }
 
 }
 
@@ -154,6 +191,32 @@ public class TaktCountersignQueryDto : TaktPagedQuery
     public string? CountersignCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 来源采购询价 ID（采购链路自动生成时写入）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? PurchaseInquiryId { get; set; }
+
+    /// <summary>
+    /// 来源采购询价编码（冗余）
+    /// </summary>
+    public string? PurchaseInquiryCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会签业务类型（字典 logistics_countersign_business_type：inquiry/pr/expense/standalone）
+    /// </summary>
+    public string? BusinessType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会签业务键（如 inquiry:123、pr:456、expense:789）
+    /// </summary>
+    public string? BusinessKey { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会签步骤序号（询价=1，PR=2，报销=3）
+    /// </summary>
+    public int? StepNo { get; set; }
+
+    /// <summary>
     /// 会签部门 JSON
     /// </summary>
     public string? CountersignDepts { get; set; } = string.Empty;
@@ -174,23 +237,23 @@ public class TaktCountersignQueryDto : TaktPagedQuery
     public string? ExecutiveOffice { get; set; } = string.Empty;
 
     /// <summary>
-    /// 申请人（员工 ID）
+    /// 申请人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ApplicantBy { get; set; }
 
     /// <summary>
-    /// 申请部门
+    /// 申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     public string? ApplicationDept { get; set; } = string.Empty;
 
     /// <summary>
-    /// 经费负担部门
+    /// 经费负担部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     public string? CostBearerDept { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否有预算
+    /// 预算否（字典 sys_yes_no_type）
     /// </summary>
     public int? IsBudget { get; set; }
 
@@ -235,12 +298,12 @@ public class TaktCountersignQueryDto : TaktPagedQuery
     public string? Attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会签单业务状态（0=草稿，1=审批中，2=已承认，3=已驳回）
+    /// 会签单状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）
     /// </summary>
     public int? CountersignStatus { get; set; }
 
     /// <summary>
-    /// 审批状态（TaktApprovalStatus）
+    /// 审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）
     /// </summary>
     public TaktApprovalStatus? ApprovalStatus { get; set; }
 
@@ -323,7 +386,7 @@ public class TaktCountersignCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -332,6 +395,33 @@ public class TaktCountersignCreateDto
     /// </summary>
     [Required(ErrorMessage = "会签编号不能为空")]
     public string CountersignCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 来源采购询价 ID（采购链路自动生成时写入）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? PurchaseInquiryId { get; set; }
+
+    /// <summary>
+    /// 来源采购询价编码（冗余）
+    /// </summary>
+    public string? PurchaseInquiryCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会签业务类型（字典 logistics_countersign_business_type：inquiry/pr/expense/standalone）
+    /// </summary>
+    [Required(ErrorMessage = "会签业务类型（字典 logistics_countersign_business_type：inquiry/pr/expense/standalone）不能为空")]
+    public string BusinessType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会签业务键（如 inquiry:123、pr:456、expense:789）
+    /// </summary>
+    public string? BusinessKey { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会签步骤序号（询价=1，PR=2，报销=3）
+    /// </summary>
+    public int StepNo { get; set; } = 0;
 
     /// <summary>
     /// 会签部门 JSON
@@ -354,23 +444,23 @@ public class TaktCountersignCreateDto
     public string? ExecutiveOffice { get; set; } = string.Empty;
 
     /// <summary>
-    /// 申请人（员工 ID）
+    /// 申请人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ApplicantBy { get; set; }
 
     /// <summary>
-    /// 申请部门
+    /// 申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     public string? ApplicationDept { get; set; } = string.Empty;
 
     /// <summary>
-    /// 经费负担部门
+    /// 经费负担部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     public string? CostBearerDept { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否有预算
+    /// 预算否（字典 sys_yes_no_type）
     /// </summary>
     public int IsBudget { get; set; } = 0;
 
@@ -415,9 +505,14 @@ public class TaktCountersignCreateDto
     public string? Attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会签单业务状态（0=草稿，1=审批中，2=已承认，3=已驳回）
+    /// 会签单状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）
     /// </summary>
     public int CountersignStatus { get; set; } = 0;
+
+    /// <summary>
+    /// 会签单明细列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktCountersignDetailCreateDto>? CountersignDetails { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -469,9 +564,9 @@ public class TaktCountersignStatusDto
     public long CountersignId { get; set; }
 
     /// <summary>
-    /// 会签单业务状态（0=草稿，1=审批中，2=已承认，3=已驳回）
+    /// 会签单状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）
     /// </summary>
-    [Required(ErrorMessage = "会签单业务状态（0=草稿，1=审批中，2=已承认，3=已驳回）不能为空")]
+    [Required(ErrorMessage = "会签单状态（字典 sys_approval_status）不能为空")]
     public int CountersignStatus { get; set; } = 0;
 }
 
@@ -500,6 +595,32 @@ public class TaktCountersignTemplateDto
     public string? CountersignCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 来源采购询价 ID（采购链路自动生成时写入）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? PurchaseInquiryId { get; set; }
+
+    /// <summary>
+    /// 来源采购询价编码（冗余）
+    /// </summary>
+    public string? PurchaseInquiryCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会签业务类型（字典 logistics_countersign_business_type：inquiry/pr/expense/standalone）
+    /// </summary>
+    public string? BusinessType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会签业务键（如 inquiry:123、pr:456、expense:789）
+    /// </summary>
+    public string? BusinessKey { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会签步骤序号（询价=1，PR=2，报销=3）
+    /// </summary>
+    public int? StepNo { get; set; }
+
+    /// <summary>
     /// 会签部门 JSON
     /// </summary>
     public string? CountersignDepts { get; set; } = string.Empty;
@@ -520,23 +641,23 @@ public class TaktCountersignTemplateDto
     public string? ExecutiveOffice { get; set; } = string.Empty;
 
     /// <summary>
-    /// 申请人（员工 ID）
+    /// 申请人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ApplicantBy { get; set; }
 
     /// <summary>
-    /// 申请部门
+    /// 申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     public string? ApplicationDept { get; set; } = string.Empty;
 
     /// <summary>
-    /// 经费负担部门
+    /// 经费负担部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     public string? CostBearerDept { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否有预算
+    /// 预算否（字典 sys_yes_no_type）
     /// </summary>
     public int? IsBudget { get; set; }
 
@@ -544,6 +665,16 @@ public class TaktCountersignTemplateDto
     /// 预算项目
     /// </summary>
     public string? BudgetItem { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 预算金额
+    /// </summary>
+    public decimal? BudgetAmount { get; set; }
+
+    /// <summary>
+    /// 申请金额
+    /// </summary>
+    public decimal? ApplicationAmount { get; set; }
 
     /// <summary>
     /// 标题
@@ -554,6 +685,31 @@ public class TaktCountersignTemplateDto
     /// 申请原因
     /// </summary>
     public string? ApplicationReason { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 预算使用说明
+    /// </summary>
+    public string? BudgetUsageDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 目标与预期效益
+    /// </summary>
+    public string? TargetAndExpectedBenefit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 附件 JSON
+    /// </summary>
+    public string? Attachments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会签单状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）
+    /// </summary>
+    public int? CountersignStatus { get; set; }
+
+    /// <summary>
+    /// 会签单明细列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktCountersignDetailCreateDto>? CountersignDetails { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -583,7 +739,7 @@ public class TaktCountersignImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -591,6 +747,32 @@ public class TaktCountersignImportDto
     /// 会签编号
     /// </summary>
     public string? CountersignCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 来源采购询价 ID（采购链路自动生成时写入）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? PurchaseInquiryId { get; set; }
+
+    /// <summary>
+    /// 来源采购询价编码（冗余）
+    /// </summary>
+    public string? PurchaseInquiryCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会签业务类型（字典 logistics_countersign_business_type：inquiry/pr/expense/standalone）
+    /// </summary>
+    public string? BusinessType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会签业务键（如 inquiry:123、pr:456、expense:789）
+    /// </summary>
+    public string? BusinessKey { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会签步骤序号（询价=1，PR=2，报销=3）
+    /// </summary>
+    public int? StepNo { get; set; }
 
     /// <summary>
     /// 会签部门 JSON
@@ -613,23 +795,23 @@ public class TaktCountersignImportDto
     public string? ExecutiveOffice { get; set; } = string.Empty;
 
     /// <summary>
-    /// 申请人（员工 ID）
+    /// 申请人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ApplicantBy { get; set; }
 
     /// <summary>
-    /// 申请部门
+    /// 申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     public string? ApplicationDept { get; set; } = string.Empty;
 
     /// <summary>
-    /// 经费负担部门
+    /// 经费负担部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     public string? CostBearerDept { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否有预算
+    /// 预算否（字典 sys_yes_no_type）
     /// </summary>
     public int? IsBudget { get; set; }
 
@@ -637,6 +819,16 @@ public class TaktCountersignImportDto
     /// 预算项目
     /// </summary>
     public string? BudgetItem { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 预算金额
+    /// </summary>
+    public decimal? BudgetAmount { get; set; }
+
+    /// <summary>
+    /// 申请金额
+    /// </summary>
+    public decimal? ApplicationAmount { get; set; }
 
     /// <summary>
     /// 标题
@@ -647,6 +839,31 @@ public class TaktCountersignImportDto
     /// 申请原因
     /// </summary>
     public string? ApplicationReason { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 预算使用说明
+    /// </summary>
+    public string? BudgetUsageDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 目标与预期效益
+    /// </summary>
+    public string? TargetAndExpectedBenefit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 附件 JSON
+    /// </summary>
+    public string? Attachments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会签单状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）
+    /// </summary>
+    public int? CountersignStatus { get; set; }
+
+    /// <summary>
+    /// 会签单明细列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktCountersignDetailCreateDto>? CountersignDetails { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -682,6 +899,32 @@ public class TaktCountersignExportDto
     public string CountersignCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 来源采购询价 ID（采购链路自动生成时写入）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? PurchaseInquiryId { get; set; }
+
+    /// <summary>
+    /// 来源采购询价编码（冗余）
+    /// </summary>
+    public string? PurchaseInquiryCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会签业务类型（字典 logistics_countersign_business_type：inquiry/pr/expense/standalone）
+    /// </summary>
+    public string BusinessType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会签业务键（如 inquiry:123、pr:456、expense:789）
+    /// </summary>
+    public string? BusinessKey { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会签步骤序号（询价=1，PR=2，报销=3）
+    /// </summary>
+    public int StepNo { get; set; } = 0;
+
+    /// <summary>
     /// 会签部门 JSON
     /// </summary>
     public string? CountersignDepts { get; set; } = string.Empty;
@@ -702,23 +945,23 @@ public class TaktCountersignExportDto
     public string? ExecutiveOffice { get; set; } = string.Empty;
 
     /// <summary>
-    /// 申请人（员工 ID）
+    /// 申请人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ApplicantBy { get; set; }
 
     /// <summary>
-    /// 申请部门
+    /// 申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     public string? ApplicationDept { get; set; } = string.Empty;
 
     /// <summary>
-    /// 经费负担部门
+    /// 经费负担部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     public string? CostBearerDept { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否有预算
+    /// 预算否（字典 sys_yes_no_type）
     /// </summary>
     public int IsBudget { get; set; } = 0;
 
@@ -763,7 +1006,7 @@ public class TaktCountersignExportDto
     public string? Attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会签单业务状态（0=草稿，1=审批中，2=已承认，3=已驳回）
+    /// 会签单状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）
     /// </summary>
     public int CountersignStatus { get; set; } = 0;
 

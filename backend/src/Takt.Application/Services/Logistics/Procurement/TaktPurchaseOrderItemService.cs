@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Procurement
 // 文件名称：TaktPurchaseOrderItemService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-30
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购订单明细应用服务实现
 // 
@@ -96,7 +96,7 @@ public class TaktPurchaseOrderItemService : TaktServiceBase, ITaktPurchaseOrderI
     {
         EnsureThreeLayerContext();
         var list = await _purchaseOrderItemRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.DeliveryStatus == 1,
             x => x.MaterialName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
@@ -335,6 +335,7 @@ public class TaktPurchaseOrderItemService : TaktServiceBase, ITaktPurchaseOrderI
                 || (x.PurchaseUnit != null && x.PurchaseUnit.Contains(keywords))
                 || SqlFunc.ToString(x.OrderQuantity).Contains(keywords)
                 || SqlFunc.ToString(x.ReceivedQuantity).Contains(keywords)
+                || SqlFunc.ToString(x.PurchasePerUnit).Contains(keywords)
                 || SqlFunc.ToString(x.UnitPrice).Contains(keywords)
                 || SqlFunc.ToString(x.DiscountRate).Contains(keywords)
                 || SqlFunc.ToString(x.DiscountAmount).Contains(keywords)
@@ -401,6 +402,11 @@ public class TaktPurchaseOrderItemService : TaktServiceBase, ITaktPurchaseOrderI
         if (queryDto?.ReceivedQuantity.HasValue == true)
         {
             exp = exp.And(x => x.ReceivedQuantity == queryDto.ReceivedQuantity);
+        }
+
+        if (queryDto?.PurchasePerUnit.HasValue == true)
+        {
+            exp = exp.And(x => x.PurchasePerUnit == queryDto.PurchasePerUnit);
         }
 
         if (queryDto?.UnitPrice.HasValue == true)

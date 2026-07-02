@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Materials
 // 文件名称：ITaktModelDestinationService.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：型号目的地应用服务接口
 // 
@@ -40,6 +40,13 @@ public interface ITaktModelDestinationService
     /// </summary>
     /// <returns>下拉选项</returns>
     Task<List<TaktSelectOption>> GetModelDestinationOptionsAsync();
+
+    /// <summary>
+    /// 根据物料编码获取机种名称与仕向地信息
+    /// </summary>
+    /// <param name="materialCode">物料编码</param>
+    /// <returns>型号目的地 DTO；未匹配时返回 null</returns>
+    Task<TaktModelDestinationDto?> GetModelDestinationByMaterialAsync(string materialCode);
 
     /// <summary>
     /// 创建型号目的地

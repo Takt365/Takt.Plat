@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Complaint
 // 文件名称：TaktSupplierEvaluationDtos.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SupplierEvaluation 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSupplierEvaluation 生成，请按需审阅）
 // 
@@ -41,7 +41,7 @@ public class TaktSupplierEvaluationDto : TaktCompanyDtoBase
     public string SupplierEvaluationCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供应商ID（序列化为string以避免Javascript精度问题）
+    /// 供应商 ID（关联 TaktSupplier.Id，选项 TaktSuppliers/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SupplierId { get; set; }
@@ -52,7 +52,7 @@ public class TaktSupplierEvaluationDto : TaktCompanyDtoBase
     public string SupplierName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供应商编码
+    /// 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
     /// </summary>
     public string? SupplierCode { get; set; } = string.Empty;
 
@@ -62,7 +62,7 @@ public class TaktSupplierEvaluationDto : TaktCompanyDtoBase
     public DateTime EvaluationDate { get; set; }
 
     /// <summary>
-    /// 评价周期（0=月度，1=季度，2=半年度，3=年度）
+    /// 评价周期（字典 logistics_quality_period）
     /// </summary>
     public int EvaluationPeriod { get; set; } = 0;
 
@@ -72,17 +72,17 @@ public class TaktSupplierEvaluationDto : TaktCompanyDtoBase
     public int EvaluationType { get; set; } = 0;
 
     /// <summary>
-    /// 评价人（人员代码）
+    /// 评价人（选项 TaktEmployees/options，DictValue=EmployeeCode）
     /// </summary>
     public string? EvaluatorBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评价部门
+    /// 评价部门（选项 TaktDepts/tree-options，DictValue=DeptCode）
     /// </summary>
     public string? EvaluationDept { get; set; } = string.Empty;
 
     /// <summary>
-    /// 总体评级（0=D级-不合格，1=C级-合格，2=B级-良好，3=A级-优秀）
+    /// 总体评级（字典 logistics_quality_supplier_rating）
     /// </summary>
     public int OverallRating { get; set; } = 0;
 
@@ -132,7 +132,7 @@ public class TaktSupplierEvaluationDto : TaktCompanyDtoBase
     public string? ImprovementRequirements { get; set; } = string.Empty;
 
     /// <summary>
-    /// 考核结论（0=继续合作，1=限期整改，2=减少订单，3=暂停合作，4=取消资格）
+    /// 考核结论（字典 logistics_quality_evaluation_conclusion）
     /// </summary>
     public int EvaluationConclusion { get; set; } = 0;
 
@@ -142,24 +142,29 @@ public class TaktSupplierEvaluationDto : TaktCompanyDtoBase
     public DateTime? RectificationDeadline { get; set; }
 
     /// <summary>
-    /// 评价状态（0=草稿，1=评价中，2=已完成，3=已归档）
+    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// </summary>
+    public string? Attachments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 评价状态（字典 logistics_quality_evaluation_status）
     /// </summary>
     public int EvaluationStatus { get; set; } = 0;
 
     /// <summary>
-    /// 整改跟进状态（0=无需整改，1=待整改，2=整改中，3=已完成，4=未通过）
+    /// 关联工厂（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
-    public int RectificationStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
+
+    /// <summary>
+    /// 整改跟进状态（字典 logistics_quality_rectification_status）
+    /// </summary>
+    public int RectificationStatus { get; set; } = 0;
 
     /// <summary>
     /// 评价项目明细列表（主子表关系）
@@ -195,7 +200,7 @@ public class TaktSupplierEvaluationQueryDto : TaktPagedQuery
     public string? SupplierEvaluationCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供应商ID（序列化为string以避免Javascript精度问题）
+    /// 供应商 ID（关联 TaktSupplier.Id，选项 TaktSuppliers/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SupplierId { get; set; }
@@ -206,7 +211,7 @@ public class TaktSupplierEvaluationQueryDto : TaktPagedQuery
     public string? SupplierName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供应商编码
+    /// 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
     /// </summary>
     public string? SupplierCode { get; set; } = string.Empty;
 
@@ -221,7 +226,7 @@ public class TaktSupplierEvaluationQueryDto : TaktPagedQuery
     public DateTime? EvaluationDateEnd { get; set; }
 
     /// <summary>
-    /// 评价周期（0=月度，1=季度，2=半年度，3=年度）
+    /// 评价周期（字典 logistics_quality_period）
     /// </summary>
     public int? EvaluationPeriod { get; set; }
 
@@ -231,17 +236,17 @@ public class TaktSupplierEvaluationQueryDto : TaktPagedQuery
     public int? EvaluationType { get; set; }
 
     /// <summary>
-    /// 评价人（人员代码）
+    /// 评价人（选项 TaktEmployees/options，DictValue=EmployeeCode）
     /// </summary>
     public string? EvaluatorBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评价部门
+    /// 评价部门（选项 TaktDepts/tree-options，DictValue=DeptCode）
     /// </summary>
     public string? EvaluationDept { get; set; } = string.Empty;
 
     /// <summary>
-    /// 总体评级（0=D级-不合格，1=C级-合格，2=B级-良好，3=A级-优秀）
+    /// 总体评级（字典 logistics_quality_supplier_rating）
     /// </summary>
     public int? OverallRating { get; set; }
 
@@ -291,7 +296,7 @@ public class TaktSupplierEvaluationQueryDto : TaktPagedQuery
     public string? ImprovementRequirements { get; set; } = string.Empty;
 
     /// <summary>
-    /// 考核结论（0=继续合作，1=限期整改，2=减少订单，3=暂停合作，4=取消资格）
+    /// 考核结论（字典 logistics_quality_evaluation_conclusion）
     /// </summary>
     public int? EvaluationConclusion { get; set; }
 
@@ -306,17 +311,17 @@ public class TaktSupplierEvaluationQueryDto : TaktPagedQuery
     public DateTime? RectificationDeadlineEnd { get; set; }
 
     /// <summary>
-    /// 评价状态（0=草稿，1=评价中，2=已完成，3=已归档）
+    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// </summary>
+    public string? Attachments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 评价状态（字典 logistics_quality_evaluation_status）
     /// </summary>
     public int? EvaluationStatus { get; set; }
 
     /// <summary>
-    /// 整改跟进状态（0=无需整改，1=待整改，2=整改中，3=已完成，4=未通过）
-    /// </summary>
-    public int? RectificationStatus { get; set; }
-
-    /// <summary>
-    /// 关联工厂
+    /// 关联工厂（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string? RelatedPlant { get; set; } = string.Empty;
 
@@ -324,6 +329,11 @@ public class TaktSupplierEvaluationQueryDto : TaktPagedQuery
     /// 排序号（越小越靠前）
     /// </summary>
     public int? SortOrder { get; set; }
+
+    /// <summary>
+    /// 整改跟进状态（字典 logistics_quality_rectification_status）
+    /// </summary>
+    public int? RectificationStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -366,7 +376,7 @@ public class TaktSupplierEvaluationCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -377,7 +387,7 @@ public class TaktSupplierEvaluationCreateDto
     public string SupplierEvaluationCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供应商ID（序列化为string以避免Javascript精度问题）
+    /// 供应商 ID（关联 TaktSupplier.Id，选项 TaktSuppliers/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SupplierId { get; set; }
@@ -389,7 +399,7 @@ public class TaktSupplierEvaluationCreateDto
     public string SupplierName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供应商编码
+    /// 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
     /// </summary>
     public string? SupplierCode { get; set; } = string.Empty;
 
@@ -399,7 +409,7 @@ public class TaktSupplierEvaluationCreateDto
     public DateTime EvaluationDate { get; set; }
 
     /// <summary>
-    /// 评价周期（0=月度，1=季度，2=半年度，3=年度）
+    /// 评价周期（字典 logistics_quality_period）
     /// </summary>
     public int EvaluationPeriod { get; set; } = 0;
 
@@ -409,17 +419,17 @@ public class TaktSupplierEvaluationCreateDto
     public int EvaluationType { get; set; } = 0;
 
     /// <summary>
-    /// 评价人（人员代码）
+    /// 评价人（选项 TaktEmployees/options，DictValue=EmployeeCode）
     /// </summary>
     public string? EvaluatorBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评价部门
+    /// 评价部门（选项 TaktDepts/tree-options，DictValue=DeptCode）
     /// </summary>
     public string? EvaluationDept { get; set; } = string.Empty;
 
     /// <summary>
-    /// 总体评级（0=D级-不合格，1=C级-合格，2=B级-良好，3=A级-优秀）
+    /// 总体评级（字典 logistics_quality_supplier_rating）
     /// </summary>
     public int OverallRating { get; set; } = 0;
 
@@ -469,7 +479,7 @@ public class TaktSupplierEvaluationCreateDto
     public string? ImprovementRequirements { get; set; } = string.Empty;
 
     /// <summary>
-    /// 考核结论（0=继续合作，1=限期整改，2=减少订单，3=暂停合作，4=取消资格）
+    /// 考核结论（字典 logistics_quality_evaluation_conclusion）
     /// </summary>
     public int EvaluationConclusion { get; set; } = 0;
 
@@ -479,19 +489,25 @@ public class TaktSupplierEvaluationCreateDto
     public DateTime? RectificationDeadline { get; set; }
 
     /// <summary>
-    /// 评价状态（0=草稿，1=评价中，2=已完成，3=已归档）
+    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// </summary>
+    public string? Attachments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 评价状态（字典 logistics_quality_evaluation_status）
     /// </summary>
     public int EvaluationStatus { get; set; } = 0;
 
     /// <summary>
-    /// 整改跟进状态（0=无需整改，1=待整改，2=整改中，3=已完成，4=未通过）
+    /// 关联工厂（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
-    public int RectificationStatus { get; set; } = 0;
+    [Required(ErrorMessage = "关联工厂（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
+    public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联工厂
+    /// 整改跟进状态（字典 logistics_quality_rectification_status）
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public int RectificationStatus { get; set; } = 0;
 
     /// <summary>
     /// 评价项目明细列表（主子表关系）（子表，级联保存）
@@ -548,9 +564,9 @@ public class TaktSupplierEvaluationStatusDto
     public long SupplierEvaluationId { get; set; }
 
     /// <summary>
-    /// 评价状态（0=草稿，1=评价中，2=已完成，3=已归档）
+    /// 评价状态（字典 logistics_quality_evaluation_status）
     /// </summary>
-    [Required(ErrorMessage = "评价状态（0=草稿，1=评价中，2=已完成，3=已归档）不能为空")]
+    [Required(ErrorMessage = "评价状态（字典 logistics_quality_evaluation_status）不能为空")]
     public int EvaluationStatus { get; set; } = 0;
 }
 
@@ -603,7 +619,7 @@ public class TaktSupplierEvaluationTemplateDto
     public string? SupplierEvaluationCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供应商ID（序列化为string以避免Javascript精度问题）
+    /// 供应商 ID（关联 TaktSupplier.Id，选项 TaktSuppliers/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SupplierId { get; set; }
@@ -614,12 +630,17 @@ public class TaktSupplierEvaluationTemplateDto
     public string? SupplierName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供应商编码
+    /// 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
     /// </summary>
     public string? SupplierCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评价周期（0=月度，1=季度，2=半年度，3=年度）
+    /// 评价日期
+    /// </summary>
+    public DateTime? EvaluationDate { get; set; }
+
+    /// <summary>
+    /// 评价周期（字典 logistics_quality_period）
     /// </summary>
     public int? EvaluationPeriod { get; set; }
 
@@ -629,17 +650,17 @@ public class TaktSupplierEvaluationTemplateDto
     public int? EvaluationType { get; set; }
 
     /// <summary>
-    /// 评价人（人员代码）
+    /// 评价人（选项 TaktEmployees/options，DictValue=EmployeeCode）
     /// </summary>
     public string? EvaluatorBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评价部门
+    /// 评价部门（选项 TaktDepts/tree-options，DictValue=DeptCode）
     /// </summary>
     public string? EvaluationDept { get; set; } = string.Empty;
 
     /// <summary>
-    /// 总体评级（0=D级-不合格，1=C级-合格，2=B级-良好，3=A级-优秀）
+    /// 总体评级（字典 logistics_quality_supplier_rating）
     /// </summary>
     public int? OverallRating { get; set; }
 
@@ -657,6 +678,71 @@ public class TaktSupplierEvaluationTemplateDto
     /// 交付评分（0-100分）
     /// </summary>
     public int? DeliveryScore { get; set; }
+
+    /// <summary>
+    /// 价格评分（0-100分）
+    /// </summary>
+    public int? PriceScore { get; set; }
+
+    /// <summary>
+    /// 服务评分（0-100分）
+    /// </summary>
+    public int? ServiceScore { get; set; }
+
+    /// <summary>
+    /// 技术能力评分（0-100分）
+    /// </summary>
+    public int? TechnicalScore { get; set; }
+
+    /// <summary>
+    /// 主要优点
+    /// </summary>
+    public string? MainStrengths { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 主要问题/不足
+    /// </summary>
+    public string? MainIssues { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 改进要求/建议
+    /// </summary>
+    public string? ImprovementRequirements { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 考核结论（字典 logistics_quality_evaluation_conclusion）
+    /// </summary>
+    public int? EvaluationConclusion { get; set; }
+
+    /// <summary>
+    /// 整改期限（要求完成日期）
+    /// </summary>
+    public DateTime? RectificationDeadline { get; set; }
+
+    /// <summary>
+    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// </summary>
+    public string? Attachments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 评价状态（字典 logistics_quality_evaluation_status）
+    /// </summary>
+    public int? EvaluationStatus { get; set; }
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options，DictValue=PlantCode）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 整改跟进状态（字典 logistics_quality_rectification_status）
+    /// </summary>
+    public int? RectificationStatus { get; set; }
+
+    /// <summary>
+    /// 评价项目明细列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktSupplierEvaluationItemCreateDto>? Items { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -686,7 +772,7 @@ public class TaktSupplierEvaluationImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -696,7 +782,7 @@ public class TaktSupplierEvaluationImportDto
     public string? SupplierEvaluationCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供应商ID（序列化为string以避免Javascript精度问题）
+    /// 供应商 ID（关联 TaktSupplier.Id，选项 TaktSuppliers/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SupplierId { get; set; }
@@ -707,12 +793,17 @@ public class TaktSupplierEvaluationImportDto
     public string? SupplierName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供应商编码
+    /// 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
     /// </summary>
     public string? SupplierCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评价周期（0=月度，1=季度，2=半年度，3=年度）
+    /// 评价日期
+    /// </summary>
+    public DateTime? EvaluationDate { get; set; }
+
+    /// <summary>
+    /// 评价周期（字典 logistics_quality_period）
     /// </summary>
     public int? EvaluationPeriod { get; set; }
 
@@ -722,17 +813,17 @@ public class TaktSupplierEvaluationImportDto
     public int? EvaluationType { get; set; }
 
     /// <summary>
-    /// 评价人（人员代码）
+    /// 评价人（选项 TaktEmployees/options，DictValue=EmployeeCode）
     /// </summary>
     public string? EvaluatorBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评价部门
+    /// 评价部门（选项 TaktDepts/tree-options，DictValue=DeptCode）
     /// </summary>
     public string? EvaluationDept { get; set; } = string.Empty;
 
     /// <summary>
-    /// 总体评级（0=D级-不合格，1=C级-合格，2=B级-良好，3=A级-优秀）
+    /// 总体评级（字典 logistics_quality_supplier_rating）
     /// </summary>
     public int? OverallRating { get; set; }
 
@@ -750,6 +841,71 @@ public class TaktSupplierEvaluationImportDto
     /// 交付评分（0-100分）
     /// </summary>
     public int? DeliveryScore { get; set; }
+
+    /// <summary>
+    /// 价格评分（0-100分）
+    /// </summary>
+    public int? PriceScore { get; set; }
+
+    /// <summary>
+    /// 服务评分（0-100分）
+    /// </summary>
+    public int? ServiceScore { get; set; }
+
+    /// <summary>
+    /// 技术能力评分（0-100分）
+    /// </summary>
+    public int? TechnicalScore { get; set; }
+
+    /// <summary>
+    /// 主要优点
+    /// </summary>
+    public string? MainStrengths { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 主要问题/不足
+    /// </summary>
+    public string? MainIssues { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 改进要求/建议
+    /// </summary>
+    public string? ImprovementRequirements { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 考核结论（字典 logistics_quality_evaluation_conclusion）
+    /// </summary>
+    public int? EvaluationConclusion { get; set; }
+
+    /// <summary>
+    /// 整改期限（要求完成日期）
+    /// </summary>
+    public DateTime? RectificationDeadline { get; set; }
+
+    /// <summary>
+    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// </summary>
+    public string? Attachments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 评价状态（字典 logistics_quality_evaluation_status）
+    /// </summary>
+    public int? EvaluationStatus { get; set; }
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options，DictValue=PlantCode）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 整改跟进状态（字典 logistics_quality_rectification_status）
+    /// </summary>
+    public int? RectificationStatus { get; set; }
+
+    /// <summary>
+    /// 评价项目明细列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktSupplierEvaluationItemCreateDto>? Items { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -790,7 +946,7 @@ public class TaktSupplierEvaluationExportDto
     public string SupplierEvaluationCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供应商ID（序列化为string以避免Javascript精度问题）
+    /// 供应商 ID（关联 TaktSupplier.Id，选项 TaktSuppliers/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SupplierId { get; set; }
@@ -801,7 +957,7 @@ public class TaktSupplierEvaluationExportDto
     public string SupplierName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供应商编码
+    /// 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
     /// </summary>
     public string? SupplierCode { get; set; } = string.Empty;
 
@@ -811,7 +967,7 @@ public class TaktSupplierEvaluationExportDto
     public DateTime EvaluationDate { get; set; }
 
     /// <summary>
-    /// 评价周期（0=月度，1=季度，2=半年度，3=年度）
+    /// 评价周期（字典 logistics_quality_period）
     /// </summary>
     public int EvaluationPeriod { get; set; } = 0;
 
@@ -821,17 +977,17 @@ public class TaktSupplierEvaluationExportDto
     public int EvaluationType { get; set; } = 0;
 
     /// <summary>
-    /// 评价人（人员代码）
+    /// 评价人（选项 TaktEmployees/options，DictValue=EmployeeCode）
     /// </summary>
     public string? EvaluatorBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评价部门
+    /// 评价部门（选项 TaktDepts/tree-options，DictValue=DeptCode）
     /// </summary>
     public string? EvaluationDept { get; set; } = string.Empty;
 
     /// <summary>
-    /// 总体评级（0=D级-不合格，1=C级-合格，2=B级-良好，3=A级-优秀）
+    /// 总体评级（字典 logistics_quality_supplier_rating）
     /// </summary>
     public int OverallRating { get; set; } = 0;
 
@@ -881,7 +1037,7 @@ public class TaktSupplierEvaluationExportDto
     public string? ImprovementRequirements { get; set; } = string.Empty;
 
     /// <summary>
-    /// 考核结论（0=继续合作，1=限期整改，2=减少订单，3=暂停合作，4=取消资格）
+    /// 考核结论（字典 logistics_quality_evaluation_conclusion）
     /// </summary>
     public int EvaluationConclusion { get; set; } = 0;
 
@@ -891,24 +1047,29 @@ public class TaktSupplierEvaluationExportDto
     public DateTime? RectificationDeadline { get; set; }
 
     /// <summary>
-    /// 评价状态（0=草稿，1=评价中，2=已完成，3=已归档）
+    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// </summary>
+    public string? Attachments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 评价状态（字典 logistics_quality_evaluation_status）
     /// </summary>
     public int EvaluationStatus { get; set; } = 0;
 
     /// <summary>
-    /// 整改跟进状态（0=无需整改，1=待整改，2=整改中，3=已完成，4=未通过）
+    /// 关联工厂（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
-    public int RectificationStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
+
+    /// <summary>
+    /// 整改跟进状态（字典 logistics_quality_rectification_status）
+    /// </summary>
+    public int RectificationStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/procurement
 // 文件名称：supplier.d.ts
-// 创建时间：2026-06-21
+// 创建时间：2026-07-01
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/procurement 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface Supplier extends CompanyDtoBase {
   supplierId: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -54,7 +54,7 @@ export interface Supplier extends CompanyDtoBase {
   supplierType: number;
 
   /**
-   * 行业领域
+   * 行业领域（字典 logistics_industry_sector，DictValue=A/C/M/P）
    */
   industrySector?: string;
 
@@ -62,6 +62,11 @@ export interface Supplier extends CompanyDtoBase {
    * 供货商标识（税务登记证号/统一社会信用代码）
    */
   supplierTaxNumber?: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等）
+   */
+  taxRate: number;
 
   /**
    * 注册国家（ISO 3166-1 alpha-2两位代码）
@@ -119,14 +124,14 @@ export interface Supplier extends CompanyDtoBase {
   contactEmail?: string;
 
   /**
-   * 结算币种代码
+   * 结算币种代码（字典 accounting_currency_code，DictValue=CNY/USD 等）
    */
   currencyCode: string;
 
   /**
-   * 付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
+   * 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
    */
-  paymentTerms: number;
+  paymentTerms: string;
 
   /**
    * 供货商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时）
@@ -139,19 +144,14 @@ export interface Supplier extends CompanyDtoBase {
   evaluationScore: number;
 
   /**
-   * 是否合格供货商（0=否，1=是）
-   */
-  isQualified: number;
-
-  /**
-   * 供货商状态（1=启用，0=禁用）
-   */
-  supplierStatus: number;
-
-  /**
    * 排序号（越小越靠前）
    */
   sortOrder: number;
+
+  /**
+   * 供货商状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   */
+  supplierStatus: number;
 
 }
 
@@ -174,7 +174,7 @@ export interface SupplierQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -199,7 +199,7 @@ export interface SupplierQuery extends TaktPagedQuery {
   supplierType?: number;
 
   /**
-   * 行业领域
+   * 行业领域（字典 logistics_industry_sector，DictValue=A/C/M/P）
    */
   industrySector?: string;
 
@@ -207,6 +207,11 @@ export interface SupplierQuery extends TaktPagedQuery {
    * 供货商标识（税务登记证号/统一社会信用代码）
    */
   supplierTaxNumber?: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等）
+   */
+  taxRate?: number;
 
   /**
    * 注册国家（ISO 3166-1 alpha-2两位代码）
@@ -264,14 +269,14 @@ export interface SupplierQuery extends TaktPagedQuery {
   contactEmail?: string;
 
   /**
-   * 结算币种代码
+   * 结算币种代码（字典 accounting_currency_code，DictValue=CNY/USD 等）
    */
   currencyCode?: string;
 
   /**
-   * 付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
+   * 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
    */
-  paymentTerms?: number;
+  paymentTerms?: string;
 
   /**
    * 供货商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时）
@@ -284,19 +289,14 @@ export interface SupplierQuery extends TaktPagedQuery {
   evaluationScore?: number;
 
   /**
-   * 是否合格供货商（0=否，1=是）
-   */
-  isQualified?: number;
-
-  /**
-   * 供货商状态（1=启用，0=禁用）
-   */
-  supplierStatus?: number;
-
-  /**
    * 排序号（越小越靠前）
    */
   sortOrder?: number;
+
+  /**
+   * 供货商状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   */
+  supplierStatus?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -338,12 +338,12 @@ export interface SupplierCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -368,7 +368,7 @@ export interface SupplierCreate {
   supplierType: number;
 
   /**
-   * 行业领域
+   * 行业领域（字典 logistics_industry_sector，DictValue=A/C/M/P）
    */
   industrySector?: string;
 
@@ -376,6 +376,11 @@ export interface SupplierCreate {
    * 供货商标识（税务登记证号/统一社会信用代码）
    */
   supplierTaxNumber?: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等）
+   */
+  taxRate: number;
 
   /**
    * 注册国家（ISO 3166-1 alpha-2两位代码）
@@ -433,14 +438,14 @@ export interface SupplierCreate {
   contactEmail?: string;
 
   /**
-   * 结算币种代码
+   * 结算币种代码（字典 accounting_currency_code，DictValue=CNY/USD 等）
    */
   currencyCode: string;
 
   /**
-   * 付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
+   * 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
    */
-  paymentTerms: number;
+  paymentTerms: string;
 
   /**
    * 供货商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时）
@@ -453,12 +458,7 @@ export interface SupplierCreate {
   evaluationScore: number;
 
   /**
-   * 是否合格供货商（0=否，1=是）
-   */
-  isQualified: number;
-
-  /**
-   * 供货商状态（1=启用，0=禁用）
+   * 供货商状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   supplierStatus: number;
 
@@ -502,7 +502,7 @@ export interface SupplierStatus {
   supplierId: string;
 
   /**
-   * 供货商状态（1=启用，0=禁用）
+   * 供货商状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   supplierStatus: number;
 
@@ -545,7 +545,7 @@ export interface SupplierTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -570,7 +570,7 @@ export interface SupplierTemplate {
   supplierType?: number;
 
   /**
-   * 行业领域
+   * 行业领域（字典 logistics_industry_sector，DictValue=A/C/M/P）
    */
   industrySector?: string;
 
@@ -580,187 +580,9 @@ export interface SupplierTemplate {
   supplierTaxNumber?: string;
 
   /**
-   * 注册国家（ISO 3166-1 alpha-2两位代码）
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等）
    */
-  registrationCountry?: string;
-
-  /**
-   * 注册地址1
-   */
-  registrationAddress1?: string;
-
-  /**
-   * 注册地址2
-   */
-  registrationAddress2?: string;
-
-  /**
-   * 注册地址3
-   */
-  registrationAddress3?: string;
-
-  /**
-   * 供货商电话
-   */
-  supplierPhone?: string;
-
-  /**
-   * 扩展字段JSON
-   */
-  extField?: string;
-
-  /**
-   * 备注
-   */
-  remark?: string;
-
-}
-
-
-/**
- * Supplier 导入 DTO（独立实现，不继承 TemplateDto）
- * 对应前端 SupplierImport
- * @description 对应后端 TaktSupplierImportDto
- */
-export interface SupplierImport {
-  /**
-   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
-   */
-  tenantCode?: string;
-
-  /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
-   */
-  companyCode?: string;
-
-  /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
-   */
-  companyDefaultCulture?: string;
-
-  /**
-   * 工厂代码
-   */
-  plantCode?: string;
-
-  /**
-   * 供货商编码（唯一索引）
-   */
-  supplierCode?: string;
-
-  /**
-   * 供货商名称
-   */
-  supplierName?: string;
-
-  /**
-   * 供货商简称
-   */
-  supplierShortName?: string;
-
-  /**
-   * 供货商类型（字典 logistics_supplier_category；0=生产商，1=代理商，2=经销商，3=贸易商，4=其他）
-   */
-  supplierType?: number;
-
-  /**
-   * 行业领域
-   */
-  industrySector?: string;
-
-  /**
-   * 供货商标识（税务登记证号/统一社会信用代码）
-   */
-  supplierTaxNumber?: string;
-
-  /**
-   * 注册国家（ISO 3166-1 alpha-2两位代码）
-   */
-  registrationCountry?: string;
-
-  /**
-   * 注册地址1
-   */
-  registrationAddress1?: string;
-
-  /**
-   * 注册地址2
-   */
-  registrationAddress2?: string;
-
-  /**
-   * 注册地址3
-   */
-  registrationAddress3?: string;
-
-  /**
-   * 供货商电话
-   */
-  supplierPhone?: string;
-
-  /**
-   * 扩展字段JSON
-   */
-  extField?: string;
-
-  /**
-   * 备注
-   */
-  remark?: string;
-
-}
-
-
-/**
- * Supplier 导出 DTO（独立实现，不继承响应 Dto）
- * 对应前端 SupplierExport
- * @description 对应后端 TaktSupplierExportDto
- */
-export interface SupplierExport {
-  /**
-   * SupplierID
-   */
-  supplierId: string;
-
-  /**
-   * 公司代码
-   */
-  companyCode: string;
-
-  /**
-   * 工厂代码
-   */
-  plantCode: string;
-
-  /**
-   * 供货商编码（唯一索引）
-   */
-  supplierCode: string;
-
-  /**
-   * 供货商名称
-   */
-  supplierName: string;
-
-  /**
-   * 供货商简称
-   */
-  supplierShortName?: string;
-
-  /**
-   * 供货商类型（字典 logistics_supplier_category；0=生产商，1=代理商，2=经销商，3=贸易商，4=其他）
-   */
-  supplierType: number;
-
-  /**
-   * 行业领域
-   */
-  industrySector?: string;
-
-  /**
-   * 供货商标识（税务登记证号/统一社会信用代码）
-   */
-  supplierTaxNumber?: string;
+  taxRate?: number;
 
   /**
    * 注册国家（ISO 3166-1 alpha-2两位代码）
@@ -818,14 +640,317 @@ export interface SupplierExport {
   contactEmail?: string;
 
   /**
-   * 结算币种代码
+   * 结算币种代码（字典 accounting_currency_code，DictValue=CNY/USD 等）
+   */
+  currencyCode?: string;
+
+  /**
+   * 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
+   */
+  paymentTerms?: string;
+
+  /**
+   * 供货商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时）
+   */
+  supplierLevel?: number;
+
+  /**
+   * 评价分数（0-100分）
+   */
+  evaluationScore?: number;
+
+  /**
+   * 供货商状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   */
+  supplierStatus?: number;
+
+  /**
+   * 扩展字段JSON
+   */
+  extField?: string;
+
+  /**
+   * 备注
+   */
+  remark?: string;
+
+}
+
+
+/**
+ * Supplier 导入 DTO（独立实现，不继承 TemplateDto）
+ * 对应前端 SupplierImport
+ * @description 对应后端 TaktSupplierImportDto
+ */
+export interface SupplierImport {
+  /**
+   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
+   */
+  tenantCode?: string;
+
+  /**
+   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+   */
+  companyCode?: string;
+
+  /**
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   */
+  companyDefaultCulture?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   */
+  plantCode?: string;
+
+  /**
+   * 供货商编码（唯一索引）
+   */
+  supplierCode?: string;
+
+  /**
+   * 供货商名称
+   */
+  supplierName?: string;
+
+  /**
+   * 供货商简称
+   */
+  supplierShortName?: string;
+
+  /**
+   * 供货商类型（字典 logistics_supplier_category；0=生产商，1=代理商，2=经销商，3=贸易商，4=其他）
+   */
+  supplierType?: number;
+
+  /**
+   * 行业领域（字典 logistics_industry_sector，DictValue=A/C/M/P）
+   */
+  industrySector?: string;
+
+  /**
+   * 供货商标识（税务登记证号/统一社会信用代码）
+   */
+  supplierTaxNumber?: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等）
+   */
+  taxRate?: number;
+
+  /**
+   * 注册国家（ISO 3166-1 alpha-2两位代码）
+   */
+  registrationCountry?: string;
+
+  /**
+   * 注册地址1
+   */
+  registrationAddress1?: string;
+
+  /**
+   * 注册地址2
+   */
+  registrationAddress2?: string;
+
+  /**
+   * 注册地址3
+   */
+  registrationAddress3?: string;
+
+  /**
+   * 供货商电话
+   */
+  supplierPhone?: string;
+
+  /**
+   * 供货商传真
+   */
+  supplierFax?: string;
+
+  /**
+   * 供货商邮箱
+   */
+  supplierEmail?: string;
+
+  /**
+   * 供货商网站
+   */
+  supplierWebsite?: string;
+
+  /**
+   * 联系人
+   */
+  contactPerson?: string;
+
+  /**
+   * 联系人电话
+   */
+  contactPhone?: string;
+
+  /**
+   * 联系人邮箱
+   */
+  contactEmail?: string;
+
+  /**
+   * 结算币种代码（字典 accounting_currency_code，DictValue=CNY/USD 等）
+   */
+  currencyCode?: string;
+
+  /**
+   * 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
+   */
+  paymentTerms?: string;
+
+  /**
+   * 供货商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时）
+   */
+  supplierLevel?: number;
+
+  /**
+   * 评价分数（0-100分）
+   */
+  evaluationScore?: number;
+
+  /**
+   * 供货商状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   */
+  supplierStatus?: number;
+
+  /**
+   * 扩展字段JSON
+   */
+  extField?: string;
+
+  /**
+   * 备注
+   */
+  remark?: string;
+
+}
+
+
+/**
+ * Supplier 导出 DTO（独立实现，不继承响应 Dto）
+ * 对应前端 SupplierExport
+ * @description 对应后端 TaktSupplierExportDto
+ */
+export interface SupplierExport {
+  /**
+   * SupplierID
+   */
+  supplierId: string;
+
+  /**
+   * 公司代码
+   */
+  companyCode: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   */
+  plantCode: string;
+
+  /**
+   * 供货商编码（唯一索引）
+   */
+  supplierCode: string;
+
+  /**
+   * 供货商名称
+   */
+  supplierName: string;
+
+  /**
+   * 供货商简称
+   */
+  supplierShortName?: string;
+
+  /**
+   * 供货商类型（字典 logistics_supplier_category；0=生产商，1=代理商，2=经销商，3=贸易商，4=其他）
+   */
+  supplierType: number;
+
+  /**
+   * 行业领域（字典 logistics_industry_sector，DictValue=A/C/M/P）
+   */
+  industrySector?: string;
+
+  /**
+   * 供货商标识（税务登记证号/统一社会信用代码）
+   */
+  supplierTaxNumber?: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等）
+   */
+  taxRate: number;
+
+  /**
+   * 注册国家（ISO 3166-1 alpha-2两位代码）
+   */
+  registrationCountry?: string;
+
+  /**
+   * 注册地址1
+   */
+  registrationAddress1?: string;
+
+  /**
+   * 注册地址2
+   */
+  registrationAddress2?: string;
+
+  /**
+   * 注册地址3
+   */
+  registrationAddress3?: string;
+
+  /**
+   * 供货商电话
+   */
+  supplierPhone?: string;
+
+  /**
+   * 供货商传真
+   */
+  supplierFax?: string;
+
+  /**
+   * 供货商邮箱
+   */
+  supplierEmail?: string;
+
+  /**
+   * 供货商网站
+   */
+  supplierWebsite?: string;
+
+  /**
+   * 联系人
+   */
+  contactPerson?: string;
+
+  /**
+   * 联系人电话
+   */
+  contactPhone?: string;
+
+  /**
+   * 联系人邮箱
+   */
+  contactEmail?: string;
+
+  /**
+   * 结算币种代码（字典 accounting_currency_code，DictValue=CNY/USD 等）
    */
   currencyCode: string;
 
   /**
-   * 付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
+   * 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
    */
-  paymentTerms: number;
+  paymentTerms: string;
 
   /**
    * 供货商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时）
@@ -838,19 +963,14 @@ export interface SupplierExport {
   evaluationScore: number;
 
   /**
-   * 是否合格供货商（0=否，1=是）
-   */
-  isQualified: number;
-
-  /**
-   * 供货商状态（1=启用，0=禁用）
-   */
-  supplierStatus: number;
-
-  /**
    * 排序号（越小越靠前）
    */
   sortOrder: number;
+
+  /**
+   * 供货商状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   */
+  supplierStatus: number;
 
   /**
    * 扩展字段JSON

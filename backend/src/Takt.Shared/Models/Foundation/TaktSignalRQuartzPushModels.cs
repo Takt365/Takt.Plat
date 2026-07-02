@@ -114,12 +114,12 @@ public class TaktSignalRQuartzTaskExecutedPush
     public int ExecuteCount { get; set; }
 
     /// <summary>
-    /// 上次执行时间
+    /// 上次执行
     /// </summary>
     public DateTime? LastRunAt { get; set; }
 
     /// <summary>
-    /// 下次执行时间
+    /// 下次执行
     /// </summary>
     public DateTime? NextRunAt { get; set; }
 

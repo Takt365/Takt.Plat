@@ -27,5 +27,20 @@ export default {
         hint: "彈窗內「物料清單明細 / BOM 變更記錄」Tab 可與主表一次保存；底部面板可獨立維護明細行。",
       },
     },
+    explosion: {
+      title: "BOM 多層展開清單",
+      quantity: "需求數量",
+      maxLevel: "最大層級",
+      includeLevelZero: "含父件行",
+      summary: "BOM {bomCode} · 父件 {parentMaterialCode} {parentMaterialName} · 需求 {quantity}",
+      column: {
+        level: "層級",
+        immediateParent: "直接父件",
+        cumulativeQuantity: "累計需求量",
+        hasChildBom: "有下級 BOM",
+        isCircular: "循環引用",
+      },
+      action: "展開清單",
+    },
   },
 };

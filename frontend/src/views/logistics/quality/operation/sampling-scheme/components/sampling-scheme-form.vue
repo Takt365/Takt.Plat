@@ -118,10 +118,12 @@
                 :label="t('entity.samplingscheme.type')"
                 name="samplingSchemeType"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.samplingSchemeType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingscheme.type') })"
-                  style="width: 100%"
+                  dict-type="logistics_quality_sampling_scheme_type"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.samplingscheme.type') })"
+                  :disabled="loading"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -130,10 +132,12 @@
                 :label="t('entity.samplingscheme.samplingstandard')"
                 name="samplingStandard"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.samplingStandard"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingscheme.samplingstandard') })"
-                  style="width: 100%"
+                  dict-type="logistics_quality_sampling_standard"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.samplingscheme.samplingstandard') })"
+                  :disabled="loading"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -142,10 +146,12 @@
                 :label="t('entity.samplingscheme.inspectionlevel')"
                 name="inspectionLevel"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.inspectionLevel"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingscheme.inspectionlevel') })"
-                  style="width: 100%"
+                  dict-type="logistics_quality_inspection_level"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.samplingscheme.inspectionlevel') })"
+                  :disabled="loading"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -236,10 +242,12 @@
                 :label="t('entity.samplingscheme.inspectionstrictness')"
                 name="inspectionStrictness"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.inspectionStrictness"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingscheme.inspectionstrictness') })"
-                  style="width: 100%"
+                  dict-type="logistics_quality_inspection_strictness"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.samplingscheme.inspectionstrictness') })"
+                  :disabled="loading"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -274,10 +282,12 @@
                 :label="t('entity.samplingscheme.status')"
                 name="samplingSchemeStatus"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.samplingSchemeStatus"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingscheme.status') })"
-                  style="width: 100%"
+                  dict-type="logistics_quality_standard_status"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.samplingscheme.status') })"
+                  :disabled="loading"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>

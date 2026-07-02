@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Foundation
 // 文件名称：TaktQuartzTasksController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-29
 // 创建人：Takt365(Cursor AI)
 // 功能描述：定时任务控制器
 // 
@@ -41,7 +41,7 @@ public class TaktQuartzTasksController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("foundation:quartztask:list", "定时任务列表")]
+    [TaktPermission("foundation:quartz:task:list", "定时任务列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetQuartzTaskListAsync([FromQuery] TaktQuartzTaskQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktQuartzTasksController : TaktControllerBase
     /// </summary>
     /// <param name="id">定时任务ID</param>
     /// <returns>定时任务DTO</returns>
-    [TaktPermission("foundation:quartztask:query", "定时任务详情")]
+    [TaktPermission("foundation:quartz:task:query", "定时任务详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetQuartzTaskByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktQuartzTasksController : TaktControllerBase
     /// 获取定时任务选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("foundation:quartztask:query", "定时任务选项")]
+    [TaktPermission("foundation:quartz:task:query", "定时任务选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetQuartzTaskOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktQuartzTasksController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>定时任务DTO</returns>
-    [TaktPermission("foundation:quartztask:create", "创建定时任务")]
+    [TaktPermission("foundation:quartz:task:create", "创建定时任务")]
     [HttpPost]
     public async Task<IActionResult> CreateQuartzTaskAsync([FromBody] TaktQuartzTaskCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktQuartzTasksController : TaktControllerBase
     /// <param name="id">定时任务ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>定时任务DTO</returns>
-    [TaktPermission("foundation:quartztask:update", "更新定时任务")]
+    [TaktPermission("foundation:quartz:task:update", "更新定时任务")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateQuartzTaskAsync(long id, [FromBody] TaktQuartzTaskUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktQuartzTasksController : TaktControllerBase
     /// </summary>
     /// <param name="id">定时任务ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("foundation:quartztask:delete", "删除定时任务")]
+    [TaktPermission("foundation:quartz:task:delete", "删除定时任务")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteQuartzTaskByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktQuartzTasksController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("foundation:quartztask:delete", "批量删除定时任务")]
+    [TaktPermission("foundation:quartz:task:delete", "批量删除定时任务")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteQuartzTaskBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -183,9 +183,9 @@ public class TaktQuartzTasksController : TaktControllerBase
     /// <summary>
     /// 更新定时任务状态
     /// </summary>
-    /// <param name="dto">状态 DTO（0=正常，1=暂停）</param>
+    /// <param name="dto">状态 DTO</param>
     /// <returns>定时任务DTO</returns>
-    [TaktPermission("foundation:quartztask:update", "更新定时任务状态")]
+    [TaktPermission("foundation:quartz:task:update", "更新定时任务状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateQuartzTaskStatusAsync([FromBody] TaktQuartzTaskStatusDto dto)
     {
@@ -201,30 +201,10 @@ public class TaktQuartzTasksController : TaktControllerBase
     }
 
     /// <summary>
-    /// 立即执行定时任务一次
-    /// </summary>
-    /// <param name="id">定时任务ID</param>
-    /// <returns>操作结果</returns>
-    [TaktPermission("foundation:quartztask:update", "立即执行定时任务")]
-    [HttpPost("{id}/run")]
-    public async Task<IActionResult> RunQuartzTaskNowAsync(long id)
-    {
-        try
-        {
-            await _quartzTaskService.RunQuartzTaskNowAsync(id);
-            return Success("已触发执行");
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
-    }
-
-    /// <summary>
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("foundation:quartztask:import", "获取定时任务导入模板")]
+    [TaktPermission("foundation:quartz:task:import", "获取定时任务导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetQuartzTaskTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -244,7 +224,7 @@ public class TaktQuartzTasksController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("foundation:quartztask:import", "导入定时任务")]
+    [TaktPermission("foundation:quartz:task:import", "导入定时任务")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportQuartzTaskAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -274,7 +254,7 @@ public class TaktQuartzTasksController : TaktControllerBase
     /// 导出定时任务
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("foundation:quartztask:export", "导出定时任务")]
+    [TaktPermission("foundation:quartz:task:export", "导出定时任务")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportQuartzTaskAsync([FromQuery] TaktQuartzTaskQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

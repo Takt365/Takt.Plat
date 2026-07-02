@@ -50,7 +50,7 @@ public class TaktUserCompany : TaktCompanyEntityBase
     public TaktUser User { get; set; } = null!;
 
     /// <summary>
-    /// 可访问公司（多对一，按 <see cref="CompanyCode"/> 关联）
+    /// 可访问公司（多对一，按 CompanyCode 关联）
     /// </summary>
     [Navigate(NavigateType.ManyToOne, nameof(CompanyCode), nameof(TaktCompany.CompanyCode))]
     public TaktCompany Company { get; set; } = null!;

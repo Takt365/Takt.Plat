@@ -28,6 +28,16 @@ public class TaktFileUploadOptions
     public string UploadRelativePath { get; set; } = "uploads";
 
     /// <summary>
+    /// 本地正式文件存储根目录（绝对路径或相对 ContentRoot；空则默认 wwwroot）
+    /// </summary>
+    public string? UploadStorageRootPath { get; set; }
+
+    /// <summary>
+    /// 分片临时根目录（绝对路径或相对 ContentRoot；空则默认 wwwroot）
+    /// </summary>
+    public string? ChunkStorageRootPath { get; set; }
+
+    /// <summary>
     /// 相对 wwwroot 的分片临时目录
     /// </summary>
     public string ChunkRelativePath { get; set; } = "uploads/_chunks";

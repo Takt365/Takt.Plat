@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Output
 // 文件名称：TaktStandardOperationRateI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktStandardOperationRate 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktStandardOperationRateI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.standardoperationrate._self", "zh-HK", "标准生产稼动率信息_hk", "实体名称"),
 
             // entity.standardoperationrate.plantcode
-            new TranslationSeedItem("entity.standardoperationrate.plantcode", "en-US", "工厂代码_us", "工厂代码"),
+            new TranslationSeedItem("entity.standardoperationrate.plantcode", "en-US", "工厂代码_us", "工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
             // entity.standardoperationrate.plantcode
-            new TranslationSeedItem("entity.standardoperationrate.plantcode", "ja-JP", "工厂代码_jp", "工厂代码"),
+            new TranslationSeedItem("entity.standardoperationrate.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
             // entity.standardoperationrate.plantcode
-            new TranslationSeedItem("entity.standardoperationrate.plantcode", "zh-CN", "工厂代码", "工厂代码"),
+            new TranslationSeedItem("entity.standardoperationrate.plantcode", "zh-CN", "工厂代码", "工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
             // entity.standardoperationrate.plantcode
-            new TranslationSeedItem("entity.standardoperationrate.plantcode", "zh-HK", "工厂代码_hk", "工厂代码"),
+            new TranslationSeedItem("entity.standardoperationrate.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
 
             // entity.standardoperationrate.financialyear
             new TranslationSeedItem("entity.standardoperationrate.financialyear", "en-US", "财务年度_us", "财务年度"),
@@ -145,13 +145,13 @@ public class TaktStandardOperationRateI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.standardoperationrate.expirydate", "zh-HK", "失效日期_hk", "失效日期"),
 
             // entity.standardoperationrate.status
-            new TranslationSeedItem("entity.standardoperationrate.status", "en-US", "状态_us", "状态"),
+            new TranslationSeedItem("entity.standardoperationrate.status", "en-US", "状态_us", "状态（字典 sys_normal_disable_status；0=禁用，1=启用）"),
             // entity.standardoperationrate.status
-            new TranslationSeedItem("entity.standardoperationrate.status", "ja-JP", "状态_jp", "状态"),
+            new TranslationSeedItem("entity.standardoperationrate.status", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable_status；0=禁用，1=启用）"),
             // entity.standardoperationrate.status
-            new TranslationSeedItem("entity.standardoperationrate.status", "zh-CN", "状态", "状态"),
+            new TranslationSeedItem("entity.standardoperationrate.status", "zh-CN", "状态", "状态（字典 sys_normal_disable_status；0=禁用，1=启用）"),
             // entity.standardoperationrate.status
-            new TranslationSeedItem("entity.standardoperationrate.status", "zh-HK", "状态_hk", "状态"),
+            new TranslationSeedItem("entity.standardoperationrate.status", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable_status；0=禁用，1=启用）"),
 
             // entity.standardoperationrate.changelogs
             new TranslationSeedItem("entity.standardoperationrate.changelogs", "en-US", "标准生产稼动率变更记录列表_us", "标准生产稼动率变更记录列表（外键在子表 TaktStandardOperationRateChangeLog.StandardOperationRateId）"),

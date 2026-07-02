@@ -33,7 +33,7 @@ public class TaktProfitCenterChangeLog : TaktCompanyEntityBase
     /// <summary>
     /// 利润中心编码（冗余）
     /// </summary>
-    [SugarColumn(ColumnName = "profit_center_code", ColumnDescription = "利润中心编码", ColumnDataType = "varchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "profit_center_code", ColumnDescription = "利润中心编码", ColumnDataType = "varchar", Length = 4, IsNullable = false)]
     public string ProfitCenterCode { get; set; } = string.Empty;
     /// <summary>
     /// 变更字段列表 JSON

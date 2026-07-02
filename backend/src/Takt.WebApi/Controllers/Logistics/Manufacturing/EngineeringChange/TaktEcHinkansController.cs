@@ -32,7 +32,7 @@ public class TaktEcHinkansController : TaktControllerBase
     public TaktEcHinkansController(ITaktEcHinkanService service) => _service = service;
 
     /// <summary>获取品管部门列表（分页）</summary>
-    [TaktPermission("logistics:manufacturing:engineeringchange:hinkan:list", "品管部门列表")]
+    [TaktPermission("logistics:manufacturing:engineering:change:hinkan:list", "品管部门列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetEcHinkanListAsync([FromQuery] TaktEcDeptViewQueryDto queryDto)
     {
@@ -41,7 +41,7 @@ public class TaktEcHinkansController : TaktControllerBase
     }
 
     /// <summary>根据设变明细 ID 获取品管部门行</summary>
-    [TaktPermission("logistics:manufacturing:engineeringchange:hinkan:query", "品管部门详情")]
+    [TaktPermission("logistics:manufacturing:engineering:change:hinkan:query", "品管部门详情")]
     [HttpGet("detail/{ecDetailId}")]
     public async Task<IActionResult> GetEcHinkanByEcDetailIdAsync(long ecDetailId)
     {
@@ -50,7 +50,7 @@ public class TaktEcHinkansController : TaktControllerBase
     }
 
     /// <summary>更新品管部门</summary>
-    [TaktPermission("logistics:manufacturing:engineeringchange:hinkan:update", "更新品管部门")]
+    [TaktPermission("logistics:manufacturing:engineering:change:hinkan:update", "更新品管部门")]
     [HttpPut("detail/{ecDetailId}")]
     public async Task<IActionResult> UpdateEcHinkanAsync(long ecDetailId, [FromBody] TaktEcDeptViewUpdateDto dto)
     {
@@ -59,7 +59,7 @@ public class TaktEcHinkansController : TaktControllerBase
     }
 
     /// <summary>导出品管部门</summary>
-    [TaktPermission("logistics:manufacturing:engineeringchange:hinkan:export", "导出品管部门")]
+    [TaktPermission("logistics:manufacturing:engineering:change:hinkan:export", "导出品管部门")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportEcHinkanAsync([FromQuery] TaktEcDeptViewQueryDto? query)
     {

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Sales
 // 文件名称：TaktSalesPriceChangeLogDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-07-01
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SalesPriceChangeLog 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSalesPriceChangeLog 生成，请按需审阅）
 // 
@@ -36,13 +36,13 @@ public class TaktSalesPriceChangeLogDto : TaktCompanyDtoBase
     public long SalesPriceChangeLogId { get; set; }
 
     /// <summary>
-    /// 销售价格ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 销售价格（关联 TaktSalesPrice.Id，选项 TaktSalesPrices/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SalesPriceId { get; set; }
 
     /// <summary>
-    /// 销售价格名称（填充字段）
+    /// 销售价格（关联 TaktSalesPrice.Id，选项 TaktSalesPrices/options）
     /// </summary>
     public string? SalesPriceName { get; set; }
 
@@ -65,6 +65,12 @@ public class TaktSalesPriceChangeLogDto : TaktCompanyDtoBase
     /// 变更原因
     /// </summary>
     public string? ChangeReason { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 销售价格主表
+    /// （主表：TaktSalesPrice）
+    /// </summary>
+    public TaktSalesPriceDto? SalesPrice { get; set; }
 
 }
 
@@ -89,7 +95,7 @@ public class TaktSalesPriceChangeLogQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售价格ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 销售价格（关联 TaktSalesPrice.Id，选项 TaktSalesPrices/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SalesPriceId { get; set; }
@@ -160,12 +166,12 @@ public class TaktSalesPriceChangeLogCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售价格ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 销售价格（关联 TaktSalesPrice.Id，选项 TaktSalesPrices/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SalesPriceId { get; set; }
@@ -244,7 +250,7 @@ public class TaktSalesPriceChangeLogExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售价格ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 销售价格（关联 TaktSalesPrice.Id，选项 TaktSalesPrices/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SalesPriceId { get; set; }

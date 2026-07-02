@@ -64,7 +64,7 @@ public class TaktPurchasePlanItem : TaktCompanyEntityBase
     public int? ProductionPlanLineNumber { get; set; }
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterialPlant.MaterialCode）
+    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
     /// </summary>
     [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string MaterialCode { get; set; } = string.Empty;
@@ -82,7 +82,7 @@ public class TaktPurchasePlanItem : TaktCompanyEntityBase
     public string? MaterialSpecification { get; set; }
 
     /// <summary>
-    /// 计划单位
+    /// 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
     /// </summary>
     [SugarColumn(ColumnName = "plan_unit", ColumnDescription = "计划单位", ColumnDataType = "nvarchar", Length = 20, IsNullable = false, DefaultValue = "PC")]
     public string PlanUnit { get; set; } = "PC";
@@ -118,7 +118,7 @@ public class TaktPurchasePlanItem : TaktCompanyEntityBase
     public decimal EstimatedAmount { get; set; } = 0;
 
     /// <summary>
-    /// 参考供货商编码（关联 TaktSupplier.SupplierCode）
+    /// 参考供货商编码（关联 TaktSupplier.SupplierCode，选项 TaktSuppliers/options，DictValue=SupplierCode）
     /// </summary>
     [SugarColumn(ColumnName = "reference_supplier_code", ColumnDescription = "参考供货商编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? ReferenceSupplierCode { get; set; }

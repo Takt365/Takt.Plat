@@ -89,7 +89,7 @@ const displayName = ref('')
 /** 时钟定时器句柄 */
 let timer: number | null = null
 
-/** 区域与时区映射（与 TAKT_SUPPORTED_LOCALES 一致） */
+/** 区域与时区映射（CultureCode → IANA 时区） */
 const localeTimeZoneMap: Record<string, string> = {
   'zh-CN': 'Asia/Shanghai',
   'zh-HK': 'Asia/Hong_Kong',

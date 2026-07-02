@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Defect
 // 文件名称：TaktPcbaInspectionDetailService.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-30
 // 创建人：Takt365(Cursor AI)
 // 功能描述：PCBA检查明细应用服务实现
 // 
@@ -363,7 +363,7 @@ public class TaktPcbaInspectionDetailService : TaktServiceBase, ITaktPcbaInspect
                 || SqlFunc.ToString(x.DailyCompletedQty).Contains(keywords)
                 || SqlFunc.ToString(x.InspectionQty).Contains(keywords)
                 || SqlFunc.ToString(x.InspectionStatus).Contains(keywords)
-                || (x.ProdLine != null && x.ProdLine.Contains(keywords))
+                || (x.ProdTeam != null && x.ProdTeam.Contains(keywords))
                 || SqlFunc.ToString(x.InspectionWorkHours).Contains(keywords)
                 || SqlFunc.ToString(x.AoiWorkHours).Contains(keywords)
                 || SqlFunc.ToString(x.DefectQty).Contains(keywords)
@@ -434,9 +434,9 @@ public class TaktPcbaInspectionDetailService : TaktServiceBase, ITaktPcbaInspect
             exp = exp.And(x => x.InspectionStatus == queryDto.InspectionStatus);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ProdLine))
+        if (!string.IsNullOrEmpty(queryDto?.ProdTeam))
         {
-            exp = exp.And(x => x.ProdLine != null && x.ProdLine.Contains(queryDto.ProdLine));
+            exp = exp.And(x => x.ProdTeam != null && x.ProdTeam.Contains(queryDto.ProdTeam));
         }
 
         if (queryDto?.InspectionWorkHours.HasValue == true)

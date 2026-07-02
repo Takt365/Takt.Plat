@@ -11,11 +11,13 @@
 // ========================================
 
 using Microsoft.AspNetCore.Http;
+using Takt.Application.Services.Foundation;
 using Takt.Application.Services.Identity;
 using Takt.Domain.Entities.Statistics.Logging;
 using Takt.Domain.Interfaces;
-using Takt.Shared.Enums;
+using Takt.Infrastructure.Services;
 using Takt.Shared.Helpers;
+using Takt.Shared.Constants;
 using Takt.Shared.Models.Logging;
 
 namespace Takt.WebApi.Logging;
@@ -28,11 +30,11 @@ public sealed class TaktAuthLoginLogWriteRequest
     /// <summary>流程阶段（TaktAuthLoginPhases）</summary>
     public required string Phase { get; init; }
 
-    /// <summary>登录方式（TaktLoginType）</summary>
-    public required TaktLoginType LoginType { get; init; }
+    /// <summary>登录方式（TaktConstants.LoginType）</summary>
+    public required string LoginType { get; init; }
 
-    /// <summary>登录结果</summary>
-    public required TaktLoginResult LoginResult { get; init; }
+    /// <summary>登录结果（TaktConstants.LoginResult）</summary>
+    public required string LoginResult { get; init; }
 
     /// <summary>租户编码</summary>
     public string TenantCode { get; init; } = string.Empty;
@@ -124,17 +126,27 @@ public sealed class TaktAuthLoginLogHandler : ITaktAuthLoginLogHandler
     private const string LogModule = "identity/auth";
 
     private readonly ITaktLoginLogTenantWriter _loginLogTenantWriter;
+    private readonly ITaktVisitLogTenantWriter _visitLogTenantWriter;
     private readonly ITaktAuthService _authService;
+    private readonly ITaktOnlineService _onlineService;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="loginLogTenantWriter">登录日志租户库写入器</param>
+    /// <param name="visitLogTenantWriter">访问量租户库写入器</param>
     /// <param name="authService">身份认证服务</param>
-    public TaktAuthLoginLogHandler(ITaktLoginLogTenantWriter loginLogTenantWriter, ITaktAuthService authService)
+    /// <param name="onlineService">在线用户服务</param>
+    public TaktAuthLoginLogHandler(
+        ITaktLoginLogTenantWriter loginLogTenantWriter,
+        ITaktVisitLogTenantWriter visitLogTenantWriter,
+        ITaktAuthService authService,
+        ITaktOnlineService onlineService)
     {
         _loginLogTenantWriter = loginLogTenantWriter;
+        _visitLogTenantWriter = visitLogTenantWriter;
         _authService = authService;
+        _onlineService = onlineService;
     }
 
     /// <summary>
@@ -149,32 +161,34 @@ public sealed class TaktAuthLoginLogHandler : ITaktAuthLoginLogHandler
         TaktAuthLoginLogWriteRequest request,
         CancellationToken cancellationToken = default)
     {
-        var userAgent = httpContext.Request.Headers.UserAgent.ToString();
-        var (browser, os) = ParseUserAgent(userAgent);
-        var (clientIp, loginLocation) = TaktLocationHelper.ResolveClientIpAndLocationForLog(httpContext);
+        TaktUserContext.StashAuditOperator(
+            httpContext,
+            request.UserId,
+            request.Username,
+            BuildAuthAuditContextRemark(request));
+
+        var client = TaktHttpAuditHelper.ResolveClientLogContext(httpContext);
         var requestId = httpContext.Items["RequestId"] as string;
         var path = httpContext.Request.Path.Value;
-        var isSuccess = request.LoginResult == TaktLoginResult.Success;
+        var isSuccess = request.LoginResult == TaktConstants.LoginResult.Success;
 
         var logContext = new TaktLogContext
         {
             Module = LogModule,
             Action = request.Phase,
             UserId = request.UserId?.ToString(),
-            Username = request.Username,
+            Username = ResolveLoginLogUsername(request.Username),
             TenantCode = string.IsNullOrWhiteSpace(request.TenantCode) ? null : request.TenantCode,
             CompanyCode = request.CompanyCode,
             Route = path,
             RequestId = requestId,
-            ClientIp = clientIp,
+            ClientIp = client.Ip,
             Extra = MergeExtra(
                 new Dictionary<string, object?>
                 {
                     ["LoginType"] = request.LoginType,
-                    ["LoginResult"] = request.LoginResult.ToString(),
+                    ["LoginResult"] = request.LoginResult,
                     ["Message"] = request.Message,
-                    ["Browser"] = browser,
-                    ["Os"] = os,
                     ["ElapsedMs"] = request.ElapsedMs,
                 },
                 request.Detail),
@@ -213,6 +227,11 @@ public sealed class TaktAuthLoginLogHandler : ITaktAuthLoginLogHandler
         {
             try
             {
+                if (isSuccess && request.LoginType == TaktConstants.LoginType.SignOut)
+                {
+                    await TryFinalizeSignOutSideEffectsAsync(request, cancellationToken);
+                }
+
                 var (tenantCode, companyCode) = await ResolveLoginLogScopeAsync(request, cancellationToken);
                 if (string.IsNullOrWhiteSpace(tenantCode) || string.IsNullOrWhiteSpace(companyCode))
                 {
@@ -230,16 +249,18 @@ public sealed class TaktAuthLoginLogHandler : ITaktAuthLoginLogHandler
                         new TaktLoginLog
                         {
                             CompanyCode = companyCode,
-                            Username = request.Username,
+                            Username = ResolveLoginLogUsername(request.Username),
                             LoginType = request.LoginType,
                             LoginResult = request.LoginResult,
                             LoginMessage = BuildPersistMessage(request),
-                            LoginIp = clientIp,
-                            LoginLocation = loginLocation,
-                            UserAgent = Truncate(userAgent, 500),
-                            Browser = browser,
-                            Os = os,
+                            Remark = ResolveLoginLogRemark(request),
+                            LoginIp = client.Ip,
+                            LoginLocation = client.Location,
+                            UserAgent = client.UserAgent,
+                            Browser = client.Browser,
+                            Os = client.OperatingSystem,
                         },
+                        request.UserId,
                         cancellationToken);
                 }
             }
@@ -255,6 +276,33 @@ public sealed class TaktAuthLoginLogHandler : ITaktAuthLoginLogHandler
 
         if (isSuccess
             && request.UserId is > 0
+            && ShouldRecordUserLastLogin(request.LoginType))
+        {
+            try
+            {
+                var (tenantCode, companyCode) = await ResolveLoginLogScopeAsync(request, cancellationToken);
+                if (!string.IsNullOrWhiteSpace(tenantCode) && !string.IsNullOrWhiteSpace(companyCode))
+                {
+                    await _visitLogTenantWriter.IncrementDailyVisitCountAsync(
+                        tenantCode,
+                        companyCode,
+                        request.UserId.Value,
+                        request.Username,
+                        cancellationToken: cancellationToken);
+                }
+            }
+            catch (Exception ex)
+            {
+                TaktLogger.Warning(
+                    ex,
+                    "[AuthLoginLog] 累加当日访问量失败: Phase={Phase}, UserId={UserId}",
+                    request.Phase,
+                    request.UserId);
+            }
+        }
+
+        if (isSuccess
+            && request.UserId is > 0
             && !string.IsNullOrWhiteSpace(request.TenantCode)
             && ShouldRecordUserLastLogin(request.LoginType))
         {
@@ -263,7 +311,7 @@ public sealed class TaktAuthLoginLogHandler : ITaktAuthLoginLogHandler
                 await _authService.RecordUserLastLoginAsync(
                     request.UserId.Value,
                     request.TenantCode,
-                    clientIp,
+                    client.Ip,
                     cancellationToken);
             }
             catch (Exception ex)
@@ -313,17 +361,140 @@ public sealed class TaktAuthLoginLogHandler : ITaktAuthLoginLogHandler
     }
 
     /// <summary>
+    /// 登出成功时回填 LoginLog.LogoutAt、关闭 Online 并刷新 LastActiveTime
+    /// </summary>
+    /// <param name="request">认证登录日志请求</param>
+    /// <param name="cancellationToken">取消令牌</param>
+    /// <returns>任务</returns>
+    private async Task TryFinalizeSignOutSideEffectsAsync(
+        TaktAuthLoginLogWriteRequest request,
+        CancellationToken cancellationToken)
+    {
+        var tenantCode = string.IsNullOrWhiteSpace(request.TenantCode) ? null : request.TenantCode.Trim();
+        if (string.IsNullOrEmpty(tenantCode))
+        {
+            return;
+        }
+
+        if (request.UserId is not > 0 && IsUnknownOrEmptySignOutUsername(request.Username))
+        {
+            return;
+        }
+
+        var companyCode = string.IsNullOrWhiteSpace(request.CompanyCode) ? null : request.CompanyCode.Trim();
+        if (string.IsNullOrEmpty(companyCode)
+            && request.UserId is > 0)
+        {
+            companyCode = await _loginLogTenantWriter.ResolveUserDefaultCompanyCodeAsync(
+                tenantCode,
+                request.UserId.Value,
+                cancellationToken);
+        }
+
+        var logoutAt = DateTime.Now;
+        var username = NormalizeSignOutUsername(request.Username);
+        if (string.IsNullOrEmpty(username)
+            && request.UserId is > 0)
+        {
+            username = await _loginLogTenantWriter.ResolveUsernameByUserIdAsync(
+                tenantCode,
+                request.UserId.Value,
+                cancellationToken);
+        }
+
+        if (!string.IsNullOrEmpty(username))
+        {
+            var updatedCount = await _loginLogTenantWriter.CloseOpenLoginSessionAsync(
+                tenantCode,
+                companyCode,
+                username,
+                logoutAt,
+                request.UserId,
+                cancellationToken);
+
+            if (updatedCount == 0)
+            {
+                TaktLogger.Debug(
+                    "[AuthLoginLog] 登出未匹配未关闭登录会话 Tenant={TenantCode}, Company={CompanyCode}, Username={Username}",
+                    tenantCode,
+                    companyCode,
+                    username);
+            }
+        }
+
+        if (request.UserId is > 0 && !string.IsNullOrEmpty(companyCode))
+        {
+            try
+            {
+                var closedCount = await _onlineService.CloseOnlineSessionsByUserIdAsync(
+                    request.UserId.Value,
+                    logoutAt);
+                if (closedCount == 0)
+                {
+                    TaktLogger.Debug(
+                        "[AuthLoginLog] 登出未匹配在线会话 Tenant={TenantCode}, Company={CompanyCode}, UserId={UserId}",
+                        tenantCode,
+                        companyCode,
+                        request.UserId);
+                }
+            }
+            catch (Exception ex)
+            {
+                TaktLogger.Warning(
+                    ex,
+                    "[AuthLoginLog] 登出关闭在线会话失败 Tenant={TenantCode}, Company={CompanyCode}, UserId={UserId}",
+                    tenantCode,
+                    companyCode,
+                    request.UserId);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 登出用户名是否为空或 unknown
+    /// </summary>
+    /// <param name="username">原始用户名</param>
+    /// <returns>无法用于匹配登录日志时为 true</returns>
+    private static bool IsUnknownOrEmptySignOutUsername(string? username)
+    {
+        if (string.IsNullOrWhiteSpace(username))
+        {
+            return true;
+        }
+
+        return string.Equals(
+            username.Trim(),
+            TaktConstants.AuditUserName.Unknown,
+            StringComparison.OrdinalIgnoreCase);
+    }
+
+    /// <summary>
+    /// 规范化登出匹配用登录名（小写）
+    /// </summary>
+    /// <param name="username">原始用户名</param>
+    /// <returns>小写登录名；无效时返回 null</returns>
+    private static string? NormalizeSignOutUsername(string? username)
+    {
+        if (IsUnknownOrEmptySignOutUsername(username))
+        {
+            return null;
+        }
+
+        return username!.Trim().ToLowerInvariant();
+    }
+
+    /// <summary>
     /// 是否应在成功认证后更新用户表最后登录字段
     /// </summary>
     /// <param name="loginType">登录方式</param>
     /// <returns>需要更新为 true</returns>
-    private static bool ShouldRecordUserLastLogin(TaktLoginType loginType)
+    private static bool ShouldRecordUserLastLogin(string loginType)
     {
         return loginType is not (
-            TaktLoginType.SignOut
-            or TaktLoginType.RefreshToken
-            or TaktLoginType.VerifyPassword
-            or TaktLoginType.ClientCredentials);
+            TaktConstants.LoginType.SignOut
+            or TaktConstants.LoginType.RefreshToken
+            or TaktConstants.LoginType.VerifyPassword
+            or TaktConstants.LoginType.ClientCredentials);
     }
 
     /// <summary>
@@ -335,7 +506,7 @@ public sealed class TaktAuthLoginLogHandler : ITaktAuthLoginLogHandler
     {
         var requestId = httpContext.Items["RequestId"] as string;
         var path = httpContext.Request.Path.Value;
-        var clientIp = TaktLocationHelper.ResolveClientIp(httpContext);
+        var client = TaktHttpAuditHelper.ResolveClientLogContext(httpContext);
 
         var logContext = new TaktLogContext
         {
@@ -347,7 +518,7 @@ public sealed class TaktAuthLoginLogHandler : ITaktAuthLoginLogHandler
             CompanyCode = request.CompanyCode,
             Route = path,
             RequestId = requestId,
-            ClientIp = clientIp,
+            ClientIp = client.Ip,
             Extra = MergeExtra(
                 new Dictionary<string, object?>
                 {
@@ -423,62 +594,6 @@ public sealed class TaktAuthLoginLogHandler : ITaktAuthLoginLogHandler
     }
 
     /// <summary>
-    /// 从 User-Agent 粗粒度解析浏览器与操作系统名称
-    /// </summary>
-    /// <param name="userAgent">请求头 User-Agent</param>
-    /// <returns>浏览器与操作系统；无法识别时为 null</returns>
-    private static (TaktBrowserType? Browser, TaktOperatingSystem? Os) ParseUserAgent(string userAgent)
-    {
-        if (string.IsNullOrWhiteSpace(userAgent))
-        {
-            return (null, null);
-        }
-
-        TaktOperatingSystem? os = null;
-        if (userAgent.Contains("Windows", StringComparison.OrdinalIgnoreCase))
-        {
-            os = TaktOperatingSystem.Windows;
-        }
-        else if (userAgent.Contains("Mac OS", StringComparison.OrdinalIgnoreCase))
-        {
-            os = TaktOperatingSystem.MacOS;
-        }
-        else if (userAgent.Contains("Android", StringComparison.OrdinalIgnoreCase))
-        {
-            os = TaktOperatingSystem.Android;
-        }
-        else if (userAgent.Contains("iPhone", StringComparison.OrdinalIgnoreCase)
-            || userAgent.Contains("iPad", StringComparison.OrdinalIgnoreCase))
-        {
-            os = TaktOperatingSystem.IOS;
-        }
-        else if (userAgent.Contains("Linux", StringComparison.OrdinalIgnoreCase))
-        {
-            os = TaktOperatingSystem.Linux;
-        }
-
-        TaktBrowserType? browser = null;
-        if (userAgent.Contains("Edg/", StringComparison.OrdinalIgnoreCase))
-        {
-            browser = TaktBrowserType.Edge;
-        }
-        else if (userAgent.Contains("Chrome/", StringComparison.OrdinalIgnoreCase))
-        {
-            browser = TaktBrowserType.Chrome;
-        }
-        else if (userAgent.Contains("Firefox/", StringComparison.OrdinalIgnoreCase))
-        {
-            browser = TaktBrowserType.Firefox;
-        }
-        else if (userAgent.Contains("Safari/", StringComparison.OrdinalIgnoreCase))
-        {
-            browser = TaktBrowserType.Safari;
-        }
-
-        return (browser, os);
-    }
-
-    /// <summary>
     /// 截断字符串至指定最大长度（用于 UserAgent 等落库字段）
     /// </summary>
     /// <param name="value">原始字符串</param>
@@ -492,5 +607,49 @@ public sealed class TaktAuthLoginLogHandler : ITaktAuthLoginLogHandler
         }
 
         return value[..maxLength];
+    }
+
+    /// <summary>
+    /// 登录日志落库用户名（空则 unknown）
+    /// </summary>
+    /// <param name="username">原始用户名</param>
+    /// <returns>小写登录名或 unknown</returns>
+    private static string ResolveLoginLogUsername(string? username)
+    {
+        return string.IsNullOrWhiteSpace(username)
+            ? TaktConstants.AuditUserName.Unknown
+            : username.Trim().ToLowerInvariant();
+    }
+
+    /// <summary>
+    /// 登录日志 Remark（登出且用户名未知时说明原因）
+    /// </summary>
+    /// <param name="request">认证登录日志请求</param>
+    /// <returns>Remark 文本</returns>
+    private static string ResolveLoginLogRemark(TaktAuthLoginLogWriteRequest request)
+    {
+        if (request.LoginType == TaktConstants.LoginType.SignOut
+            && string.IsNullOrWhiteSpace(request.Username))
+        {
+            return TaktAuditContextRemarks.BuildSignOutUnknownUser(request.Phase, request.Message);
+        }
+
+        return TaktAuthLoginPhases.BuildLoginStepRemark(request.Phase);
+    }
+
+    /// <summary>
+    /// 暂存至 HttpContext 的审计 Remark（登出且用户名未知）
+    /// </summary>
+    /// <param name="request">认证登录日志请求</param>
+    /// <returns>Remark；无需说明时为 null</returns>
+    private static string? BuildAuthAuditContextRemark(TaktAuthLoginLogWriteRequest request)
+    {
+        if (request.LoginType != TaktConstants.LoginType.SignOut
+            || !string.IsNullOrWhiteSpace(request.Username))
+        {
+            return null;
+        }
+
+        return TaktAuditContextRemarks.BuildSignOutUnknownUser(request.Phase, request.Message);
     }
 }

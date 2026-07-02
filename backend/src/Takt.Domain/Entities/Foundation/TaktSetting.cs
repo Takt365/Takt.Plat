@@ -46,37 +46,37 @@ public class TaktSetting : TaktCompanyEntityBase
     /// <summary>
     /// 设置描述
     /// </summary>
-    [SugarColumn(ColumnName = "description", ColumnDescription = "设置描述", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
-    public string? Description { get; set; }
+    [SugarColumn(ColumnName = "setting_description", ColumnDescription = "设置描述", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
+    public string? SettingDescription { get; set; }
 
     /// <summary>
-    /// 设置类别（0=前端，1=后端）
+    /// 设置类别（字典 sys_resource_type；frontend=前端 backend=后端）
     /// </summary>
-    [SugarColumn(ColumnName = "setting_group", ColumnDescription = "设置类别", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int SettingGroup { get; set; } = 0;
+    [SugarColumn(ColumnName = "setting_group", ColumnDescription = "设置类别", ColumnDataType = "varchar", Length = 40, IsNullable = false, DefaultValue = "frontend")]
+    public string SettingGroup { get; set; } = "frontend";
 
     /// <summary>
-    /// 值类型（用于前端渲染不同的输入控件）
+    /// 值类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）
     /// </summary>
-    [SugarColumn(ColumnName = "value_type", ColumnDescription = "值类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int ValueType { get; set; } = 0;
+    [SugarColumn(ColumnName = "value_type", ColumnDescription = "值类型", ColumnDataType = "varchar", Length = 40, IsNullable = false, DefaultValue = "input")]
+    public string ValueType { get; set; } = "input";
 
     /// <summary>
-    /// 是否内置（字典 sys_yes_no_type；0=否 1=是）
+    /// 内置（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
-    [SugarColumn(ColumnName = "is_built_in", ColumnDescription = "是否内置", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    [SugarColumn(ColumnName = "is_built_in", ColumnDescription = "内置", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 是否只读（字典 sys_yes_no_type；0=否 1=是）
+    /// 只读（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
-    [SugarColumn(ColumnName = "is_readonly", ColumnDescription = "是否只读", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    [SugarColumn(ColumnName = "is_readonly", ColumnDescription = "只读", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsReadonly { get; set; } = 0;
 
     /// <summary>
-    /// 是否加密存储（字典 sys_yes_no_type；0=否 1=是）
+    /// 加密（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
-    [SugarColumn(ColumnName = "is_encrypted", ColumnDescription = "是否加密存储", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    [SugarColumn(ColumnName = "is_encrypted", ColumnDescription = "加密", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsEncrypted { get; set; } = 0;
 
     /// <summary>
@@ -84,4 +84,10 @@ public class TaktSetting : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; } = 0;
+
+    /// <summary>
+    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+    /// </summary>
+    [SugarColumn(ColumnName = "setting_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
+    public int SettingStatus { get; set; } = 1;
 }

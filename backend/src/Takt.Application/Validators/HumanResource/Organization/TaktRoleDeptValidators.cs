@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.HumanResource.Organization
 // 文件名称：TaktRoleDeptValidators.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：RoleDept 关联 DTO FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktRoleDept 生成，请按需审阅）
 // 
@@ -30,9 +30,9 @@ public class TaktRoleDeptDtoValidator : AbstractValidator<TaktRoleDeptDto>
     public TaktRoleDeptDtoValidator()
     {
         RuleFor(x => x.RoleId)
-            .GreaterThan(0).WithMessage("角色ID无效");
+            .GreaterThan(0).WithMessage("角色无效");
         RuleFor(x => x.DeptId)
-            .GreaterThan(0).WithMessage("部门ID无效");
+            .GreaterThan(0).WithMessage("部门无效");
         RuleFor(x => x.RoleName)
             .MaximumLength(200).WithMessage("RoleName长度不能超过200个字符").When(x => !string.IsNullOrWhiteSpace(x.RoleName));
         RuleFor(x => x.DeptName)

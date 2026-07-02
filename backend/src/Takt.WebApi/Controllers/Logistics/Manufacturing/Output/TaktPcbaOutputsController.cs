@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Manufacturing.Output
 // 文件名称：TaktPcbaOutputsController.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-30
 // 创建人：Takt365(Cursor AI)
 // 功能描述：PCBA日报控制器
 // 
@@ -49,6 +49,26 @@ public class TaktPcbaOutputsController : TaktControllerBase
         {
             var result = await _pcbaOutputService.GetPcbaOutputListAsync(queryDto);
             return Success(result.Data, result.Total, result.PageIndex, result.PageSize, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 获取 PCBA 生产统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>生产统计</returns>
+    [TaktPermission("logistics:manufacturing:output:pcba:list", "PCBA生产统计")]
+    [HttpGet("production-stat")]
+    public async Task<IActionResult> GetPcbaOutputProductionStatAsync([FromQuery] TaktOutputProductionStatQueryDto queryDto)
+    {
+        try
+        {
+            var result = await _pcbaOutputService.GetPcbaOutputProductionStatAsync(queryDto);
+            return Success(result, "查询成功");
         }
         catch (Exception ex)
         {

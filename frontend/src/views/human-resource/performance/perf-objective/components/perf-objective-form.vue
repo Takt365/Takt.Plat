@@ -10,6 +10,7 @@
 <template>
   <a-form
     ref="formRef"
+    class="takt-generated-form"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -34,8 +35,9 @@
                 <a-input
                   v-model:value="formState.tenantCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -47,8 +49,9 @@
                 <a-input
                   v-model:value="formState.companyCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -60,8 +63,9 @@
                 <a-input
                   v-model:value="formState.companyDefaultCulture"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -73,7 +77,8 @@
                 <a-input
                   v-model:value="formState.employeeId"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.perfobjective.employeeid') })"
-                  size="small"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
@@ -86,7 +91,8 @@
                 <a-input
                   v-model:value="formState.employeeName"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.perfobjective.employeename') })"
-                  size="small"
+                  show-count
+                  :maxlength="50"
                   allow-clear
                 />
               </a-form-item>
@@ -99,7 +105,8 @@
                 <a-input
                   v-model:value="formState.schemeMetricId"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.perfobjective.schememetricid') })"
-                  size="small"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
@@ -112,7 +119,8 @@
                 <a-input
                   v-model:value="formState.objectivePeriod"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.perfobjective.objectiveperiod') })"
-                  size="small"
+                  show-count
+                  :maxlength="50"
                   allow-clear
                 />
               </a-form-item>
@@ -126,7 +134,6 @@
                   v-model:value="formState.objectiveDescription"
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.perfobjective.objectivedescription') })"
                   :rows="2"
-                  size="small"
                 />
               </a-form-item>
             </a-col>
@@ -138,7 +145,6 @@
                 <a-input-number
                   v-model:value="formState.targetValue"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.perfobjective.targetvalue') })"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -151,7 +157,6 @@
                 <a-input-number
                   v-model:value="formState.actualValue"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.perfobjective.actualvalue') })"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -166,7 +171,7 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.perfobjective.completionpercentage')"
                 name="completionPercentage"
@@ -174,12 +179,11 @@
                 <a-input-number
                   v-model:value="formState.completionPercentage"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.perfobjective.completionpercentage') })"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.perfobjective.objectiveweight')"
                 name="objectiveWeight"
@@ -187,12 +191,11 @@
                 <a-input-number
                   v-model:value="formState.objectiveWeight"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.perfobjective.objectiveweight') })"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.perfobjective.startdate')"
                 name="startDate"
@@ -201,12 +204,11 @@
                   v-model:value="formState.startDate"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.perfobjective.startdate') })"
                   value-format="YYYY-MM-DD"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.perfobjective.duedate')"
                 name="dueDate"
@@ -215,7 +217,6 @@
                   v-model:value="formState.dueDate"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.perfobjective.duedate') })"
                   value-format="YYYY-MM-DD"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -229,11 +230,10 @@
                   v-model:value="formState.achievementNotes"
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.perfobjective.achievementnotes') })"
                   :rows="2"
-                  size="small"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.perfobjective.objectivestatus')"
                 name="objectiveStatus"
@@ -241,12 +241,11 @@
                 <a-input-number
                   v-model:value="formState.objectiveStatus"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.perfobjective.objectivestatus') })"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.perfobjective.relatedplant')"
                 name="relatedPlant"
@@ -254,20 +253,34 @@
                 <a-input
                   v-model:value="formState.relatedPlant"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.perfobjective.relatedplant') })"
-                  size="small"
+                  show-count
+                  :maxlength="4"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.ExtField')"
-                name="ExtField"
+                name="extField"
+                class="takt-form-item-ext-field"
               >
-                <a-input
-                  v-model:value="formState.ExtField"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
-                  size="small"
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t('common.page.entity.extfieldhint')"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ t('common.page.entity.extfield') }}</span>
+                  </span>
+                </template>
+                <a-textarea
+                  v-model:value="formState.extField"
+                  :placeholder="t('common.page.form.placeholder.extfield')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
                   allow-clear
                 />
               </a-form-item>
@@ -280,15 +293,16 @@
                 <a-textarea
                   v-model:value="formState.remark"
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                  :rows="2"
-                  size="small"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
           </a-row>
         </div>
       </a-tab-pane>
-
     </a-tabs>
   </a-form>
 </template>
@@ -302,6 +316,7 @@ import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import type { PerfObjectiveCreate } from '@/types/human-resource/performance/perf-objective'
+import { RiQuestionLine } from '@remixicon/vue'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -334,7 +349,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","employeeId","employeeName","schemeMetricId","objectivePeriod","objectiveDescription","targetValue","actualValue","completionPercentage","objectiveWeight","startDate","dueDate","achievementNotes","objectiveStatus","relatedPlant","ExtField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","employeeId","employeeName","schemeMetricId","objectivePeriod","objectiveDescription","targetValue","actualValue","completionPercentage","objectiveWeight","startDate","dueDate","achievementNotes","objectiveStatus","relatedPlant","extField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -345,7 +360,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  formData: () => ({}),
+  formData: null,
   loading: false,
 })
 
@@ -353,18 +368,34 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
+/** 表单字段默认值（无字典默认项） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  void target
+}
 
-/** 编辑态灌入 formData；新增态 reset */
+
+/** 编辑态灌入 formData；新增态恢复默认值（须含 perfObjectiveId 才视为编辑） */
 watch(
   () => props.formData,
   (val) => {
-    const next = val ? { ...val } : {}
-    Object.keys(formState).forEach((k) => delete formState[k])
+    if (val?.perfObjectiveId) {
+      const next = { ...val } as Record<string, unknown>
+      Object.keys(formState).forEach((k) => delete formState[k])
 
-    applyScopeDefaults(next)
-    Object.assign(formState, next)
+      applyScopeDefaults(next)
+      Object.assign(formState, next)
+      formRef.value?.clearValidate()
+    } else {
+      Object.keys(formState).forEach((k) => delete formState[k])
+      if (val && typeof val === 'object' && Object.keys(val).length > 0) {
+        Object.assign(formState, val)
+      }
+      applyFormDefaults(formState)
+      applyScopeDefaults(formState as Record<string, unknown>, true)
+      formRef.value?.clearValidate()
+    }
   },
-  { immediate: true, deep: true }
+  { immediate: true }
 )
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
@@ -415,34 +446,58 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
-  targetValue: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.perfobjective.targetvalue') }),
-      trigger: 'change'
-    }
-  ],
-  actualValue: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.perfobjective.actualvalue') }),
-      trigger: 'change'
-    }
-  ],
-  completionPercentage: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.perfobjective.completionpercentage') }),
-      trigger: 'change'
-    }
-  ],
-  objectiveWeight: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.perfobjective.objectiveweight') }),
-      trigger: 'change'
-    }
-  ],
+  targetValue: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.perfobjective.targetvalue') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.perfobjective.targetvalue') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  actualValue: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.perfobjective.actualvalue') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.perfobjective.actualvalue') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  completionPercentage: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.perfobjective.completionpercentage') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.perfobjective.completionpercentage') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  objectiveWeight: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.perfobjective.objectiveweight') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.perfobjective.objectiveweight') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
   startDate: [
     {
       required: true,
@@ -464,13 +519,19 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
-  objectiveStatus: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.perfobjective.objectivestatus') }),
-      trigger: 'change'
-    }
-  ],
+  objectiveStatus: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.perfobjective.objectivestatus') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.perfobjective.objectivestatus') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -481,15 +542,42 @@ async function validate() {
 
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
-  return { ...formState }
+  const payload = { ...formState }
+  if ('targetValue' in payload) {
+    const rawtargetValue = payload.targetValue
+    payload.targetValue = typeof rawtargetValue === 'number' ? rawtargetValue : Number(rawtargetValue)
+  }
+  if ('actualValue' in payload) {
+    const rawactualValue = payload.actualValue
+    payload.actualValue = typeof rawactualValue === 'number' ? rawactualValue : Number(rawactualValue)
+  }
+  if ('completionPercentage' in payload) {
+    const rawcompletionPercentage = payload.completionPercentage
+    payload.completionPercentage = typeof rawcompletionPercentage === 'number' ? rawcompletionPercentage : Number(rawcompletionPercentage)
+  }
+  if ('objectiveWeight' in payload) {
+    const rawobjectiveWeight = payload.objectiveWeight
+    payload.objectiveWeight = typeof rawobjectiveWeight === 'number' ? rawobjectiveWeight : Number(rawobjectiveWeight)
+  }
+  if ('objectiveStatus' in payload) {
+    const rawobjectiveStatus = payload.objectiveStatus
+    payload.objectiveStatus = typeof rawobjectiveStatus === 'number' ? rawobjectiveStatus : Number(rawobjectiveStatus)
+  }
+  if ('sortOrder' in payload) delete payload.sortOrder
+  return payload
 }
 
-/** 重置表单与子表行 */
+/** 重置表单与子表行（弹窗未 destroy 时父级 nextTick 也会调用） */
 function resetFields() {
-  formRef.value?.resetFields()
   Object.keys(formState).forEach((k) => delete formState[k])
+  if (props.formData && typeof props.formData === 'object') {
+    Object.assign(formState, props.formData)
+  }
+  applyFormDefaults(formState)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.perfObjectiveId)
 
   activeTab.value = 'tab-0'
+  formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })

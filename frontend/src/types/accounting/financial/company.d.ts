@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/accounting/financial
 // 文件名称：company.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-07-01
 // 创建人：Takt365(Auto Generated)
 // 功能描述：accounting/financial 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -39,24 +39,19 @@ export interface Company extends TenantDtoBase {
   companyShortName: string;
 
   /**
-   * 公司类型
+   * 企业性质（字典 sys_enterprise_nature_type）
    */
-  companyType: number;
+  enterpriseNature: string;
 
   /**
-   * 企业性质（统计用登记注册类型代码，国统字〔1998〕200号）
+   * 行业属性（字典 sys_industry_attribute_type）
    */
-  enterpriseNature: number;
+  industryAttribute: string;
 
   /**
-   * 行业属性（GB/T 4754-2017 国民经济行业分类门类）
+   * 企业规模（字典 sys_enterprise_scale_type）
    */
-  industryAttribute: number;
-
-  /**
-   * 企业规模（统计上大中小微型划分代码 1–4）
-   */
-  enterpriseScale: number;
+  enterpriseScale: string;
 
   /**
    * 经营范围
@@ -179,17 +174,12 @@ export interface Company extends TenantDtoBase {
   closingDate?: string;
 
   /**
-   * 存续状态（市场主体登记状态）
+   * 存续状态（字典 sys_entity_existence_status）
    */
   companyExistence: number;
 
   /**
-   * 关联工厂编码（如 0001、C100）
-   */
-  relatedPlant: string;
-
-  /**
-   * 默认区域文化编码（BCP47，如 zh-CN、en-US、ja-JP、zh-HK）
+   * 区域文化编码（字典 sys_culture_code）
    */
   defaultCulture: string;
 
@@ -199,14 +189,19 @@ export interface Company extends TenantDtoBase {
   codeAlias: string;
 
   /**
-   * 公司状态
+   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
-  companyStatus: number;
+  relatedPlant: string;
 
   /**
    * 排序号（越小越靠前）
    */
   sortOrder: number;
+
+  /**
+   * 公司状态（字典 sys_normal_disable_status）
+   */
+  companyStatus: number;
 
   /**
    * 可访问该公司的角色关联（RBAC，表 takt_identity_role_company） （子表：TaktRoleCompany）
@@ -244,24 +239,19 @@ export interface CompanyQuery extends TaktPagedQuery {
   companyShortName?: string;
 
   /**
-   * 公司类型
+   * 企业性质（字典 sys_enterprise_nature_type）
    */
-  companyType?: number;
+  enterpriseNature?: string;
 
   /**
-   * 企业性质（统计用登记注册类型代码，国统字〔1998〕200号）
+   * 行业属性（字典 sys_industry_attribute_type）
    */
-  enterpriseNature?: number;
+  industryAttribute?: string;
 
   /**
-   * 行业属性（GB/T 4754-2017 国民经济行业分类门类）
+   * 企业规模（字典 sys_enterprise_scale_type）
    */
-  industryAttribute?: number;
-
-  /**
-   * 企业规模（统计上大中小微型划分代码 1–4）
-   */
-  enterpriseScale?: number;
+  enterpriseScale?: string;
 
   /**
    * 经营范围
@@ -394,17 +384,12 @@ export interface CompanyQuery extends TaktPagedQuery {
   closingDateEnd?: string;
 
   /**
-   * 存续状态（市场主体登记状态）
+   * 存续状态（字典 sys_entity_existence_status）
    */
   companyExistence?: number;
 
   /**
-   * 关联工厂编码（如 0001、C100）
-   */
-  relatedPlant?: string;
-
-  /**
-   * 默认区域文化编码（BCP47，如 zh-CN、en-US、ja-JP、zh-HK）
+   * 区域文化编码（字典 sys_culture_code）
    */
   defaultCulture?: string;
 
@@ -414,14 +399,19 @@ export interface CompanyQuery extends TaktPagedQuery {
   codeAlias?: string;
 
   /**
-   * 公司状态
+   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
-  companyStatus?: number;
+  relatedPlant?: string;
 
   /**
    * 排序号（越小越靠前）
    */
   sortOrder?: number;
+
+  /**
+   * 公司状态（字典 sys_normal_disable_status）
+   */
+  companyStatus?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -436,7 +426,7 @@ export interface CompanyQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -468,24 +458,19 @@ export interface CompanyCreate {
   companyShortName: string;
 
   /**
-   * 公司类型
+   * 企业性质（字典 sys_enterprise_nature_type）
    */
-  companyType: number;
+  enterpriseNature: string;
 
   /**
-   * 企业性质（统计用登记注册类型代码，国统字〔1998〕200号）
+   * 行业属性（字典 sys_industry_attribute_type）
    */
-  enterpriseNature: number;
+  industryAttribute: string;
 
   /**
-   * 行业属性（GB/T 4754-2017 国民经济行业分类门类）
+   * 企业规模（字典 sys_enterprise_scale_type）
    */
-  industryAttribute: number;
-
-  /**
-   * 企业规模（统计上大中小微型划分代码 1–4）
-   */
-  enterpriseScale: number;
+  enterpriseScale: string;
 
   /**
    * 经营范围
@@ -608,17 +593,12 @@ export interface CompanyCreate {
   closingDate?: string;
 
   /**
-   * 存续状态（市场主体登记状态）
+   * 存续状态（字典 sys_entity_existence_status）
    */
   companyExistence: number;
 
   /**
-   * 关联工厂编码（如 0001、C100）
-   */
-  relatedPlant: string;
-
-  /**
-   * 默认区域文化编码（BCP47，如 zh-CN、en-US、ja-JP、zh-HK）
+   * 区域文化编码（字典 sys_culture_code）
    */
   defaultCulture: string;
 
@@ -628,14 +608,14 @@ export interface CompanyCreate {
   codeAlias: string;
 
   /**
-   * 公司状态
+   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
-  companyStatus: number;
+  relatedPlant: string;
 
   /**
-   * 排序号（越小越靠前）
+   * 公司状态（字典 sys_normal_disable_status）
    */
-  sortOrder: number;
+  companyStatus: number;
 
   /**
    * 可访问该公司的角色 ID 列表（RBAC 反向合并）
@@ -650,7 +630,7 @@ export interface CompanyCreate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -687,7 +667,7 @@ export interface CompanyStatus {
   companyId: string;
 
   /**
-   * 公司状态
+   * 公司状态（字典 sys_normal_disable_status）
    */
   companyStatus: number;
 
@@ -735,24 +715,19 @@ export interface CompanyTemplate {
   companyShortName?: string;
 
   /**
-   * 公司类型
+   * 企业性质（字典 sys_enterprise_nature_type）
    */
-  companyType?: number;
+  enterpriseNature?: string;
 
   /**
-   * 企业性质（统计用登记注册类型代码，国统字〔1998〕200号）
+   * 行业属性（字典 sys_industry_attribute_type）
    */
-  enterpriseNature?: number;
+  industryAttribute?: string;
 
   /**
-   * 行业属性（GB/T 4754-2017 国民经济行业分类门类）
+   * 企业规模（字典 sys_enterprise_scale_type）
    */
-  industryAttribute?: number;
-
-  /**
-   * 企业规模（统计上大中小微型划分代码 1–4）
-   */
-  enterpriseScale?: number;
+  enterpriseScale?: string;
 
   /**
    * 经营范围
@@ -785,9 +760,134 @@ export interface CompanyTemplate {
   registrationProvince?: string;
 
   /**
+   * 注册市
+   */
+  registrationCity?: string;
+
+  /**
+   * 经营国家
+   */
+  businessRegion?: string;
+
+  /**
+   * 经营地区-省
+   */
+  businessProvince?: string;
+
+  /**
+   * 经营地区-市
+   */
+  businessCity?: string;
+
+  /**
+   * 经营地址1
+   */
+  businessAddress1?: string;
+
+  /**
+   * 经营地址2
+   */
+  businessAddress2?: string;
+
+  /**
+   * 经营地址3
+   */
+  businessAddress3?: string;
+
+  /**
+   * 公司电话
+   */
+  companyPhone?: string;
+
+  /**
+   * 公司邮箱
+   */
+  companyEmail?: string;
+
+  /**
+   * 公司传真
+   */
+  companyFax?: string;
+
+  /**
+   * 公司网站
+   */
+  companyWebsite?: string;
+
+  /**
+   * 统一社会信用代码
+   */
+  unifiedSocialCreditCode?: string;
+
+  /**
+   * 税务登记号
+   */
+  taxRegistrationNumber?: string;
+
+  /**
+   * 法定代表人
+   */
+  legalRepresentative?: string;
+
+  /**
+   * 公司负责人
+   */
+  companyManager?: string;
+
+  /**
+   * 注册资本（万元）
+   */
+  registeredCapital?: number;
+
+  /**
+   * 成立日期
+   */
+  establishmentDate?: string;
+
+  /**
+   * 关闭日期（注销/停业；未关闭则为 null）
+   */
+  closingDate?: string;
+
+  /**
+   * 存续状态（字典 sys_entity_existence_status）
+   */
+  companyExistence?: number;
+
+  /**
+   * 区域文化编码（字典 sys_culture_code）
+   */
+  defaultCulture?: string;
+
+  /**
+   * 编码代号（如 TKC、TCJ、DTA；前端字典录入）
+   */
+  codeAlias?: string;
+
+  /**
+   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+   */
+  relatedPlant?: string;
+
+  /**
+   * 公司状态（字典 sys_normal_disable_status）
+   */
+  companyStatus?: number;
+
+  /**
+   * 可访问该公司的角色 ID 列表（RBAC 反向合并）
+   */
+  roleIds?: any;
+
+  /**
+   * 可访问该公司的用户 ID 列表（RBAC 反向合并）
+   */
+  userIds?: any;
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -819,24 +919,19 @@ export interface CompanyImport {
   companyShortName?: string;
 
   /**
-   * 公司类型
+   * 企业性质（字典 sys_enterprise_nature_type）
    */
-  companyType?: number;
+  enterpriseNature?: string;
 
   /**
-   * 企业性质（统计用登记注册类型代码，国统字〔1998〕200号）
+   * 行业属性（字典 sys_industry_attribute_type）
    */
-  enterpriseNature?: number;
+  industryAttribute?: string;
 
   /**
-   * 行业属性（GB/T 4754-2017 国民经济行业分类门类）
+   * 企业规模（字典 sys_enterprise_scale_type）
    */
-  industryAttribute?: number;
-
-  /**
-   * 企业规模（统计上大中小微型划分代码 1–4）
-   */
-  enterpriseScale?: number;
+  enterpriseScale?: string;
 
   /**
    * 经营范围
@@ -869,9 +964,134 @@ export interface CompanyImport {
   registrationProvince?: string;
 
   /**
+   * 注册市
+   */
+  registrationCity?: string;
+
+  /**
+   * 经营国家
+   */
+  businessRegion?: string;
+
+  /**
+   * 经营地区-省
+   */
+  businessProvince?: string;
+
+  /**
+   * 经营地区-市
+   */
+  businessCity?: string;
+
+  /**
+   * 经营地址1
+   */
+  businessAddress1?: string;
+
+  /**
+   * 经营地址2
+   */
+  businessAddress2?: string;
+
+  /**
+   * 经营地址3
+   */
+  businessAddress3?: string;
+
+  /**
+   * 公司电话
+   */
+  companyPhone?: string;
+
+  /**
+   * 公司邮箱
+   */
+  companyEmail?: string;
+
+  /**
+   * 公司传真
+   */
+  companyFax?: string;
+
+  /**
+   * 公司网站
+   */
+  companyWebsite?: string;
+
+  /**
+   * 统一社会信用代码
+   */
+  unifiedSocialCreditCode?: string;
+
+  /**
+   * 税务登记号
+   */
+  taxRegistrationNumber?: string;
+
+  /**
+   * 法定代表人
+   */
+  legalRepresentative?: string;
+
+  /**
+   * 公司负责人
+   */
+  companyManager?: string;
+
+  /**
+   * 注册资本（万元）
+   */
+  registeredCapital?: number;
+
+  /**
+   * 成立日期
+   */
+  establishmentDate?: string;
+
+  /**
+   * 关闭日期（注销/停业；未关闭则为 null）
+   */
+  closingDate?: string;
+
+  /**
+   * 存续状态（字典 sys_entity_existence_status）
+   */
+  companyExistence?: number;
+
+  /**
+   * 区域文化编码（字典 sys_culture_code）
+   */
+  defaultCulture?: string;
+
+  /**
+   * 编码代号（如 TKC、TCJ、DTA；前端字典录入）
+   */
+  codeAlias?: string;
+
+  /**
+   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+   */
+  relatedPlant?: string;
+
+  /**
+   * 公司状态（字典 sys_normal_disable_status）
+   */
+  companyStatus?: number;
+
+  /**
+   * 可访问该公司的角色 ID 列表（RBAC 反向合并）
+   */
+  roleIds?: any;
+
+  /**
+   * 可访问该公司的用户 ID 列表（RBAC 反向合并）
+   */
+  userIds?: any;
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -903,24 +1123,19 @@ export interface CompanyExport {
   companyShortName: string;
 
   /**
-   * 公司类型
+   * 企业性质（字典 sys_enterprise_nature_type）
    */
-  companyType: number;
+  enterpriseNature: string;
 
   /**
-   * 企业性质（统计用登记注册类型代码，国统字〔1998〕200号）
+   * 行业属性（字典 sys_industry_attribute_type）
    */
-  enterpriseNature: number;
+  industryAttribute: string;
 
   /**
-   * 行业属性（GB/T 4754-2017 国民经济行业分类门类）
+   * 企业规模（字典 sys_enterprise_scale_type）
    */
-  industryAttribute: number;
-
-  /**
-   * 企业规模（统计上大中小微型划分代码 1–4）
-   */
-  enterpriseScale: number;
+  enterpriseScale: string;
 
   /**
    * 经营范围
@@ -1043,17 +1258,12 @@ export interface CompanyExport {
   closingDate?: string;
 
   /**
-   * 存续状态（市场主体登记状态）
+   * 存续状态（字典 sys_entity_existence_status）
    */
   companyExistence: number;
 
   /**
-   * 关联工厂编码（如 0001、C100）
-   */
-  relatedPlant: string;
-
-  /**
-   * 默认区域文化编码（BCP47，如 zh-CN、en-US、ja-JP、zh-HK）
+   * 区域文化编码（字典 sys_culture_code）
    */
   defaultCulture: string;
 
@@ -1063,9 +1273,9 @@ export interface CompanyExport {
   codeAlias: string;
 
   /**
-   * 公司状态
+   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
-  companyStatus: number;
+  relatedPlant: string;
 
   /**
    * 排序号（越小越靠前）
@@ -1073,9 +1283,14 @@ export interface CompanyExport {
   sortOrder: number;
 
   /**
+   * 公司状态（字典 sys_normal_disable_status）
+   */
+  companyStatus: number;
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注

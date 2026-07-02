@@ -112,7 +112,7 @@
           v-model:value="advancedQueryForm.costElementCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.costelementchangelog.costelementcode') })"
           show-count
-          :maxlength="50"
+          :maxlength="4"
           allow-clear
         />
       </a-form-item>
@@ -494,7 +494,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: CostElementChangeLog, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getCostElementChangeLogId(selectedRow.value) === getCostElementChangeLogId(record)) {
+    } else if (selectedRow.value && getCostElementChangeLogId(selectedRow.value) === getCostElementChangeLogId(record)) {
       selectedRow.value = null
     }
   },

@@ -25,7 +25,7 @@ namespace Takt.Domain.Entities.Routine.VisitorCenter;
 public class TaktVisitorCompanion : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 来访记录 ID
+    /// 来访记录 ID（关联 TaktVisitor.Id，选项 TaktVisitors/options）
     /// </summary>
     [SugarColumn(ColumnName = "visitor_id", ColumnDescription = "来访记录ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]

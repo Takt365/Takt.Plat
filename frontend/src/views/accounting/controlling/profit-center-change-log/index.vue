@@ -65,6 +65,8 @@
       :master-row-selection="rowSelection"
       master-id-column-key="profitCenterId"
       :master-visible-column-keys="visibleColumnKeys"
+      master-table-mode="masterDetailMaster"
+      master-scroll-layout="masterDetailLr"
       :master-total="total"
       master-entity-scope="company"
       @master-change="handleTableChange"
@@ -76,7 +78,7 @@
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'profitCenterStatus'">
           <a-switch
-            :checked="getProfitCenterField(record, 'profitCenterStatus') === 1"
+            :checked="getProfitCenterDictValue(record, 'profitCenterStatus') === 1"
             :checked-children="t('common.page.button.enable')" :un-checked-children="t('common.page.button.disable')"
             @change="(checked: unknown) => handleProfitCenterStatusChange(record, Boolean(checked))"
           />
@@ -119,21 +121,21 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('profitCenterCode')">
-      <a-form-item :label="t('entity.profitcenter.code')">
+      <a-form-item :label="pi.queryLabel('profitCenterCode')">
         <a-input
           v-model:value="advancedQueryForm.profitCenterCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.profitcenter.code') })"
+          :placeholder="pi.queryPh('profitCenterCode', 'required')"
           show-count
-          :maxlength="50"
+          :maxlength="4"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('profitCenterName')">
-      <a-form-item :label="t('entity.profitcenter.name')">
+      <a-form-item :label="pi.queryLabel('profitCenterName')">
         <a-input
           v-model:value="advancedQueryForm.profitCenterName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.profitcenter.name') })"
+          :placeholder="pi.queryPh('profitCenterName', 'required')"
           show-count
           :maxlength="100"
           allow-clear
@@ -141,10 +143,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('parentId')">
-      <a-form-item :label="t('entity.profitcenter.parentid')">
+      <a-form-item :label="pi.queryLabel('parentId')">
         <a-input
           v-model:value="advancedQueryForm.parentId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.profitcenter.parentid') })"
+          :placeholder="pi.queryPh('parentId', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -152,10 +154,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('managerId')">
-      <a-form-item :label="t('entity.profitcenter.managerid')">
+      <a-form-item :label="pi.queryLabel('managerId')">
         <a-input
           v-model:value="advancedQueryForm.managerId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.profitcenter.managerid') })"
+          :placeholder="pi.queryPh('managerId', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -163,10 +165,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('managerName')">
-      <a-form-item :label="t('entity.profitcenter.managername')">
+      <a-form-item :label="pi.queryLabel('managerName')">
         <a-input
           v-model:value="advancedQueryForm.managerName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.profitcenter.managername') })"
+          :placeholder="pi.queryPh('managerName', 'required')"
           show-count
           :maxlength="50"
           allow-clear
@@ -174,10 +176,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('deptId')">
-      <a-form-item :label="t('entity.profitcenter.deptid')">
+      <a-form-item :label="pi.queryLabel('deptId')">
         <a-input
           v-model:value="advancedQueryForm.deptId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.profitcenter.deptid') })"
+          :placeholder="pi.queryPh('deptId', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -185,10 +187,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('deptName')">
-      <a-form-item :label="t('entity.profitcenter.deptname')">
+      <a-form-item :label="pi.queryLabel('deptName')">
         <a-input
           v-model:value="advancedQueryForm.deptName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.profitcenter.deptname') })"
+          :placeholder="pi.queryPh('deptName', 'required')"
           show-count
           :maxlength="100"
           allow-clear
@@ -196,80 +198,79 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('profitCenterLevel')">
-      <a-form-item :label="t('entity.profitcenter.level')">
+      <a-form-item :label="pi.queryLabel('profitCenterLevel')">
         <a-input-number
           v-model:value="advancedQueryForm.profitCenterLevel"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.profitcenter.level') })"
+          :placeholder="pi.queryPh('profitCenterLevel', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('relatedPlant')">
-      <a-form-item :label="t('entity.profitcenter.relatedplant')">
-        <a-input
-          v-model:value="advancedQueryForm.relatedPlant"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.profitcenter.relatedplant') })"
-          show-count
-          :maxlength="4"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('profitCenterStatus')">
-      <a-form-item :label="t('entity.profitcenter.status')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.profitCenterStatus"
-          dict-type="sys_normal_disable_status"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.profitcenter.status') })"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
       <div v-show="isFieldVisible('validFromStart')">
-      <a-form-item :label="t('entity.profitcenter.validfromstart')">
+      <a-form-item :label="pi.queryLabel('validFromStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.validFromStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.profitcenter.validfromstart') })"
+          :placeholder="pi.queryPh('validFromStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('validFromEnd')">
-      <a-form-item :label="t('entity.profitcenter.validfromend')">
+      <a-form-item :label="pi.queryLabel('validFromEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.validFromEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.profitcenter.validfromend') })"
+          :placeholder="pi.queryPh('validFromEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('validToStart')">
-      <a-form-item :label="t('entity.profitcenter.validtostart')">
+      <a-form-item :label="pi.queryLabel('validToStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.validToStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.profitcenter.validtostart') })"
+          :placeholder="pi.queryPh('validToStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('validToEnd')">
-      <a-form-item :label="t('entity.profitcenter.validtoend')">
+      <a-form-item :label="pi.queryLabel('validToEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.validToEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.profitcenter.validtoend') })"
+          :placeholder="pi.queryPh('validToEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
+      <div v-show="isFieldVisible('relatedPlant')">
+      <a-form-item :label="pi.queryLabel('relatedPlant')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.relatedPlant"
+          api-url="TaktPlants/options"
+          :placeholder="pi.queryPh('relatedPlant', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('profitCenterStatus')">
+      <a-form-item :label="pi.queryLabel('profitCenterStatus')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.profitCenterStatus"
+          dict-type="sys_normal_disable_status"
+          :placeholder="pi.queryPh('profitCenterStatus', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="t('common.page.entity.createdatstart')">
+      <a-form-item :label="pi.queryLabel('createdAtStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          :placeholder="pi.queryPh('createdAtStart', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -277,10 +278,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="t('common.page.entity.createdatend')">
+      <a-form-item :label="pi.queryLabel('createdAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          :placeholder="pi.queryPh('createdAtEnd', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -302,7 +303,7 @@
             >
               <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
             </a-tooltip>
-            <span>{{ t('common.page.entity.extfield') }}</span>
+            <span>{{ pi.queryLabel('extField') }}</span>
           </span>
         </template>
         <a-textarea
@@ -316,10 +317,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="t('common.page.entity.remark')">
+      <a-form-item :label="pi.queryLabel('remark')">
         <a-textarea
           v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+          :placeholder="pi.queryPh('remark', 'optional')"
             :rows="4"
             show-count
             :maxlength="400"
@@ -333,14 +334,15 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.profitcenter._self') })"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.profitcenter._self"
+        v-if="importVisible"
+        :entity-i18n-key="PROFITCENTER_SELF_I18N_KEY"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -359,7 +361,7 @@
       :id-column-key="'profitCenterId'"
       :action-column-key="'action'"
       entity-scope="company"
-      table-mode="single"
+      table-mode="masterDetailMaster"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -379,13 +381,25 @@ import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import ProfitCenterForm from './components/profit-center-form.vue'
 import ProfitCenterChangeLogPanel from './components/profit-center-change-log-panel.vue'
-import { provideProfitCenterMasterContext } from './composables/use-profit-center-master-context'
+import { provideProfitCenterMasterContext, type ProfitCenterRowRecord } from './composables/use-profit-center-master-context'
 import { getProfitCenterList, getProfitCenterById, createProfitCenter, updateProfitCenter, deleteProfitCenterById, deleteProfitCenterBatch, getProfitCenterTemplate, importProfitCenter, exportProfitCenter, updateProfitCenterStatus } from '@/api/accounting/controlling/profit-center'
 import type { ProfitCenter, ProfitCenterQuery } from '@/types/accounting/controlling/profit-center'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+
+import {
+  useProfitCenterI18n,
+  PROFITCENTER_LIST_FIELDS,
+  PROFITCENTER_QUERY_STRING_FIELDS,
+  PROFITCENTER_QUERY_FIELDS,
+  PROFITCENTER_SELF_I18N_KEY,
+} from './composables/use-profit-center-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = useProfitCenterI18n()
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -393,7 +407,7 @@ const { t } = useI18n()
 const excelNames = taktExcelEntityNames('TaktProfitCenter')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.profitcenter._self') })
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() })
 )
 
 /** 快捷查询关键字 */
@@ -409,9 +423,9 @@ const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
-const selectedRow = ref<ProfitCenter | null>(null)
+const selectedRow = ref<ProfitCenterRowRecord | null>(null)
 /** 表格多选行 */
-const selectedRows = ref<ProfitCenter[]>([])
+const selectedRows = ref<ProfitCenterRowRecord[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 
@@ -428,48 +442,27 @@ const formRef = ref()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
+/**
+ * 创建空的高级查询表单
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(PROFITCENTER_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof PROFITCENTER_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  return {
+    ...form,
+    profitCenterLevel: undefined as number | undefined,
+    profitCenterStatus: undefined as number | undefined,
+  }
+}
 /** 高级查询表单模型 */
-const advancedQueryForm = ref({
-  profitCenterCode: '',
-  profitCenterName: '',
-  parentId: '',
-  managerId: '',
-  managerName: '',
-  deptId: '',
-  deptName: '',
-  profitCenterLevel: undefined as number | undefined,
-  relatedPlant: '',
-  profitCenterStatus: undefined as number | undefined,
-  validFromStart: '',
-  validFromEnd: '',
-  validToStart: '',
-  validToEnd: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-})
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 /** 高级查询字段元数据（列显隐配置） */
-const queryFieldsMeta = computed(() => [
-  { key: 'profitCenterCode', label: t('entity.profitcenter.code') },
-  { key: 'profitCenterName', label: t('entity.profitcenter.name') },
-  { key: 'parentId', label: t('entity.profitcenter.parentid') },
-  { key: 'managerId', label: t('entity.profitcenter.managerid') },
-  { key: 'managerName', label: t('entity.profitcenter.managername') },
-  { key: 'deptId', label: t('entity.profitcenter.deptid') },
-  { key: 'deptName', label: t('entity.profitcenter.deptname') },
-  { key: 'profitCenterLevel', label: t('entity.profitcenter.level') },
-  { key: 'relatedPlant', label: t('entity.profitcenter.relatedplant') },
-  { key: 'profitCenterStatus', label: t('entity.profitcenter.status') },
-  { key: 'validFromStart', label: t('entity.profitcenter.validfromstart') },
-  { key: 'validFromEnd', label: t('entity.profitcenter.validfromend') },
-  { key: 'validToStart', label: t('entity.profitcenter.validtostart') },
-  { key: 'validToEnd', label: t('entity.profitcenter.validtoend') },
-  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
-  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+const queryFieldsMeta = computed(() =>
+  PROFITCENTER_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -513,28 +506,15 @@ function buildListQuery(overrides?: Partial<ProfitCenterQuery>): ProfitCenterQue
       query[key] = v as never
     }
   }
-  assignTrimmed('profitCenterCode', form.profitCenterCode)
-  assignTrimmed('profitCenterName', form.profitCenterName)
-  assignTrimmed('parentId', form.parentId)
-  assignTrimmed('managerId', form.managerId)
-  assignTrimmed('managerName', form.managerName)
-  assignTrimmed('deptId', form.deptId)
-  assignTrimmed('deptName', form.deptName)
+  for (const key of PROFITCENTER_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
+  }
   if (form.profitCenterLevel !== undefined && form.profitCenterLevel !== null) {
     query.profitCenterLevel = form.profitCenterLevel
   }
-  assignTrimmed('relatedPlant', form.relatedPlant)
   if (form.profitCenterStatus !== undefined && form.profitCenterStatus !== null) {
     query.profitCenterStatus = form.profitCenterStatus
   }
-  assignTrimmed('validFromStart', form.validFromStart)
-  assignTrimmed('validFromEnd', form.validFromEnd)
-  assignTrimmed('validToStart', form.validToStart)
-  assignTrimmed('validToEnd', form.validToEnd)
-  assignTrimmed('createdAtStart', form.createdAtStart)
-  assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('extField', form.extField)
-  assignTrimmed('remark', form.remark)
   return query
 }
 /** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
@@ -549,7 +529,7 @@ onMounted(async () => {
 const selectedMasterKey = ref('')
 
 /** 同步主表选中行到右侧明细（子表由 *-panel watch 自动 reload） */
-function syncMasterSelection(record: ProfitCenter | null) {
+function syncMasterSelection(record: ProfitCenterRowRecord | null) {
   selectedMasterRow.value = record
   selectedMasterKey.value = record ? getProfitCenterId(record) : ''
 }
@@ -559,7 +539,7 @@ function syncMasterSelection(record: ProfitCenter | null) {
  * @param record 主表行
  */
 function handleMasterSelect(record: Record<string, unknown>) {
-  const row = record as unknown as ProfitCenter
+  const row = record as unknown as ProfitCenterRowRecord
   const key = getProfitCenterId(row)
   selectedRowKeys.value = [key]
   selectedRows.value = [row]
@@ -577,7 +557,7 @@ function handleMasterPaginationChange(_page: number, _pageSize: number) {
 }
 
 /** 加载主表详情并回填当前页 dataSource */
-async function loadProfitCenterDetail(record: ProfitCenter): Promise<ProfitCenter | null> {
+async function loadProfitCenterDetail(record: ProfitCenterRowRecord): Promise<ProfitCenter | null> {
   const id = getProfitCenterId(record)
   if (!id) {
     return null
@@ -608,7 +588,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getProfitCenterField(record, 'profitCenterId') ?? ''
   },
   {
-    title: t('entity.profitcenter.code'),
+    title: pi.label('profitCenterCode'),
     dataIndex: 'profitCenterCode',
     key: 'profitCenterCode',
     width: 120,
@@ -617,7 +597,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getProfitCenterField(record, 'profitCenterCode') ?? ''
   },
   {
-    title: t('entity.profitcenter.name'),
+    title: pi.label('profitCenterName'),
     dataIndex: 'profitCenterName',
     key: 'profitCenterName',
     width: 120,
@@ -626,7 +606,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getProfitCenterField(record, 'profitCenterName') ?? ''
   },
   {
-    title: t('entity.profitcenter.parentid'),
+    title: pi.label('parentId'),
     dataIndex: 'parentId',
     key: 'parentId',
     width: 120,
@@ -635,7 +615,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getProfitCenterField(record, 'parentId') ?? ''
   },
   {
-    title: t('entity.profitcenter.managerid'),
+    title: pi.label('managerId'),
     dataIndex: 'managerId',
     key: 'managerId',
     width: 120,
@@ -644,7 +624,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getProfitCenterField(record, 'managerId') ?? ''
   },
   {
-    title: t('entity.profitcenter.managername'),
+    title: pi.label('managerName'),
     dataIndex: 'managerName',
     key: 'managerName',
     width: 120,
@@ -653,7 +633,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getProfitCenterField(record, 'managerName') ?? ''
   },
   {
-    title: t('entity.profitcenter.deptid'),
+    title: pi.label('deptId'),
     dataIndex: 'deptId',
     key: 'deptId',
     width: 120,
@@ -662,7 +642,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getProfitCenterField(record, 'deptId') ?? ''
   },
   {
-    title: t('entity.profitcenter.deptname'),
+    title: pi.label('deptName'),
     dataIndex: 'deptName',
     key: 'deptName',
     width: 120,
@@ -671,7 +651,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getProfitCenterField(record, 'deptName') ?? ''
   },
   {
-    title: t('entity.profitcenter.level'),
+    title: pi.label('profitCenterLevel'),
     dataIndex: 'profitCenterLevel',
     key: 'profitCenterLevel',
     width: 120,
@@ -680,24 +660,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getProfitCenterField(record, 'profitCenterLevel') ?? ''
   },
   {
-    title: t('entity.profitcenter.relatedplant'),
-    dataIndex: 'relatedPlant',
-    key: 'relatedPlant',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getProfitCenterField(record, 'relatedPlant') ?? ''
-  },
-  {
-    title: t('entity.profitcenter.status'),
-    dataIndex: 'profitCenterStatus',
-    key: 'profitCenterStatus',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: t('entity.profitcenter.validfrom'),
+    title: pi.label('validFrom'),
     dataIndex: 'validFrom',
     key: 'validFrom',
     width: 120,
@@ -706,13 +669,30 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getProfitCenterField(record, 'validFrom') ?? ''
   },
   {
-    title: t('entity.profitcenter.validto'),
+    title: pi.label('validTo'),
     dataIndex: 'validTo',
     key: 'validTo',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getProfitCenterField(record, 'validTo') ?? ''
+  },
+  {
+    title: pi.label('relatedPlant'),
+    dataIndex: 'relatedPlant',
+    key: 'relatedPlant',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getProfitCenterField(record, 'relatedPlant') ?? ''
+  },
+  {
+    title: pi.label('profitCenterStatus'),
+    dataIndex: 'profitCenterStatus',
+    key: 'profitCenterStatus',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
   },
   CreateActionColumn({
     actions: [
@@ -722,7 +702,7 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiEditLine,
         permission: 'accounting:controlling:profit:center:update',
-        onClick: (record: ProfitCenter) => handleEdit(record)
+        onClick: (record: ProfitCenterRowRecord) => handleEdit(record)
       },
       {
         key: 'delete',
@@ -730,26 +710,51 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiDeleteBinLine,
         permission: 'accounting:controlling:profit:center:delete',
-        onClick: (record: ProfitCenter) => handleDeleteOne(record)
+        onClick: (record: ProfitCenterRowRecord) => handleDeleteOne(record)
       }
     ]
   })
 ])
 
 /** 表格 row-key（优先实体主键字段） */
-const getProfitCenterId = (record: any): string => record?.[entityIdName] ?? ''
+const getProfitCenterId = (record: ProfitCenterRowRecord): string => {
+  const id = (record as Record<string, unknown>)?.[entityIdName]
+  return id != null ? String(id) : ''
+}
 /**
  * 读取行字段值
  * @param record 行数据
  * @param field 字段名
  */
 const getProfitCenterField = (record: any, field: string): any => record?.[field]
+/**
+ * 供 TaktDictTag 等组件使用的标量字典值
+ * @param record 行数据
+ * @param field 字段名
+ */
+const getProfitCenterDictValue = (
+  record: ProfitCenterRowRecord,
+  field: string,
+): string | number | undefined => {
+  const value = (record as Record<string, unknown>)?.[field]
+  if (value === null || value === undefined) return undefined
+  if (typeof value === 'string' || typeof value === 'number') return value
+  return String(value)
+}
+
+/** 将行字段/字典值转为有限 number */
+const toProfitCenterNumber = (value: string | number | undefined | null): number => {
+  if (typeof value === 'number' && Number.isFinite(value)) return value
+  const num = Number(value ?? 0)
+  return Number.isFinite(num) ? num : 0
+}
+
 
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: ProfitCenter[]) => {
+  onChange: (keys: (string | number)[], rows: ProfitCenterRowRecord[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
@@ -759,16 +764,16 @@ const rowSelection = computed(() => ({
       syncMasterSelection(null)
     }
   },
-  onSelect: (record: ProfitCenter, selected: boolean) => {
+  onSelect: (record: ProfitCenterRowRecord, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
-    } else if (getProfitCenterId(selectedRow.value) === getProfitCenterId(record)) {
+    } else if (selectedRow.value && getProfitCenterId(selectedRow.value) === getProfitCenterId(record)) {
       selectedRow.value = null
       syncMasterSelection(null)
     }
   },
-  onSelectAll: (selected: boolean, selectedRowsData: ProfitCenter[]) => {
+  onSelectAll: (selected: boolean, selectedRowsData: ProfitCenterRowRecord[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
     syncMasterSelection(selectedRow.value)
   }
@@ -812,12 +817,12 @@ function handleReset() {
   deptId: '',
   deptName: '',
   profitCenterLevel: undefined as number | undefined,
-  relatedPlant: '',
-  profitCenterStatus: undefined as number | undefined,
   validFromStart: '',
   validFromEnd: '',
   validToStart: '',
   validToEnd: '',
+  relatedPlant: '',
+  profitCenterStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -829,14 +834,14 @@ function handleReset() {
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.profitcenter._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = null
   formVisible.value = true
   nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗（主子表：先拉详情含子表） */
-async function handleEdit(record: ProfitCenter) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.profitcenter._self') })
+async function handleEdit(record: ProfitCenterRowRecord) {
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
   formLoading.value = true
   try {
     const detail = await loadProfitCenterDetail(record)
@@ -852,7 +857,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.profitcenter._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -870,10 +875,10 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateProfitCenter(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.profitcenter._self') }))
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
       await createProfitCenter(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.profitcenter._self') }))
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     formData.value = null
@@ -904,15 +909,22 @@ async function handleDownloadTemplate(sheetName?: string, fileName?: string): Pr
   return (res as any)?.data ?? res
 }
 
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importProfitCenter(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importProfitCenter(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
+
+      if (selectedMasterKey.value) {
+    profitCenterChangeLogPanelRef.value?.reload?.()
+      }
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
+  }
 }
 
 /** 关闭导入对话框 */
@@ -946,24 +958,24 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.profitcenter._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: any) {
     logger.error('[ProfitCenter] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.profitcenter._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }
 }
 /** 删除单行 */
-async function handleDeleteOne(record: ProfitCenter) {
+async function handleDeleteOne(record: ProfitCenterRowRecord) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.profitcenter._self'), name: t('common.tip.this.target', { target: t('entity.profitcenter._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteProfitCenterById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.profitcenter._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       selectedRowKeys.value = []
       selectedRows.value = []
       selectedRow.value = null
@@ -975,18 +987,18 @@ async function handleDeleteOne(record: ProfitCenter) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.profitcenter._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.profitcenter._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteProfitCenterBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.profitcenter._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       selectedRowKeys.value = []
       selectedRows.value = []
       selectedRow.value = null
@@ -1000,9 +1012,9 @@ async function handleDelete() {
  * @param record 当前行
  * @param checked 是否启用
  */
-async function handleProfitCenterStatusChange(record: ProfitCenter, checked: boolean) {
+async function handleProfitCenterStatusChange(record: ProfitCenterRowRecord, checked: boolean) {
   const newVal = checked ? 1 : 0
-  const oldVal = getProfitCenterField(record, 'profitCenterStatus')
+  const oldVal = toProfitCenterNumber(getProfitCenterDictValue(record, 'profitCenterStatus'))
   const id = getProfitCenterId(record)
   const row = dataSource.value.find((item) => getProfitCenterId(item) === id)
   if (row) {
@@ -1041,12 +1053,12 @@ function handleAdvancedQueryReset() {
   deptId: '',
   deptName: '',
   profitCenterLevel: undefined as number | undefined,
-  relatedPlant: '',
-  profitCenterStatus: undefined as number | undefined,
   validFromStart: '',
   validFromEnd: '',
   validToStart: '',
   validToEnd: '',
+  relatedPlant: '',
+  profitCenterStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',

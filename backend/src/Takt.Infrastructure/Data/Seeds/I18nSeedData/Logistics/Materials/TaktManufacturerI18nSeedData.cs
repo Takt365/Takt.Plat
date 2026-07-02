@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Materials
 // 文件名称：TaktManufacturerI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktManufacturer 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -118,22 +118,22 @@ public class TaktManufacturerI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.manufacturer.shortname", "zh-HK", "制造商简称_hk", "制造商简称"),
 
             // entity.manufacturer.type
-            new TranslationSeedItem("entity.manufacturer.type", "en-US", "制造商类型_us", "制造商类型（0=原始设备制造商OEM，1=原始设计制造商ODM，2=合同制造商CM，3=品牌制造商，4=其他）"),
+            new TranslationSeedItem("entity.manufacturer.type", "en-US", "制造商类型_us", "制造商类型（字典 logistics_manufacturer_type；0=OEM，1=ODM，2=CM，3=品牌制造商，4=其他）"),
             // entity.manufacturer.type
-            new TranslationSeedItem("entity.manufacturer.type", "ja-JP", "制造商类型_jp", "制造商类型（0=原始设备制造商OEM，1=原始设计制造商ODM，2=合同制造商CM，3=品牌制造商，4=其他）"),
+            new TranslationSeedItem("entity.manufacturer.type", "ja-JP", "制造商类型_jp", "制造商类型（字典 logistics_manufacturer_type；0=OEM，1=ODM，2=CM，3=品牌制造商，4=其他）"),
             // entity.manufacturer.type
-            new TranslationSeedItem("entity.manufacturer.type", "zh-CN", "制造商类型", "制造商类型（0=原始设备制造商OEM，1=原始设计制造商ODM，2=合同制造商CM，3=品牌制造商，4=其他）"),
+            new TranslationSeedItem("entity.manufacturer.type", "zh-CN", "制造商类型", "制造商类型（字典 logistics_manufacturer_type；0=OEM，1=ODM，2=CM，3=品牌制造商，4=其他）"),
             // entity.manufacturer.type
-            new TranslationSeedItem("entity.manufacturer.type", "zh-HK", "制造商类型_hk", "制造商类型（0=原始设备制造商OEM，1=原始设计制造商ODM，2=合同制造商CM，3=品牌制造商，4=其他）"),
+            new TranslationSeedItem("entity.manufacturer.type", "zh-HK", "制造商类型_hk", "制造商类型（字典 logistics_manufacturer_type；0=OEM，1=ODM，2=CM，3=品牌制造商，4=其他）"),
 
             // entity.manufacturer.industrysector
-            new TranslationSeedItem("entity.manufacturer.industrysector", "en-US", "行业领域_us", "行业领域"),
+            new TranslationSeedItem("entity.manufacturer.industrysector", "en-US", "行业领域_us", "行业领域（字典 logistics_industry_sector，DictValue=A/C/M/P）"),
             // entity.manufacturer.industrysector
-            new TranslationSeedItem("entity.manufacturer.industrysector", "ja-JP", "行业领域_jp", "行业领域"),
+            new TranslationSeedItem("entity.manufacturer.industrysector", "ja-JP", "行业领域_jp", "行业领域（字典 logistics_industry_sector，DictValue=A/C/M/P）"),
             // entity.manufacturer.industrysector
-            new TranslationSeedItem("entity.manufacturer.industrysector", "zh-CN", "行业领域", "行业领域"),
+            new TranslationSeedItem("entity.manufacturer.industrysector", "zh-CN", "行业领域", "行业领域（字典 logistics_industry_sector，DictValue=A/C/M/P）"),
             // entity.manufacturer.industrysector
-            new TranslationSeedItem("entity.manufacturer.industrysector", "zh-HK", "行业领域_hk", "行业领域"),
+            new TranslationSeedItem("entity.manufacturer.industrysector", "zh-HK", "行业领域_hk", "行业领域（字典 logistics_industry_sector，DictValue=A/C/M/P）"),
 
             // entity.manufacturer.taxnumber
             new TranslationSeedItem("entity.manufacturer.taxnumber", "en-US", "制造商标识_us", "制造商标识（税务登记证号/统一社会信用代码）"),
@@ -145,13 +145,13 @@ public class TaktManufacturerI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.manufacturer.taxnumber", "zh-HK", "制造商标识_hk", "制造商标识（税务登记证号/统一社会信用代码）"),
 
             // entity.manufacturer.registrationcountry
-            new TranslationSeedItem("entity.manufacturer.registrationcountry", "en-US", "注册国家_us", "注册国家（ISO 3166-1 alpha-2两位代码）"),
+            new TranslationSeedItem("entity.manufacturer.registrationcountry", "en-US", "注册国家_us", "注册国家（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）"),
             // entity.manufacturer.registrationcountry
-            new TranslationSeedItem("entity.manufacturer.registrationcountry", "ja-JP", "注册国家_jp", "注册国家（ISO 3166-1 alpha-2两位代码）"),
+            new TranslationSeedItem("entity.manufacturer.registrationcountry", "ja-JP", "注册国家_jp", "注册国家（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）"),
             // entity.manufacturer.registrationcountry
-            new TranslationSeedItem("entity.manufacturer.registrationcountry", "zh-CN", "注册国家", "注册国家（ISO 3166-1 alpha-2两位代码）"),
+            new TranslationSeedItem("entity.manufacturer.registrationcountry", "zh-CN", "注册国家", "注册国家（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）"),
             // entity.manufacturer.registrationcountry
-            new TranslationSeedItem("entity.manufacturer.registrationcountry", "zh-HK", "注册国家_hk", "注册国家（ISO 3166-1 alpha-2两位代码）"),
+            new TranslationSeedItem("entity.manufacturer.registrationcountry", "zh-HK", "注册国家_hk", "注册国家（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）"),
 
             // entity.manufacturer.registrationaddress1
             new TranslationSeedItem("entity.manufacturer.registrationaddress1", "en-US", "注册地址1_us", "注册地址1"),
@@ -244,22 +244,22 @@ public class TaktManufacturerI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.manufacturer.contactemail", "zh-HK", "联系人邮箱_hk", "联系人邮箱"),
 
             // entity.manufacturer.level
-            new TranslationSeedItem("entity.manufacturer.level", "en-US", "制造商等级_us", "制造商等级（0=普通，1=优选，2=战略，3=临时）"),
+            new TranslationSeedItem("entity.manufacturer.level", "en-US", "制造商等级_us", "制造商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时）"),
             // entity.manufacturer.level
-            new TranslationSeedItem("entity.manufacturer.level", "ja-JP", "制造商等级_jp", "制造商等级（0=普通，1=优选，2=战略，3=临时）"),
+            new TranslationSeedItem("entity.manufacturer.level", "ja-JP", "制造商等级_jp", "制造商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时）"),
             // entity.manufacturer.level
-            new TranslationSeedItem("entity.manufacturer.level", "zh-CN", "制造商等级", "制造商等级（0=普通，1=优选，2=战略，3=临时）"),
+            new TranslationSeedItem("entity.manufacturer.level", "zh-CN", "制造商等级", "制造商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时）"),
             // entity.manufacturer.level
-            new TranslationSeedItem("entity.manufacturer.level", "zh-HK", "制造商等级_hk", "制造商等级（0=普通，1=优选，2=战略，3=临时）"),
+            new TranslationSeedItem("entity.manufacturer.level", "zh-HK", "制造商等级_hk", "制造商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时）"),
 
             // entity.manufacturer.qualitycertification
-            new TranslationSeedItem("entity.manufacturer.qualitycertification", "en-US", "质量认证_us", "质量认证（0=无，1=ISO9001，2=ISO14001，3=IATF16949，4=其他）"),
+            new TranslationSeedItem("entity.manufacturer.qualitycertification", "en-US", "质量认证_us", "质量认证（字典 logistics_quality_certification；0=无，1=ISO 9001，2=ISO 14001，3=ISO 45001，4=ISO 22000，5=ISO 27001，6=ISO 20000，7=ISO 50001，8=ISO 13485，9=IATF 16949，10=ISO/IEC 17025，11=GB/T 50430）"),
             // entity.manufacturer.qualitycertification
-            new TranslationSeedItem("entity.manufacturer.qualitycertification", "ja-JP", "质量认证_jp", "质量认证（0=无，1=ISO9001，2=ISO14001，3=IATF16949，4=其他）"),
+            new TranslationSeedItem("entity.manufacturer.qualitycertification", "ja-JP", "质量认证_jp", "质量认证（字典 logistics_quality_certification；0=无，1=ISO 9001，2=ISO 14001，3=ISO 45001，4=ISO 22000，5=ISO 27001，6=ISO 20000，7=ISO 50001，8=ISO 13485，9=IATF 16949，10=ISO/IEC 17025，11=GB/T 50430）"),
             // entity.manufacturer.qualitycertification
-            new TranslationSeedItem("entity.manufacturer.qualitycertification", "zh-CN", "质量认证", "质量认证（0=无，1=ISO9001，2=ISO14001，3=IATF16949，4=其他）"),
+            new TranslationSeedItem("entity.manufacturer.qualitycertification", "zh-CN", "质量认证", "质量认证（字典 logistics_quality_certification；0=无，1=ISO 9001，2=ISO 14001，3=ISO 45001，4=ISO 22000，5=ISO 27001，6=ISO 20000，7=ISO 50001，8=ISO 13485，9=IATF 16949，10=ISO/IEC 17025，11=GB/T 50430）"),
             // entity.manufacturer.qualitycertification
-            new TranslationSeedItem("entity.manufacturer.qualitycertification", "zh-HK", "质量认证_hk", "质量认证（0=无，1=ISO9001，2=ISO14001，3=IATF16949，4=其他）"),
+            new TranslationSeedItem("entity.manufacturer.qualitycertification", "zh-HK", "质量认证_hk", "质量认证（字典 logistics_quality_certification；0=无，1=ISO 9001，2=ISO 14001，3=ISO 45001，4=ISO 22000，5=ISO 27001，6=ISO 20000，7=ISO 50001，8=ISO 13485，9=IATF 16949，10=ISO/IEC 17025，11=GB/T 50430）"),
 
             // entity.manufacturer.evaluationscore
             new TranslationSeedItem("entity.manufacturer.evaluationscore", "en-US", "评价分数_us", "评价分数（0-100分）"),
@@ -270,24 +270,6 @@ public class TaktManufacturerI18nSeedData : ITaktSeedDataCoordinator
             // entity.manufacturer.evaluationscore
             new TranslationSeedItem("entity.manufacturer.evaluationscore", "zh-HK", "评价分数_hk", "评价分数（0-100分）"),
 
-            // entity.manufacturer.isqualified
-            new TranslationSeedItem("entity.manufacturer.isqualified", "en-US", "是否合格制造商_us", "是否合格制造商（0=否，1=是）"),
-            // entity.manufacturer.isqualified
-            new TranslationSeedItem("entity.manufacturer.isqualified", "ja-JP", "是否合格制造商_jp", "是否合格制造商（0=否，1=是）"),
-            // entity.manufacturer.isqualified
-            new TranslationSeedItem("entity.manufacturer.isqualified", "zh-CN", "是否合格制造商", "是否合格制造商（0=否，1=是）"),
-            // entity.manufacturer.isqualified
-            new TranslationSeedItem("entity.manufacturer.isqualified", "zh-HK", "是否合格制造商_hk", "是否合格制造商（0=否，1=是）"),
-
-            // entity.manufacturer.status
-            new TranslationSeedItem("entity.manufacturer.status", "en-US", "制造商状态_us", "制造商状态（1=启用，0=禁用）"),
-            // entity.manufacturer.status
-            new TranslationSeedItem("entity.manufacturer.status", "ja-JP", "制造商状态_jp", "制造商状态（1=启用，0=禁用）"),
-            // entity.manufacturer.status
-            new TranslationSeedItem("entity.manufacturer.status", "zh-CN", "制造商状态", "制造商状态（1=启用，0=禁用）"),
-            // entity.manufacturer.status
-            new TranslationSeedItem("entity.manufacturer.status", "zh-HK", "制造商状态_hk", "制造商状态（1=启用，0=禁用）"),
-
             // entity.manufacturer.sortorder
             new TranslationSeedItem("entity.manufacturer.sortorder", "en-US", "排序号_us", "排序号（越小越靠前）"),
             // entity.manufacturer.sortorder
@@ -296,6 +278,15 @@ public class TaktManufacturerI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.manufacturer.sortorder", "zh-CN", "排序号", "排序号（越小越靠前）"),
             // entity.manufacturer.sortorder
             new TranslationSeedItem("entity.manufacturer.sortorder", "zh-HK", "排序号_hk", "排序号（越小越靠前）"),
+
+            // entity.manufacturer.status
+            new TranslationSeedItem("entity.manufacturer.status", "en-US", "制造商状态_us", "制造商状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）"),
+            // entity.manufacturer.status
+            new TranslationSeedItem("entity.manufacturer.status", "ja-JP", "制造商状态_jp", "制造商状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）"),
+            // entity.manufacturer.status
+            new TranslationSeedItem("entity.manufacturer.status", "zh-CN", "制造商状态", "制造商状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）"),
+            // entity.manufacturer.status
+            new TranslationSeedItem("entity.manufacturer.status", "zh-HK", "制造商状态_hk", "制造商状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）"),
 
             // entity.manufacturer.materials
             new TranslationSeedItem("entity.manufacturer.materials", "en-US", "导航属性：制造商物料明细列表_us", "导航属性：制造商物料明细列表"),

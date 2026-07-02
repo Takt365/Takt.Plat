@@ -28,72 +28,61 @@ namespace Takt.Domain.Entities.Statistics.Report;
 [SugarIndex("ix_configurable_code_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ReportCode), OrderByType.Asc, true)]
 [SugarIndex("ix_configurable_domain", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ReportDomain), OrderByType.Asc, false)]
 public class TaktConfigurable : TaktCompanyEntityBase
-{
-    /// <summary>
+{    /// <summary>
     /// 报表编码（租户+公司内唯一）
     /// </summary>
     [SugarColumn(ColumnName = "report_code", ColumnDescription = "报表编码", ColumnDataType = "varchar", Length = 50, IsNullable = false)]
     public string ReportCode { get; set; } = string.Empty;
-
     /// <summary>
     /// 报表名称
     /// </summary>
     [SugarColumn(ColumnName = "report_name", ColumnDescription = "报表名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
     public string ReportName { get; set; } = string.Empty;
-
     /// <summary>
     /// 报表业务域（TaktModule 整型，与一级目录菜单 MenuCode 映射；展示名取自菜单 i18n）
     /// </summary>
     [SugarColumn(ColumnName = "report_domain", ColumnDescription = "报表业务域", ColumnDataType = "int", IsNullable = false, DefaultValue = "9")]
     public int ReportDomain { get; set; } = 9;
-
     /// <summary>
     /// 报表子分类（与菜单末级路由段对齐，如 management、controlling、material）
     /// </summary>
     [SugarColumn(ColumnName = "report_sub_category", ColumnDescription = "报表子分类", ColumnDataType = "varchar", Length = 50, IsNullable = true)]
     public string? ReportSubCategory { get; set; }
-
     /// <summary>
     /// 是否去重行（SELECT DISTINCT）
     /// </summary>
     [SugarColumn(ColumnName = "distinct_rows", ColumnDescription = "是否去重", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int DistinctRows { get; set; } = 0;
-
     /// <summary>
     /// 单次导出最大行数（Excel 上限，防止 OOM）
     /// </summary>
     [SugarColumn(ColumnName = "max_export_rows", ColumnDescription = "导出最大行数", ColumnDataType = "int", IsNullable = false, DefaultValue = "500")]
     public int MaxExportRows { get; set; } = TaktConfigurableConstants.DefaultRowLimit;
-
     /// <summary>
     /// 单次查询最大行数（预览/分页上限）
     /// </summary>
     [SugarColumn(ColumnName = "max_query_rows", ColumnDescription = "查询最大行数", ColumnDataType = "int", IsNullable = false, DefaultValue = "500")]
     public int MaxQueryRows { get; set; } = TaktConfigurableConstants.DefaultRowLimit;
-
     /// <summary>
     /// 公开（字典 sys_is_public_type；0=公开，1=私有）
     /// </summary>
     [SugarColumn(ColumnName = "is_public", ColumnDescription = "公开", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsPublic { get; set; } = 0;
-
+    /// <summary>
+    /// 报表描述
+    /// </summary>
+    [SugarColumn(ColumnName = "configurable_description", ColumnDescription = "报表描述", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
+    public string? ConfigurableDescription { get; set; }
     /// <summary>
     /// 排序号
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; }
-
     /// <summary>
     /// 报表状态（0=禁用 1=启用）
     /// </summary>
     [SugarColumn(ColumnName = "report_status", ColumnDescription = "报表状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int ReportStatus { get; set; } = 1;
-
-    /// <summary>
-    /// 报表描述
-    /// </summary>
-    [SugarColumn(ColumnName = "description", ColumnDescription = "报表描述", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
-    public string? Description { get; set; }
 
     // ========================================
     // 导航属性区域（主子表 OneToMany）

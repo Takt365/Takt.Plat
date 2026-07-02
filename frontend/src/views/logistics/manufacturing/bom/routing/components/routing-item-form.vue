@@ -47,7 +47,7 @@
                   v-model:value="formState.baseUnit"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routingitem.baseunit') })"
                   show-count
-                  :maxlength="20"
+                  :maxlength="5"
                   allow-clear
                 />
               </a-form-item>
@@ -121,10 +121,10 @@
                 :label="t('entity.routingitem.pointstominutesrate')"
                 name="pointsToMinutesRate"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.pointsToMinutesRate"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routingitem.pointstominutesrate') })"
-                  style="width: 100%"
+                  dict-type="logistics_points_to_minutes_rate"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.routingitem.pointstominutesrate') })"
                 />
               </a-form-item>
             </a-col>
@@ -277,19 +277,13 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
-  pointsToMinutesRate: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.routingitem.pointstominutesrate') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.routingitem.pointstominutesrate') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
+  pointsToMinutesRate: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.select', { field: t('entity.routingitem.pointstominutesrate') }),
+      trigger: 'change'
+    }
+  ],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -316,10 +310,6 @@ function getValues(): Record<string, any> {
   if ('standardShorts' in payload) {
     const rawstandardShorts = payload.standardShorts
     payload.standardShorts = typeof rawstandardShorts === 'number' ? rawstandardShorts : Number(rawstandardShorts)
-  }
-  if ('pointsToMinutesRate' in payload) {
-    const rawpointsToMinutesRate = payload.pointsToMinutesRate
-    payload.pointsToMinutesRate = typeof rawpointsToMinutesRate === 'number' ? rawpointsToMinutesRate : Number(rawpointsToMinutesRate)
   }
   if ('sortOrder' in payload) delete payload.sortOrder
   payload.routingId = props.masterId

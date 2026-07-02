@@ -19,11 +19,11 @@
       @reset="handleQueryReset"
     />
     <TaktToolsBar
-      create-permission="logistics:quality:operation:fqcorder:create"
-      update-permission="logistics:quality:operation:fqcorder:update"
-      delete-permission="logistics:quality:operation:fqcorder:delete"
+      create-permission="logistics:quality:operation:fqc:order:create"
+      update-permission="logistics:quality:operation:fqc:order:update"
+      delete-permission="logistics:quality:operation:fqc:order:delete"
 
-      export-permission="logistics:quality:operation:fqcorder:export"
+      export-permission="logistics:quality:operation:fqc:order:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -73,7 +73,7 @@
         v-model:page-size="pageSize"
         :total="total"
         scroll-layout="masterDetailLr"
-        table-mode="single"
+        table-mode="masterDetailDetail"
         :show-row-selection="true"
         @change="handleTableChange"
         @pagination-change="handleMasterDetailPaginationChange"
@@ -153,8 +153,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.changeTimeStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.fqcorderchangelog.changetimestart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -164,8 +163,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.changeTimeEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.fqcorderchangelog.changetimeend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -176,7 +174,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -187,7 +185,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -241,7 +239,7 @@
       id-column-key="fqcOrderChangeLogId"
       action-column-key="action"
       entity-scope="company"
-      table-mode="single"
+      table-mode="masterDetailDetail"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -362,6 +360,7 @@ function handleAdvancedQueryReset() {
   }
 }
 const columnSettingVisible = ref(false)
+/** 表格当前可见列 key（空数组时按 tableMode=masterDetailDetail 默认 id+4 业务列） */
 const visibleColumnKeys = ref<string[]>([])
 
 function handleColumnSetting() {
@@ -469,7 +468,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:quality:operation:fqcorder:update',
+        permission: 'logistics:quality:operation:fqc:order:update',
         onClick: (record: FqcOrderChangeLog) => void handleEdit(record),
       },
       {
@@ -477,7 +476,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:quality:operation:fqcorder:delete',
+        permission: 'logistics:quality:operation:fqc:order:delete',
         onClick: (record: FqcOrderChangeLog) => void handleDeleteOne(record),
       },
     ],
@@ -494,7 +493,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: FqcOrderChangeLog, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getFqcOrderChangeLogId(selectedRow.value) === getFqcOrderChangeLogId(record)) {
+    } else if (selectedRow.value && getFqcOrderChangeLogId(selectedRow.value) === getFqcOrderChangeLogId(record)) {
       selectedRow.value = null
     }
   },

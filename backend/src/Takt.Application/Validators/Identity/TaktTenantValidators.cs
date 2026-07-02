@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Identity
 // 文件名称：TaktTenantValidators.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Tenant 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktTenant 生成，请按需审阅）
 // 
@@ -35,10 +35,6 @@ public class TaktTenantCreateValidator : AbstractValidator<TaktTenantCreateDto>
         RuleFor(x => x.TenantName)
             .NotEmpty().WithMessage("租户名称不能为空")
             .MaximumLength(100).WithMessage("租户名称长度不能超过100个字符");
-        RuleFor(x => x.ContactName)
-            .MaximumLength(50).WithMessage("联系人姓名长度不能超过50个字符");
-        RuleFor(x => x.ContactPhone)
-            .MaximumLength(20).WithMessage("联系电话长度不能超过20个字符");
         RuleFor(x => x.ContactEmail)
             .NotEmpty().WithMessage("联系邮箱不能为空")
             .MaximumLength(100).WithMessage("联系邮箱长度不能超过100个字符")
@@ -66,6 +62,20 @@ public class TaktTenantUpdateValidator : AbstractValidator<TaktTenantUpdateDto>
     {
         RuleFor(x => x.TenantId)
             .GreaterThan(0).WithMessage("TenantID无效");
+        RuleFor(x => x.TenantCode)
+            .NotEmpty().WithMessage("租户编码不能为空")
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.TenantName)
+            .NotEmpty().WithMessage("租户名称不能为空")
+            .MaximumLength(100).WithMessage("租户名称长度不能超过100个字符");
+        RuleFor(x => x.ContactEmail)
+            .NotEmpty().WithMessage("联系邮箱不能为空")
+            .MaximumLength(100).WithMessage("联系邮箱长度不能超过100个字符")
+            .EmailAddress().WithMessage("联系邮箱格式不正确").When(x => !string.IsNullOrWhiteSpace(x.ContactEmail));
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
     }
 }
 
@@ -88,10 +98,6 @@ public class TaktTenantImportValidator : AbstractValidator<TaktTenantImportDto>
         RuleFor(x => x.TenantName)
             .NotEmpty().WithMessage("租户名称不能为空")
             .MaximumLength(100).WithMessage("租户名称长度不能超过100个字符");
-        RuleFor(x => x.ContactName)
-            .MaximumLength(50).WithMessage("联系人姓名长度不能超过50个字符").When(x => !string.IsNullOrWhiteSpace(x.ContactName));
-        RuleFor(x => x.ContactPhone)
-            .MaximumLength(20).WithMessage("联系电话长度不能超过20个字符").When(x => !string.IsNullOrWhiteSpace(x.ContactPhone));
         RuleFor(x => x.ContactEmail)
             .NotEmpty().WithMessage("联系邮箱不能为空")
             .MaximumLength(100).WithMessage("联系邮箱长度不能超过100个字符")

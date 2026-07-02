@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/quality/operation/fqc-order/components -->
 <!-- 文件名称：fqc-order-item-panel.vue -->
-<!-- 功能描述：FQC出货检验单实体主表实体右侧明细 fqcOrderItem 独立 CRUD（按主表选中 fqcOrderId 分页） -->
+<!-- 功能描述：FQC出货检验单实体主表实体右侧明细 fqcOrderItem 独立 CRUD（按主表选中 defectHandlings 分页） -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- ======================================== -->
 
@@ -19,11 +19,11 @@
       @reset="handleQueryReset"
     />
     <TaktToolsBar
-      create-permission="logistics:quality:operation:fqcorder:create"
-      update-permission="logistics:quality:operation:fqcorder:update"
-      delete-permission="logistics:quality:operation:fqcorder:delete"
-      import-permission="logistics:quality:operation:fqcorder:import"
-      export-permission="logistics:quality:operation:fqcorder:export"
+      create-permission="logistics:quality:operation:fqc:order:create"
+      update-permission="logistics:quality:operation:fqc:order:update"
+      delete-permission="logistics:quality:operation:fqc:order:delete"
+      import-permission="logistics:quality:operation:fqc:order:import"
+      export-permission="logistics:quality:operation:fqc:order:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -73,7 +73,7 @@
         v-model:page-size="pageSize"
         :total="total"
         scroll-layout="masterDetailLr"
-        table-mode="single"
+        table-mode="masterDetailDetail"
         :show-row-selection="true"
         @change="handleTableChange"
         @pagination-change="handleMasterDetailPaginationChange"
@@ -192,10 +192,11 @@
       </div>
       <div v-show="isFieldVisible('inspectionMethod')">
       <a-form-item :label="t('entity.fqcorderitem.inspectionmethod')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.inspectionMethod"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.fqcorderitem.inspectionmethod') })"
-          style="width: 100%"
+          dict-type="logistics_quality_inspection_method"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.fqcorderitem.inspectionmethod') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -231,15 +232,6 @@
         <a-input-number
           v-model:value="advancedQueryForm.inspectionReturnQuantity"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.fqcorderitem.inspectionreturnquantity') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('judgeStatus')">
-      <a-form-item :label="t('entity.fqcorderitem.judgestatus')">
-        <a-input-number
-          v-model:value="advancedQueryForm.judgeStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.fqcorderitem.judgestatus') })"
           style="width: 100%"
         />
       </a-form-item>
@@ -296,13 +288,23 @@
         />
       </a-form-item>
       </div>
+      <div v-show="isFieldVisible('judgeStatus')">
+      <a-form-item :label="t('entity.fqcorderitem.judgestatus')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.judgeStatus"
+          dict-type="logistics_quality_judge_status"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.fqcorderitem.judgestatus') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('createdAtStart')">
       <a-form-item :label="t('common.page.entity.createdatstart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -313,7 +315,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -360,6 +362,7 @@
       </div>
       </template>
     </TaktQueryDrawer>
+    <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
       :title="t('common.dialog.title.import', { entity: t('entity.fqcorderitem._self') })"
@@ -369,6 +372,7 @@
       @cancel="handleImportCancel"
     >
       <TaktImportFile
+        v-if="importVisible"
         entity-i18n-key="entity.fqcorderitem._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
@@ -387,7 +391,7 @@
       id-column-key="fqcOrderItemId"
       action-column-key="action"
       entity-scope="company"
-      table-mode="single"
+      table-mode="masterDetailDetail"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -406,6 +410,7 @@ import { useI18n } from 'vue-i18n'
 import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 import FqcOrderItemForm from './fqc-order-item-form.vue'
@@ -463,12 +468,12 @@ const advancedQueryForm = ref({
   qualifiedQuantity: undefined as number | undefined,
   unqualifiedQuantity: undefined as number | undefined,
   inspectionReturnQuantity: undefined as number | undefined,
-  judgeStatus: undefined as number | undefined,
   sampleSerialNo: '',
   inspectionDescription: '',
   inspectorBy: '',
   inspectionDateStart: '',
   inspectionDateEnd: '',
+  judgeStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -491,12 +496,12 @@ const queryFieldsMeta = computed(() => [
   { key: 'qualifiedQuantity', label: t('entity.fqcorderitem.qualifiedquantity') },
   { key: 'unqualifiedQuantity', label: t('entity.fqcorderitem.unqualifiedquantity') },
   { key: 'inspectionReturnQuantity', label: t('entity.fqcorderitem.inspectionreturnquantity') },
-  { key: 'judgeStatus', label: t('entity.fqcorderitem.judgestatus') },
   { key: 'sampleSerialNo', label: t('entity.fqcorderitem.sampleserialno') },
   { key: 'inspectionDescription', label: t('entity.fqcorderitem.inspectiondescription') },
   { key: 'inspectorBy', label: t('entity.fqcorderitem.inspectorby') },
   { key: 'inspectionDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.fqcorderitem.inspectiondate')) },
   { key: 'inspectionDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.fqcorderitem.inspectiondate')) },
+  { key: 'judgeStatus', label: t('entity.fqcorderitem.judgestatus') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extField', label: t('common.page.entity.extfield') },
@@ -536,12 +541,12 @@ function handleAdvancedQueryReset() {
   qualifiedQuantity: undefined as number | undefined,
   unqualifiedQuantity: undefined as number | undefined,
   inspectionReturnQuantity: undefined as number | undefined,
-  judgeStatus: undefined as number | undefined,
   sampleSerialNo: '',
   inspectionDescription: '',
   inspectorBy: '',
   inspectionDateStart: '',
   inspectionDateEnd: '',
+  judgeStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -549,6 +554,7 @@ function handleAdvancedQueryReset() {
   }
 }
 const columnSettingVisible = ref(false)
+/** 表格当前可见列 key（空数组时按 tableMode=masterDetailDetail 默认 id+4 业务列） */
 const visibleColumnKeys = ref<string[]>([])
 
 function handleColumnSetting() {
@@ -670,6 +676,126 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: FqcOrderItem }) =>
       String(getFqcOrderItemField(record, 'samplingSchemeCode') ?? ''),
   },
+  {
+    title: t('entity.fqcorderitem.inspectionmethod'),
+    dataIndex: 'inspectionMethod',
+    key: 'inspectionMethod',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: FqcOrderItem }) =>
+      String(getFqcOrderItemField(record, 'inspectionMethod') ?? ''),
+  },
+  {
+    title: t('entity.fqcorderitem.samplequantity'),
+    dataIndex: 'sampleQuantity',
+    key: 'sampleQuantity',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: FqcOrderItem }) =>
+      String(getFqcOrderItemField(record, 'sampleQuantity') ?? ''),
+  },
+  {
+    title: t('entity.fqcorderitem.qualifiedquantity'),
+    dataIndex: 'qualifiedQuantity',
+    key: 'qualifiedQuantity',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: FqcOrderItem }) =>
+      String(getFqcOrderItemField(record, 'qualifiedQuantity') ?? ''),
+  },
+  {
+    title: t('entity.fqcorderitem.unqualifiedquantity'),
+    dataIndex: 'unqualifiedQuantity',
+    key: 'unqualifiedQuantity',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: FqcOrderItem }) =>
+      String(getFqcOrderItemField(record, 'unqualifiedQuantity') ?? ''),
+  },
+  {
+    title: t('entity.fqcorderitem.inspectionreturnquantity'),
+    dataIndex: 'inspectionReturnQuantity',
+    key: 'inspectionReturnQuantity',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: FqcOrderItem }) =>
+      String(getFqcOrderItemField(record, 'inspectionReturnQuantity') ?? ''),
+  },
+  {
+    title: t('entity.fqcorderitem.sampleserialno'),
+    dataIndex: 'sampleSerialNo',
+    key: 'sampleSerialNo',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: FqcOrderItem }) =>
+      String(getFqcOrderItemField(record, 'sampleSerialNo') ?? ''),
+  },
+  {
+    title: t('entity.fqcorderitem.inspectiondescription'),
+    dataIndex: 'inspectionDescription',
+    key: 'inspectionDescription',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: FqcOrderItem }) =>
+      String(getFqcOrderItemField(record, 'inspectionDescription') ?? ''),
+  },
+  {
+    title: t('entity.fqcorderitem.inspectorby'),
+    dataIndex: 'inspectorBy',
+    key: 'inspectorBy',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: FqcOrderItem }) =>
+      String(getFqcOrderItemField(record, 'inspectorBy') ?? ''),
+  },
+  {
+    title: t('entity.fqcorderitem.inspectiondate'),
+    dataIndex: 'inspectionDate',
+    key: 'inspectionDate',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: FqcOrderItem }) =>
+      String(getFqcOrderItemField(record, 'inspectionDate') ?? ''),
+  },
+  {
+    title: t('entity.fqcorderitem.judgestatus'),
+    dataIndex: 'judgeStatus',
+    key: 'judgeStatus',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: FqcOrderItem }) =>
+      String(getFqcOrderItemField(record, 'judgeStatus') ?? ''),
+  },
+  {
+    title: t('entity.fqcorderitem.order'),
+    dataIndex: 'order',
+    key: 'order',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: FqcOrderItem }) =>
+      String(getFqcOrderItemField(record, 'order') ?? ''),
+  },
+  {
+    title: t('entity.fqcorderitem.defecthandlings'),
+    dataIndex: 'defectHandlings',
+    key: 'defectHandlings',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: FqcOrderItem }) =>
+      String(getFqcOrderItemField(record, 'defectHandlings') ?? ''),
+  },
   CreateActionColumn({
     actions: [
       {
@@ -677,7 +803,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:quality:operation:fqcorder:update',
+        permission: 'logistics:quality:operation:fqc:order:update',
         onClick: (record: FqcOrderItem) => void handleEdit(record),
       },
       {
@@ -685,7 +811,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:quality:operation:fqcorder:delete',
+        permission: 'logistics:quality:operation:fqc:order:delete',
         onClick: (record: FqcOrderItem) => void handleDeleteOne(record),
       },
     ],
@@ -702,7 +828,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: FqcOrderItem, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getFqcOrderItemId(selectedRow.value) === getFqcOrderItemId(record)) {
+    } else if (selectedRow.value && getFqcOrderItemId(selectedRow.value) === getFqcOrderItemId(record)) {
       selectedRow.value = null
     }
   },
@@ -740,7 +866,7 @@ function buildListQuery(overrides?: Partial<FqcOrderItemQuery>): FqcOrderItemQue
   const query: FqcOrderItemQuery = {
     pageIndex: currentPage.value,
     pageSize: pageSize.value,
-    fqcOrderId: masterFqcOrderId.value,
+    defectHandlings: masterFqcOrderId.value,
     ...overrides,
   }
   if (kw.length > 0) {
@@ -779,14 +905,14 @@ function buildListQuery(overrides?: Partial<FqcOrderItemQuery>): FqcOrderItemQue
   if (form.inspectionReturnQuantity !== undefined && form.inspectionReturnQuantity !== null) {
     query.inspectionReturnQuantity = form.inspectionReturnQuantity
   }
-  if (form.judgeStatus !== undefined && form.judgeStatus !== null) {
-    query.judgeStatus = form.judgeStatus
-  }
   assignTrimmed('sampleSerialNo', form.sampleSerialNo)
   assignTrimmed('inspectionDescription', form.inspectionDescription)
   assignTrimmed('inspectorBy', form.inspectorBy)
   assignTrimmed('inspectionDateStart', form.inspectionDateStart)
   assignTrimmed('inspectionDateEnd', form.inspectionDateEnd)
+  if (form.judgeStatus !== undefined && form.judgeStatus !== null) {
+    query.judgeStatus = form.judgeStatus
+  }
   assignTrimmed('createdAtStart', form.createdAtStart)
   assignTrimmed('createdAtEnd', form.createdAtEnd)
   assignTrimmed('extField', form.extField)
@@ -951,35 +1077,36 @@ function handleRefresh() {
   void loadData()
 }
 
+/** 打开导入对话框 */
 function handleImport() {
   if (!hasMasterSelection.value) {
-    message.warning(t('common.status.empty'))
-    return
-  }
+      message.warning(t('common.status.empty'))
+      return
+    }
   importVisible.value = true
 }
 
+/** 下载导入模板 Excel */
 async function handleDownloadTemplate(sheetName?: string, fileName?: string): Promise<Blob> {
   const res = await getFqcOrderItemTemplate(sheetName, fileName)
-  return (res as { data?: Blob }).data ?? (res as Blob)
+  return (res as any)?.data ?? res
 }
 
-async function handleImportFile(
-  file: File,
-  sheetName?: string,
-): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importFqcOrderItem(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importFqcOrderItem(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   void loadData()
-  if (result.fail === 0) {
-    setTimeout(() => {
-      importVisible.value = false
-    }, 2000)
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
   }
 }
 
+/** 关闭导入对话框 */
 function handleImportCancel() {
   importVisible.value = false
 }

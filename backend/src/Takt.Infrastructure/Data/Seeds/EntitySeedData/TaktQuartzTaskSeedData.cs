@@ -16,7 +16,7 @@ using Takt.Domain.Entities.Accounting.Financial;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Helpers;
+using Takt.Shared.Constants;
 using Takt.Shared.Options;
 
 namespace Takt.Infrastructure.Data.Seeds.EntitySeedData;
@@ -27,8 +27,9 @@ namespace Takt.Infrastructure.Data.Seeds.EntitySeedData;
 public class TaktQuartzTaskSeedData : ITaktSeedDataCoordinator
 {
     private const int TaskStatusPaused = 1;
-    private const int TaskTypeSql = 3;
-    private const int TaskTypeHttp = 2;
+    private const string TaskTypeAssembly = TaktConstants.QuartzTaskType.Assembly;
+    private const string TaskTypeSql = TaktConstants.QuartzTaskType.Sql;
+    private const string TaskTypeHttp = TaktConstants.QuartzTaskType.Http;
     private const int TriggerTypeSimple = 0;
     private const int TriggerTypeCron = 1;
 
@@ -163,6 +164,18 @@ public class TaktQuartzTaskSeedData : ITaktSeedDataCoordinator
                 CronExpression: "0 0 2 * * ?",
                 TaskStatus: TaskStatusPaused,
                 Description: "种子示例：Cron 触发器（每日 02:00）+ SQL 只读任务（默认暂停）"),
+            new(
+                TaskCode: "QT_EC_TASK_OVERDUE_SCAN",
+                TaskName: "工程变更执行任务超时扫描",
+                JobName: "ec_task_overdue_scan",
+                TaskType: TaskTypeAssembly,
+                TriggerType: TriggerTypeCron,
+                IntervalSeconds: 0,
+                CronExpression: "0 */30 * * * ?",
+                TaskStatus: TaskStatusPaused,
+                AssemblyName: "Takt.Application",
+                ClassName: TaktEcFlowConstants.QuartzHandlerEcTaskOverdueScan,
+                Description: "扫描设变执行任务超时/阻塞并 SignalR 预警（默认暂停，启用后每 30 分钟）"),
         };
     }
 
@@ -195,8 +208,8 @@ public class TaktQuartzTaskSeedData : ITaktSeedDataCoordinator
                 JobName = template.JobName,
                 JobGroup = "DEFAULT",
                 TaskType = template.TaskType,
-                AssemblyName = string.Empty,
-                ClassName = string.Empty,
+                AssemblyName = template.AssemblyName ?? string.Empty,
+                ClassName = template.ClassName ?? string.Empty,
                 ApiUrl = template.ApiUrl,
                 RequestMethod = template.RequestMethod,
                 SqlScript = template.SqlScript,
@@ -207,7 +220,7 @@ public class TaktQuartzTaskSeedData : ITaktSeedDataCoordinator
                 TaskStatus = template.TaskStatus,
                 Concurrent = 0,
                 MisfirePolicy = 0,
-                Description = template.Description,
+                TaskDescription = template.Description,
                 Remark = "系统内置示例任务种子",
             };
             entity = await repository.CreateAsync(entity);
@@ -217,6 +230,8 @@ public class TaktQuartzTaskSeedData : ITaktSeedDataCoordinator
         entity.JobName = template.JobName;
         entity.JobGroup = "DEFAULT";
         entity.TaskType = template.TaskType;
+        entity.AssemblyName = template.AssemblyName ?? string.Empty;
+        entity.ClassName = template.ClassName ?? string.Empty;
         entity.ApiUrl = template.ApiUrl;
         entity.RequestMethod = template.RequestMethod;
         entity.SqlScript = template.SqlScript;
@@ -226,7 +241,7 @@ public class TaktQuartzTaskSeedData : ITaktSeedDataCoordinator
         entity.TaskStatus = template.TaskStatus;
         entity.Concurrent = 0;
         entity.MisfirePolicy = 0;
-        entity.Description = template.Description;
+        entity.TaskDescription = template.Description;
         entity.Remark = "系统内置示例任务种子";
         await repository.UpdateAsync(entity);
         return (entity, 0, 1);
@@ -251,7 +266,7 @@ public class TaktQuartzTaskSeedData : ITaktSeedDataCoordinator
         string TaskCode,
         string TaskName,
         string JobName,
-        int TaskType,
+        string TaskType,
         string? SqlScript = null,
         string? ApiUrl = null,
         string? RequestMethod = null,
@@ -259,5 +274,7 @@ public class TaktQuartzTaskSeedData : ITaktSeedDataCoordinator
         int IntervalSeconds = 0,
         string CronExpression = "",
         int TaskStatus = 1,
-        string? Description = null);
+        string? Description = null,
+        string? AssemblyName = null,
+        string? ClassName = null);
 }

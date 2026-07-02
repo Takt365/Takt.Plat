@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/human-resource/organization
 // 文件名称：post.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/organization 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -49,12 +49,12 @@ export interface Post extends CompanyDtoBase {
   deptName?: string;
 
   /**
-   * 岗位类别（字典 sys_post_category：MGT/PRO/TEC/SUP/OPS）
+   * 岗位类别（字典 sys_post_category；DictValue：MGT=管理岗，PRO=专业岗，TEC=技术岗，SUP=支持岗，OPS=操作岗）
    */
   postCategory: string;
 
   /**
-   * 岗位职级（字典 sys_post_level_category：P1~P4、M1~M5）
+   * 岗位职级（字典 sys_post_level_category；DictValue：P1~P4 专业序列，M1~M5 管理序列）
    */
   postLevel: string;
 
@@ -79,12 +79,12 @@ export interface Post extends CompanyDtoBase {
   requirements: string;
 
   /**
-   * 学历要求（字典 hr_education_level_category，默认 1）
+   * 学历要求（字典 hr_education_level_category；1=高中及以下，2=大专，3=本科，4=硕士，5=博士）
    */
   educationRequired: number;
 
   /**
-   * 工作经验要求（年，默认 1）
+   * 工作经验要求（年）
    */
   experienceYears: number;
 
@@ -104,7 +104,7 @@ export interface Post extends CompanyDtoBase {
   postStatus: number;
 
   /**
-   * 是否内置（1=是，0=否） 种子岗位为内置，不允许删除
+   * 内置（1=是，0=否） 种子岗位为内置，不允许删除
    */
   isBuiltIn: number;
 
@@ -116,7 +116,7 @@ export interface Post extends CompanyDtoBase {
   /**
    * 岗位描述
    */
-  description?: string;
+  postDescription?: string;
 
   /**
    * 员工岗位关联（RBAC，表 takt_human_resource_organization_employeepost） （子表：TaktEmployeePost）
@@ -159,12 +159,12 @@ export interface PostQuery extends TaktPagedQuery {
   deptId?: string;
 
   /**
-   * 岗位类型（0=管理岗，1=技术岗，2=业务岗，3=职能岗，4=操作岗）
+   * 岗位类别（字典 sys_post_category；DictValue：MGT=管理岗，PRO=专业岗，TEC=技术岗，SUP=支持岗，OPS=操作岗）
    */
   postCategory?: string;
 
   /**
-   * 岗位职级（0=一线/基层，1=技术/骨干层，2=管理/决策层）
+   * 岗位职级（字典 sys_post_level_category；DictValue：P1~P4 专业序列，M1~M5 管理序列）
    */
   postLevel?: string;
 
@@ -189,7 +189,7 @@ export interface PostQuery extends TaktPagedQuery {
   requirements?: string;
 
   /**
-   * 学历要求（1=高中及以下，2=大专，3=本科，4=硕士，5=博士）
+   * 学历要求（字典 hr_education_level_category；1=高中及以下，2=大专，3=本科，4=硕士，5=博士）
    */
   educationRequired?: number;
 
@@ -214,7 +214,7 @@ export interface PostQuery extends TaktPagedQuery {
   postStatus?: number;
 
   /**
-   * 是否内置（1=是，0=否） 种子岗位为内置，不允许删除
+   * 内置（1=是，0=否） 种子岗位为内置，不允许删除
    */
   isBuiltIn?: number;
 
@@ -226,7 +226,7 @@ export interface PostQuery extends TaktPagedQuery {
   /**
    * 岗位描述
    */
-  description?: string;
+  postDescription?: string;
 
   /**
    * 创建时间（范围查询-开始）
@@ -241,7 +241,7 @@ export interface PostQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -268,7 +268,7 @@ export interface PostCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -288,12 +288,12 @@ export interface PostCreate {
   deptId: string;
 
   /**
-   * 岗位类别（字典 sys_post_category：MGT/PRO/TEC/SUP/OPS）
+   * 岗位类别（字典 sys_post_category；DictValue：MGT=管理岗，PRO=专业岗，TEC=技术岗，SUP=支持岗，OPS=操作岗）
    */
   postCategory: string;
 
   /**
-   * 岗位职级（字典 sys_post_level_category：P1~P4、M1~M5）
+   * 岗位职级（字典 sys_post_level_category；DictValue：P1~P4 专业序列，M1~M5 管理序列）
    */
   postLevel: string;
 
@@ -318,12 +318,12 @@ export interface PostCreate {
   requirements: string;
 
   /**
-   * 学历要求（字典 hr_education_level_category，默认 1）
+   * 学历要求（字典 hr_education_level_category；1=高中及以下，2=大专，3=本科，4=硕士，5=博士）
    */
   educationRequired: number;
 
   /**
-   * 工作经验要求（年，默认 1）
+   * 工作经验要求（年）
    */
   experienceYears: number;
 
@@ -343,19 +343,14 @@ export interface PostCreate {
   postStatus: number;
 
   /**
-   * 是否内置（1=是，0=否） 种子岗位为内置，不允许删除
+   * 内置（1=是，0=否） 种子岗位为内置，不允许删除
    */
   isBuiltIn: number;
 
   /**
-   * 排序号
-   */
-  sortOrder: number;
-
-  /**
    * 岗位描述
    */
-  description?: string;
+  postDescription?: string;
 
   /**
    * 关联该岗位的员工 ID 列表（RBAC 反向合并）
@@ -365,7 +360,7 @@ export interface PostCreate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -405,25 +400,6 @@ export interface PostStatus {
    * 状态（1=启用，0=禁用）
    */
   postStatus: number;
-
-}
-
-
-/**
- * Post 是否内置更新 DTO
- * 对应前端 PostBuiltIn
- * @description 对应后端 TaktPostBuiltInDto
- */
-export interface PostBuiltIn {
-  /**
-   * PostID
-   */
-  postId: string;
-
-  /**
-   * 是否内置（字典 sys_yes_no_type；1=是，0=否）
-   */
-  isBuiltIn: number;
 
 }
 
@@ -479,12 +455,12 @@ export interface PostTemplate {
   deptId?: string;
 
   /**
-   * 岗位类型（0=管理岗，1=技术岗，2=业务岗，3=职能岗，4=操作岗）
+   * 岗位类别（字典 sys_post_category；DictValue：MGT=管理岗，PRO=专业岗，TEC=技术岗，SUP=支持岗，OPS=操作岗）
    */
   postCategory?: string;
 
   /**
-   * 岗位职级（0=一线/基层，1=技术/骨干层，2=管理/决策层）
+   * 岗位职级（字典 sys_post_level_category；DictValue：P1~P4 专业序列，M1~M5 管理序列）
    */
   postLevel?: string;
 
@@ -509,7 +485,7 @@ export interface PostTemplate {
   requirements?: string;
 
   /**
-   * 学历要求（1=高中及以下，2=大专，3=本科，4=硕士，5=博士）
+   * 学历要求（字典 hr_education_level_category；1=高中及以下，2=大专，3=本科，4=硕士，5=博士）
    */
   educationRequired?: number;
 
@@ -519,14 +495,39 @@ export interface PostTemplate {
   experienceYears?: number;
 
   /**
+   * 薪资范围（最低）
+   */
+  salaryMin?: number;
+
+  /**
+   * 薪资范围（最高）
+   */
+  salaryMax?: number;
+
+  /**
    * 状态（1=启用，0=禁用）
    */
   postStatus?: number;
 
   /**
+   * 内置（1=是，0=否） 种子岗位为内置，不允许删除
+   */
+  isBuiltIn?: number;
+
+  /**
+   * 岗位描述
+   */
+  postDescription?: string;
+
+  /**
+   * 关联该岗位的员工 ID 列表（RBAC 反向合并）
+   */
+  employeeIds?: any;
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -553,7 +554,7 @@ export interface PostImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -573,12 +574,12 @@ export interface PostImport {
   deptId?: string;
 
   /**
-   * 岗位类型（0=管理岗，1=技术岗，2=业务岗，3=职能岗，4=操作岗）
+   * 岗位类别（字典 sys_post_category；DictValue：MGT=管理岗，PRO=专业岗，TEC=技术岗，SUP=支持岗，OPS=操作岗）
    */
   postCategory?: string;
 
   /**
-   * 岗位职级（0=一线/基层，1=技术/骨干层，2=管理/决策层）
+   * 岗位职级（字典 sys_post_level_category；DictValue：P1~P4 专业序列，M1~M5 管理序列）
    */
   postLevel?: string;
 
@@ -603,7 +604,7 @@ export interface PostImport {
   requirements?: string;
 
   /**
-   * 学历要求（1=高中及以下，2=大专，3=本科，4=硕士，5=博士）
+   * 学历要求（字典 hr_education_level_category；1=高中及以下，2=大专，3=本科，4=硕士，5=博士）
    */
   educationRequired?: number;
 
@@ -613,14 +614,39 @@ export interface PostImport {
   experienceYears?: number;
 
   /**
+   * 薪资范围（最低）
+   */
+  salaryMin?: number;
+
+  /**
+   * 薪资范围（最高）
+   */
+  salaryMax?: number;
+
+  /**
    * 状态（1=启用，0=禁用）
    */
   postStatus?: number;
 
   /**
+   * 内置（1=是，0=否） 种子岗位为内置，不允许删除
+   */
+  isBuiltIn?: number;
+
+  /**
+   * 岗位描述
+   */
+  postDescription?: string;
+
+  /**
+   * 关联该岗位的员工 ID 列表（RBAC 反向合并）
+   */
+  employeeIds?: any;
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -662,12 +688,12 @@ export interface PostExport {
   deptId: string;
 
   /**
-   * 岗位类别（字典 sys_post_category：MGT/PRO/TEC/SUP/OPS）
+   * 岗位类别（字典 sys_post_category；DictValue：MGT=管理岗，PRO=专业岗，TEC=技术岗，SUP=支持岗，OPS=操作岗）
    */
   postCategory: string;
 
   /**
-   * 岗位职级（字典 sys_post_level_category：P1~P4、M1~M5）
+   * 岗位职级（字典 sys_post_level_category；DictValue：P1~P4 专业序列，M1~M5 管理序列）
    */
   postLevel: string;
 
@@ -692,12 +718,12 @@ export interface PostExport {
   requirements: string;
 
   /**
-   * 学历要求（字典 hr_education_level_category，默认 1）
+   * 学历要求（字典 hr_education_level_category；1=高中及以下，2=大专，3=本科，4=硕士，5=博士）
    */
   educationRequired: number;
 
   /**
-   * 工作经验要求（年，默认 1）
+   * 工作经验要求（年）
    */
   experienceYears: number;
 
@@ -717,7 +743,7 @@ export interface PostExport {
   postStatus: number;
 
   /**
-   * 是否内置（1=是，0=否） 种子岗位为内置，不允许删除
+   * 内置（1=是，0=否） 种子岗位为内置，不允许删除
    */
   isBuiltIn: number;
 
@@ -729,12 +755,12 @@ export interface PostExport {
   /**
    * 岗位描述
    */
-  description?: string;
+  postDescription?: string;
 
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注

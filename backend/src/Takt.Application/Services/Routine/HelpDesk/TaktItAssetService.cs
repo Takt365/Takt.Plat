@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Routine.HelpDesk
 // 文件名称：TaktItAssetService.cs
-// 创建时间：2026-06-10
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：IT设备保修扩展应用服务实现
 // 
@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Services.Routine.HelpDesk;
 
@@ -32,7 +31,6 @@ public class TaktItAssetService : TaktServiceBase, ITaktItAssetService
 {
     private readonly ITaktCompanyRepository<TaktItAsset> _itAssetRepository;
     private readonly ITaktCompanyRepository<TaktItAssetChangeLog> _itAssetChangeLogRepository;
-    private readonly ITaktCompanyRepository<TaktTicket> _ticketRepository;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
@@ -40,14 +38,12 @@ public class TaktItAssetService : TaktServiceBase, ITaktItAssetService
     /// </summary>
     /// <param name="itAssetRepository">IT设备保修扩展仓储</param>
     /// <param name="itAssetChangeLogRepository">ItAssetChangeLog仓储</param>
-    /// <param name="ticketRepository">Ticket仓储</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktItAssetService(
         ITaktCompanyRepository<TaktItAsset> itAssetRepository,
         ITaktCompanyRepository<TaktItAssetChangeLog> itAssetChangeLogRepository,
-        ITaktCompanyRepository<TaktTicket> ticketRepository,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
@@ -55,7 +51,6 @@ public class TaktItAssetService : TaktServiceBase, ITaktItAssetService
     {
         _itAssetRepository = itAssetRepository;
         _itAssetChangeLogRepository = itAssetChangeLogRepository;
-        _ticketRepository = ticketRepository;
         _uniqueValidator = uniqueValidator;
     }
 
@@ -172,7 +167,6 @@ public class TaktItAssetService : TaktServiceBase, ITaktItAssetService
             throw new TaktBusinessException("IT设备保修扩展不存在或已删除");
         }
         await _itAssetChangeLogRepository.DeleteAsync(x => x.ItAssetId == entity.Id);
-        await _ticketRepository.DeleteAsync(x => x.ItAssetId == entity.Id);
         var deleted = await _itAssetRepository.DeleteAsync(id);
         if (!deleted)
         {
@@ -288,7 +282,7 @@ public class TaktItAssetService : TaktServiceBase, ITaktItAssetService
     // ========================================
 
     /// <summary>
-    /// 填充IT设备保修扩展详情（加载 OneToMany 子表：IT设备保修变更日志、工单）
+    /// 填充IT设备保修扩展详情（加载 OneToMany 子表：IT设备保修变更日志）
     /// </summary>
     /// <param name="dto">响应 DTO</param>
     /// <param name="entity">主表实体</param>
@@ -302,13 +296,10 @@ public class TaktItAssetService : TaktServiceBase, ITaktItAssetService
         // IT设备保修变更日志 → dto.ChangeLogs
         var changelogs = await _itAssetChangeLogRepository.GetListAsync(x => x.ItAssetId == entity.Id);
         dto.ChangeLogs = changelogs.Adapt<List<TaktItAssetChangeLogDto>>();
-        // 工单 → dto.Tickets
-        var tickets = await _ticketRepository.GetListAsync(x => x.ItAssetId == entity.Id);
-        dto.Tickets = tickets.Adapt<List<TaktTicketDto>>();
     }
 
     /// <summary>
-    /// 保存IT设备保修扩展子表级联（IT设备保修变更日志、工单；Create/Update 后按主表 Id 先删后插）
+    /// 保存IT设备保修扩展子表级联（IT设备保修变更日志；Create/Update 后按主表 Id 先删后插）
     /// </summary>
     /// <param name="entity">主表实体</param>
     /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
@@ -332,41 +323,6 @@ public class TaktItAssetService : TaktServiceBase, ITaktItAssetService
             {
             }
             await _itAssetChangeLogRepository.CreateRangeAsync(changelogs);
-        }
-        // 工单（Tickets）
-        if (dto.Tickets is not { Count: > 0 })
-        {
-            await _ticketRepository.DeleteAsync(x => x.ItAssetId == entity.Id);
-        }
-        else
-        {
-            var tickets = dto.Tickets.Adapt<List<TaktTicket>>();
-            foreach (var child in tickets)
-            {
-                child.ItAssetId = entity.Id;
-            }
-                        var seenKeys = new HashSet<string>(StringComparer.Ordinal);
-                        for (var i = 0; i < tickets.Count; i++)
-                        {
-                            var key = $"{tickets[i].CompanyCode}|{tickets[i].TicketNo}";
-                            if (!seenKeys.Add(key))
-                            {
-                                throw new TaktBusinessException($"工单第{i + 1}项与本次提交的其他项重复（CompanyCode、TicketNo）");
-                            }
-                        }
-            await _ticketRepository.DeleteAsync(x => x.ItAssetId == entity.Id);
-            foreach (var child in tickets)
-            {
-            var isUnique_ix_ticket_no_unique = await _uniqueValidator.IsUniqueAsync(
-                _ticketRepository,
-                x => x.CompanyCode == child.CompanyCode
-                    && x.TicketNo == child.TicketNo);
-            if (!isUnique_ix_ticket_no_unique)
-            {
-                throw new TaktBusinessException("工单的CompanyCode、TicketNo已存在");
-            }
-            }
-            await _ticketRepository.CreateRangeAsync(tickets);
         }
     }
     // ========================================

@@ -72,7 +72,7 @@ public class TaktMasterDemandScheduleLine : TaktCompanyEntityBase
     public int? SalesPlanLineNumber { get; set; }
 
     /// <summary>
-    /// 物料编码
+    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
     /// </summary>
     [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
     public string MaterialCode { get; set; } = string.Empty;
@@ -96,7 +96,7 @@ public class TaktMasterDemandScheduleLine : TaktCompanyEntityBase
     public decimal DemandQuantity { get; set; } = 0;
 
     /// <summary>
-    /// 计量单位
+    /// 计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
     /// </summary>
     [SugarColumn(ColumnName = "unit_of_measure", ColumnDescription = "计量单位", ColumnDataType = "nvarchar", Length = 40, IsNullable = false, DefaultValue = "PC")]
     public string UnitOfMeasure { get; set; } = "PC";

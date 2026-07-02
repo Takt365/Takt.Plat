@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Routine.HelpDesk
 // 文件名称：TaktSelfServicesController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：自助服务控制器
 // 
@@ -41,7 +41,7 @@ public class TaktSelfServicesController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("routine:helpdesk:selfservice:list", "自助服务列表")]
+    [TaktPermission("routine:help:desk:self:service:list", "自助服务列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetSelfServiceListAsync([FromQuery] TaktSelfServiceQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktSelfServicesController : TaktControllerBase
     /// </summary>
     /// <param name="id">自助服务ID</param>
     /// <returns>自助服务DTO</returns>
-    [TaktPermission("routine:helpdesk:selfservice:query", "自助服务详情")]
+    [TaktPermission("routine:help:desk:self:service:query", "自助服务详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetSelfServiceByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktSelfServicesController : TaktControllerBase
     /// 获取自助服务选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("routine:helpdesk:selfservice:query", "自助服务选项")]
+    [TaktPermission("routine:help:desk:self:service:query", "自助服务选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetSelfServiceOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktSelfServicesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>自助服务DTO</returns>
-    [TaktPermission("routine:helpdesk:selfservice:create", "创建自助服务")]
+    [TaktPermission("routine:help:desk:self:service:create", "创建自助服务")]
     [HttpPost]
     public async Task<IActionResult> CreateSelfServiceAsync([FromBody] TaktSelfServiceCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktSelfServicesController : TaktControllerBase
     /// <param name="id">自助服务ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>自助服务DTO</returns>
-    [TaktPermission("routine:helpdesk:selfservice:update", "更新自助服务")]
+    [TaktPermission("routine:help:desk:self:service:update", "更新自助服务")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateSelfServiceAsync(long id, [FromBody] TaktSelfServiceUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktSelfServicesController : TaktControllerBase
     /// </summary>
     /// <param name="id">自助服务ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("routine:helpdesk:selfservice:delete", "删除自助服务")]
+    [TaktPermission("routine:help:desk:self:service:delete", "删除自助服务")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteSelfServiceByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktSelfServicesController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("routine:helpdesk:selfservice:delete", "批量删除自助服务")]
+    [TaktPermission("routine:help:desk:self:service:delete", "批量删除自助服务")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteSelfServiceBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -183,9 +183,9 @@ public class TaktSelfServicesController : TaktControllerBase
     /// <summary>
     /// 更新自助服务状态
     /// </summary>
-    /// <param name="dto">状态 DTO（TaktCommonStatus 枚举）</param>
+    /// <param name="dto">状态 DTO</param>
     /// <returns>自助服务DTO</returns>
-    [TaktPermission("routine:helpdesk:selfservice:update", "更新自助服务状态")]
+    [TaktPermission("routine:help:desk:self:service:update", "更新自助服务状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateSelfServiceStatusAsync([FromBody] TaktSelfServiceStatusDto dto)
     {
@@ -205,7 +205,7 @@ public class TaktSelfServicesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">排序DTO</param>
     /// <returns>自助服务DTO</returns>
-    [TaktPermission("routine:helpdesk:selfservice:update", "更新自助服务排序")]
+    [TaktPermission("routine:help:desk:self:service:update", "更新自助服务排序")]
     [HttpPut("sort")]
     public async Task<IActionResult> UpdateSelfServiceSortAsync([FromBody] TaktSelfServiceSortDto dto)
     {
@@ -224,7 +224,7 @@ public class TaktSelfServicesController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("routine:helpdesk:selfservice:import", "获取自助服务导入模板")]
+    [TaktPermission("routine:help:desk:self:service:import", "获取自助服务导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetSelfServiceTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -244,7 +244,7 @@ public class TaktSelfServicesController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("routine:helpdesk:selfservice:import", "导入自助服务")]
+    [TaktPermission("routine:help:desk:self:service:import", "导入自助服务")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportSelfServiceAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -274,7 +274,7 @@ public class TaktSelfServicesController : TaktControllerBase
     /// 导出自助服务
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("routine:helpdesk:selfservice:export", "导出自助服务")]
+    [TaktPermission("routine:help:desk:self:service:export", "导出自助服务")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportSelfServiceAsync([FromQuery] TaktSelfServiceQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

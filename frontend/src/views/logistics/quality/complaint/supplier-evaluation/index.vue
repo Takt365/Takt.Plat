@@ -319,23 +319,21 @@
       </div>
       <div v-show="isFieldVisible('rectificationDeadlineStart')">
       <a-form-item :label="t('entity.supplierevaluation.rectificationdeadlinestart')">
-        <a-input
+        <a-date-picker
           v-model:value="advancedQueryForm.rectificationDeadlineStart"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.rectificationdeadlinestart') })"
-          show-count
-          :maxlength="20"
-          allow-clear
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.supplierevaluation.rectificationdeadlinestart') })"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('rectificationDeadlineEnd')">
       <a-form-item :label="t('entity.supplierevaluation.rectificationdeadlineend')">
-        <a-input
+        <a-date-picker
           v-model:value="advancedQueryForm.rectificationDeadlineEnd"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.rectificationdeadlineend') })"
-          show-count
-          :maxlength="20"
-          allow-clear
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.supplierevaluation.rectificationdeadlineend') })"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
         />
       </a-form-item>
       </div>
@@ -374,7 +372,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -385,7 +383,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -1027,7 +1025,7 @@ const rowSelection = computed(() => ({
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
-    } else if (getSupplierEvaluationId(selectedRow.value) === getSupplierEvaluationId(record)) {
+    } else if (selectedRow.value && getSupplierEvaluationId(selectedRow.value) === getSupplierEvaluationId(record)) {
       selectedRow.value = null
       syncMasterSelection(null)
     }

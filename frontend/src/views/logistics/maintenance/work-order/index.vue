@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="logistics:maintenance:workorder:create"
-      update-permission="logistics:maintenance:workorder:update"
-      delete-permission="logistics:maintenance:workorder:delete"
-      import-permission="logistics:maintenance:workorder:import"
-      export-permission="logistics:maintenance:workorder:export"
+      create-permission="logistics:maintenance:work:order:create"
+      update-permission="logistics:maintenance:work:order:update"
+      delete-permission="logistics:maintenance:work:order:delete"
+      import-permission="logistics:maintenance:work:order:import"
+      export-permission="logistics:maintenance:work:order:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -289,8 +289,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.plannedStartTimeStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.plannedstarttimestart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -300,8 +299,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.plannedStartTimeEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.plannedstarttimeend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -311,8 +309,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.plannedEndTimeStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.plannedendtimestart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -322,8 +319,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.plannedEndTimeEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.plannedendtimeend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -333,8 +329,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.actualStartTimeStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.actualstarttimestart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -344,8 +339,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.actualStartTimeEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.actualstarttimeend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -355,8 +349,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.actualEndTimeStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.actualendtimestart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -366,8 +359,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.actualEndTimeEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.actualendtimeend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -420,7 +412,7 @@
           v-model:value="advancedQueryForm.costCenterCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.costcentercode') })"
           show-count
-          :maxlength="50"
+          :maxlength="4"
           allow-clear
         />
       </a-form-item>
@@ -442,7 +434,7 @@
           v-model:value="advancedQueryForm.costElementCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.costelementcode') })"
           show-count
-          :maxlength="50"
+          :maxlength="4"
           allow-clear
         />
       </a-form-item>
@@ -497,8 +489,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.settlementTimeStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.settlementtimestart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -508,8 +499,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.settlementTimeEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.settlementtimeend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -650,10 +640,11 @@
       </div>
       <div v-show="isFieldVisible('approvalStatus')">
       <a-form-item :label="t('entity.maintenanceworkorder.approvalstatus')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.approvalStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.approvalstatus') })"
-          style="width: 100%"
+          dict-type="sys_approval_status"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.approvalstatus') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -738,7 +729,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -749,7 +740,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -1615,7 +1606,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:maintenance:workorder:update',
+        permission: 'logistics:maintenance:work:order:update',
         onClick: (record: MaintenanceWorkOrder) => handleEdit(record)
       },
       {
@@ -1623,7 +1614,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:maintenance:workorder:delete',
+        permission: 'logistics:maintenance:work:order:delete',
         onClick: (record: MaintenanceWorkOrder) => handleDeleteOne(record)
       }
     ]
@@ -1657,7 +1648,7 @@ const rowSelection = computed(() => ({
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
-    } else if (getMaintenanceWorkOrderId(selectedRow.value) === getMaintenanceWorkOrderId(record)) {
+    } else if (selectedRow.value && getMaintenanceWorkOrderId(selectedRow.value) === getMaintenanceWorkOrderId(record)) {
       selectedRow.value = null
       syncMasterSelection(null)
     }

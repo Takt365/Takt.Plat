@@ -33,8 +33,8 @@ public class TaktAccountTitleChangeLog : TaktCompanyEntityBase
     /// <summary>
     /// 科目编码（冗余）
     /// </summary>
-    [SugarColumn(ColumnName = "title_code", ColumnDescription = "科目编码", ColumnDataType = "varchar", Length = 50, IsNullable = false)]
-    public string TitleCode { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "account_title_code", ColumnDescription = "科目编码", ColumnDataType = "varchar", Length = 50, IsNullable = false)]
+    public string AccountTitleCode { get; set; } = string.Empty;
     /// <summary>
     /// 变更字段列表 JSON
     /// </summary>

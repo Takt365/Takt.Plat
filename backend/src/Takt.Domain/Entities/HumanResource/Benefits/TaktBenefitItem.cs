@@ -34,17 +34,17 @@ public class TaktBenefitItem : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "item_name", ColumnDescription = "福利项目名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = false)]
     public string ItemName { get; set; } = string.Empty;
     /// <summary>
-    /// 福利大类（字典 hr_benefit_category：保险/补贴/休假/其他）
+    /// 福利大类（字典 hr_benefit_category；1=保险 2=补贴 3=休假 4=其他）
     /// </summary>
     [SugarColumn(ColumnName = "benefit_category", ColumnDescription = "福利大类", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int BenefitCategory { get; set; } = 0;
     /// <summary>
-    /// 福利类型（字典 hr_benefit_type：社保/公积金/商业保险/年假额度/餐补/培训补贴/员工折扣等）
+    /// 福利类型（字典 hr_benefit_type；1=社保 2=公积金 3=商业保险 4=年假额度 5=餐补 6=培训补贴 7=员工折扣）
     /// </summary>
     [SugarColumn(ColumnName = "benefit_type", ColumnDescription = "福利类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int BenefitType { get; set; } = 0;
     /// <summary>
-    /// 发放周期（字典 hr_benefit_payment_cycle_type）
+    /// 发放周期（字典 hr_benefit_payment_cycle_type；1=月度 2=季度 3=年度 4=一次性）
     /// </summary>
     [SugarColumn(ColumnName = "payment_cycle", ColumnDescription = "发放周期", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int PaymentCycle { get; set; } = 0;
@@ -69,23 +69,23 @@ public class TaktBenefitItem : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "employee_ratio", ColumnDescription = "个人承担比例", ColumnDataType = "decimal", Length = 8, DecimalDigits = 4, IsNullable = false, DefaultValue = "0")]
     public decimal EmployeeRatio { get; set; }
     /// <summary>
-    /// 是否强制福利（字典 sys_yes_no_type）
+    /// 是否强制福利（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_mandatory", ColumnDescription = "是否强制福利", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsMandatory { get; set; } = 0;
+    /// <summary>
+    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// </summary>
+    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
+    public string RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 排序号
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; }
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
     /// </summary>
     [SugarColumn(ColumnName = "item_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int ItemStatus { get; set; } = 1;
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = true)]
-    public string? RelatedPlant { get; set; }
 }

@@ -131,12 +131,12 @@ public class TaktAnnouncementWorkflowSeedData : ITaktSeedDataCoordinator
     {
         var rules = new object[]
         {
-            new { field = "title", title = "公告标题", type = "input" },
+            new { field = "announcementTitle", title = "公告标题", type = "input" },
             new { field = "announcementType", title = "公告类型", type = "select", props = new { dictType = "sys_announcement_category" } },
             new { field = "summary", title = "摘要", type = "textarea", props = new { rows = 2 } },
             new { field = "content", title = "公告内容", type = "textarea", props = new { rows = 6 } },
             new { field = "targetScope", title = "目标范围", type = "select", props = new { options = new[] { new { label = "全员", value = "all" }, new { label = "本公司", value = "company" } } } },
-            new { field = "isTop", title = "是否置顶", type = "select", props = new { options = new[] { new { label = "否", value = "0" }, new { label = "是", value = "1" } } } }
+            new { field = "isTop", title = "置顶", type = "select", props = new { options = new[] { new { label = "否", value = "0" }, new { label = "是", value = "1" } } } }
         };
         return JsonConvert.SerializeObject(rules, JsonSettings);
     }
@@ -147,12 +147,12 @@ public class TaktAnnouncementWorkflowSeedData : ITaktSeedDataCoordinator
         {
             fields = new object[]
             {
-                new { dbColumnName = "title", csharpColumnName = "title", columnDescription = "标题", dataType = "nvarchar", displayType = "input" },
+                new { dbColumnName = "announcement_title", csharpColumnName = "announcementTitle", columnDescription = "标题", dataType = "nvarchar", displayType = "input" },
                 new { dbColumnName = "announcement_type", csharpColumnName = "announcementType", columnDescription = "公告类型", dataType = "int", displayType = "select" },
                 new { dbColumnName = "summary", csharpColumnName = "summary", columnDescription = "摘要", dataType = "nvarchar", displayType = "textarea" },
                 new { dbColumnName = "content", csharpColumnName = "content", columnDescription = "内容", dataType = "ntext", displayType = "textarea" },
                 new { dbColumnName = "target_scope", csharpColumnName = "targetScope", columnDescription = "目标范围", dataType = "varchar", displayType = "select" },
-                new { dbColumnName = "is_top", csharpColumnName = "isTop", columnDescription = "是否置顶", dataType = "int", displayType = "select" }
+                new { dbColumnName = "is_top", csharpColumnName = "isTop", columnDescription = "置顶", dataType = "int", displayType = "select" }
             },
             business = new
             {

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Sales
 // 文件名称：TaktSalesPriceService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-07-01
 // 创建人：Takt365(Cursor AI)
 // 功能描述：销售价格应用服务实现
 // 
@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Services.Logistics.Sales;
 
@@ -106,7 +105,7 @@ public class TaktSalesPriceService : TaktServiceBase, ITaktSalesPriceService
     {
         EnsureThreeLayerContext();
         var list = await _salesPriceRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.PriceStatus == 1,
             x => x.PlantCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
@@ -440,7 +439,7 @@ public class TaktSalesPriceService : TaktServiceBase, ITaktSalesPriceService
                 (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.SalesPriceCode != null && x.SalesPriceCode.Contains(keywords))
                 || (x.CustomerCode != null && x.CustomerCode.Contains(keywords))
-                || SqlFunc.ToString(x.PriceType).Contains(keywords)
+                || (x.PriceType != null && x.PriceType.Contains(keywords))
                 || SqlFunc.ToString(x.PriceStatus).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
@@ -465,9 +464,9 @@ public class TaktSalesPriceService : TaktServiceBase, ITaktSalesPriceService
             exp = exp.And(x => x.CustomerCode != null && x.CustomerCode.Contains(queryDto.CustomerCode));
         }
 
-        if (queryDto?.PriceType.HasValue == true)
+        if (!string.IsNullOrEmpty(queryDto?.PriceType))
         {
-            exp = exp.And(x => x.PriceType == queryDto.PriceType);
+            exp = exp.And(x => x.PriceType != null && x.PriceType.Contains(queryDto.PriceType));
         }
 
         if (queryDto?.PriceStatus.HasValue == true)

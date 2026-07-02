@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Materials
 // 文件名称：TaktPlantsController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-07-01
 // 创建人：Takt365(Cursor AI)
 // 功能描述：工厂控制器
 // 
@@ -183,7 +183,7 @@ public class TaktPlantsController : TaktControllerBase
     /// <summary>
     /// 更新工厂状态
     /// </summary>
-    /// <param name="dto">状态 DTO（TaktCommonStatus 枚举）</param>
+    /// <param name="dto">状态 DTO</param>
     /// <returns>工厂DTO</returns>
     [TaktPermission("logistics:materials:plant:update", "更新工厂状态")]
     [HttpPut("status")]

@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/routine/news-center/news/components -->
 <!-- 文件名称：news-form.vue -->
-<!-- 功能描述：新闻中心主实体 支持分类、置顶、推荐、社交统计维护弹窗内嵌表单。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：新闻中心主实体 支持分类、置顶、推荐、社交统计维护弹窗内嵌表单（上主下从级联保存）。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -10,6 +10,7 @@
 <template>
   <a-form
     ref="formRef"
+    class="takt-generated-form news-form flex flex-col min-h-0"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -19,7 +20,6 @@
       v-model:active-key="activeTab"
       class="news-form-tabs"
     >
-      <!-- 主表 -->
       <a-tab-pane
         key="tab-0"
         :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
@@ -35,8 +35,9 @@
                 <a-input
                   v-model:value="formState.tenantCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -48,8 +49,9 @@
                 <a-input
                   v-model:value="formState.companyCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -61,8 +63,9 @@
                 <a-input
                   v-model:value="formState.companyDefaultCulture"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -74,8 +77,10 @@
                 <a-input
                   v-model:value="formState.newsCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.code') })"
-                  size="small"
+                  show-count
+                  :maxlength="50"
                   allow-clear
+                  :disabled="!!formData?.newsId"
                 />
               </a-form-item>
             </a-col>
@@ -87,7 +92,6 @@
                 <a-input-number
                   v-model:value="formState.newsCategory"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.category') })"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -100,7 +104,8 @@
                 <a-input
                   v-model:value="formState.newsTitle"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.title') })"
-                  size="small"
+                  show-count
+                  :maxlength="200"
                   allow-clear
                 />
               </a-form-item>
@@ -113,7 +118,8 @@
                 <a-input
                   v-model:value="formState.newsSummary"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.summary') })"
-                  size="small"
+                  show-count
+                  :maxlength="2000"
                   allow-clear
                 />
               </a-form-item>
@@ -126,7 +132,8 @@
                 <a-input
                   v-model:value="formState.tags"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.tags') })"
-                  size="small"
+                  show-count
+                  :maxlength="500"
                   allow-clear
                 />
               </a-form-item>
@@ -140,7 +147,6 @@
                   v-model:value="formState.newsContent"
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.news.content') })"
                   :rows="2"
-                  size="small"
                 />
               </a-form-item>
             </a-col>
@@ -152,7 +158,8 @@
                 <a-input
                   v-model:value="formState.newsCoverImage"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.coverimage') })"
-                  size="small"
+                  show-count
+                  :maxlength="500"
                   allow-clear
                 />
               </a-form-item>
@@ -175,7 +182,6 @@
                 <a-input-number
                   v-model:value="formState.isTop"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.istop') })"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -188,7 +194,6 @@
                 <a-input-number
                   v-model:value="formState.isRecommended"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.isrecommended') })"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -198,11 +203,11 @@
                 :label="t('entity.news.effectivetime')"
                 name="effectiveTime"
               >
-                <a-input
+                <a-date-picker
                   v-model:value="formState.effectiveTime"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.effectivetime') })"
-                  size="small"
-                  allow-clear
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.news.effectivetime') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
@@ -211,11 +216,11 @@
                 :label="t('entity.news.expiretime')"
                 name="expireTime"
               >
-                <a-input
+                <a-date-picker
                   v-model:value="formState.expireTime"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.expiretime') })"
-                  size="small"
-                  allow-clear
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.news.expiretime') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
@@ -227,7 +232,6 @@
                 <a-input-number
                   v-model:value="formState.readCount"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.readcount') })"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -240,7 +244,6 @@
                 <a-input-number
                   v-model:value="formState.likeCount"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.likecount') })"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -253,7 +256,6 @@
                 <a-input-number
                   v-model:value="formState.commentCount"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.commentcount') })"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -266,7 +268,6 @@
                 <a-input-number
                   v-model:value="formState.favoriteCount"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.favoritecount') })"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -279,7 +280,6 @@
                 <a-input-number
                   v-model:value="formState.shareCount"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.sharecount') })"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -292,7 +292,6 @@
                 <a-input-number
                   v-model:value="formState.attachmentCount"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.attachmentcount') })"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -307,20 +306,7 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.news.flowinstanceid')"
-                name="flowInstanceId"
-              >
-                <a-input
-                  v-model:value="formState.flowInstanceId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.flowinstanceid') })"
-                  size="small"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.news.deptid')"
                 name="deptId"
@@ -328,12 +314,13 @@
                 <a-input
                   v-model:value="formState.deptId"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.deptid') })"
-                  size="small"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.news.deptname')"
                 name="deptName"
@@ -341,12 +328,13 @@
                 <a-input
                   v-model:value="formState.deptName"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.deptname') })"
-                  size="small"
+                  show-count
+                  :maxlength="100"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.news.publisherid')"
                 name="publisherId"
@@ -354,12 +342,13 @@
                 <a-input
                   v-model:value="formState.publisherId"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.publisherid') })"
-                  size="small"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.news.publishername')"
                 name="publisherName"
@@ -367,38 +356,26 @@
                 <a-input
                   v-model:value="formState.publisherName"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.publishername') })"
-                  size="small"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.news.publishtime')"
                 name="publishTime"
               >
-                <a-input
+                <a-date-picker
                   v-model:value="formState.publishTime"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.publishtime') })"
-                  size="small"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.news.sortorder')"
-                name="sortOrder"
-              >
-                <a-input-number
-                  v-model:value="formState.sortOrder"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.sortorder') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.news.publishtime') })"
+                  value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.news.status')"
                 name="newsStatus"
@@ -407,19 +384,31 @@
                   v-model:value="formState.newsStatus"
                   dict-type="sys_publish_status"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.news.status') })"
-                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.ExtField')"
-                name="ExtField"
+                name="extField"
+                class="takt-form-item-ext-field"
               >
-                <a-input
-                  v-model:value="formState.ExtField"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
-                  size="small"
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t('common.page.entity.extfieldhint')"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ t('common.page.entity.extfield') }}</span>
+                  </span>
+                </template>
+                <a-textarea
+                  v-model:value="formState.extField"
+                  :placeholder="t('common.page.form.placeholder.extfield')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
                   allow-clear
                 />
               </a-form-item>
@@ -432,623 +421,29 @@
                 <a-textarea
                   v-model:value="formState.remark"
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                  :rows="2"
-                  size="small"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
           </a-row>
         </div>
       </a-tab-pane>
-      <!-- 子表：newsAttachment -->
-      <a-tab-pane
-        key="child-attachments"
-        :tab="t('entity.newsAttachment._self')"
-        force-render
-      >
-        <div class="mb-2">
-          <a-button type="primary" size="small" @click="handleAddNewsAttachmentRow">
-            {{ t('common.page.button.create') }}{{ t('entity.newsAttachment._self') }}
-          </a-button>
-        </div>
-        <a-table
-          :columns="newsAttachmentFormColumns"
-          :data-source="childNewsAttachmentRows"
-          :pagination="false"
-          :row-key="(row: Record<string, unknown>, index?: number) => String(row.__rowKey ?? index ?? 0)"
-          size="small"
-          bordered
-        >
-          <template #bodyCell="{ column, record, index }">
-            <template v-if="column.key === 'tenantCode'">
-              <a-input
-                v-model:value="record.tenantCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyCode'">
-              <a-input
-                v-model:value="record.companyCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyDefaultCulture'">
-              <a-input
-                v-model:value="record.companyDefaultCulture"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'fileId'">
-              <a-input
-                v-model:value="record.fileId"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.newsAttachment.fileid') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'fileName'">
-              <a-input
-                v-model:value="record.fileName"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.newsAttachment.filename') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'filePath'">
-              <a-input
-                v-model:value="record.filePath"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.newsAttachment.filepath') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'fileSize'">
-              <a-input
-                v-model:value="record.fileSize"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.newsAttachment.filesize') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'fileType'">
-              <a-input
-                v-model:value="record.fileType"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.newsAttachment.filetype') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'fileExtension'">
-              <a-input
-                v-model:value="record.fileExtension"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.newsAttachment.fileextension') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'sortOrder'">
-              <a-input-number
-                v-model:value="record.sortOrder"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.newsAttachment.sortorder') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === 'ExtField'">
-              <a-input
-                v-model:value="record.ExtField"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === '__action'">
-              <a-button type="link" danger size="small" @click="handleRemoveNewsAttachmentRow(index)">
-                {{ t('common.page.button.delete') }}
-              </a-button>
-            </template>
-          </template>
-        </a-table>
-      </a-tab-pane>
-      <!-- 子表：newsComment -->
-      <a-tab-pane
-        key="child-comments"
-        :tab="t('entity.newsComment._self')"
-        force-render
-      >
-        <div class="mb-2">
-          <a-button type="primary" size="small" @click="handleAddNewsCommentRow">
-            {{ t('common.page.button.create') }}{{ t('entity.newsComment._self') }}
-          </a-button>
-        </div>
-        <a-table
-          :columns="newsCommentFormColumns"
-          :data-source="childNewsCommentRows"
-          :pagination="false"
-          :row-key="(row: Record<string, unknown>, index?: number) => String(row.__rowKey ?? index ?? 0)"
-          size="small"
-          bordered
-        >
-          <template #bodyCell="{ column, record, index }">
-            <template v-if="column.key === 'tenantCode'">
-              <a-input
-                v-model:value="record.tenantCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyCode'">
-              <a-input
-                v-model:value="record.companyCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyDefaultCulture'">
-              <a-input
-                v-model:value="record.companyDefaultCulture"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'parentId'">
-              <a-input
-                v-model:value="record.parentId"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.newsComment.parentid') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'userId'">
-              <a-input
-                v-model:value="record.userId"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.newsComment.userid') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'userName'">
-              <a-input
-                v-model:value="record.userName"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.newsComment.username') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'userAvatar'">
-              <a-input
-                v-model:value="record.userAvatar"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.newsComment.useravatar') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'replyToUserId'">
-              <a-input
-                v-model:value="record.replyToUserId"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.newsComment.replytouserid') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'replyToUserName'">
-              <a-input
-                v-model:value="record.replyToUserName"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.newsComment.replytousername') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'commentContent'">
-              <a-textarea
-                v-model:value="record.commentContent"
-                :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.newsComment.commentcontent') })"
-                :rows="2"
-                size="small"
-              />
-            </template>
-            <template v-else-if="column.key === 'commentTime'">
-              <a-input
-                v-model:value="record.commentTime"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.newsComment.commenttime') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === '__action'">
-              <a-button type="link" danger size="small" @click="handleRemoveNewsCommentRow(index)">
-                {{ t('common.page.button.delete') }}
-              </a-button>
-            </template>
-          </template>
-        </a-table>
-      </a-tab-pane>
-      <!-- 子表：newsLike -->
-      <a-tab-pane
-        key="child-likes"
-        :tab="t('entity.newsLike._self')"
-        force-render
-      >
-        <div class="mb-2">
-          <a-button type="primary" size="small" @click="handleAddNewsLikeRow">
-            {{ t('common.page.button.create') }}{{ t('entity.newsLike._self') }}
-          </a-button>
-        </div>
-        <a-table
-          :columns="newsLikeFormColumns"
-          :data-source="childNewsLikeRows"
-          :pagination="false"
-          :row-key="(row: Record<string, unknown>, index?: number) => String(row.__rowKey ?? index ?? 0)"
-          size="small"
-          bordered
-        >
-          <template #bodyCell="{ column, record, index }">
-            <template v-if="column.key === 'tenantCode'">
-              <a-input
-                v-model:value="record.tenantCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyCode'">
-              <a-input
-                v-model:value="record.companyCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyDefaultCulture'">
-              <a-input
-                v-model:value="record.companyDefaultCulture"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'userId'">
-              <a-input
-                v-model:value="record.userId"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.newsLike.userid') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'userName'">
-              <a-input
-                v-model:value="record.userName"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.newsLike.username') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'likeTime'">
-              <a-input
-                v-model:value="record.likeTime"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.newsLike.liketime') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'ExtField'">
-              <a-input
-                v-model:value="record.ExtField"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'remark'">
-              <a-textarea
-                v-model:value="record.remark"
-                :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                :rows="2"
-                size="small"
-              />
-            </template>
-            <template v-else-if="column.key === '__action'">
-              <a-button type="link" danger size="small" @click="handleRemoveNewsLikeRow(index)">
-                {{ t('common.page.button.delete') }}
-              </a-button>
-            </template>
-          </template>
-        </a-table>
-      </a-tab-pane>
-      <!-- 子表：newsRead -->
-      <a-tab-pane
-        key="child-reads"
-        :tab="t('entity.newsRead._self')"
-        force-render
-      >
-        <div class="mb-2">
-          <a-button type="primary" size="small" @click="handleAddNewsReadRow">
-            {{ t('common.page.button.create') }}{{ t('entity.newsRead._self') }}
-          </a-button>
-        </div>
-        <a-table
-          :columns="newsReadFormColumns"
-          :data-source="childNewsReadRows"
-          :pagination="false"
-          :row-key="(row: Record<string, unknown>, index?: number) => String(row.__rowKey ?? index ?? 0)"
-          size="small"
-          bordered
-        >
-          <template #bodyCell="{ column, record, index }">
-            <template v-if="column.key === 'tenantCode'">
-              <a-input
-                v-model:value="record.tenantCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyCode'">
-              <a-input
-                v-model:value="record.companyCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyDefaultCulture'">
-              <a-input
-                v-model:value="record.companyDefaultCulture"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'userId'">
-              <a-input
-                v-model:value="record.userId"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.newsRead.userid') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'userName'">
-              <a-input
-                v-model:value="record.userName"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.newsRead.username') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'readTime'">
-              <a-input
-                v-model:value="record.readTime"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.newsRead.readtime') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'ExtField'">
-              <a-input
-                v-model:value="record.ExtField"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'remark'">
-              <a-textarea
-                v-model:value="record.remark"
-                :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                :rows="2"
-                size="small"
-              />
-            </template>
-            <template v-else-if="column.key === '__action'">
-              <a-button type="link" danger size="small" @click="handleRemoveNewsReadRow(index)">
-                {{ t('common.page.button.delete') }}
-              </a-button>
-            </template>
-          </template>
-        </a-table>
-      </a-tab-pane>
-      <!-- 子表：newsFavorite -->
-      <a-tab-pane
-        key="child-favorites"
-        :tab="t('entity.newsFavorite._self')"
-        force-render
-      >
-        <div class="mb-2">
-          <a-button type="primary" size="small" @click="handleAddNewsFavoriteRow">
-            {{ t('common.page.button.create') }}{{ t('entity.newsFavorite._self') }}
-          </a-button>
-        </div>
-        <a-table
-          :columns="newsFavoriteFormColumns"
-          :data-source="childNewsFavoriteRows"
-          :pagination="false"
-          :row-key="(row: Record<string, unknown>, index?: number) => String(row.__rowKey ?? index ?? 0)"
-          size="small"
-          bordered
-        >
-          <template #bodyCell="{ column, record, index }">
-            <template v-if="column.key === 'tenantCode'">
-              <a-input
-                v-model:value="record.tenantCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyCode'">
-              <a-input
-                v-model:value="record.companyCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyDefaultCulture'">
-              <a-input
-                v-model:value="record.companyDefaultCulture"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'userId'">
-              <a-input
-                v-model:value="record.userId"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.newsFavorite.userid') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'userName'">
-              <a-input
-                v-model:value="record.userName"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.newsFavorite.username') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'favoriteTime'">
-              <a-input
-                v-model:value="record.favoriteTime"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.newsFavorite.favoritetime') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'ExtField'">
-              <a-input
-                v-model:value="record.ExtField"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'remark'">
-              <a-textarea
-                v-model:value="record.remark"
-                :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                :rows="2"
-                size="small"
-              />
-            </template>
-            <template v-else-if="column.key === '__action'">
-              <a-button type="link" danger size="small" @click="handleRemoveNewsFavoriteRow(index)">
-                {{ t('common.page.button.delete') }}
-              </a-button>
-            </template>
-          </template>
-        </a-table>
-      </a-tab-pane>
-      <!-- 子表：newsShare -->
-      <a-tab-pane
-        key="child-shares"
-        :tab="t('entity.newsShare._self')"
-        force-render
-      >
-        <div class="mb-2">
-          <a-button type="primary" size="small" @click="handleAddNewsShareRow">
-            {{ t('common.page.button.create') }}{{ t('entity.newsShare._self') }}
-          </a-button>
-        </div>
-        <a-table
-          :columns="newsShareFormColumns"
-          :data-source="childNewsShareRows"
-          :pagination="false"
-          :row-key="(row: Record<string, unknown>, index?: number) => String(row.__rowKey ?? index ?? 0)"
-          size="small"
-          bordered
-        >
-          <template #bodyCell="{ column, record, index }">
-            <template v-if="column.key === 'tenantCode'">
-              <a-input
-                v-model:value="record.tenantCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyCode'">
-              <a-input
-                v-model:value="record.companyCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyDefaultCulture'">
-              <a-input
-                v-model:value="record.companyDefaultCulture"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'userId'">
-              <a-input
-                v-model:value="record.userId"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.newsShare.userid') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'userName'">
-              <a-input
-                v-model:value="record.userName"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.newsShare.username') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'shareChannel'">
-              <a-input
-                v-model:value="record.shareChannel"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.newsShare.sharechannel') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'shareTime'">
-              <a-input
-                v-model:value="record.shareTime"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.newsShare.sharetime') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'ExtField'">
-              <a-input
-                v-model:value="record.ExtField"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'remark'">
-              <a-textarea
-                v-model:value="record.remark"
-                :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                :rows="2"
-                size="small"
-              />
-            </template>
-            <template v-else-if="column.key === '__action'">
-              <a-button type="link" danger size="small" @click="handleRemoveNewsShareRow(index)">
-                {{ t('common.page.button.delete') }}
-              </a-button>
-            </template>
-          </template>
-        </a-table>
-      </a-tab-pane>
     </a-tabs>
+    <!-- 下：子表 attachments -->
+    <TaktEditableTable
+      ref="newsAttachmentTableRef"
+      v-model="childNewsAttachmentRows"
+      :columns="newsAttachmentFormColumns"
+      :title="t('entity.newsattachment._self')"
+      :add-button-entity="t('entity.newsattachment._self')"
+      id-field="newsAttachmentId"
+      :default-row="createDefaultNewsAttachmentRow"
+      :disabled="loading"
+      section-border
+    />
   </a-form>
 </template>
 
@@ -1057,10 +452,13 @@
  * 新闻中心主实体 支持分类、置顶、推荐、社交统计维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/routine/news-center/news/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
-import type { NewsCreate, NewsAttachmentCreate, NewsAttachment, NewsCommentCreate, NewsComment, NewsLikeCreate, NewsLike, NewsReadCreate, NewsRead, NewsFavoriteCreate, NewsFavorite, NewsShareCreate, NewsShare } from '@/types/routine/news-center/news'
+import type { NewsCreate } from '@/types/routine/news-center/news'
+import TaktSelect from '@/components/business/takt-select/index.vue'
+import { RiQuestionLine } from '@remixicon/vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -1093,576 +491,103 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","newsCode","newsCategory","newsTitle","newsSummary","tags","newsContent","newsCoverImage","isTop","isRecommended","effectiveTime","expireTime","readCount","likeCount","commentCount","favoriteCount","shareCount","attachmentCount","flowInstanceId","deptId","deptName","publisherId","publisherName","publishTime","sortOrder","newsStatus","ExtField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","newsCode","newsCategory","newsTitle","newsSummary","tags","newsContent","newsCoverImage","isTop","isRecommended","effectiveTime","expireTime","readCount","likeCount","commentCount","favoriteCount","shareCount","attachmentCount","deptId","deptName","publisherId","publisherName","publishTime","newsStatus","extField","remark"]
 
-/** newsAttachment 子表行（表单 Tab 内嵌） */
+import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+
 const childNewsAttachmentRows = ref<Record<string, unknown>[]>([])
-/** newsComment 子表行（表单 Tab 内嵌） */
-const childNewsCommentRows = ref<Record<string, unknown>[]>([])
-/** newsLike 子表行（表单 Tab 内嵌） */
-const childNewsLikeRows = ref<Record<string, unknown>[]>([])
-/** newsRead 子表行（表单 Tab 内嵌） */
-const childNewsReadRows = ref<Record<string, unknown>[]>([])
-/** newsFavorite 子表行（表单 Tab 内嵌） */
-const childNewsFavoriteRows = ref<Record<string, unknown>[]>([])
-/** newsShare 子表行（表单 Tab 内嵌） */
-const childNewsShareRows = ref<Record<string, unknown>[]>([])
+const newsAttachmentTableRef = ref<{
+  getRows: () => Record<string, unknown>[]
+  validate: () => Promise<unknown>
+  resetRows: () => void
+} | null>(null)
 
-/** 子表 newsAttachment 表单列定义 */
-const newsAttachmentFormColumns = computed(() => [
+/** 子表 newsAttachment 可编辑列 */
+const newsAttachmentFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
-    title: t('common.page.entity.tenantcode'),
-    dataIndex: 'tenantCode',
-    key: 'tenantCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companycode'),
-    dataIndex: 'companyCode',
-    key: 'companyCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companydefaultculture'),
-    dataIndex: 'companyDefaultCulture',
-    key: 'companyDefaultCulture',
-    width: 140,
-  },
-  {
-    title: t('entity.newsAttachment.fileid'),
-    dataIndex: 'fileId',
     key: 'fileId',
+    title: t('entity.newsattachment.fileid'),
+    editor: 'input',
     width: 140,
   },
   {
-    title: t('entity.newsAttachment.filename'),
-    dataIndex: 'fileName',
     key: 'fileName',
+    title: t('entity.newsattachment.filename'),
+    editor: 'input',
     width: 140,
   },
   {
-    title: t('entity.newsAttachment.filepath'),
-    dataIndex: 'filePath',
     key: 'filePath',
+    title: t('entity.newsattachment.filepath'),
+    editor: 'input',
     width: 140,
   },
   {
-    title: t('entity.newsAttachment.filesize'),
-    dataIndex: 'fileSize',
     key: 'fileSize',
+    title: t('entity.newsattachment.filesize'),
+    editor: 'input',
     width: 140,
   },
   {
-    title: t('entity.newsAttachment.filetype'),
-    dataIndex: 'fileType',
     key: 'fileType',
-    width: 140,
+    title: t('entity.newsattachment.filetype'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.newsattachment.filetype') }),
   },
   {
-    title: t('entity.newsAttachment.fileextension'),
-    dataIndex: 'fileExtension',
     key: 'fileExtension',
+    title: t('entity.newsattachment.fileextension'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.newsattachment.fileextension') }),
+  },
+  {
+    key: 'extField',
+    title: t('common.page.entity.extfield'),
+    editor: 'textarea',
+    rows: 2,
+    placeholder: t('common.page.form.placeholder.optional', { field: t('common.page.entity.extfield') }),
     width: 140,
   },
   {
-    title: t('entity.newsAttachment.sortorder'),
-    dataIndex: 'sortOrder',
-    key: 'sortOrder',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.ExtField'),
-    dataIndex: 'ExtField',
-    key: 'ExtField',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.action'),
-    key: '__action',
-    width: 80,
-    fixed: 'right',
-  },
-])
-
-/** 子表 newsComment 表单列定义 */
-const newsCommentFormColumns = computed(() => [
-  {
-    title: t('common.page.entity.tenantcode'),
-    dataIndex: 'tenantCode',
-    key: 'tenantCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companycode'),
-    dataIndex: 'companyCode',
-    key: 'companyCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companydefaultculture'),
-    dataIndex: 'companyDefaultCulture',
-    key: 'companyDefaultCulture',
-    width: 140,
-  },
-  {
-    title: t('entity.newsComment.parentid'),
-    dataIndex: 'parentId',
-    key: 'parentId',
-    width: 140,
-  },
-  {
-    title: t('entity.newsComment.userid'),
-    dataIndex: 'userId',
-    key: 'userId',
-    width: 140,
-  },
-  {
-    title: t('entity.newsComment.username'),
-    dataIndex: 'userName',
-    key: 'userName',
-    width: 140,
-  },
-  {
-    title: t('entity.newsComment.useravatar'),
-    dataIndex: 'userAvatar',
-    key: 'userAvatar',
-    width: 140,
-  },
-  {
-    title: t('entity.newsComment.replytouserid'),
-    dataIndex: 'replyToUserId',
-    key: 'replyToUserId',
-    width: 140,
-  },
-  {
-    title: t('entity.newsComment.replytousername'),
-    dataIndex: 'replyToUserName',
-    key: 'replyToUserName',
-    width: 140,
-  },
-  {
-    title: t('entity.newsComment.commentcontent'),
-    dataIndex: 'commentContent',
-    key: 'commentContent',
-    width: 140,
-  },
-  {
-    title: t('entity.newsComment.commenttime'),
-    dataIndex: 'commentTime',
-    key: 'commentTime',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.action'),
-    key: '__action',
-    width: 80,
-    fixed: 'right',
-  },
-])
-
-/** 子表 newsLike 表单列定义 */
-const newsLikeFormColumns = computed(() => [
-  {
-    title: t('common.page.entity.tenantcode'),
-    dataIndex: 'tenantCode',
-    key: 'tenantCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companycode'),
-    dataIndex: 'companyCode',
-    key: 'companyCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companydefaultculture'),
-    dataIndex: 'companyDefaultCulture',
-    key: 'companyDefaultCulture',
-    width: 140,
-  },
-  {
-    title: t('entity.newsLike.userid'),
-    dataIndex: 'userId',
-    key: 'userId',
-    width: 140,
-  },
-  {
-    title: t('entity.newsLike.username'),
-    dataIndex: 'userName',
-    key: 'userName',
-    width: 140,
-  },
-  {
-    title: t('entity.newsLike.liketime'),
-    dataIndex: 'likeTime',
-    key: 'likeTime',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.ExtField'),
-    dataIndex: 'ExtField',
-    key: 'ExtField',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.remark'),
-    dataIndex: 'remark',
     key: 'remark',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.action'),
-    key: '__action',
-    width: 80,
-    fixed: 'right',
-  },
-])
-
-/** 子表 newsRead 表单列定义 */
-const newsReadFormColumns = computed(() => [
-  {
-    title: t('common.page.entity.tenantcode'),
-    dataIndex: 'tenantCode',
-    key: 'tenantCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companycode'),
-    dataIndex: 'companyCode',
-    key: 'companyCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companydefaultculture'),
-    dataIndex: 'companyDefaultCulture',
-    key: 'companyDefaultCulture',
-    width: 140,
-  },
-  {
-    title: t('entity.newsRead.userid'),
-    dataIndex: 'userId',
-    key: 'userId',
-    width: 140,
-  },
-  {
-    title: t('entity.newsRead.username'),
-    dataIndex: 'userName',
-    key: 'userName',
-    width: 140,
-  },
-  {
-    title: t('entity.newsRead.readtime'),
-    dataIndex: 'readTime',
-    key: 'readTime',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.ExtField'),
-    dataIndex: 'ExtField',
-    key: 'ExtField',
-    width: 140,
-  },
-  {
     title: t('common.page.entity.remark'),
-    dataIndex: 'remark',
-    key: 'remark',
+    editor: 'textarea',
+    rows: 2,
+    placeholder: t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') }),
     width: 140,
-  },
-  {
-    title: t('common.page.entity.action'),
-    key: '__action',
-    width: 80,
-    fixed: 'right',
-  },
-])
-
-/** 子表 newsFavorite 表单列定义 */
-const newsFavoriteFormColumns = computed(() => [
-  {
-    title: t('common.page.entity.tenantcode'),
-    dataIndex: 'tenantCode',
-    key: 'tenantCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companycode'),
-    dataIndex: 'companyCode',
-    key: 'companyCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companydefaultculture'),
-    dataIndex: 'companyDefaultCulture',
-    key: 'companyDefaultCulture',
-    width: 140,
-  },
-  {
-    title: t('entity.newsFavorite.userid'),
-    dataIndex: 'userId',
-    key: 'userId',
-    width: 140,
-  },
-  {
-    title: t('entity.newsFavorite.username'),
-    dataIndex: 'userName',
-    key: 'userName',
-    width: 140,
-  },
-  {
-    title: t('entity.newsFavorite.favoritetime'),
-    dataIndex: 'favoriteTime',
-    key: 'favoriteTime',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.ExtField'),
-    dataIndex: 'ExtField',
-    key: 'ExtField',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.remark'),
-    dataIndex: 'remark',
-    key: 'remark',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.action'),
-    key: '__action',
-    width: 80,
-    fixed: 'right',
-  },
-])
-
-/** 子表 newsShare 表单列定义 */
-const newsShareFormColumns = computed(() => [
-  {
-    title: t('common.page.entity.tenantcode'),
-    dataIndex: 'tenantCode',
-    key: 'tenantCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companycode'),
-    dataIndex: 'companyCode',
-    key: 'companyCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companydefaultculture'),
-    dataIndex: 'companyDefaultCulture',
-    key: 'companyDefaultCulture',
-    width: 140,
-  },
-  {
-    title: t('entity.newsShare.userid'),
-    dataIndex: 'userId',
-    key: 'userId',
-    width: 140,
-  },
-  {
-    title: t('entity.newsShare.username'),
-    dataIndex: 'userName',
-    key: 'userName',
-    width: 140,
-  },
-  {
-    title: t('entity.newsShare.sharechannel'),
-    dataIndex: 'shareChannel',
-    key: 'shareChannel',
-    width: 140,
-  },
-  {
-    title: t('entity.newsShare.sharetime'),
-    dataIndex: 'shareTime',
-    key: 'shareTime',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.ExtField'),
-    dataIndex: 'ExtField',
-    key: 'ExtField',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.remark'),
-    dataIndex: 'remark',
-    key: 'remark',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.action'),
-    key: '__action',
-    width: 80,
-    fixed: 'right',
   },
 ])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<NewsCreate & { newsId?: string }> | null | undefined) {
-  childNewsAttachmentRows.value = ((val as any)?.attachments ?? []).map((item: Record<string, unknown>, index: number) => ({
-    ...item,
-    __rowKey: item.newsAttachmentId ?? `new-${index}`,
-  }))
-  childNewsCommentRows.value = ((val as any)?.comments ?? []).map((item: Record<string, unknown>, index: number) => ({
-    ...item,
-    __rowKey: item.newsCommentId ?? `new-${index}`,
-  }))
-  childNewsLikeRows.value = ((val as any)?.likes ?? []).map((item: Record<string, unknown>, index: number) => ({
-    ...item,
-    __rowKey: item.newsLikeId ?? `new-${index}`,
-  }))
-  childNewsReadRows.value = ((val as any)?.reads ?? []).map((item: Record<string, unknown>, index: number) => ({
-    ...item,
-    __rowKey: item.newsReadId ?? `new-${index}`,
-  }))
-  childNewsFavoriteRows.value = ((val as any)?.favorites ?? []).map((item: Record<string, unknown>, index: number) => ({
-    ...item,
-    __rowKey: item.newsFavoriteId ?? `new-${index}`,
-  }))
-  childNewsShareRows.value = ((val as any)?.shares ?? []).map((item: Record<string, unknown>, index: number) => ({
-    ...item,
-    __rowKey: item.newsShareId ?? `new-${index}`,
-  }))
+  childNewsAttachmentRows.value = ((val as any)?.attachments ?? []) as Record<string, unknown>[]
 }
 
-/** 表单 Tab 内新增 newsAttachment 行 */
-function handleAddNewsAttachmentRow() {
-  childNewsAttachmentRows.value.push({
-    __rowKey: `new-${Date.now()}`,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      fileId: '',
-      fileName: '',
-      filePath: '',
-      fileSize: '',
-      fileType: '',
-      fileExtension: '',
-      sortOrder: 0,
-      ExtField: '',
-  })
-}
-
-/** 表单 Tab 内删除 newsAttachment 行 */
-function handleRemoveNewsAttachmentRow(index: number) {
-  childNewsAttachmentRows.value.splice(index, 1)
-}
-
-/** 表单 Tab 内新增 newsComment 行 */
-function handleAddNewsCommentRow() {
-  childNewsCommentRows.value.push({
-    __rowKey: `new-${Date.now()}`,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      parentId: '',
-      userId: '',
-      userName: '',
-      userAvatar: '',
-      replyToUserId: '',
-      replyToUserName: '',
-      commentContent: '',
-      commentTime: '',
-  })
-}
-
-/** 表单 Tab 内删除 newsComment 行 */
-function handleRemoveNewsCommentRow(index: number) {
-  childNewsCommentRows.value.splice(index, 1)
-}
-
-/** 表单 Tab 内新增 newsLike 行 */
-function handleAddNewsLikeRow() {
-  childNewsLikeRows.value.push({
-    __rowKey: `new-${Date.now()}`,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      userId: '',
-      userName: '',
-      likeTime: '',
-      ExtField: '',
-      remark: '',
-  })
-}
-
-/** 表单 Tab 内删除 newsLike 行 */
-function handleRemoveNewsLikeRow(index: number) {
-  childNewsLikeRows.value.splice(index, 1)
-}
-
-/** 表单 Tab 内新增 newsRead 行 */
-function handleAddNewsReadRow() {
-  childNewsReadRows.value.push({
-    __rowKey: `new-${Date.now()}`,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      userId: '',
-      userName: '',
-      readTime: '',
-      ExtField: '',
-      remark: '',
-  })
-}
-
-/** 表单 Tab 内删除 newsRead 行 */
-function handleRemoveNewsReadRow(index: number) {
-  childNewsReadRows.value.splice(index, 1)
-}
-
-/** 表单 Tab 内新增 newsFavorite 行 */
-function handleAddNewsFavoriteRow() {
-  childNewsFavoriteRows.value.push({
-    __rowKey: `new-${Date.now()}`,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      userId: '',
-      userName: '',
-      favoriteTime: '',
-      ExtField: '',
-      remark: '',
-  })
-}
-
-/** 表单 Tab 内删除 newsFavorite 行 */
-function handleRemoveNewsFavoriteRow(index: number) {
-  childNewsFavoriteRows.value.splice(index, 1)
-}
-
-/** 表单 Tab 内新增 newsShare 行 */
-function handleAddNewsShareRow() {
-  childNewsShareRows.value.push({
-    __rowKey: `new-${Date.now()}`,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      userId: '',
-      userName: '',
-      shareChannel: '',
-      shareTime: '',
-      ExtField: '',
-      remark: '',
-  })
-}
-
-/** 表单 Tab 内删除 newsShare 行 */
-function handleRemoveNewsShareRow(index: number) {
-  childNewsShareRows.value.splice(index, 1)
+function createDefaultNewsAttachmentRow(): Record<string, unknown> {
+  return {
+    fileId: '',
+    fileName: '',
+    filePath: '',
+    fileSize: '',
+    fileType: '',
+    fileExtension: '',
+    extField: '',
+    remark: '',
+  }
 }
 
 /** 组装 Create/Update 载荷（主表 + 子表数组） */
 function buildSubmitPayload() {
+  const masterId = props.formData?.newsId ?? ''
   return {
     ...formState,
-    attachments: childNewsAttachmentRows.value.map(({ __rowKey, ...rest }) => rest),
-    comments: childNewsCommentRows.value.map(({ __rowKey, ...rest }) => rest),
-    likes: childNewsLikeRows.value.map(({ __rowKey, ...rest }) => rest),
-    reads: childNewsReadRows.value.map(({ __rowKey, ...rest }) => rest),
-    favorites: childNewsFavoriteRows.value.map(({ __rowKey, ...rest }) => rest),
-    shares: childNewsShareRows.value.map(({ __rowKey, ...rest }) => rest),
+    attachments: newsAttachmentTableRef.value?.getRows?.() ?? childNewsAttachmentRows.value.map((rest) => ({
+      ...rest,
+      tenantCode: tenantStore.tenantCode,
+      companyCode: tenantStore.companyCode,
+      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+      newsId: masterId,
+    })),
   }
 }
 
@@ -1674,7 +599,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  formData: () => ({}),
+  formData: null,
   loading: false,
 })
 
@@ -1682,24 +607,47 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
+/** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
+const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  newsStatus: 0
+}
 
-/** 编辑态灌入 formData；新增态 reset */
+/** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  Object.assign(target, FORM_FIELD_DEFAULTS)
+}
+
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载全量字典 */
+onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
+})
+
+/** 编辑态灌入 formData；新增态恢复默认值（须含 newsId 才视为编辑） */
 watch(
   () => props.formData,
   (val) => {
-    const next = val ? { ...val } : {}
-    Object.keys(formState).forEach((k) => delete formState[k])
+    if (val?.newsId) {
+      const next = { ...val } as Record<string, unknown>
+      Object.keys(formState).forEach((k) => delete formState[k])
     delete (next as any).attachments
-    delete (next as any).comments
-    delete (next as any).likes
-    delete (next as any).reads
-    delete (next as any).favorites
-    delete (next as any).shares
-    applyScopeDefaults(next)
-    Object.assign(formState, next)
+      applyScopeDefaults(next)
+      Object.assign(formState, next)
     syncChildRowsFromFormData(val)
+      formRef.value?.clearValidate()
+    } else {
+      Object.keys(formState).forEach((k) => delete formState[k])
+      if (val && typeof val === 'object' && Object.keys(val).length > 0) {
+        Object.assign(formState, val)
+      }
+      applyFormDefaults(formState)
+      applyScopeDefaults(formState as Record<string, unknown>, true)
+      formRef.value?.clearValidate()
+    }
   },
-  { immediate: true, deep: true }
+  { immediate: true }
 )
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
@@ -1722,13 +670,19 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
-  newsCategory: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.news.category') }),
-      trigger: 'change'
-    }
-  ],
+  newsCategory: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.news.category') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.news.category') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
   newsTitle: [
     {
       required: true,
@@ -1743,62 +697,110 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
-  isTop: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.news.istop') }),
-      trigger: 'change'
-    }
-  ],
-  isRecommended: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.news.isrecommended') }),
-      trigger: 'change'
-    }
-  ],
-  readCount: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.news.readcount') }),
-      trigger: 'change'
-    }
-  ],
-  likeCount: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.news.likecount') }),
-      trigger: 'change'
-    }
-  ],
-  commentCount: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.news.commentcount') }),
-      trigger: 'change'
-    }
-  ],
-  favoriteCount: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.news.favoritecount') }),
-      trigger: 'change'
-    }
-  ],
-  shareCount: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.news.sharecount') }),
-      trigger: 'change'
-    }
-  ],
-  attachmentCount: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.news.attachmentcount') }),
-      trigger: 'change'
-    }
-  ],
+  isTop: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.news.istop') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.news.istop') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  isRecommended: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.news.isrecommended') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.news.isrecommended') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  readCount: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.news.readcount') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.news.readcount') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  likeCount: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.news.likecount') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.news.likecount') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  commentCount: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.news.commentcount') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.news.commentcount') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  favoriteCount: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.news.favoritecount') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.news.favoritecount') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  shareCount: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.news.sharecount') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.news.sharecount') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  attachmentCount: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.news.attachmentcount') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.news.attachmentcount') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
   publisherId: [
     {
       required: true,
@@ -1813,44 +815,87 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
-  sortOrder: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.news.sortorder') }),
-      trigger: 'change'
-    }
-  ],
-  newsStatus: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.news.status') }),
-      trigger: 'change'
-    }
-  ],
+  newsStatus: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.news.status') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.news.status') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
 async function validate() {
   await formRef.value?.validate()
+  await newsAttachmentTableRef.value?.validate?.()
   return formState
 }
 
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
-  return buildSubmitPayload()
+  const payload = buildSubmitPayload() as Record<string, unknown>
+  if ('newsCategory' in payload) {
+    const rawnewsCategory = payload.newsCategory
+    payload.newsCategory = typeof rawnewsCategory === 'number' ? rawnewsCategory : Number(rawnewsCategory)
+  }
+  if ('isTop' in payload) {
+    const rawisTop = payload.isTop
+    payload.isTop = typeof rawisTop === 'number' ? rawisTop : Number(rawisTop)
+  }
+  if ('isRecommended' in payload) {
+    const rawisRecommended = payload.isRecommended
+    payload.isRecommended = typeof rawisRecommended === 'number' ? rawisRecommended : Number(rawisRecommended)
+  }
+  if ('readCount' in payload) {
+    const rawreadCount = payload.readCount
+    payload.readCount = typeof rawreadCount === 'number' ? rawreadCount : Number(rawreadCount)
+  }
+  if ('likeCount' in payload) {
+    const rawlikeCount = payload.likeCount
+    payload.likeCount = typeof rawlikeCount === 'number' ? rawlikeCount : Number(rawlikeCount)
+  }
+  if ('commentCount' in payload) {
+    const rawcommentCount = payload.commentCount
+    payload.commentCount = typeof rawcommentCount === 'number' ? rawcommentCount : Number(rawcommentCount)
+  }
+  if ('favoriteCount' in payload) {
+    const rawfavoriteCount = payload.favoriteCount
+    payload.favoriteCount = typeof rawfavoriteCount === 'number' ? rawfavoriteCount : Number(rawfavoriteCount)
+  }
+  if ('shareCount' in payload) {
+    const rawshareCount = payload.shareCount
+    payload.shareCount = typeof rawshareCount === 'number' ? rawshareCount : Number(rawshareCount)
+  }
+  if ('attachmentCount' in payload) {
+    const rawattachmentCount = payload.attachmentCount
+    payload.attachmentCount = typeof rawattachmentCount === 'number' ? rawattachmentCount : Number(rawattachmentCount)
+  }
+  if ('newsStatus' in payload) {
+    const rawnewsStatus = payload.newsStatus
+    payload.newsStatus = typeof rawnewsStatus === 'number' ? rawnewsStatus : Number(rawnewsStatus)
+  }
+  if ('sortOrder' in payload) delete payload.sortOrder
+  return payload
 }
 
-/** 重置表单与子表行 */
+/** 重置表单与子表行（弹窗未 destroy 时父级 nextTick 也会调用） */
 function resetFields() {
-  formRef.value?.resetFields()
   Object.keys(formState).forEach((k) => delete formState[k])
+  if (props.formData && typeof props.formData === 'object') {
+    Object.assign(formState, props.formData)
+  }
+  applyFormDefaults(formState)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.newsId)
   childNewsAttachmentRows.value = []
-  childNewsCommentRows.value = []
-  childNewsLikeRows.value = []
-  childNewsReadRows.value = []
-  childNewsFavoriteRows.value = []
-  childNewsShareRows.value = []
+  newsAttachmentTableRef.value?.resetRows?.()
   activeTab.value = 'tab-0'
+  formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Performance
 // 文件名称：TaktPerfAnalysisDtos.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PerfAnalysis 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPerfAnalysis 生成，请按需审阅）
 // 
@@ -114,14 +114,14 @@ public class TaktPerfAnalysisDto : TaktApprovalDtoBase
     public string? MentorName { get; set; }
 
     /// <summary>
+    /// 关联工厂
+    /// </summary>
+    public string RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
     /// 业务状态（0=待审批 1=进行中 2=已完成 3=已关闭）
     /// </summary>
     public int ImprovementStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
 
 }
 
@@ -224,17 +224,17 @@ public class TaktPerfAnalysisQueryDto : TaktPagedQuery
     public long? MentorId { get; set; }
 
     /// <summary>
-    /// 业务状态（0=待审批 1=进行中 2=已完成 3=已关闭）
-    /// </summary>
-    public int? ImprovementStatus { get; set; }
-
-    /// <summary>
     /// 关联工厂
     /// </summary>
     public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
-    /// 审批状态（TaktApprovalStatus）
+    /// 业务状态（0=待审批 1=进行中 2=已完成 3=已关闭）
+    /// </summary>
+    public int? ImprovementStatus { get; set; }
+
+    /// <summary>
+    /// 审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）
     /// </summary>
     public TaktApprovalStatus? ApprovalStatus { get; set; }
 
@@ -317,7 +317,7 @@ public class TaktPerfAnalysisCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -397,14 +397,15 @@ public class TaktPerfAnalysisCreateDto
     public long MentorId { get; set; }
 
     /// <summary>
+    /// 关联工厂
+    /// </summary>
+    [Required(ErrorMessage = "关联工厂不能为空")]
+    public string RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
     /// 业务状态（0=待审批 1=进行中 2=已完成 3=已关闭）
     /// </summary>
     public int ImprovementStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON
@@ -524,6 +525,21 @@ public class TaktPerfAnalysisTemplateDto
     public string? ImprovementActions { get; set; } = string.Empty;
 
     /// <summary>
+    /// 计划制定日期
+    /// </summary>
+    public DateTime? PlanDate { get; set; }
+
+    /// <summary>
+    /// 目标完成日期
+    /// </summary>
+    public DateTime? TargetCompletionDate { get; set; }
+
+    /// <summary>
+    /// 进度百分比（%）
+    /// </summary>
+    public decimal? ProgressPercentage { get; set; }
+
+    /// <summary>
     /// 改进结果说明
     /// </summary>
     public string? ResultDescription { get; set; } = string.Empty;
@@ -535,14 +551,14 @@ public class TaktPerfAnalysisTemplateDto
     public long? MentorId { get; set; }
 
     /// <summary>
-    /// 业务状态（0=待审批 1=进行中 2=已完成 3=已关闭）
-    /// </summary>
-    public int? ImprovementStatus { get; set; }
-
-    /// <summary>
     /// 关联工厂
     /// </summary>
     public string? RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 业务状态（0=待审批 1=进行中 2=已完成 3=已关闭）
+    /// </summary>
+    public int? ImprovementStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -572,7 +588,7 @@ public class TaktPerfAnalysisImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -619,6 +635,21 @@ public class TaktPerfAnalysisImportDto
     public string? ImprovementActions { get; set; } = string.Empty;
 
     /// <summary>
+    /// 计划制定日期
+    /// </summary>
+    public DateTime? PlanDate { get; set; }
+
+    /// <summary>
+    /// 目标完成日期
+    /// </summary>
+    public DateTime? TargetCompletionDate { get; set; }
+
+    /// <summary>
+    /// 进度百分比（%）
+    /// </summary>
+    public decimal? ProgressPercentage { get; set; }
+
+    /// <summary>
     /// 改进结果说明
     /// </summary>
     public string? ResultDescription { get; set; } = string.Empty;
@@ -630,14 +661,14 @@ public class TaktPerfAnalysisImportDto
     public long? MentorId { get; set; }
 
     /// <summary>
-    /// 业务状态（0=待审批 1=进行中 2=已完成 3=已关闭）
-    /// </summary>
-    public int? ImprovementStatus { get; set; }
-
-    /// <summary>
     /// 关联工厂
     /// </summary>
     public string? RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 业务状态（0=待审批 1=进行中 2=已完成 3=已关闭）
+    /// </summary>
+    public int? ImprovementStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -736,14 +767,14 @@ public class TaktPerfAnalysisExportDto
     public long MentorId { get; set; }
 
     /// <summary>
+    /// 关联工厂
+    /// </summary>
+    public string RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
     /// 业务状态（0=待审批 1=进行中 2=已完成 3=已关闭）
     /// </summary>
     public int ImprovementStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON

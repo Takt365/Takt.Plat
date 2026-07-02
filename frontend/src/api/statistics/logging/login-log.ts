@@ -18,7 +18,7 @@ import type {
 import type {
   LoginLog,
   LoginLogCreate,
-  LoginLogUpdate
+  LoginLogUpdate,
 } from '@/types/statistics/logging/login-log';
 
 /**

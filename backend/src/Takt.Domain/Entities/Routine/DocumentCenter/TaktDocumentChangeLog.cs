@@ -10,6 +10,7 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
+using SqlSugar;
 using Takt.Domain.Entities;
 
 namespace Takt.Domain.Entities.Routine.DocumentCenter;
@@ -26,7 +27,7 @@ namespace Takt.Domain.Entities.Routine.DocumentCenter;
 public class TaktDocumentChangeLog : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 文档 ID
+    /// 文档 ID（关联 TaktDocument.Id，选项 TaktDocuments/options）
     /// </summary>
     [SugarColumn(ColumnName = "document_id", ColumnDescription = "文档ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -42,7 +43,7 @@ public class TaktDocumentChangeLog : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "document_title", ColumnDescription = "文档标题", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
     public string? DocumentTitle { get; set; }
     /// <summary>
-    /// 变更类型
+    /// 变更类型（字典 routine_document_change_type；0=创建 1=修订 2=发布 3=归档 4=删除）
     /// </summary>
     [SugarColumn(ColumnName = "change_type", ColumnDescription = "变更类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int ChangeType { get; set; } = 0;
@@ -66,6 +67,10 @@ public class TaktDocumentChangeLog : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "version_at_change", ColumnDescription = "变更时文档版本号", ColumnDataType = "int", IsNullable = true)]
     public int? VersionAtChange { get; set; }
+
+    // ========================================
+    // 导航属性区域
+    // ========================================
     /// <summary>
     /// 文档（主表）
     /// </summary>

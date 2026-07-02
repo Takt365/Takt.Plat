@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="logistics:procurement:purchase:price:change:log:create"
-      update-permission="logistics:procurement:purchase:price:change:log:update"
-      delete-permission="logistics:procurement:purchase:price:change:log:delete"
-      import-permission="logistics:procurement:purchase:price:change:log:import"
-      export-permission="logistics:procurement:purchase:price:change:log:export"
+      create-permission="logistics:procurement:purchase:price:create"
+      update-permission="logistics:procurement:purchase:price:update"
+      delete-permission="logistics:procurement:purchase:price:delete"
+      import-permission="logistics:procurement:purchase:price:import"
+      export-permission="logistics:procurement:purchase:price:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -157,6 +157,28 @@
         />
       </a-form-item>
       </div>
+      <div v-show="isFieldVisible('purchaseInquiryId')">
+      <a-form-item :label="t('entity.purchaseprice.purchaseinquiryid')">
+        <a-input
+          v-model:value="advancedQueryForm.purchaseInquiryId"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseprice.purchaseinquiryid') })"
+          show-count
+          :maxlength="20"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('purchaseInquiryCode')">
+      <a-form-item :label="t('entity.purchaseprice.purchaseinquirycode')">
+        <a-input
+          v-model:value="advancedQueryForm.purchaseInquiryCode"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseprice.purchaseinquirycode') })"
+          show-count
+          :maxlength="40"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('priceType')">
       <a-form-item :label="t('entity.purchaseprice.pricetype')">
         <TaktSelect
@@ -223,7 +245,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -234,7 +256,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -385,6 +407,8 @@ const advancedQueryForm = ref({
   plantCode: '',
   purchasePriceCode: '',
   supplierCode: '',
+  purchaseInquiryId: '',
+  purchaseInquiryCode: '',
   priceType: undefined as number | undefined,
   effectiveStartDateStart: '',
   effectiveStartDateEnd: '',
@@ -401,6 +425,8 @@ const queryFieldsMeta = computed(() => [
   { key: 'plantCode', label: t('entity.purchaseprice.plantcode') },
   { key: 'purchasePriceCode', label: t('entity.purchaseprice.code') },
   { key: 'supplierCode', label: t('entity.purchaseprice.suppliercode') },
+  { key: 'purchaseInquiryId', label: t('entity.purchaseprice.purchaseinquiryid') },
+  { key: 'purchaseInquiryCode', label: t('entity.purchaseprice.purchaseinquirycode') },
   { key: 'priceType', label: t('entity.purchaseprice.pricetype') },
   { key: 'effectiveStartDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.purchaseprice.effectivestartdate')) },
   { key: 'effectiveStartDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.purchaseprice.effectivestartdate')) },
@@ -458,6 +484,8 @@ function buildListQuery(overrides?: Partial<PurchasePriceQuery>): PurchasePriceQ
   assignTrimmed('plantCode', form.plantCode)
   assignTrimmed('purchasePriceCode', form.purchasePriceCode)
   assignTrimmed('supplierCode', form.supplierCode)
+  assignTrimmed('purchaseInquiryId', form.purchaseInquiryId)
+  assignTrimmed('purchaseInquiryCode', form.purchaseInquiryCode)
   if (form.priceType !== undefined && form.priceType !== null) {
     query.priceType = form.priceType
   }
@@ -572,6 +600,24 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPurchasePriceField(record, 'supplierCode') ?? ''
   },
   {
+    title: t('entity.purchaseprice.purchaseinquiryid'),
+    dataIndex: 'purchaseInquiryId',
+    key: 'purchaseInquiryId',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getPurchasePriceField(record, 'purchaseInquiryId') ?? ''
+  },
+  {
+    title: t('entity.purchaseprice.purchaseinquirycode'),
+    dataIndex: 'purchaseInquiryCode',
+    key: 'purchaseInquiryCode',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getPurchasePriceField(record, 'purchaseInquiryCode') ?? ''
+  },
+  {
     title: t('entity.purchaseprice.pricetype'),
     dataIndex: 'priceType',
     key: 'priceType',
@@ -612,7 +658,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:procurement:purchase:price:change:log:update',
+        permission: 'logistics:procurement:purchase:price:update',
         onClick: (record: PurchasePrice) => handleEdit(record)
       },
       {
@@ -620,7 +666,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:procurement:purchase:price:change:log:delete',
+        permission: 'logistics:procurement:purchase:price:delete',
         onClick: (record: PurchasePrice) => handleDeleteOne(record)
       }
     ]
@@ -654,7 +700,7 @@ const rowSelection = computed(() => ({
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
-    } else if (getPurchasePriceId(selectedRow.value) === getPurchasePriceId(record)) {
+    } else if (selectedRow.value && getPurchasePriceId(selectedRow.value) === getPurchasePriceId(record)) {
       selectedRow.value = null
       syncMasterSelection(null)
     }
@@ -698,6 +744,8 @@ function handleReset() {
   plantCode: '',
   purchasePriceCode: '',
   supplierCode: '',
+  purchaseInquiryId: '',
+  purchaseInquiryCode: '',
   priceType: undefined as number | undefined,
   effectiveStartDateStart: '',
   effectiveStartDateEnd: '',
@@ -922,6 +970,8 @@ function handleAdvancedQueryReset() {
   plantCode: '',
   purchasePriceCode: '',
   supplierCode: '',
+  purchaseInquiryId: '',
+  purchaseInquiryCode: '',
   priceType: undefined as number | undefined,
   effectiveStartDateStart: '',
   effectiveStartDateEnd: '',

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Sales
 // 文件名称：TaktSalesOrderChangeLogDtos.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-07-01
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SalesOrderChangeLog 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSalesOrderChangeLog 生成，请按需审阅）
 // 
@@ -36,13 +36,13 @@ public class TaktSalesOrderChangeLogDto : TaktCompanyDtoBase
     public long SalesOrderChangeLogId { get; set; }
 
     /// <summary>
-    /// 销售订单ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 销售订单（关联 TaktSalesOrder.Id，选项 TaktSalesOrders/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SalesOrderId { get; set; }
 
     /// <summary>
-    /// 销售订单名称（填充字段）
+    /// 销售订单（关联 TaktSalesOrder.Id，选项 TaktSalesOrders/options）
     /// </summary>
     public string? SalesOrderName { get; set; }
 
@@ -100,7 +100,7 @@ public class TaktSalesOrderChangeLogQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售订单ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 销售订单（关联 TaktSalesOrder.Id，选项 TaktSalesOrders/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SalesOrderId { get; set; }
@@ -176,12 +176,12 @@ public class TaktSalesOrderChangeLogCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售订单ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 销售订单（关联 TaktSalesOrder.Id，选项 TaktSalesOrders/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SalesOrderId { get; set; }
@@ -266,7 +266,7 @@ public class TaktSalesOrderChangeLogExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售订单ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 销售订单（关联 TaktSalesOrder.Id，选项 TaktSalesOrders/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SalesOrderId { get; set; }

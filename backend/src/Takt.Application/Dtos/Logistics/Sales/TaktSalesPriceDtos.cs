@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Sales
 // 文件名称：TaktSalesPriceDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-07-01
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SalesPrice 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSalesPrice 生成，请按需审阅）
 // 
@@ -14,7 +14,6 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Dtos.Logistics.Sales;
 
@@ -37,7 +36,7 @@ public class TaktSalesPriceDto : TaktCompanyDtoBase
     public long SalesPriceId { get; set; }
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -47,14 +46,14 @@ public class TaktSalesPriceDto : TaktCompanyDtoBase
     public string SalesPriceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户编码（如果为空则表示通用价格）
+    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode；为空表示通用价格）
     /// </summary>
     public string? CustomerCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 价格类型（0=标准价格，1=客户价格，2=促销价格，3=合同价格，4=临时价格）
+    /// 价格类型（字典 logistics_sales_price_type；SAP 定价条件类型 KSCHL，如 PR00/PB00；默认 PR00）
     /// </summary>
-    public int PriceType { get; set; } = 0;
+    public string PriceType { get; set; } = string.Empty;
 
     /// <summary>
     /// 生效日期
@@ -67,9 +66,9 @@ public class TaktSalesPriceDto : TaktCompanyDtoBase
     public DateTime? EffectiveEndDate { get; set; }
 
     /// <summary>
-    /// 价格状态（1=启用，0=禁用）
+    /// 价格状态（字典 sys_normal_disable_status；1=启用 0=禁用）
     /// </summary>
-    public int PriceStatus { get; set; }
+    public int PriceStatus { get; set; } = 0;
 
     /// <summary>
     /// 物料价格明细列表（主子表关系，一个客户价格可以有多个物料价格）
@@ -78,7 +77,7 @@ public class TaktSalesPriceDto : TaktCompanyDtoBase
     public List<TaktSalesPriceItemDto>? Items { get; set; }
 
     /// <summary>
-    /// 销售价格变更记录列表（外键在子表 TaktSalesPriceChangeLog.PriceId）
+    /// 销售价格变更记录列表（外键在子表 TaktSalesPriceChangeLog.SalesPriceId）
     /// （子表：TaktSalesPriceChangeLog）
     /// </summary>
     public List<TaktSalesPriceChangeLogDto>? ChangeLogs { get; set; }
@@ -106,7 +105,7 @@ public class TaktSalesPriceQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -116,14 +115,14 @@ public class TaktSalesPriceQueryDto : TaktPagedQuery
     public string? SalesPriceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户编码（如果为空则表示通用价格）
+    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode；为空表示通用价格）
     /// </summary>
     public string? CustomerCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 价格类型（0=标准价格，1=客户价格，2=促销价格，3=合同价格，4=临时价格）
+    /// 价格类型（字典 logistics_sales_price_type；SAP 定价条件类型 KSCHL，如 PR00/PB00；默认 PR00）
     /// </summary>
-    public int? PriceType { get; set; }
+    public string? PriceType { get; set; } = string.Empty;
 
     /// <summary>
     /// 生效日期（范围查询-开始）
@@ -146,7 +145,7 @@ public class TaktSalesPriceQueryDto : TaktPagedQuery
     public DateTime? EffectiveEndDateEnd { get; set; }
 
     /// <summary>
-    /// 价格状态（1=启用，0=禁用）
+    /// 价格状态（字典 sys_normal_disable_status；1=启用 0=禁用）
     /// </summary>
     public int? PriceStatus { get; set; }
 
@@ -191,13 +190,14 @@ public class TaktSalesPriceCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -207,14 +207,15 @@ public class TaktSalesPriceCreateDto
     public string SalesPriceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户编码（如果为空则表示通用价格）
+    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode；为空表示通用价格）
     /// </summary>
     public string? CustomerCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 价格类型（0=标准价格，1=客户价格，2=促销价格，3=合同价格，4=临时价格）
+    /// 价格类型（字典 logistics_sales_price_type；SAP 定价条件类型 KSCHL，如 PR00/PB00；默认 PR00）
     /// </summary>
-    public int PriceType { get; set; } = 0;
+    [Required(ErrorMessage = "价格类型（字典 logistics_sales_price_type；SAP 定价条件类型 KSCHL，如 PR00/PB00；默认 PR00）不能为空")]
+    public string PriceType { get; set; } = string.Empty;
 
     /// <summary>
     /// 生效日期
@@ -227,9 +228,9 @@ public class TaktSalesPriceCreateDto
     public DateTime? EffectiveEndDate { get; set; }
 
     /// <summary>
-    /// 价格状态（1=启用，0=禁用）
+    /// 价格状态（字典 sys_normal_disable_status；1=启用 0=禁用）
     /// </summary>
-    public int PriceStatus { get; set; }
+    public int PriceStatus { get; set; } = 0;
 
     /// <summary>
     /// 物料价格明细列表（主子表关系，一个客户价格可以有多个物料价格）（子表，级联保存）
@@ -237,7 +238,7 @@ public class TaktSalesPriceCreateDto
     public List<TaktSalesPriceItemCreateDto>? Items { get; set; }
 
     /// <summary>
-    /// 销售价格变更记录列表（外键在子表 TaktSalesPriceChangeLog.PriceId）（子表，级联保存）
+    /// 销售价格变更记录列表（外键在子表 TaktSalesPriceChangeLog.SalesPriceId）（子表，级联保存）
     /// </summary>
     public List<TaktSalesPriceChangeLogCreateDto>? ChangeLogs { get; set; }
 
@@ -291,10 +292,10 @@ public class TaktSalesPriceStatusDto
     public long SalesPriceId { get; set; }
 
     /// <summary>
-    /// 价格状态（1=启用，0=禁用）
+    /// 价格状态（字典 sys_normal_disable_status；1=启用 0=禁用）
     /// </summary>
-    [Required(ErrorMessage = "价格状态（1=启用，0=禁用）不能为空")]
-    public int PriceStatus { get; set; }
+    [Required(ErrorMessage = "价格状态（字典 sys_normal_disable_status；1=启用 0=禁用）不能为空")]
+    public int PriceStatus { get; set; } = 0;
 }
 
 // ========================================
@@ -317,9 +318,9 @@ public class TaktSalesPriceTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 销售价格编码（唯一索引）
@@ -327,19 +328,39 @@ public class TaktSalesPriceTemplateDto
     public string? SalesPriceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户编码（如果为空则表示通用价格）
+    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode；为空表示通用价格）
     /// </summary>
     public string? CustomerCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 价格类型（0=标准价格，1=客户价格，2=促销价格，3=合同价格，4=临时价格）
+    /// 价格类型（字典 logistics_sales_price_type；SAP 定价条件类型 KSCHL，如 PR00/PB00；默认 PR00）
     /// </summary>
-    public int? PriceType { get; set; }
+    public string? PriceType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 价格状态（1=启用，0=禁用）
+    /// 生效日期
+    /// </summary>
+    public DateTime? EffectiveStartDate { get; set; }
+
+    /// <summary>
+    /// 失效日期（空表示长期有效）
+    /// </summary>
+    public DateTime? EffectiveEndDate { get; set; }
+
+    /// <summary>
+    /// 价格状态（字典 sys_normal_disable_status；1=启用 0=禁用）
     /// </summary>
     public int? PriceStatus { get; set; }
+
+    /// <summary>
+    /// 物料价格明细列表（主子表关系，一个客户价格可以有多个物料价格）（子表，级联保存）
+    /// </summary>
+    public List<TaktSalesPriceItemCreateDto>? Items { get; set; }
+
+    /// <summary>
+    /// 销售价格变更记录列表（外键在子表 TaktSalesPriceChangeLog.SalesPriceId）（子表，级联保存）
+    /// </summary>
+    public List<TaktSalesPriceChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -369,14 +390,14 @@ public class TaktSalesPriceImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 销售价格编码（唯一索引）
@@ -384,19 +405,39 @@ public class TaktSalesPriceImportDto
     public string? SalesPriceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户编码（如果为空则表示通用价格）
+    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode；为空表示通用价格）
     /// </summary>
     public string? CustomerCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 价格类型（0=标准价格，1=客户价格，2=促销价格，3=合同价格，4=临时价格）
+    /// 价格类型（字典 logistics_sales_price_type；SAP 定价条件类型 KSCHL，如 PR00/PB00；默认 PR00）
     /// </summary>
-    public int? PriceType { get; set; }
+    public string? PriceType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 价格状态（1=启用，0=禁用）
+    /// 生效日期
+    /// </summary>
+    public DateTime? EffectiveStartDate { get; set; }
+
+    /// <summary>
+    /// 失效日期（空表示长期有效）
+    /// </summary>
+    public DateTime? EffectiveEndDate { get; set; }
+
+    /// <summary>
+    /// 价格状态（字典 sys_normal_disable_status；1=启用 0=禁用）
     /// </summary>
     public int? PriceStatus { get; set; }
+
+    /// <summary>
+    /// 物料价格明细列表（主子表关系，一个客户价格可以有多个物料价格）（子表，级联保存）
+    /// </summary>
+    public List<TaktSalesPriceItemCreateDto>? Items { get; set; }
+
+    /// <summary>
+    /// 销售价格变更记录列表（外键在子表 TaktSalesPriceChangeLog.SalesPriceId）（子表，级联保存）
+    /// </summary>
+    public List<TaktSalesPriceChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -432,7 +473,7 @@ public class TaktSalesPriceExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -442,14 +483,14 @@ public class TaktSalesPriceExportDto
     public string SalesPriceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户编码（如果为空则表示通用价格）
+    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode；为空表示通用价格）
     /// </summary>
     public string? CustomerCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 价格类型（0=标准价格，1=客户价格，2=促销价格，3=合同价格，4=临时价格）
+    /// 价格类型（字典 logistics_sales_price_type；SAP 定价条件类型 KSCHL，如 PR00/PB00；默认 PR00）
     /// </summary>
-    public int PriceType { get; set; } = 0;
+    public string PriceType { get; set; } = string.Empty;
 
     /// <summary>
     /// 生效日期
@@ -462,9 +503,9 @@ public class TaktSalesPriceExportDto
     public DateTime? EffectiveEndDate { get; set; }
 
     /// <summary>
-    /// 价格状态（1=启用，0=禁用）
+    /// 价格状态（字典 sys_normal_disable_status；1=启用 0=禁用）
     /// </summary>
-    public int PriceStatus { get; set; }
+    public int PriceStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

@@ -47,6 +47,9 @@ export default {
       file: {
         hint: "上传附件文件，大文件将自动分片上传",
       },
+      multimedia: {
+        hint: "支持图片、文件、视频、语音等格式，大文件将自动分片上传",
+      },
       video: {
         hint: "上传视频文件",
       },

@@ -18,7 +18,7 @@
     />
     <div class="mb-2">
       <a-button
-        v-permission="'routine:helpdesk:ticket:create'"
+        v-permission="'routine:help:desk:my:ticket:list'"
         type="primary"
         class="takt-button-create"
         @click="handleCreate"
@@ -26,7 +26,7 @@
         {{ t('common.page.button.create') }}
       </a-button>
       <a-button
-        v-permission="'routine:helpdesk:ticket:query'"
+        v-permission="'routine:help:desk:my:ticket:list'"
         class="ml-2 takt-button-query"
         :disabled="!selectedRow"
         @click="handleOpenWorkflow"
@@ -121,6 +121,9 @@
     <TicketWorkflowDrawer
       v-model:open="workflowVisible"
       :ticket-id="workflowTicketId"
+      workflow-permission="routine:help:desk:my:ticket:list"
+      :show-internal-note="false"
+      portal-mode
       @changed="loadData"
     />
   </div>

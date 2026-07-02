@@ -23,7 +23,7 @@ namespace Takt.Infrastructure.Data.Seeds.I18nSeedData;
 /// <summary>
 /// 部门国际化翻译种子（键前缀 org.dept.*）
 /// 幂等性：存在则更新，不存在则创建
-/// TranslationText 为部门名称；ContextNote 为 TaktDeptSeedData.Description
+/// TranslationText 为部门名称；ContextNote 为 TaktDeptSeedData.DeptDescription
 /// </summary>
 public class TaktDeptI18nSeedData : ITaktSeedDataCoordinator
 {

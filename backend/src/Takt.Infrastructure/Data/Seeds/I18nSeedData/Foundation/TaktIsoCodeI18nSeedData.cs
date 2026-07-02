@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation
 // 文件名称：TaktIsoCodeI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktIsoCode 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktIsoCodeI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.isocode._self", "zh-HK", "ISO 编码信息_hk", "实体名称"),
 
             // entity.isocode.category
-            new TranslationSeedItem("entity.isocode.category", "en-US", "编码类别_us", "编码类别（字典 sys_iso_code_category；1=部门，2=公司，3=产品，4=通用）"),
+            new TranslationSeedItem("entity.isocode.category", "en-US", "编码类别_us", "编码类别（字典 sys_iso_code_category；0=不使用，1=部门）"),
             // entity.isocode.category
-            new TranslationSeedItem("entity.isocode.category", "ja-JP", "编码类别_jp", "编码类别（字典 sys_iso_code_category；1=部门，2=公司，3=产品，4=通用）"),
+            new TranslationSeedItem("entity.isocode.category", "ja-JP", "编码类别_jp", "编码类别（字典 sys_iso_code_category；0=不使用，1=部门）"),
             // entity.isocode.category
-            new TranslationSeedItem("entity.isocode.category", "zh-CN", "编码类别", "编码类别（字典 sys_iso_code_category；1=部门，2=公司，3=产品，4=通用）"),
+            new TranslationSeedItem("entity.isocode.category", "zh-CN", "编码类别", "编码类别（字典 sys_iso_code_category；0=不使用，1=部门）"),
             // entity.isocode.category
-            new TranslationSeedItem("entity.isocode.category", "zh-HK", "编码类别_hk", "编码类别（字典 sys_iso_code_category；1=部门，2=公司，3=产品，4=通用）"),
+            new TranslationSeedItem("entity.isocode.category", "zh-HK", "编码类别_hk", "编码类别（字典 sys_iso_code_category；0=不使用，1=部门）"),
 
             // entity.isocode.isocode
             new TranslationSeedItem("entity.isocode.isocode", "en-US", "ISO编码_us", "ISO 编码（唯一索引：租户+类别内唯一，见 ix_iso_code_category_unique；编号规则等段引用，如 Eng、Pmc、D1000）"),
@@ -117,32 +117,14 @@ public class TaktIsoCodeI18nSeedData : ITaktSeedDataCoordinator
             // entity.isocode.isoname
             new TranslationSeedItem("entity.isocode.isoname", "zh-HK", "ISO名称_hk", "ISO 名称（如：技术、生管、总经理室）"),
 
-            // entity.isocode.sortorder
-            new TranslationSeedItem("entity.isocode.sortorder", "en-US", "排序号_us", "排序号"),
-            // entity.isocode.sortorder
-            new TranslationSeedItem("entity.isocode.sortorder", "ja-JP", "排序号_jp", "排序号"),
-            // entity.isocode.sortorder
-            new TranslationSeedItem("entity.isocode.sortorder", "zh-CN", "排序号", "排序号"),
-            // entity.isocode.sortorder
-            new TranslationSeedItem("entity.isocode.sortorder", "zh-HK", "排序号_hk", "排序号"),
-
             // entity.isocode.isbuiltin
-            new TranslationSeedItem("entity.isocode.isbuiltin", "en-US", "是否内置_us", "是否内置（字典 sys_yes_no_type；0=否 1=是，内置项不可删除）"),
+            new TranslationSeedItem("entity.isocode.isbuiltin", "en-US", "内置_us", "内置（字典 sys_yes_no_type；0=否 1=是，内置项不可删除）"),
             // entity.isocode.isbuiltin
-            new TranslationSeedItem("entity.isocode.isbuiltin", "ja-JP", "是否内置_jp", "是否内置（字典 sys_yes_no_type；0=否 1=是，内置项不可删除）"),
+            new TranslationSeedItem("entity.isocode.isbuiltin", "ja-JP", "内置_jp", "内置（字典 sys_yes_no_type；0=否 1=是，内置项不可删除）"),
             // entity.isocode.isbuiltin
-            new TranslationSeedItem("entity.isocode.isbuiltin", "zh-CN", "是否内置", "是否内置（字典 sys_yes_no_type；0=否 1=是，内置项不可删除）"),
+            new TranslationSeedItem("entity.isocode.isbuiltin", "zh-CN", "内置", "内置（字典 sys_yes_no_type；0=否 1=是，内置项不可删除）"),
             // entity.isocode.isbuiltin
-            new TranslationSeedItem("entity.isocode.isbuiltin", "zh-HK", "是否内置_hk", "是否内置（字典 sys_yes_no_type；0=否 1=是，内置项不可删除）"),
-
-            // entity.isocode.status
-            new TranslationSeedItem("entity.isocode.status", "en-US", "状态_us", "状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
-            // entity.isocode.status
-            new TranslationSeedItem("entity.isocode.status", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
-            // entity.isocode.status
-            new TranslationSeedItem("entity.isocode.status", "zh-CN", "状态", "状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
-            // entity.isocode.status
-            new TranslationSeedItem("entity.isocode.status", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
+            new TranslationSeedItem("entity.isocode.isbuiltin", "zh-HK", "内置_hk", "内置（字典 sys_yes_no_type；0=否 1=是，内置项不可删除）"),
 
             // entity.isocode.description
             new TranslationSeedItem("entity.isocode.description", "en-US", "描述说明_us", "描述说明"),
@@ -152,6 +134,24 @@ public class TaktIsoCodeI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.isocode.description", "zh-CN", "描述说明", "描述说明"),
             // entity.isocode.description
             new TranslationSeedItem("entity.isocode.description", "zh-HK", "描述说明_hk", "描述说明"),
+
+            // entity.isocode.sortorder
+            new TranslationSeedItem("entity.isocode.sortorder", "en-US", "排序号_us", "排序号"),
+            // entity.isocode.sortorder
+            new TranslationSeedItem("entity.isocode.sortorder", "ja-JP", "排序号_jp", "排序号"),
+            // entity.isocode.sortorder
+            new TranslationSeedItem("entity.isocode.sortorder", "zh-CN", "排序号", "排序号"),
+            // entity.isocode.sortorder
+            new TranslationSeedItem("entity.isocode.sortorder", "zh-HK", "排序号_hk", "排序号"),
+
+            // entity.isocode.status
+            new TranslationSeedItem("entity.isocode.status", "en-US", "状态_us", "状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
+            // entity.isocode.status
+            new TranslationSeedItem("entity.isocode.status", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
+            // entity.isocode.status
+            new TranslationSeedItem("entity.isocode.status", "zh-CN", "状态", "状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
+            // entity.isocode.status
+            new TranslationSeedItem("entity.isocode.status", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
         };
     }
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.HumanResource.Personnel
 // 文件名称：TaktEmployeeAttachmentsController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：员工附件控制器
 // 
@@ -41,7 +41,7 @@ public class TaktEmployeeAttachmentsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("human:resource:personnel:employeeattachment:list", "员工附件列表")]
+    [TaktPermission("human:resource:personnel:employee:attachment:list", "员工附件列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetEmployeeAttachmentListAsync([FromQuery] TaktEmployeeAttachmentQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktEmployeeAttachmentsController : TaktControllerBase
     /// </summary>
     /// <param name="id">员工附件ID</param>
     /// <returns>员工附件DTO</returns>
-    [TaktPermission("human:resource:personnel:employeeattachment:query", "员工附件详情")]
+    [TaktPermission("human:resource:personnel:employee:attachment:query", "员工附件详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetEmployeeAttachmentByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktEmployeeAttachmentsController : TaktControllerBase
     /// 获取员工附件选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("human:resource:personnel:employeeattachment:query", "员工附件选项")]
+    [TaktPermission("human:resource:personnel:employee:attachment:query", "员工附件选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetEmployeeAttachmentOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktEmployeeAttachmentsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>员工附件DTO</returns>
-    [TaktPermission("human:resource:personnel:employeeattachment:create", "创建员工附件")]
+    [TaktPermission("human:resource:personnel:employee:attachment:create", "创建员工附件")]
     [HttpPost]
     public async Task<IActionResult> CreateEmployeeAttachmentAsync([FromBody] TaktEmployeeAttachmentCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktEmployeeAttachmentsController : TaktControllerBase
     /// <param name="id">员工附件ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>员工附件DTO</returns>
-    [TaktPermission("human:resource:personnel:employeeattachment:update", "更新员工附件")]
+    [TaktPermission("human:resource:personnel:employee:attachment:update", "更新员工附件")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateEmployeeAttachmentAsync(long id, [FromBody] TaktEmployeeAttachmentUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktEmployeeAttachmentsController : TaktControllerBase
     /// </summary>
     /// <param name="id">员工附件ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("human:resource:personnel:employeeattachment:delete", "删除员工附件")]
+    [TaktPermission("human:resource:personnel:employee:attachment:delete", "删除员工附件")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteEmployeeAttachmentByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktEmployeeAttachmentsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("human:resource:personnel:employeeattachment:delete", "批量删除员工附件")]
+    [TaktPermission("human:resource:personnel:employee:attachment:delete", "批量删除员工附件")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteEmployeeAttachmentBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -181,30 +181,10 @@ public class TaktEmployeeAttachmentsController : TaktControllerBase
     }
 
     /// <summary>
-    /// 更新员工附件排序
-    /// </summary>
-    /// <param name="dto">排序DTO</param>
-    /// <returns>员工附件DTO</returns>
-    [TaktPermission("human:resource:personnel:employeeattachment:update", "更新员工附件排序")]
-    [HttpPut("sort")]
-    public async Task<IActionResult> UpdateEmployeeAttachmentSortAsync([FromBody] TaktEmployeeAttachmentSortDto dto)
-    {
-        try
-        {
-            var result = await _employeeAttachmentService.UpdateEmployeeAttachmentSortAsync(dto);
-            return Success(result, "更新成功");
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
-    }
-
-    /// <summary>
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("human:resource:personnel:employeeattachment:import", "获取员工附件导入模板")]
+    [TaktPermission("human:resource:personnel:employee:attachment:import", "获取员工附件导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetEmployeeAttachmentTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +204,7 @@ public class TaktEmployeeAttachmentsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("human:resource:personnel:employeeattachment:import", "导入员工附件")]
+    [TaktPermission("human:resource:personnel:employee:attachment:import", "导入员工附件")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportEmployeeAttachmentAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +234,7 @@ public class TaktEmployeeAttachmentsController : TaktControllerBase
     /// 导出员工附件
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("human:resource:personnel:employeeattachment:export", "导出员工附件")]
+    [TaktPermission("human:resource:personnel:employee:attachment:export", "导出员工附件")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportEmployeeAttachmentAsync([FromQuery] TaktEmployeeAttachmentQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

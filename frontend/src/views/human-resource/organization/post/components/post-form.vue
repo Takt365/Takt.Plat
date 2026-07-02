@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/human-resource/organization/post/components -->
 <!-- 文件名称：post-form.vue -->
-<!-- 功能描述：岗位实体维护弹窗内嵌表单。由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：岗位实体 代表组织架构中的岗位/职位 参照 SAP Position维护弹窗内嵌表单。由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -16,7 +16,10 @@
     layout="horizontal"
     label-align="right"
   >
-    <a-tabs v-model:active-key="activeTab">
+    <a-tabs
+      v-model:active-key="activeTab"
+      class="post-form-tabs"
+    >
       <a-tab-pane
         key="tab-0"
         :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
@@ -52,7 +55,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
                 :label="t('common.page.entity.companydefaultculture')"
                 name="companyDefaultCulture"
@@ -95,17 +98,17 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
                 :label="t('entity.post.deptid')"
                 name="deptId"
               >
-                <TaktTreeSelect
+                <a-input
                   v-model:value="formState.deptId"
-                  api-url="TaktDepts/tree-options"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.post.deptid') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.post.deptid') })"
+                  show-count
+                  :maxlength="20"
                   allow-clear
-                  :field-names="{ label: 'dictLabel', value: 'dictValue' }"
                 />
               </a-form-item>
             </a-col>
@@ -141,8 +144,7 @@
                 <a-input-number
                   v-model:value="formState.headcount"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.post.headcount') })"
-                  :min="0"
-                  class="w-full"
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
@@ -154,8 +156,7 @@
                 <a-input-number
                   v-model:value="formState.currentCount"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.post.currentcount') })"
-                  :min="0"
-                  class="w-full"
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
@@ -169,28 +170,30 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
                 :label="t('entity.post.responsibilities')"
                 name="responsibilities"
               >
-                <a-textarea
+                <a-input
                   v-model:value="formState.responsibilities"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.post.responsibilities') })"
-                  :rows="2"
+                  show-count
+                  :maxlength="2000"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
                 :label="t('entity.post.requirements')"
                 name="requirements"
               >
-                <a-textarea
+                <a-input
                   v-model:value="formState.requirements"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.post.requirements') })"
-                  :rows="2"
+                  show-count
+                  :maxlength="2000"
                   allow-clear
                 />
               </a-form-item>
@@ -215,8 +218,7 @@
                 <a-input-number
                   v-model:value="formState.experienceYears"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.post.experienceyears') })"
-                  :min="1"
-                  class="w-full"
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
@@ -227,9 +229,8 @@
               >
                 <a-input-number
                   v-model:value="formState.salaryMin"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.post.salarymin') })"
-                  :min="0"
-                  class="w-full"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.post.salarymin') })"
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
@@ -240,9 +241,8 @@
               >
                 <a-input-number
                   v-model:value="formState.salaryMax"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.post.salarymax') })"
-                  :min="0"
-                  class="w-full"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.post.salarymax') })"
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
@@ -279,6 +279,19 @@
                   v-model:value="formState.description"
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.post.description') })"
                   :rows="2"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.post.employeeids')"
+                name="employeeIds"
+              >
+                <a-input
+                  v-model:value="formState.employeeIds"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.post.employeeids') })"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
@@ -343,7 +356,7 @@
 
 <script setup lang="ts">
 /**
- * 岗位维护表单 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
+ * 岗位实体 代表组织架构中的岗位/职位 参照 SAP Position维护表单 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/human-resource/organization/post/components
  */
 import { reactive, watch, computed, ref, onMounted } from 'vue'
@@ -380,36 +393,13 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
     target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
   }
 }
-
-/** 表单内容区高度 class（字段多时 tab 内滚动） */
+/** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
-
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = [
-  'tenantCode',
-  'companyCode',
-  'companyDefaultCulture',
-  'postCode',
-  'postName',
-  'deptId',
-  'postCategory',
-  'postLevel',
-  'headcount',
-  'currentCount',
-  'responsibilities',
-  'requirements',
-  'educationRequired',
-  'experienceYears',
-  'salaryMin',
-  'salaryMax',
-  'postStatus',
-  'isBuiltIn',
-  'description',
-  'extField',
-  'remark',
-]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","postCode","postName","deptId","postCategory","postLevel","headcount","currentCount","responsibilities","requirements","educationRequired","experienceYears","salaryMin","salaryMax","postStatus","isBuiltIn","description","employeeIds","extField","remark"]
+
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -427,19 +417,10 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
-
-/** 表单字段默认值（与 TaktPost 实体 DefaultValue 对齐） */
+/** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
-  postCategory: 'TEC',
-  postLevel: 'P1',
-  responsibilities: '',
-  requirements: '',
-  educationRequired: 1,
-  experienceYears: 1,
-  headcount: 1,
-  currentCount: 0,
   postStatus: 1,
-  isBuiltIn: 0,
+  isBuiltIn: 0
 }
 
 /** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
@@ -455,56 +436,14 @@ onMounted(() => {
   void dictDataStore.loadAllDictDataAsync()
 })
 
-/**
- * 字典字符串选择校验（DictValue 为 string）
- * @param fieldKey i18n 字段键
- */
-function createDictSelectRule(fieldKey: string): Rule {
-  return {
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || String(value).trim() === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t(fieldKey) }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change',
-  }
-}
-
-/**
- * 字典/数值选择校验（与 iso-code-form 一致）
- * @param fieldKey i18n 字段键
- */
-function createSelectRule(fieldKey: string): Rule {
-  return {
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t(fieldKey) }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t(fieldKey) }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change',
-  }
-}
-
 /** 编辑态灌入 formData；新增态恢复默认值（须含 postId 才视为编辑） */
 watch(
   () => props.formData,
   (val) => {
     if (val?.postId) {
       const next = { ...val } as Record<string, unknown>
-      if (next.ExtField != null && next.extField == null) {
-        next.extField = next.ExtField
-        delete next.ExtField
-      }
-      if (next.deptId != null && next.deptId !== '') {
-        next.deptId = String(next.deptId)
-      }
       Object.keys(formState).forEach((k) => delete formState[k])
+
       applyScopeDefaults(next)
       Object.assign(formState, next)
       formRef.value?.clearValidate()
@@ -538,45 +477,129 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     {
       required: true,
       message: t('common.page.form.placeholder.required', { field: t('entity.post.code') }),
-      trigger: 'blur',
-    },
+      trigger: 'blur'
+    }
   ],
   postName: [
     {
       required: true,
       message: t('common.page.form.placeholder.required', { field: t('entity.post.name') }),
-      trigger: 'blur',
-    },
+      trigger: 'blur'
+    }
   ],
   deptId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.post.deptid') }),
-      trigger: 'change',
-    },
+      message: t('common.page.form.placeholder.required', { field: t('entity.post.deptid') }),
+      trigger: 'blur'
+    }
   ],
-  postCategory: [createDictSelectRule('entity.post.category')],
-  postLevel: [createDictSelectRule('entity.post.level')],
+  postCategory: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.select', { field: t('entity.post.category') }),
+      trigger: 'change'
+    }
+  ],
+  postLevel: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.select', { field: t('entity.post.level') }),
+      trigger: 'change'
+    }
+  ],
+  headcount: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.post.headcount') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.post.headcount') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  currentCount: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.post.currentcount') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.post.currentcount') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
   responsibilities: [
     {
       required: true,
       message: t('common.page.form.placeholder.required', { field: t('entity.post.responsibilities') }),
-      trigger: 'blur',
-    },
+      trigger: 'blur'
+    }
   ],
   requirements: [
     {
       required: true,
       message: t('common.page.form.placeholder.required', { field: t('entity.post.requirements') }),
-      trigger: 'blur',
-    },
+      trigger: 'blur'
+    }
   ],
-  educationRequired: [createSelectRule('entity.post.educationrequired')],
-  experienceYears: [createSelectRule('entity.post.experienceyears')],
-  headcount: [createSelectRule('entity.post.headcount')],
-  currentCount: [createSelectRule('entity.post.currentcount')],
-  postStatus: [createSelectRule('entity.post.status')],
-  isBuiltIn: [createSelectRule('entity.post.isbuiltin')],
+  educationRequired: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.post.educationrequired') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.post.educationrequired') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  experienceYears: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.post.experienceyears') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.post.experienceyears') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  postStatus: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.post.status') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.post.status') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  isBuiltIn: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.post.isbuiltin') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.post.isbuiltin') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -588,52 +611,64 @@ async function validate() {
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
-  const intFields = [
-    'educationRequired',
-    'experienceYears',
-    'headcount',
-    'currentCount',
-    'postStatus',
-    'isBuiltIn',
-  ] as const
-  for (const key of intFields) {
-    if (key in payload && payload[key] != null && payload[key] !== '') {
-      payload[key] = typeof payload[key] === 'number' ? payload[key] : Number(payload[key])
-    }
+  if ('headcount' in payload) {
+    const rawheadcount = payload.headcount
+    payload.headcount = typeof rawheadcount === 'number' ? rawheadcount : Number(rawheadcount)
   }
-  if ('salaryMin' in payload && payload.salaryMin != null && payload.salaryMin !== '') {
-    payload.salaryMin = Number(payload.salaryMin)
+  if ('currentCount' in payload) {
+    const rawcurrentCount = payload.currentCount
+    payload.currentCount = typeof rawcurrentCount === 'number' ? rawcurrentCount : Number(rawcurrentCount)
   }
-  if ('salaryMax' in payload && payload.salaryMax != null && payload.salaryMax !== '') {
-    payload.salaryMax = Number(payload.salaryMax)
+  if ('educationRequired' in payload) {
+    const raweducationRequired = payload.educationRequired
+    payload.educationRequired = typeof raweducationRequired === 'number' ? raweducationRequired : Number(raweducationRequired)
   }
-  if ('deptId' in payload && payload.deptId != null && payload.deptId !== '') {
-    payload.deptId = String(payload.deptId)
+  if ('experienceYears' in payload) {
+    const rawexperienceYears = payload.experienceYears
+    payload.experienceYears = typeof rawexperienceYears === 'number' ? rawexperienceYears : Number(rawexperienceYears)
   }
-  if ('extField' in payload) {
-    payload.ExtField = payload.extField
-    delete payload.extField
+  if ('salaryMin' in payload) {
+    const rawsalaryMin = payload.salaryMin
+    payload.salaryMin = typeof rawsalaryMin === 'number' ? rawsalaryMin : Number(rawsalaryMin)
+  }
+  if ('salaryMax' in payload) {
+    const rawsalaryMax = payload.salaryMax
+    payload.salaryMax = typeof rawsalaryMax === 'number' ? rawsalaryMax : Number(rawsalaryMax)
+  }
+  if ('postStatus' in payload) {
+    const rawpostStatus = payload.postStatus
+    payload.postStatus = typeof rawpostStatus === 'number' ? rawpostStatus : Number(rawpostStatus)
+  }
+  if ('isBuiltIn' in payload) {
+    const rawisBuiltIn = payload.isBuiltIn
+    payload.isBuiltIn = typeof rawisBuiltIn === 'number' ? rawisBuiltIn : Number(rawisBuiltIn)
   }
   if ('sortOrder' in payload) delete payload.sortOrder
   return payload
 }
 
-/** 重置表单（弹窗未 destroy 时父级 nextTick 也会调用） */
+/** 重置表单与子表行（弹窗未 destroy 时父级 nextTick 也会调用） */
 function resetFields() {
   Object.keys(formState).forEach((k) => delete formState[k])
   if (props.formData && typeof props.formData === 'object') {
-    const next = { ...props.formData } as Record<string, unknown>
-    if (next.ExtField != null && next.extField == null) {
-      next.extField = next.ExtField
-      delete next.ExtField
-    }
-    Object.assign(formState, next)
+    Object.assign(formState, props.formData)
   }
   applyFormDefaults(formState)
   applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.postId)
+
   activeTab.value = 'tab-0'
   formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })
 </script>
+
+<style scoped lang="css">
+:deep(.ant-tabs-content-holder) {
+  min-height: 50vh;
+}
+
+:deep(.ant-tabs-tabpane) {
+  min-height: 50vh;
+}
+</style>

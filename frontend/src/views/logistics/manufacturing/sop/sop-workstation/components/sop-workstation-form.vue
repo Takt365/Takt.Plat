@@ -122,7 +122,7 @@
                   v-model:value="formState.workCenter"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopworkstation.workcenter') })"
                   show-count
-                  :maxlength="20"
+                  :maxlength="8"
                   allow-clear
                 />
               </a-form-item>

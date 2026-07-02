@@ -116,6 +116,18 @@
             @change="(checked: unknown) => handleCostElementStatusChange(record, Boolean(checked))"
           />
         </template>
+        <template v-else-if="column.key === 'costElementCategory'">
+          <TaktDictTag
+            :value="getCostElementDictValue(record, 'costElementCategory')"
+            dict-type="accounting_cost_element_category"
+          />
+        </template>
+        <template v-else-if="column.key === 'costElementType'">
+          <TaktDictTag
+            :value="getCostElementDictValue(record, 'costElementType')"
+            dict-type="accounting_cost_element_type"
+          />
+        </template>
 
         </template>
       </TaktTreeRightTable>
@@ -155,7 +167,7 @@
           v-model:value="advancedQueryForm.costElementCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.costelement.code') })"
           show-count
-          :maxlength="50"
+          :maxlength="4"
           allow-clear
         />
       </a-form-item>
@@ -171,21 +183,23 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('costElementType')">
-      <a-form-item :label="t('entity.costelement.type')">
-        <a-input-number
-          v-model:value="advancedQueryForm.costElementType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.costelement.type') })"
-          style="width: 100%"
+      <div v-show="isFieldVisible('costElementCategory')">
+      <a-form-item :label="t('entity.costelement.category')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.costElementCategory"
+          dict-type="accounting_cost_element_category"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.costelement.category') })"
+          allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('costElementCategory')">
-      <a-form-item :label="t('entity.costelement.category')">
-        <a-input-number
-          v-model:value="advancedQueryForm.costElementCategory"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.costelement.category') })"
-          style="width: 100%"
+      <div v-show="isFieldVisible('costElementType')">
+      <a-form-item :label="t('entity.costelement.type')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.costElementType"
+          dict-type="accounting_cost_element_type"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.costelement.type') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -861,19 +875,17 @@ watchEffect(() => {
     title: t('entity.costelement.type'),
     dataIndex: 'costElementType',
     key: 'costElementType',
-    width: 120,
+    width: 140,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: Record<string, unknown> }) => getCostElementField(record, 'costElementType') ?? ''
   },
   {
     title: t('entity.costelement.category'),
     dataIndex: 'costElementCategory',
     key: 'costElementCategory',
-    width: 120,
+    width: 220,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: Record<string, unknown> }) => getCostElementField(record, 'costElementCategory') ?? ''
   },
   {
     title: t('entity.costelement.parentid'),

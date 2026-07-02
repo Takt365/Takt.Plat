@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Procurement
 // 文件名称：TaktPurchasePriceScalesController.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-27
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购价格阶梯控制器
 // 
@@ -41,7 +41,7 @@ public class TaktPurchasePriceScalesController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:procurement:purchaseprice:list", "采购价格阶梯列表")]
+    [TaktPermission("logistics:procurement:purchase:price:list", "采购价格阶梯列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetPurchasePriceScaleListAsync([FromQuery] TaktPurchasePriceScaleQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktPurchasePriceScalesController : TaktControllerBase
     /// </summary>
     /// <param name="id">采购价格阶梯ID</param>
     /// <returns>采购价格阶梯DTO</returns>
-    [TaktPermission("logistics:procurement:purchaseprice:query", "采购价格阶梯详情")]
+    [TaktPermission("logistics:procurement:purchase:price:query", "采购价格阶梯详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetPurchasePriceScaleByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktPurchasePriceScalesController : TaktControllerBase
     /// 获取采购价格阶梯选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:procurement:purchaseprice:query", "采购价格阶梯选项")]
+    [TaktPermission("logistics:procurement:purchase:price:query", "采购价格阶梯选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetPurchasePriceScaleOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktPurchasePriceScalesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>采购价格阶梯DTO</returns>
-    [TaktPermission("logistics:procurement:purchaseprice:create", "创建采购价格阶梯")]
+    [TaktPermission("logistics:procurement:purchase:price:create", "创建采购价格阶梯")]
     [HttpPost]
     public async Task<IActionResult> CreatePurchasePriceScaleAsync([FromBody] TaktPurchasePriceScaleCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktPurchasePriceScalesController : TaktControllerBase
     /// <param name="id">采购价格阶梯ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>采购价格阶梯DTO</returns>
-    [TaktPermission("logistics:procurement:purchaseprice:update", "更新采购价格阶梯")]
+    [TaktPermission("logistics:procurement:purchase:price:update", "更新采购价格阶梯")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdatePurchasePriceScaleAsync(long id, [FromBody] TaktPurchasePriceScaleUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktPurchasePriceScalesController : TaktControllerBase
     /// </summary>
     /// <param name="id">采购价格阶梯ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:procurement:purchaseprice:delete", "删除采购价格阶梯")]
+    [TaktPermission("logistics:procurement:purchase:price:delete", "删除采购价格阶梯")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeletePurchasePriceScaleByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktPurchasePriceScalesController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:procurement:purchaseprice:delete", "批量删除采购价格阶梯")]
+    [TaktPermission("logistics:procurement:purchase:price:delete", "批量删除采购价格阶梯")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeletePurchasePriceScaleBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktPurchasePriceScalesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">排序DTO</param>
     /// <returns>采购价格阶梯DTO</returns>
-    [TaktPermission("logistics:procurement:purchaseprice:update", "更新采购价格阶梯排序")]
+    [TaktPermission("logistics:procurement:purchase:price:update", "更新采购价格阶梯排序")]
     [HttpPut("sort")]
     public async Task<IActionResult> UpdatePurchasePriceScaleSortAsync([FromBody] TaktPurchasePriceScaleSortDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktPurchasePriceScalesController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:procurement:purchaseprice:import", "获取采购价格阶梯导入模板")]
+    [TaktPermission("logistics:procurement:purchase:price:import", "获取采购价格阶梯导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetPurchasePriceScaleTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +224,7 @@ public class TaktPurchasePriceScalesController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:procurement:purchaseprice:import", "导入采购价格阶梯")]
+    [TaktPermission("logistics:procurement:purchase:price:import", "导入采购价格阶梯")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportPurchasePriceScaleAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +254,7 @@ public class TaktPurchasePriceScalesController : TaktControllerBase
     /// 导出采购价格阶梯
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:procurement:purchaseprice:export", "导出采购价格阶梯")]
+    [TaktPermission("logistics:procurement:purchase:price:export", "导出采购价格阶梯")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportPurchasePriceScaleAsync([FromQuery] TaktPurchasePriceScaleQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

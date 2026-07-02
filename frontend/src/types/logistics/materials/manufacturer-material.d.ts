@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/materials
 // 文件名称：manufacturer-material.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/materials 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,17 +29,17 @@ export interface ManufacturerMaterial extends CompanyDtoBase {
   manufacturerMaterialId: string;
 
   /**
-   * 制造商ID（关联TaktManufacturer主表）
+   * 制造商 ID（关联 TaktManufacturer.Id，选项 TaktManufacturers/options）
    */
   manufacturerId: string;
 
   /**
-   * 制造商名称（填充字段）
+   * 制造商 名称（填充字段）
    */
   manufacturerName?: string;
 
   /**
-   * 制造商编码（冗余字段，便于查询）
+   * 制造商编码（关联 TaktManufacturer.ManufacturerCode，冗余；选项 TaktManufacturers/options，DictValue=ManufacturerCode）
    */
   manufacturerCode: string;
 
@@ -47,11 +47,6 @@ export interface ManufacturerMaterial extends CompanyDtoBase {
    * 行号（项号/序号，固定步长=10）
    */
   lineNumber: number;
-
-  /**
-   * 物料类型（0=原材料，1=半成品，2=成品，3=辅料，4=包装材料，5=其他）
-   */
-  materialType: number;
 
   /**
    * 制造商物料编码（制造商内部的物料编号）
@@ -69,7 +64,7 @@ export interface ManufacturerMaterial extends CompanyDtoBase {
   manufacturerMaterialSpecification?: string;
 
   /**
-   * 物料编码（对应的内部物料编码）
+   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
    */
   materialCode: string;
 
@@ -94,12 +89,12 @@ export interface ManufacturerMaterialQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 制造商ID（关联TaktManufacturer主表）
+   * 制造商 ID（关联 TaktManufacturer.Id，选项 TaktManufacturers/options）
    */
   manufacturerId?: string;
 
   /**
-   * 制造商编码（冗余字段，便于查询）
+   * 制造商编码（关联 TaktManufacturer.ManufacturerCode，冗余；选项 TaktManufacturers/options，DictValue=ManufacturerCode）
    */
   manufacturerCode?: string;
 
@@ -107,11 +102,6 @@ export interface ManufacturerMaterialQuery extends TaktPagedQuery {
    * 行号（项号/序号，固定步长=10）
    */
   lineNumber?: number;
-
-  /**
-   * 物料类型（0=原材料，1=半成品，2=成品，3=辅料，4=包装材料，5=其他）
-   */
-  materialType?: number;
 
   /**
    * 制造商物料编码（制造商内部的物料编号）
@@ -129,7 +119,7 @@ export interface ManufacturerMaterialQuery extends TaktPagedQuery {
   manufacturerMaterialSpecification?: string;
 
   /**
-   * 物料编码（对应的内部物料编码）
+   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
    */
   materialCode?: string;
 
@@ -146,7 +136,7 @@ export interface ManufacturerMaterialQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -173,17 +163,17 @@ export interface ManufacturerMaterialCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
   /**
-   * 制造商ID（关联TaktManufacturer主表）
+   * 制造商 ID（关联 TaktManufacturer.Id，选项 TaktManufacturers/options）
    */
   manufacturerId: string;
 
   /**
-   * 制造商编码（冗余字段，便于查询）
+   * 制造商编码（关联 TaktManufacturer.ManufacturerCode，冗余；选项 TaktManufacturers/options，DictValue=ManufacturerCode）
    */
   manufacturerCode: string;
 
@@ -191,11 +181,6 @@ export interface ManufacturerMaterialCreate {
    * 行号（项号/序号，固定步长=10）
    */
   lineNumber: number;
-
-  /**
-   * 物料类型（0=原材料，1=半成品，2=成品，3=辅料，4=包装材料，5=其他）
-   */
-  materialType: number;
 
   /**
    * 制造商物料编码（制造商内部的物料编号）
@@ -213,14 +198,14 @@ export interface ManufacturerMaterialCreate {
   manufacturerMaterialSpecification?: string;
 
   /**
-   * 物料编码（对应的内部物料编码）
+   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
    */
   materialCode: string;
 
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -262,12 +247,12 @@ export interface ManufacturerMaterialTemplate {
   companyCode?: string;
 
   /**
-   * 制造商ID（关联TaktManufacturer主表）
+   * 制造商 ID（关联 TaktManufacturer.Id，选项 TaktManufacturers/options）
    */
   manufacturerId?: string;
 
   /**
-   * 制造商编码（冗余字段，便于查询）
+   * 制造商编码（关联 TaktManufacturer.ManufacturerCode，冗余；选项 TaktManufacturers/options，DictValue=ManufacturerCode）
    */
   manufacturerCode?: string;
 
@@ -275,11 +260,6 @@ export interface ManufacturerMaterialTemplate {
    * 行号（项号/序号，固定步长=10）
    */
   lineNumber?: number;
-
-  /**
-   * 物料类型（0=原材料，1=半成品，2=成品，3=辅料，4=包装材料，5=其他）
-   */
-  materialType?: number;
 
   /**
    * 制造商物料编码（制造商内部的物料编号）
@@ -297,14 +277,14 @@ export interface ManufacturerMaterialTemplate {
   manufacturerMaterialSpecification?: string;
 
   /**
-   * 物料编码（对应的内部物料编码）
+   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
    */
   materialCode?: string;
 
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -331,17 +311,17 @@ export interface ManufacturerMaterialImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
   /**
-   * 制造商ID（关联TaktManufacturer主表）
+   * 制造商 ID（关联 TaktManufacturer.Id，选项 TaktManufacturers/options）
    */
   manufacturerId?: string;
 
   /**
-   * 制造商编码（冗余字段，便于查询）
+   * 制造商编码（关联 TaktManufacturer.ManufacturerCode，冗余；选项 TaktManufacturers/options，DictValue=ManufacturerCode）
    */
   manufacturerCode?: string;
 
@@ -349,11 +329,6 @@ export interface ManufacturerMaterialImport {
    * 行号（项号/序号，固定步长=10）
    */
   lineNumber?: number;
-
-  /**
-   * 物料类型（0=原材料，1=半成品，2=成品，3=辅料，4=包装材料，5=其他）
-   */
-  materialType?: number;
 
   /**
    * 制造商物料编码（制造商内部的物料编号）
@@ -371,14 +346,14 @@ export interface ManufacturerMaterialImport {
   manufacturerMaterialSpecification?: string;
 
   /**
-   * 物料编码（对应的内部物料编码）
+   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
    */
   materialCode?: string;
 
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -405,12 +380,12 @@ export interface ManufacturerMaterialExport {
   companyCode: string;
 
   /**
-   * 制造商ID（关联TaktManufacturer主表）
+   * 制造商 ID（关联 TaktManufacturer.Id，选项 TaktManufacturers/options）
    */
   manufacturerId: string;
 
   /**
-   * 制造商编码（冗余字段，便于查询）
+   * 制造商编码（关联 TaktManufacturer.ManufacturerCode，冗余；选项 TaktManufacturers/options，DictValue=ManufacturerCode）
    */
   manufacturerCode: string;
 
@@ -418,11 +393,6 @@ export interface ManufacturerMaterialExport {
    * 行号（项号/序号，固定步长=10）
    */
   lineNumber: number;
-
-  /**
-   * 物料类型（0=原材料，1=半成品，2=成品，3=辅料，4=包装材料，5=其他）
-   */
-  materialType: number;
 
   /**
    * 制造商物料编码（制造商内部的物料编号）
@@ -440,14 +410,14 @@ export interface ManufacturerMaterialExport {
   manufacturerMaterialSpecification?: string;
 
   /**
-   * 物料编码（对应的内部物料编码）
+   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
    */
   materialCode: string;
 
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注

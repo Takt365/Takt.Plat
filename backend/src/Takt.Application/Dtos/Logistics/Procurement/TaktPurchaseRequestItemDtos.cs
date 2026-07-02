@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Procurement
 // 文件名称：TaktPurchaseRequestItemDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchaseRequestItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPurchaseRequestItem 生成，请按需审阅）
 // 
@@ -36,13 +36,13 @@ public class TaktPurchaseRequestItemDto : TaktCompanyDtoBase
     public long PurchaseRequestItemId { get; set; }
 
     /// <summary>
-    /// 采购申请ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 采购申请 ID（关联 TaktPurchaseRequest.Id，选项 TaktPurchaseRequests/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PurchaseRequestId { get; set; }
 
     /// <summary>
-    /// 采购申请名称（填充字段）
+    /// 采购申请 名称（填充字段）
     /// </summary>
     public string? PurchaseRequestName { get; set; }
 
@@ -57,9 +57,14 @@ public class TaktPurchaseRequestItemDto : TaktCompanyDtoBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
+    /// 分配类别（字典 logistics_allocation_category：A=资产，K=成本中心，F=订单；会签明细、采购申请明细、费用单明细共用）
+    /// </summary>
+    public string AllocationCategory { get; set; } = string.Empty;
+
+    /// <summary>
     /// 物料编码
     /// </summary>
-    public string MaterialCode { get; set; } = string.Empty;
+    public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料名称
@@ -85,6 +90,11 @@ public class TaktPurchaseRequestItemDto : TaktCompanyDtoBase
     /// 已转订单数量（基本单位数量）
     /// </summary>
     public decimal ConvertedQuantity { get; set; }
+
+    /// <summary>
+    /// 价格单位（字典 logistics_price_unit_param：1/100/1000/10000；默认 1000）
+    /// </summary>
+    public int PurchasePerUnit { get; set; } = 0;
 
     /// <summary>
     /// 预计单价（精确到分，存储为整数，单位为分）
@@ -129,7 +139,7 @@ public class TaktPurchaseRequestItemQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购申请ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 采购申请 ID（关联 TaktPurchaseRequest.Id，选项 TaktPurchaseRequests/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PurchaseRequestId { get; set; }
@@ -143,6 +153,11 @@ public class TaktPurchaseRequestItemQueryDto : TaktPagedQuery
     /// 行号（项号/序号，固定步长=10）
     /// </summary>
     public int? LineNumber { get; set; }
+
+    /// <summary>
+    /// 分配类别（字典 logistics_allocation_category：A=资产，K=成本中心，F=订单；会签明细、采购申请明细、费用单明细共用）
+    /// </summary>
+    public string? AllocationCategory { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料编码
@@ -173,6 +188,11 @@ public class TaktPurchaseRequestItemQueryDto : TaktPagedQuery
     /// 已转订单数量（基本单位数量）
     /// </summary>
     public decimal? ConvertedQuantity { get; set; }
+
+    /// <summary>
+    /// 价格单位（字典 logistics_price_unit_param：1/100/1000/10000；默认 1000）
+    /// </summary>
+    public int? PurchasePerUnit { get; set; }
 
     /// <summary>
     /// 预计单价（精确到分，存储为整数，单位为分）
@@ -235,12 +255,12 @@ public class TaktPurchaseRequestItemCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购申请ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 采购申请 ID（关联 TaktPurchaseRequest.Id，选项 TaktPurchaseRequests/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PurchaseRequestId { get; set; }
@@ -257,10 +277,15 @@ public class TaktPurchaseRequestItemCreateDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
+    /// 分配类别（字典 logistics_allocation_category：A=资产，K=成本中心，F=订单；会签明细、采购申请明细、费用单明细共用）
+    /// </summary>
+    [Required(ErrorMessage = "分配类别（字典 logistics_allocation_category：A=资产，K=成本中心，F=订单；会签明细、采购申请明细、费用单明细共用）不能为空")]
+    public string AllocationCategory { get; set; } = string.Empty;
+
+    /// <summary>
     /// 物料编码
     /// </summary>
-    [Required(ErrorMessage = "物料编码不能为空")]
-    public string MaterialCode { get; set; } = string.Empty;
+    public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料名称
@@ -288,6 +313,11 @@ public class TaktPurchaseRequestItemCreateDto
     /// 已转订单数量（基本单位数量）
     /// </summary>
     public decimal ConvertedQuantity { get; set; }
+
+    /// <summary>
+    /// 价格单位（字典 logistics_price_unit_param：1/100/1000/10000；默认 1000）
+    /// </summary>
+    public int PurchasePerUnit { get; set; } = 0;
 
     /// <summary>
     /// 预计单价（精确到分，存储为整数，单位为分）
@@ -361,7 +391,7 @@ public class TaktPurchaseRequestItemTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购申请ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 采购申请 ID（关联 TaktPurchaseRequest.Id，选项 TaktPurchaseRequests/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PurchaseRequestId { get; set; }
@@ -375,6 +405,11 @@ public class TaktPurchaseRequestItemTemplateDto
     /// 行号（项号/序号，固定步长=10）
     /// </summary>
     public int? LineNumber { get; set; }
+
+    /// <summary>
+    /// 分配类别（字典 logistics_allocation_category：A=资产，K=成本中心，F=订单；会签明细、采购申请明细、费用单明细共用）
+    /// </summary>
+    public string? AllocationCategory { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料编码
@@ -395,6 +430,31 @@ public class TaktPurchaseRequestItemTemplateDto
     /// 申请单位
     /// </summary>
     public string? RequestUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 申请数量（基本单位数量）
+    /// </summary>
+    public decimal? RequestQuantity { get; set; }
+
+    /// <summary>
+    /// 已转订单数量（基本单位数量）
+    /// </summary>
+    public decimal? ConvertedQuantity { get; set; }
+
+    /// <summary>
+    /// 价格单位（字典 logistics_price_unit_param：1/100/1000/10000；默认 1000）
+    /// </summary>
+    public int? PurchasePerUnit { get; set; }
+
+    /// <summary>
+    /// 预计单价（精确到分，存储为整数，单位为分）
+    /// </summary>
+    public decimal? EstimatedUnitPrice { get; set; }
+
+    /// <summary>
+    /// 预计金额（精确到分，存储为整数，单位为分）
+    /// </summary>
+    public decimal? EstimatedAmount { get; set; }
 
     /// <summary>
     /// 参考供应商编码
@@ -434,12 +494,12 @@ public class TaktPurchaseRequestItemImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购申请ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 采购申请 ID（关联 TaktPurchaseRequest.Id，选项 TaktPurchaseRequests/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PurchaseRequestId { get; set; }
@@ -453,6 +513,11 @@ public class TaktPurchaseRequestItemImportDto
     /// 行号（项号/序号，固定步长=10）
     /// </summary>
     public int? LineNumber { get; set; }
+
+    /// <summary>
+    /// 分配类别（字典 logistics_allocation_category：A=资产，K=成本中心，F=订单；会签明细、采购申请明细、费用单明细共用）
+    /// </summary>
+    public string? AllocationCategory { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料编码
@@ -473,6 +538,31 @@ public class TaktPurchaseRequestItemImportDto
     /// 申请单位
     /// </summary>
     public string? RequestUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 申请数量（基本单位数量）
+    /// </summary>
+    public decimal? RequestQuantity { get; set; }
+
+    /// <summary>
+    /// 已转订单数量（基本单位数量）
+    /// </summary>
+    public decimal? ConvertedQuantity { get; set; }
+
+    /// <summary>
+    /// 价格单位（字典 logistics_price_unit_param：1/100/1000/10000；默认 1000）
+    /// </summary>
+    public int? PurchasePerUnit { get; set; }
+
+    /// <summary>
+    /// 预计单价（精确到分，存储为整数，单位为分）
+    /// </summary>
+    public decimal? EstimatedUnitPrice { get; set; }
+
+    /// <summary>
+    /// 预计金额（精确到分，存储为整数，单位为分）
+    /// </summary>
+    public decimal? EstimatedAmount { get; set; }
 
     /// <summary>
     /// 参考供应商编码
@@ -518,7 +608,7 @@ public class TaktPurchaseRequestItemExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购申请ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 采购申请 ID（关联 TaktPurchaseRequest.Id，选项 TaktPurchaseRequests/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PurchaseRequestId { get; set; }
@@ -534,9 +624,14 @@ public class TaktPurchaseRequestItemExportDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
+    /// 分配类别（字典 logistics_allocation_category：A=资产，K=成本中心，F=订单；会签明细、采购申请明细、费用单明细共用）
+    /// </summary>
+    public string AllocationCategory { get; set; } = string.Empty;
+
+    /// <summary>
     /// 物料编码
     /// </summary>
-    public string MaterialCode { get; set; } = string.Empty;
+    public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料名称
@@ -562,6 +657,11 @@ public class TaktPurchaseRequestItemExportDto
     /// 已转订单数量（基本单位数量）
     /// </summary>
     public decimal ConvertedQuantity { get; set; }
+
+    /// <summary>
+    /// 价格单位（字典 logistics_price_unit_param：1/100/1000/10000；默认 1000）
+    /// </summary>
+    public int PurchasePerUnit { get; set; } = 0;
 
     /// <summary>
     /// 预计单价（精确到分，存储为整数，单位为分）

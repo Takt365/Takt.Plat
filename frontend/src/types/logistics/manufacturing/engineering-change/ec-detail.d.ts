@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/engineering-change
 // 文件名称：ec-detail.d.ts
-// 创建时间：2026-06-22
+// 创建时间：2026-07-01
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/engineering-change 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -16,7 +16,7 @@ import type {
 } from '@/types/common';
 
 /**
- * 设变（ECN）子表实体
+ * 设变明细实体（技术阶段一 ③，隶属 TaktEcGijutsu）。技术维护 BOM/料号变更行；存在明细时保存主表后系统自动生成 TaktEcNotification， 阶段二各部门在 TaktEcSeikan/Mp 等表按明细行（EcnDetailId）填报执行，本实体通过 OneToOne 导航直接关联各课部门执行表。
  * 对应前端 TaktEcDetailDto
  * 继承 TaktCompanyDtoBase
  * 对应前端 EcDetail
@@ -49,54 +49,34 @@ export interface EcDetail extends CompanyDtoBase {
   lineNumber: number;
 
   /**
-   * 型号（Ec_model）
+   * 机种（Ec_model）
    */
   ecModel: string;
 
   /**
-   * BOM 主项料号（Ec_bomitem）
+   * 完成品（Ec_bomitem）
    */
   ecBomItem?: string;
 
   /**
-   * BOM 子项料号（Ec_bomsubitem）
+   * 完成品描述（Ec_bomitemtext）
+   */
+  ecBomItemText?: string;
+
+  /**
+   * 上阶物料（Ec_bomsubitem）
    */
   ecBomSubItem?: string;
 
   /**
-   * BOM 编号（Ec_bomno）
+   * 上阶物料描述（Ec_bomsubitemtext）
    */
-  ecBomNo?: string;
+  ecBomSubItemText?: string;
 
   /**
-   * 变更内容（Ec_change）
+   * 完成品EOL（End of Line，0=否 1=是）
    */
-  ecChange?: string;
-
-  /**
-   * 本地/现场（Ec_local）
-   */
-  ecLocal?: string;
-
-  /**
-   * 备注（Ec_note）
-   */
-  ecNote?: string;
-
-  /**
-   * 工序（Ec_process）
-   */
-  ecProcess?: string;
-
-  /**
-   * BOM 日期（Ec_bomdate）
-   */
-  ecBomDate: string;
-
-  /**
-   * 录入日期（Ec_entrydate）
-   */
-  ecEntryDate: string;
+  isEndOfLine: number;
 
   /**
    * 旧料号（Ec_olditem）
@@ -109,14 +89,34 @@ export interface EcDetail extends CompanyDtoBase {
   ecOldText?: string;
 
   /**
-   * 旧数量（Ec_oldqty）
+   * 旧用量（Ec_oldusage）
    */
-  ecOldQty?: number;
+  ecOldUsage?: number;
 
   /**
-   * 旧单位/设置（Ec_oldset）
+   * 旧位置（Ec_oldposition）
    */
-  ecOldSet?: string;
+  ecOldPosition?: string;
+
+  /**
+   * 旧在库数量（Ec_oldstock）
+   */
+  ecOldStock?: number;
+
+  /**
+   * 旧品仓库（Ec_oldwarehouse）
+   */
+  ecOldWarehouse?: string;
+
+  /**
+   * 旧品是否采购（0=否 1=是）
+   */
+  isOldProcurement: number;
+
+  /**
+   * 旧品是否检查（0=否 1=是）
+   */
+  isOldCheck: number;
 
   /**
    * 新料号（Ec_newitem）
@@ -129,44 +129,44 @@ export interface EcDetail extends CompanyDtoBase {
   ecNewText?: string;
 
   /**
-   * 新数量（Ec_newqty）
+   * 新用量（Ec_newusage）
    */
-  ecNewQty?: number;
+  ecNewUsage?: number;
 
   /**
-   * 新单位/设置（Ec_newset）
+   * 新位置（Ec_newposition）
    */
-  ecNewSet?: string;
+  ecNewPosition?: string;
 
   /**
-   * 是否采购（0=否 1=是）
+   * 新在库数量（Ec_newstock）
    */
-  isProcurement: number;
+  ecNewStock?: number;
 
   /**
-   * 是否检查（0=否 1=是）
+   * 新品仓库（Ec_newwarehouse）
    */
-  isCheck: number;
+  ecNewWarehouse?: string;
 
   /**
-   * 仓库（Ec_warehouse）
+   * 新品是否采购（0=否 1=是）
    */
-  ecWarehouse?: string;
+  isNewProcurement: number;
 
   /**
-   * EOL（End of Line，0=否 1=是）
+   * 新品是否检查（0=否 1=是）
    */
-  isEndOfLine: number;
+  isNewCheck: number;
 
   /**
-   * 设变主表 （主表：TaktEc）
+   * BOM生效日期（Ec_bomdate）
    */
-  ec?: Ec;
+  ecBomDate: string;
 
   /**
-   * 设变明细-部门记录列表（按 DeptCode 区分部门：Assy/It/Cus/Fins/Gas/Iqc/Mc/Mp/Pcba/Pmc/Qa/Te/Eng） （子表：TaktEcDept）
+   * 设变技术课主表（多对一） （主表：TaktEcGijutsu）
    */
-  deptRecords?: EcDept[];
+  ecGijutsu?: EcGijutsu;
 
 }
 
@@ -204,64 +204,34 @@ export interface EcDetailQuery extends TaktPagedQuery {
   lineNumber?: number;
 
   /**
-   * 型号（Ec_model）
+   * 机种（Ec_model）
    */
   ecModel?: string;
 
   /**
-   * BOM 主项料号（Ec_bomitem）
+   * 完成品（Ec_bomitem）
    */
   ecBomItem?: string;
 
   /**
-   * BOM 子项料号（Ec_bomsubitem）
+   * 完成品描述（Ec_bomitemtext）
+   */
+  ecBomItemText?: string;
+
+  /**
+   * 上阶物料（Ec_bomsubitem）
    */
   ecBomSubItem?: string;
 
   /**
-   * BOM 编号（Ec_bomno）
+   * 上阶物料描述（Ec_bomsubitemtext）
    */
-  ecBomNo?: string;
+  ecBomSubItemText?: string;
 
   /**
-   * 变更内容（Ec_change）
+   * 完成品EOL（End of Line，0=否 1=是）
    */
-  ecChange?: string;
-
-  /**
-   * 本地/现场（Ec_local）
-   */
-  ecLocal?: string;
-
-  /**
-   * 备注（Ec_note）
-   */
-  ecNote?: string;
-
-  /**
-   * 工序（Ec_process）
-   */
-  ecProcess?: string;
-
-  /**
-   * BOM 日期（Ec_bomdate）（范围查询-开始）
-   */
-  ecBomDateStart?: string;
-
-  /**
-   * BOM 日期（Ec_bomdate）（范围查询-结束）
-   */
-  ecBomDateEnd?: string;
-
-  /**
-   * 录入日期（Ec_entrydate）（范围查询-开始）
-   */
-  ecEntryDateStart?: string;
-
-  /**
-   * 录入日期（Ec_entrydate）（范围查询-结束）
-   */
-  ecEntryDateEnd?: string;
+  isEndOfLine?: number;
 
   /**
    * 旧料号（Ec_olditem）
@@ -274,14 +244,34 @@ export interface EcDetailQuery extends TaktPagedQuery {
   ecOldText?: string;
 
   /**
-   * 旧数量（Ec_oldqty）
+   * 旧用量（Ec_oldusage）
    */
-  ecOldQty?: number;
+  ecOldUsage?: number;
 
   /**
-   * 旧单位/设置（Ec_oldset）
+   * 旧位置（Ec_oldposition）
    */
-  ecOldSet?: string;
+  ecOldPosition?: string;
+
+  /**
+   * 旧在库数量（Ec_oldstock）
+   */
+  ecOldStock?: number;
+
+  /**
+   * 旧品仓库（Ec_oldwarehouse）
+   */
+  ecOldWarehouse?: string;
+
+  /**
+   * 旧品是否采购（0=否 1=是）
+   */
+  isOldProcurement?: number;
+
+  /**
+   * 旧品是否检查（0=否 1=是）
+   */
+  isOldCheck?: number;
 
   /**
    * 新料号（Ec_newitem）
@@ -294,34 +284,44 @@ export interface EcDetailQuery extends TaktPagedQuery {
   ecNewText?: string;
 
   /**
-   * 新数量（Ec_newqty）
+   * 新用量（Ec_newusage）
    */
-  ecNewQty?: number;
+  ecNewUsage?: number;
 
   /**
-   * 新单位/设置（Ec_newset）
+   * 新位置（Ec_newposition）
    */
-  ecNewSet?: string;
+  ecNewPosition?: string;
 
   /**
-   * 是否采购（0=否 1=是）
+   * 新在库数量（Ec_newstock）
    */
-  isProcurement?: number;
+  ecNewStock?: number;
 
   /**
-   * 是否检查（0=否 1=是）
+   * 新品仓库（Ec_newwarehouse）
    */
-  isCheck?: number;
+  ecNewWarehouse?: string;
 
   /**
-   * 仓库（Ec_warehouse）
+   * 新品是否采购（0=否 1=是）
    */
-  ecWarehouse?: string;
+  isNewProcurement?: number;
 
   /**
-   * EOL（End of Line，0=否 1=是）
+   * 新品是否检查（0=否 1=是）
    */
-  isEndOfLine?: number;
+  isNewCheck?: number;
+
+  /**
+   * BOM生效日期（Ec_bomdate）（范围查询-开始）
+   */
+  ecBomDateStart?: string;
+
+  /**
+   * BOM生效日期（Ec_bomdate）（范围查询-结束）
+   */
+  ecBomDateEnd?: string;
 
   /**
    * 创建时间（范围查询-开始）
@@ -363,7 +363,7 @@ export interface EcDetailCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -383,54 +383,34 @@ export interface EcDetailCreate {
   lineNumber: number;
 
   /**
-   * 型号（Ec_model）
+   * 机种（Ec_model）
    */
   ecModel: string;
 
   /**
-   * BOM 主项料号（Ec_bomitem）
+   * 完成品（Ec_bomitem）
    */
   ecBomItem?: string;
 
   /**
-   * BOM 子项料号（Ec_bomsubitem）
+   * 完成品描述（Ec_bomitemtext）
+   */
+  ecBomItemText?: string;
+
+  /**
+   * 上阶物料（Ec_bomsubitem）
    */
   ecBomSubItem?: string;
 
   /**
-   * BOM 编号（Ec_bomno）
+   * 上阶物料描述（Ec_bomsubitemtext）
    */
-  ecBomNo?: string;
+  ecBomSubItemText?: string;
 
   /**
-   * 变更内容（Ec_change）
+   * 完成品EOL（End of Line，0=否 1=是）
    */
-  ecChange?: string;
-
-  /**
-   * 本地/现场（Ec_local）
-   */
-  ecLocal?: string;
-
-  /**
-   * 备注（Ec_note）
-   */
-  ecNote?: string;
-
-  /**
-   * 工序（Ec_process）
-   */
-  ecProcess?: string;
-
-  /**
-   * BOM 日期（Ec_bomdate）
-   */
-  ecBomDate: string;
-
-  /**
-   * 录入日期（Ec_entrydate）
-   */
-  ecEntryDate: string;
+  isEndOfLine: number;
 
   /**
    * 旧料号（Ec_olditem）
@@ -443,14 +423,34 @@ export interface EcDetailCreate {
   ecOldText?: string;
 
   /**
-   * 旧数量（Ec_oldqty）
+   * 旧用量（Ec_oldusage）
    */
-  ecOldQty?: number;
+  ecOldUsage?: number;
 
   /**
-   * 旧单位/设置（Ec_oldset）
+   * 旧位置（Ec_oldposition）
    */
-  ecOldSet?: string;
+  ecOldPosition?: string;
+
+  /**
+   * 旧在库数量（Ec_oldstock）
+   */
+  ecOldStock?: number;
+
+  /**
+   * 旧品仓库（Ec_oldwarehouse）
+   */
+  ecOldWarehouse?: string;
+
+  /**
+   * 旧品是否采购（0=否 1=是）
+   */
+  isOldProcurement: number;
+
+  /**
+   * 旧品是否检查（0=否 1=是）
+   */
+  isOldCheck: number;
 
   /**
    * 新料号（Ec_newitem）
@@ -463,39 +463,39 @@ export interface EcDetailCreate {
   ecNewText?: string;
 
   /**
-   * 新数量（Ec_newqty）
+   * 新用量（Ec_newusage）
    */
-  ecNewQty?: number;
+  ecNewUsage?: number;
 
   /**
-   * 新单位/设置（Ec_newset）
+   * 新位置（Ec_newposition）
    */
-  ecNewSet?: string;
+  ecNewPosition?: string;
 
   /**
-   * 是否采购（0=否 1=是）
+   * 新在库数量（Ec_newstock）
    */
-  isProcurement: number;
+  ecNewStock?: number;
 
   /**
-   * 是否检查（0=否 1=是）
+   * 新品仓库（Ec_newwarehouse）
    */
-  isCheck: number;
+  ecNewWarehouse?: string;
 
   /**
-   * 仓库（Ec_warehouse）
+   * 新品是否采购（0=否 1=是）
    */
-  ecWarehouse?: string;
+  isNewProcurement: number;
 
   /**
-   * EOL（End of Line，0=否 1=是）
+   * 新品是否检查（0=否 1=是）
    */
-  isEndOfLine: number;
+  isNewCheck: number;
 
   /**
-   * 设变明细-部门记录列表（按 DeptCode 区分部门：Assy/It/Cus/Fins/Gas/Iqc/Mc/Mp/Pcba/Pmc/Qa/Te/Eng）（子表，级联保存）
+   * BOM生效日期（Ec_bomdate）
    */
-  deptRecords?: EcDeptCreate[];
+  ecBomDate: string;
 
   /**
    * 扩展字段JSON
@@ -557,49 +557,119 @@ export interface EcDetailTemplate {
   lineNumber?: number;
 
   /**
-   * 型号（Ec_model）
+   * 机种（Ec_model）
    */
   ecModel?: string;
 
   /**
-   * BOM 主项料号（Ec_bomitem）
+   * 完成品（Ec_bomitem）
    */
   ecBomItem?: string;
 
   /**
-   * BOM 子项料号（Ec_bomsubitem）
+   * 完成品描述（Ec_bomitemtext）
+   */
+  ecBomItemText?: string;
+
+  /**
+   * 上阶物料（Ec_bomsubitem）
    */
   ecBomSubItem?: string;
 
   /**
-   * BOM 编号（Ec_bomno）
+   * 上阶物料描述（Ec_bomsubitemtext）
    */
-  ecBomNo?: string;
+  ecBomSubItemText?: string;
 
   /**
-   * 变更内容（Ec_change）
+   * 完成品EOL（End of Line，0=否 1=是）
    */
-  ecChange?: string;
-
-  /**
-   * 本地/现场（Ec_local）
-   */
-  ecLocal?: string;
-
-  /**
-   * 备注（Ec_note）
-   */
-  ecNote?: string;
-
-  /**
-   * 工序（Ec_process）
-   */
-  ecProcess?: string;
+  isEndOfLine: number;
 
   /**
    * 旧料号（Ec_olditem）
    */
   ecOldItem?: string;
+
+  /**
+   * 旧料号描述（Ec_oldtext）
+   */
+  ecOldText?: string;
+
+  /**
+   * 旧用量（Ec_oldusage）
+   */
+  ecOldUsage?: number;
+
+  /**
+   * 旧位置（Ec_oldposition）
+   */
+  ecOldPosition?: string;
+
+  /**
+   * 旧在库数量（Ec_oldstock）
+   */
+  ecOldStock?: number;
+
+  /**
+   * 旧品仓库（Ec_oldwarehouse）
+   */
+  ecOldWarehouse?: string;
+
+  /**
+   * 旧品是否采购（0=否 1=是）
+   */
+  isOldProcurement: number;
+
+  /**
+   * 旧品是否检查（0=否 1=是）
+   */
+  isOldCheck: number;
+
+  /**
+   * 新料号（Ec_newitem）
+   */
+  ecNewItem?: string;
+
+  /**
+   * 新料号描述（Ec_newtext）
+   */
+  ecNewText?: string;
+
+  /**
+   * 新用量（Ec_newusage）
+   */
+  ecNewUsage?: number;
+
+  /**
+   * 新位置（Ec_newposition）
+   */
+  ecNewPosition?: string;
+
+  /**
+   * 新在库数量（Ec_newstock）
+   */
+  ecNewStock?: number;
+
+  /**
+   * 新品仓库（Ec_newwarehouse）
+   */
+  ecNewWarehouse?: string;
+
+  /**
+   * 新品是否采购（0=否 1=是）
+   */
+  isNewProcurement?: number;
+
+  /**
+   * 新品是否检查（0=否 1=是）
+   */
+  isNewCheck?: number;
+
+  /**
+   * BOM生效日期（Ec_bomdate）
+   */
+  ecBomDate?: string;
 
   /**
    * 扩展字段JSON
@@ -631,7 +701,7 @@ export interface EcDetailImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -651,49 +721,119 @@ export interface EcDetailImport {
   lineNumber?: number;
 
   /**
-   * 型号（Ec_model）
+   * 机种（Ec_model）
    */
   ecModel?: string;
 
   /**
-   * BOM 主项料号（Ec_bomitem）
+   * 完成品（Ec_bomitem）
    */
   ecBomItem?: string;
 
   /**
-   * BOM 子项料号（Ec_bomsubitem）
+   * 完成品描述（Ec_bomitemtext）
+   */
+  ecBomItemText?: string;
+
+  /**
+   * 上阶物料（Ec_bomsubitem）
    */
   ecBomSubItem?: string;
 
   /**
-   * BOM 编号（Ec_bomno）
+   * 上阶物料描述（Ec_bomsubitemtext）
    */
-  ecBomNo?: string;
+  ecBomSubItemText?: string;
 
   /**
-   * 变更内容（Ec_change）
+   * 完成品EOL（End of Line，0=否 1=是）
    */
-  ecChange?: string;
-
-  /**
-   * 本地/现场（Ec_local）
-   */
-  ecLocal?: string;
-
-  /**
-   * 备注（Ec_note）
-   */
-  ecNote?: string;
-
-  /**
-   * 工序（Ec_process）
-   */
-  ecProcess?: string;
+  isEndOfLine: number;
 
   /**
    * 旧料号（Ec_olditem）
    */
   ecOldItem?: string;
+
+  /**
+   * 旧料号描述（Ec_oldtext）
+   */
+  ecOldText?: string;
+
+  /**
+   * 旧用量（Ec_oldusage）
+   */
+  ecOldUsage?: number;
+
+  /**
+   * 旧位置（Ec_oldposition）
+   */
+  ecOldPosition?: string;
+
+  /**
+   * 旧在库数量（Ec_oldstock）
+   */
+  ecOldStock?: number;
+
+  /**
+   * 旧品仓库（Ec_oldwarehouse）
+   */
+  ecOldWarehouse?: string;
+
+  /**
+   * 旧品是否采购（0=否 1=是）
+   */
+  isOldProcurement: number;
+
+  /**
+   * 旧品是否检查（0=否 1=是）
+   */
+  isOldCheck: number;
+
+  /**
+   * 新料号（Ec_newitem）
+   */
+  ecNewItem?: string;
+
+  /**
+   * 新料号描述（Ec_newtext）
+   */
+  ecNewText?: string;
+
+  /**
+   * 新用量（Ec_newusage）
+   */
+  ecNewUsage?: number;
+
+  /**
+   * 新位置（Ec_newposition）
+   */
+  ecNewPosition?: string;
+
+  /**
+   * 新在库数量（Ec_newstock）
+   */
+  ecNewStock?: number;
+
+  /**
+   * 新品仓库（Ec_newwarehouse）
+   */
+  ecNewWarehouse?: string;
+
+  /**
+   * 新品是否采购（0=否 1=是）
+   */
+  isNewProcurement?: number;
+
+  /**
+   * 新品是否检查（0=否 1=是）
+   */
+  isNewCheck?: number;
+
+  /**
+   * BOM生效日期（Ec_bomdate）
+   */
+  ecBomDate?: string;
 
   /**
    * 扩展字段JSON
@@ -740,54 +880,34 @@ export interface EcDetailExport {
   lineNumber: number;
 
   /**
-   * 型号（Ec_model）
+   * 机种（Ec_model）
    */
   ecModel: string;
 
   /**
-   * BOM 主项料号（Ec_bomitem）
+   * 完成品（Ec_bomitem）
    */
   ecBomItem?: string;
 
   /**
-   * BOM 子项料号（Ec_bomsubitem）
+   * 完成品描述（Ec_bomitemtext）
+   */
+  ecBomItemText?: string;
+
+  /**
+   * 上阶物料（Ec_bomsubitem）
    */
   ecBomSubItem?: string;
 
   /**
-   * BOM 编号（Ec_bomno）
+   * 上阶物料描述（Ec_bomsubitemtext）
    */
-  ecBomNo?: string;
+  ecBomSubItemText?: string;
 
   /**
-   * 变更内容（Ec_change）
+   * 完成品EOL（End of Line，0=否 1=是）
    */
-  ecChange?: string;
-
-  /**
-   * 本地/现场（Ec_local）
-   */
-  ecLocal?: string;
-
-  /**
-   * 备注（Ec_note）
-   */
-  ecNote?: string;
-
-  /**
-   * 工序（Ec_process）
-   */
-  ecProcess?: string;
-
-  /**
-   * BOM 日期（Ec_bomdate）
-   */
-  ecBomDate: string;
-
-  /**
-   * 录入日期（Ec_entrydate）
-   */
-  ecEntryDate: string;
+  isEndOfLine: number;
 
   /**
    * 旧料号（Ec_olditem）
@@ -800,14 +920,34 @@ export interface EcDetailExport {
   ecOldText?: string;
 
   /**
-   * 旧数量（Ec_oldqty）
+   * 旧用量（Ec_oldusage）
    */
-  ecOldQty?: number;
+  ecOldUsage?: number;
 
   /**
-   * 旧单位/设置（Ec_oldset）
+   * 旧位置（Ec_oldposition）
    */
-  ecOldSet?: string;
+  ecOldPosition?: string;
+
+  /**
+   * 旧在库数量（Ec_oldstock）
+   */
+  ecOldStock?: number;
+
+  /**
+   * 旧品仓库（Ec_oldwarehouse）
+   */
+  ecOldWarehouse?: string;
+
+  /**
+   * 旧品是否采购（0=否 1=是）
+   */
+  isOldProcurement: number;
+
+  /**
+   * 旧品是否检查（0=否 1=是）
+   */
+  isOldCheck: number;
 
   /**
    * 新料号（Ec_newitem）
@@ -820,34 +960,39 @@ export interface EcDetailExport {
   ecNewText?: string;
 
   /**
-   * 新数量（Ec_newqty）
+   * 新用量（Ec_newusage）
    */
-  ecNewQty?: number;
+  ecNewUsage?: number;
 
   /**
-   * 新单位/设置（Ec_newset）
+   * 新位置（Ec_newposition）
    */
-  ecNewSet?: string;
+  ecNewPosition?: string;
 
   /**
-   * 是否采购（0=否 1=是）
+   * 新在库数量（Ec_newstock）
    */
-  isProcurement: number;
+  ecNewStock?: number;
 
   /**
-   * 是否检查（0=否 1=是）
+   * 新品仓库（Ec_newwarehouse）
    */
-  isCheck: number;
+  ecNewWarehouse?: string;
 
   /**
-   * 仓库（Ec_warehouse）
+   * 新品是否采购（0=否 1=是）
    */
-  ecWarehouse?: string;
+  isNewProcurement: number;
 
   /**
-   * EOL（End of Line，0=否 1=是）
+   * 新品是否检查（0=否 1=是）
    */
-  isEndOfLine: number;
+  isNewCheck: number;
+
+  /**
+   * BOM生效日期（Ec_bomdate）
+   */
+  ecBomDate: string;
 
   /**
    * 扩展字段JSON

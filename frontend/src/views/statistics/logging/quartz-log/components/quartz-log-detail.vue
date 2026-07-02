@@ -36,12 +36,12 @@
               </a-col>
               <a-col :span="24">
                 <a-form-item :label="t('entity.quartzlog.jobgroup')">
-                  <a-input :value="text(detail.jobGroup)" size="small" disabled />
+                  <TaktDictTag dict-type="sys_quartz_job_group" :value="detail.jobGroup" />
                 </a-form-item>
               </a-col>
               <a-col :span="24">
                 <a-form-item :label="t('entity.quartzlog.tasktype')">
-                  <a-input :value="text(detail.taskType)" size="small" disabled />
+                  <TaktDictTag dict-type="sys_quartz_task_type" :value="detail.taskType" />
                 </a-form-item>
               </a-col>
               <a-col :span="24">

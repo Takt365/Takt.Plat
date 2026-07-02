@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation
 // 文件名称：TaktVocabularyI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktVocabulary 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -118,22 +118,22 @@ public class TaktVocabularyI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.vocabulary.filterlevel", "zh-HK", "过滤等级_hk", "过滤等级（字典 sys_word_filter_level_category：1=低，2=中，3=高）"),
 
             // entity.vocabulary.replacetext
-            new TranslationSeedItem("entity.vocabulary.replacetext", "en-US", "替换文本_us", "替换文本（为空时使用 * 替换）"),
+            new TranslationSeedItem("entity.vocabulary.replacetext", "en-US", "替换文本_us", "替换文本（默认 *）"),
             // entity.vocabulary.replacetext
-            new TranslationSeedItem("entity.vocabulary.replacetext", "ja-JP", "替换文本_jp", "替换文本（为空时使用 * 替换）"),
+            new TranslationSeedItem("entity.vocabulary.replacetext", "ja-JP", "替换文本_jp", "替换文本（默认 *）"),
             // entity.vocabulary.replacetext
-            new TranslationSeedItem("entity.vocabulary.replacetext", "zh-CN", "替换文本", "替换文本（为空时使用 * 替换）"),
+            new TranslationSeedItem("entity.vocabulary.replacetext", "zh-CN", "替换文本", "替换文本（默认 *）"),
             // entity.vocabulary.replacetext
-            new TranslationSeedItem("entity.vocabulary.replacetext", "zh-HK", "替换文本_hk", "替换文本（为空时使用 * 替换）"),
+            new TranslationSeedItem("entity.vocabulary.replacetext", "zh-HK", "替换文本_hk", "替换文本（默认 *）"),
 
             // entity.vocabulary.status
-            new TranslationSeedItem("entity.vocabulary.status", "en-US", "状态_us", "状态（1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.vocabulary.status", "en-US", "状态_us", "状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
             // entity.vocabulary.status
-            new TranslationSeedItem("entity.vocabulary.status", "ja-JP", "状态_jp", "状态（1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.vocabulary.status", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
             // entity.vocabulary.status
-            new TranslationSeedItem("entity.vocabulary.status", "zh-CN", "状态", "状态（1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.vocabulary.status", "zh-CN", "状态", "状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
             // entity.vocabulary.status
-            new TranslationSeedItem("entity.vocabulary.status", "zh-HK", "状态_hk", "状态（1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.vocabulary.status", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
         };
     }
 

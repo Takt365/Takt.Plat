@@ -1,0 +1,277 @@
+// ========================================
+// 项目名称：节拍工厂·Takt Plat
+// 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.EngineeringChange
+// 文件名称：TaktEcGijutsuI18nSeedData.cs
+// 创建时间：2026-07-02
+// 创建人：Takt365(Auto Generated)
+// 功能描述：TaktEcGijutsu 实体字段国际化种子（已对齐前端 locales：src/locales/logistics/manufacturing/engineering-change/ec-gijutsu）
+// 
+// 版权信息：Copyright (c) 2025 Takt  All rights reserved.
+// 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
+// ========================================
+
+using System.Linq;
+using Microsoft.Extensions.DependencyInjection;
+using Takt.Domain.Entities.Foundation;
+using Takt.Domain.Interfaces;
+using Takt.Domain.Repositories;
+using Takt.Shared.Helpers;
+
+namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.EngineeringChange;
+
+/// <summary>
+/// TaktEcGijutsu 实体国际化翻译种子（键前缀 entity.ecgijutsu.*）
+/// 幂等性：存在则更新，不存在则创建
+/// </summary>
+public class TaktEcGijutsuI18nSeedData : ITaktSeedDataCoordinator
+{
+    /// <summary>
+    /// 执行顺序（实体翻译种子，位于部门翻译之后）
+    /// </summary>
+    public int Order => 52;
+
+    /// <summary>
+    /// 初始化实体字段翻译种子
+    /// </summary>
+    public async Task<(int InsertCount, int UpdateCount)> SeedAsync(IServiceProvider serviceProvider, string? tenantCode = null)
+    {
+        TaktLogger.Information("开始初始化 TaktEcGijutsu 实体国际化翻译种子...");
+
+        if (string.IsNullOrEmpty(tenantCode))
+        {
+            TaktLogger.Warning("租户编码为空，跳过实体国际化翻译种子初始化");
+            return (0, 0);
+        }
+
+        var repository = serviceProvider.GetRequiredService<ITaktTenantSeedRepository<TaktTranslation>>();
+        var cultureRepository = serviceProvider.GetRequiredService<ITaktTenantSeedRepository<TaktCulture>>();
+        var cultureIdByCode = (await cultureRepository.GetListAsync(c => c.TenantCode == tenantCode))
+            .ToDictionary(c => c.CultureCode, c => c.Id);
+        int insertCount = 0;
+        int updateCount = 0;
+
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 ecgijutsu 实体翻译...", tenantCode);
+
+        foreach (var item in GetEcGijutsuTranslations())
+        {
+            if (!cultureIdByCode.TryGetValue(item.CultureCode, out var cultureId))
+            {
+                TaktLogger.Warning("未找到区域文化 {CultureCode}，跳过翻译 {I18nKey}", item.CultureCode, item.I18nKey);
+                continue;
+            }
+
+            var (translation, i, u) = await CreateOrUpdateTranslationAsync(
+                repository,
+                tenantCode,
+                cultureId,
+                item);
+            insertCount += i;
+            updateCount += u;
+        }
+
+        TaktLogger.Information("TaktEcGijutsu 实体翻译种子完成: 插入 {InsertCount} 条，更新 {UpdateCount} 条", insertCount, updateCount);
+        return (insertCount, updateCount);
+    }
+
+    /// <summary>
+    /// TaktEcGijutsu 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
+    /// I18nKey：entity.ecgijutsu._self / entity.ecgijutsu.{{field}}；ResourceGroup=EngineeringChange；ResourceType=frontend
+    /// </summary>
+    private static List<TranslationSeedItem> GetEcGijutsuTranslations()
+    {
+        return new List<TranslationSeedItem>
+        {
+            // entity.ecgijutsu._self
+            new TranslationSeedItem("entity.ecgijutsu._self", "en-US", "Ec Gijutsu Information_us", "实体名称"),
+            // entity.ecgijutsu._self
+            new TranslationSeedItem("entity.ecgijutsu._self", "ja-JP", "设变技术课主表信息_jp", "实体名称"),
+            // entity.ecgijutsu._self
+            new TranslationSeedItem("entity.ecgijutsu._self", "zh-CN", "设变技术课主表信息", "实体名称"),
+            // entity.ecgijutsu._self
+            new TranslationSeedItem("entity.ecgijutsu._self", "zh-HK", "设变技术课主表信息_hk", "实体名称"),
+
+            // entity.ecgijutsu.plantcode
+            new TranslationSeedItem("entity.ecgijutsu.plantcode", "en-US", "工厂代码_us", "工厂代码"),
+            // entity.ecgijutsu.plantcode
+            new TranslationSeedItem("entity.ecgijutsu.plantcode", "ja-JP", "工厂代码_jp", "工厂代码"),
+            // entity.ecgijutsu.plantcode
+            new TranslationSeedItem("entity.ecgijutsu.plantcode", "zh-CN", "工厂代码", "工厂代码"),
+            // entity.ecgijutsu.plantcode
+            new TranslationSeedItem("entity.ecgijutsu.plantcode", "zh-HK", "工厂代码_hk", "工厂代码"),
+
+            // entity.ecgijutsu.ecno
+            new TranslationSeedItem("entity.ecgijutsu.ecno", "en-US", "设变单号_us", "设变单号（唯一）"),
+            // entity.ecgijutsu.ecno
+            new TranslationSeedItem("entity.ecgijutsu.ecno", "ja-JP", "设变单号_jp", "设变单号（唯一）"),
+            // entity.ecgijutsu.ecno
+            new TranslationSeedItem("entity.ecgijutsu.ecno", "zh-CN", "设变单号", "设变单号（唯一）"),
+            // entity.ecgijutsu.ecno
+            new TranslationSeedItem("entity.ecgijutsu.ecno", "zh-HK", "设变单号_hk", "设变单号（唯一）"),
+
+            // entity.ecgijutsu.ecissuedate
+            new TranslationSeedItem("entity.ecgijutsu.ecissuedate", "en-US", "发行日期_us", "发行日期"),
+            // entity.ecgijutsu.ecissuedate
+            new TranslationSeedItem("entity.ecgijutsu.ecissuedate", "ja-JP", "发行日期_jp", "发行日期"),
+            // entity.ecgijutsu.ecissuedate
+            new TranslationSeedItem("entity.ecgijutsu.ecissuedate", "zh-CN", "发行日期", "发行日期"),
+            // entity.ecgijutsu.ecissuedate
+            new TranslationSeedItem("entity.ecgijutsu.ecissuedate", "zh-HK", "发行日期_hk", "发行日期"),
+
+            // entity.ecgijutsu.changestatus
+            new TranslationSeedItem("entity.ecgijutsu.changestatus", "en-US", "变更状态_us", "变更状态（字典 logistics_ec_status；1=工作的，2=取消的，3=发行的，4=P.P中变更的，5=固定的，6=挂起的，7=拒绝的）"),
+            // entity.ecgijutsu.changestatus
+            new TranslationSeedItem("entity.ecgijutsu.changestatus", "ja-JP", "变更状态_jp", "变更状态（字典 logistics_ec_status；1=工作的，2=取消的，3=发行的，4=P.P中变更的，5=固定的，6=挂起的，7=拒绝的）"),
+            // entity.ecgijutsu.changestatus
+            new TranslationSeedItem("entity.ecgijutsu.changestatus", "zh-CN", "变更状态", "变更状态（字典 logistics_ec_status；1=工作的，2=取消的，3=发行的，4=P.P中变更的，5=固定的，6=挂起的，7=拒绝的）"),
+            // entity.ecgijutsu.changestatus
+            new TranslationSeedItem("entity.ecgijutsu.changestatus", "zh-HK", "变更状态_hk", "变更状态（字典 logistics_ec_status；1=工作的，2=取消的，3=发行的，4=P.P中变更的，5=固定的，6=挂起的，7=拒绝的）"),
+
+            // entity.ecgijutsu.ectitle
+            new TranslationSeedItem("entity.ecgijutsu.ectitle", "en-US", "EC Title", "设变标题"),
+            // entity.ecgijutsu.ectitle
+            new TranslationSeedItem("entity.ecgijutsu.ectitle", "ja-JP", "設変タイトル", "设变标题"),
+            // entity.ecgijutsu.ectitle
+            new TranslationSeedItem("entity.ecgijutsu.ectitle", "zh-CN", "设变标题", "设变标题"),
+            // entity.ecgijutsu.ectitle
+            new TranslationSeedItem("entity.ecgijutsu.ectitle", "zh-HK", "設變標題", "设变标题"),
+
+            // entity.ecgijutsu.eccontent
+            new TranslationSeedItem("entity.ecgijutsu.eccontent", "en-US", "设变内容_us", "设变内容"),
+            // entity.ecgijutsu.eccontent
+            new TranslationSeedItem("entity.ecgijutsu.eccontent", "ja-JP", "设变内容_jp", "设变内容"),
+            // entity.ecgijutsu.eccontent
+            new TranslationSeedItem("entity.ecgijutsu.eccontent", "zh-CN", "设变内容", "设变内容"),
+            // entity.ecgijutsu.eccontent
+            new TranslationSeedItem("entity.ecgijutsu.eccontent", "zh-HK", "设变内容_hk", "设变内容"),
+
+            // entity.ecgijutsu.ecleader
+            new TranslationSeedItem("entity.ecgijutsu.ecleader", "en-US", "负责人_us", "负责人（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            // entity.ecgijutsu.ecleader
+            new TranslationSeedItem("entity.ecgijutsu.ecleader", "ja-JP", "负责人_jp", "负责人（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            // entity.ecgijutsu.ecleader
+            new TranslationSeedItem("entity.ecgijutsu.ecleader", "zh-CN", "负责人", "负责人（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            // entity.ecgijutsu.ecleader
+            new TranslationSeedItem("entity.ecgijutsu.ecleader", "zh-HK", "负责人_hk", "负责人（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+
+            // entity.ecgijutsu.eclossamount
+            new TranslationSeedItem("entity.ecgijutsu.eclossamount", "en-US", "损失金额_us", "损失金额"),
+            // entity.ecgijutsu.eclossamount
+            new TranslationSeedItem("entity.ecgijutsu.eclossamount", "ja-JP", "损失金额_jp", "损失金额"),
+            // entity.ecgijutsu.eclossamount
+            new TranslationSeedItem("entity.ecgijutsu.eclossamount", "zh-CN", "损失金额", "损失金额"),
+            // entity.ecgijutsu.eclossamount
+            new TranslationSeedItem("entity.ecgijutsu.eclossamount", "zh-HK", "损失金额_hk", "损失金额"),
+
+            // entity.ecgijutsu.ecdistinction
+            new TranslationSeedItem("entity.ecgijutsu.ecdistinction", "en-US", "区分_us", "区分/类别（字典 logistics_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）"),
+            // entity.ecgijutsu.ecdistinction
+            new TranslationSeedItem("entity.ecgijutsu.ecdistinction", "ja-JP", "区分_jp", "区分/类别（字典 logistics_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）"),
+            // entity.ecgijutsu.ecdistinction
+            new TranslationSeedItem("entity.ecgijutsu.ecdistinction", "zh-CN", "区分", "区分/类别（字典 logistics_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）"),
+            // entity.ecgijutsu.ecdistinction
+            new TranslationSeedItem("entity.ecgijutsu.ecdistinction", "zh-HK", "区分_hk", "区分/类别（字典 logistics_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）"),
+
+            // entity.ecgijutsu.ecentrydate
+            new TranslationSeedItem("entity.ecgijutsu.ecentrydate", "en-US", "录入日期_us", "录入日期"),
+            // entity.ecgijutsu.ecentrydate
+            new TranslationSeedItem("entity.ecgijutsu.ecentrydate", "ja-JP", "录入日期_jp", "录入日期"),
+            // entity.ecgijutsu.ecentrydate
+            new TranslationSeedItem("entity.ecgijutsu.ecentrydate", "zh-CN", "录入日期", "录入日期"),
+            // entity.ecgijutsu.ecentrydate
+            new TranslationSeedItem("entity.ecgijutsu.ecentrydate", "zh-HK", "录入日期_hk", "录入日期"),
+
+            // entity.ecgijutsu.ecstatus
+            new TranslationSeedItem("entity.ecgijutsu.ecstatus", "en-US", "设变状态_us", "设变状态（字典 logistics_ec_gijutsu_status；1=发行，2=执行中，3=完成）"),
+            // entity.ecgijutsu.ecstatus
+            new TranslationSeedItem("entity.ecgijutsu.ecstatus", "ja-JP", "设变状态_jp", "设变状态（字典 logistics_ec_gijutsu_status；1=发行，2=执行中，3=完成）"),
+            // entity.ecgijutsu.ecstatus
+            new TranslationSeedItem("entity.ecgijutsu.ecstatus", "zh-CN", "设变状态", "设变状态（字典 logistics_ec_gijutsu_status；1=发行，2=执行中，3=完成）"),
+            // entity.ecgijutsu.ecstatus
+            new TranslationSeedItem("entity.ecgijutsu.ecstatus", "zh-HK", "设变状态_hk", "设变状态（字典 logistics_ec_gijutsu_status；1=发行，2=执行中，3=完成）"),
+
+            // entity.ecgijutsu.ecdetails
+            new TranslationSeedItem("entity.ecgijutsu.ecdetails", "en-US", "设变明细列表_us", "设变明细列表（技术阶段一：③，BOM/料号变更行）"),
+            // entity.ecgijutsu.ecdetails
+            new TranslationSeedItem("entity.ecgijutsu.ecdetails", "ja-JP", "设变明细列表_jp", "设变明细列表（技术阶段一：③，BOM/料号变更行）"),
+            // entity.ecgijutsu.ecdetails
+            new TranslationSeedItem("entity.ecgijutsu.ecdetails", "zh-CN", "设变明细列表", "设变明细列表（技术阶段一：③，BOM/料号变更行）"),
+            // entity.ecgijutsu.ecdetails
+            new TranslationSeedItem("entity.ecgijutsu.ecdetails", "zh-HK", "设变明细列表_hk", "设变明细列表（技术阶段一：③，BOM/料号变更行）"),
+
+            // entity.ecgijutsu.attachments
+            new TranslationSeedItem("entity.ecgijutsu.attachments", "en-US", "设变附件列表_us", "设变附件列表（技术阶段一：②，联络/EPP/FPP 等文档）"),
+            // entity.ecgijutsu.attachments
+            new TranslationSeedItem("entity.ecgijutsu.attachments", "ja-JP", "设变附件列表_jp", "设变附件列表（技术阶段一：②，联络/EPP/FPP 等文档）"),
+            // entity.ecgijutsu.attachments
+            new TranslationSeedItem("entity.ecgijutsu.attachments", "zh-CN", "设变附件列表", "设变附件列表（技术阶段一：②，联络/EPP/FPP 等文档）"),
+            // entity.ecgijutsu.attachments
+            new TranslationSeedItem("entity.ecgijutsu.attachments", "zh-HK", "设变附件列表_hk", "设变附件列表（技术阶段一：②，联络/EPP/FPP 等文档）"),
+
+            // entity.ecgijutsu.notifications
+            new TranslationSeedItem("entity.ecgijutsu.notifications", "en-US", "设变通知列表_us", "设变通知列表（技术阶段一：④，发行通知至各部门）"),
+            // entity.ecgijutsu.notifications
+            new TranslationSeedItem("entity.ecgijutsu.notifications", "ja-JP", "设变通知列表_jp", "设变通知列表（技术阶段一：④，发行通知至各部门）"),
+            // entity.ecgijutsu.notifications
+            new TranslationSeedItem("entity.ecgijutsu.notifications", "zh-CN", "设变通知列表", "设变通知列表（技术阶段一：④，发行通知至各部门）"),
+            // entity.ecgijutsu.notifications
+            new TranslationSeedItem("entity.ecgijutsu.notifications", "zh-HK", "设变通知列表_hk", "设变通知列表（技术阶段一：④，发行通知至各部门）"),
+        };
+    }
+
+    /// <summary>
+    /// 填充 TaktTranslation 全部业务字段（含租户基类字段）
+    /// </summary>
+    private static void ApplyTranslationFields(
+        TaktTranslation translation,
+        string tenantCode,
+        long cultureId,
+        TranslationSeedItem item)
+    {
+        translation.TenantCode = tenantCode;
+        translation.CultureId = cultureId;
+        translation.CultureCode = item.CultureCode;
+        translation.I18nKey = item.I18nKey;
+        translation.TranslationText = item.TranslationText;
+        translation.ResourceGroup = "EngineeringChange";
+        translation.ResourceType = "frontend";
+        translation.ContextNote = item.ContextNote;
+        translation.ExtField = null;
+        translation.Remark = null;
+        translation.IsDeleted = 0;
+        translation.DeletedBy = null;
+        translation.DeletedAt = null;
+    }
+
+    private static async Task<(TaktTranslation Translation, int InsertCount, int UpdateCount)> CreateOrUpdateTranslationAsync(
+        ITaktTenantSeedRepository<TaktTranslation> repository,
+        string tenantCode,
+        long cultureId,
+        TranslationSeedItem item)
+    {
+        var translation = await repository.FirstAsync(t =>
+            t.TenantCode == tenantCode &&
+            t.I18nKey == item.I18nKey &&
+            t.CultureCode == item.CultureCode);
+
+        if (translation == null)
+        {
+            translation = new TaktTranslation();
+            ApplyTranslationFields(translation, tenantCode, cultureId, item);
+            translation = await repository.CreateAsync(translation);
+            return (translation, 1, 0);
+        }
+
+        ApplyTranslationFields(translation, tenantCode, cultureId, item);
+        await repository.UpdateAsync(translation);
+        return (translation, 0, 1);
+    }
+
+    /// <summary>
+    /// 翻译种子项（对应 TaktTranslation 全部可写字段，CultureId 由 SeedAsync 解析）
+    /// </summary>
+    private sealed record TranslationSeedItem(
+        string I18nKey,
+        string CultureCode,
+        string TranslationText,
+        string? ContextNote);
+}

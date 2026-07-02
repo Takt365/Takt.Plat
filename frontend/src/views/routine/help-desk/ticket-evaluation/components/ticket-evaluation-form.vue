@@ -10,6 +10,7 @@
 <template>
   <a-form
     ref="formRef"
+    class="takt-generated-form"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -34,8 +35,9 @@
                 <a-input
                   v-model:value="formState.tenantCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -47,8 +49,9 @@
                 <a-input
                   v-model:value="formState.companyCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -60,98 +63,115 @@
                 <a-input
                   v-model:value="formState.companyDefaultCulture"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.ticketEvaluation.ticketid')"
+                :label="t('entity.ticketevaluation.ticketid')"
                 name="ticketId"
               >
                 <a-input
                   v-model:value="formState.ticketId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticketEvaluation.ticketid') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticketevaluation.ticketid') })"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.ticketEvaluation.score')"
+                :label="t('entity.ticketevaluation.score')"
                 name="score"
               >
                 <a-input-number
                   v-model:value="formState.score"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticketEvaluation.score') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticketevaluation.score') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.ticketEvaluation.comment')"
+                :label="t('entity.ticketevaluation.comment')"
                 name="comment"
               >
                 <a-input
                   v-model:value="formState.comment"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticketEvaluation.comment') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticketevaluation.comment') })"
+                  show-count
+                  :maxlength="1000"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.ticketEvaluation.evaluatorid')"
+                :label="t('entity.ticketevaluation.evaluatorid')"
                 name="evaluatorId"
               >
                 <a-input
                   v-model:value="formState.evaluatorId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticketEvaluation.evaluatorid') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticketevaluation.evaluatorid') })"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.ticketEvaluation.evaluatorname')"
+                :label="t('entity.ticketevaluation.evaluatorname')"
                 name="evaluatorName"
               >
                 <a-input
                   v-model:value="formState.evaluatorName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticketEvaluation.evaluatorname') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticketevaluation.evaluatorname') })"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.ticketEvaluation.evaluatedat')"
+                :label="t('entity.ticketevaluation.evaluatedat')"
                 name="evaluatedAt"
               >
-                <a-input
+                <a-date-picker
                   v-model:value="formState.evaluatedAt"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticketEvaluation.evaluatedat') })"
-                  size="small"
-                  allow-clear
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ticketevaluation.evaluatedat') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.ExtField')"
-                name="ExtField"
+                name="extField"
+                class="takt-form-item-ext-field"
               >
-                <a-input
-                  v-model:value="formState.ExtField"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
-                  size="small"
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t('common.page.entity.extfieldhint')"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ t('common.page.entity.extfield') }}</span>
+                  </span>
+                </template>
+                <a-textarea
+                  v-model:value="formState.extField"
+                  :placeholder="t('common.page.form.placeholder.extfield')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
                   allow-clear
                 />
               </a-form-item>
@@ -174,15 +194,16 @@
                 <a-textarea
                   v-model:value="formState.remark"
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                  :rows="2"
-                  size="small"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
           </a-row>
         </div>
       </a-tab-pane>
-
     </a-tabs>
   </a-form>
 </template>
@@ -196,6 +217,7 @@ import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import type { TicketEvaluationCreate } from '@/types/routine/help-desk/ticket-evaluation'
+import { RiQuestionLine } from '@remixicon/vue'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -228,7 +250,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","ticketId","score","comment","evaluatorId","evaluatorName","evaluatedAt","ExtField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","ticketId","score","comment","evaluatorId","evaluatorName","evaluatedAt","extField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -239,7 +261,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  formData: () => ({}),
+  formData: null,
   loading: false,
 })
 
@@ -247,18 +269,34 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
+/** 表单字段默认值（无字典默认项） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  void target
+}
 
-/** 编辑态灌入 formData；新增态 reset */
+
+/** 编辑态灌入 formData；新增态恢复默认值（须含 ticketEvaluationId 才视为编辑） */
 watch(
   () => props.formData,
   (val) => {
-    const next = val ? { ...val } : {}
-    Object.keys(formState).forEach((k) => delete formState[k])
+    if (val?.ticketEvaluationId) {
+      const next = { ...val } as Record<string, unknown>
+      Object.keys(formState).forEach((k) => delete formState[k])
 
-    applyScopeDefaults(next)
-    Object.assign(formState, next)
+      applyScopeDefaults(next)
+      Object.assign(formState, next)
+      formRef.value?.clearValidate()
+    } else {
+      Object.keys(formState).forEach((k) => delete formState[k])
+      if (val && typeof val === 'object' && Object.keys(val).length > 0) {
+        Object.assign(formState, val)
+      }
+      applyFormDefaults(formState)
+      applyScopeDefaults(formState as Record<string, unknown>, true)
+      formRef.value?.clearValidate()
+    }
   },
-  { immediate: true, deep: true }
+  { immediate: true }
 )
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
@@ -277,29 +315,35 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   ticketId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.ticketEvaluation.ticketid') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.ticketevaluation.ticketid') }),
       trigger: 'blur'
     }
   ],
-  score: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.ticketEvaluation.score') }),
-      trigger: 'change'
-    }
-  ],
+  score: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.ticketevaluation.score') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.ticketevaluation.score') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
   evaluatorId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.ticketEvaluation.evaluatorid') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.ticketevaluation.evaluatorid') }),
       trigger: 'blur'
     }
   ],
   evaluatedAt: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.ticketEvaluation.evaluatedat') }),
-      trigger: 'blur'
+      message: t('common.page.form.placeholder.select', { field: t('entity.ticketevaluation.evaluatedat') }),
+      trigger: 'change'
     }
   ],
 }))
@@ -312,15 +356,26 @@ async function validate() {
 
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
-  return { ...formState }
+  const payload = { ...formState }
+  if ('score' in payload) {
+    const rawscore = payload.score
+    payload.score = typeof rawscore === 'number' ? rawscore : Number(rawscore)
+  }
+  if ('sortOrder' in payload) delete payload.sortOrder
+  return payload
 }
 
-/** 重置表单与子表行 */
+/** 重置表单与子表行（弹窗未 destroy 时父级 nextTick 也会调用） */
 function resetFields() {
-  formRef.value?.resetFields()
   Object.keys(formState).forEach((k) => delete formState[k])
+  if (props.formData && typeof props.formData === 'object') {
+    Object.assign(formState, props.formData)
+  }
+  applyFormDefaults(formState)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.ticketEvaluationId)
 
   activeTab.value = 'tab-0'
+  formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Complaint
 // 文件名称：TaktCustomerSatisfactionSurveyItemI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktCustomerSatisfactionSurveyItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktCustomerSatisfactionSurveyItemI18nSeedData : ITaktSeedDataCoord
             new TranslationSeedItem("entity.customersatisfactionsurveyitem._self", "zh-HK", "客户满意度调查项目明细信息_hk", "实体名称"),
 
             // entity.customersatisfactionsurveyitem.surveyid
-            new TranslationSeedItem("entity.customersatisfactionsurveyitem.surveyid", "en-US", "调查表ID_us", "调查表ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.customersatisfactionsurveyitem.surveyid", "en-US", "调查表ID_us", "调查表 ID（关联 TaktCustomerSatisfactionSurvey.Id，选项 TaktCustomerSatisfactionSurveys/options）"),
             // entity.customersatisfactionsurveyitem.surveyid
-            new TranslationSeedItem("entity.customersatisfactionsurveyitem.surveyid", "ja-JP", "调查表ID_jp", "调查表ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.customersatisfactionsurveyitem.surveyid", "ja-JP", "调查表ID_jp", "调查表 ID（关联 TaktCustomerSatisfactionSurvey.Id，选项 TaktCustomerSatisfactionSurveys/options）"),
             // entity.customersatisfactionsurveyitem.surveyid
-            new TranslationSeedItem("entity.customersatisfactionsurveyitem.surveyid", "zh-CN", "调查表ID", "调查表ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.customersatisfactionsurveyitem.surveyid", "zh-CN", "调查表ID", "调查表 ID（关联 TaktCustomerSatisfactionSurvey.Id，选项 TaktCustomerSatisfactionSurveys/options）"),
             // entity.customersatisfactionsurveyitem.surveyid
-            new TranslationSeedItem("entity.customersatisfactionsurveyitem.surveyid", "zh-HK", "调查表ID_hk", "调查表ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.customersatisfactionsurveyitem.surveyid", "zh-HK", "调查表ID_hk", "调查表 ID（关联 TaktCustomerSatisfactionSurvey.Id，选项 TaktCustomerSatisfactionSurveys/options）"),
 
             // entity.customersatisfactionsurveyitem.customersatisfactionsurveycode
             new TranslationSeedItem("entity.customersatisfactionsurveyitem.customersatisfactionsurveycode", "en-US", "调查表编号_us", "调查表编号（冗余字段，便于查询）"),
@@ -118,13 +118,13 @@ public class TaktCustomerSatisfactionSurveyItemI18nSeedData : ITaktSeedDataCoord
             new TranslationSeedItem("entity.customersatisfactionsurveyitem.linenumber", "zh-HK", "行号_hk", "行号（项号/序号，固定步长=10）"),
 
             // entity.customersatisfactionsurveyitem.categorytype
-            new TranslationSeedItem("entity.customersatisfactionsurveyitem.categorytype", "en-US", "调查类别_us", "调查类别类型（0=产品质量，1=交付服务，2=售后服务，3=技术支持，4=价格，5=其他）"),
+            new TranslationSeedItem("entity.customersatisfactionsurveyitem.categorytype", "en-US", "调查类别_us", "调查类别类型（字典 logistics_quality_satisfaction_category）"),
             // entity.customersatisfactionsurveyitem.categorytype
-            new TranslationSeedItem("entity.customersatisfactionsurveyitem.categorytype", "ja-JP", "调查类别_jp", "调查类别类型（0=产品质量，1=交付服务，2=售后服务，3=技术支持，4=价格，5=其他）"),
+            new TranslationSeedItem("entity.customersatisfactionsurveyitem.categorytype", "ja-JP", "调查类别_jp", "调查类别类型（字典 logistics_quality_satisfaction_category）"),
             // entity.customersatisfactionsurveyitem.categorytype
-            new TranslationSeedItem("entity.customersatisfactionsurveyitem.categorytype", "zh-CN", "调查类别", "调查类别类型（0=产品质量，1=交付服务，2=售后服务，3=技术支持，4=价格，5=其他）"),
+            new TranslationSeedItem("entity.customersatisfactionsurveyitem.categorytype", "zh-CN", "调查类别", "调查类别类型（字典 logistics_quality_satisfaction_category）"),
             // entity.customersatisfactionsurveyitem.categorytype
-            new TranslationSeedItem("entity.customersatisfactionsurveyitem.categorytype", "zh-HK", "调查类别_hk", "调查类别类型（0=产品质量，1=交付服务，2=售后服务，3=技术支持，4=价格，5=其他）"),
+            new TranslationSeedItem("entity.customersatisfactionsurveyitem.categorytype", "zh-HK", "调查类别_hk", "调查类别类型（字典 logistics_quality_satisfaction_category）"),
 
             // entity.customersatisfactionsurveyitem.itemname
             new TranslationSeedItem("entity.customersatisfactionsurveyitem.itemname", "en-US", "调查项目_us", "调查项目名称"),
@@ -163,13 +163,13 @@ public class TaktCustomerSatisfactionSurveyItemI18nSeedData : ITaktSeedDataCoord
             new TranslationSeedItem("entity.customersatisfactionsurveyitem.score", "zh-HK", "评分_hk", "评分（0-100分）"),
 
             // entity.customersatisfactionsurveyitem.satisfactionlevel
-            new TranslationSeedItem("entity.customersatisfactionsurveyitem.satisfactionlevel", "en-US", "满意度等级_us", "满意度等级（0=非常不满意，1=不满意，2=一般，3=满意，4=非常满意）"),
+            new TranslationSeedItem("entity.customersatisfactionsurveyitem.satisfactionlevel", "en-US", "满意度等级_us", "满意度等级（字典 logistics_quality_satisfaction_level）"),
             // entity.customersatisfactionsurveyitem.satisfactionlevel
-            new TranslationSeedItem("entity.customersatisfactionsurveyitem.satisfactionlevel", "ja-JP", "满意度等级_jp", "满意度等级（0=非常不满意，1=不满意，2=一般，3=满意，4=非常满意）"),
+            new TranslationSeedItem("entity.customersatisfactionsurveyitem.satisfactionlevel", "ja-JP", "满意度等级_jp", "满意度等级（字典 logistics_quality_satisfaction_level）"),
             // entity.customersatisfactionsurveyitem.satisfactionlevel
-            new TranslationSeedItem("entity.customersatisfactionsurveyitem.satisfactionlevel", "zh-CN", "满意度等级", "满意度等级（0=非常不满意，1=不满意，2=一般，3=满意，4=非常满意）"),
+            new TranslationSeedItem("entity.customersatisfactionsurveyitem.satisfactionlevel", "zh-CN", "满意度等级", "满意度等级（字典 logistics_quality_satisfaction_level）"),
             // entity.customersatisfactionsurveyitem.satisfactionlevel
-            new TranslationSeedItem("entity.customersatisfactionsurveyitem.satisfactionlevel", "zh-HK", "满意度等级_hk", "满意度等级（0=非常不满意，1=不满意，2=一般，3=满意，4=非常满意）"),
+            new TranslationSeedItem("entity.customersatisfactionsurveyitem.satisfactionlevel", "zh-HK", "满意度等级_hk", "满意度等级（字典 logistics_quality_satisfaction_level）"),
 
             // entity.customersatisfactionsurveyitem.customerfeedback
             new TranslationSeedItem("entity.customersatisfactionsurveyitem.customerfeedback", "en-US", "客户反馈_us", "客户反馈/意见"),
@@ -199,13 +199,13 @@ public class TaktCustomerSatisfactionSurveyItemI18nSeedData : ITaktSeedDataCoord
             new TranslationSeedItem("entity.customersatisfactionsurveyitem.followupaction", "zh-HK", "跟进措施_hk", "跟进措施"),
 
             // entity.customersatisfactionsurveyitem.followupstatus
-            new TranslationSeedItem("entity.customersatisfactionsurveyitem.followupstatus", "en-US", "跟进状态_us", "跟进状态（0=无需跟进，1=待跟进，2=跟进中，3=已完成）"),
+            new TranslationSeedItem("entity.customersatisfactionsurveyitem.followupstatus", "en-US", "跟进状态_us", "跟进状态（字典 logistics_quality_follow_up_status）"),
             // entity.customersatisfactionsurveyitem.followupstatus
-            new TranslationSeedItem("entity.customersatisfactionsurveyitem.followupstatus", "ja-JP", "跟进状态_jp", "跟进状态（0=无需跟进，1=待跟进，2=跟进中，3=已完成）"),
+            new TranslationSeedItem("entity.customersatisfactionsurveyitem.followupstatus", "ja-JP", "跟进状态_jp", "跟进状态（字典 logistics_quality_follow_up_status）"),
             // entity.customersatisfactionsurveyitem.followupstatus
-            new TranslationSeedItem("entity.customersatisfactionsurveyitem.followupstatus", "zh-CN", "跟进状态", "跟进状态（0=无需跟进，1=待跟进，2=跟进中，3=已完成）"),
+            new TranslationSeedItem("entity.customersatisfactionsurveyitem.followupstatus", "zh-CN", "跟进状态", "跟进状态（字典 logistics_quality_follow_up_status）"),
             // entity.customersatisfactionsurveyitem.followupstatus
-            new TranslationSeedItem("entity.customersatisfactionsurveyitem.followupstatus", "zh-HK", "跟进状态_hk", "跟进状态（0=无需跟进，1=待跟进，2=跟进中，3=已完成）"),
+            new TranslationSeedItem("entity.customersatisfactionsurveyitem.followupstatus", "zh-HK", "跟进状态_hk", "跟进状态（字典 logistics_quality_follow_up_status）"),
 
             // entity.customersatisfactionsurveyitem.survey
             new TranslationSeedItem("entity.customersatisfactionsurveyitem.survey", "en-US", "调查表主表_us", "调查表主表"),

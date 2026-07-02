@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/sop
 // 文件名称：step-check-item.d.ts
-// 创建时间：2026-06-20
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/sop 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface SopStepCheckItem extends CompanyDtoBase {
   sopStepCheckItemId: string;
 
   /**
-   * 工步 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
    */
   stepId: string;
 
@@ -54,7 +54,7 @@ export interface SopStepCheckItem extends CompanyDtoBase {
   checkStandard?: string;
 
   /**
-   * 是否必检（字典 sys_yes_no_type，0=否，1=是）
+   * 是否必检（字典 sys_yes_no_type；0=否，1=是）
    */
   isRequired: number;
 
@@ -89,7 +89,7 @@ export interface SopStepCheckItemQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工步 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
    */
   stepId?: string;
 
@@ -109,7 +109,7 @@ export interface SopStepCheckItemQuery extends TaktPagedQuery {
   checkStandard?: string;
 
   /**
-   * 是否必检（字典 sys_yes_no_type，0=否，1=是）
+   * 是否必检（字典 sys_yes_no_type；0=否，1=是）
    */
   isRequired?: number;
 
@@ -158,12 +158,12 @@ export interface SopStepCheckItemCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
   /**
-   * 工步 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
    */
   stepId: string;
 
@@ -183,7 +183,7 @@ export interface SopStepCheckItemCreate {
   checkStandard?: string;
 
   /**
-   * 是否必检（字典 sys_yes_no_type，0=否，1=是）
+   * 是否必检（字典 sys_yes_no_type；0=否，1=是）
    */
   isRequired: number;
 
@@ -251,7 +251,7 @@ export interface SopStepCheckItemTemplate {
   companyCode?: string;
 
   /**
-   * 工步 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
    */
   stepId?: string;
 
@@ -271,7 +271,7 @@ export interface SopStepCheckItemTemplate {
   checkStandard?: string;
 
   /**
-   * 是否必检（字典 sys_yes_no_type，0=否，1=是）
+   * 是否必检（字典 sys_yes_no_type；0=否，1=是）
    */
   isRequired?: number;
 
@@ -305,12 +305,12 @@ export interface SopStepCheckItemImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
   /**
-   * 工步 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
    */
   stepId?: string;
 
@@ -330,7 +330,7 @@ export interface SopStepCheckItemImport {
   checkStandard?: string;
 
   /**
-   * 是否必检（字典 sys_yes_no_type，0=否，1=是）
+   * 是否必检（字典 sys_yes_no_type；0=否，1=是）
    */
   isRequired?: number;
 
@@ -364,7 +364,7 @@ export interface SopStepCheckItemExport {
   companyCode: string;
 
   /**
-   * 工步 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
    */
   stepId: string;
 
@@ -384,7 +384,7 @@ export interface SopStepCheckItemExport {
   checkStandard?: string;
 
   /**
-   * 是否必检（字典 sys_yes_no_type，0=否，1=是）
+   * 是否必检（字典 sys_yes_no_type；0=否，1=是）
    */
   isRequired: number;
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/human-resource/attendance
 // 文件名称：shift-schedule.d.ts
-// 创建时间：2026-06-20
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/attendance 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,12 +29,12 @@ export interface ShiftSchedule extends CompanyDtoBase {
   shiftScheduleId: string;
 
   /**
-   * 排班类别（0=部门 1=人员）
+   * 排班类别（字典 hr_schedule_type；0=部门 1=人员）
    */
   scheduleType: number;
 
   /**
-   * 部门 ID（ScheduleType=0 时必填）
+   * 部门（关联 TaktDept.Id，选项 TaktDepts/tree-options；ScheduleType=0 时必填）
    */
   deptId?: string;
 
@@ -44,7 +44,7 @@ export interface ShiftSchedule extends CompanyDtoBase {
   deptName?: string;
 
   /**
-   * 员工 ID（ScheduleType=1 时必填）
+   * 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options；ScheduleType=1 时必填）
    */
   employeeId?: string;
 
@@ -59,7 +59,7 @@ export interface ShiftSchedule extends CompanyDtoBase {
   scheduleDate: string;
 
   /**
-   * 班次 ID（TaktWorkShift）
+   * 班次（关联 TaktWorkShift.Id，选项 TaktWorkShifts/options）
    */
   shiftId: string;
 
@@ -69,7 +69,7 @@ export interface ShiftSchedule extends CompanyDtoBase {
   shiftName?: string;
 
   /**
-   * 关联工厂
+   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
   relatedPlant?: string;
 
@@ -94,17 +94,17 @@ export interface ShiftScheduleQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 排班类别（0=部门 1=人员）
+   * 排班类别（字典 hr_schedule_type；0=部门 1=人员）
    */
   scheduleType?: number;
 
   /**
-   * 部门 ID（ScheduleType=0 时必填）
+   * 部门（关联 TaktDept.Id，选项 TaktDepts/tree-options；ScheduleType=0 时必填）
    */
   deptId?: string;
 
   /**
-   * 员工 ID（ScheduleType=1 时必填）
+   * 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options；ScheduleType=1 时必填）
    */
   employeeId?: string;
 
@@ -119,12 +119,12 @@ export interface ShiftScheduleQuery extends TaktPagedQuery {
   scheduleDateEnd?: string;
 
   /**
-   * 班次 ID（TaktWorkShift）
+   * 班次（关联 TaktWorkShift.Id，选项 TaktWorkShifts/options）
    */
   shiftId?: string;
 
   /**
-   * 关联工厂
+   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
   relatedPlant?: string;
 
@@ -168,22 +168,22 @@ export interface ShiftScheduleCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
   /**
-   * 排班类别（0=部门 1=人员）
+   * 排班类别（字典 hr_schedule_type；0=部门 1=人员）
    */
   scheduleType: number;
 
   /**
-   * 部门 ID（ScheduleType=0 时必填）
+   * 部门（关联 TaktDept.Id，选项 TaktDepts/tree-options；ScheduleType=0 时必填）
    */
   deptId?: string;
 
   /**
-   * 员工 ID（ScheduleType=1 时必填）
+   * 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options；ScheduleType=1 时必填）
    */
   employeeId?: string;
 
@@ -193,12 +193,12 @@ export interface ShiftScheduleCreate {
   scheduleDate: string;
 
   /**
-   * 班次 ID（TaktWorkShift）
+   * 班次（关联 TaktWorkShift.Id，选项 TaktWorkShifts/options）
    */
   shiftId: string;
 
   /**
-   * 关联工厂
+   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
   relatedPlant?: string;
 
@@ -247,27 +247,32 @@ export interface ShiftScheduleTemplate {
   companyCode?: string;
 
   /**
-   * 排班类别（0=部门 1=人员）
+   * 排班类别（字典 hr_schedule_type；0=部门 1=人员）
    */
   scheduleType?: number;
 
   /**
-   * 部门 ID（ScheduleType=0 时必填）
+   * 部门（关联 TaktDept.Id，选项 TaktDepts/tree-options；ScheduleType=0 时必填）
    */
   deptId?: string;
 
   /**
-   * 员工 ID（ScheduleType=1 时必填）
+   * 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options；ScheduleType=1 时必填）
    */
   employeeId?: string;
 
   /**
-   * 班次 ID（TaktWorkShift）
+   * 排班日期
+   */
+  scheduleDate?: string;
+
+  /**
+   * 班次（关联 TaktWorkShift.Id，选项 TaktWorkShifts/options）
    */
   shiftId?: string;
 
   /**
-   * 关联工厂
+   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
   relatedPlant?: string;
 
@@ -301,32 +306,37 @@ export interface ShiftScheduleImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
   /**
-   * 排班类别（0=部门 1=人员）
+   * 排班类别（字典 hr_schedule_type；0=部门 1=人员）
    */
   scheduleType?: number;
 
   /**
-   * 部门 ID（ScheduleType=0 时必填）
+   * 部门（关联 TaktDept.Id，选项 TaktDepts/tree-options；ScheduleType=0 时必填）
    */
   deptId?: string;
 
   /**
-   * 员工 ID（ScheduleType=1 时必填）
+   * 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options；ScheduleType=1 时必填）
    */
   employeeId?: string;
 
   /**
-   * 班次 ID（TaktWorkShift）
+   * 排班日期
+   */
+  scheduleDate?: string;
+
+  /**
+   * 班次（关联 TaktWorkShift.Id，选项 TaktWorkShifts/options）
    */
   shiftId?: string;
 
   /**
-   * 关联工厂
+   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
   relatedPlant?: string;
 
@@ -360,17 +370,17 @@ export interface ShiftScheduleExport {
   companyCode: string;
 
   /**
-   * 排班类别（0=部门 1=人员）
+   * 排班类别（字典 hr_schedule_type；0=部门 1=人员）
    */
   scheduleType: number;
 
   /**
-   * 部门 ID（ScheduleType=0 时必填）
+   * 部门（关联 TaktDept.Id，选项 TaktDepts/tree-options；ScheduleType=0 时必填）
    */
   deptId?: string;
 
   /**
-   * 员工 ID（ScheduleType=1 时必填）
+   * 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options；ScheduleType=1 时必填）
    */
   employeeId?: string;
 
@@ -380,12 +390,12 @@ export interface ShiftScheduleExport {
   scheduleDate: string;
 
   /**
-   * 班次 ID（TaktWorkShift）
+   * 班次（关联 TaktWorkShift.Id，选项 TaktWorkShifts/options）
    */
   shiftId: string;
 
   /**
-   * 关联工厂
+   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
   relatedPlant?: string;
 

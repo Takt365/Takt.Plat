@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Routine.Announcement
 // 文件名称：TaktAnnouncementValidators.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Announcement 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktAnnouncement 生成，请按需审阅）
 // 
@@ -35,24 +35,17 @@ public class TaktAnnouncementCreateValidator : AbstractValidator<TaktAnnouncemen
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
-        RuleFor(x => x.Title)
+        RuleFor(x => x.AnnouncementCode)
+            .NotEmpty().WithMessage("公告编码不能为空")
+            .MaximumLength(50).WithMessage("公告编码长度不能超过50个字符");
+        RuleFor(x => x.AnnouncementTitle)
             .NotEmpty().WithMessage("公告标题不能为空")
             .MaximumLength(200).WithMessage("公告标题长度不能超过200个字符");
         RuleFor(x => x.Content)
             .NotEmpty().WithMessage("公告内容不能为空");
-        RuleFor(x => x.Summary)
-            .MaximumLength(2000).WithMessage("公告摘要长度不能超过2000个字符");
-        RuleFor(x => x.Tags)
-            .MaximumLength(500).WithMessage("标签长度不能超过500个字符");
-        RuleFor(x => x.Attachments)
-            .MaximumLength(2000).WithMessage("附件路径长度不能超过2000个字符");
         RuleFor(x => x.TargetScope)
             .NotEmpty().WithMessage("目标范围不能为空")
             .MaximumLength(20).WithMessage("目标范围长度不能超过20个字符");
-        RuleFor(x => x.TargetDepartments)
-            .MaximumLength(1000).WithMessage("目标部门编码长度不能超过1000个字符");
-        RuleFor(x => x.TargetUsers)
-            .MaximumLength(2000).WithMessage("目标用户 ID长度不能超过2000个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -76,6 +69,27 @@ public class TaktAnnouncementUpdateValidator : AbstractValidator<TaktAnnouncemen
     {
         RuleFor(x => x.AnnouncementId)
             .GreaterThan(0).WithMessage("AnnouncementID无效");
+        RuleFor(x => x.TenantCode)
+            .NotEmpty().WithMessage("租户编码不能为空")
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.CompanyCode)
+            .NotEmpty().WithMessage("公司代码不能为空")
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.AnnouncementCode)
+            .NotEmpty().WithMessage("公告编码不能为空")
+            .MaximumLength(50).WithMessage("公告编码长度不能超过50个字符");
+        RuleFor(x => x.AnnouncementTitle)
+            .NotEmpty().WithMessage("公告标题不能为空")
+            .MaximumLength(200).WithMessage("公告标题长度不能超过200个字符");
+        RuleFor(x => x.Content)
+            .NotEmpty().WithMessage("公告内容不能为空");
+        RuleFor(x => x.TargetScope)
+            .NotEmpty().WithMessage("目标范围不能为空")
+            .MaximumLength(20).WithMessage("目标范围长度不能超过20个字符");
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
     }
 }
 
@@ -97,22 +111,17 @@ public class TaktAnnouncementImportValidator : AbstractValidator<TaktAnnouncemen
             .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
         RuleFor(x => x.CompanyCode)
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
-        RuleFor(x => x.Title)
+        RuleFor(x => x.AnnouncementCode)
+            .NotEmpty().WithMessage("公告编码不能为空")
+            .MaximumLength(50).WithMessage("公告编码长度不能超过50个字符");
+        RuleFor(x => x.AnnouncementTitle)
             .NotEmpty().WithMessage("公告标题不能为空")
             .MaximumLength(200).WithMessage("公告标题长度不能超过200个字符");
         RuleFor(x => x.Content)
             .NotEmpty().WithMessage("公告内容不能为空");
-        RuleFor(x => x.Summary)
-            .MaximumLength(2000).WithMessage("公告摘要长度不能超过2000个字符").When(x => !string.IsNullOrWhiteSpace(x.Summary));
-        RuleFor(x => x.Tags)
-            .MaximumLength(500).WithMessage("标签长度不能超过500个字符").When(x => !string.IsNullOrWhiteSpace(x.Tags));
-        RuleFor(x => x.Attachments)
-            .MaximumLength(2000).WithMessage("附件路径长度不能超过2000个字符").When(x => !string.IsNullOrWhiteSpace(x.Attachments));
         RuleFor(x => x.TargetScope)
             .NotEmpty().WithMessage("目标范围不能为空")
             .MaximumLength(20).WithMessage("目标范围长度不能超过20个字符");
-        RuleFor(x => x.TargetDepartments)
-            .MaximumLength(1000).WithMessage("目标部门编码长度不能超过1000个字符").When(x => !string.IsNullOrWhiteSpace(x.TargetDepartments));
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

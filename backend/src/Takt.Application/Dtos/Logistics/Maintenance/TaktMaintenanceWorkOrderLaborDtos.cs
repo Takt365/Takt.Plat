@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Maintenance
 // 文件名称：TaktMaintenanceWorkOrderLaborDtos.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：MaintenanceWorkOrderLabor 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktMaintenanceWorkOrderLabor 生成，请按需审阅）
 // 
@@ -108,14 +108,14 @@ public class TaktMaintenanceWorkOrderLaborDto : TaktCompanyDtoBase
     public string? OperationDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 报工确认状态（0=待确认，1=已确认）
-    /// </summary>
-    public int ConfirmationStatus { get; set; } = 0;
-
-    /// <summary>
     /// 确认时间
     /// </summary>
     public DateTime? ConfirmedAt { get; set; }
+
+    /// <summary>
+    /// 报工确认状态（0=待确认，1=已确认）
+    /// </summary>
+    public int ConfirmationStatus { get; set; } = 0;
 
     /// <summary>
     /// 维护工单（主表）
@@ -228,11 +228,6 @@ public class TaktMaintenanceWorkOrderLaborQueryDto : TaktPagedQuery
     public string? OperationDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 报工确认状态（0=待确认，1=已确认）
-    /// </summary>
-    public int? ConfirmationStatus { get; set; }
-
-    /// <summary>
     /// 确认时间（范围查询-开始）
     /// </summary>
     public DateTime? ConfirmedAtStart { get; set; }
@@ -241,6 +236,11 @@ public class TaktMaintenanceWorkOrderLaborQueryDto : TaktPagedQuery
     /// 确认时间（范围查询-结束）
     /// </summary>
     public DateTime? ConfirmedAtEnd { get; set; }
+
+    /// <summary>
+    /// 报工确认状态（0=待确认，1=已确认）
+    /// </summary>
+    public int? ConfirmationStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -283,7 +283,7 @@ public class TaktMaintenanceWorkOrderLaborCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -357,14 +357,14 @@ public class TaktMaintenanceWorkOrderLaborCreateDto
     public string? OperationDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 报工确认状态（0=待确认，1=已确认）
-    /// </summary>
-    public int ConfirmationStatus { get; set; } = 0;
-
-    /// <summary>
     /// 确认时间
     /// </summary>
     public DateTime? ConfirmedAt { get; set; }
+
+    /// <summary>
+    /// 报工确认状态（0=待确认，1=已确认）
+    /// </summary>
+    public int ConfirmationStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -474,9 +474,44 @@ public class TaktMaintenanceWorkOrderLaborTemplateDto
     public string? EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
+    /// 报工日期
+    /// </summary>
+    public DateTime? WorkDate { get; set; }
+
+    /// <summary>
+    /// 开始时间
+    /// </summary>
+    public DateTime? StartTime { get; set; }
+
+    /// <summary>
+    /// 结束时间
+    /// </summary>
+    public DateTime? EndTime { get; set; }
+
+    /// <summary>
+    /// 工时（小时）
+    /// </summary>
+    public decimal? WorkHours { get; set; }
+
+    /// <summary>
+    /// 小时费率
+    /// </summary>
+    public decimal? HourlyRate { get; set; }
+
+    /// <summary>
+    /// 人工成本
+    /// </summary>
+    public decimal? LaborCost { get; set; }
+
+    /// <summary>
     /// 作业描述
     /// </summary>
     public string? OperationDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 确认时间
+    /// </summary>
+    public DateTime? ConfirmedAt { get; set; }
 
     /// <summary>
     /// 报工确认状态（0=待确认，1=已确认）
@@ -511,7 +546,7 @@ public class TaktMaintenanceWorkOrderLaborImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -548,9 +583,44 @@ public class TaktMaintenanceWorkOrderLaborImportDto
     public string? EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
+    /// 报工日期
+    /// </summary>
+    public DateTime? WorkDate { get; set; }
+
+    /// <summary>
+    /// 开始时间
+    /// </summary>
+    public DateTime? StartTime { get; set; }
+
+    /// <summary>
+    /// 结束时间
+    /// </summary>
+    public DateTime? EndTime { get; set; }
+
+    /// <summary>
+    /// 工时（小时）
+    /// </summary>
+    public decimal? WorkHours { get; set; }
+
+    /// <summary>
+    /// 小时费率
+    /// </summary>
+    public decimal? HourlyRate { get; set; }
+
+    /// <summary>
+    /// 人工成本
+    /// </summary>
+    public decimal? LaborCost { get; set; }
+
+    /// <summary>
     /// 作业描述
     /// </summary>
     public string? OperationDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 确认时间
+    /// </summary>
+    public DateTime? ConfirmedAt { get; set; }
 
     /// <summary>
     /// 报工确认状态（0=待确认，1=已确认）
@@ -658,14 +728,14 @@ public class TaktMaintenanceWorkOrderLaborExportDto
     public string? OperationDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 报工确认状态（0=待确认，1=已确认）
-    /// </summary>
-    public int ConfirmationStatus { get; set; } = 0;
-
-    /// <summary>
     /// 确认时间
     /// </summary>
     public DateTime? ConfirmedAt { get; set; }
+
+    /// <summary>
+    /// 报工确认状态（0=待确认，1=已确认）
+    /// </summary>
+    public int ConfirmationStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

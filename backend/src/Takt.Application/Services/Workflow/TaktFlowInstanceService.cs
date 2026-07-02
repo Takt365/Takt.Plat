@@ -459,6 +459,65 @@ public class TaktFlowInstanceService : TaktServiceBase, ITaktFlowInstanceService
             await _flowAddSignRepository.CreateRangeAsync(addsigns);
         }
     }
+
+    /// <summary>
+    /// 获取流程实例统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>流程实例统计</returns>
+    public async Task<TaktWorkflowInstanceStatDto> GetWorkflowInstanceStatAsync(TaktWorkflowInstanceStatQueryDto queryDto)
+    {
+        EnsureThreeLayerContext();
+        var (start, end, statMonth) = TaktStatMonthRangeHelper.ResolveMonthRange(
+            queryDto.StartTimeStart,
+            queryDto.StartTimeEnd);
+        var tenantCode = CurrentTenantCode;
+        var companyCode = CurrentCompanyCode;
+        Expression<Func<TaktFlowInstance, bool>> basePredicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && ((x.StartTime != null && x.StartTime >= start && x.StartTime <= end)
+                || (x.StartTime == null && x.CreatedAt >= start && x.CreatedAt <= end));
+        var monthInstanceCount = await _flowInstanceRepository.CountAsync(basePredicate);
+        Expression<Func<TaktFlowInstance, bool>> runningPredicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.InstanceStatus == TaktFlowInstanceStatus.Running
+            && ((x.StartTime != null && x.StartTime >= start && x.StartTime <= end)
+                || (x.StartTime == null && x.CreatedAt >= start && x.CreatedAt <= end));
+        var monthRunningCount = await _flowInstanceRepository.CountAsync(runningPredicate);
+        Expression<Func<TaktFlowInstance, bool>> completedPredicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.InstanceStatus == TaktFlowInstanceStatus.Completed
+            && ((x.StartTime != null && x.StartTime >= start && x.StartTime <= end)
+                || (x.StartTime == null && x.CreatedAt >= start && x.CreatedAt <= end));
+        var monthCompletedCount = await _flowInstanceRepository.CountAsync(completedPredicate);
+        Expression<Func<TaktFlowInstance, bool>> rejectedPredicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.InstanceStatus == TaktFlowInstanceStatus.Rejected
+            && ((x.StartTime != null && x.StartTime >= start && x.StartTime <= end)
+                || (x.StartTime == null && x.CreatedAt >= start && x.CreatedAt <= end));
+        var monthRejectedCount = await _flowInstanceRepository.CountAsync(rejectedPredicate);
+        Expression<Func<TaktFlowInstance, bool>> terminatedPredicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.InstanceStatus == TaktFlowInstanceStatus.Terminated
+            && ((x.StartTime != null && x.StartTime >= start && x.StartTime <= end)
+                || (x.StartTime == null && x.CreatedAt >= start && x.CreatedAt <= end));
+        var monthTerminatedCount = await _flowInstanceRepository.CountAsync(terminatedPredicate);
+        return new TaktWorkflowInstanceStatDto
+        {
+            StatMonth = statMonth,
+            MonthInstanceCount = monthInstanceCount,
+            MonthRunningCount = monthRunningCount,
+            MonthCompletedCount = monthCompletedCount,
+            MonthRejectedCount = monthRejectedCount,
+            MonthTerminatedCount = monthTerminatedCount,
+        };
+    }
+
     // ========================================
     // 查询表达式
     // ========================================

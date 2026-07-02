@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopCallDtos.cs
-// 创建时间：2026-06-15
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SopCall 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSopCall 生成，请按需审阅）
 // 
@@ -36,7 +36,12 @@ public class TaktSopCallDto : TaktCompanyDtoBase
     public long SopCallId { get; set; }
 
     /// <summary>
-    /// 工位 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long WorkstationId { get; set; }
@@ -47,7 +52,7 @@ public class TaktSopCallDto : TaktCompanyDtoBase
     public string? WorkstationName { get; set; }
 
     /// <summary>
-    /// 执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 执行追溯 ID（关联 TaktSopExec.Id，选项 TaktSopExecs/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ExecId { get; set; }
@@ -58,12 +63,12 @@ public class TaktSopCallDto : TaktCompanyDtoBase
     public string? ExecName { get; set; }
 
     /// <summary>
-    /// 呼叫类型（1=班长，2=维修，3=品质；字典 logistics_sop_andon_type）
+    /// 呼叫类型（字典 logistics_sop_andon_type；1=班长，2=维修，3=品质）
     /// </summary>
     public int CallType { get; set; } = 0;
 
     /// <summary>
-    /// 呼叫人 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 呼叫人 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long CallerId { get; set; }
@@ -79,7 +84,7 @@ public class TaktSopCallDto : TaktCompanyDtoBase
     public DateTime CalledAt { get; set; }
 
     /// <summary>
-    /// 响应人 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 响应人 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RespondedBy { get; set; }
@@ -95,7 +100,7 @@ public class TaktSopCallDto : TaktCompanyDtoBase
     public int? ResponseSeconds { get; set; }
 
     /// <summary>
-    /// 呼叫状态（1=待响应，2=已响应，3=已关闭；字典 logistics_sop_andon_status）
+    /// 呼叫状态（字典 logistics_sop_andon_status；1=待响应，2=已响应，3=已关闭）
     /// </summary>
     public int CallStatus { get; set; } = 0;
 
@@ -128,24 +133,29 @@ public class TaktSopCallQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工位 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? WorkstationId { get; set; }
 
     /// <summary>
-    /// 执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 执行追溯 ID（关联 TaktSopExec.Id，选项 TaktSopExecs/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ExecId { get; set; }
 
     /// <summary>
-    /// 呼叫类型（1=班长，2=维修，3=品质；字典 logistics_sop_andon_type）
+    /// 呼叫类型（字典 logistics_sop_andon_type；1=班长，2=维修，3=品质）
     /// </summary>
     public int? CallType { get; set; }
 
     /// <summary>
-    /// 呼叫人 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 呼叫人 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CallerId { get; set; }
@@ -161,7 +171,7 @@ public class TaktSopCallQueryDto : TaktPagedQuery
     public DateTime? CalledAtEnd { get; set; }
 
     /// <summary>
-    /// 响应人 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 响应人 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RespondedBy { get; set; }
@@ -182,7 +192,7 @@ public class TaktSopCallQueryDto : TaktPagedQuery
     public int? ResponseSeconds { get; set; }
 
     /// <summary>
-    /// 呼叫状态（1=待响应，2=已响应，3=已关闭；字典 logistics_sop_andon_status）
+    /// 呼叫状态（字典 logistics_sop_andon_status；1=待响应，2=已响应，3=已关闭）
     /// </summary>
     public int? CallStatus { get; set; }
 
@@ -227,29 +237,35 @@ public class TaktSopCallCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工位 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// </summary>
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long WorkstationId { get; set; }
 
     /// <summary>
-    /// 执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 执行追溯 ID（关联 TaktSopExec.Id，选项 TaktSopExecs/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ExecId { get; set; }
 
     /// <summary>
-    /// 呼叫类型（1=班长，2=维修，3=品质；字典 logistics_sop_andon_type）
+    /// 呼叫类型（字典 logistics_sop_andon_type；1=班长，2=维修，3=品质）
     /// </summary>
     public int CallType { get; set; } = 0;
 
     /// <summary>
-    /// 呼叫人 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 呼叫人 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long CallerId { get; set; }
@@ -260,7 +276,7 @@ public class TaktSopCallCreateDto
     public DateTime CalledAt { get; set; }
 
     /// <summary>
-    /// 响应人 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 响应人 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RespondedBy { get; set; }
@@ -276,7 +292,7 @@ public class TaktSopCallCreateDto
     public int? ResponseSeconds { get; set; }
 
     /// <summary>
-    /// 呼叫状态（1=待响应，2=已响应，3=已关闭；字典 logistics_sop_andon_status）
+    /// 呼叫状态（字典 logistics_sop_andon_status；1=待响应，2=已响应，3=已关闭）
     /// </summary>
     public int CallStatus { get; set; } = 0;
 
@@ -330,9 +346,9 @@ public class TaktSopCallStatusDto
     public long SopCallId { get; set; }
 
     /// <summary>
-    /// 呼叫状态（1=待响应，2=已响应，3=已关闭；字典 logistics_sop_andon_status）
+    /// 呼叫状态（字典 logistics_sop_andon_status；1=待响应，2=已响应，3=已关闭）
     /// </summary>
-    [Required(ErrorMessage = "呼叫状态（1=待响应，2=已响应，3=已关闭；字典 logistics_sop_andon_status）不能为空")]
+    [Required(ErrorMessage = "呼叫状态（字典 logistics_sop_andon_status；1=待响应，2=已响应，3=已关闭）不能为空")]
     public int CallStatus { get; set; } = 0;
 }
 
@@ -356,33 +372,48 @@ public class TaktSopCallTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工位 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? WorkstationId { get; set; }
 
     /// <summary>
-    /// 执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 执行追溯 ID（关联 TaktSopExec.Id，选项 TaktSopExecs/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ExecId { get; set; }
 
     /// <summary>
-    /// 呼叫类型（1=班长，2=维修，3=品质；字典 logistics_sop_andon_type）
+    /// 呼叫类型（字典 logistics_sop_andon_type；1=班长，2=维修，3=品质）
     /// </summary>
     public int? CallType { get; set; }
 
     /// <summary>
-    /// 呼叫人 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 呼叫人 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CallerId { get; set; }
 
     /// <summary>
-    /// 响应人 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 呼叫时间
+    /// </summary>
+    public DateTime? CalledAt { get; set; }
+
+    /// <summary>
+    /// 响应人 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RespondedBy { get; set; }
+
+    /// <summary>
+    /// 响应时间
+    /// </summary>
+    public DateTime? RespondedAt { get; set; }
 
     /// <summary>
     /// 响应时长（秒）
@@ -390,7 +421,7 @@ public class TaktSopCallTemplateDto
     public int? ResponseSeconds { get; set; }
 
     /// <summary>
-    /// 呼叫状态（1=待响应，2=已响应，3=已关闭；字典 logistics_sop_andon_status）
+    /// 呼叫状态（字典 logistics_sop_andon_status；1=待响应，2=已响应，3=已关闭）
     /// </summary>
     public int? CallStatus { get; set; }
 
@@ -422,38 +453,53 @@ public class TaktSopCallImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工位 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? WorkstationId { get; set; }
 
     /// <summary>
-    /// 执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 执行追溯 ID（关联 TaktSopExec.Id，选项 TaktSopExecs/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ExecId { get; set; }
 
     /// <summary>
-    /// 呼叫类型（1=班长，2=维修，3=品质；字典 logistics_sop_andon_type）
+    /// 呼叫类型（字典 logistics_sop_andon_type；1=班长，2=维修，3=品质）
     /// </summary>
     public int? CallType { get; set; }
 
     /// <summary>
-    /// 呼叫人 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 呼叫人 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CallerId { get; set; }
 
     /// <summary>
-    /// 响应人 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 呼叫时间
+    /// </summary>
+    public DateTime? CalledAt { get; set; }
+
+    /// <summary>
+    /// 响应人 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RespondedBy { get; set; }
+
+    /// <summary>
+    /// 响应时间
+    /// </summary>
+    public DateTime? RespondedAt { get; set; }
 
     /// <summary>
     /// 响应时长（秒）
@@ -461,7 +507,7 @@ public class TaktSopCallImportDto
     public int? ResponseSeconds { get; set; }
 
     /// <summary>
-    /// 呼叫状态（1=待响应，2=已响应，3=已关闭；字典 logistics_sop_andon_status）
+    /// 呼叫状态（字典 logistics_sop_andon_status；1=待响应，2=已响应，3=已关闭）
     /// </summary>
     public int? CallStatus { get; set; }
 
@@ -499,24 +545,29 @@ public class TaktSopCallExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工位 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long WorkstationId { get; set; }
 
     /// <summary>
-    /// 执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 执行追溯 ID（关联 TaktSopExec.Id，选项 TaktSopExecs/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ExecId { get; set; }
 
     /// <summary>
-    /// 呼叫类型（1=班长，2=维修，3=品质；字典 logistics_sop_andon_type）
+    /// 呼叫类型（字典 logistics_sop_andon_type；1=班长，2=维修，3=品质）
     /// </summary>
     public int CallType { get; set; } = 0;
 
     /// <summary>
-    /// 呼叫人 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 呼叫人 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long CallerId { get; set; }
@@ -527,7 +578,7 @@ public class TaktSopCallExportDto
     public DateTime CalledAt { get; set; }
 
     /// <summary>
-    /// 响应人 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 响应人 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RespondedBy { get; set; }
@@ -543,7 +594,7 @@ public class TaktSopCallExportDto
     public int? ResponseSeconds { get; set; }
 
     /// <summary>
-    /// 呼叫状态（1=待响应，2=已响应，3=已关闭；字典 logistics_sop_andon_status）
+    /// 呼叫状态（字典 logistics_sop_andon_status；1=待响应，2=已响应，3=已关闭）
     /// </summary>
     public int CallStatus { get; set; } = 0;
 

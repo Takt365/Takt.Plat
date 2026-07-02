@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Foundation
 // 文件名称：TaktCultureDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Culture 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktCulture 生成，请按需审阅）
 // 
@@ -14,7 +14,6 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Dtos.Foundation;
 
@@ -37,7 +36,7 @@ public class TaktCultureDto : TaktTenantDtoBase
     public long CultureId { get; set; }
 
     /// <summary>
-    /// 区域文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）
+    /// 文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
@@ -57,19 +56,19 @@ public class TaktCultureDto : TaktTenantDtoBase
     public string? Icon { get; set; } = string.Empty;
 
     /// <summary>
+    /// 默认语言（字典 sys_yes_no_type；1=是 0=否）
+    /// </summary>
+    public int IsDefault { get; set; } = 0;
+
+    /// <summary>
     /// 排序号
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 是否默认语言（1=是，0=否）
+    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
     /// </summary>
-    public int IsDefault { get; set; }
-
-    /// <summary>
-    /// 状态（1=启用，0=禁用）
-    /// </summary>
-    public int LanguageStatus { get; set; }
+    public int LanguageStatus { get; set; } = 0;
 
     /// <summary>
     /// 翻译列表（一对多关联）
@@ -95,7 +94,7 @@ public class TaktCultureQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）
+    /// 文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
@@ -115,17 +114,17 @@ public class TaktCultureQueryDto : TaktPagedQuery
     public string? Icon { get; set; } = string.Empty;
 
     /// <summary>
+    /// 默认语言（字典 sys_yes_no_type；1=是 0=否）
+    /// </summary>
+    public int? IsDefault { get; set; }
+
+    /// <summary>
     /// 排序号
     /// </summary>
     public int? SortOrder { get; set; }
 
     /// <summary>
-    /// 是否默认语言（1=是，0=否）
-    /// </summary>
-    public int? IsDefault { get; set; }
-
-    /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
     /// </summary>
     public int? LanguageStatus { get; set; }
 
@@ -165,9 +164,9 @@ public class TaktCultureCreateDto
     public string TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）
+    /// 文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）
     /// </summary>
-    [Required(ErrorMessage = "区域文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）不能为空")]
+    [Required(ErrorMessage = "文化编码不能为空")]
     public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -188,19 +187,19 @@ public class TaktCultureCreateDto
     public string? Icon { get; set; } = string.Empty;
 
     /// <summary>
+    /// 默认语言（字典 sys_yes_no_type；1=是 0=否）
+    /// </summary>
+    public int IsDefault { get; set; } = 0;
+
+    /// <summary>
     /// 排序号
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 是否默认语言（1=是，0=否）
+    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
     /// </summary>
-    public int IsDefault { get; set; }
-
-    /// <summary>
-    /// 状态（1=启用，0=禁用）
-    /// </summary>
-    public int LanguageStatus { get; set; }
+    public int LanguageStatus { get; set; } = 0;
 
     /// <summary>
     /// 翻译列表（一对多关联）（子表，级联保存）
@@ -257,10 +256,10 @@ public class TaktCultureStatusDto
     public long CultureId { get; set; }
 
     /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
     /// </summary>
-    [Required(ErrorMessage = "状态（1=启用，0=禁用）不能为空")]
-    public int LanguageStatus { get; set; }
+    [Required(ErrorMessage = "状态（字典 sys_normal_disable_status；1=启用 0=禁用）不能为空")]
+    public int LanguageStatus { get; set; } = 0;
 }
 
 // ========================================
@@ -302,7 +301,7 @@ public class TaktCultureTemplateDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）
+    /// 文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
@@ -322,19 +321,19 @@ public class TaktCultureTemplateDto
     public string? Icon { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号
-    /// </summary>
-    public int? SortOrder { get; set; }
-
-    /// <summary>
-    /// 是否默认语言（1=是，0=否）
+    /// 默认语言（字典 sys_yes_no_type；1=是 0=否）
     /// </summary>
     public int? IsDefault { get; set; }
 
     /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
     /// </summary>
     public int? LanguageStatus { get; set; }
+
+    /// <summary>
+    /// 翻译列表（一对多关联）（子表，级联保存）
+    /// </summary>
+    public List<TaktTranslationCreateDto>? TranslationList { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -359,7 +358,7 @@ public class TaktCultureImportDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）
+    /// 文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
@@ -379,19 +378,19 @@ public class TaktCultureImportDto
     public string? Icon { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号
-    /// </summary>
-    public int? SortOrder { get; set; }
-
-    /// <summary>
-    /// 是否默认语言（1=是，0=否）
+    /// 默认语言（字典 sys_yes_no_type；1=是 0=否）
     /// </summary>
     public int? IsDefault { get; set; }
 
     /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
     /// </summary>
     public int? LanguageStatus { get; set; }
+
+    /// <summary>
+    /// 翻译列表（一对多关联）（子表，级联保存）
+    /// </summary>
+    public List<TaktTranslationCreateDto>? TranslationList { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -422,7 +421,7 @@ public class TaktCultureExportDto
     public long CultureId { get; set; }
 
     /// <summary>
-    /// 区域文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）
+    /// 文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
@@ -442,19 +441,19 @@ public class TaktCultureExportDto
     public string? Icon { get; set; } = string.Empty;
 
     /// <summary>
+    /// 默认语言（字典 sys_yes_no_type；1=是 0=否）
+    /// </summary>
+    public int IsDefault { get; set; } = 0;
+
+    /// <summary>
     /// 排序号
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 是否默认语言（1=是，0=否）
+    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
     /// </summary>
-    public int IsDefault { get; set; }
-
-    /// <summary>
-    /// 状态（1=启用，0=禁用）
-    /// </summary>
-    public int LanguageStatus { get; set; }
+    public int LanguageStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

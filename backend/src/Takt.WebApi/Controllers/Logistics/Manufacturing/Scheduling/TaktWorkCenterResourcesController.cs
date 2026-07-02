@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Manufacturing.Scheduling
 // 文件名称：TaktWorkCenterResourcesController.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-06-27
 // 创建人：Takt365(Cursor AI)
 // 功能描述：工作中心资源控制器
 // 
@@ -41,7 +41,7 @@ public class TaktWorkCenterResourcesController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:manufacturing:scheduling:work:center:resource:list", "工作中心资源列表")]
+    [TaktPermission("logistics:manufacturing:scheduling:work:center:list", "工作中心资源列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetWorkCenterResourceListAsync([FromQuery] TaktWorkCenterResourceQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktWorkCenterResourcesController : TaktControllerBase
     /// </summary>
     /// <param name="id">工作中心资源ID</param>
     /// <returns>工作中心资源DTO</returns>
-    [TaktPermission("logistics:manufacturing:scheduling:work:center:resource:query", "工作中心资源详情")]
+    [TaktPermission("logistics:manufacturing:scheduling:work:center:query", "工作中心资源详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetWorkCenterResourceByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktWorkCenterResourcesController : TaktControllerBase
     /// 获取工作中心资源选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:manufacturing:scheduling:work:center:resource:query", "工作中心资源选项")]
+    [TaktPermission("logistics:manufacturing:scheduling:work:center:query", "工作中心资源选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetWorkCenterResourceOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktWorkCenterResourcesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>工作中心资源DTO</returns>
-    [TaktPermission("logistics:manufacturing:scheduling:work:center:resource:create", "创建工作中心资源")]
+    [TaktPermission("logistics:manufacturing:scheduling:work:center:create", "创建工作中心资源")]
     [HttpPost]
     public async Task<IActionResult> CreateWorkCenterResourceAsync([FromBody] TaktWorkCenterResourceCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktWorkCenterResourcesController : TaktControllerBase
     /// <param name="id">工作中心资源ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>工作中心资源DTO</returns>
-    [TaktPermission("logistics:manufacturing:scheduling:work:center:resource:update", "更新工作中心资源")]
+    [TaktPermission("logistics:manufacturing:scheduling:work:center:update", "更新工作中心资源")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateWorkCenterResourceAsync(long id, [FromBody] TaktWorkCenterResourceUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktWorkCenterResourcesController : TaktControllerBase
     /// </summary>
     /// <param name="id">工作中心资源ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:scheduling:work:center:resource:delete", "删除工作中心资源")]
+    [TaktPermission("logistics:manufacturing:scheduling:work:center:delete", "删除工作中心资源")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteWorkCenterResourceByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktWorkCenterResourcesController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:scheduling:work:center:resource:delete", "批量删除工作中心资源")]
+    [TaktPermission("logistics:manufacturing:scheduling:work:center:delete", "批量删除工作中心资源")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteWorkCenterResourceBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktWorkCenterResourcesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO</param>
     /// <returns>工作中心资源DTO</returns>
-    [TaktPermission("logistics:manufacturing:scheduling:work:center:resource:update", "更新工作中心资源状态")]
+    [TaktPermission("logistics:manufacturing:scheduling:work:center:update", "更新工作中心资源状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateWorkCenterResourceStatusAsync([FromBody] TaktWorkCenterResourceStatusDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktWorkCenterResourcesController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:scheduling:work:center:resource:import", "获取工作中心资源导入模板")]
+    [TaktPermission("logistics:manufacturing:scheduling:work:center:import", "获取工作中心资源导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetWorkCenterResourceTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +224,7 @@ public class TaktWorkCenterResourcesController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:manufacturing:scheduling:work:center:resource:import", "导入工作中心资源")]
+    [TaktPermission("logistics:manufacturing:scheduling:work:center:import", "导入工作中心资源")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportWorkCenterResourceAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +254,7 @@ public class TaktWorkCenterResourcesController : TaktControllerBase
     /// 导出工作中心资源
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:scheduling:work:center:resource:export", "导出工作中心资源")]
+    [TaktPermission("logistics:manufacturing:scheduling:work:center:export", "导出工作中心资源")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportWorkCenterResourceAsync([FromQuery] TaktWorkCenterResourceQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

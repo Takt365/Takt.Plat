@@ -23,47 +23,40 @@ namespace Takt.Domain.Entities.HumanResource.Personnel;
 public class TaktEmployeeExperience : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 员工ID
+    /// 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [SugarColumn(ColumnName = "employee_id", ColumnDescription = "员工ID", ColumnDataType = "bigint", IsNullable = false)]
     public long EmployeeId { get; set; }
-
     /// <summary>
     /// 工作单位名称
     /// </summary>
     [SugarColumn(ColumnName = "company_name", ColumnDescription = "工作单位", ColumnDataType = "nvarchar", Length = 200, IsNullable = false)]
     public string CompanyName { get; set; } = string.Empty;
-
     /// <summary>
     /// 职位名称
     /// </summary>
     [SugarColumn(ColumnName = "position_name", ColumnDescription = "职位名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
     public string? PositionName { get; set; }
-
     /// <summary>
     /// 工作内容
     /// </summary>
     [SugarColumn(ColumnName = "job_content", ColumnDescription = "工作内容", ColumnDataType = "nvarchar", Length = 2000, IsNullable = true)]
     public string? JobContent { get; set; }
-
     /// <summary>
     /// 开始日期
     /// </summary>
     [SugarColumn(ColumnName = "start_date", ColumnDescription = "开始日期", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? StartDate { get; set; }
-
     /// <summary>
     /// 结束日期
     /// </summary>
     [SugarColumn(ColumnName = "end_date", ColumnDescription = "结束日期", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? EndDate { get; set; }
-
     /// <summary>
     /// 证明人姓名
     /// </summary>
     [SugarColumn(ColumnName = "witness_name", ColumnDescription = "证明人姓名", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? WitnessName { get; set; }
-
     /// <summary>
     /// 证明人电话
     /// </summary>

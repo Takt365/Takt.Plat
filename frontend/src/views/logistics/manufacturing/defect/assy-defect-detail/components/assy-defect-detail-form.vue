@@ -1,6 +1,6 @@
 <!-- ======================================== -->
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
-<!-- 命名空间：@/views/logistics/manufacturing/defect/assy-defect-detail/components -->
+<!-- 命名空间：@/views/logistics/manufacturing/defect/assy-defect/components -->
 <!-- 文件名称：assy-defect-detail-form.vue -->
 <!-- 功能描述：组立不良日报实体子表 assyDefectDetail 独立 CRUD 弹窗表单；defineExpose validate/getValues/resetFields。由 generate-vue-master-detail-from-api.cjs 生成，风格与主表 *-form 一致 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
@@ -58,11 +58,12 @@
                 :label="t('entity.assydefectdetail.defectcategory')"
                 name="defectCategory"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.defectCategory"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefectdetail.defectcategory') })"
-                  show-count
-                  :maxlength="20"
+                  dict-type="logistics_defect_category"
+                  :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.assydefectdetail.defectcategory') })"
+                  :disabled="loading"
                   allow-clear
                 />
               </a-form-item>
@@ -133,6 +134,20 @@
                 />
               </a-form-item>
             </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.assydefectdetail.repairoperator')"
+                name="repairOperator"
+              >
+                <TaktSelect
+                  v-model:value="formState.repairOperator"
+                  api-url="TaktEmployees/options"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.assydefectdetail.repairoperator') })"
+                  :disabled="loading"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
           </a-row>
         </div>
       </a-tab-pane>
@@ -143,21 +158,31 @@
 <script setup lang="ts">
 /**
  * 组立不良日报实体子表 assyDefectDetail 维护表单 · 由 generate-vue-master-detail-from-api.cjs 生成
- * @module views/logistics/manufacturing/defect/assy-defect-detail/components
+ * @module views/logistics/manufacturing/defect/assy-defect/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import type { AssyDefectDetailCreate } from '@/types/logistics/manufacturing/defect/assy-defect-detail'
+import TaktSelect from '@/components/business/takt-select/index.vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
+
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载字典 */
+onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
+})
 /** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["prodOrderCode","lineNumber","defectCategory","defectQty","cumulativeDefectQty","randomCardNo","occurrenceEngineering","testStep"]
+const formFields = ["prodOrderCode","lineNumber","defectCategory","defectQty","cumulativeDefectQty","randomCardNo","occurrenceEngineering","testStep","repairOperator"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */

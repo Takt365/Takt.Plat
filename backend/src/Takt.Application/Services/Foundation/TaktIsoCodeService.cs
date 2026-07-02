@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Foundation
 // 文件名称：TaktIsoCodeService.cs
-// 创建时间：2026-06-18
+// 创建时间：2026-06-27
 // 创建人：Takt365(Cursor AI)
 // 功能描述：ISO编码应用服务实现
 // 
@@ -96,7 +96,7 @@ public class TaktIsoCodeService : TaktServiceBase, ITaktIsoCodeService
     {
         var list = await _isoCodeRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode
-                && x.Status == 1
+                && x.IsoCodeStatus == 1
                 && (isoCodeCategory == null || x.IsoCodeCategory == isoCodeCategory),
             x => x.SortOrder,
             false);
@@ -223,11 +223,11 @@ public class TaktIsoCodeService : TaktServiceBase, ITaktIsoCodeService
         {
             throw new TaktBusinessException("ISO编码不存在");
         }
-        if (entity.IsBuiltIn == 1 && dto.Status != 1)
+        if (entity.IsBuiltIn == 1 && dto.IsoCodeStatus != 1)
         {
             throw new TaktBusinessException("不允许禁用内置ISO编码");
         }
-        entity.Status = dto.Status;
+        entity.IsoCodeStatus = dto.IsoCodeStatus;
         await _isoCodeRepository.UpdateAsync(entity);
         return await GetIsoCodeByIdAsync(dto.IsoCodeId) ?? throw new TaktBusinessException("ISO编码不存在");
     }
@@ -364,10 +364,10 @@ public class TaktIsoCodeService : TaktServiceBase, ITaktIsoCodeService
                 SqlFunc.ToString(x.IsoCodeCategory).Contains(keywords)
                 || (x.IsoCode != null && x.IsoCode.Contains(keywords))
                 || (x.IsoName != null && x.IsoName.Contains(keywords))
-                || SqlFunc.ToString(x.SortOrder).Contains(keywords)
                 || SqlFunc.ToString(x.IsBuiltIn).Contains(keywords)
-                || SqlFunc.ToString(x.Status).Contains(keywords)
-                || (x.Description != null && x.Description.Contains(keywords))
+                || (x.IsoCodeDescription != null && x.IsoCodeDescription.Contains(keywords))
+                || SqlFunc.ToString(x.SortOrder).Contains(keywords)
+                || SqlFunc.ToString(x.IsoCodeStatus).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
@@ -389,24 +389,24 @@ public class TaktIsoCodeService : TaktServiceBase, ITaktIsoCodeService
             exp = exp.And(x => x.IsoName != null && x.IsoName.Contains(queryDto.IsoName));
         }
 
-        if (queryDto?.SortOrder.HasValue == true)
-        {
-            exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
-        }
-
         if (queryDto?.IsBuiltIn.HasValue == true)
         {
             exp = exp.And(x => x.IsBuiltIn == queryDto.IsBuiltIn);
         }
 
-        if (queryDto?.Status.HasValue == true)
+        if (!string.IsNullOrEmpty(queryDto?.IsoCodeDescription))
         {
-            exp = exp.And(x => x.Status == queryDto.Status);
+            exp = exp.And(x => x.IsoCodeDescription != null && x.IsoCodeDescription.Contains(queryDto.IsoCodeDescription));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Description))
+        if (queryDto?.SortOrder.HasValue == true)
         {
-            exp = exp.And(x => x.Description != null && x.Description.Contains(queryDto.Description));
+            exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
+        }
+
+        if (queryDto?.IsoCodeStatus.HasValue == true)
+        {
+            exp = exp.And(x => x.IsoCodeStatus == queryDto.IsoCodeStatus);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

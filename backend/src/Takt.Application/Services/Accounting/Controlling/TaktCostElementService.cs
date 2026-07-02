@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Accounting.Controlling
 // 文件名称：TaktCostElementService.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：成本要素应用服务实现
 // 
@@ -18,6 +18,7 @@ using Takt.Domain.Entities.Accounting.Controlling;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
 using Takt.Shared.Exceptions;
+using Takt.Shared.Constants;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
@@ -94,7 +95,7 @@ public class TaktCostElementService : TaktServiceBase, ITaktCostElementService
         return dto;    }
 
     /// <summary>
-    /// 获取成本要素树形选项列表
+    /// 获取成本要素树形选项列表（DictValue 为 CostElementCode，DictLabel 为成本要素名称）
     /// </summary>
     /// <returns>树形选项</returns>
     public async Task<List<TaktTreeSelectOption>> GetCostElementTreeOptionsAsync()
@@ -105,7 +106,18 @@ public class TaktCostElementService : TaktServiceBase, ITaktCostElementService
     }
 
     /// <summary>
-    /// 在内存中构建成本要素树形选项（递归，按 ParentId）
+    /// 获取成本要素父级树形选项列表（DictValue 为 Id，用于 ParentId 选择）
+    /// </summary>
+    /// <returns>树形选项</returns>
+    public async Task<List<TaktTreeSelectOption>> GetCostElementParentTreeOptionsAsync()
+    {
+        EnsureThreeLayerContext();
+        var list = await _costElementRepository.GetListAsync(x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.CostElementStatus == 1);
+        return BuildCostElementParentTreeOptions(list, 0);
+    }
+
+    /// <summary>
+    /// 在内存中构建成本要素树形选项（递归，按 ParentId；DictValue 为 CostElementCode）
     /// </summary>
     private List<TaktTreeSelectOption> BuildCostElementTreeOptions(List<TaktCostElement> all, long parentId)
     {
@@ -114,11 +126,37 @@ public class TaktCostElementService : TaktServiceBase, ITaktCostElementService
         {
             var option = new TaktTreeSelectOption
             {
-                DictValue = item.Id,
-                DictLabel = item.CostElementName ?? item.Id.ToString(),
+                DictValue = item.CostElementCode,
+                DictLabel = string.IsNullOrWhiteSpace(item.CostElementName) ? item.CostElementCode : item.CostElementName,
+                ExtLabel = item.CostElementCode,
                 SortOrder = item.SortOrder,
             };
             var children = BuildCostElementTreeOptions(all, item.Id);
+            if (children.Count > 0)
+            {
+                option.Children = children;
+            }
+            result.Add(option);
+        }
+        return result;
+    }
+
+    /// <summary>
+    /// 在内存中构建成本要素父级树形选项（递归，按 ParentId；DictValue 为 Id）
+    /// </summary>
+    private List<TaktTreeSelectOption> BuildCostElementParentTreeOptions(List<TaktCostElement> all, long parentId)
+    {
+        var result = new List<TaktTreeSelectOption>();
+        foreach (var item in all.Where(x => x.ParentId == parentId).OrderBy(x => x.SortOrder))
+        {
+            var option = new TaktTreeSelectOption
+            {
+                DictValue = item.Id,
+                DictLabel = string.IsNullOrWhiteSpace(item.CostElementName) ? item.Id.ToString() : item.CostElementName,
+                ExtLabel = item.CostElementCode,
+                SortOrder = item.SortOrder,
+            };
+            var children = BuildCostElementParentTreeOptions(all, item.Id);
             if (children.Count > 0)
             {
                 option.Children = children;
@@ -175,6 +213,7 @@ public class TaktCostElementService : TaktServiceBase, ITaktCostElementService
     public async Task<TaktCostElementDto> CreateCostElementAsync(TaktCostElementCreateDto dto)
     {
         var entity = dto.Adapt<TaktCostElement>();
+        ApplyCostElementKatyp(entity);
         var isUnique_ix_cost_element_code_unique = await _uniqueValidator.IsUniqueAsync(
             _costElementRepository,
             x => x.CostElementCode == entity.CostElementCode);
@@ -208,6 +247,7 @@ public class TaktCostElementService : TaktServiceBase, ITaktCostElementService
             throw new TaktBusinessException("成本要素不存在");
         }
         dto.Adapt(entity);
+        ApplyCostElementKatyp(entity);
         var isUnique_ix_cost_element_code_unique = await _uniqueValidator.IsUniqueAsync(
             _costElementRepository,
             x => x.CostElementCode == entity.CostElementCode,
@@ -329,6 +369,7 @@ public class TaktCostElementService : TaktServiceBase, ITaktCostElementService
             try
             {
                 var entity = rows[i].Adapt<TaktCostElement>();
+                ApplyCostElementKatyp(entity);
                 var importKey = $"{entity.CostElementCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
@@ -547,5 +588,18 @@ public class TaktCostElementService : TaktServiceBase, ITaktCostElementService
         }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 按 SAP KATYP 类别推导并写入成本要素类型
+    /// </summary>
+    /// <param name="entity">成本要素实体</param>
+    private static void ApplyCostElementKatyp(TaktCostElement entity)
+    {
+        if (!TaktCostElementKatypConstants.IsValidCategory(entity.CostElementCategory))
+        {
+            throw new TaktBusinessException("成本要素类别无效，请选择有效的 SAP KATYP");
+        }
+        entity.CostElementType = TaktCostElementKatypConstants.ResolveTypeFromCategory(entity.CostElementCategory);
     }
 }

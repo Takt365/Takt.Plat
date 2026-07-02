@@ -238,7 +238,7 @@
                   v-model:value="formState.workCenter"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.workcenter') })"
                   show-count
-                  :maxlength="50"
+                  :maxlength="8"
                   allow-clear
                 />
               </a-form-item>
@@ -394,7 +394,7 @@
                   v-model:value="formState.costCenterCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.costcentercode') })"
                   show-count
-                  :maxlength="50"
+                  :maxlength="4"
                   allow-clear
                   :disabled="!!formData?.maintenanceWorkOrderId"
                 />
@@ -423,7 +423,7 @@
                   v-model:value="formState.costElementCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.costelementcode') })"
                   show-count
-                  :maxlength="50"
+                  :maxlength="4"
                   allow-clear
                   :disabled="!!formData?.maintenanceWorkOrderId"
                 />
@@ -517,12 +517,11 @@
                 :label="t('entity.maintenanceworkorder.completedat')"
                 name="completedAt"
               >
-                <a-input
+                <a-date-picker
                   v-model:value="formState.completedAt"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.completedat') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.completedat') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
@@ -545,12 +544,11 @@
                 :label="t('entity.maintenanceworkorder.acceptedat')"
                 name="acceptedAt"
               >
-                <a-input
+                <a-date-picker
                   v-model:value="formState.acceptedAt"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.acceptedat') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.acceptedat') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>

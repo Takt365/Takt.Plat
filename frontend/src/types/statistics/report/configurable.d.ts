@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/statistics/report
 // 文件名称：configurable.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：statistics/report 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -39,7 +39,7 @@ export interface Configurable extends CompanyDtoBase {
   reportName: string;
 
   /**
-   * 报表业务域（财务/人力/后勤等）
+   * 报表业务域（TaktModule 整型，与一级目录菜单 MenuCode 映射；展示名取自菜单 i18n）
    */
   reportDomain: number;
 
@@ -81,7 +81,7 @@ export interface Configurable extends CompanyDtoBase {
   /**
    * 报表描述
    */
-  description?: string;
+  configurableDescription?: string;
 
   /**
    * 数据源表列表（FROM） （子表：TaktConfigurableSource）
@@ -144,7 +144,7 @@ export interface ConfigurableQuery extends TaktPagedQuery {
   reportName?: string;
 
   /**
-   * 报表业务域（财务/人力/后勤等）
+   * 报表业务域（TaktModule 整型，与一级目录菜单 MenuCode 映射；展示名取自菜单 i18n）
    */
   reportDomain?: number;
 
@@ -186,7 +186,7 @@ export interface ConfigurableQuery extends TaktPagedQuery {
   /**
    * 报表描述
    */
-  description?: string;
+  configurableDescription?: string;
 
   /**
    * 创建时间（范围查询-开始）
@@ -201,7 +201,7 @@ export interface ConfigurableQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -228,7 +228,7 @@ export interface ConfigurableCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -243,7 +243,7 @@ export interface ConfigurableCreate {
   reportName: string;
 
   /**
-   * 报表业务域（财务/人力/后勤等）
+   * 报表业务域（TaktModule 整型，与一级目录菜单 MenuCode 映射；展示名取自菜单 i18n）
    */
   reportDomain: number;
 
@@ -273,11 +273,6 @@ export interface ConfigurableCreate {
   isPublic: number;
 
   /**
-   * 排序号
-   */
-  sortOrder: number;
-
-  /**
    * 报表状态（0=禁用 1=启用）
    */
   reportStatus: number;
@@ -285,7 +280,7 @@ export interface ConfigurableCreate {
   /**
    * 报表描述
    */
-  description?: string;
+  configurableDescription?: string;
 
   /**
    * 数据源表列表（FROM）（子表，级联保存）
@@ -320,7 +315,7 @@ export interface ConfigurableCreate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -410,7 +405,7 @@ export interface ConfigurableTemplate {
   reportName?: string;
 
   /**
-   * 报表业务域（财务/人力/后勤等）
+   * 报表业务域（TaktModule 整型，与一级目录菜单 MenuCode 映射；展示名取自菜单 i18n）
    */
   reportDomain?: number;
 
@@ -440,11 +435,6 @@ export interface ConfigurableTemplate {
   isPublic?: number;
 
   /**
-   * 排序号
-   */
-  sortOrder?: number;
-
-  /**
    * 报表状态（0=禁用 1=启用）
    */
   reportStatus?: number;
@@ -452,12 +442,42 @@ export interface ConfigurableTemplate {
   /**
    * 报表描述
    */
-  description?: string;
+  configurableDescription?: string;
+
+  /**
+   * 数据源表列表（FROM）（子表，级联保存）
+   */
+  sources?: ConfigurableSourceCreate[];
+
+  /**
+   * 多表关联列表（JOIN）（子表，级联保存）
+   */
+  joins?: ConfigurableJoinCreate[];
+
+  /**
+   * 输出字段列表（SELECT）（子表，级联保存）
+   */
+  fields?: ConfigurableFieldCreate[];
+
+  /**
+   * 筛选条件列表（SQVI WHERE）（子表，级联保存）
+   */
+  selections?: ConfigurableSelectionCreate[];
+
+  /**
+   * 分组字段列表（GROUP BY）（子表，级联保存）
+   */
+  groupBys?: ConfigurableGroupByCreate[];
+
+  /**
+   * 排序字段列表（ORDER BY）（子表，级联保存）
+   */
+  orderBys?: ConfigurableOrderByCreate[];
 
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -484,7 +504,7 @@ export interface ConfigurableImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -499,7 +519,7 @@ export interface ConfigurableImport {
   reportName?: string;
 
   /**
-   * 报表业务域（财务/人力/后勤等）
+   * 报表业务域（TaktModule 整型，与一级目录菜单 MenuCode 映射；展示名取自菜单 i18n）
    */
   reportDomain?: number;
 
@@ -529,11 +549,6 @@ export interface ConfigurableImport {
   isPublic?: number;
 
   /**
-   * 排序号
-   */
-  sortOrder?: number;
-
-  /**
    * 报表状态（0=禁用 1=启用）
    */
   reportStatus?: number;
@@ -541,12 +556,42 @@ export interface ConfigurableImport {
   /**
    * 报表描述
    */
-  description?: string;
+  configurableDescription?: string;
+
+  /**
+   * 数据源表列表（FROM）（子表，级联保存）
+   */
+  sources?: ConfigurableSourceCreate[];
+
+  /**
+   * 多表关联列表（JOIN）（子表，级联保存）
+   */
+  joins?: ConfigurableJoinCreate[];
+
+  /**
+   * 输出字段列表（SELECT）（子表，级联保存）
+   */
+  fields?: ConfigurableFieldCreate[];
+
+  /**
+   * 筛选条件列表（SQVI WHERE）（子表，级联保存）
+   */
+  selections?: ConfigurableSelectionCreate[];
+
+  /**
+   * 分组字段列表（GROUP BY）（子表，级联保存）
+   */
+  groupBys?: ConfigurableGroupByCreate[];
+
+  /**
+   * 排序字段列表（ORDER BY）（子表，级联保存）
+   */
+  orderBys?: ConfigurableOrderByCreate[];
 
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -583,7 +628,7 @@ export interface ConfigurableExport {
   reportName: string;
 
   /**
-   * 报表业务域（财务/人力/后勤等）
+   * 报表业务域（TaktModule 整型，与一级目录菜单 MenuCode 映射；展示名取自菜单 i18n）
    */
   reportDomain: number;
 
@@ -625,12 +670,12 @@ export interface ConfigurableExport {
   /**
    * 报表描述
    */
-  description?: string;
+  configurableDescription?: string;
 
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -642,204 +687,5 @@ export interface ConfigurableExport {
    */
   createdAt: string;
 
-}
-
-// ========================================
-// SQVI 运行时
-// ========================================
-
-/**
- * 运行时结果列
- */
-export interface ConfigurableRuntimeColumn {
-  /**
-   * 列键
-   */
-  key: string;
-
-  /**
-   * 列显示名
-   */
-  label: string;
-}
-
-/**
- * SQVI 筛选项
- */
-export interface ConfigurableRuntimeSelection {
-  /**
-   * 筛选项主键（运行时表单独立绑定）
-   */
-  configurableSelectionId?: string;
-
-  /**
-   * 排序号（运行时取值键）
-   */
-  sortOrder: number;
-
-  /**
-   * 数据源别名
-   */
-  sourceAlias: string;
-
-  /**
-   * 列名
-   */
-  columnName: string;
-
-  /**
-   * 显示名称
-   */
-  displayName: string;
-
-  /**
-   * 比较运算符
-   */
-  filterOperator: number;
-
-  /**
-   * 是否必填
-   */
-  isRequired: number;
-
-  /**
-   * 默认值
-   */
-  defaultValue?: string;
-
-  /**
-   * 区间结束默认值
-   */
-  defaultValueTo?: string;
-}
-
-/**
- * SQVI 运行时筛选条件
- */
-export interface ConfigurableRuntimeScreen {
-  /**
-   * 报表主键
-   */
-  configurableId: string;
-
-  /**
-   * 报表编码
-   */
-  reportCode: string;
-
-  /**
-   * 报表名称
-   */
-  reportName: string;
-
-  /**
-   * 查询最大行数
-   */
-  maxQueryRows: number;
-
-  /**
-   * 导出最大行数
-   */
-  maxExportRows: number;
-
-  /**
-   * 输出列
-   */
-  columns: ConfigurableRuntimeColumn[];
-
-  /**
-   * 筛选项
-   */
-  selections: ConfigurableRuntimeSelection[];
-}
-
-/**
- * 运行时筛选值
- */
-export interface ConfigurableRuntimeSelectionValue {
-  /**
-   * 筛选项主键（优先于 sortOrder 匹配）
-   */
-  configurableSelectionId?: string;
-
-  /**
-   * 排序号
-   */
-  sortOrder: number;
-
-  /**
-   * 筛选值
-   */
-  value?: string;
-
-  /**
-   * 区间结束值
-   */
-  valueTo?: string;
-
-  /**
-   * 运行时比较运算符（1～8，与 gen_query_type SortOrder 一致）
-   */
-  filterOperator?: number;
-}
-
-/**
- * 执行报表查询请求
- */
-export interface ConfigurableExecuteQuery extends TaktPagedQuery {
-  /**
-   * 筛选值列表
-   */
-  selectionValues: ConfigurableRuntimeSelectionValue[];
-
-  /**
-   * 本次查询行数上限（0 或未传默认 500，最大 50000）
-   */
-  rowLimit?: number;
-}
-
-/**
- * 报表查询结果
- */
-export interface ConfigurableQueryResult {
-  /**
-   * 输出列
-   */
-  columns: ConfigurableRuntimeColumn[];
-
-  /**
-   * 数据行
-   */
-  rows: Record<string, unknown>[];
-
-  /**
-   * 总记录数
-   */
-  total: number;
-
-  /**
-   * 当前页码
-   */
-  pageIndex: number;
-
-  /**
-   * 每页大小
-   */
-  pageSize: number;
-}
-
-/**
- * 导出报表数据请求
- */
-export interface ConfigurableExportData {
-  /**
-   * 筛选值列表
-   */
-  selectionValues: ConfigurableRuntimeSelectionValue[];
-
-  /**
-   * 本次导出行数上限（0 或未传默认 500，最大 50000）
-   */
-  rowLimit?: number;
 }
 

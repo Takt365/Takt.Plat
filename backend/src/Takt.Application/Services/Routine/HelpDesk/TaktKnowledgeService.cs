@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Routine.HelpDesk
 // 文件名称：TaktKnowledgeService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：知识库应用服务实现
 // 
@@ -101,7 +101,7 @@ public class TaktKnowledgeService : TaktServiceBase, ITaktKnowledgeService
     {
         EnsureThreeLayerContext();
         var list = await _knowledgeRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.KnowledgeStatus == 1,
             x => x.CategoryCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
@@ -367,17 +367,18 @@ public class TaktKnowledgeService : TaktServiceBase, ITaktKnowledgeService
         {
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
-                (x.Title != null && x.Title.Contains(keywords))
-                || (x.Content != null && x.Content.Contains(keywords))
-                || (x.Summary != null && x.Summary.Contains(keywords))
+                (x.KnowledgeTitle != null && x.KnowledgeTitle.Contains(keywords))
+                || (x.KnowledgeContent != null && x.KnowledgeContent.Contains(keywords))
+                || (x.KnowledgeSummary != null && x.KnowledgeSummary.Contains(keywords))
                 || (x.CategoryCode != null && x.CategoryCode.Contains(keywords))
-                || (x.Tags != null && x.Tags.Contains(keywords))
+                || (x.KnowledgeTags != null && x.KnowledgeTags.Contains(keywords))
                 || SqlFunc.ToString(x.KnowledgeStatus).Contains(keywords)
+                || (x.Attachments != null && x.Attachments.Contains(keywords))
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
-                || SqlFunc.ToString(x.ViewCount).Contains(keywords)
+                || SqlFunc.ToString(x.KnowledgeViewCount).Contains(keywords)
                 || SqlFunc.ToString(x.HelpfulCount).Contains(keywords)
                 || SqlFunc.ToString(x.UnhelpfulCount).Contains(keywords)
-                || SqlFunc.ToString(x.IsPublished).Contains(keywords)
+                || SqlFunc.ToString(x.KnowledgeIsPublished).Contains(keywords)
                 || SqlFunc.ToString(x.Version).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
@@ -387,19 +388,19 @@ public class TaktKnowledgeService : TaktServiceBase, ITaktKnowledgeService
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Title))
+        if (!string.IsNullOrEmpty(queryDto?.KnowledgeTitle))
         {
-            exp = exp.And(x => x.Title != null && x.Title.Contains(queryDto.Title));
+            exp = exp.And(x => x.KnowledgeTitle != null && x.KnowledgeTitle.Contains(queryDto.KnowledgeTitle));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Content))
+        if (!string.IsNullOrEmpty(queryDto?.KnowledgeContent))
         {
-            exp = exp.And(x => x.Content != null && x.Content.Contains(queryDto.Content));
+            exp = exp.And(x => x.KnowledgeContent != null && x.KnowledgeContent.Contains(queryDto.KnowledgeContent));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Summary))
+        if (!string.IsNullOrEmpty(queryDto?.KnowledgeSummary))
         {
-            exp = exp.And(x => x.Summary != null && x.Summary.Contains(queryDto.Summary));
+            exp = exp.And(x => x.KnowledgeSummary != null && x.KnowledgeSummary.Contains(queryDto.KnowledgeSummary));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.CategoryCode))
@@ -407,9 +408,9 @@ public class TaktKnowledgeService : TaktServiceBase, ITaktKnowledgeService
             exp = exp.And(x => x.CategoryCode != null && x.CategoryCode.Contains(queryDto.CategoryCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Tags))
+        if (!string.IsNullOrEmpty(queryDto?.KnowledgeTags))
         {
-            exp = exp.And(x => x.Tags != null && x.Tags.Contains(queryDto.Tags));
+            exp = exp.And(x => x.KnowledgeTags != null && x.KnowledgeTags.Contains(queryDto.KnowledgeTags));
         }
 
         if (queryDto?.KnowledgeStatus.HasValue == true)
@@ -417,14 +418,19 @@ public class TaktKnowledgeService : TaktServiceBase, ITaktKnowledgeService
             exp = exp.And(x => x.KnowledgeStatus == queryDto.KnowledgeStatus);
         }
 
+        if (!string.IsNullOrEmpty(queryDto?.Attachments))
+        {
+            exp = exp.And(x => x.Attachments != null && x.Attachments.Contains(queryDto.Attachments));
+        }
+
         if (queryDto?.SortOrder.HasValue == true)
         {
             exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
         }
 
-        if (queryDto?.ViewCount.HasValue == true)
+        if (queryDto?.KnowledgeViewCount.HasValue == true)
         {
-            exp = exp.And(x => x.ViewCount == queryDto.ViewCount);
+            exp = exp.And(x => x.KnowledgeViewCount == queryDto.KnowledgeViewCount);
         }
 
         if (queryDto?.HelpfulCount.HasValue == true)
@@ -437,9 +443,9 @@ public class TaktKnowledgeService : TaktServiceBase, ITaktKnowledgeService
             exp = exp.And(x => x.UnhelpfulCount == queryDto.UnhelpfulCount);
         }
 
-        if (queryDto?.IsPublished.HasValue == true)
+        if (queryDto?.KnowledgeIsPublished.HasValue == true)
         {
-            exp = exp.And(x => x.IsPublished == queryDto.IsPublished);
+            exp = exp.And(x => x.KnowledgeIsPublished == queryDto.KnowledgeIsPublished);
         }
 
         if (queryDto?.Version.HasValue == true)

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Operation
 // 文件名称：TaktInspectionStandardI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktInspectionStandard 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktInspectionStandardI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.inspectionstandard._self", "zh-HK", "检验标准信息_hk", "实体名称"),
 
             // entity.inspectionstandard.plantcode
-            new TranslationSeedItem("entity.inspectionstandard.plantcode", "en-US", "工厂代码_us", "工厂代码"),
+            new TranslationSeedItem("entity.inspectionstandard.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
             // entity.inspectionstandard.plantcode
-            new TranslationSeedItem("entity.inspectionstandard.plantcode", "ja-JP", "工厂代码_jp", "工厂代码"),
+            new TranslationSeedItem("entity.inspectionstandard.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
             // entity.inspectionstandard.plantcode
-            new TranslationSeedItem("entity.inspectionstandard.plantcode", "zh-CN", "工厂代码", "工厂代码"),
+            new TranslationSeedItem("entity.inspectionstandard.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
             // entity.inspectionstandard.plantcode
-            new TranslationSeedItem("entity.inspectionstandard.plantcode", "zh-HK", "工厂代码_hk", "工厂代码"),
+            new TranslationSeedItem("entity.inspectionstandard.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
 
             // entity.inspectionstandard.standardcode
             new TranslationSeedItem("entity.inspectionstandard.standardcode", "en-US", "检验标准编码_us", "检验标准编码（唯一索引）"),
@@ -118,13 +118,13 @@ public class TaktInspectionStandardI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.inspectionstandard.standardname", "zh-HK", "检验标准名称_hk", "检验标准名称"),
 
             // entity.inspectionstandard.inspectiontype
-            new TranslationSeedItem("entity.inspectionstandard.inspectiontype", "en-US", "检验类型_us", "检验类型（0=IQC来料检验，1=IPQC过程检验，2=FQC最终检验）"),
+            new TranslationSeedItem("entity.inspectionstandard.inspectiontype", "en-US", "检验类型_us", "检验类型（字典 logistics_quality_inspection_type）"),
             // entity.inspectionstandard.inspectiontype
-            new TranslationSeedItem("entity.inspectionstandard.inspectiontype", "ja-JP", "检验类型_jp", "检验类型（0=IQC来料检验，1=IPQC过程检验，2=FQC最终检验）"),
+            new TranslationSeedItem("entity.inspectionstandard.inspectiontype", "ja-JP", "检验类型_jp", "检验类型（字典 logistics_quality_inspection_type）"),
             // entity.inspectionstandard.inspectiontype
-            new TranslationSeedItem("entity.inspectionstandard.inspectiontype", "zh-CN", "检验类型", "检验类型（0=IQC来料检验，1=IPQC过程检验，2=FQC最终检验）"),
+            new TranslationSeedItem("entity.inspectionstandard.inspectiontype", "zh-CN", "检验类型", "检验类型（字典 logistics_quality_inspection_type）"),
             // entity.inspectionstandard.inspectiontype
-            new TranslationSeedItem("entity.inspectionstandard.inspectiontype", "zh-HK", "检验类型_hk", "检验类型（0=IQC来料检验，1=IPQC过程检验，2=FQC最终检验）"),
+            new TranslationSeedItem("entity.inspectionstandard.inspectiontype", "zh-HK", "检验类型_hk", "检验类型（字典 logistics_quality_inspection_type）"),
 
             // entity.inspectionstandard.materialcategorycode
             new TranslationSeedItem("entity.inspectionstandard.materialcategorycode", "en-US", "物料类别编码_us", "物料类别编码"),
@@ -145,13 +145,13 @@ public class TaktInspectionStandardI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.inspectionstandard.materialcategoryname", "zh-HK", "物料类别名称_hk", "物料类别名称"),
 
             // entity.inspectionstandard.samplingschemecode
-            new TranslationSeedItem("entity.inspectionstandard.samplingschemecode", "en-US", "抽样方案编码_us", "抽样方案编码"),
+            new TranslationSeedItem("entity.inspectionstandard.samplingschemecode", "en-US", "抽样方案编码_us", "抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）"),
             // entity.inspectionstandard.samplingschemecode
-            new TranslationSeedItem("entity.inspectionstandard.samplingschemecode", "ja-JP", "抽样方案编码_jp", "抽样方案编码"),
+            new TranslationSeedItem("entity.inspectionstandard.samplingschemecode", "ja-JP", "抽样方案编码_jp", "抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）"),
             // entity.inspectionstandard.samplingschemecode
-            new TranslationSeedItem("entity.inspectionstandard.samplingschemecode", "zh-CN", "抽样方案编码", "抽样方案编码"),
+            new TranslationSeedItem("entity.inspectionstandard.samplingschemecode", "zh-CN", "抽样方案编码", "抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）"),
             // entity.inspectionstandard.samplingschemecode
-            new TranslationSeedItem("entity.inspectionstandard.samplingschemecode", "zh-HK", "抽样方案编码_hk", "抽样方案编码"),
+            new TranslationSeedItem("entity.inspectionstandard.samplingschemecode", "zh-HK", "抽样方案编码_hk", "抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）"),
 
             // entity.inspectionstandard.samplingschemename
             new TranslationSeedItem("entity.inspectionstandard.samplingschemename", "en-US", "抽样方案名称_us", "抽样方案名称"),
@@ -162,24 +162,6 @@ public class TaktInspectionStandardI18nSeedData : ITaktSeedDataCoordinator
             // entity.inspectionstandard.samplingschemename
             new TranslationSeedItem("entity.inspectionstandard.samplingschemename", "zh-HK", "抽样方案名称_hk", "抽样方案名称"),
 
-            // entity.inspectionstandard.isenabled
-            new TranslationSeedItem("entity.inspectionstandard.isenabled", "en-US", "是否启用_us", "是否启用（0=否，1=是）"),
-            // entity.inspectionstandard.isenabled
-            new TranslationSeedItem("entity.inspectionstandard.isenabled", "ja-JP", "是否启用_jp", "是否启用（0=否，1=是）"),
-            // entity.inspectionstandard.isenabled
-            new TranslationSeedItem("entity.inspectionstandard.isenabled", "zh-CN", "是否启用", "是否启用（0=否，1=是）"),
-            // entity.inspectionstandard.isenabled
-            new TranslationSeedItem("entity.inspectionstandard.isenabled", "zh-HK", "是否启用_hk", "是否启用（0=否，1=是）"),
-
-            // entity.inspectionstandard.standardstatus
-            new TranslationSeedItem("entity.inspectionstandard.standardstatus", "en-US", "检验标准状态_us", "检验标准状态（0=草稿，1=已发布，2=已停用）"),
-            // entity.inspectionstandard.standardstatus
-            new TranslationSeedItem("entity.inspectionstandard.standardstatus", "ja-JP", "检验标准状态_jp", "检验标准状态（0=草稿，1=已发布，2=已停用）"),
-            // entity.inspectionstandard.standardstatus
-            new TranslationSeedItem("entity.inspectionstandard.standardstatus", "zh-CN", "检验标准状态", "检验标准状态（0=草稿，1=已发布，2=已停用）"),
-            // entity.inspectionstandard.standardstatus
-            new TranslationSeedItem("entity.inspectionstandard.standardstatus", "zh-HK", "检验标准状态_hk", "检验标准状态（0=草稿，1=已发布，2=已停用）"),
-
             // entity.inspectionstandard.standarddescription
             new TranslationSeedItem("entity.inspectionstandard.standarddescription", "en-US", "检验标准描述_us", "检验标准描述"),
             // entity.inspectionstandard.standarddescription
@@ -188,6 +170,15 @@ public class TaktInspectionStandardI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.inspectionstandard.standarddescription", "zh-CN", "检验标准描述", "检验标准描述"),
             // entity.inspectionstandard.standarddescription
             new TranslationSeedItem("entity.inspectionstandard.standarddescription", "zh-HK", "检验标准描述_hk", "检验标准描述"),
+
+            // entity.inspectionstandard.standardstatus
+            new TranslationSeedItem("entity.inspectionstandard.standardstatus", "en-US", "检验标准状态_us", "检验标准状态（字典 logistics_quality_standard_status）"),
+            // entity.inspectionstandard.standardstatus
+            new TranslationSeedItem("entity.inspectionstandard.standardstatus", "ja-JP", "检验标准状态_jp", "检验标准状态（字典 logistics_quality_standard_status）"),
+            // entity.inspectionstandard.standardstatus
+            new TranslationSeedItem("entity.inspectionstandard.standardstatus", "zh-CN", "检验标准状态", "检验标准状态（字典 logistics_quality_standard_status）"),
+            // entity.inspectionstandard.standardstatus
+            new TranslationSeedItem("entity.inspectionstandard.standardstatus", "zh-HK", "检验标准状态_hk", "检验标准状态（字典 logistics_quality_standard_status）"),
 
             // entity.inspectionstandard.items
             new TranslationSeedItem("entity.inspectionstandard.items", "en-US", "检验标准明细列表_us", "检验标准明细列表（主子表关系）"),

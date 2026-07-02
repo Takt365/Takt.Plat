@@ -25,7 +25,7 @@ namespace Takt.Domain.Entities.Logistics.Sales;
 public class TaktSalesQuotationChangeLog : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 销售报价ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 销售报价（关联 TaktSalesQuotation.Id，选项 TaktSalesQuotations/options）
     /// </summary>
     [SugarColumn(ColumnName = "sales_quotation_id", ColumnDescription = "销售报价ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -61,6 +61,10 @@ public class TaktSalesQuotationChangeLog : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "change_reason", ColumnDescription = "变更原因", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
     public string? ChangeReason { get; set; }
+
+    // ========================================
+    // 导航属性区域
+    // ========================================
 
     /// <summary>
     /// 销售报价主表

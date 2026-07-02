@@ -28,9 +28,9 @@ namespace Takt.Domain.Entities.Logistics.Procurement;
 public class TaktPurchaseOrder : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码（不可空）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -38,120 +38,112 @@ public class TaktPurchaseOrder : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "purchase_order_code", ColumnDescription = "采购订单编码", ColumnDataType = "nvarchar", Length = 10, IsNullable = false)]
     public string PurchaseOrderCode { get; set; } = string.Empty;
-
     /// <summary>
-    /// 供应商编码
+    /// 来源采购申请 ID（关联 TaktPurchaseRequest.Id，选项 TaktPurchaseRequests/options）
+    /// </summary>
+    [SugarColumn(ColumnName = "purchase_request_id", ColumnDescription = "来源采购申请ID", ColumnDataType = "bigint", IsNullable = true)]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? PurchaseRequestId { get; set; }
+    /// <summary>
+    /// 来源采购申请编码（冗余）
+    /// </summary>
+    [SugarColumn(ColumnName = "purchase_request_code", ColumnDescription = "来源采购申请编码", ColumnDataType = "nvarchar", Length = 10, IsNullable = true)]
+    public string? PurchaseRequestCode { get; set; }
+    /// <summary>
+    /// 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
     /// </summary>
     [SugarColumn(ColumnName = "supplier_code", ColumnDescription = "供应商编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string SupplierCode { get; set; } = string.Empty;
-
     /// <summary>
     /// 供应商名称
     /// </summary>
     [SugarColumn(ColumnName = "supplier_name", ColumnDescription = "供应商名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = false)]
     public string SupplierName { get; set; } = string.Empty;
-
     /// <summary>
     /// 订单日期
     /// </summary>
     [SugarColumn(ColumnName = "order_date", ColumnDescription = "订单日期", ColumnDataType = "datetime", IsNullable = false)]
     public DateTime OrderDate { get; set; } = DateTime.Now;
-
     /// <summary>
     /// 要求到货日期
     /// </summary>
     [SugarColumn(ColumnName = "required_arrival_date", ColumnDescription = "要求到货日期", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? RequiredArrivalDate { get; set; }
-
     /// <summary>
     /// 实际到货日期
     /// </summary>
     [SugarColumn(ColumnName = "actual_arrival_date", ColumnDescription = "实际到货日期", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? ActualArrivalDate { get; set; }
-
     /// <summary>
-    /// 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
+    /// 采购组编码（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
     /// </summary>
-    [SugarColumn(ColumnName = "purchase_group", ColumnDescription = "采购组代码", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
+    [SugarColumn(ColumnName = "purchase_group", ColumnDescription = "采购组代码", ColumnDataType = "nvarchar", Length = 3, IsNullable = true)]
     public string? PurchaseGroup { get; set; }
-
     /// <summary>
     /// 订单总数量（基本单位数量）
     /// </summary>
     [SugarColumn(ColumnName = "total_quantity", ColumnDescription = "订单总数量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 4, IsNullable = false, DefaultValue = "0")]
     public decimal TotalQuantity { get; set; } = 0;
-
     /// <summary>
     /// 订单总金额（精确到分，存储为整数，单位为分）
     /// </summary>
     [SugarColumn(ColumnName = "total_amount", ColumnDescription = "订单总金额", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
     public decimal TotalAmount { get; set; } = 0;
-
     /// <summary>
     /// 折扣金额（精确到分，存储为整数，单位为分）
     /// </summary>
     [SugarColumn(ColumnName = "discount_amount", ColumnDescription = "折扣金额", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
     public decimal DiscountAmount { get; set; } = 0;
-
     /// <summary>
     /// 税费（精确到分，存储为整数，单位为分）
     /// </summary>
     [SugarColumn(ColumnName = "tax_amount", ColumnDescription = "税费", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
     public decimal TaxAmount { get; set; } = 0;
-
     /// <summary>
     /// 订单实付金额（精确到分，存储为整数，单位为分）
     /// </summary>
     [SugarColumn(ColumnName = "actual_amount", ColumnDescription = "订单实付金额", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
     public decimal ActualAmount { get; set; } = 0;
-
     /// <summary>
     /// 已入库数量（基本单位数量）
     /// </summary>
     [SugarColumn(ColumnName = "received_quantity", ColumnDescription = "已入库数量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 4, IsNullable = false, DefaultValue = "0")]
     public decimal ReceivedQuantity { get; set; } = 0;
-
     /// <summary>
     /// 已入库金额（精确到分，存储为整数，单位为分）
     /// </summary>
     [SugarColumn(ColumnName = "received_amount", ColumnDescription = "已入库金额", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
     public decimal ReceivedAmount { get; set; } = 0;
-
     /// <summary>
     /// 已付款金额（精确到分，存储为整数，单位为分）
     /// </summary>
     [SugarColumn(ColumnName = "paid_amount", ColumnDescription = "已付款金额", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
     public decimal PaidAmount { get; set; } = 0;
-
     /// <summary>
-    /// 订单状态（1=启用，0=禁用）
-    /// </summary>
-    [SugarColumn(ColumnName = "order_status", ColumnDescription = "订单状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public int OrderStatus { get; set; } = 1;
-
-    /// <summary>
-    /// 交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
-    /// </summary>
-    [SugarColumn(ColumnName = "delivery_status", ColumnDescription = "交货状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int DeliveryStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 支付方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+    /// 支付方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
     /// </summary>
     [SugarColumn(ColumnName = "payment_method", ColumnDescription = "支付方式", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int PaymentMethod { get; set; } = 0;
-
     /// <summary>
     /// 交货方式（字典 logistics_delivery_method_type；0=自提，1=送货上门（采购为供应商送货），2=物流配送，3=快递）
     /// </summary>
     [SugarColumn(ColumnName = "delivery_method", ColumnDescription = "交货方式", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int DeliveryMethod { get; set; } = 0;
-
     /// <summary>
     /// 交货地址
     /// </summary>
     [SugarColumn(ColumnName = "delivery_address", ColumnDescription = "交货地址", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
     public string? DeliveryAddress { get; set; }
+    /// <summary>
+    /// 订单状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// </summary>
+    [SugarColumn(ColumnName = "order_status", ColumnDescription = "订单状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
+    public int OrderStatus { get; set; } = 1;
+    /// <summary>
+    /// 交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
+    /// </summary>
+    [SugarColumn(ColumnName = "delivery_status", ColumnDescription = "交货状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int DeliveryStatus { get; set; } = 0;
 
     /// <summary>
     /// 订单明细列表（主子表关系，一个订单可以有多个明细）
@@ -160,7 +152,7 @@ public class TaktPurchaseOrder : TaktCompanyEntityBase
     public List<TaktPurchaseOrderItem>? Items { get; set; }
 
     /// <summary>
-    /// 采购订单变更记录列表（外键在子表 <see cref="TaktPurchaseOrderChangeLog.OrderId"/>）
+    /// 采购订单变更记录列表（外键在子表 TaktPurchaseOrderChangeLog.PurchaseOrderId）
     /// </summary>
     [Navigate(NavigateType.OneToMany, nameof(TaktPurchaseOrderChangeLog.PurchaseOrderId))]
     public List<TaktPurchaseOrderChangeLog>? ChangeLogs { get; set; }

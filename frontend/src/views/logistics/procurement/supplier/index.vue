@@ -87,7 +87,7 @@
         <template v-else-if="column.key === 'paymentTerms'">
           <TaktDictTag
             :value="getSupplierField(record, 'paymentTerms')"
-            dict-type="logistics_payment_terms_param"
+            dict-type="accounting_payment_terms_param"
           />
         </template>
         <template v-else-if="column.key === 'supplierLevel'">
@@ -337,7 +337,7 @@
           v-model:value="advancedQueryForm.currencyCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplier.currencycode') })"
           show-count
-          :maxlength="10"
+          :maxlength="3"
           allow-clear
         />
       </a-form-item>
@@ -346,7 +346,7 @@
       <a-form-item :label="t('entity.supplier.paymentterms')">
         <TaktSelect
           v-model:value="advancedQueryForm.paymentTerms"
-          dict-type="logistics_payment_terms_param"
+          dict-type="accounting_payment_terms_param"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.supplier.paymentterms') })"
           allow-clear
         />
@@ -371,15 +371,6 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('isQualified')">
-      <a-form-item :label="t('entity.supplier.isqualified')">
-        <a-input-number
-          v-model:value="advancedQueryForm.isQualified"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplier.isqualified') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
       <div v-show="isFieldVisible('supplierStatus')">
       <a-form-item :label="t('entity.supplier.status')">
         <TaktSelect
@@ -396,7 +387,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -407,7 +398,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -575,7 +566,6 @@ const advancedQueryForm = ref({
   paymentTerms: undefined as number | undefined,
   supplierLevel: undefined as number | undefined,
   evaluationScore: undefined as number | undefined,
-  isQualified: undefined as number | undefined,
   supplierStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
@@ -606,7 +596,6 @@ const queryFieldsMeta = computed(() => [
   { key: 'paymentTerms', label: t('entity.supplier.paymentterms') },
   { key: 'supplierLevel', label: t('entity.supplier.level') },
   { key: 'evaluationScore', label: t('entity.supplier.evaluationscore') },
-  { key: 'isQualified', label: t('entity.supplier.isqualified') },
   { key: 'supplierStatus', label: t('entity.supplier.status') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
@@ -683,9 +672,6 @@ function buildListQuery(overrides?: Partial<SupplierQuery>): SupplierQuery {
   }
   if (form.evaluationScore !== undefined && form.evaluationScore !== null) {
     query.evaluationScore = form.evaluationScore
-  }
-  if (form.isQualified !== undefined && form.isQualified !== null) {
-    query.isQualified = form.isQualified
   }
   if (form.supplierStatus !== undefined && form.supplierStatus !== null) {
     query.supplierStatus = form.supplierStatus
@@ -917,15 +903,6 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSupplierField(record, 'evaluationScore') ?? ''
   },
   {
-    title: t('entity.supplier.isqualified'),
-    dataIndex: 'isQualified',
-    key: 'isQualified',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSupplierField(record, 'isQualified') ?? ''
-  },
-  {
     title: t('entity.supplier.status'),
     dataIndex: 'supplierStatus',
     key: 'supplierStatus',
@@ -976,7 +953,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: Supplier, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getSupplierId(selectedRow.value) === getSupplierId(record)) {
+    } else if (selectedRow.value && getSupplierId(selectedRow.value) === getSupplierId(record)) {
       selectedRow.value = null
     }
   },
@@ -1055,7 +1032,6 @@ function handleReset() {
   paymentTerms: undefined as number | undefined,
   supplierLevel: undefined as number | undefined,
   evaluationScore: undefined as number | undefined,
-  isQualified: undefined as number | undefined,
   supplierStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
@@ -1277,7 +1253,6 @@ function handleAdvancedQueryReset() {
   paymentTerms: undefined as number | undefined,
   supplierLevel: undefined as number | undefined,
   evaluationScore: undefined as number | undefined,
-  isQualified: undefined as number | undefined,
   supplierStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',

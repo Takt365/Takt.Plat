@@ -2,9 +2,9 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-06-29
 // 创建人：Takt365(Auto Generated)
-// 功能描述：TaktEc 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
+// 功能描述：TaktEc 实体字段国际化种子（已对齐前端 locales：src/locales/logistics/manufacturing/engineering-change/ec）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -117,41 +117,32 @@ public class TaktEcI18nSeedData : ITaktSeedDataCoordinator
             // entity.ec.issuedate
             new TranslationSeedItem("entity.ec.issuedate", "zh-HK", "发行日期_hk", "发行日期"),
 
-            // entity.ec.changestatus
-            new TranslationSeedItem("entity.ec.changestatus", "en-US", "变更状态_us", "变更状态(1=工作的 2=取消的 3=发行的 4=P.P中变更的 5=固定的 6=挂起的 7=拒绝的)"),
-            // entity.ec.changestatus
-            new TranslationSeedItem("entity.ec.changestatus", "ja-JP", "变更状态_jp", "变更状态(1=工作的 2=取消的 3=发行的 4=P.P中变更的 5=固定的 6=挂起的 7=拒绝的)"),
-            // entity.ec.changestatus
-            new TranslationSeedItem("entity.ec.changestatus", "zh-CN", "变更状态", "变更状态(1=工作的 2=取消的 3=发行的 4=P.P中变更的 5=固定的 6=挂起的 7=拒绝的)"),
-            // entity.ec.changestatus
-            new TranslationSeedItem("entity.ec.changestatus", "zh-HK", "变更状态_hk", "变更状态(1=工作的 2=取消的 3=发行的 4=P.P中变更的 5=固定的 6=挂起的 7=拒绝的)"),
+            // entity.ec.title
+            new TranslationSeedItem("entity.ec.title", "en-US", "EC Title", "设变标题"),
+            // entity.ec.title
+            new TranslationSeedItem("entity.ec.title", "ja-JP", "設変タイトル", "设变标题"),
+            // entity.ec.title
+            new TranslationSeedItem("entity.ec.title", "zh-CN", "设变标题", "设变标题"),
+            // entity.ec.title
+            new TranslationSeedItem("entity.ec.title", "zh-HK", "設變標題", "设变标题"),
 
-            // entity.ec.title
-            new TranslationSeedItem("entity.ec.title", "en-US", "设变主题_us", "设变主题/标题"),
-            // entity.ec.title
-            new TranslationSeedItem("entity.ec.title", "ja-JP", "设变主题_jp", "设变主题/标题"),
-            // entity.ec.title
-            new TranslationSeedItem("entity.ec.title", "zh-CN", "设变主题", "设变主题/标题"),
-            // entity.ec.title
-            new TranslationSeedItem("entity.ec.title", "zh-HK", "设变主题_hk", "设变主题/标题"),
-
-            // entity.ec.detailtext
-            new TranslationSeedItem("entity.ec.detailtext", "en-US", "设变详情_us", "设变详情/详细说明"),
-            // entity.ec.detailtext
-            new TranslationSeedItem("entity.ec.detailtext", "ja-JP", "设变详情_jp", "设变详情/详细说明"),
-            // entity.ec.detailtext
-            new TranslationSeedItem("entity.ec.detailtext", "zh-CN", "设变详情", "设变详情/详细说明"),
-            // entity.ec.detailtext
-            new TranslationSeedItem("entity.ec.detailtext", "zh-HK", "设变详情_hk", "设变详情/详细说明"),
+            // entity.ec.content
+            new TranslationSeedItem("entity.ec.content", "en-US", "设变内容_us", "设变内容"),
+            // entity.ec.content
+            new TranslationSeedItem("entity.ec.content", "ja-JP", "设变内容_jp", "设变内容"),
+            // entity.ec.content
+            new TranslationSeedItem("entity.ec.content", "zh-CN", "设变内容", "设变内容"),
+            // entity.ec.content
+            new TranslationSeedItem("entity.ec.content", "zh-HK", "设变内容_hk", "设变内容"),
 
             // entity.ec.leader
-            new TranslationSeedItem("entity.ec.leader", "en-US", "负责人_us", "负责人"),
+            new TranslationSeedItem("entity.ec.leader", "en-US", "负责人_us", "负责人（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
             // entity.ec.leader
-            new TranslationSeedItem("entity.ec.leader", "ja-JP", "负责人_jp", "负责人"),
+            new TranslationSeedItem("entity.ec.leader", "ja-JP", "负责人_jp", "负责人（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
             // entity.ec.leader
-            new TranslationSeedItem("entity.ec.leader", "zh-CN", "负责人", "负责人"),
+            new TranslationSeedItem("entity.ec.leader", "zh-CN", "负责人", "负责人（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
             // entity.ec.leader
-            new TranslationSeedItem("entity.ec.leader", "zh-HK", "负责人_hk", "负责人"),
+            new TranslationSeedItem("entity.ec.leader", "zh-HK", "负责人_hk", "负责人（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
 
             // entity.ec.lossamount
             new TranslationSeedItem("entity.ec.lossamount", "en-US", "损失金额_us", "损失金额"),
@@ -163,13 +154,13 @@ public class TaktEcI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ec.lossamount", "zh-HK", "损失金额_hk", "损失金额"),
 
             // entity.ec.distinction
-            new TranslationSeedItem("entity.ec.distinction", "en-US", "区分_us", "区分/类别 1:全仕向，2：部管，3：内部，4：技术"),
+            new TranslationSeedItem("entity.ec.distinction", "en-US", "区分_us", "区分/类别（字典 logistics_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）"),
             // entity.ec.distinction
-            new TranslationSeedItem("entity.ec.distinction", "ja-JP", "区分_jp", "区分/类别 1:全仕向，2：部管，3：内部，4：技术"),
+            new TranslationSeedItem("entity.ec.distinction", "ja-JP", "区分_jp", "区分/类别（字典 logistics_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）"),
             // entity.ec.distinction
-            new TranslationSeedItem("entity.ec.distinction", "zh-CN", "区分", "区分/类别 1:全仕向，2：部管，3：内部，4：技术"),
+            new TranslationSeedItem("entity.ec.distinction", "zh-CN", "区分", "区分/类别（字典 logistics_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）"),
             // entity.ec.distinction
-            new TranslationSeedItem("entity.ec.distinction", "zh-HK", "区分_hk", "区分/类别 1:全仕向，2：部管，3：内部，4：技术"),
+            new TranslationSeedItem("entity.ec.distinction", "zh-HK", "区分_hk", "区分/类别（字典 logistics_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）"),
 
             // entity.ec.effectivedate
             new TranslationSeedItem("entity.ec.effectivedate", "en-US", "生效日期_us", "生效日期"),
@@ -189,23 +180,23 @@ public class TaktEcI18nSeedData : ITaktSeedDataCoordinator
             // entity.ec.entrydate
             new TranslationSeedItem("entity.ec.entrydate", "zh-HK", "录入日期_hk", "录入日期"),
 
-            // entity.ec.flowinstanceid
-            new TranslationSeedItem("entity.ec.flowinstanceid", "en-US", "流程实例ID_us", "流程实例ID（关联工作流）"),
-            // entity.ec.flowinstanceid
-            new TranslationSeedItem("entity.ec.flowinstanceid", "ja-JP", "流程实例ID_jp", "流程实例ID（关联工作流）"),
-            // entity.ec.flowinstanceid
-            new TranslationSeedItem("entity.ec.flowinstanceid", "zh-CN", "流程实例ID", "流程实例ID（关联工作流）"),
-            // entity.ec.flowinstanceid
-            new TranslationSeedItem("entity.ec.flowinstanceid", "zh-HK", "流程实例ID_hk", "流程实例ID（关联工作流）"),
+            // entity.ec.changestatus
+            new TranslationSeedItem("entity.ec.changestatus", "en-US", "变更状态_us", "变更状态(1=工作的 2=取消的 3=发行的 4=P.P中变更的 5=固定的 6=挂起的 7=拒绝的)"),
+            // entity.ec.changestatus
+            new TranslationSeedItem("entity.ec.changestatus", "ja-JP", "变更状态_jp", "变更状态(1=工作的 2=取消的 3=发行的 4=P.P中变更的 5=固定的 6=挂起的 7=拒绝的)"),
+            // entity.ec.changestatus
+            new TranslationSeedItem("entity.ec.changestatus", "zh-CN", "变更状态", "变更状态(1=工作的 2=取消的 3=发行的 4=P.P中变更的 5=固定的 6=挂起的 7=拒绝的)"),
+            // entity.ec.changestatus
+            new TranslationSeedItem("entity.ec.changestatus", "zh-HK", "变更状态_hk", "变更状态(1=工作的 2=取消的 3=发行的 4=P.P中变更的 5=固定的 6=挂起的 7=拒绝的)"),
 
             // entity.ec.status
-            new TranslationSeedItem("entity.ec.status", "en-US", "设变状态_us", "设变状态（0=草稿 1=审批中 2=已通过 3=已驳回 4=已撤回）"),
+            new TranslationSeedItem("entity.ec.status", "en-US", "设变状态_us", "设变状态（字典 logistics_ec_gijutsu_status；1=发行，2=执行中，3=完成）"),
             // entity.ec.status
-            new TranslationSeedItem("entity.ec.status", "ja-JP", "设变状态_jp", "设变状态（0=草稿 1=审批中 2=已通过 3=已驳回 4=已撤回）"),
+            new TranslationSeedItem("entity.ec.status", "ja-JP", "设变状态_jp", "设变状态（字典 logistics_ec_gijutsu_status；1=发行，2=执行中，3=完成）"),
             // entity.ec.status
-            new TranslationSeedItem("entity.ec.status", "zh-CN", "设变状态", "设变状态（0=草稿 1=审批中 2=已通过 3=已驳回 4=已撤回）"),
+            new TranslationSeedItem("entity.ec.status", "zh-CN", "设变状态", "设变状态（字典 logistics_ec_gijutsu_status；1=发行，2=执行中，3=完成）"),
             // entity.ec.status
-            new TranslationSeedItem("entity.ec.status", "zh-HK", "设变状态_hk", "设变状态（0=草稿 1=审批中 2=已通过 3=已驳回 4=已撤回）"),
+            new TranslationSeedItem("entity.ec.status", "zh-HK", "设变状态_hk", "设变状态（字典 logistics_ec_gijutsu_status；1=发行，2=执行中，3=完成）"),
 
             // entity.ec.details
             new TranslationSeedItem("entity.ec.details", "en-US", "设变明细列表_us", "设变明细列表"),

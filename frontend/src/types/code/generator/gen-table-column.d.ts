@@ -54,12 +54,12 @@ export interface GenTableColumn extends TenantDtoBase {
   columnComment?: string;
 
   /**
-   * 数据库数据类型（如：varchar、int、datetime、decimal等）
+   * 数据类型（字典 sys_db_data_type；nvarchar/varchar/int/datetime/decimal 等）
    */
   databaseDataType: string;
 
   /**
-   * C#类型（对应C#数据类型，如：string、int、long、DateTime、decimal、bool、Guid等）
+   * C#类型（字典 gen_csharp_data_type；string/int/long/datetime/decimal/bool/guid 等）
    */
   csharpDataType: string;
 
@@ -79,67 +79,67 @@ export interface GenTableColumn extends TenantDtoBase {
   decimalDigits: number;
 
   /**
-   * 是否主键（1=是，0=否）
+   * 主键（字典 sys_yes_no_type；0=否 1=是）
    */
   isPk: number;
 
   /**
-   * 是否自增（1=是，0=否）
+   * 自增（字典 sys_yes_no_type；0=否 1=是）
    */
   isIncrement: number;
 
   /**
-   * 是否必填（1=是，0=否）
+   * 必填（字典 sys_yes_no_type；0=否 1=是）
    */
   isRequired: number;
 
   /**
-   * 是否为新增字段（1=是，0=否）
+   * 新增（字典 sys_yes_no_type；0=否 1=是）
    */
   isCreate: number;
 
   /**
-   * 是否更新字段（1=是，0=否）
+   * 更新（字典 sys_yes_no_type；0=否 1=是）
    */
   isUpdate: number;
 
   /**
-   * 是否查重字段（1=是，0=否）
+   * 查重（字典 sys_yes_no_type；0=否 1=是）
    */
   isUnique: number;
 
   /**
-   * 是否列表字段（1=是，0=否）
+   * 列表（字典 sys_yes_no_type；0=否 1=是）
    */
   isList: number;
 
   /**
-   * 是否导出字段（1=是，0=否）
+   * 导出（字典 sys_yes_no_type；0=否 1=是）
    */
   isExport: number;
 
   /**
-   * 是否可排序字段（1=是，0=否）。控制前端表格列是否显示 sortable 排序图标，与 TaktGenTable.SortField/SortType（默认排序规则）互补。
+   * 可排序（字典 sys_yes_no_type；0=否 1=是）。控制前端表格列是否显示 sortable 排序图标，与 TaktGenTable.SortField/SortType（默认排序规则）互补。
    */
   isSort: number;
 
   /**
-   * 是否查询字段（1=是，0=否）
+   * 查询（字典 sys_yes_no_type；0=否 1=是）
    */
   isQuery: number;
 
   /**
-   * 查询方式（EQ=等于，NE=不等于，GT=大于，GTE=大于等于，LT=小于，LTE=小于等于，LIKE=模糊，BETWEEN=范围）
+   * 查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其它类型默认 eq
    */
   queryType: string;
 
   /**
-   * 显示类型（input=输入框，textarea=文本域，select=下拉框，checkbox=复选框，radio=单选框，date=日期控件，time=时间控件，image=图片上传，file=文件上传，slider=滑块，switch=开关，editor=富文本编辑器）
+   * 显示类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）
    */
   htmlType: string;
 
   /**
-   * 字典类型（关联数据字典）
+   * 字典类型（关联 TaktDictType.DictTypeCode，选项 TaktDictTypes/options）
    */
   dictType?: string;
 
@@ -184,12 +184,12 @@ export interface GenTableColumnQuery extends TaktPagedQuery {
   columnComment?: string;
 
   /**
-   * 数据库数据类型（如：varchar、int、datetime、decimal等）
+   * 数据类型（字典 sys_db_data_type；nvarchar/varchar/int/datetime/decimal 等）
    */
   databaseDataType?: string;
 
   /**
-   * C#类型（对应C#数据类型，如：string、int、long、DateTime、decimal、bool、Guid等）
+   * C#类型（字典 gen_csharp_data_type；string/int/long/datetime/decimal/bool/guid 等）
    */
   csharpDataType?: string;
 
@@ -209,67 +209,67 @@ export interface GenTableColumnQuery extends TaktPagedQuery {
   decimalDigits?: number;
 
   /**
-   * 是否主键（1=是，0=否）
+   * 主键（字典 sys_yes_no_type；0=否 1=是）
    */
   isPk?: number;
 
   /**
-   * 是否自增（1=是，0=否）
+   * 自增（字典 sys_yes_no_type；0=否 1=是）
    */
   isIncrement?: number;
 
   /**
-   * 是否必填（1=是，0=否）
+   * 必填（字典 sys_yes_no_type；0=否 1=是）
    */
   isRequired?: number;
 
   /**
-   * 是否为新增字段（1=是，0=否）
+   * 新增（字典 sys_yes_no_type；0=否 1=是）
    */
   isCreate?: number;
 
   /**
-   * 是否更新字段（1=是，0=否）
+   * 更新（字典 sys_yes_no_type；0=否 1=是）
    */
   isUpdate?: number;
 
   /**
-   * 是否查重字段（1=是，0=否）
+   * 查重（字典 sys_yes_no_type；0=否 1=是）
    */
   isUnique?: number;
 
   /**
-   * 是否列表字段（1=是，0=否）
+   * 列表（字典 sys_yes_no_type；0=否 1=是）
    */
   isList?: number;
 
   /**
-   * 是否导出字段（1=是，0=否）
+   * 导出（字典 sys_yes_no_type；0=否 1=是）
    */
   isExport?: number;
 
   /**
-   * 是否可排序字段（1=是，0=否）。控制前端表格列是否显示 sortable 排序图标，与 TaktGenTable.SortField/SortType（默认排序规则）互补。
+   * 可排序（字典 sys_yes_no_type；0=否 1=是）。控制前端表格列是否显示 sortable 排序图标，与 TaktGenTable.SortField/SortType（默认排序规则）互补。
    */
   isSort?: number;
 
   /**
-   * 是否查询字段（1=是，0=否）
+   * 查询（字典 sys_yes_no_type；0=否 1=是）
    */
   isQuery?: number;
 
   /**
-   * 查询方式（EQ=等于，NE=不等于，GT=大于，GTE=大于等于，LT=小于，LTE=小于等于，LIKE=模糊，BETWEEN=范围）
+   * 查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其它类型默认 eq
    */
   queryType?: string;
 
   /**
-   * 显示类型（input=输入框，textarea=文本域，select=下拉框，checkbox=复选框，radio=单选框，date=日期控件，time=时间控件，image=图片上传，file=文件上传，slider=滑块，switch=开关，editor=富文本编辑器）
+   * 显示类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）
    */
   htmlType?: string;
 
   /**
-   * 字典类型（关联数据字典）
+   * 字典类型（关联 TaktDictType.DictTypeCode，选项 TaktDictTypes/options）
    */
   dictType?: string;
 
@@ -328,12 +328,12 @@ export interface GenTableColumnCreate {
   columnComment?: string;
 
   /**
-   * 数据库数据类型（如：varchar、int、datetime、decimal等）
+   * 数据类型（字典 sys_db_data_type；nvarchar/varchar/int/datetime/decimal 等）
    */
   databaseDataType: string;
 
   /**
-   * C#类型（对应C#数据类型，如：string、int、long、DateTime、decimal、bool、Guid等）
+   * C#类型（字典 gen_csharp_data_type；string/int/long/datetime/decimal/bool/guid 等）
    */
   csharpDataType: string;
 
@@ -353,67 +353,67 @@ export interface GenTableColumnCreate {
   decimalDigits: number;
 
   /**
-   * 是否主键（1=是，0=否）
+   * 主键（字典 sys_yes_no_type；0=否 1=是）
    */
   isPk: number;
 
   /**
-   * 是否自增（1=是，0=否）
+   * 自增（字典 sys_yes_no_type；0=否 1=是）
    */
   isIncrement: number;
 
   /**
-   * 是否必填（1=是，0=否）
+   * 必填（字典 sys_yes_no_type；0=否 1=是）
    */
   isRequired: number;
 
   /**
-   * 是否为新增字段（1=是，0=否）
+   * 新增（字典 sys_yes_no_type；0=否 1=是）
    */
   isCreate: number;
 
   /**
-   * 是否更新字段（1=是，0=否）
+   * 更新（字典 sys_yes_no_type；0=否 1=是）
    */
   isUpdate: number;
 
   /**
-   * 是否查重字段（1=是，0=否）
+   * 查重（字典 sys_yes_no_type；0=否 1=是）
    */
   isUnique: number;
 
   /**
-   * 是否列表字段（1=是，0=否）
+   * 列表（字典 sys_yes_no_type；0=否 1=是）
    */
   isList: number;
 
   /**
-   * 是否导出字段（1=是，0=否）
+   * 导出（字典 sys_yes_no_type；0=否 1=是）
    */
   isExport: number;
 
   /**
-   * 是否可排序字段（1=是，0=否）。控制前端表格列是否显示 sortable 排序图标，与 TaktGenTable.SortField/SortType（默认排序规则）互补。
+   * 可排序（字典 sys_yes_no_type；0=否 1=是）。控制前端表格列是否显示 sortable 排序图标，与 TaktGenTable.SortField/SortType（默认排序规则）互补。
    */
   isSort: number;
 
   /**
-   * 是否查询字段（1=是，0=否）
+   * 查询（字典 sys_yes_no_type；0=否 1=是）
    */
   isQuery: number;
 
   /**
-   * 查询方式（EQ=等于，NE=不等于，GT=大于，GTE=大于等于，LT=小于，LTE=小于等于，LIKE=模糊，BETWEEN=范围）
+   * 查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其它类型默认 eq
    */
   queryType: string;
 
   /**
-   * 显示类型（input=输入框，textarea=文本域，select=下拉框，checkbox=复选框，radio=单选框，date=日期控件，time=时间控件，image=图片上传，file=文件上传，slider=滑块，switch=开关，editor=富文本编辑器）
+   * 显示类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）
    */
   htmlType: string;
 
   /**
-   * 字典类型（关联数据字典）
+   * 字典类型（关联 TaktDictType.DictTypeCode，选项 TaktDictTypes/options）
    */
   dictType?: string;
 
@@ -496,12 +496,12 @@ export interface GenTableColumnTemplate {
   columnComment?: string;
 
   /**
-   * 数据库数据类型（如：varchar、int、datetime、decimal等）
+   * 数据类型（字典 sys_db_data_type；nvarchar/varchar/int/datetime/decimal 等）
    */
   databaseDataType?: string;
 
   /**
-   * C#类型（对应C#数据类型，如：string、int、long、DateTime、decimal、bool、Guid等）
+   * C#类型（字典 gen_csharp_data_type；string/int/long/datetime/decimal/bool/guid 等）
    */
   csharpDataType?: string;
 
@@ -521,17 +521,17 @@ export interface GenTableColumnTemplate {
   decimalDigits?: number;
 
   /**
-   * 是否主键（1=是，0=否）
+   * 主键（字典 sys_yes_no_type；0=否 1=是）
    */
   isPk?: number;
 
   /**
-   * 是否自增（1=是，0=否）
+   * 自增（字典 sys_yes_no_type；0=否 1=是）
    */
   isIncrement?: number;
 
   /**
-   * 是否必填（1=是，0=否）
+   * 必填（字典 sys_yes_no_type；0=否 1=是）
    */
   isRequired?: number;
 
@@ -580,12 +580,12 @@ export interface GenTableColumnImport {
   columnComment?: string;
 
   /**
-   * 数据库数据类型（如：varchar、int、datetime、decimal等）
+   * 数据类型（字典 sys_db_data_type；nvarchar/varchar/int/datetime/decimal 等）
    */
   databaseDataType?: string;
 
   /**
-   * C#类型（对应C#数据类型，如：string、int、long、DateTime、decimal、bool、Guid等）
+   * C#类型（字典 gen_csharp_data_type；string/int/long/datetime/decimal/bool/guid 等）
    */
   csharpDataType?: string;
 
@@ -605,17 +605,17 @@ export interface GenTableColumnImport {
   decimalDigits?: number;
 
   /**
-   * 是否主键（1=是，0=否）
+   * 主键（字典 sys_yes_no_type；0=否 1=是）
    */
   isPk?: number;
 
   /**
-   * 是否自增（1=是，0=否）
+   * 自增（字典 sys_yes_no_type；0=否 1=是）
    */
   isIncrement?: number;
 
   /**
-   * 是否必填（1=是，0=否）
+   * 必填（字典 sys_yes_no_type；0=否 1=是）
    */
   isRequired?: number;
 
@@ -664,12 +664,12 @@ export interface GenTableColumnExport {
   columnComment?: string;
 
   /**
-   * 数据库数据类型（如：varchar、int、datetime、decimal等）
+   * 数据类型（字典 sys_db_data_type；nvarchar/varchar/int/datetime/decimal 等）
    */
   databaseDataType: string;
 
   /**
-   * C#类型（对应C#数据类型，如：string、int、long、DateTime、decimal、bool、Guid等）
+   * C#类型（字典 gen_csharp_data_type；string/int/long/datetime/decimal/bool/guid 等）
    */
   csharpDataType: string;
 
@@ -689,67 +689,67 @@ export interface GenTableColumnExport {
   decimalDigits: number;
 
   /**
-   * 是否主键（1=是，0=否）
+   * 主键（字典 sys_yes_no_type；0=否 1=是）
    */
   isPk: number;
 
   /**
-   * 是否自增（1=是，0=否）
+   * 自增（字典 sys_yes_no_type；0=否 1=是）
    */
   isIncrement: number;
 
   /**
-   * 是否必填（1=是，0=否）
+   * 必填（字典 sys_yes_no_type；0=否 1=是）
    */
   isRequired: number;
 
   /**
-   * 是否为新增字段（1=是，0=否）
+   * 新增（字典 sys_yes_no_type；0=否 1=是）
    */
   isCreate: number;
 
   /**
-   * 是否更新字段（1=是，0=否）
+   * 更新（字典 sys_yes_no_type；0=否 1=是）
    */
   isUpdate: number;
 
   /**
-   * 是否查重字段（1=是，0=否）
+   * 查重（字典 sys_yes_no_type；0=否 1=是）
    */
   isUnique: number;
 
   /**
-   * 是否列表字段（1=是，0=否）
+   * 列表（字典 sys_yes_no_type；0=否 1=是）
    */
   isList: number;
 
   /**
-   * 是否导出字段（1=是，0=否）
+   * 导出（字典 sys_yes_no_type；0=否 1=是）
    */
   isExport: number;
 
   /**
-   * 是否可排序字段（1=是，0=否）。控制前端表格列是否显示 sortable 排序图标，与 TaktGenTable.SortField/SortType（默认排序规则）互补。
+   * 可排序（字典 sys_yes_no_type；0=否 1=是）。控制前端表格列是否显示 sortable 排序图标，与 TaktGenTable.SortField/SortType（默认排序规则）互补。
    */
   isSort: number;
 
   /**
-   * 是否查询字段（1=是，0=否）
+   * 查询（字典 sys_yes_no_type；0=否 1=是）
    */
   isQuery: number;
 
   /**
-   * 查询方式（EQ=等于，NE=不等于，GT=大于，GTE=大于等于，LT=小于，LTE=小于等于，LIKE=模糊，BETWEEN=范围）
+   * 查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其它类型默认 eq
    */
   queryType: string;
 
   /**
-   * 显示类型（input=输入框，textarea=文本域，select=下拉框，checkbox=复选框，radio=单选框，date=日期控件，time=时间控件，image=图片上传，file=文件上传，slider=滑块，switch=开关，editor=富文本编辑器）
+   * 显示类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）
    */
   htmlType: string;
 
   /**
-   * 字典类型（关联数据字典）
+   * 字典类型（关联 TaktDictType.DictTypeCode，选项 TaktDictTypes/options）
    */
   dictType?: string;
 

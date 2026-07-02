@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Maintenance
 // 文件名称：TaktEquipmentService.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：工厂设备应用服务实现
 // 
@@ -450,6 +450,33 @@ public class TaktEquipmentService : TaktServiceBase, ITaktEquipmentService
             await _maintenanceHistoryRepository.CreateRangeAsync(maintenancehistories);
         }
     }
+
+    /// <summary>
+    /// 获取设备统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>设备统计</returns>
+    public async Task<TaktEquipmentStatDto> GetEquipmentStatAsync(TaktEquipmentStatQueryDto queryDto)
+    {
+        EnsureThreeLayerContext();
+        var (start, end, statMonth) = TaktStatMonthRangeHelper.ResolveMonthRange(
+            queryDto.CreatedAtStart,
+            queryDto.CreatedAtEnd);
+        var tenantCode = CurrentTenantCode;
+        var companyCode = CurrentCompanyCode;
+        Expression<Func<TaktEquipment, bool>> predicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.CreatedAt >= start
+            && x.CreatedAt <= end;
+        var monthEquipmentCount = await _equipmentRepository.CountAsync(predicate);
+        return new TaktEquipmentStatDto
+        {
+            StatMonth = statMonth,
+            MonthEquipmentCount = monthEquipmentCount,
+        };
+    }
+
     // ========================================
     // 查询表达式
     // ========================================

@@ -106,11 +106,11 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('productionLine')">
-      <a-form-item :label="t('entity.personneloperationratechangelog.productionline')">
+      <div v-show="isFieldVisible('prodTeam')">
+      <a-form-item :label="t('entity.personneloperationratechangelog.prodteam')">
         <a-input
-          v-model:value="advancedQueryForm.productionLine"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationratechangelog.productionline') })"
+          v-model:value="advancedQueryForm.prodTeam"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationratechangelog.prodteam') })"
           show-count
           :maxlength="20"
           allow-clear
@@ -304,7 +304,7 @@ const formRef = ref()
 
 const advancedQueryVisible = ref(false)
 const advancedQueryForm = ref({
-  productionLine: '',
+  prodTeam: '',
   changeFields: '',
   changeTimeStart: '',
   changeTimeEnd: '',
@@ -319,7 +319,7 @@ const visibleQueryFieldKeys = ref<string[]>([])
 
 /** 高级查询字段元数据 */
 const queryFieldsMeta = computed(() => [
-  { key: 'productionLine', label: t('entity.personneloperationratechangelog.productionline') },
+  { key: 'prodTeam', label: t('entity.personneloperationratechangelog.prodteam') },
   { key: 'changeFields', label: t('entity.personneloperationratechangelog.changefields') },
   { key: 'changeTimeStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.personneloperationratechangelog.changetime')) },
   { key: 'changeTimeEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.personneloperationratechangelog.changetime')) },
@@ -351,7 +351,7 @@ function handleAdvancedQuerySubmit() {
 
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
-  productionLine: '',
+  prodTeam: '',
   changeFields: '',
   changeTimeStart: '',
   changeTimeEnd: '',
@@ -405,14 +405,14 @@ const columns = computed<TableColumnsType>(() => [
       String(getPersonnelOperationRateChangeLogField(record, 'personnelOperationRateChangeLogId') ?? ''),
   },
   {
-    title: t('entity.personneloperationratechangelog.productionline'),
-    dataIndex: 'productionLine',
-    key: 'productionLine',
+    title: t('entity.personneloperationratechangelog.prodteam'),
+    dataIndex: 'prodTeam',
+    key: 'prodTeam',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: PersonnelOperationRateChangeLog }) =>
-      String(getPersonnelOperationRateChangeLogField(record, 'productionLine') ?? ''),
+      String(getPersonnelOperationRateChangeLogField(record, 'prodTeam') ?? ''),
   },
   {
     title: t('entity.personneloperationratechangelog.changefields'),
@@ -546,7 +546,7 @@ function buildListQuery(overrides?: Partial<PersonnelOperationRateChangeLogQuery
       query[key] = v as never
     }
   }
-  assignTrimmed('productionLine', form.productionLine)
+  assignTrimmed('prodTeam', form.prodTeam)
   assignTrimmed('changeFields', form.changeFields)
   assignTrimmed('changeTimeStart', form.changeTimeStart)
   assignTrimmed('changeTimeEnd', form.changeTimeEnd)

@@ -47,7 +47,7 @@ public class TaktBillOfMaterialItem : TaktCompanyEntityBase
     public int LineNumber { get; set; } = 10;
 
     /// <summary>
-    /// 子项物料ID（关联工厂物料主数据，序列化为string以避免Javascript精度问题）
+    /// 子项物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
     /// </summary>
     [SugarColumn(ColumnName = "material_id", ColumnDescription = "子项物料ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -66,10 +66,10 @@ public class TaktBillOfMaterialItem : TaktCompanyEntityBase
     public decimal UsageQuantity { get; set; } = 0;
 
     /// <summary>
-    /// 单位（unit）
+    /// 单位（字典 logistics_unit_of_measure_code）
     /// </summary>
-    [SugarColumn(ColumnName = "material_unit", ColumnDescription = "单位", ColumnDataType = "nvarchar", Length = 20, IsNullable = false, DefaultValue = "个")]
-    public string MaterialUnit { get; set; } = "个";
+    [SugarColumn(ColumnName = "material_unit", ColumnDescription = "单位", ColumnDataType = "nvarchar", Length = 20, IsNullable = false, DefaultValue = "PC")]
+    public string MaterialUnit { get; set; } = "PC";
 
     /// <summary>
     /// 损耗率（0-100，scrap_rate）
@@ -90,7 +90,7 @@ public class TaktBillOfMaterialItem : TaktCompanyEntityBase
     public int OperationSeq { get; set; } = 0;
 
     /// <summary>
-    /// 工作中心（work_center）
+    /// 工作中心（选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
     /// </summary>
     [SugarColumn(ColumnName = "work_center", ColumnDescription = "工作中心", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? WorkCenter { get; set; }
@@ -114,13 +114,13 @@ public class TaktBillOfMaterialItem : TaktCompanyEntityBase
     public int SubstitutePriority { get; set; } = 0;
 
     /// <summary>
-    /// 是否可选件（0=否，1=是，optional_flag）
+    /// 是否可选件（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_optional", ColumnDescription = "是否可选件", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsOptional { get; set; } = 0;
 
     /// <summary>
-    /// 是否虚拟件（0=否，1=是，phantom_flag）
+    /// 是否虚拟件（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_phantom", ColumnDescription = "是否虚拟件", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsPhantom { get; set; } = 0;

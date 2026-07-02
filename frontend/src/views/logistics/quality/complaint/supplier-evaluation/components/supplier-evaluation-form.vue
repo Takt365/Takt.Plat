@@ -355,12 +355,11 @@
                 :label="t('entity.supplierevaluation.rectificationdeadline')"
                 name="rectificationDeadline"
               >
-                <a-input
+                <a-date-picker
                   v-model:value="formState.rectificationDeadline"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.rectificationdeadline') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.supplierevaluation.rectificationdeadline') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>

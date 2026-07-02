@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.HumanResource.Compensation
 // 文件名称：TaktSalaryItemValidators.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SalaryItem 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktSalaryItem 生成，请按需审阅）
 // 
@@ -41,13 +41,10 @@ public class TaktSalaryItemCreateValidator : AbstractValidator<TaktSalaryItemCre
         RuleFor(x => x.ItemName)
             .NotEmpty().WithMessage("项目名称不能为空")
             .MaximumLength(80).WithMessage("项目名称长度不能超过80个字符");
-        RuleFor(x => x.ShortName)
-            .MaximumLength(40).WithMessage("简称长度不能超过40个字符");
         RuleFor(x => x.SalaryFormulaId)
-            .GreaterThanOrEqualTo(0).WithMessage("关联计算公式步骤 ID不能为负数");
-        RuleFor(x => x.SortOrder)
-            .GreaterThanOrEqualTo(0).WithMessage("排序号不能为负数");
+            .GreaterThanOrEqualTo(0).WithMessage("计算公式不能为负数");
         RuleFor(x => x.RelatedPlant)
+            .NotEmpty().WithMessage("关联工厂不能为空")
             .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
@@ -72,6 +69,27 @@ public class TaktSalaryItemUpdateValidator : AbstractValidator<TaktSalaryItemUpd
     {
         RuleFor(x => x.SalaryItemId)
             .GreaterThan(0).WithMessage("SalaryItemID无效");
+        RuleFor(x => x.TenantCode)
+            .NotEmpty().WithMessage("租户编码不能为空")
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.CompanyCode)
+            .NotEmpty().WithMessage("公司代码不能为空")
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.ItemCode)
+            .NotEmpty().WithMessage("项目编码不能为空")
+            .MaximumLength(40).WithMessage("项目编码长度不能超过40个字符");
+        RuleFor(x => x.ItemName)
+            .NotEmpty().WithMessage("项目名称不能为空")
+            .MaximumLength(80).WithMessage("项目名称长度不能超过80个字符");
+        RuleFor(x => x.SalaryFormulaId)
+            .GreaterThanOrEqualTo(0).WithMessage("计算公式不能为负数");
+        RuleFor(x => x.RelatedPlant)
+            .NotEmpty().WithMessage("关联工厂不能为空")
+            .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符");
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
     }
 }
 
@@ -99,12 +117,11 @@ public class TaktSalaryItemImportValidator : AbstractValidator<TaktSalaryItemImp
         RuleFor(x => x.ItemName)
             .NotEmpty().WithMessage("项目名称不能为空")
             .MaximumLength(80).WithMessage("项目名称长度不能超过80个字符");
-        RuleFor(x => x.ShortName)
-            .MaximumLength(40).WithMessage("简称长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.ShortName));
         RuleFor(x => x.SalaryFormulaId)
-            .GreaterThanOrEqualTo(0).WithMessage("关联计算公式步骤 ID不能为负数");
-        RuleFor(x => x.SortOrder)
-            .GreaterThanOrEqualTo(0).WithMessage("排序号不能为负数");
+            .GreaterThanOrEqualTo(0).WithMessage("计算公式不能为负数");
+        RuleFor(x => x.RelatedPlant)
+            .NotEmpty().WithMessage("关联工厂不能为空")
+            .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

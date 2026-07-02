@@ -454,8 +454,8 @@ public class TaktMenuLevel4SeedData
                 menu.ParentId = manufacturingEngineeringChangeMenu.Id;
                 menu.MenuType = 1;
                 menu.Permission = "logistics:manufacturing:engineering:change:kanban:list";
-                menu.RoutePath = "/logistics/manufacturing/engineering-change/kanban";
-                menu.ComponentPath = "logistics/manufacturing/engineering-change/kanban/index";
+                menu.RoutePath = "/logistics/manufacturing/engineering-change/ec-kanban";
+                menu.ComponentPath = "logistics/manufacturing/engineering-change/ec-kanban/index";
                 menu.SortOrder = 1;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
@@ -474,8 +474,8 @@ public class TaktMenuLevel4SeedData
                 menu.ParentId = manufacturingEngineeringChangeMenu.Id;
                 menu.MenuType = 1;
                 menu.Permission = "logistics:manufacturing:engineering:change:batch:list";
-                menu.RoutePath = "/logistics/manufacturing/engineering-change/batch";
-                menu.ComponentPath = "logistics/manufacturing/engineering-change/batch/index";
+                menu.RoutePath = "/logistics/manufacturing/engineering-change/ec-batch";
+                menu.ComponentPath = "logistics/manufacturing/engineering-change/ec-batch/index";
                 menu.SortOrder = 2;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
@@ -494,8 +494,8 @@ public class TaktMenuLevel4SeedData
                 menu.ParentId = manufacturingEngineeringChangeMenu.Id;
                 menu.MenuType = 1;
                 menu.Permission = "logistics:manufacturing:engineering:change:kakunin:list";
-                menu.RoutePath = "/logistics/manufacturing/engineering-change/kakunin";
-                menu.ComponentPath = "logistics/manufacturing/engineering-change/kakunin/index";
+                menu.RoutePath = "/logistics/manufacturing/engineering-change/ec-kakunin";
+                menu.ComponentPath = "logistics/manufacturing/engineering-change/ec-kakunin/index";
                 menu.SortOrder = 3;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
@@ -504,26 +504,6 @@ public class TaktMenuLevel4SeedData
             });
             insertCount += insertECN3;
             updateCount += updateECN3;
-
-            var (insertECNNotification, updateECNNotification) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_EC_NOTIFICATION", menu =>
-            {
-                menu.MenuName = "设变通知";
-                menu.MenuCode = "LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_EC_NOTIFICATION";
-                menu.I18nKey = "menu.logistics.manufacturing.engineering.change.ec.notification";
-                menu.Icon = "RiNotificationLine";
-                menu.ParentId = manufacturingEngineeringChangeMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "logistics:manufacturing:engineering:change:ec:notification:list";
-                menu.RoutePath = "/logistics/manufacturing/engineering-change/ec-notification";
-                menu.ComponentPath = "logistics/manufacturing/engineering-change/ec-notification/index";
-                menu.SortOrder = 4;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertECNNotification;
-            updateCount += updateECNNotification;
 
             var (insertECN4, updateECN4) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_GIJUTSU", menu =>
             {
@@ -534,9 +514,9 @@ public class TaktMenuLevel4SeedData
                 menu.ParentId = manufacturingEngineeringChangeMenu.Id;
                 menu.MenuType = 1;
                 menu.Permission = "logistics:manufacturing:engineering:change:gijutsu:list";
-                menu.RoutePath = "/logistics/manufacturing/engineering-change/gijutsu";
-                menu.ComponentPath = "logistics/manufacturing/engineering-change/gijutsu/index";
-                menu.SortOrder = 5;
+                menu.RoutePath = "/logistics/manufacturing/engineering-change/ec-gijutsu";
+                menu.ComponentPath = "logistics/manufacturing/engineering-change/ec-gijutsu/index";
+                menu.SortOrder = 4;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -544,6 +524,26 @@ public class TaktMenuLevel4SeedData
             });
             insertCount += insertECN4;
             updateCount += updateECN4;
+
+            var (insertECNNotification, updateECNNotification) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_NOTIFICATION", menu =>
+            {
+                menu.MenuName = "设变通知";
+                menu.MenuCode = "LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_NOTIFICATION";
+                menu.I18nKey = "menu.logistics.manufacturing.engineering.change.notification";
+                menu.Icon = "RiNotificationLine";
+                menu.ParentId = manufacturingEngineeringChangeMenu.Id;
+                menu.MenuType = 1;
+                menu.Permission = "logistics:manufacturing:engineering:change:notification:list";
+                menu.RoutePath = "/logistics/manufacturing/engineering-change/ec-notification";
+                menu.ComponentPath = "logistics/manufacturing/engineering-change/ec-notification/index";
+                menu.SortOrder = 5;
+                menu.MenuStatus = 1;
+                menu.IsVisible = 1;
+                menu.IsCached = 0;
+                menu.IsExternal = 0;
+            });
+            insertCount += insertECNNotification;
+            updateCount += updateECNNotification;
 
             var (insertECN5, updateECN5) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_KOUBAI", menu =>
             {
@@ -554,8 +554,8 @@ public class TaktMenuLevel4SeedData
                 menu.ParentId = manufacturingEngineeringChangeMenu.Id;
                 menu.MenuType = 1;
                 menu.Permission = "logistics:manufacturing:engineering:change:koubai:list";
-                menu.RoutePath = "/logistics/manufacturing/engineering-change/koubai";
-                menu.ComponentPath = "logistics/manufacturing/engineering-change/koubai/index";
+                menu.RoutePath = "/logistics/manufacturing/engineering-change/ec-koubai";
+                menu.ComponentPath = "logistics/manufacturing/engineering-change/ec-koubai/index";
                 menu.SortOrder = 6;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
@@ -574,8 +574,8 @@ public class TaktMenuLevel4SeedData
                 menu.ParentId = manufacturingEngineeringChangeMenu.Id;
                 menu.MenuType = 1;
                 menu.Permission = "logistics:manufacturing:engineering:change:seikan:list";
-                menu.RoutePath = "/logistics/manufacturing/engineering-change/seikan";
-                menu.ComponentPath = "logistics/manufacturing/engineering-change/seikan/index";
+                menu.RoutePath = "/logistics/manufacturing/engineering-change/ec-seikan";
+                menu.ComponentPath = "logistics/manufacturing/engineering-change/ec-seikan/index";
                 menu.SortOrder = 7;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
@@ -594,8 +594,8 @@ public class TaktMenuLevel4SeedData
                 menu.ParentId = manufacturingEngineeringChangeMenu.Id;
                 menu.MenuType = 1;
                 menu.Permission = "logistics:manufacturing:engineering:change:ukeken:list";
-                menu.RoutePath = "/logistics/manufacturing/engineering-change/ukeken";
-                menu.ComponentPath = "logistics/manufacturing/engineering-change/ukeken/index";
+                menu.RoutePath = "/logistics/manufacturing/engineering-change/ec-ukeken";
+                menu.ComponentPath = "logistics/manufacturing/engineering-change/ec-ukeken/index";
                 menu.SortOrder = 8;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
@@ -614,8 +614,8 @@ public class TaktMenuLevel4SeedData
                 menu.ParentId = manufacturingEngineeringChangeMenu.Id;
                 menu.MenuType = 1;
                 menu.Permission = "logistics:manufacturing:engineering:change:bukan:list";
-                menu.RoutePath = "/logistics/manufacturing/engineering-change/bukan";
-                menu.ComponentPath = "logistics/manufacturing/engineering-change/bukan/index";
+                menu.RoutePath = "/logistics/manufacturing/engineering-change/ec-bukan";
+                menu.ComponentPath = "logistics/manufacturing/engineering-change/ec-bukan/index";
                 menu.SortOrder = 9;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
@@ -634,8 +634,8 @@ public class TaktMenuLevel4SeedData
                 menu.ParentId = manufacturingEngineeringChangeMenu.Id;
                 menu.MenuType = 1;
                 menu.Permission = "logistics:manufacturing:engineering:change:seizounika:list";
-                menu.RoutePath = "/logistics/manufacturing/engineering-change/seizounika";
-                menu.ComponentPath = "logistics/manufacturing/engineering-change/seizounika/index";
+                menu.RoutePath = "/logistics/manufacturing/engineering-change/ec-seizounika";
+                menu.ComponentPath = "logistics/manufacturing/engineering-change/ec-seizounika/index";
                 menu.SortOrder = 10;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
@@ -654,8 +654,8 @@ public class TaktMenuLevel4SeedData
                 menu.ParentId = manufacturingEngineeringChangeMenu.Id;
                 menu.MenuType = 1;
                 menu.Permission = "logistics:manufacturing:engineering:change:seizouikka:list";
-                menu.RoutePath = "/logistics/manufacturing/engineering-change/seizouikka";
-                menu.ComponentPath = "logistics/manufacturing/engineering-change/seizouikka/index";
+                menu.RoutePath = "/logistics/manufacturing/engineering-change/ec-seizouikka";
+                menu.ComponentPath = "logistics/manufacturing/engineering-change/ec-seizouikka/index";
                 menu.SortOrder = 11;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
@@ -674,8 +674,8 @@ public class TaktMenuLevel4SeedData
                 menu.ParentId = manufacturingEngineeringChangeMenu.Id;
                 menu.MenuType = 1;
                 menu.Permission = "logistics:manufacturing:engineering:change:hinkan:list";
-                menu.RoutePath = "/logistics/manufacturing/engineering-change/hinkan";
-                menu.ComponentPath = "logistics/manufacturing/engineering-change/hinkan/index";
+                menu.RoutePath = "/logistics/manufacturing/engineering-change/ec-hinkan";
+                menu.ComponentPath = "logistics/manufacturing/engineering-change/ec-hinkan/index";
                 menu.SortOrder = 12;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
@@ -684,6 +684,26 @@ public class TaktMenuLevel4SeedData
             });
             insertCount += insertECN11;
             updateCount += updateECN11;
+
+            var (insertECN11Te, updateECN11Te) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_SEIZOUGIJUTSU", menu =>
+            {
+                menu.MenuName = "制造技术课";
+                menu.MenuCode = "LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_SEIZOUGIJUTSU";
+                menu.I18nKey = "menu.logistics.manufacturing.engineering.change.seizougijutsu";
+                menu.Icon = "RiToolsLine";
+                menu.ParentId = manufacturingEngineeringChangeMenu.Id;
+                menu.MenuType = 1;
+                menu.Permission = "logistics:manufacturing:engineering:change:seizougijutsu:list";
+                menu.RoutePath = "/logistics/manufacturing/engineering-change/ec-seizougijutsu";
+                menu.ComponentPath = "logistics/manufacturing/engineering-change/ec-seizougijutsu/index";
+                menu.SortOrder = 13;
+                menu.MenuStatus = 1;
+                menu.IsVisible = 1;
+                menu.IsCached = 0;
+                menu.IsExternal = 0;
+            });
+            insertCount += insertECN11Te;
+            updateCount += updateECN11Te;
 
             var (insertECN12, updateECN12) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_LEGACY_PRODUCT", menu =>
             {
@@ -696,7 +716,7 @@ public class TaktMenuLevel4SeedData
                 menu.Permission = "logistics:manufacturing:engineering:change:legacy:product:list";
                 menu.RoutePath = "/logistics/manufacturing/engineering-change/legacy-product";
                 menu.ComponentPath = "logistics/manufacturing/engineering-change/legacy-product/index";
-                menu.SortOrder = 13;
+                menu.SortOrder = 14;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -704,6 +724,26 @@ public class TaktMenuLevel4SeedData
             });
             insertCount += insertECN12;
             updateCount += updateECN12;
+
+            var (insertECNSourceEc, updateECNSourceEc) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_SOURCE_EC", menu =>
+            {
+                menu.MenuName = "设变来源";
+                menu.MenuCode = "LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_SOURCE_EC";
+                menu.I18nKey = "menu.logistics.manufacturing.engineering.change.source.ec";
+                menu.Icon = "RiInboxArchiveLine";
+                menu.ParentId = manufacturingEngineeringChangeMenu.Id;
+                menu.MenuType = 1;
+                menu.Permission = "logistics:manufacturing:engineering:change:source:ec:list";
+                menu.RoutePath = "/logistics/manufacturing/engineering-change/source-ec";
+                menu.ComponentPath = "logistics/manufacturing/engineering-change/source-ec/index";
+                menu.SortOrder = 15;
+                menu.MenuStatus = 1;
+                menu.IsVisible = 1;
+                menu.IsCached = 0;
+                menu.IsExternal = 0;
+            });
+            insertCount += insertECNSourceEc;
+            updateCount += updateECNSourceEc;
         }
 
         // ========== 产出管理下的四级菜单 ==========

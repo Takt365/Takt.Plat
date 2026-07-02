@@ -23,7 +23,7 @@ namespace Takt.Domain.Entities.Logistics.Quality.Operation;
 public class TaktInspectionStandardItem : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 检验标准ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 检验标准 ID（关联 TaktInspectionStandard.Id，选项 TaktInspectionStandards/options）
     /// </summary>
     [SugarColumn(ColumnName = "inspection_standard_id", ColumnDescription = "检验标准ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -48,19 +48,19 @@ public class TaktInspectionStandardItem : TaktCompanyEntityBase
     public string ItemName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检验项目类型（0=外观，1=尺寸，2=性能，3=材质，4=功能，5=颜色，6=结构）
+    /// 检验项目类型（字典 logistics_quality_inspection_item_type）
     /// </summary>
     [SugarColumn(ColumnName = "item_type", ColumnDescription = "检验项目类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int ItemType { get; set; } = 0;
 
     /// <summary>
-    /// 缺点等级（CR=严重，MA=主要，MI=次要）
+    /// 缺点等级（字典 logistics_quality_defect_severity_code；CR/MA/MI）
     /// </summary>
     [SugarColumn(ColumnName = "defect_level", ColumnDescription = "缺点等级", ColumnDataType = "nvarchar", Length = 2, IsNullable = false)]
     public string DefectLevel { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检验方式（1=计数，2=计量）
+    /// 检验方式（字典 logistics_quality_inspection_mode）
     /// </summary>
     [SugarColumn(ColumnName = "inspection_mode", ColumnDescription = "检验方式", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int InspectionMode { get; set; } = 1;
@@ -84,7 +84,7 @@ public class TaktInspectionStandardItem : TaktCompanyEntityBase
     public string LowerLimit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检验工具
+    /// 检验工具（手输名称）
     /// </summary>
     [SugarColumn(ColumnName = "inspection_tool", ColumnDescription = "检验工具", ColumnDataType = "nvarchar", Length = 200, IsNullable = false)]
     public string InspectionTool { get; set; } = string.Empty;
@@ -108,7 +108,7 @@ public class TaktInspectionStandardItem : TaktCompanyEntityBase
     public string RejectionCriteria { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否合格判定项目（0=否，1=是）
+    /// 是否合格判定项目（字典 sys_yes_no_type）
     /// </summary>
     [SugarColumn(ColumnName = "is_qualified_basis", ColumnDescription = "是否合格判定项目", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int IsQualifiedBasis { get; set; } = 1;

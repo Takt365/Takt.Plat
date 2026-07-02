@@ -23,10 +23,11 @@ namespace Takt.Domain.Entities.Logistics.Quality.Cost;
 [SugarIndex("ix_quality_issue_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_quality_issue_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_quality_issue_qf_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(QualityIssueCode), OrderByType.Asc, nameof(IssueDate), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_quality_issue_plant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
 public class TaktQualityIssue : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", Length = 4, ColumnDataType = "nvarchar", IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
@@ -92,7 +93,7 @@ public class TaktQualityIssue : TaktCompanyEntityBase
     /// <summary>
     /// 成本币种（CNY/USD/JPY等）
     /// </summary>
-    [SugarColumn(ColumnName = "cost_currency", ColumnDescription = "成本币种", Length = 10, ColumnDataType = "nvarchar", IsNullable = false, DefaultValue = "CNY")]
+    [SugarColumn(ColumnName = "cost_currency", ColumnDescription = "成本币种", Length = 3, ColumnDataType = "nvarchar", IsNullable = false, DefaultValue = "CNY")]
     public string CostCurrency { get; set; } = "CNY";
 
     // ==================== 导航关系 ====================

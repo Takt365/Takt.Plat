@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcNotificationValidators.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：EcNotification 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktEcNotification 生成，请按需审阅）
 // 
@@ -46,16 +46,8 @@ public class TaktEcNotificationCreateValidator : AbstractValidator<TaktEcNotific
         RuleFor(x => x.EcNo)
             .NotEmpty().WithMessage("设变单号不能为空")
             .MaximumLength(30).WithMessage("设变单号长度不能超过30个字符");
-        RuleFor(x => x.EcTitle)
-            .MaximumLength(500).WithMessage("设变主题长度不能超过500个字符");
-        RuleFor(x => x.EcNotificationDeptCodes)
-            .MaximumLength(200).WithMessage("通知部门编码长度不能超过200个字符");
-        RuleFor(x => x.EcNotificationDeptNames)
-            .MaximumLength(500).WithMessage("通知部门名称长度不能超过500个字符");
         RuleFor(x => x.EcNotificationNotifierId)
             .GreaterThanOrEqualTo(0).WithMessage("通知人ID不能为负数");
-        RuleFor(x => x.EcNotificationNotifierName)
-            .MaximumLength(50).WithMessage("通知人姓名长度不能超过50个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -79,6 +71,29 @@ public class TaktEcNotificationUpdateValidator : AbstractValidator<TaktEcNotific
     {
         RuleFor(x => x.EcNotificationId)
             .GreaterThan(0).WithMessage("EcNotificationID无效");
+        RuleFor(x => x.TenantCode)
+            .NotEmpty().WithMessage("租户编码不能为空")
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.CompanyCode)
+            .NotEmpty().WithMessage("公司代码不能为空")
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.PlantCode)
+            .NotEmpty().WithMessage("工厂代码不能为空")
+            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
+        RuleFor(x => x.EcNotificationNo)
+            .NotEmpty().WithMessage("通知单号不能为空")
+            .MaximumLength(30).WithMessage("通知单号长度不能超过30个字符");
+        RuleFor(x => x.EcId)
+            .GreaterThanOrEqualTo(0).WithMessage("关联的设变主表ID不能为负数");
+        RuleFor(x => x.EcNo)
+            .NotEmpty().WithMessage("设变单号不能为空")
+            .MaximumLength(30).WithMessage("设变单号长度不能超过30个字符");
+        RuleFor(x => x.EcNotificationNotifierId)
+            .GreaterThanOrEqualTo(0).WithMessage("通知人ID不能为负数");
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
     }
 }
 
@@ -111,16 +126,8 @@ public class TaktEcNotificationImportValidator : AbstractValidator<TaktEcNotific
         RuleFor(x => x.EcNo)
             .NotEmpty().WithMessage("设变单号不能为空")
             .MaximumLength(30).WithMessage("设变单号长度不能超过30个字符");
-        RuleFor(x => x.EcTitle)
-            .MaximumLength(500).WithMessage("设变主题长度不能超过500个字符").When(x => !string.IsNullOrWhiteSpace(x.EcTitle));
-        RuleFor(x => x.EcNotificationDeptCodes)
-            .MaximumLength(200).WithMessage("通知部门编码长度不能超过200个字符").When(x => !string.IsNullOrWhiteSpace(x.EcNotificationDeptCodes));
-        RuleFor(x => x.EcNotificationDeptNames)
-            .MaximumLength(500).WithMessage("通知部门名称长度不能超过500个字符").When(x => !string.IsNullOrWhiteSpace(x.EcNotificationDeptNames));
         RuleFor(x => x.EcNotificationNotifierId)
             .GreaterThanOrEqualTo(0).WithMessage("通知人ID不能为负数");
-        RuleFor(x => x.EcNotificationNotifierName)
-            .MaximumLength(50).WithMessage("通知人姓名长度不能超过50个字符").When(x => !string.IsNullOrWhiteSpace(x.EcNotificationNotifierName));
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

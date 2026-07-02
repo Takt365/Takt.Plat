@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopArgumentI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSopArgument 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,31 +91,31 @@ public class TaktSopArgumentI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.sopargument._self", "zh-HK", "SOP 作业参数信息_hk", "实体名称"),
 
             // entity.sopargument.execid
-            new TranslationSeedItem("entity.sopargument.execid", "en-US", "执行追溯ID_us", "执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.sopargument.execid", "en-US", "执行追溯ID_us", "执行追溯 ID（关联 TaktSopExec.Id，选项 TaktSopExecs/options）"),
             // entity.sopargument.execid
-            new TranslationSeedItem("entity.sopargument.execid", "ja-JP", "执行追溯ID_jp", "执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.sopargument.execid", "ja-JP", "执行追溯ID_jp", "执行追溯 ID（关联 TaktSopExec.Id，选项 TaktSopExecs/options）"),
             // entity.sopargument.execid
-            new TranslationSeedItem("entity.sopargument.execid", "zh-CN", "执行追溯ID", "执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.sopargument.execid", "zh-CN", "执行追溯ID", "执行追溯 ID（关联 TaktSopExec.Id，选项 TaktSopExecs/options）"),
             // entity.sopargument.execid
-            new TranslationSeedItem("entity.sopargument.execid", "zh-HK", "执行追溯ID_hk", "执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.sopargument.execid", "zh-HK", "执行追溯ID_hk", "执行追溯 ID（关联 TaktSopExec.Id，选项 TaktSopExecs/options）"),
 
             // entity.sopargument.execstepid
-            new TranslationSeedItem("entity.sopargument.execstepid", "en-US", "工步执行明细ID_us", "工步执行明细 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.sopargument.execstepid", "en-US", "工步执行明细ID_us", "工步执行明细 ID（关联 TaktSopExecStep.Id，选项 TaktSopExecSteps/options）"),
             // entity.sopargument.execstepid
-            new TranslationSeedItem("entity.sopargument.execstepid", "ja-JP", "工步执行明细ID_jp", "工步执行明细 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.sopargument.execstepid", "ja-JP", "工步执行明细ID_jp", "工步执行明细 ID（关联 TaktSopExecStep.Id，选项 TaktSopExecSteps/options）"),
             // entity.sopargument.execstepid
-            new TranslationSeedItem("entity.sopargument.execstepid", "zh-CN", "工步执行明细ID", "工步执行明细 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.sopargument.execstepid", "zh-CN", "工步执行明细ID", "工步执行明细 ID（关联 TaktSopExecStep.Id，选项 TaktSopExecSteps/options）"),
             // entity.sopargument.execstepid
-            new TranslationSeedItem("entity.sopargument.execstepid", "zh-HK", "工步执行明细ID_hk", "工步执行明细 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.sopargument.execstepid", "zh-HK", "工步执行明细ID_hk", "工步执行明细 ID（关联 TaktSopExecStep.Id，选项 TaktSopExecSteps/options）"),
 
             // entity.sopargument.routingitemparameterid
-            new TranslationSeedItem("entity.sopargument.routingitemparameterid", "en-US", "工序参数定义ID_us", "工序参数定义 ID（关联 TaktRoutingItemArgument，序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.sopargument.routingitemparameterid", "en-US", "工序参数定义ID_us", "工序参数定义 ID（关联 TaktRoutingItemArgument.Id，选项 TaktRoutingItemArguments/options）"),
             // entity.sopargument.routingitemparameterid
-            new TranslationSeedItem("entity.sopargument.routingitemparameterid", "ja-JP", "工序参数定义ID_jp", "工序参数定义 ID（关联 TaktRoutingItemArgument，序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.sopargument.routingitemparameterid", "ja-JP", "工序参数定义ID_jp", "工序参数定义 ID（关联 TaktRoutingItemArgument.Id，选项 TaktRoutingItemArguments/options）"),
             // entity.sopargument.routingitemparameterid
-            new TranslationSeedItem("entity.sopargument.routingitemparameterid", "zh-CN", "工序参数定义ID", "工序参数定义 ID（关联 TaktRoutingItemArgument，序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.sopargument.routingitemparameterid", "zh-CN", "工序参数定义ID", "工序参数定义 ID（关联 TaktRoutingItemArgument.Id，选项 TaktRoutingItemArguments/options）"),
             // entity.sopargument.routingitemparameterid
-            new TranslationSeedItem("entity.sopargument.routingitemparameterid", "zh-HK", "工序参数定义ID_hk", "工序参数定义 ID（关联 TaktRoutingItemArgument，序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.sopargument.routingitemparameterid", "zh-HK", "工序参数定义ID_hk", "工序参数定义 ID（关联 TaktRoutingItemArgument.Id，选项 TaktRoutingItemArguments/options）"),
 
             // entity.sopargument.paramcode
             new TranslationSeedItem("entity.sopargument.paramcode", "en-US", "参数编码_us", "参数编码"),
@@ -136,13 +136,13 @@ public class TaktSopArgumentI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.sopargument.actualvalue", "zh-HK", "实际值_hk", "实际值"),
 
             // entity.sopargument.isoutofrange
-            new TranslationSeedItem("entity.sopargument.isoutofrange", "en-US", "是否超差_us", "是否超差（字典 sys_yes_no_type，0=否，1=是）"),
+            new TranslationSeedItem("entity.sopargument.isoutofrange", "en-US", "是否超差_us", "是否超差（字典 sys_yes_no_type；0=否，1=是）"),
             // entity.sopargument.isoutofrange
-            new TranslationSeedItem("entity.sopargument.isoutofrange", "ja-JP", "是否超差_jp", "是否超差（字典 sys_yes_no_type，0=否，1=是）"),
+            new TranslationSeedItem("entity.sopargument.isoutofrange", "ja-JP", "是否超差_jp", "是否超差（字典 sys_yes_no_type；0=否，1=是）"),
             // entity.sopargument.isoutofrange
-            new TranslationSeedItem("entity.sopargument.isoutofrange", "zh-CN", "是否超差", "是否超差（字典 sys_yes_no_type，0=否，1=是）"),
+            new TranslationSeedItem("entity.sopargument.isoutofrange", "zh-CN", "是否超差", "是否超差（字典 sys_yes_no_type；0=否，1=是）"),
             // entity.sopargument.isoutofrange
-            new TranslationSeedItem("entity.sopargument.isoutofrange", "zh-HK", "是否超差_hk", "是否超差（字典 sys_yes_no_type，0=否，1=是）"),
+            new TranslationSeedItem("entity.sopargument.isoutofrange", "zh-HK", "是否超差_hk", "是否超差（字典 sys_yes_no_type；0=否，1=是）"),
 
             // entity.sopargument.recordedat
             new TranslationSeedItem("entity.sopargument.recordedat", "en-US", "记录时间_us", "记录时间"),

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.HumanResource.Attendance
 // 文件名称：TaktHolidayValidators.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-06-29
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Holiday 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktHoliday 生成，请按需审阅）
 // 
@@ -70,6 +70,28 @@ public class TaktHolidayUpdateValidator : AbstractValidator<TaktHolidayUpdateDto
     {
         RuleFor(x => x.HolidayId)
             .GreaterThan(0).WithMessage("HolidayID无效");
+        RuleFor(x => x.TenantCode)
+            .NotEmpty().WithMessage("租户编码不能为空")
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.CompanyCode)
+            .NotEmpty().WithMessage("公司代码不能为空")
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.HolidayName)
+            .NotEmpty().WithMessage("假日名称不能为空")
+            .MaximumLength(100).WithMessage("假日名称长度不能超过100个字符");
+        RuleFor(x => x.HolidayGreeting)
+            .NotEmpty().WithMessage("假日问候语不能为空")
+            .MaximumLength(200).WithMessage("假日问候语长度不能超过200个字符");
+        RuleFor(x => x.HolidayQuote)
+            .NotEmpty().WithMessage("假日引用/诗句不能为空")
+            .MaximumLength(500).WithMessage("假日引用/诗句长度不能超过500个字符");
+        RuleFor(x => x.HolidayTheme)
+            .NotEmpty().WithMessage("假日主题不能为空")
+            .MaximumLength(20).WithMessage("假日主题长度不能超过20个字符");
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
     }
 }
 

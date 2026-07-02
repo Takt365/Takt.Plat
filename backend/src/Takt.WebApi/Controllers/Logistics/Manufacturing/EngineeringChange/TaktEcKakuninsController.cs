@@ -30,7 +30,7 @@ public class TaktEcKakuninsController : TaktControllerBase
     public TaktEcKakuninsController(ITaktEcKakuninService service) => _service = service;
 
     /// <summary>获取物料确认列表（分页）</summary>
-    [TaktPermission("logistics:manufacturing:engineeringchange:kakunin:list", "物料确认列表")]
+    [TaktPermission("logistics:manufacturing:engineering:change:kakunin:list", "物料确认列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetEcKakuninListAsync([FromQuery] TaktEcKakuninQueryDto queryDto)
     {
@@ -39,7 +39,7 @@ public class TaktEcKakuninsController : TaktControllerBase
     }
 
     /// <summary>获取物料确认详情</summary>
-    [TaktPermission("logistics:manufacturing:engineeringchange:kakunin:query", "物料确认详情")]
+    [TaktPermission("logistics:manufacturing:engineering:change:kakunin:query", "物料确认详情")]
     [HttpGet("detail/{ecDetailId}")]
     public async Task<IActionResult> GetEcKakuninByEcDetailIdAsync(long ecDetailId)
     {
@@ -48,7 +48,7 @@ public class TaktEcKakuninsController : TaktControllerBase
     }
 
     /// <summary>更新物料确认</summary>
-    [TaktPermission("logistics:manufacturing:engineeringchange:kakunin:update", "更新物料确认")]
+    [TaktPermission("logistics:manufacturing:engineering:change:kakunin:update", "更新物料确认")]
     [HttpPut("detail/{ecDetailId}")]
     public async Task<IActionResult> UpdateEcKakuninAsync(long ecDetailId, [FromBody] TaktEcKakuninUpdateDto dto)
     {
@@ -57,7 +57,7 @@ public class TaktEcKakuninsController : TaktControllerBase
     }
 
     /// <summary>导出物料确认</summary>
-    [TaktPermission("logistics:manufacturing:engineeringchange:kakunin:export", "导出物料确认")]
+    [TaktPermission("logistics:manufacturing:engineering:change:kakunin:export", "导出物料确认")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportEcKakuninAsync([FromQuery] TaktEcKakuninQueryDto? query)
     {

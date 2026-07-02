@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Workflow
 // 文件名称：TaktFlowTaskDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：FlowTask 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktFlowTask 生成，请按需审阅）
 // 
@@ -80,11 +80,6 @@ public class TaktFlowTaskDto : TaktCompanyDtoBase
     public string? OwnerUserName { get; set; }
 
     /// <summary>
-    /// 任务状态
-    /// </summary>
-    public TaktFlowTaskStatus TaskStatus { get; set; }
-
-    /// <summary>
     /// 会签类型
     /// </summary>
     public TaktFlowSignType SignType { get; set; }
@@ -126,14 +121,19 @@ public class TaktFlowTaskDto : TaktCompanyDtoBase
     public string? AddSignName { get; set; }
 
     /// <summary>
+    /// 审批意见
+    /// </summary>
+    public string? Comment { get; set; } = string.Empty;
+
+    /// <summary>
     /// 多实例序号
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 审批意见
+    /// 任务状态
     /// </summary>
-    public string? Comment { get; set; } = string.Empty;
+    public TaktFlowTaskStatus TaskStatus { get; set; }
 
     /// <summary>
     /// 所属流程实例
@@ -197,11 +197,6 @@ public class TaktFlowTaskQueryDto : TaktPagedQuery
     public long? OwnerUserId { get; set; }
 
     /// <summary>
-    /// 任务状态
-    /// </summary>
-    public TaktFlowTaskStatus? TaskStatus { get; set; }
-
-    /// <summary>
     /// 会签类型
     /// </summary>
     public TaktFlowSignType? SignType { get; set; }
@@ -253,14 +248,19 @@ public class TaktFlowTaskQueryDto : TaktPagedQuery
     public long? AddSignId { get; set; }
 
     /// <summary>
+    /// 审批意见
+    /// </summary>
+    public string? Comment { get; set; } = string.Empty;
+
+    /// <summary>
     /// 多实例序号
     /// </summary>
     public int? SortOrder { get; set; }
 
     /// <summary>
-    /// 审批意见
+    /// 任务状态
     /// </summary>
-    public string? Comment { get; set; } = string.Empty;
+    public TaktFlowTaskStatus? TaskStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -303,7 +303,7 @@ public class TaktFlowTaskCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -342,11 +342,6 @@ public class TaktFlowTaskCreateDto
     public long? OwnerUserId { get; set; }
 
     /// <summary>
-    /// 任务状态
-    /// </summary>
-    public TaktFlowTaskStatus TaskStatus { get; set; }
-
-    /// <summary>
     /// 会签类型
     /// </summary>
     public TaktFlowSignType SignType { get; set; }
@@ -383,14 +378,14 @@ public class TaktFlowTaskCreateDto
     public long? AddSignId { get; set; }
 
     /// <summary>
-    /// 多实例序号
-    /// </summary>
-    public int SortOrder { get; set; } = 0;
-
-    /// <summary>
     /// 审批意见
     /// </summary>
     public string? Comment { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 任务状态
+    /// </summary>
+    public TaktFlowTaskStatus TaskStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -525,11 +520,6 @@ public class TaktFlowTaskTemplateDto
     public long? OwnerUserId { get; set; }
 
     /// <summary>
-    /// 任务状态
-    /// </summary>
-    public TaktFlowTaskStatus? TaskStatus { get; set; }
-
-    /// <summary>
     /// 会签类型
     /// </summary>
     public TaktFlowSignType? SignType { get; set; }
@@ -538,6 +528,21 @@ public class TaktFlowTaskTemplateDto
     /// 优先级
     /// </summary>
     public int? Priority { get; set; }
+
+    /// <summary>
+    /// 到期时间
+    /// </summary>
+    public DateTime? DueDate { get; set; }
+
+    /// <summary>
+    /// 认领时间
+    /// </summary>
+    public DateTime? ClaimTime { get; set; }
+
+    /// <summary>
+    /// 办结时间
+    /// </summary>
+    public DateTime? CompletedAt { get; set; }
 
     /// <summary>
     /// 是否加签任务
@@ -551,9 +556,14 @@ public class TaktFlowTaskTemplateDto
     public long? AddSignId { get; set; }
 
     /// <summary>
-    /// 多实例序号
+    /// 审批意见
     /// </summary>
-    public int? SortOrder { get; set; }
+    public string? Comment { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 任务状态
+    /// </summary>
+    public TaktFlowTaskStatus? TaskStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -583,7 +593,7 @@ public class TaktFlowTaskImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -621,11 +631,6 @@ public class TaktFlowTaskImportDto
     public long? OwnerUserId { get; set; }
 
     /// <summary>
-    /// 任务状态
-    /// </summary>
-    public TaktFlowTaskStatus? TaskStatus { get; set; }
-
-    /// <summary>
     /// 会签类型
     /// </summary>
     public TaktFlowSignType? SignType { get; set; }
@@ -634,6 +639,21 @@ public class TaktFlowTaskImportDto
     /// 优先级
     /// </summary>
     public int? Priority { get; set; }
+
+    /// <summary>
+    /// 到期时间
+    /// </summary>
+    public DateTime? DueDate { get; set; }
+
+    /// <summary>
+    /// 认领时间
+    /// </summary>
+    public DateTime? ClaimTime { get; set; }
+
+    /// <summary>
+    /// 办结时间
+    /// </summary>
+    public DateTime? CompletedAt { get; set; }
 
     /// <summary>
     /// 是否加签任务
@@ -647,9 +667,14 @@ public class TaktFlowTaskImportDto
     public long? AddSignId { get; set; }
 
     /// <summary>
-    /// 多实例序号
+    /// 审批意见
     /// </summary>
-    public int? SortOrder { get; set; }
+    public string? Comment { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 任务状态
+    /// </summary>
+    public TaktFlowTaskStatus? TaskStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -718,11 +743,6 @@ public class TaktFlowTaskExportDto
     public long? OwnerUserId { get; set; }
 
     /// <summary>
-    /// 任务状态
-    /// </summary>
-    public TaktFlowTaskStatus TaskStatus { get; set; }
-
-    /// <summary>
     /// 会签类型
     /// </summary>
     public TaktFlowSignType SignType { get; set; }
@@ -759,14 +779,19 @@ public class TaktFlowTaskExportDto
     public long? AddSignId { get; set; }
 
     /// <summary>
+    /// 审批意见
+    /// </summary>
+    public string? Comment { get; set; } = string.Empty;
+
+    /// <summary>
     /// 多实例序号
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 审批意见
+    /// 任务状态
     /// </summary>
-    public string? Comment { get; set; } = string.Empty;
+    public TaktFlowTaskStatus TaskStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON

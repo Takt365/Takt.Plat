@@ -29,9 +29,9 @@ namespace Takt.Domain.Entities.Logistics.Procurement;
 public class TaktPurchasePrice : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码（不可空）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -41,10 +41,21 @@ public class TaktPurchasePrice : TaktCompanyEntityBase
     public string PurchasePriceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供应商编码
+    /// 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
     /// </summary>
     [SugarColumn(ColumnName = "supplier_code", ColumnDescription = "供应商编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string SupplierCode { get; set; } = string.Empty;
+    /// <summary>
+    /// 来源采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
+    /// </summary>
+    [SugarColumn(ColumnName = "purchase_inquiry_id", ColumnDescription = "来源采购询价ID", ColumnDataType = "bigint", IsNullable = true)]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? PurchaseInquiryId { get; set; }
+    /// <summary>
+    /// 来源采购询价编码（冗余）
+    /// </summary>
+    [SugarColumn(ColumnName = "purchase_inquiry_code", ColumnDescription = "来源采购询价编码", ColumnDataType = "varchar", Length = 40, IsNullable = true)]
+    public string? PurchaseInquiryCode { get; set; }
 
     /// <summary>
     /// 价格类型（字典 logistics_price_type；0=标准价格，1=合同价格，2=临时价格，3=询价价格，4=历史价格）
@@ -65,7 +76,7 @@ public class TaktPurchasePrice : TaktCompanyEntityBase
     public DateTime? EffectiveEndDate { get; set; }
 
     /// <summary>
-    /// 价格状态（1=启用，0=禁用）
+    /// 价格状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
     [SugarColumn(ColumnName = "price_status", ColumnDescription = "价格状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int PriceStatus { get; set; } = 1;
@@ -77,7 +88,7 @@ public class TaktPurchasePrice : TaktCompanyEntityBase
     public List<TaktPurchasePriceItem>? Items { get; set; }
 
     /// <summary>
-    /// 采购价格变更记录列表（外键在子表 <see cref="TaktPurchasePriceChangeLog.PriceId"/>）
+    /// 采购价格变更记录列表（外键在子表 TaktPurchasePriceChangeLog.PurchasePriceId）
     /// </summary>
     [Navigate(NavigateType.OneToMany, nameof(TaktPurchasePriceChangeLog.PurchasePriceId))]
     public List<TaktPurchasePriceChangeLog>? ChangeLogs { get; set; }

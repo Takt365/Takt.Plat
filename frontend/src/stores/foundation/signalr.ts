@@ -22,17 +22,19 @@ import type { SignalRMessageWithId } from '@/types/common';
 import type {
   BroadcastMessage,
   ForceLogoutEvent,
+  ForceLogoutScheduledEvent,
   OnlineUser,
   SignalRMessage,
 } from '@/types/foundation/signal-r';
 import type { MessageStatistics } from '@/types/foundation/message';
 import type { OnlineStatistics } from '@/types/foundation/online';
-import { TaktReadStatus } from '@/utils/common-enums';
+import { TaktReadStatus } from '@/utils/common';
 import { getMessageStatistics } from '@/api/foundation/message';
 import { getOnlineStatistics } from '@/api/foundation/online';
 import { useTenantStore } from '@/stores/identity/tenant';
 import { taktSignalRManager } from '@/utils/takt-signalr';
 import { executeForceLogoutAsync } from '@/bootstrap/takt-logout-flow';
+import { useForceLogoutScheduleStore } from '@/stores/foundation/force-logout-schedule';
 import { EventBus } from '@/utils/event-bus';
 import { createLogger } from '@/utils/logger';
 import { translateLocaleMessage } from '@/utils/takt-i18n-message';
@@ -48,6 +50,15 @@ import type {
   QuartzTaskChangedEvent,
   QuartzTaskExecutedEvent,
 } from '@/types/foundation/quartz-signal-r';
+import type {
+  EcChangeClosedEvent,
+  EcChangeNotificationEvent,
+  EcExecutionTaskAlertEvent,
+  EcExecutionTaskAssignedEvent,
+  EcExecutionTaskProgressEvent,
+  EcNotificationConfirmedEvent,
+} from '@/types/logistics/manufacturing/engineering-change/ec-change-signal-r';
+import { EC_NOTIFICATION_TABLE_NAME } from '@/composables/use-ec-change-signalr-refresh';
 
 const signalrStoreLogger = createLogger('signalr-store');
 
@@ -111,11 +122,51 @@ function dispatchQuartzSignalREvents(
 }
 
 /**
+ * 分发工程变更 SignalR 事件到 EventBus
+ * @param notificationEvent 变更通知
+ * @param taskAssignedEvent 任务分配
+ * @param taskProgressEvent 任务进度
+ * @param changeClosedEvent 变更闭环
+ * @param taskAlertEvent 任务预警
+ * @param notificationConfirmedEvent 通知确认回执
+ */
+function dispatchEcChangeSignalREvents(
+  notificationEvent?: EcChangeNotificationEvent,
+  taskAssignedEvent?: EcExecutionTaskAssignedEvent,
+  taskProgressEvent?: EcExecutionTaskProgressEvent,
+  changeClosedEvent?: EcChangeClosedEvent,
+  taskAlertEvent?: EcExecutionTaskAlertEvent,
+  notificationConfirmedEvent?: EcNotificationConfirmedEvent,
+): void {
+  if (notificationEvent) {
+    EventBus.emit('logistics:ec-change:notification', notificationEvent);
+  }
+  if (taskAssignedEvent) {
+    EventBus.emit('logistics:ec-change:task-assigned', taskAssignedEvent);
+  }
+  if (taskProgressEvent) {
+    EventBus.emit('logistics:ec-change:task-progress', taskProgressEvent);
+  }
+  if (changeClosedEvent) {
+    EventBus.emit('logistics:ec-change:closed', changeClosedEvent);
+    EventBus.emit('table:refresh', { tableName: EC_NOTIFICATION_TABLE_NAME });
+  }
+  if (taskAlertEvent) {
+    EventBus.emit('logistics:ec-change:task-alert', taskAlertEvent);
+  }
+  if (notificationConfirmedEvent) {
+    EventBus.emit('logistics:ec-change:notification-confirmed', notificationConfirmedEvent);
+    EventBus.emit('table:refresh', { tableName: EC_NOTIFICATION_TABLE_NAME });
+  }
+}
+
+/**
  * SignalR 状态管理
  */
 export const useSignalRStore = defineStore('signalr', () => {
   const connectHubState = ref<signalR.HubConnectionState>(signalR.HubConnectionState.Disconnected);
   const notificationHubState = ref<signalR.HubConnectionState>(signalR.HubConnectionState.Disconnected);
+  const ecChangeHubState = ref<signalR.HubConnectionState>(signalR.HubConnectionState.Disconnected);
   const onlineUsers = ref<OnlineUser[]>([]);
   const unreadCount = ref(0);
   const onlineStatistics = ref<OnlineStatistics | null>(null);
@@ -130,7 +181,8 @@ export const useSignalRStore = defineStore('signalr', () => {
   const isConnected = computed(
     () =>
       connectHubState.value === signalR.HubConnectionState.Connected &&
-      notificationHubState.value === signalR.HubConnectionState.Connected
+      notificationHubState.value === signalR.HubConnectionState.Connected &&
+      ecChangeHubState.value === signalR.HubConnectionState.Connected
   );
 
   /**
@@ -140,6 +192,7 @@ export const useSignalRStore = defineStore('signalr', () => {
     const state = taktSignalRManager.getConnectionState();
     connectHubState.value = state.connectHub;
     notificationHubState.value = state.notificationHub;
+    ecChangeHubState.value = state.ecChangeHub;
   }
 
   /**
@@ -191,8 +244,17 @@ export const useSignalRStore = defineStore('signalr', () => {
    * 处理强退事件
    */
   function handleForceLogout(event: ForceLogoutEvent): void {
+    useForceLogoutScheduleStore().clearSchedule();
     const message = event.message || translateLocaleMessage('common.tip.force.logout');
     void executeForceLogoutAsync(message);
+  }
+
+  /**
+   * 处理延迟强退预告（倒计时，不立即退出）
+   * @param event 延迟强退事件
+   */
+  function handleForceLogoutScheduled(event: ForceLogoutScheduledEvent): void {
+    useForceLogoutScheduleStore().startScheduledLogout(event);
   }
 
   /**
@@ -206,7 +268,8 @@ export const useSignalRStore = defineStore('signalr', () => {
     const actualState = taktSignalRManager.getConnectionState();
     const actuallyConnected =
       actualState.connectHub === signalR.HubConnectionState.Connected
-      && actualState.notificationHub === signalR.HubConnectionState.Connected;
+      && actualState.notificationHub === signalR.HubConnectionState.Connected
+      && actualState.ecChangeHub === signalR.HubConnectionState.Connected;
 
     if (actuallyConnected) {
       syncConnectionState();
@@ -242,9 +305,11 @@ export const useSignalRStore = defineStore('signalr', () => {
         onConnectionStateChange: (state) => {
           connectHubState.value = state.connectHub;
           notificationHubState.value = state.notificationHub;
+          ecChangeHubState.value = state.ecChangeHub;
           if (
             state.connectHub === signalR.HubConnectionState.Disconnected
             || state.notificationHub === signalR.HubConnectionState.Disconnected
+            || state.ecChangeHub === signalR.HubConnectionState.Disconnected
           ) {
             signalrStoreLogger.warn('SignalR Hub 已断开，等待自动重连或手动刷新', {
               action: 'connectionStateChange',
@@ -255,6 +320,7 @@ export const useSignalRStore = defineStore('signalr', () => {
           if (
             state.connectHub === signalR.HubConnectionState.Connected
             && state.notificationHub === signalR.HubConnectionState.Connected
+            && state.ecChangeHub === signalR.HubConnectionState.Connected
           ) {
             void refreshWorkflowTodoCountAfterHubConnectedAsync();
           }
@@ -268,8 +334,8 @@ export const useSignalRStore = defineStore('signalr', () => {
           }
           showPrivateMessageNotify({
             sender,
+            senderNickname: msg.fromUserNickname,
             content: body,
-            title: msg.messageTitle?.trim(),
             messageId: msg.messageId,
             sendTime: msg.sendTime,
           });
@@ -316,6 +382,54 @@ export const useSignalRStore = defineStore('signalr', () => {
         onQuartzTaskExecuted: (event) => {
           dispatchQuartzSignalREvents(undefined, event);
         },
+        onEcChangeNotification: (event) => {
+          dispatchEcChangeSignalREvents(event);
+          notify({
+            type: 'info',
+            message: translateLocaleMessage('logistics.manufacturing.engineering-change.ec-notification.page.signalr.changeNotification'),
+            description: `${event.ecNo} · ${event.deptCode}`,
+            duration: 8,
+          });
+        },
+        onEcExecutionTaskAssigned: (event) => {
+          dispatchEcChangeSignalREvents(undefined, event);
+          notify({
+            type: 'info',
+            message: translateLocaleMessage('logistics.manufacturing.engineering-change.ec-notification.page.signalr.taskAssigned'),
+            description: `${event.ecNo} · ${event.taskTitle}`,
+            duration: 8,
+          });
+        },
+        onEcExecutionTaskProgress: (event) => {
+          dispatchEcChangeSignalREvents(undefined, undefined, event);
+        },
+        onEcChangeClosed: (event) => {
+          dispatchEcChangeSignalREvents(undefined, undefined, undefined, event);
+          notify({
+            type: 'success',
+            message: translateLocaleMessage('logistics.manufacturing.engineering-change.ec-notification.page.signalr.changeClosed'),
+            description: event.ecNo,
+            duration: 8,
+          });
+        },
+        onEcExecutionTaskAlert: (event) => {
+          dispatchEcChangeSignalREvents(undefined, undefined, undefined, undefined, event);
+          notify({
+            type: 'warning',
+            message: translateLocaleMessage('logistics.manufacturing.engineering-change.ec-notification.page.signalr.taskAlert'),
+            description: event.message,
+            duration: 10,
+          });
+        },
+        onEcNotificationConfirmed: (event) => {
+          dispatchEcChangeSignalREvents(undefined, undefined, undefined, undefined, undefined, event);
+          notify({
+            type: 'success',
+            message: translateLocaleMessage('logistics.manufacturing.engineering-change.ec-notification.page.signalr.notificationConfirmed'),
+            description: `${event.ecNo ?? ''} · ${event.deptCode}`.trim(),
+            duration: 6,
+          });
+        },
         onOnlineMessage: (event) => {
           notify({
             type: 'success',
@@ -335,6 +449,7 @@ export const useSignalRStore = defineStore('signalr', () => {
           void refreshOnlineUsersAsync().catch(() => undefined);
         },
         onForceLogout: handleForceLogout,
+        onForceLogoutScheduled: handleForceLogoutScheduled,
         onError: (error) => {
           EventBus.emit('notification:show', {
             type: 'error',
@@ -431,6 +546,7 @@ export const useSignalRStore = defineStore('signalr', () => {
   function resetSignalRState(): void {
     connectHubState.value = signalR.HubConnectionState.Disconnected;
     notificationHubState.value = signalR.HubConnectionState.Disconnected;
+    ecChangeHubState.value = signalR.HubConnectionState.Disconnected;
     onlineUsers.value = [];
     unreadCount.value = 0;
     onlineStatistics.value = null;
@@ -444,6 +560,7 @@ export const useSignalRStore = defineStore('signalr', () => {
   return {
     connectHubState,
     notificationHubState,
+    ecChangeHubState,
     onlineUsers,
     unreadCount,
     onlineStatistics,

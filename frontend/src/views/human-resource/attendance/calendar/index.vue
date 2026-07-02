@@ -177,7 +177,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -188,7 +188,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -346,8 +346,8 @@ const advancedQueryForm = ref({
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'calendarDateStart', label: t('entity.calendar.datestart') },
-  { key: 'calendarDateEnd', label: t('entity.calendar.dateend') },
+  { key: 'calendarDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.calendar.date')) },
+  { key: 'calendarDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.calendar.date')) },
   { key: 'isWorkingDay', label: t('entity.calendar.isworkingday') },
   { key: 'holidayId', label: t('entity.calendar.holidayid') },
   { key: 'shiftId', label: t('entity.calendar.shiftid') },
@@ -522,7 +522,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: Calendar, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getCalendarId(selectedRow.value) === getCalendarId(record)) {
+    } else if (selectedRow.value && getCalendarId(selectedRow.value) === getCalendarId(record)) {
       selectedRow.value = null
     }
   },

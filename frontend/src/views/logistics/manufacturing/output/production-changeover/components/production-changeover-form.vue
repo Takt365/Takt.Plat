@@ -74,38 +74,36 @@
                 :label="t('entity.productionchangeover.plantcode')"
                 name="plantCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.plantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionchangeover.plantcode') })"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
-                  :disabled="!!formData?.productionChangeoverId"
+                  api-url="TaktPlants/options"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionchangeover.plantcode') })"
+                  :disabled="!!formData?.productionChangeoverId || loading"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.productionchangeover.productioncategory')"
-                name="productionCategory"
+                :label="t('entity.productionchangeover.prodcategory')"
+                name="prodCategory"
               >
-                <a-input
-                  v-model:value="formState.productionCategory"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionchangeover.productioncategory') })"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
+                <TaktSelect
+                  v-model:value="formState.prodCategory"
+                  dict-type="logistics_prod_category"
+                  :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionchangeover.prodcategory') })"
+                  :disabled="loading"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.productionchangeover.productiondate')"
-                name="productionDate"
+                :label="t('entity.productionchangeover.proddate')"
+                name="prodDate"
               >
                 <a-date-picker
-                  v-model:value="formState.productionDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionchangeover.productiondate') })"
+                  v-model:value="formState.prodDate"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionchangeover.proddate') })"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
@@ -113,14 +111,15 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.productionchangeover.productionline')"
-                name="productionLine"
+                :label="t('entity.productionchangeover.prodteam')"
+                name="prodTeam"
               >
-                <a-input
-                  v-model:value="formState.productionLine"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionchangeover.productionline') })"
-                  show-count
-                  :maxlength="50"
+                <TaktSelect
+                  v-model:value="formState.prodTeam"
+                  :options="filteredProductionTeamOptions"
+                  :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionchangeover.prodteam') })"
+                  :disabled="loading || !formState.plantCode"
                   allow-clear
                 />
               </a-form-item>
@@ -260,21 +259,49 @@
  * 生产切换记录实体维护表单 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/logistics/manufacturing/output/production-changeover/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import type { ProductionChangeoverCreate } from '@/types/logistics/manufacturing/output/production-changeover'
+import type { TaktSelectOption } from '@/types/common'
+import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
+import { getProductionTeamOptions } from '@/api/logistics/manufacturing/output/production-team'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
+
+/** Pinia：字典缓存 */
+const dictDataStore = useDictDataStore()
+/** 生产班组下拉全量选项 */
+const productionTeamOptions = ref<TaktSelectOption[]>([])
+/** 按当前工厂过滤的生产班组选项 */
+const filteredProductionTeamOptions = computed(() => {
+  const plantCode = formState.plantCode
+  if (!plantCode) {
+    return []
+  }
+  return productionTeamOptions.value.filter((item) => String(item.extValue ?? '') === String(plantCode))
+})
+
+/** 加载生产班组选项 */
+async function loadProductionTeamOptions() {
+  productionTeamOptions.value = await getProductionTeamOptions()
+}
 
 /** Pinia：租户/公司上下文 */
 const tenantStore = useTenantStore()
 /** Pinia：用户上下文 */
 const userStore = useUserStore()
+
+/** 表单挂载时预加载字典与班组选项 */
+onMounted(async () => {
+  void dictDataStore.loadAllDictDataAsync()
+  await loadProductionTeamOptions()
+})
 
 /**
  * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
@@ -297,7 +324,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","productionCategory","productionDate","productionLine","readSopTime","personCount","totalSopTime","changeoverCount","changeoverTime","totalChangeoverTime","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","prodCategory","prodDate","prodTeam","readSopTime","personCount","totalSopTime","changeoverCount","changeoverTime","totalChangeoverTime","extField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -357,6 +384,28 @@ watch(
   },
 )
 
+/** 工厂变更时清理无效生产班组 */
+watch(
+  () => formState.plantCode,
+  (plantCode, prevPlantCode) => {
+    if (props.formData?.productionChangeoverId) {
+      return
+    }
+    if (!plantCode) {
+      formState.prodTeam = undefined
+      return
+    }
+    if (prevPlantCode && prevPlantCode !== plantCode && formState.prodTeam) {
+      const teamStillValid = filteredProductionTeamOptions.value.some(
+        (item) => String(item.dictValue ?? '') === String(formState.prodTeam)
+      )
+      if (!teamStillValid) {
+        formState.prodTeam = undefined
+      }
+    }
+  },
+)
+
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
   plantCode: [
@@ -366,10 +415,10 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
-  productionDate: [
+  prodDate: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.productionchangeover.productiondate') }),
+      message: t('common.page.form.placeholder.select', { field: t('entity.productionchangeover.proddate') }),
       trigger: 'change'
     }
   ],

@@ -21,8 +21,7 @@ namespace Takt.Domain.Entities.Workflow;
 [SugarIndex("ix_flow_scheme_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_flow_scheme_key_version_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProcessKey), OrderByType.Asc, nameof(DefinitionVersion), OrderByType.Asc, true)]
 public class TaktFlowScheme : TaktCompanyEntityBase
-{
-    /// <summary>
+{    /// <summary>
     /// 流程键（公司内业务唯一标识，如 leave）
     /// </summary>
     [SugarColumn(ColumnName = "process_key", ColumnDescription = "流程键", ColumnDataType = "varchar", Length = 64, IsNullable = false)]
@@ -58,11 +57,6 @@ public class TaktFlowScheme : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "process_description", ColumnDescription = "流程说明", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
     public string? ProcessDescription { get; set; }
     /// <summary>
-    /// 发布状态
-    /// </summary>
-    [SugarColumn(ColumnName = "process_status", ColumnDescription = "发布状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int ProcessStatus { get; set; } = 0;
-    /// <summary>
     /// 挂起状态（1 激活，2 挂起）
     /// </summary>
     [SugarColumn(ColumnName = "suspension_state", ColumnDescription = "挂起状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
@@ -70,7 +64,7 @@ public class TaktFlowScheme : TaktCompanyEntityBase
     /// <summary>
     /// 流程设计 JSON（节点、网关、条件、审批人配置）
     /// </summary>
-    [SugarColumn(ColumnName = "process_content", ColumnDescription = "流程设计JSON", ColumnDataType = "nvarchar", Length = -1, IsNullable = true)]
+    [SugarColumn(ColumnName = "process_content", ColumnDescription = "流程设计", ColumnDataType = "nvarchar", Length = -1, IsNullable = true)]
     public string? ProcessContent { get; set; }
     /// <summary>
     /// 部署批次号
@@ -92,6 +86,12 @@ public class TaktFlowScheme : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; }
+    /// <summary>
+    /// 发布状态
+    /// </summary>
+    [SugarColumn(ColumnName = "process_status", ColumnDescription = "发布状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int ProcessStatus { get; set; } = 0;
+
     // ========================================
     // 导航属性区域
     // ========================================

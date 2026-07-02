@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/planning
 // 文件名称：master-demand-schedule.d.ts
-// 创建时间：2026-06-22
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/planning 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -124,7 +124,7 @@ export interface MasterDemandScheduleQuery extends TaktPagedQuery {
   scheduleStatus?: number;
 
   /**
-   * 审批状态（TaktApprovalStatus）
+   * 审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）
    */
   approvalStatus?: number;
 
@@ -203,7 +203,7 @@ export interface MasterDemandScheduleCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -316,6 +316,16 @@ export interface MasterDemandScheduleTemplate {
   mdsCode?: string;
 
   /**
+   * 计划周期开始
+   */
+  planPeriodStart?: string;
+
+  /**
+   * 计划周期结束
+   */
+  planPeriodEnd?: string;
+
+  /**
    * 时间桶粒度（字典 mps_time_bucket_type；0=日，1=周，2=月）
    */
   bucketType?: number;
@@ -324,6 +334,11 @@ export interface MasterDemandScheduleTemplate {
    * 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   scheduleStatus?: number;
+
+  /**
+   * MDS 明细行（按物料与时间桶）（子表，级联保存）
+   */
+  lines?: MasterDemandScheduleLineCreate[];
 
   /**
    * 扩展字段JSON
@@ -355,7 +370,7 @@ export interface MasterDemandScheduleImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -370,6 +385,16 @@ export interface MasterDemandScheduleImport {
   mdsCode?: string;
 
   /**
+   * 计划周期开始
+   */
+  planPeriodStart?: string;
+
+  /**
+   * 计划周期结束
+   */
+  planPeriodEnd?: string;
+
+  /**
    * 时间桶粒度（字典 mps_time_bucket_type；0=日，1=周，2=月）
    */
   bucketType?: number;
@@ -378,6 +403,11 @@ export interface MasterDemandScheduleImport {
    * 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   scheduleStatus?: number;
+
+  /**
+   * MDS 明细行（按物料与时间桶）（子表，级联保存）
+   */
+  lines?: MasterDemandScheduleLineCreate[];
 
   /**
    * 扩展字段JSON

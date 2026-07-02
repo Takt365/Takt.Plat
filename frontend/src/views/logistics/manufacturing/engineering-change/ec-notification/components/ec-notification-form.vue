@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/engineering-change/ec-notification/components -->
 <!-- 文件名称：ec-notification-form.vue -->
-<!-- 功能描述：工程变更通知单实体维护弹窗内嵌表单。由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：工程变更通知单维护弹窗内嵌表单。由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -293,7 +293,7 @@
 
 <script setup lang="ts">
 /**
- * 工程变更通知单实体维护表单 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
+ * 工程变更通知单维护表单 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/logistics/manufacturing/engineering-change/ec-notification/components
  */
 import { reactive, watch, computed, ref } from 'vue'

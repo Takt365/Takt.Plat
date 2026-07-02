@@ -2,13 +2,13 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/routine/help-desk/ticket -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：Takt工单实体管理页面，含查询、增删改，由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成 -->
+<!-- 功能描述：Takt工单实体管理页面，含查询、增删改，由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
 
 <template>
-  <div class="routine-help-desk-ticket">
+  <div class="p-4">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -25,13 +25,12 @@
       delete-permission="routine:help:desk:ticket:delete"
       import-permission="routine:help:desk:ticket:import"
       export-permission="routine:help:desk:ticket:export"
-      :left-actions="toolbarLeftActions"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
       :show-import="true"
       :show-export="true"
-      :show-expand="true"
+      :show-expand="false"
       :show-advanced-query="true"
       :show-column-setting="true"
       :show-fullscreen="true"
@@ -53,10 +52,21 @@
       @refresh="handleRefresh"
     />
 
+    <div class="mb-2">
+      <a-button
+        v-permission="'routine:help:desk:ticket:update'"
+        class="takt-button-query"
+        :disabled="!selectedRow"
+        @click="handleOpenWorkflow"
+      >
+        {{ t('routine.help-desk.ticket.page.workflow.title') }}
+      </a-button>
+    </div>
+
     <!-- 表格 -->
     <TaktSingleTable
-      :columns="columns"
       entity-scope="company"
+      :columns="columns"
       :visible-column-keys="visibleColumnKeys"
       :id-column-key="'ticketId'"
       table-mode="single"
@@ -67,11 +77,10 @@
       :row-selection="rowSelection"
       :custom-row="onClickRow"
 
-      :expanded-row-keys="expandedRowKeys"
-      @expand="handleExpand"
       @change="handleTableChange"
       @resize-column="handleResizeColumn"
     >
+      <!-- 字典/开关列渲染 -->
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'ticketStatus'">
           <TaktDictTag
@@ -97,33 +106,11 @@
             dict-type="sys_impact_level_category"
           />
         </template>
-        <template v-else-if="column.key === 'ticketSource'">
-          <TaktDictTag
-            :value="getTicketField(record, 'ticketSource')"
-            dict-type="routine_ticket_source_type"
-          />
-        </template>
       </template>
-      <!-- 展开行渲染 -->
-      <template #expandedRowRender="{ record }">
-        <div class="p-4">
-          <div class="mb-2 text-sm font-medium">{{ t('entity.ticketChangeLog._self') }}</div>
-          <a-table
-            v-if="hasTicketChangeLogRows(record)"
-            :columns="ticketChangeLogExpandColumns"
-            :data-source="getTicketChangeLogRows(record)"
-            :row-key="(row: TicketChangeLog, index?: number) => row?.ticketChangeLogId || String(index ?? 0)"
-            :pagination="false"
-            size="small"
-            bordered
-            class="mb-4"
-          />
-          <a-empty v-else class="mb-4" />
-        </div>
-      </template>
+
     </TaktSingleTable>
 
-    <!-- 分页组件 -->
+    <!-- 分页（服务端分页，外置 TaktPagination） -->
     <TaktPagination
       v-model:current="currentPage"
       v-model:page-size="pageSize"
@@ -143,6 +130,7 @@
       @cancel="handleFormCancel"
     >
       <TicketForm
+        :key="formData?.ticketId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -164,6 +152,8 @@
         <a-input
           v-model:value="advancedQueryForm.ticketNo"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.no') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
@@ -173,6 +163,8 @@
         <a-input
           v-model:value="advancedQueryForm.title"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.title') })"
+          show-count
+          :maxlength="200"
           allow-clear
         />
       </a-form-item>
@@ -187,11 +179,13 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('attachmentsJson')">
-      <a-form-item :label="t('entity.ticket.attachmentsjson')">
+      <div v-show="isFieldVisible('attachments')">
+      <a-form-item :label="t('entity.ticket.attachments')">
         <a-input
-          v-model:value="advancedQueryForm.attachmentsJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.attachmentsjson') })"
+          v-model:value="advancedQueryForm.attachments"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.attachments') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -216,22 +210,43 @@
         />
       </a-form-item>
       </div>
+      <div v-show="isFieldVisible('urgency')">
+      <a-form-item :label="t('entity.ticket.urgency')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.urgency"
+          dict-type="sys_urgency_level_category"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ticket.urgency') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('impact')">
+      <a-form-item :label="t('entity.ticket.impact')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.impact"
+          dict-type="sys_impact_level_category"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ticket.impact') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('categoryCode')">
       <a-form-item :label="t('entity.ticket.categorycode')">
         <a-input
           v-model:value="advancedQueryForm.categoryCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.categorycode') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('ticketSource')">
       <a-form-item :label="t('entity.ticket.source')">
-        <TaktSelect
+        <a-input-number
           v-model:value="advancedQueryForm.ticketSource"
-          dict-type="routine_ticket_source_type"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ticket.source') })"
-          allow-clear
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.source') })"
+          style="width: 100%"
         />
       </a-form-item>
       </div>
@@ -240,6 +255,8 @@
         <a-input
           v-model:value="advancedQueryForm.submitterId"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.submitterid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -249,6 +266,8 @@
         <a-input
           v-model:value="advancedQueryForm.submitterName"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.submittername') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -258,6 +277,8 @@
         <a-input
           v-model:value="advancedQueryForm.assigneeId"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.assigneeid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -267,6 +288,8 @@
         <a-input
           v-model:value="advancedQueryForm.assigneeName"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.assigneename') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -276,6 +299,8 @@
         <a-input
           v-model:value="advancedQueryForm.knowledgeId"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.knowledgeid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -285,6 +310,8 @@
         <a-input
           v-model:value="advancedQueryForm.parentTicketId"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.parentticketid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -294,6 +321,8 @@
         <a-input
           v-model:value="advancedQueryForm.firstResponseAtStart"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.firstresponseatstart') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -303,6 +332,8 @@
         <a-input
           v-model:value="advancedQueryForm.firstResponseAtEnd"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.firstresponseatend') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -312,6 +343,8 @@
         <a-input
           v-model:value="advancedQueryForm.firstResponseDueByStart"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.firstresponseduebystart') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -321,6 +354,8 @@
         <a-input
           v-model:value="advancedQueryForm.firstResponseDueByEnd"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.firstresponseduebyend') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -330,6 +365,8 @@
         <a-input
           v-model:value="advancedQueryForm.resolvedAtStart"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.resolvedatstart') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -349,6 +386,8 @@
         <a-input
           v-model:value="advancedQueryForm.resolutionDueByStart"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.resolutionduebystart') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -358,6 +397,8 @@
         <a-input
           v-model:value="advancedQueryForm.resolutionDueByEnd"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.resolutionduebyend') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -367,6 +408,8 @@
         <a-input
           v-model:value="advancedQueryForm.closedAtStart"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.closedatstart') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -381,11 +424,24 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('flowInstanceId')">
-      <a-form-item :label="t('entity.ticket.flowinstanceid')">
+      <div v-show="isFieldVisible('itAssetId')">
+      <a-form-item :label="t('entity.ticket.itassetid')">
         <a-input
-          v-model:value="advancedQueryForm.flowInstanceId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.flowinstanceid') })"
+          v-model:value="advancedQueryForm.itAssetId"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.itassetid') })"
+          show-count
+          :maxlength="20"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('assetCode')">
+      <a-form-item :label="t('entity.ticket.assetcode')">
+        <a-input
+          v-model:value="advancedQueryForm.assetCode"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.assetcode') })"
+          show-count
+          :maxlength="40"
           allow-clear
         />
       </a-form-item>
@@ -395,6 +451,8 @@
         <a-input
           v-model:value="advancedQueryForm.applicantDeptId"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.applicantdeptid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -404,6 +462,8 @@
         <a-input
           v-model:value="advancedQueryForm.applicantDeptName"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.applicantdeptname') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
@@ -413,6 +473,8 @@
         <a-input
           v-model:value="advancedQueryForm.applicantBy"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.applicantby') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -423,7 +485,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -434,17 +496,36 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('ExtField')">
-      <a-form-item :label="t('common.page.entity.ExtField')">
-        <a-input
-          v-model:value="advancedQueryForm.ExtField"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
-          allow-clear
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
+        <a-textarea
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -453,8 +534,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -482,12 +565,6 @@
         @success="handleImportSuccess"
       />
     </TaktModal>
-    <!-- 工单 ITSM 工作流抽屉 -->
-    <TicketWorkflowDrawer
-      v-model:open="workflowVisible"
-      :ticket-id="workflowTicketId"
-      @changed="loadData"
-    />
     <!-- 列设置抽屉 -->
     <TaktColumnDrawer
       v-model:open="columnSettingVisible"
@@ -500,13 +577,17 @@
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
+    <TicketWorkflowDrawer
+      v-model:open="workflowVisible"
+      :ticket-id="workflowTicketId"
+      @changed="loadData"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 /**
- * Takt工单实体管理页 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
+ * Takt工单实体管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/routine/help-desk/ticket
  */
 import { ref, computed, onMounted } from 'vue'
@@ -514,22 +595,20 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import TicketForm from './components/ticket-form.vue'
 import TicketWorkflowDrawer from './components/ticket-workflow-drawer.vue'
-import { getTicketList, getTicketById, submitTicket, updateTicket, deleteTicketById, deleteTicketBatch, getTicketTemplate, importTicket, exportTicket } from '@/api/routine/help-desk/ticket'
-import type { ToolBarAction } from '@/components/business/takt-tools-bar/index'
-import * as ticketChangeLogApi from '@/api/routine/help-desk/ticket-change-log'
-import type { TicketChangeLog, TicketChangeLogQuery } from '@/types/routine/help-desk/ticket-change-log'
-import type { Ticket, TicketQuery, TicketSubmit, TicketUpdate } from '@/types/routine/help-desk/ticket'
+import { getTicketList, getTicketById, createTicket, updateTicket, deleteTicketById, deleteTicketBatch, getTicketTemplate, importTicket, exportTicket, updateTicketStatus } from '@/api/routine/help-desk/ticket'
+import type { Ticket, TicketQuery } from '@/types/routine/help-desk/ticket'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine, RiCustomerService2Line } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine, RiCustomerService2Line } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
 /** Excel 导入/导出默认 sheet 名与文件名前缀 */
 const excelNames = taktExcelEntityNames('TaktTicket')
-
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
   () => t('common.page.form.placeholder.search', { keyword: t('entity.ticket._self') })
@@ -559,15 +638,16 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<Ticket>>({})
+const formData = ref<Partial<Ticket> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
 const formRef = ref()
-/** 工作流抽屉 */
+/** 工作流抽屉是否打开 */
 const workflowVisible = ref(false)
-/** 工作流当前工单 ID */
+/** 工作流抽屉当前工单 ID */
 const workflowTicketId = ref<string | null>(null)
+
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
@@ -575,9 +655,11 @@ const advancedQueryForm = ref({
   ticketNo: '',
   title: '',
   content: '',
-  attachmentsJson: '',
+  attachments: '',
   ticketStatus: undefined as number | undefined,
   priority: undefined as number | undefined,
+  urgency: undefined as number | undefined,
+  impact: undefined as number | undefined,
   categoryCode: '',
   ticketSource: undefined as number | undefined,
   submitterId: '',
@@ -596,13 +678,14 @@ const advancedQueryForm = ref({
   resolutionDueByEnd: '',
   closedAtStart: '',
   closedAtEnd: '',
-  flowInstanceId: '',
+  itAssetId: '',
+  assetCode: '',
   applicantDeptId: '',
   applicantDeptName: '',
   applicantBy: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
@@ -610,11 +693,11 @@ const queryFieldsMeta = computed(() => [
   { key: 'ticketNo', label: t('entity.ticket.no') },
   { key: 'title', label: t('entity.ticket.title') },
   { key: 'content', label: t('entity.ticket.content') },
-  { key: 'attachmentsJson', label: t('entity.ticket.attachmentsjson') },
+  { key: 'attachments', label: t('entity.ticket.attachments') },
   { key: 'ticketStatus', label: t('entity.ticket.status') },
+  { key: 'priority', label: t('entity.ticket.priority') },
   { key: 'urgency', label: t('entity.ticket.urgency') },
   { key: 'impact', label: t('entity.ticket.impact') },
-  { key: 'priority', label: t('entity.ticket.priority') },
   { key: 'categoryCode', label: t('entity.ticket.categorycode') },
   { key: 'ticketSource', label: t('entity.ticket.source') },
   { key: 'submitterId', label: t('entity.ticket.submitterid') },
@@ -633,13 +716,14 @@ const queryFieldsMeta = computed(() => [
   { key: 'resolutionDueByEnd', label: t('entity.ticket.resolutionduebyend') },
   { key: 'closedAtStart', label: t('entity.ticket.closedatstart') },
   { key: 'closedAtEnd', label: t('entity.ticket.closedatend') },
-  { key: 'flowInstanceId', label: t('entity.ticket.flowinstanceid') },
+  { key: 'itAssetId', label: t('entity.ticket.itassetid') },
+  { key: 'assetCode', label: t('entity.ticket.assetcode') },
   { key: 'applicantDeptId', label: t('entity.ticket.applicantdeptid') },
   { key: 'applicantDeptName', label: t('entity.ticket.applicantdeptname') },
   { key: 'applicantBy', label: t('entity.ticket.applicantby') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'ExtField', label: t('common.page.entity.ExtField') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -657,135 +741,91 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
-/** 主子表展开行 keys（手风琴，仅一行展开） */
-const expandedRowKeys = ref<string[]>([])
+/** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
+const dictDataStore = useDictDataStore()
 
-/** 页面挂载后加载分页列表 */
-onMounted(() => {
+
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {TicketQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<TicketQuery>): TicketQuery {
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: TicketQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: keyof TicketQuery, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v as never
+    }
+  }
+  assignTrimmed('ticketNo', form.ticketNo)
+  assignTrimmed('title', form.title)
+  assignTrimmed('content', form.content)
+  assignTrimmed('attachments', form.attachments)
+  if (form.ticketStatus !== undefined && form.ticketStatus !== null) {
+    query.ticketStatus = form.ticketStatus
+  }
+  if (form.priority !== undefined && form.priority !== null) {
+    query.priority = form.priority
+  }
+  if (form.urgency !== undefined && form.urgency !== null) {
+    query.urgency = form.urgency
+  }
+  if (form.impact !== undefined && form.impact !== null) {
+    query.impact = form.impact
+  }
+  assignTrimmed('categoryCode', form.categoryCode)
+  if (form.ticketSource !== undefined && form.ticketSource !== null) {
+    query.ticketSource = form.ticketSource
+  }
+  assignTrimmed('submitterId', form.submitterId)
+  assignTrimmed('submitterName', form.submitterName)
+  assignTrimmed('assigneeId', form.assigneeId)
+  assignTrimmed('assigneeName', form.assigneeName)
+  assignTrimmed('knowledgeId', form.knowledgeId)
+  assignTrimmed('parentTicketId', form.parentTicketId)
+  assignTrimmed('firstResponseAtStart', form.firstResponseAtStart)
+  assignTrimmed('firstResponseAtEnd', form.firstResponseAtEnd)
+  assignTrimmed('firstResponseDueByStart', form.firstResponseDueByStart)
+  assignTrimmed('firstResponseDueByEnd', form.firstResponseDueByEnd)
+  assignTrimmed('resolvedAtStart', form.resolvedAtStart)
+  assignTrimmed('resolvedAtEnd', form.resolvedAtEnd)
+  assignTrimmed('resolutionDueByStart', form.resolutionDueByStart)
+  assignTrimmed('resolutionDueByEnd', form.resolutionDueByEnd)
+  assignTrimmed('closedAtStart', form.closedAtStart)
+  assignTrimmed('closedAtEnd', form.closedAtEnd)
+  assignTrimmed('itAssetId', form.itAssetId)
+  assignTrimmed('assetCode', form.assetCode)
+  assignTrimmed('applicantDeptId', form.applicantDeptId)
+  assignTrimmed('applicantDeptName', form.applicantDeptName)
+  assignTrimmed('applicantBy', form.applicantBy)
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('extField', form.extField)
+  assignTrimmed('remark', form.remark)
+  return query
+}
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
+  void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
 
-/** 展开行预览：ticketChangeLog 列 */
-const ticketChangeLogExpandColumns = computed(() => [
-  {
-    title: t('entity.ticketChangeLog.ticketname'),
-    dataIndex: 'ticketName',
-    key: 'ticketName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.ticketChangeLog.ticketno'),
-    dataIndex: 'ticketNo',
-    key: 'ticketNo',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.ticketChangeLog.changetype'),
-    dataIndex: 'changeType',
-    key: 'changeType',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.ticketChangeLog.changesummary'),
-    dataIndex: 'changeSummary',
-    key: 'changeSummary',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.ticketChangeLog.changefields'),
-    dataIndex: 'changeFields',
-    key: 'changeFields',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.ticketChangeLog.changereason'),
-    dataIndex: 'changeReason',
-    key: 'changeReason',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.ticketChangeLog.ticket'),
-    dataIndex: 'ticket',
-    key: 'ticket',
-    ellipsis: true,
-  },
-])
-
-/** 读取主表行上的 ticketChangeLog 子表缓存 */
-function getTicketChangeLogRows(record: Ticket): TicketChangeLog[] {
-  return (record as any)?.changeLogs ?? []
-}
-
-/** 主表行是否已加载 ticketChangeLog 子表 */
-function hasTicketChangeLogRows(record: Ticket): boolean {
-  return getTicketChangeLogRows(record).length > 0
-}
 
 
-/** 加载主表详情并回填当前页 dataSource */
-async function loadTicketDetail(record: Ticket): Promise<Ticket | null> {
-  const id = getTicketId(record)
-  if (!id) {
-    return null
-  }
-  try {
-    const detail = await getTicketById(id)
-    const index = dataSource.value.findIndex((row) => getTicketId(row) === id)
-    if (index !== -1) {
-      dataSource.value[index] = { ...dataSource.value[index], ...detail } as Ticket
-    }
-    return detail
-  } catch (error: any) {
-    message.error(error?.message || t('common.feedback.load.data.failed'))
-    return null
-  }
-}
-/** 懒加载 ticketChangeLog 子表（TicketChangeLogQuery + ticketChangeLogApi，与主表 TicketQuery 分离） */
-async function loadTicketChangeLogForTicket(record: Ticket): Promise<TicketChangeLog[]> {
-  const masterId = getTicketId(record)
-  if (!masterId) {
-    return []
-  }
-  try {
-    const childQuery: TicketChangeLogQuery = {
-      pageIndex: 1,
-      pageSize: 500,
-      ticketId: masterId,
-    }
-    const result = await ticketChangeLogApi.getTicketChangeLogList(childQuery)
-    const rows = result?.data ?? []
-    const index = dataSource.value.findIndex((row) => getTicketId(row) === masterId)
-    if (index !== -1) {
-      const row = dataSource.value[index]
-      dataSource.value[index] = { ...row, changeLogs: rows } as Ticket
-    }
-    return rows
-  } catch (error: any) {
-    message.error(error?.message || t('common.feedback.load.data.failed'))
-    return []
-  }
-}
 
-/** 展开前确保各子表已懒加载 */
-async function ensureTicketChildrenLoaded(record: Ticket) {
-  if (!hasTicketChangeLogRows(record)) {
-    await loadTicketChangeLogForTicket(record)
-  }
-}
 
-/** 主表展开行：手风琴懒加载子表 */
-async function handleExpand(expanded: boolean, record: Ticket) {
-  const key = getTicketId(record)
-  if (!expanded || !key) {
-    expandedRowKeys.value = []
-    return
-  }
-  if (expandedRowKeys.value.length > 0 && expandedRowKeys.value[0] !== key) {
-    expandedRowKeys.value = []
-  }
-  await ensureTicketChildrenLoaded(record)
-  expandedRowKeys.value = [key]
-}
+
 
 /** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
@@ -827,13 +867,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getTicketField(record, 'content') ?? ''
   },
   {
-    title: t('entity.ticket.attachmentsjson'),
-    dataIndex: 'attachmentsJson',
-    key: 'attachmentsJson',
+    title: t('entity.ticket.attachments'),
+    dataIndex: 'attachments',
+    key: 'attachments',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTicketField(record, 'attachmentsJson') ?? ''
+    customRender: ({ record }: { record: any }) => getTicketField(record, 'attachments') ?? ''
   },
   {
     title: t('entity.ticket.status'),
@@ -844,10 +884,18 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
   },
   {
+    title: t('entity.ticket.priority'),
+    dataIndex: 'priority',
+    key: 'priority',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
     title: t('entity.ticket.urgency'),
     dataIndex: 'urgency',
     key: 'urgency',
-    width: 100,
+    width: 120,
     resizable: true,
     ellipsis: true,
   },
@@ -855,14 +903,6 @@ const columns = computed<TableColumnsType>(() => [
     title: t('entity.ticket.impact'),
     dataIndex: 'impact',
     key: 'impact',
-    width: 100,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: t('entity.ticket.priority'),
-    dataIndex: 'priority',
-    key: 'priority',
     width: 120,
     resizable: true,
     ellipsis: true,
@@ -883,6 +923,7 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
+    customRender: ({ record }: { record: any }) => getTicketField(record, 'ticketSource') ?? ''
   },
   {
     title: t('entity.ticket.submitterid'),
@@ -930,15 +971,6 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getTicketField(record, 'knowledgeId') ?? ''
   },
   {
-    title: t('entity.ticket.knowledgename'),
-    dataIndex: 'knowledgeName',
-    key: 'knowledgeName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTicketField(record, 'knowledgeName') ?? ''
-  },
-  {
     title: t('entity.ticket.parentticketid'),
     dataIndex: 'parentTicketId',
     key: 'parentTicketId',
@@ -946,15 +978,6 @@ const columns = computed<TableColumnsType>(() => [
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getTicketField(record, 'parentTicketId') ?? ''
-  },
-  {
-    title: t('entity.ticket.parentticketname'),
-    dataIndex: 'parentTicketName',
-    key: 'parentTicketName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTicketField(record, 'parentTicketName') ?? ''
   },
   {
     title: t('entity.ticket.firstresponseat'),
@@ -1002,22 +1025,22 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getTicketField(record, 'closedAt') ?? ''
   },
   {
-    title: t('entity.ticket.flowinstanceid'),
-    dataIndex: 'flowInstanceId',
-    key: 'flowInstanceId',
+    title: t('entity.ticket.itassetid'),
+    dataIndex: 'itAssetId',
+    key: 'itAssetId',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTicketField(record, 'flowInstanceId') ?? ''
+    customRender: ({ record }: { record: any }) => getTicketField(record, 'itAssetId') ?? ''
   },
   {
-    title: t('entity.ticket.flowinstancename'),
-    dataIndex: 'flowInstanceName',
-    key: 'flowInstanceName',
+    title: t('entity.ticket.assetcode'),
+    dataIndex: 'assetCode',
+    key: 'assetCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTicketField(record, 'flowInstanceName') ?? ''
+    customRender: ({ record }: { record: any }) => getTicketField(record, 'assetCode') ?? ''
   },
   {
     title: t('entity.ticket.applicantdeptid'),
@@ -1062,8 +1085,8 @@ const columns = computed<TableColumnsType>(() => [
         label: t('routine.help-desk.ticket.page.workflow.title'),
         shape: 'plain',
         icon: RiCustomerService2Line,
-        permission: 'routine:help:desk:ticket:query',
-        onClick: (record: Ticket) => handleOpenWorkflow(record)
+        permission: 'routine:help:desk:ticket:update',
+        onClick: (record: Ticket) => handleOpenWorkflowForRecord(record)
       },
       {
         key: 'update',
@@ -1094,6 +1117,7 @@ const getTicketId = (record: any): string => record?.[entityIdName] ?? ''
  */
 const getTicketField = (record: any, field: string): any => record?.[field]
 
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -1105,7 +1129,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: Ticket, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getTicketId(selectedRow.value) === getTicketId(record)) {
+    } else if (selectedRow.value && getTicketId(selectedRow.value) === getTicketId(record)) {
       selectedRow.value = null
     }
   },
@@ -1136,16 +1160,7 @@ const onClickRow = (record: Ticket) => ({
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: TicketQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getTicketList(params)
+    const res = await getTicketList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
@@ -1163,7 +1178,7 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -1174,9 +1189,11 @@ function handleReset() {
   ticketNo: '',
   title: '',
   content: '',
-  attachmentsJson: '',
+  attachments: '',
   ticketStatus: undefined as number | undefined,
   priority: undefined as number | undefined,
+  urgency: undefined as number | undefined,
+  impact: undefined as number | undefined,
   categoryCode: '',
   ticketSource: undefined as number | undefined,
   submitterId: '',
@@ -1195,65 +1212,61 @@ function handleReset() {
   resolutionDueByEnd: '',
   closedAtStart: '',
   closedAtEnd: '',
-  flowInstanceId: '',
+  itAssetId: '',
+  assetCode: '',
   applicantDeptId: '',
   applicantDeptName: '',
   applicantBy: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
+}
+
+/** 打开工作流抽屉（工具栏：当前选中行） */
+function handleOpenWorkflow() {
+  if (!selectedRow.value) {
+    message.warning(t('common.tip.select.to.action', {
+      action: t('routine.help-desk.ticket.page.workflow.title'),
+      entity: t('entity.ticket._self'),
+    }))
+    return
+  }
+  handleOpenWorkflowForRecord(selectedRow.value)
+}
+
+/**
+ * 打开工作流抽屉（指定行）
+ * @param {Ticket} record 工单行
+ */
+function handleOpenWorkflowForRecord(record: Ticket) {
+  const id = getTicketId(record)
+  if (!id) return
+  workflowTicketId.value = id
+  workflowVisible.value = true
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
   formTitle.value = t('common.dialog.title.create', { entity: t('entity.ticket._self') })
-  formData.value = {}
+  formData.value = null
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
-/** 打开工单工作流抽屉 */
-function handleOpenWorkflow(record: Ticket): void {
-  workflowTicketId.value = getTicketId(record)
-  workflowVisible.value = true
-}
-
-/** 工具栏扩展：工单处理（选中单行） */
-const toolbarLeftActions = computed<ToolBarAction[]>(() => [
-  {
-    key: 'workflow',
-    label: t('routine.help-desk.ticket.page.workflow.title'),
-    shape: 'plain',
-    icon: RiCustomerService2Line,
-    permission: 'routine:help:desk:ticket:query',
-    disabled: !selectedRow.value,
-    onClick: () => {
-      if (selectedRow.value) {
-        handleOpenWorkflow(selectedRow.value)
-      }
-    },
-  },
-])
-
-/** 打开编辑弹窗（主子表：先拉详情含子表） */
-async function handleEdit(record: Ticket) {
+/** 打开编辑弹窗 */
+function handleEdit(record: Ticket) {
   formTitle.value = t('common.dialog.title.edit', { entity: t('entity.ticket._self') })
-  formLoading.value = true
-  try {
-    const detail = await loadTicketDetail(record)
-    formData.value = detail ? { ...detail } : { ...record }
-    formVisible.value = true
-  } finally {
-    formLoading.value = false
-  }
+  formData.value = { ...record }
+  formVisible.value = true
 }
 
 /** 工具栏编辑：打开当前单选行 */
 function handleUpdate() {
   if (selectedRow.value) {
-    void handleEdit(selectedRow.value)
+    handleEdit(selectedRow.value)
   } else {
     message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.ticket._self') }))
   }
@@ -1272,21 +1285,15 @@ async function handleFormSubmit() {
     const payload = refInst.getValues?.() ?? { ...(formData.value as any) }
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
-      await updateTicket(id, payload as TicketUpdate)
+      await updateTicket(id, payload as any)
       message.success(t('common.feedback.updated', { target: t('entity.ticket._self') }))
     } else {
-      const submitDto: TicketSubmit = {
-        title: payload.title,
-        content: payload.content,
-        attachmentsJson: payload.attachmentsJson,
-        priority: payload.priority,
-        categoryCode: payload.categoryCode,
-        remark: payload.remark,
-      }
-      await submitTicket(submitDto)
+      await createTicket(payload as any)
       message.success(t('common.feedback.created', { target: t('entity.ticket._self') }))
     }
     formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
     loadData()
   } finally {
     formLoading.value = false
@@ -1296,6 +1303,8 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开导入对话框 */
 function handleImport() {
@@ -1327,16 +1336,11 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: TicketQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportTicket(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportTicket(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -1404,7 +1408,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -1413,9 +1417,11 @@ function handleAdvancedQueryReset() {
   ticketNo: '',
   title: '',
   content: '',
-  attachmentsJson: '',
+  attachments: '',
   ticketStatus: undefined as number | undefined,
   priority: undefined as number | undefined,
+  urgency: undefined as number | undefined,
+  impact: undefined as number | undefined,
   categoryCode: '',
   ticketSource: undefined as number | undefined,
   submitterId: '',
@@ -1434,13 +1440,14 @@ function handleAdvancedQueryReset() {
   resolutionDueByEnd: '',
   closedAtStart: '',
   closedAtEnd: '',
-  flowInstanceId: '',
+  itAssetId: '',
+  assetCode: '',
   applicantDeptId: '',
   applicantDeptName: '',
   applicantBy: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
 }
@@ -1470,23 +1477,16 @@ function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
 /** 分页页码变更 */
-function handlePaginationChange(page: number) {
+function handlePaginationChange(page: number, size: number) {
   currentPage.value = page
+  pageSize.value = size
   loadData()
 }
-/** 分页每页条数变更 */
+
+/** 分页每页条数变更（重置到第 1 页） */
 function handlePaginationSizeChange(_current: number, size: number) {
+  currentPage.value = getTaktDefaultPageIndex()
   pageSize.value = size
-  currentPage.value = 1
   loadData()
 }
 </script>
-
-<style scoped lang="css">
-.routine-help-desk-ticket {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-</style>

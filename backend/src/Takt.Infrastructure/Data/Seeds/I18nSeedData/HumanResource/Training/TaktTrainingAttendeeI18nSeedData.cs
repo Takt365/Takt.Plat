@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Training
 // 文件名称：TaktTrainingAttendeeI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktTrainingAttendee 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktTrainingAttendeeI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.trainingattendee._self", "zh-HK", "员工培训结果记录信息_hk", "实体名称"),
 
             // entity.trainingattendee.employeeid
-            new TranslationSeedItem("entity.trainingattendee.employeeid", "en-US", "员工ID_us", "员工 ID"),
+            new TranslationSeedItem("entity.trainingattendee.employeeid", "en-US", "员工ID_us", "员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
             // entity.trainingattendee.employeeid
-            new TranslationSeedItem("entity.trainingattendee.employeeid", "ja-JP", "员工ID_jp", "员工 ID"),
+            new TranslationSeedItem("entity.trainingattendee.employeeid", "ja-JP", "员工ID_jp", "员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
             // entity.trainingattendee.employeeid
-            new TranslationSeedItem("entity.trainingattendee.employeeid", "zh-CN", "员工ID", "员工 ID"),
+            new TranslationSeedItem("entity.trainingattendee.employeeid", "zh-CN", "员工ID", "员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
             // entity.trainingattendee.employeeid
-            new TranslationSeedItem("entity.trainingattendee.employeeid", "zh-HK", "员工ID_hk", "员工 ID"),
+            new TranslationSeedItem("entity.trainingattendee.employeeid", "zh-HK", "员工ID_hk", "员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
 
             // entity.trainingattendee.employeename
             new TranslationSeedItem("entity.trainingattendee.employeename", "en-US", "员工姓名_us", "员工姓名"),
@@ -109,13 +109,13 @@ public class TaktTrainingAttendeeI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.trainingattendee.employeename", "zh-HK", "员工姓名_hk", "员工姓名"),
 
             // entity.trainingattendee.trainingcourseid
-            new TranslationSeedItem("entity.trainingattendee.trainingcourseid", "en-US", "培训课程ID_us", "培训课程 ID"),
+            new TranslationSeedItem("entity.trainingattendee.trainingcourseid", "en-US", "培训课程ID_us", "培训课程（关联 TaktTrainingCourse.Id，选项 TaktTrainingCourses/options）"),
             // entity.trainingattendee.trainingcourseid
-            new TranslationSeedItem("entity.trainingattendee.trainingcourseid", "ja-JP", "培训课程ID_jp", "培训课程 ID"),
+            new TranslationSeedItem("entity.trainingattendee.trainingcourseid", "ja-JP", "培训课程ID_jp", "培训课程（关联 TaktTrainingCourse.Id，选项 TaktTrainingCourses/options）"),
             // entity.trainingattendee.trainingcourseid
-            new TranslationSeedItem("entity.trainingattendee.trainingcourseid", "zh-CN", "培训课程ID", "培训课程 ID"),
+            new TranslationSeedItem("entity.trainingattendee.trainingcourseid", "zh-CN", "培训课程ID", "培训课程（关联 TaktTrainingCourse.Id，选项 TaktTrainingCourses/options）"),
             // entity.trainingattendee.trainingcourseid
-            new TranslationSeedItem("entity.trainingattendee.trainingcourseid", "zh-HK", "培训课程ID_hk", "培训课程 ID"),
+            new TranslationSeedItem("entity.trainingattendee.trainingcourseid", "zh-HK", "培训课程ID_hk", "培训课程（关联 TaktTrainingCourse.Id，选项 TaktTrainingCourses/options）"),
 
             // entity.trainingattendee.coursename
             new TranslationSeedItem("entity.trainingattendee.coursename", "en-US", "培训课程名称_us", "培训课程名称"),
@@ -127,13 +127,13 @@ public class TaktTrainingAttendeeI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.trainingattendee.coursename", "zh-HK", "培训课程名称_hk", "培训课程名称"),
 
             // entity.trainingattendee.trainingtype
-            new TranslationSeedItem("entity.trainingattendee.trainingtype", "en-US", "培训类型_us", "培训类型"),
+            new TranslationSeedItem("entity.trainingattendee.trainingtype", "en-US", "培训类型_us", "培训类型（字典 hr_training_course_type；列存 DictValue：ONBOARD/SKILL/MANAGEMENT/SAFETY/PROFESSIONAL）"),
             // entity.trainingattendee.trainingtype
-            new TranslationSeedItem("entity.trainingattendee.trainingtype", "ja-JP", "培训类型_jp", "培训类型"),
+            new TranslationSeedItem("entity.trainingattendee.trainingtype", "ja-JP", "培训类型_jp", "培训类型（字典 hr_training_course_type；列存 DictValue：ONBOARD/SKILL/MANAGEMENT/SAFETY/PROFESSIONAL）"),
             // entity.trainingattendee.trainingtype
-            new TranslationSeedItem("entity.trainingattendee.trainingtype", "zh-CN", "培训类型", "培训类型"),
+            new TranslationSeedItem("entity.trainingattendee.trainingtype", "zh-CN", "培训类型", "培训类型（字典 hr_training_course_type；列存 DictValue：ONBOARD/SKILL/MANAGEMENT/SAFETY/PROFESSIONAL）"),
             // entity.trainingattendee.trainingtype
-            new TranslationSeedItem("entity.trainingattendee.trainingtype", "zh-HK", "培训类型_hk", "培训类型"),
+            new TranslationSeedItem("entity.trainingattendee.trainingtype", "zh-HK", "培训类型_hk", "培训类型（字典 hr_training_course_type；列存 DictValue：ONBOARD/SKILL/MANAGEMENT/SAFETY/PROFESSIONAL）"),
 
             // entity.trainingattendee.instructor
             new TranslationSeedItem("entity.trainingattendee.instructor", "en-US", "培训讲师_us", "培训讲师"),
@@ -190,13 +190,13 @@ public class TaktTrainingAttendeeI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.trainingattendee.trainingscore", "zh-HK", "培训成绩_hk", "培训成绩"),
 
             // entity.trainingattendee.ispassed
-            new TranslationSeedItem("entity.trainingattendee.ispassed", "en-US", "是否通过_us", "是否通过（0=否 1=是）"),
+            new TranslationSeedItem("entity.trainingattendee.ispassed", "en-US", "是否通过_us", "是否通过（字典 sys_yes_no_type；0=否 1=是）"),
             // entity.trainingattendee.ispassed
-            new TranslationSeedItem("entity.trainingattendee.ispassed", "ja-JP", "是否通过_jp", "是否通过（0=否 1=是）"),
+            new TranslationSeedItem("entity.trainingattendee.ispassed", "ja-JP", "是否通过_jp", "是否通过（字典 sys_yes_no_type；0=否 1=是）"),
             // entity.trainingattendee.ispassed
-            new TranslationSeedItem("entity.trainingattendee.ispassed", "zh-CN", "是否通过", "是否通过（0=否 1=是）"),
+            new TranslationSeedItem("entity.trainingattendee.ispassed", "zh-CN", "是否通过", "是否通过（字典 sys_yes_no_type；0=否 1=是）"),
             // entity.trainingattendee.ispassed
-            new TranslationSeedItem("entity.trainingattendee.ispassed", "zh-HK", "是否通过_hk", "是否通过（0=否 1=是）"),
+            new TranslationSeedItem("entity.trainingattendee.ispassed", "zh-HK", "是否通过_hk", "是否通过（字典 sys_yes_no_type；0=否 1=是）"),
 
             // entity.trainingattendee.certificateno
             new TranslationSeedItem("entity.trainingattendee.certificateno", "en-US", "证书编号_us", "证书编号"),
@@ -216,23 +216,23 @@ public class TaktTrainingAttendeeI18nSeedData : ITaktSeedDataCoordinator
             // entity.trainingattendee.trainingevaluation
             new TranslationSeedItem("entity.trainingattendee.trainingevaluation", "zh-HK", "培训评价_hk", "培训评价"),
 
-            // entity.trainingattendee.trainingresultstatus
-            new TranslationSeedItem("entity.trainingattendee.trainingresultstatus", "en-US", "状态_us", "状态（1=有效 0=无效）"),
-            // entity.trainingattendee.trainingresultstatus
-            new TranslationSeedItem("entity.trainingattendee.trainingresultstatus", "ja-JP", "状态_jp", "状态（1=有效 0=无效）"),
-            // entity.trainingattendee.trainingresultstatus
-            new TranslationSeedItem("entity.trainingattendee.trainingresultstatus", "zh-CN", "状态", "状态（1=有效 0=无效）"),
-            // entity.trainingattendee.trainingresultstatus
-            new TranslationSeedItem("entity.trainingattendee.trainingresultstatus", "zh-HK", "状态_hk", "状态（1=有效 0=无效）"),
+            // entity.trainingattendee.relatedplant
+            new TranslationSeedItem("entity.trainingattendee.relatedplant", "en-US", "关联工厂_us", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            // entity.trainingattendee.relatedplant
+            new TranslationSeedItem("entity.trainingattendee.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            // entity.trainingattendee.relatedplant
+            new TranslationSeedItem("entity.trainingattendee.relatedplant", "zh-CN", "关联工厂", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            // entity.trainingattendee.relatedplant
+            new TranslationSeedItem("entity.trainingattendee.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
 
-            // entity.trainingattendee.relatedplant
-            new TranslationSeedItem("entity.trainingattendee.relatedplant", "en-US", "关联工厂_us", "关联工厂"),
-            // entity.trainingattendee.relatedplant
-            new TranslationSeedItem("entity.trainingattendee.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂"),
-            // entity.trainingattendee.relatedplant
-            new TranslationSeedItem("entity.trainingattendee.relatedplant", "zh-CN", "关联工厂", "关联工厂"),
-            // entity.trainingattendee.relatedplant
-            new TranslationSeedItem("entity.trainingattendee.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂"),
+            // entity.trainingattendee.trainingresultstatus
+            new TranslationSeedItem("entity.trainingattendee.trainingresultstatus", "en-US", "状态_us", "参训记录状态（字典 sys_normal_disable_status；1=有效 0=无效）"),
+            // entity.trainingattendee.trainingresultstatus
+            new TranslationSeedItem("entity.trainingattendee.trainingresultstatus", "ja-JP", "状态_jp", "参训记录状态（字典 sys_normal_disable_status；1=有效 0=无效）"),
+            // entity.trainingattendee.trainingresultstatus
+            new TranslationSeedItem("entity.trainingattendee.trainingresultstatus", "zh-CN", "状态", "参训记录状态（字典 sys_normal_disable_status；1=有效 0=无效）"),
+            // entity.trainingattendee.trainingresultstatus
+            new TranslationSeedItem("entity.trainingattendee.trainingresultstatus", "zh-HK", "状态_hk", "参训记录状态（字典 sys_normal_disable_status；1=有效 0=无效）"),
         };
     }
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Routine.HelpDesk
 // 文件名称：TaktSelfServiceService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：自助服务应用服务实现
 // 
@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Services.Routine.HelpDesk;
 
@@ -97,7 +96,7 @@ public class TaktSelfServiceService : TaktServiceBase, ITaktSelfServiceService
     {
         EnsureThreeLayerContext();
         var list = await _selfServiceRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.SelfServiceStatus == 1,
             x => x.ServiceName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
@@ -309,9 +308,10 @@ public class TaktSelfServiceService : TaktServiceBase, ITaktSelfServiceService
             exp = exp.And(x =>
                 (x.ServiceName != null && x.ServiceName.Contains(keywords))
                 || SqlFunc.ToString(x.ServiceType).Contains(keywords)
-                || (x.Description != null && x.Description.Contains(keywords))
+                || (x.SelfServiceDescription != null && x.SelfServiceDescription.Contains(keywords))
                 || (x.LinkOrCode != null && x.LinkOrCode.Contains(keywords))
                 || (x.IconUrl != null && x.IconUrl.Contains(keywords))
+                || (x.Attachments != null && x.Attachments.Contains(keywords))
                 || SqlFunc.ToString(x.SelfServiceStatus).Contains(keywords)
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
@@ -330,9 +330,9 @@ public class TaktSelfServiceService : TaktServiceBase, ITaktSelfServiceService
             exp = exp.And(x => x.ServiceType == queryDto.ServiceType);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Description))
+        if (!string.IsNullOrEmpty(queryDto?.SelfServiceDescription))
         {
-            exp = exp.And(x => x.Description != null && x.Description.Contains(queryDto.Description));
+            exp = exp.And(x => x.SelfServiceDescription != null && x.SelfServiceDescription.Contains(queryDto.SelfServiceDescription));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.LinkOrCode))
@@ -343,6 +343,11 @@ public class TaktSelfServiceService : TaktServiceBase, ITaktSelfServiceService
         if (!string.IsNullOrEmpty(queryDto?.IconUrl))
         {
             exp = exp.And(x => x.IconUrl != null && x.IconUrl.Contains(queryDto.IconUrl));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.Attachments))
+        {
+            exp = exp.And(x => x.Attachments != null && x.Attachments.Contains(queryDto.Attachments));
         }
 
         if (queryDto?.SelfServiceStatus.HasValue == true)

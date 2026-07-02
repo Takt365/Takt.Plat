@@ -27,7 +27,7 @@ namespace Takt.Domain.Entities.Logistics.Quality.Cost;
 public class TaktQualityIssueMeeting : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 品质问题主表ID(主子表关系,序列化为string以避免Javascript精度问题)
+    /// 品质问题主表 ID（关联 TaktQualityIssue.Id，选项 TaktQualityIssues/options）
     /// </summary>
     [SugarColumn(ColumnName = "quality_issue_id", ColumnDescription = "品质问题主表ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]

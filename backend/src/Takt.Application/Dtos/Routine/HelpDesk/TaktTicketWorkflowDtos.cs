@@ -26,17 +26,17 @@ public class TaktTicketSubmitDto
     /// 工单标题
     /// </summary>
     [Required(ErrorMessage = "工单标题不能为空")]
-    public string Title { get; set; } = string.Empty;
+    public string TicketTitle { get; set; } = string.Empty;
 
     /// <summary>
     /// 工单内容
     /// </summary>
-    public string? Content { get; set; }
+    public string? TicketContent { get; set; }
 
     /// <summary>
     /// 附件 JSON
     /// </summary>
-    public string? AttachmentsJson { get; set; }
+    public string? attachments { get; set; }
 
     /// <summary>
     /// 紧急度（字典 sys_urgency_level_category）
@@ -156,102 +156,6 @@ public class TaktTicketWorkflowActionDto
 }
 
 /// <summary>
-/// 工单回复 DTO
-/// </summary>
-public class TaktTicketReplyCreateDto
-{
-    /// <summary>
-    /// 工单 ID
-    /// </summary>
-    [Required]
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long TicketId { get; set; }
-
-    /// <summary>
-    /// 回复内容
-    /// </summary>
-    [Required(ErrorMessage = "回复内容不能为空")]
-    public string Content { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 附件 JSON
-    /// </summary>
-    public string? AttachmentsJson { get; set; }
-
-    /// <summary>
-    /// 是否内部备注（仅客服）
-    /// </summary>
-    public bool IsInternal { get; set; }
-}
-
-/// <summary>
-/// 工单回复响应 DTO
-/// </summary>
-public class TaktTicketReplyDto : TaktCompanyDtoBase
-{
-    /// <summary>
-    /// 回复 ID
-    /// </summary>
-    [AdaptMember("Id")]
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long TicketReplyId { get; set; }
-
-    /// <summary>
-    /// 工单 ID
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long TicketId { get; set; }
-
-    /// <summary>
-    /// 作者类型
-    /// </summary>
-    public int AuthorType { get; set; }
-
-    /// <summary>
-    /// 作者 ID
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long AuthorId { get; set; }
-
-    /// <summary>
-    /// 作者姓名
-    /// </summary>
-    public string? AuthorName { get; set; }
-
-    /// <summary>
-    /// 回复内容
-    /// </summary>
-    public string Content { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 附件 JSON
-    /// </summary>
-    public string? AttachmentsJson { get; set; }
-
-    /// <summary>
-    /// 是否内部备注
-    /// </summary>
-    public bool IsInternal { get; set; }
-}
-
-/// <summary>
-/// 工单回复分页查询
-/// </summary>
-public class TaktTicketReplyQueryDto : TaktPagedQuery
-{
-    /// <summary>
-    /// 工单 ID
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long TicketId { get; set; }
-
-    /// <summary>
-    /// 是否包含内部备注（客服可见）
-    /// </summary>
-    public bool IncludeInternal { get; set; } = true;
-}
-
-/// <summary>
 /// 我的资产汇总 DTO（按工单 AssetCode 聚合，关联 TaktAsset）
 /// </summary>
 public class TaktTicketMyAssetDto
@@ -282,4 +186,33 @@ public class TaktTicketMyAssetDto
 /// </summary>
 public class TaktTicketMyAssetQueryDto : TaktPagedQuery
 {
+}
+
+/// <summary>
+/// 工单会话回复 DTO（工作流入口，租户/作者由服务端填充）
+/// </summary>
+public class TaktTicketSessionReplyCreateDto
+{
+    /// <summary>
+    /// 工单 ID
+    /// </summary>
+    [Required]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long TicketId { get; set; }
+
+    /// <summary>
+    /// 回复内容
+    /// </summary>
+    [Required(ErrorMessage = "回复内容不能为空")]
+    public string TicketContent { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// </summary>
+    public string? Attachments { get; set; }
+
+    /// <summary>
+    /// 是否内部备注（仅客服可见；0=否，1=是）
+    /// </summary>
+    public int IsInternal { get; set; } = 0;
 }

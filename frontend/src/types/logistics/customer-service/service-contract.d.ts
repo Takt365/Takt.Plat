@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/customer-service
 // 文件名称：service-contract.d.ts
-// 创建时间：2026-06-21
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/customer-service 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -303,7 +303,7 @@ export interface ServiceContractCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -530,6 +530,26 @@ export interface ServiceContractTemplate {
   contractStatus?: number;
 
   /**
+   * 签订日期
+   */
+  signDate?: string;
+
+  /**
+   * 生效日期
+   */
+  effectiveDate?: string;
+
+  /**
+   * 到期日期
+   */
+  expiryDate?: string;
+
+  /**
+   * 合同金额
+   */
+  contractAmount?: number;
+
+  /**
    * 结算币种代码
    */
   currencyCode?: string;
@@ -548,6 +568,26 @@ export interface ServiceContractTemplate {
    * SLA 响应时限（小时）
    */
   slaResponseHours?: number;
+
+  /**
+   * SLA 解决时限（小时）
+   */
+  slaResolveHours?: number;
+
+  /**
+   * 客户经理（人员代码）
+   */
+  accountManager?: string;
+
+  /**
+   * 服务订单列表（外键在子表 TaktServiceOrder.ServiceContractId）（子表，级联保存）
+   */
+  serviceOrders?: ServiceOrderCreate[];
+
+  /**
+   * 服务请求列表（外键在子表 TaktServiceRequest.ServiceContractId）（子表，级联保存）
+   */
+  serviceRequests?: ServiceRequestCreate[];
 
   /**
    * 扩展字段JSON
@@ -579,7 +619,7 @@ export interface ServiceContractImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -624,6 +664,26 @@ export interface ServiceContractImport {
   contractStatus?: number;
 
   /**
+   * 签订日期
+   */
+  signDate?: string;
+
+  /**
+   * 生效日期
+   */
+  effectiveDate?: string;
+
+  /**
+   * 到期日期
+   */
+  expiryDate?: string;
+
+  /**
+   * 合同金额
+   */
+  contractAmount?: number;
+
+  /**
    * 结算币种代码
    */
   currencyCode?: string;
@@ -642,6 +702,26 @@ export interface ServiceContractImport {
    * SLA 响应时限（小时）
    */
   slaResponseHours?: number;
+
+  /**
+   * SLA 解决时限（小时）
+   */
+  slaResolveHours?: number;
+
+  /**
+   * 客户经理（人员代码）
+   */
+  accountManager?: string;
+
+  /**
+   * 服务订单列表（外键在子表 TaktServiceOrder.ServiceContractId）（子表，级联保存）
+   */
+  serviceOrders?: ServiceOrderCreate[];
+
+  /**
+   * 服务请求列表（外键在子表 TaktServiceRequest.ServiceContractId）（子表，级联保存）
+   */
+  serviceRequests?: ServiceRequestCreate[];
 
   /**
    * 扩展字段JSON

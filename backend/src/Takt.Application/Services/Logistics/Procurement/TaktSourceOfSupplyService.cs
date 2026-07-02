@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Procurement
 // 文件名称：TaktSourceOfSupplyService.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-30
 // 创建人：Takt365(Cursor AI)
 // 功能描述：货源清单应用服务实现
 // 
@@ -97,12 +97,12 @@ public class TaktSourceOfSupplyService : TaktServiceBase, ITaktSourceOfSupplySer
         EnsureThreeLayerContext();
         var list = await _sourceOfSupplyRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.SourceStatus == 1,
-            x => x.MaterialName ?? string.Empty,
+            x => x.SourceOfSupplyCode,
             false);
         return list.Select(e => new TaktSelectOption
         {
             DictValue = e.Id,
-            DictLabel = e.MaterialName ?? e.Id.ToString(),
+            DictLabel = e.SourceOfSupplyCode,
         }).ToList();
     }
 
@@ -368,10 +368,8 @@ public class TaktSourceOfSupplyService : TaktServiceBase, ITaktSourceOfSupplySer
                 (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.SourceOfSupplyCode != null && x.SourceOfSupplyCode.Contains(keywords))
                 || (x.MaterialCode != null && x.MaterialCode.Contains(keywords))
-                || (x.MaterialName != null && x.MaterialName.Contains(keywords))
                 || (x.SupplierCode != null && x.SupplierCode.Contains(keywords))
-                || (x.SupplierName != null && x.SupplierName.Contains(keywords))
-                || (x.PurchaseGroupCode != null && x.PurchaseGroupCode.Contains(keywords))
+                || (x.PurchaseGroup != null && x.PurchaseGroup.Contains(keywords))
                 || SqlFunc.ToString(x.IsFixed).Contains(keywords)
                 || SqlFunc.ToString(x.IsBlocked).Contains(keywords)
                 || (x.PurchaseUnit != null && x.PurchaseUnit.Contains(keywords))
@@ -379,8 +377,8 @@ public class TaktSourceOfSupplyService : TaktServiceBase, ITaktSourceOfSupplySer
                 || SqlFunc.ToString(x.LeadTimeDays).Contains(keywords)
                 || (x.AgreementNumber != null && x.AgreementNumber.Contains(keywords))
                 || SqlFunc.ToString(x.AgreementLineNumber).Contains(keywords)
-                || SqlFunc.ToString(x.SourceStatus).Contains(keywords)
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
+                || SqlFunc.ToString(x.SourceStatus).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.ValidFrom).Contains(keywords)
@@ -404,24 +402,14 @@ public class TaktSourceOfSupplyService : TaktServiceBase, ITaktSourceOfSupplySer
             exp = exp.And(x => x.MaterialCode != null && x.MaterialCode.Contains(queryDto.MaterialCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaterialName))
-        {
-            exp = exp.And(x => x.MaterialName != null && x.MaterialName.Contains(queryDto.MaterialName));
-        }
-
         if (!string.IsNullOrEmpty(queryDto?.SupplierCode))
         {
             exp = exp.And(x => x.SupplierCode != null && x.SupplierCode.Contains(queryDto.SupplierCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SupplierName))
+        if (!string.IsNullOrEmpty(queryDto?.PurchaseGroup))
         {
-            exp = exp.And(x => x.SupplierName != null && x.SupplierName.Contains(queryDto.SupplierName));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.PurchaseGroupCode))
-        {
-            exp = exp.And(x => x.PurchaseGroupCode != null && x.PurchaseGroupCode.Contains(queryDto.PurchaseGroupCode));
+            exp = exp.And(x => x.PurchaseGroup != null && x.PurchaseGroup.Contains(queryDto.PurchaseGroup));
         }
 
         if (queryDto?.IsFixed.HasValue == true)
@@ -459,14 +447,14 @@ public class TaktSourceOfSupplyService : TaktServiceBase, ITaktSourceOfSupplySer
             exp = exp.And(x => x.AgreementLineNumber == queryDto.AgreementLineNumber);
         }
 
-        if (queryDto?.SourceStatus.HasValue == true)
-        {
-            exp = exp.And(x => x.SourceStatus == queryDto.SourceStatus);
-        }
-
         if (queryDto?.SortOrder.HasValue == true)
         {
             exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
+        }
+
+        if (queryDto?.SourceStatus.HasValue == true)
+        {
+            exp = exp.And(x => x.SourceStatus == queryDto.SourceStatus);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

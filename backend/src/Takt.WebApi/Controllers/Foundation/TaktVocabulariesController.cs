@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Foundation
 // 文件名称：TaktVocabulariesController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：敏感词控制器
 // 
@@ -183,7 +183,7 @@ public class TaktVocabulariesController : TaktControllerBase
     /// <summary>
     /// 更新敏感词状态
     /// </summary>
-    /// <param name="dto">状态 DTO（TaktCommonStatus 枚举）</param>
+    /// <param name="dto">状态 DTO</param>
     /// <returns>敏感词DTO</returns>
     [TaktPermission("foundation:vocabulary:update", "更新敏感词状态")]
     [HttpPut("status")]
@@ -262,46 +262,6 @@ public class TaktVocabulariesController : TaktControllerBase
         {
             var (resultFileName, fileContent) = await _vocabularyService.ExportVocabularyAsync(query, sheetName, exportName);
             return File(fileContent, TaktExcelHelper.ExcelContentType, resultFileName);
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
-    }
-
-    /// <summary>
-    /// 检测文本是否包含敏感词
-    /// </summary>
-    /// <param name="dto">检测请求</param>
-    /// <returns>检测结果</returns>
-    [TaktPermission("foundation:vocabulary:filter", "敏感词检测")]
-    [HttpPost("detect")]
-    public async Task<IActionResult> DetectVocabularyTextAsync([FromBody] TaktVocabularyFilterRequestDto dto)
-    {
-        try
-        {
-            var result = await _vocabularyService.DetectVocabularyTextAsync(dto);
-            return Success(result, "检测完成");
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
-    }
-
-    /// <summary>
-    /// 过滤文本中的敏感词
-    /// </summary>
-    /// <param name="dto">过滤请求</param>
-    /// <returns>过滤结果</returns>
-    [TaktPermission("foundation:vocabulary:replace", "敏感词替换")]
-    [HttpPost("filter")]
-    public async Task<IActionResult> FilterVocabularyTextAsync([FromBody] TaktVocabularyFilterRequestDto dto)
-    {
-        try
-        {
-            var result = await _vocabularyService.FilterVocabularyTextAsync(dto);
-            return Success(result, "过滤完成");
         }
         catch (Exception ex)
         {

@@ -10,7 +10,7 @@
 // ========================================
 
 import { getFileUploadPolicy } from '@/api/foundation/file';
-import type { FileUploadPolicy } from '@/types/foundation/file-upload';
+import type { FileUploadPolicy } from '@/types/foundation/file';
 
 /** 全局基础上传策略缓存（不含 totalSize 分片计划） */
 let cachedBasePolicyPromise: Promise<FileUploadPolicy> | null = null;

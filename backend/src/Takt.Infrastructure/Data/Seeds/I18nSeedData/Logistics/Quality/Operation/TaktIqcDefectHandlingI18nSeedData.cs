@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Operation
 // 文件名称：TaktIqcDefectHandlingI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktIqcDefectHandling 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,13 +100,13 @@ public class TaktIqcDefectHandlingI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.iqcdefecthandling.code", "zh-HK", "IQC不良处理编码_hk", "IQC不良处理编码"),
 
             // entity.iqcdefecthandling.iqcorderitemid
-            new TranslationSeedItem("entity.iqcdefecthandling.iqcorderitemid", "en-US", "IQC检验单明细ID_us", "IQC检验单明细ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.iqcdefecthandling.iqcorderitemid", "en-US", "IQC检验单明细ID_us", "IQC检验单明细 ID（关联 TaktIqcOrderItem.Id，选项 TaktIqcOrderItems/options）"),
             // entity.iqcdefecthandling.iqcorderitemid
-            new TranslationSeedItem("entity.iqcdefecthandling.iqcorderitemid", "ja-JP", "IQC检验单明细ID_jp", "IQC检验单明细ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.iqcdefecthandling.iqcorderitemid", "ja-JP", "IQC检验单明细ID_jp", "IQC检验单明细 ID（关联 TaktIqcOrderItem.Id，选项 TaktIqcOrderItems/options）"),
             // entity.iqcdefecthandling.iqcorderitemid
-            new TranslationSeedItem("entity.iqcdefecthandling.iqcorderitemid", "zh-CN", "IQC检验单明细ID", "IQC检验单明细ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.iqcdefecthandling.iqcorderitemid", "zh-CN", "IQC检验单明细ID", "IQC检验单明细 ID（关联 TaktIqcOrderItem.Id，选项 TaktIqcOrderItems/options）"),
             // entity.iqcdefecthandling.iqcorderitemid
-            new TranslationSeedItem("entity.iqcdefecthandling.iqcorderitemid", "zh-HK", "IQC检验单明细ID_hk", "IQC检验单明细ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.iqcdefecthandling.iqcorderitemid", "zh-HK", "IQC检验单明细ID_hk", "IQC检验单明细 ID（关联 TaktIqcOrderItem.Id，选项 TaktIqcOrderItems/options）"),
 
             // entity.iqcdefecthandling.iqcordercode
             new TranslationSeedItem("entity.iqcdefecthandling.iqcordercode", "en-US", "IQC检验单编码_us", "IQC检验单编码（冗余字段，便于查询）"),
@@ -216,15 +216,6 @@ public class TaktIqcDefectHandlingI18nSeedData : ITaktSeedDataCoordinator
             // entity.iqcdefecthandling.handlingat
             new TranslationSeedItem("entity.iqcdefecthandling.handlingat", "zh-HK", "处理时间_hk", "处理时间"),
 
-            // entity.iqcdefecthandling.handlingstatus
-            new TranslationSeedItem("entity.iqcdefecthandling.handlingstatus", "en-US", "处理状态_us", "处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）"),
-            // entity.iqcdefecthandling.handlingstatus
-            new TranslationSeedItem("entity.iqcdefecthandling.handlingstatus", "ja-JP", "处理状态_jp", "处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）"),
-            // entity.iqcdefecthandling.handlingstatus
-            new TranslationSeedItem("entity.iqcdefecthandling.handlingstatus", "zh-CN", "处理状态", "处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）"),
-            // entity.iqcdefecthandling.handlingstatus
-            new TranslationSeedItem("entity.iqcdefecthandling.handlingstatus", "zh-HK", "处理状态_hk", "处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）"),
-
             // entity.iqcdefecthandling.correctiveaction
             new TranslationSeedItem("entity.iqcdefecthandling.correctiveaction", "en-US", "纠正措施_us", "预防措施/纠正措施"),
             // entity.iqcdefecthandling.correctiveaction
@@ -242,6 +233,24 @@ public class TaktIqcDefectHandlingI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.iqcdefecthandling.defectimages", "zh-CN", "不良图片", "不良图片（JSON格式，存储不良图片URL列表）"),
             // entity.iqcdefecthandling.defectimages
             new TranslationSeedItem("entity.iqcdefecthandling.defectimages", "zh-HK", "不良图片_hk", "不良图片（JSON格式，存储不良图片URL列表）"),
+
+            // entity.iqcdefecthandling.attachments
+            new TranslationSeedItem("entity.iqcdefecthandling.attachments", "en-US", "附件JSON_us", "附件 （JSON列表形式，由TaktFile 统一上传到服务器）"),
+            // entity.iqcdefecthandling.attachments
+            new TranslationSeedItem("entity.iqcdefecthandling.attachments", "ja-JP", "附件JSON_jp", "附件 （JSON列表形式，由TaktFile 统一上传到服务器）"),
+            // entity.iqcdefecthandling.attachments
+            new TranslationSeedItem("entity.iqcdefecthandling.attachments", "zh-CN", "附件JSON", "附件 （JSON列表形式，由TaktFile 统一上传到服务器）"),
+            // entity.iqcdefecthandling.attachments
+            new TranslationSeedItem("entity.iqcdefecthandling.attachments", "zh-HK", "附件JSON_hk", "附件 （JSON列表形式，由TaktFile 统一上传到服务器）"),
+
+            // entity.iqcdefecthandling.handlingstatus
+            new TranslationSeedItem("entity.iqcdefecthandling.handlingstatus", "en-US", "处理状态_us", "处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）"),
+            // entity.iqcdefecthandling.handlingstatus
+            new TranslationSeedItem("entity.iqcdefecthandling.handlingstatus", "ja-JP", "处理状态_jp", "处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）"),
+            // entity.iqcdefecthandling.handlingstatus
+            new TranslationSeedItem("entity.iqcdefecthandling.handlingstatus", "zh-CN", "处理状态", "处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）"),
+            // entity.iqcdefecthandling.handlingstatus
+            new TranslationSeedItem("entity.iqcdefecthandling.handlingstatus", "zh-HK", "处理状态_hk", "处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）"),
 
             // entity.iqcdefecthandling.orderitem
             new TranslationSeedItem("entity.iqcdefecthandling.orderitem", "en-US", "IQC检验单明细_us", "IQC检验单明细（主表）"),

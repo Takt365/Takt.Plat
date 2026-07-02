@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Manufacturing.Planning
 // 文件名称：TaktMasterDemandScheduleLinesController.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-06-27
 // 创建人：Takt365(Cursor AI)
 // 功能描述：主需求计划MDS行控制器
 // 
@@ -41,7 +41,7 @@ public class TaktMasterDemandScheduleLinesController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:manufacturing:planning:master:demand:schedule:line:list", "主需求计划MDS行列表")]
+    [TaktPermission("logistics:manufacturing:planning:master:demand:schedule:list", "主需求计划MDS行列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetMasterDemandScheduleLineListAsync([FromQuery] TaktMasterDemandScheduleLineQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktMasterDemandScheduleLinesController : TaktControllerBase
     /// </summary>
     /// <param name="id">主需求计划MDS行ID</param>
     /// <returns>主需求计划MDS行DTO</returns>
-    [TaktPermission("logistics:manufacturing:planning:master:demand:schedule:line:query", "主需求计划MDS行详情")]
+    [TaktPermission("logistics:manufacturing:planning:master:demand:schedule:query", "主需求计划MDS行详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetMasterDemandScheduleLineByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktMasterDemandScheduleLinesController : TaktControllerBase
     /// 获取主需求计划MDS行选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:manufacturing:planning:master:demand:schedule:line:query", "主需求计划MDS行选项")]
+    [TaktPermission("logistics:manufacturing:planning:master:demand:schedule:query", "主需求计划MDS行选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetMasterDemandScheduleLineOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktMasterDemandScheduleLinesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>主需求计划MDS行DTO</returns>
-    [TaktPermission("logistics:manufacturing:planning:master:demand:schedule:line:create", "创建主需求计划MDS行")]
+    [TaktPermission("logistics:manufacturing:planning:master:demand:schedule:create", "创建主需求计划MDS行")]
     [HttpPost]
     public async Task<IActionResult> CreateMasterDemandScheduleLineAsync([FromBody] TaktMasterDemandScheduleLineCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktMasterDemandScheduleLinesController : TaktControllerBase
     /// <param name="id">主需求计划MDS行ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>主需求计划MDS行DTO</returns>
-    [TaktPermission("logistics:manufacturing:planning:master:demand:schedule:line:update", "更新主需求计划MDS行")]
+    [TaktPermission("logistics:manufacturing:planning:master:demand:schedule:update", "更新主需求计划MDS行")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateMasterDemandScheduleLineAsync(long id, [FromBody] TaktMasterDemandScheduleLineUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktMasterDemandScheduleLinesController : TaktControllerBase
     /// </summary>
     /// <param name="id">主需求计划MDS行ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:planning:master:demand:schedule:line:delete", "删除主需求计划MDS行")]
+    [TaktPermission("logistics:manufacturing:planning:master:demand:schedule:delete", "删除主需求计划MDS行")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteMasterDemandScheduleLineByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktMasterDemandScheduleLinesController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:planning:master:demand:schedule:line:delete", "批量删除主需求计划MDS行")]
+    [TaktPermission("logistics:manufacturing:planning:master:demand:schedule:delete", "批量删除主需求计划MDS行")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteMasterDemandScheduleLineBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktMasterDemandScheduleLinesController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:planning:master:demand:schedule:line:import", "获取主需求计划MDS行导入模板")]
+    [TaktPermission("logistics:manufacturing:planning:master:demand:schedule:import", "获取主需求计划MDS行导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetMasterDemandScheduleLineTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -204,7 +204,7 @@ public class TaktMasterDemandScheduleLinesController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:manufacturing:planning:master:demand:schedule:line:import", "导入主需求计划MDS行")]
+    [TaktPermission("logistics:manufacturing:planning:master:demand:schedule:import", "导入主需求计划MDS行")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportMasterDemandScheduleLineAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -234,7 +234,7 @@ public class TaktMasterDemandScheduleLinesController : TaktControllerBase
     /// 导出主需求计划MDS行
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:planning:master:demand:schedule:line:export", "导出主需求计划MDS行")]
+    [TaktPermission("logistics:manufacturing:planning:master:demand:schedule:export", "导出主需求计划MDS行")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportMasterDemandScheduleLineAsync([FromQuery] TaktMasterDemandScheduleLineQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

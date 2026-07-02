@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Routine.DocumentCenter
 // 文件名称：TaktDocumentService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：文管中心应用服务实现
 // 
@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Services.Routine.DocumentCenter;
 
@@ -99,14 +98,14 @@ public class TaktDocumentService : TaktServiceBase, ITaktDocumentService
         return dto;    }
 
     /// <summary>
-    /// 获取文管中心主选项列表
+    /// 获取文管中心选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
     public async Task<List<TaktSelectOption>> GetDocumentOptionsAsync()
     {
         EnsureThreeLayerContext();
         var list = await _documentRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.DocumentStatus == 1,
             x => x.FileName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
@@ -440,14 +439,14 @@ public class TaktDocumentService : TaktServiceBase, ITaktDocumentService
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
                 (x.DocumentCode != null && x.DocumentCode.Contains(keywords))
-                || (x.Title != null && x.Title.Contains(keywords))
+                || (x.DocumentTitle != null && x.DocumentTitle.Contains(keywords))
                 || SqlFunc.ToString(x.DocumentCategory).Contains(keywords)
                 || SqlFunc.ToString(x.DocumentStatus).Contains(keywords)
                 || SqlFunc.ToString(x.ConfidentialLevel).Contains(keywords)
                 || SqlFunc.ToString(x.Version).Contains(keywords)
-                || (x.Content != null && x.Content.Contains(keywords))
-                || (x.Summary != null && x.Summary.Contains(keywords))
-                || (x.Tags != null && x.Tags.Contains(keywords))
+                || (x.DocumentContent != null && x.DocumentContent.Contains(keywords))
+                || (x.DocumentSummary != null && x.DocumentSummary.Contains(keywords))
+                || (x.DocumentTags != null && x.DocumentTags.Contains(keywords))
                 || SqlFunc.ToString(x.FileId).Contains(keywords)
                 || (x.FileName != null && x.FileName.Contains(keywords))
                 || (x.FilePath != null && x.FilePath.Contains(keywords))
@@ -458,18 +457,18 @@ public class TaktDocumentService : TaktServiceBase, ITaktDocumentService
                 || (x.PublisherName != null && x.PublisherName.Contains(keywords))
                 || SqlFunc.ToString(x.DeptId).Contains(keywords)
                 || (x.DeptName != null && x.DeptName.Contains(keywords))
-                || SqlFunc.ToString(x.IsTop).Contains(keywords)
+                || SqlFunc.ToString(x.DocumentIsTop).Contains(keywords)
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
-                || SqlFunc.ToString(x.ViewCount).Contains(keywords)
+                || SqlFunc.ToString(x.DocumentViewCount).Contains(keywords)
                 || SqlFunc.ToString(x.DownloadCount).Contains(keywords)
                 || (x.TargetScope != null && x.TargetScope.Contains(keywords))
                 || (x.TargetDepartments != null && x.TargetDepartments.Contains(keywords))
                 || (x.TargetUsers != null && x.TargetUsers.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.EffectiveTime).Contains(keywords)
-                || SqlFunc.ToString(x.ExpireTime).Contains(keywords)
-                || SqlFunc.ToString(x.PublishTime).Contains(keywords)
+                || SqlFunc.ToString(x.DocumentEffectiveTime).Contains(keywords)
+                || SqlFunc.ToString(x.DocumentExpireTime).Contains(keywords)
+                || SqlFunc.ToString(x.DocumentPublishTime).Contains(keywords)
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
@@ -479,9 +478,9 @@ public class TaktDocumentService : TaktServiceBase, ITaktDocumentService
             exp = exp.And(x => x.DocumentCode != null && x.DocumentCode.Contains(queryDto.DocumentCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Title))
+        if (!string.IsNullOrEmpty(queryDto?.DocumentTitle))
         {
-            exp = exp.And(x => x.Title != null && x.Title.Contains(queryDto.Title));
+            exp = exp.And(x => x.DocumentTitle != null && x.DocumentTitle.Contains(queryDto.DocumentTitle));
         }
 
         if (queryDto?.DocumentCategory.HasValue == true)
@@ -504,19 +503,19 @@ public class TaktDocumentService : TaktServiceBase, ITaktDocumentService
             exp = exp.And(x => x.Version == queryDto.Version);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Content))
+        if (!string.IsNullOrEmpty(queryDto?.DocumentContent))
         {
-            exp = exp.And(x => x.Content != null && x.Content.Contains(queryDto.Content));
+            exp = exp.And(x => x.DocumentContent != null && x.DocumentContent.Contains(queryDto.DocumentContent));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Summary))
+        if (!string.IsNullOrEmpty(queryDto?.DocumentSummary))
         {
-            exp = exp.And(x => x.Summary != null && x.Summary.Contains(queryDto.Summary));
+            exp = exp.And(x => x.DocumentSummary != null && x.DocumentSummary.Contains(queryDto.DocumentSummary));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Tags))
+        if (!string.IsNullOrEmpty(queryDto?.DocumentTags))
         {
-            exp = exp.And(x => x.Tags != null && x.Tags.Contains(queryDto.Tags));
+            exp = exp.And(x => x.DocumentTags != null && x.DocumentTags.Contains(queryDto.DocumentTags));
         }
 
         if (queryDto?.FileId.HasValue == true)
@@ -569,9 +568,9 @@ public class TaktDocumentService : TaktServiceBase, ITaktDocumentService
             exp = exp.And(x => x.DeptName != null && x.DeptName.Contains(queryDto.DeptName));
         }
 
-        if (queryDto?.IsTop.HasValue == true)
+        if (queryDto?.DocumentIsTop.HasValue == true)
         {
-            exp = exp.And(x => x.IsTop == queryDto.IsTop);
+            exp = exp.And(x => x.DocumentIsTop == queryDto.DocumentIsTop);
         }
 
         if (queryDto?.SortOrder.HasValue == true)
@@ -579,9 +578,9 @@ public class TaktDocumentService : TaktServiceBase, ITaktDocumentService
             exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
         }
 
-        if (queryDto?.ViewCount.HasValue == true)
+        if (queryDto?.DocumentViewCount.HasValue == true)
         {
-            exp = exp.And(x => x.ViewCount == queryDto.ViewCount);
+            exp = exp.And(x => x.DocumentViewCount == queryDto.DocumentViewCount);
         }
 
         if (queryDto?.DownloadCount.HasValue == true)
@@ -616,32 +615,32 @@ public class TaktDocumentService : TaktServiceBase, ITaktDocumentService
 
         if (queryDto?.EffectiveTimeStart.HasValue == true)
         {
-            exp = exp.And(x => x.EffectiveTime >= queryDto.EffectiveTimeStart);
+            exp = exp.And(x => x.DocumentEffectiveTime >= queryDto.EffectiveTimeStart);
         }
 
         if (queryDto?.EffectiveTimeEnd.HasValue == true)
         {
-            exp = exp.And(x => x.EffectiveTime <= queryDto.EffectiveTimeEnd);
+            exp = exp.And(x => x.DocumentEffectiveTime <= queryDto.EffectiveTimeEnd);
         }
 
         if (queryDto?.ExpireTimeStart.HasValue == true)
         {
-            exp = exp.And(x => x.ExpireTime >= queryDto.ExpireTimeStart);
+            exp = exp.And(x => x.DocumentExpireTime >= queryDto.ExpireTimeStart);
         }
 
         if (queryDto?.ExpireTimeEnd.HasValue == true)
         {
-            exp = exp.And(x => x.ExpireTime <= queryDto.ExpireTimeEnd);
+            exp = exp.And(x => x.DocumentExpireTime <= queryDto.ExpireTimeEnd);
         }
 
         if (queryDto?.PublishTimeStart.HasValue == true)
         {
-            exp = exp.And(x => x.PublishTime >= queryDto.PublishTimeStart);
+            exp = exp.And(x => x.DocumentPublishTime >= queryDto.PublishTimeStart);
         }
 
         if (queryDto?.PublishTimeEnd.HasValue == true)
         {
-            exp = exp.And(x => x.PublishTime <= queryDto.PublishTimeEnd);
+            exp = exp.And(x => x.DocumentPublishTime <= queryDto.PublishTimeEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)

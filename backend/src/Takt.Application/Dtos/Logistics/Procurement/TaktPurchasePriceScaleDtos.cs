@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Procurement
 // 文件名称：TaktPurchasePriceScaleDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-27
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchasePriceScale 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPurchasePriceScale 生成，请按需审阅）
 // 
@@ -59,12 +59,12 @@ public class TaktPurchasePriceScaleDto : TaktCompanyDtoBase
     /// <summary>
     /// 起始数量（基本单位数量，包含此数量）
     /// </summary>
-    public decimal StartQuantity { get; set; }
+    public int StartQuantity { get; set; } = 0;
 
     /// <summary>
     /// 结束数量（基本单位数量，包含此数量，0表示无上限）
     /// </summary>
-    public decimal EndQuantity { get; set; }
+    public int EndQuantity { get; set; } = 0;
 
     /// <summary>
     /// 阶梯价格（精确到分，存储为整数，单位为分）
@@ -117,12 +117,12 @@ public class TaktPurchasePriceScaleQueryDto : TaktPagedQuery
     /// <summary>
     /// 起始数量（基本单位数量，包含此数量）
     /// </summary>
-    public decimal? StartQuantity { get; set; }
+    public int? StartQuantity { get; set; }
 
     /// <summary>
     /// 结束数量（基本单位数量，包含此数量，0表示无上限）
     /// </summary>
-    public decimal? EndQuantity { get; set; }
+    public int? EndQuantity { get; set; }
 
     /// <summary>
     /// 阶梯价格（精确到分，存储为整数，单位为分）
@@ -175,7 +175,7 @@ public class TaktPurchasePriceScaleCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -199,22 +199,17 @@ public class TaktPurchasePriceScaleCreateDto
     /// <summary>
     /// 起始数量（基本单位数量，包含此数量）
     /// </summary>
-    public decimal StartQuantity { get; set; }
+    public int StartQuantity { get; set; } = 0;
 
     /// <summary>
     /// 结束数量（基本单位数量，包含此数量，0表示无上限）
     /// </summary>
-    public decimal EndQuantity { get; set; }
+    public int EndQuantity { get; set; } = 0;
 
     /// <summary>
     /// 阶梯价格（精确到分，存储为整数，单位为分）
     /// </summary>
     public decimal ScalePrice { get; set; }
-
-    /// <summary>
-    /// 排序号（越小越靠前）
-    /// </summary>
-    public int SortOrder { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -308,9 +303,19 @@ public class TaktPurchasePriceScaleTemplateDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 起始数量（基本单位数量，包含此数量）
     /// </summary>
-    public int? SortOrder { get; set; }
+    public int? StartQuantity { get; set; }
+
+    /// <summary>
+    /// 结束数量（基本单位数量，包含此数量，0表示无上限）
+    /// </summary>
+    public int? EndQuantity { get; set; }
+
+    /// <summary>
+    /// 阶梯价格（精确到分，存储为整数，单位为分）
+    /// </summary>
+    public decimal? ScalePrice { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -340,7 +345,7 @@ public class TaktPurchasePriceScaleImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -361,9 +366,19 @@ public class TaktPurchasePriceScaleImportDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 起始数量（基本单位数量，包含此数量）
     /// </summary>
-    public int? SortOrder { get; set; }
+    public int? StartQuantity { get; set; }
+
+    /// <summary>
+    /// 结束数量（基本单位数量，包含此数量，0表示无上限）
+    /// </summary>
+    public int? EndQuantity { get; set; }
+
+    /// <summary>
+    /// 阶梯价格（精确到分，存储为整数，单位为分）
+    /// </summary>
+    public decimal? ScalePrice { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -417,12 +432,12 @@ public class TaktPurchasePriceScaleExportDto
     /// <summary>
     /// 起始数量（基本单位数量，包含此数量）
     /// </summary>
-    public decimal StartQuantity { get; set; }
+    public int StartQuantity { get; set; } = 0;
 
     /// <summary>
     /// 结束数量（基本单位数量，包含此数量，0表示无上限）
     /// </summary>
-    public decimal EndQuantity { get; set; }
+    public int EndQuantity { get; set; } = 0;
 
     /// <summary>
     /// 阶梯价格（精确到分，存储为整数，单位为分）

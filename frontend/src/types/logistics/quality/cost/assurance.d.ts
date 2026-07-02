@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/quality/cost
 // 文件名称：assurance.d.ts
-// 创建时间：2026-06-21
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/cost 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface QualityAssurance extends CompanyDtoBase {
   qualityAssuranceId: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -124,7 +124,7 @@ export interface QualityAssuranceQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -203,12 +203,12 @@ export interface QualityAssuranceCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -327,7 +327,7 @@ export interface QualityAssuranceTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -357,9 +357,49 @@ export interface QualityAssuranceTemplate {
   recorder?: string;
 
   /**
+   * 质量总成本(元,自动计算 = 各子表费用合计)
+   */
+  totalQualityCost?: number;
+
+  /**
    * 成本币种(CNY/USD/JPY等)
    */
   costCurrency?: string;
+
+  /**
+   * 来料检验费用明细列表（子表，级联保存）
+   */
+  incomingItems?: QualityAssuranceIncomingCreate[];
+
+  /**
+   * 初期/定期检定费用明细列表（子表，级联保存）
+   */
+  firstArticleItems?: QualityAssuranceFirstArticleCreate[];
+
+  /**
+   * 设备校正费用明细列表（子表，级联保存）
+   */
+  calibrationItems?: QualityAssuranceCalibrationCreate[];
+
+  /**
+   * 其他通常业务费用明细列表（子表，级联保存）
+   */
+  otherItems?: QualityAssuranceOtherCreate[];
+
+  /**
+   * 出货检验费用明细列表（子表，级联保存）
+   */
+  outgoingItems?: QualityAssuranceOutgoingCreate[];
+
+  /**
+   * 信赖性评价/ORT费用明细列表（子表，级联保存）
+   */
+  reliabilityItems?: QualityAssuranceReliabilityCreate[];
+
+  /**
+   * 顾客品质要求对应费用明细列表（子表，级联保存）
+   */
+  customerResponseItems?: QualityAssuranceCustomerResponseCreate[];
 
   /**
    * 扩展字段JSON
@@ -391,12 +431,12 @@ export interface QualityAssuranceImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -426,9 +466,49 @@ export interface QualityAssuranceImport {
   recorder?: string;
 
   /**
+   * 质量总成本(元,自动计算 = 各子表费用合计)
+   */
+  totalQualityCost?: number;
+
+  /**
    * 成本币种(CNY/USD/JPY等)
    */
   costCurrency?: string;
+
+  /**
+   * 来料检验费用明细列表（子表，级联保存）
+   */
+  incomingItems?: QualityAssuranceIncomingCreate[];
+
+  /**
+   * 初期/定期检定费用明细列表（子表，级联保存）
+   */
+  firstArticleItems?: QualityAssuranceFirstArticleCreate[];
+
+  /**
+   * 设备校正费用明细列表（子表，级联保存）
+   */
+  calibrationItems?: QualityAssuranceCalibrationCreate[];
+
+  /**
+   * 其他通常业务费用明细列表（子表，级联保存）
+   */
+  otherItems?: QualityAssuranceOtherCreate[];
+
+  /**
+   * 出货检验费用明细列表（子表，级联保存）
+   */
+  outgoingItems?: QualityAssuranceOutgoingCreate[];
+
+  /**
+   * 信赖性评价/ORT费用明细列表（子表，级联保存）
+   */
+  reliabilityItems?: QualityAssuranceReliabilityCreate[];
+
+  /**
+   * 顾客品质要求对应费用明细列表（子表，级联保存）
+   */
+  customerResponseItems?: QualityAssuranceCustomerResponseCreate[];
 
   /**
    * 扩展字段JSON
@@ -460,7 +540,7 @@ export interface QualityAssuranceExport {
   companyCode: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 

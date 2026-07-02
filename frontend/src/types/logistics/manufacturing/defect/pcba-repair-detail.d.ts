@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/defect
 // 文件名称：pcba-repair-detail.d.ts
-// 创建时间：2026-06-20
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/defect 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -49,7 +49,7 @@ export interface PcbaRepairDetail extends CompanyDtoBase {
   lineNumber: number;
 
   /**
-   * PCBA板别
+   * PCBA板别（字典 logistics_pcba_panel_category，存 DictValue）
    */
   pcbaBoardType?: string;
 
@@ -59,9 +59,9 @@ export interface PcbaRepairDetail extends CompanyDtoBase {
   prodActualQty: number;
 
   /**
-   * 生产线
+   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
    */
-  prodLine?: string;
+  prodTeam?: string;
 
   /**
    * 卡号
@@ -74,7 +74,7 @@ export interface PcbaRepairDetail extends CompanyDtoBase {
   defectSymptom?: string;
 
   /**
-   * 检出工程
+   * 检出工程（字典 logistics_defect_category，存 DictValue，与组立不良区分共用）
    */
   defectEngineering?: string;
 
@@ -89,17 +89,17 @@ export interface PcbaRepairDetail extends CompanyDtoBase {
   defectQty: number;
 
   /**
-   * 责任归属
+   * 责任归属（字典 logistics_defect_responsibility_category，存 DictValue）
    */
   defectResponsibility?: string;
 
   /**
-   * 不良性质
+   * 不良性质（字典 logistics_defect_nature_category，存 DictValue）
    */
   defectNature?: string;
 
   /**
-   * 修理员
+   * 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   repairOperator?: string;
 
@@ -144,7 +144,7 @@ export interface PcbaRepairDetailQuery extends TaktPagedQuery {
   lineNumber?: number;
 
   /**
-   * PCBA板别
+   * PCBA板别（字典 logistics_pcba_panel_category，存 DictValue）
    */
   pcbaBoardType?: string;
 
@@ -154,9 +154,9 @@ export interface PcbaRepairDetailQuery extends TaktPagedQuery {
   prodActualQty?: number;
 
   /**
-   * 生产线
+   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
    */
-  prodLine?: string;
+  prodTeam?: string;
 
   /**
    * 卡号
@@ -169,7 +169,7 @@ export interface PcbaRepairDetailQuery extends TaktPagedQuery {
   defectSymptom?: string;
 
   /**
-   * 检出工程
+   * 检出工程（字典 logistics_defect_category，存 DictValue，与组立不良区分共用）
    */
   defectEngineering?: string;
 
@@ -184,17 +184,17 @@ export interface PcbaRepairDetailQuery extends TaktPagedQuery {
   defectQty?: number;
 
   /**
-   * 责任归属
+   * 责任归属（字典 logistics_defect_responsibility_category，存 DictValue）
    */
   defectResponsibility?: string;
 
   /**
-   * 不良性质
+   * 不良性质（字典 logistics_defect_nature_category，存 DictValue）
    */
   defectNature?: string;
 
   /**
-   * 修理员
+   * 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   repairOperator?: string;
 
@@ -238,7 +238,7 @@ export interface PcbaRepairDetailCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -258,7 +258,7 @@ export interface PcbaRepairDetailCreate {
   lineNumber: number;
 
   /**
-   * PCBA板别
+   * PCBA板别（字典 logistics_pcba_panel_category，存 DictValue）
    */
   pcbaBoardType?: string;
 
@@ -268,9 +268,9 @@ export interface PcbaRepairDetailCreate {
   prodActualQty: number;
 
   /**
-   * 生产线
+   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
    */
-  prodLine?: string;
+  prodTeam?: string;
 
   /**
    * 卡号
@@ -283,7 +283,7 @@ export interface PcbaRepairDetailCreate {
   defectSymptom?: string;
 
   /**
-   * 检出工程
+   * 检出工程（字典 logistics_defect_category，存 DictValue，与组立不良区分共用）
    */
   defectEngineering?: string;
 
@@ -298,17 +298,17 @@ export interface PcbaRepairDetailCreate {
   defectQty: number;
 
   /**
-   * 责任归属
+   * 责任归属（字典 logistics_defect_responsibility_category，存 DictValue）
    */
   defectResponsibility?: string;
 
   /**
-   * 不良性质
+   * 不良性质（字典 logistics_defect_nature_category，存 DictValue）
    */
   defectNature?: string;
 
   /**
-   * 修理员
+   * 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   repairOperator?: string;
 
@@ -372,14 +372,19 @@ export interface PcbaRepairDetailTemplate {
   lineNumber?: number;
 
   /**
-   * PCBA板别
+   * PCBA板别（字典 logistics_pcba_panel_category，存 DictValue）
    */
   pcbaBoardType?: string;
 
   /**
-   * 生产线
+   * 生产实绩
    */
-  prodLine?: string;
+  prodActualQty?: number;
+
+  /**
+   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+   */
+  prodTeam?: string;
 
   /**
    * 卡号
@@ -392,7 +397,7 @@ export interface PcbaRepairDetailTemplate {
   defectSymptom?: string;
 
   /**
-   * 检出工程
+   * 检出工程（字典 logistics_defect_category，存 DictValue，与组立不良区分共用）
    */
   defectEngineering?: string;
 
@@ -402,17 +407,22 @@ export interface PcbaRepairDetailTemplate {
   defectReason?: string;
 
   /**
-   * 责任归属
+   * 不良数量
+   */
+  defectQty?: number;
+
+  /**
+   * 责任归属（字典 logistics_defect_responsibility_category，存 DictValue）
    */
   defectResponsibility?: string;
 
   /**
-   * 不良性质
+   * 不良性质（字典 logistics_defect_nature_category，存 DictValue）
    */
   defectNature?: string;
 
   /**
-   * 修理员
+   * 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   repairOperator?: string;
 
@@ -446,7 +456,7 @@ export interface PcbaRepairDetailImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -466,14 +476,19 @@ export interface PcbaRepairDetailImport {
   lineNumber?: number;
 
   /**
-   * PCBA板别
+   * PCBA板别（字典 logistics_pcba_panel_category，存 DictValue）
    */
   pcbaBoardType?: string;
 
   /**
-   * 生产线
+   * 生产实绩
    */
-  prodLine?: string;
+  prodActualQty?: number;
+
+  /**
+   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+   */
+  prodTeam?: string;
 
   /**
    * 卡号
@@ -486,7 +501,7 @@ export interface PcbaRepairDetailImport {
   defectSymptom?: string;
 
   /**
-   * 检出工程
+   * 检出工程（字典 logistics_defect_category，存 DictValue，与组立不良区分共用）
    */
   defectEngineering?: string;
 
@@ -496,17 +511,22 @@ export interface PcbaRepairDetailImport {
   defectReason?: string;
 
   /**
-   * 责任归属
+   * 不良数量
+   */
+  defectQty?: number;
+
+  /**
+   * 责任归属（字典 logistics_defect_responsibility_category，存 DictValue）
    */
   defectResponsibility?: string;
 
   /**
-   * 不良性质
+   * 不良性质（字典 logistics_defect_nature_category，存 DictValue）
    */
   defectNature?: string;
 
   /**
-   * 修理员
+   * 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   repairOperator?: string;
 
@@ -555,7 +575,7 @@ export interface PcbaRepairDetailExport {
   lineNumber: number;
 
   /**
-   * PCBA板别
+   * PCBA板别（字典 logistics_pcba_panel_category，存 DictValue）
    */
   pcbaBoardType?: string;
 
@@ -565,9 +585,9 @@ export interface PcbaRepairDetailExport {
   prodActualQty: number;
 
   /**
-   * 生产线
+   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
    */
-  prodLine?: string;
+  prodTeam?: string;
 
   /**
    * 卡号
@@ -580,7 +600,7 @@ export interface PcbaRepairDetailExport {
   defectSymptom?: string;
 
   /**
-   * 检出工程
+   * 检出工程（字典 logistics_defect_category，存 DictValue，与组立不良区分共用）
    */
   defectEngineering?: string;
 
@@ -595,17 +615,17 @@ export interface PcbaRepairDetailExport {
   defectQty: number;
 
   /**
-   * 责任归属
+   * 责任归属（字典 logistics_defect_responsibility_category，存 DictValue）
    */
   defectResponsibility?: string;
 
   /**
-   * 不良性质
+   * 不良性质（字典 logistics_defect_nature_category，存 DictValue）
    */
   defectNature?: string;
 
   /**
-   * 修理员
+   * 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   repairOperator?: string;
 

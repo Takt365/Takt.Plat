@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Maintenance
 // 文件名称：TaktMaintenanceWorkOrderDtos.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：MaintenanceWorkOrder 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktMaintenanceWorkOrder 生成，请按需审阅）
 // 
@@ -86,11 +86,6 @@ public class TaktMaintenanceWorkOrderDto : TaktApprovalDtoBase
     /// 维护类型（字典 logistics_maintenance_type；0=定期保养，1=故障维修，2=大修，3=改造升级，4=其他）
     /// </summary>
     public int MaintenanceType { get; set; } = 0;
-
-    /// <summary>
-    /// 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消）
-    /// </summary>
-    public int WorkOrderStatus { get; set; } = 0;
 
     /// <summary>
     /// 优先级（1=低，2=中，3=高，4=紧急）
@@ -200,11 +195,6 @@ public class TaktMaintenanceWorkOrderDto : TaktApprovalDtoBase
     public decimal TotalCost { get; set; }
 
     /// <summary>
-    /// 结算状态（0=未结算，1=部分结算，2=已结算）
-    /// </summary>
-    public int SettlementStatus { get; set; } = 0;
-
-    /// <summary>
     /// 结算时间
     /// </summary>
     public DateTime? SettlementTime { get; set; }
@@ -258,6 +248,16 @@ public class TaktMaintenanceWorkOrderDto : TaktApprovalDtoBase
     /// 是否已归档至维护履历（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int IsHistoryArchived { get; set; } = 0;
+
+    /// <summary>
+    /// 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消）
+    /// </summary>
+    public int WorkOrderStatus { get; set; } = 0;
+
+    /// <summary>
+    /// 结算状态（0=未结算，1=部分结算，2=已结算）
+    /// </summary>
+    public int SettlementStatus { get; set; } = 0;
 
     /// <summary>
     /// 来源维护通知单
@@ -351,11 +351,6 @@ public class TaktMaintenanceWorkOrderQueryDto : TaktPagedQuery
     /// 维护类型（字典 logistics_maintenance_type；0=定期保养，1=故障维修，2=大修，3=改造升级，4=其他）
     /// </summary>
     public int? MaintenanceType { get; set; }
-
-    /// <summary>
-    /// 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消）
-    /// </summary>
-    public int? WorkOrderStatus { get; set; }
 
     /// <summary>
     /// 优先级（1=低，2=中，3=高，4=紧急）
@@ -475,11 +470,6 @@ public class TaktMaintenanceWorkOrderQueryDto : TaktPagedQuery
     public decimal? TotalCost { get; set; }
 
     /// <summary>
-    /// 结算状态（0=未结算，1=部分结算，2=已结算）
-    /// </summary>
-    public int? SettlementStatus { get; set; }
-
-    /// <summary>
     /// 结算时间（范围查询-开始）
     /// </summary>
     public DateTime? SettlementTimeStart { get; set; }
@@ -555,7 +545,17 @@ public class TaktMaintenanceWorkOrderQueryDto : TaktPagedQuery
     public int? IsHistoryArchived { get; set; }
 
     /// <summary>
-    /// 审批状态（TaktApprovalStatus）
+    /// 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消）
+    /// </summary>
+    public int? WorkOrderStatus { get; set; }
+
+    /// <summary>
+    /// 结算状态（0=未结算，1=部分结算，2=已结算）
+    /// </summary>
+    public int? SettlementStatus { get; set; }
+
+    /// <summary>
+    /// 审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）
     /// </summary>
     public TaktApprovalStatus? ApprovalStatus { get; set; }
 
@@ -638,7 +638,7 @@ public class TaktMaintenanceWorkOrderCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -692,11 +692,6 @@ public class TaktMaintenanceWorkOrderCreateDto
     /// 维护类型（字典 logistics_maintenance_type；0=定期保养，1=故障维修，2=大修，3=改造升级，4=其他）
     /// </summary>
     public int MaintenanceType { get; set; } = 0;
-
-    /// <summary>
-    /// 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消）
-    /// </summary>
-    public int WorkOrderStatus { get; set; } = 0;
 
     /// <summary>
     /// 优先级（1=低，2=中，3=高，4=紧急）
@@ -796,11 +791,6 @@ public class TaktMaintenanceWorkOrderCreateDto
     public decimal TotalCost { get; set; }
 
     /// <summary>
-    /// 结算状态（0=未结算，1=部分结算，2=已结算）
-    /// </summary>
-    public int SettlementStatus { get; set; } = 0;
-
-    /// <summary>
     /// 结算时间
     /// </summary>
     public DateTime? SettlementTime { get; set; }
@@ -854,6 +844,16 @@ public class TaktMaintenanceWorkOrderCreateDto
     /// 是否已归档至维护履历（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int IsHistoryArchived { get; set; } = 0;
+
+    /// <summary>
+    /// 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消）
+    /// </summary>
+    public int WorkOrderStatus { get; set; } = 0;
+
+    /// <summary>
+    /// 结算状态（0=未结算，1=部分结算，2=已结算）
+    /// </summary>
+    public int SettlementStatus { get; set; } = 0;
 
     /// <summary>
     /// 领料明细（子表，级联保存）
@@ -988,11 +988,6 @@ public class TaktMaintenanceWorkOrderTemplateDto
     public int? MaintenanceType { get; set; }
 
     /// <summary>
-    /// 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消）
-    /// </summary>
-    public int? WorkOrderStatus { get; set; }
-
-    /// <summary>
     /// 优先级（1=低，2=中，3=高，4=紧急）
     /// </summary>
     public int? Priority { get; set; }
@@ -1001,6 +996,168 @@ public class TaktMaintenanceWorkOrderTemplateDto
     /// 工作中心
     /// </summary>
     public string? WorkCenter { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 指派技师（人员编码）
+    /// </summary>
+    public string? AssignedTechnician { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 维护单位
+    /// </summary>
+    public string? MaintenanceCompany { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 计划开始时间
+    /// </summary>
+    public DateTime? PlannedStartTime { get; set; }
+
+    /// <summary>
+    /// 计划结束时间
+    /// </summary>
+    public DateTime? PlannedEndTime { get; set; }
+
+    /// <summary>
+    /// 实际开始时间
+    /// </summary>
+    public DateTime? ActualStartTime { get; set; }
+
+    /// <summary>
+    /// 实际结束时间
+    /// </summary>
+    public DateTime? ActualEndTime { get; set; }
+
+    /// <summary>
+    /// 故障描述
+    /// </summary>
+    public string? FaultDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 维护内容
+    /// </summary>
+    public string? MaintenanceContent { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 处理方案
+    /// </summary>
+    public string? Solution { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 结算成本中心ID（序列化为string以避免Javascript精度问题）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? CostCenterId { get; set; }
+
+    /// <summary>
+    /// 结算成本中心编码（冗余）
+    /// </summary>
+    public string? CostCenterCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 成本要素ID（序列化为string以避免Javascript精度问题）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? CostElementId { get; set; }
+
+    /// <summary>
+    /// 成本要素编码（冗余）
+    /// </summary>
+    public string? CostElementCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 材料成本合计
+    /// </summary>
+    public decimal? TotalMaterialCost { get; set; }
+
+    /// <summary>
+    /// 人工成本合计
+    /// </summary>
+    public decimal? TotalLaborCost { get; set; }
+
+    /// <summary>
+    /// 其他成本合计
+    /// </summary>
+    public decimal? TotalOtherCost { get; set; }
+
+    /// <summary>
+    /// 总成本
+    /// </summary>
+    public decimal? TotalCost { get; set; }
+
+    /// <summary>
+    /// 结算时间
+    /// </summary>
+    public DateTime? SettlementTime { get; set; }
+
+    /// <summary>
+    /// 完工时间
+    /// </summary>
+    public DateTime? CompletedAt { get; set; }
+
+    /// <summary>
+    /// 验收人（人员编码）
+    /// </summary>
+    public string? AcceptedBy { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 验收时间
+    /// </summary>
+    public DateTime? AcceptedAt { get; set; }
+
+    /// <summary>
+    /// 维护结果（0=正常，1=待观察，2=需再次维修，3=已报废）
+    /// </summary>
+    public int? MaintenanceResult { get; set; }
+
+    /// <summary>
+    /// 下次维护日期
+    /// </summary>
+    public DateTime? NextMaintenanceDate { get; set; }
+
+    /// <summary>
+    /// 维护周期（天）
+    /// </summary>
+    public int? MaintenanceCycleDays { get; set; }
+
+    /// <summary>
+    /// 维护图片（JSON格式，存储维护图片URL列表）
+    /// </summary>
+    public string? MaintenanceImages { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 维护文档（JSON格式，存储维护文档ID列表）
+    /// </summary>
+    public string? MaintenanceDocuments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 验收总结
+    /// </summary>
+    public string? AcceptedSummary { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否已归档至维护履历（字典 sys_yes_no_type；0=否，1=是）
+    /// </summary>
+    public int? IsHistoryArchived { get; set; }
+
+    /// <summary>
+    /// 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消）
+    /// </summary>
+    public int? WorkOrderStatus { get; set; }
+
+    /// <summary>
+    /// 结算状态（0=未结算，1=部分结算，2=已结算）
+    /// </summary>
+    public int? SettlementStatus { get; set; }
+
+    /// <summary>
+    /// 领料明细（子表，级联保存）
+    /// </summary>
+    public List<TaktMaintenanceWorkOrderMaterialCreateDto>? Materials { get; set; }
+
+    /// <summary>
+    /// 报工明细（子表，级联保存）
+    /// </summary>
+    public List<TaktMaintenanceWorkOrderLaborCreateDto>? Labors { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -1030,7 +1187,7 @@ public class TaktMaintenanceWorkOrderImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -1082,11 +1239,6 @@ public class TaktMaintenanceWorkOrderImportDto
     public int? MaintenanceType { get; set; }
 
     /// <summary>
-    /// 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消）
-    /// </summary>
-    public int? WorkOrderStatus { get; set; }
-
-    /// <summary>
     /// 优先级（1=低，2=中，3=高，4=紧急）
     /// </summary>
     public int? Priority { get; set; }
@@ -1095,6 +1247,168 @@ public class TaktMaintenanceWorkOrderImportDto
     /// 工作中心
     /// </summary>
     public string? WorkCenter { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 指派技师（人员编码）
+    /// </summary>
+    public string? AssignedTechnician { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 维护单位
+    /// </summary>
+    public string? MaintenanceCompany { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 计划开始时间
+    /// </summary>
+    public DateTime? PlannedStartTime { get; set; }
+
+    /// <summary>
+    /// 计划结束时间
+    /// </summary>
+    public DateTime? PlannedEndTime { get; set; }
+
+    /// <summary>
+    /// 实际开始时间
+    /// </summary>
+    public DateTime? ActualStartTime { get; set; }
+
+    /// <summary>
+    /// 实际结束时间
+    /// </summary>
+    public DateTime? ActualEndTime { get; set; }
+
+    /// <summary>
+    /// 故障描述
+    /// </summary>
+    public string? FaultDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 维护内容
+    /// </summary>
+    public string? MaintenanceContent { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 处理方案
+    /// </summary>
+    public string? Solution { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 结算成本中心ID（序列化为string以避免Javascript精度问题）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? CostCenterId { get; set; }
+
+    /// <summary>
+    /// 结算成本中心编码（冗余）
+    /// </summary>
+    public string? CostCenterCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 成本要素ID（序列化为string以避免Javascript精度问题）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? CostElementId { get; set; }
+
+    /// <summary>
+    /// 成本要素编码（冗余）
+    /// </summary>
+    public string? CostElementCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 材料成本合计
+    /// </summary>
+    public decimal? TotalMaterialCost { get; set; }
+
+    /// <summary>
+    /// 人工成本合计
+    /// </summary>
+    public decimal? TotalLaborCost { get; set; }
+
+    /// <summary>
+    /// 其他成本合计
+    /// </summary>
+    public decimal? TotalOtherCost { get; set; }
+
+    /// <summary>
+    /// 总成本
+    /// </summary>
+    public decimal? TotalCost { get; set; }
+
+    /// <summary>
+    /// 结算时间
+    /// </summary>
+    public DateTime? SettlementTime { get; set; }
+
+    /// <summary>
+    /// 完工时间
+    /// </summary>
+    public DateTime? CompletedAt { get; set; }
+
+    /// <summary>
+    /// 验收人（人员编码）
+    /// </summary>
+    public string? AcceptedBy { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 验收时间
+    /// </summary>
+    public DateTime? AcceptedAt { get; set; }
+
+    /// <summary>
+    /// 维护结果（0=正常，1=待观察，2=需再次维修，3=已报废）
+    /// </summary>
+    public int? MaintenanceResult { get; set; }
+
+    /// <summary>
+    /// 下次维护日期
+    /// </summary>
+    public DateTime? NextMaintenanceDate { get; set; }
+
+    /// <summary>
+    /// 维护周期（天）
+    /// </summary>
+    public int? MaintenanceCycleDays { get; set; }
+
+    /// <summary>
+    /// 维护图片（JSON格式，存储维护图片URL列表）
+    /// </summary>
+    public string? MaintenanceImages { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 维护文档（JSON格式，存储维护文档ID列表）
+    /// </summary>
+    public string? MaintenanceDocuments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 验收总结
+    /// </summary>
+    public string? AcceptedSummary { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否已归档至维护履历（字典 sys_yes_no_type；0=否，1=是）
+    /// </summary>
+    public int? IsHistoryArchived { get; set; }
+
+    /// <summary>
+    /// 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消）
+    /// </summary>
+    public int? WorkOrderStatus { get; set; }
+
+    /// <summary>
+    /// 结算状态（0=未结算，1=部分结算，2=已结算）
+    /// </summary>
+    public int? SettlementStatus { get; set; }
+
+    /// <summary>
+    /// 领料明细（子表，级联保存）
+    /// </summary>
+    public List<TaktMaintenanceWorkOrderMaterialCreateDto>? Materials { get; set; }
+
+    /// <summary>
+    /// 报工明细（子表，级联保存）
+    /// </summary>
+    public List<TaktMaintenanceWorkOrderLaborCreateDto>? Labors { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -1170,11 +1484,6 @@ public class TaktMaintenanceWorkOrderExportDto
     /// 维护类型（字典 logistics_maintenance_type；0=定期保养，1=故障维修，2=大修，3=改造升级，4=其他）
     /// </summary>
     public int MaintenanceType { get; set; } = 0;
-
-    /// <summary>
-    /// 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消）
-    /// </summary>
-    public int WorkOrderStatus { get; set; } = 0;
 
     /// <summary>
     /// 优先级（1=低，2=中，3=高，4=紧急）
@@ -1274,11 +1583,6 @@ public class TaktMaintenanceWorkOrderExportDto
     public decimal TotalCost { get; set; }
 
     /// <summary>
-    /// 结算状态（0=未结算，1=部分结算，2=已结算）
-    /// </summary>
-    public int SettlementStatus { get; set; } = 0;
-
-    /// <summary>
     /// 结算时间
     /// </summary>
     public DateTime? SettlementTime { get; set; }
@@ -1332,6 +1636,16 @@ public class TaktMaintenanceWorkOrderExportDto
     /// 是否已归档至维护履历（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int IsHistoryArchived { get; set; } = 0;
+
+    /// <summary>
+    /// 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消）
+    /// </summary>
+    public int WorkOrderStatus { get; set; } = 0;
+
+    /// <summary>
+    /// 结算状态（0=未结算，1=部分结算，2=已结算）
+    /// </summary>
+    public int SettlementStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

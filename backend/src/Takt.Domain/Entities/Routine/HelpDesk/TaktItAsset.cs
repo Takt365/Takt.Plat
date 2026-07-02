@@ -26,13 +26,13 @@ namespace Takt.Domain.Entities.Routine.HelpDesk;
 public class TaktItAsset : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 资产号码
+    /// 资产号码（选项 TaktAssets/options，DictValue=AssetCode）
     /// </summary>
     [SugarColumn(ColumnName = "asset_code", ColumnDescription = "资产号码", ColumnDataType = "varchar", Length = 40, IsNullable = false)]
     public string AssetCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 保修类型（见 TaktWarrantyType）
+    /// 保修类型（字典 sys_warranty_type；0=原厂保修 1=延长保修 2=上门保修 3=寄修保修 4=维保合同 5=付费保养）
     /// </summary>
     [SugarColumn(ColumnName = "warranty_type", ColumnDescription = "保修类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int WarrantyType { get; set; } = 0;

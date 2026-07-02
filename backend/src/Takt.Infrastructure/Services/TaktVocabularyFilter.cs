@@ -21,7 +21,7 @@ namespace Takt.Infrastructure.Services;
 
 /// <summary>
 /// 敏感词过滤实现（ITaktVocabularyFilter）。
-/// 按租户缓存启用词条，优先匹配较长词；ReplaceText 为空时使用等长 *。
+/// 按租户缓存启用词条，优先匹配较长词；ReplaceText 默认为 *，为空时回退为等长 *。
 /// </summary>
 public class TaktVocabularyFilter : ITaktVocabularyFilter
 {
@@ -78,7 +78,7 @@ public class TaktVocabularyFilter : ITaktVocabularyFilter
     }
 
     /// <summary>
-    /// 过滤文本：命中敏感词时按词条 ReplaceText 替换，为空则用等长 * 替换
+    /// 过滤文本：命中敏感词时按词条 ReplaceText 替换，默认为 *，为空时回退为等长 *
     /// 优先匹配较长词（词库按词长降序），返回原文、替换后文本及命中词列表
     /// </summary>
     /// <param name="text">待过滤文本</param>
@@ -163,7 +163,7 @@ public class TaktVocabularyFilter : ITaktVocabularyFilter
     private async Task<IReadOnlyList<VocabularyEntry>> LoadActiveEntriesAsync(CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
-        var list = await _vocabularyRepository.GetListAsync(x => x.Status == 1);
+        var list = await _vocabularyRepository.GetListAsync(x => x.VocabularyStatus == 1);
         return list
             .Where(x => !string.IsNullOrWhiteSpace(x.WordText))
             .Select(x => new VocabularyEntry(x.WordText, x.FilterLevel, x.ReplaceText))

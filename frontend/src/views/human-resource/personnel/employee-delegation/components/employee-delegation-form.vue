@@ -10,6 +10,7 @@
 <template>
   <a-form
     ref="formRef"
+    class="takt-generated-form"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -34,8 +35,9 @@
                 <a-input
                   v-model:value="formState.tenantCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -47,8 +49,9 @@
                 <a-input
                   v-model:value="formState.companyCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -60,99 +63,99 @@
                 <a-input
                   v-model:value="formState.companyDefaultCulture"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.employeeDelegation.proxyemployeeid')"
+                :label="t('entity.employeedelegation.proxyemployeeid')"
                 name="proxyEmployeeId"
               >
                 <a-input
                   v-model:value="formState.proxyEmployeeId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeDelegation.proxyemployeeid') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeedelegation.proxyemployeeid') })"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.employeeDelegation.originalemployeeid')"
+                :label="t('entity.employeedelegation.originalemployeeid')"
                 name="originalEmployeeId"
               >
                 <a-input
                   v-model:value="formState.originalEmployeeId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeDelegation.originalemployeeid') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeedelegation.originalemployeeid') })"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.employeeDelegation.delegationtype')"
+                :label="t('entity.employeedelegation.delegationtype')"
                 name="delegationType"
               >
                 <a-input-number
                   v-model:value="formState.delegationType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeDelegation.delegationtype') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeedelegation.delegationtype') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.employeeDelegation.scopetype')"
+                :label="t('entity.employeedelegation.scopetype')"
                 name="scopeType"
               >
                 <a-textarea
                   v-model:value="formState.scopeType"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.employeeDelegation.scopetype') })"
+                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.employeedelegation.scopetype') })"
                   :rows="2"
-                  size="small"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.employeeDelegation.scopeid')"
+                :label="t('entity.employeedelegation.scopeid')"
                 name="scopeId"
               >
                 <a-textarea
                   v-model:value="formState.scopeId"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.employeeDelegation.scopeid') })"
+                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.employeedelegation.scopeid') })"
                   :rows="2"
-                  size="small"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.employeeDelegation.reason')"
+                :label="t('entity.employeedelegation.reason')"
                 name="reason"
               >
                 <a-input
                   v-model:value="formState.reason"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeDelegation.reason') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeedelegation.reason') })"
+                  show-count
+                  :maxlength="200"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.employeeDelegation.startdate')"
+                :label="t('entity.employeedelegation.startdate')"
                 name="startDate"
               >
                 <a-date-picker
                   v-model:value="formState.startDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeDelegation.startdate') })"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeedelegation.startdate') })"
                   value-format="YYYY-MM-DD"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -167,29 +170,41 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.employeeDelegation.enddate')"
+                :label="t('entity.employeedelegation.enddate')"
                 name="endDate"
               >
                 <a-date-picker
                   v-model:value="formState.endDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeDelegation.enddate') })"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeedelegation.enddate') })"
                   value-format="YYYY-MM-DD"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.ExtField')"
-                name="ExtField"
+                name="extField"
+                class="takt-form-item-ext-field"
               >
-                <a-input
-                  v-model:value="formState.ExtField"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
-                  size="small"
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t('common.page.entity.extfieldhint')"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ t('common.page.entity.extfield') }}</span>
+                  </span>
+                </template>
+                <a-textarea
+                  v-model:value="formState.extField"
+                  :placeholder="t('common.page.form.placeholder.extfield')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
                   allow-clear
                 />
               </a-form-item>
@@ -202,15 +217,16 @@
                 <a-textarea
                   v-model:value="formState.remark"
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                  :rows="2"
-                  size="small"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
           </a-row>
         </div>
       </a-tab-pane>
-
     </a-tabs>
   </a-form>
 </template>
@@ -224,6 +240,7 @@ import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import type { EmployeeDelegationCreate } from '@/types/human-resource/personnel/employee-delegation'
+import { RiQuestionLine } from '@remixicon/vue'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -256,7 +273,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","proxyEmployeeId","originalEmployeeId","delegationType","scopeType","scopeId","reason","startDate","endDate","ExtField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","proxyEmployeeId","originalEmployeeId","delegationType","scopeType","scopeId","reason","startDate","endDate","extField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -267,7 +284,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  formData: () => ({}),
+  formData: null,
   loading: false,
 })
 
@@ -275,18 +292,34 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
+/** 表单字段默认值（无字典默认项） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  void target
+}
 
-/** 编辑态灌入 formData；新增态 reset */
+
+/** 编辑态灌入 formData；新增态恢复默认值（须含 employeeDelegationId 才视为编辑） */
 watch(
   () => props.formData,
   (val) => {
-    const next = val ? { ...val } : {}
-    Object.keys(formState).forEach((k) => delete formState[k])
+    if (val?.employeeDelegationId) {
+      const next = { ...val } as Record<string, unknown>
+      Object.keys(formState).forEach((k) => delete formState[k])
 
-    applyScopeDefaults(next)
-    Object.assign(formState, next)
+      applyScopeDefaults(next)
+      Object.assign(formState, next)
+      formRef.value?.clearValidate()
+    } else {
+      Object.keys(formState).forEach((k) => delete formState[k])
+      if (val && typeof val === 'object' && Object.keys(val).length > 0) {
+        Object.assign(formState, val)
+      }
+      applyFormDefaults(formState)
+      applyScopeDefaults(formState as Record<string, unknown>, true)
+      formRef.value?.clearValidate()
+    }
   },
-  { immediate: true, deep: true }
+  { immediate: true }
 )
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
@@ -305,42 +338,48 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   proxyEmployeeId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.employeeDelegation.proxyemployeeid') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.employeedelegation.proxyemployeeid') }),
       trigger: 'blur'
     }
   ],
   originalEmployeeId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.employeeDelegation.originalemployeeid') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.employeedelegation.originalemployeeid') }),
       trigger: 'blur'
     }
   ],
-  delegationType: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.employeeDelegation.delegationtype') }),
-      trigger: 'change'
-    }
-  ],
+  delegationType: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.employeedelegation.delegationtype') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.employeedelegation.delegationtype') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
   scopeType: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.employeeDelegation.scopetype') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.employeedelegation.scopetype') }),
       trigger: 'blur'
     }
   ],
   reason: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.employeeDelegation.reason') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.employeedelegation.reason') }),
       trigger: 'blur'
     }
   ],
   startDate: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.employeeDelegation.startdate') }),
+      message: t('common.page.form.placeholder.select', { field: t('entity.employeedelegation.startdate') }),
       trigger: 'change'
     }
   ],
@@ -354,15 +393,30 @@ async function validate() {
 
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
-  return { ...formState }
+  const payload = { ...formState }
+  if ('delegationType' in payload) {
+    const rawdelegationType = payload.delegationType
+    payload.delegationType = typeof rawdelegationType === 'number' ? rawdelegationType : Number(rawdelegationType)
+  }
+  if ('scopeType' in payload) {
+    const rawscopeType = payload.scopeType
+    payload.scopeType = typeof rawscopeType === 'number' ? rawscopeType : Number(rawscopeType)
+  }
+  if ('sortOrder' in payload) delete payload.sortOrder
+  return payload
 }
 
-/** 重置表单与子表行 */
+/** 重置表单与子表行（弹窗未 destroy 时父级 nextTick 也会调用） */
 function resetFields() {
-  formRef.value?.resetFields()
   Object.keys(formState).forEach((k) => delete formState[k])
+  if (props.formData && typeof props.formData === 'object') {
+    Object.assign(formState, props.formData)
+  }
+  applyFormDefaults(formState)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.employeeDelegationId)
 
   activeTab.value = 'tab-0'
+  formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })

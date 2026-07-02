@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Personnel
 // 文件名称：ITaktEmployeeService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：员工应用服务接口
 // 
@@ -101,14 +101,5 @@ public interface ITaktEmployeeService
     /// <param name="fileName">文件名</param>
     /// <returns>Excel 文件</returns>
     Task<(string fileName, byte[] fileContent)> ExportEmployeeAsync(TaktEmployeeQueryDto? query = null, string? sheetName = null, string? fileName = null);
-
-    /// <summary>
-    /// 按已审批上岗（主职）与调动单重算员工主档任职快照（上岗/调动审批通过后调用）
-    /// </summary>
-    /// <param name="employeeId">员工 ID</param>
-    /// <param name="tenantCode">租户编码（与流程实例一致）</param>
-    /// <param name="companyCode">公司编码（与流程实例一致）</param>
-    /// <returns>异步任务</returns>
-    Task RefreshEmployeePrimaryAssignmentAsync(long employeeId, string tenantCode, string companyCode);
 
 }

@@ -331,7 +331,7 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
         var payload = new
         {
             employeeId = employee.Id.ToString(),
-            employeeName = employee.Name,
+            employeeName = employee.EmployeeName,
             deptId = dept?.Id.ToString(),
             deptName = dept?.DeptName,
             leaveType,
@@ -522,7 +522,7 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
                 TenantCode = tenantCode,
                 CompanyCode = companyCode,
                 EmployeeId = employee.Id,
-                EmployeeName = employee.Name,
+                EmployeeName = employee.EmployeeName,
                 DeptId = dept?.Id,
                 DeptName = dept?.DeptName,
                 LeaveType = leaveType,
@@ -540,7 +540,7 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
             leave = await repository.CreateAsync(leave);
             return (leave, 1, 0);
         }
-        leave.EmployeeName = employee.Name;
+        leave.EmployeeName = employee.EmployeeName;
         leave.DeptId = dept?.Id;
         leave.DeptName = dept?.DeptName;
         leave.LeaveType = leaveType;

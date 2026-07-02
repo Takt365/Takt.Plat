@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Planning
 // 文件名称：TaktMasterDemandScheduleLineDtos.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：MasterDemandScheduleLine 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktMasterDemandScheduleLine 生成，请按需审阅）
 // 
@@ -249,7 +249,7 @@ public class TaktMasterDemandScheduleLineCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -414,6 +414,21 @@ public class TaktMasterDemandScheduleLineTemplateDto
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 时间桶开始
+    /// </summary>
+    public DateTime? BucketStart { get; set; }
+
+    /// <summary>
+    /// 时间桶结束
+    /// </summary>
+    public DateTime? BucketEnd { get; set; }
+
+    /// <summary>
+    /// 需求数量（基本单位）
+    /// </summary>
+    public decimal? DemandQuantity { get; set; }
+
+    /// <summary>
     /// 计量单位
     /// </summary>
     public string? UnitOfMeasure { get; set; } = string.Empty;
@@ -446,7 +461,7 @@ public class TaktMasterDemandScheduleLineImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -492,6 +507,21 @@ public class TaktMasterDemandScheduleLineImportDto
     /// 物料编码
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 时间桶开始
+    /// </summary>
+    public DateTime? BucketStart { get; set; }
+
+    /// <summary>
+    /// 时间桶结束
+    /// </summary>
+    public DateTime? BucketEnd { get; set; }
+
+    /// <summary>
+    /// 需求数量（基本单位）
+    /// </summary>
+    public decimal? DemandQuantity { get; set; }
 
     /// <summary>
     /// 计量单位

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/sales
 // 文件名称：customer.d.ts
-// 创建时间：2026-06-20
+// 创建时间：2026-07-01
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface Customer extends CompanyDtoBase {
   customerId: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -49,7 +49,7 @@ export interface Customer extends CompanyDtoBase {
   customerShortName?: string;
 
   /**
-   * 客户类型（字典 logistics_customer_category；0=企业客户，1=个人客户，2=政府机构，3=其他）
+   * 客户类型（字典 logistics_customer_category；0=企业客户 1=个人客户 2=政府机构 3=其他）
    */
   customerType: number;
 
@@ -62,6 +62,11 @@ export interface Customer extends CompanyDtoBase {
    * 客户标识（税务登记证号/统一社会信用代码）
    */
   customerTaxNumber?: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等）
+   */
+  taxRate: number;
 
   /**
    * 注册国家（ISO 3166-1 alpha-2两位代码）
@@ -124,12 +129,12 @@ export interface Customer extends CompanyDtoBase {
   currencyCode: string;
 
   /**
-   * 付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
+   * 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
    */
-  paymentTerms: number;
+  paymentTerms: string;
 
   /**
-   * 信用等级（字典 logistics_credit_rating_category；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
+   * 信用等级（字典 logistics_credit_rating_category；0=无 1=A级 2=AA级 3=AAA级 4=B级 5=C级）
    */
   creditLevel: number;
 
@@ -139,17 +144,17 @@ export interface Customer extends CompanyDtoBase {
   creditAmount: number;
 
   /**
-   * 折扣率（百分比，如 5.5 表示 5.5% 折扣；可选字典 logistics_discount_rate_param 预设）
+   * 折扣率（百分比；可选字典 logistics_discount_rate_param 预设）
    */
   discountRate: number;
 
   /**
-   * 销售员（人员代码）
+   * 销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）
    */
   salesBy?: string;
 
   /**
-   * 客户等级（字典 logistics_customer_level_category；0=普通，1=重要，2=VIP，3=战略）
+   * 客户等级（字典 logistics_customer_level_category；0=普通 1=重要 2=VIP 3=战略）
    */
   customerLevel: number;
 
@@ -159,19 +164,14 @@ export interface Customer extends CompanyDtoBase {
   evaluationScore: number;
 
   /**
-   * 是否合格客户（0=否，1=是）
-   */
-  isQualified: number;
-
-  /**
-   * 客户状态（1=启用，0=禁用）
-   */
-  customerStatus: number;
-
-  /**
    * 排序号（越小越靠前）
    */
   sortOrder: number;
+
+  /**
+   * 客户状态（字典 sys_normal_disable_status）
+   */
+  customerStatus: number;
 
 }
 
@@ -194,7 +194,7 @@ export interface CustomerQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -214,7 +214,7 @@ export interface CustomerQuery extends TaktPagedQuery {
   customerShortName?: string;
 
   /**
-   * 客户类型（字典 logistics_customer_category；0=企业客户，1=个人客户，2=政府机构，3=其他）
+   * 客户类型（字典 logistics_customer_category；0=企业客户 1=个人客户 2=政府机构 3=其他）
    */
   customerType?: number;
 
@@ -227,6 +227,11 @@ export interface CustomerQuery extends TaktPagedQuery {
    * 客户标识（税务登记证号/统一社会信用代码）
    */
   customerTaxNumber?: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等）
+   */
+  taxRate?: number;
 
   /**
    * 注册国家（ISO 3166-1 alpha-2两位代码）
@@ -289,12 +294,12 @@ export interface CustomerQuery extends TaktPagedQuery {
   currencyCode?: string;
 
   /**
-   * 付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
+   * 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
    */
-  paymentTerms?: number;
+  paymentTerms?: string;
 
   /**
-   * 信用等级（字典 logistics_credit_rating_category；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
+   * 信用等级（字典 logistics_credit_rating_category；0=无 1=A级 2=AA级 3=AAA级 4=B级 5=C级）
    */
   creditLevel?: number;
 
@@ -304,17 +309,17 @@ export interface CustomerQuery extends TaktPagedQuery {
   creditAmount?: number;
 
   /**
-   * 折扣率（百分比，如 5.5 表示 5.5% 折扣；可选字典 logistics_discount_rate_param 预设）
+   * 折扣率（百分比；可选字典 logistics_discount_rate_param 预设）
    */
   discountRate?: number;
 
   /**
-   * 销售员（人员代码）
+   * 销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）
    */
   salesBy?: string;
 
   /**
-   * 客户等级（字典 logistics_customer_level_category；0=普通，1=重要，2=VIP，3=战略）
+   * 客户等级（字典 logistics_customer_level_category；0=普通 1=重要 2=VIP 3=战略）
    */
   customerLevel?: number;
 
@@ -324,19 +329,14 @@ export interface CustomerQuery extends TaktPagedQuery {
   evaluationScore?: number;
 
   /**
-   * 是否合格客户（0=否，1=是）
-   */
-  isQualified?: number;
-
-  /**
-   * 客户状态（1=启用，0=禁用）
-   */
-  customerStatus?: number;
-
-  /**
    * 排序号（越小越靠前）
    */
   sortOrder?: number;
+
+  /**
+   * 客户状态（字典 sys_normal_disable_status）
+   */
+  customerStatus?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -378,12 +378,12 @@ export interface CustomerCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -403,7 +403,7 @@ export interface CustomerCreate {
   customerShortName?: string;
 
   /**
-   * 客户类型（字典 logistics_customer_category；0=企业客户，1=个人客户，2=政府机构，3=其他）
+   * 客户类型（字典 logistics_customer_category；0=企业客户 1=个人客户 2=政府机构 3=其他）
    */
   customerType: number;
 
@@ -416,6 +416,11 @@ export interface CustomerCreate {
    * 客户标识（税务登记证号/统一社会信用代码）
    */
   customerTaxNumber?: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等）
+   */
+  taxRate: number;
 
   /**
    * 注册国家（ISO 3166-1 alpha-2两位代码）
@@ -478,12 +483,12 @@ export interface CustomerCreate {
   currencyCode: string;
 
   /**
-   * 付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
+   * 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
    */
-  paymentTerms: number;
+  paymentTerms: string;
 
   /**
-   * 信用等级（字典 logistics_credit_rating_category；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
+   * 信用等级（字典 logistics_credit_rating_category；0=无 1=A级 2=AA级 3=AAA级 4=B级 5=C级）
    */
   creditLevel: number;
 
@@ -493,17 +498,17 @@ export interface CustomerCreate {
   creditAmount: number;
 
   /**
-   * 折扣率（百分比，如 5.5 表示 5.5% 折扣；可选字典 logistics_discount_rate_param 预设）
+   * 折扣率（百分比；可选字典 logistics_discount_rate_param 预设）
    */
   discountRate: number;
 
   /**
-   * 销售员（人员代码）
+   * 销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）
    */
   salesBy?: string;
 
   /**
-   * 客户等级（字典 logistics_customer_level_category；0=普通，1=重要，2=VIP，3=战略）
+   * 客户等级（字典 logistics_customer_level_category；0=普通 1=重要 2=VIP 3=战略）
    */
   customerLevel: number;
 
@@ -513,12 +518,7 @@ export interface CustomerCreate {
   evaluationScore: number;
 
   /**
-   * 是否合格客户（0=否，1=是）
-   */
-  isQualified: number;
-
-  /**
-   * 客户状态（1=启用，0=禁用）
+   * 客户状态（字典 sys_normal_disable_status）
    */
   customerStatus: number;
 
@@ -562,7 +562,7 @@ export interface CustomerStatus {
   customerId: string;
 
   /**
-   * 客户状态（1=启用，0=禁用）
+   * 客户状态（字典 sys_normal_disable_status）
    */
   customerStatus: number;
 
@@ -605,7 +605,7 @@ export interface CustomerTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -625,7 +625,7 @@ export interface CustomerTemplate {
   customerShortName?: string;
 
   /**
-   * 客户类型（字典 logistics_customer_category；0=企业客户，1=个人客户，2=政府机构，3=其他）
+   * 客户类型（字典 logistics_customer_category；0=企业客户 1=个人客户 2=政府机构 3=其他）
    */
   customerType?: number;
 
@@ -638,6 +638,11 @@ export interface CustomerTemplate {
    * 客户标识（税务登记证号/统一社会信用代码）
    */
   customerTaxNumber?: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等）
+   */
+  taxRate?: number;
 
   /**
    * 注册国家（ISO 3166-1 alpha-2两位代码）
@@ -663,6 +668,81 @@ export interface CustomerTemplate {
    * 客户电话
    */
   customerPhone?: string;
+
+  /**
+   * 客户传真
+   */
+  customerFax?: string;
+
+  /**
+   * 客户邮箱
+   */
+  customerEmail?: string;
+
+  /**
+   * 客户网站
+   */
+  customerWebsite?: string;
+
+  /**
+   * 联系人
+   */
+  contactPerson?: string;
+
+  /**
+   * 联系人电话
+   */
+  contactPhone?: string;
+
+  /**
+   * 联系人邮箱
+   */
+  contactEmail?: string;
+
+  /**
+   * 结算币种代码
+   */
+  currencyCode?: string;
+
+  /**
+   * 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
+   */
+  paymentTerms?: string;
+
+  /**
+   * 信用等级（字典 logistics_credit_rating_category；0=无 1=A级 2=AA级 3=AAA级 4=B级 5=C级）
+   */
+  creditLevel?: number;
+
+  /**
+   * 信用额度（精确到分，存储为整数，单位为分）
+   */
+  creditAmount?: number;
+
+  /**
+   * 折扣率（百分比；可选字典 logistics_discount_rate_param 预设）
+   */
+  discountRate?: number;
+
+  /**
+   * 销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   */
+  salesBy?: string;
+
+  /**
+   * 客户等级（字典 logistics_customer_level_category；0=普通 1=重要 2=VIP 3=战略）
+   */
+  customerLevel?: number;
+
+  /**
+   * 评价分数（0-100分）
+   */
+  evaluationScore?: number;
+
+  /**
+   * 客户状态（字典 sys_normal_disable_status）
+   */
+  customerStatus?: number;
 
   /**
    * 扩展字段JSON
@@ -694,12 +774,12 @@ export interface CustomerImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -719,7 +799,7 @@ export interface CustomerImport {
   customerShortName?: string;
 
   /**
-   * 客户类型（字典 logistics_customer_category；0=企业客户，1=个人客户，2=政府机构，3=其他）
+   * 客户类型（字典 logistics_customer_category；0=企业客户 1=个人客户 2=政府机构 3=其他）
    */
   customerType?: number;
 
@@ -732,6 +812,11 @@ export interface CustomerImport {
    * 客户标识（税务登记证号/统一社会信用代码）
    */
   customerTaxNumber?: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等）
+   */
+  taxRate?: number;
 
   /**
    * 注册国家（ISO 3166-1 alpha-2两位代码）
@@ -757,6 +842,81 @@ export interface CustomerImport {
    * 客户电话
    */
   customerPhone?: string;
+
+  /**
+   * 客户传真
+   */
+  customerFax?: string;
+
+  /**
+   * 客户邮箱
+   */
+  customerEmail?: string;
+
+  /**
+   * 客户网站
+   */
+  customerWebsite?: string;
+
+  /**
+   * 联系人
+   */
+  contactPerson?: string;
+
+  /**
+   * 联系人电话
+   */
+  contactPhone?: string;
+
+  /**
+   * 联系人邮箱
+   */
+  contactEmail?: string;
+
+  /**
+   * 结算币种代码
+   */
+  currencyCode?: string;
+
+  /**
+   * 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
+   */
+  paymentTerms?: string;
+
+  /**
+   * 信用等级（字典 logistics_credit_rating_category；0=无 1=A级 2=AA级 3=AAA级 4=B级 5=C级）
+   */
+  creditLevel?: number;
+
+  /**
+   * 信用额度（精确到分，存储为整数，单位为分）
+   */
+  creditAmount?: number;
+
+  /**
+   * 折扣率（百分比；可选字典 logistics_discount_rate_param 预设）
+   */
+  discountRate?: number;
+
+  /**
+   * 销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   */
+  salesBy?: string;
+
+  /**
+   * 客户等级（字典 logistics_customer_level_category；0=普通 1=重要 2=VIP 3=战略）
+   */
+  customerLevel?: number;
+
+  /**
+   * 评价分数（0-100分）
+   */
+  evaluationScore?: number;
+
+  /**
+   * 客户状态（字典 sys_normal_disable_status）
+   */
+  customerStatus?: number;
 
   /**
    * 扩展字段JSON
@@ -788,7 +948,7 @@ export interface CustomerExport {
   companyCode: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -808,7 +968,7 @@ export interface CustomerExport {
   customerShortName?: string;
 
   /**
-   * 客户类型（字典 logistics_customer_category；0=企业客户，1=个人客户，2=政府机构，3=其他）
+   * 客户类型（字典 logistics_customer_category；0=企业客户 1=个人客户 2=政府机构 3=其他）
    */
   customerType: number;
 
@@ -821,6 +981,11 @@ export interface CustomerExport {
    * 客户标识（税务登记证号/统一社会信用代码）
    */
   customerTaxNumber?: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等）
+   */
+  taxRate: number;
 
   /**
    * 注册国家（ISO 3166-1 alpha-2两位代码）
@@ -883,12 +1048,12 @@ export interface CustomerExport {
   currencyCode: string;
 
   /**
-   * 付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
+   * 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
    */
-  paymentTerms: number;
+  paymentTerms: string;
 
   /**
-   * 信用等级（字典 logistics_credit_rating_category；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
+   * 信用等级（字典 logistics_credit_rating_category；0=无 1=A级 2=AA级 3=AAA级 4=B级 5=C级）
    */
   creditLevel: number;
 
@@ -898,17 +1063,17 @@ export interface CustomerExport {
   creditAmount: number;
 
   /**
-   * 折扣率（百分比，如 5.5 表示 5.5% 折扣；可选字典 logistics_discount_rate_param 预设）
+   * 折扣率（百分比；可选字典 logistics_discount_rate_param 预设）
    */
   discountRate: number;
 
   /**
-   * 销售员（人员代码）
+   * 销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）
    */
   salesBy?: string;
 
   /**
-   * 客户等级（字典 logistics_customer_level_category；0=普通，1=重要，2=VIP，3=战略）
+   * 客户等级（字典 logistics_customer_level_category；0=普通 1=重要 2=VIP 3=战略）
    */
   customerLevel: number;
 
@@ -918,19 +1083,14 @@ export interface CustomerExport {
   evaluationScore: number;
 
   /**
-   * 是否合格客户（0=否，1=是）
-   */
-  isQualified: number;
-
-  /**
-   * 客户状态（1=启用，0=禁用）
-   */
-  customerStatus: number;
-
-  /**
    * 排序号（越小越靠前）
    */
   sortOrder: number;
+
+  /**
+   * 客户状态（字典 sys_normal_disable_status）
+   */
+  customerStatus: number;
 
   /**
    * 扩展字段JSON

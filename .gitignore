@@ -13,7 +13,10 @@ scripts/.tmp/
 # ========================================
 # 日志与本地运行产物
 # ========================================
+backend/src/Takt.WebApi/wwwroot/uploads/
 backend/src/Takt.WebApi/logs/
+backend/**/.takt-temp/
+frontend/logs/
 *.log
 
 # ========================================

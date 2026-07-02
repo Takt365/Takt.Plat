@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Bom
 // 文件名称：TaktBillOfMaterialSubstituteI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktBillOfMaterialSubstitute 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -136,13 +136,13 @@ public class TaktBillOfMaterialSubstituteI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.billofmaterialsubstitute.linenumber", "zh-HK", "替代行号_hk", "替代行号（步长10：10/20/30…）"),
 
             // entity.billofmaterialsubstitute.substitutematerialid
-            new TranslationSeedItem("entity.billofmaterialsubstitute.substitutematerialid", "en-US", "替代物料ID_us", "替代物料ID（关联工厂物料主数据，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.billofmaterialsubstitute.substitutematerialid", "en-US", "替代物料ID_us", "替代物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）"),
             // entity.billofmaterialsubstitute.substitutematerialid
-            new TranslationSeedItem("entity.billofmaterialsubstitute.substitutematerialid", "ja-JP", "替代物料ID_jp", "替代物料ID（关联工厂物料主数据，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.billofmaterialsubstitute.substitutematerialid", "ja-JP", "替代物料ID_jp", "替代物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）"),
             // entity.billofmaterialsubstitute.substitutematerialid
-            new TranslationSeedItem("entity.billofmaterialsubstitute.substitutematerialid", "zh-CN", "替代物料ID", "替代物料ID（关联工厂物料主数据，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.billofmaterialsubstitute.substitutematerialid", "zh-CN", "替代物料ID", "替代物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）"),
             // entity.billofmaterialsubstitute.substitutematerialid
-            new TranslationSeedItem("entity.billofmaterialsubstitute.substitutematerialid", "zh-HK", "替代物料ID_hk", "替代物料ID（关联工厂物料主数据，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.billofmaterialsubstitute.substitutematerialid", "zh-HK", "替代物料ID_hk", "替代物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）"),
 
             // entity.billofmaterialsubstitute.substitutematerialcode
             new TranslationSeedItem("entity.billofmaterialsubstitute.substitutematerialcode", "en-US", "替代物料编码_us", "替代物料编码（冗余）"),
@@ -181,13 +181,13 @@ public class TaktBillOfMaterialSubstituteI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.billofmaterialsubstitute.usagequantity", "zh-HK", "替代用量_hk", "替代用量"),
 
             // entity.billofmaterialsubstitute.materialunit
-            new TranslationSeedItem("entity.billofmaterialsubstitute.materialunit", "en-US", "单位_us", "单位"),
+            new TranslationSeedItem("entity.billofmaterialsubstitute.materialunit", "en-US", "单位_us", "单位（字典 logistics_unit_of_measure_code）"),
             // entity.billofmaterialsubstitute.materialunit
-            new TranslationSeedItem("entity.billofmaterialsubstitute.materialunit", "ja-JP", "单位_jp", "单位"),
+            new TranslationSeedItem("entity.billofmaterialsubstitute.materialunit", "ja-JP", "单位_jp", "单位（字典 logistics_unit_of_measure_code）"),
             // entity.billofmaterialsubstitute.materialunit
-            new TranslationSeedItem("entity.billofmaterialsubstitute.materialunit", "zh-CN", "单位", "单位"),
+            new TranslationSeedItem("entity.billofmaterialsubstitute.materialunit", "zh-CN", "单位", "单位（字典 logistics_unit_of_measure_code）"),
             // entity.billofmaterialsubstitute.materialunit
-            new TranslationSeedItem("entity.billofmaterialsubstitute.materialunit", "zh-HK", "单位_hk", "单位"),
+            new TranslationSeedItem("entity.billofmaterialsubstitute.materialunit", "zh-HK", "单位_hk", "单位（字典 logistics_unit_of_measure_code）"),
 
             // entity.billofmaterialsubstitute.usageratio
             new TranslationSeedItem("entity.billofmaterialsubstitute.usageratio", "en-US", "替代比例_us", "替代比例（相对主件用量，默认1表示等量替代）"),

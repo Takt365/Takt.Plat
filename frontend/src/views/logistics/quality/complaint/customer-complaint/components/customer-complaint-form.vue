@@ -145,10 +145,10 @@
                 :label="t('entity.customercomplaint.complaintmethod')"
                 name="complaintMethod"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.complaintMethod"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customercomplaint.complaintmethod') })"
-                  style="width: 100%"
+                  dict-type="logistics_quality_complaint_method"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.customercomplaint.complaintmethod') })"
                 />
               </a-form-item>
             </a-col>

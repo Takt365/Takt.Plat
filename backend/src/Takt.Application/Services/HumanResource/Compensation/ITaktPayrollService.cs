@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Compensation
 // 文件名称：ITaktPayrollService.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：薪酬体系应用服务接口
 // 

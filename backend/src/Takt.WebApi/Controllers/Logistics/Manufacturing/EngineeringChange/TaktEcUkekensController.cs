@@ -32,7 +32,7 @@ public class TaktEcUkekensController : TaktControllerBase
     public TaktEcUkekensController(ITaktEcUkekenService service) => _service = service;
 
     /// <summary>获取受检部门列表（分页）</summary>
-    [TaktPermission("logistics:manufacturing:engineeringchange:ukeken:list", "受检部门列表")]
+    [TaktPermission("logistics:manufacturing:engineering:change:ukeken:list", "受检部门列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetEcUkekenListAsync([FromQuery] TaktEcDeptViewQueryDto queryDto)
     {
@@ -41,7 +41,7 @@ public class TaktEcUkekensController : TaktControllerBase
     }
 
     /// <summary>根据设变明细 ID 获取受检部门行</summary>
-    [TaktPermission("logistics:manufacturing:engineeringchange:ukeken:query", "受检部门详情")]
+    [TaktPermission("logistics:manufacturing:engineering:change:ukeken:query", "受检部门详情")]
     [HttpGet("detail/{ecDetailId}")]
     public async Task<IActionResult> GetEcUkekenByEcDetailIdAsync(long ecDetailId)
     {
@@ -50,7 +50,7 @@ public class TaktEcUkekensController : TaktControllerBase
     }
 
     /// <summary>更新受检部门</summary>
-    [TaktPermission("logistics:manufacturing:engineeringchange:ukeken:update", "更新受检部门")]
+    [TaktPermission("logistics:manufacturing:engineering:change:ukeken:update", "更新受检部门")]
     [HttpPut("detail/{ecDetailId}")]
     public async Task<IActionResult> UpdateEcUkekenAsync(long ecDetailId, [FromBody] TaktEcDeptViewUpdateDto dto)
     {
@@ -59,7 +59,7 @@ public class TaktEcUkekensController : TaktControllerBase
     }
 
     /// <summary>导出受检部门</summary>
-    [TaktPermission("logistics:manufacturing:engineeringchange:ukeken:export", "导出受检部门")]
+    [TaktPermission("logistics:manufacturing:engineering:change:ukeken:export", "导出受检部门")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportEcUkekenAsync([FromQuery] TaktEcDeptViewQueryDto? query)
     {

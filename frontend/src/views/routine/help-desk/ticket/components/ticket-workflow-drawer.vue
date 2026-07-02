@@ -30,8 +30,8 @@
         <!-- 工作流操作 -->
         <div class="mb-4 flex flex-wrap gap-2">
           <a-button
-            v-if="canPick"
-            v-permission="'routine:helpdesk:ticket:update'"
+            v-if="!props.portalMode && canPick"
+            v-permission="props.workflowPermission"
             type="primary"
             :loading="actionLoading"
             @click="handlePick(true)"
@@ -39,24 +39,24 @@
             {{ t('routine.help-desk.ticket.page.action.pick') }}
           </a-button>
           <a-button
-            v-if="canStart"
-            v-permission="'routine:helpdesk:ticket:update'"
+            v-if="!props.portalMode && canStart"
+            v-permission="props.workflowPermission"
             :loading="actionLoading"
             @click="handleStart"
           >
             {{ t('routine.help-desk.ticket.page.action.start') }}
           </a-button>
           <a-button
-            v-if="canWait"
-            v-permission="'routine:helpdesk:ticket:update'"
+            v-if="!props.portalMode && canWait"
+            v-permission="props.workflowPermission"
             :loading="actionLoading"
             @click="handleWait"
           >
             {{ t('routine.help-desk.ticket.page.action.wait') }}
           </a-button>
           <a-button
-            v-if="canResolve"
-            v-permission="'routine:helpdesk:ticket:update'"
+            v-if="!props.portalMode && canResolve"
+            v-permission="props.workflowPermission"
             :loading="actionLoading"
             @click="handleResolve"
           >
@@ -64,7 +64,7 @@
           </a-button>
           <a-button
             v-if="canConfirmClose"
-            v-permission="'routine:helpdesk:ticket:confirm'"
+            v-permission="props.workflowPermission"
             type="primary"
             :loading="actionLoading"
             @click="handleConfirmClose"
@@ -72,8 +72,8 @@
             {{ t('routine.help-desk.ticket.page.action.confirm.close') }}
           </a-button>
           <a-button
-            v-if="canReopen"
-            v-permission="'routine:helpdesk:ticket:update'"
+            v-if="!props.portalMode && canReopen"
+            v-permission="props.workflowPermission"
             danger
             :loading="actionLoading"
             @click="handleReopen"
@@ -107,11 +107,11 @@
           <a-form-item :label="t('routine.help-desk.ticket.page.reply.placeholder')">
             <a-textarea v-model:value="replyContent" :rows="3" :disabled="actionLoading" />
           </a-form-item>
-          <a-form-item v-permission="'routine:helpdesk:ticket:update'">
+          <a-form-item v-if="props.showInternalNote" v-permission="props.workflowPermission">
             <a-checkbox v-model:checked="isInternal">{{ t('routine.help-desk.ticket.page.internal.note') }}</a-checkbox>
           </a-form-item>
           <a-button
-            v-permission="'routine:helpdesk:ticket:reply'"
+            v-permission="props.workflowPermission"
             type="primary"
             :loading="actionLoading"
             :disabled="!replyContent.trim()"
@@ -136,6 +136,8 @@ import { useI18n } from 'vue-i18n'
 import {
   getTicketById,
   getTicketReplyList,
+  getMyTicketById,
+  getMyTicketReplyList,
   assignTicket,
   startTicketProgress,
   waitForRequester,
@@ -143,16 +145,31 @@ import {
   confirmCloseTicket,
   reopenTicket,
   replyTicket,
+  replyMyTicket,
 } from '@/api/routine/help-desk/ticket'
-import type { Ticket, TicketReply } from '@/types/routine/help-desk/ticket'
+import type { Ticket } from '@/types/routine/help-desk/ticket'
+import type { TicketReply } from '@/types/routine/help-desk/ticket-reply'
 
 /** 抽屉 open（v-model） */
 const visible = defineModel<boolean>('open', { default: false })
 
 /** 工单 ID */
-const props = defineProps<{
-  ticketId?: string | null
-}>()
+const props = withDefaults(
+  defineProps<{
+    ticketId?: string | null
+    /** 工作流/回复按钮权限码（门户页传 routine:help:desk:my:ticket:list） */
+    workflowPermission?: string
+    /** 是否显示内部备注勾选项（客服端 true，门户 false） */
+    showInternalNote?: boolean
+    /** 门户模式：走 my-tickets 专用 API */
+    portalMode?: boolean
+  }>(),
+  {
+    workflowPermission: 'routine:help:desk:ticket:update',
+    showInternalNote: true,
+    portalMode: false,
+  },
+)
 
 /** 工作流变更后通知父级刷新列表 */
 const emit = defineEmits<{
@@ -256,14 +273,23 @@ async function loadDetail(): Promise<void> {
   }
   loading.value = true
   try {
-    ticket.value = await getTicketById(props.ticketId)
-    const page = await getTicketReplyList({
-      ticketId: props.ticketId,
-      pageIndex: 1,
-      pageSize: 50,
-      includeInternal: true,
-    })
-    replies.value = page.data ?? []
+    if (props.portalMode) {
+      ticket.value = await getMyTicketById(props.ticketId)
+      const page = await getMyTicketReplyList(props.ticketId, {
+        pageIndex: 1,
+        pageSize: 50,
+      })
+      replies.value = page.data ?? []
+    } else {
+      ticket.value = await getTicketById(props.ticketId)
+      const page = await getTicketReplyList({
+        ticketId: props.ticketId,
+        pageIndex: 1,
+        pageSize: 50,
+        includeInternal: true,
+      })
+      replies.value = page.data ?? []
+    }
   } finally {
     loading.value = false
   }
@@ -278,7 +304,7 @@ async function runAction(fn: () => Promise<void>): Promise<void> {
   actionLoading.value = true
   try {
     await fn()
-    message.success(t('common.page.feedback.success'))
+    message.success(t('common.feedback.updated'))
     emit('changed')
     await loadDetail()
   } finally {
@@ -345,11 +371,17 @@ async function handleReopen(): Promise<void> {
 async function handleReply(): Promise<void> {
   if (!props.ticketId || !replyContent.value.trim()) return
   await runAction(async () => {
-    await replyTicket({
-      ticketId: props.ticketId!,
-      content: replyContent.value.trim(),
-      isInternal: isInternal.value,
-    })
+    if (props.portalMode) {
+      await replyMyTicket(props.ticketId!, {
+        content: replyContent.value.trim(),
+      })
+    } else {
+      await replyTicket({
+        ticketId: props.ticketId!,
+        content: replyContent.value.trim(),
+        isInternal: isInternal.value ? 1 : 0,
+      })
+    }
     replyContent.value = ''
     isInternal.value = false
   })

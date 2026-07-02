@@ -64,7 +64,7 @@ public class TaktProductionPlanItem : TaktCompanyEntityBase
     public int? SalesPlanLineNumber { get; set; }
 
     /// <summary>
-    /// 物料编码（计划生产物料，关联 TaktMaterialPlant.MaterialCode）
+    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
     /// </summary>
     [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string MaterialCode { get; set; } = string.Empty;
@@ -82,7 +82,7 @@ public class TaktProductionPlanItem : TaktCompanyEntityBase
     public string? MaterialSpecification { get; set; }
 
     /// <summary>
-    /// 计划单位
+    /// 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
     /// </summary>
     [SugarColumn(ColumnName = "plan_unit", ColumnDescription = "计划单位", ColumnDataType = "nvarchar", Length = 20, IsNullable = false, DefaultValue = "PC")]
     public string PlanUnit { get; set; } = "PC";

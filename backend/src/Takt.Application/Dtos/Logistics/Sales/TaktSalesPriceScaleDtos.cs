@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Sales
 // 文件名称：TaktSalesPriceScaleDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-07-01
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SalesPriceScale 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSalesPriceScale 生成，请按需审阅）
 // 
@@ -36,13 +36,13 @@ public class TaktSalesPriceScaleDto : TaktCompanyDtoBase
     public long SalesPriceScaleId { get; set; }
 
     /// <summary>
-    /// 价格明细ID（关联销售价格明细表，序列化为string以避免Javascript精度问题）
+    /// 价格明细 ID（关联 TaktSalesPriceItem.Id，选项 TaktSalesPriceItems/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ItemId { get; set; }
 
     /// <summary>
-    /// 价格明细名称（填充字段）
+    /// 价格明细 名称（填充字段）
     /// </summary>
     public string? ItemName { get; set; }
 
@@ -100,7 +100,7 @@ public class TaktSalesPriceScaleQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 价格明细ID（关联销售价格明细表，序列化为string以避免Javascript精度问题）
+    /// 价格明细 ID（关联 TaktSalesPriceItem.Id，选项 TaktSalesPriceItems/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ItemId { get; set; }
@@ -171,12 +171,12 @@ public class TaktSalesPriceScaleCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 价格明细ID（关联销售价格明细表，序列化为string以避免Javascript精度问题）
+    /// 价格明细 ID（关联 TaktSalesPriceItem.Id，选项 TaktSalesPriceItems/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ItemId { get; set; }
@@ -259,7 +259,7 @@ public class TaktSalesPriceScaleTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 价格明细ID（关联销售价格明细表，序列化为string以避免Javascript精度问题）
+    /// 价格明细 ID（关联 TaktSalesPriceItem.Id，选项 TaktSalesPriceItems/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ItemId { get; set; }
@@ -273,6 +273,21 @@ public class TaktSalesPriceScaleTemplateDto
     /// 行号（项号/序号，固定步长=10）
     /// </summary>
     public int? LineNumber { get; set; }
+
+    /// <summary>
+    /// 起始数量（基本单位数量，包含此数量）
+    /// </summary>
+    public decimal? StartQuantity { get; set; }
+
+    /// <summary>
+    /// 结束数量（基本单位数量，包含此数量，0表示无上限）
+    /// </summary>
+    public decimal? EndQuantity { get; set; }
+
+    /// <summary>
+    /// 阶梯价格（精确到分，存储为整数，单位为分）
+    /// </summary>
+    public decimal? ScalePrice { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -302,12 +317,12 @@ public class TaktSalesPriceScaleImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 价格明细ID（关联销售价格明细表，序列化为string以避免Javascript精度问题）
+    /// 价格明细 ID（关联 TaktSalesPriceItem.Id，选项 TaktSalesPriceItems/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ItemId { get; set; }
@@ -321,6 +336,21 @@ public class TaktSalesPriceScaleImportDto
     /// 行号（项号/序号，固定步长=10）
     /// </summary>
     public int? LineNumber { get; set; }
+
+    /// <summary>
+    /// 起始数量（基本单位数量，包含此数量）
+    /// </summary>
+    public decimal? StartQuantity { get; set; }
+
+    /// <summary>
+    /// 结束数量（基本单位数量，包含此数量，0表示无上限）
+    /// </summary>
+    public decimal? EndQuantity { get; set; }
+
+    /// <summary>
+    /// 阶梯价格（精确到分，存储为整数，单位为分）
+    /// </summary>
+    public decimal? ScalePrice { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -356,7 +386,7 @@ public class TaktSalesPriceScaleExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 价格明细ID（关联销售价格明细表，序列化为string以避免Javascript精度问题）
+    /// 价格明细 ID（关联 TaktSalesPriceItem.Id，选项 TaktSalesPriceItems/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ItemId { get; set; }

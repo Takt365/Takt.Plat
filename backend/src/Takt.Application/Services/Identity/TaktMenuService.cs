@@ -462,7 +462,7 @@ public class TaktMenuService : TaktServiceBase, ITaktMenuService
                 || SqlFunc.ToString(x.IsVisible).Contains(keywords)
                 || SqlFunc.ToString(x.MenuStatus).Contains(keywords)
                 || SqlFunc.ToString(x.IsBuiltIn).Contains(keywords)
-                || (x.Description != null && x.Description.Contains(keywords))
+                || (x.MenuDescription != null && x.MenuDescription.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
@@ -564,9 +564,9 @@ public class TaktMenuService : TaktServiceBase, ITaktMenuService
             exp = exp.And(x => x.IsBuiltIn == queryDto.IsBuiltIn);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Description))
+        if (!string.IsNullOrEmpty(queryDto?.MenuDescription))
         {
-            exp = exp.And(x => x.Description != null && x.Description.Contains(queryDto.Description));
+            exp = exp.And(x => x.MenuDescription != null && x.MenuDescription.Contains(queryDto.MenuDescription));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

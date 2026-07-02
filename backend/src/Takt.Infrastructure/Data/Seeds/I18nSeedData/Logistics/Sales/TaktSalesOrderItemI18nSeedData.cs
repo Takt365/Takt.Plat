@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Sales
 // 文件名称：TaktSalesOrderItemI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSalesOrderItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktSalesOrderItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salesorderitem._self", "zh-HK", "Takt销售订单明细信息_hk", "实体名称"),
 
             // entity.salesorderitem.salesorderid
-            new TranslationSeedItem("entity.salesorderitem.salesorderid", "en-US", "销售订单ID_us", "销售订单ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.salesorderitem.salesorderid", "en-US", "销售订单ID_us", "销售订单（关联 TaktSalesOrder.Id，选项 TaktSalesOrders/options）"),
             // entity.salesorderitem.salesorderid
-            new TranslationSeedItem("entity.salesorderitem.salesorderid", "ja-JP", "销售订单ID_jp", "销售订单ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.salesorderitem.salesorderid", "ja-JP", "销售订单ID_jp", "销售订单（关联 TaktSalesOrder.Id，选项 TaktSalesOrders/options）"),
             // entity.salesorderitem.salesorderid
-            new TranslationSeedItem("entity.salesorderitem.salesorderid", "zh-CN", "销售订单ID", "销售订单ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.salesorderitem.salesorderid", "zh-CN", "销售订单ID", "销售订单（关联 TaktSalesOrder.Id，选项 TaktSalesOrders/options）"),
             // entity.salesorderitem.salesorderid
-            new TranslationSeedItem("entity.salesorderitem.salesorderid", "zh-HK", "销售订单ID_hk", "销售订单ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.salesorderitem.salesorderid", "zh-HK", "销售订单ID_hk", "销售订单（关联 TaktSalesOrder.Id，选项 TaktSalesOrders/options）"),
 
             // entity.salesorderitem.salesordercode
             new TranslationSeedItem("entity.salesorderitem.salesordercode", "en-US", "销售订单编码_us", "销售订单编码（冗余字段，便于查询）"),
@@ -118,13 +118,13 @@ public class TaktSalesOrderItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salesorderitem.linenumber", "zh-HK", "行号_hk", "行号（项号/序号，固定步长=10）"),
 
             // entity.salesorderitem.materialcode
-            new TranslationSeedItem("entity.salesorderitem.materialcode", "en-US", "物料编码_us", "物料编码"),
+            new TranslationSeedItem("entity.salesorderitem.materialcode", "en-US", "物料编码_us", "物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）"),
             // entity.salesorderitem.materialcode
-            new TranslationSeedItem("entity.salesorderitem.materialcode", "ja-JP", "物料编码_jp", "物料编码"),
+            new TranslationSeedItem("entity.salesorderitem.materialcode", "ja-JP", "物料编码_jp", "物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）"),
             // entity.salesorderitem.materialcode
-            new TranslationSeedItem("entity.salesorderitem.materialcode", "zh-CN", "物料编码", "物料编码"),
+            new TranslationSeedItem("entity.salesorderitem.materialcode", "zh-CN", "物料编码", "物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）"),
             // entity.salesorderitem.materialcode
-            new TranslationSeedItem("entity.salesorderitem.materialcode", "zh-HK", "物料编码_hk", "物料编码"),
+            new TranslationSeedItem("entity.salesorderitem.materialcode", "zh-HK", "物料编码_hk", "物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）"),
 
             // entity.salesorderitem.materialname
             new TranslationSeedItem("entity.salesorderitem.materialname", "en-US", "物料名称_us", "物料名称"),
@@ -145,13 +145,13 @@ public class TaktSalesOrderItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salesorderitem.materialspecification", "zh-HK", "物料规格_hk", "物料规格"),
 
             // entity.salesorderitem.salesunit
-            new TranslationSeedItem("entity.salesorderitem.salesunit", "en-US", "销售单位_us", "销售单位"),
+            new TranslationSeedItem("entity.salesorderitem.salesunit", "en-US", "销售单位_us", "销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）"),
             // entity.salesorderitem.salesunit
-            new TranslationSeedItem("entity.salesorderitem.salesunit", "ja-JP", "销售单位_jp", "销售单位"),
+            new TranslationSeedItem("entity.salesorderitem.salesunit", "ja-JP", "销售单位_jp", "销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）"),
             // entity.salesorderitem.salesunit
-            new TranslationSeedItem("entity.salesorderitem.salesunit", "zh-CN", "销售单位", "销售单位"),
+            new TranslationSeedItem("entity.salesorderitem.salesunit", "zh-CN", "销售单位", "销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）"),
             // entity.salesorderitem.salesunit
-            new TranslationSeedItem("entity.salesorderitem.salesunit", "zh-HK", "销售单位_hk", "销售单位"),
+            new TranslationSeedItem("entity.salesorderitem.salesunit", "zh-HK", "销售单位_hk", "销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）"),
 
             // entity.salesorderitem.orderquantity
             new TranslationSeedItem("entity.salesorderitem.orderquantity", "en-US", "订购数量_us", "订购数量（基本单位数量）"),
@@ -170,6 +170,15 @@ public class TaktSalesOrderItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salesorderitem.shippedquantity", "zh-CN", "已发货数量", "已发货数量（基本单位数量）"),
             // entity.salesorderitem.shippedquantity
             new TranslationSeedItem("entity.salesorderitem.shippedquantity", "zh-HK", "已发货数量_hk", "已发货数量（基本单位数量）"),
+
+            // entity.salesorderitem.salesperunit
+            new TranslationSeedItem("entity.salesorderitem.salesperunit", "en-US", "价格单位_us", "价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）"),
+            // entity.salesorderitem.salesperunit
+            new TranslationSeedItem("entity.salesorderitem.salesperunit", "ja-JP", "价格单位_jp", "价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）"),
+            // entity.salesorderitem.salesperunit
+            new TranslationSeedItem("entity.salesorderitem.salesperunit", "zh-CN", "价格单位", "价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）"),
+            // entity.salesorderitem.salesperunit
+            new TranslationSeedItem("entity.salesorderitem.salesperunit", "zh-HK", "价格单位_hk", "价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）"),
 
             // entity.salesorderitem.unitprice
             new TranslationSeedItem("entity.salesorderitem.unitprice", "en-US", "单价_us", "单价（精确到分，存储为整数，单位为分）"),
@@ -199,13 +208,13 @@ public class TaktSalesOrderItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salesorderitem.discountamount", "zh-HK", "折扣金额_hk", "折扣金额（精确到分，存储为整数，单位为分）"),
 
             // entity.salesorderitem.taxrate
-            new TranslationSeedItem("entity.salesorderitem.taxrate", "en-US", "税费率_us", "税费率（0-100，表示税费百分比）"),
+            new TranslationSeedItem("entity.salesorderitem.taxrate", "en-US", "税费率_us", "税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）"),
             // entity.salesorderitem.taxrate
-            new TranslationSeedItem("entity.salesorderitem.taxrate", "ja-JP", "税费率_jp", "税费率（0-100，表示税费百分比）"),
+            new TranslationSeedItem("entity.salesorderitem.taxrate", "ja-JP", "税费率_jp", "税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）"),
             // entity.salesorderitem.taxrate
-            new TranslationSeedItem("entity.salesorderitem.taxrate", "zh-CN", "税费率", "税费率（0-100，表示税费百分比）"),
+            new TranslationSeedItem("entity.salesorderitem.taxrate", "zh-CN", "税费率", "税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）"),
             // entity.salesorderitem.taxrate
-            new TranslationSeedItem("entity.salesorderitem.taxrate", "zh-HK", "税费率_hk", "税费率（0-100，表示税费百分比）"),
+            new TranslationSeedItem("entity.salesorderitem.taxrate", "zh-HK", "税费率_hk", "税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）"),
 
             // entity.salesorderitem.taxamount
             new TranslationSeedItem("entity.salesorderitem.taxamount", "en-US", "税费_us", "税费（精确到分，存储为整数，单位为分）"),
@@ -226,13 +235,13 @@ public class TaktSalesOrderItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salesorderitem.subtotalamount", "zh-HK", "小计金额_hk", "小计金额（精确到分，存储为整数，单位为分）"),
 
             // entity.salesorderitem.deliverystatus
-            new TranslationSeedItem("entity.salesorderitem.deliverystatus", "en-US", "行交货状态_us", "行交货状态（0=未交货，1=部分交货，2=全部交货）"),
+            new TranslationSeedItem("entity.salesorderitem.deliverystatus", "en-US", "行交货状态_us", "行交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）"),
             // entity.salesorderitem.deliverystatus
-            new TranslationSeedItem("entity.salesorderitem.deliverystatus", "ja-JP", "行交货状态_jp", "行交货状态（0=未交货，1=部分交货，2=全部交货）"),
+            new TranslationSeedItem("entity.salesorderitem.deliverystatus", "ja-JP", "行交货状态_jp", "行交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）"),
             // entity.salesorderitem.deliverystatus
-            new TranslationSeedItem("entity.salesorderitem.deliverystatus", "zh-CN", "行交货状态", "行交货状态（0=未交货，1=部分交货，2=全部交货）"),
+            new TranslationSeedItem("entity.salesorderitem.deliverystatus", "zh-CN", "行交货状态", "行交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）"),
             // entity.salesorderitem.deliverystatus
-            new TranslationSeedItem("entity.salesorderitem.deliverystatus", "zh-HK", "行交货状态_hk", "行交货状态（0=未交货，1=部分交货，2=全部交货）"),
+            new TranslationSeedItem("entity.salesorderitem.deliverystatus", "zh-HK", "行交货状态_hk", "行交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）"),
 
             // entity.salesorderitem.salesorder
             new TranslationSeedItem("entity.salesorderitem.salesorder", "en-US", "销售订单主表_us", "销售订单主表"),

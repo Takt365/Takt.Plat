@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Accounting.Controlling
 // 文件名称：TaktCostCenterDtos.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：CostCenter 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktCostCenter 生成，请按需审阅）
 // 
@@ -36,7 +36,7 @@ public class TaktCostCenterDto : TaktCompanyDtoBase
     public long CostCenterId { get; set; }
 
     /// <summary>
-    /// 成本中心编码
+    /// 成本中心编码（4位，租户+公司内唯一）
     /// </summary>
     public string CostCenterCode { get; set; } = string.Empty;
 
@@ -84,16 +84,6 @@ public class TaktCostCenterDto : TaktCompanyDtoBase
     public int CostCenterLevel { get; set; } = 0;
 
     /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 成本中心状态（1=启用，0=禁用）
-    /// </summary>
-    public int CostCenterStatus { get; set; } = 0;
-
-    /// <summary>
     /// 生效日期
     /// </summary>
     public DateTime ValidFrom { get; set; }
@@ -104,9 +94,19 @@ public class TaktCostCenterDto : TaktCompanyDtoBase
     public DateTime ValidTo { get; set; }
 
     /// <summary>
+    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// </summary>
+    public string RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
     /// 排序号
     /// </summary>
     public int SortOrder { get; set; } = 0;
+
+    /// <summary>
+    /// 成本中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// </summary>
+    public int CostCenterStatus { get; set; } = 0;
 
     /// <summary>
     /// 成本中心变更记录列表（外键在子表 TaktCostCenterChangeLog.CostCenterId）
@@ -153,7 +153,7 @@ public class TaktCostCenterQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 成本中心编码
+    /// 成本中心编码（4位，租户+公司内唯一）
     /// </summary>
     public string? CostCenterCode { get; set; } = string.Empty;
 
@@ -201,16 +201,6 @@ public class TaktCostCenterQueryDto : TaktPagedQuery
     public int? CostCenterLevel { get; set; }
 
     /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 成本中心状态（1=启用，0=禁用）
-    /// </summary>
-    public int? CostCenterStatus { get; set; }
-
-    /// <summary>
     /// 生效日期（范围查询-开始）
     /// </summary>
     public DateTime? ValidFromStart { get; set; }
@@ -231,9 +221,19 @@ public class TaktCostCenterQueryDto : TaktPagedQuery
     public DateTime? ValidToEnd { get; set; }
 
     /// <summary>
+    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
     /// 排序号
     /// </summary>
     public int? SortOrder { get; set; }
+
+    /// <summary>
+    /// 成本中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// </summary>
+    public int? CostCenterStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -276,14 +276,14 @@ public class TaktCostCenterCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 成本中心编码
+    /// 成本中心编码（4位，租户+公司内唯一）
     /// </summary>
-    [Required(ErrorMessage = "成本中心编码不能为空")]
+    [Required(ErrorMessage = "成本中心编码（4位，租户+公司内唯一）不能为空")]
     public string CostCenterCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -331,16 +331,6 @@ public class TaktCostCenterCreateDto
     public int CostCenterLevel { get; set; } = 0;
 
     /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 成本中心状态（1=启用，0=禁用）
-    /// </summary>
-    public int CostCenterStatus { get; set; } = 0;
-
-    /// <summary>
     /// 生效日期
     /// </summary>
     public DateTime ValidFrom { get; set; }
@@ -349,6 +339,17 @@ public class TaktCostCenterCreateDto
     /// 失效日期
     /// </summary>
     public DateTime ValidTo { get; set; }
+
+    /// <summary>
+    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// </summary>
+    [Required(ErrorMessage = "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）不能为空")]
+    public string RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 成本中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// </summary>
+    public int CostCenterStatus { get; set; } = 0;
 
     /// <summary>
     /// 成本中心变更记录列表（外键在子表 TaktCostCenterChangeLog.CostCenterId）（子表，级联保存）
@@ -405,9 +406,9 @@ public class TaktCostCenterStatusDto
     public long CostCenterId { get; set; }
 
     /// <summary>
-    /// 成本中心状态（1=启用，0=禁用）
+    /// 成本中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
-    [Required(ErrorMessage = "成本中心状态（1=启用，0=禁用）不能为空")]
+    [Required(ErrorMessage = "成本中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）不能为空")]
     public int CostCenterStatus { get; set; } = 0;
 }
 
@@ -455,7 +456,7 @@ public class TaktCostCenterTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 成本中心编码
+    /// 成本中心编码（4位，租户+公司内唯一）
     /// </summary>
     public string? CostCenterCode { get; set; } = string.Empty;
 
@@ -503,14 +504,29 @@ public class TaktCostCenterTemplateDto
     public int? CostCenterLevel { get; set; }
 
     /// <summary>
-    /// 关联工厂
+    /// 生效日期
+    /// </summary>
+    public DateTime? ValidFrom { get; set; }
+
+    /// <summary>
+    /// 失效日期
+    /// </summary>
+    public DateTime? ValidTo { get; set; }
+
+    /// <summary>
+    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
     public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
-    /// 成本中心状态（1=启用，0=禁用）
+    /// 成本中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
     public int? CostCenterStatus { get; set; }
+
+    /// <summary>
+    /// 成本中心变更记录列表（外键在子表 TaktCostCenterChangeLog.CostCenterId）（子表，级联保存）
+    /// </summary>
+    public List<TaktCostCenterChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -540,12 +556,12 @@ public class TaktCostCenterImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 成本中心编码
+    /// 成本中心编码（4位，租户+公司内唯一）
     /// </summary>
     public string? CostCenterCode { get; set; } = string.Empty;
 
@@ -593,14 +609,29 @@ public class TaktCostCenterImportDto
     public int? CostCenterLevel { get; set; }
 
     /// <summary>
-    /// 关联工厂
+    /// 生效日期
+    /// </summary>
+    public DateTime? ValidFrom { get; set; }
+
+    /// <summary>
+    /// 失效日期
+    /// </summary>
+    public DateTime? ValidTo { get; set; }
+
+    /// <summary>
+    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
     public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
-    /// 成本中心状态（1=启用，0=禁用）
+    /// 成本中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
     public int? CostCenterStatus { get; set; }
+
+    /// <summary>
+    /// 成本中心变更记录列表（外键在子表 TaktCostCenterChangeLog.CostCenterId）（子表，级联保存）
+    /// </summary>
+    public List<TaktCostCenterChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -636,7 +667,7 @@ public class TaktCostCenterExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 成本中心编码
+    /// 成本中心编码（4位，租户+公司内唯一）
     /// </summary>
     public string CostCenterCode { get; set; } = string.Empty;
 
@@ -684,16 +715,6 @@ public class TaktCostCenterExportDto
     public int CostCenterLevel { get; set; } = 0;
 
     /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 成本中心状态（1=启用，0=禁用）
-    /// </summary>
-    public int CostCenterStatus { get; set; } = 0;
-
-    /// <summary>
     /// 生效日期
     /// </summary>
     public DateTime ValidFrom { get; set; }
@@ -704,9 +725,19 @@ public class TaktCostCenterExportDto
     public DateTime ValidTo { get; set; }
 
     /// <summary>
+    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// </summary>
+    public string RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
     /// 排序号
     /// </summary>
     public int SortOrder { get; set; } = 0;
+
+    /// <summary>
+    /// 成本中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// </summary>
+    public int CostCenterStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

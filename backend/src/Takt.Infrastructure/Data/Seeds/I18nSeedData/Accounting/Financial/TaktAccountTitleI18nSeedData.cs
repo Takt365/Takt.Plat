@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Financial
 // 文件名称：TaktAccountTitleI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktAccountTitle 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -90,23 +90,23 @@ public class TaktAccountTitleI18nSeedData : ITaktSeedDataCoordinator
             // entity.accounttitle._self
             new TranslationSeedItem("entity.accounttitle._self", "zh-HK", "会计科目信息_hk", "实体名称"),
 
-            // entity.accounttitle.titlecode
-            new TranslationSeedItem("entity.accounttitle.titlecode", "en-US", "科目编码_us", "科目编码"),
-            // entity.accounttitle.titlecode
-            new TranslationSeedItem("entity.accounttitle.titlecode", "ja-JP", "科目编码_jp", "科目编码"),
-            // entity.accounttitle.titlecode
-            new TranslationSeedItem("entity.accounttitle.titlecode", "zh-CN", "科目编码", "科目编码"),
-            // entity.accounttitle.titlecode
-            new TranslationSeedItem("entity.accounttitle.titlecode", "zh-HK", "科目编码_hk", "科目编码"),
+            // entity.accounttitle.code
+            new TranslationSeedItem("entity.accounttitle.code", "en-US", "科目编码_us", "科目编码"),
+            // entity.accounttitle.code
+            new TranslationSeedItem("entity.accounttitle.code", "ja-JP", "科目编码_jp", "科目编码"),
+            // entity.accounttitle.code
+            new TranslationSeedItem("entity.accounttitle.code", "zh-CN", "科目编码", "科目编码"),
+            // entity.accounttitle.code
+            new TranslationSeedItem("entity.accounttitle.code", "zh-HK", "科目编码_hk", "科目编码"),
 
-            // entity.accounttitle.titlename
-            new TranslationSeedItem("entity.accounttitle.titlename", "en-US", "科目名称_us", "科目名称"),
-            // entity.accounttitle.titlename
-            new TranslationSeedItem("entity.accounttitle.titlename", "ja-JP", "科目名称_jp", "科目名称"),
-            // entity.accounttitle.titlename
-            new TranslationSeedItem("entity.accounttitle.titlename", "zh-CN", "科目名称", "科目名称"),
-            // entity.accounttitle.titlename
-            new TranslationSeedItem("entity.accounttitle.titlename", "zh-HK", "科目名称_hk", "科目名称"),
+            // entity.accounttitle.name
+            new TranslationSeedItem("entity.accounttitle.name", "en-US", "科目名称_us", "科目名称"),
+            // entity.accounttitle.name
+            new TranslationSeedItem("entity.accounttitle.name", "ja-JP", "科目名称_jp", "科目名称"),
+            // entity.accounttitle.name
+            new TranslationSeedItem("entity.accounttitle.name", "zh-CN", "科目名称", "科目名称"),
+            // entity.accounttitle.name
+            new TranslationSeedItem("entity.accounttitle.name", "zh-HK", "科目名称_hk", "科目名称"),
 
             // entity.accounttitle.parentid
             new TranslationSeedItem("entity.accounttitle.parentid", "en-US", "父级ID_us", "父级 ID"),
@@ -117,14 +117,14 @@ public class TaktAccountTitleI18nSeedData : ITaktSeedDataCoordinator
             // entity.accounttitle.parentid
             new TranslationSeedItem("entity.accounttitle.parentid", "zh-HK", "父级ID_hk", "父级 ID"),
 
-            // entity.accounttitle.titletype
-            new TranslationSeedItem("entity.accounttitle.titletype", "en-US", "科目类型_us", "科目类型"),
-            // entity.accounttitle.titletype
-            new TranslationSeedItem("entity.accounttitle.titletype", "ja-JP", "科目类型_jp", "科目类型"),
-            // entity.accounttitle.titletype
-            new TranslationSeedItem("entity.accounttitle.titletype", "zh-CN", "科目类型", "科目类型"),
-            // entity.accounttitle.titletype
-            new TranslationSeedItem("entity.accounttitle.titletype", "zh-HK", "科目类型_hk", "科目类型"),
+            // entity.accounttitle.type
+            new TranslationSeedItem("entity.accounttitle.type", "en-US", "科目类型_us", "科目类型（字典 accounting_account_title_type；SAP X=资产负债表科目，P=初级成本或收入，S=次级成本，N=非经营性收支，C=现金/银行账户）"),
+            // entity.accounttitle.type
+            new TranslationSeedItem("entity.accounttitle.type", "ja-JP", "科目类型_jp", "科目类型（字典 accounting_account_title_type；SAP X=资产负债表科目，P=初级成本或收入，S=次级成本，N=非经营性收支，C=现金/银行账户）"),
+            // entity.accounttitle.type
+            new TranslationSeedItem("entity.accounttitle.type", "zh-CN", "科目类型", "科目类型（字典 accounting_account_title_type；SAP X=资产负债表科目，P=初级成本或收入，S=次级成本，N=非经营性收支，C=现金/银行账户）"),
+            // entity.accounttitle.type
+            new TranslationSeedItem("entity.accounttitle.type", "zh-HK", "科目类型_hk", "科目类型（字典 accounting_account_title_type；SAP X=资产负债表科目，P=初级成本或收入，S=次级成本，N=非经营性收支，C=现金/银行账户）"),
 
             // entity.accounttitle.balancedirection
             new TranslationSeedItem("entity.accounttitle.balancedirection", "en-US", "余额方向_us", "余额方向（0=借方，1=贷方）"),
@@ -135,95 +135,77 @@ public class TaktAccountTitleI18nSeedData : ITaktSeedDataCoordinator
             // entity.accounttitle.balancedirection
             new TranslationSeedItem("entity.accounttitle.balancedirection", "zh-HK", "余额方向_hk", "余额方向（0=借方，1=贷方）"),
 
-            // entity.accounttitle.titlelevel
-            new TranslationSeedItem("entity.accounttitle.titlelevel", "en-US", "科目层级_us", "科目层级"),
-            // entity.accounttitle.titlelevel
-            new TranslationSeedItem("entity.accounttitle.titlelevel", "ja-JP", "科目层级_jp", "科目层级"),
-            // entity.accounttitle.titlelevel
-            new TranslationSeedItem("entity.accounttitle.titlelevel", "zh-CN", "科目层级", "科目层级"),
-            // entity.accounttitle.titlelevel
-            new TranslationSeedItem("entity.accounttitle.titlelevel", "zh-HK", "科目层级_hk", "科目层级"),
+            // entity.accounttitle.level
+            new TranslationSeedItem("entity.accounttitle.level", "en-US", "科目层级_us", "科目层级"),
+            // entity.accounttitle.level
+            new TranslationSeedItem("entity.accounttitle.level", "ja-JP", "科目层级_jp", "科目层级"),
+            // entity.accounttitle.level
+            new TranslationSeedItem("entity.accounttitle.level", "zh-CN", "科目层级", "科目层级"),
+            // entity.accounttitle.level
+            new TranslationSeedItem("entity.accounttitle.level", "zh-HK", "科目层级_hk", "科目层级"),
 
             // entity.accounttitle.isleaf
-            new TranslationSeedItem("entity.accounttitle.isleaf", "en-US", "是否末级科目_us", "是否末级科目"),
+            new TranslationSeedItem("entity.accounttitle.isleaf", "en-US", "末级科目_us", "末级科目（字典 sys_yes_no_type；1=是，0=否）"),
             // entity.accounttitle.isleaf
-            new TranslationSeedItem("entity.accounttitle.isleaf", "ja-JP", "是否末级科目_jp", "是否末级科目"),
+            new TranslationSeedItem("entity.accounttitle.isleaf", "ja-JP", "末级科目_jp", "末级科目（字典 sys_yes_no_type；1=是，0=否）"),
             // entity.accounttitle.isleaf
-            new TranslationSeedItem("entity.accounttitle.isleaf", "zh-CN", "是否末级科目", "是否末级科目"),
+            new TranslationSeedItem("entity.accounttitle.isleaf", "zh-CN", "末级科目", "末级科目（字典 sys_yes_no_type；1=是，0=否）"),
             // entity.accounttitle.isleaf
-            new TranslationSeedItem("entity.accounttitle.isleaf", "zh-HK", "是否末级科目_hk", "是否末级科目"),
+            new TranslationSeedItem("entity.accounttitle.isleaf", "zh-HK", "末级科目_hk", "末级科目（字典 sys_yes_no_type；1=是，0=否）"),
 
             // entity.accounttitle.isauxiliary
-            new TranslationSeedItem("entity.accounttitle.isauxiliary", "en-US", "是否辅助核算_us", "是否辅助核算"),
+            new TranslationSeedItem("entity.accounttitle.isauxiliary", "en-US", "辅助核算_us", "辅助核算（字典 sys_yes_no_type；1=是，0=否）"),
             // entity.accounttitle.isauxiliary
-            new TranslationSeedItem("entity.accounttitle.isauxiliary", "ja-JP", "是否辅助核算_jp", "是否辅助核算"),
+            new TranslationSeedItem("entity.accounttitle.isauxiliary", "ja-JP", "辅助核算_jp", "辅助核算（字典 sys_yes_no_type；1=是，0=否）"),
             // entity.accounttitle.isauxiliary
-            new TranslationSeedItem("entity.accounttitle.isauxiliary", "zh-CN", "是否辅助核算", "是否辅助核算"),
+            new TranslationSeedItem("entity.accounttitle.isauxiliary", "zh-CN", "辅助核算", "辅助核算（字典 sys_yes_no_type；1=是，0=否）"),
             // entity.accounttitle.isauxiliary
-            new TranslationSeedItem("entity.accounttitle.isauxiliary", "zh-HK", "是否辅助核算_hk", "是否辅助核算"),
+            new TranslationSeedItem("entity.accounttitle.isauxiliary", "zh-HK", "辅助核算_hk", "辅助核算（字典 sys_yes_no_type；1=是，0=否）"),
 
             // entity.accounttitle.auxiliarytype
-            new TranslationSeedItem("entity.accounttitle.auxiliarytype", "en-US", "辅助核算类型_us", "辅助核算类型"),
+            new TranslationSeedItem("entity.accounttitle.auxiliarytype", "en-US", "辅助核算类型_us", "辅助核算类型（字典 accounting_auxiliary_type；SAP D=客户/K=供应商/A=资产/S=总账无辅助/M=物料）"),
             // entity.accounttitle.auxiliarytype
-            new TranslationSeedItem("entity.accounttitle.auxiliarytype", "ja-JP", "辅助核算类型_jp", "辅助核算类型"),
+            new TranslationSeedItem("entity.accounttitle.auxiliarytype", "ja-JP", "辅助核算类型_jp", "辅助核算类型（字典 accounting_auxiliary_type；SAP D=客户/K=供应商/A=资产/S=总账无辅助/M=物料）"),
             // entity.accounttitle.auxiliarytype
-            new TranslationSeedItem("entity.accounttitle.auxiliarytype", "zh-CN", "辅助核算类型", "辅助核算类型"),
+            new TranslationSeedItem("entity.accounttitle.auxiliarytype", "zh-CN", "辅助核算类型", "辅助核算类型（字典 accounting_auxiliary_type；SAP D=客户/K=供应商/A=资产/S=总账无辅助/M=物料）"),
             // entity.accounttitle.auxiliarytype
-            new TranslationSeedItem("entity.accounttitle.auxiliarytype", "zh-HK", "辅助核算类型_hk", "辅助核算类型"),
+            new TranslationSeedItem("entity.accounttitle.auxiliarytype", "zh-HK", "辅助核算类型_hk", "辅助核算类型（字典 accounting_auxiliary_type；SAP D=客户/K=供应商/A=资产/S=总账无辅助/M=物料）"),
 
             // entity.accounttitle.isquantity
-            new TranslationSeedItem("entity.accounttitle.isquantity", "en-US", "是否数量核算_us", "是否数量核算"),
+            new TranslationSeedItem("entity.accounttitle.isquantity", "en-US", "数量核算_us", "数量核算（字典 sys_yes_no_type；1=是，0=否）"),
             // entity.accounttitle.isquantity
-            new TranslationSeedItem("entity.accounttitle.isquantity", "ja-JP", "是否数量核算_jp", "是否数量核算"),
+            new TranslationSeedItem("entity.accounttitle.isquantity", "ja-JP", "数量核算_jp", "数量核算（字典 sys_yes_no_type；1=是，0=否）"),
             // entity.accounttitle.isquantity
-            new TranslationSeedItem("entity.accounttitle.isquantity", "zh-CN", "是否数量核算", "是否数量核算"),
+            new TranslationSeedItem("entity.accounttitle.isquantity", "zh-CN", "数量核算", "数量核算（字典 sys_yes_no_type；1=是，0=否）"),
             // entity.accounttitle.isquantity
-            new TranslationSeedItem("entity.accounttitle.isquantity", "zh-HK", "是否数量核算_hk", "是否数量核算"),
+            new TranslationSeedItem("entity.accounttitle.isquantity", "zh-HK", "数量核算_hk", "数量核算（字典 sys_yes_no_type；1=是，0=否）"),
 
             // entity.accounttitle.iscurrency
-            new TranslationSeedItem("entity.accounttitle.iscurrency", "en-US", "是否外币核算_us", "是否外币核算"),
+            new TranslationSeedItem("entity.accounttitle.iscurrency", "en-US", "外币核算_us", "外币核算（字典 sys_yes_no_type；1=是，0=否）"),
             // entity.accounttitle.iscurrency
-            new TranslationSeedItem("entity.accounttitle.iscurrency", "ja-JP", "是否外币核算_jp", "是否外币核算"),
+            new TranslationSeedItem("entity.accounttitle.iscurrency", "ja-JP", "外币核算_jp", "外币核算（字典 sys_yes_no_type；1=是，0=否）"),
             // entity.accounttitle.iscurrency
-            new TranslationSeedItem("entity.accounttitle.iscurrency", "zh-CN", "是否外币核算", "是否外币核算"),
+            new TranslationSeedItem("entity.accounttitle.iscurrency", "zh-CN", "外币核算", "外币核算（字典 sys_yes_no_type；1=是，0=否）"),
             // entity.accounttitle.iscurrency
-            new TranslationSeedItem("entity.accounttitle.iscurrency", "zh-HK", "是否外币核算_hk", "是否外币核算"),
+            new TranslationSeedItem("entity.accounttitle.iscurrency", "zh-HK", "外币核算_hk", "外币核算（字典 sys_yes_no_type；1=是，0=否）"),
 
             // entity.accounttitle.iscash
-            new TranslationSeedItem("entity.accounttitle.iscash", "en-US", "是否现金科目_us", "是否现金科目"),
+            new TranslationSeedItem("entity.accounttitle.iscash", "en-US", "现金科目_us", "现金科目（字典 sys_yes_no_type；1=是，0=否）"),
             // entity.accounttitle.iscash
-            new TranslationSeedItem("entity.accounttitle.iscash", "ja-JP", "是否现金科目_jp", "是否现金科目"),
+            new TranslationSeedItem("entity.accounttitle.iscash", "ja-JP", "现金科目_jp", "现金科目（字典 sys_yes_no_type；1=是，0=否）"),
             // entity.accounttitle.iscash
-            new TranslationSeedItem("entity.accounttitle.iscash", "zh-CN", "是否现金科目", "是否现金科目"),
+            new TranslationSeedItem("entity.accounttitle.iscash", "zh-CN", "现金科目", "现金科目（字典 sys_yes_no_type；1=是，0=否）"),
             // entity.accounttitle.iscash
-            new TranslationSeedItem("entity.accounttitle.iscash", "zh-HK", "是否现金科目_hk", "是否现金科目"),
+            new TranslationSeedItem("entity.accounttitle.iscash", "zh-HK", "现金科目_hk", "现金科目（字典 sys_yes_no_type；1=是，0=否）"),
 
             // entity.accounttitle.isbank
-            new TranslationSeedItem("entity.accounttitle.isbank", "en-US", "是否银行科目_us", "是否银行科目"),
+            new TranslationSeedItem("entity.accounttitle.isbank", "en-US", "银行科目_us", "银行科目（字典 sys_yes_no_type；1=是，0=否）"),
             // entity.accounttitle.isbank
-            new TranslationSeedItem("entity.accounttitle.isbank", "ja-JP", "是否银行科目_jp", "是否银行科目"),
+            new TranslationSeedItem("entity.accounttitle.isbank", "ja-JP", "银行科目_jp", "银行科目（字典 sys_yes_no_type；1=是，0=否）"),
             // entity.accounttitle.isbank
-            new TranslationSeedItem("entity.accounttitle.isbank", "zh-CN", "是否银行科目", "是否银行科目"),
+            new TranslationSeedItem("entity.accounttitle.isbank", "zh-CN", "银行科目", "银行科目（字典 sys_yes_no_type；1=是，0=否）"),
             // entity.accounttitle.isbank
-            new TranslationSeedItem("entity.accounttitle.isbank", "zh-HK", "是否银行科目_hk", "是否银行科目"),
-
-            // entity.accounttitle.relatedplant
-            new TranslationSeedItem("entity.accounttitle.relatedplant", "en-US", "关联工厂_us", "关联工厂"),
-            // entity.accounttitle.relatedplant
-            new TranslationSeedItem("entity.accounttitle.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂"),
-            // entity.accounttitle.relatedplant
-            new TranslationSeedItem("entity.accounttitle.relatedplant", "zh-CN", "关联工厂", "关联工厂"),
-            // entity.accounttitle.relatedplant
-            new TranslationSeedItem("entity.accounttitle.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂"),
-
-            // entity.accounttitle.titlestatus
-            new TranslationSeedItem("entity.accounttitle.titlestatus", "en-US", "科目状态_us", "科目状态（1=启用，0=禁用）"),
-            // entity.accounttitle.titlestatus
-            new TranslationSeedItem("entity.accounttitle.titlestatus", "ja-JP", "科目状态_jp", "科目状态（1=启用，0=禁用）"),
-            // entity.accounttitle.titlestatus
-            new TranslationSeedItem("entity.accounttitle.titlestatus", "zh-CN", "科目状态", "科目状态（1=启用，0=禁用）"),
-            // entity.accounttitle.titlestatus
-            new TranslationSeedItem("entity.accounttitle.titlestatus", "zh-HK", "科目状态_hk", "科目状态（1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.accounttitle.isbank", "zh-HK", "银行科目_hk", "银行科目（字典 sys_yes_no_type；1=是，0=否）"),
 
             // entity.accounttitle.validfrom
             new TranslationSeedItem("entity.accounttitle.validfrom", "en-US", "生效日期_us", "生效日期"),
@@ -243,6 +225,15 @@ public class TaktAccountTitleI18nSeedData : ITaktSeedDataCoordinator
             // entity.accounttitle.validto
             new TranslationSeedItem("entity.accounttitle.validto", "zh-HK", "失效日期_hk", "失效日期"),
 
+            // entity.accounttitle.relatedplant
+            new TranslationSeedItem("entity.accounttitle.relatedplant", "en-US", "关联工厂_us", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            // entity.accounttitle.relatedplant
+            new TranslationSeedItem("entity.accounttitle.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            // entity.accounttitle.relatedplant
+            new TranslationSeedItem("entity.accounttitle.relatedplant", "zh-CN", "关联工厂", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            // entity.accounttitle.relatedplant
+            new TranslationSeedItem("entity.accounttitle.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+
             // entity.accounttitle.sortorder
             new TranslationSeedItem("entity.accounttitle.sortorder", "en-US", "排序号_us", "排序号"),
             // entity.accounttitle.sortorder
@@ -251,6 +242,15 @@ public class TaktAccountTitleI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.accounttitle.sortorder", "zh-CN", "排序号", "排序号"),
             // entity.accounttitle.sortorder
             new TranslationSeedItem("entity.accounttitle.sortorder", "zh-HK", "排序号_hk", "排序号"),
+
+            // entity.accounttitle.status
+            new TranslationSeedItem("entity.accounttitle.status", "en-US", "科目状态_us", "科目状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            // entity.accounttitle.status
+            new TranslationSeedItem("entity.accounttitle.status", "ja-JP", "科目状态_jp", "科目状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            // entity.accounttitle.status
+            new TranslationSeedItem("entity.accounttitle.status", "zh-CN", "科目状态", "科目状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            // entity.accounttitle.status
+            new TranslationSeedItem("entity.accounttitle.status", "zh-HK", "科目状态_hk", "科目状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
 
             // entity.accounttitle.changelogs
             new TranslationSeedItem("entity.accounttitle.changelogs", "en-US", "会计科目变更记录列表_us", "会计科目变更记录列表（外键在子表 TaktAccountTitleChangeLog.AccountTitleId）"),

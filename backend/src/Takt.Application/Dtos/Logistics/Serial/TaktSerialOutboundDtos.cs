@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Serial
 // 文件名称：TaktSerialOutboundDtos.cs
-// 创建时间：2026-06-15
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SerialOutbound 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSerialOutbound 生成，请按需审阅）
 // 
@@ -36,12 +36,12 @@ public class TaktSerialOutboundDto : TaktCompanyDtoBase
     public long SerialOutboundId { get; set; }
 
     /// <summary>
-    /// 工厂代码(4位字母数字组合)
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 出库单号(组合唯一索引:PlantCode + OutboundNo)
+    /// 出库单号（租户+公司+工厂内唯一）
     /// </summary>
     public string OutboundNo { get; set; } = string.Empty;
 
@@ -56,39 +56,34 @@ public class TaktSerialOutboundDto : TaktCompanyDtoBase
     public DateTime OutboundDate { get; set; }
 
     /// <summary>
-    /// 仕向地(目的地)
+    /// 仕向地（选项 TaktModelDestinations/options，DictValue=DestinationCode）
     /// </summary>
     public string Destination { get; set; } = string.Empty;
 
     /// <summary>
-    /// 运输方式(0=海运,1=空运,2=陆运,3=铁路,4=快递,5=其他)
+    /// 运输方式（字典 logistics_shipping_method_type；0=海运 1=空运 2=陆运 3=铁路 4=快递 5=其他）
     /// </summary>
     public int ShippingMethod { get; set; } = 0;
 
     /// <summary>
-    /// 目的地港
+    /// 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
     /// </summary>
     public string DestinationPort { get; set; } = string.Empty;
 
     /// <summary>
-    /// 出库类型(0=销售出库,1=生产领料,2=退货出库,3=调拨出库,4=报废出库,5=序列号出库,6=其他)
+    /// 出库类型（字典 logistics_outbound_type；0=销售出库 1=生产领料 2=退货出库 3=调拨出库 4=报废出库 5=序列号出库 6=其他）
     /// </summary>
     public int OutboundType { get; set; } = 0;
 
     /// <summary>
-    /// 仓库编码
+    /// 仓库编码（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options）
     /// </summary>
     public string WarehouseCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 库位编码
+    /// 库位编码（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options）
     /// </summary>
     public string LocationCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 关联公司
-    /// </summary>
-    public string RelatedCompany { get; set; } = string.Empty;
 
     /// <summary>
     /// 总数量
@@ -124,12 +119,12 @@ public class TaktSerialOutboundQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码(4位字母数字组合)
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 出库单号(组合唯一索引:PlantCode + OutboundNo)
+    /// 出库单号（租户+公司+工厂内唯一）
     /// </summary>
     public string? OutboundNo { get; set; } = string.Empty;
 
@@ -149,39 +144,34 @@ public class TaktSerialOutboundQueryDto : TaktPagedQuery
     public DateTime? OutboundDateEnd { get; set; }
 
     /// <summary>
-    /// 仕向地(目的地)
+    /// 仕向地（选项 TaktModelDestinations/options，DictValue=DestinationCode）
     /// </summary>
     public string? Destination { get; set; } = string.Empty;
 
     /// <summary>
-    /// 运输方式(0=海运,1=空运,2=陆运,3=铁路,4=快递,5=其他)
+    /// 运输方式（字典 logistics_shipping_method_type；0=海运 1=空运 2=陆运 3=铁路 4=快递 5=其他）
     /// </summary>
     public int? ShippingMethod { get; set; }
 
     /// <summary>
-    /// 目的地港
+    /// 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
     /// </summary>
     public string? DestinationPort { get; set; } = string.Empty;
 
     /// <summary>
-    /// 出库类型(0=销售出库,1=生产领料,2=退货出库,3=调拨出库,4=报废出库,5=序列号出库,6=其他)
+    /// 出库类型（字典 logistics_outbound_type；0=销售出库 1=生产领料 2=退货出库 3=调拨出库 4=报废出库 5=序列号出库 6=其他）
     /// </summary>
     public int? OutboundType { get; set; }
 
     /// <summary>
-    /// 仓库编码
+    /// 仓库编码（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options）
     /// </summary>
     public string? WarehouseCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 库位编码
+    /// 库位编码（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options）
     /// </summary>
     public string? LocationCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 关联公司
-    /// </summary>
-    public string? RelatedCompany { get; set; } = string.Empty;
 
     /// <summary>
     /// 总数量
@@ -229,20 +219,20 @@ public class TaktSerialOutboundCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码(4位字母数字组合)
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码(4位字母数字组合)不能为空")]
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 出库单号(组合唯一索引:PlantCode + OutboundNo)
+    /// 出库单号（租户+公司+工厂内唯一）
     /// </summary>
-    [Required(ErrorMessage = "出库单号(组合唯一索引:PlantCode + OutboundNo)不能为空")]
+    [Required(ErrorMessage = "出库单号（租户+公司+工厂内唯一）不能为空")]
     public string OutboundNo { get; set; } = string.Empty;
 
     /// <summary>
@@ -257,45 +247,38 @@ public class TaktSerialOutboundCreateDto
     public DateTime OutboundDate { get; set; }
 
     /// <summary>
-    /// 仕向地(目的地)
+    /// 仕向地（选项 TaktModelDestinations/options，DictValue=DestinationCode）
     /// </summary>
-    [Required(ErrorMessage = "仕向地(目的地)不能为空")]
+    [Required(ErrorMessage = "仕向地（选项 TaktModelDestinations/options，DictValue=DestinationCode）不能为空")]
     public string Destination { get; set; } = string.Empty;
 
     /// <summary>
-    /// 运输方式(0=海运,1=空运,2=陆运,3=铁路,4=快递,5=其他)
+    /// 运输方式（字典 logistics_shipping_method_type；0=海运 1=空运 2=陆运 3=铁路 4=快递 5=其他）
     /// </summary>
-    [Required(ErrorMessage = "运输方式(0=海运,1=空运,2=陆运,3=铁路,4=快递,5=其他)不能为空")]
     public int ShippingMethod { get; set; } = 0;
 
     /// <summary>
-    /// 目的地港
+    /// 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
     /// </summary>
-    [Required(ErrorMessage = "目的地港不能为空")]
+    [Required(ErrorMessage = "目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）不能为空")]
     public string DestinationPort { get; set; } = string.Empty;
 
     /// <summary>
-    /// 出库类型(0=销售出库,1=生产领料,2=退货出库,3=调拨出库,4=报废出库,5=序列号出库,6=其他)
+    /// 出库类型（字典 logistics_outbound_type；0=销售出库 1=生产领料 2=退货出库 3=调拨出库 4=报废出库 5=序列号出库 6=其他）
     /// </summary>
     public int OutboundType { get; set; } = 0;
 
     /// <summary>
-    /// 仓库编码
+    /// 仓库编码（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options）
     /// </summary>
-    [Required(ErrorMessage = "仓库编码不能为空")]
+    [Required(ErrorMessage = "仓库编码（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options）不能为空")]
     public string WarehouseCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 库位编码
+    /// 库位编码（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options）
     /// </summary>
-    [Required(ErrorMessage = "库位编码不能为空")]
+    [Required(ErrorMessage = "库位编码（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options）不能为空")]
     public string LocationCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 关联公司
-    /// </summary>
-    [Required(ErrorMessage = "关联公司不能为空")]
-    public string RelatedCompany { get; set; } = string.Empty;
 
     /// <summary>
     /// 总数量
@@ -359,12 +342,12 @@ public class TaktSerialOutboundTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码(4位字母数字组合)
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 出库单号(组合唯一索引:PlantCode + OutboundNo)
+    /// 出库单号（租户+公司+工厂内唯一）
     /// </summary>
     public string? OutboundNo { get; set; } = string.Empty;
 
@@ -374,44 +357,49 @@ public class TaktSerialOutboundTemplateDto
     public string? ShippingInvoiceNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 仕向地(目的地)
+    /// 出库日期
+    /// </summary>
+    public DateTime? OutboundDate { get; set; }
+
+    /// <summary>
+    /// 仕向地（选项 TaktModelDestinations/options，DictValue=DestinationCode）
     /// </summary>
     public string? Destination { get; set; } = string.Empty;
 
     /// <summary>
-    /// 运输方式(0=海运,1=空运,2=陆运,3=铁路,4=快递,5=其他)
+    /// 运输方式（字典 logistics_shipping_method_type；0=海运 1=空运 2=陆运 3=铁路 4=快递 5=其他）
     /// </summary>
     public int? ShippingMethod { get; set; }
 
     /// <summary>
-    /// 目的地港
+    /// 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
     /// </summary>
     public string? DestinationPort { get; set; } = string.Empty;
 
     /// <summary>
-    /// 出库类型(0=销售出库,1=生产领料,2=退货出库,3=调拨出库,4=报废出库,5=序列号出库,6=其他)
+    /// 出库类型（字典 logistics_outbound_type；0=销售出库 1=生产领料 2=退货出库 3=调拨出库 4=报废出库 5=序列号出库 6=其他）
     /// </summary>
     public int? OutboundType { get; set; }
 
     /// <summary>
-    /// 仓库编码
+    /// 仓库编码（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options）
     /// </summary>
     public string? WarehouseCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 库位编码
+    /// 库位编码（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options）
     /// </summary>
     public string? LocationCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 关联公司
-    /// </summary>
-    public string? RelatedCompany { get; set; } = string.Empty;
 
     /// <summary>
     /// 总数量
     /// </summary>
     public int? TotalQuantity { get; set; }
+
+    /// <summary>
+    /// 序列号出库明细列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktSerialOutboundItemCreateDto>? Items { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -441,17 +429,17 @@ public class TaktSerialOutboundImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码(4位字母数字组合)
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 出库单号(组合唯一索引:PlantCode + OutboundNo)
+    /// 出库单号（租户+公司+工厂内唯一）
     /// </summary>
     public string? OutboundNo { get; set; } = string.Empty;
 
@@ -461,44 +449,49 @@ public class TaktSerialOutboundImportDto
     public string? ShippingInvoiceNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 仕向地(目的地)
+    /// 出库日期
+    /// </summary>
+    public DateTime? OutboundDate { get; set; }
+
+    /// <summary>
+    /// 仕向地（选项 TaktModelDestinations/options，DictValue=DestinationCode）
     /// </summary>
     public string? Destination { get; set; } = string.Empty;
 
     /// <summary>
-    /// 运输方式(0=海运,1=空运,2=陆运,3=铁路,4=快递,5=其他)
+    /// 运输方式（字典 logistics_shipping_method_type；0=海运 1=空运 2=陆运 3=铁路 4=快递 5=其他）
     /// </summary>
     public int? ShippingMethod { get; set; }
 
     /// <summary>
-    /// 目的地港
+    /// 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
     /// </summary>
     public string? DestinationPort { get; set; } = string.Empty;
 
     /// <summary>
-    /// 出库类型(0=销售出库,1=生产领料,2=退货出库,3=调拨出库,4=报废出库,5=序列号出库,6=其他)
+    /// 出库类型（字典 logistics_outbound_type；0=销售出库 1=生产领料 2=退货出库 3=调拨出库 4=报废出库 5=序列号出库 6=其他）
     /// </summary>
     public int? OutboundType { get; set; }
 
     /// <summary>
-    /// 仓库编码
+    /// 仓库编码（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options）
     /// </summary>
     public string? WarehouseCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 库位编码
+    /// 库位编码（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options）
     /// </summary>
     public string? LocationCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 关联公司
-    /// </summary>
-    public string? RelatedCompany { get; set; } = string.Empty;
 
     /// <summary>
     /// 总数量
     /// </summary>
     public int? TotalQuantity { get; set; }
+
+    /// <summary>
+    /// 序列号出库明细列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktSerialOutboundItemCreateDto>? Items { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -534,12 +527,12 @@ public class TaktSerialOutboundExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码(4位字母数字组合)
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 出库单号(组合唯一索引:PlantCode + OutboundNo)
+    /// 出库单号（租户+公司+工厂内唯一）
     /// </summary>
     public string OutboundNo { get; set; } = string.Empty;
 
@@ -554,39 +547,34 @@ public class TaktSerialOutboundExportDto
     public DateTime OutboundDate { get; set; }
 
     /// <summary>
-    /// 仕向地(目的地)
+    /// 仕向地（选项 TaktModelDestinations/options，DictValue=DestinationCode）
     /// </summary>
     public string Destination { get; set; } = string.Empty;
 
     /// <summary>
-    /// 运输方式(0=海运,1=空运,2=陆运,3=铁路,4=快递,5=其他)
+    /// 运输方式（字典 logistics_shipping_method_type；0=海运 1=空运 2=陆运 3=铁路 4=快递 5=其他）
     /// </summary>
     public int ShippingMethod { get; set; } = 0;
 
     /// <summary>
-    /// 目的地港
+    /// 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
     /// </summary>
     public string DestinationPort { get; set; } = string.Empty;
 
     /// <summary>
-    /// 出库类型(0=销售出库,1=生产领料,2=退货出库,3=调拨出库,4=报废出库,5=序列号出库,6=其他)
+    /// 出库类型（字典 logistics_outbound_type；0=销售出库 1=生产领料 2=退货出库 3=调拨出库 4=报废出库 5=序列号出库 6=其他）
     /// </summary>
     public int OutboundType { get; set; } = 0;
 
     /// <summary>
-    /// 仓库编码
+    /// 仓库编码（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options）
     /// </summary>
     public string WarehouseCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 库位编码
+    /// 库位编码（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options）
     /// </summary>
     public string LocationCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 关联公司
-    /// </summary>
-    public string RelatedCompany { get; set; } = string.Empty;
 
     /// <summary>
     /// 总数量

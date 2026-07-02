@@ -47,6 +47,9 @@ export default {
       file: {
         hint: "Upload a file; large files use chunked upload",
       },
+      multimedia: {
+        hint: "Images, files, video, or audio; large files use chunked upload",
+      },
       video: {
         hint: "Upload a video file",
       },

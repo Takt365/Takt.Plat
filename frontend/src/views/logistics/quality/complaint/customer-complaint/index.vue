@@ -174,10 +174,11 @@
       </div>
       <div v-show="isFieldVisible('complaintMethod')">
       <a-form-item :label="t('entity.customercomplaint.complaintmethod')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.complaintMethod"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customercomplaint.complaintmethod') })"
-          style="width: 100%"
+          dict-type="logistics_quality_complaint_method"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.customercomplaint.complaintmethod') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -339,7 +340,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -350,7 +351,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -439,9 +440,10 @@
  * 客诉主表实体管理页 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/quality/complaint/customer-complaint
  */
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, h } from 'vue'
 import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
+import TaktDictTag from '@/components/common/takt-dict-tag/index.vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
@@ -753,7 +755,10 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerComplaintField(record, 'complaintMethod') ?? ''
+    customRender: ({ record }: { record: any }) => h(TaktDictTag, {
+      value: getCustomerComplaintField(record, 'complaintMethod'),
+      dictType: 'logistics_quality_complaint_method',
+    }),
   },
   {
     title: t('entity.customercomplaint.complainttype'),
@@ -921,7 +926,7 @@ const rowSelection = computed(() => ({
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
-    } else if (getCustomerComplaintId(selectedRow.value) === getCustomerComplaintId(record)) {
+    } else if (selectedRow.value && getCustomerComplaintId(selectedRow.value) === getCustomerComplaintId(record)) {
       selectedRow.value = null
       syncMasterSelection(null)
     }

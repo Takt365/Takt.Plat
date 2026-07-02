@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Quality.Operation
 // 文件名称：TaktIqcOrdersController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-30
 // 创建人：Takt365(Cursor AI)
 // 功能描述：进货检验单控制器
 // 
@@ -49,6 +49,26 @@ public class TaktIqcOrdersController : TaktControllerBase
         {
             var result = await _iqcOrderService.GetIqcOrderListAsync(queryDto);
             return Success(result.Data, result.Total, result.PageIndex, result.PageSize, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 获取 IQC 检验统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>IQC 检验统计</returns>
+    [TaktPermission("logistics:quality:operation:iqc:order:list", "IQC 检验统计")]
+    [HttpGet("inspection-stat")]
+    public async Task<IActionResult> GetIqcOrderStatAsync([FromQuery] TaktQualityStatQueryDto queryDto)
+    {
+        try
+        {
+            var result = await _iqcOrderService.GetIqcOrderStatAsync(queryDto);
+            return Success(result, "查询成功");
         }
         catch (Exception ex)
         {

@@ -11,6 +11,7 @@
 // ========================================
 
 using Takt.Shared.Models.Foundation;
+using Takt.Shared.Models.Logistics.Manufacturing;
 using Takt.Shared.Models.Workflow;
 
 namespace Takt.Domain.Interfaces;
@@ -26,16 +27,18 @@ public interface ITaktSignalRDispatchService
     /// <param name="onlineId">在线用户记录 ID</param>
     /// <param name="reason">强退原因</param>
     /// <param name="connectionId">SignalR 连接 ID（主键查无记录时回退定位）</param>
+    /// <param name="delaySeconds">延迟强退秒数（0 表示立即强退）</param>
     /// <returns>任务</returns>
-    Task ForceKickOnlineAsync(long onlineId, string? reason = null, string? connectionId = null);
+    Task ForceKickOnlineAsync(long onlineId, string? reason = null, string? connectionId = null, int delaySeconds = 0);
 
     /// <summary>
     /// 批量强制踢出在线用户
     /// </summary>
     /// <param name="onlineIds">在线用户记录 ID 列表</param>
     /// <param name="reason">强退原因</param>
+    /// <param name="delaySeconds">延迟强退秒数（0 表示立即强退）</param>
     /// <returns>任务</returns>
-    Task ForceKickOnlineBatchAsync(IEnumerable<long> onlineIds, string? reason = null);
+    Task ForceKickOnlineBatchAsync(IEnumerable<long> onlineIds, string? reason = null, int delaySeconds = 0);
 
     /// <summary>
     /// 推送私信到在线客户端
@@ -104,4 +107,57 @@ public interface ITaktSignalRDispatchService
     /// <param name="push">推送模型</param>
     /// <returns>任务</returns>
     Task PushQuartzTaskExecutedAsync(TaktSignalRQuartzTaskExecutedPush push);
+
+    /// <summary>
+    /// 推送工程变更通知到部门组（SendChangeNotification）
+    /// </summary>
+    /// <param name="push">推送模型</param>
+    /// <returns>任务</returns>
+    Task PushEcChangeNotificationAsync(TaktEcChangeNotificationPush push);
+
+    /// <summary>
+    /// 推送工程变更执行任务分配到部门组
+    /// </summary>
+    /// <param name="push">推送模型</param>
+    /// <returns>任务</returns>
+    Task PushEcExecutionTaskAssignedAsync(TaktEcExecutionTaskAssignedPush push);
+
+    /// <summary>
+    /// 推送工程变更任务进度到任务组与部门组
+    /// </summary>
+    /// <param name="push">推送模型</param>
+    /// <returns>任务</returns>
+    Task PushEcExecutionTaskProgressAsync(TaktEcExecutionTaskProgressPush push);
+
+    /// <summary>
+    /// 推送工程变更闭环完成（公司广播组）
+    /// </summary>
+    /// <param name="push">推送模型</param>
+    /// <returns>任务</returns>
+    Task PushEcChangeClosedAsync(TaktEcChangeClosedPush push);
+
+    /// <summary>
+    /// 推送工程变更任务超时/阻塞预警
+    /// </summary>
+    /// <param name="push">推送模型</param>
+    /// <returns>任务</returns>
+    Task PushEcExecutionTaskAlertAsync(TaktEcExecutionTaskAlertPush push);
+
+    /// <summary>
+    /// 向发起人推送部门确认通知
+    /// </summary>
+    /// <param name="companyCode">公司编码</param>
+    /// <param name="userName">发起人用户名</param>
+    /// <param name="payload">载荷</param>
+    /// <returns>任务</returns>
+    Task PushEcNotificationConfirmedToUserAsync(string companyCode, string userName, object payload);
+
+    /// <summary>
+    /// 向发起人推送变更闭环完成
+    /// </summary>
+    /// <param name="companyCode">公司编码</param>
+    /// <param name="userName">发起人用户名</param>
+    /// <param name="push">闭环模型</param>
+    /// <returns>任务</returns>
+    Task PushEcChangeClosedToUserAsync(string companyCode, string userName, TaktEcChangeClosedPush push);
 }

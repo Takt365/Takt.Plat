@@ -8,7 +8,7 @@
 <!-- ======================================== -->
 
 <template>
-  <div class="human-resource-personnel-employee-skill">
+  <div class="p-4">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="human:resource:personnel:employeeskill:create"
-      update-permission="human:resource:personnel:employeeskill:update"
-      delete-permission="human:resource:personnel:employeeskill:delete"
-      import-permission="human:resource:personnel:employeeskill:import"
-      export-permission="human:resource:personnel:employeeskill:export"
+      create-permission="human:resource:personnel:employee:skill:create"
+      update-permission="human:resource:personnel:employee:skill:update"
+      delete-permission="human:resource:personnel:employee:skill:delete"
+      import-permission="human:resource:personnel:employee:skill:import"
+      export-permission="human:resource:personnel:employee:skill:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -54,8 +54,8 @@
 
     <!-- 表格 -->
     <TaktSingleTable
-      :columns="columns"
       entity-scope="company"
+      :columns="columns"
       :visible-column-keys="visibleColumnKeys"
       :id-column-key="'employeeSkillId'"
       table-mode="single"
@@ -72,7 +72,7 @@
 
     </TaktSingleTable>
 
-    <!-- 分页组件 -->
+    <!-- 分页（服务端分页，外置 TaktPagination） -->
     <TaktPagination
       v-model:current="currentPage"
       v-model:page-size="pageSize"
@@ -92,6 +92,7 @@
       @cancel="handleFormCancel"
     >
       <EmployeeSkillForm
+        :key="formData?.employeeSkillId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -109,85 +110,93 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('employeeId')">
-      <a-form-item :label="t('entity.employeeSkill.employeeid')">
+      <a-form-item :label="t('entity.employeeskill.employeeid')">
         <a-input
           v-model:value="advancedQueryForm.employeeId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeSkill.employeeid') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeskill.employeeid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('skillName')">
-      <a-form-item :label="t('entity.employeeSkill.skillname')">
+      <a-form-item :label="t('entity.employeeskill.skillname')">
         <a-input
           v-model:value="advancedQueryForm.skillName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeSkill.skillname') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeskill.skillname') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('skillLevel')">
-      <a-form-item :label="t('entity.employeeSkill.skilllevel')">
+      <a-form-item :label="t('entity.employeeskill.skilllevel')">
         <a-input-number
           v-model:value="advancedQueryForm.skillLevel"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeSkill.skilllevel') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeskill.skilllevel') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('certificateName')">
-      <a-form-item :label="t('entity.employeeSkill.certificatename')">
+      <a-form-item :label="t('entity.employeeskill.certificatename')">
         <a-input
           v-model:value="advancedQueryForm.certificateName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeSkill.certificatename') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeskill.certificatename') })"
+          show-count
+          :maxlength="200"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('certificateNo')">
-      <a-form-item :label="t('entity.employeeSkill.certificateno')">
+      <a-form-item :label="t('entity.employeeskill.certificateno')">
         <a-input
           v-model:value="advancedQueryForm.certificateNo"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeSkill.certificateno') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeskill.certificateno') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('obtainedDateStart')">
-      <a-form-item :label="t('entity.employeeSkill.obtaineddatestart')">
+      <a-form-item :label="t('entity.employeeskill.obtaineddatestart')">
         <a-date-picker
           v-model:value="advancedQueryForm.obtainedDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeSkill.obtaineddatestart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeskill.obtaineddatestart') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('obtainedDateEnd')">
-      <a-form-item :label="t('entity.employeeSkill.obtaineddateend')">
+      <a-form-item :label="t('entity.employeeskill.obtaineddateend')">
         <a-date-picker
           v-model:value="advancedQueryForm.obtainedDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeSkill.obtaineddateend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeskill.obtaineddateend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('expiryDateStart')">
-      <a-form-item :label="t('entity.employeeSkill.expirydatestart')">
+      <a-form-item :label="t('entity.employeeskill.expirydatestart')">
         <a-date-picker
           v-model:value="advancedQueryForm.expiryDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeSkill.expirydatestart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeskill.expirydatestart') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('expiryDateEnd')">
-      <a-form-item :label="t('entity.employeeSkill.expirydateend')">
+      <a-form-item :label="t('entity.employeeskill.expirydateend')">
         <a-date-picker
           v-model:value="advancedQueryForm.expiryDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeSkill.expirydateend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeskill.expirydateend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
@@ -199,7 +208,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -210,17 +219,36 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('ExtField')">
-      <a-form-item :label="t('common.page.entity.ExtField')">
-        <a-input
-          v-model:value="advancedQueryForm.ExtField"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
-          allow-clear
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
+        <a-textarea
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -229,8 +257,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -240,14 +270,14 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.employeeSkill._self') })"
+      :title="t('common.dialog.title.import', { entity: t('entity.employeeskill._self') })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.employeeSkill._self"
+        entity-i18n-key="entity.employeeskill._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -274,7 +304,6 @@
 </template>
 
 <script setup lang="ts">
-import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 /**
  * 员工技能与证书管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/human-resource/personnel/employee-skill
@@ -284,12 +313,13 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import EmployeeSkillForm from './components/employee-skill-form.vue'
 import { getEmployeeSkillList, getEmployeeSkillById, createEmployeeSkill, updateEmployeeSkill, deleteEmployeeSkillById, deleteEmployeeSkillBatch, getEmployeeSkillTemplate, importEmployeeSkill, exportEmployeeSkill } from '@/api/human-resource/personnel/employee-skill'
-import type { EmployeeSkill, EmployeeSkillQuery, EmployeeSkillCreate, EmployeeSkillUpdate } from '@/types/human-resource/personnel/employee-skill'
+import type { EmployeeSkill, EmployeeSkillQuery } from '@/types/human-resource/personnel/employee-skill'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -297,7 +327,7 @@ const { t } = useI18n()
 const excelNames = taktExcelEntityNames('TaktEmployeeSkill')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.employeeSkill._self') })
+  () => t('common.page.form.placeholder.search', { keyword: t('entity.employeeskill._self') })
 )
 
 /** 快捷查询关键字 */
@@ -324,11 +354,13 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<EmployeeSkill>>({})
+const formData = ref<Partial<EmployeeSkill> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
@@ -343,23 +375,23 @@ const advancedQueryForm = ref({
   expiryDateEnd: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'employeeId', label: t('entity.employeeSkill.employeeid') },
-  { key: 'skillName', label: t('entity.employeeSkill.skillname') },
-  { key: 'skillLevel', label: t('entity.employeeSkill.skilllevel') },
-  { key: 'certificateName', label: t('entity.employeeSkill.certificatename') },
-  { key: 'certificateNo', label: t('entity.employeeSkill.certificateno') },
-  { key: 'obtainedDateStart', label: t('entity.employeeSkill.obtaineddatestart') },
-  { key: 'obtainedDateEnd', label: t('entity.employeeSkill.obtaineddateend') },
-  { key: 'expiryDateStart', label: t('entity.employeeSkill.expirydatestart') },
-  { key: 'expiryDateEnd', label: t('entity.employeeSkill.expirydateend') },
+  { key: 'employeeId', label: t('entity.employeeskill.employeeid') },
+  { key: 'skillName', label: t('entity.employeeskill.skillname') },
+  { key: 'skillLevel', label: t('entity.employeeskill.skilllevel') },
+  { key: 'certificateName', label: t('entity.employeeskill.certificatename') },
+  { key: 'certificateNo', label: t('entity.employeeskill.certificateno') },
+  { key: 'obtainedDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.employeeskill.obtaineddate')) },
+  { key: 'obtainedDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.employeeskill.obtaineddate')) },
+  { key: 'expiryDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.employeeskill.expirydate')) },
+  { key: 'expiryDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.employeeskill.expirydate')) },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'ExtField', label: t('common.page.entity.ExtField') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -378,10 +410,52 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
 
-/** 页面挂载后加载分页列表 */
-onMounted(() => {
+
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {EmployeeSkillQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<EmployeeSkillQuery>): EmployeeSkillQuery {
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: EmployeeSkillQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: keyof EmployeeSkillQuery, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v as never
+    }
+  }
+  assignTrimmed('employeeId', form.employeeId)
+  assignTrimmed('skillName', form.skillName)
+  if (form.skillLevel !== undefined && form.skillLevel !== null) {
+    query.skillLevel = form.skillLevel
+  }
+  assignTrimmed('certificateName', form.certificateName)
+  assignTrimmed('certificateNo', form.certificateNo)
+  assignTrimmed('obtainedDateStart', form.obtainedDateStart)
+  assignTrimmed('obtainedDateEnd', form.obtainedDateEnd)
+  assignTrimmed('expiryDateStart', form.expiryDateStart)
+  assignTrimmed('expiryDateEnd', form.expiryDateEnd)
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('extField', form.extField)
+  assignTrimmed('remark', form.remark)
+  return query
+}
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
   loadData()
 })
+
 
 
 
@@ -401,7 +475,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeSkillField(record, 'employeeSkillId') ?? ''
   },
   {
-    title: t('entity.employeeSkill.employeeid'),
+    title: t('entity.employeeskill.employeeid'),
     dataIndex: 'employeeId',
     key: 'employeeId',
     width: 120,
@@ -410,16 +484,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeSkillField(record, 'employeeId') ?? ''
   },
   {
-    title: t('entity.employeeSkill.employeename'),
-    dataIndex: 'employeeName',
-    key: 'employeeName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmployeeSkillField(record, 'employeeName') ?? ''
-  },
-  {
-    title: t('entity.employeeSkill.skillname'),
+    title: t('entity.employeeskill.skillname'),
     dataIndex: 'skillName',
     key: 'skillName',
     width: 120,
@@ -428,7 +493,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeSkillField(record, 'skillName') ?? ''
   },
   {
-    title: t('entity.employeeSkill.skilllevel'),
+    title: t('entity.employeeskill.skilllevel'),
     dataIndex: 'skillLevel',
     key: 'skillLevel',
     width: 120,
@@ -437,7 +502,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeSkillField(record, 'skillLevel') ?? ''
   },
   {
-    title: t('entity.employeeSkill.certificatename'),
+    title: t('entity.employeeskill.certificatename'),
     dataIndex: 'certificateName',
     key: 'certificateName',
     width: 120,
@@ -446,7 +511,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeSkillField(record, 'certificateName') ?? ''
   },
   {
-    title: t('entity.employeeSkill.certificateno'),
+    title: t('entity.employeeskill.certificateno'),
     dataIndex: 'certificateNo',
     key: 'certificateNo',
     width: 120,
@@ -455,7 +520,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeSkillField(record, 'certificateNo') ?? ''
   },
   {
-    title: t('entity.employeeSkill.obtaineddate'),
+    title: t('entity.employeeskill.obtaineddate'),
     dataIndex: 'obtainedDate',
     key: 'obtainedDate',
     width: 120,
@@ -464,7 +529,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeSkillField(record, 'obtainedDate') ?? ''
   },
   {
-    title: t('entity.employeeSkill.expirydate'),
+    title: t('entity.employeeskill.expirydate'),
     dataIndex: 'expiryDate',
     key: 'expiryDate',
     width: 120,
@@ -479,7 +544,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'human:resource:personnel:employeeskill:update',
+        permission: 'human:resource:personnel:employee:skill:update',
         onClick: (record: EmployeeSkill) => handleEdit(record)
       },
       {
@@ -487,7 +552,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'human:resource:personnel:employeeskill:delete',
+        permission: 'human:resource:personnel:employee:skill:delete',
         onClick: (record: EmployeeSkill) => handleDeleteOne(record)
       }
     ]
@@ -503,6 +568,7 @@ const getEmployeeSkillId = (record: any): string => record?.[entityIdName] ?? ''
  */
 const getEmployeeSkillField = (record: any, field: string): any => record?.[field]
 
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -514,7 +580,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: EmployeeSkill, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getEmployeeSkillId(selectedRow.value) === getEmployeeSkillId(record)) {
+    } else if (selectedRow.value && getEmployeeSkillId(selectedRow.value) === getEmployeeSkillId(record)) {
       selectedRow.value = null
     }
   },
@@ -545,16 +611,7 @@ const onClickRow = (record: EmployeeSkill) => ({
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: EmployeeSkillQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getEmployeeSkillList(params)
+    const res = await getEmployeeSkillList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
@@ -572,7 +629,7 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -591,22 +648,23 @@ function handleReset() {
   expiryDateEnd: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.employeeSkill._self') })
-  formData.value = {}
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.employeeskill._self') })
+  formData.value = null
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗 */
 function handleEdit(record: EmployeeSkill) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.employeeSkill._self') })
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.employeeskill._self') })
   formData.value = { ...record }
   formVisible.value = true
 }
@@ -616,7 +674,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.employeeSkill._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.employeeskill._self') }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -634,12 +692,14 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateEmployeeSkill(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.employeeSkill._self') }))
+      message.success(t('common.feedback.updated', { target: t('entity.employeeskill._self') }))
     } else {
       await createEmployeeSkill(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.employeeSkill._self') }))
+      message.success(t('common.feedback.created', { target: t('entity.employeeskill._self') }))
     }
     formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
     loadData()
   } finally {
     formLoading.value = false
@@ -649,6 +709,8 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开导入对话框 */
 function handleImport() {
@@ -680,16 +742,11 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: EmployeeSkillQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportEmployeeSkill(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportEmployeeSkill(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -708,10 +765,10 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.employeeSkill._self') }))
+    message.success(t('common.feedback.export.success', { target: t('entity.employeeskill._self') }))
   } catch (error: any) {
     logger.error('[EmployeeSkill] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.employeeSkill._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.employeeskill._self') }))
   } finally {
     loading.value = false
   }
@@ -720,12 +777,12 @@ async function handleExport() {
 async function handleDeleteOne(record: EmployeeSkill) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.employeeSkill._self'), name: t('common.tip.this.target', { target: t('entity.employeeSkill._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: t('entity.employeeskill._self'), name: t('common.tip.this.target', { target: t('entity.employeeskill._self') }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteEmployeeSkillById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.employeeSkill._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.employeeskill._self') }))
       loadData()
     }
   })
@@ -733,18 +790,18 @@ async function handleDeleteOne(record: EmployeeSkill) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.employeeSkill._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.employeeskill._self') }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.employeeSkill._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: t('entity.employeeskill._self'), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteEmployeeSkillBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.employeeSkill._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.employeeskill._self') }))
       loadData()
     }
   })
@@ -757,7 +814,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -774,7 +831,7 @@ function handleAdvancedQueryReset() {
   expiryDateEnd: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
 }
@@ -804,23 +861,16 @@ function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
 /** 分页页码变更 */
-function handlePaginationChange(page: number) {
+function handlePaginationChange(page: number, size: number) {
   currentPage.value = page
+  pageSize.value = size
   loadData()
 }
-/** 分页每页条数变更 */
+
+/** 分页每页条数变更（重置到第 1 页） */
 function handlePaginationSizeChange(_current: number, size: number) {
+  currentPage.value = getTaktDefaultPageIndex()
   pageSize.value = size
-  currentPage.value = 1
   loadData()
 }
 </script>
-
-<style scoped lang="css">
-.human-resource-personnel-employee-skill {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-</style>

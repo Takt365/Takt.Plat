@@ -4,7 +4,7 @@
 // 文件名称：takt-idle-session.ts
 // 创建时间：2026-05-26
 // 创建人：Takt365(Cursor AI)
-// 功能描述：用户无操作超时自动登出（按 lastActivityAt 累计空闲 → 预警 Modal → executeIdleLogoutAsync）
+// 功能描述：用户无操作超时自动登出（wall-clock 巡检 + 可选预警 Modal → 自动跳转登录页）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -51,6 +51,12 @@ let isHandlingIdle = false;
 /** 是否已向 window/document 注册活动与可见性监听 */
 let listenersAttached = false;
 
+/** 空闲 wall-clock 巡检（缓解后台标签页 setTimeout 节流导致无法自动登出） */
+let idleWatchInterval: ReturnType<typeof setInterval> | null = null;
+
+/** 巡检间隔（毫秒） */
+const IDLE_WATCH_INTERVAL_MS = 15_000;
+
 /**
  * 清除空闲计时器
  */
@@ -88,10 +94,53 @@ function getIdleElapsedMs(): number {
 }
 
 /**
- * 弹出空闲预警（layouts.page.session.*）
- * @param warningMinutes Modal 文案与倒计时分钟数（向上取整，至少 1）
+ * 距离空闲总超时还剩多少毫秒（≤0 表示应立刻登出）
  */
-function showIdleWarningModal(warningMinutes: number): void {
+function getIdleRemainingMs(): number {
+  const timeoutMs = getAuthIdleTimeoutMs();
+  if (timeoutMs <= 0) {
+    return Number.POSITIVE_INFINITY;
+  }
+  return timeoutMs - getIdleElapsedMs();
+}
+
+/**
+ * 按 wall-clock 校验是否应预警或登出（不依赖可能被节流的 setTimeout）
+ */
+function enforceIdlePolicyByWallClock(): void {
+  const userStore = useUserStore();
+  if (!userStore.isLoggedIn || isHandlingIdle || isLogoutInProgress()) {
+    return;
+  }
+
+  const timeoutMs = getAuthIdleTimeoutMs();
+  if (timeoutMs <= 0) {
+    return;
+  }
+
+  const remainingMs = getIdleRemainingMs();
+  if (remainingMs <= 0) {
+    void handleIdleTimeout();
+    return;
+  }
+
+  const warningMs = getAuthIdleWarningMs();
+  if (warningMs > 0 && !destroyWarningModal) {
+    const warningAtMs = timeoutMs - warningMs;
+    const elapsedMs = getIdleElapsedMs();
+    if (elapsedMs >= warningAtMs) {
+      const warningMinutes = Math.max(1, Math.ceil(remainingMs / 60_000));
+      showIdleWarningModal(warningMinutes, remainingMs);
+    }
+  }
+}
+
+/**
+ * 弹出空闲预警（layouts.page.session.*）
+ * @param warningMinutes Modal 文案分钟数（向上取整，至少 1）
+ * @param remainingMs 距离总超时剩余毫秒（用于自动登出计时，避免 countdown 长于实际剩余时间）
+ */
+function showIdleWarningModal(warningMinutes: number, remainingMs?: number): void {
   if (destroyWarningModal || isHandlingIdle || isLogoutInProgress()) {
     return;
   }
@@ -104,7 +153,10 @@ function showIdleWarningModal(warningMinutes: number): void {
   clearIdleTimer();
 
   const minutes = Math.max(1, warningMinutes);
-  const warningMs = minutes * 60_000;
+  const logoutAfterMs = Math.max(
+    1_000,
+    remainingMs ?? minutes * 60_000,
+  );
   const modal = Modal.confirm({
     title: translateLocaleMessage('layouts.page.session.title'),
     content: translateLocaleMessage('layouts.page.session.content', { minutes }),
@@ -127,7 +179,7 @@ function showIdleWarningModal(warningMinutes: number): void {
   warningLogoutTimer = setTimeout(() => {
     clearIdleWarningState();
     void handleIdleTimeout();
-  }, warningMs);
+  }, logoutAfterMs);
 }
 
 /**
@@ -165,13 +217,14 @@ function scheduleIdleTimer(): void {
     if (untilWarningMs <= 0) {
       if (!destroyWarningModal && !isHandlingIdle) {
         const warningMinutes = Math.max(1, Math.ceil(remainingMs / 60_000));
-        showIdleWarningModal(warningMinutes);
+        showIdleWarningModal(warningMinutes, remainingMs);
       }
       return;
     }
 
     idleTimer = setTimeout(() => {
-      showIdleWarningModal(getAuthIdleWarningMinutes());
+      const msLeft = getIdleRemainingMs();
+      showIdleWarningModal(getAuthIdleWarningMinutes(), msLeft);
     }, untilWarningMs);
     return;
   }
@@ -244,30 +297,45 @@ function onUserActivity(event?: Event): void {
 }
 
 /**
- * 标签页重新可见：按 wall-clock 校验已空闲时长，禁止把「切回标签」当成活动
+ * 标签页重新可见 / 窗口聚焦：按 wall-clock 校验已空闲时长（弹窗已显示时也须强制登出）
  */
-function onVisibilityChange(): void {
+function onVisibilityOrFocusResume(): void {
   if (document.hidden) {
     return;
   }
 
   const userStore = useUserStore();
-  if (!userStore.isLoggedIn || isHandlingIdle || destroyWarningModal) {
+  if (!userStore.isLoggedIn || isHandlingIdle) {
     return;
   }
 
-  const timeoutMs = getAuthIdleTimeoutMs();
-  if (timeoutMs <= 0) {
+  enforceIdlePolicyByWallClock();
+  if (!isHandlingIdle) {
+    scheduleIdleTimer();
+  }
+}
+
+/**
+ * 启动 wall-clock 巡检
+ */
+function startIdleWatchInterval(): void {
+  if (idleWatchInterval !== null) {
     return;
   }
 
-  const elapsedMs = getIdleElapsedMs();
-  if (elapsedMs >= timeoutMs) {
-    void handleIdleTimeout();
-    return;
-  }
+  idleWatchInterval = setInterval(() => {
+    enforceIdlePolicyByWallClock();
+  }, IDLE_WATCH_INTERVAL_MS);
+}
 
-  scheduleIdleTimer();
+/**
+ * 停止 wall-clock 巡检
+ */
+function stopIdleWatchInterval(): void {
+  if (idleWatchInterval !== null) {
+    clearInterval(idleWatchInterval);
+    idleWatchInterval = null;
+  }
 }
 
 /**
@@ -284,7 +352,8 @@ function attachActivityListeners(): void {
     window.addEventListener(eventName, onUserActivity, { passive: true, capture: true });
   });
 
-  document.addEventListener('visibilitychange', onVisibilityChange);
+  document.addEventListener('visibilitychange', onVisibilityOrFocusResume);
+  window.addEventListener('focus', onVisibilityOrFocusResume);
 }
 
 /**
@@ -309,11 +378,13 @@ export function initTaktIdleSession(): void {
         if (accessToken) {
           lastActivityAt = Date.now();
           scheduleIdleTimer();
+          startIdleWatchInterval();
           return;
         }
 
         clearIdleTimer();
         clearIdleWarningState();
+        stopIdleWatchInterval();
         isHandlingIdle = false;
         lastActivityAt = 0;
       },
@@ -324,6 +395,7 @@ export function initTaktIdleSession(): void {
   EventBus.on('user:login', () => {
     lastActivityAt = Date.now();
     scheduleIdleTimer();
+    startIdleWatchInterval();
   });
 
   idleSessionLogger.info('空闲自动登出已启用', {

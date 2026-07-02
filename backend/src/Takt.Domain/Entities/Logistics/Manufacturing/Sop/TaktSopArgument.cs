@@ -26,21 +26,21 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Sop;
 public class TaktSopArgument : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 执行追溯 ID（关联 TaktSopExec.Id，选项 TaktSopExecs/options）
     /// </summary>
     [SugarColumn(ColumnName = "exec_id", ColumnDescription = "执行追溯ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ExecId { get; set; }
 
     /// <summary>
-    /// 工步执行明细 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工步执行明细 ID（关联 TaktSopExecStep.Id，选项 TaktSopExecSteps/options）
     /// </summary>
     [SugarColumn(ColumnName = "exec_step_id", ColumnDescription = "工步执行明细ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ExecStepId { get; set; }
 
     /// <summary>
-    /// 工序参数定义 ID（关联 TaktRoutingItemArgument，序列化为 string 以避免 Javascript 精度问题）
+    /// 工序参数定义 ID（关联 TaktRoutingItemArgument.Id，选项 TaktRoutingItemArguments/options）
     /// </summary>
     [SugarColumn(ColumnName = "routing_item_parameter_id", ColumnDescription = "工序参数定义ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -59,7 +59,7 @@ public class TaktSopArgument : TaktCompanyEntityBase
     public decimal ActualValue { get; set; }
 
     /// <summary>
-    /// 是否超差（字典 sys_yes_no_type，0=否，1=是）
+    /// 是否超差（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_out_of_range", ColumnDescription = "是否超差", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsOutOfRange { get; set; } = 0;

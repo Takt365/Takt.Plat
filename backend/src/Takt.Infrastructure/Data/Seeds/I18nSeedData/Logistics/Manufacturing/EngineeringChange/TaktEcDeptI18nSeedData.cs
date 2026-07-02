@@ -2,9 +2,9 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcDeptI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-06-28
 // 创建人：Takt365(Auto Generated)
-// 功能描述：TaktEcDept 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
+// 功能描述：TaktEcExec 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -20,7 +20,7 @@ using Takt.Shared.Helpers;
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.EngineeringChange;
 
 /// <summary>
-/// TaktEcDept 实体国际化翻译种子（键前缀 entity.ecdept.*）
+/// TaktEcExec 实体国际化翻译种子（键前缀 entity.ecdept.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktEcDeptI18nSeedData : ITaktSeedDataCoordinator
@@ -35,7 +35,7 @@ public class TaktEcDeptI18nSeedData : ITaktSeedDataCoordinator
     /// </summary>
     public async Task<(int InsertCount, int UpdateCount)> SeedAsync(IServiceProvider serviceProvider, string? tenantCode = null)
     {
-        TaktLogger.Information("开始初始化 TaktEcDept 实体国际化翻译种子...");
+        TaktLogger.Information("开始初始化 TaktEcExec 实体国际化翻译种子...");
 
         if (string.IsNullOrEmpty(tenantCode))
         {
@@ -69,12 +69,12 @@ public class TaktEcDeptI18nSeedData : ITaktSeedDataCoordinator
             updateCount += u;
         }
 
-        TaktLogger.Information("TaktEcDept 实体翻译种子完成: 插入 {InsertCount} 条，更新 {UpdateCount} 条", insertCount, updateCount);
+        TaktLogger.Information("TaktEcExec 实体翻译种子完成: 插入 {InsertCount} 条，更新 {UpdateCount} 条", insertCount, updateCount);
         return (insertCount, updateCount);
     }
 
     /// <summary>
-    /// TaktEcDept 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
+    /// TaktEcExec 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
     /// I18nKey：entity.ecdept._self / entity.ecdept.{{field}}；ResourceGroup=EngineeringChange；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetEcDeptTranslations()
@@ -127,13 +127,13 @@ public class TaktEcDeptI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ecdept.deptcode", "zh-HK", "部门编码_hk", "部门编码。顺序严格为：Eng=技术, Pmc=生管, Mp=采购, Iqc=受检, Mc=部管, Pcba=制二, Assy=制一, Qa=品管, Te=制技。"),
 
             // entity.ecdept.isimplemented
-            new TranslationSeedItem("entity.ecdept.isimplemented", "en-US", "是否实施_us", "是否实施（0=否 1=是）"),
+            new TranslationSeedItem("entity.ecdept.isimplemented", "en-US", "实施_us", "是否实施（0=否 1=是）"),
             // entity.ecdept.isimplemented
-            new TranslationSeedItem("entity.ecdept.isimplemented", "ja-JP", "是否实施_jp", "是否实施（0=否 1=是）"),
+            new TranslationSeedItem("entity.ecdept.isimplemented", "ja-JP", "实施_jp", "是否实施（0=否 1=是）"),
             // entity.ecdept.isimplemented
-            new TranslationSeedItem("entity.ecdept.isimplemented", "zh-CN", "是否实施", "是否实施（0=否 1=是）"),
+            new TranslationSeedItem("entity.ecdept.isimplemented", "zh-CN", "实施", "是否实施（0=否 1=是）"),
             // entity.ecdept.isimplemented
-            new TranslationSeedItem("entity.ecdept.isimplemented", "zh-HK", "是否实施_hk", "是否实施（0=否 1=是）"),
+            new TranslationSeedItem("entity.ecdept.isimplemented", "zh-HK", "实施_hk", "是否实施（0=否 1=是）"),
 
             // entity.ecdept.content
             new TranslationSeedItem("entity.ecdept.content", "en-US", "内容_us", "内容（各部门通用）"),
@@ -143,6 +143,24 @@ public class TaktEcDeptI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ecdept.content", "zh-CN", "内容", "内容（各部门通用）"),
             // entity.ecdept.content
             new TranslationSeedItem("entity.ecdept.content", "zh-HK", "内容_hk", "内容（各部门通用）"),
+
+            // entity.ecdept.entrydate
+            new TranslationSeedItem("entity.ecdept.entrydate", "en-US", "录入日期_us", "录入日期"),
+            // entity.ecdept.entrydate
+            new TranslationSeedItem("entity.ecdept.entrydate", "ja-JP", "录入日期_jp", "录入日期"),
+            // entity.ecdept.entrydate
+            new TranslationSeedItem("entity.ecdept.entrydate", "zh-CN", "录入日期", "录入日期"),
+            // entity.ecdept.entrydate
+            new TranslationSeedItem("entity.ecdept.entrydate", "zh-HK", "录入日期_hk", "录入日期"),
+
+            // entity.ecdept.ecleader
+            new TranslationSeedItem("entity.ecdept.ecleader", "en-US", "担当_us", "担当（EcLeader）"),
+            // entity.ecdept.ecleader
+            new TranslationSeedItem("entity.ecdept.ecleader", "ja-JP", "担当_jp", "担当（EcLeader）"),
+            // entity.ecdept.ecleader
+            new TranslationSeedItem("entity.ecdept.ecleader", "zh-CN", "担当", "担当（EcLeader）"),
+            // entity.ecdept.ecleader
+            new TranslationSeedItem("entity.ecdept.ecleader", "zh-HK", "担当_hk", "担当（EcLeader）"),
 
             // entity.ecdept.scheduledproductiondate
             new TranslationSeedItem("entity.ecdept.scheduledproductiondate", "en-US", "预计生产日期_us", "预计生产日期"),
@@ -297,6 +315,15 @@ public class TaktEcDeptI18nSeedData : ITaktSeedDataCoordinator
             // entity.ecdept.implementationdate
             new TranslationSeedItem("entity.ecdept.implementationdate", "zh-HK", "实施日期_hk", "实施日期"),
 
+            // entity.ecdept.implementationbatch
+            new TranslationSeedItem("entity.ecdept.implementationbatch", "en-US", "实施批次_us", "实施批次"),
+            // entity.ecdept.implementationbatch
+            new TranslationSeedItem("entity.ecdept.implementationbatch", "ja-JP", "实施批次_jp", "实施批次"),
+            // entity.ecdept.implementationbatch
+            new TranslationSeedItem("entity.ecdept.implementationbatch", "zh-CN", "实施批次", "实施批次"),
+            // entity.ecdept.implementationbatch
+            new TranslationSeedItem("entity.ecdept.implementationbatch", "zh-HK", "实施批次_hk", "实施批次"),
+
             // entity.ecdept.inspectionbatch
             new TranslationSeedItem("entity.ecdept.inspectionbatch", "en-US", "检验批次_us", "检验批次"),
             // entity.ecdept.inspectionbatch
@@ -314,6 +341,15 @@ public class TaktEcDeptI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ecdept.samplingno", "zh-CN", "抽样号码", "抽样号码"),
             // entity.ecdept.samplingno
             new TranslationSeedItem("entity.ecdept.samplingno", "zh-HK", "抽样号码_hk", "抽样号码"),
+
+            // entity.ecdept.confirmationdate
+            new TranslationSeedItem("entity.ecdept.confirmationdate", "en-US", "确认日期_us", "确认日期"),
+            // entity.ecdept.confirmationdate
+            new TranslationSeedItem("entity.ecdept.confirmationdate", "ja-JP", "确认日期_jp", "确认日期"),
+            // entity.ecdept.confirmationdate
+            new TranslationSeedItem("entity.ecdept.confirmationdate", "zh-CN", "确认日期", "确认日期"),
+            // entity.ecdept.confirmationdate
+            new TranslationSeedItem("entity.ecdept.confirmationdate", "zh-HK", "确认日期_hk", "确认日期"),
 
             // entity.ecdept.issopupdated
             new TranslationSeedItem("entity.ecdept.issopupdated", "en-US", "是否更新SOP_us", "是否更新SOP（0=否 1=是）"),

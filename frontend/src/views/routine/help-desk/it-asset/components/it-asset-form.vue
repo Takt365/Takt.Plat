@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/routine/help-desk/it-asset/components -->
 <!-- 文件名称：it-asset-form.vue -->
-<!-- 功能描述：服务台 IT 设备保修扩展实体维护弹窗内嵌表单。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：服务台 IT 设备保修扩展实体维护弹窗内嵌表单。由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -10,6 +10,7 @@
 <template>
   <a-form
     ref="formRef"
+    class="takt-generated-form"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -19,7 +20,6 @@
       v-model:active-key="activeTab"
       class="it-asset-form-tabs"
     >
-      <!-- 主表 -->
       <a-tab-pane
         key="tab-0"
         :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
@@ -35,8 +35,9 @@
                 <a-input
                   v-model:value="formState.tenantCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -48,8 +49,9 @@
                 <a-input
                   v-model:value="formState.companyCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -61,100 +63,103 @@
                 <a-input
                   v-model:value="formState.companyDefaultCulture"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.itAsset.assetcode')"
+                :label="t('entity.itasset.assetcode')"
                 name="assetCode"
               >
                 <a-input
                   v-model:value="formState.assetCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.itAsset.assetcode') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.itasset.assetcode') })"
+                  show-count
+                  :maxlength="40"
                   allow-clear
+                  :disabled="!!formData?.itAssetId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.itAsset.warrantytype')"
+                :label="t('entity.itasset.warrantytype')"
                 name="warrantyType"
               >
                 <a-input-number
                   v-model:value="formState.warrantyType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.itAsset.warrantytype') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.itasset.warrantytype') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.itAsset.warrantystartdate')"
+                :label="t('entity.itasset.warrantystartdate')"
                 name="warrantyStartDate"
               >
                 <a-date-picker
                   v-model:value="formState.warrantyStartDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.itAsset.warrantystartdate') })"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.itasset.warrantystartdate') })"
                   value-format="YYYY-MM-DD"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.itAsset.warrantyexpirydate')"
+                :label="t('entity.itasset.warrantyexpirydate')"
                 name="warrantyExpiryDate"
               >
                 <a-date-picker
                   v-model:value="formState.warrantyExpiryDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.itAsset.warrantyexpirydate') })"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.itasset.warrantyexpirydate') })"
                   value-format="YYYY-MM-DD"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.itAsset.warrantyprovider')"
+                :label="t('entity.itasset.warrantyprovider')"
                 name="warrantyProvider"
               >
                 <a-input
                   v-model:value="formState.warrantyProvider"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.itAsset.warrantyprovider') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.itasset.warrantyprovider') })"
+                  show-count
+                  :maxlength="200"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.itAsset.warrantycontractno')"
+                :label="t('entity.itasset.warrantycontractno')"
                 name="warrantyContractNo"
               >
                 <a-input
                   v-model:value="formState.warrantyContractNo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.itAsset.warrantycontractno') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.itasset.warrantycontractno') })"
+                  show-count
+                  :maxlength="100"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.itAsset.servicehotline')"
+                :label="t('entity.itasset.servicehotline')"
                 name="serviceHotline"
               >
                 <a-input
                   v-model:value="formState.serviceHotline"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.itAsset.servicehotline') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.itasset.servicehotline') })"
+                  show-count
+                  :maxlength="50"
                   allow-clear
                 />
               </a-form-item>
@@ -169,83 +174,93 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.itAsset.serviceemail')"
+                :label="t('entity.itasset.serviceemail')"
                 name="serviceEmail"
               >
                 <a-input
                   v-model:value="formState.serviceEmail"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.itAsset.serviceemail') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.itasset.serviceemail') })"
+                  show-count
+                  :maxlength="100"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.itAsset.maintenanceexpirydate')"
+                :label="t('entity.itasset.maintenanceexpirydate')"
                 name="maintenanceExpiryDate"
               >
                 <a-date-picker
                   v-model:value="formState.maintenanceExpiryDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.itAsset.maintenanceexpirydate') })"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.itasset.maintenanceexpirydate') })"
                   value-format="YYYY-MM-DD"
-                  size="small"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.itAsset.lastmaintenancedate')"
-                name="lastMaintenanceDate"
-              >
-                <a-date-picker
-                  v-model:value="formState.lastMaintenanceDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.itAsset.lastmaintenancedate') })"
-                  value-format="YYYY-MM-DD"
-                  size="small"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.itAsset.nextmaintenancedate')"
-                name="nextMaintenanceDate"
-              >
-                <a-date-picker
-                  v-model:value="formState.nextMaintenanceDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.itAsset.nextmaintenancedate') })"
-                  value-format="YYYY-MM-DD"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.itAsset.warrantyremark')"
+                :label="t('entity.itasset.lastmaintenancedate')"
+                name="lastMaintenanceDate"
+              >
+                <a-date-picker
+                  v-model:value="formState.lastMaintenanceDate"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.itasset.lastmaintenancedate') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="t('entity.itasset.nextmaintenancedate')"
+                name="nextMaintenanceDate"
+              >
+                <a-date-picker
+                  v-model:value="formState.nextMaintenanceDate"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.itasset.nextmaintenancedate') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="t('entity.itasset.warrantyremark')"
                 name="warrantyRemark"
               >
                 <a-textarea
                   v-model:value="formState.warrantyRemark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.itAsset.warrantyremark') })"
+                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.itasset.warrantyremark') })"
                   :rows="2"
-                  size="small"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.ExtField')"
-                name="ExtField"
+                name="extField"
+                class="takt-form-item-ext-field"
               >
-                <a-input
-                  v-model:value="formState.ExtField"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
-                  size="small"
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t('common.page.entity.extfieldhint')"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ t('common.page.entity.extfield') }}</span>
+                  </span>
+                </template>
+                <a-textarea
+                  v-model:value="formState.extField"
+                  :placeholder="t('common.page.form.placeholder.extfield')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
                   allow-clear
                 />
               </a-form-item>
@@ -258,158 +273,15 @@
                 <a-textarea
                   v-model:value="formState.remark"
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                  :rows="2"
-                  size="small"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
           </a-row>
         </div>
-      </a-tab-pane>
-      <!-- 子表：itAssetChangeLog -->
-      <a-tab-pane
-        key="child-changeLogs"
-        :tab="t('entity.itAssetChangeLog._self')"
-        force-render
-      >
-        <div class="mb-2">
-          <a-button type="primary" size="small" @click="handleAddItAssetChangeLogRow">
-            {{ t('common.page.button.create') }}{{ t('entity.itAssetChangeLog._self') }}
-          </a-button>
-        </div>
-        <a-table
-          :columns="itAssetChangeLogFormColumns"
-          :data-source="childItAssetChangeLogRows"
-          :pagination="false"
-          :row-key="(row: Record<string, unknown>, index?: number) => String(row.__rowKey ?? index ?? 0)"
-          size="small"
-          bordered
-        >
-          <template #bodyCell="{ column, record, index }">
-
-            <template v-else-if="column.key === '__action'">
-              <a-button type="link" danger size="small" @click="handleRemoveItAssetChangeLogRow(index)">
-                {{ t('common.page.button.delete') }}
-              </a-button>
-            </template>
-          </template>
-        </a-table>
-      </a-tab-pane>
-      <!-- 子表：ticket -->
-      <a-tab-pane
-        key="child-tickets"
-        :tab="t('entity.ticket._self')"
-        force-render
-      >
-        <div class="mb-2">
-          <a-button type="primary" size="small" @click="handleAddTicketRow">
-            {{ t('common.page.button.create') }}{{ t('entity.ticket._self') }}
-          </a-button>
-        </div>
-        <a-table
-          :columns="ticketFormColumns"
-          :data-source="childTicketRows"
-          :pagination="false"
-          :row-key="(row: Record<string, unknown>, index?: number) => String(row.__rowKey ?? index ?? 0)"
-          size="small"
-          bordered
-        >
-          <template #bodyCell="{ column, record, index }">
-            <template v-if="column.key === 'tenantCode'">
-              <a-input
-                v-model:value="record.tenantCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyCode'">
-              <a-input
-                v-model:value="record.companyCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyDefaultCulture'">
-              <a-input
-                v-model:value="record.companyDefaultCulture"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'ticketNo'">
-              <a-input
-                v-model:value="record.ticketNo"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.no') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'title'">
-              <a-input
-                v-model:value="record.title"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.title') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'content'">
-              <a-textarea
-                v-model:value="record.content"
-                :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.ticket.content') })"
-                :rows="2"
-                size="small"
-              />
-            </template>
-            <template v-else-if="column.key === 'attachmentsJson'">
-              <a-input
-                v-model:value="record.attachmentsJson"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.attachmentsjson') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'ticketStatus'">
-              <a-input-number
-                v-model:value="record.ticketStatus"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.status') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === 'priority'">
-              <a-input-number
-                v-model:value="record.priority"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.priority') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === 'categoryCode'">
-              <a-input
-                v-model:value="record.categoryCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.categorycode') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'ticketSource'">
-              <a-input-number
-                v-model:value="record.ticketSource"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.source') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === '__action'">
-              <a-button type="link" danger size="small" @click="handleRemoveTicketRow(index)">
-                {{ t('common.page.button.delete') }}
-              </a-button>
-            </template>
-          </template>
-        </a-table>
       </a-tab-pane>
     </a-tabs>
   </a-form>
@@ -417,13 +289,14 @@
 
 <script setup lang="ts">
 /**
- * 服务台 IT 设备保修扩展实体维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
+ * 服务台 IT 设备保修扩展实体维护表单 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/routine/help-desk/it-asset/components
  */
 import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
-import type { ItAssetCreate, ItAssetChangeLogCreate, ItAssetChangeLog, TicketCreate, Ticket } from '@/types/routine/help-desk/it-asset'
+import type { ItAssetCreate } from '@/types/routine/help-desk/it-asset'
+import { RiQuestionLine } from '@remixicon/vue'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -456,156 +329,8 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","assetCode","warrantyType","warrantyStartDate","warrantyExpiryDate","warrantyProvider","warrantyContractNo","serviceHotline","serviceEmail","maintenanceExpiryDate","lastMaintenanceDate","nextMaintenanceDate","warrantyRemark","ExtField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","assetCode","warrantyType","warrantyStartDate","warrantyExpiryDate","warrantyProvider","warrantyContractNo","serviceHotline","serviceEmail","maintenanceExpiryDate","lastMaintenanceDate","nextMaintenanceDate","warrantyRemark","extField","remark"]
 
-/** itAssetChangeLog 子表行（表单 Tab 内嵌） */
-const childItAssetChangeLogRows = ref<Record<string, unknown>[]>([])
-/** ticket 子表行（表单 Tab 内嵌） */
-const childTicketRows = ref<Record<string, unknown>[]>([])
-
-/** 子表 itAssetChangeLog 表单列定义 */
-const itAssetChangeLogFormColumns = computed(() => [
-
-  {
-    title: t('common.page.entity.action'),
-    key: '__action',
-    width: 80,
-    fixed: 'right',
-  },
-])
-
-/** 子表 ticket 表单列定义 */
-const ticketFormColumns = computed(() => [
-  {
-    title: t('common.page.entity.tenantcode'),
-    dataIndex: 'tenantCode',
-    key: 'tenantCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companycode'),
-    dataIndex: 'companyCode',
-    key: 'companyCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companydefaultculture'),
-    dataIndex: 'companyDefaultCulture',
-    key: 'companyDefaultCulture',
-    width: 140,
-  },
-  {
-    title: t('entity.ticket.no'),
-    dataIndex: 'ticketNo',
-    key: 'ticketNo',
-    width: 140,
-  },
-  {
-    title: t('entity.ticket.title'),
-    dataIndex: 'title',
-    key: 'title',
-    width: 140,
-  },
-  {
-    title: t('entity.ticket.content'),
-    dataIndex: 'content',
-    key: 'content',
-    width: 140,
-  },
-  {
-    title: t('entity.ticket.attachmentsjson'),
-    dataIndex: 'attachmentsJson',
-    key: 'attachmentsJson',
-    width: 140,
-  },
-  {
-    title: t('entity.ticket.status'),
-    dataIndex: 'ticketStatus',
-    key: 'ticketStatus',
-    width: 140,
-  },
-  {
-    title: t('entity.ticket.priority'),
-    dataIndex: 'priority',
-    key: 'priority',
-    width: 140,
-  },
-  {
-    title: t('entity.ticket.categorycode'),
-    dataIndex: 'categoryCode',
-    key: 'categoryCode',
-    width: 140,
-  },
-  {
-    title: t('entity.ticket.source'),
-    dataIndex: 'ticketSource',
-    key: 'ticketSource',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.action'),
-    key: '__action',
-    width: 80,
-    fixed: 'right',
-  },
-])
-
-/** 编辑态从 formData 同步各子表行 */
-function syncChildRowsFromFormData(val: Partial<ItAssetCreate & { itAssetId?: string }> | null | undefined) {
-  childItAssetChangeLogRows.value = ((val as any)?.changeLogs ?? []).map((item: Record<string, unknown>, index: number) => ({
-    ...item,
-    __rowKey: item.itAssetChangeLogId ?? `new-${index}`,
-  }))
-  childTicketRows.value = ((val as any)?.tickets ?? []).map((item: Record<string, unknown>, index: number) => ({
-    ...item,
-    __rowKey: item.ticketId ?? `new-${index}`,
-  }))
-}
-
-/** 表单 Tab 内新增 itAssetChangeLog 行 */
-function handleAddItAssetChangeLogRow() {
-  childItAssetChangeLogRows.value.push({
-    __rowKey: `new-${Date.now()}`,
-
-  })
-}
-
-/** 表单 Tab 内删除 itAssetChangeLog 行 */
-function handleRemoveItAssetChangeLogRow(index: number) {
-  childItAssetChangeLogRows.value.splice(index, 1)
-}
-
-/** 表单 Tab 内新增 ticket 行 */
-function handleAddTicketRow() {
-  childTicketRows.value.push({
-    __rowKey: `new-${Date.now()}`,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      ticketNo: '',
-      title: '',
-      content: '',
-      attachmentsJson: '',
-      ticketStatus: 0,
-      priority: 0,
-      categoryCode: '',
-      ticketSource: 0,
-  })
-}
-
-/** 表单 Tab 内删除 ticket 行 */
-function handleRemoveTicketRow(index: number) {
-  childTicketRows.value.splice(index, 1)
-}
-
-/** 组装 Create/Update 载荷（主表 + 子表数组） */
-function buildSubmitPayload() {
-  return {
-    ...formState,
-    changeLogs: childItAssetChangeLogRows.value.map(({ __rowKey, ...rest }) => rest),
-    tickets: childTicketRows.value.map(({ __rowKey, ...rest }) => rest),
-  }
-}
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -615,7 +340,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  formData: () => ({}),
+  formData: null,
   loading: false,
 })
 
@@ -623,20 +348,34 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
+/** 表单字段默认值（无字典默认项） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  void target
+}
 
-/** 编辑态灌入 formData；新增态 reset */
+
+/** 编辑态灌入 formData；新增态恢复默认值（须含 itAssetId 才视为编辑） */
 watch(
   () => props.formData,
   (val) => {
-    const next = val ? { ...val } : {}
-    Object.keys(formState).forEach((k) => delete formState[k])
-    delete (next as any).changeLogs
-    delete (next as any).tickets
-    applyScopeDefaults(next)
-    Object.assign(formState, next)
-    syncChildRowsFromFormData(val)
+    if (val?.itAssetId) {
+      const next = { ...val } as Record<string, unknown>
+      Object.keys(formState).forEach((k) => delete formState[k])
+
+      applyScopeDefaults(next)
+      Object.assign(formState, next)
+      formRef.value?.clearValidate()
+    } else {
+      Object.keys(formState).forEach((k) => delete formState[k])
+      if (val && typeof val === 'object' && Object.keys(val).length > 0) {
+        Object.assign(formState, val)
+      }
+      applyFormDefaults(formState)
+      applyScopeDefaults(formState as Record<string, unknown>, true)
+      formRef.value?.clearValidate()
+    }
   },
-  { immediate: true, deep: true }
+  { immediate: true }
 )
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
@@ -655,17 +394,23 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   assetCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.itAsset.assetcode') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.itasset.assetcode') }),
       trigger: 'blur'
     }
   ],
-  warrantyType: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.itAsset.warrantytype') }),
-      trigger: 'change'
-    }
-  ],
+  warrantyType: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.itasset.warrantytype') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.itasset.warrantytype') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -676,16 +421,26 @@ async function validate() {
 
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
-  return buildSubmitPayload()
+  const payload = { ...formState }
+  if ('warrantyType' in payload) {
+    const rawwarrantyType = payload.warrantyType
+    payload.warrantyType = typeof rawwarrantyType === 'number' ? rawwarrantyType : Number(rawwarrantyType)
+  }
+  if ('sortOrder' in payload) delete payload.sortOrder
+  return payload
 }
 
-/** 重置表单与子表行 */
+/** 重置表单与子表行（弹窗未 destroy 时父级 nextTick 也会调用） */
 function resetFields() {
-  formRef.value?.resetFields()
   Object.keys(formState).forEach((k) => delete formState[k])
-  childItAssetChangeLogRows.value = []
-  childTicketRows.value = []
+  if (props.formData && typeof props.formData === 'object') {
+    Object.assign(formState, props.formData)
+  }
+  applyFormDefaults(formState)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.itAssetId)
+
   activeTab.value = 'tab-0'
+  formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })

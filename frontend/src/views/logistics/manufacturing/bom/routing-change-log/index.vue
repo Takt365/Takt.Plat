@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="logistics:manufacturing:bom:routing:change:log:create"
-      update-permission="logistics:manufacturing:bom:routing:change:log:update"
-      delete-permission="logistics:manufacturing:bom:routing:change:log:delete"
-      import-permission="logistics:manufacturing:bom:routing:change:log:import"
-      export-permission="logistics:manufacturing:bom:routing:change:log:export"
+      create-permission="logistics:manufacturing:bom:routing:create"
+      update-permission="logistics:manufacturing:bom:routing:update"
+      delete-permission="logistics:manufacturing:bom:routing:delete"
+      import-permission="logistics:manufacturing:bom:routing:import"
+      export-permission="logistics:manufacturing:bom:routing:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -244,10 +244,11 @@
       </div>
       <div v-show="isFieldVisible('approvalStatus')">
       <a-form-item :label="t('entity.routing.approvalstatus')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.approvalStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routing.approvalstatus') })"
-          style="width: 100%"
+          dict-type="sys_approval_status"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.routing.approvalstatus') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -332,7 +333,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -343,7 +344,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -793,7 +794,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:manufacturing:bom:routing:change:log:update',
+        permission: 'logistics:manufacturing:bom:routing:update',
         onClick: (record: Routing) => handleEdit(record)
       },
       {
@@ -801,7 +802,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:manufacturing:bom:routing:change:log:delete',
+        permission: 'logistics:manufacturing:bom:routing:delete',
         onClick: (record: Routing) => handleDeleteOne(record)
       }
     ]
@@ -835,7 +836,7 @@ const rowSelection = computed(() => ({
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
-    } else if (getRoutingId(selectedRow.value) === getRoutingId(record)) {
+    } else if (selectedRow.value && getRoutingId(selectedRow.value) === getRoutingId(record)) {
       selectedRow.value = null
       syncMasterSelection(null)
     }

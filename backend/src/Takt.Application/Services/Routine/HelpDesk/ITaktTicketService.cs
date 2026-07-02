@@ -29,6 +29,20 @@ public interface ITaktTicketService
     Task<TaktPagedResult<TaktTicketDto>> GetTicketListAsync(TaktTicketQueryDto queryDto);
 
     /// <summary>
+    /// 获取当前用户提交的工单列表（分页）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>分页结果</returns>
+    Task<TaktPagedResult<TaktTicketDto>> GetMyTicketListAsync(TaktTicketQueryDto queryDto);
+
+    /// <summary>
+    /// 获取当前用户提交的工单详情
+    /// </summary>
+    /// <param name="id">工单 ID</param>
+    /// <returns>DTO</returns>
+    Task<TaktTicketDto?> GetMyTicketByIdAsync(long id);
+
+    /// <summary>
     /// 根据ID获取工单
     /// </summary>
     /// <param name="id">工单ID</param>
@@ -138,7 +152,7 @@ public interface ITaktTicketService
     /// </summary>
     /// <param name="dto">回复 DTO</param>
     /// <returns>回复 DTO</returns>
-    Task<TaktTicketReplyDto> ReplyTicketAsync(TaktTicketReplyCreateDto dto);
+    Task<TaktTicketReplyDto> ReplyTicketAsync(TaktTicketSessionReplyCreateDto dto);
 
     /// <summary>
     /// 获取工单回复列表（分页）
@@ -178,4 +192,11 @@ public interface ITaktTicketService
     /// <param name="fileName">文件名</param>
     /// <returns>Excel 文件</returns>
     Task<(string fileName, byte[] fileContent)> ExportTicketAsync(TaktTicketQueryDto? query = null, string? sheetName = null, string? fileName = null);
+
+    /// <summary>
+    /// 获取服务台工单统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>服务台工单统计</returns>
+    Task<TaktHelpDeskTicketStatDto> GetHelpDeskTicketStatAsync(TaktHelpDeskTicketStatQueryDto queryDto);
 }

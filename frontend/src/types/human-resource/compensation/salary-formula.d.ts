@@ -1,10 +1,10 @@
-﻿// ========================================
+// ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/human-resource/compensation
 // 文件名称：salary-formula.d.ts
-// 创建时间：2026-06-12
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
-// 功能描述：human-resource/Payroll 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
+// 功能描述：human-resource/compensation 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -41,12 +41,12 @@ export interface SalaryFormula extends CompanyDtoBase {
   /**
    * 关联薪酬体系 ID（可选；同 set_code 各行取值应一致）
    */
-  PayrollId?: string;
+  payrollId?: string;
 
   /**
    * 关联薪酬体系 名称（填充字段）
    */
-  PayrollName?: string;
+  payrollName?: string;
 
   /**
    * 步骤编码（同方案内唯一，如 GROSS、SS_EMP、HF_EMP、TAX、NET）
@@ -136,7 +136,7 @@ export interface SalaryFormulaQuery extends TaktPagedQuery {
   /**
    * 关联薪酬体系 ID（可选；同 set_code 各行取值应一致）
    */
-  PayrollId?: string;
+  payrollId?: string;
 
   /**
    * 步骤编码（同方案内唯一，如 GROSS、SS_EMP、HF_EMP、TAX、NET）
@@ -216,7 +216,7 @@ export interface SalaryFormulaQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -243,7 +243,7 @@ export interface SalaryFormulaCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -260,7 +260,7 @@ export interface SalaryFormulaCreate {
   /**
    * 关联薪酬体系 ID（可选；同 set_code 各行取值应一致）
    */
-  PayrollId?: string;
+  payrollId?: string;
 
   /**
    * 步骤编码（同方案内唯一，如 GROSS、SS_EMP、HF_EMP、TAX、NET）
@@ -276,11 +276,6 @@ export interface SalaryFormulaCreate {
    * 公式步骤类型（字典 hr_salary_formula_step_type：应发/社保个人/公积金个人/个税/实发）
    */
   formulaStep: number;
-
-  /**
-   * 执行顺序（同一 set_code 内从小到大；应发=1 … 实发=5）
-   */
-  sortOrder: number;
 
   /**
    * 结果写入字段（与 TaktPayslip 列名一致，如 gross_amount、net_amount）
@@ -320,7 +315,7 @@ export interface SalaryFormulaCreate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -412,7 +407,7 @@ export interface SalaryFormulaTemplate {
   /**
    * 关联薪酬体系 ID（可选；同 set_code 各行取值应一致）
    */
-  PayrollId?: string;
+  payrollId?: string;
 
   /**
    * 步骤编码（同方案内唯一，如 GROSS、SS_EMP、HF_EMP、TAX、NET）
@@ -430,11 +425,6 @@ export interface SalaryFormulaTemplate {
   formulaStep?: number;
 
   /**
-   * 执行顺序（同一 set_code 内从小到大；应发=1 … 实发=5）
-   */
-  sortOrder?: number;
-
-  /**
    * 结果写入字段（与 TaktPayslip 列名一致，如 gross_amount、net_amount）
    */
   targetField?: string;
@@ -450,6 +440,16 @@ export interface SalaryFormulaTemplate {
   stepDescription?: string;
 
   /**
+   * 方案生效日期（同 set_code 各行应一致）
+   */
+  effectiveDate?: string;
+
+  /**
+   * 方案失效日期
+   */
+  expiryDate?: string;
+
+  /**
    * 状态（字典 sys_normal_disable_status）
    */
   formulaStatus?: number;
@@ -462,7 +462,7 @@ export interface SalaryFormulaTemplate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -489,7 +489,7 @@ export interface SalaryFormulaImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -506,7 +506,7 @@ export interface SalaryFormulaImport {
   /**
    * 关联薪酬体系 ID（可选；同 set_code 各行取值应一致）
    */
-  PayrollId?: string;
+  payrollId?: string;
 
   /**
    * 步骤编码（同方案内唯一，如 GROSS、SS_EMP、HF_EMP、TAX、NET）
@@ -524,11 +524,6 @@ export interface SalaryFormulaImport {
   formulaStep?: number;
 
   /**
-   * 执行顺序（同一 set_code 内从小到大；应发=1 … 实发=5）
-   */
-  sortOrder?: number;
-
-  /**
    * 结果写入字段（与 TaktPayslip 列名一致，如 gross_amount、net_amount）
    */
   targetField?: string;
@@ -544,6 +539,16 @@ export interface SalaryFormulaImport {
   stepDescription?: string;
 
   /**
+   * 方案生效日期（同 set_code 各行应一致）
+   */
+  effectiveDate?: string;
+
+  /**
+   * 方案失效日期
+   */
+  expiryDate?: string;
+
+  /**
    * 状态（字典 sys_normal_disable_status）
    */
   formulaStatus?: number;
@@ -556,7 +561,7 @@ export interface SalaryFormulaImport {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -595,7 +600,7 @@ export interface SalaryFormulaExport {
   /**
    * 关联薪酬体系 ID（可选；同 set_code 各行取值应一致）
    */
-  PayrollId?: string;
+  payrollId?: string;
 
   /**
    * 步骤编码（同方案内唯一，如 GROSS、SS_EMP、HF_EMP、TAX、NET）
@@ -655,7 +660,7 @@ export interface SalaryFormulaExport {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注

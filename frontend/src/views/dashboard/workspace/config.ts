@@ -10,7 +10,7 @@ export const WORKSPACE_AVAILABLE_MODULES: WorkspaceModuleMeta[] = [
   { key: 'welcome', titleKey: 'dashboard.workspace.page.modules.welcome', defaultSpan: 12 },
   { key: 'shortcut', titleKey: 'dashboard.workspace.page.modules.shortcut', defaultSpan: 12 },
   { key: 'todo', titleKey: 'dashboard.workspace.page.modules.todo', defaultSpan: 12 },
-  { key: 'Announcement', titleKey: 'dashboard.workspace.page.modules.Announcement', defaultSpan: 12 },
+  { key: 'Announcement', titleKey: 'dashboard.workspace.page.modules.announcement', defaultSpan: 12 },
   { key: 'custom', titleKey: 'dashboard.workspace.page.modules.custom', defaultSpan: 24 }
 ]
 

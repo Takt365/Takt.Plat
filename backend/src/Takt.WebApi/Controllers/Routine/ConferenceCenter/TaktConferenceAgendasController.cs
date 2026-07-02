@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Routine.ConferenceCenter
 // 文件名称：TaktConferenceAgendasController.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：会议议程纪要控制器
 // 
@@ -41,7 +41,7 @@ public class TaktConferenceAgendasController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("routine:conferencecenter:agenda:list", "会议议程纪要列表")]
+    [TaktPermission("routine:conference:center:agenda:list", "会议议程纪要列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetConferenceAgendaListAsync([FromQuery] TaktConferenceAgendaQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktConferenceAgendasController : TaktControllerBase
     /// </summary>
     /// <param name="id">会议议程纪要ID</param>
     /// <returns>会议议程纪要DTO</returns>
-    [TaktPermission("routine:conferencecenter:agenda:query", "会议议程纪要详情")]
+    [TaktPermission("routine:conference:center:agenda:query", "会议议程纪要详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetConferenceAgendaByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktConferenceAgendasController : TaktControllerBase
     /// 获取会议议程纪要选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("routine:conferencecenter:agenda:query", "会议议程纪要选项")]
+    [TaktPermission("routine:conference:center:agenda:query", "会议议程纪要选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetConferenceAgendaOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktConferenceAgendasController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>会议议程纪要DTO</returns>
-    [TaktPermission("routine:conferencecenter:agenda:create", "创建会议议程纪要")]
+    [TaktPermission("routine:conference:center:agenda:create", "创建会议议程纪要")]
     [HttpPost]
     public async Task<IActionResult> CreateConferenceAgendaAsync([FromBody] TaktConferenceAgendaCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktConferenceAgendasController : TaktControllerBase
     /// <param name="id">会议议程纪要ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>会议议程纪要DTO</returns>
-    [TaktPermission("routine:conferencecenter:agenda:update", "更新会议议程纪要")]
+    [TaktPermission("routine:conference:center:agenda:update", "更新会议议程纪要")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateConferenceAgendaAsync(long id, [FromBody] TaktConferenceAgendaUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktConferenceAgendasController : TaktControllerBase
     /// </summary>
     /// <param name="id">会议议程纪要ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("routine:conferencecenter:agenda:delete", "删除会议议程纪要")]
+    [TaktPermission("routine:conference:center:agenda:delete", "删除会议议程纪要")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteConferenceAgendaByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktConferenceAgendasController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("routine:conferencecenter:agenda:delete", "批量删除会议议程纪要")]
+    [TaktPermission("routine:conference:center:agenda:delete", "批量删除会议议程纪要")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteConferenceAgendaBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktConferenceAgendasController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("routine:conferencecenter:agenda:import", "获取会议议程纪要导入模板")]
+    [TaktPermission("routine:conference:center:agenda:import", "获取会议议程纪要导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetConferenceAgendaTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -204,7 +204,7 @@ public class TaktConferenceAgendasController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("routine:conferencecenter:agenda:import", "导入会议议程纪要")]
+    [TaktPermission("routine:conference:center:agenda:import", "导入会议议程纪要")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportConferenceAgendaAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -234,7 +234,7 @@ public class TaktConferenceAgendasController : TaktControllerBase
     /// 导出会议议程纪要
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("routine:conferencecenter:agenda:export", "导出会议议程纪要")]
+    [TaktPermission("routine:conference:center:agenda:export", "导出会议议程纪要")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportConferenceAgendaAsync([FromQuery] TaktConferenceAgendaQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

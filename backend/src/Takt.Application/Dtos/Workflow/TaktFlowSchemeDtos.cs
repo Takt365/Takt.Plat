@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Workflow
 // 文件名称：TaktFlowSchemeDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：FlowScheme 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktFlowScheme 生成，请按需审阅）
 // 
@@ -14,7 +14,6 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Dtos.Workflow;
 
@@ -72,14 +71,9 @@ public class TaktFlowSchemeDto : TaktCompanyDtoBase
     public string? ProcessDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 发布状态
-    /// </summary>
-    public int ProcessStatus { get; set; }
-
-    /// <summary>
     /// 挂起状态（1 激活，2 挂起）
     /// </summary>
-    public TaktFlowSuspensionState SuspensionState { get; set; }
+    public int SuspensionState { get; set; } = 0;
 
     /// <summary>
     /// 流程设计 JSON（节点、网关、条件、审批人配置）
@@ -97,10 +91,10 @@ public class TaktFlowSchemeDto : TaktCompanyDtoBase
     public string? DeploymentName { get; set; }
 
     /// <summary>
-    /// 关联表单 ID（审批流程必填）
+    /// 关联表单 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long FormId { get; set; }
+    public long? FormId { get; set; }
 
     /// <summary>
     /// 关联表单 名称（填充字段）
@@ -108,14 +102,19 @@ public class TaktFlowSchemeDto : TaktCompanyDtoBase
     public string? FormName { get; set; }
 
     /// <summary>
-    /// 关联表单编码（审批流程必填）
+    /// 关联表单编码
     /// </summary>
-    public string FormCode { get; set; } = string.Empty;
+    public string? FormCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号
     /// </summary>
     public int SortOrder { get; set; } = 0;
+
+    /// <summary>
+    /// 发布状态
+    /// </summary>
+    public int ProcessStatus { get; set; } = 0;
 
     /// <summary>
     /// 关联表单
@@ -181,14 +180,9 @@ public class TaktFlowSchemeQueryDto : TaktPagedQuery
     public string? ProcessDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 发布状态
-    /// </summary>
-    public int? ProcessStatus { get; set; }
-
-    /// <summary>
     /// 挂起状态（1 激活，2 挂起）
     /// </summary>
-    public TaktFlowSuspensionState? SuspensionState { get; set; }
+    public int? SuspensionState { get; set; }
 
     /// <summary>
     /// 流程设计 JSON（节点、网关、条件、审批人配置）
@@ -215,6 +209,11 @@ public class TaktFlowSchemeQueryDto : TaktPagedQuery
     /// 排序号
     /// </summary>
     public int? SortOrder { get; set; }
+
+    /// <summary>
+    /// 发布状态
+    /// </summary>
+    public int? ProcessStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -257,7 +256,7 @@ public class TaktFlowSchemeCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -300,14 +299,9 @@ public class TaktFlowSchemeCreateDto
     public string? ProcessDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 发布状态
-    /// </summary>
-    public int ProcessStatus { get; set; }
-
-    /// <summary>
     /// 挂起状态（1 激活，2 挂起）
     /// </summary>
-    public TaktFlowSuspensionState SuspensionState { get; set; }
+    public int SuspensionState { get; set; } = 0;
 
     /// <summary>
     /// 流程设计 JSON（节点、网关、条件、审批人配置）
@@ -320,22 +314,20 @@ public class TaktFlowSchemeCreateDto
     public string? DeploymentId { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联表单 ID（审批流程必填）
+    /// 关联表单 ID
     /// </summary>
-    [Required(ErrorMessage = "关联表单不能为空")]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long FormId { get; set; }
+    public long? FormId { get; set; }
 
     /// <summary>
-    /// 关联表单编码（审批流程必填）
+    /// 关联表单编码
     /// </summary>
-    [Required(ErrorMessage = "关联表单编码不能为空")]
-    public string FormCode { get; set; } = string.Empty;
+    public string? FormCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号
+    /// 发布状态
     /// </summary>
-    public int SortOrder { get; set; } = 0;
+    public int ProcessStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -390,7 +382,7 @@ public class TaktFlowSchemeStatusDto
     /// 发布状态
     /// </summary>
     [Required(ErrorMessage = "发布状态不能为空")]
-    public int ProcessStatus { get; set; }
+    public int ProcessStatus { get; set; } = 0;
 }
 
 // ========================================
@@ -472,14 +464,9 @@ public class TaktFlowSchemeTemplateDto
     public string? ProcessDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 发布状态
-    /// </summary>
-    public int? ProcessStatus { get; set; }
-
-    /// <summary>
     /// 挂起状态（1 激活，2 挂起）
     /// </summary>
-    public TaktFlowSuspensionState? SuspensionState { get; set; }
+    public int? SuspensionState { get; set; }
 
     /// <summary>
     /// 流程设计 JSON（节点、网关、条件、审批人配置）
@@ -492,15 +479,20 @@ public class TaktFlowSchemeTemplateDto
     public string? DeploymentId { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联表单 ID（审批流程必填）
+    /// 关联表单 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long FormId { get; set; }
+    public long? FormId { get; set; }
 
     /// <summary>
-    /// 关联表单编码（审批流程必填）
+    /// 关联表单编码
     /// </summary>
-    public string FormCode { get; set; } = string.Empty;
+    public string? FormCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 发布状态
+    /// </summary>
+    public int? ProcessStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -530,7 +522,7 @@ public class TaktFlowSchemeImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -570,14 +562,9 @@ public class TaktFlowSchemeImportDto
     public string? ProcessDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 发布状态
-    /// </summary>
-    public int? ProcessStatus { get; set; }
-
-    /// <summary>
     /// 挂起状态（1 激活，2 挂起）
     /// </summary>
-    public TaktFlowSuspensionState? SuspensionState { get; set; }
+    public int? SuspensionState { get; set; }
 
     /// <summary>
     /// 流程设计 JSON（节点、网关、条件、审批人配置）
@@ -590,15 +577,20 @@ public class TaktFlowSchemeImportDto
     public string? DeploymentId { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联表单 ID（审批流程必填）
+    /// 关联表单 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long FormId { get; set; }
+    public long? FormId { get; set; }
 
     /// <summary>
-    /// 关联表单编码（审批流程必填）
+    /// 关联表单编码
     /// </summary>
-    public string FormCode { get; set; } = string.Empty;
+    public string? FormCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 发布状态
+    /// </summary>
+    public int? ProcessStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -669,14 +661,9 @@ public class TaktFlowSchemeExportDto
     public string? ProcessDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 发布状态
-    /// </summary>
-    public int ProcessStatus { get; set; }
-
-    /// <summary>
     /// 挂起状态（1 激活，2 挂起）
     /// </summary>
-    public TaktFlowSuspensionState SuspensionState { get; set; }
+    public int SuspensionState { get; set; } = 0;
 
     /// <summary>
     /// 流程设计 JSON（节点、网关、条件、审批人配置）
@@ -692,17 +679,22 @@ public class TaktFlowSchemeExportDto
     /// 关联表单 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long FormId { get; set; }
+    public long? FormId { get; set; }
 
     /// <summary>
     /// 关联表单编码
     /// </summary>
-    public string FormCode { get; set; } = string.Empty;
+    public string? FormCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号
     /// </summary>
     public int SortOrder { get; set; } = 0;
+
+    /// <summary>
+    /// 发布状态
+    /// </summary>
+    public int ProcessStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Serial
 // 文件名称：TaktSerialOutboundService.cs
-// 创建时间：2026-06-15
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：序列号出库应用服务实现
 // 
@@ -366,6 +366,84 @@ public class TaktSerialOutboundService : TaktServiceBase, ITaktSerialOutboundSer
             await _serialOutboundItemRepository.CreateRangeAsync(items);
         }
     }
+
+    /// <summary>
+    /// 获取序列号出库统计（数据看板；按出库日期、仕向地、目的地港分组）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>序列号出库统计</returns>
+    public async Task<TaktSerialOutboundStatDto> GetSerialOutboundStatAsync(TaktSerialOutboundStatQueryDto queryDto)
+    {
+        EnsureThreeLayerContext();
+        var (start, end, statMonth) = TaktStatMonthRangeHelper.ResolveMonthRange(
+            queryDto.OutboundDateStart,
+            queryDto.OutboundDateEnd);
+        var tenantCode = CurrentTenantCode;
+        var companyCode = CurrentCompanyCode;
+        var predicate = BuildSerialOutboundStatPredicate(tenantCode, companyCode, start, end, queryDto);
+        var records = await _serialOutboundRepository.GetListAsync(predicate);
+        var monthOutboundCount = records.Count;
+        var monthTotalQuantity = records.Sum(x => x.TotalQuantity);
+        var groupItems = records
+            .GroupBy(x => new
+            {
+                OutboundDate = x.OutboundDate.Date,
+                Destination = x.Destination ?? string.Empty,
+                DestinationPort = x.DestinationPort ?? string.Empty,
+            })
+            .Select(g => new TaktSerialOutboundStatItemDto
+            {
+                OutboundDate = g.Key.OutboundDate,
+                Destination = g.Key.Destination,
+                DestinationPort = g.Key.DestinationPort,
+                OutboundCount = g.Count(),
+                TotalQuantity = g.Sum(x => x.TotalQuantity),
+            })
+            .OrderBy(x => x.OutboundDate)
+            .ThenBy(x => x.Destination)
+            .ThenBy(x => x.DestinationPort)
+            .ToList();
+        return new TaktSerialOutboundStatDto
+        {
+            StatMonth = statMonth,
+            MonthOutboundCount = monthOutboundCount,
+            MonthTotalQuantity = monthTotalQuantity,
+            GroupItems = groupItems,
+        };
+    }
+
+    /// <summary>
+    /// 构建序列号出库统计查询表达式
+    /// </summary>
+    /// <param name="tenantCode">租户编码</param>
+    /// <param name="companyCode">公司编码</param>
+    /// <param name="start">出库日期开始</param>
+    /// <param name="end">出库日期结束</param>
+    /// <param name="queryDto">统计查询 DTO</param>
+    /// <returns>查询表达式</returns>
+    private static Expression<Func<TaktSerialOutbound, bool>> BuildSerialOutboundStatPredicate(
+        string tenantCode,
+        string companyCode,
+        DateTime start,
+        DateTime end,
+        TaktSerialOutboundStatQueryDto queryDto)
+    {
+        var exp = Expressionable.Create<TaktSerialOutbound>();
+        exp = exp.And(x => x.TenantCode == tenantCode && x.CompanyCode == companyCode);
+        exp = exp.And(x => x.OutboundDate >= start && x.OutboundDate <= end);
+        if (!string.IsNullOrWhiteSpace(queryDto.Destination))
+        {
+            var destination = queryDto.Destination.Trim();
+            exp = exp.And(x => x.Destination == destination);
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DestinationPort))
+        {
+            var destinationPort = queryDto.DestinationPort.Trim();
+            exp = exp.And(x => x.DestinationPort == destinationPort);
+        }
+        return exp.ToExpression();
+    }
+
     // ========================================
     // 查询表达式
     // ========================================
@@ -392,7 +470,6 @@ public class TaktSerialOutboundService : TaktServiceBase, ITaktSerialOutboundSer
                 || SqlFunc.ToString(x.OutboundType).Contains(keywords)
                 || (x.WarehouseCode != null && x.WarehouseCode.Contains(keywords))
                 || (x.LocationCode != null && x.LocationCode.Contains(keywords))
-                || (x.RelatedCompany != null && x.RelatedCompany.Contains(keywords))
                 || SqlFunc.ToString(x.TotalQuantity).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
@@ -421,7 +498,7 @@ public class TaktSerialOutboundService : TaktServiceBase, ITaktSerialOutboundSer
             exp = exp.And(x => x.Destination != null && x.Destination.Contains(queryDto.Destination));
         }
 
-        if (queryDto?.ShippingMethod != null)
+        if (queryDto?.ShippingMethod.HasValue == true)
         {
             exp = exp.And(x => x.ShippingMethod == queryDto.ShippingMethod);
         }
@@ -444,11 +521,6 @@ public class TaktSerialOutboundService : TaktServiceBase, ITaktSerialOutboundSer
         if (!string.IsNullOrEmpty(queryDto?.LocationCode))
         {
             exp = exp.And(x => x.LocationCode != null && x.LocationCode.Contains(queryDto.LocationCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.RelatedCompany))
-        {
-            exp = exp.And(x => x.RelatedCompany != null && x.RelatedCompany.Contains(queryDto.RelatedCompany));
         }
 
         if (queryDto?.TotalQuantity.HasValue == true)

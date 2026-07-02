@@ -23,8 +23,8 @@ import {
 /** 登出后硬跳转登录页时，在登录页展示一次性提示（sessionStorage） */
 export const TAKT_LOGOUT_FLASH_STORAGE_KEY = 'takt.logout.flash';
 
-/** 多标签页持久化键（强退时清除，避免恢复无效动态路由） */
-const TAKT_TABS_STORAGE_KEY = 'takt-tabs';
+/** 多标签页持久化键（登出时清除，避免恢复无效动态路由） */
+export const TAKT_TABS_STORAGE_KEY = 'takt-tabs';
 
 /** 登出流程进行中（防止 idle / 401 并发重复清态） */
 let logoutInProgress = false;

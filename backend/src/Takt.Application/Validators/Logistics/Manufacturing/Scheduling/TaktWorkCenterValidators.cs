@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Manufacturing.Scheduling
 // 文件名称：TaktWorkCenterValidators.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：WorkCenter 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktWorkCenter 生成，请按需审阅）
 // 
@@ -44,8 +44,6 @@ public class TaktWorkCenterCreateValidator : AbstractValidator<TaktWorkCenterCre
         RuleFor(x => x.WorkCenterName)
             .NotEmpty().WithMessage("工作中心名称不能为空")
             .MaximumLength(200).WithMessage("工作中心名称长度不能超过200个字符");
-        RuleFor(x => x.WorkshopCode)
-            .MaximumLength(40).WithMessage("车间编码长度不能超过40个字符");
         RuleFor(x => x.DefaultShiftId)
             .GreaterThanOrEqualTo(0).WithMessage("默认班次 ID不能为负数");
         RuleFor(x => x.ExtField)
@@ -71,6 +69,27 @@ public class TaktWorkCenterUpdateValidator : AbstractValidator<TaktWorkCenterUpd
     {
         RuleFor(x => x.WorkCenterId)
             .GreaterThan(0).WithMessage("WorkCenterID无效");
+        RuleFor(x => x.TenantCode)
+            .NotEmpty().WithMessage("租户编码不能为空")
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.CompanyCode)
+            .NotEmpty().WithMessage("公司代码不能为空")
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.PlantCode)
+            .NotEmpty().WithMessage("工厂代码不能为空")
+            .MaximumLength(40).WithMessage("工厂代码长度不能超过40个字符");
+        RuleFor(x => x.WorkCenterCode)
+            .NotEmpty().WithMessage("工作中心编码不能为空")
+            .MaximumLength(40).WithMessage("工作中心编码长度不能超过40个字符");
+        RuleFor(x => x.WorkCenterName)
+            .NotEmpty().WithMessage("工作中心名称不能为空")
+            .MaximumLength(200).WithMessage("工作中心名称长度不能超过200个字符");
+        RuleFor(x => x.DefaultShiftId)
+            .GreaterThanOrEqualTo(0).WithMessage("默认班次 ID不能为负数");
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
     }
 }
 
@@ -101,8 +120,6 @@ public class TaktWorkCenterImportValidator : AbstractValidator<TaktWorkCenterImp
         RuleFor(x => x.WorkCenterName)
             .NotEmpty().WithMessage("工作中心名称不能为空")
             .MaximumLength(200).WithMessage("工作中心名称长度不能超过200个字符");
-        RuleFor(x => x.WorkshopCode)
-            .MaximumLength(40).WithMessage("车间编码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.WorkshopCode));
         RuleFor(x => x.DefaultShiftId)
             .GreaterThanOrEqualTo(0).WithMessage("默认班次 ID不能为负数");
         RuleFor(x => x.ExtField)

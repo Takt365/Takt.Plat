@@ -5,6 +5,8 @@
 // 创建时间：2025-02-02
 // 创建人：Takt365(Cursor AI)
 // 功能描述：PCBA日报实体，按工厂、生产日期、生产线等记录PCBA生产订单与标准产能
+// 计算公式：达成率(%) = 明细当日完成数量合计 ÷ 主表标准产能合计 × 100%（见 TaktProductionStatHelper.CalculateAchievementRatePercent）
+// 辅助关系：明细实际产量取 TaktPcbaOutputDetail.DailyCompletedQty；标准产能为 0 时取 0
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -17,24 +19,24 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Output;
 
 /// <summary>
 /// PCBA日报实体
+/// 达成率(%) = 明细当日完成数量合计 ÷ 主表标准产能合计 × 100%。
 /// </summary>
 [SugarTable("takt_logistics_manufacturing_output_pcba", "PCBA日报表")]
 [SugarIndex("ix_pcba_output_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_pcba_output_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_output_pcba_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(ProdCategory), OrderByType.Asc, nameof(ProdDate), OrderByType.Asc, nameof(ProdLine), OrderByType.Asc, nameof(ShiftNo), OrderByType.Asc, nameof(ProdOrderCode), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_output_pcba_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(ProdCategory), OrderByType.Asc, nameof(ProdDate), OrderByType.Asc, nameof(ProdTeam), OrderByType.Asc, nameof(ShiftNo), OrderByType.Asc, nameof(ProdOrderCode), OrderByType.Asc, true)]
 [SugarIndex("ix_takt_logistics_manufacturing_output_pcba_prod_date", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProdDate), OrderByType.Desc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_output_pcba_prod_line", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProdLine), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_output_pcba_prod_team", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProdTeam), OrderByType.Asc, false)]
 public class TaktPcbaOutput : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", Length = 4, ColumnDataType = "nvarchar", IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别
-    /// RD: 研发  EVT: 工程验证测试  DVT: 设计验证测试  EPP: 工程试产  PP: 试产  FPP: 正式生产  MP: 大规模生产  RPR: 维修生产  RWR: 返工生产
+    /// 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
     /// </summary>
     [SugarColumn(ColumnName = "prod_category", ColumnDescription = "生产类别", Length = 20, ColumnDataType = "nvarchar", IsNullable = false)]
     public string ProdCategory { get; set; } = string.Empty;
@@ -46,19 +48,19 @@ public class TaktPcbaOutput : TaktCompanyEntityBase
     public DateTime ProdDate { get; set; }
 
     /// <summary>
-    /// 生产线
+    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
     /// </summary>
-    [SugarColumn(ColumnName = "prod_line", ColumnDescription = "生产线", Length = 20, ColumnDataType = "nvarchar", IsNullable = false)]
-    public string ProdLine { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "prod_team", ColumnDescription = "生产班组", Length = 20, ColumnDataType = "nvarchar", IsNullable = false)]
+    public string ProdTeam { get; set; } = string.Empty;
 
     /// <summary>
-    /// 班次(1=早班 2=中班 3=晚班)
+    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     [SugarColumn(ColumnName = "shift_no", ColumnDescription = "班次", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int ShiftNo { get; set; } = 1;
 
     /// <summary>
-    /// 生产工单号
+    /// 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
     /// </summary>
     [SugarColumn(ColumnName = "prod_order_code", ColumnDescription = "生产工单号", Length = 20, ColumnDataType = "nvarchar", IsNullable = false)]
     public string ProdOrderCode { get; set; } = string.Empty;

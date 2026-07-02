@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/bom
 // 文件名称：bill-of-material-item.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/bom 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -14,10 +14,6 @@ import type {
   CompanyDtoBase,
   TaktPagedQuery
 } from '@/types/common';
-
-import type {
-  MaterialPlant
-} from '@/types/logistics/materials/material-plant';
 
 /**
  * Takt物料清单明细实体（扁平BOM行：一头多行，每行一个直接子件；多层BOM通过子件物料关联其BOM头递归展开）
@@ -132,6 +128,11 @@ export interface BillOfMaterialItem extends CompanyDtoBase {
    */
   materialPlant?: MaterialPlant;
 
+  /**
+   * 替代料明细（一行主件可维护多条替代物料） （子表：TaktBillOfMaterialSubstitute）
+   */
+  substitutes?: BillOfMaterialSubstitute[];
+
 }
 
 
@@ -245,7 +246,7 @@ export interface BillOfMaterialItemQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -272,7 +273,7 @@ export interface BillOfMaterialItemCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -357,9 +358,14 @@ export interface BillOfMaterialItemCreate {
   isPhantom: number;
 
   /**
+   * 替代料明细（一行主件可维护多条替代物料）（子表，级联保存）
+   */
+  substitutes?: BillOfMaterialSubstituteCreate[];
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -426,9 +432,24 @@ export interface BillOfMaterialItemTemplate {
   materialCode?: string;
 
   /**
+   * 用量（quantity）
+   */
+  usageQuantity?: number;
+
+  /**
    * 单位（unit）
    */
   materialUnit?: string;
+
+  /**
+   * 损耗率（0-100，scrap_rate）
+   */
+  scrapRate?: number;
+
+  /**
+   * 实际用量（用量 × (1 + 损耗率/100)）
+   */
+  actualUsageQuantity?: number;
 
   /**
    * 工序号（operation_seq）
@@ -461,9 +482,19 @@ export interface BillOfMaterialItemTemplate {
   isOptional?: number;
 
   /**
+   * 是否虚拟件（0=否，1=是，phantom_flag）
+   */
+  isPhantom?: number;
+
+  /**
+   * 替代料明细（一行主件可维护多条替代物料）（子表，级联保存）
+   */
+  substitutes?: BillOfMaterialSubstituteCreate[];
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -490,7 +521,7 @@ export interface BillOfMaterialItemImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -520,9 +551,24 @@ export interface BillOfMaterialItemImport {
   materialCode?: string;
 
   /**
+   * 用量（quantity）
+   */
+  usageQuantity?: number;
+
+  /**
    * 单位（unit）
    */
   materialUnit?: string;
+
+  /**
+   * 损耗率（0-100，scrap_rate）
+   */
+  scrapRate?: number;
+
+  /**
+   * 实际用量（用量 × (1 + 损耗率/100)）
+   */
+  actualUsageQuantity?: number;
 
   /**
    * 工序号（operation_seq）
@@ -555,9 +601,19 @@ export interface BillOfMaterialItemImport {
   isOptional?: number;
 
   /**
+   * 是否虚拟件（0=否，1=是，phantom_flag）
+   */
+  isPhantom?: number;
+
+  /**
+   * 替代料明细（一行主件可维护多条替代物料）（子表，级联保存）
+   */
+  substitutes?: BillOfMaterialSubstituteCreate[];
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -666,7 +722,7 @@ export interface BillOfMaterialItemExport {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注

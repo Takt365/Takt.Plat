@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/procurement
 // 文件名称：source-of-supply.d.ts
-// 创建时间：2026-06-21
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/procurement 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface SourceOfSupply extends CompanyDtoBase {
   sourceOfSupplyId: string;
 
   /**
-   * 工厂代码（关联 TaktPlant.PlantCode）
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -39,47 +39,27 @@ export interface SourceOfSupply extends CompanyDtoBase {
   sourceOfSupplyCode: string;
 
   /**
-   * 物料编码（关联 TaktMaterialPlant.MaterialCode）
+   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
    */
   materialCode: string;
 
   /**
-   * 物料名称（冗余字段，便于查询展示）
-   */
-  materialName: string;
-
-  /**
-   * 供货商编码（关联 TaktSupplier.SupplierCode）
+   * 供货商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
    */
   supplierCode: string;
 
   /**
-   * 供货商名称（冗余字段，便于查询展示）
+   * 采购组（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
    */
-  supplierName: string;
+  purchaseGroup?: string;
 
   /**
-   * 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
-   */
-  purchaseGroupCode?: string;
-
-  /**
-   * 生效日期
-   */
-  validFrom: string;
-
-  /**
-   * 失效日期
-   */
-  validTo: string;
-
-  /**
-   * 是否固定（字典 sys_yes_no_type；1=是，0=否；固定货源，MRP/寻源优先选用）
+   * 固定（字典 sys_yes_no_type；1=是，0=否；固定货源，MRP/寻源优先选用）
    */
   isFixed: number;
 
   /**
-   * 是否冻结（字典 sys_yes_no_type；1=是，0=否；冻结后禁止新建采购订单引用）
+   * 冻结（字典 sys_yes_no_type；1=是，0=否；冻结后禁止新建采购订单引用）
    */
   isBlocked: number;
 
@@ -109,14 +89,24 @@ export interface SourceOfSupply extends CompanyDtoBase {
   agreementLineNumber?: number;
 
   /**
-   * 货源状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 生效日期
    */
-  sourceStatus: number;
+  validFrom: string;
+
+  /**
+   * 失效日期
+   */
+  validTo: string;
 
   /**
    * 排序号（越小越靠前；同物料多货源时的优先级）
    */
   sortOrder: number;
+
+  /**
+   * 货源状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   */
+  sourceStatus: number;
 
 }
 
@@ -139,7 +129,7 @@ export interface SourceOfSupplyQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂代码（关联 TaktPlant.PlantCode）
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -149,57 +139,27 @@ export interface SourceOfSupplyQuery extends TaktPagedQuery {
   sourceOfSupplyCode?: string;
 
   /**
-   * 物料编码（关联 TaktMaterialPlant.MaterialCode）
+   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称（冗余字段，便于查询展示）
-   */
-  materialName?: string;
-
-  /**
-   * 供货商编码（关联 TaktSupplier.SupplierCode）
+   * 供货商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
    */
   supplierCode?: string;
 
   /**
-   * 供货商名称（冗余字段，便于查询展示）
+   * 采购组（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
    */
-  supplierName?: string;
+  purchaseGroup?: string;
 
   /**
-   * 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
-   */
-  purchaseGroupCode?: string;
-
-  /**
-   * 生效日期（范围查询-开始）
-   */
-  validFromStart?: string;
-
-  /**
-   * 生效日期（范围查询-结束）
-   */
-  validFromEnd?: string;
-
-  /**
-   * 失效日期（范围查询-开始）
-   */
-  validToStart?: string;
-
-  /**
-   * 失效日期（范围查询-结束）
-   */
-  validToEnd?: string;
-
-  /**
-   * 是否固定（字典 sys_yes_no_type；1=是，0=否；固定货源，MRP/寻源优先选用）
+   * 固定（字典 sys_yes_no_type；1=是，0=否；固定货源，MRP/寻源优先选用）
    */
   isFixed?: number;
 
   /**
-   * 是否冻结（字典 sys_yes_no_type；1=是，0=否；冻结后禁止新建采购订单引用）
+   * 冻结（字典 sys_yes_no_type；1=是，0=否；冻结后禁止新建采购订单引用）
    */
   isBlocked?: number;
 
@@ -229,14 +189,34 @@ export interface SourceOfSupplyQuery extends TaktPagedQuery {
   agreementLineNumber?: number;
 
   /**
-   * 货源状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 生效日期（范围查询-开始）
    */
-  sourceStatus?: number;
+  validFromStart?: string;
+
+  /**
+   * 生效日期（范围查询-结束）
+   */
+  validFromEnd?: string;
+
+  /**
+   * 失效日期（范围查询-开始）
+   */
+  validToStart?: string;
+
+  /**
+   * 失效日期（范围查询-结束）
+   */
+  validToEnd?: string;
 
   /**
    * 排序号（越小越靠前；同物料多货源时的优先级）
    */
   sortOrder?: number;
+
+  /**
+   * 货源状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   */
+  sourceStatus?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -278,12 +258,12 @@ export interface SourceOfSupplyCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
   /**
-   * 工厂代码（关联 TaktPlant.PlantCode）
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -293,47 +273,27 @@ export interface SourceOfSupplyCreate {
   sourceOfSupplyCode: string;
 
   /**
-   * 物料编码（关联 TaktMaterialPlant.MaterialCode）
+   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
    */
   materialCode: string;
 
   /**
-   * 物料名称（冗余字段，便于查询展示）
-   */
-  materialName: string;
-
-  /**
-   * 供货商编码（关联 TaktSupplier.SupplierCode）
+   * 供货商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
    */
   supplierCode: string;
 
   /**
-   * 供货商名称（冗余字段，便于查询展示）
+   * 采购组（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
    */
-  supplierName: string;
+  purchaseGroup?: string;
 
   /**
-   * 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
-   */
-  purchaseGroupCode?: string;
-
-  /**
-   * 生效日期
-   */
-  validFrom: string;
-
-  /**
-   * 失效日期
-   */
-  validTo: string;
-
-  /**
-   * 是否固定（字典 sys_yes_no_type；1=是，0=否；固定货源，MRP/寻源优先选用）
+   * 固定（字典 sys_yes_no_type；1=是，0=否；固定货源，MRP/寻源优先选用）
    */
   isFixed: number;
 
   /**
-   * 是否冻结（字典 sys_yes_no_type；1=是，0=否；冻结后禁止新建采购订单引用）
+   * 冻结（字典 sys_yes_no_type；1=是，0=否；冻结后禁止新建采购订单引用）
    */
   isBlocked: number;
 
@@ -361,6 +321,16 @@ export interface SourceOfSupplyCreate {
    * 协议行号
    */
   agreementLineNumber?: number;
+
+  /**
+   * 生效日期
+   */
+  validFrom: string;
+
+  /**
+   * 失效日期
+   */
+  validTo: string;
 
   /**
    * 货源状态（字典 sys_normal_disable_status；1=启用，0=禁用）
@@ -450,7 +420,7 @@ export interface SourceOfSupplyTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码（关联 TaktPlant.PlantCode）
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -460,37 +430,27 @@ export interface SourceOfSupplyTemplate {
   sourceOfSupplyCode?: string;
 
   /**
-   * 物料编码（关联 TaktMaterialPlant.MaterialCode）
+   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称（冗余字段，便于查询展示）
-   */
-  materialName?: string;
-
-  /**
-   * 供货商编码（关联 TaktSupplier.SupplierCode）
+   * 供货商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
    */
   supplierCode?: string;
 
   /**
-   * 供货商名称（冗余字段，便于查询展示）
+   * 采购组（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
    */
-  supplierName?: string;
+  purchaseGroup?: string;
 
   /**
-   * 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
-   */
-  purchaseGroupCode?: string;
-
-  /**
-   * 是否固定（字典 sys_yes_no_type；1=是，0=否；固定货源，MRP/寻源优先选用）
+   * 固定（字典 sys_yes_no_type；1=是，0=否；固定货源，MRP/寻源优先选用）
    */
   isFixed?: number;
 
   /**
-   * 是否冻结（字典 sys_yes_no_type；1=是，0=否；冻结后禁止新建采购订单引用）
+   * 冻结（字典 sys_yes_no_type；1=是，0=否；冻结后禁止新建采购订单引用）
    */
   isBlocked?: number;
 
@@ -498,6 +458,11 @@ export interface SourceOfSupplyTemplate {
    * 采购单位
    */
   purchaseUnit?: string;
+
+  /**
+   * 最小订购量
+   */
+  minimumOrderQuantity?: number;
 
   /**
    * 计划交货天数（采购提前期）
@@ -508,6 +473,26 @@ export interface SourceOfSupplyTemplate {
    * 框架协议号（采购合同/协议编号，可选）
    */
   agreementNumber?: string;
+
+  /**
+   * 协议行号
+   */
+  agreementLineNumber?: number;
+
+  /**
+   * 生效日期
+   */
+  validFrom?: string;
+
+  /**
+   * 失效日期
+   */
+  validTo?: string;
+
+  /**
+   * 货源状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   */
+  sourceStatus?: number;
 
   /**
    * 扩展字段JSON
@@ -539,12 +524,12 @@ export interface SourceOfSupplyImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
   /**
-   * 工厂代码（关联 TaktPlant.PlantCode）
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -554,37 +539,27 @@ export interface SourceOfSupplyImport {
   sourceOfSupplyCode?: string;
 
   /**
-   * 物料编码（关联 TaktMaterialPlant.MaterialCode）
+   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称（冗余字段，便于查询展示）
-   */
-  materialName?: string;
-
-  /**
-   * 供货商编码（关联 TaktSupplier.SupplierCode）
+   * 供货商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
    */
   supplierCode?: string;
 
   /**
-   * 供货商名称（冗余字段，便于查询展示）
+   * 采购组（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
    */
-  supplierName?: string;
+  purchaseGroup?: string;
 
   /**
-   * 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
-   */
-  purchaseGroupCode?: string;
-
-  /**
-   * 是否固定（字典 sys_yes_no_type；1=是，0=否；固定货源，MRP/寻源优先选用）
+   * 固定（字典 sys_yes_no_type；1=是，0=否；固定货源，MRP/寻源优先选用）
    */
   isFixed?: number;
 
   /**
-   * 是否冻结（字典 sys_yes_no_type；1=是，0=否；冻结后禁止新建采购订单引用）
+   * 冻结（字典 sys_yes_no_type；1=是，0=否；冻结后禁止新建采购订单引用）
    */
   isBlocked?: number;
 
@@ -592,6 +567,11 @@ export interface SourceOfSupplyImport {
    * 采购单位
    */
   purchaseUnit?: string;
+
+  /**
+   * 最小订购量
+   */
+  minimumOrderQuantity?: number;
 
   /**
    * 计划交货天数（采购提前期）
@@ -602,6 +582,26 @@ export interface SourceOfSupplyImport {
    * 框架协议号（采购合同/协议编号，可选）
    */
   agreementNumber?: string;
+
+  /**
+   * 协议行号
+   */
+  agreementLineNumber?: number;
+
+  /**
+   * 生效日期
+   */
+  validFrom?: string;
+
+  /**
+   * 失效日期
+   */
+  validTo?: string;
+
+  /**
+   * 货源状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   */
+  sourceStatus?: number;
 
   /**
    * 扩展字段JSON
@@ -633,7 +633,7 @@ export interface SourceOfSupplyExport {
   companyCode: string;
 
   /**
-   * 工厂代码（关联 TaktPlant.PlantCode）
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -643,47 +643,27 @@ export interface SourceOfSupplyExport {
   sourceOfSupplyCode: string;
 
   /**
-   * 物料编码（关联 TaktMaterialPlant.MaterialCode）
+   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
    */
   materialCode: string;
 
   /**
-   * 物料名称（冗余字段，便于查询展示）
-   */
-  materialName: string;
-
-  /**
-   * 供货商编码（关联 TaktSupplier.SupplierCode）
+   * 供货商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
    */
   supplierCode: string;
 
   /**
-   * 供货商名称（冗余字段，便于查询展示）
+   * 采购组（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
    */
-  supplierName: string;
+  purchaseGroup?: string;
 
   /**
-   * 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
-   */
-  purchaseGroupCode?: string;
-
-  /**
-   * 生效日期
-   */
-  validFrom: string;
-
-  /**
-   * 失效日期
-   */
-  validTo: string;
-
-  /**
-   * 是否固定（字典 sys_yes_no_type；1=是，0=否；固定货源，MRP/寻源优先选用）
+   * 固定（字典 sys_yes_no_type；1=是，0=否；固定货源，MRP/寻源优先选用）
    */
   isFixed: number;
 
   /**
-   * 是否冻结（字典 sys_yes_no_type；1=是，0=否；冻结后禁止新建采购订单引用）
+   * 冻结（字典 sys_yes_no_type；1=是，0=否；冻结后禁止新建采购订单引用）
    */
   isBlocked: number;
 
@@ -713,14 +693,24 @@ export interface SourceOfSupplyExport {
   agreementLineNumber?: number;
 
   /**
-   * 货源状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 生效日期
    */
-  sourceStatus: number;
+  validFrom: string;
+
+  /**
+   * 失效日期
+   */
+  validTo: string;
 
   /**
    * 排序号（越小越靠前；同物料多货源时的优先级）
    */
   sortOrder: number;
+
+  /**
+   * 货源状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   */
+  sourceStatus: number;
 
   /**
    * 扩展字段JSON

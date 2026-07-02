@@ -2,9 +2,9 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Foundation
 // 文件名称：TaktFileDtos.cs
-// 创建时间：2026-06-13
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
-// 功能描述：File 模块 DTO（实体 CRUD + 上传/分片 API，与 frontend api/foundation/file.ts 协议对齐）
+// 功能描述：File 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktFile 生成，请按需审阅）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -41,42 +41,7 @@ public class TaktFileDto : TaktCompanyDtoBase
     public string FileCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文件哈希值（MD5 或 SHA256，用于去重与校验）
-    /// </summary>
-    public string FileHash { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 存储方式（字典 sys_storage_type）
-    /// </summary>
-    public int StorageType { get; set; } = 0;
-
-    /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用，0=禁用）
-    /// </summary>
-    public int FileStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 公开（字典 sys_is_public_type；0=公开同公司可见，1=私有仅创建人可见/可改/可下载）
-    /// </summary>
-    public int IsPublic { get; set; } = 0;
-
-    /// <summary>
-    /// 文件标签（多个标签用逗号分隔）
-    /// </summary>
-    public string FileTags { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 下载次数
-    /// </summary>
-    public int DownloadCount { get; set; } = 0;
-
-    /// <summary>
-    /// 最后下载时间
-    /// </summary>
-    public DateTime? LastDownloadTime { get; set; }    
-
-    /// <summary>
-    /// 文件名称（存储文件名）
+    /// 文件名称（字典 sys_storage_naming_config；0=原文件+哈希值 1=自动生成 2=自定义）
     /// </summary>
     public string FileName { get; set; } = string.Empty;
 
@@ -86,7 +51,7 @@ public class TaktFileDto : TaktCompanyDtoBase
     public string FileOriginalName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文件路径（相对路径或完整路径）
+    /// 文件路径（关联一级菜单 uploadPath，选项 useMenuUploadPath）
     /// </summary>
     public string FilePath { get; set; } = string.Empty;
 
@@ -104,12 +69,22 @@ public class TaktFileDto : TaktCompanyDtoBase
     /// <summary>
     /// 文件扩展名
     /// </summary>
-    public string FileExtension { get; set; } = string.Empty; 
+    public string FileExtension { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 文件哈希值（MD5 或 SHA256，用于去重与校验）
+    /// </summary>
+    public string FileHash { get; set; } = string.Empty;
 
     /// <summary>
     /// 文件分类（根据 FileType/MIME 自动推断：0=文档，1=图片，2=视频，3=音频，4=压缩包，5=其他）
     /// </summary>
     public int FileCategory { get; set; } = 0;
+
+    /// <summary>
+    /// 存储方式（字典 sys_storage_type；0=本地存储 1=OSS对象存储 2=FTP）
+    /// </summary>
+    public int StorageType { get; set; } = 0;
 
     /// <summary>
     /// 存储配置（JSON，OSS/FTP 等扩展配置）
@@ -122,9 +97,29 @@ public class TaktFileDto : TaktCompanyDtoBase
     public string AccessUrl { get; set; } = string.Empty;
 
     /// <summary>
+    /// 下载次数
+    /// </summary>
+    public int DownloadCount { get; set; } = 0;
+
+    /// <summary>
+    /// 最后下载时间
+    /// </summary>
+    public DateTime? LastDownloadTime { get; set; }
+
+    /// <summary>
+    /// 公开（字典 sys_is_public_type；0=公开同公司可见，1=私有仅创建人可见/可改/可下载）
+    /// </summary>
+    public int IsPublic { get; set; } = 0;
+
+    /// <summary>
     /// 文件描述
     /// </summary>
     public string FileDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 文件标签（多个标签用逗号分隔）
+    /// </summary>
+    public string FileTags { get; set; } = string.Empty;
 
     /// <summary>
     /// IP 地址（上传或访问来源）
@@ -135,6 +130,11 @@ public class TaktFileDto : TaktCompanyDtoBase
     /// 位置（IP 对应地理位置）
     /// </summary>
     public string Location { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// </summary>
+    public int FileStatus { get; set; } = 0;
 
 }
 
@@ -164,7 +164,7 @@ public class TaktFileQueryDto : TaktPagedQuery
     public string? FileCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文件名称（存储文件名）
+    /// 文件名称（字典 sys_storage_naming_config；0=原文件+哈希值 1=自动生成 2=自定义）
     /// </summary>
     public string? FileName { get; set; } = string.Empty;
 
@@ -174,7 +174,7 @@ public class TaktFileQueryDto : TaktPagedQuery
     public string? FileOriginalName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文件路径（相对路径或完整路径）
+    /// 文件路径（关联一级菜单 uploadPath，选项 useMenuUploadPath）
     /// </summary>
     public string? FilePath { get; set; } = string.Empty;
 
@@ -205,7 +205,7 @@ public class TaktFileQueryDto : TaktPagedQuery
     public int? FileCategory { get; set; }
 
     /// <summary>
-    /// 存储方式（字典 sys_storage_type）
+    /// 存储方式（字典 sys_storage_type；0=本地存储 1=OSS对象存储 2=FTP）
     /// </summary>
     public int? StorageType { get; set; }
 
@@ -235,11 +235,6 @@ public class TaktFileQueryDto : TaktPagedQuery
     public DateTime? LastDownloadTimeEnd { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用，0=禁用）
-    /// </summary>
-    public int? FileStatus { get; set; }
-
-    /// <summary>
     /// 公开（字典 sys_is_public_type；0=公开同公司可见，1=私有仅创建人可见/可改/可下载）
     /// </summary>
     public int? IsPublic { get; set; }
@@ -263,6 +258,11 @@ public class TaktFileQueryDto : TaktPagedQuery
     /// 位置（IP 对应地理位置）
     /// </summary>
     public string? Location { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// </summary>
+    public int? FileStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -305,7 +305,7 @@ public class TaktFileCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -316,9 +316,9 @@ public class TaktFileCreateDto
     public string FileCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文件名称（存储文件名）
+    /// 文件名称（字典 sys_storage_naming_config；0=原文件+哈希值 1=自动生成 2=自定义）
     /// </summary>
-    [Required(ErrorMessage = "文件名称（存储文件名）不能为空")]
+    [Required(ErrorMessage = "文件名称（字典 sys_storage_naming_config；0=原文件+哈希值 1=自动生成 2=自定义）不能为空")]
     public string FileName { get; set; } = string.Empty;
 
     /// <summary>
@@ -328,9 +328,9 @@ public class TaktFileCreateDto
     public string FileOriginalName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文件路径（相对路径或完整路径）
+    /// 文件路径（关联一级菜单 uploadPath，选项 useMenuUploadPath）
     /// </summary>
-    [Required(ErrorMessage = "文件路径（相对路径或完整路径）不能为空")]
+    [Required(ErrorMessage = "文件路径（关联一级菜单 uploadPath，选项 useMenuUploadPath）不能为空")]
     public string FilePath { get; set; } = string.Empty;
 
     /// <summary>
@@ -362,7 +362,7 @@ public class TaktFileCreateDto
     public int FileCategory { get; set; } = 0;
 
     /// <summary>
-    /// 存储方式（字典 sys_storage_type）
+    /// 存储方式（字典 sys_storage_type；0=本地存储 1=OSS对象存储 2=FTP）
     /// </summary>
     public int StorageType { get; set; } = 0;
 
@@ -386,11 +386,6 @@ public class TaktFileCreateDto
     /// 最后下载时间
     /// </summary>
     public DateTime? LastDownloadTime { get; set; }
-
-    /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用，0=禁用）
-    /// </summary>
-    public int FileStatus { get; set; } = 0;
 
     /// <summary>
     /// 公开（字典 sys_is_public_type；0=公开同公司可见，1=私有仅创建人可见/可改/可下载）
@@ -420,6 +415,11 @@ public class TaktFileCreateDto
     /// </summary>
     [Required(ErrorMessage = "位置（IP 对应地理位置）不能为空")]
     public string Location { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// </summary>
+    public int FileStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -482,7 +482,7 @@ public class TaktFileStatusDto
 // ========================================
 
 /// <summary>
-/// File 公开更新 DTO
+/// File 是否公开更新 DTO
 /// </summary>
 public class TaktFilePublicDto
 {
@@ -495,10 +495,222 @@ public class TaktFilePublicDto
     public long FileId { get; set; }
 
     /// <summary>
-    /// 公开（字典 sys_is_public_type；0=公开同公司可见，1=私有仅创建人可见）
+    /// 是否公开（字典 sys_is_public_type；0=公开，1=私有）
     /// </summary>
-    [Required(ErrorMessage = "公开不能为空")]
+    [Required(ErrorMessage = "是否公开不能为空")]
     public int IsPublic { get; set; } = 0;
+}
+
+// ========================================
+// 文件上传 DTO
+// ========================================
+
+/// <summary>
+/// 整文件/分片合并上传附带业务元数据
+/// </summary>
+public class TaktFileUploadMetaDto
+{
+    /// <summary>
+    /// 文件描述
+    /// </summary>
+    public string? FileDescription { get; set; }
+
+    /// <summary>
+    /// 文件标签（多个标签用逗号分隔）
+    /// </summary>
+    public string? FileTags { get; set; }
+
+    /// <summary>
+    /// 是否公开（字典 sys_is_public_type；0=公开，1=私有）
+    /// </summary>
+    public int IsPublic { get; set; } = 0;
+
+    /// <summary>
+    /// 状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// </summary>
+    public int? FileStatus { get; set; }
+
+    /// <summary>
+    /// 上传业务类型（TaktFileUploadType 枚举值）
+    /// </summary>
+    public int? FileUploadType { get; set; }
+
+    /// <summary>
+    /// 目标存储文件名（可选）
+    /// </summary>
+    public string? TargetFileName { get; set; }
+
+    /// <summary>
+    /// 分类路径（相对目录）
+    /// </summary>
+    public string? CategoryPath { get; set; }
+
+    /// <summary>
+    /// 存储方式（字典 sys_storage_type；0=本地存储 1=OSS对象存储 2=FTP）
+    /// </summary>
+    public int? StorageType { get; set; }
+
+    /// <summary>
+    /// 存储命名策略（0=默认）
+    /// </summary>
+    public int? StorageNaming { get; set; }
+
+    /// <summary>
+    /// 存储配置（JSON）
+    /// </summary>
+    public string? StorageConfig { get; set; }
+}
+
+/// <summary>
+/// 文件上传完成结果 DTO
+/// </summary>
+public class TaktFileUploadResultDto
+{
+    /// <summary>
+    /// 文件 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long FileId { get; set; }
+
+    /// <summary>
+    /// 文件编码
+    /// </summary>
+    public string FileCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 存储文件名
+    /// </summary>
+    public string FileName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 原始文件名
+    /// </summary>
+    public string FileOriginalName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 文件路径（关联一级菜单 uploadPath，选项 useMenuUploadPath）
+    /// </summary>
+    public string FilePath { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 文件大小（字节）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long FileSize { get; set; }
+
+    /// <summary>
+    /// 文件 MIME 类型
+    /// </summary>
+    public string FileType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 文件扩展名
+    /// </summary>
+    public string FileExtension { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 文件哈希值
+    /// </summary>
+    public string FileHash { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 文件分类
+    /// </summary>
+    public int FileCategory { get; set; } = 0;
+
+    /// <summary>
+    /// 存储方式（字典 sys_storage_type；0=本地存储 1=OSS对象存储 2=FTP）
+    /// </summary>
+    public int StorageType { get; set; } = 0;
+
+    /// <summary>
+    /// 存储配置
+    /// </summary>
+    public string? StorageConfig { get; set; }
+
+    /// <summary>
+    /// 访问地址
+    /// </summary>
+    public string AccessUrl { get; set; } = string.Empty;
+}
+
+/// <summary>
+/// 分片合并请求 DTO（含业务元数据）
+/// </summary>
+public class TaktFileChunkMergeDto
+{
+    /// <summary>
+    /// 上传会话标识
+    /// </summary>
+    [Required(ErrorMessage = "上传会话标识不能为空")]
+    public string Identifier { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 原始文件名
+    /// </summary>
+    [Required(ErrorMessage = "文件名不能为空")]
+    public string FileName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 总分片数
+    /// </summary>
+    public int TotalChunks { get; set; }
+
+    /// <summary>
+    /// 文件总大小（字节）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long TotalSize { get; set; }
+
+    /// <summary>
+    /// 文件描述
+    /// </summary>
+    public string? FileDescription { get; set; }
+
+    /// <summary>
+    /// 文件标签
+    /// </summary>
+    public string? FileTags { get; set; }
+
+    /// <summary>
+    /// 是否公开
+    /// </summary>
+    public int IsPublic { get; set; } = 0;
+
+    /// <summary>
+    /// 状态
+    /// </summary>
+    public int? FileStatus { get; set; }
+
+    /// <summary>
+    /// 上传业务类型
+    /// </summary>
+    public int? FileUploadType { get; set; }
+
+    /// <summary>
+    /// 目标存储文件名
+    /// </summary>
+    public string? TargetFileName { get; set; }
+
+    /// <summary>
+    /// 分类路径
+    /// </summary>
+    public string? CategoryPath { get; set; }
+
+    /// <summary>
+    /// 存储方式（字典 sys_storage_type；0=本地存储 1=OSS对象存储 2=FTP）
+    /// </summary>
+    public int? StorageType { get; set; }
+
+    /// <summary>
+    /// 存储命名策略
+    /// </summary>
+    public int? StorageNaming { get; set; }
+
+    /// <summary>
+    /// 存储配置
+    /// </summary>
+    public string? StorageConfig { get; set; }
 }
 
 // ========================================
@@ -526,7 +738,7 @@ public class TaktFileTemplateDto
     public string? FileCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文件名称（存储文件名）
+    /// 文件名称（字典 sys_storage_naming_config；0=原文件+哈希值 1=自动生成 2=自定义）
     /// </summary>
     public string? FileName { get; set; } = string.Empty;
 
@@ -536,7 +748,7 @@ public class TaktFileTemplateDto
     public string? FileOriginalName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文件路径（相对路径或完整路径）
+    /// 文件路径（关联一级菜单 uploadPath，选项 useMenuUploadPath）
     /// </summary>
     public string? FilePath { get; set; } = string.Empty;
 
@@ -567,7 +779,7 @@ public class TaktFileTemplateDto
     public int? FileCategory { get; set; }
 
     /// <summary>
-    /// 存储方式（字典 sys_storage_type）
+    /// 存储方式（字典 sys_storage_type；0=本地存储 1=OSS对象存储 2=FTP）
     /// </summary>
     public int? StorageType { get; set; }
 
@@ -580,6 +792,46 @@ public class TaktFileTemplateDto
     /// 访问地址（文件 URL）
     /// </summary>
     public string? AccessUrl { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 下载次数
+    /// </summary>
+    public int? DownloadCount { get; set; }
+
+    /// <summary>
+    /// 最后下载时间
+    /// </summary>
+    public DateTime? LastDownloadTime { get; set; }
+
+    /// <summary>
+    /// 公开（字典 sys_is_public_type；0=公开同公司可见，1=私有仅创建人可见/可改/可下载）
+    /// </summary>
+    public int? IsPublic { get; set; }
+
+    /// <summary>
+    /// 文件描述
+    /// </summary>
+    public string? FileDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 文件标签（多个标签用逗号分隔）
+    /// </summary>
+    public string? FileTags { get; set; } = string.Empty;
+
+    /// <summary>
+    /// IP 地址（上传或访问来源）
+    /// </summary>
+    public string? IpAddress { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 位置（IP 对应地理位置）
+    /// </summary>
+    public string? Location { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// </summary>
+    public int? FileStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -609,7 +861,7 @@ public class TaktFileImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -619,7 +871,7 @@ public class TaktFileImportDto
     public string? FileCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文件名称（存储文件名）
+    /// 文件名称（字典 sys_storage_naming_config；0=原文件+哈希值 1=自动生成 2=自定义）
     /// </summary>
     public string? FileName { get; set; } = string.Empty;
 
@@ -629,7 +881,7 @@ public class TaktFileImportDto
     public string? FileOriginalName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文件路径（相对路径或完整路径）
+    /// 文件路径（关联一级菜单 uploadPath，选项 useMenuUploadPath）
     /// </summary>
     public string? FilePath { get; set; } = string.Empty;
 
@@ -660,7 +912,7 @@ public class TaktFileImportDto
     public int? FileCategory { get; set; }
 
     /// <summary>
-    /// 存储方式（字典 sys_storage_type）
+    /// 存储方式（字典 sys_storage_type；0=本地存储 1=OSS对象存储 2=FTP）
     /// </summary>
     public int? StorageType { get; set; }
 
@@ -673,6 +925,46 @@ public class TaktFileImportDto
     /// 访问地址（文件 URL）
     /// </summary>
     public string? AccessUrl { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 下载次数
+    /// </summary>
+    public int? DownloadCount { get; set; }
+
+    /// <summary>
+    /// 最后下载时间
+    /// </summary>
+    public DateTime? LastDownloadTime { get; set; }
+
+    /// <summary>
+    /// 公开（字典 sys_is_public_type；0=公开同公司可见，1=私有仅创建人可见/可改/可下载）
+    /// </summary>
+    public int? IsPublic { get; set; }
+
+    /// <summary>
+    /// 文件描述
+    /// </summary>
+    public string? FileDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 文件标签（多个标签用逗号分隔）
+    /// </summary>
+    public string? FileTags { get; set; } = string.Empty;
+
+    /// <summary>
+    /// IP 地址（上传或访问来源）
+    /// </summary>
+    public string? IpAddress { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 位置（IP 对应地理位置）
+    /// </summary>
+    public string? Location { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// </summary>
+    public int? FileStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -713,7 +1005,7 @@ public class TaktFileExportDto
     public string FileCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文件名称（存储文件名）
+    /// 文件名称（字典 sys_storage_naming_config；0=原文件+哈希值 1=自动生成 2=自定义）
     /// </summary>
     public string FileName { get; set; } = string.Empty;
 
@@ -723,7 +1015,7 @@ public class TaktFileExportDto
     public string FileOriginalName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文件路径（相对路径或完整路径）
+    /// 文件路径（关联一级菜单 uploadPath，选项 useMenuUploadPath）
     /// </summary>
     public string FilePath { get; set; } = string.Empty;
 
@@ -754,7 +1046,7 @@ public class TaktFileExportDto
     public int FileCategory { get; set; } = 0;
 
     /// <summary>
-    /// 存储方式（字典 sys_storage_type）
+    /// 存储方式（字典 sys_storage_type；0=本地存储 1=OSS对象存储 2=FTP）
     /// </summary>
     public int StorageType { get; set; } = 0;
 
@@ -777,11 +1069,6 @@ public class TaktFileExportDto
     /// 最后下载时间
     /// </summary>
     public DateTime? LastDownloadTime { get; set; }
-
-    /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用，0=禁用）
-    /// </summary>
-    public int FileStatus { get; set; } = 0;
 
     /// <summary>
     /// 公开（字典 sys_is_public_type；0=公开同公司可见，1=私有仅创建人可见/可改/可下载）
@@ -809,6 +1096,11 @@ public class TaktFileExportDto
     public string Location { get; set; } = string.Empty;
 
     /// <summary>
+    /// 状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// </summary>
+    public int FileStatus { get; set; } = 0;
+
+    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -822,212 +1114,4 @@ public class TaktFileExportDto
     /// 创建时间
     /// </summary>
     public DateTime CreatedAt { get; set; }
-}
-
-// ========================================
-// 上传 / 分片 DTO
-// ========================================
-
-/// <summary>
-/// 整文件上传附带业务元数据（multipart 表单字段）
-/// </summary>
-public class TaktFileUploadMetaDto
-{
-    /// <summary>
-    /// 文件描述
-    /// </summary>
-    public string? FileDescription { get; set; }
-
-    /// <summary>
-    /// 文件标签（逗号分隔）
-    /// </summary>
-    public string? FileTags { get; set; }
-
-    /// <summary>
-    /// 公开（字典 sys_is_public_type）
-    /// </summary>
-    public int? IsPublic { get; set; }
-
-    /// <summary>
-    /// 文件状态（字典 sys_normal_disable_status）
-    /// </summary>
-    public int? FileStatus { get; set; }
-
-    /// <summary>
-    /// 上传类型（引擎路由）
-    /// </summary>
-    public int? FileUploadType { get; set; }
-
-    /// <summary>
-    /// 自定义目标文件名（storageNaming=2）
-    /// </summary>
-    public string? TargetFileName { get; set; }
-
-    /// <summary>
-    /// 业务存储子目录
-    /// </summary>
-    public string? CategoryPath { get; set; }
-
-    /// <summary>
-    /// 存储方式（字典 sys_storage_type）
-    /// </summary>
-    public int? StorageType { get; set; }
-
-    /// <summary>
-    /// 存储命名规则（字典 sys_storage_naming_config）
-    /// </summary>
-    public int? StorageNaming { get; set; }
-
-    /// <summary>
-    /// 存储配置 JSON
-    /// </summary>
-    public string? StorageConfig { get; set; }
-}
-
-/// <summary>
-/// 分片合并请求（含业务元数据）
-/// </summary>
-public class TaktFileChunkMergeDto
-{
-    /// <summary>
-    /// 文件唯一标识
-    /// </summary>
-    public string Identifier { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 原始文件名
-    /// </summary>
-    public string FileName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 总分片数
-    /// </summary>
-    public int TotalChunks { get; set; }
-
-    /// <summary>
-    /// 文件总大小（字节）
-    /// </summary>
-    public long TotalSize { get; set; }
-
-    /// <summary>
-    /// 文件描述
-    /// </summary>
-    public string? FileDescription { get; set; }
-
-    /// <summary>
-    /// 文件标签
-    /// </summary>
-    public string? FileTags { get; set; }
-
-    /// <summary>
-    /// 公开
-    /// </summary>
-    public int? IsPublic { get; set; }
-
-    /// <summary>
-    /// 上传类型
-    /// </summary>
-    public int? FileUploadType { get; set; }
-
-    /// <summary>
-    /// 自定义目标文件名
-    /// </summary>
-    public string? TargetFileName { get; set; }
-
-    /// <summary>
-    /// 业务存储子目录
-    /// </summary>
-    public string? CategoryPath { get; set; }
-
-    /// <summary>
-    /// 存储方式
-    /// </summary>
-    public int? StorageType { get; set; }
-
-    /// <summary>
-    /// 存储配置 JSON
-    /// </summary>
-    public string? StorageConfig { get; set; }
-
-    /// <summary>
-    /// 存储命名规则
-    /// </summary>
-    public int? StorageNaming { get; set; }
-
-    /// <summary>
-    /// 文件状态
-    /// </summary>
-    public int? FileStatus { get; set; }
-}
-
-/// <summary>
-/// 上传完成结果（存储层 + 业务 fileId）
-/// </summary>
-public class TaktFileUploadResultDto
-{
-    /// <summary>
-    /// 业务文件主键（序列化为 string）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FileId { get; set; }
-
-    /// <summary>
-    /// 文件编码
-    /// </summary>
-    public string FileCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 存储文件名
-    /// </summary>
-    public string FileName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 原始文件名
-    /// </summary>
-    public string FileOriginalName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 相对路径
-    /// </summary>
-    public string FilePath { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 文件大小（字节）
-    /// </summary>
-    public long FileSize { get; set; }
-
-    /// <summary>
-    /// MIME 类型
-    /// </summary>
-    public string? FileType { get; set; }
-
-    /// <summary>
-    /// 扩展名（不含点）
-    /// </summary>
-    public string? FileExtension { get; set; }
-
-    /// <summary>
-    /// 文件哈希
-    /// </summary>
-    public string? FileHash { get; set; }
-
-    /// <summary>
-    /// 文件分类
-    /// </summary>
-    public int FileCategory { get; set; }
-
-    /// <summary>
-    /// 存储方式
-    /// </summary>
-    public int StorageType { get; set; }
-
-    /// <summary>
-    /// 存储配置 JSON
-    /// </summary>
-    public string? StorageConfig { get; set; }
-
-    /// <summary>
-    /// 访问地址
-    /// </summary>
-    public string? AccessUrl { get; set; }
 }

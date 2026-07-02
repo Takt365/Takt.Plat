@@ -164,7 +164,7 @@ public partial class TaktXssProtectionMiddleware
     /// <returns>通过校验为 true</returns>
     private static async Task<bool> ValidateRequestPayloadAsync(HttpContext context)
     {
-        if (ContainsSuspiciousContent(context.Request.QueryString.Value))
+        if (!ValidateQueryString(context.Request.QueryString))
         {
             return false;
         }
@@ -202,6 +202,65 @@ public partial class TaktXssProtectionMiddleware
 
         var bodySample = new string(buffer, 0, readCount);
         return !ContainsSuspiciousContent(bodySample);
+    }
+
+    /// <summary>
+    /// 校验查询字符串：参数名仅检测 script 等关键字；参数值做完整 XSS 检测（避免 onlyX= 等键名误触 on\w+= 规则）
+    /// </summary>
+    /// <param name="queryString">查询字符串</param>
+    /// <returns>通过校验为 true</returns>
+    private static bool ValidateQueryString(QueryString queryString)
+    {
+        if (!queryString.HasValue || string.IsNullOrWhiteSpace(queryString.Value))
+        {
+            return true;
+        }
+        var raw = queryString.Value!.TrimStart('?');
+        if (string.IsNullOrWhiteSpace(raw))
+        {
+            return true;
+        }
+        foreach (var segment in raw.Split('&', StringSplitOptions.RemoveEmptyEntries))
+        {
+            var eqIndex = segment.IndexOf('=');
+            var name = eqIndex >= 0 ? segment[..eqIndex] : segment;
+            var value = eqIndex >= 0 ? segment[(eqIndex + 1)..] : string.Empty;
+            try
+            {
+                name = Uri.UnescapeDataString(name.Replace('+', ' '));
+                value = Uri.UnescapeDataString(value.Replace('+', ' '));
+            }
+            catch (UriFormatException)
+            {
+                return false;
+            }
+            if (ContainsSuspiciousKeyword(name) || ContainsSuspiciousContent(value))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /// <summary>
+    /// 是否包含可疑 XSS 关键字（不含 HTML 事件 on*= 正则，供查询参数名等短标识检测）
+    /// </summary>
+    /// <param name="value">待检测文本</param>
+    /// <returns>包含可疑内容时为 true</returns>
+    private static bool ContainsSuspiciousKeyword(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return false;
+        }
+        foreach (var pattern in SuspiciousPatterns)
+        {
+            if (value.Contains(pattern, StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     /// <summary>

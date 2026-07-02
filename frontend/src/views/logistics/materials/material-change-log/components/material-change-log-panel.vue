@@ -73,7 +73,7 @@
         v-model:page-size="pageSize"
         :total="total"
         scroll-layout="masterDetailLr"
-        table-mode="single"
+        table-mode="masterDetailDetail"
         :show-row-selection="true"
         @change="handleTableChange"
         @pagination-change="handleMasterDetailPaginationChange"
@@ -133,8 +133,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.changeTimeStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialchangelog.changetimestart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -144,8 +143,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.changeTimeEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialchangelog.changetimeend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -178,7 +176,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -189,7 +187,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -243,7 +241,7 @@
       id-column-key="materialChangeLogId"
       action-column-key="action"
       entity-scope="tenant"
-      table-mode="single"
+      table-mode="masterDetailDetail"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -364,6 +362,7 @@ function handleAdvancedQueryReset() {
   }
 }
 const columnSettingVisible = ref(false)
+/** 表格当前可见列 key（空数组时按 tableMode=masterDetailDetail 默认 id+4 业务列） */
 const visibleColumnKeys = ref<string[]>([])
 
 function handleColumnSetting() {
@@ -496,7 +495,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: MaterialChangeLog, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getMaterialChangeLogId(selectedRow.value) === getMaterialChangeLogId(record)) {
+    } else if (selectedRow.value && getMaterialChangeLogId(selectedRow.value) === getMaterialChangeLogId(record)) {
       selectedRow.value = null
     }
   },

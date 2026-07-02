@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Serial
 // 文件名称：TaktSerialInboundDtos.cs
-// 创建时间：2026-06-16
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SerialInbound 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSerialInbound 生成，请按需审阅）
 // 
@@ -36,12 +36,12 @@ public class TaktSerialInboundDto : TaktCompanyDtoBase
     public long SerialInboundId { get; set; }
 
     /// <summary>
-    /// 工厂代码(4位字母数字组合)
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 入库单号（组合唯一索引：PlantCode + InboundNo）
+    /// 入库单号（租户+公司+工厂内唯一）
     /// </summary>
     public string InboundNo { get; set; } = string.Empty;
 
@@ -51,17 +51,17 @@ public class TaktSerialInboundDto : TaktCompanyDtoBase
     public DateTime InboundDate { get; set; }
 
     /// <summary>
-    /// 入库类型(0=采购入库,1=生产入库,2=退货入库,3=调拨入库,4=序列号入库,5=其他)
+    /// 入库类型（字典 logistics_inbound_type；0=采购入库 1=生产入库 2=退货入库 3=调拨入库 4=序列号入库 5=其他）
     /// </summary>
     public int InboundType { get; set; } = 0;
 
     /// <summary>
-    /// 仓库编码
+    /// 仓库编码（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options）
     /// </summary>
     public string WarehouseCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 库位编码
+    /// 库位编码（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options）
     /// </summary>
     public string LocationCode { get; set; } = string.Empty;
 
@@ -71,12 +71,7 @@ public class TaktSerialInboundDto : TaktCompanyDtoBase
     public int TotalQuantity { get; set; } = 0;
 
     /// <summary>
-    /// 关联公司
-    /// </summary>
-    public string RelatedCompany { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 序列号入库明细列表(主子表关系)
+    /// 序列号入库明细列表（主子表关系）
     /// （子表：TaktSerialInboundItem）
     /// </summary>
     public List<TaktSerialInboundItemDto>? Items { get; set; }
@@ -104,12 +99,12 @@ public class TaktSerialInboundQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码(4位字母数字组合)
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 入库单号（组合唯一索引：PlantCode + InboundNo）
+    /// 入库单号（租户+公司+工厂内唯一）
     /// </summary>
     public string? InboundNo { get; set; } = string.Empty;
 
@@ -124,17 +119,17 @@ public class TaktSerialInboundQueryDto : TaktPagedQuery
     public DateTime? InboundDateEnd { get; set; }
 
     /// <summary>
-    /// 入库类型(0=采购入库,1=生产入库,2=退货入库,3=调拨入库,4=序列号入库,5=其他)
+    /// 入库类型（字典 logistics_inbound_type；0=采购入库 1=生产入库 2=退货入库 3=调拨入库 4=序列号入库 5=其他）
     /// </summary>
     public int? InboundType { get; set; }
 
     /// <summary>
-    /// 仓库编码
+    /// 仓库编码（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options）
     /// </summary>
     public string? WarehouseCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 库位编码
+    /// 库位编码（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options）
     /// </summary>
     public string? LocationCode { get; set; } = string.Empty;
 
@@ -142,11 +137,6 @@ public class TaktSerialInboundQueryDto : TaktPagedQuery
     /// 总数量
     /// </summary>
     public int? TotalQuantity { get; set; }
-
-    /// <summary>
-    /// 关联公司
-    /// </summary>
-    public string? RelatedCompany { get; set; } = string.Empty;
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -189,20 +179,20 @@ public class TaktSerialInboundCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码(4位字母数字组合)
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码(4位字母数字组合)不能为空")]
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 入库单号（组合唯一索引：PlantCode + InboundNo）
+    /// 入库单号（租户+公司+工厂内唯一）
     /// </summary>
-    [Required(ErrorMessage = "入库单号（组合唯一索引：PlantCode + InboundNo）不能为空")]
+    [Required(ErrorMessage = "入库单号（租户+公司+工厂内唯一）不能为空")]
     public string InboundNo { get; set; } = string.Empty;
 
     /// <summary>
@@ -211,20 +201,20 @@ public class TaktSerialInboundCreateDto
     public DateTime InboundDate { get; set; }
 
     /// <summary>
-    /// 入库类型(0=采购入库,1=生产入库,2=退货入库,3=调拨入库,4=序列号入库,5=其他)
+    /// 入库类型（字典 logistics_inbound_type；0=采购入库 1=生产入库 2=退货入库 3=调拨入库 4=序列号入库 5=其他）
     /// </summary>
     public int InboundType { get; set; } = 0;
 
     /// <summary>
-    /// 仓库编码
+    /// 仓库编码（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options）
     /// </summary>
-    [Required(ErrorMessage = "仓库编码不能为空")]
+    [Required(ErrorMessage = "仓库编码（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options）不能为空")]
     public string WarehouseCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 库位编码
+    /// 库位编码（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options）
     /// </summary>
-    [Required(ErrorMessage = "库位编码不能为空")]
+    [Required(ErrorMessage = "库位编码（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options）不能为空")]
     public string LocationCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -233,13 +223,7 @@ public class TaktSerialInboundCreateDto
     public int TotalQuantity { get; set; } = 0;
 
     /// <summary>
-    /// 关联公司
-    /// </summary>
-    [Required(ErrorMessage = "关联公司不能为空")]
-    public string RelatedCompany { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 序列号入库明细列表(主子表关系)（子表，级联保存）
+    /// 序列号入库明细列表（主子表关系）（子表，级联保存）
     /// </summary>
     public List<TaktSerialInboundItemCreateDto>? Items { get; set; }
 
@@ -295,27 +279,32 @@ public class TaktSerialInboundTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码(4位字母数字组合)
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 入库单号（组合唯一索引：PlantCode + InboundNo）
+    /// 入库单号（租户+公司+工厂内唯一）
     /// </summary>
     public string? InboundNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 入库类型(0=采购入库,1=生产入库,2=退货入库,3=调拨入库,4=序列号入库,5=其他)
+    /// 入库日期
+    /// </summary>
+    public DateTime? InboundDate { get; set; }
+
+    /// <summary>
+    /// 入库类型（字典 logistics_inbound_type；0=采购入库 1=生产入库 2=退货入库 3=调拨入库 4=序列号入库 5=其他）
     /// </summary>
     public int? InboundType { get; set; }
 
     /// <summary>
-    /// 仓库编码
+    /// 仓库编码（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options）
     /// </summary>
     public string? WarehouseCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 库位编码
+    /// 库位编码（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options）
     /// </summary>
     public string? LocationCode { get; set; } = string.Empty;
 
@@ -325,9 +314,9 @@ public class TaktSerialInboundTemplateDto
     public int? TotalQuantity { get; set; }
 
     /// <summary>
-    /// 关联公司
+    /// 序列号入库明细列表（主子表关系）（子表，级联保存）
     /// </summary>
-    public string? RelatedCompany { get; set; } = string.Empty;
+    public List<TaktSerialInboundItemCreateDto>? Items { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -357,32 +346,37 @@ public class TaktSerialInboundImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码(4位字母数字组合)
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 入库单号（组合唯一索引：PlantCode + InboundNo）
+    /// 入库单号（租户+公司+工厂内唯一）
     /// </summary>
     public string? InboundNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 入库类型(0=采购入库,1=生产入库,2=退货入库,3=调拨入库,4=序列号入库,5=其他)
+    /// 入库日期
+    /// </summary>
+    public DateTime? InboundDate { get; set; }
+
+    /// <summary>
+    /// 入库类型（字典 logistics_inbound_type；0=采购入库 1=生产入库 2=退货入库 3=调拨入库 4=序列号入库 5=其他）
     /// </summary>
     public int? InboundType { get; set; }
 
     /// <summary>
-    /// 仓库编码
+    /// 仓库编码（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options）
     /// </summary>
     public string? WarehouseCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 库位编码
+    /// 库位编码（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options）
     /// </summary>
     public string? LocationCode { get; set; } = string.Empty;
 
@@ -392,9 +386,9 @@ public class TaktSerialInboundImportDto
     public int? TotalQuantity { get; set; }
 
     /// <summary>
-    /// 关联公司
+    /// 序列号入库明细列表（主子表关系）（子表，级联保存）
     /// </summary>
-    public string? RelatedCompany { get; set; } = string.Empty;
+    public List<TaktSerialInboundItemCreateDto>? Items { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -430,12 +424,12 @@ public class TaktSerialInboundExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码(4位字母数字组合)
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 入库单号（组合唯一索引：PlantCode + InboundNo）
+    /// 入库单号（租户+公司+工厂内唯一）
     /// </summary>
     public string InboundNo { get; set; } = string.Empty;
 
@@ -445,17 +439,17 @@ public class TaktSerialInboundExportDto
     public DateTime InboundDate { get; set; }
 
     /// <summary>
-    /// 入库类型(0=采购入库,1=生产入库,2=退货入库,3=调拨入库,4=序列号入库,5=其他)
+    /// 入库类型（字典 logistics_inbound_type；0=采购入库 1=生产入库 2=退货入库 3=调拨入库 4=序列号入库 5=其他）
     /// </summary>
     public int InboundType { get; set; } = 0;
 
     /// <summary>
-    /// 仓库编码
+    /// 仓库编码（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options）
     /// </summary>
     public string WarehouseCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 库位编码
+    /// 库位编码（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options）
     /// </summary>
     public string LocationCode { get; set; } = string.Empty;
 
@@ -463,11 +457,6 @@ public class TaktSerialInboundExportDto
     /// 总数量
     /// </summary>
     public int TotalQuantity { get; set; } = 0;
-
-    /// <summary>
-    /// 关联公司
-    /// </summary>
-    public string RelatedCompany { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON

@@ -28,6 +28,48 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
+                :label="t('entity.apsscheduleitem.apsorderid')"
+                name="apsOrderId"
+              >
+                <a-input
+                  v-model:value="formState.apsOrderId"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsscheduleitem.apsorderid') })"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.apsscheduleitem.apsoperationid')"
+                name="apsOperationId"
+              >
+                <a-input
+                  v-model:value="formState.apsOperationId"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsscheduleitem.apsoperationid') })"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.apsscheduleitem.routingitemid')"
+                name="routingItemId"
+              >
+                <a-input
+                  v-model:value="formState.routingItemId"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsscheduleitem.routingitemid') })"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
                 :label="t('entity.apsscheduleitem.linenumber')"
                 name="lineNumber"
               >
@@ -97,49 +139,6 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.apsscheduleitem.workcentername')"
-                name="workCenterName"
-              >
-                <a-input
-                  v-model:value="formState.workCenterName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsscheduleitem.workcentername') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.apsscheduleitem.processcode')"
-                name="processCode"
-              >
-                <a-input
-                  v-model:value="formState.processCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsscheduleitem.processcode') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                  :disabled="!!formData?.apsScheduleItemId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.apsscheduleitem.processname')"
-                name="processName"
-              >
-                <a-input
-                  v-model:value="formState.processName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsscheduleitem.processname') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
           </a-row>
         </div>
       </a-tab-pane>
@@ -164,7 +163,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["lineNumber","workOrderCode","productCode","productName","workCenterCode","workCenterName","processCode","processName"]
+const formFields = ["apsOrderId","apsOperationId","routingItemId","lineNumber","workOrderCode","productCode","productName","workCenterCode"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -247,20 +246,6 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     {
       required: true,
       message: t('common.page.form.placeholder.required', { field: t('entity.apsscheduleitem.productname') }),
-      trigger: 'blur'
-    }
-  ],
-  processCode: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.apsscheduleitem.processcode') }),
-      trigger: 'blur'
-    }
-  ],
-  processName: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.apsscheduleitem.processname') }),
       trigger: 'blur'
     }
   ],

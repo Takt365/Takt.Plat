@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="routine:conferencecenter:agenda:create"
-      update-permission="routine:conferencecenter:agenda:update"
-      delete-permission="routine:conferencecenter:agenda:delete"
-      import-permission="routine:conferencecenter:agenda:import"
-      export-permission="routine:conferencecenter:agenda:export"
+      create-permission="routine:conference:center:agenda:create"
+      update-permission="routine:conference:center:agenda:update"
+      delete-permission="routine:conference:center:agenda:delete"
+      import-permission="routine:conference:center:agenda:import"
+      export-permission="routine:conference:center:agenda:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -197,8 +197,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.plannedStartTimeStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.conferenceagenda.plannedstarttimestart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -208,8 +207,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.plannedStartTimeEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.conferenceagenda.plannedstarttimeend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -245,13 +243,22 @@
         />
       </a-form-item>
       </div>
+      <div v-show="isFieldVisible('attachments')">
+      <a-form-item :label="t('entity.conferenceagenda.attachments')">
+        <a-input
+          v-model:value="advancedQueryForm.attachments"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.conferenceagenda.attachments') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('createdAtStart')">
       <a-form-item :label="t('common.page.entity.createdatstart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -262,7 +269,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -420,6 +427,7 @@ const advancedQueryForm = ref({
   durationMinutes: undefined as number | undefined,
   recorderId: '',
   recorderName: '',
+  attachments: '',
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -440,6 +448,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'durationMinutes', label: t('entity.conferenceagenda.durationminutes') },
   { key: 'recorderId', label: t('entity.conferenceagenda.recorderid') },
   { key: 'recorderName', label: t('entity.conferenceagenda.recordername') },
+  { key: 'attachments', label: t('entity.conferenceagenda.attachments') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extField', label: t('common.page.entity.extfield') },
@@ -503,6 +512,7 @@ function buildListQuery(overrides?: Partial<ConferenceAgendaQuery>): ConferenceA
   }
   assignTrimmed('recorderId', form.recorderId)
   assignTrimmed('recorderName', form.recorderName)
+  assignTrimmed('attachments', form.attachments)
   assignTrimmed('createdAtStart', form.createdAtStart)
   assignTrimmed('createdAtEnd', form.createdAtEnd)
   assignTrimmed('extField', form.extField)
@@ -642,6 +652,15 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getConferenceAgendaField(record, 'recorderName') ?? ''
   },
   {
+    title: t('entity.conferenceagenda.attachments'),
+    dataIndex: 'attachments',
+    key: 'attachments',
+    width: 160,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getConferenceAgendaField(record, 'attachments') ?? ''
+  },
+  {
     title: t('entity.conferenceagenda.conference'),
     dataIndex: 'conference',
     key: 'conference',
@@ -657,7 +676,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'routine:conferencecenter:agenda:update',
+        permission: 'routine:conference:center:agenda:update',
         onClick: (record: ConferenceAgenda) => handleEdit(record)
       },
       {
@@ -665,7 +684,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'routine:conferencecenter:agenda:delete',
+        permission: 'routine:conference:center:agenda:delete',
         onClick: (record: ConferenceAgenda) => handleDeleteOne(record)
       }
     ]
@@ -693,7 +712,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: ConferenceAgenda, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getConferenceAgendaId(selectedRow.value) === getConferenceAgendaId(record)) {
+    } else if (selectedRow.value && getConferenceAgendaId(selectedRow.value) === getConferenceAgendaId(record)) {
       selectedRow.value = null
     }
   },
@@ -763,6 +782,7 @@ function handleReset() {
   durationMinutes: undefined as number | undefined,
   recorderId: '',
   recorderName: '',
+  attachments: '',
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -950,6 +970,7 @@ function handleAdvancedQueryReset() {
   durationMinutes: undefined as number | undefined,
   recorderId: '',
   recorderName: '',
+  attachments: '',
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',

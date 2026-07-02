@@ -27,21 +27,21 @@ namespace Takt.Domain.Entities.Foundation;
 public class TaktTranslation : TaktTenantEntityBase
 {
     /// <summary>
-    /// 语言ID（关联 TaktCulture.Id）
+    /// 文化ID（关联 TaktCulture.Id）
     /// </summary>
-    [SugarColumn(ColumnName = "culture_id", ColumnDescription = "区域文化ID", ColumnDataType = "bigint", IsNullable = false)]
+    [SugarColumn(ColumnName = "culture_id", ColumnDescription = "文化ID", ColumnDataType = "bigint", IsNullable = false)]
     public long CultureId { get; set; } 
 
     /// <summary>
-    /// 区域文化编码（如：zh-CN, en-US, ja-JP）
+    /// 文化编码（关联 TaktCulture.CultureCode，选项 TaktCultures/options）
     /// </summary>
-    [SugarColumn(ColumnName = "culture_code", ColumnDescription = "区域文化编码", ColumnDataType = "varchar", Length = 5, IsNullable = false, DefaultValue = "")]
+    [SugarColumn(ColumnName = "culture_code", ColumnDescription = "文化编码", ColumnDataType = "varchar", Length = 5, IsNullable = false, DefaultValue = "")]
     public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 国际化翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；如 common.confirm）
+    /// 翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；如 common.confirm）
     /// </summary>
-    [SugarColumn(ColumnName = "i18n_key", ColumnDescription = "国际化翻译键", ColumnDataType = "varchar", Length = 200, IsNullable = false, DefaultValue = "")]
+    [SugarColumn(ColumnName = "i18n_key", ColumnDescription = "翻译键", ColumnDataType = "varchar", Length = 200, IsNullable = false, DefaultValue = "")]
     public string I18nKey { get; set; } = string.Empty;
 
     /// <summary>
@@ -51,13 +51,13 @@ public class TaktTranslation : TaktTenantEntityBase
     public string TranslationText { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资源分组（用于分类管理翻译，如 page、menu、模块编号字符串）
+    /// 资源分组（关联 TaktMenu.Id，选项 TaktMenus/tree-options）
     /// </summary>
     [SugarColumn(ColumnName = "resource_group", ColumnDescription = "资源分组", ColumnDataType = "varchar", Length = 40, IsNullable = false, DefaultValue = "")]
     public string ResourceGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资源类别（字典 sys_resource_type；frontend=前端，backend=后端）
+    /// 资源类别（字典 sys_resource_type；frontend=前端 backend=后端）
     /// </summary>
     [SugarColumn(ColumnName = "resource_type", ColumnDescription = "资源类别", ColumnDataType = "varchar", Length = 40, IsNullable = false, DefaultValue = "frontend")]
     public string ResourceType { get; set; } = "frontend";
@@ -73,7 +73,7 @@ public class TaktTranslation : TaktTenantEntityBase
     // ========================================
 
     /// <summary>
-    /// 区域文化（多对一关联）
+    /// 文化（多对一关联）
     /// </summary>
     [Navigate(NavigateType.ManyToOne, nameof(CultureCode))]
     public TaktCulture? Culture { get; set; }

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Materials
 // 文件名称：TaktModelDestinationService.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：型号目的地应用服务实现
 // 
@@ -96,13 +96,29 @@ public class TaktModelDestinationService : TaktServiceBase, ITaktModelDestinatio
     {
         var list = await _modelDestinationRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode,
-            x => x.MaterialCode ?? string.Empty,
+            x => x.SortOrder,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.MaterialCode ?? e.Id.ToString(),
+            DictValue = e.DestinationCode,
+            DictLabel = e.DestinationName ?? e.DestinationCode,
         }).ToList();
+    }
+
+    /// <summary>
+    /// 根据物料编码获取机种名称与仕向地信息
+    /// </summary>
+    /// <param name="materialCode">物料编码</param>
+    /// <returns>型号目的地 DTO；未匹配时返回 null</returns>
+    public async Task<TaktModelDestinationDto?> GetModelDestinationByMaterialAsync(string materialCode)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(materialCode);
+        var list = await _modelDestinationRepository.GetListAsync(
+            x => x.TenantCode == CurrentTenantCode && x.MaterialCode == materialCode,
+            x => x.SortOrder,
+            false);
+        var entity = list.FirstOrDefault();
+        return entity?.Adapt<TaktModelDestinationDto>();
     }
 
     /// <summary>

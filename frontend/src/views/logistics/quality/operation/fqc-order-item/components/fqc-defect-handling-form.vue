@@ -73,10 +73,10 @@
                 :label="t('entity.fqcdefecthandling.defecttype')"
                 name="defectType"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.defectType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.fqcdefecthandling.defecttype') })"
-                  style="width: 100%"
+                  dict-type="logistics_quality_defect_type"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.fqcdefecthandling.defecttype') })"
                 />
               </a-form-item>
             </a-col>
@@ -124,10 +124,10 @@
                 :label="t('entity.fqcdefecthandling.handlingmethod')"
                 name="handlingMethod"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.handlingMethod"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.fqcdefecthandling.handlingmethod') })"
-                  style="width: 100%"
+                  dict-type="logistics_quality_defect_handling_method"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.fqcdefecthandling.handlingmethod') })"
                 />
               </a-form-item>
             </a-col>
@@ -143,10 +143,12 @@
  * FQC出货检验单明细实体子表 fqcDefectHandling 维护表单 · 由 generate-vue-master-detail-from-api.cjs 生成
  * @module views/logistics/quality/operation/fqc-order-item/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import type { FqcDefectHandlingCreate } from '@/types/logistics/quality/operation/fqc-defect-handling'
+import TaktSelect from '@/components/business/takt-select/index.vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -177,11 +179,24 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
-/** 表单字段默认值（无字典默认项） */
-function applyFormDefaults(target: Record<string, unknown>) {
-  void target
+/** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
+const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  defectType: 0,
+  handlingMethod: 0
 }
 
+/** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  Object.assign(target, FORM_FIELD_DEFAULTS)
+}
+
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载全量字典 */
+onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
+})
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 fqcDefectHandlingId 才视为编辑） */
 watch(

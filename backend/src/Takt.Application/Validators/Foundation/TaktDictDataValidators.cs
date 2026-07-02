@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Foundation
 // 文件名称：TaktDictDataValidators.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：DictData 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktDictData 生成，请按需审阅）
 // 
@@ -43,10 +43,6 @@ public class TaktDictDataCreateValidator : AbstractValidator<TaktDictDataCreateD
         RuleFor(x => x.I18nKey)
             .NotEmpty().WithMessage("国际化翻译键不能为空")
             .MaximumLength(200).WithMessage("国际化翻译键长度不能超过200个字符");
-        RuleFor(x => x.ExtLabel)
-            .MaximumLength(200).WithMessage("扩展标签长度不能超过200个字符");
-        RuleFor(x => x.ExtValue)
-            .MaximumLength(200).WithMessage("扩展值长度不能超过200个字符");
         RuleFor(x => x.SortOrder)
             .GreaterThanOrEqualTo(0).WithMessage("排序号不能为负数");
         RuleFor(x => x.ExtField)
@@ -72,6 +68,26 @@ public class TaktDictDataUpdateValidator : AbstractValidator<TaktDictDataUpdateD
     {
         RuleFor(x => x.DictDataId)
             .GreaterThan(0).WithMessage("DictDataID无效");
+        RuleFor(x => x.DictTypeId)
+            .GreaterThanOrEqualTo(0).WithMessage("字典类型ID不能为负数");
+        RuleFor(x => x.DictTypeCode)
+            .NotEmpty().WithMessage("字典类型编码不能为空")
+            .MaximumLength(80).WithMessage("字典类型编码长度不能超过80个字符");
+        RuleFor(x => x.DictLabel)
+            .NotEmpty().WithMessage("字典项标签不能为空")
+            .MaximumLength(100).WithMessage("字典项标签长度不能超过100个字符");
+        RuleFor(x => x.DictValue)
+            .NotEmpty().WithMessage("字典项值不能为空")
+            .MaximumLength(100).WithMessage("字典项值长度不能超过100个字符");
+        RuleFor(x => x.I18nKey)
+            .NotEmpty().WithMessage("国际化翻译键不能为空")
+            .MaximumLength(200).WithMessage("国际化翻译键长度不能超过200个字符");
+        RuleFor(x => x.SortOrder)
+            .GreaterThanOrEqualTo(0).WithMessage("排序号不能为负数");
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
     }
 }
 
@@ -103,10 +119,6 @@ public class TaktDictDataImportValidator : AbstractValidator<TaktDictDataImportD
         RuleFor(x => x.I18nKey)
             .NotEmpty().WithMessage("国际化翻译键不能为空")
             .MaximumLength(200).WithMessage("国际化翻译键长度不能超过200个字符");
-        RuleFor(x => x.ExtLabel)
-            .MaximumLength(200).WithMessage("扩展标签长度不能超过200个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtLabel));
-        RuleFor(x => x.ExtValue)
-            .MaximumLength(200).WithMessage("扩展值长度不能超过200个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtValue));
         RuleFor(x => x.SortOrder)
             .GreaterThanOrEqualTo(0).WithMessage("排序号不能为负数");
         RuleFor(x => x.ExtField)

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Planning
 // 文件名称：TaktPlannedOrderI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPlannedOrder 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktPlannedOrderI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.plannedorder._self", "zh-HK", "计划订单信息_hk", "实体名称"),
 
             // entity.plannedorder.plantcode
-            new TranslationSeedItem("entity.plannedorder.plantcode", "en-US", "工厂代码_us", "工厂代码"),
+            new TranslationSeedItem("entity.plannedorder.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
             // entity.plannedorder.plantcode
-            new TranslationSeedItem("entity.plannedorder.plantcode", "ja-JP", "工厂代码_jp", "工厂代码"),
+            new TranslationSeedItem("entity.plannedorder.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
             // entity.plannedorder.plantcode
-            new TranslationSeedItem("entity.plannedorder.plantcode", "zh-CN", "工厂代码", "工厂代码"),
+            new TranslationSeedItem("entity.plannedorder.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
             // entity.plannedorder.plantcode
-            new TranslationSeedItem("entity.plannedorder.plantcode", "zh-HK", "工厂代码_hk", "工厂代码"),
+            new TranslationSeedItem("entity.plannedorder.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
 
             // entity.plannedorder.code
             new TranslationSeedItem("entity.plannedorder.code", "en-US", "计划订单编码_us", "计划订单编码"),
@@ -127,13 +127,13 @@ public class TaktPlannedOrderI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.plannedorder.masterproductionschedulelineid", "zh-HK", "来源MPS行ID_hk", "来源 MPS 行 ID"),
 
             // entity.plannedorder.materialcode
-            new TranslationSeedItem("entity.plannedorder.materialcode", "en-US", "物料编码_us", "物料编码"),
+            new TranslationSeedItem("entity.plannedorder.materialcode", "en-US", "物料编码_us", "物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）"),
             // entity.plannedorder.materialcode
-            new TranslationSeedItem("entity.plannedorder.materialcode", "ja-JP", "物料编码_jp", "物料编码"),
+            new TranslationSeedItem("entity.plannedorder.materialcode", "ja-JP", "物料编码_jp", "物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）"),
             // entity.plannedorder.materialcode
-            new TranslationSeedItem("entity.plannedorder.materialcode", "zh-CN", "物料编码", "物料编码"),
+            new TranslationSeedItem("entity.plannedorder.materialcode", "zh-CN", "物料编码", "物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）"),
             // entity.plannedorder.materialcode
-            new TranslationSeedItem("entity.plannedorder.materialcode", "zh-HK", "物料编码_hk", "物料编码"),
+            new TranslationSeedItem("entity.plannedorder.materialcode", "zh-HK", "物料编码_hk", "物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）"),
 
             // entity.plannedorder.plannedquantity
             new TranslationSeedItem("entity.plannedorder.plannedquantity", "en-US", "计划数量_us", "计划数量"),
@@ -145,13 +145,13 @@ public class TaktPlannedOrderI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.plannedorder.plannedquantity", "zh-HK", "计划数量_hk", "计划数量"),
 
             // entity.plannedorder.unitofmeasure
-            new TranslationSeedItem("entity.plannedorder.unitofmeasure", "en-US", "计量单位_us", "计量单位"),
+            new TranslationSeedItem("entity.plannedorder.unitofmeasure", "en-US", "计量单位_us", "计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）"),
             // entity.plannedorder.unitofmeasure
-            new TranslationSeedItem("entity.plannedorder.unitofmeasure", "ja-JP", "计量单位_jp", "计量单位"),
+            new TranslationSeedItem("entity.plannedorder.unitofmeasure", "ja-JP", "计量单位_jp", "计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）"),
             // entity.plannedorder.unitofmeasure
-            new TranslationSeedItem("entity.plannedorder.unitofmeasure", "zh-CN", "计量单位", "计量单位"),
+            new TranslationSeedItem("entity.plannedorder.unitofmeasure", "zh-CN", "计量单位", "计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）"),
             // entity.plannedorder.unitofmeasure
-            new TranslationSeedItem("entity.plannedorder.unitofmeasure", "zh-HK", "计量单位_hk", "计量单位"),
+            new TranslationSeedItem("entity.plannedorder.unitofmeasure", "zh-HK", "计量单位_hk", "计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）"),
 
             // entity.plannedorder.plannedstarttime
             new TranslationSeedItem("entity.plannedorder.plannedstarttime", "en-US", "计划开始时间_us", "计划开始时间"),
@@ -172,13 +172,13 @@ public class TaktPlannedOrderI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.plannedorder.plannedendtime", "zh-HK", "计划结束时间_hk", "计划结束时间"),
 
             // entity.plannedorder.routingcode
-            new TranslationSeedItem("entity.plannedorder.routingcode", "en-US", "工艺路线编码_us", "工艺路线编码（关联 TaktRouting.RoutingCode）"),
+            new TranslationSeedItem("entity.plannedorder.routingcode", "en-US", "工艺路线编码_us", "工艺路线编码（关联 TaktRouting.RoutingCode，选项 TaktRoutings/options，DictValue=RoutingCode）"),
             // entity.plannedorder.routingcode
-            new TranslationSeedItem("entity.plannedorder.routingcode", "ja-JP", "工艺路线编码_jp", "工艺路线编码（关联 TaktRouting.RoutingCode）"),
+            new TranslationSeedItem("entity.plannedorder.routingcode", "ja-JP", "工艺路线编码_jp", "工艺路线编码（关联 TaktRouting.RoutingCode，选项 TaktRoutings/options，DictValue=RoutingCode）"),
             // entity.plannedorder.routingcode
-            new TranslationSeedItem("entity.plannedorder.routingcode", "zh-CN", "工艺路线编码", "工艺路线编码（关联 TaktRouting.RoutingCode）"),
+            new TranslationSeedItem("entity.plannedorder.routingcode", "zh-CN", "工艺路线编码", "工艺路线编码（关联 TaktRouting.RoutingCode，选项 TaktRoutings/options，DictValue=RoutingCode）"),
             // entity.plannedorder.routingcode
-            new TranslationSeedItem("entity.plannedorder.routingcode", "zh-HK", "工艺路线编码_hk", "工艺路线编码（关联 TaktRouting.RoutingCode）"),
+            new TranslationSeedItem("entity.plannedorder.routingcode", "zh-HK", "工艺路线编码_hk", "工艺路线编码（关联 TaktRouting.RoutingCode，选项 TaktRoutings/options，DictValue=RoutingCode）"),
 
             // entity.plannedorder.orderstatus
             new TranslationSeedItem("entity.plannedorder.orderstatus", "en-US", "计划订单状态_us", "计划订单状态（字典 planned_order_status；0=计划，1=确认，2=已释放，3=已关闭）"),

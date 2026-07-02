@@ -72,6 +72,15 @@
       @master-pagination-change="handleMasterPaginationChange"
       @master-select="handleMasterSelect"
     >
+      <!-- 字典/开关列渲染 -->
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'inboundType'">
+          <TaktDictTag
+            :value="getSerialInboundField(record, 'inboundType')"
+            dict-type="logistics_inbound_type"
+          />
+        </template>
+      </template>
       <template #detail>
         <SerialInboundItemPanel
           ref="serialInboundItemPanelRef"
@@ -152,10 +161,11 @@
       </div>
       <div v-show="isFieldVisible('inboundType')">
       <a-form-item :label="t('entity.serialinbound.inboundtype')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.inboundType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serialinbound.inboundtype') })"
-          style="width: 100%"
+          dict-type="logistics_inbound_type"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serialinbound.inboundtype') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -190,24 +200,13 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('relatedCompany')">
-      <a-form-item :label="t('entity.serialinbound.relatedcompany')">
-        <a-input
-          v-model:value="advancedQueryForm.relatedCompany"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serialinbound.relatedcompany') })"
-          show-count
-          :maxlength="4"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
       <div v-show="isFieldVisible('createdAtStart')">
       <a-form-item :label="t('common.page.entity.createdatstart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -218,7 +217,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -318,6 +317,7 @@ import SerialInboundItemPanel from './components/inbound-item-panel.vue'
 import { provideSerialInboundMasterContext } from './composables/use-inbound-master-context'
 import { getSerialInboundList, getSerialInboundById, createSerialInbound, updateSerialInbound, deleteSerialInboundById, deleteSerialInboundBatch, getSerialInboundTemplate, importSerialInbound, exportSerialInbound } from '@/api/logistics/serial/inbound'
 import type { SerialInbound, SerialInboundQuery } from '@/types/logistics/serial/inbound'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
@@ -373,7 +373,6 @@ const advancedQueryForm = ref({
   warehouseCode: '',
   locationCode: '',
   totalQuantity: undefined as number | undefined,
-  relatedCompany: '',
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -383,13 +382,12 @@ const advancedQueryForm = ref({
 const queryFieldsMeta = computed(() => [
   { key: 'plantCode', label: t('entity.serialinbound.plantcode') },
   { key: 'inboundNo', label: t('entity.serialinbound.inboundno') },
-  { key: 'inboundDateStart', label: t('entity.serialinbound.inbounddatestart') },
-  { key: 'inboundDateEnd', label: t('entity.serialinbound.inbounddateend') },
+  { key: 'inboundDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.serialinbound.inbounddate')) },
+  { key: 'inboundDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.serialinbound.inbounddate')) },
   { key: 'inboundType', label: t('entity.serialinbound.inboundtype') },
   { key: 'warehouseCode', label: t('entity.serialinbound.warehousecode') },
   { key: 'locationCode', label: t('entity.serialinbound.locationcode') },
   { key: 'totalQuantity', label: t('entity.serialinbound.totalquantity') },
-  { key: 'relatedCompany', label: t('entity.serialinbound.relatedcompany') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extField', label: t('common.page.entity.extfield') },
@@ -410,6 +408,8 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
+/** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
+const dictDataStore = useDictDataStore()
 /** 主表选中行上下文（右侧明细面板读取） */
 const { selectedMasterRow } = provideSerialInboundMasterContext()
 const serialInboundItemPanelRef = ref<InstanceType<typeof SerialInboundItemPanel> | null>(null)
@@ -448,7 +448,6 @@ function buildListQuery(overrides?: Partial<SerialInboundQuery>): SerialInboundQ
   if (form.totalQuantity !== undefined && form.totalQuantity !== null) {
     query.totalQuantity = form.totalQuantity
   }
-  assignTrimmed('relatedCompany', form.relatedCompany)
   assignTrimmed('createdAtStart', form.createdAtStart)
   assignTrimmed('createdAtEnd', form.createdAtEnd)
   assignTrimmed('extField', form.extField)
@@ -458,6 +457,7 @@ function buildListQuery(overrides?: Partial<SerialInboundQuery>): SerialInboundQ
 /** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
+  void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
 
@@ -558,7 +558,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSerialInboundField(record, 'inboundType') ?? ''
   },
   {
     title: t('entity.serialinbound.warehousecode'),
@@ -586,15 +585,6 @@ const columns = computed<TableColumnsType>(() => [
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getSerialInboundField(record, 'totalQuantity') ?? ''
-  },
-  {
-    title: t('entity.serialinbound.relatedcompany'),
-    dataIndex: 'relatedCompany',
-    key: 'relatedCompany',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSerialInboundField(record, 'relatedCompany') ?? ''
   },
   CreateActionColumn({
     actions: [
@@ -645,7 +635,7 @@ const rowSelection = computed(() => ({
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
-    } else if (getSerialInboundId(selectedRow.value) === getSerialInboundId(record)) {
+    } else if (selectedRow.value && getSerialInboundId(selectedRow.value) === getSerialInboundId(record)) {
       selectedRow.value = null
       syncMasterSelection(null)
     }
@@ -694,7 +684,6 @@ function handleReset() {
   warehouseCode: '',
   locationCode: '',
   totalQuantity: undefined as number | undefined,
-  relatedCompany: '',
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -894,7 +883,6 @@ function handleAdvancedQueryReset() {
   warehouseCode: '',
   locationCode: '',
   totalQuantity: undefined as number | undefined,
-  relatedCompany: '',
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',

@@ -54,8 +54,8 @@
 
     <!-- 表格 -->
     <TaktSingleTable
-      :columns="columns"
       entity-scope="company"
+      :columns="columns"
       :visible-column-keys="visibleColumnKeys"
       :id-column-key="'postId'"
       table-mode="single"
@@ -69,13 +69,12 @@
       @change="handleTableChange"
       @resize-column="handleResizeColumn"
     >
+      <!-- 字典/开关列渲染 -->
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'postStatus'">
           <a-switch
             :checked="getPostField(record, 'postStatus') === 1"
-            :disabled="getPostField(record, 'isBuiltIn') === 1"
-            :checked-children="t('common.page.button.enable')"
-            :un-checked-children="t('common.page.button.disable')"
+            :checked-children="t('common.page.button.enable')" :un-checked-children="t('common.page.button.disable')"
             @change="(checked: unknown) => handlePostStatusChange(record, Boolean(checked))"
           />
         </template>
@@ -149,6 +148,8 @@
         <a-input
           v-model:value="advancedQueryForm.postCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.post.code') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
@@ -158,6 +159,8 @@
         <a-input
           v-model:value="advancedQueryForm.postName"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.post.name') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
@@ -167,6 +170,8 @@
         <a-input
           v-model:value="advancedQueryForm.deptId"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.post.deptid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -214,6 +219,8 @@
         <a-input
           v-model:value="advancedQueryForm.responsibilities"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.post.responsibilities') })"
+          show-count
+          :maxlength="2000"
           allow-clear
         />
       </a-form-item>
@@ -223,6 +230,8 @@
         <a-input
           v-model:value="advancedQueryForm.requirements"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.post.requirements') })"
+          show-count
+          :maxlength="2000"
           allow-clear
         />
       </a-form-item>
@@ -284,15 +293,6 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('sortOrder')">
-      <a-form-item :label="t('entity.post.sortorder')">
-        <a-input-number
-          v-model:value="advancedQueryForm.sortOrder"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.post.sortorder') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
       <div v-show="isFieldVisible('description')">
       <a-form-item :label="t('entity.post.description')">
         <a-textarea
@@ -309,7 +309,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -320,7 +320,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -346,10 +346,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.extField"
           :placeholder="t('common.page.form.placeholder.extfield')"
-          :rows="4"
-          show-count
-          :maxlength="400"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -358,10 +358,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="4"
-          show-count
-          :maxlength="400"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -389,11 +389,6 @@
         @success="handleImportSuccess"
       />
     </TaktModal>
-    <AssignPostEmployees
-      v-model:open="assignPostEmployeesVisible"
-      :post="currentAssignPost"
-      @success="handleAssignSuccess"
-    />
     <!-- 列设置抽屉 -->
     <TaktColumnDrawer
       v-model:open="columnSettingVisible"
@@ -421,13 +416,12 @@ import { CreateActionColumn } from '@/components/business/takt-action-column/ind
 import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import PostForm from './components/post-form.vue'
-import AssignPostEmployees from './components/assign-post-employees.vue'
-import { getPostList, getPostById, createPost, updatePost, deletePostById, deletePostBatch, updatePostStatus, getPostTemplate, importPost, exportPost } from '@/api/human-resource/organization/post'
-import type { Post, PostQuery, PostCreate, PostUpdate } from '@/types/human-resource/organization/post'
+import { getPostList, getPostById, createPost, updatePost, deletePostById, deletePostBatch, getPostTemplate, importPost, exportPost, updatePostStatus } from '@/api/human-resource/organization/post'
+import type { Post, PostQuery } from '@/types/human-resource/organization/post'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine, RiQuestionLine, RiUserLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -467,6 +461,7 @@ const formData = ref<Partial<Post> | null>(null)
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
 const formRef = ref()
+
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
@@ -474,8 +469,8 @@ const advancedQueryForm = ref({
   postCode: '',
   postName: '',
   deptId: '',
-  postCategory: undefined as string | undefined,
-  postLevel: undefined as string | undefined,
+  postCategory: '',
+  postLevel: '',
   headcount: undefined as number | undefined,
   currentCount: undefined as number | undefined,
   responsibilities: '',
@@ -486,7 +481,6 @@ const advancedQueryForm = ref({
   salaryMax: undefined as number | undefined,
   postStatus: undefined as number | undefined,
   isBuiltIn: undefined as number | undefined,
-  sortOrder: undefined as number | undefined,
   description: '',
   createdAtStart: '',
   createdAtEnd: '',
@@ -510,7 +504,6 @@ const queryFieldsMeta = computed(() => [
   { key: 'salaryMax', label: t('entity.post.salarymax') },
   { key: 'postStatus', label: t('entity.post.status') },
   { key: 'isBuiltIn', label: t('entity.post.isbuiltin') },
-  { key: 'sortOrder', label: t('entity.post.sortorder') },
   { key: 'description', label: t('entity.post.description') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
@@ -521,10 +514,6 @@ const queryFieldsMeta = computed(() => [
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
 const columnSettingVisible = ref(false)
-/** 分配岗位员工弹窗是否打开 */
-const assignPostEmployeesVisible = ref(false)
-/** 当前分配员工的目标岗位 */
-const currentAssignPost = ref<Post | null>(null)
 /** 导入对话框是否打开 */
 const importVisible = ref(false)
 /** 表格当前可见列 key */
@@ -539,8 +528,9 @@ const deleteDisabled = computed(() => selectedRows.value.length === 0)
 /** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
 const dictDataStore = useDictDataStore()
 
+
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? / long? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {PostQuery} 查询 DTO
  */
@@ -564,12 +554,8 @@ function buildListQuery(overrides?: Partial<PostQuery>): PostQuery {
   assignTrimmed('postCode', form.postCode)
   assignTrimmed('postName', form.postName)
   assignTrimmed('deptId', form.deptId)
-  if (form.postCategory !== undefined && form.postCategory !== null && form.postCategory !== '') {
-    query.postCategory = form.postCategory
-  }
-  if (form.postLevel !== undefined && form.postLevel !== null && form.postLevel !== '') {
-    query.postLevel = form.postLevel
-  }
+  assignTrimmed('postCategory', form.postCategory)
+  assignTrimmed('postLevel', form.postLevel)
   if (form.headcount !== undefined && form.headcount !== null) {
     query.headcount = form.headcount
   }
@@ -596,13 +582,10 @@ function buildListQuery(overrides?: Partial<PostQuery>): PostQuery {
   if (form.isBuiltIn !== undefined && form.isBuiltIn !== null) {
     query.isBuiltIn = form.isBuiltIn
   }
-  if (form.sortOrder !== undefined && form.sortOrder !== null) {
-    query.sortOrder = form.sortOrder
-  }
   assignTrimmed('description', form.description)
   assignTrimmed('createdAtStart', form.createdAtStart)
   assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('ExtField', form.extField)
+  assignTrimmed('extField', form.extField)
   assignTrimmed('remark', form.remark)
   return query
 }
@@ -612,6 +595,7 @@ onMounted(async () => {
   void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
+
 
 
 
@@ -664,7 +648,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPostField(record, 'postCategory') ?? ''
   },
   {
     title: t('entity.post.level'),
@@ -673,7 +656,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPostField(record, 'postLevel') ?? ''
   },
   {
     title: t('entity.post.headcount'),
@@ -718,7 +700,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPostField(record, 'educationRequired') ?? ''
   },
   {
     title: t('entity.post.experienceyears'),
@@ -761,7 +742,7 @@ const columns = computed<TableColumnsType>(() => [
     key: 'isBuiltIn',
     width: 120,
     resizable: true,
-    ellipsis: true
+    ellipsis: true,
   },
   {
     title: t('entity.post.description'),
@@ -792,14 +773,6 @@ const columns = computed<TableColumnsType>(() => [
         onClick: (record: Post) => handleEdit(record)
       },
       {
-        key: 'allocate-post-user',
-        label: t('common.page.button.allocate') + t('entity.employee._self'),
-        shape: 'plain',
-        icon: RiUserLine,
-        permission: 'human:resource:organization:post:update',
-        onClick: (record: Post) => handleAssignPostEmployees(record)
-      },
-      {
         key: 'delete',
         label: t('common.page.button.delete'),
         shape: 'plain',
@@ -820,6 +793,7 @@ const getPostId = (record: any): string => record?.[entityIdName] ?? ''
  */
 const getPostField = (record: any, field: string): any => record?.[field]
 
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -831,7 +805,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: Post, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getPostId(selectedRow.value) === getPostId(record)) {
+    } else if (selectedRow.value && getPostId(selectedRow.value) === getPostId(record)) {
       selectedRow.value = null
     }
   },
@@ -891,8 +865,8 @@ function handleReset() {
   postCode: '',
   postName: '',
   deptId: '',
-  postCategory: undefined as string | undefined,
-  postLevel: undefined as string | undefined,
+  postCategory: '',
+  postLevel: '',
   headcount: undefined as number | undefined,
   currentCount: undefined as number | undefined,
   responsibilities: '',
@@ -903,7 +877,6 @@ function handleReset() {
   salaryMax: undefined as number | undefined,
   postStatus: undefined as number | undefined,
   isBuiltIn: undefined as number | undefined,
-  sortOrder: undefined as number | undefined,
   description: '',
   createdAtStart: '',
   createdAtEnd: '',
@@ -926,20 +899,6 @@ function handleEdit(record: Post) {
   formTitle.value = t('common.dialog.title.edit', { entity: t('entity.post._self') })
   formData.value = { ...record }
   formVisible.value = true
-}
-
-/**
- * 打开分配岗位员工弹窗
- * @param record 岗位行
- */
-function handleAssignPostEmployees(record: Post) {
-  currentAssignPost.value = record
-  assignPostEmployeesVisible.value = true
-}
-
-/** 分配成功后刷新列表 */
-function handleAssignSuccess() {
-  loadData()
 }
 
 /** 工具栏编辑：打开当前单选行 */
@@ -972,7 +931,7 @@ async function handleFormSubmit() {
     }
     formVisible.value = false
     formData.value = null
-    nextTick(() => formRef.value?.resetFields())
+  nextTick(() => formRef.value?.resetFields())
     loadData()
   } finally {
     formLoading.value = false
@@ -1011,36 +970,6 @@ function handleImportSuccess(result: { success: number; fail: number; errors: st
 function handleImportCancel() {
   importVisible.value = false
 }
-
-/**
- * 表格行内切换岗位状态（sys_normal_disable_status：1=启用，0=禁用）
- * @param record 当前行
- * @param checked 开关是否选中（启用）
- */
-async function handlePostStatusChange(record: Post, checked: boolean) {
-  const id = getPostId(record)
-  if (!id || getPostField(record, 'isBuiltIn') === 1) {
-    return
-  }
-  const newStatus = checked ? 1 : 0
-  const oldStatus = getPostField(record, 'postStatus')
-  const row = dataSource.value.find((item) => getPostId(item) === id)
-  if (row) {
-    row.postStatus = newStatus
-  }
-  try {
-    await updatePostStatus({ postId: id, postStatus: newStatus })
-    message.success(t('common.feedback.updated'))
-  } catch (error: unknown) {
-    if (row) {
-      row.postStatus = oldStatus as number
-    }
-    const err = error as { message?: string }
-    logger.error('[Post] 状态更新失败', { error })
-    message.error(err?.message || t('common.feedback.failed'))
-  }
-}
-
 /** 导出当前查询条件下的 Excel */
 async function handleExport() {
   try {
@@ -1109,6 +1038,30 @@ async function handleDelete() {
     }
   })
 }
+/**
+ * 行内状态切换
+ * @param record 当前行
+ * @param checked 是否启用
+ */
+async function handlePostStatusChange(record: Post, checked: boolean) {
+  const newVal = checked ? 1 : 0
+  const oldVal = getPostField(record, 'postStatus')
+  const id = getPostId(record)
+  const row = dataSource.value.find((item) => getPostId(item) === id)
+  if (row) {
+    row.postStatus = newVal
+  }
+  try {
+    await updatePostStatus({ postId: id, postStatus: newVal })
+    message.success(t('common.feedback.updated'))
+    
+  } catch (error: unknown) {
+    if (row) {
+      row.postStatus = oldVal
+    }
+    message.error(t('common.feedback.failed'))
+  }
+}
 /** 打开高级查询抽屉 */
 function handleAdvancedQuery() {
   advancedQueryVisible.value = true
@@ -1126,8 +1079,8 @@ function handleAdvancedQueryReset() {
   postCode: '',
   postName: '',
   deptId: '',
-  postCategory: undefined as string | undefined,
-  postLevel: undefined as string | undefined,
+  postCategory: '',
+  postLevel: '',
   headcount: undefined as number | undefined,
   currentCount: undefined as number | undefined,
   responsibilities: '',
@@ -1138,7 +1091,6 @@ function handleAdvancedQueryReset() {
   salaryMax: undefined as number | undefined,
   postStatus: undefined as number | undefined,
   isBuiltIn: undefined as number | undefined,
-  sortOrder: undefined as number | undefined,
   description: '',
   createdAtStart: '',
   createdAtEnd: '',

@@ -2,9 +2,9 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcNotificationI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
-// 功能描述：TaktEcNotification 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
+// 功能描述：TaktEcNotification 实体字段国际化种子（已对齐前端 locales：src/locales/logistics/manufacturing/engineering-change/ec-notification）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -127,13 +127,13 @@ public class TaktEcNotificationI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ecnotification.ecno", "zh-HK", "设变单号_hk", "设变单号（冗余字段，便于查询）"),
 
             // entity.ecnotification.ectitle
-            new TranslationSeedItem("entity.ecnotification.ectitle", "en-US", "设变主题_us", "设变主题（冗余字段）"),
+            new TranslationSeedItem("entity.ecnotification.ectitle", "en-US", "EC Title", "设变标题（冗余字段）"),
             // entity.ecnotification.ectitle
-            new TranslationSeedItem("entity.ecnotification.ectitle", "ja-JP", "设变主题_jp", "设变主题（冗余字段）"),
+            new TranslationSeedItem("entity.ecnotification.ectitle", "ja-JP", "設変タイトル", "设变标题（冗余字段）"),
             // entity.ecnotification.ectitle
-            new TranslationSeedItem("entity.ecnotification.ectitle", "zh-CN", "设变主题", "设变主题（冗余字段）"),
+            new TranslationSeedItem("entity.ecnotification.ectitle", "zh-CN", "设变标题", "设变标题（冗余字段）"),
             // entity.ecnotification.ectitle
-            new TranslationSeedItem("entity.ecnotification.ectitle", "zh-HK", "设变主题_hk", "设变主题（冗余字段）"),
+            new TranslationSeedItem("entity.ecnotification.ectitle", "zh-HK", "設變標題", "设变标题（冗余字段）"),
 
             // entity.ecnotification.date
             new TranslationSeedItem("entity.ecnotification.date", "en-US", "通知日期_us", "通知日期"),
@@ -198,14 +198,14 @@ public class TaktEcNotificationI18nSeedData : ITaktSeedDataCoordinator
             // entity.ecnotification.status
             new TranslationSeedItem("entity.ecnotification.status", "zh-HK", "通知状态_hk", "通知状态（0=待通知 1=已通知 2=已确认 3=已驳回 4=已过期）"),
 
-            // entity.ecnotification.ec
-            new TranslationSeedItem("entity.ecnotification.ec", "en-US", "关联的设变主表_us", "关联的设变主表"),
-            // entity.ecnotification.ec
-            new TranslationSeedItem("entity.ecnotification.ec", "ja-JP", "关联的设变主表_jp", "关联的设变主表"),
-            // entity.ecnotification.ec
-            new TranslationSeedItem("entity.ecnotification.ec", "zh-CN", "关联的设变主表", "关联的设变主表"),
-            // entity.ecnotification.ec
-            new TranslationSeedItem("entity.ecnotification.ec", "zh-HK", "关联的设变主表_hk", "关联的设变主表"),
+            // entity.ecnotification.ecgijutsu
+            new TranslationSeedItem("entity.ecnotification.ecgijutsu", "en-US", "关联的设变主表_us", "关联的设变主表"),
+            // entity.ecnotification.ecgijutsu
+            new TranslationSeedItem("entity.ecnotification.ecgijutsu", "ja-JP", "关联的设变主表_jp", "关联的设变主表"),
+            // entity.ecnotification.ecgijutsu
+            new TranslationSeedItem("entity.ecnotification.ecgijutsu", "zh-CN", "关联的设变主表", "关联的设变主表"),
+            // entity.ecnotification.ecgijutsu
+            new TranslationSeedItem("entity.ecnotification.ecgijutsu", "zh-HK", "关联的设变主表_hk", "关联的设变主表"),
         };
     }
 

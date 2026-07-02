@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/routine/conference-center
 // 文件名称：conference.d.ts
-// 创建时间：2026-06-21
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：routine/conference-center 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -36,7 +36,7 @@ export interface Conference extends ApprovalDtoBase {
   /**
    * 会议标题
    */
-  title: string;
+  conferenceTitle: string;
 
   /**
    * 会议类型
@@ -76,17 +76,17 @@ export interface Conference extends ApprovalDtoBase {
   /**
    * 会议内容（会议纪要正文，富文本 HTML）
    */
-  content?: string;
+  conferenceContent?: string;
 
   /**
    * 会议纪要摘要（用于列表展示）
    */
-  summary?: string;
+  conferenceSummary?: string;
 
   /**
    * 标签（逗号分隔或 JSON 数组存储）
    */
-  tags?: string;
+  conferenceTags?: string;
 
   /**
    * 组织人 ID
@@ -161,7 +161,7 @@ export interface ConferenceQuery extends TaktPagedQuery {
   /**
    * 会议标题
    */
-  title?: string;
+  conferenceTitle?: string;
 
   /**
    * 会议类型
@@ -211,17 +211,17 @@ export interface ConferenceQuery extends TaktPagedQuery {
   /**
    * 会议内容（会议纪要正文，富文本 HTML）
    */
-  content?: string;
+  conferenceContent?: string;
 
   /**
    * 会议纪要摘要（用于列表展示）
    */
-  summary?: string;
+  conferenceSummary?: string;
 
   /**
    * 标签（逗号分隔或 JSON 数组存储）
    */
-  tags?: string;
+  conferenceTags?: string;
 
   /**
    * 组织人 ID
@@ -264,7 +264,7 @@ export interface ConferenceQuery extends TaktPagedQuery {
   conferenceRoomName?: string;
 
   /**
-   * 审批状态（TaktApprovalStatus）
+   * 审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）
    */
   approvalStatus?: number;
 
@@ -343,7 +343,7 @@ export interface ConferenceCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -355,7 +355,7 @@ export interface ConferenceCreate {
   /**
    * 会议标题
    */
-  title: string;
+  conferenceTitle: string;
 
   /**
    * 会议类型
@@ -395,17 +395,17 @@ export interface ConferenceCreate {
   /**
    * 会议内容（会议纪要正文，富文本 HTML）
    */
-  content?: string;
+  conferenceContent?: string;
 
   /**
    * 会议纪要摘要（用于列表展示）
    */
-  summary?: string;
+  conferenceSummary?: string;
 
   /**
    * 标签（逗号分隔或 JSON 数组存储）
    */
-  tags?: string;
+  conferenceTags?: string;
 
   /**
    * 组织人 ID
@@ -523,7 +523,7 @@ export interface ConferenceTemplate {
   /**
    * 会议标题
    */
-  title?: string;
+  conferenceTitle?: string;
 
   /**
    * 会议类型
@@ -534,6 +534,16 @@ export interface ConferenceTemplate {
    * 会议状态
    */
   conferenceStatus?: number;
+
+  /**
+   * 开始时间
+   */
+  startTime?: string;
+
+  /**
+   * 结束时间
+   */
+  endTime?: string;
 
   /**
    * 会议地点（线下会议室名称或地址）
@@ -553,17 +563,17 @@ export interface ConferenceTemplate {
   /**
    * 会议内容（会议纪要正文，富文本 HTML）
    */
-  content?: string;
+  conferenceContent?: string;
 
   /**
    * 会议纪要摘要（用于列表展示）
    */
-  summary?: string;
+  conferenceSummary?: string;
 
   /**
    * 标签（逗号分隔或 JSON 数组存储）
    */
-  tags?: string;
+  conferenceTags?: string;
 
   /**
    * 组织人 ID
@@ -574,6 +584,41 @@ export interface ConferenceTemplate {
    * 组织人姓名
    */
   organizerName?: string;
+
+  /**
+   * 主办部门 ID
+   */
+  deptId?: string;
+
+  /**
+   * 主办部门名称
+   */
+  deptName?: string;
+
+  /**
+   * 最大参会人数（0 表示不限）
+   */
+  maxParticipants?: number;
+
+  /**
+   * 提前提醒分钟数（0 表示不提醒）
+   */
+  reminderMinutes?: number;
+
+  /**
+   * 会议室 ID
+   */
+  conferenceRoomId?: string;
+
+  /**
+   * 会议室名称（冗余快照）
+   */
+  conferenceRoomName?: string;
+
+  /**
+   * 参与人列表（主子表关系）（子表，级联保存）
+   */
+  participants?: ConferenceParticipantCreate[];
 
   /**
    * 扩展字段JSON
@@ -605,7 +650,7 @@ export interface ConferenceImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -617,7 +662,7 @@ export interface ConferenceImport {
   /**
    * 会议标题
    */
-  title?: string;
+  conferenceTitle?: string;
 
   /**
    * 会议类型
@@ -628,6 +673,16 @@ export interface ConferenceImport {
    * 会议状态
    */
   conferenceStatus?: number;
+
+  /**
+   * 开始时间
+   */
+  startTime?: string;
+
+  /**
+   * 结束时间
+   */
+  endTime?: string;
 
   /**
    * 会议地点（线下会议室名称或地址）
@@ -647,17 +702,17 @@ export interface ConferenceImport {
   /**
    * 会议内容（会议纪要正文，富文本 HTML）
    */
-  content?: string;
+  conferenceContent?: string;
 
   /**
    * 会议纪要摘要（用于列表展示）
    */
-  summary?: string;
+  conferenceSummary?: string;
 
   /**
    * 标签（逗号分隔或 JSON 数组存储）
    */
-  tags?: string;
+  conferenceTags?: string;
 
   /**
    * 组织人 ID
@@ -668,6 +723,41 @@ export interface ConferenceImport {
    * 组织人姓名
    */
   organizerName?: string;
+
+  /**
+   * 主办部门 ID
+   */
+  deptId?: string;
+
+  /**
+   * 主办部门名称
+   */
+  deptName?: string;
+
+  /**
+   * 最大参会人数（0 表示不限）
+   */
+  maxParticipants?: number;
+
+  /**
+   * 提前提醒分钟数（0 表示不提醒）
+   */
+  reminderMinutes?: number;
+
+  /**
+   * 会议室 ID
+   */
+  conferenceRoomId?: string;
+
+  /**
+   * 会议室名称（冗余快照）
+   */
+  conferenceRoomName?: string;
+
+  /**
+   * 参与人列表（主子表关系）（子表，级联保存）
+   */
+  participants?: ConferenceParticipantCreate[];
 
   /**
    * 扩展字段JSON
@@ -701,7 +791,7 @@ export interface ConferenceExport {
   /**
    * 会议标题
    */
-  title: string;
+  conferenceTitle: string;
 
   /**
    * 会议类型
@@ -741,17 +831,17 @@ export interface ConferenceExport {
   /**
    * 会议内容（会议纪要正文，富文本 HTML）
    */
-  content?: string;
+  conferenceContent?: string;
 
   /**
    * 会议纪要摘要（用于列表展示）
    */
-  summary?: string;
+  conferenceSummary?: string;
 
   /**
    * 标签（逗号分隔或 JSON 数组存储）
    */
-  tags?: string;
+  conferenceTags?: string;
 
   /**
    * 组织人 ID

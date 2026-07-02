@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Manufacturing.Scheduling
 // 文件名称：TaktProductionDispatchValidators.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ProductionDispatch 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktProductionDispatch 生成，请按需审阅）
 // 
@@ -48,10 +48,6 @@ public class TaktProductionDispatchCreateValidator : AbstractValidator<TaktProdu
             .MaximumLength(40).WithMessage("生产工单号长度不能超过40个字符");
         RuleFor(x => x.ApsOperationId)
             .GreaterThanOrEqualTo(0).WithMessage("APS 工序排程 ID不能为负数");
-        RuleFor(x => x.WorkCenterCode)
-            .MaximumLength(40).WithMessage("工作中心编码长度不能超过40个字符");
-        RuleFor(x => x.ProcessCode)
-            .MaximumLength(40).WithMessage("工序编码长度不能超过40个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -75,6 +71,29 @@ public class TaktProductionDispatchUpdateValidator : AbstractValidator<TaktProdu
     {
         RuleFor(x => x.ProductionDispatchId)
             .GreaterThan(0).WithMessage("ProductionDispatchID无效");
+        RuleFor(x => x.TenantCode)
+            .NotEmpty().WithMessage("租户编码不能为空")
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.CompanyCode)
+            .NotEmpty().WithMessage("公司代码不能为空")
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.PlantCode)
+            .NotEmpty().WithMessage("工厂代码不能为空")
+            .MaximumLength(40).WithMessage("工厂代码长度不能超过40个字符");
+        RuleFor(x => x.DispatchCode)
+            .NotEmpty().WithMessage("派工单编码不能为空")
+            .MaximumLength(40).WithMessage("派工单编码长度不能超过40个字符");
+        RuleFor(x => x.ProductionOrderId)
+            .GreaterThanOrEqualTo(0).WithMessage("生产工单 ID不能为负数");
+        RuleFor(x => x.ProdOrderCode)
+            .NotEmpty().WithMessage("生产工单号不能为空")
+            .MaximumLength(40).WithMessage("生产工单号长度不能超过40个字符");
+        RuleFor(x => x.ApsOperationId)
+            .GreaterThanOrEqualTo(0).WithMessage("APS 工序排程 ID不能为负数");
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
     }
 }
 
@@ -109,10 +128,6 @@ public class TaktProductionDispatchImportValidator : AbstractValidator<TaktProdu
             .MaximumLength(40).WithMessage("生产工单号长度不能超过40个字符");
         RuleFor(x => x.ApsOperationId)
             .GreaterThanOrEqualTo(0).WithMessage("APS 工序排程 ID不能为负数");
-        RuleFor(x => x.WorkCenterCode)
-            .MaximumLength(40).WithMessage("工作中心编码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.WorkCenterCode));
-        RuleFor(x => x.ProcessCode)
-            .MaximumLength(40).WithMessage("工序编码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.ProcessCode));
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

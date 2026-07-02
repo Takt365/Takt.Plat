@@ -2,14 +2,15 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/sop/exec-scan/components -->
 <!-- 文件名称：exec-scan-form.vue -->
-<!-- 功能描述：SOP 工位执行追溯实体子表 sopExecScan 独立 CRUD 弹窗表单；defineExpose validate/getValues/resetFields。由 generate-vue-master-detail-from-api.cjs 生成，风格与主表 *-form 一致 -->
+<!-- 功能描述：SOP 物料扫码记录实体维护弹窗内嵌表单。由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
+<!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
 
 <template>
   <a-form
     ref="formRef"
-    class="takt-generated-form exec-scan-form flex flex-col min-h-0"
+    class="takt-generated-form"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -21,11 +22,53 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo')"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
+            <a-col :span="12">
+              <a-form-item
+                :label="t('common.page.entity.tenantcode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('common.page.entity.companycode')"
+                name="companyCode"
+              >
+                <a-input
+                  v-model:value="formState.companyCode"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('common.page.entity.companydefaultculture')"
+                name="companyDefaultCulture"
+              >
+                <a-input
+                  v-model:value="formState.companyDefaultCulture"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
             <a-col :span="12">
               <a-form-item
                 :label="t('entity.sopexecscan.execid')"
@@ -77,7 +120,7 @@
                   v-model:value="formState.scannedBarcode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopexecscan.scannedbarcode') })"
                   show-count
-                  :maxlength="20"
+                  :maxlength="200"
                   allow-clear
                 />
               </a-form-item>
@@ -91,7 +134,7 @@
                   v-model:value="formState.expectedMaterialCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopexecscan.expectedmaterialcode') })"
                   show-count
-                  :maxlength="20"
+                  :maxlength="50"
                   allow-clear
                   :disabled="!!formData?.sopExecScanId"
                 />
@@ -118,21 +161,71 @@
                   v-model:value="formState.matchMessage"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopexecscan.matchmessage') })"
                   show-count
-                  :maxlength="20"
+                  :maxlength="500"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.sopexecscan.scannedat')"
                 name="scannedAt"
               >
-                <a-input
+                <a-date-picker
                   v-model:value="formState.scannedAt"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopexecscan.scannedat') })"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopexecscan.scannedat') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                name="extField"
+                class="takt-form-item-ext-field"
+              >
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t('common.page.entity.extfieldhint')"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ t('common.page.entity.extfield') }}</span>
+                  </span>
+                </template>
+                <a-textarea
+                  v-model:value="formState.extField"
+                  :placeholder="t('common.page.form.placeholder.extfield')"
+                  :rows="4"
                   show-count
-                  :maxlength="20"
+                  :maxlength="400"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="t('common.page.entity.remark')"
+                name="remark"
+              >
+                <a-textarea
+                  v-model:value="formState.remark"
+                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
                   allow-clear
                 />
               </a-form-item>
@@ -146,7 +239,7 @@
 
 <script setup lang="ts">
 /**
- * SOP 工位执行追溯实体子表 sopExecScan 维护表单 · 由 generate-vue-master-detail-from-api.cjs 生成
+ * SOP 物料扫码记录实体维护表单 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/logistics/manufacturing/sop/exec-scan/components
  */
 import { reactive, watch, computed, ref, onMounted } from 'vue'
@@ -154,16 +247,41 @@ import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import type { SopExecScanCreate } from '@/types/logistics/manufacturing/sop/exec-scan'
 import TaktSelect from '@/components/business/takt-select/index.vue'
+import { RiQuestionLine } from '@remixicon/vue'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
+import { useTenantStore } from '@/stores/identity/tenant'
+import { useUserStore } from '@/stores/identity/user'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
+
+/** Pinia：租户/公司上下文 */
+const tenantStore = useTenantStore()
+/** Pinia：用户上下文 */
+const userStore = useUserStore()
+
+/**
+ * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
+ * @param target 表单数据
+ * @param force 为 true 时强制覆盖（新增态或公司切换）
+ */
+function applyScopeDefaults(target: Record<string, unknown>, force = false) {
+  if (formFields.includes('tenantCode') && (force || !target.tenantCode)) {
+    target.tenantCode = tenantStore.tenantCode
+  }
+  if (formFields.includes('companyCode') && (force || !target.companyCode)) {
+    target.companyCode = tenantStore.companyCode
+  }
+  if (formFields.includes('companyDefaultCulture') && (force || !target.companyDefaultCulture)) {
+    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  }
+}
 /** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["execId","execStepId","stepId","scannedBarcode","expectedMaterialCode","scanResult","matchMessage","scannedAt"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","execId","execStepId","stepId","scannedBarcode","expectedMaterialCode","scanResult","matchMessage","scannedAt","extField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -171,14 +289,11 @@ interface Props {
   formData?: Partial<SopExecScanCreate & { sopExecScanId?: string }> | null
   /** 父级提交 loading，禁用表单项 */
   loading?: boolean
-  /** 主表选中行 Id（Create/Update 提交时写入外键） */
-  masterId?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
   formData: null,
   loading: false,
-  masterId: '',
 })
 
 /** a-form 实例 ref */
@@ -211,6 +326,7 @@ watch(
       const next = { ...val } as Record<string, unknown>
       Object.keys(formState).forEach((k) => delete formState[k])
 
+      applyScopeDefaults(next)
       Object.assign(formState, next)
       formRef.value?.clearValidate()
     } else {
@@ -219,10 +335,22 @@ watch(
         Object.assign(formState, val)
       }
       applyFormDefaults(formState)
+      applyScopeDefaults(formState as Record<string, unknown>, true)
       formRef.value?.clearValidate()
     }
   },
   { immediate: true }
+)
+
+/** 公司/租户切换时，新增态表单同步隔离字段 */
+watch(
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
+  () => {
+    const isCreate = !props.formData?.sopExecScanId
+    if (isCreate) {
+      applyScopeDefaults(formState, true)
+    }
+  },
 )
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
@@ -264,8 +392,8 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   scannedAt: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.sopexecscan.scannedat') }),
-      trigger: 'blur'
+      message: t('common.page.form.placeholder.select', { field: t('entity.sopexecscan.scannedat') }),
+      trigger: 'change'
     }
   ],
 }))
@@ -276,7 +404,7 @@ async function validate() {
   return formState
 }
 
-/** 映射为 Create/Update DTO（含主表外键 sopExecId） */
+/** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
   if ('scanResult' in payload) {
@@ -284,17 +412,18 @@ function getValues(): Record<string, any> {
     payload.scanResult = typeof rawscanResult === 'number' ? rawscanResult : Number(rawscanResult)
   }
   if ('sortOrder' in payload) delete payload.sortOrder
-  payload.sopExecId = props.masterId
   return payload
 }
 
-/** 重置表单（弹窗未 destroy 时父级 nextTick 也会调用） */
+/** 重置表单与子表行（弹窗未 destroy 时父级 nextTick 也会调用） */
 function resetFields() {
   Object.keys(formState).forEach((k) => delete formState[k])
   if (props.formData && typeof props.formData === 'object') {
     Object.assign(formState, props.formData)
   }
   applyFormDefaults(formState)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.sopExecScanId)
+
   activeTab.value = 'tab-0'
   formRef.value?.clearValidate()
 }

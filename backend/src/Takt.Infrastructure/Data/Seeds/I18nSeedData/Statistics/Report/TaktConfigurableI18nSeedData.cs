@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Statistics.Report
 // 文件名称：TaktConfigurableI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktConfigurable 实体字段国际化种子（已对齐前端 locales：src/locales/statistics/report/configurable）
 // 
@@ -162,6 +162,15 @@ public class TaktConfigurableI18nSeedData : ITaktSeedDataCoordinator
             // entity.configurable.ispublic
             new TranslationSeedItem("entity.configurable.ispublic", "zh-HK", "公开_hk", "公开（字典 sys_is_public_type；0=公开，1=私有）"),
 
+            // entity.configurable.description
+            new TranslationSeedItem("entity.configurable.description", "en-US", "报表描述_us", "报表描述"),
+            // entity.configurable.description
+            new TranslationSeedItem("entity.configurable.description", "ja-JP", "报表描述_jp", "报表描述"),
+            // entity.configurable.description
+            new TranslationSeedItem("entity.configurable.description", "zh-CN", "报表描述", "报表描述"),
+            // entity.configurable.description
+            new TranslationSeedItem("entity.configurable.description", "zh-HK", "报表描述_hk", "报表描述"),
+
             // entity.configurable.sortorder
             new TranslationSeedItem("entity.configurable.sortorder", "en-US", "排序号_us", "排序号"),
             // entity.configurable.sortorder
@@ -179,15 +188,6 @@ public class TaktConfigurableI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.configurable.reportstatus", "zh-CN", "报表状态", "报表状态（0=禁用 1=启用）"),
             // entity.configurable.reportstatus
             new TranslationSeedItem("entity.configurable.reportstatus", "zh-HK", "报表状态_hk", "报表状态（0=禁用 1=启用）"),
-
-            // entity.configurable.description
-            new TranslationSeedItem("entity.configurable.description", "en-US", "报表描述_us", "报表描述"),
-            // entity.configurable.description
-            new TranslationSeedItem("entity.configurable.description", "ja-JP", "报表描述_jp", "报表描述"),
-            // entity.configurable.description
-            new TranslationSeedItem("entity.configurable.description", "zh-CN", "报表描述", "报表描述"),
-            // entity.configurable.description
-            new TranslationSeedItem("entity.configurable.description", "zh-HK", "报表描述_hk", "报表描述"),
 
             // entity.configurable.sources
             new TranslationSeedItem("entity.configurable.sources", "en-US", "数据源表列表_us", "数据源表列表（FROM）"),

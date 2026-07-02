@@ -25,13 +25,13 @@ namespace Takt.Domain.Entities.Routine.NewsCenter;
 public class TaktNewsAttachment : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 新闻 ID
+    /// 新闻 ID（关联 TaktNews.Id，选项 TaktNews/options）
     /// </summary>
     [SugarColumn(ColumnName = "news_id", ColumnDescription = "新闻ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long NewsId { get; set; }
     /// <summary>
-    /// 文件 ID
+    /// 文件 ID（关联 TaktFile.Id，选项 TaktFiles/options）
     /// </summary>
     [SugarColumn(ColumnName = "file_id", ColumnDescription = "文件ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]

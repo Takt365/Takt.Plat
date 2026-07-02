@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopStepCheckItemDtos.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SopStepCheckItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSopStepCheckItem 生成，请按需审阅）
 // 
@@ -36,7 +36,7 @@ public class TaktSopStepCheckItemDto : TaktCompanyDtoBase
     public long SopStepCheckItemId { get; set; }
 
     /// <summary>
-    /// 工步 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long StepId { get; set; }
@@ -62,7 +62,7 @@ public class TaktSopStepCheckItemDto : TaktCompanyDtoBase
     public string? CheckStandard { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否必检（字典 sys_yes_no_type，0=否，1=是）
+    /// 是否必检（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int IsRequired { get; set; } = 0;
 
@@ -100,7 +100,7 @@ public class TaktSopStepCheckItemQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工步 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? StepId { get; set; }
@@ -121,7 +121,7 @@ public class TaktSopStepCheckItemQueryDto : TaktPagedQuery
     public string? CheckStandard { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否必检（字典 sys_yes_no_type，0=否，1=是）
+    /// 是否必检（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int? IsRequired { get; set; }
 
@@ -171,12 +171,12 @@ public class TaktSopStepCheckItemCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工步 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long StepId { get; set; }
@@ -198,7 +198,7 @@ public class TaktSopStepCheckItemCreateDto
     public string? CheckStandard { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否必检（字典 sys_yes_no_type，0=否，1=是）
+    /// 是否必检（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int IsRequired { get; set; } = 0;
 
@@ -278,7 +278,7 @@ public class TaktSopStepCheckItemTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工步 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? StepId { get; set; }
@@ -299,7 +299,7 @@ public class TaktSopStepCheckItemTemplateDto
     public string? CheckStandard { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否必检（字典 sys_yes_no_type，0=否，1=是）
+    /// 是否必检（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int? IsRequired { get; set; }
 
@@ -331,12 +331,12 @@ public class TaktSopStepCheckItemImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工步 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? StepId { get; set; }
@@ -357,7 +357,7 @@ public class TaktSopStepCheckItemImportDto
     public string? CheckStandard { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否必检（字典 sys_yes_no_type，0=否，1=是）
+    /// 是否必检（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int? IsRequired { get; set; }
 
@@ -395,7 +395,7 @@ public class TaktSopStepCheckItemExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工步 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long StepId { get; set; }
@@ -416,7 +416,7 @@ public class TaktSopStepCheckItemExportDto
     public string? CheckStandard { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否必检（字典 sys_yes_no_type，0=否，1=是）
+    /// 是否必检（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int IsRequired { get; set; } = 0;
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Bom
 // 文件名称：ITaktStandardOperationTimeService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：标准工序时间应用服务接口
 // 
@@ -40,6 +40,14 @@ public interface ITaktStandardOperationTimeService
     /// </summary>
     /// <returns>下拉选项</returns>
     Task<List<TaktSelectOption>> GetStandardOperationTimeOptionsAsync();
+
+    /// <summary>
+    /// 根据物料编码获取当前有效的标准工序时间列表
+    /// </summary>
+    /// <param name="materialCode">物料编码</param>
+    /// <param name="plantCode">工厂代码（可选）</param>
+    /// <returns>标准工序时间 DTO 列表</returns>
+    Task<List<TaktStandardOperationTimeDto>> GetStandardOperationTimeByMaterialAsync(string materialCode, string? plantCode = null);
 
     /// <summary>
     /// 创建标准工序时间

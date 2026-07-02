@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Manufacturing.Output
 // 文件名称：TaktStandardOperationRateChangeLogsController.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-30
 // 创建人：Takt365(Cursor AI)
 // 功能描述：标准生产稼动率变更记录控制器
 // 
@@ -41,7 +41,7 @@ public class TaktStandardOperationRateChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:manufacturing:output:standard:operation:rate:change:log:list", "标准生产稼动率变更记录列表")]
+    [TaktPermission("logistics:manufacturing:output:standard:operation:rate:list", "标准生产稼动率变更记录列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetStandardOperationRateChangeLogListAsync([FromQuery] TaktStandardOperationRateChangeLogQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktStandardOperationRateChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="id">标准生产稼动率变更记录ID</param>
     /// <returns>标准生产稼动率变更记录DTO</returns>
-    [TaktPermission("logistics:manufacturing:output:standard:operation:rate:change:log:query", "标准生产稼动率变更记录详情")]
+    [TaktPermission("logistics:manufacturing:output:standard:operation:rate:query", "标准生产稼动率变更记录详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetStandardOperationRateChangeLogByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktStandardOperationRateChangeLogsController : TaktControllerBase
     /// 获取标准生产稼动率变更记录选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:manufacturing:output:standard:operation:rate:change:log:query", "标准生产稼动率变更记录选项")]
+    [TaktPermission("logistics:manufacturing:output:standard:operation:rate:query", "标准生产稼动率变更记录选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetStandardOperationRateChangeLogOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktStandardOperationRateChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>标准生产稼动率变更记录DTO</returns>
-    [TaktPermission("logistics:manufacturing:output:standard:operation:rate:change:log:create", "创建标准生产稼动率变更记录")]
+    [TaktPermission("logistics:manufacturing:output:standard:operation:rate:create", "创建标准生产稼动率变更记录")]
     [HttpPost]
     public async Task<IActionResult> CreateStandardOperationRateChangeLogAsync([FromBody] TaktStandardOperationRateChangeLogCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktStandardOperationRateChangeLogsController : TaktControllerBase
     /// <param name="id">标准生产稼动率变更记录ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>标准生产稼动率变更记录DTO</returns>
-    [TaktPermission("logistics:manufacturing:output:standard:operation:rate:change:log:update", "更新标准生产稼动率变更记录")]
+    [TaktPermission("logistics:manufacturing:output:standard:operation:rate:update", "更新标准生产稼动率变更记录")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateStandardOperationRateChangeLogAsync(long id, [FromBody] TaktStandardOperationRateChangeLogUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktStandardOperationRateChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="id">标准生产稼动率变更记录ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:output:standard:operation:rate:change:log:delete", "删除标准生产稼动率变更记录")]
+    [TaktPermission("logistics:manufacturing:output:standard:operation:rate:delete", "删除标准生产稼动率变更记录")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteStandardOperationRateChangeLogByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktStandardOperationRateChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:output:standard:operation:rate:change:log:delete", "批量删除标准生产稼动率变更记录")]
+    [TaktPermission("logistics:manufacturing:output:standard:operation:rate:delete", "批量删除标准生产稼动率变更记录")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteStandardOperationRateChangeLogBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktStandardOperationRateChangeLogsController : TaktControllerBase
     /// 导出标准生产稼动率变更记录
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:output:standard:operation:rate:change:log:export", "导出标准生产稼动率变更记录")]
+    [TaktPermission("logistics:manufacturing:output:standard:operation:rate:export", "导出标准生产稼动率变更记录")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportStandardOperationRateChangeLogAsync([FromQuery] TaktStandardOperationRateChangeLogQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

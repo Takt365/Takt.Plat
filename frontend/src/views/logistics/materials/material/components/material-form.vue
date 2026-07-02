@@ -101,12 +101,10 @@
                 :label="t('entity.material.industrysector')"
                 name="industrySector"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.industrySector"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.industrysector') })"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
+                  dict-type="logistics_industry_sector"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.material.industrysector') })"
                 />
               </a-form-item>
             </a-col>
@@ -126,16 +124,15 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.material.groupcode')"
-                name="materialGroupCode"
+                :label="t('entity.material.group')"
+                name="materialGroup"
               >
                 <a-input
-                  v-model:value="formState.materialGroupCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.groupcode') })"
+                  v-model:value="formState.materialGroup"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.group') })"
                   show-count
                   :maxlength="20"
                   allow-clear
-                  :disabled="!!formData?.materialId"
                 />
               </a-form-item>
             </a-col>
@@ -144,10 +141,10 @@
                 :label="t('entity.material.type')"
                 name="materialType"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.materialType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.type') })"
-                  style="width: 100%"
+                  dict-type="logistics_material_type"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.material.type') })"
                 />
               </a-form-item>
             </a-col>
@@ -175,7 +172,7 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.material.brand')"
                 name="materialBrand"
@@ -189,21 +186,19 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.material.baseunit')"
                 name="baseUnit"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.baseUnit"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.baseunit') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  dict-type="logistics_unit_of_measure_code"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.material.baseunit') })"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.material.manufacturer')"
                 name="manufacturer"
@@ -217,33 +212,22 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.material.manufacturerpartnumber')"
-                name="manufacturerPartNumber"
+                :label="t('entity.material.manufacturermaterialcode')"
+                name="manufacturerMaterialCode"
               >
                 <a-input
-                  v-model:value="formState.manufacturerPartNumber"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.manufacturerpartnumber') })"
+                  v-model:value="formState.manufacturerMaterialCode"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.manufacturermaterialcode') })"
                   show-count
-                  :maxlength="100"
+                  :maxlength="40"
                   allow-clear
+                  :disabled="!!formData?.materialId"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.material.status')"
-                name="materialStatus"
-              >
-                <TaktSelect
-                  v-model:value="formState.materialStatus"
-                  dict-type="sys_normal_disable_status"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.material.status') })"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.material.attributes')"
                 name="materialAttributes"
@@ -257,30 +241,27 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.material.isendoflife')"
                 name="isEndOfLife"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.isEndOfLife"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.isendoflife') })"
-                  show-count
-                  :maxlength="10"
-                  allow-clear
+                  dict-type="logistics_material_eol_status"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.material.isendoflife') })"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.material.endoflifedate')"
-                name="endOfLifeDate"
+                :label="t('entity.material.status')"
+                name="materialStatus"
               >
-                <a-date-picker
-                  v-model:value="formState.endOfLifeDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.material.endoflifedate') })"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
+                <TaktSelect
+                  v-model:value="formState.materialStatus"
+                  dict-type="sys_normal_disable_status"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.material.status') })"
                 />
               </a-form-item>
             </a-col>
@@ -376,7 +357,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","materialCode","materialName","materialSpecification","materialDescription","industrySector","materialHierarchy","materialGroupCode","materialType","materialModel","materialBrand","baseUnit","manufacturer","manufacturerPartNumber","materialStatus","materialAttributes","isEndOfLife","endOfLifeDate","extField","remark"]
+const formFields = ["tenantCode","materialCode","materialName","materialSpecification","materialDescription","industrySector","materialHierarchy","materialGroup","materialType","materialModel","materialBrand","baseUnit","manufacturer","manufacturerMaterialCode","materialAttributes","isEndOfLife","materialStatus","extField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -397,6 +378,7 @@ const formRef = ref()
 const formState = reactive<Record<string, any>>({})
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  materialType: "ROH",
   materialStatus: 1
 }
 
@@ -464,24 +446,39 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
-  materialType: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.material.type') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.material.type') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
+  industrySector: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.select', { field: t('entity.material.industrysector') }),
+      trigger: 'change'
+    }
+  ],
+  materialGroup: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.required', { field: t('entity.material.group') }),
+      trigger: 'blur'
+    }
+  ],
+  materialType: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.select', { field: t('entity.material.type') }),
+      trigger: 'change'
+    }
+  ],
   baseUnit: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.material.baseunit') }),
-      trigger: 'blur'
+      message: t('common.page.form.placeholder.select', { field: t('entity.material.baseunit') }),
+      trigger: 'change'
+    }
+  ],
+  isEndOfLife: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.select', { field: t('entity.material.isendoflife') }),
+      trigger: 'change'
     }
   ],
   materialStatus: [{
@@ -508,10 +505,6 @@ async function validate() {
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
-  if ('materialType' in payload) {
-    const rawmaterialType = payload.materialType
-    payload.materialType = typeof rawmaterialType === 'number' ? rawmaterialType : Number(rawmaterialType)
-  }
   if ('materialStatus' in payload) {
     const rawmaterialStatus = payload.materialStatus
     payload.materialStatus = typeof rawmaterialStatus === 'number' ? rawmaterialStatus : Number(rawmaterialStatus)

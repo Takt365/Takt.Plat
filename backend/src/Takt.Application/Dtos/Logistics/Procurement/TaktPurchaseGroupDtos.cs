@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Procurement
 // 文件名称：TaktPurchaseGroupDtos.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchaseGroup 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPurchaseGroup 生成，请按需审阅）
 // 
@@ -36,7 +36,12 @@ public class TaktPurchaseGroupDto : TaktCompanyDtoBase
     public long PurchaseGroupId { get; set; }
 
     /// <summary>
-    /// 采购组编码（租户+公司内唯一；与 TaktMaterialPlant.PurchaseGroup、TaktPurchaseOrder.PurchaseGroup 对齐）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购组编码（3）
     /// </summary>
     public string PurchaseGroupCode { get; set; } = string.Empty;
 
@@ -51,13 +56,13 @@ public class TaktPurchaseGroupDto : TaktCompanyDtoBase
     public string? PurchaseGroupDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购组负责人用户ID（可选；关联采购员）
+    /// 采购组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ResponsibleUserId { get; set; }
 
     /// <summary>
-    /// 采购组负责人用户名称（填充字段）
+    /// 采购组负责人用户 名称（填充字段）
     /// </summary>
     public string? ResponsibleUserName { get; set; }
 
@@ -72,12 +77,7 @@ public class TaktPurchaseGroupDto : TaktCompanyDtoBase
     public string? ContactEmail { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
-    /// </summary>
-    public int PurchaseGroupStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 是否内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+    /// 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
@@ -85,6 +85,11 @@ public class TaktPurchaseGroupDto : TaktCompanyDtoBase
     /// 排序号（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
+
+    /// <summary>
+    /// 采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// </summary>
+    public int PurchaseGroupStatus { get; set; } = 0;
 
 }
 
@@ -109,7 +114,12 @@ public class TaktPurchaseGroupQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购组编码（租户+公司内唯一；与 TaktMaterialPlant.PurchaseGroup、TaktPurchaseOrder.PurchaseGroup 对齐）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购组编码（3）
     /// </summary>
     public string? PurchaseGroupCode { get; set; } = string.Empty;
 
@@ -124,7 +134,7 @@ public class TaktPurchaseGroupQueryDto : TaktPagedQuery
     public string? PurchaseGroupDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购组负责人用户ID（可选；关联采购员）
+    /// 采购组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ResponsibleUserId { get; set; }
@@ -140,12 +150,7 @@ public class TaktPurchaseGroupQueryDto : TaktPagedQuery
     public string? ContactEmail { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
-    /// </summary>
-    public int? PurchaseGroupStatus { get; set; }
-
-    /// <summary>
-    /// 是否内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+    /// 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
@@ -153,6 +158,11 @@ public class TaktPurchaseGroupQueryDto : TaktPagedQuery
     /// 排序号（越小越靠前）
     /// </summary>
     public int? SortOrder { get; set; }
+
+    /// <summary>
+    /// 采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// </summary>
+    public int? PurchaseGroupStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -195,14 +205,20 @@ public class TaktPurchaseGroupCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购组编码（租户+公司内唯一；与 TaktMaterialPlant.PurchaseGroup、TaktPurchaseOrder.PurchaseGroup 对齐）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "采购组编码（租户+公司内唯一；与 TaktMaterialPlant.PurchaseGroup、TaktPurchaseOrder.PurchaseGroup 对齐）不能为空")]
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购组编码（3）
+    /// </summary>
+    [Required(ErrorMessage = "采购组编码（3）不能为空")]
     public string PurchaseGroupCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -217,7 +233,7 @@ public class TaktPurchaseGroupCreateDto
     public string? PurchaseGroupDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购组负责人用户ID（可选；关联采购员）
+    /// 采购组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ResponsibleUserId { get; set; }
@@ -233,14 +249,14 @@ public class TaktPurchaseGroupCreateDto
     public string? ContactEmail { get; set; } = string.Empty;
 
     /// <summary>
+    /// 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+    /// </summary>
+    public int IsBuiltIn { get; set; } = 0;
+
+    /// <summary>
     /// 采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
     public int PurchaseGroupStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 是否内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
-    /// </summary>
-    public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -342,7 +358,12 @@ public class TaktPurchaseGroupTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购组编码（租户+公司内唯一；与 TaktMaterialPlant.PurchaseGroup、TaktPurchaseOrder.PurchaseGroup 对齐）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购组编码（3）
     /// </summary>
     public string? PurchaseGroupCode { get; set; } = string.Empty;
 
@@ -357,7 +378,7 @@ public class TaktPurchaseGroupTemplateDto
     public string? PurchaseGroupDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购组负责人用户ID（可选；关联采购员）
+    /// 采购组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ResponsibleUserId { get; set; }
@@ -373,14 +394,14 @@ public class TaktPurchaseGroupTemplateDto
     public string? ContactEmail { get; set; } = string.Empty;
 
     /// <summary>
+    /// 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+    /// </summary>
+    public int? IsBuiltIn { get; set; }
+
+    /// <summary>
     /// 采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
     public int? PurchaseGroupStatus { get; set; }
-
-    /// <summary>
-    /// 是否内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
-    /// </summary>
-    public int? IsBuiltIn { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -410,12 +431,17 @@ public class TaktPurchaseGroupImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购组编码（租户+公司内唯一；与 TaktMaterialPlant.PurchaseGroup、TaktPurchaseOrder.PurchaseGroup 对齐）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购组编码（3）
     /// </summary>
     public string? PurchaseGroupCode { get; set; } = string.Empty;
 
@@ -430,7 +456,7 @@ public class TaktPurchaseGroupImportDto
     public string? PurchaseGroupDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购组负责人用户ID（可选；关联采购员）
+    /// 采购组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ResponsibleUserId { get; set; }
@@ -446,14 +472,14 @@ public class TaktPurchaseGroupImportDto
     public string? ContactEmail { get; set; } = string.Empty;
 
     /// <summary>
+    /// 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+    /// </summary>
+    public int? IsBuiltIn { get; set; }
+
+    /// <summary>
     /// 采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
     public int? PurchaseGroupStatus { get; set; }
-
-    /// <summary>
-    /// 是否内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
-    /// </summary>
-    public int? IsBuiltIn { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -489,7 +515,12 @@ public class TaktPurchaseGroupExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购组编码（租户+公司内唯一；与 TaktMaterialPlant.PurchaseGroup、TaktPurchaseOrder.PurchaseGroup 对齐）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购组编码（3）
     /// </summary>
     public string PurchaseGroupCode { get; set; } = string.Empty;
 
@@ -504,7 +535,7 @@ public class TaktPurchaseGroupExportDto
     public string? PurchaseGroupDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购组负责人用户ID（可选；关联采购员）
+    /// 采购组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ResponsibleUserId { get; set; }
@@ -520,12 +551,7 @@ public class TaktPurchaseGroupExportDto
     public string? ContactEmail { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
-    /// </summary>
-    public int PurchaseGroupStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 是否内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+    /// 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
@@ -533,6 +559,11 @@ public class TaktPurchaseGroupExportDto
     /// 排序号（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
+
+    /// <summary>
+    /// 采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// </summary>
+    public int PurchaseGroupStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

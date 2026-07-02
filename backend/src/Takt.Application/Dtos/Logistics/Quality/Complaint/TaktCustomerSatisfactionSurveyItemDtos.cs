@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Complaint
 // 文件名称：TaktCustomerSatisfactionSurveyItemDtos.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：CustomerSatisfactionSurveyItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktCustomerSatisfactionSurveyItem 生成，请按需审阅）
 // 
@@ -36,13 +36,13 @@ public class TaktCustomerSatisfactionSurveyItemDto : TaktCompanyDtoBase
     public long CustomerSatisfactionSurveyItemId { get; set; }
 
     /// <summary>
-    /// 调查表ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 调查表 ID（关联 TaktCustomerSatisfactionSurvey.Id，选项 TaktCustomerSatisfactionSurveys/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SurveyId { get; set; }
 
     /// <summary>
-    /// 调查表名称（填充字段）
+    /// 调查表 名称（填充字段）
     /// </summary>
     public string? SurveyName { get; set; }
 
@@ -57,7 +57,7 @@ public class TaktCustomerSatisfactionSurveyItemDto : TaktCompanyDtoBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 调查类别类型（0=产品质量，1=交付服务，2=售后服务，3=技术支持，4=价格，5=其他）
+    /// 调查类别类型（字典 logistics_quality_satisfaction_category）
     /// </summary>
     public int CategoryType { get; set; } = 0;
 
@@ -82,7 +82,7 @@ public class TaktCustomerSatisfactionSurveyItemDto : TaktCompanyDtoBase
     public int? Score { get; set; }
 
     /// <summary>
-    /// 满意度等级（0=非常不满意，1=不满意，2=一般，3=满意，4=非常满意）
+    /// 满意度等级（字典 logistics_quality_satisfaction_level）
     /// </summary>
     public int? SatisfactionLevel { get; set; }
 
@@ -102,7 +102,7 @@ public class TaktCustomerSatisfactionSurveyItemDto : TaktCompanyDtoBase
     public string? FollowUpAction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 跟进状态（0=无需跟进，1=待跟进，2=跟进中，3=已完成）
+    /// 跟进状态（字典 logistics_quality_follow_up_status）
     /// </summary>
     public int FollowUpStatus { get; set; } = 0;
 
@@ -135,7 +135,7 @@ public class TaktCustomerSatisfactionSurveyItemQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 调查表ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 调查表 ID（关联 TaktCustomerSatisfactionSurvey.Id，选项 TaktCustomerSatisfactionSurveys/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SurveyId { get; set; }
@@ -151,7 +151,7 @@ public class TaktCustomerSatisfactionSurveyItemQueryDto : TaktPagedQuery
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 调查类别类型（0=产品质量，1=交付服务，2=售后服务，3=技术支持，4=价格，5=其他）
+    /// 调查类别类型（字典 logistics_quality_satisfaction_category）
     /// </summary>
     public int? CategoryType { get; set; }
 
@@ -176,7 +176,7 @@ public class TaktCustomerSatisfactionSurveyItemQueryDto : TaktPagedQuery
     public int? Score { get; set; }
 
     /// <summary>
-    /// 满意度等级（0=非常不满意，1=不满意，2=一般，3=满意，4=非常满意）
+    /// 满意度等级（字典 logistics_quality_satisfaction_level）
     /// </summary>
     public int? SatisfactionLevel { get; set; }
 
@@ -196,7 +196,7 @@ public class TaktCustomerSatisfactionSurveyItemQueryDto : TaktPagedQuery
     public string? FollowUpAction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 跟进状态（0=无需跟进，1=待跟进，2=跟进中，3=已完成）
+    /// 跟进状态（字典 logistics_quality_follow_up_status）
     /// </summary>
     public int? FollowUpStatus { get; set; }
 
@@ -241,12 +241,12 @@ public class TaktCustomerSatisfactionSurveyItemCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 调查表ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 调查表 ID（关联 TaktCustomerSatisfactionSurvey.Id，选项 TaktCustomerSatisfactionSurveys/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SurveyId { get; set; }
@@ -263,7 +263,7 @@ public class TaktCustomerSatisfactionSurveyItemCreateDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 调查类别类型（0=产品质量，1=交付服务，2=售后服务，3=技术支持，4=价格，5=其他）
+    /// 调查类别类型（字典 logistics_quality_satisfaction_category）
     /// </summary>
     public int CategoryType { get; set; } = 0;
 
@@ -289,7 +289,7 @@ public class TaktCustomerSatisfactionSurveyItemCreateDto
     public int? Score { get; set; }
 
     /// <summary>
-    /// 满意度等级（0=非常不满意，1=不满意，2=一般，3=满意，4=非常满意）
+    /// 满意度等级（字典 logistics_quality_satisfaction_level）
     /// </summary>
     public int? SatisfactionLevel { get; set; }
 
@@ -309,7 +309,7 @@ public class TaktCustomerSatisfactionSurveyItemCreateDto
     public string? FollowUpAction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 跟进状态（0=无需跟进，1=待跟进，2=跟进中，3=已完成）
+    /// 跟进状态（字典 logistics_quality_follow_up_status）
     /// </summary>
     public int FollowUpStatus { get; set; } = 0;
 
@@ -363,9 +363,9 @@ public class TaktCustomerSatisfactionSurveyItemStatusDto
     public long CustomerSatisfactionSurveyItemId { get; set; }
 
     /// <summary>
-    /// 跟进状态（0=无需跟进，1=待跟进，2=跟进中，3=已完成）
+    /// 跟进状态（字典 logistics_quality_follow_up_status）
     /// </summary>
-    [Required(ErrorMessage = "跟进状态（0=无需跟进，1=待跟进，2=跟进中，3=已完成）不能为空")]
+    [Required(ErrorMessage = "跟进状态（字典 logistics_quality_follow_up_status）不能为空")]
     public int FollowUpStatus { get; set; } = 0;
 }
 
@@ -389,7 +389,7 @@ public class TaktCustomerSatisfactionSurveyItemTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 调查表ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 调查表 ID（关联 TaktCustomerSatisfactionSurvey.Id，选项 TaktCustomerSatisfactionSurveys/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SurveyId { get; set; }
@@ -405,7 +405,7 @@ public class TaktCustomerSatisfactionSurveyItemTemplateDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 调查类别类型（0=产品质量，1=交付服务，2=售后服务，3=技术支持，4=价格，5=其他）
+    /// 调查类别类型（字典 logistics_quality_satisfaction_category）
     /// </summary>
     public int? CategoryType { get; set; }
 
@@ -430,7 +430,7 @@ public class TaktCustomerSatisfactionSurveyItemTemplateDto
     public int? Score { get; set; }
 
     /// <summary>
-    /// 满意度等级（0=非常不满意，1=不满意，2=一般，3=满意，4=非常满意）
+    /// 满意度等级（字典 logistics_quality_satisfaction_level）
     /// </summary>
     public int? SatisfactionLevel { get; set; }
 
@@ -448,6 +448,11 @@ public class TaktCustomerSatisfactionSurveyItemTemplateDto
     /// 跟进措施
     /// </summary>
     public string? FollowUpAction { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 跟进状态（字典 logistics_quality_follow_up_status）
+    /// </summary>
+    public int? FollowUpStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -477,12 +482,12 @@ public class TaktCustomerSatisfactionSurveyItemImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 调查表ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 调查表 ID（关联 TaktCustomerSatisfactionSurvey.Id，选项 TaktCustomerSatisfactionSurveys/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SurveyId { get; set; }
@@ -498,7 +503,7 @@ public class TaktCustomerSatisfactionSurveyItemImportDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 调查类别类型（0=产品质量，1=交付服务，2=售后服务，3=技术支持，4=价格，5=其他）
+    /// 调查类别类型（字典 logistics_quality_satisfaction_category）
     /// </summary>
     public int? CategoryType { get; set; }
 
@@ -523,7 +528,7 @@ public class TaktCustomerSatisfactionSurveyItemImportDto
     public int? Score { get; set; }
 
     /// <summary>
-    /// 满意度等级（0=非常不满意，1=不满意，2=一般，3=满意，4=非常满意）
+    /// 满意度等级（字典 logistics_quality_satisfaction_level）
     /// </summary>
     public int? SatisfactionLevel { get; set; }
 
@@ -541,6 +546,11 @@ public class TaktCustomerSatisfactionSurveyItemImportDto
     /// 跟进措施
     /// </summary>
     public string? FollowUpAction { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 跟进状态（字典 logistics_quality_follow_up_status）
+    /// </summary>
+    public int? FollowUpStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -576,7 +586,7 @@ public class TaktCustomerSatisfactionSurveyItemExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 调查表ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 调查表 ID（关联 TaktCustomerSatisfactionSurvey.Id，选项 TaktCustomerSatisfactionSurveys/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SurveyId { get; set; }
@@ -592,7 +602,7 @@ public class TaktCustomerSatisfactionSurveyItemExportDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 调查类别类型（0=产品质量，1=交付服务，2=售后服务，3=技术支持，4=价格，5=其他）
+    /// 调查类别类型（字典 logistics_quality_satisfaction_category）
     /// </summary>
     public int CategoryType { get; set; } = 0;
 
@@ -617,7 +627,7 @@ public class TaktCustomerSatisfactionSurveyItemExportDto
     public int? Score { get; set; }
 
     /// <summary>
-    /// 满意度等级（0=非常不满意，1=不满意，2=一般，3=满意，4=非常满意）
+    /// 满意度等级（字典 logistics_quality_satisfaction_level）
     /// </summary>
     public int? SatisfactionLevel { get; set; }
 
@@ -637,7 +647,7 @@ public class TaktCustomerSatisfactionSurveyItemExportDto
     public string? FollowUpAction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 跟进状态（0=无需跟进，1=待跟进，2=跟进中，3=已完成）
+    /// 跟进状态（字典 logistics_quality_follow_up_status）
     /// </summary>
     public int FollowUpStatus { get; set; } = 0;
 

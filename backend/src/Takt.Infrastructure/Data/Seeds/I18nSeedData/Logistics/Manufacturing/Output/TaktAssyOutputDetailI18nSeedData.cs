@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Output
 // 文件名称：TaktAssyOutputDetailI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktAssyOutputDetail 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -145,13 +145,13 @@ public class TaktAssyOutputDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.assyoutputdetail.downtimeminutes", "zh-HK", "停线时间_hk", "停线时间(分钟)"),
 
             // entity.assyoutputdetail.downtimereason
-            new TranslationSeedItem("entity.assyoutputdetail.downtimereason", "en-US", "停线原因_us", "停线原因"),
+            new TranslationSeedItem("entity.assyoutputdetail.downtimereason", "en-US", "停线原因_us", "停线原因（字典 logistics_stop_reason_category，存 DictValue）"),
             // entity.assyoutputdetail.downtimereason
-            new TranslationSeedItem("entity.assyoutputdetail.downtimereason", "ja-JP", "停线原因_jp", "停线原因"),
+            new TranslationSeedItem("entity.assyoutputdetail.downtimereason", "ja-JP", "停线原因_jp", "停线原因（字典 logistics_stop_reason_category，存 DictValue）"),
             // entity.assyoutputdetail.downtimereason
-            new TranslationSeedItem("entity.assyoutputdetail.downtimereason", "zh-CN", "停线原因", "停线原因"),
+            new TranslationSeedItem("entity.assyoutputdetail.downtimereason", "zh-CN", "停线原因", "停线原因（字典 logistics_stop_reason_category，存 DictValue）"),
             // entity.assyoutputdetail.downtimereason
-            new TranslationSeedItem("entity.assyoutputdetail.downtimereason", "zh-HK", "停线原因_hk", "停线原因"),
+            new TranslationSeedItem("entity.assyoutputdetail.downtimereason", "zh-HK", "停线原因_hk", "停线原因（字典 logistics_stop_reason_category，存 DictValue）"),
 
             // entity.assyoutputdetail.downtimedescription
             new TranslationSeedItem("entity.assyoutputdetail.downtimedescription", "en-US", "停线说明_us", "停线说明"),
@@ -163,13 +163,13 @@ public class TaktAssyOutputDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.assyoutputdetail.downtimedescription", "zh-HK", "停线说明_hk", "停线说明"),
 
             // entity.assyoutputdetail.unachievedreason
-            new TranslationSeedItem("entity.assyoutputdetail.unachievedreason", "en-US", "未达成原因_us", "未达成原因"),
+            new TranslationSeedItem("entity.assyoutputdetail.unachievedreason", "en-US", "未达成原因_us", "未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）"),
             // entity.assyoutputdetail.unachievedreason
-            new TranslationSeedItem("entity.assyoutputdetail.unachievedreason", "ja-JP", "未达成原因_jp", "未达成原因"),
+            new TranslationSeedItem("entity.assyoutputdetail.unachievedreason", "ja-JP", "未达成原因_jp", "未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）"),
             // entity.assyoutputdetail.unachievedreason
-            new TranslationSeedItem("entity.assyoutputdetail.unachievedreason", "zh-CN", "未达成原因", "未达成原因"),
+            new TranslationSeedItem("entity.assyoutputdetail.unachievedreason", "zh-CN", "未达成原因", "未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）"),
             // entity.assyoutputdetail.unachievedreason
-            new TranslationSeedItem("entity.assyoutputdetail.unachievedreason", "zh-HK", "未达成原因_hk", "未达成原因"),
+            new TranslationSeedItem("entity.assyoutputdetail.unachievedreason", "zh-HK", "未达成原因_hk", "未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）"),
 
             // entity.assyoutputdetail.unachieveddescription
             new TranslationSeedItem("entity.assyoutputdetail.unachieveddescription", "en-US", "未达成说明_us", "未达成说明"),

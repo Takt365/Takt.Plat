@@ -71,11 +71,11 @@
     >
       <!-- 字典/开关列渲染 -->
       <template #bodyCell="{ column, record }">
-        <template v-if="column.key === 'status'">
+        <template v-if="column.key === 'isoCodeStatus'">
           <a-switch
-            :checked="getIsoCodeField(record, 'status') === 1"
+            :checked="getIsoCodeField(record, 'isoCodeStatus') === 1"
             :checked-children="t('common.page.button.enable')" :un-checked-children="t('common.page.button.disable')"
-            @change="(checked: unknown) => handleStatusChange(record, Boolean(checked))"
+            @change="(checked: unknown) => handleIsoCodeStatusChange(record, Boolean(checked))"
           />
         </template>
         <template v-else-if="column.key === 'isoCodeCategory'">
@@ -173,22 +173,22 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('status')">
-      <a-form-item :label="t('entity.isocode.status')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.status"
-          dict-type="sys_normal_disable_status"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.isocode.status') })"
+      <div v-show="isFieldVisible('isoCodeDescription')">
+      <a-form-item :label="t('entity.isocode.description')">
+        <a-textarea
+          v-model:value="advancedQueryForm.isoCodeDescription"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.isocode.description') })"
+          :rows="2"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('description')">
-      <a-form-item :label="t('entity.isocode.description')">
-        <a-textarea
-          v-model:value="advancedQueryForm.description"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.isocode.description') })"
-          :rows="2"
+      <div v-show="isFieldVisible('isoCodeStatus')">
+      <a-form-item :label="t('entity.isocode.status')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.isoCodeStatus"
+          dict-type="sys_normal_disable_status"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.isocode.status') })"
           allow-clear
         />
       </a-form-item>
@@ -199,7 +199,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -210,7 +210,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -268,6 +268,7 @@
       @cancel="handleImportCancel"
     >
       <TaktImportFile
+        v-if="importVisible"
         entity-i18n-key="entity.isocode._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
@@ -311,6 +312,7 @@ import type { IsoCode, IsoCodeQuery } from '@/types/foundation/iso-code'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
@@ -360,8 +362,8 @@ const advancedQueryForm = ref({
   isoCode: '',
   isoName: '',
   isBuiltIn: undefined as number | undefined,
-  status: undefined as number | undefined,
-  description: '',
+  isoCodeDescription: '',
+  isoCodeStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -373,8 +375,8 @@ const queryFieldsMeta = computed(() => [
   { key: 'isoCode', label: t('entity.isocode.isocode') },
   { key: 'isoName', label: t('entity.isocode.isoname') },
   { key: 'isBuiltIn', label: t('entity.isocode.isbuiltin') },
-  { key: 'status', label: t('entity.isocode.status') },
-  { key: 'description', label: t('entity.isocode.description') },
+  { key: 'isoCodeDescription', label: t('entity.isocode.description') },
+  { key: 'isoCodeStatus', label: t('entity.isocode.status') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extField', label: t('common.page.entity.extfield') },
@@ -429,10 +431,10 @@ function buildListQuery(overrides?: Partial<IsoCodeQuery>): IsoCodeQuery {
   if (form.isBuiltIn !== undefined && form.isBuiltIn !== null) {
     query.isBuiltIn = form.isBuiltIn
   }
-  if (form.status !== undefined && form.status !== null) {
-    query.status = form.status
+  assignTrimmed('isoCodeDescription', form.isoCodeDescription)
+  if (form.isoCodeStatus !== undefined && form.isoCodeStatus !== null) {
+    query.isoCodeStatus = form.isoCodeStatus
   }
-  assignTrimmed('description', form.description)
   assignTrimmed('createdAtStart', form.createdAtStart)
   assignTrimmed('createdAtEnd', form.createdAtEnd)
   assignTrimmed('extField', form.extField)
@@ -499,21 +501,21 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
   },
   {
-    title: t('entity.isocode.status'),
-    dataIndex: 'status',
-    key: 'status',
+    title: t('entity.isocode.description'),
+    dataIndex: 'isoCodeDescription',
+    key: 'isoCodeDescription',
     width: 120,
     resizable: true,
     ellipsis: true,
+    customRender: ({ record }: { record: any }) => getIsoCodeField(record, 'isoCodeDescription') ?? ''
   },
   {
-    title: t('entity.isocode.description'),
-    dataIndex: 'description',
-    key: 'description',
+    title: t('entity.isocode.status'),
+    dataIndex: 'isoCodeStatus',
+    key: 'isoCodeStatus',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getIsoCodeField(record, 'description') ?? ''
   },
   CreateActionColumn({
     actions: [
@@ -558,7 +560,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: IsoCode, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getIsoCodeId(selectedRow.value) === getIsoCodeId(record)) {
+    } else if (selectedRow.value && getIsoCodeId(selectedRow.value) === getIsoCodeId(record)) {
       selectedRow.value = null
     }
   },
@@ -619,8 +621,8 @@ function handleReset() {
   isoCode: '',
   isoName: '',
   isBuiltIn: undefined as number | undefined,
-  status: undefined as number | undefined,
-  description: '',
+  isoCodeDescription: '',
+  isoCodeStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -698,15 +700,18 @@ async function handleDownloadTemplate(sheetName?: string, fileName?: string): Pr
   return (res as any)?.data ?? res
 }
 
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importIsoCode(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importIsoCode(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
+  }
 }
 
 /** 关闭导入对话框 */
@@ -786,21 +791,21 @@ async function handleDelete() {
  * @param record 当前行
  * @param checked 是否启用
  */
-async function handleStatusChange(record: IsoCode, checked: boolean) {
+async function handleIsoCodeStatusChange(record: IsoCode, checked: boolean) {
   const newVal = checked ? 1 : 0
-  const oldVal = getIsoCodeField(record, 'status')
+  const oldVal = getIsoCodeField(record, 'isoCodeStatus')
   const id = getIsoCodeId(record)
   const row = dataSource.value.find((item) => getIsoCodeId(item) === id)
   if (row) {
-    row.status = newVal
+    row.isoCodeStatus = newVal
   }
   try {
-    await updateIsoCodeStatus({ isoCodeId: id, status: newVal })
+    await updateIsoCodeStatus({ isoCodeId: id, isoCodeStatus: newVal })
     message.success(t('common.feedback.updated'))
     
   } catch (error: unknown) {
     if (row) {
-      row.status = oldVal
+      row.isoCodeStatus = oldVal
     }
     message.error(t('common.feedback.failed'))
   }
@@ -823,8 +828,8 @@ function handleAdvancedQueryReset() {
   isoCode: '',
   isoName: '',
   isBuiltIn: undefined as number | undefined,
-  status: undefined as number | undefined,
-  description: '',
+  isoCodeDescription: '',
+  isoCodeStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',

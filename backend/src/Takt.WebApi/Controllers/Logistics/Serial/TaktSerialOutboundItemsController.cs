@@ -2,9 +2,9 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Serial
 // 文件名称：TaktSerialOutboundItemsController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-27
 // 创建人：Takt365(Cursor AI)
-// 功能描述：产品序列号出库明细控制器
+// 功能描述：序列号出库明细控制器
 // 
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -18,11 +18,11 @@ using Takt.Shared.Constants;
 namespace Takt.WebApi.Controllers.Logistics.Serial;
 
 /// <summary>
-/// 产品序列号出库明细控制器
-/// 提供产品序列号出库明细的 REST API
+/// 序列号出库明细控制器
+/// 提供序列号出库明细的 REST API
 /// </summary>
 [ApiModule(4, "后勤管理")]
-[Route("api/[controller]", Name = "产品序列号出库明细")]
+[Route("api/[controller]", Name = "序列号出库明细")]
 public class TaktSerialOutboundItemsController : TaktControllerBase
 {
     private readonly ITaktSerialOutboundItemService _serialOutboundItemService;
@@ -30,18 +30,18 @@ public class TaktSerialOutboundItemsController : TaktControllerBase
     /// <summary>
     /// 构造函数
     /// </summary>
-    /// <param name="serialOutboundItemService">产品序列号出库明细服务</param>
+    /// <param name="serialOutboundItemService">序列号出库明细服务</param>
     public TaktSerialOutboundItemsController(ITaktSerialOutboundItemService serialOutboundItemService)
     {
         _serialOutboundItemService = serialOutboundItemService;
     }
 
     /// <summary>
-    /// 获取产品序列号出库明细列表（分页）
+    /// 获取序列号出库明细列表（分页）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:serial:outbound:list", "产品序列号出库明细列表")]
+    [TaktPermission("logistics:serial:outbound:list", "序列号出库明细列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetSerialOutboundItemListAsync([FromQuery] TaktSerialOutboundItemQueryDto queryDto)
     {
@@ -57,11 +57,11 @@ public class TaktSerialOutboundItemsController : TaktControllerBase
     }
 
     /// <summary>
-    /// 根据ID获取产品序列号出库明细
+    /// 根据ID获取序列号出库明细
     /// </summary>
-    /// <param name="id">产品序列号出库明细ID</param>
-    /// <returns>产品序列号出库明细DTO</returns>
-    [TaktPermission("logistics:serial:outbound:query", "产品序列号出库明细详情")]
+    /// <param name="id">序列号出库明细ID</param>
+    /// <returns>序列号出库明细DTO</returns>
+    [TaktPermission("logistics:serial:outbound:query", "序列号出库明细详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetSerialOutboundItemByIdAsync(long id)
     {
@@ -70,7 +70,7 @@ public class TaktSerialOutboundItemsController : TaktControllerBase
             var result = await _serialOutboundItemService.GetSerialOutboundItemByIdAsync(id);
             if (result == null)
             {
-                return NotFound("产品序列号出库明细不存在");
+                return NotFound("序列号出库明细不存在");
             }
             return Success(result, "查询成功");
         }
@@ -84,7 +84,7 @@ public class TaktSerialOutboundItemsController : TaktControllerBase
     /// 获取产品序列号出库明细选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:serial:outbound:query", "产品序列号出库明细选项")]
+    [TaktPermission("logistics:serial:outbound:query", "序列号出库明细选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetSerialOutboundItemOptionsAsync()
     {
@@ -100,11 +100,11 @@ public class TaktSerialOutboundItemsController : TaktControllerBase
     }
 
     /// <summary>
-    /// 创建产品序列号出库明细
+    /// 创建序列号出库明细
     /// </summary>
     /// <param name="dto">创建DTO</param>
-    /// <returns>产品序列号出库明细DTO</returns>
-    [TaktPermission("logistics:serial:outbound:create", "创建产品序列号出库明细")]
+    /// <returns>序列号出库明细DTO</returns>
+    [TaktPermission("logistics:serial:outbound:create", "创建序列号出库明细")]
     [HttpPost]
     public async Task<IActionResult> CreateSerialOutboundItemAsync([FromBody] TaktSerialOutboundItemCreateDto dto)
     {
@@ -120,12 +120,12 @@ public class TaktSerialOutboundItemsController : TaktControllerBase
     }
 
     /// <summary>
-    /// 更新产品序列号出库明细
+    /// 更新序列号出库明细
     /// </summary>
-    /// <param name="id">产品序列号出库明细ID</param>
+    /// <param name="id">序列号出库明细ID</param>
     /// <param name="dto">更新DTO</param>
-    /// <returns>产品序列号出库明细DTO</returns>
-    [TaktPermission("logistics:serial:outbound:update", "更新产品序列号出库明细")]
+    /// <returns>序列号出库明细DTO</returns>
+    [TaktPermission("logistics:serial:outbound:update", "更新序列号出库明细")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateSerialOutboundItemAsync(long id, [FromBody] TaktSerialOutboundItemUpdateDto dto)
     {
@@ -141,11 +141,11 @@ public class TaktSerialOutboundItemsController : TaktControllerBase
     }
 
     /// <summary>
-    /// 删除产品序列号出库明细
+    /// 删除序列号出库明细
     /// </summary>
-    /// <param name="id">产品序列号出库明细ID</param>
+    /// <param name="id">序列号出库明细ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:serial:outbound:delete", "删除产品序列号出库明细")]
+    [TaktPermission("logistics:serial:outbound:delete", "删除序列号出库明细")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteSerialOutboundItemByIdAsync(long id)
     {
@@ -161,11 +161,11 @@ public class TaktSerialOutboundItemsController : TaktControllerBase
     }
 
     /// <summary>
-    /// 批量删除产品序列号出库明细
+    /// 批量删除序列号出库明细
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:serial:outbound:delete", "批量删除产品序列号出库明细")]
+    [TaktPermission("logistics:serial:outbound:delete", "批量删除序列号出库明细")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteSerialOutboundItemBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktSerialOutboundItemsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:serial:outbound:import", "获取产品序列号出库明细导入模板")]
+    [TaktPermission("logistics:serial:outbound:import", "获取序列号出库明细导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetSerialOutboundItemTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -200,11 +200,11 @@ public class TaktSerialOutboundItemsController : TaktControllerBase
     }
 
     /// <summary>
-    /// 导入产品序列号出库明细
+    /// 导入序列号出库明细
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:serial:outbound:import", "导入产品序列号出库明细")]
+    [TaktPermission("logistics:serial:outbound:import", "导入序列号出库明细")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportSerialOutboundItemAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -231,10 +231,10 @@ public class TaktSerialOutboundItemsController : TaktControllerBase
     }
 
     /// <summary>
-    /// 导出产品序列号出库明细
+    /// 导出序列号出库明细
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:serial:outbound:export", "导出产品序列号出库明细")]
+    [TaktPermission("logistics:serial:outbound:export", "导出序列号出库明细")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportSerialOutboundItemAsync([FromQuery] TaktSerialOutboundItemQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

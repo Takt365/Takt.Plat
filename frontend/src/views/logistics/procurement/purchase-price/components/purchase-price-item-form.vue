@@ -26,7 +26,111 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.purchasepriceitem.linenumber')"
+                name="lineNumber"
+              >
+                <a-input-number
+                  v-model:value="formState.lineNumber"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchasepriceitem.linenumber') })"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.purchasepriceitem.materialcode')"
+                name="materialCode"
+              >
+                <a-input
+                  v-model:value="formState.materialCode"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchasepriceitem.materialcode') })"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                  :disabled="!!formData?.purchasePriceItemId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.purchasepriceitem.materialname')"
+                name="materialName"
+              >
+                <a-input
+                  v-model:value="formState.materialName"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchasepriceitem.materialname') })"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.purchasepriceitem.materialspecification')"
+                name="materialSpecification"
+              >
+                <a-input
+                  v-model:value="formState.materialSpecification"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchasepriceitem.materialspecification') })"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.purchasepriceitem.purchaseunit')"
+                name="purchaseUnit"
+              >
+                <a-input
+                  v-model:value="formState.purchaseUnit"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchasepriceitem.purchaseunit') })"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.purchasepriceitem.purchaseprice')"
+                name="purchasePrice"
+              >
+                <a-input-number
+                  v-model:value="formState.purchasePrice"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchasepriceitem.purchaseprice') })"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.purchasepriceitem.minpurchasequantity')"
+                name="minPurchaseQuantity"
+              >
+                <a-input-number
+                  v-model:value="formState.minPurchaseQuantity"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchasepriceitem.minpurchasequantity') })"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.purchasepriceitem.maxpurchasequantity')"
+                name="maxPurchaseQuantity"
+              >
+                <a-input-number
+                  v-model:value="formState.maxPurchaseQuantity"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchasepriceitem.maxpurchasequantity') })"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
           </a-row>
         </div>
       </a-tab-pane>
@@ -51,7 +155,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = []
+const formFields = ["lineNumber","materialCode","materialName","materialSpecification","purchaseUnit","purchasePrice","minPurchaseQuantity","maxPurchaseQuantity"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -103,7 +207,72 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-
+  lineNumber: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchasepriceitem.linenumber') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchasepriceitem.linenumber') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  materialCode: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.required', { field: t('entity.purchasepriceitem.materialcode') }),
+      trigger: 'blur'
+    }
+  ],
+  purchaseUnit: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.required', { field: t('entity.purchasepriceitem.purchaseunit') }),
+      trigger: 'blur'
+    }
+  ],
+  purchasePrice: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchasepriceitem.purchaseprice') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchasepriceitem.purchaseprice') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  minPurchaseQuantity: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchasepriceitem.minpurchasequantity') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchasepriceitem.minpurchasequantity') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  maxPurchaseQuantity: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchasepriceitem.maxpurchasequantity') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchasepriceitem.maxpurchasequantity') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -115,6 +284,22 @@ async function validate() {
 /** 映射为 Create/Update DTO（含主表外键 purchasePriceId） */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
+  if ('lineNumber' in payload) {
+    const rawlineNumber = payload.lineNumber
+    payload.lineNumber = typeof rawlineNumber === 'number' ? rawlineNumber : Number(rawlineNumber)
+  }
+  if ('purchasePrice' in payload) {
+    const rawpurchasePrice = payload.purchasePrice
+    payload.purchasePrice = typeof rawpurchasePrice === 'number' ? rawpurchasePrice : Number(rawpurchasePrice)
+  }
+  if ('minPurchaseQuantity' in payload) {
+    const rawminPurchaseQuantity = payload.minPurchaseQuantity
+    payload.minPurchaseQuantity = typeof rawminPurchaseQuantity === 'number' ? rawminPurchaseQuantity : Number(rawminPurchaseQuantity)
+  }
+  if ('maxPurchaseQuantity' in payload) {
+    const rawmaxPurchaseQuantity = payload.maxPurchaseQuantity
+    payload.maxPurchaseQuantity = typeof rawmaxPurchaseQuantity === 'number' ? rawmaxPurchaseQuantity : Number(rawmaxPurchaseQuantity)
+  }
   if ('sortOrder' in payload) delete payload.sortOrder
   payload.purchasePriceId = props.masterId
   return payload

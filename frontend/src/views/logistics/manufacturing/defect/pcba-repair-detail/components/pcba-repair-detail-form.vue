@@ -58,11 +58,12 @@
                 :label="t('entity.pcbarepairdetail.pcbaboardtype')"
                 name="pcbaBoardType"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.pcbaBoardType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbarepairdetail.pcbaboardtype') })"
-                  show-count
-                  :maxlength="20"
+                  dict-type="logistics_pcba_panel_category"
+                  :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbarepairdetail.pcbaboardtype') })"
+                  :disabled="loading"
                   allow-clear
                 />
               </a-form-item>
@@ -81,14 +82,15 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.pcbarepairdetail.prodline')"
-                name="prodLine"
+                :label="t('entity.pcbarepairdetail.prodteam')"
+                name="prodTeam"
               >
-                <a-input
-                  v-model:value="formState.prodLine"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbarepairdetail.prodline') })"
-                  show-count
-                  :maxlength="20"
+                <TaktSelect
+                  v-model:value="formState.prodTeam"
+                  :options="filteredProductionTeamOptions"
+                  :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbarepairdetail.prodteam') })"
+                  :disabled="loading || !masterPlantCode"
                   allow-clear
                 />
               </a-form-item>
@@ -126,11 +128,56 @@
                 :label="t('entity.pcbarepairdetail.defectengineering')"
                 name="defectEngineering"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.defectEngineering"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbarepairdetail.defectengineering') })"
-                  show-count
-                  :maxlength="20"
+                  dict-type="logistics_defect_category"
+                  :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbarepairdetail.defectengineering') })"
+                  :disabled="loading"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.pcbarepairdetail.defectresponsibility')"
+                name="defectResponsibility"
+              >
+                <TaktSelect
+                  v-model:value="formState.defectResponsibility"
+                  dict-type="logistics_defect_responsibility_category"
+                  :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbarepairdetail.defectresponsibility') })"
+                  :disabled="loading"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.pcbarepairdetail.defectnature')"
+                name="defectNature"
+              >
+                <TaktSelect
+                  v-model:value="formState.defectNature"
+                  dict-type="logistics_defect_nature_category"
+                  :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbarepairdetail.defectnature') })"
+                  :disabled="loading"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.pcbarepairdetail.repairoperator')"
+                name="repairOperator"
+              >
+                <TaktSelect
+                  v-model:value="formState.repairOperator"
+                  api-url="TaktEmployees/options"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbarepairdetail.repairoperator') })"
+                  :disabled="loading"
                   allow-clear
                 />
               </a-form-item>
@@ -147,20 +194,50 @@
  * PCBA改修日报实体子表 pcbaRepairDetail 维护表单 · 由 generate-vue-master-detail-from-api.cjs 生成
  * @module views/logistics/manufacturing/defect/pcba-repair-detail/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
-import type { PcbaRepairDetailCreate } from '@/types/logistics/manufacturing/defect/pcba-repair-detail'
+import type { PcbaRepairDetailCreate } from '@/types/logistics/manufacturing/defect/pcba-repair-detail-detail'
+import type { TaktSelectOption } from '@/types/common'
+import TaktSelect from '@/components/business/takt-select/index.vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
+import { getProductionTeamOptions } from '@/api/logistics/manufacturing/output/production-team'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
+
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热） */
+const dictDataStore = useDictDataStore()
+/** 生产班组下拉全量选项 */
+const productionTeamOptions = ref<TaktSelectOption[]>([])
+
+/** 按主表工厂过滤的生产线选项 */
+const filteredProductionTeamOptions = computed(() => {
+  const plantCode = props.masterPlantCode
+  if (!plantCode) {
+    return []
+  }
+  return productionTeamOptions.value.filter((item) => String(item.extValue ?? '') === String(plantCode))
+})
+
+/**
+ * 加载生产班组选项
+ */
+async function loadProductionTeamOptions() {
+  productionTeamOptions.value = await getProductionTeamOptions()
+}
+
+/** 表单挂载时预加载字典与生产班组选项 */
+onMounted(async () => {
+  void dictDataStore.loadAllDictDataAsync()
+  await loadProductionTeamOptions()
+})
 /** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["prodOrderCode","lineNumber","pcbaBoardType","prodActualQty","prodLine","cardNo","defectSymptom","defectEngineering"]
-
+const formFields = ["prodOrderCode","lineNumber","pcbaBoardType","prodActualQty","prodTeam","cardNo","defectSymptom","defectEngineering","defectResponsibility","defectNature","repairOperator"]
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -169,23 +246,26 @@ interface Props {
   loading?: boolean
   /** 主表选中行 Id（Create/Update 提交时写入外键） */
   masterId?: string
+  /** 主表工厂代码（过滤生产线选项） */
+  masterPlantCode?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
   formData: null,
   loading: false,
   masterId: '',
+  masterPlantCode: '',
 })
 
 /** a-form 实例 ref */
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
-/** 表单字段默认值（无字典默认项） */
+
+/** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
 function applyFormDefaults(target: Record<string, unknown>) {
   void target
 }
-
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 pcbaRepairDetailId 才视为编辑） */
 watch(
@@ -194,7 +274,6 @@ watch(
     if (val?.pcbaRepairDetailId) {
       const next = { ...val } as Record<string, unknown>
       Object.keys(formState).forEach((k) => delete formState[k])
-
       Object.assign(formState, next)
       formRef.value?.clearValidate()
     } else {

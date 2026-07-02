@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Maintenance
 // 文件名称：TaktMaintenanceHistoryService.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：设备维护履历应用服务实现
 // 
@@ -339,6 +339,33 @@ public class TaktMaintenanceHistoryService : TaktServiceBase, ITaktMaintenanceHi
         }
         entity.MaintenanceWorkOrderId = master.Id;
     }
+
+    /// <summary>
+    /// 获取维护履历统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>维护履历统计</returns>
+    public async Task<TaktMaintenanceHistoryStatDto> GetMaintenanceHistoryStatAsync(TaktMaintenanceHistoryStatQueryDto queryDto)
+    {
+        EnsureThreeLayerContext();
+        var (start, end, statMonth) = TaktStatMonthRangeHelper.ResolveMonthRange(
+            queryDto.MaintenanceDateStart,
+            queryDto.MaintenanceDateEnd);
+        var tenantCode = CurrentTenantCode;
+        var companyCode = CurrentCompanyCode;
+        Expression<Func<TaktMaintenanceHistory, bool>> predicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.MaintenanceDate >= start
+            && x.MaintenanceDate <= end;
+        var monthHistoryCount = await _maintenanceHistoryRepository.CountAsync(predicate);
+        return new TaktMaintenanceHistoryStatDto
+        {
+            StatMonth = statMonth,
+            MonthHistoryCount = monthHistoryCount,
+        };
+    }
+
     // ========================================
     // 查询表达式
     // ========================================

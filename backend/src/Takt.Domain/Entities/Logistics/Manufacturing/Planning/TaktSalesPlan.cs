@@ -28,7 +28,7 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Planning;
 public class TaktSalesPlan : TaktApprovalEntityBase
 {
     /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
@@ -58,7 +58,7 @@ public class TaktSalesPlan : TaktApprovalEntityBase
     public DateTime PlanPeriodEnd { get; set; } = DateTime.Now;
 
     /// <summary>
-    /// 客户编码（可选；汇总计划时为空，关联 TaktCustomer.CustomerCode）
+    /// 客户编码（关联 TaktCustomer.CustomerCode，选项 TaktCustomers/options；汇总计划时可为空）
     /// </summary>
     [SugarColumn(ColumnName = "customer_code", ColumnDescription = "客户编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? CustomerCode { get; set; }
@@ -70,14 +70,14 @@ public class TaktSalesPlan : TaktApprovalEntityBase
     public string? CustomerName { get; set; }
 
     /// <summary>
-    /// 计划人员工ID（关联 TaktEmployee，序列化为 string 以避免 Javascript 精度问题）
+    /// 计划人员工ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [SugarColumn(ColumnName = "planner_id", ColumnDescription = "计划人员工ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PlannerId { get; set; }
 
     /// <summary>
-    /// 计划人（人员代码）
+    /// 计划人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
     /// </summary>
     [SugarColumn(ColumnName = "plan_by", ColumnDescription = "计划人", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string PlanBy { get; set; } = string.Empty;
@@ -107,13 +107,13 @@ public class TaktSalesPlan : TaktApprovalEntityBase
     public decimal ConvertedAmount { get; set; } = 0;
 
     /// <summary>
-    /// 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用，2=锁定）
     /// </summary>
     [SugarColumn(ColumnName = "plan_status", ColumnDescription = "计划状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int PlanStatus { get; set; } = 1;
 
     /// <summary>
-    /// 转单状态（0=未转单，1=部分转单，2=全部转单）
+    /// 转单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
     /// </summary>
     [SugarColumn(ColumnName = "converted_status", ColumnDescription = "转单状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int ConvertedStatus { get; set; } = 0;

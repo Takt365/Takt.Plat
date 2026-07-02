@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/human-resource/attendance
 // 文件名称：leave.d.ts
-// 创建时间：2026-06-20
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/attendance 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface Leave extends ApprovalDtoBase {
   leaveId: string;
 
   /**
-   * 员工 ID（请假归属员工）
+   * 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   employeeId: string;
 
@@ -39,7 +39,7 @@ export interface Leave extends ApprovalDtoBase {
   employeeName: string;
 
   /**
-   * 部门 ID
+   * 部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
    */
   deptId?: string;
 
@@ -49,7 +49,7 @@ export interface Leave extends ApprovalDtoBase {
   deptName?: string;
 
   /**
-   * 请假类型（字典 sys_leave_type）
+   * 请假类型（字典 sys_leave_type；列存 DictValue）
    */
   leaveType: string;
 
@@ -69,17 +69,17 @@ export interface Leave extends ApprovalDtoBase {
   reason: string;
 
   /**
-   * 关联工厂
+   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
   relatedPlant?: string;
 
   /**
-   * 证明附件 JSON（与 TaktFile 字段对齐的数组）
+   * 证明附件 JSON（列表形式，由TaktFile 统一上传到服务器）
    */
-  proofAttachmentsJson?: string;
+  Attachments?: string;
 
   /**
-   * 经办人（关联 TaktEmployee）
+   * 经办人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   handlingBy: string;
 
@@ -94,7 +94,7 @@ export interface Leave extends ApprovalDtoBase {
   handlingComment?: string;
 
   /**
-   * 请假状态（字典 sys_approval_status；与 ApprovalStatus 取值一致：0=待审批 1=审批中 2=已通过 3=已驳回 4=已撤回 5=已终止）
+   * 请假状态（字典 sys_approval_status；0=待审批 1=审批中 2=已通过 3=已驳回 4=已撤回 5=已终止）
    */
   leaveStatus: number;
 
@@ -119,7 +119,7 @@ export interface LeaveQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 员工 ID（请假归属员工）
+   * 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   employeeId?: string;
 
@@ -129,7 +129,7 @@ export interface LeaveQuery extends TaktPagedQuery {
   employeeName?: string;
 
   /**
-   * 部门 ID
+   * 部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
    */
   deptId?: string;
 
@@ -139,7 +139,7 @@ export interface LeaveQuery extends TaktPagedQuery {
   deptName?: string;
 
   /**
-   * 请假类型（字典 sys_leave_type）
+   * 请假类型（字典 sys_leave_type；列存 DictValue）
    */
   leaveType?: string;
 
@@ -169,17 +169,17 @@ export interface LeaveQuery extends TaktPagedQuery {
   reason?: string;
 
   /**
-   * 关联工厂
+   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
   relatedPlant?: string;
 
   /**
-   * 证明附件 JSON（与 TaktFile 字段对齐的数组）
+   * 证明附件 JSON（列表形式，由TaktFile 统一上传到服务器）
    */
-  proofAttachmentsJson?: string;
+  Attachments?: string;
 
   /**
-   * 经办人（关联 TaktEmployee）
+   * 经办人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   handlingBy?: string;
 
@@ -199,12 +199,12 @@ export interface LeaveQuery extends TaktPagedQuery {
   handlingComment?: string;
 
   /**
-   * 请假状态（字典 sys_approval_status；与 ApprovalStatus 取值一致：0=待审批 1=审批中 2=已通过 3=已驳回 4=已撤回 5=已终止）
+   * 请假状态（字典 sys_approval_status；0=待审批 1=审批中 2=已通过 3=已驳回 4=已撤回 5=已终止）
    */
   leaveStatus?: number;
 
   /**
-   * 审批状态（TaktApprovalStatus）
+   * 审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）
    */
   approvalStatus?: number;
 
@@ -283,12 +283,12 @@ export interface LeaveCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
   /**
-   * 员工 ID（请假归属员工）
+   * 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   employeeId: string;
 
@@ -298,7 +298,7 @@ export interface LeaveCreate {
   employeeName: string;
 
   /**
-   * 部门 ID
+   * 部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
    */
   deptId?: string;
 
@@ -308,7 +308,7 @@ export interface LeaveCreate {
   deptName?: string;
 
   /**
-   * 请假类型（字典 sys_leave_type）
+   * 请假类型（字典 sys_leave_type；列存 DictValue）
    */
   leaveType: string;
 
@@ -328,17 +328,17 @@ export interface LeaveCreate {
   reason: string;
 
   /**
-   * 关联工厂
+   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
   relatedPlant?: string;
 
   /**
-   * 证明附件 JSON（与 TaktFile 字段对齐的数组）
+   * 证明附件 JSON（列表形式，由TaktFile 统一上传到服务器）
    */
-  proofAttachmentsJson?: string;
+  Attachments?: string;
 
   /**
-   * 经办人（关联 TaktEmployee）
+   * 经办人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   handlingBy: string;
 
@@ -353,7 +353,7 @@ export interface LeaveCreate {
   handlingComment?: string;
 
   /**
-   * 请假状态（字典 sys_approval_status；与 ApprovalStatus 取值一致：0=待审批 1=审批中 2=已通过 3=已驳回 4=已撤回 5=已终止）
+   * 请假状态（字典 sys_approval_status；0=待审批 1=审批中 2=已通过 3=已驳回 4=已撤回 5=已终止）
    */
   leaveStatus: number;
 
@@ -397,7 +397,7 @@ export interface LeaveStatus {
   leaveId: string;
 
   /**
-   * 请假状态（字典 sys_approval_status；与 ApprovalStatus 取值一致：0=待审批 1=审批中 2=已通过 3=已驳回 4=已撤回 5=已终止）
+   * 请假状态（字典 sys_approval_status；0=待审批 1=审批中 2=已通过 3=已驳回 4=已撤回 5=已终止）
    */
   leaveStatus: number;
 
@@ -421,7 +421,7 @@ export interface LeaveTemplate {
   companyCode?: string;
 
   /**
-   * 员工 ID（请假归属员工）
+   * 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   employeeId?: string;
 
@@ -431,7 +431,7 @@ export interface LeaveTemplate {
   employeeName?: string;
 
   /**
-   * 部门 ID
+   * 部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
    */
   deptId?: string;
 
@@ -441,9 +441,19 @@ export interface LeaveTemplate {
   deptName?: string;
 
   /**
-   * 请假类型（字典 sys_leave_type）
+   * 请假类型（字典 sys_leave_type；列存 DictValue）
    */
   leaveType?: string;
+
+  /**
+   * 开始日期
+   */
+  startDate?: string;
+
+  /**
+   * 结束日期
+   */
+  endDate?: string;
 
   /**
    * 请假事由
@@ -451,19 +461,24 @@ export interface LeaveTemplate {
   reason?: string;
 
   /**
-   * 关联工厂
+   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
   relatedPlant?: string;
 
   /**
-   * 证明附件 JSON（与 TaktFile 字段对齐的数组）
+   * 证明附件 JSON（列表形式，由TaktFile 统一上传到服务器）
    */
-  proofAttachmentsJson?: string;
+  Attachments?: string;
 
   /**
-   * 经办人（关联 TaktEmployee）
+   * 经办人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   handlingBy?: string;
+
+  /**
+   * 经办时间
+   */
+  handlingAt?: string;
 
   /**
    * 经办备注
@@ -471,7 +486,7 @@ export interface LeaveTemplate {
   handlingComment?: string;
 
   /**
-   * 请假状态（字典 sys_approval_status；与 ApprovalStatus 取值一致：0=待审批 1=审批中 2=已通过 3=已驳回 4=已撤回 5=已终止）
+   * 请假状态（字典 sys_approval_status；0=待审批 1=审批中 2=已通过 3=已驳回 4=已撤回 5=已终止）
    */
   leaveStatus?: number;
 
@@ -505,12 +520,12 @@ export interface LeaveImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
   /**
-   * 员工 ID（请假归属员工）
+   * 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   employeeId?: string;
 
@@ -520,7 +535,7 @@ export interface LeaveImport {
   employeeName?: string;
 
   /**
-   * 部门 ID
+   * 部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
    */
   deptId?: string;
 
@@ -530,9 +545,19 @@ export interface LeaveImport {
   deptName?: string;
 
   /**
-   * 请假类型（字典 sys_leave_type）
+   * 请假类型（字典 sys_leave_type；列存 DictValue）
    */
   leaveType?: string;
+
+  /**
+   * 开始日期
+   */
+  startDate?: string;
+
+  /**
+   * 结束日期
+   */
+  endDate?: string;
 
   /**
    * 请假事由
@@ -540,19 +565,24 @@ export interface LeaveImport {
   reason?: string;
 
   /**
-   * 关联工厂
+   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
   relatedPlant?: string;
 
   /**
-   * 证明附件 JSON（与 TaktFile 字段对齐的数组）
+   * 证明附件 JSON（列表形式，由TaktFile 统一上传到服务器）
    */
-  proofAttachmentsJson?: string;
+  Attachments?: string;
 
   /**
-   * 经办人（关联 TaktEmployee）
+   * 经办人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   handlingBy?: string;
+
+  /**
+   * 经办时间
+   */
+  handlingAt?: string;
 
   /**
    * 经办备注
@@ -560,7 +590,7 @@ export interface LeaveImport {
   handlingComment?: string;
 
   /**
-   * 请假状态（字典 sys_approval_status；与 ApprovalStatus 取值一致：0=待审批 1=审批中 2=已通过 3=已驳回 4=已撤回 5=已终止）
+   * 请假状态（字典 sys_approval_status；0=待审批 1=审批中 2=已通过 3=已驳回 4=已撤回 5=已终止）
    */
   leaveStatus?: number;
 
@@ -589,7 +619,7 @@ export interface LeaveExport {
   leaveId: string;
 
   /**
-   * 员工 ID（请假归属员工）
+   * 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   employeeId: string;
 
@@ -599,7 +629,7 @@ export interface LeaveExport {
   employeeName: string;
 
   /**
-   * 部门 ID
+   * 部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
    */
   deptId?: string;
 
@@ -609,7 +639,7 @@ export interface LeaveExport {
   deptName?: string;
 
   /**
-   * 请假类型（字典 sys_leave_type）
+   * 请假类型（字典 sys_leave_type；列存 DictValue）
    */
   leaveType: string;
 
@@ -629,17 +659,17 @@ export interface LeaveExport {
   reason: string;
 
   /**
-   * 关联工厂
+   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
   relatedPlant?: string;
 
   /**
-   * 证明附件 JSON（与 TaktFile 字段对齐的数组）
+   * 证明附件 JSON（列表形式，由TaktFile 统一上传到服务器）
    */
-  proofAttachmentsJson?: string;
+  Attachments?: string;
 
   /**
-   * 经办人（关联 TaktEmployee）
+   * 经办人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   handlingBy: string;
 
@@ -654,7 +684,7 @@ export interface LeaveExport {
   handlingComment?: string;
 
   /**
-   * 请假状态（字典 sys_approval_status；与 ApprovalStatus 取值一致：0=待审批 1=审批中 2=已通过 3=已驳回 4=已撤回 5=已终止）
+   * 请假状态（字典 sys_approval_status；0=待审批 1=审批中 2=已通过 3=已驳回 4=已撤回 5=已终止）
    */
   leaveStatus: number;
 

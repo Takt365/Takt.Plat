@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/sales
 // 文件名称：order.d.ts
-// 创建时间：2026-06-20
+// 创建时间：2026-07-01
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface SalesOrder extends CompanyDtoBase {
   salesOrderId: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -39,7 +39,7 @@ export interface SalesOrder extends CompanyDtoBase {
   salesOrderCode: string;
 
   /**
-   * 客户编码
+   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
    */
   customerCode: string;
 
@@ -64,7 +64,7 @@ export interface SalesOrder extends CompanyDtoBase {
   actualDeliveryDate?: string;
 
   /**
-   * 销售员（人员代码）
+   * 销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）
    */
   salesBy?: string;
 
@@ -109,22 +109,12 @@ export interface SalesOrder extends CompanyDtoBase {
   receivedAmount: number;
 
   /**
-   * 订单状态（1=启用，0=禁用）
-   */
-  orderStatus: number;
-
-  /**
-   * 交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
-   */
-  deliveryStatus: number;
-
-  /**
-   * 交货方式（字典 logistics_delivery_method_type；0=自提，1=送货上门，2=物流配送，3=快递）
+   * 交货方式（字典 logistics_delivery_method_type；0=自提 1=送货上门 2=物流配送 3=快递）
    */
   deliveryMethod: number;
 
   /**
-   * 收款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 收款方式（字典 accounting_payment_method_type；0=现金 1=银行转账 2=支票 3=信用证 4=其他）
    */
   paymentMethod: number;
 
@@ -134,12 +124,22 @@ export interface SalesOrder extends CompanyDtoBase {
   deliveryAddress?: string;
 
   /**
+   * 订单状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+   */
+  orderStatus: number;
+
+  /**
+   * 交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）
+   */
+  deliveryStatus: number;
+
+  /**
    * 销售订单明细列表（主子表关系，一个订单可以有多个明细） （子表：TaktSalesOrderItem）
    */
   items?: SalesOrderItem[];
 
   /**
-   * 销售订单变更记录列表（外键在子表 TaktSalesOrderChangeLog.OrderId） （子表：TaktSalesOrderChangeLog）
+   * 销售订单变更记录列表（外键在子表 TaktSalesOrderChangeLog.SalesOrderId） （子表：TaktSalesOrderChangeLog）
    */
   changeLogs?: SalesOrderChangeLog[];
 
@@ -164,7 +164,7 @@ export interface SalesOrderQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -174,7 +174,7 @@ export interface SalesOrderQuery extends TaktPagedQuery {
   salesOrderCode?: string;
 
   /**
-   * 客户编码
+   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
    */
   customerCode?: string;
 
@@ -214,7 +214,7 @@ export interface SalesOrderQuery extends TaktPagedQuery {
   actualDeliveryDateEnd?: string;
 
   /**
-   * 销售员（人员代码）
+   * 销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）
    */
   salesBy?: string;
 
@@ -259,22 +259,12 @@ export interface SalesOrderQuery extends TaktPagedQuery {
   receivedAmount?: number;
 
   /**
-   * 订单状态（1=启用，0=禁用）
-   */
-  orderStatus?: number;
-
-  /**
-   * 交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
-   */
-  deliveryStatus?: number;
-
-  /**
-   * 交货方式（字典 logistics_delivery_method_type；0=自提，1=送货上门，2=物流配送，3=快递）
+   * 交货方式（字典 logistics_delivery_method_type；0=自提 1=送货上门 2=物流配送 3=快递）
    */
   deliveryMethod?: number;
 
   /**
-   * 收款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 收款方式（字典 accounting_payment_method_type；0=现金 1=银行转账 2=支票 3=信用证 4=其他）
    */
   paymentMethod?: number;
 
@@ -282,6 +272,16 @@ export interface SalesOrderQuery extends TaktPagedQuery {
    * 交货地址
    */
   deliveryAddress?: string;
+
+  /**
+   * 订单状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+   */
+  orderStatus?: number;
+
+  /**
+   * 交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）
+   */
+  deliveryStatus?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -323,12 +323,12 @@ export interface SalesOrderCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -338,7 +338,7 @@ export interface SalesOrderCreate {
   salesOrderCode: string;
 
   /**
-   * 客户编码
+   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
    */
   customerCode: string;
 
@@ -363,7 +363,7 @@ export interface SalesOrderCreate {
   actualDeliveryDate?: string;
 
   /**
-   * 销售员（人员代码）
+   * 销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）
    */
   salesBy?: string;
 
@@ -408,22 +408,12 @@ export interface SalesOrderCreate {
   receivedAmount: number;
 
   /**
-   * 订单状态（1=启用，0=禁用）
-   */
-  orderStatus: number;
-
-  /**
-   * 交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
-   */
-  deliveryStatus: number;
-
-  /**
-   * 交货方式（字典 logistics_delivery_method_type；0=自提，1=送货上门，2=物流配送，3=快递）
+   * 交货方式（字典 logistics_delivery_method_type；0=自提 1=送货上门 2=物流配送 3=快递）
    */
   deliveryMethod: number;
 
   /**
-   * 收款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 收款方式（字典 accounting_payment_method_type；0=现金 1=银行转账 2=支票 3=信用证 4=其他）
    */
   paymentMethod: number;
 
@@ -433,12 +423,22 @@ export interface SalesOrderCreate {
   deliveryAddress?: string;
 
   /**
+   * 订单状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+   */
+  orderStatus: number;
+
+  /**
+   * 交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）
+   */
+  deliveryStatus: number;
+
+  /**
    * 销售订单明细列表（主子表关系，一个订单可以有多个明细）（子表，级联保存）
    */
   items?: SalesOrderItemCreate[];
 
   /**
-   * 销售订单变更记录列表（外键在子表 TaktSalesOrderChangeLog.OrderId）（子表，级联保存）
+   * 销售订单变更记录列表（外键在子表 TaktSalesOrderChangeLog.SalesOrderId）（子表，级联保存）
    */
   changeLogs?: SalesOrderChangeLogCreate[];
 
@@ -482,7 +482,7 @@ export interface SalesOrderStatus {
   salesOrderId: string;
 
   /**
-   * 订单状态（1=启用，0=禁用）
+   * 订单状态（字典 sys_normal_disable_status；1=启用 0=禁用）
    */
   orderStatus: number;
 
@@ -506,7 +506,7 @@ export interface SalesOrderTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -516,7 +516,7 @@ export interface SalesOrderTemplate {
   salesOrderCode?: string;
 
   /**
-   * 客户编码
+   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
    */
   customerCode?: string;
 
@@ -526,27 +526,72 @@ export interface SalesOrderTemplate {
   customerName?: string;
 
   /**
-   * 销售员（人员代码）
+   * 订单日期
+   */
+  orderDate?: string;
+
+  /**
+   * 要求交货日期
+   */
+  requiredDeliveryDate?: string;
+
+  /**
+   * 实际交货日期
+   */
+  actualDeliveryDate?: string;
+
+  /**
+   * 销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）
    */
   salesBy?: string;
 
   /**
-   * 订单状态（1=启用，0=禁用）
+   * 订单总数量（基本单位数量）
    */
-  orderStatus?: number;
+  totalQuantity?: number;
 
   /**
-   * 交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
+   * 订单总金额（精确到分，存储为整数，单位为分）
    */
-  deliveryStatus?: number;
+  totalAmount?: number;
 
   /**
-   * 交货方式（字典 logistics_delivery_method_type；0=自提，1=送货上门，2=物流配送，3=快递）
+   * 折扣金额（精确到分，存储为整数，单位为分）
+   */
+  discountAmount?: number;
+
+  /**
+   * 税费（精确到分，存储为整数，单位为分）
+   */
+  taxAmount?: number;
+
+  /**
+   * 订单实付金额（精确到分，存储为整数，单位为分）
+   */
+  actualAmount?: number;
+
+  /**
+   * 已发货数量（基本单位数量）
+   */
+  shippedQuantity?: number;
+
+  /**
+   * 已发货金额（精确到分，存储为整数，单位为分）
+   */
+  shippedAmount?: number;
+
+  /**
+   * 已收款金额（精确到分，存储为整数，单位为分）
+   */
+  receivedAmount?: number;
+
+  /**
+   * 交货方式（字典 logistics_delivery_method_type；0=自提 1=送货上门 2=物流配送 3=快递）
    */
   deliveryMethod?: number;
 
   /**
-   * 收款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 收款方式（字典 accounting_payment_method_type；0=现金 1=银行转账 2=支票 3=信用证 4=其他）
    */
   paymentMethod?: number;
 
@@ -554,6 +599,26 @@ export interface SalesOrderTemplate {
    * 交货地址
    */
   deliveryAddress?: string;
+
+  /**
+   * 订单状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+   */
+  orderStatus?: number;
+
+  /**
+   * 交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）
+   */
+  deliveryStatus?: number;
+
+  /**
+   * 销售订单明细列表（主子表关系，一个订单可以有多个明细）（子表，级联保存）
+   */
+  items?: SalesOrderItemCreate[];
+
+  /**
+   * 销售订单变更记录列表（外键在子表 TaktSalesOrderChangeLog.SalesOrderId）（子表，级联保存）
+   */
+  changeLogs?: SalesOrderChangeLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -585,12 +650,12 @@ export interface SalesOrderImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -600,7 +665,7 @@ export interface SalesOrderImport {
   salesOrderCode?: string;
 
   /**
-   * 客户编码
+   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
    */
   customerCode?: string;
 
@@ -610,27 +675,72 @@ export interface SalesOrderImport {
   customerName?: string;
 
   /**
-   * 销售员（人员代码）
+   * 订单日期
+   */
+  orderDate?: string;
+
+  /**
+   * 要求交货日期
+   */
+  requiredDeliveryDate?: string;
+
+  /**
+   * 实际交货日期
+   */
+  actualDeliveryDate?: string;
+
+  /**
+   * 销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）
    */
   salesBy?: string;
 
   /**
-   * 订单状态（1=启用，0=禁用）
+   * 订单总数量（基本单位数量）
    */
-  orderStatus?: number;
+  totalQuantity?: number;
 
   /**
-   * 交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
+   * 订单总金额（精确到分，存储为整数，单位为分）
    */
-  deliveryStatus?: number;
+  totalAmount?: number;
 
   /**
-   * 交货方式（字典 logistics_delivery_method_type；0=自提，1=送货上门，2=物流配送，3=快递）
+   * 折扣金额（精确到分，存储为整数，单位为分）
+   */
+  discountAmount?: number;
+
+  /**
+   * 税费（精确到分，存储为整数，单位为分）
+   */
+  taxAmount?: number;
+
+  /**
+   * 订单实付金额（精确到分，存储为整数，单位为分）
+   */
+  actualAmount?: number;
+
+  /**
+   * 已发货数量（基本单位数量）
+   */
+  shippedQuantity?: number;
+
+  /**
+   * 已发货金额（精确到分，存储为整数，单位为分）
+   */
+  shippedAmount?: number;
+
+  /**
+   * 已收款金额（精确到分，存储为整数，单位为分）
+   */
+  receivedAmount?: number;
+
+  /**
+   * 交货方式（字典 logistics_delivery_method_type；0=自提 1=送货上门 2=物流配送 3=快递）
    */
   deliveryMethod?: number;
 
   /**
-   * 收款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 收款方式（字典 accounting_payment_method_type；0=现金 1=银行转账 2=支票 3=信用证 4=其他）
    */
   paymentMethod?: number;
 
@@ -638,6 +748,26 @@ export interface SalesOrderImport {
    * 交货地址
    */
   deliveryAddress?: string;
+
+  /**
+   * 订单状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+   */
+  orderStatus?: number;
+
+  /**
+   * 交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）
+   */
+  deliveryStatus?: number;
+
+  /**
+   * 销售订单明细列表（主子表关系，一个订单可以有多个明细）（子表，级联保存）
+   */
+  items?: SalesOrderItemCreate[];
+
+  /**
+   * 销售订单变更记录列表（外键在子表 TaktSalesOrderChangeLog.SalesOrderId）（子表，级联保存）
+   */
+  changeLogs?: SalesOrderChangeLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -669,7 +799,7 @@ export interface SalesOrderExport {
   companyCode: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -679,7 +809,7 @@ export interface SalesOrderExport {
   salesOrderCode: string;
 
   /**
-   * 客户编码
+   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
    */
   customerCode: string;
 
@@ -704,7 +834,7 @@ export interface SalesOrderExport {
   actualDeliveryDate?: string;
 
   /**
-   * 销售员（人员代码）
+   * 销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）
    */
   salesBy?: string;
 
@@ -749,22 +879,12 @@ export interface SalesOrderExport {
   receivedAmount: number;
 
   /**
-   * 订单状态（1=启用，0=禁用）
-   */
-  orderStatus: number;
-
-  /**
-   * 交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
-   */
-  deliveryStatus: number;
-
-  /**
-   * 交货方式（字典 logistics_delivery_method_type；0=自提，1=送货上门，2=物流配送，3=快递）
+   * 交货方式（字典 logistics_delivery_method_type；0=自提 1=送货上门 2=物流配送 3=快递）
    */
   deliveryMethod: number;
 
   /**
-   * 收款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 收款方式（字典 accounting_payment_method_type；0=现金 1=银行转账 2=支票 3=信用证 4=其他）
    */
   paymentMethod: number;
 
@@ -772,6 +892,16 @@ export interface SalesOrderExport {
    * 交货地址
    */
   deliveryAddress?: string;
+
+  /**
+   * 订单状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+   */
+  orderStatus: number;
+
+  /**
+   * 交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）
+   */
+  deliveryStatus: number;
 
   /**
    * 扩展字段JSON

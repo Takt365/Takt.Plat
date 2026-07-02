@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Manufacturing.Output
 // 文件名称：TaktProductionOrdersController.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：生产工单控制器
 // 
@@ -83,14 +83,15 @@ public class TaktProductionOrdersController : TaktControllerBase
     /// <summary>
     /// 获取生产工单选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选）</param>
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:manufacturing:output:production:order:query", "生产工单选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetProductionOrderOptionsAsync()
+    public async Task<IActionResult> GetProductionOrderOptionsAsync([FromQuery] string? plantCode = null)
     {
         try
         {
-            var result = await _productionOrderService.GetProductionOrderOptionsAsync();
+            var result = await _productionOrderService.GetProductionOrderOptionsAsync(plantCode);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

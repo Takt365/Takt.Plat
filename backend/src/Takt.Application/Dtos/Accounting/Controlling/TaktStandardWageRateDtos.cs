@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Accounting.Controlling
 // 文件名称：TaktStandardWageRateDtos.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：StandardWageRate 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktStandardWageRate 生成，请按需审阅）
 // 
@@ -103,7 +103,7 @@ public class TaktStandardWageRateDto : TaktCompanyDtoBase
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string RelatedPlant { get; set; } = string.Empty;
 
 }
 
@@ -238,7 +238,7 @@ public class TaktStandardWageRateCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -311,7 +311,8 @@ public class TaktStandardWageRateCreateDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    [Required(ErrorMessage = "关联工厂不能为空")]
+    public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON
@@ -370,14 +371,64 @@ public class TaktStandardWageRateTemplateDto
     public string? YearMonth { get; set; } = string.Empty;
 
     /// <summary>
+    /// 工作天数
+    /// </summary>
+    public decimal? WorkingDays { get; set; }
+
+    /// <summary>
+    /// 销售额
+    /// </summary>
+    public decimal? SalesAmount { get; set; }
+
+    /// <summary>
     /// 直接人数
     /// </summary>
     public int? DirectLaborCount { get; set; }
 
     /// <summary>
+    /// 直接工资
+    /// </summary>
+    public decimal? DirectLaborWage { get; set; }
+
+    /// <summary>
+    /// 直接加班小时
+    /// </summary>
+    public decimal? DirectOvertimeHours { get; set; }
+
+    /// <summary>
+    /// 直接加班总额
+    /// </summary>
+    public decimal? DirectOvertimeTotal { get; set; }
+
+    /// <summary>
+    /// 直接工资率
+    /// </summary>
+    public decimal? DirectWageRate { get; set; }
+
+    /// <summary>
     /// 间接人数
     /// </summary>
     public int? IndirectLaborCount { get; set; }
+
+    /// <summary>
+    /// 间接工资
+    /// </summary>
+    public decimal? IndirectLaborWage { get; set; }
+
+    /// <summary>
+    /// 间接加班小时
+    /// </summary>
+    public decimal? IndirectOvertimeHours { get; set; }
+
+    /// <summary>
+    /// 间接加班总额
+    /// </summary>
+    public decimal? IndirectOvertimeTotal { get; set; }
+
+    /// <summary>
+    /// 间接工资率
+    /// </summary>
+    public decimal? IndirectWageRate { get; set; }
 
     /// <summary>
     /// 关联工厂
@@ -412,7 +463,7 @@ public class TaktStandardWageRateImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -422,14 +473,64 @@ public class TaktStandardWageRateImportDto
     public string? YearMonth { get; set; } = string.Empty;
 
     /// <summary>
+    /// 工作天数
+    /// </summary>
+    public decimal? WorkingDays { get; set; }
+
+    /// <summary>
+    /// 销售额
+    /// </summary>
+    public decimal? SalesAmount { get; set; }
+
+    /// <summary>
     /// 直接人数
     /// </summary>
     public int? DirectLaborCount { get; set; }
 
     /// <summary>
+    /// 直接工资
+    /// </summary>
+    public decimal? DirectLaborWage { get; set; }
+
+    /// <summary>
+    /// 直接加班小时
+    /// </summary>
+    public decimal? DirectOvertimeHours { get; set; }
+
+    /// <summary>
+    /// 直接加班总额
+    /// </summary>
+    public decimal? DirectOvertimeTotal { get; set; }
+
+    /// <summary>
+    /// 直接工资率
+    /// </summary>
+    public decimal? DirectWageRate { get; set; }
+
+    /// <summary>
     /// 间接人数
     /// </summary>
     public int? IndirectLaborCount { get; set; }
+
+    /// <summary>
+    /// 间接工资
+    /// </summary>
+    public decimal? IndirectLaborWage { get; set; }
+
+    /// <summary>
+    /// 间接加班小时
+    /// </summary>
+    public decimal? IndirectOvertimeHours { get; set; }
+
+    /// <summary>
+    /// 间接加班总额
+    /// </summary>
+    public decimal? IndirectOvertimeTotal { get; set; }
+
+    /// <summary>
+    /// 间接工资率
+    /// </summary>
+    public decimal? IndirectWageRate { get; set; }
 
     /// <summary>
     /// 关联工厂
@@ -537,7 +638,7 @@ public class TaktStandardWageRateExportDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON

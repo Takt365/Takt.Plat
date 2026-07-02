@@ -19,12 +19,16 @@ type ColumnItem = ColumnType<RowRecord> | ColumnGroupType<RowRecord>;
 /** 实体基类作用域 ↔ common.d.ts 三个 EntityBase */
 export type TaktEntityScope = 'tenant' | 'company' | 'approval';
 
-/** 单表 / 左树右表默认可见业务字段数（不含 id、action、基类字段） */
-export type TaktTableLayoutMode = 'single' | 'tree';
+/** 单表 / 树表 / 主子表左右布局默认可见业务字段数（不含 id、action、基类字段） */
+export type TaktTableLayoutMode = 'single' | 'tree' | 'masterDetailMaster' | 'masterDetailDetail';
 
 export const DEFAULT_VISIBLE_BUSINESS_FIELD_COUNT: Record<TaktTableLayoutMode, number> = {
   single: 8,
   tree: 4,
+  /** 主子表左表：id + 2 业务列 = 3 个字段（不含操作列） */
+  masterDetailMaster: 2,
+  /** 主子表右表/子 panel：id + 4 业务列 = 5 个字段（不含操作列） */
+  masterDetailDetail: 4,
 };
 
 /**
@@ -81,6 +85,11 @@ export const ENTITY_BASE_FIELDS = {
   ],
 } as const satisfies Record<TaktEntityScope, readonly string[]>;
 
+/** TaktApprovalEntityBase.ApprovalStatus 字典类型码 */
+export const APPROVAL_STATUS_DICT_TYPE = 'sys_approval_status';
+/** ConvertedStatus 下游单据转换进度共用 */
+export const CONVERT_STATUS_DICT_TYPE = 'sys_convert_status';
+
 const AUDIT_FIELD_SET = new Set<string>([
   'createdBy',
   'createdAt',
@@ -92,7 +101,7 @@ const AUDIT_FIELD_SET = new Set<string>([
 ]);
 
 const DATETIME_FIELDS = new Set(['createdAt', 'updatedAt', 'deletedAt', 'initiatedAt', 'approvedAt']);
-const NUMBER_FIELDS = new Set(['isDeleted', 'approvalStatus']);
+const NUMBER_FIELDS = new Set(['isDeleted']);
 
 /**
  * 归一化页面 columns（解包 Ref/ComputedRef）

@@ -51,21 +51,21 @@ public class TaktPcbaOutputDetail : TaktCompanyEntityBase
     public string TimePeriod { get; set; } = string.Empty;
 
     /// <summary>
-    /// 班组
+    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
-    [SugarColumn(ColumnName = "shift_no", ColumnDescription = "班组", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
+    [SugarColumn(ColumnName = "shift_no", ColumnDescription = "班次", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int ShiftNo { get; set; } = 1;
 
     /// <summary>
-    /// 板别（PCB板别）
+    /// PCB板别（字典 logistics_pcba_panel_category，存 DictValue）
     /// </summary>
-    [SugarColumn(ColumnName = "pcb_board_type", ColumnDescription = "PCB板别", Length = 20, ColumnDataType = "nvarchar", IsNullable = false)]
+    [SugarColumn(ColumnName = "pcb_board_type", ColumnDescription = "PCB板别", Length = 40, ColumnDataType = "nvarchar", IsNullable = false)]
     public string PcbBoardType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 面板别
+    /// 面板别（字典 logistics_pcba_side_category，存 DictValue：b= B面 t= T面）
     /// </summary>
-    [SugarColumn(ColumnName = "panel_side", ColumnDescription = "面板别", Length = 10, ColumnDataType = "nvarchar", IsNullable = false)]
+    [SugarColumn(ColumnName = "panel_side", ColumnDescription = "面板别", Length = 40, ColumnDataType = "nvarchar", IsNullable = false)]
     public string PanelSide { get; set; } = string.Empty;
 
     /// <summary>
@@ -87,7 +87,7 @@ public class TaktPcbaOutputDetail : TaktCompanyEntityBase
     public decimal TotalCompletedQty { get; set; } = 0;
 
     /// <summary>
-    /// 完成状态（0=未完成 1=部分完成 2=已完成）
+    /// 完成状态（字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成）
     /// </summary>
     [SugarColumn(ColumnName = "completed_status", ColumnDescription = "完成状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int CompletedStatus { get; set; } = 0;
@@ -141,9 +141,9 @@ public class TaktPcbaOutputDetail : TaktCompanyEntityBase
     public decimal TotalMinutes { get; set; } = 0;
 
     /// <summary>
-    /// 未达成原因
+    /// 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
     /// </summary>
-    [SugarColumn(ColumnName = "unachieved_reason", ColumnDescription = "未达成原因", Length = 500, ColumnDataType = "nvarchar", IsNullable = true)]
+    [SugarColumn(ColumnName = "unachieved_reason", ColumnDescription = "未达成原因", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? UnachievedReason { get; set; }
 
     /// <summary>

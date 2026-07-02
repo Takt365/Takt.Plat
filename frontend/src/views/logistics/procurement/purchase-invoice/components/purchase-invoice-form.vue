@@ -233,7 +233,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.paymentMethod"
-                  dict-type="logistics_payment_method_type"
+                  dict-type="accounting_payment_method_type"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.purchaseinvoice.paymentmethod') })"
                 />
               </a-form-item>
@@ -369,7 +369,54 @@ const purchaseInvoiceItemTableRef = ref<{
 
 /** 子表 purchaseInvoiceItem 可编辑列 */
 const purchaseInvoiceItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
-,
+  {
+    key: 'lineNumber',
+    title: t('entity.purchaseinvoiceitem.linenumber'),
+    editor: 'inputNumber',
+    width: 140, summary: 'sum',
+  },
+  {
+    key: 'purchaseOrderCode',
+    title: t('entity.purchaseinvoiceitem.purchaseordercode'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.purchaseinvoiceitem.purchaseordercode') }),
+  },
+  {
+    key: 'purchaseOrderLineNumber',
+    title: t('entity.purchaseinvoiceitem.purchaseorderlinenumber'),
+    editor: 'inputNumber',
+    width: 140,
+  },
+  {
+    key: 'materialCode',
+    title: t('entity.purchaseinvoiceitem.materialcode'),
+    editor: 'input',
+    width: 140,
+  },
+  {
+    key: 'materialName',
+    title: t('entity.purchaseinvoiceitem.materialname'),
+    editor: 'input',
+    width: 140,
+  },
+  {
+    key: 'materialSpecification',
+    title: t('entity.purchaseinvoiceitem.materialspecification'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.purchaseinvoiceitem.materialspecification') }),
+  },
+  {
+    key: 'purchaseUnit',
+    title: t('entity.purchaseinvoiceitem.purchaseunit'),
+    editor: 'input',
+    width: 140,
+  },
+  {
+    key: 'invoiceQuantity',
+    title: t('entity.purchaseinvoiceitem.invoicequantity'),
+    editor: 'inputNumber',
+    width: 140,
+  },
 ])
 
 /** 编辑态从 formData 同步各子表行 */
@@ -379,7 +426,14 @@ function syncChildRowsFromFormData(val: Partial<PurchaseInvoiceCreate & { purcha
 
 function createDefaultPurchaseInvoiceItemRow(): Record<string, unknown> {
   return {
-
+    lineNumber: (childPurchaseInvoiceItemRows.value.length + 1) * 10,
+    purchaseOrderCode: '',
+    purchaseOrderLineNumber: 0,
+    materialCode: '',
+    materialName: '',
+    materialSpecification: '',
+    purchaseUnit: '',
+    invoiceQuantity: 0,
   }
 }
 

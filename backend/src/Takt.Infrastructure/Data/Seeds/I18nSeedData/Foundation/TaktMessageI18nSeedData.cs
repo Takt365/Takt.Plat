@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation
 // 文件名称：TaktMessageI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktMessage 实体字段国际化种子（已对齐前端 locales：src/locales/foundation/message）
 // 
@@ -145,31 +145,22 @@ public class TaktMessageI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.message.content", "zh-HK", "消息内容_hk", "消息内容"),
 
             // entity.message.type
-            new TranslationSeedItem("entity.message.type", "en-US", "消息类型_us", "消息类型（1=系统消息 2=用户消息 3=通知消息）"),
+            new TranslationSeedItem("entity.message.type", "en-US", "消息类型_us", "消息类型（字典 sys_message_type 的 DictValue，如 text、system、multimedia）"),
             // entity.message.type
-            new TranslationSeedItem("entity.message.type", "ja-JP", "消息类型_jp", "消息类型（1=系统消息 2=用户消息 3=通知消息）"),
+            new TranslationSeedItem("entity.message.type", "ja-JP", "消息类型_jp", "消息类型（字典 sys_message_type 的 DictValue，如 text、system、multimedia）"),
             // entity.message.type
-            new TranslationSeedItem("entity.message.type", "zh-CN", "消息类型", "消息类型（1=系统消息 2=用户消息 3=通知消息）"),
+            new TranslationSeedItem("entity.message.type", "zh-CN", "消息类型", "消息类型（字典 sys_message_type 的 DictValue，如 text、system、multimedia）"),
             // entity.message.type
-            new TranslationSeedItem("entity.message.type", "zh-HK", "消息类型_hk", "消息类型（1=系统消息 2=用户消息 3=通知消息）"),
+            new TranslationSeedItem("entity.message.type", "zh-HK", "消息类型_hk", "消息类型（字典 sys_message_type 的 DictValue，如 text、system、multimedia）"),
 
             // entity.message.group
-            new TranslationSeedItem("entity.message.group", "en-US", "消息分组_us", "消息分组（可选）"),
+            new TranslationSeedItem("entity.message.group", "en-US", "消息分组_us", "消息分组（字典 sys_message_group_category 的 DictValue，如 collaboration、message、reminder）"),
             // entity.message.group
-            new TranslationSeedItem("entity.message.group", "ja-JP", "消息分组_jp", "消息分组（可选）"),
+            new TranslationSeedItem("entity.message.group", "ja-JP", "消息分组_jp", "消息分组（字典 sys_message_group_category 的 DictValue，如 collaboration、message、reminder）"),
             // entity.message.group
-            new TranslationSeedItem("entity.message.group", "zh-CN", "消息分组", "消息分组（可选）"),
+            new TranslationSeedItem("entity.message.group", "zh-CN", "消息分组", "消息分组（字典 sys_message_group_category 的 DictValue，如 collaboration、message、reminder）"),
             // entity.message.group
-            new TranslationSeedItem("entity.message.group", "zh-HK", "消息分组_hk", "消息分组（可选）"),
-
-            // entity.message.readstatus
-            new TranslationSeedItem("entity.message.readstatus", "en-US", "读取状态_us", "读取状态（0=未读 1=已读）"),
-            // entity.message.readstatus
-            new TranslationSeedItem("entity.message.readstatus", "ja-JP", "读取状态_jp", "读取状态（0=未读 1=已读）"),
-            // entity.message.readstatus
-            new TranslationSeedItem("entity.message.readstatus", "zh-CN", "读取状态", "读取状态（0=未读 1=已读）"),
-            // entity.message.readstatus
-            new TranslationSeedItem("entity.message.readstatus", "zh-HK", "读取状态_hk", "读取状态（0=未读 1=已读）"),
+            new TranslationSeedItem("entity.message.group", "zh-HK", "消息分组_hk", "消息分组（字典 sys_message_group_category 的 DictValue，如 collaboration、message、reminder）"),
 
             // entity.message.readtime
             new TranslationSeedItem("entity.message.readtime", "en-US", "读取时间_us", "读取时间"),
@@ -190,13 +181,13 @@ public class TaktMessageI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.message.sendtime", "zh-HK", "发送时间_hk", "发送时间"),
 
             // entity.message.iscc
-            new TranslationSeedItem("entity.message.iscc", "en-US", "是否抄送自审计_us", "是否抄送自审计（0=否，1=是）"),
+            new TranslationSeedItem("entity.message.iscc", "en-US", "抄送_us", "抄送（0=否，1=是）"),
             // entity.message.iscc
-            new TranslationSeedItem("entity.message.iscc", "ja-JP", "是否抄送自审计_jp", "是否抄送自审计（0=否，1=是）"),
+            new TranslationSeedItem("entity.message.iscc", "ja-JP", "抄送_jp", "抄送（0=否，1=是）"),
             // entity.message.iscc
-            new TranslationSeedItem("entity.message.iscc", "zh-CN", "是否抄送自审计", "是否抄送自审计（0=否，1=是）"),
+            new TranslationSeedItem("entity.message.iscc", "zh-CN", "抄送", "抄送（0=否，1=是）"),
             // entity.message.iscc
-            new TranslationSeedItem("entity.message.iscc", "zh-HK", "是否抄送自审计_hk", "是否抄送自审计（0=否，1=是）"),
+            new TranslationSeedItem("entity.message.iscc", "zh-HK", "抄送_hk", "抄送（0=否，1=是）"),
 
             // entity.message.attachments
             new TranslationSeedItem("entity.message.attachments", "en-US", "附件_us", "附件路径（JSON 或逗号分隔）"),
@@ -215,6 +206,15 @@ public class TaktMessageI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.message.extdata", "zh-CN", "消息扩展数据", "消息扩展数据（JSON）"),
             // entity.message.extdata
             new TranslationSeedItem("entity.message.extdata", "zh-HK", "消息扩展数据_hk", "消息扩展数据（JSON）"),
+
+            // entity.message.readstatus
+            new TranslationSeedItem("entity.message.readstatus", "en-US", "读取状态_us", "读取状态（0=未读 1=已读）"),
+            // entity.message.readstatus
+            new TranslationSeedItem("entity.message.readstatus", "ja-JP", "读取状态_jp", "读取状态（0=未读 1=已读）"),
+            // entity.message.readstatus
+            new TranslationSeedItem("entity.message.readstatus", "zh-CN", "读取状态", "读取状态（0=未读 1=已读）"),
+            // entity.message.readstatus
+            new TranslationSeedItem("entity.message.readstatus", "zh-HK", "读取状态_hk", "读取状态（0=未读 1=已读）"),
         };
     }
 

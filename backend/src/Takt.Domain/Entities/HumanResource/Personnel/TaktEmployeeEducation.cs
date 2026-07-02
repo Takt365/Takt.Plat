@@ -23,55 +23,47 @@ namespace Takt.Domain.Entities.HumanResource.Personnel;
 public class TaktEmployeeEducation : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 员工ID
+    /// 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [SugarColumn(ColumnName = "employee_id", ColumnDescription = "员工ID", ColumnDataType = "bigint", IsNullable = false)]
     public long EmployeeId { get; set; }
-
     /// <summary>
     /// 学校名称
     /// </summary>
     [SugarColumn(ColumnName = "school_name", ColumnDescription = "学校名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = false)]
     public string SchoolName { get; set; } = string.Empty;
-
     /// <summary>
-    /// 学历层次（1=高中及以下，2=大专，3=本科，4=硕士，5=博士）
+    /// 学历层次（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
     /// </summary>
     [SugarColumn(ColumnName = "education_level", ColumnDescription = "学历层次", ColumnDataType = "int", IsNullable = true)]
     public int? EducationLevel { get; set; }
-
     /// <summary>
-    /// 学位层次（0=无，1=学士，2=硕士，3=博士）
+    /// 学位层次（字典 hr_degree_level_category；0=无 1=学士 2=硕士 3=博士）
     /// </summary>
     [SugarColumn(ColumnName = "degree_level", ColumnDescription = "学位层次", ColumnDataType = "int", IsNullable = true)]
     public int? DegreeLevel { get; set; }
-
     /// <summary>
     /// 专业名称
     /// </summary>
     [SugarColumn(ColumnName = "major_name", ColumnDescription = "专业名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
     public string? MajorName { get; set; }
-
     /// <summary>
     /// 证书编号
     /// </summary>
     [SugarColumn(ColumnName = "certificate_no", ColumnDescription = "证书编号", ColumnDataType = "varchar", Length = 100, IsNullable = true)]
     public string? CertificateNo { get; set; }
-
     /// <summary>
     /// 开始日期
     /// </summary>
     [SugarColumn(ColumnName = "start_date", ColumnDescription = "开始日期", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? StartDate { get; set; }
-
     /// <summary>
     /// 结束日期
     /// </summary>
     [SugarColumn(ColumnName = "end_date", ColumnDescription = "结束日期", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? EndDate { get; set; }
-
     /// <summary>
-    /// 是否最高学历（1=是，0=否）
+    /// 是否最高学历（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_highest", ColumnDescription = "是否最高学历", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsHighest { get; set; } = 0;

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/human-resource/personnel
 // 文件名称：employee-resignation.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/personnel 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -16,7 +16,7 @@ import type {
 } from '@/types/common';
 
 /**
- * 员工离职办理记录（审批单，状态见 TaktApprovalEntityBase.ApprovalStatus）
+ * 员工离职办理记录（审批单，状态见 <see cref="TaktApprovalEntityBase.ApprovalStatus"/>）
  * 对应前端 TaktEmployeeResignationDto
  * 继承 TaktApprovalDtoBase
  * 对应前端 EmployeeResignation
@@ -139,7 +139,7 @@ export interface EmployeeResignationQuery extends TaktPagedQuery {
   handoverNotes?: string;
 
   /**
-   * 审批状态（TaktApprovalStatus）
+   * 审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）
    */
   approvalStatus?: number;
 
@@ -174,6 +174,11 @@ export interface EmployeeResignationQuery extends TaktPagedQuery {
   approvedAtEnd?: string;
 
   /**
+   * 流程实例 ID
+   */
+  flowInstanceId?: string;
+
+  /**
    * 创建时间（范围查询-开始）
    */
   createdAtStart?: string;
@@ -186,7 +191,7 @@ export interface EmployeeResignationQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -213,7 +218,7 @@ export interface EmployeeResignationCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -255,7 +260,7 @@ export interface EmployeeResignationCreate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -307,6 +312,21 @@ export interface EmployeeResignationTemplate {
   resignationType?: number;
 
   /**
+   * 申请日期
+   */
+  applyDate?: string;
+
+  /**
+   * 最后工作日
+   */
+  lastWorkDate?: string;
+
+  /**
+   * 实际离职日期
+   */
+  terminationDate?: string;
+
+  /**
    * 离职原因
    */
   reason?: string;
@@ -319,7 +339,7 @@ export interface EmployeeResignationTemplate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -346,7 +366,7 @@ export interface EmployeeResignationImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -361,6 +381,21 @@ export interface EmployeeResignationImport {
   resignationType?: number;
 
   /**
+   * 申请日期
+   */
+  applyDate?: string;
+
+  /**
+   * 最后工作日
+   */
+  lastWorkDate?: string;
+
+  /**
+   * 实际离职日期
+   */
+  terminationDate?: string;
+
+  /**
    * 离职原因
    */
   reason?: string;
@@ -373,7 +408,7 @@ export interface EmployeeResignationImport {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -432,7 +467,7 @@ export interface EmployeeResignationExport {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注

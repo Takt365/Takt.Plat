@@ -111,7 +111,7 @@
     <!-- 导入结果 -->
     <a-alert
       v-if="importResult"
-      :type="importResult.fail > 0 ? 'warning' : 'success'"
+      :type="importResult.fail > 0 || (importResult.errors.length > 0 && importResult.success === 0) ? 'warning' : 'success'"
       :message="getResultMessage()"
       :description="getResultDescription()"
       show-icon
@@ -129,6 +129,7 @@ import type { UploadChangeParam, UploadFile, UploadProps } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
 import type { TaktBinaryDownload } from '@/types/common'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 
 const { t } = useI18n()
 
@@ -148,7 +149,7 @@ interface Props {
   /** 下载模板:返回 Blob;若 API 配置 blobWithHeaders 则返回 TaktBinaryDownload,下载名优先用服务端 Content-Disposition(与导出一致) */
   downloadTemplate?: ((sheetName?: string, fileName?: string) => Promise<Blob | TaktBinaryDownload>) | undefined
   /** 导入文件的函数 */
-  importFile?: ((file: File, sheetName?: string) => Promise<{ success: number; fail: number; errors: string[] }>) | undefined
+  importFile?: ((file: File, sheetName?: string) => Promise<TaktImportResult | Record<string, unknown>>) | undefined
   /** 上传的文件字段名 */
   name?: string
   /** 是否禁用 */
@@ -194,14 +195,14 @@ const emit = defineEmits<{
   'change': [info: UploadChangeParam]
   'preview': [file: UploadFile]
   'drop': [e: DragEvent]
-  'success': [result: { success: number; fail: number; errors: string[] }]
+  'success': [result: TaktImportResult]
   'error': [error: Error]
 }>()
 
 const fileList = ref<UploadFile[]>([])
 const templateLoading = ref(false)
 const uploading = ref(false)
-const importResult = ref<{ success: number; fail: number; errors: string[] } | null>(null)
+const importResult = ref<TaktImportResult | null>(null)
 const previewVisible = ref(false)
 const previewFile = ref<File | null>(null)
 const previewTitle = ref('')
@@ -474,7 +475,8 @@ const handleCustomRequest: NonNullable<UploadProps['customRequest']> = async (op
       throw new Error(t('components.common.page.import.invalidfile'))
     }
     
-    const result = await props.importFile(uploadFile, props.sheetName)
+    const raw = await props.importFile(uploadFile, props.sheetName)
+    const result = normalizeImportResult(raw)
 
     onProgress?.({ percent: 100 })
     onSuccess?.(result)
@@ -486,10 +488,11 @@ const handleCustomRequest: NonNullable<UploadProps['customRequest']> = async (op
     emit('success', result)
 
     // 显示成功消息
-    if (result.fail > 0) {
-      message.warning(t('common.feedback.partial.success', { success: result.success, fail: result.fail }))
+    const toastMessage = buildImportFeedbackMessage(result)
+    if (result.fail > 0 || (result.errors.length > 0 && result.success === 0)) {
+      message.warning(toastMessage)
     } else {
-      message.success(t('common.feedback.import.success', { count: result.success }))
+      message.success(toastMessage)
     }
   } catch (error: unknown) {
     console.error('[TaktImportFile] 导入失败:', error)
@@ -584,14 +587,26 @@ const handleCloseResult = () => {
   importResult.value = null
 }
 
+/**
+ * 构建导入结果提示文案
+ * @param result 归一化导入结果
+ * @returns 用户可见提示
+ */
+function buildImportFeedbackMessage(result: TaktImportResult): string {
+  if (result.fail > 0 || (result.errors.length > 0 && result.success === 0)) {
+    return t('common.feedback.import.summary', {
+      success: result.success,
+      duplicate: result.duplicate,
+      error: result.error,
+    })
+  }
+  return t('common.feedback.import.success', { count: result.success })
+}
+
 // 获取结果消息
 const getResultMessage = (): string => {
   if (!importResult.value) return ''
-  const { success, fail } = importResult.value
-  if (fail > 0) {
-    return t('common.feedback.partial.success', { success, fail })
-  }
-  return t('common.feedback.import.success', { count: success })
+  return buildImportFeedbackMessage(importResult.value)
 }
 
 // 获取结果描述

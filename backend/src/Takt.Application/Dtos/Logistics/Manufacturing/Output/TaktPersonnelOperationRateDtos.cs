@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Output
 // 文件名称：TaktPersonnelOperationRateDtos.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PersonnelOperationRate 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPersonnelOperationRate 生成，请按需审阅）
 // 
@@ -66,14 +66,14 @@ public class TaktPersonnelOperationRateDto : TaktCompanyDtoBase
     public int? MonthNumber { get; set; }
 
     /// <summary>
-    /// 生产线
+    /// 生产班组
     /// </summary>
-    public string ProductionLine { get; set; } = string.Empty;
+    public string ProdTeam { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产线名称
+    /// 生产班组名称
     /// </summary>
-    public string? ProductionLineName { get; set; } = string.Empty;
+    public string? ProdTeamName { get; set; } = string.Empty;
 
     /// <summary>
     /// 班次（1=早班，2=中班，3=晚班）
@@ -183,7 +183,13 @@ public class TaktPersonnelOperationRateDto : TaktCompanyDtoBase
     /// <summary>
     /// 状态（0=正常，1=停用）
     /// </summary>
-    public int Status { get; set; } = 0;
+    public int PersonnelOperationRateStatus { get; set; } = 0;
+
+    /// <summary>
+    /// 人员稼动率变更记录列表（外键在子表 TaktPersonnelOperationRateChangeLog.PersonnelOperationRateId）
+    /// （子表：TaktPersonnelOperationRateChangeLog）
+    /// </summary>
+    public List<TaktPersonnelOperationRateChangeLogDto>? ChangeLogs { get; set; }
 
 }
 
@@ -248,14 +254,14 @@ public class TaktPersonnelOperationRateQueryDto : TaktPagedQuery
     public int? MonthNumber { get; set; }
 
     /// <summary>
-    /// 生产线
+    /// 生产班组
     /// </summary>
-    public string? ProductionLine { get; set; } = string.Empty;
+    public string? ProdTeam { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产线名称
+    /// 生产班组名称
     /// </summary>
-    public string? ProductionLineName { get; set; } = string.Empty;
+    public string? ProdTeamName { get; set; } = string.Empty;
 
     /// <summary>
     /// 班次（1=早班，2=中班，3=晚班）
@@ -365,7 +371,7 @@ public class TaktPersonnelOperationRateQueryDto : TaktPagedQuery
     /// <summary>
     /// 状态（0=正常，1=停用）
     /// </summary>
-    public int? Status { get; set; }
+    public int? PersonnelOperationRateStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -408,7 +414,7 @@ public class TaktPersonnelOperationRateCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -444,15 +450,15 @@ public class TaktPersonnelOperationRateCreateDto
     public int? MonthNumber { get; set; }
 
     /// <summary>
-    /// 生产线
+    /// 生产班组
     /// </summary>
     [Required(ErrorMessage = "生产线不能为空")]
-    public string ProductionLine { get; set; } = string.Empty;
+    public string ProdTeam { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产线名称
+    /// 生产班组名称
     /// </summary>
-    public string? ProductionLineName { get; set; } = string.Empty;
+    public string? ProdTeamName { get; set; } = string.Empty;
 
     /// <summary>
     /// 班次（1=早班，2=中班，3=晚班）
@@ -562,7 +568,12 @@ public class TaktPersonnelOperationRateCreateDto
     /// <summary>
     /// 状态（0=正常，1=停用）
     /// </summary>
-    public int Status { get; set; } = 0;
+    public int PersonnelOperationRateStatus { get; set; } = 0;
+
+    /// <summary>
+    /// 人员稼动率变更记录列表（外键在子表 TaktPersonnelOperationRateChangeLog.PersonnelOperationRateId）（子表，级联保存）
+    /// </summary>
+    public List<TaktPersonnelOperationRateChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -617,7 +628,7 @@ public class TaktPersonnelOperationRateStatusDto
     /// 状态（0=正常，1=停用）
     /// </summary>
     [Required(ErrorMessage = "状态（0=正常，1=停用）不能为空")]
-    public int Status { get; set; } = 0;
+    public int PersonnelOperationRateStatus { get; set; } = 0;
 }
 
 // ========================================
@@ -650,6 +661,16 @@ public class TaktPersonnelOperationRateTemplateDto
     public int? TimeCategory { get; set; }
 
     /// <summary>
+    /// 开始日期
+    /// </summary>
+    public DateTime? StartDate { get; set; }
+
+    /// <summary>
+    /// 结束日期
+    /// </summary>
+    public DateTime? EndDate { get; set; }
+
+    /// <summary>
     /// 周数（1-53）
     /// </summary>
     public int? WeekNumber { get; set; }
@@ -660,14 +681,14 @@ public class TaktPersonnelOperationRateTemplateDto
     public int? MonthNumber { get; set; }
 
     /// <summary>
-    /// 生产线
+    /// 生产班组
     /// </summary>
-    public string? ProductionLine { get; set; } = string.Empty;
+    public string? ProdTeam { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产线名称
+    /// 生产班组名称
     /// </summary>
-    public string? ProductionLineName { get; set; } = string.Empty;
+    public string? ProdTeamName { get; set; } = string.Empty;
 
     /// <summary>
     /// 班次（1=早班，2=中班，3=晚班）
@@ -695,9 +716,94 @@ public class TaktPersonnelOperationRateTemplateDto
     public int? ActualIndirectPersonnelCount { get; set; }
 
     /// <summary>
+    /// 出勤时间（分钟）。员工在公司的计划工作时间，含休息、待命等。
+    /// </summary>
+    public decimal? PlannedWorkTime { get; set; }
+
+    /// <summary>
+    /// 在岗作业时间（分钟）。员工实际在工位上执行生产任务的时间。
+    /// </summary>
+    public decimal? ActualWorkTime { get; set; }
+
+    /// <summary>
+    /// 休息时间（分钟）
+    /// </summary>
+    public decimal? BreakTime { get; set; }
+
+    /// <summary>
+    /// 空闲时间（分钟）。等料、设备调试等非作业时间。
+    /// </summary>
+    public decimal? IdleTime { get; set; }
+
+    /// <summary>
+    /// 人员稼动率（%）。计算公式：在岗作业时间 ÷ 出勤时间 × 100%（在岗作业率）。
+    /// </summary>
+    public decimal? PersonnelOperationRate { get; set; }
+
+    /// <summary>
+    /// 计划产量
+    /// </summary>
+    public decimal? PlannedOutput { get; set; }
+
+    /// <summary>
+    /// 实际产量
+    /// </summary>
+    public decimal? ActualOutput { get; set; }
+
+    /// <summary>
+    /// 合格品数量
+    /// </summary>
+    public decimal? QualifiedQuantity { get; set; }
+
+    /// <summary>
+    /// 不良品数量
+    /// </summary>
+    public decimal? DefectiveQuantity { get; set; }
+
+    /// <summary>
+    /// 良品率（%）
+    /// </summary>
+    public decimal? YieldRate { get; set; }
+
+    /// <summary>
+    /// 工作效率（%）
+    /// </summary>
+    public decimal? WorkEfficiency { get; set; }
+
+    /// <summary>
     /// 空闲原因类型（1=缺料，2=设备故障，3=换型调试，4=人员调配，5=其他）
     /// </summary>
     public int? IdleReasonType { get; set; }
+
+    /// <summary>
+    /// 空闲原因描述
+    /// </summary>
+    public string? IdleReason { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 加班时间（分钟）
+    /// </summary>
+    public decimal? OvertimeHours { get; set; }
+
+    /// <summary>
+    /// 班组长
+    /// </summary>
+    public string? TeamLeader { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 主管
+    /// </summary>
+    public string? Supervisor { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 状态（0=正常，1=停用）
+    /// </summary>
+    public int? PersonnelOperationRateStatus { get; set; }
+
+    /// <summary>
+    /// 人员稼动率变更记录列表（外键在子表 TaktPersonnelOperationRateChangeLog.PersonnelOperationRateId）（子表，级联保存）
+    /// </summary>
+    public List<TaktPersonnelOperationRateChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -727,7 +833,7 @@ public class TaktPersonnelOperationRateImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -742,6 +848,16 @@ public class TaktPersonnelOperationRateImportDto
     public int? TimeCategory { get; set; }
 
     /// <summary>
+    /// 开始日期
+    /// </summary>
+    public DateTime? StartDate { get; set; }
+
+    /// <summary>
+    /// 结束日期
+    /// </summary>
+    public DateTime? EndDate { get; set; }
+
+    /// <summary>
     /// 周数（1-53）
     /// </summary>
     public int? WeekNumber { get; set; }
@@ -752,14 +868,14 @@ public class TaktPersonnelOperationRateImportDto
     public int? MonthNumber { get; set; }
 
     /// <summary>
-    /// 生产线
+    /// 生产班组
     /// </summary>
-    public string? ProductionLine { get; set; } = string.Empty;
+    public string? ProdTeam { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产线名称
+    /// 生产班组名称
     /// </summary>
-    public string? ProductionLineName { get; set; } = string.Empty;
+    public string? ProdTeamName { get; set; } = string.Empty;
 
     /// <summary>
     /// 班次（1=早班，2=中班，3=晚班）
@@ -787,9 +903,94 @@ public class TaktPersonnelOperationRateImportDto
     public int? ActualIndirectPersonnelCount { get; set; }
 
     /// <summary>
+    /// 出勤时间（分钟）。员工在公司的计划工作时间，含休息、待命等。
+    /// </summary>
+    public decimal? PlannedWorkTime { get; set; }
+
+    /// <summary>
+    /// 在岗作业时间（分钟）。员工实际在工位上执行生产任务的时间。
+    /// </summary>
+    public decimal? ActualWorkTime { get; set; }
+
+    /// <summary>
+    /// 休息时间（分钟）
+    /// </summary>
+    public decimal? BreakTime { get; set; }
+
+    /// <summary>
+    /// 空闲时间（分钟）。等料、设备调试等非作业时间。
+    /// </summary>
+    public decimal? IdleTime { get; set; }
+
+    /// <summary>
+    /// 人员稼动率（%）。计算公式：在岗作业时间 ÷ 出勤时间 × 100%（在岗作业率）。
+    /// </summary>
+    public decimal? PersonnelOperationRate { get; set; }
+
+    /// <summary>
+    /// 计划产量
+    /// </summary>
+    public decimal? PlannedOutput { get; set; }
+
+    /// <summary>
+    /// 实际产量
+    /// </summary>
+    public decimal? ActualOutput { get; set; }
+
+    /// <summary>
+    /// 合格品数量
+    /// </summary>
+    public decimal? QualifiedQuantity { get; set; }
+
+    /// <summary>
+    /// 不良品数量
+    /// </summary>
+    public decimal? DefectiveQuantity { get; set; }
+
+    /// <summary>
+    /// 良品率（%）
+    /// </summary>
+    public decimal? YieldRate { get; set; }
+
+    /// <summary>
+    /// 工作效率（%）
+    /// </summary>
+    public decimal? WorkEfficiency { get; set; }
+
+    /// <summary>
     /// 空闲原因类型（1=缺料，2=设备故障，3=换型调试，4=人员调配，5=其他）
     /// </summary>
     public int? IdleReasonType { get; set; }
+
+    /// <summary>
+    /// 空闲原因描述
+    /// </summary>
+    public string? IdleReason { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 加班时间（分钟）
+    /// </summary>
+    public decimal? OvertimeHours { get; set; }
+
+    /// <summary>
+    /// 班组长
+    /// </summary>
+    public string? TeamLeader { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 主管
+    /// </summary>
+    public string? Supervisor { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 状态（0=正常，1=停用）
+    /// </summary>
+    public int? PersonnelOperationRateStatus { get; set; }
+
+    /// <summary>
+    /// 人员稼动率变更记录列表（外键在子表 TaktPersonnelOperationRateChangeLog.PersonnelOperationRateId）（子表，级联保存）
+    /// </summary>
+    public List<TaktPersonnelOperationRateChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -855,14 +1056,14 @@ public class TaktPersonnelOperationRateExportDto
     public int? MonthNumber { get; set; }
 
     /// <summary>
-    /// 生产线
+    /// 生产班组
     /// </summary>
-    public string ProductionLine { get; set; } = string.Empty;
+    public string ProdTeam { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产线名称
+    /// 生产班组名称
     /// </summary>
-    public string? ProductionLineName { get; set; } = string.Empty;
+    public string? ProdTeamName { get; set; } = string.Empty;
 
     /// <summary>
     /// 班次（1=早班，2=中班，3=晚班）
@@ -972,7 +1173,7 @@ public class TaktPersonnelOperationRateExportDto
     /// <summary>
     /// 状态（0=正常，1=停用）
     /// </summary>
-    public int Status { get; set; } = 0;
+    public int PersonnelOperationRateStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

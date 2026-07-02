@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Accounting.Financial
 // 文件名称：TaktCompanyService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-07-01
 // 创建人：Takt365(Cursor AI)
 // 功能描述：公司应用服务实现
 // 
@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Shared.Enums;
 using Takt.Application.Services.Identity;
 
 namespace Takt.Application.Services.Accounting.Financial;
@@ -99,19 +98,22 @@ public class TaktCompanyService : TaktServiceBase, ITaktCompanyService
         return dto;    }
 
     /// <summary>
-    /// 获取公司选项列表
+    /// 获取公司选项列表（DictValue 为公司代码 CompanyCode）
     /// </summary>
     /// <returns>下拉选项</returns>
     public async Task<List<TaktSelectOption>> GetCompanyOptionsAsync()
     {
         var list = await _companyRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyStatus == 1,
             x => x.CompanyName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
             DictValue = e.CompanyCode,
-            DictLabel = $"{e.CompanyName ?? e.CompanyCode}({e.DefaultCulture})",
+            DictLabel = string.IsNullOrWhiteSpace(e.CompanyShortName)
+                ? (string.IsNullOrWhiteSpace(e.CompanyName) ? e.CompanyCode : e.CompanyName)
+                : $"{e.CompanyCode} {e.CompanyShortName}",
+            ExtValue = e.Id,
         }).ToList();
     }
 
@@ -397,10 +399,9 @@ public class TaktCompanyService : TaktServiceBase, ITaktCompanyService
             exp = exp.And(x =>
                 (x.CompanyName != null && x.CompanyName.Contains(keywords))
                 || (x.CompanyShortName != null && x.CompanyShortName.Contains(keywords))
-                || SqlFunc.ToString(x.CompanyType).Contains(keywords)
-                || SqlFunc.ToString(x.EnterpriseNature).Contains(keywords)
-                || SqlFunc.ToString(x.IndustryAttribute).Contains(keywords)
-                || SqlFunc.ToString(x.EnterpriseScale).Contains(keywords)
+                || (x.EnterpriseNature != null && x.EnterpriseNature.Contains(keywords))
+                || (x.IndustryAttribute != null && x.IndustryAttribute.Contains(keywords))
+                || (x.EnterpriseScale != null && x.EnterpriseScale.Contains(keywords))
                 || (x.BusinessScope != null && x.BusinessScope.Contains(keywords))
                 || (x.RegistrationAddress1 != null && x.RegistrationAddress1.Contains(keywords))
                 || (x.RegistrationAddress2 != null && x.RegistrationAddress2.Contains(keywords))
@@ -424,11 +425,11 @@ public class TaktCompanyService : TaktServiceBase, ITaktCompanyService
                 || (x.CompanyManager != null && x.CompanyManager.Contains(keywords))
                 || SqlFunc.ToString(x.RegisteredCapital).Contains(keywords)
                 || SqlFunc.ToString(x.CompanyExistence).Contains(keywords)
-                || (x.RelatedPlant != null && x.RelatedPlant.Contains(keywords))
                 || (x.DefaultCulture != null && x.DefaultCulture.Contains(keywords))
                 || (x.CodeAlias != null && x.CodeAlias.Contains(keywords))
-                || SqlFunc.ToString(x.CompanyStatus).Contains(keywords)
+                || (x.RelatedPlant != null && x.RelatedPlant.Contains(keywords))
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
+                || SqlFunc.ToString(x.CompanyStatus).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.EstablishmentDate).Contains(keywords)
@@ -447,24 +448,19 @@ public class TaktCompanyService : TaktServiceBase, ITaktCompanyService
             exp = exp.And(x => x.CompanyShortName != null && x.CompanyShortName.Contains(queryDto.CompanyShortName));
         }
 
-        if (queryDto?.CompanyType.HasValue == true)
+        if (!string.IsNullOrEmpty(queryDto?.EnterpriseNature))
         {
-            exp = exp.And(x => x.CompanyType == queryDto.CompanyType);
+            exp = exp.And(x => x.EnterpriseNature != null && x.EnterpriseNature.Contains(queryDto.EnterpriseNature));
         }
 
-        if (queryDto?.EnterpriseNature.HasValue == true)
+        if (!string.IsNullOrEmpty(queryDto?.IndustryAttribute))
         {
-            exp = exp.And(x => x.EnterpriseNature == queryDto.EnterpriseNature);
+            exp = exp.And(x => x.IndustryAttribute != null && x.IndustryAttribute.Contains(queryDto.IndustryAttribute));
         }
 
-        if (queryDto?.IndustryAttribute.HasValue == true)
+        if (!string.IsNullOrEmpty(queryDto?.EnterpriseScale))
         {
-            exp = exp.And(x => x.IndustryAttribute == queryDto.IndustryAttribute);
-        }
-
-        if (queryDto?.EnterpriseScale.HasValue == true)
-        {
-            exp = exp.And(x => x.EnterpriseScale == queryDto.EnterpriseScale);
+            exp = exp.And(x => x.EnterpriseScale != null && x.EnterpriseScale.Contains(queryDto.EnterpriseScale));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.BusinessScope))
@@ -582,11 +578,6 @@ public class TaktCompanyService : TaktServiceBase, ITaktCompanyService
             exp = exp.And(x => x.CompanyExistence == queryDto.CompanyExistence);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.RelatedPlant))
-        {
-            exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(queryDto.RelatedPlant));
-        }
-
         if (!string.IsNullOrEmpty(queryDto?.DefaultCulture))
         {
             exp = exp.And(x => x.DefaultCulture != null && x.DefaultCulture.Contains(queryDto.DefaultCulture));
@@ -597,14 +588,19 @@ public class TaktCompanyService : TaktServiceBase, ITaktCompanyService
             exp = exp.And(x => x.CodeAlias != null && x.CodeAlias.Contains(queryDto.CodeAlias));
         }
 
-        if (queryDto?.CompanyStatus.HasValue == true)
+        if (!string.IsNullOrEmpty(queryDto?.RelatedPlant))
         {
-            exp = exp.And(x => x.CompanyStatus == queryDto.CompanyStatus);
+            exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(queryDto.RelatedPlant));
         }
 
         if (queryDto?.SortOrder.HasValue == true)
         {
             exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
+        }
+
+        if (queryDto?.CompanyStatus.HasValue == true)
+        {
+            exp = exp.And(x => x.CompanyStatus == queryDto.CompanyStatus);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

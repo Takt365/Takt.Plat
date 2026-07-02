@@ -30,10 +30,10 @@ public class TaktPersonnelOperationRateChangeLog : TaktCompanyEntityBase
     public long PersonnelOperationRateId { get; set; }
 
     /// <summary>
-    /// 生产线（冗余）
+    /// 生产班组（冗余）
     /// </summary>
-    [SugarColumn(ColumnName = "production_line", ColumnDescription = "生产线", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
-    public string ProductionLine { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "prod_team", ColumnDescription = "生产班组", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
+    public string ProdTeam { get; set; } = string.Empty;
 
     /// <summary>
     /// 变更字段列表（JSON数组格式，记录同一时间点修改的所有字段及其旧值、新值）

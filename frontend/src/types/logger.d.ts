@@ -172,6 +172,16 @@ export interface LoggerConfig {
   enableConsole: boolean;
 
   /**
+   * 是否写入本地 logs 目录（开发环境经 Vite 落盘）
+   */
+  enableFile: boolean;
+
+  /**
+   * 本地落盘端点（开发默认 /__takt/client-logs）
+   */
+  fileUrl?: string;
+
+  /**
    * 是否上报远端
    */
   enableReport: boolean;

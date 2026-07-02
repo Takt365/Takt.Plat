@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Operation
 // 文件名称：TaktInspectionStandardService.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：检验标准应用服务实现
 // 
@@ -411,7 +411,6 @@ public class TaktInspectionStandardService : TaktServiceBase, ITaktInspectionSta
                 || (x.MaterialCategoryName != null && x.MaterialCategoryName.Contains(keywords))
                 || (x.SamplingSchemeCode != null && x.SamplingSchemeCode.Contains(keywords))
                 || (x.SamplingSchemeName != null && x.SamplingSchemeName.Contains(keywords))
-                || SqlFunc.ToString(x.IsEnabled).Contains(keywords)
                 || SqlFunc.ToString(x.StandardStatus).Contains(keywords)
                 || (x.StandardDescription != null && x.StandardDescription.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
@@ -458,11 +457,6 @@ public class TaktInspectionStandardService : TaktServiceBase, ITaktInspectionSta
         if (!string.IsNullOrEmpty(queryDto?.SamplingSchemeName))
         {
             exp = exp.And(x => x.SamplingSchemeName != null && x.SamplingSchemeName.Contains(queryDto.SamplingSchemeName));
-        }
-
-        if (queryDto?.IsEnabled.HasValue == true)
-        {
-            exp = exp.And(x => x.IsEnabled == queryDto.IsEnabled);
         }
 
         if (queryDto?.StandardStatus.HasValue == true)

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Manufacturing.Bom
 // 文件名称：TaktBillOfMaterialChangeLogsController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-27
 // 创建人：Takt365(Cursor AI)
 // 功能描述：BOM变更记录控制器
 // 
@@ -41,7 +41,7 @@ public class TaktBillOfMaterialChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:manufacturing:bom:bill:of:material:change:log:list", "BOM变更记录列表")]
+    [TaktPermission("logistics:manufacturing:bom:bill:of:material:list", "BOM变更记录列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetBillOfMaterialChangeLogListAsync([FromQuery] TaktBillOfMaterialChangeLogQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktBillOfMaterialChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="id">BOM变更记录ID</param>
     /// <returns>BOM变更记录DTO</returns>
-    [TaktPermission("logistics:manufacturing:bom:bill:of:material:change:log:query", "BOM变更记录详情")]
+    [TaktPermission("logistics:manufacturing:bom:bill:of:material:query", "BOM变更记录详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetBillOfMaterialChangeLogByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktBillOfMaterialChangeLogsController : TaktControllerBase
     /// 获取BOM变更记录选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:manufacturing:bom:bill:of:material:change:log:query", "BOM变更记录选项")]
+    [TaktPermission("logistics:manufacturing:bom:bill:of:material:query", "BOM变更记录选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetBillOfMaterialChangeLogOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktBillOfMaterialChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>BOM变更记录DTO</returns>
-    [TaktPermission("logistics:manufacturing:bom:bill:of:material:change:log:create", "创建BOM变更记录")]
+    [TaktPermission("logistics:manufacturing:bom:bill:of:material:create", "创建BOM变更记录")]
     [HttpPost]
     public async Task<IActionResult> CreateBillOfMaterialChangeLogAsync([FromBody] TaktBillOfMaterialChangeLogCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktBillOfMaterialChangeLogsController : TaktControllerBase
     /// <param name="id">BOM变更记录ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>BOM变更记录DTO</returns>
-    [TaktPermission("logistics:manufacturing:bom:bill:of:material:change:log:update", "更新BOM变更记录")]
+    [TaktPermission("logistics:manufacturing:bom:bill:of:material:update", "更新BOM变更记录")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateBillOfMaterialChangeLogAsync(long id, [FromBody] TaktBillOfMaterialChangeLogUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktBillOfMaterialChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="id">BOM变更记录ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:bom:bill:of:material:change:log:delete", "删除BOM变更记录")]
+    [TaktPermission("logistics:manufacturing:bom:bill:of:material:delete", "删除BOM变更记录")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteBillOfMaterialChangeLogByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktBillOfMaterialChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:bom:bill:of:material:change:log:delete", "批量删除BOM变更记录")]
+    [TaktPermission("logistics:manufacturing:bom:bill:of:material:delete", "批量删除BOM变更记录")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteBillOfMaterialChangeLogBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktBillOfMaterialChangeLogsController : TaktControllerBase
     /// 导出BOM变更记录
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:bom:bill:of:material:change:log:export", "导出BOM变更记录")]
+    [TaktPermission("logistics:manufacturing:bom:bill:of:material:export", "导出BOM变更记录")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportBillOfMaterialChangeLogAsync([FromQuery] TaktBillOfMaterialChangeLogQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

@@ -41,7 +41,7 @@ export interface OperLog extends CompanyDtoBase {
   /**
    * 操作类型（HTTP 审计推导）
    */
-  operType: number;
+  operType: string;
 
   /**
    * 操作方法（如：TaktUserService.CreateUserAsync）
@@ -131,7 +131,7 @@ export interface OperLogQuery extends TaktPagedQuery {
   /**
    * 操作类型（HTTP 审计推导）
    */
-  operType?: number;
+  operType?: string;
 
   /**
    * 操作方法（如：TaktUserService.CreateUserAsync）
@@ -233,7 +233,7 @@ export interface OperLogCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -250,7 +250,7 @@ export interface OperLogCreate {
   /**
    * 操作类型（HTTP 审计推导）
    */
-  operType: number;
+  operType: string;
 
   /**
    * 操作方法（如：TaktUserService.CreateUserAsync）
@@ -383,7 +383,7 @@ export interface OperLogExport {
   /**
    * 操作类型（HTTP 审计推导）
    */
-  operType: number;
+  operType: string;
 
   /**
    * 操作方法（如：TaktUserService.CreateUserAsync）

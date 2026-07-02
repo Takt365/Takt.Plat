@@ -52,32 +52,32 @@ export interface Online extends CompanyDtoBase {
   /**
    * 连接 IP 地址
    */
-  connectIp?: string;
+  connectIp: string;
 
   /**
    * 连接地点
    */
-  connectLocation?: string;
+  connectLocation: string;
 
   /**
-   * User-Agent
+   * 用户代理（User-Agent）
    */
-  userAgent?: string;
+  userAgent: string;
 
   /**
-   * 设备类型
+   * 登录设备
    */
-  deviceType?: number;
+  deviceType: string;
 
   /**
-   * 浏览器类型
+   * 浏览器（TaktConstants.BrowserType）
    */
-  browserType?: number;
+  browserType: string;
 
   /**
-   * 操作系统
+   * 操作系统（TaktConstants.OperatingSystem）
    */
-  operatingSystem?: number;
+  operatingSystem: string;
 
   /**
    * 连接时间
@@ -87,17 +87,17 @@ export interface Online extends CompanyDtoBase {
   /**
    * 最后活动时间
    */
-  lastActiveTime?: string;
+  lastActiveTime: string;
 
   /**
-   * 断开时间
+   * 断开时间（未断开时为 null）
    */
   disconnectTime?: string;
 
   /**
    * 连接时长（秒）
    */
-  connectionDuration?: number;
+  connectionDuration: number;
 
 }
 
@@ -149,24 +149,24 @@ export interface OnlineQuery extends TaktPagedQuery {
   connectLocation?: string;
 
   /**
-   * User-Agent
+   * 用户代理（User-Agent）
    */
   userAgent?: string;
 
   /**
-   * 设备类型
+   * 登录设备
    */
-  deviceType?: number;
+  deviceType?: string;
 
   /**
-   * 浏览器类型
+   * 浏览器（TaktConstants.BrowserType）
    */
-  browserType?: number;
+  browserType?: string;
 
   /**
-   * 操作系统
+   * 操作系统（TaktConstants.OperatingSystem）
    */
-  operatingSystem?: number;
+  operatingSystem?: string;
 
   /**
    * 连接时间（范围查询-开始）
@@ -282,32 +282,32 @@ export interface OnlineExport {
   /**
    * 连接 IP 地址
    */
-  connectIp?: string;
+  connectIp: string;
 
   /**
    * 连接地点
    */
-  connectLocation?: string;
+  connectLocation: string;
 
   /**
-   * User-Agent
+   * 用户代理（User-Agent）
    */
-  userAgent?: string;
+  userAgent: string;
 
   /**
-   * 设备类型
+   * 登录设备
    */
-  deviceType?: number;
+  deviceType: string;
 
   /**
-   * 浏览器类型
+   * 浏览器（TaktConstants.BrowserType）
    */
-  browserType?: number;
+  browserType: string;
 
   /**
-   * 操作系统
+   * 操作系统（TaktConstants.OperatingSystem）
    */
-  operatingSystem?: number;
+  operatingSystem: string;
 
   /**
    * 连接时间
@@ -317,17 +317,17 @@ export interface OnlineExport {
   /**
    * 最后活动时间
    */
-  lastActiveTime?: string;
+  lastActiveTime: string;
 
   /**
-   * 断开时间
+   * 断开时间（未断开时为 null）
    */
   disconnectTime?: string;
 
   /**
    * 连接时长（秒）
    */
-  connectionDuration?: number;
+  connectionDuration: number;
 
   /**
    * 扩展字段JSON
@@ -378,9 +378,45 @@ export interface OnlineStatistics {
   todayDurationSeconds: number;
 
   /**
-   * 当月累计在线时长（秒）：当前用户当月各会话有效时长之和
+   * 当月累计在线时长（秒）
    */
   monthDurationSeconds: number;
+
+  /**
+   * 本周累计在线时长（秒，周一至今日）
+   */
+  weekTotalDurationSeconds: number;
+
+  /**
+   * 本周日均在线时长（秒）
+   */
+  weekAverageDurationSeconds: number;
+
+  /**
+   * 本月日均在线时长（秒）
+   */
+  monthAverageDurationSeconds: number;
+}
+
+/**
+ * 在线看板统计 DTO（公司维度）
+ * @description 对应后端 TaktOnlineDashboardStatisticsDto
+ */
+export interface OnlineDashboardStatistics {
+  /**
+   * 当前在线用户数
+   */
+  onlineUserCount: number;
+
+  /**
+   * 当日总访问量（与在线时长无关）
+   */
+  todayVisitCount: number;
+
+  /**
+   * 当前活跃会话数
+   */
+  activeSessionCount: number;
 }
 
 /**
@@ -392,6 +428,8 @@ export interface OnlineForceKick {
   connectionId?: string;
   /** 强退原因（可选） */
   reason?: string;
+  /** 延迟强退秒数（0 表示立即强退） */
+  delaySeconds?: number;
 }
 
 /**
@@ -403,6 +441,8 @@ export interface OnlineForceKickBatch {
   onlineIds: string[];
   /** 强退原因（可选） */
   reason?: string;
+  /** 延迟强退秒数（0 表示立即强退） */
+  delaySeconds?: number;
 }
 
 /**
@@ -430,10 +470,9 @@ export interface OnlineBroadcastPush {
   /** 消息内容 */
   messageContent: string;
   /** 消息类型 */
-  messageType?: number;
+  messageType?: string;
   /** 消息分组 */
-  messageGroup?: number;
+  messageGroup?: string;
   /** 发送时间 */
   sendTime?: string;
 }
-

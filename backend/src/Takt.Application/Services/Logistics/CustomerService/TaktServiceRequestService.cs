@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.CustomerService
 // 文件名称：TaktServiceRequestService.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：服务请求应用服务实现
 // 
@@ -30,6 +30,7 @@ namespace Takt.Application.Services.Logistics.CustomerService;
 public class TaktServiceRequestService : TaktServiceBase, ITaktServiceRequestService
 {
     private readonly ITaktCompanyRepository<TaktServiceRequest> _serviceRequestRepository;
+    private readonly ITaktCompanyRepository<TaktServiceOrder> _serviceOrderRepository;
     private readonly ITaktCompanyRepository<TaktServiceTicket> _serviceTicketRepository;
     private readonly ITaktSortOrderGenerator _sortOrderGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
@@ -38,6 +39,7 @@ public class TaktServiceRequestService : TaktServiceBase, ITaktServiceRequestSer
     /// 构造函数
     /// </summary>
     /// <param name="serviceRequestRepository">服务请求仓储</param>
+    /// <param name="serviceOrderRepository">ServiceOrder仓储</param>
     /// <param name="serviceTicketRepository">ServiceTicket仓储</param>
     /// <param name="sortOrderGenerator">排序号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
@@ -45,6 +47,7 @@ public class TaktServiceRequestService : TaktServiceBase, ITaktServiceRequestSer
     /// <param name="localizationService">本地化服务</param>
     public TaktServiceRequestService(
         ITaktCompanyRepository<TaktServiceRequest> serviceRequestRepository,
+        ITaktCompanyRepository<TaktServiceOrder> serviceOrderRepository,
         ITaktCompanyRepository<TaktServiceTicket> serviceTicketRepository,
         ITaktSortOrderGenerator sortOrderGenerator,
         ITaktUniqueValidator uniqueValidator,
@@ -53,6 +56,7 @@ public class TaktServiceRequestService : TaktServiceBase, ITaktServiceRequestSer
         : base(userContext, localizationService)
     {
         _serviceRequestRepository = serviceRequestRepository;
+        _serviceOrderRepository = serviceOrderRepository;
         _serviceTicketRepository = serviceTicketRepository;
         _sortOrderGenerator = sortOrderGenerator;
         _uniqueValidator = uniqueValidator;
@@ -179,6 +183,7 @@ public class TaktServiceRequestService : TaktServiceBase, ITaktServiceRequestSer
         {
             throw new TaktBusinessException("服务请求不存在或已删除");
         }
+        await _serviceOrderRepository.DeleteAsync(x => x.ServiceRequestId == entity.Id);
         await _serviceTicketRepository.DeleteAsync(x => x.ServiceRequestId == entity.Id);
         var deleted = await _serviceRequestRepository.DeleteAsync(id);
         if (!deleted)
@@ -337,7 +342,7 @@ public class TaktServiceRequestService : TaktServiceBase, ITaktServiceRequestSer
     // ========================================
 
     /// <summary>
-    /// 填充服务请求详情（加载 OneToMany 子表：服务工单）
+    /// 填充服务请求详情（加载 OneToMany 子表：服务订单、服务工单）
     /// </summary>
     /// <param name="dto">响应 DTO</param>
     /// <param name="entity">主表实体</param>
@@ -348,19 +353,74 @@ public class TaktServiceRequestService : TaktServiceBase, ITaktServiceRequestSer
         {
             return;
         }
+        // 服务订单 → dto.ServiceOrders
+        var serviceorders = await _serviceOrderRepository.GetListAsync(x => x.ServiceRequestId == entity.Id);
+        dto.ServiceOrders = serviceorders.Adapt<List<TaktServiceOrderDto>>();
         // 服务工单 → dto.Tickets
         var tickets = await _serviceTicketRepository.GetListAsync(x => x.ServiceRequestId == entity.Id);
         dto.Tickets = tickets.Adapt<List<TaktServiceTicketDto>>();
     }
 
     /// <summary>
-    /// 保存服务请求子表级联（服务工单；Create/Update 后按主表 Id 先删后插）
+    /// 保存服务请求子表级联（服务订单、服务工单；Create/Update 后按主表 Id 先删后插）
     /// </summary>
     /// <param name="entity">主表实体</param>
     /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
     /// <returns>任务</returns>
     private async Task SaveServiceRequestChildrenAsync(TaktServiceRequest entity, TaktServiceRequestCreateDto dto)
     {
+        // 服务订单（ServiceOrders）
+        if (dto.ServiceOrders is not { Count: > 0 })
+        {
+            await _serviceOrderRepository.DeleteAsync(x => x.ServiceRequestId == entity.Id);
+        }
+        else
+        {
+            var serviceorders = dto.ServiceOrders.Adapt<List<TaktServiceOrder>>();
+            foreach (var child in serviceorders)
+            {
+                child.ServiceRequestId = entity.Id;
+            }
+            var serviceordersNeedSort = serviceorders.Where(c => c.SortOrder <= 0).ToList();
+            if (serviceordersNeedSort.Count > 0)
+            {
+                var maxSort = await _serviceOrderRepository.GetMaxIntAsync(
+                    x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ServiceRequestId == entity.Id,
+                    x => x.SortOrder);
+                var sortSeq = _sortOrderGenerator.GenerateSequence(serviceordersNeedSort.Count, maxSort).ToList();
+                var sortIdx = 0;
+                foreach (var child in serviceorders)
+                {
+                    if (child.SortOrder <= 0)
+                    {
+                        child.SortOrder = sortSeq[sortIdx++];
+                    }
+                }
+            }
+                        var seenKeys = new HashSet<string>(StringComparer.Ordinal);
+                        for (var i = 0; i < serviceorders.Count; i++)
+                        {
+                            var key = $"{serviceorders[i].CompanyCode}|{serviceorders[i].PlantCode}|{serviceorders[i].ServiceOrderCode}";
+                            if (!seenKeys.Add(key))
+                            {
+                                throw new TaktBusinessException($"服务订单第{i + 1}项与本次提交的其他项重复（CompanyCode、PlantCode、ServiceOrderCode）");
+                            }
+                        }
+            await _serviceOrderRepository.DeleteAsync(x => x.ServiceRequestId == entity.Id);
+            foreach (var child in serviceorders)
+            {
+            var isUnique_ix_takt_logistics_service_order_code_unique = await _uniqueValidator.IsUniqueAsync(
+                _serviceOrderRepository,
+                x => x.CompanyCode == child.CompanyCode
+                    && x.PlantCode == child.PlantCode
+                    && x.ServiceOrderCode == child.ServiceOrderCode);
+            if (!isUnique_ix_takt_logistics_service_order_code_unique)
+            {
+                throw new TaktBusinessException("服务订单的CompanyCode、PlantCode、ServiceOrderCode已存在");
+            }
+            }
+            await _serviceOrderRepository.CreateRangeAsync(serviceorders);
+        }
         // 服务工单（Tickets）
         if (dto.Tickets is not { Count: > 0 })
         {
@@ -414,6 +474,33 @@ public class TaktServiceRequestService : TaktServiceBase, ITaktServiceRequestSer
             await _serviceTicketRepository.CreateRangeAsync(tickets);
         }
     }
+
+    /// <summary>
+    /// 获取服务请求统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>服务请求统计</returns>
+    public async Task<TaktServiceRequestStatDto> GetServiceRequestStatAsync(TaktServiceRequestStatQueryDto queryDto)
+    {
+        EnsureThreeLayerContext();
+        var (start, end, statMonth) = TaktStatMonthRangeHelper.ResolveMonthRange(
+            queryDto.RequestDateStart,
+            queryDto.RequestDateEnd);
+        var tenantCode = CurrentTenantCode;
+        var companyCode = CurrentCompanyCode;
+        Expression<Func<TaktServiceRequest, bool>> predicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.RequestDate >= start
+            && x.RequestDate <= end;
+        var monthRequestCount = await _serviceRequestRepository.CountAsync(predicate);
+        return new TaktServiceRequestStatDto
+        {
+            StatMonth = statMonth,
+            MonthRequestCount = monthRequestCount,
+        };
+    }
+
     // ========================================
     // 查询表达式
     // ========================================

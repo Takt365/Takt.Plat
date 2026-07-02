@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopStepI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSopStep 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktSopStepI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.sopstep._self", "zh-HK", "SOP 工步信息_hk", "实体名称"),
 
             // entity.sopstep.contentid
-            new TranslationSeedItem("entity.sopstep.contentid", "en-US", "正文ID_us", "正文 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.sopstep.contentid", "en-US", "正文ID_us", "正文 ID（关联 TaktSopContent.Id，选项 TaktSopContents/options）"),
             // entity.sopstep.contentid
-            new TranslationSeedItem("entity.sopstep.contentid", "ja-JP", "正文ID_jp", "正文 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.sopstep.contentid", "ja-JP", "正文ID_jp", "正文 ID（关联 TaktSopContent.Id，选项 TaktSopContents/options）"),
             // entity.sopstep.contentid
-            new TranslationSeedItem("entity.sopstep.contentid", "zh-CN", "正文ID", "正文 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.sopstep.contentid", "zh-CN", "正文ID", "正文 ID（关联 TaktSopContent.Id，选项 TaktSopContents/options）"),
             // entity.sopstep.contentid
-            new TranslationSeedItem("entity.sopstep.contentid", "zh-HK", "正文ID_hk", "正文 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.sopstep.contentid", "zh-HK", "正文ID_hk", "正文 ID（关联 TaktSopContent.Id，选项 TaktSopContents/options）"),
 
             // entity.sopstep.stepno
             new TranslationSeedItem("entity.sopstep.stepno", "en-US", "工步序号_us", "工步序号"),
@@ -136,13 +136,13 @@ public class TaktSopStepI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.sopstep.safetyalert", "zh-HK", "安全警示_hk", "安全警示"),
 
             // entity.sopstep.safetypopuprequired
-            new TranslationSeedItem("entity.sopstep.safetypopuprequired", "en-US", "是否安全弹窗_us", "是否安全弹窗（字典 sys_yes_no_type，0=否，1=是）"),
+            new TranslationSeedItem("entity.sopstep.safetypopuprequired", "en-US", "弹窗_us", "弹窗（字典 sys_yes_no_type；0=否，1=是）"),
             // entity.sopstep.safetypopuprequired
-            new TranslationSeedItem("entity.sopstep.safetypopuprequired", "ja-JP", "是否安全弹窗_jp", "是否安全弹窗（字典 sys_yes_no_type，0=否，1=是）"),
+            new TranslationSeedItem("entity.sopstep.safetypopuprequired", "ja-JP", "弹窗_jp", "弹窗（字典 sys_yes_no_type；0=否，1=是）"),
             // entity.sopstep.safetypopuprequired
-            new TranslationSeedItem("entity.sopstep.safetypopuprequired", "zh-CN", "是否安全弹窗", "是否安全弹窗（字典 sys_yes_no_type，0=否，1=是）"),
+            new TranslationSeedItem("entity.sopstep.safetypopuprequired", "zh-CN", "弹窗", "弹窗（字典 sys_yes_no_type；0=否，1=是）"),
             // entity.sopstep.safetypopuprequired
-            new TranslationSeedItem("entity.sopstep.safetypopuprequired", "zh-HK", "是否安全弹窗_hk", "是否安全弹窗（字典 sys_yes_no_type，0=否，1=是）"),
+            new TranslationSeedItem("entity.sopstep.safetypopuprequired", "zh-HK", "弹窗_hk", "弹窗（字典 sys_yes_no_type；0=否，1=是）"),
 
             // entity.sopstep.content
             new TranslationSeedItem("entity.sopstep.content", "en-US", "正文_us", "正文"),

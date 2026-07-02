@@ -316,23 +316,62 @@ function findDomainEntityFile(entityPascal, backendRoot = DEFAULT_BACKEND_ROOT) 
 }
 
 /**
+ * 实体类头正则（含 Takt*EntityIncrementBase 库自增主键基类）
+ */
+const ENTITY_CLASS_HEADER_REGEX = /public\s+(?:sealed\s+|abstract\s+)?class\s+(Takt\w+)\s*:\s*(Takt(?:Tenant|Company|Approval)Entity(?:Increment)?Base)\s*\{/;
+
+/** EntityBase / EntityIncrementBase → DTO 基类 */
+const ENTITY_BASE_TO_DTO_BASE = {
+  TaktTenantEntityBase: 'TaktTenantDtoBase',
+  TaktCompanyEntityBase: 'TaktCompanyDtoBase',
+  TaktApprovalEntityBase: 'TaktApprovalDtoBase',
+  TaktTenantEntityIncrementBase: 'TaktTenantDtoBase',
+  TaktCompanyEntityIncrementBase: 'TaktCompanyDtoBase',
+  TaktApprovalEntityIncrementBase: 'TaktApprovalDtoBase',
+};
+
+/**
+ * 从 C# 实体源码解析类名与基类
+ * @param {string} content
+ * @returns {{ className: string, entityBase: string }|null}
+ */
+function parseEntityClassHeaderFromCsContent(content) {
+  const match = content.match(ENTITY_CLASS_HEADER_REGEX);
+  if (!match) {
+    return null;
+  }
+  return { className: match[1], entityBase: match[2] };
+}
+
+/**
+ * EntityBase / EntityIncrementBase → Application DTO 基类
+ * @param {string} entityBase
+ * @returns {string}
+ */
+function resolveDtoBaseFromEntityBase(entityBase) {
+  return ENTITY_BASE_TO_DTO_BASE[entityBase] || 'TaktTenantDtoBase';
+}
+
+/**
  * 从 C# 实体文件解析 EntityBase
  * @param {string} entityFilePath
  * @returns {'TaktTenantEntityBase'|'TaktCompanyEntityBase'|'TaktApprovalEntityBase'}
  */
 function parseEntityBaseFromCsFile(entityFilePath) {
   const content = fs.readFileSync(entityFilePath, 'utf-8');
-  const match = content.match(/public\s+(?:sealed\s+|abstract\s+)?class\s+Takt\w+\s*:\s*(Takt(?:Approval|Company|Tenant)EntityBase)/);
-  if (match) {
-    return match[1];
+  const header = parseEntityClassHeaderFromCsContent(content);
+  if (header) {
+    return /** @type {'TaktTenantEntityBase'|'TaktCompanyEntityBase'|'TaktApprovalEntityBase'} */ (
+      header.entityBase.replace('Increment', '')
+    );
   }
-  if (content.includes(': TaktApprovalEntityBase')) {
+  if (content.includes(': TaktApprovalEntityIncrementBase') || content.includes(': TaktApprovalEntityBase')) {
     return 'TaktApprovalEntityBase';
   }
-  if (content.includes(': TaktCompanyEntityBase')) {
+  if (content.includes(': TaktCompanyEntityIncrementBase') || content.includes(': TaktCompanyEntityBase')) {
     return 'TaktCompanyEntityBase';
   }
-  if (content.includes(': TaktTenantEntityBase')) {
+  if (content.includes(': TaktTenantEntityIncrementBase') || content.includes(': TaktTenantEntityBase')) {
     return 'TaktTenantEntityBase';
   }
   return 'TaktCompanyEntityBase';
@@ -853,6 +892,10 @@ module.exports = {
   entityBaseNameToScope,
   findDomainEntityFile,
   parseEntityBaseFromCsFile,
+  parseEntityClassHeaderFromCsContent,
+  resolveDtoBaseFromEntityBase,
+  ENTITY_CLASS_HEADER_REGEX,
+  ENTITY_BASE_TO_DTO_BASE,
   resolveEntityScopeFromTypesInterface,
   resolveEntityScope,
   ENTITY_BASE_FIELDS,

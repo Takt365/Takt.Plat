@@ -20,74 +20,59 @@ namespace Takt.Domain.Entities.Logistics.Quality.Operation;
 [SugarIndex("ix_inspection_standard_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_inspection_standard_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_quality_inspection_standard_is_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(StandardCode), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_quality_inspection_standard_plant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_quality_inspection_standard_inspection_type", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(InspectionType), OrderByType.Asc, false)]
 public class TaktInspectionStandard : TaktCompanyEntityBase
-{
-    /// <summary>
-    /// 工厂代码
+{    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
-
     /// <summary>
     /// 检验标准编码（唯一索引）
     /// </summary>
     [SugarColumn(ColumnName = "standard_code", ColumnDescription = "检验标准编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string StandardCode { get; set; } = string.Empty;
-
     /// <summary>
     /// 检验标准名称
     /// </summary>
     [SugarColumn(ColumnName = "standard_name", ColumnDescription = "检验标准名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = false)]
     public string StandardName { get; set; } = string.Empty;
-
     /// <summary>
-    /// 检验类型（0=IQC来料检验，1=IPQC过程检验，2=FQC最终检验）
+    /// 检验类型（字典 logistics_quality_inspection_type）
     /// </summary>
     [SugarColumn(ColumnName = "inspection_type", ColumnDescription = "检验类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int InspectionType { get; set; } = 0;
-
     /// <summary>
     /// 物料类别编码
     /// </summary>
     [SugarColumn(ColumnName = "material_category_code", ColumnDescription = "物料类别编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string MaterialCategoryCode { get; set; } = string.Empty;
-
     /// <summary>
     /// 物料类别名称
     /// </summary>
     [SugarColumn(ColumnName = "material_category_name", ColumnDescription = "物料类别名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = false)]
     public string MaterialCategoryName { get; set; } = string.Empty;
-
     /// <summary>
-    /// 抽样方案编码
+    /// 抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）
     /// </summary>
     [SugarColumn(ColumnName = "sampling_scheme_code", ColumnDescription = "抽样方案编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? SamplingSchemeCode { get; set; }
-
     /// <summary>
     /// 抽样方案名称
     /// </summary>
     [SugarColumn(ColumnName = "sampling_scheme_name", ColumnDescription = "抽样方案名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
     public string? SamplingSchemeName { get; set; }
-
-    /// <summary>
-    /// 是否启用（0=否，1=是）
-    /// </summary>
-    [SugarColumn(ColumnName = "is_enabled", ColumnDescription = "是否启用", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public int IsEnabled { get; set; } = 1;
-
-    /// <summary>
-    /// 检验标准状态（0=草稿，1=已发布，2=已停用）
-    /// </summary>
-    [SugarColumn(ColumnName = "standard_status", ColumnDescription = "检验标准状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int StandardStatus { get; set; } = 0;
-
     /// <summary>
     /// 检验标准描述
     /// </summary>
     [SugarColumn(ColumnName = "standard_description", ColumnDescription = "检验标准描述", ColumnDataType = "nvarchar", Length = 1000, IsNullable = true)]
     public string? StandardDescription { get; set; }
+    /// <summary>
+    /// 检验标准状态（字典 logistics_quality_standard_status）
+    /// </summary>
+    [SugarColumn(ColumnName = "standard_status", ColumnDescription = "检验标准状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int StandardStatus { get; set; } = 0;
 
     /// <summary>
     /// 检验标准明细列表（主子表关系）

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Attendance
 // 文件名称：TaktHolidayDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Holiday 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktHoliday 生成，请按需审阅）
 // 
@@ -14,7 +14,6 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Dtos.HumanResource.Attendance;
 
@@ -42,9 +41,9 @@ public class TaktHolidayDto : TaktCompanyDtoBase
     public string HolidayName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 假日类型（字典 hr_holiday_category）
+    /// 假日类型（字典 hr_holiday_category；0=法定 1=调休 2=公司）
     /// </summary>
-    public int HolidayType { get; set; }
+    public int HolidayType { get; set; } = 0;
 
     /// <summary>
     /// 假日开始日期
@@ -57,9 +56,9 @@ public class TaktHolidayDto : TaktCompanyDtoBase
     public DateTime EndDate { get; set; }
 
     /// <summary>
-    /// 是否工作日（字典 hr_holiday_working_day_type）
+    /// 是否工作日（字典 hr_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
     /// </summary>
-    public int IsWorkingDay { get; set; }
+    public int IsWorkingDay { get; set; } = 0;
 
     /// <summary>
     /// 假日问候语（简短，用于界面问候展示）
@@ -104,7 +103,7 @@ public class TaktHolidayQueryDto : TaktPagedQuery
     public string? HolidayName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 假日类型（字典 hr_holiday_category）
+    /// 假日类型（字典 hr_holiday_category；0=法定 1=调休 2=公司）
     /// </summary>
     public int? HolidayType { get; set; }
 
@@ -129,7 +128,7 @@ public class TaktHolidayQueryDto : TaktPagedQuery
     public DateTime? EndDateEnd { get; set; }
 
     /// <summary>
-    /// 是否工作日（字典 hr_holiday_working_day_type）
+    /// 是否工作日（字典 hr_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
     /// </summary>
     public int? IsWorkingDay { get; set; }
 
@@ -189,7 +188,7 @@ public class TaktHolidayCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -200,9 +199,9 @@ public class TaktHolidayCreateDto
     public string HolidayName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 假日类型（字典 hr_holiday_category）
+    /// 假日类型（字典 hr_holiday_category；0=法定 1=调休 2=公司）
     /// </summary>
-    public int HolidayType { get; set; }
+    public int HolidayType { get; set; } = 0;
 
     /// <summary>
     /// 假日开始日期
@@ -215,9 +214,9 @@ public class TaktHolidayCreateDto
     public DateTime EndDate { get; set; }
 
     /// <summary>
-    /// 是否工作日（字典 hr_holiday_working_day_type）
+    /// 是否工作日（字典 hr_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
     /// </summary>
-    public int IsWorkingDay { get; set; }
+    public int IsWorkingDay { get; set; } = 0;
 
     /// <summary>
     /// 假日问候语（简短，用于界面问候展示）
@@ -294,12 +293,22 @@ public class TaktHolidayTemplateDto
     public string? HolidayName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 假日类型（字典 hr_holiday_category）
+    /// 假日类型（字典 hr_holiday_category；0=法定 1=调休 2=公司）
     /// </summary>
     public int? HolidayType { get; set; }
 
     /// <summary>
-    /// 是否工作日（字典 hr_holiday_working_day_type）
+    /// 假日开始日期
+    /// </summary>
+    public DateTime? StartDate { get; set; }
+
+    /// <summary>
+    /// 假日结束日期
+    /// </summary>
+    public DateTime? EndDate { get; set; }
+
+    /// <summary>
+    /// 是否工作日（字典 hr_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
     /// </summary>
     public int? IsWorkingDay { get; set; }
 
@@ -346,7 +355,7 @@ public class TaktHolidayImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -356,12 +365,22 @@ public class TaktHolidayImportDto
     public string? HolidayName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 假日类型（字典 hr_holiday_category）
+    /// 假日类型（字典 hr_holiday_category；0=法定 1=调休 2=公司）
     /// </summary>
     public int? HolidayType { get; set; }
 
     /// <summary>
-    /// 是否工作日（字典 hr_holiday_working_day_type）
+    /// 假日开始日期
+    /// </summary>
+    public DateTime? StartDate { get; set; }
+
+    /// <summary>
+    /// 假日结束日期
+    /// </summary>
+    public DateTime? EndDate { get; set; }
+
+    /// <summary>
+    /// 是否工作日（字典 hr_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
     /// </summary>
     public int? IsWorkingDay { get; set; }
 
@@ -419,9 +438,9 @@ public class TaktHolidayExportDto
     public string HolidayName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 假日类型（字典 hr_holiday_category）
+    /// 假日类型（字典 hr_holiday_category；0=法定 1=调休 2=公司）
     /// </summary>
-    public int HolidayType { get; set; }
+    public int HolidayType { get; set; } = 0;
 
     /// <summary>
     /// 假日开始日期
@@ -434,9 +453,9 @@ public class TaktHolidayExportDto
     public DateTime EndDate { get; set; }
 
     /// <summary>
-    /// 是否工作日（字典 hr_holiday_working_day_type）
+    /// 是否工作日（字典 hr_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
     /// </summary>
-    public int IsWorkingDay { get; set; }
+    public int IsWorkingDay { get; set; } = 0;
 
     /// <summary>
     /// 假日问候语（简短，用于界面问候展示）
@@ -469,6 +488,7 @@ public class TaktHolidayExportDto
     public DateTime CreatedAt { get; set; }
 }
 
+
 // ========================================
 // 假日主题（登录前预览）
 // ========================================
@@ -490,7 +510,7 @@ public class TaktHolidayThemeDto
     public string HolidayName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 假日类型（字典 hr_holiday_category）
+    /// 假日类型（字典 hr_holiday_category；0=法定 1=调休 2=公司）
     /// </summary>
     public int HolidayType { get; set; } = 0;
 
@@ -505,7 +525,7 @@ public class TaktHolidayThemeDto
     public DateTime EndDate { get; set; }
 
     /// <summary>
-    /// 是否工作日（字典 hr_holiday_working_day_type）
+    /// 是否工作日（字典 hr_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
     /// </summary>
     public int IsWorkingDay { get; set; } = 0;
 

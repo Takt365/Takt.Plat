@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Sales
 // 文件名称：TaktSalesQuotationService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-07-01
 // 创建人：Takt365(Cursor AI)
 // 功能描述：销售报价应用服务实现
 // 
@@ -31,6 +31,7 @@ public class TaktSalesQuotationService : TaktServiceBase, ITaktSalesQuotationSer
 {
     private readonly ITaktCompanyRepository<TaktSalesQuotation> _salesQuotationRepository;
     private readonly ITaktCompanyRepository<TaktSalesQuotationItem> _salesQuotationItemRepository;
+    private readonly ITaktCompanyRepository<TaktSalesQuotationChangeLog> _salesQuotationChangeLogRepository;
     private readonly ITaktLineNumberGenerator _lineNumberGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
@@ -39,6 +40,7 @@ public class TaktSalesQuotationService : TaktServiceBase, ITaktSalesQuotationSer
     /// </summary>
     /// <param name="salesQuotationRepository">销售报价仓储</param>
     /// <param name="salesQuotationItemRepository">SalesQuotationItem仓储</param>
+    /// <param name="salesQuotationChangeLogRepository">SalesQuotationChangeLog仓储</param>
     /// <param name="lineNumberGenerator">明细行号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
@@ -46,6 +48,7 @@ public class TaktSalesQuotationService : TaktServiceBase, ITaktSalesQuotationSer
     public TaktSalesQuotationService(
         ITaktCompanyRepository<TaktSalesQuotation> salesQuotationRepository,
         ITaktCompanyRepository<TaktSalesQuotationItem> salesQuotationItemRepository,
+        ITaktCompanyRepository<TaktSalesQuotationChangeLog> salesQuotationChangeLogRepository,
         ITaktLineNumberGenerator lineNumberGenerator,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
@@ -54,6 +57,7 @@ public class TaktSalesQuotationService : TaktServiceBase, ITaktSalesQuotationSer
     {
         _salesQuotationRepository = salesQuotationRepository;
         _salesQuotationItemRepository = salesQuotationItemRepository;
+        _salesQuotationChangeLogRepository = salesQuotationChangeLogRepository;
         _lineNumberGenerator = lineNumberGenerator;
         _uniqueValidator = uniqueValidator;
     }
@@ -101,7 +105,7 @@ public class TaktSalesQuotationService : TaktServiceBase, ITaktSalesQuotationSer
     {
         EnsureThreeLayerContext();
         var list = await _salesQuotationRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.QuotationStatus == 1,
             x => x.CustomerName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
@@ -173,6 +177,7 @@ public class TaktSalesQuotationService : TaktServiceBase, ITaktSalesQuotationSer
             throw new TaktBusinessException("销售报价不存在或已删除");
         }
         await _salesQuotationItemRepository.DeleteAsync(x => x.SalesQuotationId == entity.Id);
+        await _salesQuotationChangeLogRepository.DeleteAsync(x => x.SalesQuotationId == entity.Id);
         var deleted = await _salesQuotationRepository.DeleteAsync(id);
         if (!deleted)
         {
@@ -306,7 +311,7 @@ public class TaktSalesQuotationService : TaktServiceBase, ITaktSalesQuotationSer
     // ========================================
 
     /// <summary>
-    /// 填充销售报价详情（加载 OneToMany 子表：销售报价明细）
+    /// 填充销售报价详情（加载 OneToMany 子表：销售报价明细、销售报价变更记录）
     /// </summary>
     /// <param name="dto">响应 DTO</param>
     /// <param name="entity">主表实体</param>
@@ -320,10 +325,13 @@ public class TaktSalesQuotationService : TaktServiceBase, ITaktSalesQuotationSer
         // 销售报价明细 → dto.Items
         var items = await _salesQuotationItemRepository.GetListAsync(x => x.SalesQuotationId == entity.Id);
         dto.Items = items.Adapt<List<TaktSalesQuotationItemDto>>();
+        // 销售报价变更记录 → dto.ChangeLogs
+        var changelogs = await _salesQuotationChangeLogRepository.GetListAsync(x => x.SalesQuotationId == entity.Id);
+        dto.ChangeLogs = changelogs.Adapt<List<TaktSalesQuotationChangeLogDto>>();
     }
 
     /// <summary>
-    /// 保存销售报价子表级联（销售报价明细；Create/Update 后按主表 Id 先删后插）
+    /// 保存销售报价子表级联（销售报价明细、销售报价变更记录；Create/Update 后按主表 Id 先删后插）
     /// </summary>
     /// <param name="entity">主表实体</param>
     /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
@@ -383,6 +391,24 @@ public class TaktSalesQuotationService : TaktServiceBase, ITaktSalesQuotationSer
             }
             await _salesQuotationItemRepository.CreateRangeAsync(items);
         }
+        // 销售报价变更记录（ChangeLogs）
+        if (dto.ChangeLogs is not { Count: > 0 })
+        {
+            await _salesQuotationChangeLogRepository.DeleteAsync(x => x.SalesQuotationId == entity.Id);
+        }
+        else
+        {
+            var changelogs = dto.ChangeLogs.Adapt<List<TaktSalesQuotationChangeLog>>();
+            foreach (var child in changelogs)
+            {
+                child.SalesQuotationId = entity.Id;
+            }
+            await _salesQuotationChangeLogRepository.DeleteAsync(x => x.SalesQuotationId == entity.Id);
+            foreach (var child in changelogs)
+            {
+            }
+            await _salesQuotationChangeLogRepository.CreateRangeAsync(changelogs);
+        }
     }
     // ========================================
     // 查询表达式
@@ -411,8 +437,8 @@ public class TaktSalesQuotationService : TaktServiceBase, ITaktSalesQuotationSer
                 || SqlFunc.ToString(x.DiscountAmount).Contains(keywords)
                 || SqlFunc.ToString(x.TaxAmount).Contains(keywords)
                 || SqlFunc.ToString(x.ActualAmount).Contains(keywords)
-                || SqlFunc.ToString(x.QuotationStatus).Contains(keywords)
                 || (x.SalesOrderCode != null && x.SalesOrderCode.Contains(keywords))
+                || SqlFunc.ToString(x.QuotationStatus).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.QuotationDate).Contains(keywords)
@@ -471,14 +497,14 @@ public class TaktSalesQuotationService : TaktServiceBase, ITaktSalesQuotationSer
             exp = exp.And(x => x.ActualAmount == queryDto.ActualAmount);
         }
 
-        if (queryDto?.QuotationStatus.HasValue == true)
-        {
-            exp = exp.And(x => x.QuotationStatus == queryDto.QuotationStatus);
-        }
-
         if (!string.IsNullOrEmpty(queryDto?.SalesOrderCode))
         {
             exp = exp.And(x => x.SalesOrderCode != null && x.SalesOrderCode.Contains(queryDto.SalesOrderCode));
+        }
+
+        if (queryDto?.QuotationStatus.HasValue == true)
+        {
+            exp = exp.And(x => x.QuotationStatus == queryDto.QuotationStatus);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

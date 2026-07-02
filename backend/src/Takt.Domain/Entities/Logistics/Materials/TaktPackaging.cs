@@ -26,13 +26,13 @@ namespace Takt.Domain.Entities.Logistics.Materials;
 public class TaktPackaging : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（关联到物料表）
+    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
     /// </summary>
     [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string MaterialCode { get; set; } = string.Empty;
@@ -62,9 +62,9 @@ public class TaktPackaging : TaktCompanyEntityBase
     public string? AdditionalCode { get; set; }
 
     /// <summary>
-    /// 原产国/地区编码（用于关税和贸易统计）
+    /// 原产国/地区编码（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）
     /// </summary>
-    [SugarColumn(ColumnName = "origin_country_region_code", ColumnDescription = "原产国/地区编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = true)]
+    [SugarColumn(ColumnName = "origin_country_region_code", ColumnDescription = "原产国/地区编码", ColumnDataType = "nvarchar", Length = 2, IsNullable = true)]
     public string? OriginCountryRegionCode { get; set; }
 
     /// <summary>
@@ -74,9 +74,9 @@ public class TaktPackaging : TaktCompanyEntityBase
     public string? OriginCountryRegionName { get; set; }
 
     /// <summary>
-    /// 目的国/地区编码（用于出口报关和贸易分析）
+    /// 目的国/地区编码（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）
     /// </summary>
-    [SugarColumn(ColumnName = "destination_country_region_code", ColumnDescription = "目的国/地区编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = true)]
+    [SugarColumn(ColumnName = "destination_country_region_code", ColumnDescription = "目的国/地区编码", ColumnDataType = "nvarchar", Length = 2, IsNullable = true)]
     public string? DestinationCountryRegionCode { get; set; }
 
     /// <summary>
@@ -110,7 +110,7 @@ public class TaktPackaging : TaktCompanyEntityBase
     public decimal? NetWeight { get; set; }
 
     /// <summary>
-    /// 重量单位（如：KG、G、T等）
+    /// 重量单位（字典 logistics_unit_of_measure_code，DictValue=KG/G/T 等；默认 KG）
     /// </summary>
     [SugarColumn(ColumnName = "weight_unit", ColumnDescription = "重量单位", ColumnDataType = "nvarchar", Length = 10, IsNullable = false, DefaultValue = "KG")]
     public string WeightUnit { get; set; } = "KG";
@@ -122,7 +122,7 @@ public class TaktPackaging : TaktCompanyEntityBase
     public decimal? BusinessVolume { get; set; }
 
     /// <summary>
-    /// 体积单位（如：M3、L、ML等）
+    /// 体积单位（字典 logistics_unit_of_measure_code，DictValue=M3/L/ML 等；默认 M3）
     /// </summary>
     [SugarColumn(ColumnName = "volume_unit", ColumnDescription = "体积单位", ColumnDataType = "nvarchar", Length = 10, IsNullable = false, DefaultValue = "M3")]
     public string VolumeUnit { get; set; } = "M3";
@@ -134,13 +134,13 @@ public class TaktPackaging : TaktCompanyEntityBase
     public string? SizeDimension { get; set; }
 
     /// <summary>
-    /// 包装类型（如：箱、托盘、袋、桶等，VERP=销售包装）
+    /// 包装类型（字典 logistics_material_type，DictValue=VERP 等；默认 VERP）
     /// </summary>
     [SugarColumn(ColumnName = "packaging_type", ColumnDescription = "包装类型", ColumnDataType = "nvarchar", Length = 50, IsNullable = false, DefaultValue = "VERP")]
     public string PackagingType { get; set; } = "VERP";
 
     /// <summary>
-    /// 包装单位（CAR=卡通箱；其他如：个、件等）
+    /// 包装单位（字典 logistics_unit_of_measure_code，DictValue=CAR/CT 等；默认 CAR）
     /// </summary>
     [SugarColumn(ColumnName = "packing_unit", ColumnDescription = "包装单位", ColumnDataType = "nvarchar", Length = 20, IsNullable = false, DefaultValue = "CAR")]
     public string PackingUnit { get; set; } = "CAR";

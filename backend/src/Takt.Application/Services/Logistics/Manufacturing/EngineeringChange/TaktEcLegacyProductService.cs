@@ -30,27 +30,27 @@ namespace Takt.Application.Services.Logistics.Manufacturing.EngineeringChange;
 public class TaktEcLegacyProductService : TaktServiceBase, ITaktEcLegacyProductService
 {
     private readonly ITaktCompanyRepository<TaktEcDetail> _ecDetailRepository;
-    private readonly ITaktCompanyRepository<TaktEcDept> _ecDeptRepository;
+    private readonly TaktEcExecDeptAccess _ecExecDeptAccess;
     private readonly ITaktLineNumberGenerator _lineNumberGenerator;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="ecDetailRepository">设变明细仓储</param>
-    /// <param name="ecDeptRepository">设变部门仓储</param>
+    /// <param name="ecExecDeptAccess">设变部门执行跨表访问</param>
     /// <param name="lineNumberGenerator">行号生成器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktEcLegacyProductService(
         ITaktCompanyRepository<TaktEcDetail> ecDetailRepository,
-        ITaktCompanyRepository<TaktEcDept> ecDeptRepository,
+        TaktEcExecDeptAccess ecExecDeptAccess,
         ITaktLineNumberGenerator lineNumberGenerator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
         _ecDetailRepository = ecDetailRepository;
-        _ecDeptRepository = ecDeptRepository;
+        _ecExecDeptAccess = ecExecDeptAccess;
         _lineNumberGenerator = lineNumberGenerator;
     }
 
@@ -110,27 +110,27 @@ public class TaktEcLegacyProductService : TaktServiceBase, ITaktEcLegacyProductS
         detail.IsEndOfLine = dto.IsEndOfLine;
         detail.Remark = dto.Remark;
         await _ecDetailRepository.UpdateAsync(detail);
-        var pmc = await _ecDeptRepository.FirstAsync(x =>
-            x.EcnDetailId == detail.Id && x.DeptCode == TaktEcDeptCodes.Pmc);
+        var pmcRepo = _ecExecDeptAccess.PmcRepository;
+        var pmc = await pmcRepo.FirstAsync(x => x.EcnDetailId == detail.Id);
         if (pmc == null)
         {
-            pmc = new TaktEcDept
+            pmc = new TaktEcSeikan
             {
                 EcnDetailId = detail.Id,
                 EcNo = detail.EcNo,
                 DeptCode = TaktEcDeptCodes.Pmc,
             };
-            var maxLine = await _ecDeptRepository.GetMaxIntAsync(
+            var maxLine = await pmcRepo.GetMaxIntAsync(
                 x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.EcnDetailId == detail.Id,
                 x => x.LineNumber);
             pmc.LineNumber = _lineNumberGenerator.GenerateNext(detail.Id.ToString(), maxLine);
             pmc.OldProductHandling = dto.OldProductHandling;
-            await _ecDeptRepository.CreateAsync(pmc);
+            await pmcRepo.CreateAsync(pmc);
         }
         else
         {
             pmc.OldProductHandling = dto.OldProductHandling;
-            await _ecDeptRepository.UpdateAsync(pmc);
+            await pmcRepo.UpdateAsync(pmc);
         }
         return await MapLegacyProductRowAsync(detail);
     }
@@ -169,8 +169,7 @@ public class TaktEcLegacyProductService : TaktServiceBase, ITaktEcLegacyProductS
     private async Task<TaktEcLegacyProductDto> MapLegacyProductRowAsync(TaktEcDetail detail)
     {
         var dto = detail.Adapt<TaktEcLegacyProductDto>();
-        var pmc = await _ecDeptRepository.FirstAsync(x =>
-            x.EcnDetailId == detail.Id && x.DeptCode == TaktEcDeptCodes.Pmc);
+        var pmc = await _ecExecDeptAccess.PmcRepository.FirstAsync(x => x.EcnDetailId == detail.Id);
         dto.OldProductHandling = pmc?.OldProductHandling;
         return dto;
     }

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Performance
 // 文件名称：TaktPerfAssessmentI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPerfAssessment 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktPerfAssessmentI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.perfassessment._self", "zh-HK", "员工绩效考核信息_hk", "实体名称"),
 
             // entity.perfassessment.employeeid
-            new TranslationSeedItem("entity.perfassessment.employeeid", "en-US", "员工ID_us", "员工 ID"),
+            new TranslationSeedItem("entity.perfassessment.employeeid", "en-US", "员工ID_us", "员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
             // entity.perfassessment.employeeid
-            new TranslationSeedItem("entity.perfassessment.employeeid", "ja-JP", "员工ID_jp", "员工 ID"),
+            new TranslationSeedItem("entity.perfassessment.employeeid", "ja-JP", "员工ID_jp", "员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
             // entity.perfassessment.employeeid
-            new TranslationSeedItem("entity.perfassessment.employeeid", "zh-CN", "员工ID", "员工 ID"),
+            new TranslationSeedItem("entity.perfassessment.employeeid", "zh-CN", "员工ID", "员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
             // entity.perfassessment.employeeid
-            new TranslationSeedItem("entity.perfassessment.employeeid", "zh-HK", "员工ID_hk", "员工 ID"),
+            new TranslationSeedItem("entity.perfassessment.employeeid", "zh-HK", "员工ID_hk", "员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
 
             // entity.perfassessment.employeename
             new TranslationSeedItem("entity.perfassessment.employeename", "en-US", "员工姓名_us", "员工姓名"),
@@ -127,13 +127,13 @@ public class TaktPerfAssessmentI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.perfassessment.assessmentdate", "zh-HK", "考核日期_hk", "考核日期"),
 
             // entity.perfassessment.schememetricid
-            new TranslationSeedItem("entity.perfassessment.schememetricid", "en-US", "方案指标ID_us", "方案指标 ID"),
+            new TranslationSeedItem("entity.perfassessment.schememetricid", "en-US", "方案指标ID_us", "方案指标（关联 TaktPerfScheme.Id，选项 TaktPerfSchemes/options）"),
             // entity.perfassessment.schememetricid
-            new TranslationSeedItem("entity.perfassessment.schememetricid", "ja-JP", "方案指标ID_jp", "方案指标 ID"),
+            new TranslationSeedItem("entity.perfassessment.schememetricid", "ja-JP", "方案指标ID_jp", "方案指标（关联 TaktPerfScheme.Id，选项 TaktPerfSchemes/options）"),
             // entity.perfassessment.schememetricid
-            new TranslationSeedItem("entity.perfassessment.schememetricid", "zh-CN", "方案指标ID", "方案指标 ID"),
+            new TranslationSeedItem("entity.perfassessment.schememetricid", "zh-CN", "方案指标ID", "方案指标（关联 TaktPerfScheme.Id，选项 TaktPerfSchemes/options）"),
             // entity.perfassessment.schememetricid
-            new TranslationSeedItem("entity.perfassessment.schememetricid", "zh-HK", "方案指标ID_hk", "方案指标 ID"),
+            new TranslationSeedItem("entity.perfassessment.schememetricid", "zh-HK", "方案指标ID_hk", "方案指标（关联 TaktPerfScheme.Id，选项 TaktPerfSchemes/options）"),
 
             // entity.perfassessment.selfscore
             new TranslationSeedItem("entity.perfassessment.selfscore", "en-US", "自评分数_us", "自评分数"),
@@ -181,22 +181,22 @@ public class TaktPerfAssessmentI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.perfassessment.finalscore", "zh-HK", "综合得分_hk", "综合得分"),
 
             // entity.perfassessment.performancegrade
-            new TranslationSeedItem("entity.perfassessment.performancegrade", "en-US", "绩效等级_us", "绩效等级（A/B/C/D/E）"),
+            new TranslationSeedItem("entity.perfassessment.performancegrade", "en-US", "绩效等级_us", "绩效等级（字典 hr_perf_grade；列存 DictValue：A/B/C/D/E）"),
             // entity.perfassessment.performancegrade
-            new TranslationSeedItem("entity.perfassessment.performancegrade", "ja-JP", "绩效等级_jp", "绩效等级（A/B/C/D/E）"),
+            new TranslationSeedItem("entity.perfassessment.performancegrade", "ja-JP", "绩效等级_jp", "绩效等级（字典 hr_perf_grade；列存 DictValue：A/B/C/D/E）"),
             // entity.perfassessment.performancegrade
-            new TranslationSeedItem("entity.perfassessment.performancegrade", "zh-CN", "绩效等级", "绩效等级（A/B/C/D/E）"),
+            new TranslationSeedItem("entity.perfassessment.performancegrade", "zh-CN", "绩效等级", "绩效等级（字典 hr_perf_grade；列存 DictValue：A/B/C/D/E）"),
             // entity.perfassessment.performancegrade
-            new TranslationSeedItem("entity.perfassessment.performancegrade", "zh-HK", "绩效等级_hk", "绩效等级（A/B/C/D/E）"),
+            new TranslationSeedItem("entity.perfassessment.performancegrade", "zh-HK", "绩效等级_hk", "绩效等级（字典 hr_perf_grade；列存 DictValue：A/B/C/D/E）"),
 
             // entity.perfassessment.reviewerid
-            new TranslationSeedItem("entity.perfassessment.reviewerid", "en-US", "评审人ID_us", "评审人 ID"),
+            new TranslationSeedItem("entity.perfassessment.reviewerid", "en-US", "评审人ID_us", "评审人（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
             // entity.perfassessment.reviewerid
-            new TranslationSeedItem("entity.perfassessment.reviewerid", "ja-JP", "评审人ID_jp", "评审人 ID"),
+            new TranslationSeedItem("entity.perfassessment.reviewerid", "ja-JP", "评审人ID_jp", "评审人（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
             // entity.perfassessment.reviewerid
-            new TranslationSeedItem("entity.perfassessment.reviewerid", "zh-CN", "评审人ID", "评审人 ID"),
+            new TranslationSeedItem("entity.perfassessment.reviewerid", "zh-CN", "评审人ID", "评审人（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
             // entity.perfassessment.reviewerid
-            new TranslationSeedItem("entity.perfassessment.reviewerid", "zh-HK", "评审人ID_hk", "评审人 ID"),
+            new TranslationSeedItem("entity.perfassessment.reviewerid", "zh-HK", "评审人ID_hk", "评审人（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
 
             // entity.perfassessment.interviewdate
             new TranslationSeedItem("entity.perfassessment.interviewdate", "en-US", "面谈日期_us", "面谈日期"),
@@ -216,23 +216,23 @@ public class TaktPerfAssessmentI18nSeedData : ITaktSeedDataCoordinator
             // entity.perfassessment.interviewnotes
             new TranslationSeedItem("entity.perfassessment.interviewnotes", "zh-HK", "面谈记录_hk", "面谈记录"),
 
-            // entity.perfassessment.assessmentstatus
-            new TranslationSeedItem("entity.perfassessment.assessmentstatus", "en-US", "状态_us", "状态（0=待自评 1=自评中 2=待主管评审 3=评审中 4=已完成 5=已确认）"),
-            // entity.perfassessment.assessmentstatus
-            new TranslationSeedItem("entity.perfassessment.assessmentstatus", "ja-JP", "状态_jp", "状态（0=待自评 1=自评中 2=待主管评审 3=评审中 4=已完成 5=已确认）"),
-            // entity.perfassessment.assessmentstatus
-            new TranslationSeedItem("entity.perfassessment.assessmentstatus", "zh-CN", "状态", "状态（0=待自评 1=自评中 2=待主管评审 3=评审中 4=已完成 5=已确认）"),
-            // entity.perfassessment.assessmentstatus
-            new TranslationSeedItem("entity.perfassessment.assessmentstatus", "zh-HK", "状态_hk", "状态（0=待自评 1=自评中 2=待主管评审 3=评审中 4=已完成 5=已确认）"),
+            // entity.perfassessment.relatedplant
+            new TranslationSeedItem("entity.perfassessment.relatedplant", "en-US", "关联工厂_us", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            // entity.perfassessment.relatedplant
+            new TranslationSeedItem("entity.perfassessment.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            // entity.perfassessment.relatedplant
+            new TranslationSeedItem("entity.perfassessment.relatedplant", "zh-CN", "关联工厂", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            // entity.perfassessment.relatedplant
+            new TranslationSeedItem("entity.perfassessment.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
 
-            // entity.perfassessment.relatedplant
-            new TranslationSeedItem("entity.perfassessment.relatedplant", "en-US", "关联工厂_us", "关联工厂"),
-            // entity.perfassessment.relatedplant
-            new TranslationSeedItem("entity.perfassessment.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂"),
-            // entity.perfassessment.relatedplant
-            new TranslationSeedItem("entity.perfassessment.relatedplant", "zh-CN", "关联工厂", "关联工厂"),
-            // entity.perfassessment.relatedplant
-            new TranslationSeedItem("entity.perfassessment.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂"),
+            // entity.perfassessment.assessmentstatus
+            new TranslationSeedItem("entity.perfassessment.assessmentstatus", "en-US", "状态_us", "状态（字典 hr_perf_assessment_status；0=待自评 1=自评中 2=待主管评审 3=评审中 4=已完成 5=已确认）"),
+            // entity.perfassessment.assessmentstatus
+            new TranslationSeedItem("entity.perfassessment.assessmentstatus", "ja-JP", "状态_jp", "状态（字典 hr_perf_assessment_status；0=待自评 1=自评中 2=待主管评审 3=评审中 4=已完成 5=已确认）"),
+            // entity.perfassessment.assessmentstatus
+            new TranslationSeedItem("entity.perfassessment.assessmentstatus", "zh-CN", "状态", "状态（字典 hr_perf_assessment_status；0=待自评 1=自评中 2=待主管评审 3=评审中 4=已完成 5=已确认）"),
+            // entity.perfassessment.assessmentstatus
+            new TranslationSeedItem("entity.perfassessment.assessmentstatus", "zh-HK", "状态_hk", "状态（字典 hr_perf_assessment_status；0=待自评 1=自评中 2=待主管评审 3=评审中 4=已完成 5=已确认）"),
         };
     }
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Defect
 // 文件名称：ITaktPcbaInspectionService.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-30
 // 创建人：Takt365(Cursor AI)
 // 功能描述：PCBA检查日报应用服务接口
 // 
@@ -71,13 +71,6 @@ public interface ITaktPcbaInspectionService
     Task DeletePcbaInspectionBatchAsync(IEnumerable<long> ids);
 
     /// <summary>
-    /// 更新PCBA检查日报状态
-    /// </summary>
-    /// <param name="dto">状态DTO</param>
-    /// <returns>DTO</returns>
-    Task<TaktPcbaInspectionDto> UpdatePcbaInspectionStatusAsync(TaktPcbaInspectionStatusDto dto);
-
-    /// <summary>
     /// 获取导入模板
     /// </summary>
     /// <param name="sheetName">工作表名称</param>
@@ -101,5 +94,12 @@ public interface ITaktPcbaInspectionService
     /// <param name="fileName">文件名</param>
     /// <returns>Excel 文件</returns>
     Task<(string fileName, byte[] fileContent)> ExportPcbaInspectionAsync(TaktPcbaInspectionQueryDto? query = null, string? sheetName = null, string? fileName = null);
+
+    /// <summary>
+    /// 获取 PCBA 检查统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>不良统计</returns>
+    Task<TaktPcbaInspectionStatDto> GetPcbaInspectionStatAsync(TaktDefectStatQueryDto queryDto);
 
 }

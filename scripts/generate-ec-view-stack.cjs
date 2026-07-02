@@ -15,7 +15,6 @@ const FE_TYPES = path.join(ROOT, 'frontend/src/types/logistics/manufacturing/eng
 const FE_VIEWS = path.join(ROOT, 'frontend/src/views/logistics/manufacturing/engineering-change');
 
 const DEPT_VIEWS = [
-  { slug: 'gijutsu', pascal: 'Gijutsu', deptCode: 'Eng', label: '技术部门' },
   { slug: 'koubai', pascal: 'Koubai', deptCode: 'Mp', label: '采购部门' },
   { slug: 'seikan', pascal: 'Seikan', deptCode: 'Pmc', label: '生管部门' },
   { slug: 'ukeken', pascal: 'Ukeken', deptCode: 'Iqc', label: '受检部门' },
@@ -105,11 +104,11 @@ public class TaktEc${v.pascal}Service : TaktEcDeptViewServiceBase, ITaktEc${v.pa
     /// </summary>
     public TaktEc${v.pascal}Service(
         ITaktCompanyRepository<TaktEcDetail> ecDetailRepository,
-        ITaktCompanyRepository<TaktEcDept> ecDeptRepository,
+        TaktEcExecPersistence ecExecPersistence,
         ITaktLineNumberGenerator lineNumberGenerator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
-        : base(TaktEcDeptCodes.${v.deptCode === 'Eng' ? 'Eng' : v.deptCode === 'Mp' ? 'Mp' : v.deptCode === 'Pmc' ? 'Pmc' : v.deptCode === 'Iqc' ? 'Iqc' : v.deptCode === 'Mc' ? 'Mc' : v.deptCode === 'Pcba' ? 'Pcba' : v.deptCode === 'Assy' ? 'Assy' : 'Qa'}, ecDetailRepository, ecDeptRepository, lineNumberGenerator, userContext, localizationService)
+        : base(TaktEcDeptCodes.${v.deptCode === 'Eng' ? 'Eng' : v.deptCode === 'Mp' ? 'Mp' : v.deptCode === 'Pmc' ? 'Pmc' : v.deptCode === 'Iqc' ? 'Iqc' : v.deptCode === 'Mc' ? 'Mc' : v.deptCode === 'Pcba' ? 'Pcba' : v.deptCode === 'Assy' ? 'Assy' : 'Qa'}, ecDetailRepository, ecExecPersistence, lineNumberGenerator, userContext, localizationService)
     {
     }
 
@@ -140,7 +139,7 @@ public class TaktEc${v.pascal}Service : TaktEcDeptViewServiceBase, ITaktEc${v.pa
 }
 
 function deptController(v) {
-  const perm = `logistics:manufacturing:engineeringchange:${v.slug.replace('-', '')}`;
+  const perm = `logistics:manufacturing:engineering:change:${v.slug.replace('-', '')}`;
   return `// ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Manufacturing.EngineeringChange
@@ -215,7 +214,7 @@ public class TaktEc${v.pascal}sController : TaktControllerBase
 
 function specialController(v) {
   const permSlug = v.slug === 'legacy-product' ? 'legacyproduct' : v.slug;
-  const perm = `logistics:manufacturing:engineeringchange:${permSlug}`;
+  const perm = `logistics:manufacturing:engineering:change:${permSlug}`;
   const updateBlock = v.updateMethod ? `
     /// <summary>更新${v.label}</summary>
     [TaktPermission("${perm}:update", "更新${v.label}")]
@@ -395,13 +394,13 @@ export interface EcKanbanQuery extends TaktPagedQuery {
   const fields = v.slug === 'batch'
     ? `ecDetailId: string; ecNo: string; lineNumber: number; ecModel: string; ecNewItem?: string; scheduledBatch?: string; productionBatch?: string; scheduledProductionDate?: string; productionDate?: string;`
     : v.slug === 'kakunin'
-      ? `ecDetailId: string; ecNo: string; lineNumber: number; ecModel: string; ecOldItem?: string; ecNewItem?: string; isCheck: number; isProcurement: number; ecChange?: string; ecNote?: string;`
-      : `ecDetailId: string; ecNo: string; lineNumber: number; ecModel: string; ecOldItem?: string; ecOldText?: string; ecOldQty?: number; ecNewItem?: string; oldProductHandling?: string; isEndOfLine: number;`;
+      ? `ecDetailId: string; ecNo: string; lineNumber: number; ecModel: string; ecOldItem?: string; ecNewItem?: string; isOldProcurement: number; isOldCheck: number; isNewProcurement: number; isNewCheck: number; ecChange?: string; ecNote?: string;`
+      : `ecDetailId: string; ecNo: string; lineNumber: number; ecModel: string; ecOldItem?: string; ecOldText?: string; ecOldUsage?: number; ecNewItem?: string; oldProductHandling?: string; isEndOfLine?: string;`;
   const updateFields = v.slug === 'batch'
     ? `scheduledBatch?: string; productionBatch?: string; scheduledProductionDate?: string; productionDate?: string;`
     : v.slug === 'kakunin'
-      ? `isCheck: number; isProcurement: number; ecNote?: string;`
-      : `oldProductHandling?: string; isEndOfLine: number; remark?: string;`;
+      ? `isOldProcurement: number; isOldCheck: number; isNewProcurement: number; isNewCheck: number; ecNote?: string;`
+      : `oldProductHandling?: string; isEndOfLine?: string; remark?: string;`;
   return `${typeFileHeader(v)}import type { CompanyDtoBase, TaktPagedQuery } from '@/types/common';
 
 export interface Ec${v.pascal} extends CompanyDtoBase {
@@ -411,7 +410,7 @@ export interface Ec${v.pascal} extends CompanyDtoBase {
 export interface Ec${v.pascal}Query extends TaktPagedQuery {
   ecNo?: string;
   ecModel?: string;
-  ${v.slug === 'batch' ? 'batchNo?: string;' : v.slug === 'kakunin' ? 'isCheck?: number; ecNewItem?: string;' : 'ecOldItem?: string;'}
+  ${v.slug === 'batch' ? 'batchNo?: string;' : v.slug === 'kakunin' ? 'isOldCheck?: number; isNewCheck?: number; ecNewItem?: string;' : 'ecOldItem?: string;'}
 }
 
 export interface Ec${v.pascal}Update {
@@ -423,7 +422,7 @@ export interface Ec${v.pascal}Update {
 
 function feIndexVue(v, isDept) {
   const permSlug = isDept ? v.slug : (v.slug === 'legacy-product' ? 'legacyproduct' : v.slug);
-  const perm = `logistics:manufacturing:engineeringchange:${permSlug}`;
+  const perm = `logistics:manufacturing:engineering:change:${permSlug}`;
   const listFn = isDept ? `getEc${v.pascal}List` : `getEc${v.pascal}List`;
   const updateFn = isDept ? `updateEc${v.pascal}` : (v.updateMethod ? `updateEc${v.pascal}` : null);
   const exportFn = isDept ? `exportEc${v.pascal}Data` : `exportEc${v.pascal}Data`;
@@ -849,8 +848,10 @@ defineExpose({ validate, getValues, resetFields });
     <a-row :gutter="24">
       <a-col :span="12"><a-form-item :label="t('entity.ec.ecno')"><a-input v-model:value="formState.ecNo" disabled /></a-form-item></a-col>
       <a-col :span="12"><a-form-item :label="t('entity.ecdetail.ecmodel')"><a-input v-model:value="formState.ecModel" disabled /></a-form-item></a-col>
-      <a-col :span="12"><a-form-item :label="t('entity.ecdetail.ischeck')"><TaktSelect v-model:value="formState.isCheck" dict-type="sys_yes_no" /></a-form-item></a-col>
-      <a-col :span="12"><a-form-item :label="t('entity.ecdetail.isprocurement')"><TaktSelect v-model:value="formState.isProcurement" dict-type="sys_yes_no" /></a-form-item></a-col>
+      <a-col :span="12"><a-form-item :label="t('entity.ecdetail.isoldcheck')"><TaktSelect v-model:value="formState.isOldCheck" dict-type="sys_yes_no" /></a-form-item></a-col>
+      <a-col :span="12"><a-form-item :label="t('entity.ecdetail.isoldprocurement')"><TaktSelect v-model:value="formState.isOldProcurement" dict-type="sys_yes_no" /></a-form-item></a-col>
+      <a-col :span="12"><a-form-item :label="t('entity.ecdetail.isnewcheck')"><TaktSelect v-model:value="formState.isNewCheck" dict-type="sys_yes_no" /></a-form-item></a-col>
+      <a-col :span="12"><a-form-item :label="t('entity.ecdetail.isnewprocurement')"><TaktSelect v-model:value="formState.isNewProcurement" dict-type="sys_yes_no" /></a-form-item></a-col>
       <a-col :span="24"><a-form-item :label="t('entity.ecdetail.ecnote')" :label-col="{ span: 3 }" :wrapper-col="{ span: 20 }"><a-textarea v-model:value="formState.ecNote" :rows="3" /></a-form-item></a-col>
     </a-row>
   </a-form>
@@ -865,8 +866,10 @@ const { t } = useI18n();
 const formRef = ref();
 const formState = reactive<EcKakuninUpdate & { ecNo?: string; ecModel?: string }>({
   ecDetailId: '',
-  isCheck: 0,
-  isProcurement: 0,
+  isOldProcurement: 0,
+  isOldCheck: 0,
+  isNewProcurement: 0,
+  isNewCheck: 0,
 });
 
 watch(() => props.formData, (val) => {
@@ -875,8 +878,10 @@ watch(() => props.formData, (val) => {
     ecDetailId: val.ecDetailId,
     ecNo: val.ecNo,
     ecModel: val.ecModel,
-    isCheck: val.isCheck ?? 0,
-    isProcurement: val.isProcurement ?? 0,
+    isOldProcurement: val.isOldProcurement ?? 0,
+    isOldCheck: val.isOldCheck ?? 0,
+    isNewProcurement: val.isNewProcurement ?? 0,
+    isNewCheck: val.isNewCheck ?? 0,
     ecNote: val.ecNote ?? '',
   });
 }, { immediate: true });
@@ -887,7 +892,7 @@ function getValues(): EcKakuninUpdate {
   return rest;
 }
 function resetFields() {
-  Object.assign(formState, { ecDetailId: '', isCheck: 0, isProcurement: 0, ecNote: '', ecNo: '', ecModel: '' });
+  Object.assign(formState, { ecDetailId: '', isOldProcurement: 0, isOldCheck: 0, isNewProcurement: 0, isNewCheck: 0, ecNote: '', ecNo: '', ecModel: '' });
 }
 defineExpose({ validate, getValues, resetFields });
 </script>
@@ -909,7 +914,7 @@ defineExpose({ validate, getValues, resetFields });
       <a-col :span="12"><a-form-item :label="t('entity.ec.ecno')"><a-input v-model:value="formState.ecNo" disabled /></a-form-item></a-col>
       <a-col :span="12"><a-form-item :label="t('entity.ecdetail.ecolditem')"><a-input v-model:value="formState.ecOldItem" disabled /></a-form-item></a-col>
       <a-col :span="12"><a-form-item :label="t('entity.ecdept.oldproducthandling')"><a-input v-model:value="formState.oldProductHandling" /></a-form-item></a-col>
-      <a-col :span="12"><a-form-item :label="t('entity.ecdetail.isendofline')"><TaktSelect v-model:value="formState.isEndOfLine" dict-type="sys_yes_no" /></a-form-item></a-col>
+      <a-col :span="12"><a-form-item :label="t('entity.ecdetail.isendofline')"><TaktSelect v-model:value="formState.isEndOfLine" dict-type="logistics_material_eol_status" allow-clear /></a-form-item></a-col>
       <a-col :span="24"><a-form-item :label="t('entity.ec.remark')" :label-col="{ span: 3 }" :wrapper-col="{ span: 20 }"><a-textarea v-model:value="formState.remark" :rows="3" /></a-form-item></a-col>
     </a-row>
   </a-form>
@@ -924,7 +929,7 @@ const { t } = useI18n();
 const formRef = ref();
 const formState = reactive<EcLegacyProductUpdate & { ecNo?: string; ecOldItem?: string }>({
   ecDetailId: '',
-  isEndOfLine: 0,
+  isEndOfLine: '',
   oldProductHandling: '',
 });
 
@@ -935,7 +940,7 @@ watch(() => props.formData, (val) => {
     ecNo: val.ecNo,
     ecOldItem: val.ecOldItem ?? '',
     oldProductHandling: val.oldProductHandling ?? '',
-    isEndOfLine: val.isEndOfLine ?? 0,
+    isEndOfLine: val.isEndOfLine ?? '',
     remark: val.remark ?? '',
   });
 }, { immediate: true });
@@ -946,7 +951,7 @@ function getValues(): EcLegacyProductUpdate {
   return rest;
 }
 function resetFields() {
-  Object.assign(formState, { ecDetailId: '', isEndOfLine: 0, oldProductHandling: '', remark: '', ecNo: '', ecOldItem: '' });
+  Object.assign(formState, { ecDetailId: '', isEndOfLine: '', oldProductHandling: '', remark: '', ecNo: '', ecOldItem: '' });
 }
 defineExpose({ validate, getValues, resetFields });
 </script>

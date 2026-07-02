@@ -11,6 +11,7 @@
 // ========================================
 
 import { getOAuthConfig } from '@/config/oauth';
+import { buildTaktClientProfileHeaders } from '@/utils/takt-client-profile';
 
 /**
  * OpenIddict 令牌响应
@@ -44,7 +45,10 @@ export async function exchangeAuthorizationCode(
 
   const response = await fetch(oauthConfig.tokenEndpoint, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      ...buildTaktClientProfileHeaders(),
+    },
     body,
   });
 
@@ -71,7 +75,10 @@ export async function refreshAccessToken(refreshToken: string): Promise<TaktOAut
 
   const response = await fetch(oauthConfig.tokenEndpoint, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      ...buildTaktClientProfileHeaders(),
+    },
     body,
   });
 

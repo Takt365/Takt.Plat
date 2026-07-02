@@ -1,10 +1,10 @@
-﻿// ========================================
+// ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/human-resource/compensation
 // 文件名称：emp-salary.d.ts
-// 创建时间：2026-06-12
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
-// 功能描述：human-resource/Payroll 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
+// 功能描述：human-resource/compensation 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -41,12 +41,12 @@ export interface EmpSalary extends CompanyDtoBase {
   /**
    * 关联薪酬体系 ID
    */
-  PayrollId?: string;
+  payrollId?: string;
 
   /**
    * 关联薪酬体系 名称（填充字段）
    */
-  PayrollName?: string;
+  payrollName?: string;
 
   /**
    * 关联薪级 ID
@@ -86,7 +86,7 @@ export interface EmpSalary extends CompanyDtoBase {
   /**
    * 授予股数/份数（股权激励定薪时使用）
    */
-  shareCount: number;
+  empSalaryShareCount: number;
 
   /**
    * 生效日期
@@ -136,7 +136,7 @@ export interface EmpSalaryQuery extends TaktPagedQuery {
   /**
    * 关联薪酬体系 ID
    */
-  PayrollId?: string;
+  payrollId?: string;
 
   /**
    * 关联薪级 ID
@@ -166,7 +166,7 @@ export interface EmpSalaryQuery extends TaktPagedQuery {
   /**
    * 授予股数/份数（股权激励定薪时使用）
    */
-  shareCount?: number;
+  empSalaryShareCount?: number;
 
   /**
    * 生效日期（范围查询-开始）
@@ -201,7 +201,7 @@ export interface EmpSalaryQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -228,7 +228,7 @@ export interface EmpSalaryCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -245,7 +245,7 @@ export interface EmpSalaryCreate {
   /**
    * 关联薪酬体系 ID
    */
-  PayrollId?: string;
+  payrollId?: string;
 
   /**
    * 关联薪级 ID
@@ -275,7 +275,7 @@ export interface EmpSalaryCreate {
   /**
    * 授予股数/份数（股权激励定薪时使用）
    */
-  shareCount: number;
+  empSalaryShareCount: number;
 
   /**
    * 生效日期
@@ -295,7 +295,7 @@ export interface EmpSalaryCreate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -368,7 +368,7 @@ export interface EmpSalaryTemplate {
   /**
    * 关联薪酬体系 ID
    */
-  PayrollId?: string;
+  payrollId?: string;
 
   /**
    * 关联薪级 ID
@@ -376,9 +376,34 @@ export interface EmpSalaryTemplate {
   payScaleId?: string;
 
   /**
+   * 基本工资（元）
+   */
+  baseSalary?: number;
+
+  /**
+   * 岗位工资（元）
+   */
+  positionSalary?: number;
+
+  /**
+   * 津贴合计（元）
+   */
+  allowanceTotal?: number;
+
+  /**
    * 关联薪资项目 ID（如股权激励项，对应 TaktSalaryItem 中 item_type 为股权激励的记录）
    */
   salaryItemId?: string;
+
+  /**
+   * 授予股数/份数（股权激励定薪时使用）
+   */
+  empSalaryShareCount?: number;
+
+  /**
+   * 生效日期
+   */
+  effectiveDate?: string;
 
   /**
    * 状态（字典 sys_normal_disable_status）
@@ -393,7 +418,7 @@ export interface EmpSalaryTemplate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -420,7 +445,7 @@ export interface EmpSalaryImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -437,7 +462,7 @@ export interface EmpSalaryImport {
   /**
    * 关联薪酬体系 ID
    */
-  PayrollId?: string;
+  payrollId?: string;
 
   /**
    * 关联薪级 ID
@@ -445,9 +470,34 @@ export interface EmpSalaryImport {
   payScaleId?: string;
 
   /**
+   * 基本工资（元）
+   */
+  baseSalary?: number;
+
+  /**
+   * 岗位工资（元）
+   */
+  positionSalary?: number;
+
+  /**
+   * 津贴合计（元）
+   */
+  allowanceTotal?: number;
+
+  /**
    * 关联薪资项目 ID（如股权激励项，对应 TaktSalaryItem 中 item_type 为股权激励的记录）
    */
   salaryItemId?: string;
+
+  /**
+   * 授予股数/份数（股权激励定薪时使用）
+   */
+  empSalaryShareCount?: number;
+
+  /**
+   * 生效日期
+   */
+  effectiveDate?: string;
 
   /**
    * 状态（字典 sys_normal_disable_status）
@@ -462,7 +512,7 @@ export interface EmpSalaryImport {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -501,7 +551,7 @@ export interface EmpSalaryExport {
   /**
    * 关联薪酬体系 ID
    */
-  PayrollId?: string;
+  payrollId?: string;
 
   /**
    * 关联薪级 ID
@@ -531,7 +581,7 @@ export interface EmpSalaryExport {
   /**
    * 授予股数/份数（股权激励定薪时使用）
    */
-  shareCount: number;
+  empSalaryShareCount: number;
 
   /**
    * 生效日期
@@ -551,7 +601,7 @@ export interface EmpSalaryExport {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注

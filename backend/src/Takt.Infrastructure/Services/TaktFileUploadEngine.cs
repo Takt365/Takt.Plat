@@ -13,6 +13,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using System.Collections.Concurrent;
 using System.Globalization;
 using Takt.Application.Services;
 using Takt.Domain.Interfaces;
@@ -36,6 +37,11 @@ namespace Takt.Infrastructure.Services;
 /// </remarks>
 public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngine
 {
+    /// <summary>
+    /// 分片临时文件写入锁（按绝对路径串行，防止并发上传同一 .part 导致 IOException）
+    /// </summary>
+    private static readonly ConcurrentDictionary<string, SemaphoreSlim> ChunkPartWriteLocks = new(StringComparer.OrdinalIgnoreCase);
+
     /// <summary>
     /// Web 宿主环境（解析 ContentRoot 与 wwwroot）
     /// </summary>
@@ -259,7 +265,7 @@ public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngin
 
                 if (plan != null)
                 {
-                    var expectedSize = TaktFileChunkPlanHelper.GetExpectedChunkSize(plan, chunkNumber);
+                    var expectedSize = TaktFileHelper.GetExpectedChunkSize(plan, chunkNumber);
                     if (GetFileSize(partPath) != expectedSize)
                     {
                         continue;
@@ -325,38 +331,47 @@ public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngin
         }
 
         var chunkPath = GetChunkPartPath(resolvedScope, request.Identifier, request.ChunkNumber);
-        var expectedSize = TaktFileChunkPlanHelper.GetExpectedChunkSize(plan, request.ChunkNumber);
-        if (FileExists(chunkPath) && GetFileSize(chunkPath) == expectedSize)
+        var expectedSize = TaktFileHelper.GetExpectedChunkSize(plan, request.ChunkNumber);
+        var chunkLock = ChunkPartWriteLocks.GetOrAdd(chunkPath, _ => new SemaphoreSlim(1, 1));
+        await chunkLock.WaitAsync(cancellationToken);
+        try
         {
-            return;
-        }
-
-        long actualLength = 0;
-        if (chunkStream.CanSeek)
-        {
-            actualLength = chunkStream.Length;
-        }
-        else
-        {
-            await WriteFileFromStreamAsync(chunkPath, chunkStream, createDirectory: true, cancellationToken);
-            actualLength = GetFileSize(chunkPath);
-        }
-
-        if (chunkStream.CanSeek)
-        {
-            if (actualLength != expectedSize)
+            if (FileExists(chunkPath) && GetFileSize(chunkPath) == expectedSize)
             {
-                ThrowLocalizedException(FileUploadChunkSizeMismatch);
+                return;
             }
 
-            await WriteFileFromStreamAsync(chunkPath, chunkStream, createDirectory: true, cancellationToken);
-            return;
-        }
+            long actualLength = 0;
+            if (chunkStream.CanSeek)
+            {
+                actualLength = chunkStream.Length;
+            }
+            else
+            {
+                await WriteFileFromStreamAsync(chunkPath, chunkStream, createDirectory: true, cancellationToken);
+                actualLength = GetFileSize(chunkPath);
+            }
 
-        if (actualLength != expectedSize)
+            if (chunkStream.CanSeek)
+            {
+                if (actualLength != expectedSize)
+                {
+                    ThrowLocalizedException(FileUploadChunkSizeMismatch);
+                }
+
+                await WriteFileFromStreamAsync(chunkPath, chunkStream, createDirectory: true, cancellationToken);
+                return;
+            }
+
+            if (actualLength != expectedSize)
+            {
+                DeleteFile(chunkPath, throwIfNotExists: false);
+                ThrowLocalizedException(FileUploadChunkSizeMismatch);
+            }
+        }
+        finally
         {
-            DeleteFile(chunkPath, throwIfNotExists: false);
-            ThrowLocalizedException(FileUploadChunkSizeMismatch);
+            chunkLock.Release();
         }
     }
 
@@ -467,7 +482,7 @@ public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngin
             : downloadFileName;
         var mime = string.IsNullOrWhiteSpace(contentType) ? GetMimeType(name) : contentType;
         cancellationToken.ThrowIfCancellationRequested();
-        if (descriptor.StorageType == TaktFileStorageConfigHelper.StorageTypeLocal)
+        if (descriptor.StorageType == TaktFileHelper.StorageTypeLocal)
         {
             var absolutePath = GetAbsoluteUploadPath(descriptor.FilePath);
             if (!FileExists(absolutePath))
@@ -483,12 +498,12 @@ public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngin
             });
         }
 
-        if (descriptor.StorageType == TaktFileStorageConfigHelper.StorageTypeOss)
+        if (descriptor.StorageType == TaktFileHelper.StorageTypeOss)
         {
             return OpenReadFromOssAsync(descriptor, name, mime, cancellationToken);
         }
 
-        if (descriptor.StorageType == TaktFileStorageConfigHelper.StorageTypeFtp)
+        if (descriptor.StorageType == TaktFileHelper.StorageTypeFtp)
         {
             return OpenReadFromFtpAsync(descriptor, name, mime, cancellationToken);
         }
@@ -508,7 +523,7 @@ public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngin
         CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(descriptor);
-        if (descriptor.StorageType == TaktFileStorageConfigHelper.StorageTypeLocal)
+        if (descriptor.StorageType == TaktFileHelper.StorageTypeLocal)
         {
             var absolutePath = GetAbsoluteUploadPath(descriptor.FilePath);
             cancellationToken.ThrowIfCancellationRequested();
@@ -516,13 +531,13 @@ public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngin
             return;
         }
 
-        if (descriptor.StorageType == TaktFileStorageConfigHelper.StorageTypeOss)
+        if (descriptor.StorageType == TaktFileHelper.StorageTypeOss)
         {
             await DeleteOssObjectAsync(descriptor, cancellationToken);
             return;
         }
 
-        if (descriptor.StorageType == TaktFileStorageConfigHelper.StorageTypeFtp)
+        if (descriptor.StorageType == TaktFileHelper.StorageTypeFtp)
         {
             await DeleteFtpObjectAsync(descriptor, cancellationToken);
             return;
@@ -545,17 +560,17 @@ public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngin
     {
         ArgumentNullException.ThrowIfNull(descriptor);
         ArgumentException.ThrowIfNullOrWhiteSpace(descriptor.FilePath);
-        if (descriptor.StorageType == TaktFileStorageConfigHelper.StorageTypeLocal)
+        if (descriptor.StorageType == TaktFileHelper.StorageTypeLocal)
         {
             return await MarkLocalStoredFileDeletedAsync(descriptor, cancellationToken);
         }
 
-        if (descriptor.StorageType == TaktFileStorageConfigHelper.StorageTypeOss)
+        if (descriptor.StorageType == TaktFileHelper.StorageTypeOss)
         {
             return await MarkOssStoredFileDeletedAsync(descriptor, cancellationToken);
         }
 
-        if (descriptor.StorageType == TaktFileStorageConfigHelper.StorageTypeFtp)
+        if (descriptor.StorageType == TaktFileHelper.StorageTypeFtp)
         {
             return await MarkFtpStoredFileDeletedAsync(descriptor, cancellationToken);
         }
@@ -643,7 +658,7 @@ public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngin
             FileUploadType = scope?.FileUploadType ?? TaktFileUploadType.Normal,
             TargetFileName = scope?.TargetFileName,
             StorageNaming = scope?.StorageNaming ?? 0,
-            StorageType = scope?.StorageType ?? TaktFileStorageConfigHelper.StorageTypeLocal,
+            StorageType = scope?.StorageType ?? TaktFileHelper.StorageTypeLocal,
             StorageConfig = scope?.StorageConfig,
         };
     }
@@ -707,7 +722,7 @@ public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngin
         string fileExtension,
         string fileHash,
         int fileCategory,
-        int storageType = TaktFileStorageConfigHelper.StorageTypeLocal,
+        int storageType = TaktFileHelper.StorageTypeLocal,
         string? storageConfig = null) =>
         new()
         {
@@ -809,7 +824,7 @@ public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngin
     /// <returns>访问 URL</returns>
     private static string BuildAccessUrl(string relativePath, int storageType, string? storageConfig)
     {
-        if (storageType == TaktFileStorageConfigHelper.StorageTypeFtp)
+        if (storageType == TaktFileHelper.StorageTypeFtp)
         {
             return $"/{relativePath.Replace('\\', '/').TrimStart('/')}";
         }
@@ -823,19 +838,36 @@ public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngin
     /// <param name="relativePath">存储相对路径</param>
     /// <returns>以 / 开头的 URL 路径</returns>
     private static string BuildAccessUrl(string relativePath) =>
-        BuildAccessUrl(relativePath, TaktFileStorageConfigHelper.StorageTypeLocal, null);
+        BuildAccessUrl(relativePath, TaktFileHelper.StorageTypeLocal, null);
 
     /// <summary>
-    /// 将相对路径解析为 wwwroot 下绝对路径（Path.GetFullPath 规范化）
+    /// 获取本地正式文件存储根目录（默认 wwwroot）
     /// </summary>
-    /// <param name="relativePath">相对 wwwroot 的路径</param>
+    /// <returns>存储根目录绝对路径</returns>
+    private string GetLocalUploadStorageRootPath() =>
+        TaktFileHelper.ResolveLocalUploadStorageRootPath(
+            _webHostEnvironment.ContentRootPath,
+            _uploadOptions.UploadStorageRootPath);
+
+    /// <summary>
+    /// 将相对路径解析为本地存储根目录下绝对路径（Path.GetFullPath 规范化）
+    /// </summary>
+    /// <param name="relativePath">相对存储根的路径（如 uploads/…）</param>
     /// <returns>本地绝对文件路径</returns>
     private string GetAbsoluteUploadPath(string relativePath)
     {
-        var wwwroot = GetWwwRootPath(_webHostEnvironment.ContentRootPath);
         var normalized = relativePath.Replace('/', Path.DirectorySeparatorChar);
-        return Path.GetFullPath(Path.Combine(wwwroot, normalized));
+        return Path.GetFullPath(Path.Combine(GetLocalUploadStorageRootPath(), normalized));
     }
+
+    /// <summary>
+    /// 获取分片临时根目录（默认 wwwroot）
+    /// </summary>
+    /// <returns>分片临时根目录绝对路径</returns>
+    private string GetChunkStorageRootPath() =>
+        TaktFileHelper.ResolveChunkStorageRootPath(
+            _webHostEnvironment.ContentRootPath,
+            _uploadOptions.ChunkStorageRootPath);
 
     /// <summary>
     /// 获取分片临时目录绝对路径
@@ -845,9 +877,8 @@ public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngin
     /// <returns>分片目录绝对路径</returns>
     private string GetChunkDirectory(TaktFileUploadScope scope, string identifier)
     {
-        var wwwroot = GetWwwRootPath(_webHostEnvironment.ContentRootPath);
         return Path.Combine(
-            wwwroot,
+            GetChunkStorageRootPath(),
             GetNormalizedChunkRelativePath(),
             scope.TenantCode,
             scope.CompanyCode,
@@ -919,7 +950,7 @@ public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngin
         long declaredChunkSize,
         long actualChunkSize)
     {
-        if (!TaktFileChunkPlanHelper.IsChunkMetadataValid(
+        if (!TaktFileHelper.IsChunkMetadataValid(
                 plan,
                 totalChunks,
                 chunkNumber,
@@ -944,7 +975,7 @@ public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngin
     {
         try
         {
-            return TaktFileChunkPlanHelper.Resolve(_uploadOptions, totalSizeBytes);
+            return TaktFileHelper.ResolveChunkPlan(_uploadOptions, totalSizeBytes);
         }
         catch (ArgumentOutOfRangeException)
         {
@@ -1061,17 +1092,17 @@ public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngin
         CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(localResult);
-        if (scope.StorageType == TaktFileStorageConfigHelper.StorageTypeLocal)
+        if (scope.StorageType == TaktFileHelper.StorageTypeLocal)
         {
             return localResult;
         }
 
-        var objectKey = TaktFileStorageConfigHelper.NormalizeRemoteObjectKey(localResult.FilePath);
+        var objectKey = TaktFileHelper.NormalizeRemoteObjectKey(localResult.FilePath);
         try
         {
-            if (scope.StorageType == TaktFileStorageConfigHelper.StorageTypeOss)
+            if (scope.StorageType == TaktFileHelper.StorageTypeOss)
             {
-                var provider = TaktFileStorageConfigHelper.ResolveOssProvider(scope.StorageConfig);
+                var provider = TaktFileHelper.ResolveOssProvider(scope.StorageConfig);
                 if (!TaktOssHelper.IsSupportedProvider(provider))
                 {
                     ThrowLocalizedException(FileStorageProviderUnsupported);
@@ -1086,19 +1117,19 @@ public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngin
                     contentType,
                     cancellationToken);
                 DeleteFile(absoluteLocalPath, throwIfNotExists: false);
-                localResult.StorageType = TaktFileStorageConfigHelper.StorageTypeOss;
+                localResult.StorageType = TaktFileHelper.StorageTypeOss;
                 localResult.StorageConfig = scope.StorageConfig;
                 localResult.AccessUrl = TaktOssHelper.BuildPublicObjectUrl(ossOptions, objectKey);
                 return localResult;
             }
 
-            if (scope.StorageType == TaktFileStorageConfigHelper.StorageTypeFtp)
+            if (scope.StorageType == TaktFileHelper.StorageTypeFtp)
             {
                 await PublishLocalFileToFtpAsync(scope.StorageConfig, absoluteLocalPath, objectKey, cancellationToken);
                 DeleteFile(absoluteLocalPath, throwIfNotExists: false);
-                localResult.StorageType = TaktFileStorageConfigHelper.StorageTypeFtp;
+                localResult.StorageType = TaktFileHelper.StorageTypeFtp;
                 localResult.StorageConfig = scope.StorageConfig;
-                localResult.AccessUrl = BuildAccessUrl(objectKey, TaktFileStorageConfigHelper.StorageTypeFtp, scope.StorageConfig);
+                localResult.AccessUrl = BuildAccessUrl(objectKey, TaktFileHelper.StorageTypeFtp, scope.StorageConfig);
                 return localResult;
             }
 
@@ -1121,14 +1152,14 @@ public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngin
         string contentType,
         CancellationToken cancellationToken)
     {
-        var provider = TaktFileStorageConfigHelper.ResolveOssProvider(descriptor.StorageConfig);
+        var provider = TaktFileHelper.ResolveOssProvider(descriptor.StorageConfig);
         if (!TaktOssHelper.IsSupportedProvider(provider))
         {
             ThrowLocalizedException(FileStorageProviderUnsupported);
         }
 
         var ossOptions = TaktOssHelper.GetOssOptionsFromConfiguration(_configuration, provider);
-        var objectKey = TaktFileStorageConfigHelper.NormalizeRemoteObjectKey(descriptor.FilePath);
+        var objectKey = TaktFileHelper.NormalizeRemoteObjectKey(descriptor.FilePath);
         if (!await TaktOssHelper.ObjectExistsAsync(ossOptions, objectKey, cancellationToken))
         {
             ThrowLocalizedException(FilePhysicalNotFound);
@@ -1153,7 +1184,7 @@ public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngin
         CancellationToken cancellationToken)
     {
         var ftpOptions = ResolveFtpOptions(descriptor.StorageConfig);
-        var remotePath = TaktFileStorageConfigHelper.NormalizeRemoteObjectKey(descriptor.FilePath);
+        var remotePath = TaktFileHelper.NormalizeRemoteObjectKey(descriptor.FilePath);
         if (!await TaktFtpHelper.FileExistsAsync(ftpOptions, remotePath))
         {
             ThrowLocalizedException(FilePhysicalNotFound);
@@ -1178,7 +1209,7 @@ public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngin
     /// <returns>FTP 连接配置</returns>
     private TaktFtpOptions ResolveFtpOptions(string? storageConfig)
     {
-        var provider = TaktFileStorageConfigHelper.ResolveFtpProvider(storageConfig);
+        var provider = TaktFileHelper.ResolveFtpProvider(storageConfig);
         return TaktFtpHelper.GetFtpOptionsFromConfiguration(_configuration, provider);
     }
 
@@ -1210,13 +1241,13 @@ public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngin
     /// <returns>本地绝对路径</returns>
     private string GetLocalWriteAbsolutePath(TaktFileUploadScope scope, string relativePath)
     {
-        if (scope.StorageType == TaktFileStorageConfigHelper.StorageTypeLocal)
+        if (scope.StorageType == TaktFileHelper.StorageTypeLocal)
         {
             return GetAbsoluteUploadPath(relativePath);
         }
 
         var stagingRoot = Path.Combine(
-            GetWwwRootPath(_webHostEnvironment.ContentRootPath),
+            GetChunkStorageRootPath(),
             GetNormalizedChunkRelativePath(),
             "_staging");
         var normalized = relativePath.Replace('/', Path.DirectorySeparatorChar);
@@ -1235,14 +1266,14 @@ public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngin
     /// </summary>
     private async Task DeleteOssObjectAsync(TaktFileStorageDescriptor descriptor, CancellationToken cancellationToken)
     {
-        var provider = TaktFileStorageConfigHelper.ResolveOssProvider(descriptor.StorageConfig);
+        var provider = TaktFileHelper.ResolveOssProvider(descriptor.StorageConfig);
         if (!TaktOssHelper.IsSupportedProvider(provider))
         {
             ThrowLocalizedException(FileStorageProviderUnsupported);
         }
 
         var ossOptions = TaktOssHelper.GetOssOptionsFromConfiguration(_configuration, provider);
-        var objectKey = TaktFileStorageConfigHelper.NormalizeRemoteObjectKey(descriptor.FilePath);
+        var objectKey = TaktFileHelper.NormalizeRemoteObjectKey(descriptor.FilePath);
         await TaktOssHelper.DeleteObjectAsync(ossOptions, objectKey, cancellationToken);
     }
 
@@ -1252,7 +1283,7 @@ public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngin
     private async Task DeleteFtpObjectAsync(TaktFileStorageDescriptor descriptor, CancellationToken cancellationToken)
     {
         var ftpOptions = ResolveFtpOptions(descriptor.StorageConfig);
-        var remotePath = TaktFileStorageConfigHelper.NormalizeRemoteObjectKey(descriptor.FilePath);
+        var remotePath = TaktFileHelper.NormalizeRemoteObjectKey(descriptor.FilePath);
         cancellationToken.ThrowIfCancellationRequested();
         await TaktFtpHelper.DeleteFileAsync(ftpOptions, remotePath);
     }
@@ -1271,21 +1302,21 @@ public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngin
             return relativePath;
         }
 
-        var provider = TaktFileStorageConfigHelper.ResolveOssProvider(descriptor.StorageConfig);
+        var provider = TaktFileHelper.ResolveOssProvider(descriptor.StorageConfig);
         if (!TaktOssHelper.IsSupportedProvider(provider))
         {
             ThrowLocalizedException(FileStorageProviderUnsupported);
         }
 
         var ossOptions = TaktOssHelper.GetOssOptionsFromConfiguration(_configuration, provider);
-        var sourceKey = TaktFileStorageConfigHelper.NormalizeRemoteObjectKey(relativePath);
+        var sourceKey = TaktFileHelper.NormalizeRemoteObjectKey(relativePath);
         if (!await TaktOssHelper.ObjectExistsAsync(ossOptions, sourceKey, cancellationToken))
         {
             return BuildDeletedPhysicalRelativePath(relativePath);
         }
 
         var deletedRelativePath = BuildDeletedPhysicalRelativePath(relativePath);
-        var deletedKey = TaktFileStorageConfigHelper.NormalizeRemoteObjectKey(deletedRelativePath);
+        var deletedKey = TaktFileHelper.NormalizeRemoteObjectKey(deletedRelativePath);
         var attempt = 0;
         while (await TaktOssHelper.ObjectExistsAsync(ossOptions, deletedKey, cancellationToken) && attempt < 100)
         {
@@ -1299,7 +1330,7 @@ public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngin
             deletedRelativePath = string.IsNullOrWhiteSpace(directory)
                 ? suffixedFileName
                 : $"{directory.Replace('\\', '/')}/{suffixedFileName}";
-            deletedKey = TaktFileStorageConfigHelper.NormalizeRemoteObjectKey(deletedRelativePath);
+            deletedKey = TaktFileHelper.NormalizeRemoteObjectKey(deletedRelativePath);
         }
 
         if (await TaktOssHelper.ObjectExistsAsync(ossOptions, deletedKey, cancellationToken))
@@ -1327,7 +1358,7 @@ public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngin
         }
 
         var ftpOptions = ResolveFtpOptions(descriptor.StorageConfig);
-        var sourcePath = TaktFileStorageConfigHelper.NormalizeRemoteObjectKey(relativePath);
+        var sourcePath = TaktFileHelper.NormalizeRemoteObjectKey(relativePath);
         cancellationToken.ThrowIfCancellationRequested();
         if (!await TaktFtpHelper.FileExistsAsync(ftpOptions, sourcePath))
         {
@@ -1335,7 +1366,7 @@ public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngin
         }
 
         var deletedRelativePath = BuildDeletedPhysicalRelativePath(relativePath);
-        var deletedPath = TaktFileStorageConfigHelper.NormalizeRemoteObjectKey(deletedRelativePath);
+        var deletedPath = TaktFileHelper.NormalizeRemoteObjectKey(deletedRelativePath);
         var attempt = 0;
         while (await TaktFtpHelper.FileExistsAsync(ftpOptions, deletedPath) && attempt < 100)
         {
@@ -1349,7 +1380,7 @@ public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngin
             deletedRelativePath = string.IsNullOrWhiteSpace(directory)
                 ? suffixedFileName
                 : $"{directory.Replace('\\', '/')}/{suffixedFileName}";
-            deletedPath = TaktFileStorageConfigHelper.NormalizeRemoteObjectKey(deletedRelativePath);
+            deletedPath = TaktFileHelper.NormalizeRemoteObjectKey(deletedRelativePath);
         }
 
         if (await TaktFtpHelper.FileExistsAsync(ftpOptions, deletedPath))

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Scheduling
 // 文件名称：TaktApsOperationDtos.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ApsOperation 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktApsOperation 生成，请按需审阅）
 // 
@@ -57,7 +57,7 @@ public class TaktApsOperationDto : TaktCompanyDtoBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 工艺路线工序 ID（关联 TaktRoutingItem）
+    /// 工艺路线工序 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RoutingItemId { get; set; }
@@ -78,12 +78,12 @@ public class TaktApsOperationDto : TaktCompanyDtoBase
     public string? ProcessName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作中心编码
+    /// 工作中心编码（关联 TaktWorkCenter.WorkCenterCode，选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
     /// </summary>
     public string? WorkCenterCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作中心资源 ID（可选）
+    /// 工作中心资源 ID（关联 TaktWorkCenterResource.Id，选项 TaktWorkCenterResources/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? WorkCenterResourceId { get; set; }
@@ -157,7 +157,7 @@ public class TaktApsOperationQueryDto : TaktPagedQuery
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 工艺路线工序 ID（关联 TaktRoutingItem）
+    /// 工艺路线工序 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RoutingItemId { get; set; }
@@ -173,12 +173,12 @@ public class TaktApsOperationQueryDto : TaktPagedQuery
     public string? ProcessName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作中心编码
+    /// 工作中心编码（关联 TaktWorkCenter.WorkCenterCode，选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
     /// </summary>
     public string? WorkCenterCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作中心资源 ID（可选）
+    /// 工作中心资源 ID（关联 TaktWorkCenterResource.Id，选项 TaktWorkCenterResources/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? WorkCenterResourceId { get; set; }
@@ -259,7 +259,7 @@ public class TaktApsOperationCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -281,7 +281,7 @@ public class TaktApsOperationCreateDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 工艺路线工序 ID（关联 TaktRoutingItem）
+    /// 工艺路线工序 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RoutingItemId { get; set; }
@@ -298,12 +298,12 @@ public class TaktApsOperationCreateDto
     public string? ProcessName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作中心编码
+    /// 工作中心编码（关联 TaktWorkCenter.WorkCenterCode，选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
     /// </summary>
     public string? WorkCenterCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作中心资源 ID（可选）
+    /// 工作中心资源 ID（关联 TaktWorkCenterResource.Id，选项 TaktWorkCenterResources/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? WorkCenterResourceId { get; set; }
@@ -425,7 +425,7 @@ public class TaktApsOperationTemplateDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 工艺路线工序 ID（关联 TaktRoutingItem）
+    /// 工艺路线工序 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RoutingItemId { get; set; }
@@ -441,15 +441,35 @@ public class TaktApsOperationTemplateDto
     public string? ProcessName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作中心编码
+    /// 工作中心编码（关联 TaktWorkCenter.WorkCenterCode，选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
     /// </summary>
     public string? WorkCenterCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作中心资源 ID（可选）
+    /// 工作中心资源 ID（关联 TaktWorkCenterResource.Id，选项 TaktWorkCenterResources/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? WorkCenterResourceId { get; set; }
+
+    /// <summary>
+    /// 计划开始时间
+    /// </summary>
+    public DateTime? PlannedStartTime { get; set; }
+
+    /// <summary>
+    /// 计划结束时间
+    /// </summary>
+    public DateTime? PlannedEndTime { get; set; }
+
+    /// <summary>
+    /// 计划工时（分钟）
+    /// </summary>
+    public decimal? PlannedDurationMinutes { get; set; }
+
+    /// <summary>
+    /// 换型时间（分钟）
+    /// </summary>
+    public decimal? ChangeoverMinutes { get; set; }
 
     /// <summary>
     /// 工序状态（字典 aps_operation_status；0=待排程，1=已排程，2=执行中，3=已完成）
@@ -484,7 +504,7 @@ public class TaktApsOperationImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -505,7 +525,7 @@ public class TaktApsOperationImportDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 工艺路线工序 ID（关联 TaktRoutingItem）
+    /// 工艺路线工序 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RoutingItemId { get; set; }
@@ -521,15 +541,35 @@ public class TaktApsOperationImportDto
     public string? ProcessName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作中心编码
+    /// 工作中心编码（关联 TaktWorkCenter.WorkCenterCode，选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
     /// </summary>
     public string? WorkCenterCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作中心资源 ID（可选）
+    /// 工作中心资源 ID（关联 TaktWorkCenterResource.Id，选项 TaktWorkCenterResources/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? WorkCenterResourceId { get; set; }
+
+    /// <summary>
+    /// 计划开始时间
+    /// </summary>
+    public DateTime? PlannedStartTime { get; set; }
+
+    /// <summary>
+    /// 计划结束时间
+    /// </summary>
+    public DateTime? PlannedEndTime { get; set; }
+
+    /// <summary>
+    /// 计划工时（分钟）
+    /// </summary>
+    public decimal? PlannedDurationMinutes { get; set; }
+
+    /// <summary>
+    /// 换型时间（分钟）
+    /// </summary>
+    public decimal? ChangeoverMinutes { get; set; }
 
     /// <summary>
     /// 工序状态（字典 aps_operation_status；0=待排程，1=已排程，2=执行中，3=已完成）
@@ -586,7 +626,7 @@ public class TaktApsOperationExportDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 工艺路线工序 ID（关联 TaktRoutingItem）
+    /// 工艺路线工序 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RoutingItemId { get; set; }
@@ -602,12 +642,12 @@ public class TaktApsOperationExportDto
     public string? ProcessName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作中心编码
+    /// 工作中心编码（关联 TaktWorkCenter.WorkCenterCode，选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
     /// </summary>
     public string? WorkCenterCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作中心资源 ID（可选）
+    /// 工作中心资源 ID（关联 TaktWorkCenterResource.Id，选项 TaktWorkCenterResources/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? WorkCenterResourceId { get; set; }

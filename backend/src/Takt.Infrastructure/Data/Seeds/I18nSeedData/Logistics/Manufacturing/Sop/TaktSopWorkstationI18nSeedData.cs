@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopWorkstationI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSopWorkstation 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktSopWorkstationI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.sopworkstation._self", "zh-HK", "SOP 工位主数据信息_hk", "实体名称"),
 
             // entity.sopworkstation.plantcode
-            new TranslationSeedItem("entity.sopworkstation.plantcode", "en-US", "工厂代码_us", "工厂代码"),
+            new TranslationSeedItem("entity.sopworkstation.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
             // entity.sopworkstation.plantcode
-            new TranslationSeedItem("entity.sopworkstation.plantcode", "ja-JP", "工厂代码_jp", "工厂代码"),
+            new TranslationSeedItem("entity.sopworkstation.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
             // entity.sopworkstation.plantcode
-            new TranslationSeedItem("entity.sopworkstation.plantcode", "zh-CN", "工厂代码", "工厂代码"),
+            new TranslationSeedItem("entity.sopworkstation.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
             // entity.sopworkstation.plantcode
-            new TranslationSeedItem("entity.sopworkstation.plantcode", "zh-HK", "工厂代码_hk", "工厂代码"),
+            new TranslationSeedItem("entity.sopworkstation.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
 
             // entity.sopworkstation.workstationcode
             new TranslationSeedItem("entity.sopworkstation.workstationcode", "en-US", "工位编码_us", "工位编码（工厂内唯一）"),
@@ -118,49 +118,49 @@ public class TaktSopWorkstationI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.sopworkstation.workstationname", "zh-HK", "工位名称_hk", "工位名称"),
 
             // entity.sopworkstation.workcenter
-            new TranslationSeedItem("entity.sopworkstation.workcenter", "en-US", "工作中心_us", "工作中心"),
+            new TranslationSeedItem("entity.sopworkstation.workcenter", "en-US", "工作中心_us", "工作中心（关联 TaktWorkCenter.WorkCenterCode，选项 TaktWorkCenters/options，DictValue=WorkCenterCode）"),
             // entity.sopworkstation.workcenter
-            new TranslationSeedItem("entity.sopworkstation.workcenter", "ja-JP", "工作中心_jp", "工作中心"),
+            new TranslationSeedItem("entity.sopworkstation.workcenter", "ja-JP", "工作中心_jp", "工作中心（关联 TaktWorkCenter.WorkCenterCode，选项 TaktWorkCenters/options，DictValue=WorkCenterCode）"),
             // entity.sopworkstation.workcenter
-            new TranslationSeedItem("entity.sopworkstation.workcenter", "zh-CN", "工作中心", "工作中心"),
+            new TranslationSeedItem("entity.sopworkstation.workcenter", "zh-CN", "工作中心", "工作中心（关联 TaktWorkCenter.WorkCenterCode，选项 TaktWorkCenters/options，DictValue=WorkCenterCode）"),
             // entity.sopworkstation.workcenter
-            new TranslationSeedItem("entity.sopworkstation.workcenter", "zh-HK", "工作中心_hk", "工作中心"),
+            new TranslationSeedItem("entity.sopworkstation.workcenter", "zh-HK", "工作中心_hk", "工作中心（关联 TaktWorkCenter.WorkCenterCode，选项 TaktWorkCenters/options，DictValue=WorkCenterCode）"),
 
             // entity.sopworkstation.productionline
-            new TranslationSeedItem("entity.sopworkstation.productionline", "en-US", "生产线_us", "生产线"),
+            new TranslationSeedItem("entity.sopworkstation.productionline", "en-US", "生产班组_us", "生产班组"),
             // entity.sopworkstation.productionline
-            new TranslationSeedItem("entity.sopworkstation.productionline", "ja-JP", "生产线_jp", "生产线"),
+            new TranslationSeedItem("entity.sopworkstation.productionline", "ja-JP", "生产班组_jp", "生产班组"),
             // entity.sopworkstation.productionline
-            new TranslationSeedItem("entity.sopworkstation.productionline", "zh-CN", "生产线", "生产线"),
+            new TranslationSeedItem("entity.sopworkstation.productionline", "zh-CN", "生产班组", "生产班组"),
             // entity.sopworkstation.productionline
-            new TranslationSeedItem("entity.sopworkstation.productionline", "zh-HK", "生产线_hk", "生产线"),
+            new TranslationSeedItem("entity.sopworkstation.productionline", "zh-HK", "生产班组_hk", "生产班组"),
 
             // entity.sopworkstation.workstationtype
-            new TranslationSeedItem("entity.sopworkstation.workstationtype", "en-US", "工位类型_us", "工位类型（1=装配，2=检验，3=包装，4=测试，5=其他；字典 sys_workstation_type）"),
+            new TranslationSeedItem("entity.sopworkstation.workstationtype", "en-US", "工位类型_us", "工位类型（字典 sys_workstation_type；1=装配，2=检验，3=包装，4=测试，5=其他）"),
             // entity.sopworkstation.workstationtype
-            new TranslationSeedItem("entity.sopworkstation.workstationtype", "ja-JP", "工位类型_jp", "工位类型（1=装配，2=检验，3=包装，4=测试，5=其他；字典 sys_workstation_type）"),
+            new TranslationSeedItem("entity.sopworkstation.workstationtype", "ja-JP", "工位类型_jp", "工位类型（字典 sys_workstation_type；1=装配，2=检验，3=包装，4=测试，5=其他）"),
             // entity.sopworkstation.workstationtype
-            new TranslationSeedItem("entity.sopworkstation.workstationtype", "zh-CN", "工位类型", "工位类型（1=装配，2=检验，3=包装，4=测试，5=其他；字典 sys_workstation_type）"),
+            new TranslationSeedItem("entity.sopworkstation.workstationtype", "zh-CN", "工位类型", "工位类型（字典 sys_workstation_type；1=装配，2=检验，3=包装，4=测试，5=其他）"),
             // entity.sopworkstation.workstationtype
-            new TranslationSeedItem("entity.sopworkstation.workstationtype", "zh-HK", "工位类型_hk", "工位类型（1=装配，2=检验，3=包装，4=测试，5=其他；字典 sys_workstation_type）"),
+            new TranslationSeedItem("entity.sopworkstation.workstationtype", "zh-HK", "工位类型_hk", "工位类型（字典 sys_workstation_type；1=装配，2=检验，3=包装，4=测试，5=其他）"),
 
             // entity.sopworkstation.processsegmenttype
-            new TranslationSeedItem("entity.sopworkstation.processsegmenttype", "en-US", "工艺段类型_us", "工艺段类型（1=SMT，2=自插，3=手插，4=修正，5=总装；字典 logistics_process_segment_type）"),
+            new TranslationSeedItem("entity.sopworkstation.processsegmenttype", "en-US", "工艺段类型_us", "工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）"),
             // entity.sopworkstation.processsegmenttype
-            new TranslationSeedItem("entity.sopworkstation.processsegmenttype", "ja-JP", "工艺段类型_jp", "工艺段类型（1=SMT，2=自插，3=手插，4=修正，5=总装；字典 logistics_process_segment_type）"),
+            new TranslationSeedItem("entity.sopworkstation.processsegmenttype", "ja-JP", "工艺段类型_jp", "工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）"),
             // entity.sopworkstation.processsegmenttype
-            new TranslationSeedItem("entity.sopworkstation.processsegmenttype", "zh-CN", "工艺段类型", "工艺段类型（1=SMT，2=自插，3=手插，4=修正，5=总装；字典 logistics_process_segment_type）"),
+            new TranslationSeedItem("entity.sopworkstation.processsegmenttype", "zh-CN", "工艺段类型", "工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）"),
             // entity.sopworkstation.processsegmenttype
-            new TranslationSeedItem("entity.sopworkstation.processsegmenttype", "zh-HK", "工艺段类型_hk", "工艺段类型（1=SMT，2=自插，3=手插，4=修正，5=总装；字典 logistics_process_segment_type）"),
+            new TranslationSeedItem("entity.sopworkstation.processsegmenttype", "zh-HK", "工艺段类型_hk", "工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）"),
 
             // entity.sopworkstation.workstationstatus
-            new TranslationSeedItem("entity.sopworkstation.workstationstatus", "en-US", "启用状态_us", "启用状态（字典 sys_normal_disable_status，0=停用，1=启用）"),
+            new TranslationSeedItem("entity.sopworkstation.workstationstatus", "en-US", "启用状态_us", "启用状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）"),
             // entity.sopworkstation.workstationstatus
-            new TranslationSeedItem("entity.sopworkstation.workstationstatus", "ja-JP", "启用状态_jp", "启用状态（字典 sys_normal_disable_status，0=停用，1=启用）"),
+            new TranslationSeedItem("entity.sopworkstation.workstationstatus", "ja-JP", "启用状态_jp", "启用状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）"),
             // entity.sopworkstation.workstationstatus
-            new TranslationSeedItem("entity.sopworkstation.workstationstatus", "zh-CN", "启用状态", "启用状态（字典 sys_normal_disable_status，0=停用，1=启用）"),
+            new TranslationSeedItem("entity.sopworkstation.workstationstatus", "zh-CN", "启用状态", "启用状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）"),
             // entity.sopworkstation.workstationstatus
-            new TranslationSeedItem("entity.sopworkstation.workstationstatus", "zh-HK", "启用状态_hk", "启用状态（字典 sys_normal_disable_status，0=停用，1=启用）"),
+            new TranslationSeedItem("entity.sopworkstation.workstationstatus", "zh-HK", "启用状态_hk", "启用状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）"),
 
             // entity.sopworkstation.sortorder
             new TranslationSeedItem("entity.sopworkstation.sortorder", "en-US", "排序号_us", "排序号"),

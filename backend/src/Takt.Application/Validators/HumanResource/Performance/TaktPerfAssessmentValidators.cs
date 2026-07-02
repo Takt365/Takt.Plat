@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.HumanResource.Performance
 // 文件名称：TaktPerfAssessmentValidators.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PerfAssessment 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktPerfAssessment 生成，请按需审阅）
 // 
@@ -36,7 +36,7 @@ public class TaktPerfAssessmentCreateValidator : AbstractValidator<TaktPerfAsses
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.EmployeeId)
-            .GreaterThanOrEqualTo(0).WithMessage("员工 ID不能为负数");
+            .GreaterThanOrEqualTo(0).WithMessage("员工不能为负数");
         RuleFor(x => x.EmployeeName)
             .NotEmpty().WithMessage("员工姓名不能为空")
             .MaximumLength(50).WithMessage("员工姓名长度不能超过50个字符");
@@ -44,7 +44,7 @@ public class TaktPerfAssessmentCreateValidator : AbstractValidator<TaktPerfAsses
             .NotEmpty().WithMessage("考核周期不能为空")
             .MaximumLength(50).WithMessage("考核周期长度不能超过50个字符");
         RuleFor(x => x.SchemeMetricId)
-            .GreaterThanOrEqualTo(0).WithMessage("方案指标 ID不能为负数");
+            .GreaterThanOrEqualTo(0).WithMessage("方案指标不能为负数");
         RuleFor(x => x.SelfEvaluationNotes)
             .NotEmpty().WithMessage("自评说明不能为空")
             .MaximumLength(1000).WithMessage("自评说明长度不能超过1000个字符");
@@ -55,11 +55,12 @@ public class TaktPerfAssessmentCreateValidator : AbstractValidator<TaktPerfAsses
             .NotEmpty().WithMessage("绩效等级不能为空")
             .MaximumLength(10).WithMessage("绩效等级长度不能超过10个字符");
         RuleFor(x => x.ReviewerId)
-            .GreaterThanOrEqualTo(0).WithMessage("评审人 ID不能为负数");
+            .GreaterThanOrEqualTo(0).WithMessage("评审人不能为负数");
         RuleFor(x => x.InterviewNotes)
             .NotEmpty().WithMessage("面谈记录不能为空")
             .MaximumLength(1000).WithMessage("面谈记录长度不能超过1000个字符");
         RuleFor(x => x.RelatedPlant)
+            .NotEmpty().WithMessage("关联工厂不能为空")
             .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
@@ -84,6 +85,43 @@ public class TaktPerfAssessmentUpdateValidator : AbstractValidator<TaktPerfAsses
     {
         RuleFor(x => x.PerfAssessmentId)
             .GreaterThan(0).WithMessage("PerfAssessmentID无效");
+        RuleFor(x => x.TenantCode)
+            .NotEmpty().WithMessage("租户编码不能为空")
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.CompanyCode)
+            .NotEmpty().WithMessage("公司代码不能为空")
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.EmployeeId)
+            .GreaterThanOrEqualTo(0).WithMessage("员工不能为负数");
+        RuleFor(x => x.EmployeeName)
+            .NotEmpty().WithMessage("员工姓名不能为空")
+            .MaximumLength(50).WithMessage("员工姓名长度不能超过50个字符");
+        RuleFor(x => x.AssessmentPeriod)
+            .NotEmpty().WithMessage("考核周期不能为空")
+            .MaximumLength(50).WithMessage("考核周期长度不能超过50个字符");
+        RuleFor(x => x.SchemeMetricId)
+            .GreaterThanOrEqualTo(0).WithMessage("方案指标不能为负数");
+        RuleFor(x => x.SelfEvaluationNotes)
+            .NotEmpty().WithMessage("自评说明不能为空")
+            .MaximumLength(1000).WithMessage("自评说明长度不能超过1000个字符");
+        RuleFor(x => x.SupervisorComments)
+            .NotEmpty().WithMessage("主管评语不能为空")
+            .MaximumLength(1000).WithMessage("主管评语长度不能超过1000个字符");
+        RuleFor(x => x.PerformanceGrade)
+            .NotEmpty().WithMessage("绩效等级不能为空")
+            .MaximumLength(10).WithMessage("绩效等级长度不能超过10个字符");
+        RuleFor(x => x.ReviewerId)
+            .GreaterThanOrEqualTo(0).WithMessage("评审人不能为负数");
+        RuleFor(x => x.InterviewNotes)
+            .NotEmpty().WithMessage("面谈记录不能为空")
+            .MaximumLength(1000).WithMessage("面谈记录长度不能超过1000个字符");
+        RuleFor(x => x.RelatedPlant)
+            .NotEmpty().WithMessage("关联工厂不能为空")
+            .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符");
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
     }
 }
 
@@ -106,7 +144,7 @@ public class TaktPerfAssessmentImportValidator : AbstractValidator<TaktPerfAsses
         RuleFor(x => x.CompanyCode)
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
         RuleFor(x => x.EmployeeId)
-            .GreaterThanOrEqualTo(0).WithMessage("员工 ID不能为负数");
+            .GreaterThanOrEqualTo(0).WithMessage("员工不能为负数");
         RuleFor(x => x.EmployeeName)
             .NotEmpty().WithMessage("员工姓名不能为空")
             .MaximumLength(50).WithMessage("员工姓名长度不能超过50个字符");
@@ -114,7 +152,7 @@ public class TaktPerfAssessmentImportValidator : AbstractValidator<TaktPerfAsses
             .NotEmpty().WithMessage("考核周期不能为空")
             .MaximumLength(50).WithMessage("考核周期长度不能超过50个字符");
         RuleFor(x => x.SchemeMetricId)
-            .GreaterThanOrEqualTo(0).WithMessage("方案指标 ID不能为负数");
+            .GreaterThanOrEqualTo(0).WithMessage("方案指标不能为负数");
         RuleFor(x => x.SelfEvaluationNotes)
             .NotEmpty().WithMessage("自评说明不能为空")
             .MaximumLength(1000).WithMessage("自评说明长度不能超过1000个字符");
@@ -125,12 +163,13 @@ public class TaktPerfAssessmentImportValidator : AbstractValidator<TaktPerfAsses
             .NotEmpty().WithMessage("绩效等级不能为空")
             .MaximumLength(10).WithMessage("绩效等级长度不能超过10个字符");
         RuleFor(x => x.ReviewerId)
-            .GreaterThanOrEqualTo(0).WithMessage("评审人 ID不能为负数");
+            .GreaterThanOrEqualTo(0).WithMessage("评审人不能为负数");
         RuleFor(x => x.InterviewNotes)
             .NotEmpty().WithMessage("面谈记录不能为空")
             .MaximumLength(1000).WithMessage("面谈记录长度不能超过1000个字符");
         RuleFor(x => x.RelatedPlant)
-            .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.RelatedPlant));
+            .NotEmpty().WithMessage("关联工厂不能为空")
+            .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

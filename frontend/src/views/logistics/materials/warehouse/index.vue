@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/materials/warehouse -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：Takt仓库主数据管理（左主右从：仓库 + 库位子表） -->
+<!-- 功能描述：Takt仓库主数据实体管理页面，含查询、增删改，由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -52,7 +52,7 @@
       @refresh="handleRefresh"
     />
 
-    <!-- 左主右从：仓库 + 库位 -->
+    <!-- 左主右从 -->
     <TaktMasterDetailTableLr
       v-model:master-current="currentPage"
       v-model:master-page-size="pageSize"
@@ -87,6 +87,12 @@
             dict-type="sys_yes_no_type"
           />
         </template>
+        <template v-else-if="column.key === 'warehouseType'">
+          <TaktDictTag
+            :value="getWarehouseField(record, 'warehouseType')"
+            dict-type="logistics_warehouse_type"
+          />
+        </template>
         <template v-else-if="column.key === 'isBuiltIn'">
           <TaktDictTag
             :value="getWarehouseField(record, 'isBuiltIn')"
@@ -95,7 +101,10 @@
         </template>
       </template>
       <template #detail>
-        <StorageLocationPanel class="h-full min-h-0 flex-1" />
+        <StorageLocationPanel
+          ref="storageLocationPanelRef"
+          class="h-full min-h-0 flex-1"
+        />
       </template>
     </TaktMasterDetailTableLr>
 
@@ -103,7 +112,7 @@
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="50%"
+      width="1100px"
       wrap-class-name="takt-form-modal-resizable"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
@@ -144,7 +153,7 @@
           v-model:value="advancedQueryForm.warehouseCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.warehouse.code') })"
           show-count
-          :maxlength="50"
+          :maxlength="4"
           allow-clear
         />
       </a-form-item>
@@ -155,7 +164,7 @@
           v-model:value="advancedQueryForm.warehouseName"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.warehouse.name') })"
           show-count
-          :maxlength="100"
+          :maxlength="80"
           allow-clear
         />
       </a-form-item>
@@ -166,7 +175,7 @@
           v-model:value="advancedQueryForm.warehouseShortName"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.warehouse.shortname') })"
           show-count
-          :maxlength="50"
+          :maxlength="40"
           allow-clear
         />
       </a-form-item>
@@ -226,10 +235,11 @@
       </div>
       <div v-show="isFieldVisible('warehouseType')">
       <a-form-item :label="t('entity.warehouse.type')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.warehouseType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.warehouse.type') })"
-          style="width: 100%"
+          dict-type="logistics_warehouse_type"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.warehouse.type') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -259,7 +269,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -270,7 +280,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -356,7 +366,7 @@
 
 <script setup lang="ts">
 /**
- * Takt仓库主数据管理页（左主右从：仓库 + 库位子表）
+ * Takt仓库主数据实体管理页 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/materials/warehouse
  */
 import { ref, computed, onMounted } from 'vue'
@@ -471,8 +481,9 @@ const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
 /** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
 const dictDataStore = useDictDataStore()
-/** 主表选中行上下文（供右侧库位面板 inject） */
+/** 主表选中行上下文（右侧明细面板读取） */
 const { selectedMasterRow } = provideWarehouseMasterContext()
+const storageLocationPanelRef = ref<InstanceType<typeof StorageLocationPanel> | null>(null)
 
 /**
  * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
@@ -529,10 +540,11 @@ onMounted(async () => {
   loadData()
 })
 
+
 /** 主表行点击选中 key（左右主子表高亮） */
 const selectedMasterKey = ref('')
 
-/** 同步主表选中行到右侧库位明细 */
+/** 同步主表选中行到右侧明细（子表由 *-panel watch 自动 reload） */
 function syncMasterSelection(record: Warehouse | null) {
   selectedMasterRow.value = record
   selectedMasterKey.value = record ? getWarehouseId(record) : ''
@@ -558,6 +570,25 @@ function handleMasterSelect(record: Record<string, unknown>) {
  */
 function handleMasterPaginationChange(_page: number, _pageSize: number) {
   loadData()
+}
+
+/** 加载主表详情并回填当前页 dataSource */
+async function loadWarehouseDetail(record: Warehouse): Promise<Warehouse | null> {
+  const id = getWarehouseId(record)
+  if (!id) {
+    return null
+  }
+  try {
+    const detail = await getWarehouseById(id)
+    const index = dataSource.value.findIndex((row) => getWarehouseId(row) === id)
+    if (index !== -1) {
+      dataSource.value[index] = { ...dataSource.value[index], ...detail } as Warehouse
+    }
+    return detail
+  } catch (error: any) {
+    message.error(error?.message || t('common.feedback.load.data.failed'))
+    return null
+  }
 }
 
 /** 表格列定义（i18n 随 locale 变化） */
@@ -659,7 +690,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getWarehouseField(record, 'warehouseType') ?? ''
   },
   {
     title: t('entity.warehouse.status'),
@@ -726,7 +756,7 @@ const rowSelection = computed(() => ({
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
-    } else if (getWarehouseId(selectedRow.value) === getWarehouseId(record)) {
+    } else if (selectedRow.value && getWarehouseId(selectedRow.value) === getWarehouseId(record)) {
       selectedRow.value = null
       syncMasterSelection(null)
     }
@@ -795,17 +825,23 @@ function handleCreate() {
   formVisible.value = true
   nextTick(() => formRef.value?.resetFields())
 }
-/** 打开编辑弹窗 */
-function handleEdit(record: Warehouse) {
+/** 打开编辑弹窗（主子表：先拉详情含子表） */
+async function handleEdit(record: Warehouse) {
   formTitle.value = t('common.dialog.title.edit', { entity: t('entity.warehouse._self') })
-  formData.value = { ...record }
-  formVisible.value = true
+  formLoading.value = true
+  try {
+    const detail = await loadWarehouseDetail(record)
+    formData.value = detail ? { ...detail } : { ...record }
+    formVisible.value = true
+  } finally {
+    formLoading.value = false
+  }
 }
 
 /** 工具栏编辑：打开当前单选行 */
 function handleUpdate() {
   if (selectedRow.value) {
-    handleEdit(selectedRow.value)
+    void handleEdit(selectedRow.value)
   } else {
     message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.warehouse._self') }))
   }
@@ -833,6 +869,9 @@ async function handleFormSubmit() {
     formVisible.value = false
     formData.value = null
   nextTick(() => formRef.value?.resetFields())
+    if (selectedMasterKey.value) {
+  storageLocationPanelRef.value?.reload?.()
+    }
     loadData()
   } finally {
     formLoading.value = false
@@ -916,6 +955,10 @@ async function handleDeleteOne(record: Warehouse) {
     onOk: async () => {
       await deleteWarehouseById((record as any)[entityIdName])
       message.success(t('common.feedback.deleted', { target: t('entity.warehouse._self') }))
+      selectedRowKeys.value = []
+      selectedRows.value = []
+      selectedRow.value = null
+      syncMasterSelection(null)
       loadData()
     }
   })
@@ -935,6 +978,10 @@ async function handleDelete() {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteWarehouseBatch(ids)
       message.success(t('common.feedback.deleted', { target: t('entity.warehouse._self') }))
+      selectedRowKeys.value = []
+      selectedRows.value = []
+      selectedRow.value = null
+      syncMasterSelection(null)
       loadData()
     }
   })

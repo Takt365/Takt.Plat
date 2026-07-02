@@ -25,7 +25,6 @@ const {
   renderFormItemOpening,
   buildExtFieldIconImportLine,
   buildRemixIconImportLine,
-  buildQueryFieldMetaLine,
   computeFormTabCount,
   buildFormTabLabelAttr,
   buildFormContentClassComputedExpr,
@@ -45,8 +44,17 @@ const {
   resolveListSwitchAndDictColsForIndex,
   buildListSwitchBodyCellLine,
   buildListSwitchHandlersBlock,
+  buildEntityNumericCoerceHelper,
   INDEX_FORM_RESET_NEXT_TICK,
   buildFormResetScopeDefaultsBlock,
+  buildVueImportResultUtilImportLine,
+  buildImportModalVueBlock,
+  buildImportHandlersScriptBlock,
+  buildEntityI18nComposableFile,
+  buildEntityI18nIndexImportBlock,
+  buildEntityI18nFormImportBlock,
+  buildAdvancedQueryFactoryBlock,
+  entityRowRecordTypeName,
 } = require('./generate-vue-common.cjs');
 
 /**
@@ -117,6 +125,10 @@ function buildTreeUpdateDtoFunction(entityPascal, entityCamel, idField, createPr
   if (!createProperties.length) {
     return '';
   }
+  const hasSortOrderInUpdateDto = createProperties.some((p) => p.name === 'sortOrder');
+  const overridesType = hasSortOrderInUpdateDto
+    ? `Pick<${entityPascal}Update, 'parentId' | 'sortOrder'>`
+    : `Pick<${entityPascal}Update, 'parentId'> & { sortOrder: number }`;
   const fieldLines = createProperties.map((p) => {
     if (p.name === 'companyDefaultCulture') {
       return `    companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',`;
@@ -134,7 +146,7 @@ function buildTreeUpdateDtoFunction(entityPascal, entityCamel, idField, createPr
  */
 function build${entityPascal}UpdateDto(
   ${entityCamel}: ${entityPascal},
-  overrides: Pick<${entityPascal}Update, 'parentId' | 'sortOrder'>,
+  overrides: ${overridesType},
 ): ${entityPascal}Update {
   return {
     ${idField}: String(${entityCamel}.${idField}),
@@ -167,6 +179,7 @@ function generateTreeIndexVue(ctx, helpers) {
     updateDtoFields = [],
   } = ctx;
   const { fieldLabelTExpr, fieldPlaceholderTExpr } = helpers;
+  const rowRecordType = entityRowRecordTypeName(entityPascal);
   const { titleField, searchFields } = treeMeta;
   const entityScope = fields.entityScope || 'company';
   const importApiNames = [
@@ -181,6 +194,7 @@ function generateTreeIndexVue(ctx, helpers) {
     caps.apiExport,
     caps.apiUpdateStatus,
     caps.apiUpdateBuiltIn,
+    caps.apiUpdateSort,
   ].filter(Boolean);
   const listCols = fields.listFields.filter((f) => f.name !== caps.entityIdName && f.name !== 'children');
   const { switchListCols, dictTagListCols } = resolveListSwitchAndDictColsForIndex(
@@ -193,10 +207,14 @@ function generateTreeIndexVue(ctx, helpers) {
   const indexDictImport = needsDictInIndex ? buildDictDataStoreImportLine() : '';
   const indexDictSetup = needsDictInIndex ? buildDictDataStoreIndexSetup() : '';
   const indexDictOnMounted = needsDictInIndex ? '  void dictDataStore.loadAllDictDataAsync()\n' : '';
-  const searchPlaceholderFields = (treeMeta.searchFieldLabels || [])
-    .map((key) => `t('${key}')`).join(', ');
+  const searchFieldLabelExprs = (treeMeta.searchFields || []).length
+    ? (treeMeta.searchFields || []).map((f) => `pi.label('${f}')`).join(', ')
+    : 'pi.self()';
   const queryItems = fields.queryFields.map((f) => helpers.renderQueryFormItem(f)).join('\n');
-  const queryFieldsMetaBlock = fields.queryFields.map((f) => buildQueryFieldMetaLine(f, entityI18nSlug)).join('\n');
+  const queryFactoryBlock = buildAdvancedQueryFactoryBlock(entityPascal, fields.queryFields);
+  const advancedQueryResetExpr = fields.queryFields.length
+    ? 'createEmptyAdvancedQueryForm()'
+    : `{\n${queryInit}\n  }`;
   const queryFieldStorageKey = `takt-query-fields-${viewModulePath.replace(/\//g, '-')}`;
   const queryInit = fields.queryFields.map((f) => {
     const val = f.type === 'number' ? 'undefined as number | undefined' : "''";
@@ -285,7 +303,7 @@ ${dictBodyCellExtra}
         shape: 'plain',
         icon: RiEditLine,
         permission: '${permissionPrefix}:update',
-        onClick: (record: ${entityPascal}) => handleEdit(record)
+        onClick: (record: ${rowRecordType}) => handleEdit(record)
       },`);
   }
   if (caps.hasDelete) {
@@ -295,7 +313,7 @@ ${dictBodyCellExtra}
         shape: 'plain',
         icon: RiDeleteBinLine,
         permission: '${permissionPrefix}:delete',
-        onClick: (record: ${entityPascal}) => handleDeleteOne(record)
+        onClick: (record: ${rowRecordType}) => handleDeleteOne(record)
       }`);
   }
   const formBlock = (caps.hasCreate || caps.hasUpdate) ? `
@@ -316,29 +334,14 @@ ${dictBodyCellExtra}
         :loading="formLoading"
       />
     </TaktModal>` : '';
-  const importBlock = (caps.hasImport && caps.hasGetTemplate) ? `
-    <!-- 导入对话框 -->
-    <TaktModal
-      v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.${entityI18nSlug}._self') })"
-      :width="600"
-      :footer="null"
-      :cancel-text="t('common.page.button.close')"
-      @cancel="handleImportCancel"
-    >
-      <TaktImportFile
-        entity-i18n-key="entity.${entityI18nSlug}._self"
-        file-type="xlsx"
-        :sheet-name="excelNames.sheet"
-        :template-file-name="excelNames.fileBase"
-        :download-template="handleDownloadTemplate"
-        :import-file="handleImportFile"
-        :max-size="10"
-        :max-rows="1000"
-        @success="handleImportSuccess"
-      />
-    </TaktModal>` : '';
+  const importBlock = (caps.hasImport && caps.hasGetTemplate)
+    ? buildImportModalVueBlock(entityPascal)
+    : '';
+  const entityI18nIndexImport = buildEntityI18nIndexImportBlock(entityPascal, viewEntityKebab, './composables', {
+    includeListFields: false,
+  });
   const needsUserStoreForTreeDrop = caps.hasUpdate && updateDtoFields.some((p) => p.name === 'companyDefaultCulture');
+  const hasSortOrderInUpdateDto = updateDtoFields.some((p) => p.name === 'sortOrder');
   const treeUpdateDtoBlock = caps.hasUpdate
     ? buildTreeUpdateDtoFunction(entityPascal, entityCamel, idField, updateDtoFields)
     : '';
@@ -348,11 +351,12 @@ ${dictBodyCellExtra}
     idField,
     titleField,
     queryInit,
-    queryFieldsMetaBlock,
-    searchPlaceholderFields,
+    queryFactoryBlock,
+    searchFieldLabelExprs,
     needsUserStore: needsUserStoreForTreeDrop,
     needsExcelNames: caps.hasImport || caps.hasExport,
     entityClassName: caps.entityClassName,
+    entityPascal,
   });
   const remixIconImport = buildRemixIconImportLine({
     includeActionIcons: caps.hasUpdate || caps.hasDelete,
@@ -508,7 +512,8 @@ import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaul
 ${(caps.hasCreate || caps.hasUpdate) ? `import ${entityPascal}Form from './components/${viewEntityKebab}-form.vue'\n` : ''}import { ${importApiNames.join(', ')} } from '@/api/${modulePath}/${entityKebab}'
 import type { ${entityPascal}, ${caps.entityTreeType}, ${entityPascal}Update } from '@/types/${modulePath}/${entityKebab}'
 import type { TreeDropPayload } from '@/components/business/takt-tree-left-table/index.vue'
-${indexDictImport}${(caps.hasImport || caps.hasExport) ? "import { taktExcelEntityNames } from '@/utils/naming'\n" : ''}${caps.hasExport ? "import { resolveExportDownloadFileName } from '@/utils/export-download-name'\n" : ''}${remixIconImport}${needsUserStoreForTreeDrop ? "import { useUserStore } from '@/stores/identity/user'\n" : ''}
+${indexDictImport}${(caps.hasImport || caps.hasExport) ? "import { taktExcelEntityNames } from '@/utils/naming'\n" : ''}${caps.hasExport ? "import { resolveExportDownloadFileName } from '@/utils/export-download-name'\n" : ''}${(caps.hasImport && caps.hasGetTemplate) ? buildVueImportResultUtilImportLine() : ''}${remixIconImport}${needsUserStoreForTreeDrop ? "import { useUserStore } from '@/stores/identity/user'\n" : ''}
+${entityI18nIndexImport}
 ${treeStateBlock}
 ${indexDictSetup}
 /** 解析树节点 key（与列表 ${idField}、左侧树 key 一致） */
@@ -737,10 +742,11 @@ const handleTreeDrop = async (payload: TreeDropPayload) => {
       parentId: pos.parentId,
       sortOrder: pos.sortOrder,
     }))
-    message.success(t('common.feedback.updated', { target: t('entity.${entityI18nSlug}._self') }))
+${!hasSortOrderInUpdateDto && caps.apiUpdateSort ? `    await ${caps.apiUpdateSort}({ ${idField}: String(dragKey), sortOrder: pos.sortOrder })` : ''}
+    message.success(t('common.feedback.updated', { target: pi.self() }))
     await loadData()
   } catch (error: unknown) {
-    message.error(getErrorMessage(error, t('common.feedback.update.failed', { target: t('entity.${entityI18nSlug}._self') })))
+    message.error(getErrorMessage(error, t('common.feedback.update.failed', { target: pi.self() })))
     await loadFull${entityPascal}Tree().catch(() => undefined)
   } finally {
     loading.value = false
@@ -796,6 +802,7 @@ const get${entityPascal}DictValue = (
   if (typeof value === 'string' || typeof value === 'number') return value
   return String(value)
 }
+${switchListCols.length > 0 ? buildEntityNumericCoerceHelper(entityPascal) : ''}
 ${resetPeriodListMapperBlock}
 
 /** 从异常对象提取用户可见消息 */
@@ -839,7 +846,7 @@ const rowSelection = computed(() => ({
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? rows[0] : null
   },
-  onSelect: (record: ${entityPascal}, selected: boolean) => {
+  onSelect: (record: ${rowRecordType}, selected: boolean) => {
     if (selected) selectedRow.value = record
     else if (selectedRow.value && get${entityPascal}Id(selectedRow.value) === get${entityPascal}Id(record)) selectedRow.value = null
   },
@@ -884,9 +891,7 @@ const handleSearch = () => {
 /** 右侧重置（不影响左侧树与 fullTableTree） */
 const handleReset = () => {
   queryKeyword.value = ''
-  advancedQueryForm.value = {
-${queryInit}
-  }
+  advancedQueryForm.value = ${advancedQueryResetExpr}
   tableCurrentPage.value = getTaktDefaultPageIndex()
 }
 
@@ -894,7 +899,7 @@ ${listSwitchHandlersBlock}
 
 ${caps.hasCreate ? `/** 新增：默认 parentId 为当前左侧选中节点 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.${entityI18nSlug}._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   const keys = selectedTreeKeys.value
   formData.value = {
     parentId: keys.length > 0 ? String(keys[keys.length - 1]) : '0',
@@ -903,8 +908,8 @@ function handleCreate() {
 }` : ''}
 
 ${caps.hasUpdate ? `/** 打开编辑弹窗 */
-function handleEdit(record: ${entityPascal}) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.${entityI18nSlug}._self') })
+function handleEdit(record: ${rowRecordType}) {
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
   formData.value = { ...record }
   formVisible.value = true
 }
@@ -914,7 +919,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.${entityI18nSlug}._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
   }
 }` : ''}
 
@@ -933,10 +938,10 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
 ${caps.hasUpdate ? `      await ${caps.apiUpdate}(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.${entityI18nSlug}._self') }))` : ''}
+      message.success(t('common.feedback.updated', { target: pi.self() }))` : ''}
     } else {
 ${caps.hasCreate ? `      await ${caps.apiCreate}(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.${entityI18nSlug}._self') }))` : ''}
+      message.success(t('common.feedback.created', { target: pi.self() }))` : ''}
     }
     formVisible.value = false
     formData.value = null${INDEX_FORM_RESET_NEXT_TICK}
@@ -953,15 +958,15 @@ function handleFormCancel() {
 }` : ''}
 
 ${caps.hasDelete ? `/** 删除单行 */
-async function handleDeleteOne(record: ${entityPascal}) {
+async function handleDeleteOne(record: ${rowRecordType}) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.${entityI18nSlug}._self'), name: t('common.tip.this.target', { target: t('entity.${entityI18nSlug}._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await ${caps.apiDelete}((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.${entityI18nSlug}._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       await loadData()
     }
   })
@@ -970,49 +975,28 @@ async function handleDeleteOne(record: ${entityPascal}) {
 ${caps.hasDeleteBatch ? `/** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.${entityI18nSlug}._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.${entityI18nSlug}._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await ${caps.apiDeleteBatch}(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.${entityI18nSlug}._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       await loadData()
     }
   })
 }` : ''}
 
-${(caps.hasImport && caps.hasGetTemplate) ? `/** 打开导入对话框 */
-function handleImport() {
-  importVisible.value = true
-}
-
-/** 下载导入模板 Excel */
-async function handleDownloadTemplate(sheetName?: string, fileName?: string): Promise<Blob> {
-  const res = await ${caps.apiGetTemplate}(sheetName, fileName)
-  return (res as any)?.data ?? res
-}
-
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await ${caps.apiImport}(file, sheetName)
-}
-
-/** 导入完成回调：刷新树并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
-  void loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
-}
-
-/** 关闭导入对话框 */
-function handleImportCancel() {
-  importVisible.value = false
-}` : ''}
+${(caps.hasImport && caps.hasGetTemplate) ? buildImportHandlersScriptBlock({
+  apiGetTemplate: caps.apiGetTemplate,
+  apiImport: caps.apiImport,
+  successBody: 'void loadData()',
+}) : ''}
 
 ${caps.hasExport ? `/** 导出当前查询条件下的 Excel */
 async function handleExport() {
@@ -1037,10 +1021,10 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.${entityI18nSlug}._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: unknown) {
     logger.error('[${entityPascal}] 导出失败', undefined, error)
-    message.error(getErrorMessage(error, t('common.feedback.export.failed', { target: t('entity.${entityI18nSlug}._self') })))
+    message.error(getErrorMessage(error, t('common.feedback.export.failed', { target: pi.self() })))
   } finally {
     loading.value = false
   }
@@ -1059,9 +1043,7 @@ function handleAdvancedQuerySubmit() {
 
 /** 重置高级查询表单（不自动查询） */
 function handleAdvancedQueryReset() {
-  advancedQueryForm.value = {
-${queryInit}
-  }
+  advancedQueryForm.value = ${advancedQueryResetExpr}
 }
 
 /** 打开列设置抽屉 */
@@ -1264,6 +1246,7 @@ ${mdFormParts.tabs}
 ${formScriptFragments.vueImportLine}
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+${buildEntityI18nFormImportBlock(entityPascal, viewEntityKebab)}
 import type { ${typeImportLine} } from '@/types/${modulePath}/${entityKebab}'
 ${taktSelectImport}${extFieldIconImport}${formScriptFragments.dictImportLine}${scopeStoreImports}
 ${formScriptState}
@@ -1534,9 +1517,6 @@ function processTreeApiModule(apiFilePath, options, registry) {
   );
   const treeMeta = {
     ...treeFieldMetaRaw,
-    searchFieldLabels: treeFieldMetaRaw.searchFields.map(
-      (fieldName) => resolveFieldTranslationKey(fieldName, bundle.fullCtx.entityI18nSlug),
-    ),
   };
   const vueHelpers = {
     fieldLabelTExpr,
@@ -1552,7 +1532,22 @@ function processTreeApiModule(apiFilePath, options, registry) {
   const fullCtx = { ...bundle.fullCtx, treeMeta };
   const indexContent = generateTreeIndexVue(fullCtx, vueHelpers);
   const formContent = bundle.needsForm ? generateTreeFormVue(fullCtx, vueHelpers) : '';
-  return writeVueModuleOutputs(bundle, indexContent, formContent, options);
+  const listCols = fullCtx.fields.listFields.filter(
+    (f) => f.name !== fullCtx.caps.entityIdName && f.name !== 'children',
+  );
+  const i18nComposableContent = buildEntityI18nComposableFile({
+    entityPascal: fullCtx.entityPascal,
+    entityI18nSlug: fullCtx.entityI18nSlug,
+    entityKebab: fullCtx.entityKebab,
+    viewModulePath: fullCtx.viewModulePath,
+    viewEntityKebab: fullCtx.viewEntityKebab,
+    modulePath: fullCtx.modulePath,
+    listFields: listCols,
+    formFields: fullCtx.fields.formFields,
+    queryFields: fullCtx.fields.queryFields,
+    comment: fullCtx.comment,
+  });
+  return writeVueModuleOutputs(bundle, indexContent, formContent, options, i18nComposableContent);
 }
 
 module.exports = {

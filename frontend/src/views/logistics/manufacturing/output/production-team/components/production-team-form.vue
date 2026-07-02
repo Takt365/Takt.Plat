@@ -74,13 +74,11 @@
                 :label="t('entity.productionteam.plantcode')"
                 name="plantCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.plantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionteam.plantcode') })"
-                  show-count
-                  :maxlength="4"
-                  allow-clear
-                  :disabled="!!formData?.productionTeamId"
+                  api-url="TaktPlants/options"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionteam.plantcode') })"
+                  :disabled="!!formData?.productionTeamId || loading"
                 />
               </a-form-item>
             </a-col>
@@ -108,7 +106,7 @@
                   v-model:value="formState.teamName"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionteam.teamname') })"
                   show-count
-                  :maxlength="64"
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
@@ -118,53 +116,23 @@
                 :label="t('entity.productionteam.teamcategory')"
                 name="teamCategory"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.teamCategory"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionteam.teamcategory') })"
-                  show-count
-                  :maxlength="10"
-                  allow-clear
+                  dict-type="logistics_team_category"
+                  :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionteam.teamcategory') })"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.productionteam.teamcategoryname')"
-                name="teamCategoryName"
+                :label="t('entity.productionteam.teamleader')"
+                name="teamLeader"
               >
-                <a-input
-                  v-model:value="formState.teamCategoryName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionteam.teamcategoryname') })"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.productionteam.productionline')"
-                name="productionLine"
-              >
-                <a-input
-                  v-model:value="formState.productionLine"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionteam.productionline') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.productionteam.teamleaderid')"
-                name="teamLeaderId"
-              >
-                <a-input
-                  v-model:value="formState.teamLeaderId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionteam.teamleaderid') })"
-                  show-count
-                  :maxlength="20"
+                <TaktSelect
+                  v-model:value="formState.teamLeader"
+                  api-url="TaktEmployees/options"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionteam.teamleader') })"
                   allow-clear
                 />
               </a-form-item>
@@ -181,27 +149,13 @@
           <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.productionteam.teamleadername')"
-                name="teamLeaderName"
-              >
-                <a-input
-                  v-model:value="formState.teamLeaderName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionteam.teamleadername') })"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
                 :label="t('entity.productionteam.shiftno')"
                 name="shiftNo"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.shiftNo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionteam.shiftno') })"
-                  style="width: 100%"
+                  dict-type="logistics_shift_category"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionteam.shiftno') })"
                 />
               </a-form-item>
             </a-col>
@@ -309,7 +263,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","teamCode","teamName","teamCategory","teamCategoryName","productionLine","teamLeaderId","teamLeaderName","shiftNo","status","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","teamCode","teamName","teamCategory","teamLeader","shiftNo","status","extField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -330,6 +284,8 @@ const formRef = ref()
 const formState = reactive<Record<string, any>>({})
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  teamCategory: 'A',
+  shiftNo: 1,
   status: 1
 }
 
@@ -404,6 +360,28 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
+  teamCategory: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || String(value).trim() === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.productionteam.teamcategory') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  shiftNo: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.productionteam.shiftno') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num) || num <= 0) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.productionteam.shiftno') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
   status: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
@@ -431,6 +409,9 @@ function getValues(): Record<string, any> {
   if ('shiftNo' in payload) {
     const rawshiftNo = payload.shiftNo
     payload.shiftNo = typeof rawshiftNo === 'number' ? rawshiftNo : Number(rawshiftNo)
+  }
+  if ('teamCategory' in payload && payload.teamCategory != null) {
+    payload.teamCategory = String(payload.teamCategory).trim()
   }
   if ('status' in payload) {
     const rawstatus = payload.status

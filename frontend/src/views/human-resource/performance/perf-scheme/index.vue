@@ -8,7 +8,7 @@
 <!-- ======================================== -->
 
 <template>
-  <div class="human-resource-performance-perf-scheme">
+  <div class="p-4">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="human:resource:talent:jobposting:create"
-      update-permission="human:resource:talent:jobposting:update"
-      delete-permission="human:resource:talent:jobposting:delete"
-      import-permission="human:resource:talent:jobposting:import"
-      export-permission="human:resource:talent:jobposting:export"
+      create-permission="human:resource:performance:perf:scheme:create"
+      update-permission="human:resource:performance:perf:scheme:update"
+      delete-permission="human:resource:performance:perf:scheme:delete"
+      import-permission="human:resource:performance:perf:scheme:import"
+      export-permission="human:resource:performance:perf:scheme:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -54,8 +54,8 @@
 
     <!-- 表格 -->
     <TaktSingleTable
-      :columns="columns"
       entity-scope="company"
+      :columns="columns"
       :visible-column-keys="visibleColumnKeys"
       :id-column-key="'perfSchemeId'"
       table-mode="single"
@@ -72,7 +72,7 @@
 
     </TaktSingleTable>
 
-    <!-- 分页组件 -->
+    <!-- 分页（服务端分页，外置 TaktPagination） -->
     <TaktPagination
       v-model:current="currentPage"
       v-model:page-size="pageSize"
@@ -92,6 +92,7 @@
       @cancel="handleFormCancel"
     >
       <PerfSchemeForm
+        :key="formData?.perfSchemeId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -113,6 +114,8 @@
         <a-input
           v-model:value="advancedQueryForm.schemeCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.perfscheme.schemecode') })"
+          show-count
+          :maxlength="64"
           allow-clear
         />
       </a-form-item>
@@ -122,6 +125,8 @@
         <a-input
           v-model:value="advancedQueryForm.schemeName"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.perfscheme.schemename') })"
+          show-count
+          :maxlength="128"
           allow-clear
         />
       </a-form-item>
@@ -131,6 +136,8 @@
         <a-input
           v-model:value="advancedQueryForm.applicableDepartment"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.perfscheme.applicabledepartment') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
@@ -140,6 +147,8 @@
         <a-input
           v-model:value="advancedQueryForm.cycleType"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.perfscheme.cycletype') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
@@ -149,6 +158,8 @@
         <a-input
           v-model:value="advancedQueryForm.scoringStandard"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.perfscheme.scoringstandard') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
@@ -176,6 +187,8 @@
         <a-input
           v-model:value="advancedQueryForm.metricCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.perfscheme.metriccode') })"
+          show-count
+          :maxlength="64"
           allow-clear
         />
       </a-form-item>
@@ -185,6 +198,8 @@
         <a-input
           v-model:value="advancedQueryForm.metricName"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.perfscheme.metricname') })"
+          show-count
+          :maxlength="128"
           allow-clear
         />
       </a-form-item>
@@ -194,6 +209,8 @@
         <a-input
           v-model:value="advancedQueryForm.category"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.perfscheme.category') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
@@ -203,6 +220,8 @@
         <a-input
           v-model:value="advancedQueryForm.metricType"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.perfscheme.metrictype') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
@@ -212,6 +231,8 @@
         <a-input
           v-model:value="advancedQueryForm.scoringCriteria"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.perfscheme.scoringcriteria') })"
+          show-count
+          :maxlength="1000"
           allow-clear
         />
       </a-form-item>
@@ -221,15 +242,6 @@
         <a-input-number
           v-model:value="advancedQueryForm.standardWeight"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.perfscheme.standardweight') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('sortOrder')">
-      <a-form-item :label="t('entity.perfscheme.sortorder')">
-        <a-input-number
-          v-model:value="advancedQueryForm.sortOrder"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.perfscheme.sortorder') })"
           style="width: 100%"
         />
       </a-form-item>
@@ -248,6 +260,8 @@
         <a-input
           v-model:value="advancedQueryForm.relatedPlant"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.perfscheme.relatedplant') })"
+          show-count
+          :maxlength="4"
           allow-clear
         />
       </a-form-item>
@@ -258,7 +272,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -269,17 +283,36 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('ExtField')">
-      <a-form-item :label="t('common.page.entity.ExtField')">
-        <a-input
-          v-model:value="advancedQueryForm.ExtField"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
-          allow-clear
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
+        <a-textarea
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -288,8 +321,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -333,7 +368,6 @@
 </template>
 
 <script setup lang="ts">
-import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 /**
  * 绩效方案指标管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/human-resource/performance/perf-scheme
@@ -343,12 +377,13 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import PerfSchemeForm from './components/perf-scheme-form.vue'
-import { getPerfSchemeList, getPerfSchemeById, createPerfScheme, updatePerfScheme, deletePerfSchemeById, deletePerfSchemeBatch, getPerfSchemeTemplate, importPerfScheme, exportPerfScheme } from '@/api/human-resource/performance/perf-scheme'
-import type { PerfScheme, PerfSchemeQuery, PerfSchemeCreate, PerfSchemeUpdate } from '@/types/human-resource/performance/perf-scheme'
+import { getPerfSchemeList, getPerfSchemeById, createPerfScheme, updatePerfScheme, deletePerfSchemeById, deletePerfSchemeBatch, getPerfSchemeTemplate, importPerfScheme, exportPerfScheme, updatePerfSchemeStatus } from '@/api/human-resource/performance/perf-scheme'
+import type { PerfScheme, PerfSchemeQuery } from '@/types/human-resource/performance/perf-scheme'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -383,11 +418,13 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<PerfScheme>>({})
+const formData = ref<Partial<PerfScheme> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
@@ -404,12 +441,11 @@ const advancedQueryForm = ref({
   metricType: '',
   scoringCriteria: '',
   standardWeight: undefined as number | undefined,
-  sortOrder: undefined as number | undefined,
   schemeMetricStatus: undefined as number | undefined,
   relatedPlant: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
@@ -427,12 +463,11 @@ const queryFieldsMeta = computed(() => [
   { key: 'metricType', label: t('entity.perfscheme.metrictype') },
   { key: 'scoringCriteria', label: t('entity.perfscheme.scoringcriteria') },
   { key: 'standardWeight', label: t('entity.perfscheme.standardweight') },
-  { key: 'sortOrder', label: t('entity.perfscheme.sortorder') },
   { key: 'schemeMetricStatus', label: t('entity.perfscheme.schememetricstatus') },
   { key: 'relatedPlant', label: t('entity.perfscheme.relatedplant') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'ExtField', label: t('common.page.entity.ExtField') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -451,10 +486,64 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
 
-/** 页面挂载后加载分页列表 */
-onMounted(() => {
+
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {PerfSchemeQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<PerfSchemeQuery>): PerfSchemeQuery {
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: PerfSchemeQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: keyof PerfSchemeQuery, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v as never
+    }
+  }
+  assignTrimmed('schemeCode', form.schemeCode)
+  assignTrimmed('schemeName', form.schemeName)
+  assignTrimmed('applicableDepartment', form.applicableDepartment)
+  assignTrimmed('cycleType', form.cycleType)
+  assignTrimmed('scoringStandard', form.scoringStandard)
+  if (form.selfEvaluationWeight !== undefined && form.selfEvaluationWeight !== null) {
+    query.selfEvaluationWeight = form.selfEvaluationWeight
+  }
+  if (form.supervisorWeight !== undefined && form.supervisorWeight !== null) {
+    query.supervisorWeight = form.supervisorWeight
+  }
+  assignTrimmed('metricCode', form.metricCode)
+  assignTrimmed('metricName', form.metricName)
+  assignTrimmed('category', form.category)
+  assignTrimmed('metricType', form.metricType)
+  assignTrimmed('scoringCriteria', form.scoringCriteria)
+  if (form.standardWeight !== undefined && form.standardWeight !== null) {
+    query.standardWeight = form.standardWeight
+  }
+  if (form.schemeMetricStatus !== undefined && form.schemeMetricStatus !== null) {
+    query.schemeMetricStatus = form.schemeMetricStatus
+  }
+  assignTrimmed('relatedPlant', form.relatedPlant)
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('extField', form.extField)
+  assignTrimmed('remark', form.remark)
+  return query
+}
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
   loadData()
 })
+
 
 
 
@@ -615,7 +704,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'human:resource:talent:jobposting:update',
+        permission: 'human:resource:performance:perf:scheme:update',
         onClick: (record: PerfScheme) => handleEdit(record)
       },
       {
@@ -623,7 +712,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'human:resource:talent:jobposting:delete',
+        permission: 'human:resource:performance:perf:scheme:delete',
         onClick: (record: PerfScheme) => handleDeleteOne(record)
       }
     ]
@@ -639,6 +728,7 @@ const getPerfSchemeId = (record: any): string => record?.[entityIdName] ?? ''
  */
 const getPerfSchemeField = (record: any, field: string): any => record?.[field]
 
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -650,7 +740,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: PerfScheme, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getPerfSchemeId(selectedRow.value) === getPerfSchemeId(record)) {
+    } else if (selectedRow.value && getPerfSchemeId(selectedRow.value) === getPerfSchemeId(record)) {
       selectedRow.value = null
     }
   },
@@ -681,16 +771,7 @@ const onClickRow = (record: PerfScheme) => ({
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: PerfSchemeQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getPerfSchemeList(params)
+    const res = await getPerfSchemeList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
@@ -708,7 +789,7 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -729,23 +810,23 @@ function handleReset() {
   metricType: '',
   scoringCriteria: '',
   standardWeight: undefined as number | undefined,
-  sortOrder: undefined as number | undefined,
   schemeMetricStatus: undefined as number | undefined,
   relatedPlant: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
   formTitle.value = t('common.dialog.title.create', { entity: t('entity.perfscheme._self') })
-  formData.value = {}
+  formData.value = null
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗 */
 function handleEdit(record: PerfScheme) {
@@ -783,6 +864,8 @@ async function handleFormSubmit() {
       message.success(t('common.feedback.created', { target: t('entity.perfscheme._self') }))
     }
     formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
     loadData()
   } finally {
     formLoading.value = false
@@ -792,6 +875,8 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开导入对话框 */
 function handleImport() {
@@ -823,16 +908,11 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: PerfSchemeQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportPerfScheme(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportPerfScheme(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -900,7 +980,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -919,12 +999,11 @@ function handleAdvancedQueryReset() {
   metricType: '',
   scoringCriteria: '',
   standardWeight: undefined as number | undefined,
-  sortOrder: undefined as number | undefined,
   schemeMetricStatus: undefined as number | undefined,
   relatedPlant: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
 }
@@ -954,23 +1033,16 @@ function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
 /** 分页页码变更 */
-function handlePaginationChange(page: number) {
+function handlePaginationChange(page: number, size: number) {
   currentPage.value = page
+  pageSize.value = size
   loadData()
 }
-/** 分页每页条数变更 */
+
+/** 分页每页条数变更（重置到第 1 页） */
 function handlePaginationSizeChange(_current: number, size: number) {
+  currentPage.value = getTaktDefaultPageIndex()
   pageSize.value = size
-  currentPage.value = 1
   loadData()
 }
 </script>
-
-<style scoped lang="css">
-.human-resource-performance-perf-scheme {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-</style>

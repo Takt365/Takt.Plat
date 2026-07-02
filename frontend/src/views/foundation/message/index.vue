@@ -20,10 +20,10 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="foundation:message:create"
+      send-message-permission="foundation:message:send"
       delete-permission="foundation:message:delete"
       export-permission="foundation:message:export"
-      :show-create="true"
+      :show-send-message="true"
       :show-update="false"
       :show-delete="true"
       :show-import="false"
@@ -33,12 +33,12 @@
       :show-column-setting="true"
       :show-fullscreen="true"
       :show-refresh="true"
-      :create-disabled="false"
-      :create-loading="loading"
+      :send-message-disabled="false"
+      :send-message-loading="loading"
       :delete-disabled="deleteDisabled"
       :delete-loading="loading"
       :refresh-loading="loading"
-      @create="handleCreate"
+      @send-message="handleSendMessage"
       @delete="handleDelete"
       @export="handleExport"
       @advanced-query="handleAdvancedQuery"
@@ -95,6 +95,7 @@
 
     <!-- 分页组件 -->
     <TaktPagination
+      v-if="paginationReady"
       v-model:current="currentPage"
       v-model:page-size="pageSize"
       :total="total"
@@ -148,24 +149,6 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('messageTitle')">
-      <a-form-item :label="t('entity.message.title')">
-        <a-input
-          v-model:value="advancedQueryForm.messageTitle"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.message.title') })"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('messageContent')">
-      <a-form-item :label="t('entity.message.content')">
-        <a-input
-          v-model:value="advancedQueryForm.messageContent"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.message.content') })"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
       <div v-show="isFieldVisible('messageType')">
       <a-form-item :label="t('entity.message.type')">
         <TaktSelect
@@ -182,6 +165,24 @@
           v-model:value="advancedQueryForm.messageGroup"
           dict-type="sys_message_group_category"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.message.group') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('messageTitle')">
+      <a-form-item :label="t('entity.message.title')">
+        <a-input
+          v-model:value="advancedQueryForm.messageTitle"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.message.title') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('messageContent')">
+      <a-form-item :label="t('entity.message.content')">
+        <a-input
+          v-model:value="advancedQueryForm.messageContent"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.message.content') })"
           allow-clear
         />
       </a-form-item>
@@ -324,6 +325,19 @@ import { RiDeleteBinLine } from '@remixicon/vue'
 const { t } = useI18n()
 /** Excel 导出默认 sheet 名与文件名前缀 */
 const excelNames = taktExcelEntityNames('TaktMessage')
+
+/**
+ * 高级查询字典 DictValue：非空 trim 后传 API
+ * @param value 表单值
+ * @returns {string | undefined}
+ */
+function trimDictQueryValue(value: unknown): string | undefined {
+  if (value === undefined || value === null || value === '') {
+    return undefined
+  }
+  const text = String(value).trim()
+  return text || undefined
+}
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
   () => t('common.page.form.placeholder.search', { keyword: t('entity.message._self') })
@@ -335,10 +349,12 @@ const queryKeyword = ref('')
 const loading = ref(false)
 /** 分页列表数据 */
 const dataSource = ref<Message[]>([])
-/** 当前页码 */
-const currentPage = ref(getTaktDefaultPageIndex())
-/** 每页条数 */
-const pageSize = ref(getTaktDefaultPageSize())
+/** 当前页码（挂载后由 ensureTaktPaginationConfigAsync 同步为运维配置） */
+const currentPage = ref(1)
+/** 每页条数（挂载后由 ensureTaktPaginationConfigAsync 同步为运维配置） */
+const pageSize = ref(20)
+/** 分页配置已加载（避免 HMR/首屏在 TaktPagination 默认 props 中触发 assertPaginationConfigured） */
+const paginationReady = ref(false)
 /** 分页 total */
 const total = ref(0)
 /** 表格 scroll.y（服务端分页固定视口高度） */
@@ -368,8 +384,8 @@ const advancedQueryForm = ref({
   toUserName: '',
   messageTitle: '',
   messageContent: '',
-  messageType: undefined as number | undefined,
-  messageGroup: undefined as number | undefined,
+  messageType: undefined as string | undefined,
+  messageGroup: undefined as string | undefined,
   sendTimeStart: '',
   sendTimeEnd: '',
   readTimeStart: '',
@@ -383,10 +399,10 @@ const advancedQueryForm = ref({
 const queryFieldsMeta = computed(() => [
   { key: 'fromUserName', label: t('entity.message.fromusername') },
   { key: 'toUserName', label: t('entity.message.tousername') },
-  { key: 'messageTitle', label: t('entity.message.title') },
-  { key: 'messageContent', label: t('entity.message.content') },
   { key: 'messageType', label: t('entity.message.type') },
   { key: 'messageGroup', label: t('entity.message.group') },
+  { key: 'messageTitle', label: t('entity.message.title') },
+  { key: 'messageContent', label: t('entity.message.content') },
   { key: 'sendTimeStart', label: t('entity.message.sendtime') + ' (' + t('common.page.entity.createdatstart') + ')' },
   { key: 'sendTimeEnd', label: t('entity.message.sendtime') + ' (' + t('common.page.entity.createdatend') + ')' },
   { key: 'readTimeStart', label: t('entity.message.readtime') + ' (' + t('common.page.entity.createdatstart') + ')' },
@@ -421,6 +437,9 @@ function handleFoundationMessageReceived(_msg: SignalRMessage): void {
 /** 页面挂载后加载分页列表并订阅实时消息 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
+  currentPage.value = getTaktDefaultPageIndex()
+  pageSize.value = getTaktDefaultPageSize()
+  paginationReady.value = true
   loadData()
   onEventBus('foundation:message:received', handleFoundationMessageReceived)
 })
@@ -469,6 +488,22 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
   },
   {
+    title: t('entity.message.type'),
+    dataIndex: 'messageType',
+    key: 'messageType',
+    width: 100,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
+    title: t('entity.message.group'),
+    dataIndex: 'messageGroup',
+    key: 'messageGroup',
+    width: 100,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
     title: t('entity.message.title'),
     dataIndex: 'messageTitle',
     key: 'messageTitle',
@@ -485,22 +520,6 @@ const columns = computed<TableColumnsType>(() => [
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getMessageField(record, 'messageContent') ?? ''
-  },
-  {
-    title: t('entity.message.type'),
-    dataIndex: 'messageType',
-    key: 'messageType',
-    width: 100,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: t('entity.message.group'),
-    dataIndex: 'messageGroup',
-    key: 'messageGroup',
-    width: 100,
-    resizable: true,
-    ellipsis: true,
   },
   {
     title: t('entity.message.sendtime'),
@@ -609,8 +628,10 @@ async function loadData() {
     if (q.toUserName) params.toUserName = q.toUserName
     if (q.messageTitle) params.messageTitle = q.messageTitle
     if (q.messageContent) params.messageContent = q.messageContent
-    if (q.messageType !== undefined) params.messageType = String(q.messageType)
-    if (q.messageGroup !== undefined) params.messageGroup = q.messageGroup
+    const messageType = trimDictQueryValue(q.messageType)
+    if (messageType !== undefined) params.messageType = messageType
+    const messageGroup = trimDictQueryValue(q.messageGroup)
+    if (messageGroup !== undefined) params.messageGroup = messageGroup
     if (q.sendTimeStart) params.sendTimeStart = q.sendTimeStart
     if (q.sendTimeEnd) params.sendTimeEnd = q.sendTimeEnd
     if (q.readTimeStart) params.readTimeStart = q.readTimeStart
@@ -653,8 +674,8 @@ function handleReset() {
     toUserName: '',
     messageTitle: '',
     messageContent: '',
-    messageType: undefined as number | undefined,
-    messageGroup: undefined as number | undefined,
+    messageType: undefined as string | undefined,
+    messageGroup: undefined as string | undefined,
     sendTimeStart: '',
     sendTimeEnd: '',
     readTimeStart: '',
@@ -668,9 +689,9 @@ function handleReset() {
   loadData()
 }
 
-/** 打开新增弹窗 */
-function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.message._self') })
+/** 打开发送消息弹窗 */
+function handleSendMessage() {
+  formTitle.value = t('common.page.button.sendmessage')
   formData.value = {}
   formVisible.value = true
 }
@@ -720,8 +741,10 @@ async function handleExport() {
     if (q.toUserName) exportQuery.toUserName = q.toUserName
     if (q.messageTitle) exportQuery.messageTitle = q.messageTitle
     if (q.messageContent) exportQuery.messageContent = q.messageContent
-    if (q.messageType !== undefined) exportQuery.messageType = String(q.messageType)
-    if (q.messageGroup !== undefined) exportQuery.messageGroup = q.messageGroup
+    const exportMessageType = trimDictQueryValue(q.messageType)
+    if (exportMessageType !== undefined) exportQuery.messageType = exportMessageType
+    const exportMessageGroup = trimDictQueryValue(q.messageGroup)
+    if (exportMessageGroup !== undefined) exportQuery.messageGroup = exportMessageGroup
     if (q.sendTimeStart) exportQuery.sendTimeStart = q.sendTimeStart
     if (q.sendTimeEnd) exportQuery.sendTimeEnd = q.sendTimeEnd
     if (q.readTimeStart) exportQuery.readTimeStart = q.readTimeStart
@@ -812,8 +835,8 @@ function handleAdvancedQueryReset() {
     toUserName: '',
     messageTitle: '',
     messageContent: '',
-    messageType: undefined as number | undefined,
-    messageGroup: undefined as number | undefined,
+    messageType: undefined as string | undefined,
+    messageGroup: undefined as string | undefined,
     sendTimeStart: '',
     sendTimeEnd: '',
     readTimeStart: '',

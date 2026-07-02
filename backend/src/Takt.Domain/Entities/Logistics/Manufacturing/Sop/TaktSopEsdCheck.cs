@@ -22,25 +22,31 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Sop;
 [SugarTable("takt_logistics_manufacturing_sop_esd_check", "SOP ESD检查表")]
 [SugarIndex("ix_sop_esd_check_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_sop_esd_check_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_sop_esd_check_workstation", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(WorkstationId), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_sop_esd_check_workstation", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(WorkstationId), OrderByType.Asc, false)]
 public class TaktSopEsdCheck : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工位 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// </summary>
+    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
     /// </summary>
     [SugarColumn(ColumnName = "workstation_id", ColumnDescription = "工位ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long WorkstationId { get; set; }
 
     /// <summary>
-    /// 执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 执行追溯 ID（关联 TaktSopExec.Id，选项 TaktSopExecs/options）
     /// </summary>
     [SugarColumn(ColumnName = "exec_id", ColumnDescription = "执行追溯ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ExecId { get; set; }
 
     /// <summary>
-    /// 员工 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [SugarColumn(ColumnName = "employee_id", ColumnDescription = "员工ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -59,15 +65,15 @@ public class TaktSopEsdCheck : TaktCompanyEntityBase
     public decimal? ResistanceValue { get; set; }
 
     /// <summary>
-    /// 是否达标（字典 sys_yes_no_type，0=否，1=是）
+    /// 达标（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
-    [SugarColumn(ColumnName = "is_compliant", ColumnDescription = "是否达标", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
+    [SugarColumn(ColumnName = "is_compliant", ColumnDescription = "达标", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int IsCompliant { get; set; } = 1;
 
     /// <summary>
-    /// 是否触发锁屏（字典 sys_yes_no_type，0=否，1=是）
+    /// 锁屏（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
-    [SugarColumn(ColumnName = "lock_screen_triggered", ColumnDescription = "是否触发锁屏", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    [SugarColumn(ColumnName = "lock_screen_triggered", ColumnDescription = "锁屏", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int LockScreenTriggered { get; set; } = 0;
 
     /// <summary>

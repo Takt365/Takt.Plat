@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/human-resource/personnel
 // 文件名称：employee.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/personnel 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -36,7 +36,7 @@ export interface Employee extends CompanyDtoBase {
   /**
    * 姓名
    */
-  name: string;
+  employeeName: string;
 
   /**
    * 性别（0=未知，1=男，2=女）
@@ -44,17 +44,17 @@ export interface Employee extends CompanyDtoBase {
   gender: number;
 
   /**
-   * 出生日期
+   * 出生日期（人事档案必填）
    */
   birthDate: string;
 
   /**
-   * 身份证号
+   * 身份证号（人事档案必填）
    */
   idCardNo: string;
 
   /**
-   * 手机号码
+   * 手机号码（人事档案必填）
    */
   mobile: string;
 
@@ -64,7 +64,7 @@ export interface Employee extends CompanyDtoBase {
   email?: string;
 
   /**
-   * 籍贯（6 位 GB 行政区划代码，字典 hr_native_place_code）
+   * 籍贯（字典 hr_native_place_code 的 6 位 GB 行政区划代码，人事档案必填）
    */
   nativePlace: string;
 
@@ -74,12 +74,12 @@ export interface Employee extends CompanyDtoBase {
   ethnicity: number;
 
   /**
-   * 政治面貌（字典 hr_political_status，0～12）
+   * 政治面貌（字典 hr_political_status，0～12；人事档案必填）
    */
   politicalStatus: number;
 
   /**
-   * 婚姻状况（0=未婚，1=已婚，2=离异，3=丧偶）
+   * 婚姻状况（0=未婚，1=已婚，2=离异，3=丧偶；人事档案必填）
    */
   maritalStatus: number;
 
@@ -99,37 +99,37 @@ export interface Employee extends CompanyDtoBase {
   major?: string;
 
   /**
-   * 实际上岗日期（JoinedDate：入职上班；招聘录用见人才管理 TaktTalentOffer）
+   * 实际上岗日期（JoinedDate：入职上班；投影字段，由上岗审批通过后回写，未上岗可空）
    */
   joinedDate?: string;
 
   /**
-   * 试用期结束日期
+   * 试用期结束日期（投影字段，由上岗审批通过后回写）
    */
   probationEndDate?: string;
 
   /**
-   * 转正日期
+   * 转正日期（投影字段，由上岗审批通过后回写）
    */
   regularDate?: string;
 
   /**
-   * 离职日期
+   * 离职日期（投影字段，由离职审批通过后回写）
    */
   terminationDate?: string;
 
   /**
-   * 最后工作日
+   * 最后工作日（投影字段，由离职审批通过后回写）
    */
   lastWorkDate?: string;
 
   /**
-   * 离职类型（0=主动辞职，1=公司辞退，2=合同到期，3=退休，9=其他）
+   * 离职类型（投影字段，由离职审批通过后回写；0=主动辞职，1=公司辞退，2=合同到期，3=退休，9=其他）
    */
   resignationType?: number;
 
   /**
-   * 离职原因
+   * 离职原因（投影字段，由离职审批通过后回写）
    */
   resignationReason?: string;
 
@@ -139,7 +139,7 @@ export interface Employee extends CompanyDtoBase {
   employeeStatus: number;
 
   /**
-   * 当前主部门ID（任职快照，与最新已生效上岗单同步）
+   * 当前主部门ID（任职投影快照；未上岗可空，在岗员工由投影服务保证有值）
    */
   primaryDeptId?: string;
 
@@ -149,7 +149,7 @@ export interface Employee extends CompanyDtoBase {
   primaryDeptName?: string;
 
   /**
-   * 当前主岗位ID（任职快照）
+   * 当前主岗位ID（任职投影快照；未上岗可空，在岗员工由投影服务保证有值）
    */
   primaryPostId?: string;
 
@@ -159,29 +159,29 @@ export interface Employee extends CompanyDtoBase {
   primaryPostName?: string;
 
   /**
-   * 是否内置（种子员工不可删）
+   * 内置（种子员工不可删）
    */
   isBuiltIn: number;
 
   /**
-   * 紧急联系人姓名
+   * 紧急联系人姓名（人事档案必填）
    */
   emergencyContactName: string;
 
   /**
-   * 紧急联系人电话
+   * 紧急联系人电话（人事档案必填）
    */
   emergencyContactPhone: string;
 
   /**
-   * 家庭住址
+   * 家庭住址（人事档案必填）
    */
   homeAddress: string;
 
   /**
    * 照片URL
    */
-  photoUrl?: string;
+  avatar?: string;
 
   /**
    * 员工部门关联（RBAC，表 takt_human_resource_organization_employeedept） （子表：TaktEmployeeDept）
@@ -221,7 +221,7 @@ export interface EmployeeQuery extends TaktPagedQuery {
   /**
    * 姓名
    */
-  name?: string;
+  employeeName?: string;
 
   /**
    * 性别（0=未知，1=男，2=女）
@@ -229,22 +229,22 @@ export interface EmployeeQuery extends TaktPagedQuery {
   gender?: number;
 
   /**
-   * 出生日期（范围查询-开始）
+   * 出生日期（人事档案必填）（范围查询-开始）
    */
   birthDateStart?: string;
 
   /**
-   * 出生日期（范围查询-结束）
+   * 出生日期（人事档案必填）（范围查询-结束）
    */
   birthDateEnd?: string;
 
   /**
-   * 身份证号
+   * 身份证号（人事档案必填）
    */
   idCardNo?: string;
 
   /**
-   * 手机号码
+   * 手机号码（人事档案必填）
    */
   mobile?: string;
 
@@ -254,22 +254,22 @@ export interface EmployeeQuery extends TaktPagedQuery {
   email?: string;
 
   /**
-   * 籍贯（6 位 GB 行政区划代码，字典 hr_native_place_code）
+   * 籍贯（字典 hr_native_place_code 的 6 位 GB 行政区划代码，人事档案必填）
    */
   nativePlace?: string;
 
   /**
-   * 民族（字典 hr_ethnic_code 编码或文本）
+   * 民族（字典 hr_ethnic_code，1～56）
    */
   ethnicity?: number;
 
   /**
-   * 政治面貌（字典 hr_political_status，0～12）
+   * 政治面貌（字典 hr_political_status，0～12；人事档案必填）
    */
   politicalStatus?: number;
 
   /**
-   * 婚姻状况（0=未婚，1=已婚，2=离异，3=丧偶）
+   * 婚姻状况（0=未婚，1=已婚，2=离异，3=丧偶；人事档案必填）
    */
   maritalStatus?: number;
 
@@ -289,62 +289,62 @@ export interface EmployeeQuery extends TaktPagedQuery {
   major?: string;
 
   /**
-   * 实际上岗日期（JoinedDate：入职上班；招聘录用见人才管理 TaktTalentOffer）（范围查询-开始）
+   * 实际上岗日期（JoinedDate：入职上班；投影字段，由上岗审批通过后回写，未上岗可空）（范围查询-开始）
    */
   joinedDateStart?: string;
 
   /**
-   * 实际上岗日期（JoinedDate：入职上班；招聘录用见人才管理 TaktTalentOffer）（范围查询-结束）
+   * 实际上岗日期（JoinedDate：入职上班；投影字段，由上岗审批通过后回写，未上岗可空）（范围查询-结束）
    */
   joinedDateEnd?: string;
 
   /**
-   * 试用期结束日期（范围查询-开始）
+   * 试用期结束日期（投影字段，由上岗审批通过后回写）（范围查询-开始）
    */
   probationEndDateStart?: string;
 
   /**
-   * 试用期结束日期（范围查询-结束）
+   * 试用期结束日期（投影字段，由上岗审批通过后回写）（范围查询-结束）
    */
   probationEndDateEnd?: string;
 
   /**
-   * 转正日期（范围查询-开始）
+   * 转正日期（投影字段，由上岗审批通过后回写）（范围查询-开始）
    */
   regularDateStart?: string;
 
   /**
-   * 转正日期（范围查询-结束）
+   * 转正日期（投影字段，由上岗审批通过后回写）（范围查询-结束）
    */
   regularDateEnd?: string;
 
   /**
-   * 离职日期（范围查询-开始）
+   * 离职日期（投影字段，由离职审批通过后回写）（范围查询-开始）
    */
   terminationDateStart?: string;
 
   /**
-   * 离职日期（范围查询-结束）
+   * 离职日期（投影字段，由离职审批通过后回写）（范围查询-结束）
    */
   terminationDateEnd?: string;
 
   /**
-   * 最后工作日（范围查询-开始）
+   * 最后工作日（投影字段，由离职审批通过后回写）（范围查询-开始）
    */
   lastWorkDateStart?: string;
 
   /**
-   * 最后工作日（范围查询-结束）
+   * 最后工作日（投影字段，由离职审批通过后回写）（范围查询-结束）
    */
   lastWorkDateEnd?: string;
 
   /**
-   * 离职类型（0=主动辞职，1=公司辞退，2=合同到期，3=退休，9=其他）
+   * 离职类型（投影字段，由离职审批通过后回写；0=主动辞职，1=公司辞退，2=合同到期，3=退休，9=其他）
    */
   resignationType?: number;
 
   /**
-   * 离职原因
+   * 离职原因（投影字段，由离职审批通过后回写）
    */
   resignationReason?: string;
 
@@ -354,39 +354,39 @@ export interface EmployeeQuery extends TaktPagedQuery {
   employeeStatus?: number;
 
   /**
-   * 当前主部门ID（任职快照，与最新已生效上岗单同步）
+   * 当前主部门ID（任职投影快照；未上岗可空，在岗员工由投影服务保证有值）
    */
   primaryDeptId?: string;
 
   /**
-   * 当前主岗位ID（任职快照）
+   * 当前主岗位ID（任职投影快照；未上岗可空，在岗员工由投影服务保证有值）
    */
   primaryPostId?: string;
 
   /**
-   * 是否内置（种子员工不可删）
+   * 内置（种子员工不可删）
    */
   isBuiltIn?: number;
 
   /**
-   * 紧急联系人姓名
+   * 紧急联系人姓名（人事档案必填）
    */
   emergencyContactName?: string;
 
   /**
-   * 紧急联系人电话
+   * 紧急联系人电话（人事档案必填）
    */
   emergencyContactPhone?: string;
 
   /**
-   * 家庭住址
+   * 家庭住址（人事档案必填）
    */
   homeAddress?: string;
 
   /**
    * 照片URL
    */
-  photoUrl?: string;
+  avatar?: string;
 
   /**
    * 创建时间（范围查询-开始）
@@ -401,7 +401,7 @@ export interface EmployeeQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -428,7 +428,7 @@ export interface EmployeeCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -440,7 +440,7 @@ export interface EmployeeCreate {
   /**
    * 姓名
    */
-  name: string;
+  employeeName: string;
 
   /**
    * 性别（0=未知，1=男，2=女）
@@ -448,17 +448,17 @@ export interface EmployeeCreate {
   gender: number;
 
   /**
-   * 出生日期
+   * 出生日期（人事档案必填）
    */
   birthDate: string;
 
   /**
-   * 身份证号
+   * 身份证号（人事档案必填）
    */
   idCardNo: string;
 
   /**
-   * 手机号码
+   * 手机号码（人事档案必填）
    */
   mobile: string;
 
@@ -468,7 +468,7 @@ export interface EmployeeCreate {
   email?: string;
 
   /**
-   * 籍贯（6 位 GB 行政区划代码，字典 hr_native_place_code）
+   * 籍贯（字典 hr_native_place_code 的 6 位 GB 行政区划代码，人事档案必填）
    */
   nativePlace: string;
 
@@ -478,12 +478,12 @@ export interface EmployeeCreate {
   ethnicity: number;
 
   /**
-   * 政治面貌（字典 hr_political_status，0～12）
+   * 政治面貌（字典 hr_political_status，0～12；人事档案必填）
    */
   politicalStatus: number;
 
   /**
-   * 婚姻状况（0=未婚，1=已婚，2=离异，3=丧偶）
+   * 婚姻状况（0=未婚，1=已婚，2=离异，3=丧偶；人事档案必填）
    */
   maritalStatus: number;
 
@@ -503,37 +503,37 @@ export interface EmployeeCreate {
   major?: string;
 
   /**
-   * 实际上岗日期（JoinedDate：入职上班；招聘录用见人才管理 TaktTalentOffer）
+   * 实际上岗日期（JoinedDate：入职上班；投影字段，由上岗审批通过后回写，未上岗可空）
    */
   joinedDate?: string;
 
   /**
-   * 试用期结束日期
+   * 试用期结束日期（投影字段，由上岗审批通过后回写）
    */
   probationEndDate?: string;
 
   /**
-   * 转正日期
+   * 转正日期（投影字段，由上岗审批通过后回写）
    */
   regularDate?: string;
 
   /**
-   * 离职日期
+   * 离职日期（投影字段，由离职审批通过后回写）
    */
   terminationDate?: string;
 
   /**
-   * 最后工作日
+   * 最后工作日（投影字段，由离职审批通过后回写）
    */
   lastWorkDate?: string;
 
   /**
-   * 离职类型（0=主动辞职，1=公司辞退，2=合同到期，3=退休，9=其他）
+   * 离职类型（投影字段，由离职审批通过后回写；0=主动辞职，1=公司辞退，2=合同到期，3=退休，9=其他）
    */
   resignationType?: number;
 
   /**
-   * 离职原因
+   * 离职原因（投影字段，由离职审批通过后回写）
    */
   resignationReason?: string;
 
@@ -543,39 +543,39 @@ export interface EmployeeCreate {
   employeeStatus: number;
 
   /**
-   * 当前主部门ID（任职快照，与最新已生效上岗单同步）
+   * 当前主部门ID（任职投影快照；未上岗可空，在岗员工由投影服务保证有值）
    */
   primaryDeptId?: string;
 
   /**
-   * 当前主岗位ID（任职快照）
+   * 当前主岗位ID（任职投影快照；未上岗可空，在岗员工由投影服务保证有值）
    */
   primaryPostId?: string;
 
   /**
-   * 是否内置（种子员工不可删）
+   * 内置（种子员工不可删）
    */
   isBuiltIn: number;
 
   /**
-   * 紧急联系人姓名
+   * 紧急联系人姓名（人事档案必填）
    */
   emergencyContactName: string;
 
   /**
-   * 紧急联系人电话
+   * 紧急联系人电话（人事档案必填）
    */
   emergencyContactPhone: string;
 
   /**
-   * 家庭住址
+   * 家庭住址（人事档案必填）
    */
   homeAddress: string;
 
   /**
    * 照片URL
    */
-  photoUrl?: string;
+  avatar?: string;
 
   /**
    * 员工部门关联（RBAC 全量覆盖，分配走 ITaktRbacService）
@@ -590,7 +590,7 @@ export interface EmployeeCreate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -627,9 +627,9 @@ export interface EmployeeStatus {
   employeeId: string;
 
   /**
-   * 婚姻状况（0=未婚，1=已婚，2=离异，3=丧偶）
+   * 政治面貌（字典 hr_political_status，0～12；人事档案必填）
    */
-  maritalStatus: number;
+  politicalStatus: number;
 
 }
 
@@ -658,7 +658,7 @@ export interface EmployeeTemplate {
   /**
    * 姓名
    */
-  name?: string;
+  employeeName?: string;
 
   /**
    * 性别（0=未知，1=男，2=女）
@@ -666,12 +666,17 @@ export interface EmployeeTemplate {
   gender?: number;
 
   /**
-   * 身份证号
+   * 出生日期（人事档案必填）
+   */
+  birthDate?: string;
+
+  /**
+   * 身份证号（人事档案必填）
    */
   idCardNo?: string;
 
   /**
-   * 手机号码
+   * 手机号码（人事档案必填）
    */
   mobile?: string;
 
@@ -681,22 +686,22 @@ export interface EmployeeTemplate {
   email?: string;
 
   /**
-   * 籍贯（6 位 GB 行政区划代码，字典 hr_native_place_code）
+   * 籍贯（字典 hr_native_place_code 的 6 位 GB 行政区划代码，人事档案必填）
    */
   nativePlace?: string;
 
   /**
-   * 民族（字典 hr_ethnic_code 编码或文本）
+   * 民族（字典 hr_ethnic_code，1～56）
    */
   ethnicity?: number;
 
   /**
-   * 政治面貌（字典 hr_political_status，0～12）
+   * 政治面貌（字典 hr_political_status，0～12；人事档案必填）
    */
   politicalStatus?: number;
 
   /**
-   * 婚姻状况（0=未婚，1=已婚，2=离异，3=丧偶）
+   * 婚姻状况（0=未婚，1=已婚，2=离异，3=丧偶；人事档案必填）
    */
   maritalStatus?: number;
 
@@ -711,9 +716,99 @@ export interface EmployeeTemplate {
   graduateSchool?: string;
 
   /**
+   * 专业（最高学历摘要）
+   */
+  major?: string;
+
+  /**
+   * 实际上岗日期（JoinedDate：入职上班；投影字段，由上岗审批通过后回写，未上岗可空）
+   */
+  joinedDate?: string;
+
+  /**
+   * 试用期结束日期（投影字段，由上岗审批通过后回写）
+   */
+  probationEndDate?: string;
+
+  /**
+   * 转正日期（投影字段，由上岗审批通过后回写）
+   */
+  regularDate?: string;
+
+  /**
+   * 离职日期（投影字段，由离职审批通过后回写）
+   */
+  terminationDate?: string;
+
+  /**
+   * 最后工作日（投影字段，由离职审批通过后回写）
+   */
+  lastWorkDate?: string;
+
+  /**
+   * 离职类型（投影字段，由离职审批通过后回写；0=主动辞职，1=公司辞退，2=合同到期，3=退休，9=其他）
+   */
+  resignationType?: number;
+
+  /**
+   * 离职原因（投影字段，由离职审批通过后回写）
+   */
+  resignationReason?: string;
+
+  /**
+   * 员工状态（1=试用期，2=正式，3=离职，4=退休）
+   */
+  employeeStatus?: number;
+
+  /**
+   * 当前主部门ID（任职投影快照；未上岗可空，在岗员工由投影服务保证有值）
+   */
+  primaryDeptId?: string;
+
+  /**
+   * 当前主岗位ID（任职投影快照；未上岗可空，在岗员工由投影服务保证有值）
+   */
+  primaryPostId?: string;
+
+  /**
+   * 内置（种子员工不可删）
+   */
+  isBuiltIn?: number;
+
+  /**
+   * 紧急联系人姓名（人事档案必填）
+   */
+  emergencyContactName?: string;
+
+  /**
+   * 紧急联系人电话（人事档案必填）
+   */
+  emergencyContactPhone?: string;
+
+  /**
+   * 家庭住址（人事档案必填）
+   */
+  homeAddress?: string;
+
+  /**
+   * 照片URL
+   */
+  avatar?: string;
+
+  /**
+   * 员工部门关联（RBAC 全量覆盖，分配走 ITaktRbacService）
+   */
+  employeeDeptIds?: any;
+
+  /**
+   * 员工岗位关联（RBAC 全量覆盖，分配走 ITaktRbacService）
+   */
+  employeePostIds?: any;
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -740,7 +835,7 @@ export interface EmployeeImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -752,7 +847,7 @@ export interface EmployeeImport {
   /**
    * 姓名
    */
-  name?: string;
+  employeeName?: string;
 
   /**
    * 性别（0=未知，1=男，2=女）
@@ -760,17 +855,17 @@ export interface EmployeeImport {
   gender?: number;
 
   /**
-   * 出生日期
+   * 出生日期（人事档案必填）
    */
   birthDate?: string;
 
   /**
-   * 身份证号
+   * 身份证号（人事档案必填）
    */
   idCardNo?: string;
 
   /**
-   * 手机号码
+   * 手机号码（人事档案必填）
    */
   mobile?: string;
 
@@ -780,22 +875,22 @@ export interface EmployeeImport {
   email?: string;
 
   /**
-   * 籍贯（6 位 GB 行政区划代码，字典 hr_native_place_code）
+   * 籍贯（字典 hr_native_place_code 的 6 位 GB 行政区划代码，人事档案必填）
    */
   nativePlace?: string;
 
   /**
-   * 民族（字典 hr_ethnic_code 编码或文本）
+   * 民族（字典 hr_ethnic_code，1～56）
    */
   ethnicity?: number;
 
   /**
-   * 政治面貌（字典 hr_political_status，0～12）
+   * 政治面貌（字典 hr_political_status，0～12；人事档案必填）
    */
   politicalStatus?: number;
 
   /**
-   * 婚姻状况（0=未婚，1=已婚，2=离异，3=丧偶）
+   * 婚姻状况（0=未婚，1=已婚，2=离异，3=丧偶；人事档案必填）
    */
   maritalStatus?: number;
 
@@ -810,24 +905,99 @@ export interface EmployeeImport {
   graduateSchool?: string;
 
   /**
-   * 紧急联系人姓名
+   * 专业（最高学历摘要）
+   */
+  major?: string;
+
+  /**
+   * 实际上岗日期（JoinedDate：入职上班；投影字段，由上岗审批通过后回写，未上岗可空）
+   */
+  joinedDate?: string;
+
+  /**
+   * 试用期结束日期（投影字段，由上岗审批通过后回写）
+   */
+  probationEndDate?: string;
+
+  /**
+   * 转正日期（投影字段，由上岗审批通过后回写）
+   */
+  regularDate?: string;
+
+  /**
+   * 离职日期（投影字段，由离职审批通过后回写）
+   */
+  terminationDate?: string;
+
+  /**
+   * 最后工作日（投影字段，由离职审批通过后回写）
+   */
+  lastWorkDate?: string;
+
+  /**
+   * 离职类型（投影字段，由离职审批通过后回写；0=主动辞职，1=公司辞退，2=合同到期，3=退休，9=其他）
+   */
+  resignationType?: number;
+
+  /**
+   * 离职原因（投影字段，由离职审批通过后回写）
+   */
+  resignationReason?: string;
+
+  /**
+   * 员工状态（1=试用期，2=正式，3=离职，4=退休）
+   */
+  employeeStatus?: number;
+
+  /**
+   * 当前主部门ID（任职投影快照；未上岗可空，在岗员工由投影服务保证有值）
+   */
+  primaryDeptId?: string;
+
+  /**
+   * 当前主岗位ID（任职投影快照；未上岗可空，在岗员工由投影服务保证有值）
+   */
+  primaryPostId?: string;
+
+  /**
+   * 内置（种子员工不可删）
+   */
+  isBuiltIn?: number;
+
+  /**
+   * 紧急联系人姓名（人事档案必填）
    */
   emergencyContactName?: string;
 
   /**
-   * 紧急联系人电话
+   * 紧急联系人电话（人事档案必填）
    */
   emergencyContactPhone?: string;
 
   /**
-   * 家庭住址
+   * 家庭住址（人事档案必填）
    */
   homeAddress?: string;
 
   /**
+   * 照片URL
+   */
+  avatar?: string;
+
+  /**
+   * 员工部门关联（RBAC 全量覆盖，分配走 ITaktRbacService）
+   */
+  employeeDeptIds?: any;
+
+  /**
+   * 员工岗位关联（RBAC 全量覆盖，分配走 ITaktRbacService）
+   */
+  employeePostIds?: any;
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -861,7 +1031,7 @@ export interface EmployeeExport {
   /**
    * 姓名
    */
-  name: string;
+  employeeName: string;
 
   /**
    * 性别（0=未知，1=男，2=女）
@@ -869,17 +1039,17 @@ export interface EmployeeExport {
   gender: number;
 
   /**
-   * 出生日期
+   * 出生日期（人事档案必填）
    */
   birthDate: string;
 
   /**
-   * 身份证号
+   * 身份证号（人事档案必填）
    */
   idCardNo: string;
 
   /**
-   * 手机号码
+   * 手机号码（人事档案必填）
    */
   mobile: string;
 
@@ -889,7 +1059,7 @@ export interface EmployeeExport {
   email?: string;
 
   /**
-   * 籍贯（6 位 GB 行政区划代码，字典 hr_native_place_code）
+   * 籍贯（字典 hr_native_place_code 的 6 位 GB 行政区划代码，人事档案必填）
    */
   nativePlace: string;
 
@@ -899,12 +1069,12 @@ export interface EmployeeExport {
   ethnicity: number;
 
   /**
-   * 政治面貌（字典 hr_political_status，0～12）
+   * 政治面貌（字典 hr_political_status，0～12；人事档案必填）
    */
   politicalStatus: number;
 
   /**
-   * 婚姻状况（0=未婚，1=已婚，2=离异，3=丧偶）
+   * 婚姻状况（0=未婚，1=已婚，2=离异，3=丧偶；人事档案必填）
    */
   maritalStatus: number;
 
@@ -924,37 +1094,37 @@ export interface EmployeeExport {
   major?: string;
 
   /**
-   * 实际上岗日期（JoinedDate：入职上班；招聘录用见人才管理 TaktTalentOffer）
+   * 实际上岗日期（JoinedDate：入职上班；投影字段，由上岗审批通过后回写，未上岗可空）
    */
   joinedDate?: string;
 
   /**
-   * 试用期结束日期
+   * 试用期结束日期（投影字段，由上岗审批通过后回写）
    */
   probationEndDate?: string;
 
   /**
-   * 转正日期
+   * 转正日期（投影字段，由上岗审批通过后回写）
    */
   regularDate?: string;
 
   /**
-   * 离职日期
+   * 离职日期（投影字段，由离职审批通过后回写）
    */
   terminationDate?: string;
 
   /**
-   * 最后工作日
+   * 最后工作日（投影字段，由离职审批通过后回写）
    */
   lastWorkDate?: string;
 
   /**
-   * 离职类型（0=主动辞职，1=公司辞退，2=合同到期，3=退休，9=其他）
+   * 离职类型（投影字段，由离职审批通过后回写；0=主动辞职，1=公司辞退，2=合同到期，3=退休，9=其他）
    */
   resignationType?: number;
 
   /**
-   * 离职原因
+   * 离职原因（投影字段，由离职审批通过后回写）
    */
   resignationReason?: string;
 
@@ -964,44 +1134,44 @@ export interface EmployeeExport {
   employeeStatus: number;
 
   /**
-   * 当前主部门ID（任职快照，与最新已生效上岗单同步）
+   * 当前主部门ID（任职投影快照；未上岗可空，在岗员工由投影服务保证有值）
    */
   primaryDeptId?: string;
 
   /**
-   * 当前主岗位ID（任职快照）
+   * 当前主岗位ID（任职投影快照；未上岗可空，在岗员工由投影服务保证有值）
    */
   primaryPostId?: string;
 
   /**
-   * 是否内置（种子员工不可删）
+   * 内置（种子员工不可删）
    */
   isBuiltIn: number;
 
   /**
-   * 紧急联系人姓名
+   * 紧急联系人姓名（人事档案必填）
    */
   emergencyContactName: string;
 
   /**
-   * 紧急联系人电话
+   * 紧急联系人电话（人事档案必填）
    */
   emergencyContactPhone: string;
 
   /**
-   * 家庭住址
+   * 家庭住址（人事档案必填）
    */
   homeAddress: string;
 
   /**
    * 照片URL
    */
-  photoUrl?: string;
+  avatar?: string;
 
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注

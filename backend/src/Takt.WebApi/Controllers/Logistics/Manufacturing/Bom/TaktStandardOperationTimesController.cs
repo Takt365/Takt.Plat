@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Manufacturing.Bom
 // 文件名称：TaktStandardOperationTimesController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：标准工序时间控制器
 // 
@@ -91,6 +91,31 @@ public class TaktStandardOperationTimesController : TaktControllerBase
         try
         {
             var result = await _standardOperationTimeService.GetStandardOperationTimeOptionsAsync();
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 根据物料编码获取当前有效的标准工序时间列表
+    /// </summary>
+    /// <param name="materialCode">物料编码</param>
+    /// <param name="plantCode">工厂代码（可选）</param>
+    /// <returns>标准工序时间 DTO 列表</returns>
+    [TaktPermission("logistics:manufacturing:bom:standard:operation:time:query", "按物料查询标准工序时间")]
+    [HttpGet("by-material")]
+    public async Task<IActionResult> GetStandardOperationTimeByMaterialAsync([FromQuery] string materialCode, [FromQuery] string? plantCode = null)
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(materialCode))
+            {
+                return BadRequest("物料编码不能为空");
+            }
+            var result = await _standardOperationTimeService.GetStandardOperationTimeByMaterialAsync(materialCode, plantCode);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

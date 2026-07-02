@@ -45,12 +45,12 @@ public class TaktFlowForm : TaktCompanyEntityBase
     /// <summary>
     /// 表单设计 JSON
     /// </summary>
-    [SugarColumn(ColumnName = "form_config", ColumnDescription = "表单配置JSON", ColumnDataType = "nvarchar", Length = -1, IsNullable = true)]
+    [SugarColumn(ColumnName = "form_config", ColumnDescription = "表单配置", ColumnDataType = "nvarchar", Length = -1, IsNullable = true)]
     public string? FormConfig { get; set; }
     /// <summary>
     /// 表单模板 JSON
     /// </summary>
-    [SugarColumn(ColumnName = "form_template", ColumnDescription = "表单模板JSON", ColumnDataType = "nvarchar", Length = -1, IsNullable = true)]
+    [SugarColumn(ColumnName = "form_template", ColumnDescription = "表单模板", ColumnDataType = "nvarchar", Length = -1, IsNullable = true)]
     public string? FormTemplate { get; set; }
     /// <summary>
     /// 表单版本标签
@@ -60,12 +60,12 @@ public class TaktFlowForm : TaktCompanyEntityBase
     /// <summary>
     /// 是否绑定数据源
     /// </summary>
-    [SugarColumn(ColumnName = "is_datasource", ColumnDescription = "是否数据源表单", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    [SugarColumn(ColumnName = "is_datasource", ColumnDescription = "数据源表单", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsDatasource { get; set; }
     /// <summary>
-    /// 关联数据库名
+    /// 关联库名
     /// </summary>
-    [SugarColumn(ColumnName = "related_database_name", ColumnDescription = "关联数据库名", ColumnDataType = "varchar", Length = 128, IsNullable = true)]
+    [SugarColumn(ColumnName = "related_database_name", ColumnDescription = "关联库名", ColumnDataType = "varchar", Length = 128, IsNullable = true)]
     public string? RelatedDataBaseName { get; set; }
     /// <summary>
     /// 关联表名
@@ -73,9 +73,9 @@ public class TaktFlowForm : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "related_table_name", ColumnDescription = "关联表名", ColumnDataType = "varchar", Length = 128, IsNullable = true)]
     public string? RelatedTableName { get; set; }
     /// <summary>
-    /// 关联字段映射 JSON
+    /// 关联映射 JSON
     /// </summary>
-    [SugarColumn(ColumnName = "related_form_field", ColumnDescription = "关联字段映射", ColumnDataType = "nvarchar", Length = 4000, IsNullable = true)]
+    [SugarColumn(ColumnName = "related_form_field", ColumnDescription = "关联映射", ColumnDataType = "nvarchar", Length = 4000, IsNullable = true)]
     public string? RelatedFormField { get; set; }
     /// <summary>
     /// 排序号

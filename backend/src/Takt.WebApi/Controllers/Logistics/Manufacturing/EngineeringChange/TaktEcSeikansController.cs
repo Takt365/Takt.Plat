@@ -32,7 +32,7 @@ public class TaktEcSeikansController : TaktControllerBase
     public TaktEcSeikansController(ITaktEcSeikanService service) => _service = service;
 
     /// <summary>获取生管部门列表（分页）</summary>
-    [TaktPermission("logistics:manufacturing:engineeringchange:seikan:list", "生管部门列表")]
+    [TaktPermission("logistics:manufacturing:engineering:change:seikan:list", "生管部门列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetEcSeikanListAsync([FromQuery] TaktEcDeptViewQueryDto queryDto)
     {
@@ -41,7 +41,7 @@ public class TaktEcSeikansController : TaktControllerBase
     }
 
     /// <summary>根据设变明细 ID 获取生管部门行</summary>
-    [TaktPermission("logistics:manufacturing:engineeringchange:seikan:query", "生管部门详情")]
+    [TaktPermission("logistics:manufacturing:engineering:change:seikan:query", "生管部门详情")]
     [HttpGet("detail/{ecDetailId}")]
     public async Task<IActionResult> GetEcSeikanByEcDetailIdAsync(long ecDetailId)
     {
@@ -50,7 +50,7 @@ public class TaktEcSeikansController : TaktControllerBase
     }
 
     /// <summary>更新生管部门</summary>
-    [TaktPermission("logistics:manufacturing:engineeringchange:seikan:update", "更新生管部门")]
+    [TaktPermission("logistics:manufacturing:engineering:change:seikan:update", "更新生管部门")]
     [HttpPut("detail/{ecDetailId}")]
     public async Task<IActionResult> UpdateEcSeikanAsync(long ecDetailId, [FromBody] TaktEcDeptViewUpdateDto dto)
     {
@@ -59,7 +59,7 @@ public class TaktEcSeikansController : TaktControllerBase
     }
 
     /// <summary>导出生管部门</summary>
-    [TaktPermission("logistics:manufacturing:engineeringchange:seikan:export", "导出生管部门")]
+    [TaktPermission("logistics:manufacturing:engineering:change:seikan:export", "导出生管部门")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportEcSeikanAsync([FromQuery] TaktEcDeptViewQueryDto? query)
     {

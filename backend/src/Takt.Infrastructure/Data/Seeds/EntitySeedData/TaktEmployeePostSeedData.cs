@@ -86,7 +86,7 @@ public class TaktEmployeePostSeedData : ITaktSeedDataCoordinator
     private static IEnumerable<(string EmployeeNo, string PostCode)> GetEmployeePostTemplates(TaktCompany company)
     {
         if (string.Equals(company.DefaultCulture, "zh-CN", StringComparison.OrdinalIgnoreCase)
-            && company.CompanyType == 1)
+            && string.Equals(company.IndustryAttribute, "C", StringComparison.OrdinalIgnoreCase))
         {
             yield return ("900001", "POST01");
             yield return ("900002", "POST02");

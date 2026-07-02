@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Bom
 // 文件名称：TaktBillOfMaterialService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：物料清单应用服务实现
 // 
@@ -15,6 +15,7 @@ using Mapster;
 using SqlSugar;
 using Takt.Application.Dtos.Logistics.Manufacturing.Bom;
 using Takt.Domain.Entities.Logistics.Manufacturing.Bom;
+using Takt.Domain.Entities.Logistics.Materials;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
 using Takt.Shared.Exceptions;
@@ -29,9 +30,14 @@ namespace Takt.Application.Services.Logistics.Manufacturing.Bom;
 /// </summary>
 public class TaktBillOfMaterialService : TaktServiceBase, ITaktBillOfMaterialService
 {
+    private const int MaxExplosionLevel = 20;
+    private const int MaxExplosionLines = 5000;
+    private const int PublishedBomStatus = 1;
+
     private readonly ITaktCompanyRepository<TaktBillOfMaterial> _billOfMaterialRepository;
     private readonly ITaktCompanyRepository<TaktBillOfMaterialItem> _billOfMaterialItemRepository;
     private readonly ITaktCompanyRepository<TaktBillOfMaterialChangeLog> _billOfMaterialChangeLogRepository;
+    private readonly ITaktCompanyRepository<TaktMaterialPlant> _materialPlantRepository;
     private readonly ITaktSortOrderGenerator _sortOrderGenerator;
     private readonly ITaktLineNumberGenerator _lineNumberGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
@@ -42,6 +48,7 @@ public class TaktBillOfMaterialService : TaktServiceBase, ITaktBillOfMaterialSer
     /// <param name="billOfMaterialRepository">物料清单仓储</param>
     /// <param name="billOfMaterialItemRepository">BillOfMaterialItem仓储</param>
     /// <param name="billOfMaterialChangeLogRepository">BillOfMaterialChangeLog仓储</param>
+    /// <param name="materialPlantRepository">工厂物料仓储</param>
     /// <param name="sortOrderGenerator">排序号生成器</param>
     /// <param name="lineNumberGenerator">明细行号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
@@ -51,6 +58,7 @@ public class TaktBillOfMaterialService : TaktServiceBase, ITaktBillOfMaterialSer
         ITaktCompanyRepository<TaktBillOfMaterial> billOfMaterialRepository,
         ITaktCompanyRepository<TaktBillOfMaterialItem> billOfMaterialItemRepository,
         ITaktCompanyRepository<TaktBillOfMaterialChangeLog> billOfMaterialChangeLogRepository,
+        ITaktCompanyRepository<TaktMaterialPlant> materialPlantRepository,
         ITaktSortOrderGenerator sortOrderGenerator,
         ITaktLineNumberGenerator lineNumberGenerator,
         ITaktUniqueValidator uniqueValidator,
@@ -61,6 +69,7 @@ public class TaktBillOfMaterialService : TaktServiceBase, ITaktBillOfMaterialSer
         _billOfMaterialRepository = billOfMaterialRepository;
         _billOfMaterialItemRepository = billOfMaterialItemRepository;
         _billOfMaterialChangeLogRepository = billOfMaterialChangeLogRepository;
+        _materialPlantRepository = materialPlantRepository;
         _sortOrderGenerator = sortOrderGenerator;
         _lineNumberGenerator = lineNumberGenerator;
         _uniqueValidator = uniqueValidator;
@@ -99,7 +108,8 @@ public class TaktBillOfMaterialService : TaktServiceBase, ITaktBillOfMaterialSer
         }
         var dto = entity.Adapt<TaktBillOfMaterialDto>();
         await FillBillOfMaterialDetailsAsync(dto, entity);
-        return dto;    }
+        return dto;
+    }
 
     /// <summary>
     /// 获取物料清单选项列表
@@ -109,7 +119,7 @@ public class TaktBillOfMaterialService : TaktServiceBase, ITaktBillOfMaterialSer
     {
         EnsureThreeLayerContext();
         var list = await _billOfMaterialRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.BomStatus == 1,
             x => x.BomName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
@@ -347,6 +357,99 @@ public class TaktBillOfMaterialService : TaktServiceBase, ITaktBillOfMaterialSer
             fileName ?? "物料清单导出.xlsx");
     }
 
+    /// <summary>
+    /// BOM 多层递归展开（单层存储、运行时多层展开）
+    /// </summary>
+    /// <param name="queryDto">展开查询参数</param>
+    /// <returns>展开结果；根 BOM 不存在时返回 null</returns>
+    public async Task<TaktBillOfMaterialExplosionDto?> GetBillOfMaterialExplosionAsync(TaktBillOfMaterialExplosionQueryDto queryDto)
+    {
+        ArgumentNullException.ThrowIfNull(queryDto);
+        EnsureThreeLayerContext();
+        if (queryDto.BillOfMaterialId <= 0)
+        {
+            throw new TaktBusinessException("展开根 BOM ID 无效");
+        }
+
+        var demandQuantity = queryDto.Quantity <= 0 ? 1m : queryDto.Quantity;
+        var maxLevel = Math.Min(MaxExplosionLevel, Math.Max(0, queryDto.MaxLevel));
+
+        var root = await _billOfMaterialRepository.GetByIdAsync(queryDto.BillOfMaterialId);
+        if (root == null || root.TenantCode != CurrentTenantCode || root.CompanyCode != CurrentCompanyCode)
+        {
+            return null;
+        }
+
+        var now = DateTime.Now;
+        var plantBoms = await _billOfMaterialRepository.GetListAsync(x =>
+            x.TenantCode == CurrentTenantCode
+            && x.CompanyCode == CurrentCompanyCode
+            && x.PlantCode == root.PlantCode
+            && x.BomType == root.BomType);
+        var childBomLookup = BuildChildBomLookup(plantBoms, now);
+
+        var bomIds = plantBoms.Select(x => x.Id).ToHashSet();
+        bomIds.Add(root.Id);
+        var allItems = await _billOfMaterialItemRepository.GetListAsync(x => bomIds.Contains(x.BillOfMaterialId));
+        var itemsByBomId = allItems
+            .GroupBy(x => x.BillOfMaterialId)
+            .ToDictionary(g => g.Key, g => g.OrderBy(i => i.LineNumber).ToList());
+
+        var materialNameMap = BuildMaterialNameMap(plantBoms, root);
+        var materialPlants = await _materialPlantRepository.GetListAsync(x =>
+            x.TenantCode == CurrentTenantCode
+            && x.CompanyCode == CurrentCompanyCode
+            && x.PlantCode == root.PlantCode);
+        foreach (var materialPlant in materialPlants)
+        {
+            if (!string.IsNullOrWhiteSpace(materialPlant.MaterialCode))
+            {
+                materialNameMap[materialPlant.MaterialCode] = materialPlant.MaterialName;
+            }
+        }
+
+        var lines = new List<TaktBillOfMaterialExplosionLineDto>();
+        if (queryDto.IncludeLevelZero)
+        {
+            lines.Add(BuildLevelZeroLine(root, demandQuantity));
+        }
+
+        if (maxLevel > 0)
+        {
+            var rootItems = itemsByBomId.GetValueOrDefault(root.Id) ?? new List<TaktBillOfMaterialItem>();
+            var ancestorCodes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+            {
+                root.ParentMaterialCode
+            };
+            ExpandBillOfMaterialLines(
+                root,
+                rootItems,
+                demandQuantity,
+                1,
+                root.ParentMaterialCode,
+                maxLevel,
+                ancestorCodes,
+                childBomLookup,
+                itemsByBomId,
+                materialNameMap,
+                lines);
+        }
+
+        return new TaktBillOfMaterialExplosionDto
+        {
+            BillOfMaterialId = root.Id,
+            BomCode = root.BomCode,
+            ParentMaterialCode = root.ParentMaterialCode,
+            ParentMaterialName = root.ParentMaterialName,
+            Quantity = demandQuantity,
+            Lines = lines
+                .OrderBy(x => x.HierarchyLevel)
+                .ThenBy(x => x.LineNumber)
+                .ThenBy(x => x.MaterialCode, StringComparer.OrdinalIgnoreCase)
+                .ToList()
+        };
+    }
+
     // ========================================
     // 主子表级联（OneToMany）
     // ========================================
@@ -480,7 +583,6 @@ public class TaktBillOfMaterialService : TaktServiceBase, ITaktBillOfMaterialSer
                 || (x.AlternativeBomNumber != null && x.AlternativeBomNumber.Contains(keywords))
                 || (x.ParentMaterialUnit != null && x.ParentMaterialUnit.Contains(keywords))
                 || SqlFunc.ToString(x.ParentMaterialQuantity).Contains(keywords)
-                || SqlFunc.ToString(x.IsEnabled).Contains(keywords)
                 || SqlFunc.ToString(x.BomStatus).Contains(keywords)
                 || (x.BomDescription != null && x.BomDescription.Contains(keywords))
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
@@ -547,11 +649,6 @@ public class TaktBillOfMaterialService : TaktServiceBase, ITaktBillOfMaterialSer
             exp = exp.And(x => x.ParentMaterialQuantity == queryDto.ParentMaterialQuantity);
         }
 
-        if (queryDto?.IsEnabled.HasValue == true)
-        {
-            exp = exp.And(x => x.IsEnabled == queryDto.IsEnabled);
-        }
-
         if (queryDto?.BomStatus.HasValue == true)
         {
             exp = exp.And(x => x.BomStatus == queryDto.BomStatus);
@@ -608,5 +705,201 @@ public class TaktBillOfMaterialService : TaktServiceBase, ITaktBillOfMaterialSer
         }
 
         return exp.ToExpression();
+    }
+
+    // ========================================
+    // BOM 多层展开（运行时）
+    // ========================================
+
+    /// <summary>
+    /// 构建子件 BOM 查找表（同工厂、同 BOM 类型；已发布且在有效期内；多版本取最新生效）
+    /// </summary>
+    /// <param name="plantBoms">同工厂同类型 BOM 头列表</param>
+    /// <param name="asOf">生效判定时间点</param>
+    /// <returns>父件物料编码 → BOM 头</returns>
+    private static Dictionary<string, TaktBillOfMaterial> BuildChildBomLookup(
+        IEnumerable<TaktBillOfMaterial> plantBoms,
+        DateTime asOf)
+    {
+        return plantBoms
+            .Where(b => b.BomStatus == PublishedBomStatus
+                && b.EffectiveDate <= asOf
+                && (b.ExpiryDate == null || b.ExpiryDate >= asOf))
+            .GroupBy(b => b.ParentMaterialCode, StringComparer.OrdinalIgnoreCase)
+            .ToDictionary(
+                g => g.Key,
+                g => g
+                    .OrderByDescending(b => b.EffectiveDate)
+                    .ThenByDescending(b => b.BomVersion, StringComparer.Ordinal)
+                    .First(),
+                StringComparer.OrdinalIgnoreCase);
+    }
+
+    /// <summary>
+    /// 构建物料编码 → 名称映射（BOM 头冗余父件名称）
+    /// </summary>
+    /// <param name="plantBoms">同工厂 BOM 头</param>
+    /// <param name="root">根 BOM</param>
+    /// <returns>物料编码 → 名称</returns>
+    private static Dictionary<string, string> BuildMaterialNameMap(
+        IEnumerable<TaktBillOfMaterial> plantBoms,
+        TaktBillOfMaterial root)
+    {
+        var map = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var bom in plantBoms)
+        {
+            if (!string.IsNullOrWhiteSpace(bom.ParentMaterialCode))
+            {
+                map[bom.ParentMaterialCode] = bom.ParentMaterialName;
+            }
+        }
+        if (!string.IsNullOrWhiteSpace(root.ParentMaterialCode))
+        {
+            map[root.ParentMaterialCode] = root.ParentMaterialName;
+        }
+        return map;
+    }
+
+    /// <summary>
+    /// 构建层级 0 父件行
+    /// </summary>
+    /// <param name="root">根 BOM</param>
+    /// <param name="demandQuantity">需求数量</param>
+    /// <returns>展开行</returns>
+    private static TaktBillOfMaterialExplosionLineDto BuildLevelZeroLine(
+        TaktBillOfMaterial root,
+        decimal demandQuantity)
+    {
+        return new TaktBillOfMaterialExplosionLineDto
+        {
+            HierarchyLevel = 0,
+            LevelPrefix = string.Empty,
+            SourceBillOfMaterialId = root.Id,
+            SourceBillOfMaterialItemId = null,
+            LineNumber = 0,
+            MaterialId = root.ParentMaterialId,
+            MaterialCode = root.ParentMaterialCode,
+            MaterialName = root.ParentMaterialName,
+            ImmediateParentMaterialCode = string.Empty,
+            UsageQuantity = root.ParentMaterialQuantity <= 0 ? 1m : root.ParentMaterialQuantity,
+            MaterialUnit = root.ParentMaterialUnit,
+            ScrapRate = 0,
+            CumulativeQuantity = demandQuantity,
+            OperationSeq = 0,
+            IsPhantom = 0,
+            IsOptional = 0,
+            HasChildBom = 0,
+            IsCircular = 0
+        };
+    }
+
+    /// <summary>
+    /// 递归展开 BOM 明细行
+    /// </summary>
+    /// <param name="bom">当前 BOM 头</param>
+    /// <param name="items">当前 BOM 直接子件</param>
+    /// <param name="parentDemandQuantity">直接父件需求量</param>
+    /// <param name="currentLevel">当前层级（1=直接子件）</param>
+    /// <param name="immediateParentMaterialCode">直接父件物料编码</param>
+    /// <param name="maxLevel">最大展开层级</param>
+    /// <param name="ancestorMaterialCodes">祖先物料编码（环检测）</param>
+    /// <param name="childBomLookup">子件 BOM 查找表</param>
+    /// <param name="itemsByBomId">BOM ID → 明细行</param>
+    /// <param name="materialNameMap">物料编码 → 名称</param>
+    /// <param name="lines">输出行集合</param>
+    private void ExpandBillOfMaterialLines(
+        TaktBillOfMaterial bom,
+        IReadOnlyList<TaktBillOfMaterialItem> items,
+        decimal parentDemandQuantity,
+        int currentLevel,
+        string immediateParentMaterialCode,
+        int maxLevel,
+        HashSet<string> ancestorMaterialCodes,
+        IReadOnlyDictionary<string, TaktBillOfMaterial> childBomLookup,
+        IReadOnlyDictionary<long, List<TaktBillOfMaterialItem>> itemsByBomId,
+        IReadOnlyDictionary<string, string> materialNameMap,
+        List<TaktBillOfMaterialExplosionLineDto> lines)
+    {
+        if (currentLevel > maxLevel || items.Count == 0)
+        {
+            return;
+        }
+
+        var baseQuantity = bom.ParentMaterialQuantity <= 0 ? 1m : bom.ParentMaterialQuantity;
+        foreach (var item in items)
+        {
+            if (lines.Count >= MaxExplosionLines)
+            {
+                throw new TaktBusinessException($"BOM 展开行数超过上限 {MaxExplosionLines}，请缩小需求数量或降低展开层级");
+            }
+
+            var cumulativeQuantity = parentDemandQuantity * item.ActualUsageQuantity / baseQuantity;
+            childBomLookup.TryGetValue(item.MaterialCode, out var childBom);
+            var hasChildBom = childBom != null ? 1 : 0;
+            var isCircular = ancestorMaterialCodes.Contains(item.MaterialCode) ? 1 : 0;
+            materialNameMap.TryGetValue(item.MaterialCode, out var materialName);
+
+            lines.Add(new TaktBillOfMaterialExplosionLineDto
+            {
+                HierarchyLevel = currentLevel,
+                LevelPrefix = BuildLevelPrefix(currentLevel),
+                SourceBillOfMaterialId = bom.Id,
+                SourceBillOfMaterialItemId = item.Id,
+                LineNumber = item.LineNumber,
+                MaterialId = item.MaterialId,
+                MaterialCode = item.MaterialCode,
+                MaterialName = materialName,
+                ImmediateParentMaterialCode = immediateParentMaterialCode,
+                UsageQuantity = item.UsageQuantity,
+                MaterialUnit = item.MaterialUnit,
+                ScrapRate = item.ScrapRate,
+                CumulativeQuantity = cumulativeQuantity,
+                OperationSeq = item.OperationSeq,
+                WorkCenter = item.WorkCenter,
+                Position = item.Position,
+                IsPhantom = item.IsPhantom,
+                IsOptional = item.IsOptional,
+                SubstituteGroup = item.SubstituteGroup,
+                HasChildBom = hasChildBom,
+                IsCircular = isCircular
+            });
+
+            if (childBom == null || isCircular == 1 || currentLevel >= maxLevel)
+            {
+                continue;
+            }
+
+            var childItems = itemsByBomId.GetValueOrDefault(childBom.Id) ?? new List<TaktBillOfMaterialItem>();
+            var nextAncestors = new HashSet<string>(ancestorMaterialCodes, StringComparer.OrdinalIgnoreCase)
+            {
+                item.MaterialCode
+            };
+            ExpandBillOfMaterialLines(
+                childBom,
+                childItems,
+                cumulativeQuantity,
+                currentLevel + 1,
+                item.MaterialCode,
+                maxLevel,
+                nextAncestors,
+                childBomLookup,
+                itemsByBomId,
+                materialNameMap,
+                lines);
+        }
+    }
+
+    /// <summary>
+    /// 构建层级显示前缀
+    /// </summary>
+    /// <param name="level">层级</param>
+    /// <returns>前缀字符串</returns>
+    private static string BuildLevelPrefix(int level)
+    {
+        if (level <= 0)
+        {
+            return string.Empty;
+        }
+        return new string('.', level);
     }
 }

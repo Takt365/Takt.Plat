@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.ConferenceCenter
 // 文件名称：TaktConferenceI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktConference 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -109,22 +109,13 @@ public class TaktConferenceI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.conference.title", "zh-HK", "会议标题_hk", "会议标题"),
 
             // entity.conference.type
-            new TranslationSeedItem("entity.conference.type", "en-US", "会议类型_us", "会议类型"),
+            new TranslationSeedItem("entity.conference.type", "en-US", "会议类型_us", "会议类型（字典 routine_conference_type；0=内部 1=外部 2=视频 3=混合）"),
             // entity.conference.type
-            new TranslationSeedItem("entity.conference.type", "ja-JP", "会议类型_jp", "会议类型"),
+            new TranslationSeedItem("entity.conference.type", "ja-JP", "会议类型_jp", "会议类型（字典 routine_conference_type；0=内部 1=外部 2=视频 3=混合）"),
             // entity.conference.type
-            new TranslationSeedItem("entity.conference.type", "zh-CN", "会议类型", "会议类型"),
+            new TranslationSeedItem("entity.conference.type", "zh-CN", "会议类型", "会议类型（字典 routine_conference_type；0=内部 1=外部 2=视频 3=混合）"),
             // entity.conference.type
-            new TranslationSeedItem("entity.conference.type", "zh-HK", "会议类型_hk", "会议类型"),
-
-            // entity.conference.status
-            new TranslationSeedItem("entity.conference.status", "en-US", "会议状态_us", "会议状态"),
-            // entity.conference.status
-            new TranslationSeedItem("entity.conference.status", "ja-JP", "会议状态_jp", "会议状态"),
-            // entity.conference.status
-            new TranslationSeedItem("entity.conference.status", "zh-CN", "会议状态", "会议状态"),
-            // entity.conference.status
-            new TranslationSeedItem("entity.conference.status", "zh-HK", "会议状态_hk", "会议状态"),
+            new TranslationSeedItem("entity.conference.type", "zh-HK", "会议类型_hk", "会议类型（字典 routine_conference_type；0=内部 1=外部 2=视频 3=混合）"),
 
             // entity.conference.starttime
             new TranslationSeedItem("entity.conference.starttime", "en-US", "开始时间_us", "开始时间"),
@@ -199,13 +190,13 @@ public class TaktConferenceI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.conference.tags", "zh-HK", "标签_hk", "标签（逗号分隔或 JSON 数组存储）"),
 
             // entity.conference.organizerid
-            new TranslationSeedItem("entity.conference.organizerid", "en-US", "组织人ID_us", "组织人 ID"),
+            new TranslationSeedItem("entity.conference.organizerid", "en-US", "组织人ID_us", "组织人 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
             // entity.conference.organizerid
-            new TranslationSeedItem("entity.conference.organizerid", "ja-JP", "组织人ID_jp", "组织人 ID"),
+            new TranslationSeedItem("entity.conference.organizerid", "ja-JP", "组织人ID_jp", "组织人 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
             // entity.conference.organizerid
-            new TranslationSeedItem("entity.conference.organizerid", "zh-CN", "组织人ID", "组织人 ID"),
+            new TranslationSeedItem("entity.conference.organizerid", "zh-CN", "组织人ID", "组织人 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
             // entity.conference.organizerid
-            new TranslationSeedItem("entity.conference.organizerid", "zh-HK", "组织人ID_hk", "组织人 ID"),
+            new TranslationSeedItem("entity.conference.organizerid", "zh-HK", "组织人ID_hk", "组织人 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
 
             // entity.conference.organizername
             new TranslationSeedItem("entity.conference.organizername", "en-US", "组织人姓名_us", "组织人姓名"),
@@ -217,13 +208,13 @@ public class TaktConferenceI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.conference.organizername", "zh-HK", "组织人姓名_hk", "组织人姓名"),
 
             // entity.conference.deptid
-            new TranslationSeedItem("entity.conference.deptid", "en-US", "主办部门ID_us", "主办部门 ID"),
+            new TranslationSeedItem("entity.conference.deptid", "en-US", "主办部门ID_us", "主办部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
             // entity.conference.deptid
-            new TranslationSeedItem("entity.conference.deptid", "ja-JP", "主办部门ID_jp", "主办部门 ID"),
+            new TranslationSeedItem("entity.conference.deptid", "ja-JP", "主办部门ID_jp", "主办部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
             // entity.conference.deptid
-            new TranslationSeedItem("entity.conference.deptid", "zh-CN", "主办部门ID", "主办部门 ID"),
+            new TranslationSeedItem("entity.conference.deptid", "zh-CN", "主办部门ID", "主办部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
             // entity.conference.deptid
-            new TranslationSeedItem("entity.conference.deptid", "zh-HK", "主办部门ID_hk", "主办部门 ID"),
+            new TranslationSeedItem("entity.conference.deptid", "zh-HK", "主办部门ID_hk", "主办部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
 
             // entity.conference.deptname
             new TranslationSeedItem("entity.conference.deptname", "en-US", "主办部门名称_us", "主办部门名称"),
@@ -253,13 +244,13 @@ public class TaktConferenceI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.conference.reminderminutes", "zh-HK", "提前提醒分钟数_hk", "提前提醒分钟数（0 表示不提醒）"),
 
             // entity.conference.roomid
-            new TranslationSeedItem("entity.conference.roomid", "en-US", "会议室ID_us", "会议室 ID"),
+            new TranslationSeedItem("entity.conference.roomid", "en-US", "会议室ID_us", "会议室 ID（关联 TaktConferenceRoom.Id，选项 TaktConferenceRooms/options）"),
             // entity.conference.roomid
-            new TranslationSeedItem("entity.conference.roomid", "ja-JP", "会议室ID_jp", "会议室 ID"),
+            new TranslationSeedItem("entity.conference.roomid", "ja-JP", "会议室ID_jp", "会议室 ID（关联 TaktConferenceRoom.Id，选项 TaktConferenceRooms/options）"),
             // entity.conference.roomid
-            new TranslationSeedItem("entity.conference.roomid", "zh-CN", "会议室ID", "会议室 ID"),
+            new TranslationSeedItem("entity.conference.roomid", "zh-CN", "会议室ID", "会议室 ID（关联 TaktConferenceRoom.Id，选项 TaktConferenceRooms/options）"),
             // entity.conference.roomid
-            new TranslationSeedItem("entity.conference.roomid", "zh-HK", "会议室ID_hk", "会议室 ID"),
+            new TranslationSeedItem("entity.conference.roomid", "zh-HK", "会议室ID_hk", "会议室 ID（关联 TaktConferenceRoom.Id，选项 TaktConferenceRooms/options）"),
 
             // entity.conference.roomname
             new TranslationSeedItem("entity.conference.roomname", "en-US", "会议室名称_us", "会议室名称（冗余快照）"),
@@ -269,6 +260,15 @@ public class TaktConferenceI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.conference.roomname", "zh-CN", "会议室名称", "会议室名称（冗余快照）"),
             // entity.conference.roomname
             new TranslationSeedItem("entity.conference.roomname", "zh-HK", "会议室名称_hk", "会议室名称（冗余快照）"),
+
+            // entity.conference.status
+            new TranslationSeedItem("entity.conference.status", "en-US", "会议状态_us", "会议状态（字典 routine_conference_status；0=草稿 1=已排期 2=进行中 3=已结束 4=已取消）"),
+            // entity.conference.status
+            new TranslationSeedItem("entity.conference.status", "ja-JP", "会议状态_jp", "会议状态（字典 routine_conference_status；0=草稿 1=已排期 2=进行中 3=已结束 4=已取消）"),
+            // entity.conference.status
+            new TranslationSeedItem("entity.conference.status", "zh-CN", "会议状态", "会议状态（字典 routine_conference_status；0=草稿 1=已排期 2=进行中 3=已结束 4=已取消）"),
+            // entity.conference.status
+            new TranslationSeedItem("entity.conference.status", "zh-HK", "会议状态_hk", "会议状态（字典 routine_conference_status；0=草稿 1=已排期 2=进行中 3=已结束 4=已取消）"),
 
             // entity.conference.participants
             new TranslationSeedItem("entity.conference.participants", "en-US", "参与人列表_us", "参与人列表（主子表关系）"),

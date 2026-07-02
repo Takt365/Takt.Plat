@@ -42,6 +42,11 @@ public class TaktSignalRPrivateMessagePush
     public long? FromUserId { get; set; }
 
     /// <summary>
+    /// 发送者昵称（由用户表 Nickname 解析）
+    /// </summary>
+    public string? FromUserNickname { get; set; }
+
+    /// <summary>
     /// 接收者用户名
     /// </summary>
     public string ToUserName { get; set; } = string.Empty;
@@ -63,19 +68,19 @@ public class TaktSignalRPrivateMessagePush
     public string MessageContent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件列表 JSON
+    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
     /// </summary>
     public string? Attachments { get; set; }
 
     /// <summary>
-    /// 消息类型
+    /// 消息类型（字典 sys_message_type DictValue）
     /// </summary>
-    public int MessageType { get; set; } = 1;
+    public string MessageType { get; set; } = "text";
 
     /// <summary>
-    /// 消息分组
+    /// 消息分组（字典 sys_message_group_category DictValue）
     /// </summary>
-    public int? MessageGroup { get; set; }
+    public string MessageGroup { get; set; } = "message";
 
     /// <summary>
     /// 发送时间
@@ -119,14 +124,14 @@ public class TaktSignalRBroadcastPush
     public string MessageContent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 消息类型
+    /// 消息类型（字典 sys_message_type DictValue）
     /// </summary>
-    public int MessageType { get; set; } = 4;
+    public string MessageType { get; set; } = "system";
 
     /// <summary>
-    /// 消息分组
+    /// 消息分组（字典 sys_message_group_category DictValue）
     /// </summary>
-    public int MessageGroup { get; set; } = 4;
+    public string MessageGroup { get; set; } = "message";
 
     /// <summary>
     /// 发送时间

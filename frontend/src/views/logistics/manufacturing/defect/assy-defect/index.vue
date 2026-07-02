@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/defect/assy-defect -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：组立不良日报实体管理页面，含查询、增删改，由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成 -->
+<!-- 功能描述：组立不良日报实体 不良率管理页面，含查询、增删改，由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -65,6 +65,8 @@
       :master-row-selection="rowSelection"
       master-id-column-key="assyDefectId"
       :master-visible-column-keys="visibleColumnKeys"
+      master-table-mode="masterDetailMaster"
+      master-scroll-layout="masterDetailLr"
       :master-total="total"
       master-entity-scope="company"
       @master-change="handleTableChange"
@@ -72,6 +74,21 @@
       @master-pagination-change="handleMasterPaginationChange"
       @master-select="handleMasterSelect"
     >
+      <!-- 字典/开关列渲染 -->
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'prodCategory'">
+          <TaktDictTag
+            :value="getAssyDefectField(record, 'prodCategory')"
+            dict-type="logistics_prod_category"
+          />
+        </template>
+        <template v-else-if="column.key === 'shiftNo'">
+          <TaktDictTag
+            :value="getAssyDefectField(record, 'shiftNo')"
+            dict-type="logistics_shift_category"
+          />
+        </template>
+      </template>
       <template #detail>
         <AssyDefectDetailPanel
           ref="assyDefectDetailPanelRef"
@@ -121,11 +138,10 @@
       </div>
       <div v-show="isFieldVisible('prodCategory')">
       <a-form-item :label="t('entity.assydefect.prodcategory')">
-        <a-input
+        <TaktSelect
           v-model:value="advancedQueryForm.prodCategory"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefect.prodcategory') })"
-          show-count
-          :maxlength="20"
+          dict-type="logistics_prod_category"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.assydefect.prodcategory') })"
           allow-clear
         />
       </a-form-item>
@@ -150,11 +166,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('prodLine')">
-      <a-form-item :label="t('entity.assydefect.prodline')">
+      <div v-show="isFieldVisible('prodTeam')">
+      <a-form-item :label="t('entity.assydefect.prodteam')">
         <a-input
-          v-model:value="advancedQueryForm.prodLine"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefect.prodline') })"
+          v-model:value="advancedQueryForm.prodTeam"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefect.prodteam') })"
           show-count
           :maxlength="20"
           allow-clear
@@ -163,10 +179,11 @@
       </div>
       <div v-show="isFieldVisible('shiftNo')">
       <a-form-item :label="t('entity.assydefect.shiftno')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.shiftNo"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefect.shiftno') })"
-          style="width: 100%"
+          dict-type="logistics_shift_category"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.assydefect.shiftno') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -241,22 +258,13 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('status')">
-      <a-form-item :label="t('entity.assydefect.status')">
-        <a-input-number
-          v-model:value="advancedQueryForm.status"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefect.status') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
       <div v-show="isFieldVisible('createdAtStart')">
       <a-form-item :label="t('common.page.entity.createdatstart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -267,7 +275,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -325,6 +333,7 @@
       @cancel="handleImportCancel"
     >
       <TaktImportFile
+        v-if="importVisible"
         entity-i18n-key="entity.assydefect._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
@@ -344,7 +353,7 @@
       :id-column-key="'assyDefectId'"
       :action-column-key="'action'"
       entity-scope="company"
-      table-mode="single"
+      table-mode="masterDetailMaster"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -353,7 +362,7 @@
 
 <script setup lang="ts">
 /**
- * 组立不良日报实体管理页 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
+ * 组立不良日报实体 不良率管理页 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/manufacturing/defect/assy-defect
  */
 import { ref, computed, onMounted } from 'vue'
@@ -365,10 +374,12 @@ import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaul
 import AssyDefectForm from './components/assy-defect-form.vue'
 import AssyDefectDetailPanel from './components/assy-defect-detail-panel.vue'
 import { provideAssyDefectMasterContext } from './composables/use-assy-defect-master-context'
-import { getAssyDefectList, getAssyDefectById, createAssyDefect, updateAssyDefect, deleteAssyDefectById, deleteAssyDefectBatch, getAssyDefectTemplate, importAssyDefect, exportAssyDefect, updateAssyDefectStatus } from '@/api/logistics/manufacturing/defect/assy-defect'
+import { getAssyDefectList, getAssyDefectById, createAssyDefect, updateAssyDefect, deleteAssyDefectById, deleteAssyDefectBatch, getAssyDefectTemplate, importAssyDefect, exportAssyDefect } from '@/api/logistics/manufacturing/defect/assy-defect'
 import type { AssyDefect, AssyDefectQuery } from '@/types/logistics/manufacturing/defect/assy-defect'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
@@ -418,7 +429,7 @@ const advancedQueryForm = ref({
   prodCategory: '',
   prodDateStart: '',
   prodDateEnd: '',
-  prodLine: '',
+  prodTeam: '',
   shiftNo: undefined as number | undefined,
   prodOrderCode: '',
   prodOrderQty: undefined as number | undefined,
@@ -427,7 +438,6 @@ const advancedQueryForm = ref({
   materialCode: '',
   prodActualQty: undefined as number | undefined,
   goodQuantity: undefined as number | undefined,
-  status: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -439,7 +449,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'prodCategory', label: t('entity.assydefect.prodcategory') },
   { key: 'prodDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.assydefect.proddate')) },
   { key: 'prodDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.assydefect.proddate')) },
-  { key: 'prodLine', label: t('entity.assydefect.prodline') },
+  { key: 'prodTeam', label: t('entity.assydefect.prodteam') },
   { key: 'shiftNo', label: t('entity.assydefect.shiftno') },
   { key: 'prodOrderCode', label: t('entity.assydefect.prodordercode') },
   { key: 'prodOrderQty', label: t('entity.assydefect.prodorderqty') },
@@ -448,7 +458,6 @@ const queryFieldsMeta = computed(() => [
   { key: 'materialCode', label: t('entity.assydefect.materialcode') },
   { key: 'prodActualQty', label: t('entity.assydefect.prodactualqty') },
   { key: 'goodQuantity', label: t('entity.assydefect.goodquantity') },
-  { key: 'status', label: t('entity.assydefect.status') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extField', label: t('common.page.entity.extfield') },
@@ -469,6 +478,8 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
+/** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
+const dictDataStore = useDictDataStore()
 /** 主表选中行上下文（右侧明细面板读取） */
 const { selectedMasterRow } = provideAssyDefectMasterContext()
 const assyDefectDetailPanelRef = ref<InstanceType<typeof AssyDefectDetailPanel> | null>(null)
@@ -499,7 +510,7 @@ function buildListQuery(overrides?: Partial<AssyDefectQuery>): AssyDefectQuery {
   assignTrimmed('prodCategory', form.prodCategory)
   assignTrimmed('prodDateStart', form.prodDateStart)
   assignTrimmed('prodDateEnd', form.prodDateEnd)
-  assignTrimmed('prodLine', form.prodLine)
+  assignTrimmed('prodTeam', form.prodTeam)
   if (form.shiftNo !== undefined && form.shiftNo !== null) {
     query.shiftNo = form.shiftNo
   }
@@ -516,9 +527,6 @@ function buildListQuery(overrides?: Partial<AssyDefectQuery>): AssyDefectQuery {
   if (form.goodQuantity !== undefined && form.goodQuantity !== null) {
     query.goodQuantity = form.goodQuantity
   }
-  if (form.status !== undefined && form.status !== null) {
-    query.status = form.status
-  }
   assignTrimmed('createdAtStart', form.createdAtStart)
   assignTrimmed('createdAtEnd', form.createdAtEnd)
   assignTrimmed('extField', form.extField)
@@ -528,6 +536,7 @@ function buildListQuery(overrides?: Partial<AssyDefectQuery>): AssyDefectQuery {
 /** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
+  void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
 
@@ -610,7 +619,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getAssyDefectField(record, 'prodCategory') ?? ''
   },
   {
     title: t('entity.assydefect.proddate'),
@@ -622,13 +630,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getAssyDefectField(record, 'prodDate') ?? ''
   },
   {
-    title: t('entity.assydefect.prodline'),
-    dataIndex: 'prodLine',
-    key: 'prodLine',
+    title: t('entity.assydefect.prodteam'),
+    dataIndex: 'prodTeam',
+    key: 'prodTeam',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getAssyDefectField(record, 'prodLine') ?? ''
+    customRender: ({ record }: { record: any }) => getAssyDefectField(record, 'prodTeam') ?? ''
   },
   {
     title: t('entity.assydefect.shiftno'),
@@ -637,7 +645,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getAssyDefectField(record, 'shiftNo') ?? ''
   },
   {
     title: t('entity.assydefect.prodordercode'),
@@ -702,15 +709,6 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getAssyDefectField(record, 'goodQuantity') ?? ''
   },
-  {
-    title: t('entity.assydefect.status'),
-    dataIndex: 'status',
-    key: 'status',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getAssyDefectField(record, 'status') ?? ''
-  },
   CreateActionColumn({
     actions: [
       {
@@ -760,7 +758,7 @@ const rowSelection = computed(() => ({
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
-    } else if (getAssyDefectId(selectedRow.value) === getAssyDefectId(record)) {
+    } else if (selectedRow.value && getAssyDefectId(selectedRow.value) === getAssyDefectId(record)) {
       selectedRow.value = null
       syncMasterSelection(null)
     }
@@ -805,7 +803,7 @@ function handleReset() {
   prodCategory: '',
   prodDateStart: '',
   prodDateEnd: '',
-  prodLine: '',
+  prodTeam: '',
   shiftNo: undefined as number | undefined,
   prodOrderCode: '',
   prodOrderQty: undefined as number | undefined,
@@ -814,7 +812,6 @@ function handleReset() {
   materialCode: '',
   prodActualQty: undefined as number | undefined,
   goodQuantity: undefined as number | undefined,
-  status: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -901,15 +898,22 @@ async function handleDownloadTemplate(sheetName?: string, fileName?: string): Pr
   return (res as any)?.data ?? res
 }
 
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importAssyDefect(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importAssyDefect(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
+
+      if (selectedMasterKey.value) {
+    assyDefectDetailPanelRef.value?.reload?.()
+      }
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
+  }
 }
 
 /** 关闭导入对话框 */
@@ -1010,7 +1014,7 @@ function handleAdvancedQueryReset() {
   prodCategory: '',
   prodDateStart: '',
   prodDateEnd: '',
-  prodLine: '',
+  prodTeam: '',
   shiftNo: undefined as number | undefined,
   prodOrderCode: '',
   prodOrderQty: undefined as number | undefined,
@@ -1019,7 +1023,6 @@ function handleAdvancedQueryReset() {
   materialCode: '',
   prodActualQty: undefined as number | undefined,
   goodQuantity: undefined as number | undefined,
-  status: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',

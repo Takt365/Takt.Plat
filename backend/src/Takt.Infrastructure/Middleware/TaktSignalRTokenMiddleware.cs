@@ -12,6 +12,7 @@
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
+using Takt.Shared.Constants;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models.Logging;
 using Takt.Shared.Options;
@@ -52,10 +53,18 @@ public class TaktSignalRTokenMiddleware
             PromoteQueryToHeader(context, "access_token", "Authorization", static v => $"Bearer {v}");
             PromoteQueryToHeader(context, "tenant_code", _tenantOptions.TenantHeaderName);
             PromoteQueryToHeader(context, "company_code", _tenantOptions.CompanyHeaderName);
+            PromoteQueryToHeader(context, TaktHttpQueryNames.ClientUserAgent, TaktHttpHeaderNames.ClientUserAgent);
+            PromoteQueryToHeader(context, TaktHttpQueryNames.ClientBrowser, TaktHttpHeaderNames.ClientBrowser);
+            PromoteQueryToHeader(context, TaktHttpQueryNames.ClientOperatingSystem, TaktHttpHeaderNames.ClientOperatingSystem);
+            PromoteQueryToHeader(context, TaktHttpQueryNames.ClientDeviceType, TaktHttpHeaderNames.ClientDeviceType);
 
             if (context.Request.Query.ContainsKey("access_token")
                 || context.Request.Query.ContainsKey("tenant_code")
-                || context.Request.Query.ContainsKey("company_code"))
+                || context.Request.Query.ContainsKey("company_code")
+                || context.Request.Query.ContainsKey(TaktHttpQueryNames.ClientUserAgent)
+                || context.Request.Query.ContainsKey(TaktHttpQueryNames.ClientBrowser)
+                || context.Request.Query.ContainsKey(TaktHttpQueryNames.ClientOperatingSystem)
+                || context.Request.Query.ContainsKey(TaktHttpQueryNames.ClientDeviceType))
             {
                 TaktLogger.Information(
                     new TaktLogContext { Module = "signalr", Action = "context", Route = path },

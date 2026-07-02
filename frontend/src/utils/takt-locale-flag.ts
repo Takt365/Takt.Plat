@@ -13,6 +13,7 @@
 /** cultureCode 与 flag-icons 默认映射 */
 const DEFAULT_FLAG_CLASS_MAP: Record<string, string> = {
   'zh-CN': 'fi fi-cn',
+  'zh-HK': 'fi fi-hk',
   'en-US': 'fi fi-us',
   'ja-JP': 'fi fi-jp',
 };

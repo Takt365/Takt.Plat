@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Sales
 // 文件名称：TaktSalesPriceScaleI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSalesPriceScale 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktSalesPriceScaleI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salespricescale._self", "zh-HK", "Takt销售价格阶梯信息_hk", "实体名称"),
 
             // entity.salespricescale.itemid
-            new TranslationSeedItem("entity.salespricescale.itemid", "en-US", "价格明细ID_us", "价格明细ID（关联销售价格明细表，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.salespricescale.itemid", "en-US", "价格明细ID_us", "价格明细 ID（关联 TaktSalesPriceItem.Id，选项 TaktSalesPriceItems/options）"),
             // entity.salespricescale.itemid
-            new TranslationSeedItem("entity.salespricescale.itemid", "ja-JP", "价格明细ID_jp", "价格明细ID（关联销售价格明细表，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.salespricescale.itemid", "ja-JP", "价格明细ID_jp", "价格明细 ID（关联 TaktSalesPriceItem.Id，选项 TaktSalesPriceItems/options）"),
             // entity.salespricescale.itemid
-            new TranslationSeedItem("entity.salespricescale.itemid", "zh-CN", "价格明细ID", "价格明细ID（关联销售价格明细表，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.salespricescale.itemid", "zh-CN", "价格明细ID", "价格明细 ID（关联 TaktSalesPriceItem.Id，选项 TaktSalesPriceItems/options）"),
             // entity.salespricescale.itemid
-            new TranslationSeedItem("entity.salespricescale.itemid", "zh-HK", "价格明细ID_hk", "价格明细ID（关联销售价格明细表，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.salespricescale.itemid", "zh-HK", "价格明细ID_hk", "价格明细 ID（关联 TaktSalesPriceItem.Id，选项 TaktSalesPriceItems/options）"),
 
             // entity.salespricescale.salespricecode
             new TranslationSeedItem("entity.salespricescale.salespricecode", "en-US", "销售价格编码_us", "销售价格编码（冗余字段，便于查询）"),

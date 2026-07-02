@@ -130,6 +130,35 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
+                :label="t('entity.productionplan.masterproductionscheduleid')"
+                name="masterProductionScheduleId"
+              >
+                <a-input
+                  v-model:value="formState.masterProductionScheduleId"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionplan.masterproductionscheduleid') })"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.productionplan.mpscode')"
+                name="mpsCode"
+              >
+                <a-input
+                  v-model:value="formState.mpsCode"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionplan.mpscode') })"
+                  show-count
+                  :maxlength="40"
+                  allow-clear
+                  :disabled="!!formData?.productionPlanId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
                 :label="t('entity.productionplan.plandate')"
                 name="planDate"
               >
@@ -138,34 +167,6 @@
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionplan.plandate') })"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.productionplan.planperiodstart')"
-                name="planPeriodStart"
-              >
-                <a-input
-                  v-model:value="formState.planPeriodStart"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionplan.planperiodstart') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.productionplan.planperiodend')"
-                name="planPeriodEnd"
-              >
-                <a-input
-                  v-model:value="formState.planPeriodEnd"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionplan.planperiodend') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -179,6 +180,32 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.productionplan.planperiodstart')"
+                name="planPeriodStart"
+              >
+                <a-date-picker
+                  v-model:value="formState.planPeriodStart"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionplan.planperiodstart') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.productionplan.planperiodend')"
+                name="planPeriodEnd"
+              >
+                <a-date-picker
+                  v-model:value="formState.planPeriodEnd"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionplan.planperiodend') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
             <a-col :span="12">
               <a-form-item
                 :label="t('entity.productionplan.plannerid')"
@@ -272,13 +299,24 @@
                 :label="t('entity.productionplan.convertedstatus')"
                 name="convertedStatus"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.convertedStatus"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionplan.convertedstatus') })"
-                  style="width: 100%"
+                  dict-type="sys_convert_status"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionplan.convertedstatus') })"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-2"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
                 :label="t('entity.productionplan.plandescription')"
@@ -317,16 +355,6 @@
                 />
               </a-form-item>
             </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
                 :label="t('common.page.entity.remark')"
@@ -405,7 +433,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","productionPlanCode","salesPlanId","salesPlanCode","planDate","planPeriodStart","planPeriodEnd","plannerId","planBy","totalQuantity","totalAmount","convertedQuantity","convertedAmount","planStatus","convertedStatus","planDescription","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","productionPlanCode","salesPlanId","salesPlanCode","masterProductionScheduleId","mpsCode","planDate","planPeriodStart","planPeriodEnd","plannerId","planBy","totalQuantity","totalAmount","convertedQuantity","convertedAmount","planStatus","convertedStatus","planDescription","extField","remark"]
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
 
@@ -597,15 +625,15 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   planPeriodStart: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.productionplan.planperiodstart') }),
-      trigger: 'blur'
+      message: t('common.page.form.placeholder.select', { field: t('entity.productionplan.planperiodstart') }),
+      trigger: 'change'
     }
   ],
   planPeriodEnd: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.productionplan.planperiodend') }),
-      trigger: 'blur'
+      message: t('common.page.form.placeholder.select', { field: t('entity.productionplan.planperiodend') }),
+      trigger: 'change'
     }
   ],
   planBy: [

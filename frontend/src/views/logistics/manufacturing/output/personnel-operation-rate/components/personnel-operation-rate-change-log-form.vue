@@ -28,12 +28,12 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.personneloperationratechangelog.productionline')"
-                name="productionLine"
+                :label="t('entity.personneloperationratechangelog.prodteam')"
+                name="prodTeam"
               >
                 <a-input
-                  v-model:value="formState.productionLine"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationratechangelog.productionline') })"
+                  v-model:value="formState.prodTeam"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationratechangelog.prodteam') })"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -161,7 +161,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["productionLine","changeFields","changeTime","changeBy","changeReason","extField","remark"]
+const formFields = ["prodTeam","changeFields","changeTime","changeBy","changeReason","extField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -213,10 +213,10 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  productionLine: [
+  prodTeam: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.personneloperationratechangelog.productionline') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.personneloperationratechangelog.prodteam') }),
       trigger: 'blur'
     }
   ],

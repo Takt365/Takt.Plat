@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Cost
 // 文件名称：TaktQualityIssueMeetingDtos.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：QualityIssueMeeting 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktQualityIssueMeeting 生成，请按需审阅）
 // 
@@ -36,13 +36,13 @@ public class TaktQualityIssueMeetingDto : TaktCompanyDtoBase
     public long QualityIssueMeetingId { get; set; }
 
     /// <summary>
-    /// 品质问题主表ID(主子表关系,序列化为string以避免Javascript精度问题)
+    /// 品质问题主表 ID（关联 TaktQualityIssue.Id，选项 TaktQualityIssues/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long QualityIssueId { get; set; }
 
     /// <summary>
-    /// 品质问题主表名称（填充字段）
+    /// 品质问题主表 名称（填充字段）
     /// </summary>
     public string? QualityIssueName { get; set; }
 
@@ -150,7 +150,7 @@ public class TaktQualityIssueMeetingQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 品质问题主表ID(主子表关系,序列化为string以避免Javascript精度问题)
+    /// 品质问题主表 ID（关联 TaktQualityIssue.Id，选项 TaktQualityIssues/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? QualityIssueId { get; set; }
@@ -271,12 +271,12 @@ public class TaktQualityIssueMeetingCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 品质问题主表ID(主子表关系,序列化为string以避免Javascript精度问题)
+    /// 品质问题主表 ID（关联 TaktQualityIssue.Id，选项 TaktQualityIssues/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long QualityIssueId { get; set; }
@@ -409,7 +409,7 @@ public class TaktQualityIssueMeetingTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 品质问题主表ID(主子表关系,序列化为string以避免Javascript精度问题)
+    /// 品质问题主表 ID（关联 TaktQualityIssue.Id，选项 TaktQualityIssues/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? QualityIssueId { get; set; }
@@ -425,9 +425,24 @@ public class TaktQualityIssueMeetingTemplateDto
     public int? LineNumber { get; set; }
 
     /// <summary>
+    /// 直接人员费率（元/分钟）
+    /// </summary>
+    public decimal? DirectManpowerCostPerMinute { get; set; }
+
+    /// <summary>
+    /// 间接人员费率（元/分钟）
+    /// </summary>
+    public decimal? IndirectManpowerCostPerMinute { get; set; }
+
+    /// <summary>
     /// 讨论调查试验内容(会议记录)
     /// </summary>
     public string? MeetingInvestigationContent { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 讨论调查试验费用(元)
+    /// </summary>
+    public decimal? MeetingInvestigationCost { get; set; }
 
     /// <summary>
     /// 讨论会使用时间(分钟)
@@ -450,9 +465,24 @@ public class TaktQualityIssueMeetingTemplateDto
     public int? InvestigationWorkTimeMinutes { get; set; }
 
     /// <summary>
+    /// 交通费、旅费（元）
+    /// </summary>
+    public decimal? TravelCost { get; set; }
+
+    /// <summary>
+    /// 其他费用（元）
+    /// </summary>
+    public decimal? OtherExpenses { get; set; }
+
+    /// <summary>
     /// 其他作业時間（分钟）
     /// </summary>
     public int? OtherWorkTimeMinutes { get; set; }
+
+    /// <summary>
+    /// 其他设备购入费、工程费、搬运费等（元）
+    /// </summary>
+    public decimal? OtherApparatusCost { get; set; }
 
     /// <summary>
     /// 品质问题対応记录者（会议调查试验记录者）
@@ -487,12 +517,12 @@ public class TaktQualityIssueMeetingImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 品质问题主表ID(主子表关系,序列化为string以避免Javascript精度问题)
+    /// 品质问题主表 ID（关联 TaktQualityIssue.Id，选项 TaktQualityIssues/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? QualityIssueId { get; set; }
@@ -508,9 +538,24 @@ public class TaktQualityIssueMeetingImportDto
     public int? LineNumber { get; set; }
 
     /// <summary>
+    /// 直接人员费率（元/分钟）
+    /// </summary>
+    public decimal? DirectManpowerCostPerMinute { get; set; }
+
+    /// <summary>
+    /// 间接人员费率（元/分钟）
+    /// </summary>
+    public decimal? IndirectManpowerCostPerMinute { get; set; }
+
+    /// <summary>
     /// 讨论调查试验内容(会议记录)
     /// </summary>
     public string? MeetingInvestigationContent { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 讨论调查试验费用(元)
+    /// </summary>
+    public decimal? MeetingInvestigationCost { get; set; }
 
     /// <summary>
     /// 讨论会使用时间(分钟)
@@ -533,9 +578,24 @@ public class TaktQualityIssueMeetingImportDto
     public int? InvestigationWorkTimeMinutes { get; set; }
 
     /// <summary>
+    /// 交通费、旅费（元）
+    /// </summary>
+    public decimal? TravelCost { get; set; }
+
+    /// <summary>
+    /// 其他费用（元）
+    /// </summary>
+    public decimal? OtherExpenses { get; set; }
+
+    /// <summary>
     /// 其他作业時間（分钟）
     /// </summary>
     public int? OtherWorkTimeMinutes { get; set; }
+
+    /// <summary>
+    /// 其他设备购入费、工程费、搬运费等（元）
+    /// </summary>
+    public decimal? OtherApparatusCost { get; set; }
 
     /// <summary>
     /// 品质问题対応记录者（会议调查试验记录者）
@@ -576,7 +636,7 @@ public class TaktQualityIssueMeetingExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 品质问题主表ID(主子表关系,序列化为string以避免Javascript精度问题)
+    /// 品质问题主表 ID（关联 TaktQualityIssue.Id，选项 TaktQualityIssues/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long QualityIssueId { get; set; }

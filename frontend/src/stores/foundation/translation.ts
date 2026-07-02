@@ -42,7 +42,7 @@ export const useTranslationStore = defineStore('translation', () => {
 
   /**
    * 构建动态翻译加载缓存键（租户 + 语言；登录页须在租户校验通过后再拉取 entity.*）
-   * @param cultureCode 区域文化编码
+   * @param cultureCode 文化编码
    */
   function buildLoadedCacheKey(cultureCode: string): string {
     const tenantCode = useTenantStore().tenantCode?.trim() || '';
@@ -51,7 +51,7 @@ export const useTranslationStore = defineStore('translation', () => {
 
   /**
    * 指定语言是否已加载动态翻译
-   * @param cultureCode 区域文化编码
+   * @param cultureCode 文化编码
    */
   function isLocaleLoaded(cultureCode: string): boolean {
     return loadedLocales.value[buildLoadedCacheKey(cultureCode)] === true;
@@ -79,7 +79,7 @@ export const useTranslationStore = defineStore('translation', () => {
 
   /**
    * 从后端拉取指定语言的前端翻译键值（GET /messages）
-   * @param cultureCode 区域文化编码
+   * @param cultureCode 文化编码
    */
   async function fetchFrontendTranslationMapAsync(cultureCode: string): Promise<Record<string, string>> {
     const normalizedCulture = resolveTaktCultureCode(cultureCode);
@@ -89,7 +89,7 @@ export const useTranslationStore = defineStore('translation', () => {
 
   /**
    * 加载指定语言的动态翻译并合并到 vue-i18n
-   * @param cultureCode 区域文化编码，默认当前 locale
+   * @param cultureCode 文化编码，默认当前 locale
    * @param options.allowAnonymous 为 true 时未登录也可拉取（登录页等公开场景）
    */
   async function loadTranslationMessagesAsync(
@@ -156,7 +156,7 @@ export const useTranslationStore = defineStore('translation', () => {
 
   /**
    * 预加载多种语言的动态翻译
-   * @param cultureCodes 区域文化编码列表
+   * @param cultureCodes 文化编码列表
    */
   async function loadTranslationMessagesBatchAsync(cultureCodes: string[]): Promise<void> {
     const uniqueCodes = [...new Set(cultureCodes.filter(Boolean))];
@@ -166,7 +166,7 @@ export const useTranslationStore = defineStore('translation', () => {
 
   /**
    * 未登录场景加载动态翻译（登录/注册/忘记密码页使用后端 common.* / entity.*）
-   * @param cultureCode 区域文化编码，默认当前 locale
+   * @param cultureCode 文化编码，默认当前 locale
    */
   async function loadPublicTranslationMessagesAsync(cultureCode?: string): Promise<void> {
     return loadTranslationMessagesAsync(cultureCode, { allowAnonymous: true });

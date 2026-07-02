@@ -86,7 +86,7 @@ public class TaktEmployeeSeedData : ITaktSeedDataCoordinator
                     tenantCode,
                     company.CompanyCode,
                     employeeData.EmployeeNo,
-                    employeeData.Name,
+                    employeeData.EmployeeName,
                     index);
                 insertCount += i;
                 updateCount += u;
@@ -101,7 +101,7 @@ public class TaktEmployeeSeedData : ITaktSeedDataCoordinator
     /// <summary>
     /// 获取标准员工档案列表
     /// </summary>
-    private static List<(string EmployeeNo, string Name)> GetStandardEmployees()
+    private static List<(string EmployeeNo, string EmployeeName)> GetStandardEmployees()
     {
         return new List<(string, string)>
         {
@@ -153,7 +153,7 @@ public class TaktEmployeeSeedData : ITaktSeedDataCoordinator
                 TenantCode = tenantCode,
                 CompanyCode = companyCode,
                 EmployeeNo = employeeNo,
-                Name = name,
+                EmployeeName = name,
                 Gender = 1,
                 EmployeeStatus = 2,
                 JoinedDate = DateTime.Now,
@@ -163,7 +163,7 @@ public class TaktEmployeeSeedData : ITaktSeedDataCoordinator
             employee = await repository.CreateAsync(employee);
             return (employee, 1, 0);
         }
-        employee.Name = name;
+        employee.EmployeeName = name;
         employee.EmployeeStatus = 2;
         employee.IsBuiltIn = 1;
         ApplySeedPersonalProfile(employee, sequence);

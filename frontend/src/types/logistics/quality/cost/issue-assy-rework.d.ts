@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/quality/cost
 // 文件名称：issue-assy-rework.d.ts
-// 创建时间：2026-06-21
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/cost 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -268,7 +268,7 @@ export interface QualityIssueAssyReworkCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -422,6 +422,11 @@ export interface QualityIssueAssyReworkTemplate {
   assyDefectParts?: string;
 
   /**
+   * 组装选别・改修费用(元)
+   */
+  assyReworkCost?: number;
+
+  /**
    * 组装选别・改修时间(分钟)
    */
   assyReworkTimeMinutes?: number;
@@ -432,9 +437,29 @@ export interface QualityIssueAssyReworkTemplate {
   assyReinspectionTimeMinutes?: number;
 
   /**
+   * 组装交通费、旅费(元)
+   */
+  assyTravelCost?: number;
+
+  /**
+   * 组装仓库管理费(元)
+   */
+  assyWarehouseCost?: number;
+
+  /**
+   * 组装选别・改修其他费用(元)
+   */
+  assyOtherExpenses?: number;
+
+  /**
    * 组装选别・改修备注
    */
   assyReworkNote?: string;
+
+  /**
+   * 组装向顾客的费用请求(元)
+   */
+  assyScrapCost?: number;
 
   /**
    * 组装顾客名
@@ -445,6 +470,11 @@ export interface QualityIssueAssyReworkTemplate {
    * 组装 Debit Note No
    */
   assyDebitNoteNo?: string;
+
+  /**
+   * 组装其他费用(元)
+   */
+  assyOtherExpenses2?: number;
 
   /**
    * 组装备注
@@ -486,7 +516,7 @@ export interface QualityIssueAssyReworkImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -511,6 +541,11 @@ export interface QualityIssueAssyReworkImport {
   assyDefectParts?: string;
 
   /**
+   * 组装选别・改修费用(元)
+   */
+  assyReworkCost?: number;
+
+  /**
    * 组装选别・改修时间(分钟)
    */
   assyReworkTimeMinutes?: number;
@@ -521,9 +556,29 @@ export interface QualityIssueAssyReworkImport {
   assyReinspectionTimeMinutes?: number;
 
   /**
+   * 组装交通费、旅费(元)
+   */
+  assyTravelCost?: number;
+
+  /**
+   * 组装仓库管理费(元)
+   */
+  assyWarehouseCost?: number;
+
+  /**
+   * 组装选别・改修其他费用(元)
+   */
+  assyOtherExpenses?: number;
+
+  /**
    * 组装选别・改修备注
    */
   assyReworkNote?: string;
+
+  /**
+   * 组装向顾客的费用请求(元)
+   */
+  assyScrapCost?: number;
 
   /**
    * 组装顾客名
@@ -534,6 +589,11 @@ export interface QualityIssueAssyReworkImport {
    * 组装 Debit Note No
    */
   assyDebitNoteNo?: string;
+
+  /**
+   * 组装其他费用(元)
+   */
+  assyOtherExpenses2?: number;
 
   /**
    * 组装备注

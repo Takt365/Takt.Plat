@@ -2,7 +2,7 @@
 // 项目名称：节拍数字工厂 · Takt Plat (TDF)
 // 命名空间：@/views/logistics/manufacturing/defect/assy-defect/composables
 // 文件名称：use-assy-defect-master-context.ts
-// 功能描述：组立不良日报实体主表选中行上下文（供右侧明细面板读取）
+// 功能描述：组立不良日报实体 不良率主表选中行上下文（供右侧明细面板读取）
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // ========================================
 

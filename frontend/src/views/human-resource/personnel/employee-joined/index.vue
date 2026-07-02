@@ -8,7 +8,7 @@
 <!-- ======================================== -->
 
 <template>
-  <div class="human-resource-personnel-employee-joined">
+  <div class="p-4">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="human:resource:personnel:employeejoined:create"
-      update-permission="human:resource:personnel:employeejoined:update"
-      delete-permission="human:resource:personnel:employeejoined:delete"
-      import-permission="human:resource:personnel:employeejoined:import"
-      export-permission="human:resource:personnel:employeejoined:export"
+      create-permission="human:resource:personnel:employee:joined:create"
+      update-permission="human:resource:personnel:employee:joined:update"
+      delete-permission="human:resource:personnel:employee:joined:delete"
+      import-permission="human:resource:personnel:employee:joined:import"
+      export-permission="human:resource:personnel:employee:joined:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -54,8 +54,8 @@
 
     <!-- 表格 -->
     <TaktSingleTable
-      :columns="columns"
       entity-scope="approval"
+      :columns="columns"
       :visible-column-keys="visibleColumnKeys"
       :id-column-key="'employeeJoinedId'"
       table-mode="single"
@@ -72,7 +72,7 @@
 
     </TaktSingleTable>
 
-    <!-- 分页组件 -->
+    <!-- 分页（服务端分页，外置 TaktPagination） -->
     <TaktPagination
       v-model:current="currentPage"
       v-model:page-size="pageSize"
@@ -92,6 +92,7 @@
       @cancel="handleFormCancel"
     >
       <EmployeeJoinedForm
+        :key="formData?.employeeJoinedId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -109,226 +110,264 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('employeeId')">
-      <a-form-item :label="t('entity.employeeJoined.employeeid')">
+      <a-form-item :label="t('entity.employeejoined.employeeid')">
         <a-input
           v-model:value="advancedQueryForm.employeeId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeJoined.employeeid') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeejoined.employeeid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('onboardingId')">
-      <a-form-item :label="t('entity.employeeJoined.onboardingid')">
+      <a-form-item :label="t('entity.employeejoined.onboardingid')">
         <a-input
           v-model:value="advancedQueryForm.onboardingId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeJoined.onboardingid') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeejoined.onboardingid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('joinedDateStart')">
-      <a-form-item :label="t('entity.employeeJoined.joineddatestart')">
+      <a-form-item :label="t('entity.employeejoined.joineddatestart')">
         <a-date-picker
           v-model:value="advancedQueryForm.joinedDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeJoined.joineddatestart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeejoined.joineddatestart') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('joinedDateEnd')">
-      <a-form-item :label="t('entity.employeeJoined.joineddateend')">
+      <a-form-item :label="t('entity.employeejoined.joineddateend')">
         <a-date-picker
           v-model:value="advancedQueryForm.joinedDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeJoined.joineddateend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeejoined.joineddateend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('probationEndDateStart')">
-      <a-form-item :label="t('entity.employeeJoined.probationenddatestart')">
+      <a-form-item :label="t('entity.employeejoined.probationenddatestart')">
         <a-date-picker
           v-model:value="advancedQueryForm.probationEndDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeJoined.probationenddatestart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeejoined.probationenddatestart') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('probationEndDateEnd')">
-      <a-form-item :label="t('entity.employeeJoined.probationenddateend')">
+      <a-form-item :label="t('entity.employeejoined.probationenddateend')">
         <a-date-picker
           v-model:value="advancedQueryForm.probationEndDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeJoined.probationenddateend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeejoined.probationenddateend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('regularDateStart')">
-      <a-form-item :label="t('entity.employeeJoined.regulardatestart')">
+      <a-form-item :label="t('entity.employeejoined.regulardatestart')">
         <a-date-picker
           v-model:value="advancedQueryForm.regularDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeJoined.regulardatestart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeejoined.regulardatestart') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('regularDateEnd')">
-      <a-form-item :label="t('entity.employeeJoined.regulardateend')">
+      <a-form-item :label="t('entity.employeejoined.regulardateend')">
         <a-date-picker
           v-model:value="advancedQueryForm.regularDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeJoined.regulardateend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeejoined.regulardateend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('deptId')">
-      <a-form-item :label="t('entity.employeeJoined.deptid')">
+      <a-form-item :label="t('entity.employeejoined.deptid')">
         <a-input
           v-model:value="advancedQueryForm.deptId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeJoined.deptid') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeejoined.deptid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('deptName')">
-      <a-form-item :label="t('entity.employeeJoined.deptname')">
+      <a-form-item :label="t('entity.employeejoined.deptname')">
         <a-input
           v-model:value="advancedQueryForm.deptName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeJoined.deptname') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeejoined.deptname') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('postId')">
-      <a-form-item :label="t('entity.employeeJoined.postid')">
+      <a-form-item :label="t('entity.employeejoined.postid')">
         <a-input
           v-model:value="advancedQueryForm.postId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeJoined.postid') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeejoined.postid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('postName')">
-      <a-form-item :label="t('entity.employeeJoined.postname')">
+      <a-form-item :label="t('entity.employeejoined.postname')">
         <a-input
           v-model:value="advancedQueryForm.postName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeJoined.postname') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeejoined.postname') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('jobTitle')">
-      <a-form-item :label="t('entity.employeeJoined.jobtitle')">
+      <a-form-item :label="t('entity.employeejoined.jobtitle')">
         <a-input
           v-model:value="advancedQueryForm.jobTitle"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeJoined.jobtitle') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeejoined.jobtitle') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('workNature')">
-      <a-form-item :label="t('entity.employeeJoined.worknature')">
+      <a-form-item :label="t('entity.employeejoined.worknature')">
         <a-input-number
           v-model:value="advancedQueryForm.workNature"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeJoined.worknature') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeejoined.worknature') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('employmentType')">
-      <a-form-item :label="t('entity.employeeJoined.employmenttype')">
+      <a-form-item :label="t('entity.employeejoined.employmenttype')">
         <a-input-number
           v-model:value="advancedQueryForm.employmentType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeJoined.employmenttype') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeejoined.employmenttype') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('directManagerId')">
-      <a-form-item :label="t('entity.employeeJoined.directmanagerid')">
+      <a-form-item :label="t('entity.employeejoined.directmanagerid')">
         <a-input
           v-model:value="advancedQueryForm.directManagerId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeJoined.directmanagerid') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeejoined.directmanagerid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('directManagerName')">
-      <a-form-item :label="t('entity.employeeJoined.directmanagername')">
+      <a-form-item :label="t('entity.employeejoined.directmanagername')">
         <a-input
           v-model:value="advancedQueryForm.directManagerName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeJoined.directmanagername') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeejoined.directmanagername') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('approvalStatus')">
-      <a-form-item :label="t('entity.employeeJoined.approvalstatus')">
-        <a-input-number
+      <a-form-item :label="t('entity.employeejoined.approvalstatus')">
+        <TaktSelect
           v-model:value="advancedQueryForm.approvalStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeJoined.approvalstatus') })"
-          style="width: 100%"
+          dict-type="sys_approval_status"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeejoined.approvalstatus') })"
+          allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('initiatorId')">
-      <a-form-item :label="t('entity.employeeJoined.initiatorid')">
+      <a-form-item :label="t('entity.employeejoined.initiatorid')">
         <a-input
           v-model:value="advancedQueryForm.initiatorId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeJoined.initiatorid') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeejoined.initiatorid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('initiatedAtStart')">
-      <a-form-item :label="t('entity.employeeJoined.initiatedatstart')">
+      <a-form-item :label="t('entity.employeejoined.initiatedatstart')">
         <a-input
           v-model:value="advancedQueryForm.initiatedAtStart"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeJoined.initiatedatstart') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeejoined.initiatedatstart') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('initiatedAtEnd')">
-      <a-form-item :label="t('entity.employeeJoined.initiatedatend')">
+      <a-form-item :label="t('entity.employeejoined.initiatedatend')">
         <a-date-picker
           v-model:value="advancedQueryForm.initiatedAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeJoined.initiatedatend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeejoined.initiatedatend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('approvedBy')">
-      <a-form-item :label="t('entity.employeeJoined.approvedby')">
+      <a-form-item :label="t('entity.employeejoined.approvedby')">
         <a-input
           v-model:value="advancedQueryForm.approvedBy"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeJoined.approvedby') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeejoined.approvedby') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('approvedAtStart')">
-      <a-form-item :label="t('entity.employeeJoined.approvedatstart')">
+      <a-form-item :label="t('entity.employeejoined.approvedatstart')">
         <a-input
           v-model:value="advancedQueryForm.approvedAtStart"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeJoined.approvedatstart') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeejoined.approvedatstart') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('approvedAtEnd')">
-      <a-form-item :label="t('entity.employeeJoined.approvedatend')">
+      <a-form-item :label="t('entity.employeejoined.approvedatend')">
         <a-date-picker
           v-model:value="advancedQueryForm.approvedAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeJoined.approvedatend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeejoined.approvedatend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('flowInstanceId')">
+      <a-form-item :label="t('entity.employeejoined.flowinstanceid')">
+        <a-input
+          v-model:value="advancedQueryForm.flowInstanceId"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeejoined.flowinstanceid') })"
+          show-count
+          :maxlength="20"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -338,7 +377,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -349,17 +388,36 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('ExtField')">
-      <a-form-item :label="t('common.page.entity.ExtField')">
-        <a-input
-          v-model:value="advancedQueryForm.ExtField"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
-          allow-clear
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
+        <a-textarea
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -368,8 +426,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -379,14 +439,14 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.employeeJoined._self') })"
+      :title="t('common.dialog.title.import', { entity: t('entity.employeejoined._self') })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.employeeJoined._self"
+        entity-i18n-key="entity.employeejoined._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -413,7 +473,6 @@
 </template>
 
 <script setup lang="ts">
-import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 /**
  * 员工入职上岗办理记录管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/human-resource/personnel/employee-joined
@@ -423,12 +482,13 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import EmployeeJoinedForm from './components/employee-joined-form.vue'
 import { getEmployeeJoinedList, getEmployeeJoinedById, createEmployeeJoined, updateEmployeeJoined, deleteEmployeeJoinedById, deleteEmployeeJoinedBatch, getEmployeeJoinedTemplate, importEmployeeJoined, exportEmployeeJoined } from '@/api/human-resource/personnel/employee-joined'
-import type { EmployeeJoined, EmployeeJoinedQuery, EmployeeJoinedCreate, EmployeeJoinedUpdate } from '@/types/human-resource/personnel/employee-joined'
+import type { EmployeeJoined, EmployeeJoinedQuery } from '@/types/human-resource/personnel/employee-joined'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -436,7 +496,7 @@ const { t } = useI18n()
 const excelNames = taktExcelEntityNames('TaktEmployeeJoined')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.employeeJoined._self') })
+  () => t('common.page.form.placeholder.search', { keyword: t('entity.employeejoined._self') })
 )
 
 /** 快捷查询关键字 */
@@ -463,11 +523,13 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<EmployeeJoined>>({})
+const formData = ref<Partial<EmployeeJoined> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
@@ -495,40 +557,42 @@ const advancedQueryForm = ref({
   approvedBy: '',
   approvedAtStart: '',
   approvedAtEnd: '',
+  flowInstanceId: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'employeeId', label: t('entity.employeeJoined.employeeid') },
-  { key: 'onboardingId', label: t('entity.employeeJoined.onboardingid') },
-  { key: 'joinedDateStart', label: t('entity.employeeJoined.joineddatestart') },
-  { key: 'joinedDateEnd', label: t('entity.employeeJoined.joineddateend') },
-  { key: 'probationEndDateStart', label: t('entity.employeeJoined.probationenddatestart') },
-  { key: 'probationEndDateEnd', label: t('entity.employeeJoined.probationenddateend') },
-  { key: 'regularDateStart', label: t('entity.employeeJoined.regulardatestart') },
-  { key: 'regularDateEnd', label: t('entity.employeeJoined.regulardateend') },
-  { key: 'deptId', label: t('entity.employeeJoined.deptid') },
-  { key: 'deptName', label: t('entity.employeeJoined.deptname') },
-  { key: 'postId', label: t('entity.employeeJoined.postid') },
-  { key: 'postName', label: t('entity.employeeJoined.postname') },
-  { key: 'jobTitle', label: t('entity.employeeJoined.jobtitle') },
-  { key: 'workNature', label: t('entity.employeeJoined.worknature') },
-  { key: 'employmentType', label: t('entity.employeeJoined.employmenttype') },
-  { key: 'directManagerId', label: t('entity.employeeJoined.directmanagerid') },
-  { key: 'directManagerName', label: t('entity.employeeJoined.directmanagername') },
-  { key: 'approvalStatus', label: t('entity.employeeJoined.approvalstatus') },
-  { key: 'initiatorId', label: t('entity.employeeJoined.initiatorid') },
-  { key: 'initiatedAtStart', label: t('entity.employeeJoined.initiatedatstart') },
-  { key: 'initiatedAtEnd', label: t('entity.employeeJoined.initiatedatend') },
-  { key: 'approvedBy', label: t('entity.employeeJoined.approvedby') },
-  { key: 'approvedAtStart', label: t('entity.employeeJoined.approvedatstart') },
-  { key: 'approvedAtEnd', label: t('entity.employeeJoined.approvedatend') },
+  { key: 'employeeId', label: t('entity.employeejoined.employeeid') },
+  { key: 'onboardingId', label: t('entity.employeejoined.onboardingid') },
+  { key: 'joinedDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.employeejoined.joineddate')) },
+  { key: 'joinedDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.employeejoined.joineddate')) },
+  { key: 'probationEndDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.employeejoined.probationenddate')) },
+  { key: 'probationEndDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.employeejoined.probationenddate')) },
+  { key: 'regularDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.employeejoined.regulardate')) },
+  { key: 'regularDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.employeejoined.regulardate')) },
+  { key: 'deptId', label: t('entity.employeejoined.deptid') },
+  { key: 'deptName', label: t('entity.employeejoined.deptname') },
+  { key: 'postId', label: t('entity.employeejoined.postid') },
+  { key: 'postName', label: t('entity.employeejoined.postname') },
+  { key: 'jobTitle', label: t('entity.employeejoined.jobtitle') },
+  { key: 'workNature', label: t('entity.employeejoined.worknature') },
+  { key: 'employmentType', label: t('entity.employeejoined.employmenttype') },
+  { key: 'directManagerId', label: t('entity.employeejoined.directmanagerid') },
+  { key: 'directManagerName', label: t('entity.employeejoined.directmanagername') },
+  { key: 'approvalStatus', label: t('entity.employeejoined.approvalstatus') },
+  { key: 'initiatorId', label: t('entity.employeejoined.initiatorid') },
+  { key: 'initiatedAtStart', label: t('entity.employeejoined.initiatedatstart') },
+  { key: 'initiatedAtEnd', label: t('entity.employeejoined.initiatedatend') },
+  { key: 'approvedBy', label: t('entity.employeejoined.approvedby') },
+  { key: 'approvedAtStart', label: t('entity.employeejoined.approvedatstart') },
+  { key: 'approvedAtEnd', label: t('entity.employeejoined.approvedatend') },
+  { key: 'flowInstanceId', label: t('entity.employeejoined.flowinstanceid') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'ExtField', label: t('common.page.entity.ExtField') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -547,10 +611,72 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
 
-/** 页面挂载后加载分页列表 */
-onMounted(() => {
+
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {EmployeeJoinedQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<EmployeeJoinedQuery>): EmployeeJoinedQuery {
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: EmployeeJoinedQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: keyof EmployeeJoinedQuery, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v as never
+    }
+  }
+  assignTrimmed('employeeId', form.employeeId)
+  assignTrimmed('onboardingId', form.onboardingId)
+  assignTrimmed('joinedDateStart', form.joinedDateStart)
+  assignTrimmed('joinedDateEnd', form.joinedDateEnd)
+  assignTrimmed('probationEndDateStart', form.probationEndDateStart)
+  assignTrimmed('probationEndDateEnd', form.probationEndDateEnd)
+  assignTrimmed('regularDateStart', form.regularDateStart)
+  assignTrimmed('regularDateEnd', form.regularDateEnd)
+  assignTrimmed('deptId', form.deptId)
+  assignTrimmed('deptName', form.deptName)
+  assignTrimmed('postId', form.postId)
+  assignTrimmed('postName', form.postName)
+  assignTrimmed('jobTitle', form.jobTitle)
+  if (form.workNature !== undefined && form.workNature !== null) {
+    query.workNature = form.workNature
+  }
+  if (form.employmentType !== undefined && form.employmentType !== null) {
+    query.employmentType = form.employmentType
+  }
+  assignTrimmed('directManagerId', form.directManagerId)
+  assignTrimmed('directManagerName', form.directManagerName)
+  if (form.approvalStatus !== undefined && form.approvalStatus !== null) {
+    query.approvalStatus = form.approvalStatus
+  }
+  assignTrimmed('initiatorId', form.initiatorId)
+  assignTrimmed('initiatedAtStart', form.initiatedAtStart)
+  assignTrimmed('initiatedAtEnd', form.initiatedAtEnd)
+  assignTrimmed('approvedBy', form.approvedBy)
+  assignTrimmed('approvedAtStart', form.approvedAtStart)
+  assignTrimmed('approvedAtEnd', form.approvedAtEnd)
+  assignTrimmed('flowInstanceId', form.flowInstanceId)
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('extField', form.extField)
+  assignTrimmed('remark', form.remark)
+  return query
+}
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
   loadData()
 })
+
 
 
 
@@ -570,7 +696,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeJoinedField(record, 'employeeJoinedId') ?? ''
   },
   {
-    title: t('entity.employeeJoined.employeeid'),
+    title: t('entity.employeejoined.employeeid'),
     dataIndex: 'employeeId',
     key: 'employeeId',
     width: 120,
@@ -579,16 +705,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeJoinedField(record, 'employeeId') ?? ''
   },
   {
-    title: t('entity.employeeJoined.employeename'),
-    dataIndex: 'employeeName',
-    key: 'employeeName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmployeeJoinedField(record, 'employeeName') ?? ''
-  },
-  {
-    title: t('entity.employeeJoined.onboardingid'),
+    title: t('entity.employeejoined.onboardingid'),
     dataIndex: 'onboardingId',
     key: 'onboardingId',
     width: 120,
@@ -597,16 +714,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeJoinedField(record, 'onboardingId') ?? ''
   },
   {
-    title: t('entity.employeeJoined.onboardingname'),
-    dataIndex: 'onboardingName',
-    key: 'onboardingName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmployeeJoinedField(record, 'onboardingName') ?? ''
-  },
-  {
-    title: t('entity.employeeJoined.joineddate'),
+    title: t('entity.employeejoined.joineddate'),
     dataIndex: 'joinedDate',
     key: 'joinedDate',
     width: 120,
@@ -615,7 +723,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeJoinedField(record, 'joinedDate') ?? ''
   },
   {
-    title: t('entity.employeeJoined.probationenddate'),
+    title: t('entity.employeejoined.probationenddate'),
     dataIndex: 'probationEndDate',
     key: 'probationEndDate',
     width: 120,
@@ -624,7 +732,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeJoinedField(record, 'probationEndDate') ?? ''
   },
   {
-    title: t('entity.employeeJoined.regulardate'),
+    title: t('entity.employeejoined.regulardate'),
     dataIndex: 'regularDate',
     key: 'regularDate',
     width: 120,
@@ -633,7 +741,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeJoinedField(record, 'regularDate') ?? ''
   },
   {
-    title: t('entity.employeeJoined.deptid'),
+    title: t('entity.employeejoined.deptid'),
     dataIndex: 'deptId',
     key: 'deptId',
     width: 120,
@@ -642,7 +750,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeJoinedField(record, 'deptId') ?? ''
   },
   {
-    title: t('entity.employeeJoined.deptname'),
+    title: t('entity.employeejoined.deptname'),
     dataIndex: 'deptName',
     key: 'deptName',
     width: 120,
@@ -651,7 +759,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeJoinedField(record, 'deptName') ?? ''
   },
   {
-    title: t('entity.employeeJoined.postid'),
+    title: t('entity.employeejoined.postid'),
     dataIndex: 'postId',
     key: 'postId',
     width: 120,
@@ -660,7 +768,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeJoinedField(record, 'postId') ?? ''
   },
   {
-    title: t('entity.employeeJoined.postname'),
+    title: t('entity.employeejoined.postname'),
     dataIndex: 'postName',
     key: 'postName',
     width: 120,
@@ -669,7 +777,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeJoinedField(record, 'postName') ?? ''
   },
   {
-    title: t('entity.employeeJoined.jobtitle'),
+    title: t('entity.employeejoined.jobtitle'),
     dataIndex: 'jobTitle',
     key: 'jobTitle',
     width: 120,
@@ -678,7 +786,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeJoinedField(record, 'jobTitle') ?? ''
   },
   {
-    title: t('entity.employeeJoined.worknature'),
+    title: t('entity.employeejoined.worknature'),
     dataIndex: 'workNature',
     key: 'workNature',
     width: 120,
@@ -687,7 +795,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeJoinedField(record, 'workNature') ?? ''
   },
   {
-    title: t('entity.employeeJoined.employmenttype'),
+    title: t('entity.employeejoined.employmenttype'),
     dataIndex: 'employmentType',
     key: 'employmentType',
     width: 120,
@@ -696,7 +804,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeJoinedField(record, 'employmentType') ?? ''
   },
   {
-    title: t('entity.employeeJoined.directmanagerid'),
+    title: t('entity.employeejoined.directmanagerid'),
     dataIndex: 'directManagerId',
     key: 'directManagerId',
     width: 120,
@@ -705,7 +813,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeJoinedField(record, 'directManagerId') ?? ''
   },
   {
-    title: t('entity.employeeJoined.directmanagername'),
+    title: t('entity.employeejoined.directmanagername'),
     dataIndex: 'directManagerName',
     key: 'directManagerName',
     width: 120,
@@ -720,7 +828,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'human:resource:personnel:employeejoined:update',
+        permission: 'human:resource:personnel:employee:joined:update',
         onClick: (record: EmployeeJoined) => handleEdit(record)
       },
       {
@@ -728,7 +836,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'human:resource:personnel:employeejoined:delete',
+        permission: 'human:resource:personnel:employee:joined:delete',
         onClick: (record: EmployeeJoined) => handleDeleteOne(record)
       }
     ]
@@ -744,6 +852,7 @@ const getEmployeeJoinedId = (record: any): string => record?.[entityIdName] ?? '
  */
 const getEmployeeJoinedField = (record: any, field: string): any => record?.[field]
 
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -755,7 +864,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: EmployeeJoined, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getEmployeeJoinedId(selectedRow.value) === getEmployeeJoinedId(record)) {
+    } else if (selectedRow.value && getEmployeeJoinedId(selectedRow.value) === getEmployeeJoinedId(record)) {
       selectedRow.value = null
     }
   },
@@ -786,16 +895,7 @@ const onClickRow = (record: EmployeeJoined) => ({
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: EmployeeJoinedQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getEmployeeJoinedList(params)
+    const res = await getEmployeeJoinedList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
@@ -813,7 +913,7 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -845,24 +945,26 @@ function handleReset() {
   approvedBy: '',
   approvedAtStart: '',
   approvedAtEnd: '',
+  flowInstanceId: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.employeeJoined._self') })
-  formData.value = {}
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.employeejoined._self') })
+  formData.value = null
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗 */
 function handleEdit(record: EmployeeJoined) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.employeeJoined._self') })
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.employeejoined._self') })
   formData.value = { ...record }
   formVisible.value = true
 }
@@ -872,7 +974,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.employeeJoined._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.employeejoined._self') }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -890,12 +992,14 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateEmployeeJoined(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.employeeJoined._self') }))
+      message.success(t('common.feedback.updated', { target: t('entity.employeejoined._self') }))
     } else {
       await createEmployeeJoined(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.employeeJoined._self') }))
+      message.success(t('common.feedback.created', { target: t('entity.employeejoined._self') }))
     }
     formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
     loadData()
   } finally {
     formLoading.value = false
@@ -905,6 +1009,8 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开导入对话框 */
 function handleImport() {
@@ -936,16 +1042,11 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: EmployeeJoinedQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportEmployeeJoined(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportEmployeeJoined(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -964,10 +1065,10 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.employeeJoined._self') }))
+    message.success(t('common.feedback.export.success', { target: t('entity.employeejoined._self') }))
   } catch (error: any) {
     logger.error('[EmployeeJoined] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.employeeJoined._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.employeejoined._self') }))
   } finally {
     loading.value = false
   }
@@ -976,12 +1077,12 @@ async function handleExport() {
 async function handleDeleteOne(record: EmployeeJoined) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.employeeJoined._self'), name: t('common.tip.this.target', { target: t('entity.employeeJoined._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: t('entity.employeejoined._self'), name: t('common.tip.this.target', { target: t('entity.employeejoined._self') }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteEmployeeJoinedById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.employeeJoined._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.employeejoined._self') }))
       loadData()
     }
   })
@@ -989,18 +1090,18 @@ async function handleDeleteOne(record: EmployeeJoined) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.employeeJoined._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.employeejoined._self') }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.employeeJoined._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: t('entity.employeejoined._self'), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteEmployeeJoinedBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.employeeJoined._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.employeejoined._self') }))
       loadData()
     }
   })
@@ -1013,7 +1114,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -1043,9 +1144,10 @@ function handleAdvancedQueryReset() {
   approvedBy: '',
   approvedAtStart: '',
   approvedAtEnd: '',
+  flowInstanceId: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
 }
@@ -1075,23 +1177,16 @@ function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
 /** 分页页码变更 */
-function handlePaginationChange(page: number) {
+function handlePaginationChange(page: number, size: number) {
   currentPage.value = page
+  pageSize.value = size
   loadData()
 }
-/** 分页每页条数变更 */
+
+/** 分页每页条数变更（重置到第 1 页） */
 function handlePaginationSizeChange(_current: number, size: number) {
+  currentPage.value = getTaktDefaultPageIndex()
   pageSize.value = size
-  currentPage.value = 1
   loadData()
 }
 </script>
-
-<style scoped lang="css">
-.human-resource-personnel-employee-joined {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-</style>

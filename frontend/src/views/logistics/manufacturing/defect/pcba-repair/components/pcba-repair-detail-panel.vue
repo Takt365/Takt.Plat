@@ -19,11 +19,11 @@
       @reset="handleQueryReset"
     />
     <TaktToolsBar
-      create-permission="logistics:manufacturing:defect:pcbarepair:create"
-      update-permission="logistics:manufacturing:defect:pcbarepair:update"
-      delete-permission="logistics:manufacturing:defect:pcbarepair:delete"
-      import-permission="logistics:manufacturing:defect:pcbarepair:import"
-      export-permission="logistics:manufacturing:defect:pcbarepair:export"
+      create-permission="logistics:manufacturing:defect:pcba:repair:create"
+      update-permission="logistics:manufacturing:defect:pcba:repair:update"
+      delete-permission="logistics:manufacturing:defect:pcba:repair:delete"
+      import-permission="logistics:manufacturing:defect:pcba:repair:import"
+      export-permission="logistics:manufacturing:defect:pcba:repair:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -73,7 +73,7 @@
         v-model:page-size="pageSize"
         :total="total"
         scroll-layout="masterDetailLr"
-        table-mode="single"
+        table-mode="masterDetailDetail"
         :show-row-selection="true"
         @change="handleTableChange"
         @pagination-change="handleMasterDetailPaginationChange"
@@ -128,11 +128,10 @@
       </div>
       <div v-show="isFieldVisible('pcbaBoardType')">
       <a-form-item :label="t('entity.pcbarepairdetail.pcbaboardtype')">
-        <a-input
+        <TaktSelect
           v-model:value="advancedQueryForm.pcbaBoardType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbarepairdetail.pcbaboardtype') })"
-          show-count
-          :maxlength="20"
+          dict-type="logistics_pcba_panel_category"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbarepairdetail.pcbaboardtype') })"
           allow-clear
         />
       </a-form-item>
@@ -146,11 +145,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('prodLine')">
-      <a-form-item :label="t('entity.pcbarepairdetail.prodline')">
+      <div v-show="isFieldVisible('prodTeam')">
+      <a-form-item :label="t('entity.pcbarepairdetail.prodteam')">
         <a-input
-          v-model:value="advancedQueryForm.prodLine"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbarepairdetail.prodline') })"
+          v-model:value="advancedQueryForm.prodTeam"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbarepairdetail.prodteam') })"
           show-count
           :maxlength="20"
           allow-clear
@@ -181,11 +180,10 @@
       </div>
       <div v-show="isFieldVisible('defectEngineering')">
       <a-form-item :label="t('entity.pcbarepairdetail.defectengineering')">
-        <a-input
+        <TaktSelect
           v-model:value="advancedQueryForm.defectEngineering"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbarepairdetail.defectengineering') })"
-          show-count
-          :maxlength="20"
+          dict-type="logistics_defect_category"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbarepairdetail.defectengineering') })"
           allow-clear
         />
       </a-form-item>
@@ -212,22 +210,20 @@
       </div>
       <div v-show="isFieldVisible('defectResponsibility')">
       <a-form-item :label="t('entity.pcbarepairdetail.defectresponsibility')">
-        <a-input
+        <TaktSelect
           v-model:value="advancedQueryForm.defectResponsibility"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbarepairdetail.defectresponsibility') })"
-          show-count
-          :maxlength="20"
+          dict-type="logistics_defect_responsibility_category"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbarepairdetail.defectresponsibility') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('defectNature')">
       <a-form-item :label="t('entity.pcbarepairdetail.defectnature')">
-        <a-input
+        <TaktSelect
           v-model:value="advancedQueryForm.defectNature"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbarepairdetail.defectnature') })"
-          show-count
-          :maxlength="20"
+          dict-type="logistics_defect_nature_category"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbarepairdetail.defectnature') })"
           allow-clear
         />
       </a-form-item>
@@ -249,7 +245,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -260,18 +256,36 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('ExtField')">
-      <a-form-item :label="t('entity.pcbarepairdetail.extfield')">
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
         <a-textarea
-          v-model:value="advancedQueryForm.ExtField"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.pcbarepairdetail.extfield') })"
-          :rows="2"
-          allow-clear
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -289,6 +303,7 @@
       </div>
       </template>
     </TaktQueryDrawer>
+    <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
       :title="t('common.dialog.title.import', { entity: t('entity.pcbarepairdetail._self') })"
@@ -298,6 +313,7 @@
       @cancel="handleImportCancel"
     >
       <TaktImportFile
+        v-if="importVisible"
         entity-i18n-key="entity.pcbarepairdetail._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
@@ -316,7 +332,7 @@
       id-column-key="pcbaRepairDetailId"
       action-column-key="action"
       entity-scope="company"
-      table-mode="single"
+      table-mode="masterDetailDetail"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -335,8 +351,9 @@ import { useI18n } from 'vue-i18n'
 import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 import PcbaRepairDetailForm from './pcba-repair-detail-form.vue'
 import { usePcbaRepairMasterContext } from '../composables/use-pcba-repair-master-context'
 import {
@@ -383,7 +400,7 @@ const advancedQueryForm = ref({
   lineNumber: undefined as number | undefined,
   pcbaBoardType: '',
   prodActualQty: undefined as number | undefined,
-  prodLine: '',
+  prodTeam: '',
   cardNo: '',
   defectSymptom: '',
   defectEngineering: '',
@@ -394,7 +411,7 @@ const advancedQueryForm = ref({
   repairOperator: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
 })
 const visibleQueryFieldKeys = ref<string[]>([])
@@ -405,7 +422,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'lineNumber', label: t('entity.pcbarepairdetail.linenumber') },
   { key: 'pcbaBoardType', label: t('entity.pcbarepairdetail.pcbaboardtype') },
   { key: 'prodActualQty', label: t('entity.pcbarepairdetail.prodactualqty') },
-  { key: 'prodLine', label: t('entity.pcbarepairdetail.prodline') },
+  { key: 'prodTeam', label: t('entity.pcbarepairdetail.prodteam') },
   { key: 'cardNo', label: t('entity.pcbarepairdetail.cardno') },
   { key: 'defectSymptom', label: t('entity.pcbarepairdetail.defectsymptom') },
   { key: 'defectEngineering', label: t('entity.pcbarepairdetail.defectengineering') },
@@ -416,7 +433,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'repairOperator', label: t('entity.pcbarepairdetail.repairoperator') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'ExtField', label: t('entity.pcbarepairdetail.extfield') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 
@@ -444,7 +461,7 @@ function handleAdvancedQueryReset() {
   lineNumber: undefined as number | undefined,
   pcbaBoardType: '',
   prodActualQty: undefined as number | undefined,
-  prodLine: '',
+  prodTeam: '',
   cardNo: '',
   defectSymptom: '',
   defectEngineering: '',
@@ -455,11 +472,12 @@ function handleAdvancedQueryReset() {
   repairOperator: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
 }
 const columnSettingVisible = ref(false)
+/** 表格当前可见列 key（空数组时按 tableMode=masterDetailDetail 默认 id+4 业务列） */
 const visibleColumnKeys = ref<string[]>([])
 
 function handleColumnSetting() {
@@ -542,14 +560,14 @@ const columns = computed<TableColumnsType>(() => [
       String(getPcbaRepairDetailField(record, 'prodActualQty') ?? ''),
   },
   {
-    title: t('entity.pcbarepairdetail.prodline'),
-    dataIndex: 'prodLine',
-    key: 'prodLine',
+    title: t('entity.pcbarepairdetail.prodteam'),
+    dataIndex: 'prodTeam',
+    key: 'prodTeam',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: PcbaRepairDetail }) =>
-      String(getPcbaRepairDetailField(record, 'prodLine') ?? ''),
+      String(getPcbaRepairDetailField(record, 'prodTeam') ?? ''),
   },
   {
     title: t('entity.pcbarepairdetail.cardno'),
@@ -581,6 +599,66 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: PcbaRepairDetail }) =>
       String(getPcbaRepairDetailField(record, 'defectEngineering') ?? ''),
   },
+  {
+    title: t('entity.pcbarepairdetail.defectreason'),
+    dataIndex: 'defectReason',
+    key: 'defectReason',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: PcbaRepairDetail }) =>
+      String(getPcbaRepairDetailField(record, 'defectReason') ?? ''),
+  },
+  {
+    title: t('entity.pcbarepairdetail.defectqty'),
+    dataIndex: 'defectQty',
+    key: 'defectQty',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: PcbaRepairDetail }) =>
+      String(getPcbaRepairDetailField(record, 'defectQty') ?? ''),
+  },
+  {
+    title: t('entity.pcbarepairdetail.defectresponsibility'),
+    dataIndex: 'defectResponsibility',
+    key: 'defectResponsibility',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: PcbaRepairDetail }) =>
+      String(getPcbaRepairDetailField(record, 'defectResponsibility') ?? ''),
+  },
+  {
+    title: t('entity.pcbarepairdetail.defectnature'),
+    dataIndex: 'defectNature',
+    key: 'defectNature',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: PcbaRepairDetail }) =>
+      String(getPcbaRepairDetailField(record, 'defectNature') ?? ''),
+  },
+  {
+    title: t('entity.pcbarepairdetail.repairoperator'),
+    dataIndex: 'repairOperator',
+    key: 'repairOperator',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: PcbaRepairDetail }) =>
+      String(getPcbaRepairDetailField(record, 'repairOperator') ?? ''),
+  },
+  {
+    title: t('entity.pcbarepairdetail.pcbarepair'),
+    dataIndex: 'pcbaRepair',
+    key: 'pcbaRepair',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: PcbaRepairDetail }) =>
+      String(getPcbaRepairDetailField(record, 'pcbaRepair') ?? ''),
+  },
   CreateActionColumn({
     actions: [
       {
@@ -588,7 +666,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:manufacturing:defect:pcbarepair:update',
+        permission: 'logistics:manufacturing:defect:pcba:repair:update',
         onClick: (record: PcbaRepairDetail) => void handleEdit(record),
       },
       {
@@ -596,7 +674,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:manufacturing:defect:pcbarepair:delete',
+        permission: 'logistics:manufacturing:defect:pcba:repair:delete',
         onClick: (record: PcbaRepairDetail) => void handleDeleteOne(record),
       },
     ],
@@ -613,7 +691,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: PcbaRepairDetail, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getPcbaRepairDetailId(selectedRow.value) === getPcbaRepairDetailId(record)) {
+    } else if (selectedRow.value && getPcbaRepairDetailId(selectedRow.value) === getPcbaRepairDetailId(record)) {
       selectedRow.value = null
     }
   },
@@ -671,7 +749,7 @@ function buildListQuery(overrides?: Partial<PcbaRepairDetailQuery>): PcbaRepairD
   if (form.prodActualQty !== undefined && form.prodActualQty !== null) {
     query.prodActualQty = form.prodActualQty
   }
-  assignTrimmed('prodLine', form.prodLine)
+  assignTrimmed('prodTeam', form.prodTeam)
   assignTrimmed('cardNo', form.cardNo)
   assignTrimmed('defectSymptom', form.defectSymptom)
   assignTrimmed('defectEngineering', form.defectEngineering)
@@ -684,7 +762,7 @@ function buildListQuery(overrides?: Partial<PcbaRepairDetailQuery>): PcbaRepairD
   assignTrimmed('repairOperator', form.repairOperator)
   assignTrimmed('createdAtStart', form.createdAtStart)
   assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('ExtField', form.ExtField)
+  assignTrimmed('extField', form.extField)
   assignTrimmed('remark', form.remark)
   return query
 }
@@ -846,35 +924,36 @@ function handleRefresh() {
   void loadData()
 }
 
+/** 打开导入对话框 */
 function handleImport() {
   if (!hasMasterSelection.value) {
-    message.warning(t('common.status.empty'))
-    return
-  }
+      message.warning(t('common.status.empty'))
+      return
+    }
   importVisible.value = true
 }
 
+/** 下载导入模板 Excel */
 async function handleDownloadTemplate(sheetName?: string, fileName?: string): Promise<Blob> {
   const res = await getPcbaRepairDetailTemplate(sheetName, fileName)
-  return (res as { data?: Blob }).data ?? (res as Blob)
+  return (res as any)?.data ?? res
 }
 
-async function handleImportFile(
-  file: File,
-  sheetName?: string,
-): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importPcbaRepairDetail(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importPcbaRepairDetail(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   void loadData()
-  if (result.fail === 0) {
-    setTimeout(() => {
-      importVisible.value = false
-    }, 2000)
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
   }
 }
 
+/** 关闭导入对话框 */
 function handleImportCancel() {
   importVisible.value = false
 }

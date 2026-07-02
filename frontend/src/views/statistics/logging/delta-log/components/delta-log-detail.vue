@@ -31,7 +31,7 @@
               </a-col>
               <a-col :span="24">
                 <a-form-item :label="t('entity.deltalog.opertype')">
-                  <a-input :value="text(detail.operType)" size="small" disabled />
+                  <TaktConstTag category="operType" :value="detail.operType" />
                 </a-form-item>
               </a-col>
               <a-col :span="24">

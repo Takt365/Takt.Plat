@@ -4,13 +4,18 @@
 // 文件名称：setting.ts
 // 创建时间：2026-05-26
 // 创建人：Takt365(Cursor AI)
-// 功能描述：全局配置（默认值、常量、持久化读写与工具）
+// 功能描述：全局配置（默认值、持久化）；主题色映射权威源见 @/utils/theme
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
 import type { AppSetting, ThemeColor, ThemeColorConfig } from '@/types/setting';
+import {
+  appSettingThemeColorToPreset,
+  getThemeColorValue as getPresetThemeColorValue,
+  themeColorPresetI18nKeyMap,
+} from '@/utils/theme';
 import { createLogger } from '@/utils/logger';
 
 export type { ThemeColor, ThemeColorConfig, AppSetting } from '@/types/setting';
@@ -22,6 +27,8 @@ export const defaultSetting: AppSetting = {
   layout: 'side',
   theme: 'dark',
   themeColor: { type: 'blue' },
+  /** 仅主题外观：true 表示用户手动选过明暗/主色，假日主题不再覆盖主色 */
+  appearanceUserOverride: false,
   borderRadius: 5,
   fontSize: 15,
   colorWeak: false,
@@ -56,40 +63,31 @@ export const defaultSetting: AppSetting = {
 /** localStorage 键名 */
 export const STORAGE_KEY = 'app-setting';
 
+/** AppSetting 短键 → preset（与 utils/theme 同源） */
+export const themeColorToPreset = appSettingThemeColorToPreset;
+
 /**
- * 主题色预设映射（与 styles/color-base.css 十大著名色彩一致）
+ * 主题色短键 → hex（由 utils/theme 预设派生，禁止重复维护色值）
  */
-export const themeColorMap: Record<Exclude<ThemeColor, 'custom'>, string> = {
-  green: '#2e8b57',
-  cyan: '#00a0b0',
-  red: '#ff0000',
-  orange: '#ff6347',
-  purple: '#990033',
-  pink: '#8c1515',
-  blue: '#002fa7',
-  brown: '#4c2b18',
-  indigo: '#003153',
-  yellow: '#f4d35e',
-  gray: '#808080',
-};
-
-/** 主题色 preset → common.page.color.* 键后缀（小写点分段；preset slug 本身可含连字符，不得写入 i18n 键） */
-export const themeColorI18nKeyMap: Record<Exclude<ThemeColor, 'custom'>, string> = {
-  green: 'mars.green',
-  cyan: 'tiffany.blue',
-  red: 'chinese.red',
-  orange: 'titian.red',
-  purple: 'burgundy.red',
-  pink: 'bordeaux.red',
-  blue: 'klein.blue',
-  brown: 'vandyke.brown',
-  indigo: 'prussian.blue',
-  yellow: 'sennelier.yellow',
-  gray: 'memorial.gray',
-};
+export const themeColorMap: Record<Exclude<ThemeColor, 'custom'>, string> = Object.fromEntries(
+  Object.entries(appSettingThemeColorToPreset).map(([shortKey, preset]) => [
+    shortKey,
+    getPresetThemeColorValue(preset),
+  ])
+) as Record<Exclude<ThemeColor, 'custom'>, string>;
 
 /**
- * 解析主题色色值
+ * 主题色短键 → common.page.color.* 后缀（由 preset i18n 映射派生）
+ */
+export const themeColorI18nKeyMap: Record<Exclude<ThemeColor, 'custom'>, string> = Object.fromEntries(
+  Object.entries(appSettingThemeColorToPreset).map(([shortKey, preset]) => [
+    shortKey,
+    themeColorPresetI18nKeyMap[preset],
+  ])
+) as Record<Exclude<ThemeColor, 'custom'>, string>;
+
+/**
+ * 解析 AppSetting 主题色为 hex
  * @param {ThemeColorConfig} config 主题色配置
  * @returns {string} 十六进制色值
  */
@@ -97,8 +95,11 @@ export function getThemeColorValue(config: ThemeColorConfig): string {
   if (config.type === 'custom' && config.customColor) {
     return config.customColor;
   }
-
-  return themeColorMap[config.type as Exclude<ThemeColor, 'custom'>] || themeColorMap.blue;
+  const preset = appSettingThemeColorToPreset[config.type as keyof typeof appSettingThemeColorToPreset];
+  if (preset) {
+    return getPresetThemeColorValue(preset);
+  }
+  return getPresetThemeColorValue('klein-blue');
 }
 
 /**
@@ -110,11 +111,9 @@ export function validateFontSize(size: number): number {
   if (size < 15) {
     return 15;
   }
-
   if (size > 22) {
     return 22;
   }
-
   return size;
 }
 
@@ -139,9 +138,18 @@ export function normalizeSetting(raw: Partial<AppSetting>): AppSetting {
 
   if (!base.themeColor || typeof base.themeColor !== 'object') {
     base.themeColor = { ...defaultSetting.themeColor };
-  } else if (base.themeColor.type !== 'custom' && !(base.themeColor.type in themeColorMap)) {
+  } else if (
+    base.themeColor.type !== 'custom'
+    && !(base.themeColor.type in appSettingThemeColorToPreset)
+  ) {
     base.themeColor = { ...defaultSetting.themeColor };
   }
+
+  if (base.theme !== 'light' && base.theme !== 'dark') {
+    base.theme = defaultSetting.theme;
+  }
+
+  base.appearanceUserOverride = raw.appearanceUserOverride === true;
 
   return base;
 }
@@ -154,13 +162,11 @@ export function readSettingFromStorage(): AppSetting {
   if (typeof window === 'undefined' || !localStorage) {
     return defaultSetting;
   }
-
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (!stored) {
       return defaultSetting;
     }
-
     const parsed = JSON.parse(stored) as Partial<AppSetting>;
     return normalizeSetting(parsed);
   } catch (error) {
@@ -180,7 +186,6 @@ export function saveSettingToStorage(setting: AppSetting): void {
   if (typeof window === 'undefined' || !localStorage) {
     return;
   }
-
   const normalized = normalizeSetting(setting);
   localStorage.setItem(STORAGE_KEY, JSON.stringify(normalized));
 }

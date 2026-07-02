@@ -2,6 +2,8 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Domain.Entities.Logistics.Sales
 // 文件名称：TaktSalesOrderChangeLog.cs
+// 创建时间：2025-01-20
+// 创建人：Takt365(Cursor AI)
 // 功能描述：销售订单变更记录实体（变更记录表，非历史表）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
@@ -23,7 +25,7 @@ namespace Takt.Domain.Entities.Logistics.Sales;
 public class TaktSalesOrderChangeLog : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 销售订单ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 销售订单（关联 TaktSalesOrder.Id，选项 TaktSalesOrders/options）
     /// </summary>
     [SugarColumn(ColumnName = "sales_order_id", ColumnDescription = "销售订单ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -59,6 +61,10 @@ public class TaktSalesOrderChangeLog : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "change_reason", ColumnDescription = "变更原因", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
     public string? ChangeReason { get; set; }
+
+    // ========================================
+    // 导航属性区域
+    // ========================================
 
     /// <summary>
     /// 销售订单主表

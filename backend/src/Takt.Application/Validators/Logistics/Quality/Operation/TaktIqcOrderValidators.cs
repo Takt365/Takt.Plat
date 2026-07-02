@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Quality.Operation
 // 文件名称：TaktIqcOrderValidators.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：IqcOrder 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktIqcOrder 生成，请按需审阅）
 // 
@@ -47,10 +47,6 @@ public class TaktIqcOrderCreateValidator : AbstractValidator<TaktIqcOrderCreateD
         RuleFor(x => x.SupplierCode)
             .NotEmpty().WithMessage("供应商编码不能为空")
             .MaximumLength(50).WithMessage("供应商编码长度不能超过50个字符");
-        RuleFor(x => x.JudgeBy)
-            .MaximumLength(50).WithMessage("判定人长度不能超过50个字符");
-        RuleFor(x => x.JudgeDescription)
-            .MaximumLength(1000).WithMessage("判定说明长度不能超过1000个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -74,6 +70,28 @@ public class TaktIqcOrderUpdateValidator : AbstractValidator<TaktIqcOrderUpdateD
     {
         RuleFor(x => x.IqcOrderId)
             .GreaterThan(0).WithMessage("IqcOrderID无效");
+        RuleFor(x => x.TenantCode)
+            .NotEmpty().WithMessage("租户编码不能为空")
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.CompanyCode)
+            .NotEmpty().WithMessage("公司代码不能为空")
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.PlantCode)
+            .NotEmpty().WithMessage("工厂代码不能为空")
+            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
+        RuleFor(x => x.SourceCode)
+            .NotEmpty().WithMessage("来源单号不能为空")
+            .MaximumLength(50).WithMessage("来源单号长度不能超过50个字符");
+        RuleFor(x => x.IqcOrderCode)
+            .NotEmpty().WithMessage("IQC检验单编码不能为空")
+            .MaximumLength(50).WithMessage("IQC检验单编码长度不能超过50个字符");
+        RuleFor(x => x.SupplierCode)
+            .NotEmpty().WithMessage("供应商编码不能为空")
+            .MaximumLength(50).WithMessage("供应商编码长度不能超过50个字符");
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
     }
 }
 
@@ -107,10 +125,6 @@ public class TaktIqcOrderImportValidator : AbstractValidator<TaktIqcOrderImportD
         RuleFor(x => x.SupplierCode)
             .NotEmpty().WithMessage("供应商编码不能为空")
             .MaximumLength(50).WithMessage("供应商编码长度不能超过50个字符");
-        RuleFor(x => x.JudgeBy)
-            .MaximumLength(50).WithMessage("判定人长度不能超过50个字符").When(x => !string.IsNullOrWhiteSpace(x.JudgeBy));
-        RuleFor(x => x.JudgeDescription)
-            .MaximumLength(1000).WithMessage("判定说明长度不能超过1000个字符").When(x => !string.IsNullOrWhiteSpace(x.JudgeDescription));
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

@@ -97,7 +97,7 @@ export default {
       },
       fieldtree: {
         root: "Table/View/Structure",
-        datafield: "Field List (Description)",
+        datafield: "Field List (ConfigurableDescription)",
         outputlist: "List Fields",
         selectionfield: "Selection Fields",
         fieldname: "Field Name",

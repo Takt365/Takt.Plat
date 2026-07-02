@@ -19,11 +19,11 @@
       @reset="handleQueryReset"
     />
     <TaktToolsBar
-      create-permission="logistics:quality:complaint:customercomplaint:create"
-      update-permission="logistics:quality:complaint:customercomplaint:update"
-      delete-permission="logistics:quality:complaint:customercomplaint:delete"
-      import-permission="logistics:quality:complaint:customercomplaint:import"
-      export-permission="logistics:quality:complaint:customercomplaint:export"
+      create-permission="logistics:quality:complaint:customer:create"
+      update-permission="logistics:quality:complaint:customer:update"
+      delete-permission="logistics:quality:complaint:customer:delete"
+      import-permission="logistics:quality:complaint:customer:import"
+      export-permission="logistics:quality:complaint:customer:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -306,7 +306,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -317,7 +317,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -681,7 +681,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:quality:complaint:customercomplaint:update',
+        permission: 'logistics:quality:complaint:customer:update',
         onClick: (record: CustomerComplaintItem) => void handleEdit(record),
       },
       {
@@ -689,7 +689,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:quality:complaint:customercomplaint:delete',
+        permission: 'logistics:quality:complaint:customer:delete',
         onClick: (record: CustomerComplaintItem) => void handleDeleteOne(record),
       },
     ],
@@ -706,7 +706,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: CustomerComplaintItem, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getCustomerComplaintItemId(selectedRow.value) === getCustomerComplaintItemId(record)) {
+    } else if (selectedRow.value && getCustomerComplaintItemId(selectedRow.value) === getCustomerComplaintItemId(record)) {
       selectedRow.value = null
     }
   },

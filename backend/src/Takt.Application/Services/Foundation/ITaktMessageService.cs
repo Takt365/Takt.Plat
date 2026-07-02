@@ -11,6 +11,7 @@
 // ========================================
 
 using Takt.Application.Dtos.Foundation;
+using Takt.Domain.Entities.Foundation;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
 
@@ -75,6 +76,22 @@ public interface ITaktMessageService
     /// <param name="id">在线消息 ID</param>
     /// <returns>任务</returns>
     Task SendMessageByIdAsync(long id);
+
+    /// <summary>
+    /// 为被强退的在线用户落库并 SignalR 推送系统消息（与 message-form：Create + Send 一致；按 online 租户/公司，适用于延迟强退后台任务）
+    /// </summary>
+    /// <param name="online">目标在线用户</param>
+    /// <param name="messageContent">消息正文</param>
+    /// <param name="messageGroup">消息分组 DictValue</param>
+    /// <param name="fromUserId">操作者用户 ID（可为空，须与 fromUserName 成对解析）</param>
+    /// <param name="fromUserName">操作者登录名</param>
+    /// <returns>任务</returns>
+    Task CreateAndSendOnlineKickMessageAsync(
+        TaktOnline online,
+        string messageContent,
+        string messageGroup,
+        long? fromUserId = null,
+        string? fromUserName = null);
 
     /// <summary>
     /// 删除在线消息

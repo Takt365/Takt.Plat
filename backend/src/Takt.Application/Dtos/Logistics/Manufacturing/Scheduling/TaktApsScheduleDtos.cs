@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Scheduling
 // 文件名称：TaktApsScheduleDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ApsSchedule 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktApsSchedule 生成，请按需审阅）
 // 
@@ -36,7 +36,7 @@ public class TaktApsScheduleDto : TaktCompanyDtoBase
     public long ApsScheduleId { get; set; }
 
     /// <summary>
-    /// 工厂编码（不可空）
+    /// 工厂编码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -86,12 +86,12 @@ public class TaktApsScheduleDto : TaktCompanyDtoBase
     public string? WorkshopName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产线编码
+    /// 生产班组编码
     /// </summary>
     public string? ProductionLineCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产线名称
+    /// 生产班组名称
     /// </summary>
     public string? ProductionLineName { get; set; } = string.Empty;
 
@@ -116,7 +116,7 @@ public class TaktApsScheduleDto : TaktCompanyDtoBase
     public int ScheduleStatus { get; set; } = 0;
 
     /// <summary>
-    /// 计划员ID
+    /// 计划员ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PlannerId { get; set; }
@@ -132,7 +132,7 @@ public class TaktApsScheduleDto : TaktCompanyDtoBase
     public DateTime? PublishTime { get; set; }
 
     /// <summary>
-    /// 发布人ID
+    /// 发布人ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PublishUserId { get; set; }
@@ -146,6 +146,12 @@ public class TaktApsScheduleDto : TaktCompanyDtoBase
     /// 排程说明
     /// </summary>
     public string? ScheduleDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// APS 排程订单列表（排程批次关联的订单）
+    /// （子表：TaktApsOrder）
+    /// </summary>
+    public List<TaktApsOrderDto>? Orders { get; set; }
 
     /// <summary>
     /// 排程明细列表（主子表关系）
@@ -182,7 +188,7 @@ public class TaktApsScheduleQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂编码（不可空）
+    /// 工厂编码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -247,12 +253,12 @@ public class TaktApsScheduleQueryDto : TaktPagedQuery
     public string? WorkshopName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产线编码
+    /// 生产班组编码
     /// </summary>
     public string? ProductionLineCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产线名称
+    /// 生产班组名称
     /// </summary>
     public string? ProductionLineName { get; set; } = string.Empty;
 
@@ -277,7 +283,7 @@ public class TaktApsScheduleQueryDto : TaktPagedQuery
     public int? ScheduleStatus { get; set; }
 
     /// <summary>
-    /// 计划员ID
+    /// 计划员ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PlannerId { get; set; }
@@ -298,7 +304,7 @@ public class TaktApsScheduleQueryDto : TaktPagedQuery
     public DateTime? PublishTimeEnd { get; set; }
 
     /// <summary>
-    /// 发布人ID
+    /// 发布人ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PublishUserId { get; set; }
@@ -354,14 +360,14 @@ public class TaktApsScheduleCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂编码（不可空）
+    /// 工厂编码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "工厂编码（不可空）不能为空")]
+    [Required(ErrorMessage = "工厂编码（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -412,12 +418,12 @@ public class TaktApsScheduleCreateDto
     public string? WorkshopName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产线编码
+    /// 生产班组编码
     /// </summary>
     public string? ProductionLineCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产线名称
+    /// 生产班组名称
     /// </summary>
     public string? ProductionLineName { get; set; } = string.Empty;
 
@@ -442,7 +448,7 @@ public class TaktApsScheduleCreateDto
     public int ScheduleStatus { get; set; } = 0;
 
     /// <summary>
-    /// 计划员ID
+    /// 计划员ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PlannerId { get; set; }
@@ -458,7 +464,7 @@ public class TaktApsScheduleCreateDto
     public DateTime? PublishTime { get; set; }
 
     /// <summary>
-    /// 发布人ID
+    /// 发布人ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PublishUserId { get; set; }
@@ -472,6 +478,11 @@ public class TaktApsScheduleCreateDto
     /// 排程说明
     /// </summary>
     public string? ScheduleDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// APS 排程订单列表（排程批次关联的订单）（子表，级联保存）
+    /// </summary>
+    public List<TaktApsOrderCreateDto>? Orders { get; set; }
 
     /// <summary>
     /// 排程明细列表（主子表关系）（子表，级联保存）
@@ -559,9 +570,9 @@ public class TaktApsScheduleTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂编码（不可空）
+    /// 工厂编码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 排程编码（唯一索引）
@@ -579,6 +590,21 @@ public class TaktApsScheduleTemplateDto
     public int? ScheduleType { get; set; }
 
     /// <summary>
+    /// 计划日期
+    /// </summary>
+    public DateTime? PlanDate { get; set; }
+
+    /// <summary>
+    /// 计划开始时间
+    /// </summary>
+    public DateTime? PlanStartTime { get; set; }
+
+    /// <summary>
+    /// 计划结束时间
+    /// </summary>
+    public DateTime? PlanEndTime { get; set; }
+
+    /// <summary>
     /// 计划周期（0=日计划，1=周计划，2=月计划）
     /// </summary>
     public int? PlanCycle { get; set; }
@@ -594,12 +620,12 @@ public class TaktApsScheduleTemplateDto
     public string? WorkshopName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产线编码
+    /// 生产班组编码
     /// </summary>
     public string? ProductionLineCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产线名称
+    /// 生产班组名称
     /// </summary>
     public string? ProductionLineName { get; set; } = string.Empty;
 
@@ -617,6 +643,58 @@ public class TaktApsScheduleTemplateDto
     /// 优化目标（0=交期优先，1=产能优先，2=成本优先，3=均衡生产）
     /// </summary>
     public int? OptimizationObjective { get; set; }
+
+    /// <summary>
+    /// 排程状态（0=草稿，1=计算中，2=已计算，3=已发布，4=执行中，5=已完成，6=已取消）
+    /// </summary>
+    public int? ScheduleStatus { get; set; }
+
+    /// <summary>
+    /// 计划员ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? PlannerId { get; set; }
+
+    /// <summary>
+    /// 计划员姓名
+    /// </summary>
+    public string? PlannerName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 发布时间
+    /// </summary>
+    public DateTime? PublishTime { get; set; }
+
+    /// <summary>
+    /// 发布人ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? PublishUserId { get; set; }
+
+    /// <summary>
+    /// 发布人姓名
+    /// </summary>
+    public string? PublishUserName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 排程说明
+    /// </summary>
+    public string? ScheduleDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// APS 排程订单列表（排程批次关联的订单）（子表，级联保存）
+    /// </summary>
+    public List<TaktApsOrderCreateDto>? Orders { get; set; }
+
+    /// <summary>
+    /// 排程明细列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktApsScheduleItemCreateDto>? Items { get; set; }
+
+    /// <summary>
+    /// 变更日志列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktApsScheduleChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -646,14 +724,14 @@ public class TaktApsScheduleImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂编码（不可空）
+    /// 工厂编码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 排程编码（唯一索引）
@@ -671,6 +749,21 @@ public class TaktApsScheduleImportDto
     public int? ScheduleType { get; set; }
 
     /// <summary>
+    /// 计划日期
+    /// </summary>
+    public DateTime? PlanDate { get; set; }
+
+    /// <summary>
+    /// 计划开始时间
+    /// </summary>
+    public DateTime? PlanStartTime { get; set; }
+
+    /// <summary>
+    /// 计划结束时间
+    /// </summary>
+    public DateTime? PlanEndTime { get; set; }
+
+    /// <summary>
     /// 计划周期（0=日计划，1=周计划，2=月计划）
     /// </summary>
     public int? PlanCycle { get; set; }
@@ -686,12 +779,12 @@ public class TaktApsScheduleImportDto
     public string? WorkshopName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产线编码
+    /// 生产班组编码
     /// </summary>
     public string? ProductionLineCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产线名称
+    /// 生产班组名称
     /// </summary>
     public string? ProductionLineName { get; set; } = string.Empty;
 
@@ -709,6 +802,58 @@ public class TaktApsScheduleImportDto
     /// 优化目标（0=交期优先，1=产能优先，2=成本优先，3=均衡生产）
     /// </summary>
     public int? OptimizationObjective { get; set; }
+
+    /// <summary>
+    /// 排程状态（0=草稿，1=计算中，2=已计算，3=已发布，4=执行中，5=已完成，6=已取消）
+    /// </summary>
+    public int? ScheduleStatus { get; set; }
+
+    /// <summary>
+    /// 计划员ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? PlannerId { get; set; }
+
+    /// <summary>
+    /// 计划员姓名
+    /// </summary>
+    public string? PlannerName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 发布时间
+    /// </summary>
+    public DateTime? PublishTime { get; set; }
+
+    /// <summary>
+    /// 发布人ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? PublishUserId { get; set; }
+
+    /// <summary>
+    /// 发布人姓名
+    /// </summary>
+    public string? PublishUserName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 排程说明
+    /// </summary>
+    public string? ScheduleDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// APS 排程订单列表（排程批次关联的订单）（子表，级联保存）
+    /// </summary>
+    public List<TaktApsOrderCreateDto>? Orders { get; set; }
+
+    /// <summary>
+    /// 排程明细列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktApsScheduleItemCreateDto>? Items { get; set; }
+
+    /// <summary>
+    /// 变更日志列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktApsScheduleChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -744,7 +889,7 @@ public class TaktApsScheduleExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂编码（不可空）
+    /// 工厂编码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -794,12 +939,12 @@ public class TaktApsScheduleExportDto
     public string? WorkshopName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产线编码
+    /// 生产班组编码
     /// </summary>
     public string? ProductionLineCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产线名称
+    /// 生产班组名称
     /// </summary>
     public string? ProductionLineName { get; set; } = string.Empty;
 
@@ -824,7 +969,7 @@ public class TaktApsScheduleExportDto
     public int ScheduleStatus { get; set; } = 0;
 
     /// <summary>
-    /// 计划员ID
+    /// 计划员ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PlannerId { get; set; }
@@ -840,7 +985,7 @@ public class TaktApsScheduleExportDto
     public DateTime? PublishTime { get; set; }
 
     /// <summary>
-    /// 发布人ID
+    /// 发布人ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PublishUserId { get; set; }

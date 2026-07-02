@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcAttachmentService.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-06-30
 // 创建人：Takt365(Cursor AI)
 // 功能描述：设变附件应用服务实现
 // 
@@ -30,7 +30,7 @@ namespace Takt.Application.Services.Logistics.Manufacturing.EngineeringChange;
 public class TaktEcAttachmentService : TaktServiceBase, ITaktEcAttachmentService
 {
     private readonly ITaktCompanyRepository<TaktEcAttachment> _ecAttachmentRepository;
-    private readonly ITaktCompanyRepository<TaktEc> _ecRepository;
+    private readonly ITaktCompanyRepository<TaktEcGijutsu> _ecEngRepository;
     private readonly ITaktLineNumberGenerator _lineNumberGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
@@ -38,14 +38,14 @@ public class TaktEcAttachmentService : TaktServiceBase, ITaktEcAttachmentService
     /// 构造函数
     /// </summary>
     /// <param name="ecAttachmentRepository">设变附件仓储</param>
-    /// <param name="ecRepository">设变主仓储</param>
+    /// <param name="ecEngRepository">设变技术课主仓储</param>
     /// <param name="lineNumberGenerator">明细行号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktEcAttachmentService(
         ITaktCompanyRepository<TaktEcAttachment> ecAttachmentRepository,
-        ITaktCompanyRepository<TaktEc> ecRepository,
+        ITaktCompanyRepository<TaktEcGijutsu> ecEngRepository,
         ITaktLineNumberGenerator lineNumberGenerator,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
@@ -53,7 +53,7 @@ public class TaktEcAttachmentService : TaktServiceBase, ITaktEcAttachmentService
         : base(userContext, localizationService)
     {
         _ecAttachmentRepository = ecAttachmentRepository;
-        _ecRepository = ecRepository;
+        _ecEngRepository = ecEngRepository;
         _lineNumberGenerator = lineNumberGenerator;
         _uniqueValidator = uniqueValidator;
     }
@@ -118,7 +118,7 @@ public class TaktEcAttachmentService : TaktServiceBase, ITaktEcAttachmentService
     public async Task<TaktEcAttachmentDto> CreateEcAttachmentAsync(TaktEcAttachmentCreateDto dto)
     {
         var entity = dto.Adapt<TaktEcAttachment>();
-        await StampEcAttachmentEcAsync(entity, dto);
+        await StampEcAttachmentEcGijutsuAsync(entity, dto);
         var isUnique_ix_takt_logistics_manufacturing_ec_attachment_line_unique = await _uniqueValidator.IsUniqueAsync(
             _ecAttachmentRepository,
             x => x.EcId == entity.EcId
@@ -153,7 +153,7 @@ public class TaktEcAttachmentService : TaktServiceBase, ITaktEcAttachmentService
             throw new TaktBusinessException("设变附件不存在");
         }
         dto.Adapt(entity);
-        await StampEcAttachmentEcAsync(entity, dto);
+        await StampEcAttachmentEcGijutsuAsync(entity, dto);
         var isUnique_ix_takt_logistics_manufacturing_ec_attachment_line_unique = await _uniqueValidator.IsUniqueAsync(
             _ecAttachmentRepository,
             x => x.EcId == entity.EcId
@@ -236,7 +236,7 @@ public class TaktEcAttachmentService : TaktServiceBase, ITaktEcAttachmentService
             {
                 var entity = rows[i].Adapt<TaktEcAttachment>();
                 var importDto = rows[i].Adapt<TaktEcAttachmentCreateDto>();
-                await StampEcAttachmentEcAsync(entity, importDto);
+                await StampEcAttachmentEcGijutsuAsync(entity, importDto);
                 var importKey = $"{entity.EcId}|{entity.LineNumber}";
                 if (!importSeenKeys.Add(importKey))
                 {
@@ -300,21 +300,21 @@ public class TaktEcAttachmentService : TaktServiceBase, ITaktEcAttachmentService
     // ========================================
 
     /// <summary>
-    /// 同步设变附件主表外键（ManyToOne → 设变主）
+    /// 同步设变附件主表外键（ManyToOne → 设变技术课主）
     /// </summary>
     /// <param name="entity">当前实体</param>
     /// <param name="dto">创建 DTO</param>
     /// <returns>任务</returns>
-    private async Task StampEcAttachmentEcAsync(TaktEcAttachment entity, TaktEcAttachmentCreateDto dto)
+    private async Task StampEcAttachmentEcGijutsuAsync(TaktEcAttachment entity, TaktEcAttachmentCreateDto dto)
     {
         if (dto.EcId <= 0)
         {
             return;
         }
-        var master = await _ecRepository.GetByIdAsync(dto.EcId);
+        var master = await _ecEngRepository.GetByIdAsync(dto.EcId);
         if (master == null)
         {
-            throw new TaktBusinessException("设变主不存在");
+            throw new TaktBusinessException("设变技术课主不存在");
         }
         entity.EcId = master.Id;
     }

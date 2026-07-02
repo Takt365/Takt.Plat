@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/accounting/financial
 // 文件名称：account-title-change-log.d.ts
-// 创建时间：2026-06-22
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：accounting/financial 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -41,7 +41,7 @@ export interface AccountTitleChangeLog extends CompanyDtoBase {
   /**
    * 科目编码（冗余）
    */
-  titleCode: string;
+  accountTitleCode: string;
 
   /**
    * 变更字段列表 JSON
@@ -96,7 +96,7 @@ export interface AccountTitleChangeLogQuery extends TaktPagedQuery {
   /**
    * 科目编码（冗余）
    */
-  titleCode?: string;
+  accountTitleCode?: string;
 
   /**
    * 变更字段列表 JSON
@@ -163,7 +163,7 @@ export interface AccountTitleChangeLogCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -175,7 +175,7 @@ export interface AccountTitleChangeLogCreate {
   /**
    * 科目编码（冗余）
    */
-  titleCode: string;
+  accountTitleCode: string;
 
   /**
    * 变更字段列表 JSON
@@ -249,7 +249,7 @@ export interface AccountTitleChangeLogExport {
   /**
    * 科目编码（冗余）
    */
-  titleCode: string;
+  accountTitleCode: string;
 
   /**
    * 变更字段列表 JSON

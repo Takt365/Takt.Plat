@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Statistics.Logging
 // 文件名称：TaktQuartzLogService.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-29
 // 创建人：Takt365(Cursor AI)
 // 功能描述：任务执行日志应用服务实现
 // 
@@ -17,11 +17,11 @@ using Takt.Application.Dtos.Statistics.Logging;
 using Takt.Domain.Entities.Statistics.Logging;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
+using Takt.Shared.Enums;
 using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Services.Statistics.Logging;
 
@@ -93,7 +93,7 @@ public class TaktQuartzLogService : TaktServiceBase, ITaktQuartzLogService
     {
         EnsureThreeLayerContext();
         var list = await _quartzLogRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ExecuteStatus == TaktExecuteStatus.Success,
             x => x.TaskName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
@@ -226,8 +226,8 @@ public class TaktQuartzLogService : TaktServiceBase, ITaktQuartzLogService
             exp = exp.And(x =>
                 SqlFunc.ToString(x.QuartzTaskId).Contains(keywords)
                 || (x.TaskName != null && x.TaskName.Contains(keywords))
-                || SqlFunc.ToString(x.JobGroup).Contains(keywords)
-                || SqlFunc.ToString(x.TaskType).Contains(keywords)
+                || (x.JobGroup != null && x.JobGroup.Contains(keywords))
+                || (x.TaskType != null && x.TaskType.Contains(keywords))
                 || SqlFunc.ToString(x.ExecuteDuration).Contains(keywords)
                 || (x.ExecuteParams != null && x.ExecuteParams.Contains(keywords))
                 || (x.ExecuteMessage != null && x.ExecuteMessage.Contains(keywords))
@@ -252,14 +252,14 @@ public class TaktQuartzLogService : TaktServiceBase, ITaktQuartzLogService
             exp = exp.And(x => x.TaskName != null && x.TaskName.Contains(queryDto.TaskName));
         }
 
-        if (queryDto?.JobGroup.HasValue == true)
+        if (!string.IsNullOrEmpty(queryDto?.JobGroup))
         {
-            exp = exp.And(x => x.JobGroup == queryDto.JobGroup);
+            exp = exp.And(x => x.JobGroup != null && x.JobGroup.Contains(queryDto.JobGroup));
         }
 
-        if (queryDto?.TaskType.HasValue == true)
+        if (!string.IsNullOrEmpty(queryDto?.TaskType))
         {
-            exp = exp.And(x => x.TaskType == queryDto.TaskType);
+            exp = exp.And(x => x.TaskType != null && x.TaskType.Contains(queryDto.TaskType));
         }
 
         if (queryDto?.ExecuteDuration.HasValue == true)

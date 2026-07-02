@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Procurement
 // 文件名称：TaktPurchaseInvoiceItemDtos.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchaseInvoiceItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPurchaseInvoiceItem 生成，请按需审阅）
 // 
@@ -36,13 +36,13 @@ public class TaktPurchaseInvoiceItemDto : TaktCompanyDtoBase
     public long PurchaseInvoiceItemId { get; set; }
 
     /// <summary>
-    /// 采购发票ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 采购发票 ID（关联 TaktPurchaseInvoice.Id，选项 TaktPurchaseInvoices/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PurchaseInvoiceId { get; set; }
 
     /// <summary>
-    /// 采购发票名称（填充字段）
+    /// 采购发票 名称（填充字段）
     /// </summary>
     public string? PurchaseInvoiceName { get; set; }
 
@@ -69,7 +69,7 @@ public class TaktPurchaseInvoiceItemDto : TaktCompanyDtoBase
     /// <summary>
     /// 物料编码
     /// </summary>
-    public string MaterialCode { get; set; } = string.Empty;
+    public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料名称
@@ -107,7 +107,7 @@ public class TaktPurchaseInvoiceItemDto : TaktCompanyDtoBase
     public decimal DiscountAmount { get; set; }
 
     /// <summary>
-    /// 税费率（字典 logistics_tax_rate_param 预设或手输；0-100，表示税费百分比）
+    /// 税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）
     /// </summary>
     public decimal TaxRate { get; set; }
 
@@ -144,7 +144,7 @@ public class TaktPurchaseInvoiceItemQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购发票ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 采购发票 ID（关联 TaktPurchaseInvoice.Id，选项 TaktPurchaseInvoices/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PurchaseInvoiceId { get; set; }
@@ -210,7 +210,7 @@ public class TaktPurchaseInvoiceItemQueryDto : TaktPagedQuery
     public decimal? DiscountAmount { get; set; }
 
     /// <summary>
-    /// 税费率（字典 logistics_tax_rate_param 预设或手输；0-100，表示税费百分比）
+    /// 税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）
     /// </summary>
     public decimal? TaxRate { get; set; }
 
@@ -265,12 +265,12 @@ public class TaktPurchaseInvoiceItemCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购发票ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 采购发票 ID（关联 TaktPurchaseInvoice.Id，选项 TaktPurchaseInvoices/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PurchaseInvoiceId { get; set; }
@@ -299,8 +299,7 @@ public class TaktPurchaseInvoiceItemCreateDto
     /// <summary>
     /// 物料编码
     /// </summary>
-    [Required(ErrorMessage = "物料编码不能为空")]
-    public string MaterialCode { get; set; } = string.Empty;
+    public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料名称
@@ -340,7 +339,7 @@ public class TaktPurchaseInvoiceItemCreateDto
     public decimal DiscountAmount { get; set; }
 
     /// <summary>
-    /// 税费率（字典 logistics_tax_rate_param 预设或手输；0-100，表示税费百分比）
+    /// 税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）
     /// </summary>
     public decimal TaxRate { get; set; }
 
@@ -406,7 +405,7 @@ public class TaktPurchaseInvoiceItemTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购发票ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 采购发票 ID（关联 TaktPurchaseInvoice.Id，选项 TaktPurchaseInvoices/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PurchaseInvoiceId { get; set; }
@@ -450,6 +449,41 @@ public class TaktPurchaseInvoiceItemTemplateDto
     /// 采购单位
     /// </summary>
     public string? PurchaseUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 开票数量（基本单位数量）
+    /// </summary>
+    public decimal? InvoiceQuantity { get; set; }
+
+    /// <summary>
+    /// 单价
+    /// </summary>
+    public decimal? UnitPrice { get; set; }
+
+    /// <summary>
+    /// 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
+    /// </summary>
+    public decimal? DiscountRate { get; set; }
+
+    /// <summary>
+    /// 折扣金额
+    /// </summary>
+    public decimal? DiscountAmount { get; set; }
+
+    /// <summary>
+    /// 税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）
+    /// </summary>
+    public decimal? TaxRate { get; set; }
+
+    /// <summary>
+    /// 税费
+    /// </summary>
+    public decimal? TaxAmount { get; set; }
+
+    /// <summary>
+    /// 小计金额
+    /// </summary>
+    public decimal? SubtotalAmount { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -479,12 +513,12 @@ public class TaktPurchaseInvoiceItemImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购发票ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 采购发票 ID（关联 TaktPurchaseInvoice.Id，选项 TaktPurchaseInvoices/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PurchaseInvoiceId { get; set; }
@@ -528,6 +562,41 @@ public class TaktPurchaseInvoiceItemImportDto
     /// 采购单位
     /// </summary>
     public string? PurchaseUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 开票数量（基本单位数量）
+    /// </summary>
+    public decimal? InvoiceQuantity { get; set; }
+
+    /// <summary>
+    /// 单价
+    /// </summary>
+    public decimal? UnitPrice { get; set; }
+
+    /// <summary>
+    /// 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
+    /// </summary>
+    public decimal? DiscountRate { get; set; }
+
+    /// <summary>
+    /// 折扣金额
+    /// </summary>
+    public decimal? DiscountAmount { get; set; }
+
+    /// <summary>
+    /// 税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）
+    /// </summary>
+    public decimal? TaxRate { get; set; }
+
+    /// <summary>
+    /// 税费
+    /// </summary>
+    public decimal? TaxAmount { get; set; }
+
+    /// <summary>
+    /// 小计金额
+    /// </summary>
+    public decimal? SubtotalAmount { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -563,7 +632,7 @@ public class TaktPurchaseInvoiceItemExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购发票ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 采购发票 ID（关联 TaktPurchaseInvoice.Id，选项 TaktPurchaseInvoices/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PurchaseInvoiceId { get; set; }
@@ -591,7 +660,7 @@ public class TaktPurchaseInvoiceItemExportDto
     /// <summary>
     /// 物料编码
     /// </summary>
-    public string MaterialCode { get; set; } = string.Empty;
+    public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料名称
@@ -629,7 +698,7 @@ public class TaktPurchaseInvoiceItemExportDto
     public decimal DiscountAmount { get; set; }
 
     /// <summary>
-    /// 税费率（字典 logistics_tax_rate_param 预设或手输；0-100，表示税费百分比）
+    /// 税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）
     /// </summary>
     public decimal TaxRate { get; set; }
 

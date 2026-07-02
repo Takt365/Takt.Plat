@@ -90,6 +90,11 @@ export interface SignalRMessage {
   fromUserId?: string;
 
   /**
+   * 发送者昵称
+   */
+  fromUserNickname?: string;
+
+  /**
    * 接收者用户名
    */
   toUserName: string;
@@ -115,14 +120,14 @@ export interface SignalRMessage {
   attachments?: string;
 
   /**
-   * 消息类型
+   * 消息类型（字典 sys_message_type DictValue）
    */
-  messageType: number;
+  messageType: string;
 
   /**
-   * 消息分组
+   * 消息分组（字典 sys_message_group_category DictValue）
    */
-  messageGroup?: number;
+  messageGroup: string;
 
   /**
    * 发送时间
@@ -160,14 +165,14 @@ export interface BroadcastMessage {
   messageContent: string;
 
   /**
-   * 消息类型
+   * 消息类型（字典 sys_message_type DictValue）
    */
-  messageType: number;
+  messageType: string;
 
   /**
-   * 消息分组
+   * 消息分组（字典 sys_message_group_category DictValue）
    */
-  messageGroup: number;
+  messageGroup: string;
 
   /**
    * 发送时间
@@ -278,4 +283,39 @@ export interface ForceLogoutEvent {
    * 强退时间
    */
   forceKickTime?: string;
+}
+
+/**
+ * 延迟强退预告事件
+ */
+export interface ForceLogoutScheduledEvent {
+  /**
+   * 预告提示
+   */
+  message: string;
+
+  /**
+   * 延迟秒数
+   */
+  delaySeconds: number;
+
+  /**
+   * 计划强退时间（ISO 8601）
+   */
+  kickAt: string;
+
+  /**
+   * 在线用户记录 ID
+   */
+  onlineId?: string;
+
+  /**
+   * SignalR 连接 ID
+   */
+  connectionId?: string;
+
+  /**
+   * 用户名
+   */
+  userName?: string;
 }

@@ -10,6 +10,7 @@
 <template>
   <a-form
     ref="formRef"
+    class="takt-generated-form"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -34,8 +35,9 @@
                 <a-input
                   v-model:value="formState.tenantCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -47,8 +49,9 @@
                 <a-input
                   v-model:value="formState.companyCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -60,99 +63,103 @@
                 <a-input
                   v-model:value="formState.companyDefaultCulture"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.employeeFamily.employeeid')"
+                :label="t('entity.employeefamily.employeeid')"
                 name="employeeId"
               >
                 <a-input
                   v-model:value="formState.employeeId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeFamily.employeeid') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeefamily.employeeid') })"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.employeeFamily.membername')"
+                :label="t('entity.employeefamily.membername')"
                 name="memberName"
               >
                 <a-input
                   v-model:value="formState.memberName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeFamily.membername') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeefamily.membername') })"
+                  show-count
+                  :maxlength="50"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.employeeFamily.relationtype')"
+                :label="t('entity.employeefamily.relationtype')"
                 name="relationType"
               >
                 <a-input-number
                   v-model:value="formState.relationType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeFamily.relationtype') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeefamily.relationtype') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.employeeFamily.phonenumber')"
+                :label="t('entity.employeefamily.phonenumber')"
                 name="phoneNumber"
               >
                 <a-input
                   v-model:value="formState.phoneNumber"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeFamily.phonenumber') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeefamily.phonenumber') })"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.employeeFamily.workunit')"
+                :label="t('entity.employeefamily.workunit')"
                 name="workUnit"
               >
                 <a-input
                   v-model:value="formState.workUnit"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeFamily.workunit') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeefamily.workunit') })"
+                  show-count
+                  :maxlength="200"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.employeeFamily.jobtitle')"
+                :label="t('entity.employeefamily.jobtitle')"
                 name="jobTitle"
               >
                 <a-input
                   v-model:value="formState.jobTitle"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeFamily.jobtitle') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeefamily.jobtitle') })"
+                  show-count
+                  :maxlength="100"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.employeeFamily.birthdate')"
+                :label="t('entity.employeefamily.birthdate')"
                 name="birthDate"
               >
                 <a-date-picker
                   v-model:value="formState.birthDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeFamily.birthdate') })"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeefamily.birthdate') })"
                   value-format="YYYY-MM-DD"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -167,28 +174,40 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.employeeFamily.isemergencycontact')"
+                :label="t('entity.employeefamily.isemergencycontact')"
                 name="isEmergencyContact"
               >
                 <a-input-number
                   v-model:value="formState.isEmergencyContact"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeFamily.isemergencycontact') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeefamily.isemergencycontact') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.ExtField')"
-                name="ExtField"
+                name="extField"
+                class="takt-form-item-ext-field"
               >
-                <a-input
-                  v-model:value="formState.ExtField"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
-                  size="small"
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t('common.page.entity.extfieldhint')"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ t('common.page.entity.extfield') }}</span>
+                  </span>
+                </template>
+                <a-textarea
+                  v-model:value="formState.extField"
+                  :placeholder="t('common.page.form.placeholder.extfield')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
                   allow-clear
                 />
               </a-form-item>
@@ -201,15 +220,16 @@
                 <a-textarea
                   v-model:value="formState.remark"
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                  :rows="2"
-                  size="small"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
           </a-row>
         </div>
       </a-tab-pane>
-
     </a-tabs>
   </a-form>
 </template>
@@ -223,6 +243,7 @@ import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import type { EmployeeFamilyCreate } from '@/types/human-resource/personnel/employee-family'
+import { RiQuestionLine } from '@remixicon/vue'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -255,7 +276,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","employeeId","memberName","relationType","phoneNumber","workUnit","jobTitle","birthDate","isEmergencyContact","ExtField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","employeeId","memberName","relationType","phoneNumber","workUnit","jobTitle","birthDate","isEmergencyContact","extField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -266,7 +287,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  formData: () => ({}),
+  formData: null,
   loading: false,
 })
 
@@ -274,18 +295,34 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
+/** 表单字段默认值（无字典默认项） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  void target
+}
 
-/** 编辑态灌入 formData；新增态 reset */
+
+/** 编辑态灌入 formData；新增态恢复默认值（须含 employeeFamilyId 才视为编辑） */
 watch(
   () => props.formData,
   (val) => {
-    const next = val ? { ...val } : {}
-    Object.keys(formState).forEach((k) => delete formState[k])
+    if (val?.employeeFamilyId) {
+      const next = { ...val } as Record<string, unknown>
+      Object.keys(formState).forEach((k) => delete formState[k])
 
-    applyScopeDefaults(next)
-    Object.assign(formState, next)
+      applyScopeDefaults(next)
+      Object.assign(formState, next)
+      formRef.value?.clearValidate()
+    } else {
+      Object.keys(formState).forEach((k) => delete formState[k])
+      if (val && typeof val === 'object' && Object.keys(val).length > 0) {
+        Object.assign(formState, val)
+      }
+      applyFormDefaults(formState)
+      applyScopeDefaults(formState as Record<string, unknown>, true)
+      formRef.value?.clearValidate()
+    }
   },
-  { immediate: true, deep: true }
+  { immediate: true }
 )
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
@@ -304,31 +341,43 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   employeeId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.employeeFamily.employeeid') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.employeefamily.employeeid') }),
       trigger: 'blur'
     }
   ],
   memberName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.employeeFamily.membername') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.employeefamily.membername') }),
       trigger: 'blur'
     }
   ],
-  relationType: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.employeeFamily.relationtype') }),
-      trigger: 'change'
-    }
-  ],
-  isEmergencyContact: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.employeeFamily.isemergencycontact') }),
-      trigger: 'change'
-    }
-  ],
+  relationType: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.employeefamily.relationtype') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.employeefamily.relationtype') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  isEmergencyContact: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.employeefamily.isemergencycontact') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.employeefamily.isemergencycontact') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -339,15 +388,30 @@ async function validate() {
 
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
-  return { ...formState }
+  const payload = { ...formState }
+  if ('relationType' in payload) {
+    const rawrelationType = payload.relationType
+    payload.relationType = typeof rawrelationType === 'number' ? rawrelationType : Number(rawrelationType)
+  }
+  if ('isEmergencyContact' in payload) {
+    const rawisEmergencyContact = payload.isEmergencyContact
+    payload.isEmergencyContact = typeof rawisEmergencyContact === 'number' ? rawisEmergencyContact : Number(rawisEmergencyContact)
+  }
+  if ('sortOrder' in payload) delete payload.sortOrder
+  return payload
 }
 
-/** 重置表单与子表行 */
+/** 重置表单与子表行（弹窗未 destroy 时父级 nextTick 也会调用） */
 function resetFields() {
-  formRef.value?.resetFields()
   Object.keys(formState).forEach((k) => delete formState[k])
+  if (props.formData && typeof props.formData === 'object') {
+    Object.assign(formState, props.formData)
+  }
+  applyFormDefaults(formState)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.employeeFamilyId)
 
   activeTab.value = 'tab-0'
+  formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })

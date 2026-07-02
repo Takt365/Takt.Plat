@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Bom
 // 文件名称：TaktBillOfMaterialDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：BillOfMaterial 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktBillOfMaterial 生成，请按需审阅）
 // 
@@ -102,16 +102,6 @@ public class TaktBillOfMaterialDto : TaktCompanyDtoBase
     public decimal ParentMaterialQuantity { get; set; }
 
     /// <summary>
-    /// 是否启用（0=否，1=是）
-    /// </summary>
-    public int IsEnabled { get; set; } = 0;
-
-    /// <summary>
-    /// BOM状态（0=草稿，1=已发布，2=已停用）
-    /// </summary>
-    public int BomStatus { get; set; } = 0;
-
-    /// <summary>
     /// BOM描述
     /// </summary>
     public string? BomDescription { get; set; } = string.Empty;
@@ -120,6 +110,11 @@ public class TaktBillOfMaterialDto : TaktCompanyDtoBase
     /// 排序号（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
+
+    /// <summary>
+    /// BOM状态（0=草稿，1=已发布，2=已停用）
+    /// </summary>
+    public int BomStatus { get; set; } = 0;
 
     /// <summary>
     /// BOM组成件明细（扁平单层；多层通过子件物料关联其BOM头递归展开）
@@ -232,16 +227,6 @@ public class TaktBillOfMaterialQueryDto : TaktPagedQuery
     public decimal? ParentMaterialQuantity { get; set; }
 
     /// <summary>
-    /// 是否启用（0=否，1=是）
-    /// </summary>
-    public int? IsEnabled { get; set; }
-
-    /// <summary>
-    /// BOM状态（0=草稿，1=已发布，2=已停用）
-    /// </summary>
-    public int? BomStatus { get; set; }
-
-    /// <summary>
     /// BOM描述
     /// </summary>
     public string? BomDescription { get; set; } = string.Empty;
@@ -250,6 +235,11 @@ public class TaktBillOfMaterialQueryDto : TaktPagedQuery
     /// 排序号（越小越靠前）
     /// </summary>
     public int? SortOrder { get; set; }
+
+    /// <summary>
+    /// BOM状态（0=草稿，1=已发布，2=已停用）
+    /// </summary>
+    public int? BomStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -292,7 +282,7 @@ public class TaktBillOfMaterialCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -371,24 +361,14 @@ public class TaktBillOfMaterialCreateDto
     public decimal ParentMaterialQuantity { get; set; }
 
     /// <summary>
-    /// 是否启用（0=否，1=是）
-    /// </summary>
-    public int IsEnabled { get; set; } = 0;
-
-    /// <summary>
-    /// BOM状态（0=草稿，1=已发布，2=已停用）
-    /// </summary>
-    public int BomStatus { get; set; } = 0;
-
-    /// <summary>
     /// BOM描述
     /// </summary>
     public string? BomDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// BOM状态（0=草稿，1=已发布，2=已停用）
     /// </summary>
-    public int SortOrder { get; set; } = 0;
+    public int BomStatus { get; set; } = 0;
 
     /// <summary>
     /// BOM组成件明细（扁平单层；多层通过子件物料关联其BOM头递归展开）（子表，级联保存）
@@ -502,7 +482,7 @@ public class TaktBillOfMaterialTemplateDto
     /// <summary>
     /// 工厂代码
     /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// BOM编码（业务单据号，便于检索，非唯一键）
@@ -546,19 +526,44 @@ public class TaktBillOfMaterialTemplateDto
     public string? AlternativeBomNumber { get; set; } = string.Empty;
 
     /// <summary>
+    /// 生效日期
+    /// </summary>
+    public DateTime? EffectiveDate { get; set; }
+
+    /// <summary>
+    /// 失效日期（为空表示永久有效）
+    /// </summary>
+    public DateTime? ExpiryDate { get; set; }
+
+    /// <summary>
     /// 父物料单位
     /// </summary>
     public string? ParentMaterialUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否启用（0=否，1=是）
+    /// 基本数量（BOM基数，对应SAP Base quantity）
     /// </summary>
-    public int? IsEnabled { get; set; }
+    public decimal? ParentMaterialQuantity { get; set; }
+
+    /// <summary>
+    /// BOM描述
+    /// </summary>
+    public string? BomDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// BOM状态（0=草稿，1=已发布，2=已停用）
     /// </summary>
     public int? BomStatus { get; set; }
+
+    /// <summary>
+    /// BOM组成件明细（扁平单层；多层通过子件物料关联其BOM头递归展开）（子表，级联保存）
+    /// </summary>
+    public List<TaktBillOfMaterialItemCreateDto>? Items { get; set; }
+
+    /// <summary>
+    /// BOM变更记录列表（外键在子表 TaktBillOfMaterialChangeLog.BillOfMaterialId）（子表，级联保存）
+    /// </summary>
+    public List<TaktBillOfMaterialChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -588,14 +593,14 @@ public class TaktBillOfMaterialImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
     /// 工厂代码
     /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// BOM编码（业务单据号，便于检索，非唯一键）
@@ -639,19 +644,44 @@ public class TaktBillOfMaterialImportDto
     public string? AlternativeBomNumber { get; set; } = string.Empty;
 
     /// <summary>
+    /// 生效日期
+    /// </summary>
+    public DateTime? EffectiveDate { get; set; }
+
+    /// <summary>
+    /// 失效日期（为空表示永久有效）
+    /// </summary>
+    public DateTime? ExpiryDate { get; set; }
+
+    /// <summary>
     /// 父物料单位
     /// </summary>
     public string? ParentMaterialUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否启用（0=否，1=是）
+    /// 基本数量（BOM基数，对应SAP Base quantity）
     /// </summary>
-    public int? IsEnabled { get; set; }
+    public decimal? ParentMaterialQuantity { get; set; }
+
+    /// <summary>
+    /// BOM描述
+    /// </summary>
+    public string? BomDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// BOM状态（0=草稿，1=已发布，2=已停用）
     /// </summary>
     public int? BomStatus { get; set; }
+
+    /// <summary>
+    /// BOM组成件明细（扁平单层；多层通过子件物料关联其BOM头递归展开）（子表，级联保存）
+    /// </summary>
+    public List<TaktBillOfMaterialItemCreateDto>? Items { get; set; }
+
+    /// <summary>
+    /// BOM变更记录列表（外键在子表 TaktBillOfMaterialChangeLog.BillOfMaterialId）（子表，级联保存）
+    /// </summary>
+    public List<TaktBillOfMaterialChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -753,16 +783,6 @@ public class TaktBillOfMaterialExportDto
     public decimal ParentMaterialQuantity { get; set; }
 
     /// <summary>
-    /// 是否启用（0=否，1=是）
-    /// </summary>
-    public int IsEnabled { get; set; } = 0;
-
-    /// <summary>
-    /// BOM状态（0=草稿，1=已发布，2=已停用）
-    /// </summary>
-    public int BomStatus { get; set; } = 0;
-
-    /// <summary>
     /// BOM描述
     /// </summary>
     public string? BomDescription { get; set; } = string.Empty;
@@ -771,6 +791,11 @@ public class TaktBillOfMaterialExportDto
     /// 排序号（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
+
+    /// <summary>
+    /// BOM状态（0=草稿，1=已发布，2=已停用）
+    /// </summary>
+    public int BomStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

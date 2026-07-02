@@ -187,7 +187,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -198,7 +198,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -554,7 +554,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: QualityAssuranceIncoming, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getQualityAssuranceIncomingId(selectedRow.value) === getQualityAssuranceIncomingId(record)) {
+    } else if (selectedRow.value && getQualityAssuranceIncomingId(selectedRow.value) === getQualityAssuranceIncomingId(record)) {
       selectedRow.value = null
     }
   },

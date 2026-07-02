@@ -241,27 +241,27 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.itasset.tickets')"
-                name="tickets"
+                name="extField"
+                class="takt-form-item-ext-field"
               >
-                <a-input
-                  v-model:value="formState.tickets"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.itasset.tickets') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.itasset.extfield')"
-                name="ExtField"
-              >
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t('common.page.entity.extfieldhint')"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ t('common.page.entity.extfield') }}</span>
+                  </span>
+                </template>
                 <a-textarea
-                  v-model:value="formState.ExtField"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.itasset.extfield') })"
-                  :rows="2"
+                  v-model:value="formState.extField"
+                  :placeholder="t('common.page.form.placeholder.extfield')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -308,6 +308,7 @@ import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import type { ItAssetCreate } from '@/types/routine/help-desk/it-asset'
+import { RiQuestionLine } from '@remixicon/vue'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -340,7 +341,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","assetCode","warrantyType","warrantyStartDate","warrantyExpiryDate","warrantyProvider","warrantyContractNo","serviceHotline","serviceEmail","maintenanceExpiryDate","lastMaintenanceDate","nextMaintenanceDate","warrantyRemark","tickets","ExtField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","assetCode","warrantyType","warrantyStartDate","warrantyExpiryDate","warrantyProvider","warrantyContractNo","serviceHotline","serviceEmail","maintenanceExpiryDate","lastMaintenanceDate","nextMaintenanceDate","warrantyRemark","extField","remark"]
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
 
@@ -384,11 +385,11 @@ const itAssetChangeLogFormColumns = computed<TaktEditableTableColumn[]>(() => [
     width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.itassetchangelog.changereason') }),
   },
   {
-    key: 'ExtField',
-    title: t('entity.itassetchangelog.extfield'),
+    key: 'extField',
+    title: t('common.page.entity.extfield'),
     editor: 'textarea',
-    rows: 1,
-    placeholder: t('common.page.form.placeholder.optional', { field: t('entity.itassetchangelog.extfield') }),
+    rows: 2,
+    placeholder: t('common.page.form.placeholder.optional', { field: t('common.page.entity.extfield') }),
     width: 140,
   },
   {
@@ -413,7 +414,7 @@ function createDefaultItAssetChangeLogRow(): Record<string, unknown> {
     changeSummary: '',
     changeFields: '',
     changeReason: '',
-    ExtField: '',
+    extField: '',
     remark: '',
   }
 }

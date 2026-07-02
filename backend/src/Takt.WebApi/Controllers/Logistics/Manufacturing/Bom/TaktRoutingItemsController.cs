@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Manufacturing.Bom
 // 文件名称：TaktRoutingItemsController.cs
-// 创建时间：2026-06-15
+// 创建时间：2026-06-27
 // 创建人：Takt365(Cursor AI)
 // 功能描述：工艺路线明细控制器
 // 
@@ -41,7 +41,7 @@ public class TaktRoutingItemsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:manufacturing:bom:routingitem:list", "工艺路线明细列表")]
+    [TaktPermission("logistics:manufacturing:bom:routing:list", "工艺路线明细列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetRoutingItemListAsync([FromQuery] TaktRoutingItemQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktRoutingItemsController : TaktControllerBase
     /// </summary>
     /// <param name="id">工艺路线明细ID</param>
     /// <returns>工艺路线明细DTO</returns>
-    [TaktPermission("logistics:manufacturing:bom:routingitem:query", "工艺路线明细详情")]
+    [TaktPermission("logistics:manufacturing:bom:routing:query", "工艺路线明细详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetRoutingItemByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktRoutingItemsController : TaktControllerBase
     /// 获取工艺路线明细选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:manufacturing:bom:routingitem:query", "工艺路线明细选项")]
+    [TaktPermission("logistics:manufacturing:bom:routing:query", "工艺路线明细选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetRoutingItemOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktRoutingItemsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>工艺路线明细DTO</returns>
-    [TaktPermission("logistics:manufacturing:bom:routingitem:create", "创建工艺路线明细")]
+    [TaktPermission("logistics:manufacturing:bom:routing:create", "创建工艺路线明细")]
     [HttpPost]
     public async Task<IActionResult> CreateRoutingItemAsync([FromBody] TaktRoutingItemCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktRoutingItemsController : TaktControllerBase
     /// <param name="id">工艺路线明细ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>工艺路线明细DTO</returns>
-    [TaktPermission("logistics:manufacturing:bom:routingitem:update", "更新工艺路线明细")]
+    [TaktPermission("logistics:manufacturing:bom:routing:update", "更新工艺路线明细")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateRoutingItemAsync(long id, [FromBody] TaktRoutingItemUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktRoutingItemsController : TaktControllerBase
     /// </summary>
     /// <param name="id">工艺路线明细ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:bom:routingitem:delete", "删除工艺路线明细")]
+    [TaktPermission("logistics:manufacturing:bom:routing:delete", "删除工艺路线明细")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteRoutingItemByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktRoutingItemsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:bom:routingitem:delete", "批量删除工艺路线明细")]
+    [TaktPermission("logistics:manufacturing:bom:routing:delete", "批量删除工艺路线明细")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteRoutingItemBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktRoutingItemsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">排序DTO</param>
     /// <returns>工艺路线明细DTO</returns>
-    [TaktPermission("logistics:manufacturing:bom:routingitem:update", "更新工艺路线明细排序")]
+    [TaktPermission("logistics:manufacturing:bom:routing:update", "更新工艺路线明细排序")]
     [HttpPut("sort")]
     public async Task<IActionResult> UpdateRoutingItemSortAsync([FromBody] TaktRoutingItemSortDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktRoutingItemsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:bom:routingitem:import", "获取工艺路线明细导入模板")]
+    [TaktPermission("logistics:manufacturing:bom:routing:import", "获取工艺路线明细导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetRoutingItemTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +224,7 @@ public class TaktRoutingItemsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:manufacturing:bom:routingitem:import", "导入工艺路线明细")]
+    [TaktPermission("logistics:manufacturing:bom:routing:import", "导入工艺路线明细")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportRoutingItemAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +254,7 @@ public class TaktRoutingItemsController : TaktControllerBase
     /// 导出工艺路线明细
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:bom:routingitem:export", "导出工艺路线明细")]
+    [TaktPermission("logistics:manufacturing:bom:routing:export", "导出工艺路线明细")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportRoutingItemAsync([FromQuery] TaktRoutingItemQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

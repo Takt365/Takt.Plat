@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Scheduling
 // 文件名称：TaktWorkCenterResourceDtos.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：WorkCenterResource 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktWorkCenterResource 生成，请按需审阅）
 // 
@@ -185,7 +185,7 @@ public class TaktWorkCenterResourceCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -340,6 +340,11 @@ public class TaktWorkCenterResourceTemplateDto
     public int? ParallelCapacity { get; set; }
 
     /// <summary>
+    /// 效率系数（1.0=标准）
+    /// </summary>
+    public decimal? EfficiencyRate { get; set; }
+
+    /// <summary>
     /// 状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int? ResourceStatus { get; set; }
@@ -372,7 +377,7 @@ public class TaktWorkCenterResourceImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -406,6 +411,11 @@ public class TaktWorkCenterResourceImportDto
     /// 并行能力（可同时加工任务数）
     /// </summary>
     public int? ParallelCapacity { get; set; }
+
+    /// <summary>
+    /// 效率系数（1.0=标准）
+    /// </summary>
+    public decimal? EfficiencyRate { get; set; }
 
     /// <summary>
     /// 状态（字典 sys_normal_disable；1=启用，0=禁用）

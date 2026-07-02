@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Routine.ConferenceCenter
 // 文件名称：TaktConferenceRoomDtos.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ConferenceRoom 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktConferenceRoom 生成，请按需审阅）
 // 
@@ -71,14 +71,14 @@ public class TaktConferenceRoomDto : TaktCompanyDtoBase
     public string? Facilities { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会议室状态
-    /// </summary>
-    public int RoomStatus { get; set; } = 0;
-
-    /// <summary>
     /// 排序号
     /// </summary>
     public int SortOrder { get; set; } = 0;
+
+    /// <summary>
+    /// 会议室状态
+    /// </summary>
+    public int RoomStatus { get; set; } = 0;
 
 }
 
@@ -138,14 +138,14 @@ public class TaktConferenceRoomQueryDto : TaktPagedQuery
     public string? Facilities { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会议室状态
-    /// </summary>
-    public int? RoomStatus { get; set; }
-
-    /// <summary>
     /// 排序号
     /// </summary>
     public int? SortOrder { get; set; }
+
+    /// <summary>
+    /// 会议室状态
+    /// </summary>
+    public int? RoomStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -188,7 +188,7 @@ public class TaktConferenceRoomCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -401,7 +401,7 @@ public class TaktConferenceRoomImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -514,14 +514,14 @@ public class TaktConferenceRoomExportDto
     public string? Facilities { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会议室状态
-    /// </summary>
-    public int RoomStatus { get; set; } = 0;
-
-    /// <summary>
     /// 排序号
     /// </summary>
     public int SortOrder { get; set; } = 0;
+
+    /// <summary>
+    /// 会议室状态
+    /// </summary>
+    public int RoomStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

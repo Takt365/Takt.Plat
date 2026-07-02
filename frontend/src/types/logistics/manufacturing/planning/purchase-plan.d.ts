@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/planning
 // 文件名称：purchase-plan.d.ts
-// 创建时间：2026-06-20
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/planning 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -114,7 +114,7 @@ export interface PurchasePlan extends ApprovalDtoBase {
   planStatus: number;
 
   /**
-   * 转单状态（0=未转单，1=部分转单，2=全部转单）
+   * 转单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
    */
   convertedStatus: number;
 
@@ -239,7 +239,7 @@ export interface PurchasePlanQuery extends TaktPagedQuery {
   planStatus?: number;
 
   /**
-   * 转单状态（0=未转单，1=部分转单，2=全部转单）
+   * 转单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
    */
   convertedStatus?: number;
 
@@ -249,7 +249,7 @@ export interface PurchasePlanQuery extends TaktPagedQuery {
   planDescription?: string;
 
   /**
-   * 审批状态（TaktApprovalStatus）
+   * 审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）
    */
   approvalStatus?: number;
 
@@ -328,7 +328,7 @@ export interface PurchasePlanCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -408,7 +408,7 @@ export interface PurchasePlanCreate {
   planStatus: number;
 
   /**
-   * 转单状态（0=未转单，1=部分转单，2=全部转单）
+   * 转单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
    */
   convertedStatus: number;
 
@@ -506,6 +506,21 @@ export interface PurchasePlanTemplate {
   productionPlanCode?: string;
 
   /**
+   * 计划编制日期
+   */
+  planDate?: string;
+
+  /**
+   * 计划周期开始日期
+   */
+  planPeriodStart?: string;
+
+  /**
+   * 计划周期结束日期
+   */
+  planPeriodEnd?: string;
+
+  /**
    * 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
    */
   purchaseGroupCode?: string;
@@ -521,12 +536,32 @@ export interface PurchasePlanTemplate {
   planBy?: string;
 
   /**
+   * 计划总数量（基本单位数量）
+   */
+  totalQuantity?: number;
+
+  /**
+   * 计划总金额
+   */
+  totalAmount?: number;
+
+  /**
+   * 已转申请/订单数量（基本单位数量）
+   */
+  convertedQuantity?: number;
+
+  /**
+   * 已转申请/订单金额
+   */
+  convertedAmount?: number;
+
+  /**
    * 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   planStatus?: number;
 
   /**
-   * 转单状态（0=未转单，1=部分转单，2=全部转单）
+   * 转单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
    */
   convertedStatus?: number;
 
@@ -534,6 +569,11 @@ export interface PurchasePlanTemplate {
    * 计划说明
    */
   planDescription?: string;
+
+  /**
+   * 采购计划明细列表（主子表关系，一个计划可有多个明细行）（子表，级联保存）
+   */
+  items?: PurchasePlanItemCreate[];
 
   /**
    * 扩展字段JSON
@@ -565,7 +605,7 @@ export interface PurchasePlanImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -590,6 +630,21 @@ export interface PurchasePlanImport {
   productionPlanCode?: string;
 
   /**
+   * 计划编制日期
+   */
+  planDate?: string;
+
+  /**
+   * 计划周期开始日期
+   */
+  planPeriodStart?: string;
+
+  /**
+   * 计划周期结束日期
+   */
+  planPeriodEnd?: string;
+
+  /**
    * 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
    */
   purchaseGroupCode?: string;
@@ -605,12 +660,32 @@ export interface PurchasePlanImport {
   planBy?: string;
 
   /**
+   * 计划总数量（基本单位数量）
+   */
+  totalQuantity?: number;
+
+  /**
+   * 计划总金额
+   */
+  totalAmount?: number;
+
+  /**
+   * 已转申请/订单数量（基本单位数量）
+   */
+  convertedQuantity?: number;
+
+  /**
+   * 已转申请/订单金额
+   */
+  convertedAmount?: number;
+
+  /**
    * 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   planStatus?: number;
 
   /**
-   * 转单状态（0=未转单，1=部分转单，2=全部转单）
+   * 转单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
    */
   convertedStatus?: number;
 
@@ -618,6 +693,11 @@ export interface PurchasePlanImport {
    * 计划说明
    */
   planDescription?: string;
+
+  /**
+   * 采购计划明细列表（主子表关系，一个计划可有多个明细行）（子表，级联保存）
+   */
+  items?: PurchasePlanItemCreate[];
 
   /**
    * 扩展字段JSON
@@ -719,7 +799,7 @@ export interface PurchasePlanExport {
   planStatus: number;
 
   /**
-   * 转单状态（0=未转单，1=部分转单，2=全部转单）
+   * 转单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
    */
   convertedStatus: number;
 

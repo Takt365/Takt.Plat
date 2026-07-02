@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/sales
 // 文件名称：price.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-07-01
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,9 +29,9 @@ export interface SalesPrice extends CompanyDtoBase {
   salesPriceId: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
-  plantCode?: string;
+  plantCode: string;
 
   /**
    * 销售价格编码（唯一索引）
@@ -39,14 +39,14 @@ export interface SalesPrice extends CompanyDtoBase {
   salesPriceCode: string;
 
   /**
-   * 客户编码（如果为空则表示通用价格）
+   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode；为空表示通用价格）
    */
   customerCode?: string;
 
   /**
-   * 价格类型（0=标准价格，1=客户价格，2=促销价格，3=合同价格，4=临时价格）
+   * 价格类型（字典 logistics_sales_price_type；SAP 定价条件类型 KSCHL，如 PR00/PB00；默认 PR00）
    */
-  priceType: number;
+  priceType: string;
 
   /**
    * 生效日期
@@ -59,7 +59,7 @@ export interface SalesPrice extends CompanyDtoBase {
   effectiveEndDate?: string;
 
   /**
-   * 价格状态（1=启用，0=禁用）
+   * 价格状态（字典 sys_normal_disable_status；1=启用 0=禁用）
    */
   priceStatus: number;
 
@@ -69,7 +69,7 @@ export interface SalesPrice extends CompanyDtoBase {
   items?: SalesPriceItem[];
 
   /**
-   * 销售价格变更记录列表（外键在子表 TaktSalesPriceChangeLog.PriceId） （子表：TaktSalesPriceChangeLog）
+   * 销售价格变更记录列表（外键在子表 TaktSalesPriceChangeLog.SalesPriceId） （子表：TaktSalesPriceChangeLog）
    */
   changeLogs?: SalesPriceChangeLog[];
 
@@ -94,7 +94,7 @@ export interface SalesPriceQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -104,14 +104,14 @@ export interface SalesPriceQuery extends TaktPagedQuery {
   salesPriceCode?: string;
 
   /**
-   * 客户编码（如果为空则表示通用价格）
+   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode；为空表示通用价格）
    */
   customerCode?: string;
 
   /**
-   * 价格类型（0=标准价格，1=客户价格，2=促销价格，3=合同价格，4=临时价格）
+   * 价格类型（字典 logistics_sales_price_type；SAP 定价条件类型 KSCHL，如 PR00/PB00；默认 PR00）
    */
-  priceType?: number;
+  priceType?: string;
 
   /**
    * 生效日期（范围查询-开始）
@@ -134,7 +134,7 @@ export interface SalesPriceQuery extends TaktPagedQuery {
   effectiveEndDateEnd?: string;
 
   /**
-   * 价格状态（1=启用，0=禁用）
+   * 价格状态（字典 sys_normal_disable_status；1=启用 0=禁用）
    */
   priceStatus?: number;
 
@@ -151,7 +151,7 @@ export interface SalesPriceQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -178,14 +178,14 @@ export interface SalesPriceCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
-  plantCode?: string;
+  plantCode: string;
 
   /**
    * 销售价格编码（唯一索引）
@@ -193,14 +193,14 @@ export interface SalesPriceCreate {
   salesPriceCode: string;
 
   /**
-   * 客户编码（如果为空则表示通用价格）
+   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode；为空表示通用价格）
    */
   customerCode?: string;
 
   /**
-   * 价格类型（0=标准价格，1=客户价格，2=促销价格，3=合同价格，4=临时价格）
+   * 价格类型（字典 logistics_sales_price_type；SAP 定价条件类型 KSCHL，如 PR00/PB00；默认 PR00）
    */
-  priceType: number;
+  priceType: string;
 
   /**
    * 生效日期
@@ -213,7 +213,7 @@ export interface SalesPriceCreate {
   effectiveEndDate?: string;
 
   /**
-   * 价格状态（1=启用，0=禁用）
+   * 价格状态（字典 sys_normal_disable_status；1=启用 0=禁用）
    */
   priceStatus: number;
 
@@ -223,14 +223,14 @@ export interface SalesPriceCreate {
   items?: SalesPriceItemCreate[];
 
   /**
-   * 销售价格变更记录列表（外键在子表 TaktSalesPriceChangeLog.PriceId）（子表，级联保存）
+   * 销售价格变更记录列表（外键在子表 TaktSalesPriceChangeLog.SalesPriceId）（子表，级联保存）
    */
   changeLogs?: SalesPriceChangeLogCreate[];
 
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -267,7 +267,7 @@ export interface SalesPriceStatus {
   salesPriceId: string;
 
   /**
-   * 价格状态（1=启用，0=禁用）
+   * 价格状态（字典 sys_normal_disable_status；1=启用 0=禁用）
    */
   priceStatus: number;
 
@@ -291,7 +291,7 @@ export interface SalesPriceTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -301,24 +301,44 @@ export interface SalesPriceTemplate {
   salesPriceCode?: string;
 
   /**
-   * 客户编码（如果为空则表示通用价格）
+   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode；为空表示通用价格）
    */
   customerCode?: string;
 
   /**
-   * 价格类型（0=标准价格，1=客户价格，2=促销价格，3=合同价格，4=临时价格）
+   * 价格类型（字典 logistics_sales_price_type；SAP 定价条件类型 KSCHL，如 PR00/PB00；默认 PR00）
    */
-  priceType?: number;
+  priceType?: string;
 
   /**
-   * 价格状态（1=启用，0=禁用）
+   * 生效日期
+   */
+  effectiveStartDate?: string;
+
+  /**
+   * 失效日期（空表示长期有效）
+   */
+  effectiveEndDate?: string;
+
+  /**
+   * 价格状态（字典 sys_normal_disable_status；1=启用 0=禁用）
    */
   priceStatus?: number;
 
   /**
+   * 物料价格明细列表（主子表关系，一个客户价格可以有多个物料价格）（子表，级联保存）
+   */
+  items?: SalesPriceItemCreate[];
+
+  /**
+   * 销售价格变更记录列表（外键在子表 TaktSalesPriceChangeLog.SalesPriceId）（子表，级联保存）
+   */
+  changeLogs?: SalesPriceChangeLogCreate[];
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -345,12 +365,12 @@ export interface SalesPriceImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -360,24 +380,44 @@ export interface SalesPriceImport {
   salesPriceCode?: string;
 
   /**
-   * 客户编码（如果为空则表示通用价格）
+   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode；为空表示通用价格）
    */
   customerCode?: string;
 
   /**
-   * 价格类型（0=标准价格，1=客户价格，2=促销价格，3=合同价格，4=临时价格）
+   * 价格类型（字典 logistics_sales_price_type；SAP 定价条件类型 KSCHL，如 PR00/PB00；默认 PR00）
    */
-  priceType?: number;
+  priceType?: string;
 
   /**
-   * 价格状态（1=启用，0=禁用）
+   * 生效日期
+   */
+  effectiveStartDate?: string;
+
+  /**
+   * 失效日期（空表示长期有效）
+   */
+  effectiveEndDate?: string;
+
+  /**
+   * 价格状态（字典 sys_normal_disable_status；1=启用 0=禁用）
    */
   priceStatus?: number;
 
   /**
+   * 物料价格明细列表（主子表关系，一个客户价格可以有多个物料价格）（子表，级联保存）
+   */
+  items?: SalesPriceItemCreate[];
+
+  /**
+   * 销售价格变更记录列表（外键在子表 TaktSalesPriceChangeLog.SalesPriceId）（子表，级联保存）
+   */
+  changeLogs?: SalesPriceChangeLogCreate[];
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -404,9 +444,9 @@ export interface SalesPriceExport {
   companyCode: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
-  plantCode?: string;
+  plantCode: string;
 
   /**
    * 销售价格编码（唯一索引）
@@ -414,14 +454,14 @@ export interface SalesPriceExport {
   salesPriceCode: string;
 
   /**
-   * 客户编码（如果为空则表示通用价格）
+   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode；为空表示通用价格）
    */
   customerCode?: string;
 
   /**
-   * 价格类型（0=标准价格，1=客户价格，2=促销价格，3=合同价格，4=临时价格）
+   * 价格类型（字典 logistics_sales_price_type；SAP 定价条件类型 KSCHL，如 PR00/PB00；默认 PR00）
    */
-  priceType: number;
+  priceType: string;
 
   /**
    * 生效日期
@@ -434,14 +474,14 @@ export interface SalesPriceExport {
   effectiveEndDate?: string;
 
   /**
-   * 价格状态（1=启用，0=禁用）
+   * 价格状态（字典 sys_normal_disable_status；1=启用 0=禁用）
    */
   priceStatus: number;
 
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注

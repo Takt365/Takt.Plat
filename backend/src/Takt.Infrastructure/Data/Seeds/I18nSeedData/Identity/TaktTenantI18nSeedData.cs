@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Identity
 // 文件名称：TaktTenantI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktTenant 实体字段国际化种子（已对齐前端 locales：src/locales/identity/tenant）
 // 
@@ -145,13 +145,13 @@ public class TaktTenantI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.tenant.contactemail", "zh-HK", "联系邮箱_hk", "联系邮箱"),
 
             // entity.tenant.isbuiltin
-            new TranslationSeedItem("entity.tenant.isbuiltin", "en-US", "是否内置_us", "是否内置（字典 sys_yes_no_type；种子租户 000/500/100 为内置，不允许删除）"),
+            new TranslationSeedItem("entity.tenant.isbuiltin", "en-US", "内置_us", "内置（字典 sys_yes_no_type；种子租户 000/500/100 为内置，不允许删除）"),
             // entity.tenant.isbuiltin
-            new TranslationSeedItem("entity.tenant.isbuiltin", "ja-JP", "是否内置_jp", "是否内置（字典 sys_yes_no_type；种子租户 000/500/100 为内置，不允许删除）"),
+            new TranslationSeedItem("entity.tenant.isbuiltin", "ja-JP", "内置_jp", "内置（字典 sys_yes_no_type；种子租户 000/500/100 为内置，不允许删除）"),
             // entity.tenant.isbuiltin
-            new TranslationSeedItem("entity.tenant.isbuiltin", "zh-CN", "是否内置", "是否内置（字典 sys_yes_no_type；种子租户 000/500/100 为内置，不允许删除）"),
+            new TranslationSeedItem("entity.tenant.isbuiltin", "zh-CN", "内置", "内置（字典 sys_yes_no_type；种子租户 000/500/100 为内置，不允许删除）"),
             // entity.tenant.isbuiltin
-            new TranslationSeedItem("entity.tenant.isbuiltin", "zh-HK", "是否内置_hk", "是否内置（字典 sys_yes_no_type；种子租户 000/500/100 为内置，不允许删除）"),
+            new TranslationSeedItem("entity.tenant.isbuiltin", "zh-HK", "内置_hk", "内置（字典 sys_yes_no_type；种子租户 000/500/100 为内置，不允许删除）"),
 
             // entity.tenant.status
             new TranslationSeedItem("entity.tenant.status", "en-US", "状态_us", "状态（字典 sys_normal_disable_status）"),

@@ -14,6 +14,7 @@ using SqlSugar;
 using Takt.Domain.Interfaces;
 using Takt.Infrastructure.Data.Context;
 using Takt.Infrastructure.Repositories;
+using Takt.Shared.Helpers;
 using Takt.Shared.Options;
 using Microsoft.Extensions.Options;
 
@@ -98,13 +99,11 @@ public sealed class TaktApprovalFlowDataGateway : ITaktApprovalFlowDataGateway
                 data[pair.Key] = pair.Value ?? DBNull.Value;
             }
         }
-        if (_primaryKeyTypeOptions.Snowflake.Enabled)
-        {
-            return await _dbContext.Db.Insertable(data).AS(tableName).ExecuteReturnSnowflakeIdAsync();
-        }
-        await _dbContext.Db.Insertable(data).AS(tableName).ExecuteCommandAsync();
-        var idObj = data.GetValueOrDefault("id");
-        return idObj is long l ? l : Convert.ToInt64(idObj ?? 0);
+        return await TaktPrimaryKeyInsertHelper.InsertDictionaryAsync(
+            _dbContext.Db,
+            data,
+            tableName,
+            _primaryKeyTypeOptions);
     }
 
     /// <inheritdoc />

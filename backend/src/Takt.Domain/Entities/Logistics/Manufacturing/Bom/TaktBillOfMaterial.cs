@@ -28,7 +28,7 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Bom;
 public class TaktBillOfMaterial : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
@@ -46,7 +46,7 @@ public class TaktBillOfMaterial : TaktCompanyEntityBase
     public string BomName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 父物料ID（成品/半成品，关联工厂物料主数据，序列化为string以避免Javascript精度问题）
+    /// 父物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
     /// </summary>
     [SugarColumn(ColumnName = "parent_material_id", ColumnDescription = "父物料ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -71,7 +71,7 @@ public class TaktBillOfMaterial : TaktCompanyEntityBase
     public string BomVersion { get; set; } = "1.0";
 
     /// <summary>
-    /// BOM类型/用途（0=标准BOM，1=工程BOM，2=制造BOM，3=成本BOM，4=销售BOM，对应SAP BOM Usage）
+    /// BOM类型/用途（字典 logistics_bom_type；0=标准，1=工程，2=制造，3=成本，4=销售）
     /// </summary>
     [SugarColumn(ColumnName = "bom_type", ColumnDescription = "BOM类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int BomType { get; set; } = 0;
@@ -95,28 +95,16 @@ public class TaktBillOfMaterial : TaktCompanyEntityBase
     public DateTime? ExpiryDate { get; set; }
 
     /// <summary>
-    /// 父物料单位
+    /// 父物料单位（字典 logistics_unit_of_measure_code）
     /// </summary>
-    [SugarColumn(ColumnName = "parent_material_unit", ColumnDescription = "父物料单位", ColumnDataType = "nvarchar", Length = 20, IsNullable = false, DefaultValue = "个")]
-    public string ParentMaterialUnit { get; set; } = "个";
+    [SugarColumn(ColumnName = "parent_material_unit", ColumnDescription = "父物料单位", ColumnDataType = "nvarchar", Length = 20, IsNullable = false, DefaultValue = "PC")]
+    public string ParentMaterialUnit { get; set; } = "PC";
 
     /// <summary>
     /// 基本数量（BOM基数，对应SAP Base quantity）
     /// </summary>
     [SugarColumn(ColumnName = "parent_material_quantity", ColumnDescription = "基本数量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 4, IsNullable = false, DefaultValue = "1")]
     public decimal ParentMaterialQuantity { get; set; } = 1;
-
-    /// <summary>
-    /// 是否启用（0=否，1=是）
-    /// </summary>
-    [SugarColumn(ColumnName = "is_enabled", ColumnDescription = "是否启用", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public int IsEnabled { get; set; } = 1;
-
-    /// <summary>
-    /// BOM状态（0=草稿，1=已发布，2=已停用）
-    /// </summary>
-    [SugarColumn(ColumnName = "bom_status", ColumnDescription = "BOM状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int BomStatus { get; set; } = 0;
 
     /// <summary>
     /// BOM描述
@@ -131,13 +119,19 @@ public class TaktBillOfMaterial : TaktCompanyEntityBase
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
+    /// BOM状态（字典 logistics_bom_status；0=草稿，1=已发布，2=已停用）
+    /// </summary>
+    [SugarColumn(ColumnName = "bom_status", ColumnDescription = "BOM状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int BomStatus { get; set; } = 0;
+
+    /// <summary>
     /// BOM组成件明细（扁平单层；多层通过子件物料关联其BOM头递归展开）
     /// </summary>
     [Navigate(NavigateType.OneToMany, nameof(TaktBillOfMaterialItem.BillOfMaterialId))]
     public List<TaktBillOfMaterialItem>? Items { get; set; }
 
     /// <summary>
-    /// BOM变更记录列表（外键在子表 <see cref="TaktBillOfMaterialChangeLog.BillOfMaterialId"/>）
+    /// BOM变更记录列表（外键在子表 TaktBillOfMaterialChangeLog.BillOfMaterialId）
     /// </summary>
     [Navigate(NavigateType.OneToMany, nameof(TaktBillOfMaterialChangeLog.BillOfMaterialId))]
     public List<TaktBillOfMaterialChangeLog>? ChangeLogs { get; set; }

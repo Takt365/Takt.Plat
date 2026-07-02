@@ -81,6 +81,12 @@
             @change="(checked: unknown) => handleRequestStatusChange(record, Boolean(checked))"
           />
         </template>
+        <template v-else-if="column.key === 'convertedStatus'">
+          <TaktDictTag
+            :value="getPurchaseRequestField(record, 'convertedStatus')"
+            dict-type="sys_convert_status"
+          />
+        </template>
       </template>
       <template #detail>
         <PurchaseRequestItemPanel
@@ -136,6 +142,28 @@
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaserequest.code') })"
           show-count
           :maxlength="10"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('countersignId')">
+      <a-form-item :label="t('entity.purchaserequest.countersignid')">
+        <a-input
+          v-model:value="advancedQueryForm.countersignId"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaserequest.countersignid') })"
+          show-count
+          :maxlength="20"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('countersignCode')">
+      <a-form-item :label="t('entity.purchaserequest.countersigncode')">
+        <a-input
+          v-model:value="advancedQueryForm.countersignCode"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaserequest.countersigncode') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
@@ -238,6 +266,17 @@
         />
       </a-form-item>
       </div>
+      <div v-show="isFieldVisible('requestReason')">
+      <a-form-item :label="t('entity.purchaserequest.requestreason')">
+        <a-input
+          v-model:value="advancedQueryForm.requestReason"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaserequest.requestreason') })"
+          show-count
+          :maxlength="1000"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('requestStatus')">
       <a-form-item :label="t('entity.purchaserequest.requeststatus')">
         <TaktSelect
@@ -250,30 +289,21 @@
       </div>
       <div v-show="isFieldVisible('convertedStatus')">
       <a-form-item :label="t('entity.purchaserequest.convertedstatus')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.convertedStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaserequest.convertedstatus') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('requestReason')">
-      <a-form-item :label="t('entity.purchaserequest.requestreason')">
-        <a-input
-          v-model:value="advancedQueryForm.requestReason"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaserequest.requestreason') })"
-          show-count
-          :maxlength="1000"
+          dict-type="sys_convert_status"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.purchaserequest.convertedstatus') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('approvalStatus')">
       <a-form-item :label="t('entity.purchaserequest.approvalstatus')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.approvalStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaserequest.approvalstatus') })"
-          style="width: 100%"
+          dict-type="sys_approval_status"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.purchaserequest.approvalstatus') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -358,7 +388,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -369,7 +399,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -519,6 +549,8 @@ const advancedQueryVisible = ref(false)
 const advancedQueryForm = ref({
   plantCode: '',
   purchaseRequestCode: '',
+  countersignId: '',
+  countersignCode: '',
   requestDateStart: '',
   requestDateEnd: '',
   requiredArrivalDateStart: '',
@@ -529,9 +561,9 @@ const advancedQueryForm = ref({
   totalAmount: undefined as number | undefined,
   convertedQuantity: undefined as number | undefined,
   convertedAmount: undefined as number | undefined,
+  requestReason: '',
   requestStatus: undefined as number | undefined,
   convertedStatus: undefined as number | undefined,
-  requestReason: '',
   approvalStatus: undefined as number | undefined,
   initiatorId: '',
   initiatedAtStart: '',
@@ -549,6 +581,8 @@ const advancedQueryForm = ref({
 const queryFieldsMeta = computed(() => [
   { key: 'plantCode', label: t('entity.purchaserequest.plantcode') },
   { key: 'purchaseRequestCode', label: t('entity.purchaserequest.code') },
+  { key: 'countersignId', label: t('entity.purchaserequest.countersignid') },
+  { key: 'countersignCode', label: t('entity.purchaserequest.countersigncode') },
   { key: 'requestDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.purchaserequest.requestdate')) },
   { key: 'requestDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.purchaserequest.requestdate')) },
   { key: 'requiredArrivalDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.purchaserequest.requiredarrivaldate')) },
@@ -559,9 +593,9 @@ const queryFieldsMeta = computed(() => [
   { key: 'totalAmount', label: t('entity.purchaserequest.totalamount') },
   { key: 'convertedQuantity', label: t('entity.purchaserequest.convertedquantity') },
   { key: 'convertedAmount', label: t('entity.purchaserequest.convertedamount') },
+  { key: 'requestReason', label: t('entity.purchaserequest.requestreason') },
   { key: 'requestStatus', label: t('entity.purchaserequest.requeststatus') },
   { key: 'convertedStatus', label: t('entity.purchaserequest.convertedstatus') },
-  { key: 'requestReason', label: t('entity.purchaserequest.requestreason') },
   { key: 'approvalStatus', label: t('entity.purchaserequest.approvalstatus') },
   { key: 'initiatorId', label: t('entity.purchaserequest.initiatorid') },
   { key: 'initiatedAtStart', label: t('entity.purchaserequest.initiatedatstart') },
@@ -620,6 +654,8 @@ function buildListQuery(overrides?: Partial<PurchaseRequestQuery>): PurchaseRequ
   }
   assignTrimmed('plantCode', form.plantCode)
   assignTrimmed('purchaseRequestCode', form.purchaseRequestCode)
+  assignTrimmed('countersignId', form.countersignId)
+  assignTrimmed('countersignCode', form.countersignCode)
   assignTrimmed('requestDateStart', form.requestDateStart)
   assignTrimmed('requestDateEnd', form.requestDateEnd)
   assignTrimmed('requiredArrivalDateStart', form.requiredArrivalDateStart)
@@ -638,13 +674,13 @@ function buildListQuery(overrides?: Partial<PurchaseRequestQuery>): PurchaseRequ
   if (form.convertedAmount !== undefined && form.convertedAmount !== null) {
     query.convertedAmount = form.convertedAmount
   }
+  assignTrimmed('requestReason', form.requestReason)
   if (form.requestStatus !== undefined && form.requestStatus !== null) {
     query.requestStatus = form.requestStatus
   }
   if (form.convertedStatus !== undefined && form.convertedStatus !== null) {
     query.convertedStatus = form.convertedStatus
   }
-  assignTrimmed('requestReason', form.requestReason)
   if (form.approvalStatus !== undefined && form.approvalStatus !== null) {
     query.approvalStatus = form.approvalStatus
   }
@@ -750,6 +786,24 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPurchaseRequestField(record, 'purchaseRequestCode') ?? ''
   },
   {
+    title: t('entity.purchaserequest.countersignid'),
+    dataIndex: 'countersignId',
+    key: 'countersignId',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getPurchaseRequestField(record, 'countersignId') ?? ''
+  },
+  {
+    title: t('entity.purchaserequest.countersigncode'),
+    dataIndex: 'countersignCode',
+    key: 'countersignCode',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getPurchaseRequestField(record, 'countersignCode') ?? ''
+  },
+  {
     title: t('entity.purchaserequest.requestdate'),
     dataIndex: 'requestDate',
     key: 'requestDate',
@@ -822,6 +876,15 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPurchaseRequestField(record, 'convertedAmount') ?? ''
   },
   {
+    title: t('entity.purchaserequest.requestreason'),
+    dataIndex: 'requestReason',
+    key: 'requestReason',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getPurchaseRequestField(record, 'requestReason') ?? ''
+  },
+  {
     title: t('entity.purchaserequest.requeststatus'),
     dataIndex: 'requestStatus',
     key: 'requestStatus',
@@ -836,16 +899,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPurchaseRequestField(record, 'convertedStatus') ?? ''
-  },
-  {
-    title: t('entity.purchaserequest.requestreason'),
-    dataIndex: 'requestReason',
-    key: 'requestReason',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPurchaseRequestField(record, 'requestReason') ?? ''
   },
   CreateActionColumn({
     actions: [
@@ -896,7 +949,7 @@ const rowSelection = computed(() => ({
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
-    } else if (getPurchaseRequestId(selectedRow.value) === getPurchaseRequestId(record)) {
+    } else if (selectedRow.value && getPurchaseRequestId(selectedRow.value) === getPurchaseRequestId(record)) {
       selectedRow.value = null
       syncMasterSelection(null)
     }
@@ -939,6 +992,8 @@ function handleReset() {
   advancedQueryForm.value = {
   plantCode: '',
   purchaseRequestCode: '',
+  countersignId: '',
+  countersignCode: '',
   requestDateStart: '',
   requestDateEnd: '',
   requiredArrivalDateStart: '',
@@ -949,9 +1004,9 @@ function handleReset() {
   totalAmount: undefined as number | undefined,
   convertedQuantity: undefined as number | undefined,
   convertedAmount: undefined as number | undefined,
+  requestReason: '',
   requestStatus: undefined as number | undefined,
   convertedStatus: undefined as number | undefined,
-  requestReason: '',
   approvalStatus: undefined as number | undefined,
   initiatorId: '',
   initiatedAtStart: '',
@@ -1177,6 +1232,8 @@ function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
   plantCode: '',
   purchaseRequestCode: '',
+  countersignId: '',
+  countersignCode: '',
   requestDateStart: '',
   requestDateEnd: '',
   requiredArrivalDateStart: '',
@@ -1187,9 +1244,9 @@ function handleAdvancedQueryReset() {
   totalAmount: undefined as number | undefined,
   convertedQuantity: undefined as number | undefined,
   convertedAmount: undefined as number | undefined,
+  requestReason: '',
   requestStatus: undefined as number | undefined,
   convertedStatus: undefined as number | undefined,
-  requestReason: '',
   approvalStatus: undefined as number | undefined,
   initiatorId: '',
   initiatedAtStart: '',

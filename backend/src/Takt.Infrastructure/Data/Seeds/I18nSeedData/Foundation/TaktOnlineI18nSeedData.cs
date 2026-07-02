@@ -2,9 +2,9 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation
 // 文件名称：TaktOnlineI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
-// 功能描述：TaktOnline 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
+// 功能描述：TaktOnline 实体字段国际化种子（已对齐前端 locales：src/locales/foundation/online）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -91,13 +91,13 @@ public class TaktOnlineI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.online._self", "zh-HK", "在线用户信息_hk", "实体名称"),
 
             // entity.online.connectionid
-            new TranslationSeedItem("entity.online.connectionid", "en-US", "SignalR连接ID_us", "SignalR 连接 ID（唯一索引：租户+公司内唯一，见 ix_online_connection_id_unique）"),
+            new TranslationSeedItem("entity.online.connectionid", "en-US", "SignalR连接ID_us", "SignalR 连接 ID（当前连接；租户+公司内唯一，见 ix_online_connection_id_unique）"),
             // entity.online.connectionid
-            new TranslationSeedItem("entity.online.connectionid", "ja-JP", "SignalR连接ID_jp", "SignalR 连接 ID（唯一索引：租户+公司内唯一，见 ix_online_connection_id_unique）"),
+            new TranslationSeedItem("entity.online.connectionid", "ja-JP", "SignalR连接ID_jp", "SignalR 连接 ID（当前连接；租户+公司内唯一，见 ix_online_connection_id_unique）"),
             // entity.online.connectionid
-            new TranslationSeedItem("entity.online.connectionid", "zh-CN", "SignalR连接ID", "SignalR 连接 ID（唯一索引：租户+公司内唯一，见 ix_online_connection_id_unique）"),
+            new TranslationSeedItem("entity.online.connectionid", "zh-CN", "SignalR连接ID", "SignalR 连接 ID（当前连接；租户+公司内唯一，见 ix_online_connection_id_unique）"),
             // entity.online.connectionid
-            new TranslationSeedItem("entity.online.connectionid", "zh-HK", "SignalR连接ID_hk", "SignalR 连接 ID（唯一索引：租户+公司内唯一，见 ix_online_connection_id_unique）"),
+            new TranslationSeedItem("entity.online.connectionid", "zh-HK", "SignalR连接ID_hk", "SignalR 连接 ID（当前连接；租户+公司内唯一，见 ix_online_connection_id_unique）"),
 
             // entity.online.username
             new TranslationSeedItem("entity.online.username", "en-US", "用户名_us", "用户名"),
@@ -116,15 +116,6 @@ public class TaktOnlineI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.online.userid", "zh-CN", "用户ID", "用户 ID"),
             // entity.online.userid
             new TranslationSeedItem("entity.online.userid", "zh-HK", "用户ID_hk", "用户 ID"),
-
-            // entity.online.status
-            new TranslationSeedItem("entity.online.status", "en-US", "在线状态_us", "在线状态（字典 sys_online_status；0=在线 1=离线 2=离开）"),
-            // entity.online.status
-            new TranslationSeedItem("entity.online.status", "ja-JP", "在线状态_jp", "在线状态（字典 sys_online_status；0=在线 1=离线 2=离开）"),
-            // entity.online.status
-            new TranslationSeedItem("entity.online.status", "zh-CN", "在线状态", "在线状态（字典 sys_online_status；0=在线 1=离线 2=离开）"),
-            // entity.online.status
-            new TranslationSeedItem("entity.online.status", "zh-HK", "在线状态_hk", "在线状态（字典 sys_online_status；0=在线 1=离线 2=离开）"),
 
             // entity.online.connectip
             new TranslationSeedItem("entity.online.connectip", "en-US", "连接IP地址_us", "连接 IP 地址"),
@@ -145,40 +136,40 @@ public class TaktOnlineI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.online.connectlocation", "zh-HK", "连接地点_hk", "连接地点"),
 
             // entity.online.useragent
-            new TranslationSeedItem("entity.online.useragent", "en-US", "User-Agent_us", "User-Agent"),
+            new TranslationSeedItem("entity.online.useragent", "en-US", "用户代理_us", "用户代理（User-Agent）"),
             // entity.online.useragent
-            new TranslationSeedItem("entity.online.useragent", "ja-JP", "User-Agent_jp", "User-Agent"),
+            new TranslationSeedItem("entity.online.useragent", "ja-JP", "用户代理_jp", "用户代理（User-Agent）"),
             // entity.online.useragent
-            new TranslationSeedItem("entity.online.useragent", "zh-CN", "User-Agent", "User-Agent"),
+            new TranslationSeedItem("entity.online.useragent", "zh-CN", "用户代理", "用户代理（User-Agent）"),
             // entity.online.useragent
-            new TranslationSeedItem("entity.online.useragent", "zh-HK", "User-Agent_hk", "User-Agent"),
+            new TranslationSeedItem("entity.online.useragent", "zh-HK", "用户代理_hk", "用户代理（User-Agent）"),
 
             // entity.online.devicetype
-            new TranslationSeedItem("entity.online.devicetype", "en-US", "设备类型_us", "设备类型"),
+            new TranslationSeedItem("entity.online.devicetype", "en-US", "登录设备_us", "登录设备（TaktConstants.DeviceType，如 unknown、pc、mobile、tablet）"),
             // entity.online.devicetype
-            new TranslationSeedItem("entity.online.devicetype", "ja-JP", "设备类型_jp", "设备类型"),
+            new TranslationSeedItem("entity.online.devicetype", "ja-JP", "登录设备_jp", "登录设备（TaktConstants.DeviceType，如 unknown、pc、mobile、tablet）"),
             // entity.online.devicetype
-            new TranslationSeedItem("entity.online.devicetype", "zh-CN", "设备类型", "设备类型"),
+            new TranslationSeedItem("entity.online.devicetype", "zh-CN", "登录设备", "登录设备（TaktConstants.DeviceType，如 unknown、pc、mobile、tablet）"),
             // entity.online.devicetype
-            new TranslationSeedItem("entity.online.devicetype", "zh-HK", "设备类型_hk", "设备类型"),
+            new TranslationSeedItem("entity.online.devicetype", "zh-HK", "登录设备_hk", "登录设备（TaktConstants.DeviceType，如 unknown、pc、mobile、tablet）"),
 
             // entity.online.browsertype
-            new TranslationSeedItem("entity.online.browsertype", "en-US", "浏览器类型_us", "浏览器类型（User-Agent 解析；0=未知 1=Chrome 2=Firefox 3=Safari 4=Edge）"),
+            new TranslationSeedItem("entity.online.browsertype", "en-US", "浏览器_us", "浏览器（TaktConstants.BrowserType，如 unknown、chrome、firefox、safari、edge）"),
             // entity.online.browsertype
-            new TranslationSeedItem("entity.online.browsertype", "ja-JP", "浏览器类型_jp", "浏览器类型（User-Agent 解析；0=未知 1=Chrome 2=Firefox 3=Safari 4=Edge）"),
+            new TranslationSeedItem("entity.online.browsertype", "ja-JP", "浏览器_jp", "浏览器（TaktConstants.BrowserType，如 unknown、chrome、firefox、safari、edge）"),
             // entity.online.browsertype
-            new TranslationSeedItem("entity.online.browsertype", "zh-CN", "浏览器类型", "浏览器类型（User-Agent 解析；0=未知 1=Chrome 2=Firefox 3=Safari 4=Edge）"),
+            new TranslationSeedItem("entity.online.browsertype", "zh-CN", "浏览器", "浏览器（TaktConstants.BrowserType，如 unknown、chrome、firefox、safari、edge）"),
             // entity.online.browsertype
-            new TranslationSeedItem("entity.online.browsertype", "zh-HK", "浏览器类型_hk", "浏览器类型（User-Agent 解析；0=未知 1=Chrome 2=Firefox 3=Safari 4=Edge）"),
+            new TranslationSeedItem("entity.online.browsertype", "zh-HK", "浏览器_hk", "浏览器（TaktConstants.BrowserType，如 unknown、chrome、firefox、safari、edge）"),
 
             // entity.online.operatingsystem
-            new TranslationSeedItem("entity.online.operatingsystem", "en-US", "操作系统_us", "操作系统（User-Agent 解析；0=未知 1=Windows 2=macOS 3=Linux 4=Android 5=iOS）"),
+            new TranslationSeedItem("entity.online.operatingsystem", "en-US", "操作系统_us", "操作系统（TaktConstants.OperatingSystem，如 unknown、windows、macos、linux、android、ios）"),
             // entity.online.operatingsystem
-            new TranslationSeedItem("entity.online.operatingsystem", "ja-JP", "操作系统_jp", "操作系统（User-Agent 解析；0=未知 1=Windows 2=macOS 3=Linux 4=Android 5=iOS）"),
+            new TranslationSeedItem("entity.online.operatingsystem", "ja-JP", "操作系统_jp", "操作系统（TaktConstants.OperatingSystem，如 unknown、windows、macos、linux、android、ios）"),
             // entity.online.operatingsystem
-            new TranslationSeedItem("entity.online.operatingsystem", "zh-CN", "操作系统", "操作系统（User-Agent 解析；0=未知 1=Windows 2=macOS 3=Linux 4=Android 5=iOS）"),
+            new TranslationSeedItem("entity.online.operatingsystem", "zh-CN", "操作系统", "操作系统（TaktConstants.OperatingSystem，如 unknown、windows、macos、linux、android、ios）"),
             // entity.online.operatingsystem
-            new TranslationSeedItem("entity.online.operatingsystem", "zh-HK", "操作系统_hk", "操作系统（User-Agent 解析；0=未知 1=Windows 2=macOS 3=Linux 4=Android 5=iOS）"),
+            new TranslationSeedItem("entity.online.operatingsystem", "zh-HK", "操作系统_hk", "操作系统（TaktConstants.OperatingSystem，如 unknown、windows、macos、linux、android、ios）"),
 
             // entity.online.connecttime
             new TranslationSeedItem("entity.online.connecttime", "en-US", "连接时间_us", "连接时间"),
@@ -190,31 +181,67 @@ public class TaktOnlineI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.online.connecttime", "zh-HK", "连接时间_hk", "连接时间"),
 
             // entity.online.lastactivetime
-            new TranslationSeedItem("entity.online.lastactivetime", "en-US", "最后活动时间_us", "最后活动时间"),
+            new TranslationSeedItem("entity.online.lastactivetime", "en-US", "最后活动时间_us", "最后活动时间（Heartbeat 刷新；登出/断开时写为 DisconnectTime，对齐 TaktLoginLog.LogoutAt）"),
             // entity.online.lastactivetime
-            new TranslationSeedItem("entity.online.lastactivetime", "ja-JP", "最后活动时间_jp", "最后活动时间"),
+            new TranslationSeedItem("entity.online.lastactivetime", "ja-JP", "最后活动时间_jp", "最后活动时间（Heartbeat 刷新；登出/断开时写为 DisconnectTime，对齐 TaktLoginLog.LogoutAt）"),
             // entity.online.lastactivetime
-            new TranslationSeedItem("entity.online.lastactivetime", "zh-CN", "最后活动时间", "最后活动时间"),
+            new TranslationSeedItem("entity.online.lastactivetime", "zh-CN", "最后活动时间", "最后活动时间（Heartbeat 刷新；登出/断开时写为 DisconnectTime，对齐 TaktLoginLog.LogoutAt）"),
             // entity.online.lastactivetime
-            new TranslationSeedItem("entity.online.lastactivetime", "zh-HK", "最后活动时间_hk", "最后活动时间"),
+            new TranslationSeedItem("entity.online.lastactivetime", "zh-HK", "最后活动时间_hk", "最后活动时间（Heartbeat 刷新；登出/断开时写为 DisconnectTime，对齐 TaktLoginLog.LogoutAt）"),
 
             // entity.online.disconnecttime
-            new TranslationSeedItem("entity.online.disconnecttime", "en-US", "断开时间_us", "断开时间"),
+            new TranslationSeedItem("entity.online.disconnecttime", "en-US", "断开时间_us", "断开时间（未断开时为 null，对齐登录日志 LogoutAt）"),
             // entity.online.disconnecttime
-            new TranslationSeedItem("entity.online.disconnecttime", "ja-JP", "断开时间_jp", "断开时间"),
+            new TranslationSeedItem("entity.online.disconnecttime", "ja-JP", "断开时间_jp", "断开时间（未断开时为 null，对齐登录日志 LogoutAt）"),
             // entity.online.disconnecttime
-            new TranslationSeedItem("entity.online.disconnecttime", "zh-CN", "断开时间", "断开时间"),
+            new TranslationSeedItem("entity.online.disconnecttime", "zh-CN", "断开时间", "断开时间（未断开时为 null，对齐登录日志 LogoutAt）"),
             // entity.online.disconnecttime
-            new TranslationSeedItem("entity.online.disconnecttime", "zh-HK", "断开时间_hk", "断开时间"),
+            new TranslationSeedItem("entity.online.disconnecttime", "zh-HK", "断开时间_hk", "断开时间（未断开时为 null，对齐登录日志 LogoutAt）"),
 
             // entity.online.connectionduration
-            new TranslationSeedItem("entity.online.connectionduration", "en-US", "连接时长_us", "连接时长（秒）"),
+            new TranslationSeedItem("entity.online.connectionduration", "en-US", "连接时长_us", "SignalR Heartbeat 累计 +ReportingIntervalSeconds；写入与统计见 TaktOnlineService"),
             // entity.online.connectionduration
-            new TranslationSeedItem("entity.online.connectionduration", "ja-JP", "连接时长_jp", "连接时长（秒）"),
+            new TranslationSeedItem("entity.online.connectionduration", "ja-JP", "连接时长_jp", "SignalR Heartbeat 累计 +ReportingIntervalSeconds；写入与统计见 TaktOnlineService"),
             // entity.online.connectionduration
-            new TranslationSeedItem("entity.online.connectionduration", "zh-CN", "连接时长", "连接时长（秒）"),
+            new TranslationSeedItem("entity.online.connectionduration", "zh-CN", "连接时长", "SignalR Heartbeat 累计 +ReportingIntervalSeconds；写入与统计见 TaktOnlineService"),
             // entity.online.connectionduration
-            new TranslationSeedItem("entity.online.connectionduration", "zh-HK", "连接时长_hk", "连接时长（秒）"),
+            new TranslationSeedItem("entity.online.connectionduration", "zh-HK", "连接时长_hk", "SignalR Heartbeat 累计 +ReportingIntervalSeconds；写入与统计见 TaktOnlineService"),
+
+            // entity.online.sessiondurationbaselineseconds
+            new TranslationSeedItem("entity.online.sessiondurationbaselineseconds", "en-US", "会话开始时当日时长基线秒数_us", "当前会话开始时 TaktDurationLog 当日已累计秒数（ConnectTime 自然日）"),
+            // entity.online.sessiondurationbaselineseconds
+            new TranslationSeedItem("entity.online.sessiondurationbaselineseconds", "ja-JP", "会话开始时当日时长基线秒数_jp", "当前会话开始时 TaktDurationLog 当日已累计秒数（ConnectTime 自然日）"),
+            // entity.online.sessiondurationbaselineseconds
+            new TranslationSeedItem("entity.online.sessiondurationbaselineseconds", "zh-CN", "会话开始时当日时长基线秒数", "当前会话开始时 TaktDurationLog 当日已累计秒数（ConnectTime 自然日）"),
+            // entity.online.sessiondurationbaselineseconds
+            new TranslationSeedItem("entity.online.sessiondurationbaselineseconds", "zh-HK", "会话开始时当日时长基线秒数_hk", "当前会话开始时 TaktDurationLog 当日已累计秒数（ConnectTime 自然日）"),
+
+            // entity.online.dailydurationbaselinedate
+            new TranslationSeedItem("entity.online.dailydurationbaselinedate", "en-US", "日汇总基线日期_us", "日汇总基线对应的自然日（跨天会话时随 Heartbeat 刷新）"),
+            // entity.online.dailydurationbaselinedate
+            new TranslationSeedItem("entity.online.dailydurationbaselinedate", "ja-JP", "日汇总基线日期_jp", "日汇总基线对应的自然日（跨天会话时随 Heartbeat 刷新）"),
+            // entity.online.dailydurationbaselinedate
+            new TranslationSeedItem("entity.online.dailydurationbaselinedate", "zh-CN", "日汇总基线日期", "日汇总基线对应的自然日（跨天会话时随 Heartbeat 刷新）"),
+            // entity.online.dailydurationbaselinedate
+            new TranslationSeedItem("entity.online.dailydurationbaselinedate", "zh-HK", "日汇总基线日期_hk", "日汇总基线对应的自然日（跨天会话时随 Heartbeat 刷新）"),
+
+            // entity.online.dailydurationbaselineseconds
+            new TranslationSeedItem("entity.online.dailydurationbaselineseconds", "en-US", "日汇总基线秒数_us", "当前自然日 TaktDurationLog 已累计秒数基线（DailyDurationBaselineDate 当天）"),
+            // entity.online.dailydurationbaselineseconds
+            new TranslationSeedItem("entity.online.dailydurationbaselineseconds", "ja-JP", "日汇总基线秒数_jp", "当前自然日 TaktDurationLog 已累计秒数基线（DailyDurationBaselineDate 当天）"),
+            // entity.online.dailydurationbaselineseconds
+            new TranslationSeedItem("entity.online.dailydurationbaselineseconds", "zh-CN", "日汇总基线秒数", "当前自然日 TaktDurationLog 已累计秒数基线（DailyDurationBaselineDate 当天）"),
+            // entity.online.dailydurationbaselineseconds
+            new TranslationSeedItem("entity.online.dailydurationbaselineseconds", "zh-HK", "日汇总基线秒数_hk", "当前自然日 TaktDurationLog 已累计秒数基线（DailyDurationBaselineDate 当天）"),
+
+            // entity.online.status
+            new TranslationSeedItem("entity.online.status", "en-US", "在线状态_us", "在线状态（字典 sys_online_status；0=在线 1=离线 2=离开）"),
+            // entity.online.status
+            new TranslationSeedItem("entity.online.status", "ja-JP", "在线状态_jp", "在线状态（字典 sys_online_status；0=在线 1=离线 2=离开）"),
+            // entity.online.status
+            new TranslationSeedItem("entity.online.status", "zh-CN", "在线状态", "在线状态（字典 sys_online_status；0=在线 1=离线 2=离开）"),
+            // entity.online.status
+            new TranslationSeedItem("entity.online.status", "zh-HK", "在线状态_hk", "在线状态（字典 sys_online_status；0=在线 1=离线 2=离开）"),
         };
     }
 

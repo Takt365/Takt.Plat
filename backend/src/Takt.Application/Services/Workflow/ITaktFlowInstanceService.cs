@@ -102,4 +102,11 @@ public interface ITaktFlowInstanceService
     /// <returns>Excel 文件</returns>
     Task<(string fileName, byte[] fileContent)> ExportFlowInstanceAsync(TaktFlowInstanceQueryDto? query = null, string? sheetName = null, string? fileName = null);
 
+    /// <summary>
+    /// 获取流程实例统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>流程实例统计</returns>
+    Task<TaktWorkflowInstanceStatDto> GetWorkflowInstanceStatAsync(TaktWorkflowInstanceStatQueryDto queryDto);
+
 }

@@ -17,6 +17,8 @@ using Newtonsoft.Json;
 using SqlSugar;
 using Takt.Domain.Entities;
 using Takt.Domain.Entities.Statistics.Logging;
+using Takt.Infrastructure.Services;
+using Takt.Shared.Constants;
 using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 using Takt.Shared.Options;
@@ -531,27 +533,31 @@ internal static class TaktSqlSugarAuditAop
 
         try
         {
-            var (operIp, operLocation) = TaktLocationHelper.ResolveClientIpAndLocationForLog(httpContext);
+            var client = TaktHttpAuditHelper.ResolveClientLogContext(httpContext);
             var operLog = new TaktOperLog
             {
-                TenantCode = httpContext.Request.Headers["X-Tenant-Code"].FirstOrDefault()?.Trim() ?? string.Empty,
-                CompanyCode = httpContext.Request.Headers["X-Company-Code"].FirstOrDefault()?.Trim() ?? string.Empty,
-                UserName = ResolveUserName(httpContext),
-                OperModule = ResolveOperModule(httpContext.Request.Path.Value),
-                OperType = ResolveHttpAuditOperType(httpContext.Request.Method),
-                OperMethod = httpContext.GetEndpoint()?.DisplayName,
-                RequestMethod = httpContext.Request.Method,
-                OperUrl = BuildOperUrl(httpContext),
-                RequestParam = MaskSensitiveJson(requestBody),
+                TenantCode = TaktUserContext.TryResolveTenantCode(httpContext) ?? string.Empty,
+                CompanyCode = TaktUserContext.TryResolveCompanyCode(httpContext) ?? string.Empty,
+                UserName = TaktUserContext.ResolveAuditUserName(httpContext),
+                Remark = TaktUserContext.ResolveAuditContextRemark(httpContext),
+                OperModule = TaktHttpAuditHelper.ResolveOperModule(httpContext.Request.Path.Value),
+                OperType = TaktHttpAuditHelper.ResolveOperType(httpContext),
+                OperMethod = httpContext.GetEndpoint()?.DisplayName ?? string.Empty,
+                RequestMethod = httpContext.Request.Method ?? string.Empty,
+                OperUrl = BuildOperUrl(httpContext) ?? string.Empty,
+                RequestParam = MaskSensitiveJson(requestBody) ?? string.Empty,
                 OperStatus = statusCode >= 400 ? TaktExecuteStatus.Failed : TaktExecuteStatus.Success,
-                OperIp = operIp,
-                OperLocation = operLocation,
+                OperIp = client.Ip,
+                OperLocation = client.Location,
+                UserAgent = client.UserAgent,
+                Browser = client.Browser,
+                Os = client.OperatingSystem,
+                DeviceType = client.DeviceType,
                 OperTime = DateTime.Now,
                 ElapsedTime = (int)Math.Min(int.MaxValue, elapsedMs),
-                CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now,
-                IsDeleted = 0,
             };
+            operLog.ApplyCreate(
+                TaktUserContext.TryResolveUserId(httpContext));
 
             if (string.IsNullOrWhiteSpace(operLog.TenantCode) || string.IsNullOrWhiteSpace(operLog.CompanyCode))
             {
@@ -559,7 +565,7 @@ internal static class TaktSqlSugarAuditAop
             }
 
             SuppressAuditWrite.Value = true;
-            db.Insertable(operLog).ExecuteReturnSnowflakeId();
+            TaktPrimaryKeyInsertHelper.InsertEntitySync(db, operLog, TaktPrimaryKeyInsertHelper.RuntimeOptions);
         }
         catch (Exception ex)
         {
@@ -601,32 +607,38 @@ internal static class TaktSqlSugarAuditAop
 
         try
         {
-            var (operIp, operLocation) = TaktLocationHelper.ResolveClientIpAndLocationForLog(httpContext);
+            var client = TaktHttpAuditHelper.ResolveClientLogContext(httpContext);
             var beforeJson = SerializeDiffTables(diff.BeforeData);
             var afterJson = SerializeDiffTables(diff.AfterData);
             var deltaLog = new TaktDeltaLog
             {
-                TenantCode = httpContext.Request.Headers["X-Tenant-Code"].FirstOrDefault()?.Trim() ?? string.Empty,
-                CompanyCode = httpContext.Request.Headers["X-Company-Code"].FirstOrDefault()?.Trim() ?? string.Empty,
-                UserName = ResolveUserName(httpContext),
-                OperType = MapDiffType(diff.DiffType),
+                TenantCode = TaktUserContext.TryResolveTenantCode(httpContext) ?? string.Empty,
+                CompanyCode = TaktUserContext.TryResolveCompanyCode(httpContext) ?? string.Empty,
+                UserName = TaktUserContext.ResolveAuditUserName(httpContext),
+                Remark = TaktUserContext.ResolveAuditContextRemark(httpContext),
+                OperType = TaktHttpAuditHelper.ResolveOperTypeFromEntityChange(
+                    diff.DiffType == DiffType.insert,
+                    diff.DiffType == DiffType.delete),
                 TableName = tableName,
                 PrimaryKeyId = ResolvePrimaryKeyId(diff),
                 BeforeData = beforeJson,
                 AfterData = afterJson,
                 DiffData = BuildDiffJson(diff),
-                ExtField = SerializeBusinessData(diff.BusinessData),
-                SqlStatement = diff.Sql,
-                OperIp = operIp,
-                OperLocation = operLocation,
+                ExtField = SerializeBusinessData(diff.BusinessData) ?? string.Empty,
+                SqlStatement = diff.Sql ?? string.Empty,
+                OperIp = client.Ip,
+                OperLocation = client.Location,
+                UserAgent = client.UserAgent,
+                Browser = client.Browser,
+                Os = client.OperatingSystem,
+                DeviceType = client.DeviceType,
                 OperTime = DateTime.Now,
                 ElapsedTime = (int)Math.Min(
                     int.MaxValue,
                     diff.Time?.TotalMilliseconds ?? db.Ado.SqlExecutionTime.TotalMilliseconds),
-                CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now,
-                IsDeleted = 0,
             };
+            deltaLog.ApplyCreate(
+                TaktUserContext.TryResolveUserId(httpContext));
 
             if (string.IsNullOrWhiteSpace(deltaLog.TenantCode) || string.IsNullOrWhiteSpace(deltaLog.CompanyCode))
             {
@@ -634,7 +646,7 @@ internal static class TaktSqlSugarAuditAop
             }
 
             SuppressAuditWrite.Value = true;
-            db.Insertable(deltaLog).ExecuteReturnSnowflakeId();
+            TaktPrimaryKeyInsertHelper.InsertEntitySync(db, deltaLog, TaktPrimaryKeyInsertHelper.RuntimeOptions);
         }
         catch (Exception ex)
         {
@@ -760,12 +772,12 @@ internal static class TaktSqlSugarAuditAop
     /// 将差异表数据序列化为 JSON 字符串
     /// </summary>
     /// <param name="tables">差异表列表</param>
-    /// <returns>JSON 字符串；无数据时为 null</returns>
-    private static string? SerializeDiffTables(List<DiffLogTableInfo>? tables)
+    /// <returns>JSON 字符串；无数据时为空串</returns>
+    private static string SerializeDiffTables(List<DiffLogTableInfo>? tables)
     {
         if (tables == null || tables.Count == 0)
         {
-            return null;
+            return string.Empty;
         }
 
         return JsonConvert.SerializeObject(tables);
@@ -775,19 +787,19 @@ internal static class TaktSqlSugarAuditAop
     /// 构建列级前后值差异 JSON（仅包含有变更的列）
     /// </summary>
     /// <param name="diff">差异日志模型</param>
-    /// <returns>差异 JSON；无有效对比时为 null</returns>
-    private static string? BuildDiffJson(DiffLogModel diff)
+    /// <returns>差异 JSON；无有效对比时为空串</returns>
+    private static string BuildDiffJson(DiffLogModel diff)
     {
         if (diff.BeforeData == null || diff.AfterData == null)
         {
-            return null;
+            return string.Empty;
         }
 
         var beforeColumns = diff.BeforeData.FirstOrDefault()?.Columns;
         var afterColumns = diff.AfterData.FirstOrDefault()?.Columns;
         if (beforeColumns == null || afterColumns == null)
         {
-            return null;
+            return string.Empty;
         }
 
         var changes = new List<object>();
@@ -810,7 +822,7 @@ internal static class TaktSqlSugarAuditAop
             });
         }
 
-        return changes.Count == 0 ? null : JsonConvert.SerializeObject(changes);
+        return changes.Count == 0 ? string.Empty : JsonConvert.SerializeObject(changes);
     }
 
     /// <summary>
@@ -833,72 +845,6 @@ internal static class TaktSqlSugarAuditAop
         }
 
         return context.Request.Method is "POST" or "PUT" or "PATCH" or "DELETE";
-    }
-
-    /// <summary>
-    /// 从 Claims 解析当前操作用户名
-    /// </summary>
-    /// <param name="context">HTTP 上下文</param>
-    /// <returns>用户名；未登录时为空字符串</returns>
-    private static string ResolveUserName(HttpContext context)
-    {
-        return context.User?.Identity?.Name
-            ?? context.User?.FindFirst("name")?.Value
-            ?? context.User?.FindFirst(System.Security.Claims.ClaimTypes.Name)?.Value
-            ?? string.Empty;
-    }
-
-    /// <summary>
-    /// 从请求路径解析操作模块名（通常为控制器名）
-    /// </summary>
-    /// <param name="path">请求路径</param>
-    /// <returns>模块名；路径无效时为 null</returns>
-    private static string? ResolveOperModule(string? path)
-    {
-        if (string.IsNullOrWhiteSpace(path))
-        {
-            return null;
-        }
-
-        var segments = path.Split('/', StringSplitOptions.RemoveEmptyEntries);
-        return segments.Length >= 2 ? segments[^1].Replace("Controller", string.Empty, StringComparison.Ordinal) : path;
-    }
-
-    /// <summary>
-    /// 将 HTTP 方法映射为操作日志操作类型枚举
-    /// </summary>
-    /// <param name="method">HTTP 方法</param>
-    /// <returns>操作类型</returns>
-    private static TaktHttpAuditOperType ResolveHttpAuditOperType(string method) => method.ToUpperInvariant() switch
-    {
-        "POST" => TaktHttpAuditOperType.Insert,
-        "PUT" or "PATCH" => TaktHttpAuditOperType.Update,
-        "DELETE" => TaktHttpAuditOperType.Delete,
-        "GET" => TaktHttpAuditOperType.Query,
-        _ => TaktHttpAuditOperType.Unknown,
-    };
-
-    /// <summary>
-    /// 将 SqlSugar DiffType 映射为差异日志操作类型枚举
-    /// </summary>
-    /// <param name="diffType">SqlSugar 差异类型</param>
-    /// <returns>差异操作类型</returns>
-    private static TaktDeltaOperType MapDiffType(DiffType diffType)
-    {
-        var name = diffType.ToString().ToUpperInvariant();
-        if (name.Contains("INSERT", StringComparison.Ordinal))
-        {
-            return TaktDeltaOperType.Insert;
-        }
-        if (name.Contains("UPDATE", StringComparison.Ordinal))
-        {
-            return TaktDeltaOperType.Update;
-        }
-        if (name.Contains("DELETE", StringComparison.Ordinal))
-        {
-            return TaktDeltaOperType.Delete;
-        }
-        return TaktDeltaOperType.Update;
     }
 
     /// <summary>

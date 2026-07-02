@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="logistics:manufacturing:output:production:order:change:log:create"
-      update-permission="logistics:manufacturing:output:production:order:change:log:update"
-      delete-permission="logistics:manufacturing:output:production:order:change:log:delete"
-      import-permission="logistics:manufacturing:output:production:order:change:log:import"
-      export-permission="logistics:manufacturing:output:production:order:change:log:export"
+      create-permission="logistics:manufacturing:output:production:order:create"
+      update-permission="logistics:manufacturing:output:production:order:update"
+      delete-permission="logistics:manufacturing:output:production:order:delete"
+      import-permission="logistics:manufacturing:output:production:order:import"
+      export-permission="logistics:manufacturing:output:production:order:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -176,7 +176,7 @@
           v-model:value="advancedQueryForm.unitOfMeasure"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionorder.unitofmeasure') })"
           show-count
-          :maxlength="10"
+          :maxlength="5"
           allow-clear
         />
       </a-form-item>
@@ -241,11 +241,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('prodLine')">
-      <a-form-item :label="t('entity.productionorder.prodline')">
+      <div v-show="isFieldVisible('prodTeam')">
+      <a-form-item :label="t('entity.productionorder.prodteam')">
         <a-input
-          v-model:value="advancedQueryForm.prodLine"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionorder.prodline') })"
+          v-model:value="advancedQueryForm.prodTeam"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionorder.prodteam') })"
           show-count
           :maxlength="20"
           allow-clear
@@ -285,6 +285,68 @@
         />
       </a-form-item>
       </div>
+      <div v-show="isFieldVisible('plannedOrderId')">
+      <a-form-item :label="t('entity.productionorder.plannedorderid')">
+        <a-input
+          v-model:value="advancedQueryForm.plannedOrderId"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionorder.plannedorderid') })"
+          show-count
+          :maxlength="20"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('apsOrderId')">
+      <a-form-item :label="t('entity.productionorder.apsorderid')">
+        <a-input
+          v-model:value="advancedQueryForm.apsOrderId"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionorder.apsorderid') })"
+          show-count
+          :maxlength="20"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('plannedStartTimeStart')">
+      <a-form-item :label="t('entity.productionorder.plannedstarttimestart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.plannedStartTimeStart"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionorder.plannedstarttimestart') })"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('plannedStartTimeEnd')">
+      <a-form-item :label="t('entity.productionorder.plannedstarttimeend')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.plannedStartTimeEnd"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionorder.plannedstarttimeend') })"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('plannedEndTimeStart')">
+      <a-form-item :label="t('entity.productionorder.plannedendtimestart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.plannedEndTimeStart"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionorder.plannedendtimestart') })"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('plannedEndTimeEnd')">
+      <a-form-item :label="t('entity.productionorder.plannedendtimeend')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.plannedEndTimeEnd"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionorder.plannedendtimeend') })"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('status')">
       <a-form-item :label="t('entity.productionorder.status')">
         <a-input-number
@@ -300,7 +362,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -311,7 +373,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -471,10 +533,16 @@ const advancedQueryForm = ref({
   actualEndDateEnd: '',
   priority: undefined as number | undefined,
   workCenter: '',
-  prodLine: '',
+  prodTeam: '',
   prodBatch: '',
   serialNo: '',
   routingCode: '',
+  plannedOrderId: '',
+  apsOrderId: '',
+  plannedStartTimeStart: '',
+  plannedStartTimeEnd: '',
+  plannedEndTimeStart: '',
+  plannedEndTimeEnd: '',
   status: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
@@ -496,10 +564,16 @@ const queryFieldsMeta = computed(() => [
   { key: 'actualEndDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.productionorder.actualenddate')) },
   { key: 'priority', label: t('entity.productionorder.priority') },
   { key: 'workCenter', label: t('entity.productionorder.workcenter') },
-  { key: 'prodLine', label: t('entity.productionorder.prodline') },
+  { key: 'prodTeam', label: t('entity.productionorder.prodteam') },
   { key: 'prodBatch', label: t('entity.productionorder.prodbatch') },
   { key: 'serialNo', label: t('entity.productionorder.serialno') },
   { key: 'routingCode', label: t('entity.productionorder.routingcode') },
+  { key: 'plannedOrderId', label: t('entity.productionorder.plannedorderid') },
+  { key: 'apsOrderId', label: t('entity.productionorder.apsorderid') },
+  { key: 'plannedStartTimeStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.productionorder.plannedstarttime')) },
+  { key: 'plannedStartTimeEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.productionorder.plannedstarttime')) },
+  { key: 'plannedEndTimeStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.productionorder.plannedendtime')) },
+  { key: 'plannedEndTimeEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.productionorder.plannedendtime')) },
   { key: 'status', label: t('entity.productionorder.status') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
@@ -566,10 +640,16 @@ function buildListQuery(overrides?: Partial<ProductionOrderQuery>): ProductionOr
     query.priority = form.priority
   }
   assignTrimmed('workCenter', form.workCenter)
-  assignTrimmed('prodLine', form.prodLine)
+  assignTrimmed('prodTeam', form.prodTeam)
   assignTrimmed('prodBatch', form.prodBatch)
   assignTrimmed('serialNo', form.serialNo)
   assignTrimmed('routingCode', form.routingCode)
+  assignTrimmed('plannedOrderId', form.plannedOrderId)
+  assignTrimmed('apsOrderId', form.apsOrderId)
+  assignTrimmed('plannedStartTimeStart', form.plannedStartTimeStart)
+  assignTrimmed('plannedStartTimeEnd', form.plannedStartTimeEnd)
+  assignTrimmed('plannedEndTimeStart', form.plannedEndTimeStart)
+  assignTrimmed('plannedEndTimeEnd', form.plannedEndTimeEnd)
   if (form.status !== undefined && form.status !== null) {
     query.status = form.status
   }
@@ -748,13 +828,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getProductionOrderField(record, 'workCenter') ?? ''
   },
   {
-    title: t('entity.productionorder.prodline'),
-    dataIndex: 'prodLine',
-    key: 'prodLine',
+    title: t('entity.productionorder.prodteam'),
+    dataIndex: 'prodTeam',
+    key: 'prodTeam',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getProductionOrderField(record, 'prodLine') ?? ''
+    customRender: ({ record }: { record: any }) => getProductionOrderField(record, 'prodTeam') ?? ''
   },
   {
     title: t('entity.productionorder.prodbatch'),
@@ -784,6 +864,42 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getProductionOrderField(record, 'routingCode') ?? ''
   },
   {
+    title: t('entity.productionorder.plannedorderid'),
+    dataIndex: 'plannedOrderId',
+    key: 'plannedOrderId',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getProductionOrderField(record, 'plannedOrderId') ?? ''
+  },
+  {
+    title: t('entity.productionorder.apsorderid'),
+    dataIndex: 'apsOrderId',
+    key: 'apsOrderId',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getProductionOrderField(record, 'apsOrderId') ?? ''
+  },
+  {
+    title: t('entity.productionorder.plannedstarttime'),
+    dataIndex: 'plannedStartTime',
+    key: 'plannedStartTime',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getProductionOrderField(record, 'plannedStartTime') ?? ''
+  },
+  {
+    title: t('entity.productionorder.plannedendtime'),
+    dataIndex: 'plannedEndTime',
+    key: 'plannedEndTime',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getProductionOrderField(record, 'plannedEndTime') ?? ''
+  },
+  {
     title: t('entity.productionorder.status'),
     dataIndex: 'status',
     key: 'status',
@@ -799,7 +915,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:manufacturing:output:production:order:change:log:update',
+        permission: 'logistics:manufacturing:output:production:order:update',
         onClick: (record: ProductionOrder) => handleEdit(record)
       },
       {
@@ -807,7 +923,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:manufacturing:output:production:order:change:log:delete',
+        permission: 'logistics:manufacturing:output:production:order:delete',
         onClick: (record: ProductionOrder) => handleDeleteOne(record)
       }
     ]
@@ -841,7 +957,7 @@ const rowSelection = computed(() => ({
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
-    } else if (getProductionOrderId(selectedRow.value) === getProductionOrderId(record)) {
+    } else if (selectedRow.value && getProductionOrderId(selectedRow.value) === getProductionOrderId(record)) {
       selectedRow.value = null
       syncMasterSelection(null)
     }
@@ -895,10 +1011,16 @@ function handleReset() {
   actualEndDateEnd: '',
   priority: undefined as number | undefined,
   workCenter: '',
-  prodLine: '',
+  prodTeam: '',
   prodBatch: '',
   serialNo: '',
   routingCode: '',
+  plannedOrderId: '',
+  apsOrderId: '',
+  plannedStartTimeStart: '',
+  plannedStartTimeEnd: '',
+  plannedEndTimeStart: '',
+  plannedEndTimeEnd: '',
   status: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
@@ -1104,10 +1226,16 @@ function handleAdvancedQueryReset() {
   actualEndDateEnd: '',
   priority: undefined as number | undefined,
   workCenter: '',
-  prodLine: '',
+  prodTeam: '',
   prodBatch: '',
   serialNo: '',
   routingCode: '',
+  plannedOrderId: '',
+  apsOrderId: '',
+  plannedStartTimeStart: '',
+  plannedStartTimeEnd: '',
+  plannedEndTimeStart: '',
+  plannedEndTimeEnd: '',
   status: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',

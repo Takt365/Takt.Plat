@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/quality/complaint
 // 文件名称：customer-satisfaction-survey-item.d.ts
-// 创建时间：2026-06-21
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/complaint 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -228,7 +228,7 @@ export interface CustomerSatisfactionSurveyItemCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -421,6 +421,11 @@ export interface CustomerSatisfactionSurveyItemTemplate {
   followUpAction?: string;
 
   /**
+   * 跟进状态（0=无需跟进，1=待跟进，2=跟进中，3=已完成）
+   */
+  followUpStatus?: number;
+
+  /**
    * 扩展字段JSON
    */
   extField?: string;
@@ -450,7 +455,7 @@ export interface CustomerSatisfactionSurveyItemImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -513,6 +518,11 @@ export interface CustomerSatisfactionSurveyItemImport {
    * 跟进措施
    */
   followUpAction?: string;
+
+  /**
+   * 跟进状态（0=无需跟进，1=待跟进，2=跟进中，3=已完成）
+   */
+  followUpStatus?: number;
 
   /**
    * 扩展字段JSON

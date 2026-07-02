@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcAttachmentI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEcAttachment 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -153,14 +153,14 @@ public class TaktEcAttachmentI18nSeedData : ITaktSeedDataCoordinator
             // entity.ecattachment.accessurl
             new TranslationSeedItem("entity.ecattachment.accessurl", "zh-HK", "访问地址_hk", "访问地址（URL）"),
 
-            // entity.ecattachment.ec
-            new TranslationSeedItem("entity.ecattachment.ec", "en-US", "设变主表_us", "设变主表（多对一）"),
-            // entity.ecattachment.ec
-            new TranslationSeedItem("entity.ecattachment.ec", "ja-JP", "设变主表_jp", "设变主表（多对一）"),
-            // entity.ecattachment.ec
-            new TranslationSeedItem("entity.ecattachment.ec", "zh-CN", "设变主表", "设变主表（多对一）"),
-            // entity.ecattachment.ec
-            new TranslationSeedItem("entity.ecattachment.ec", "zh-HK", "设变主表_hk", "设变主表（多对一）"),
+            // entity.ecattachment.ecgijutsu
+            new TranslationSeedItem("entity.ecattachment.ecgijutsu", "en-US", "设变主表_us", "设变主表（多对一）"),
+            // entity.ecattachment.ecgijutsu
+            new TranslationSeedItem("entity.ecattachment.ecgijutsu", "ja-JP", "设变主表_jp", "设变主表（多对一）"),
+            // entity.ecattachment.ecgijutsu
+            new TranslationSeedItem("entity.ecattachment.ecgijutsu", "zh-CN", "设变主表", "设变主表（多对一）"),
+            // entity.ecattachment.ecgijutsu
+            new TranslationSeedItem("entity.ecattachment.ecgijutsu", "zh-HK", "设变主表_hk", "设变主表（多对一）"),
         };
     }
 

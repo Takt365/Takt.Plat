@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/sop
 // 文件名称：exec.d.ts
-// 创建时间：2026-06-20
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/sop 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,12 @@ export interface SopExec extends CompanyDtoBase {
   sopExecId: string;
 
   /**
-   * 生产工单 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   */
+  plantCode: string;
+
+  /**
+   * 生产工单 ID（关联 TaktProductionOrder.Id，选项 TaktProductionOrders/options）
    */
   productionOrderId?: string;
 
@@ -49,12 +54,12 @@ export interface SopExec extends CompanyDtoBase {
   serialNumber?: string;
 
   /**
-   * 产品/机种物料编码
+   * 产品/机种物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
    */
   materialCode: string;
 
   /**
-   * 工序 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工序 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
    */
   routingItemId: string;
 
@@ -64,12 +69,12 @@ export interface SopExec extends CompanyDtoBase {
   routingItemName?: string;
 
   /**
-   * 工艺段类型（1=SMT，2=自插，3=手插，4=修正，5=总装；字典 logistics_process_segment_type）
+   * 工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
    */
   processSegmentType: number;
 
   /**
-   * 工位 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
    */
   workstationId: string;
 
@@ -79,7 +84,7 @@ export interface SopExec extends CompanyDtoBase {
   workstationName?: string;
 
   /**
-   * 员工 ID（员工卡，序列化为 string 以避免 Javascript 精度问题）
+   * 员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   employeeId: string;
 
@@ -89,7 +94,7 @@ export interface SopExec extends CompanyDtoBase {
   employeeName?: string;
 
   /**
-   * SOP 主档 ID（序列化为 string 以避免 Javascript 精度问题）
+   * SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
    */
   sopId: string;
 
@@ -99,7 +104,7 @@ export interface SopExec extends CompanyDtoBase {
   sopName?: string;
 
   /**
-   * SOP 版本 ID（序列化为 string 以避免 Javascript 精度问题）
+   * SOP 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
    */
   revisionId: string;
 
@@ -114,7 +119,7 @@ export interface SopExec extends CompanyDtoBase {
   revision: string;
 
   /**
-   * 使用语言（zh-CN 简体 / en-US 英文 / ja-JP 日文 / zh-HK 香港繁体；与 TaktCulture.CultureCode 一致）
+   * 使用语言（选项 TaktCultures/options，DictValue=CultureCode）
    */
   contentLang: string;
 
@@ -129,17 +134,17 @@ export interface SopExec extends CompanyDtoBase {
   endedAt?: string;
 
   /**
-   * 自检结果（1=合格，2=不合格，3=不适用；字典 logistics_sop_check_result_type）
+   * 自检结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
    */
   selfCheckResult?: number;
 
   /**
-   * 执行状态（1=进行中，2=完成，3=中断；字典 logistics_sop_exec_status）
+   * 执行状态（字典 logistics_sop_exec_status；1=进行中，2=完成，3=中断）
    */
   execStatus: number;
 
   /**
-   * 当前工步 ID（运行时指针，序列化为 string 以避免 Javascript 精度问题）
+   * 当前工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
    */
   currentStepId?: string;
 
@@ -189,7 +194,12 @@ export interface SopExecQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 生产工单 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   */
+  plantCode?: string;
+
+  /**
+   * 生产工单 ID（关联 TaktProductionOrder.Id，选项 TaktProductionOrders/options）
    */
   productionOrderId?: string;
 
@@ -204,37 +214,37 @@ export interface SopExecQuery extends TaktPagedQuery {
   serialNumber?: string;
 
   /**
-   * 产品/机种物料编码
+   * 产品/机种物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
    */
   materialCode?: string;
 
   /**
-   * 工序 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工序 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
    */
   routingItemId?: string;
 
   /**
-   * 工艺段类型（1=SMT，2=自插，3=手插，4=修正，5=总装；字典 logistics_process_segment_type）
+   * 工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
    */
   processSegmentType?: number;
 
   /**
-   * 工位 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
    */
   workstationId?: string;
 
   /**
-   * 员工 ID（员工卡，序列化为 string 以避免 Javascript 精度问题）
+   * 员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   employeeId?: string;
 
   /**
-   * SOP 主档 ID（序列化为 string 以避免 Javascript 精度问题）
+   * SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
    */
   sopId?: string;
 
   /**
-   * SOP 版本 ID（序列化为 string 以避免 Javascript 精度问题）
+   * SOP 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
    */
   revisionId?: string;
 
@@ -244,7 +254,7 @@ export interface SopExecQuery extends TaktPagedQuery {
   revision?: string;
 
   /**
-   * 使用语言（zh-CN 简体 / en-US 英文 / ja-JP 日文 / zh-HK 香港繁体；与 TaktCulture.CultureCode 一致）
+   * 使用语言（选项 TaktCultures/options，DictValue=CultureCode）
    */
   contentLang?: string;
 
@@ -269,17 +279,17 @@ export interface SopExecQuery extends TaktPagedQuery {
   endedAtEnd?: string;
 
   /**
-   * 自检结果（1=合格，2=不合格，3=不适用；字典 logistics_sop_check_result_type）
+   * 自检结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
    */
   selfCheckResult?: number;
 
   /**
-   * 执行状态（1=进行中，2=完成，3=中断；字典 logistics_sop_exec_status）
+   * 执行状态（字典 logistics_sop_exec_status；1=进行中，2=完成，3=中断）
    */
   execStatus?: number;
 
   /**
-   * 当前工步 ID（运行时指针，序列化为 string 以避免 Javascript 精度问题）
+   * 当前工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
    */
   currentStepId?: string;
 
@@ -323,12 +333,17 @@ export interface SopExecCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
   /**
-   * 生产工单 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   */
+  plantCode: string;
+
+  /**
+   * 生产工单 ID（关联 TaktProductionOrder.Id，选项 TaktProductionOrders/options）
    */
   productionOrderId?: string;
 
@@ -343,37 +358,37 @@ export interface SopExecCreate {
   serialNumber?: string;
 
   /**
-   * 产品/机种物料编码
+   * 产品/机种物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
    */
   materialCode: string;
 
   /**
-   * 工序 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工序 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
    */
   routingItemId: string;
 
   /**
-   * 工艺段类型（1=SMT，2=自插，3=手插，4=修正，5=总装；字典 logistics_process_segment_type）
+   * 工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
    */
   processSegmentType: number;
 
   /**
-   * 工位 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
    */
   workstationId: string;
 
   /**
-   * 员工 ID（员工卡，序列化为 string 以避免 Javascript 精度问题）
+   * 员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   employeeId: string;
 
   /**
-   * SOP 主档 ID（序列化为 string 以避免 Javascript 精度问题）
+   * SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
    */
   sopId: string;
 
   /**
-   * SOP 版本 ID（序列化为 string 以避免 Javascript 精度问题）
+   * SOP 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
    */
   revisionId: string;
 
@@ -383,7 +398,7 @@ export interface SopExecCreate {
   revision: string;
 
   /**
-   * 使用语言（zh-CN 简体 / en-US 英文 / ja-JP 日文 / zh-HK 香港繁体；与 TaktCulture.CultureCode 一致）
+   * 使用语言（选项 TaktCultures/options，DictValue=CultureCode）
    */
   contentLang: string;
 
@@ -398,17 +413,17 @@ export interface SopExecCreate {
   endedAt?: string;
 
   /**
-   * 自检结果（1=合格，2=不合格，3=不适用；字典 logistics_sop_check_result_type）
+   * 自检结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
    */
   selfCheckResult?: number;
 
   /**
-   * 执行状态（1=进行中，2=完成，3=中断；字典 logistics_sop_exec_status）
+   * 执行状态（字典 logistics_sop_exec_status；1=进行中，2=完成，3=中断）
    */
   execStatus: number;
 
   /**
-   * 当前工步 ID（运行时指针，序列化为 string 以避免 Javascript 精度问题）
+   * 当前工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
    */
   currentStepId?: string;
 
@@ -467,7 +482,7 @@ export interface SopExecStatus {
   sopExecId: string;
 
   /**
-   * 执行状态（1=进行中，2=完成，3=中断；字典 logistics_sop_exec_status）
+   * 执行状态（字典 logistics_sop_exec_status；1=进行中，2=完成，3=中断）
    */
   execStatus: number;
 
@@ -491,7 +506,12 @@ export interface SopExecTemplate {
   companyCode?: string;
 
   /**
-   * 生产工单 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   */
+  plantCode?: string;
+
+  /**
+   * 生产工单 ID（关联 TaktProductionOrder.Id，选项 TaktProductionOrders/options）
    */
   productionOrderId?: string;
 
@@ -506,37 +526,37 @@ export interface SopExecTemplate {
   serialNumber?: string;
 
   /**
-   * 产品/机种物料编码
+   * 产品/机种物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
    */
   materialCode?: string;
 
   /**
-   * 工序 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工序 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
    */
   routingItemId?: string;
 
   /**
-   * 工艺段类型（1=SMT，2=自插，3=手插，4=修正，5=总装；字典 logistics_process_segment_type）
+   * 工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
    */
   processSegmentType?: number;
 
   /**
-   * 工位 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
    */
   workstationId?: string;
 
   /**
-   * 员工 ID（员工卡，序列化为 string 以避免 Javascript 精度问题）
+   * 员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   employeeId?: string;
 
   /**
-   * SOP 主档 ID（序列化为 string 以避免 Javascript 精度问题）
+   * SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
    */
   sopId?: string;
 
   /**
-   * SOP 版本 ID（序列化为 string 以避免 Javascript 精度问题）
+   * SOP 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
    */
   revisionId?: string;
 
@@ -546,9 +566,49 @@ export interface SopExecTemplate {
   revision?: string;
 
   /**
-   * 使用语言（zh-CN 简体 / en-US 英文 / ja-JP 日文 / zh-HK 香港繁体；与 TaktCulture.CultureCode 一致）
+   * 使用语言（选项 TaktCultures/options，DictValue=CultureCode）
    */
   contentLang?: string;
+
+  /**
+   * 开始时间
+   */
+  startedAt?: string;
+
+  /**
+   * 结束时间
+   */
+  endedAt?: string;
+
+  /**
+   * 自检结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
+   */
+  selfCheckResult?: number;
+
+  /**
+   * 执行状态（字典 logistics_sop_exec_status；1=进行中，2=完成，3=中断）
+   */
+  execStatus?: number;
+
+  /**
+   * 当前工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
+   */
+  currentStepId?: string;
+
+  /**
+   * 工步执行明细（子表，级联保存）
+   */
+  steps?: SopExecStepCreate[];
+
+  /**
+   * 扫码记录（子表，级联保存）
+   */
+  scans?: SopExecScanCreate[];
+
+  /**
+   * 作业参数（子表，级联保存）
+   */
+  arguments?: SopArgumentCreate[];
 
   /**
    * 扩展字段JSON
@@ -580,12 +640,17 @@ export interface SopExecImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
   /**
-   * 生产工单 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   */
+  plantCode?: string;
+
+  /**
+   * 生产工单 ID（关联 TaktProductionOrder.Id，选项 TaktProductionOrders/options）
    */
   productionOrderId?: string;
 
@@ -600,37 +665,37 @@ export interface SopExecImport {
   serialNumber?: string;
 
   /**
-   * 产品/机种物料编码
+   * 产品/机种物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
    */
   materialCode?: string;
 
   /**
-   * 工序 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工序 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
    */
   routingItemId?: string;
 
   /**
-   * 工艺段类型（1=SMT，2=自插，3=手插，4=修正，5=总装；字典 logistics_process_segment_type）
+   * 工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
    */
   processSegmentType?: number;
 
   /**
-   * 工位 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
    */
   workstationId?: string;
 
   /**
-   * 员工 ID（员工卡，序列化为 string 以避免 Javascript 精度问题）
+   * 员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   employeeId?: string;
 
   /**
-   * SOP 主档 ID（序列化为 string 以避免 Javascript 精度问题）
+   * SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
    */
   sopId?: string;
 
   /**
-   * SOP 版本 ID（序列化为 string 以避免 Javascript 精度问题）
+   * SOP 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
    */
   revisionId?: string;
 
@@ -640,9 +705,49 @@ export interface SopExecImport {
   revision?: string;
 
   /**
-   * 使用语言（zh-CN 简体 / en-US 英文 / ja-JP 日文 / zh-HK 香港繁体；与 TaktCulture.CultureCode 一致）
+   * 使用语言（选项 TaktCultures/options，DictValue=CultureCode）
    */
   contentLang?: string;
+
+  /**
+   * 开始时间
+   */
+  startedAt?: string;
+
+  /**
+   * 结束时间
+   */
+  endedAt?: string;
+
+  /**
+   * 自检结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
+   */
+  selfCheckResult?: number;
+
+  /**
+   * 执行状态（字典 logistics_sop_exec_status；1=进行中，2=完成，3=中断）
+   */
+  execStatus?: number;
+
+  /**
+   * 当前工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
+   */
+  currentStepId?: string;
+
+  /**
+   * 工步执行明细（子表，级联保存）
+   */
+  steps?: SopExecStepCreate[];
+
+  /**
+   * 扫码记录（子表，级联保存）
+   */
+  scans?: SopExecScanCreate[];
+
+  /**
+   * 作业参数（子表，级联保存）
+   */
+  arguments?: SopArgumentCreate[];
 
   /**
    * 扩展字段JSON
@@ -674,7 +779,12 @@ export interface SopExecExport {
   companyCode: string;
 
   /**
-   * 生产工单 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   */
+  plantCode: string;
+
+  /**
+   * 生产工单 ID（关联 TaktProductionOrder.Id，选项 TaktProductionOrders/options）
    */
   productionOrderId?: string;
 
@@ -689,37 +799,37 @@ export interface SopExecExport {
   serialNumber?: string;
 
   /**
-   * 产品/机种物料编码
+   * 产品/机种物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
    */
   materialCode: string;
 
   /**
-   * 工序 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工序 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
    */
   routingItemId: string;
 
   /**
-   * 工艺段类型（1=SMT，2=自插，3=手插，4=修正，5=总装；字典 logistics_process_segment_type）
+   * 工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
    */
   processSegmentType: number;
 
   /**
-   * 工位 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
    */
   workstationId: string;
 
   /**
-   * 员工 ID（员工卡，序列化为 string 以避免 Javascript 精度问题）
+   * 员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   employeeId: string;
 
   /**
-   * SOP 主档 ID（序列化为 string 以避免 Javascript 精度问题）
+   * SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
    */
   sopId: string;
 
   /**
-   * SOP 版本 ID（序列化为 string 以避免 Javascript 精度问题）
+   * SOP 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
    */
   revisionId: string;
 
@@ -729,7 +839,7 @@ export interface SopExecExport {
   revision: string;
 
   /**
-   * 使用语言（zh-CN 简体 / en-US 英文 / ja-JP 日文 / zh-HK 香港繁体；与 TaktCulture.CultureCode 一致）
+   * 使用语言（选项 TaktCultures/options，DictValue=CultureCode）
    */
   contentLang: string;
 
@@ -744,17 +854,17 @@ export interface SopExecExport {
   endedAt?: string;
 
   /**
-   * 自检结果（1=合格，2=不合格，3=不适用；字典 logistics_sop_check_result_type）
+   * 自检结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
    */
   selfCheckResult?: number;
 
   /**
-   * 执行状态（1=进行中，2=完成，3=中断；字典 logistics_sop_exec_status）
+   * 执行状态（字典 logistics_sop_exec_status；1=进行中，2=完成，3=中断）
    */
   execStatus: number;
 
   /**
-   * 当前工步 ID（运行时指针，序列化为 string 以避免 Javascript 精度问题）
+   * 当前工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
    */
   currentStepId?: string;
 

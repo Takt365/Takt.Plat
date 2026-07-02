@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/quality/complaint
 // 文件名称：customer-complaint-handling.d.ts
-// 创建时间：2026-06-21
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/complaint 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,17 +29,22 @@ export interface CustomerComplaintHandling extends CompanyDtoBase {
   customerComplaintHandlingId: string;
 
   /**
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   */
+  plantCode: string;
+
+  /**
    * 客诉处理记录编码（唯一索引）
    */
   complaintHandlingCode: string;
 
   /**
-   * 客诉ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 客诉 ID（关联 TaktCustomerComplaint.Id，选项 TaktCustomerComplaints/options）
    */
   complaintId: string;
 
   /**
-   * 客诉名称（填充字段）
+   * 客诉 名称（填充字段）
    */
   complaintName?: string;
 
@@ -49,12 +54,12 @@ export interface CustomerComplaintHandling extends CompanyDtoBase {
   complaintNo: string;
 
   /**
-   * 客诉明细ID（可选，关联到具体不良项目，序列化为string以避免Javascript精度问题）
+   * 客诉明细 ID（关联 TaktCustomerComplaintItem.Id，选项 TaktCustomerComplaintItems/options）
    */
   complaintItemId?: string;
 
   /**
-   * 客诉明细名称（填充字段）
+   * 客诉明细 名称（填充字段）
    */
   complaintItemName?: string;
 
@@ -119,11 +124,6 @@ export interface CustomerComplaintHandling extends CompanyDtoBase {
   actualCompletionDate?: string;
 
   /**
-   * 处理状态（0=待处理，1=处理中，2=已完成，3=已关闭，4=已驳回）
-   */
-  handlingStatus: number;
-
-  /**
    * 处理成本/损失金额
    */
   handlingCost?: number;
@@ -142,6 +142,11 @@ export interface CustomerComplaintHandling extends CompanyDtoBase {
    * 附件路径（JSON格式，存储相关文件URL列表）
    */
   attachmentPaths?: string;
+
+  /**
+   * 处理状态（0=待处理，1=处理中，2=已完成，3=已关闭，4=已驳回）
+   */
+  handlingStatus: number;
 
   /**
    * 客诉主表 （主表：TaktCustomerComplaint）
@@ -169,12 +174,17 @@ export interface CustomerComplaintHandlingQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   */
+  plantCode?: string;
+
+  /**
    * 客诉处理记录编码（唯一索引）
    */
   complaintHandlingCode?: string;
 
   /**
-   * 客诉ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 客诉 ID（关联 TaktCustomerComplaint.Id，选项 TaktCustomerComplaints/options）
    */
   complaintId?: string;
 
@@ -184,7 +194,7 @@ export interface CustomerComplaintHandlingQuery extends TaktPagedQuery {
   complaintNo?: string;
 
   /**
-   * 客诉明细ID（可选，关联到具体不良项目，序列化为string以避免Javascript精度问题）
+   * 客诉明细 ID（关联 TaktCustomerComplaintItem.Id，选项 TaktCustomerComplaintItems/options）
    */
   complaintItemId?: string;
 
@@ -264,11 +274,6 @@ export interface CustomerComplaintHandlingQuery extends TaktPagedQuery {
   actualCompletionDateEnd?: string;
 
   /**
-   * 处理状态（0=待处理，1=处理中，2=已完成，3=已关闭，4=已驳回）
-   */
-  handlingStatus?: number;
-
-  /**
    * 处理成本/损失金额
    */
   handlingCost?: number;
@@ -287,6 +292,11 @@ export interface CustomerComplaintHandlingQuery extends TaktPagedQuery {
    * 附件路径（JSON格式，存储相关文件URL列表）
    */
   attachmentPaths?: string;
+
+  /**
+   * 处理状态（0=待处理，1=处理中，2=已完成，3=已关闭，4=已驳回）
+   */
+  handlingStatus?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -328,9 +338,14 @@ export interface CustomerComplaintHandlingCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   */
+  plantCode: string;
 
   /**
    * 客诉处理记录编码（唯一索引）
@@ -338,7 +353,7 @@ export interface CustomerComplaintHandlingCreate {
   complaintHandlingCode: string;
 
   /**
-   * 客诉ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 客诉 ID（关联 TaktCustomerComplaint.Id，选项 TaktCustomerComplaints/options）
    */
   complaintId: string;
 
@@ -348,7 +363,7 @@ export interface CustomerComplaintHandlingCreate {
   complaintNo: string;
 
   /**
-   * 客诉明细ID（可选，关联到具体不良项目，序列化为string以避免Javascript精度问题）
+   * 客诉明细 ID（关联 TaktCustomerComplaintItem.Id，选项 TaktCustomerComplaintItems/options）
    */
   complaintItemId?: string;
 
@@ -413,11 +428,6 @@ export interface CustomerComplaintHandlingCreate {
   actualCompletionDate?: string;
 
   /**
-   * 处理状态（0=待处理，1=处理中，2=已完成，3=已关闭，4=已驳回）
-   */
-  handlingStatus: number;
-
-  /**
    * 处理成本/损失金额
    */
   handlingCost?: number;
@@ -436,6 +446,11 @@ export interface CustomerComplaintHandlingCreate {
    * 附件路径（JSON格式，存储相关文件URL列表）
    */
   attachmentPaths?: string;
+
+  /**
+   * 处理状态（0=待处理，1=处理中，2=已完成，3=已关闭，4=已驳回）
+   */
+  handlingStatus: number;
 
   /**
    * 扩展字段JSON
@@ -501,12 +516,17 @@ export interface CustomerComplaintHandlingTemplate {
   companyCode?: string;
 
   /**
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   */
+  plantCode?: string;
+
+  /**
    * 客诉处理记录编码（唯一索引）
    */
   complaintHandlingCode?: string;
 
   /**
-   * 客诉ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 客诉 ID（关联 TaktCustomerComplaint.Id，选项 TaktCustomerComplaints/options）
    */
   complaintId?: string;
 
@@ -516,7 +536,7 @@ export interface CustomerComplaintHandlingTemplate {
   complaintNo?: string;
 
   /**
-   * 客诉明细ID（可选，关联到具体不良项目，序列化为string以避免Javascript精度问题）
+   * 客诉明细 ID（关联 TaktCustomerComplaintItem.Id，选项 TaktCustomerComplaintItems/options）
    */
   complaintItemId?: string;
 
@@ -559,6 +579,51 @@ export interface CustomerComplaintHandlingTemplate {
    * 责任人（人员代码）
    */
   responsibleBy?: string;
+
+  /**
+   * 处理人（人员代码）
+   */
+  handlerBy?: string;
+
+  /**
+   * 处理时间
+   */
+  handlingAt?: string;
+
+  /**
+   * 计划完成日期
+   */
+  plannedCompletionDate?: string;
+
+  /**
+   * 实际完成日期
+   */
+  actualCompletionDate?: string;
+
+  /**
+   * 处理成本/损失金额
+   */
+  handlingCost?: number;
+
+  /**
+   * 客户反馈
+   */
+  customerFeedback?: string;
+
+  /**
+   * 客户满意度（0=不满意，1=一般，2=满意，3=非常满意）
+   */
+  customerSatisfaction?: number;
+
+  /**
+   * 附件路径（JSON格式，存储相关文件URL列表）
+   */
+  attachmentPaths?: string;
+
+  /**
+   * 处理状态（0=待处理，1=处理中，2=已完成，3=已关闭，4=已驳回）
+   */
+  handlingStatus?: number;
 
   /**
    * 扩展字段JSON
@@ -590,9 +655,14 @@ export interface CustomerComplaintHandlingImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   */
+  plantCode?: string;
 
   /**
    * 客诉处理记录编码（唯一索引）
@@ -600,7 +670,7 @@ export interface CustomerComplaintHandlingImport {
   complaintHandlingCode?: string;
 
   /**
-   * 客诉ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 客诉 ID（关联 TaktCustomerComplaint.Id，选项 TaktCustomerComplaints/options）
    */
   complaintId?: string;
 
@@ -610,7 +680,7 @@ export interface CustomerComplaintHandlingImport {
   complaintNo?: string;
 
   /**
-   * 客诉明细ID（可选，关联到具体不良项目，序列化为string以避免Javascript精度问题）
+   * 客诉明细 ID（关联 TaktCustomerComplaintItem.Id，选项 TaktCustomerComplaintItems/options）
    */
   complaintItemId?: string;
 
@@ -655,6 +725,51 @@ export interface CustomerComplaintHandlingImport {
   responsibleBy?: string;
 
   /**
+   * 处理人（人员代码）
+   */
+  handlerBy?: string;
+
+  /**
+   * 处理时间
+   */
+  handlingAt?: string;
+
+  /**
+   * 计划完成日期
+   */
+  plannedCompletionDate?: string;
+
+  /**
+   * 实际完成日期
+   */
+  actualCompletionDate?: string;
+
+  /**
+   * 处理成本/损失金额
+   */
+  handlingCost?: number;
+
+  /**
+   * 客户反馈
+   */
+  customerFeedback?: string;
+
+  /**
+   * 客户满意度（0=不满意，1=一般，2=满意，3=非常满意）
+   */
+  customerSatisfaction?: number;
+
+  /**
+   * 附件路径（JSON格式，存储相关文件URL列表）
+   */
+  attachmentPaths?: string;
+
+  /**
+   * 处理状态（0=待处理，1=处理中，2=已完成，3=已关闭，4=已驳回）
+   */
+  handlingStatus?: number;
+
+  /**
    * 扩展字段JSON
    */
   extField?: string;
@@ -684,12 +799,17 @@ export interface CustomerComplaintHandlingExport {
   companyCode: string;
 
   /**
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   */
+  plantCode: string;
+
+  /**
    * 客诉处理记录编码（唯一索引）
    */
   complaintHandlingCode: string;
 
   /**
-   * 客诉ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 客诉 ID（关联 TaktCustomerComplaint.Id，选项 TaktCustomerComplaints/options）
    */
   complaintId: string;
 
@@ -699,7 +819,7 @@ export interface CustomerComplaintHandlingExport {
   complaintNo: string;
 
   /**
-   * 客诉明细ID（可选，关联到具体不良项目，序列化为string以避免Javascript精度问题）
+   * 客诉明细 ID（关联 TaktCustomerComplaintItem.Id，选项 TaktCustomerComplaintItems/options）
    */
   complaintItemId?: string;
 
@@ -764,11 +884,6 @@ export interface CustomerComplaintHandlingExport {
   actualCompletionDate?: string;
 
   /**
-   * 处理状态（0=待处理，1=处理中，2=已完成，3=已关闭，4=已驳回）
-   */
-  handlingStatus: number;
-
-  /**
    * 处理成本/损失金额
    */
   handlingCost?: number;
@@ -787,6 +902,11 @@ export interface CustomerComplaintHandlingExport {
    * 附件路径（JSON格式，存储相关文件URL列表）
    */
   attachmentPaths?: string;
+
+  /**
+   * 处理状态（0=待处理，1=处理中，2=已完成，3=已关闭，4=已驳回）
+   */
+  handlingStatus: number;
 
   /**
    * 扩展字段JSON

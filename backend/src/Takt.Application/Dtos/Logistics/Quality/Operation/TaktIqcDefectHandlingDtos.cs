@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Operation
 // 文件名称：TaktIqcDefectHandlingDtos.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：IqcDefectHandling 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktIqcDefectHandling 生成，请按需审阅）
 // 
@@ -41,13 +41,13 @@ public class TaktIqcDefectHandlingDto : TaktCompanyDtoBase
     public string IqcDefectHandlingCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// IQC检验单明细ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// IQC检验单明细 ID（关联 TaktIqcOrderItem.Id，选项 TaktIqcOrderItems/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long IqcOrderItemId { get; set; }
 
     /// <summary>
-    /// IQC检验单明细名称（填充字段）
+    /// IQC检验单明细 名称（填充字段）
     /// </summary>
     public string? IqcOrderItemName { get; set; }
 
@@ -112,11 +112,6 @@ public class TaktIqcDefectHandlingDto : TaktCompanyDtoBase
     public DateTime? HandlingAt { get; set; }
 
     /// <summary>
-    /// 处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）
-    /// </summary>
-    public int HandlingStatus { get; set; } = 0;
-
-    /// <summary>
     /// 预防措施/纠正措施
     /// </summary>
     public string? CorrectiveAction { get; set; } = string.Empty;
@@ -125,6 +120,16 @@ public class TaktIqcDefectHandlingDto : TaktCompanyDtoBase
     /// 不良图片（JSON格式，存储不良图片URL列表）
     /// </summary>
     public string? DefectImages { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// </summary>
+    public string? Attachments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）
+    /// </summary>
+    public int HandlingStatus { get; set; } = 0;
 
     /// <summary>
     /// IQC检验单明细（主表）
@@ -160,7 +165,7 @@ public class TaktIqcDefectHandlingQueryDto : TaktPagedQuery
     public string? IqcDefectHandlingCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// IQC检验单明细ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// IQC检验单明细 ID（关联 TaktIqcOrderItem.Id，选项 TaktIqcOrderItems/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? IqcOrderItemId { get; set; }
@@ -231,11 +236,6 @@ public class TaktIqcDefectHandlingQueryDto : TaktPagedQuery
     public DateTime? HandlingAtEnd { get; set; }
 
     /// <summary>
-    /// 处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）
-    /// </summary>
-    public int? HandlingStatus { get; set; }
-
-    /// <summary>
     /// 预防措施/纠正措施
     /// </summary>
     public string? CorrectiveAction { get; set; } = string.Empty;
@@ -244,6 +244,16 @@ public class TaktIqcDefectHandlingQueryDto : TaktPagedQuery
     /// 不良图片（JSON格式，存储不良图片URL列表）
     /// </summary>
     public string? DefectImages { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// </summary>
+    public string? Attachments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）
+    /// </summary>
+    public int? HandlingStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -286,7 +296,7 @@ public class TaktIqcDefectHandlingCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -297,7 +307,7 @@ public class TaktIqcDefectHandlingCreateDto
     public string IqcDefectHandlingCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// IQC检验单明细ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// IQC检验单明细 ID（关联 TaktIqcOrderItem.Id，选项 TaktIqcOrderItems/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long IqcOrderItemId { get; set; }
@@ -366,11 +376,6 @@ public class TaktIqcDefectHandlingCreateDto
     public DateTime? HandlingAt { get; set; }
 
     /// <summary>
-    /// 处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）
-    /// </summary>
-    public int HandlingStatus { get; set; } = 0;
-
-    /// <summary>
     /// 预防措施/纠正措施
     /// </summary>
     public string? CorrectiveAction { get; set; } = string.Empty;
@@ -379,6 +384,16 @@ public class TaktIqcDefectHandlingCreateDto
     /// 不良图片（JSON格式，存储不良图片URL列表）
     /// </summary>
     public string? DefectImages { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// </summary>
+    public string? Attachments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）
+    /// </summary>
+    public int HandlingStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -461,7 +476,7 @@ public class TaktIqcDefectHandlingTemplateDto
     public string? IqcDefectHandlingCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// IQC检验单明细ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// IQC检验单明细 ID（关联 TaktIqcOrderItem.Id，选项 TaktIqcOrderItems/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? IqcOrderItemId { get; set; }
@@ -515,6 +530,36 @@ public class TaktIqcDefectHandlingTemplateDto
     /// 责任人（人员代码）
     /// </summary>
     public string? ResponsibleBy { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 处理人（人员代码）
+    /// </summary>
+    public string? HandlerBy { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 处理时间
+    /// </summary>
+    public DateTime? HandlingAt { get; set; }
+
+    /// <summary>
+    /// 预防措施/纠正措施
+    /// </summary>
+    public string? CorrectiveAction { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 不良图片（JSON格式，存储不良图片URL列表）
+    /// </summary>
+    public string? DefectImages { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// </summary>
+    public string? Attachments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）
+    /// </summary>
+    public int? HandlingStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -544,7 +589,7 @@ public class TaktIqcDefectHandlingImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -554,7 +599,7 @@ public class TaktIqcDefectHandlingImportDto
     public string? IqcDefectHandlingCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// IQC检验单明细ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// IQC检验单明细 ID（关联 TaktIqcOrderItem.Id，选项 TaktIqcOrderItems/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? IqcOrderItemId { get; set; }
@@ -608,6 +653,36 @@ public class TaktIqcDefectHandlingImportDto
     /// 责任人（人员代码）
     /// </summary>
     public string? ResponsibleBy { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 处理人（人员代码）
+    /// </summary>
+    public string? HandlerBy { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 处理时间
+    /// </summary>
+    public DateTime? HandlingAt { get; set; }
+
+    /// <summary>
+    /// 预防措施/纠正措施
+    /// </summary>
+    public string? CorrectiveAction { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 不良图片（JSON格式，存储不良图片URL列表）
+    /// </summary>
+    public string? DefectImages { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// </summary>
+    public string? Attachments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）
+    /// </summary>
+    public int? HandlingStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -648,7 +723,7 @@ public class TaktIqcDefectHandlingExportDto
     public string IqcDefectHandlingCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// IQC检验单明细ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// IQC检验单明细 ID（关联 TaktIqcOrderItem.Id，选项 TaktIqcOrderItems/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long IqcOrderItemId { get; set; }
@@ -714,11 +789,6 @@ public class TaktIqcDefectHandlingExportDto
     public DateTime? HandlingAt { get; set; }
 
     /// <summary>
-    /// 处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）
-    /// </summary>
-    public int HandlingStatus { get; set; } = 0;
-
-    /// <summary>
     /// 预防措施/纠正措施
     /// </summary>
     public string? CorrectiveAction { get; set; } = string.Empty;
@@ -727,6 +797,16 @@ public class TaktIqcDefectHandlingExportDto
     /// 不良图片（JSON格式，存储不良图片URL列表）
     /// </summary>
     public string? DefectImages { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// </summary>
+    public string? Attachments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）
+    /// </summary>
+    public int HandlingStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

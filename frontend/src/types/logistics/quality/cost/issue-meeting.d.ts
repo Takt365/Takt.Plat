@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/quality/cost
 // 文件名称：issue-meeting.d.ts
-// 创建时间：2026-06-21
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/cost 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -258,7 +258,7 @@ export interface QualityIssueMeetingCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -402,9 +402,24 @@ export interface QualityIssueMeetingTemplate {
   lineNumber?: number;
 
   /**
+   * 直接人员费率（元/分钟）
+   */
+  directManpowerCostPerMinute?: number;
+
+  /**
+   * 间接人员费率（元/分钟）
+   */
+  indirectManpowerCostPerMinute?: number;
+
+  /**
    * 讨论调查试验内容(会议记录)
    */
   meetingInvestigationContent?: string;
+
+  /**
+   * 讨论调查试验费用(元)
+   */
+  meetingInvestigationCost?: number;
 
   /**
    * 讨论会使用时间(分钟)
@@ -427,9 +442,24 @@ export interface QualityIssueMeetingTemplate {
   investigationWorkTimeMinutes?: number;
 
   /**
+   * 交通费、旅费（元）
+   */
+  travelCost?: number;
+
+  /**
+   * 其他费用（元）
+   */
+  otherExpenses?: number;
+
+  /**
    * 其他作业時間（分钟）
    */
   otherWorkTimeMinutes?: number;
+
+  /**
+   * 其他设备购入费、工程费、搬运费等（元）
+   */
+  otherApparatusCost?: number;
 
   /**
    * 品质问题対応记录者（会议调查试验记录者）
@@ -466,7 +496,7 @@ export interface QualityIssueMeetingImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -486,9 +516,24 @@ export interface QualityIssueMeetingImport {
   lineNumber?: number;
 
   /**
+   * 直接人员费率（元/分钟）
+   */
+  directManpowerCostPerMinute?: number;
+
+  /**
+   * 间接人员费率（元/分钟）
+   */
+  indirectManpowerCostPerMinute?: number;
+
+  /**
    * 讨论调查试验内容(会议记录)
    */
   meetingInvestigationContent?: string;
+
+  /**
+   * 讨论调查试验费用(元)
+   */
+  meetingInvestigationCost?: number;
 
   /**
    * 讨论会使用时间(分钟)
@@ -511,9 +556,24 @@ export interface QualityIssueMeetingImport {
   investigationWorkTimeMinutes?: number;
 
   /**
+   * 交通费、旅费（元）
+   */
+  travelCost?: number;
+
+  /**
+   * 其他费用（元）
+   */
+  otherExpenses?: number;
+
+  /**
    * 其他作业時間（分钟）
    */
   otherWorkTimeMinutes?: number;
+
+  /**
+   * 其他设备购入费、工程费、搬运费等（元）
+   */
+  otherApparatusCost?: number;
 
   /**
    * 品质问题対応记录者（会议调查试验记录者）

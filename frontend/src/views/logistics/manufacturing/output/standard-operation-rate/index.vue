@@ -69,6 +69,16 @@
       @change="handleTableChange"
       @resize-column="handleResizeColumn"
     >
+      <!-- 字典/开关列渲染 -->
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'standardOperationRateStatus'">
+          <a-switch
+            :checked="getStandardOperationRateField(record, 'standardOperationRateStatus') === 1"
+            :checked-children="t('common.page.button.enable')" :un-checked-children="t('common.page.button.disable')"
+            @change="(checked: unknown) => handleStatusChange(record, Boolean(checked))"
+          />
+        </template>
+      </template>
 
     </TaktSingleTable>
 
@@ -189,12 +199,13 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('status')">
+      <div v-show="isFieldVisible('standardOperationRateStatus')">
       <a-form-item :label="t('entity.standardoperationrate.status')">
-        <a-input-number
-          v-model:value="advancedQueryForm.status"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardoperationrate.status') })"
-          style="width: 100%"
+        <TaktSelect
+          v-model:value="advancedQueryForm.standardOperationRateStatus"
+          dict-type="sys_normal_disable_status"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.standardoperationrate.status') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -204,7 +215,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -215,18 +226,36 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('ExtField')">
-      <a-form-item :label="t('entity.standardoperationrate.extfield')">
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
         <a-textarea
-          v-model:value="advancedQueryForm.ExtField"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.standardoperationrate.extfield') })"
-          :rows="2"
-          allow-clear
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -255,6 +284,7 @@
       @cancel="handleImportCancel"
     >
       <TaktImportFile
+        v-if="importVisible"
         entity-i18n-key="entity.standardoperationrate._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
@@ -295,9 +325,11 @@ import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaul
 import StandardOperationRateForm from './components/standard-operation-rate-form.vue'
 import { getStandardOperationRateList, getStandardOperationRateById, createStandardOperationRate, updateStandardOperationRate, deleteStandardOperationRateById, deleteStandardOperationRateBatch, getStandardOperationRateTemplate, importStandardOperationRate, exportStandardOperationRate, updateStandardOperationRateStatus } from '@/api/logistics/manufacturing/output/standard-operation-rate'
 import type { StandardOperationRate, StandardOperationRateQuery } from '@/types/logistics/manufacturing/output/standard-operation-rate'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -350,10 +382,10 @@ const advancedQueryForm = ref({
   effectiveDateEnd: '',
   expiryDateStart: '',
   expiryDateEnd: '',
-  status: undefined as number | undefined,
+  standardOperationRateStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
@@ -366,10 +398,10 @@ const queryFieldsMeta = computed(() => [
   { key: 'effectiveDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.standardoperationrate.effectivedate')) },
   { key: 'expiryDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.standardoperationrate.expirydate')) },
   { key: 'expiryDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.standardoperationrate.expirydate')) },
-  { key: 'status', label: t('entity.standardoperationrate.status') },
+  { key: 'standardOperationRateStatus', label: t('entity.standardoperationrate.status') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'ExtField', label: t('entity.standardoperationrate.extfield') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -387,6 +419,8 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
+/** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
+const dictDataStore = useDictDataStore()
 
 
 /**
@@ -423,18 +457,19 @@ function buildListQuery(overrides?: Partial<StandardOperationRateQuery>): Standa
   assignTrimmed('effectiveDateEnd', form.effectiveDateEnd)
   assignTrimmed('expiryDateStart', form.expiryDateStart)
   assignTrimmed('expiryDateEnd', form.expiryDateEnd)
-  if (form.status !== undefined && form.status !== null) {
-    query.status = form.status
+  if (form.standardOperationRateStatus !== undefined && form.standardOperationRateStatus !== null) {
+    query.standardOperationRateStatus = form.standardOperationRateStatus
   }
   assignTrimmed('createdAtStart', form.createdAtStart)
   assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('ExtField', form.ExtField)
+  assignTrimmed('extField', form.extField)
   assignTrimmed('remark', form.remark)
   return query
 }
 /** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
+  void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
 
@@ -512,12 +547,11 @@ const columns = computed<TableColumnsType>(() => [
   },
   {
     title: t('entity.standardoperationrate.status'),
-    dataIndex: 'status',
-    key: 'status',
+    dataIndex: 'standardOperationRateStatus',
+    key: 'standardOperationRateStatus',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getStandardOperationRateField(record, 'status') ?? ''
   },
   CreateActionColumn({
     actions: [
@@ -562,7 +596,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: StandardOperationRate, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getStandardOperationRateId(selectedRow.value) === getStandardOperationRateId(record)) {
+    } else if (selectedRow.value && getStandardOperationRateId(selectedRow.value) === getStandardOperationRateId(record)) {
       selectedRow.value = null
     }
   },
@@ -627,10 +661,10 @@ function handleReset() {
   effectiveDateEnd: '',
   expiryDateStart: '',
   expiryDateEnd: '',
-  status: undefined as number | undefined,
+  standardOperationRateStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
   currentPage.value = getTaktDefaultPageIndex()
@@ -705,15 +739,18 @@ async function handleDownloadTemplate(sheetName?: string, fileName?: string): Pr
   return (res as any)?.data ?? res
 }
 
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importStandardOperationRate(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importStandardOperationRate(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
+  }
 }
 
 /** 关闭导入对话框 */
@@ -788,6 +825,30 @@ async function handleDelete() {
     }
   })
 }
+/**
+ * 行内状态切换
+ * @param record 当前行
+ * @param checked 是否启用
+ */
+async function handleStatusChange(record: StandardOperationRate, checked: boolean) {
+  const newVal = checked ? 1 : 0
+  const oldVal = getStandardOperationRateField(record, 'standardOperationRateStatus')
+  const id = getStandardOperationRateId(record)
+  const row = dataSource.value.find((item) => getStandardOperationRateId(item) === id)
+  if (row) {
+    row.standardOperationRateStatus = newVal
+  }
+  try {
+    await updateStandardOperationRateStatus({ standardOperationRateId: id, standardOperationRateStatus: newVal })
+    message.success(t('common.feedback.updated'))
+    
+  } catch (error: unknown) {
+    if (row) {
+      row.standardOperationRateStatus = oldVal
+    }
+    message.error(t('common.feedback.failed'))
+  }
+}
 /** 打开高级查询抽屉 */
 function handleAdvancedQuery() {
   advancedQueryVisible.value = true
@@ -810,10 +871,10 @@ function handleAdvancedQueryReset() {
   effectiveDateEnd: '',
   expiryDateStart: '',
   expiryDateEnd: '',
-  status: undefined as number | undefined,
+  standardOperationRateStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
 }

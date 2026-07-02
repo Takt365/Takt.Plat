@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Planning
 // 文件名称：TaktMasterProductionScheduleI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktMasterProductionSchedule 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktMasterProductionScheduleI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.masterproductionschedule._self", "zh-HK", "主生产计划 MPS 头表信息_hk", "实体名称"),
 
             // entity.masterproductionschedule.plantcode
-            new TranslationSeedItem("entity.masterproductionschedule.plantcode", "en-US", "工厂代码_us", "工厂代码"),
+            new TranslationSeedItem("entity.masterproductionschedule.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
             // entity.masterproductionschedule.plantcode
-            new TranslationSeedItem("entity.masterproductionschedule.plantcode", "ja-JP", "工厂代码_jp", "工厂代码"),
+            new TranslationSeedItem("entity.masterproductionschedule.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
             // entity.masterproductionschedule.plantcode
-            new TranslationSeedItem("entity.masterproductionschedule.plantcode", "zh-CN", "工厂代码", "工厂代码"),
+            new TranslationSeedItem("entity.masterproductionschedule.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
             // entity.masterproductionschedule.plantcode
-            new TranslationSeedItem("entity.masterproductionschedule.plantcode", "zh-HK", "工厂代码_hk", "工厂代码"),
+            new TranslationSeedItem("entity.masterproductionschedule.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
 
             // entity.masterproductionschedule.mpscode
             new TranslationSeedItem("entity.masterproductionschedule.mpscode", "en-US", "MPS编码_us", "MPS 编码"),
@@ -154,13 +154,13 @@ public class TaktMasterProductionScheduleI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.masterproductionschedule.buckettype", "zh-HK", "时间桶粒度_hk", "时间桶粒度（字典 mps_time_bucket_type；0=日，1=周，2=月）"),
 
             // entity.masterproductionschedule.schedulestatus
-            new TranslationSeedItem("entity.masterproductionschedule.schedulestatus", "en-US", "计划状态_us", "计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.masterproductionschedule.schedulestatus", "en-US", "计划状态_us", "计划状态（字典 sys_normal_disable_status；1=启用，0=禁用，2=锁定）"),
             // entity.masterproductionschedule.schedulestatus
-            new TranslationSeedItem("entity.masterproductionschedule.schedulestatus", "ja-JP", "计划状态_jp", "计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.masterproductionschedule.schedulestatus", "ja-JP", "计划状态_jp", "计划状态（字典 sys_normal_disable_status；1=启用，0=禁用，2=锁定）"),
             // entity.masterproductionschedule.schedulestatus
-            new TranslationSeedItem("entity.masterproductionschedule.schedulestatus", "zh-CN", "计划状态", "计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.masterproductionschedule.schedulestatus", "zh-CN", "计划状态", "计划状态（字典 sys_normal_disable_status；1=启用，0=禁用，2=锁定）"),
             // entity.masterproductionschedule.schedulestatus
-            new TranslationSeedItem("entity.masterproductionschedule.schedulestatus", "zh-HK", "计划状态_hk", "计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.masterproductionschedule.schedulestatus", "zh-HK", "计划状态_hk", "计划状态（字典 sys_normal_disable_status；1=启用，0=禁用，2=锁定）"),
 
             // entity.masterproductionschedule.lines
             new TranslationSeedItem("entity.masterproductionschedule.lines", "en-US", "MPS 明细行_us", "MPS 明细行"),

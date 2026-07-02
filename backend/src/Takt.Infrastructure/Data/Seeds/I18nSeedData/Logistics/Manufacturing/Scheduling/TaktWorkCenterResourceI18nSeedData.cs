@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Scheduling
 // 文件名称：TaktWorkCenterResourceI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktWorkCenterResource 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,22 +91,22 @@ public class TaktWorkCenterResourceI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.workcenterresource._self", "zh-HK", "工作中心资源信息_hk", "实体名称"),
 
             // entity.workcenterresource.workcenterid
-            new TranslationSeedItem("entity.workcenterresource.workcenterid", "en-US", "工作中心ID_us", "工作中心 ID（主子表关系）"),
+            new TranslationSeedItem("entity.workcenterresource.workcenterid", "en-US", "工作中心ID_us", "工作中心 ID（主子表关系，关联 TaktWorkCenter.Id，选项 TaktWorkCenters/options）"),
             // entity.workcenterresource.workcenterid
-            new TranslationSeedItem("entity.workcenterresource.workcenterid", "ja-JP", "工作中心ID_jp", "工作中心 ID（主子表关系）"),
+            new TranslationSeedItem("entity.workcenterresource.workcenterid", "ja-JP", "工作中心ID_jp", "工作中心 ID（主子表关系，关联 TaktWorkCenter.Id，选项 TaktWorkCenters/options）"),
             // entity.workcenterresource.workcenterid
-            new TranslationSeedItem("entity.workcenterresource.workcenterid", "zh-CN", "工作中心ID", "工作中心 ID（主子表关系）"),
+            new TranslationSeedItem("entity.workcenterresource.workcenterid", "zh-CN", "工作中心ID", "工作中心 ID（主子表关系，关联 TaktWorkCenter.Id，选项 TaktWorkCenters/options）"),
             // entity.workcenterresource.workcenterid
-            new TranslationSeedItem("entity.workcenterresource.workcenterid", "zh-HK", "工作中心ID_hk", "工作中心 ID（主子表关系）"),
+            new TranslationSeedItem("entity.workcenterresource.workcenterid", "zh-HK", "工作中心ID_hk", "工作中心 ID（主子表关系，关联 TaktWorkCenter.Id，选项 TaktWorkCenters/options）"),
 
             // entity.workcenterresource.workcentercode
-            new TranslationSeedItem("entity.workcenterresource.workcentercode", "en-US", "工作中心编码_us", "工作中心编码（冗余）"),
+            new TranslationSeedItem("entity.workcenterresource.workcentercode", "en-US", "工作中心编码_us", "工作中心编码（关联 TaktWorkCenter.WorkCenterCode，冗余；选项 TaktWorkCenters/options，DictValue=WorkCenterCode）"),
             // entity.workcenterresource.workcentercode
-            new TranslationSeedItem("entity.workcenterresource.workcentercode", "ja-JP", "工作中心编码_jp", "工作中心编码（冗余）"),
+            new TranslationSeedItem("entity.workcenterresource.workcentercode", "ja-JP", "工作中心编码_jp", "工作中心编码（关联 TaktWorkCenter.WorkCenterCode，冗余；选项 TaktWorkCenters/options，DictValue=WorkCenterCode）"),
             // entity.workcenterresource.workcentercode
-            new TranslationSeedItem("entity.workcenterresource.workcentercode", "zh-CN", "工作中心编码", "工作中心编码（冗余）"),
+            new TranslationSeedItem("entity.workcenterresource.workcentercode", "zh-CN", "工作中心编码", "工作中心编码（关联 TaktWorkCenter.WorkCenterCode，冗余；选项 TaktWorkCenters/options，DictValue=WorkCenterCode）"),
             // entity.workcenterresource.workcentercode
-            new TranslationSeedItem("entity.workcenterresource.workcentercode", "zh-HK", "工作中心编码_hk", "工作中心编码（冗余）"),
+            new TranslationSeedItem("entity.workcenterresource.workcentercode", "zh-HK", "工作中心编码_hk", "工作中心编码（关联 TaktWorkCenter.WorkCenterCode，冗余；选项 TaktWorkCenters/options，DictValue=WorkCenterCode）"),
 
             // entity.workcenterresource.resourcecode
             new TranslationSeedItem("entity.workcenterresource.resourcecode", "en-US", "资源编码_us", "资源编码"),

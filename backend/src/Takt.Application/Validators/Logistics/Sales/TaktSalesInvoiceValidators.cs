@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Sales
 // 文件名称：TaktSalesInvoiceValidators.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SalesInvoice 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktSalesInvoice 生成，请按需审阅）
 // 
@@ -37,20 +37,19 @@ public class TaktSalesInvoiceCreateValidator : AbstractValidator<TaktSalesInvoic
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.PlantCode)
             .NotEmpty().WithMessage("工厂代码不能为空")
-            .MaximumLength(50).WithMessage("工厂代码长度不能超过50个字符");
-        RuleFor(x => x.SalesInvoiceCode)
-            .NotEmpty().WithMessage("销售发票编码不能为空")
-            .MaximumLength(50).WithMessage("销售发票编码长度不能超过50个字符");
-        RuleFor(x => x.SalesOrderCode)
-            .MaximumLength(50).WithMessage("关联销售订单编码长度不能超过50个字符");
+            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
+        RuleFor(x => x.YearMonth)
+            .NotEmpty().WithMessage("年度期间不能为空")
+            .MaximumLength(6).WithMessage("年度期间长度不能超过6个字符");
         RuleFor(x => x.CustomerCode)
             .NotEmpty().WithMessage("客户编码不能为空")
-            .MaximumLength(50).WithMessage("客户编码长度不能超过50个字符");
+            .MaximumLength(40).WithMessage("客户编码长度不能超过40个字符");
         RuleFor(x => x.CustomerName)
             .NotEmpty().WithMessage("客户名称不能为空")
             .MaximumLength(200).WithMessage("客户名称长度不能超过200个字符");
-        RuleFor(x => x.TaxInvoiceNo)
-            .MaximumLength(50).WithMessage("发票号码长度不能超过50个字符");
+        RuleFor(x => x.AccountingDocumentCode)
+            .NotEmpty().WithMessage("会计凭证编号不能为空")
+            .MaximumLength(40).WithMessage("会计凭证编号长度不能超过40个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -74,6 +73,31 @@ public class TaktSalesInvoiceUpdateValidator : AbstractValidator<TaktSalesInvoic
     {
         RuleFor(x => x.SalesInvoiceId)
             .GreaterThan(0).WithMessage("SalesInvoiceID无效");
+        RuleFor(x => x.TenantCode)
+            .NotEmpty().WithMessage("租户编码不能为空")
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.CompanyCode)
+            .NotEmpty().WithMessage("公司代码不能为空")
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.PlantCode)
+            .NotEmpty().WithMessage("工厂代码不能为空")
+            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
+        RuleFor(x => x.YearMonth)
+            .NotEmpty().WithMessage("年度期间不能为空")
+            .MaximumLength(6).WithMessage("年度期间长度不能超过6个字符");
+        RuleFor(x => x.CustomerCode)
+            .NotEmpty().WithMessage("客户编码不能为空")
+            .MaximumLength(40).WithMessage("客户编码长度不能超过40个字符");
+        RuleFor(x => x.CustomerName)
+            .NotEmpty().WithMessage("客户名称不能为空")
+            .MaximumLength(200).WithMessage("客户名称长度不能超过200个字符");
+        RuleFor(x => x.AccountingDocumentCode)
+            .NotEmpty().WithMessage("会计凭证编号不能为空")
+            .MaximumLength(40).WithMessage("会计凭证编号长度不能超过40个字符");
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
     }
 }
 
@@ -97,20 +121,19 @@ public class TaktSalesInvoiceImportValidator : AbstractValidator<TaktSalesInvoic
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
         RuleFor(x => x.PlantCode)
             .NotEmpty().WithMessage("工厂代码不能为空")
-            .MaximumLength(50).WithMessage("工厂代码长度不能超过50个字符");
-        RuleFor(x => x.SalesInvoiceCode)
-            .NotEmpty().WithMessage("销售发票编码不能为空")
-            .MaximumLength(50).WithMessage("销售发票编码长度不能超过50个字符");
-        RuleFor(x => x.SalesOrderCode)
-            .MaximumLength(50).WithMessage("关联销售订单编码长度不能超过50个字符").When(x => !string.IsNullOrWhiteSpace(x.SalesOrderCode));
+            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
+        RuleFor(x => x.YearMonth)
+            .NotEmpty().WithMessage("年度期间不能为空")
+            .MaximumLength(6).WithMessage("年度期间长度不能超过6个字符");
         RuleFor(x => x.CustomerCode)
             .NotEmpty().WithMessage("客户编码不能为空")
-            .MaximumLength(50).WithMessage("客户编码长度不能超过50个字符");
+            .MaximumLength(40).WithMessage("客户编码长度不能超过40个字符");
         RuleFor(x => x.CustomerName)
             .NotEmpty().WithMessage("客户名称不能为空")
             .MaximumLength(200).WithMessage("客户名称长度不能超过200个字符");
-        RuleFor(x => x.TaxInvoiceNo)
-            .MaximumLength(50).WithMessage("发票号码长度不能超过50个字符").When(x => !string.IsNullOrWhiteSpace(x.TaxInvoiceNo));
+        RuleFor(x => x.AccountingDocumentCode)
+            .NotEmpty().WithMessage("会计凭证编号不能为空")
+            .MaximumLength(40).WithMessage("会计凭证编号长度不能超过40个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

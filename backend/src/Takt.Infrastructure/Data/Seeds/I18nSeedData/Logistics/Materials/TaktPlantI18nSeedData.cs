@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Materials
 // 文件名称：TaktPlantI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPlant 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -127,58 +127,40 @@ public class TaktPlantI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.plant.codealias", "zh-HK", "编码代号_hk", "编码代号（如 TKC、TCJ、DTA；前端字典录入）"),
 
             // entity.plant.defaultculture
-            new TranslationSeedItem("entity.plant.defaultculture", "en-US", "默认区域文化编码_us", "默认区域文化编码（BCP47，如 zh-CN、en-US、ja-JP、zh-HK）"),
+            new TranslationSeedItem("entity.plant.defaultculture", "en-US", "区域文化_us", "区域文化编码（字典 sys_culture_code，选项 TaktCultures/options，DictValue=CultureCode）"),
             // entity.plant.defaultculture
-            new TranslationSeedItem("entity.plant.defaultculture", "ja-JP", "默认区域文化编码_jp", "默认区域文化编码（BCP47，如 zh-CN、en-US、ja-JP、zh-HK）"),
+            new TranslationSeedItem("entity.plant.defaultculture", "ja-JP", "区域文化_jp", "区域文化编码（字典 sys_culture_code，选项 TaktCultures/options，DictValue=CultureCode）"),
             // entity.plant.defaultculture
-            new TranslationSeedItem("entity.plant.defaultculture", "zh-CN", "默认区域文化编码", "默认区域文化编码（BCP47，如 zh-CN、en-US、ja-JP、zh-HK）"),
+            new TranslationSeedItem("entity.plant.defaultculture", "zh-CN", "区域文化", "区域文化编码（字典 sys_culture_code，选项 TaktCultures/options，DictValue=CultureCode）"),
             // entity.plant.defaultculture
-            new TranslationSeedItem("entity.plant.defaultculture", "zh-HK", "默认区域文化编码_hk", "默认区域文化编码（BCP47，如 zh-CN、en-US、ja-JP、zh-HK）"),
-
-            // entity.plant.type
-            new TranslationSeedItem("entity.plant.type", "en-US", "工厂类型_us", "工厂类型"),
-            // entity.plant.type
-            new TranslationSeedItem("entity.plant.type", "ja-JP", "工厂类型_jp", "工厂类型"),
-            // entity.plant.type
-            new TranslationSeedItem("entity.plant.type", "zh-CN", "工厂类型", "工厂类型"),
-            // entity.plant.type
-            new TranslationSeedItem("entity.plant.type", "zh-HK", "工厂类型_hk", "工厂类型"),
-
-            // entity.plant.relatedcompany
-            new TranslationSeedItem("entity.plant.relatedcompany", "en-US", "关联公司代码_us", "关联公司代码（如 2300、2400；与公司 RelatedPlant 对称）"),
-            // entity.plant.relatedcompany
-            new TranslationSeedItem("entity.plant.relatedcompany", "ja-JP", "关联公司代码_jp", "关联公司代码（如 2300、2400；与公司 RelatedPlant 对称）"),
-            // entity.plant.relatedcompany
-            new TranslationSeedItem("entity.plant.relatedcompany", "zh-CN", "关联公司代码", "关联公司代码（如 2300、2400；与公司 RelatedPlant 对称）"),
-            // entity.plant.relatedcompany
-            new TranslationSeedItem("entity.plant.relatedcompany", "zh-HK", "关联公司代码_hk", "关联公司代码（如 2300、2400；与公司 RelatedPlant 对称）"),
+            new TranslationSeedItem("entity.plant.defaultculture", "zh-HK", "区域文化_hk", "区域文化编码（字典 sys_culture_code，选项 TaktCultures/options，DictValue=CultureCode）"),
 
             // entity.plant.enterprisenature
-            new TranslationSeedItem("entity.plant.enterprisenature", "en-US", "企业性质（登记注册类型代码）_us", "企业性质（统计用登记注册类型代码，国统字〔1998〕200号）"),
+            new TranslationSeedItem("entity.plant.enterprisenature", "en-US", "企业性质_us", "企业性质（字典 sys_enterprise_nature_type，DictValue=150 等）"),
             // entity.plant.enterprisenature
-            new TranslationSeedItem("entity.plant.enterprisenature", "ja-JP", "企业性质（登记注册类型代码）_jp", "企业性质（统计用登记注册类型代码，国统字〔1998〕200号）"),
+            new TranslationSeedItem("entity.plant.enterprisenature", "ja-JP", "企业性质_jp", "企业性质（字典 sys_enterprise_nature_type，DictValue=150 等）"),
             // entity.plant.enterprisenature
-            new TranslationSeedItem("entity.plant.enterprisenature", "zh-CN", "企业性质（登记注册类型代码）", "企业性质（统计用登记注册类型代码，国统字〔1998〕200号）"),
+            new TranslationSeedItem("entity.plant.enterprisenature", "zh-CN", "企业性质", "企业性质（字典 sys_enterprise_nature_type，DictValue=150 等）"),
             // entity.plant.enterprisenature
-            new TranslationSeedItem("entity.plant.enterprisenature", "zh-HK", "企业性质（登记注册类型代码）_hk", "企业性质（统计用登记注册类型代码，国统字〔1998〕200号）"),
+            new TranslationSeedItem("entity.plant.enterprisenature", "zh-HK", "企业性质_hk", "企业性质（字典 sys_enterprise_nature_type，DictValue=150 等）"),
 
             // entity.plant.industryattribute
-            new TranslationSeedItem("entity.plant.industryattribute", "en-US", "行业属性（国民经济行业门类）_us", "行业属性（GB/T 4754-2017 国民经济行业分类门类）"),
+            new TranslationSeedItem("entity.plant.industryattribute", "en-US", "行业属性_us", "行业属性（字典 sys_industry_attribute_type，DictValue=C 等）"),
             // entity.plant.industryattribute
-            new TranslationSeedItem("entity.plant.industryattribute", "ja-JP", "行业属性（国民经济行业门类）_jp", "行业属性（GB/T 4754-2017 国民经济行业分类门类）"),
+            new TranslationSeedItem("entity.plant.industryattribute", "ja-JP", "行业属性_jp", "行业属性（字典 sys_industry_attribute_type，DictValue=C 等）"),
             // entity.plant.industryattribute
-            new TranslationSeedItem("entity.plant.industryattribute", "zh-CN", "行业属性（国民经济行业门类）", "行业属性（GB/T 4754-2017 国民经济行业分类门类）"),
+            new TranslationSeedItem("entity.plant.industryattribute", "zh-CN", "行业属性", "行业属性（字典 sys_industry_attribute_type，DictValue=C 等）"),
             // entity.plant.industryattribute
-            new TranslationSeedItem("entity.plant.industryattribute", "zh-HK", "行业属性（国民经济行业门类）_hk", "行业属性（GB/T 4754-2017 国民经济行业分类门类）"),
+            new TranslationSeedItem("entity.plant.industryattribute", "zh-HK", "行业属性_hk", "行业属性（字典 sys_industry_attribute_type，DictValue=C 等）"),
 
             // entity.plant.enterprisescale
-            new TranslationSeedItem("entity.plant.enterprisescale", "en-US", "企业规模（大中小微型代码）_us", "企业规模（统计上大中小微型划分代码 1–4）"),
+            new TranslationSeedItem("entity.plant.enterprisescale", "en-US", "企业规模_us", "企业规模（字典 sys_enterprise_scale_type，DictValue=M 等）"),
             // entity.plant.enterprisescale
-            new TranslationSeedItem("entity.plant.enterprisescale", "ja-JP", "企业规模（大中小微型代码）_jp", "企业规模（统计上大中小微型划分代码 1–4）"),
+            new TranslationSeedItem("entity.plant.enterprisescale", "ja-JP", "企业规模_jp", "企业规模（字典 sys_enterprise_scale_type，DictValue=M 等）"),
             // entity.plant.enterprisescale
-            new TranslationSeedItem("entity.plant.enterprisescale", "zh-CN", "企业规模（大中小微型代码）", "企业规模（统计上大中小微型划分代码 1–4）"),
+            new TranslationSeedItem("entity.plant.enterprisescale", "zh-CN", "企业规模", "企业规模（字典 sys_enterprise_scale_type，DictValue=M 等）"),
             // entity.plant.enterprisescale
-            new TranslationSeedItem("entity.plant.enterprisescale", "zh-HK", "企业规模（大中小微型代码）_hk", "企业规模（统计上大中小微型划分代码 1–4）"),
+            new TranslationSeedItem("entity.plant.enterprisescale", "zh-HK", "企业规模_hk", "企业规模（字典 sys_enterprise_scale_type，DictValue=M 等）"),
 
             // entity.plant.businessscope
             new TranslationSeedItem("entity.plant.businessscope", "en-US", "经营范围_us", "经营范围"),
@@ -424,22 +406,22 @@ public class TaktPlantI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.plant.closingdate", "zh-HK", "关闭日期_hk", "关闭日期（注销/停业；未关闭则为 null）"),
 
             // entity.plant.existence
-            new TranslationSeedItem("entity.plant.existence", "en-US", "存续状态（登记状态代码）_us", "存续状态（市场主体登记状态）"),
+            new TranslationSeedItem("entity.plant.existence", "en-US", "存续状态_us", "存续状态（字典 sys_entity_existence_status；1=存续（在营），2=吊销，3=注销，4=迁出，5=停业）"),
             // entity.plant.existence
-            new TranslationSeedItem("entity.plant.existence", "ja-JP", "存续状态（登记状态代码）_jp", "存续状态（市场主体登记状态）"),
+            new TranslationSeedItem("entity.plant.existence", "ja-JP", "存续状态_jp", "存续状态（字典 sys_entity_existence_status；1=存续（在营），2=吊销，3=注销，4=迁出，5=停业）"),
             // entity.plant.existence
-            new TranslationSeedItem("entity.plant.existence", "zh-CN", "存续状态（登记状态代码）", "存续状态（市场主体登记状态）"),
+            new TranslationSeedItem("entity.plant.existence", "zh-CN", "存续状态", "存续状态（字典 sys_entity_existence_status；1=存续（在营），2=吊销，3=注销，4=迁出，5=停业）"),
             // entity.plant.existence
-            new TranslationSeedItem("entity.plant.existence", "zh-HK", "存续状态（登记状态代码）_hk", "存续状态（市场主体登记状态）"),
+            new TranslationSeedItem("entity.plant.existence", "zh-HK", "存续状态_hk", "存续状态（字典 sys_entity_existence_status；1=存续（在营），2=吊销，3=注销，4=迁出，5=停业）"),
 
-            // entity.plant.status
-            new TranslationSeedItem("entity.plant.status", "en-US", "工厂状态_us", "工厂状态"),
-            // entity.plant.status
-            new TranslationSeedItem("entity.plant.status", "ja-JP", "工厂状态_jp", "工厂状态"),
-            // entity.plant.status
-            new TranslationSeedItem("entity.plant.status", "zh-CN", "工厂状态", "工厂状态"),
-            // entity.plant.status
-            new TranslationSeedItem("entity.plant.status", "zh-HK", "工厂状态_hk", "工厂状态"),
+            // entity.plant.relatedcompany
+            new TranslationSeedItem("entity.plant.relatedcompany", "en-US", "关联公司_us", "关联公司（关联 TaktCompany.CompanyCode，选项 TaktCompanies/options）"),
+            // entity.plant.relatedcompany
+            new TranslationSeedItem("entity.plant.relatedcompany", "ja-JP", "关联公司_jp", "关联公司（关联 TaktCompany.CompanyCode，选项 TaktCompanies/options）"),
+            // entity.plant.relatedcompany
+            new TranslationSeedItem("entity.plant.relatedcompany", "zh-CN", "关联公司", "关联公司（关联 TaktCompany.CompanyCode，选项 TaktCompanies/options）"),
+            // entity.plant.relatedcompany
+            new TranslationSeedItem("entity.plant.relatedcompany", "zh-HK", "关联公司_hk", "关联公司（关联 TaktCompany.CompanyCode，选项 TaktCompanies/options）"),
 
             // entity.plant.sortorder
             new TranslationSeedItem("entity.plant.sortorder", "en-US", "排序号_us", "排序号（越小越靠前）"),
@@ -449,6 +431,15 @@ public class TaktPlantI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.plant.sortorder", "zh-CN", "排序号", "排序号（越小越靠前）"),
             // entity.plant.sortorder
             new TranslationSeedItem("entity.plant.sortorder", "zh-HK", "排序号_hk", "排序号（越小越靠前）"),
+
+            // entity.plant.status
+            new TranslationSeedItem("entity.plant.status", "en-US", "工厂状态_us", "工厂状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）"),
+            // entity.plant.status
+            new TranslationSeedItem("entity.plant.status", "ja-JP", "工厂状态_jp", "工厂状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）"),
+            // entity.plant.status
+            new TranslationSeedItem("entity.plant.status", "zh-CN", "工厂状态", "工厂状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）"),
+            // entity.plant.status
+            new TranslationSeedItem("entity.plant.status", "zh-HK", "工厂状态_hk", "工厂状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）"),
         };
     }
 

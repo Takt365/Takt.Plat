@@ -71,7 +71,7 @@ public class TaktNotificationHub : Hub
             var companyCode = await ResolveCompanyCodeAsync();
             var connectionId = Context.ConnectionId ?? string.Empty;
             var httpContext = Context.GetHttpContext();
-            var (connectIp, connectLocation) = TaktLocationHelper.ResolveClientIpAndLocationForLog(httpContext);
+            var (connectIp, connectLocation) = TaktHttpAuditHelper.ResolveClientIpAndLocation(httpContext);
             var connectTime = DateTime.Now;
 
             await Groups.AddToGroupAsync(connectionId, TaktSignalRGroupNames.UserGroup(companyCode, userName));
@@ -145,8 +145,8 @@ public class TaktNotificationHub : Hub
         string toUserName,
         string messageContent,
         string? messageTitle = null,
-        int messageType = 1,
-        int? messageGroup = null)
+        string messageType = "text",
+        string messageGroup = "message")
     {
         try
         {
@@ -162,7 +162,7 @@ public class TaktNotificationHub : Hub
                 MessageTitle = messageTitle ?? string.Empty,
                 MessageContent = messageContent,
                 MessageType = messageType,
-                MessageGroup = messageGroup ?? 1,
+                MessageGroup = messageGroup,
                 ReadStatus = 0,
                 SendTime = DateTime.Now,
             });
@@ -199,8 +199,8 @@ public class TaktNotificationHub : Hub
     public async Task BroadcastMessage(
         string messageContent,
         string? messageTitle = null,
-        int messageType = 4,
-        int messageGroup = 4)
+        string messageType = "system",
+        string messageGroup = "message")
     {
         try
         {
@@ -316,11 +316,6 @@ public class TaktNotificationHub : Hub
     private (long? UserId, string? UserName) ResolveUserFromContext()
     {
         var principal = Context.User ?? TaktUserContext.HubInvocationPrincipal;
-        var sub = principal?.FindFirst("sub")?.Value ?? principal?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        var name = principal?.FindFirst("name")?.Value ?? principal?.FindFirst(ClaimTypes.Name)?.Value;
-
-        long? userId = long.TryParse(sub, out var parsedId) ? parsedId : _userContext.UserId;
-        var userName = !string.IsNullOrWhiteSpace(name) ? name : _userContext.UserName;
-        return (userId, userName);
+        return TaktUserContext.ResolveUserFromPrincipal(principal, _userContext.UserId, _userContext.UserName);
     }
 }

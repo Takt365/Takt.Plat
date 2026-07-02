@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/quality/operation
 // 文件名称：fqc-defect-handling.d.ts
-// 创建时间：2026-06-21
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/operation 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -34,12 +34,12 @@ export interface FqcDefectHandling extends CompanyDtoBase {
   fqcDefectHandlingCode: string;
 
   /**
-   * FQC检验单明细ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * FQC检验单明细 ID（关联 TaktFqcOrderItem.Id，选项 TaktFqcOrderItems/options）
    */
   fqcOrderItemId: string;
 
   /**
-   * FQC检验单明细名称（填充字段）
+   * FQC检验单明细 名称（填充字段）
    */
   fqcOrderItemName?: string;
 
@@ -54,7 +54,7 @@ export interface FqcDefectHandling extends CompanyDtoBase {
   lineNumber: number;
 
   /**
-   * 不良类型（0=轻微，1=一般，2=严重，3=致命）
+   * 不良类型（字典 logistics_quality_defect_type）
    */
   defectType: number;
 
@@ -74,7 +74,7 @@ export interface FqcDefectHandling extends CompanyDtoBase {
   defectQuantity: number;
 
   /**
-   * 处理方式（0=返工，1=返修，2=让步接收，3=退货，4=报废，5=挑选使用）
+   * 处理方式（字典 logistics_quality_defect_handling_method）
    */
   handlingMethod: number;
 
@@ -84,17 +84,17 @@ export interface FqcDefectHandling extends CompanyDtoBase {
   handlingDescription?: string;
 
   /**
-   * 责任部门
+   * 责任部门（选项 TaktDepts/tree-options，DictValue=DeptCode）
    */
   responsibleDept?: string;
 
   /**
-   * 责任人（人员代码）
+   * 责任人（选项 TaktEmployees/options，DictValue=EmployeeCode）
    */
   responsibleBy?: string;
 
   /**
-   * 处理人（人员代码）
+   * 处理人（选项 TaktEmployees/options，DictValue=EmployeeCode）
    */
   handlerBy?: string;
 
@@ -102,11 +102,6 @@ export interface FqcDefectHandling extends CompanyDtoBase {
    * 处理时间
    */
   handlingAt?: string;
-
-  /**
-   * 处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）
-   */
-  handlingStatus: number;
 
   /**
    * 预防措施/纠正措施
@@ -117,6 +112,16 @@ export interface FqcDefectHandling extends CompanyDtoBase {
    * 不良图片（JSON格式，存储不良图片URL列表）
    */
   defectImages?: string;
+
+  /**
+   * 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+   */
+  attachments?: string;
+
+  /**
+   * 处理状态（字典 logistics_quality_defect_handling_status）
+   */
+  handlingStatus: number;
 
   /**
    * FQC检验单明细（主表） （主表：TaktFqcOrderItem）
@@ -149,7 +154,7 @@ export interface FqcDefectHandlingQuery extends TaktPagedQuery {
   fqcDefectHandlingCode?: string;
 
   /**
-   * FQC检验单明细ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * FQC检验单明细 ID（关联 TaktFqcOrderItem.Id，选项 TaktFqcOrderItems/options）
    */
   fqcOrderItemId?: string;
 
@@ -164,7 +169,7 @@ export interface FqcDefectHandlingQuery extends TaktPagedQuery {
   lineNumber?: number;
 
   /**
-   * 不良类型（0=轻微，1=一般，2=严重，3=致命）
+   * 不良类型（字典 logistics_quality_defect_type）
    */
   defectType?: number;
 
@@ -184,7 +189,7 @@ export interface FqcDefectHandlingQuery extends TaktPagedQuery {
   defectQuantity?: number;
 
   /**
-   * 处理方式（0=返工，1=返修，2=让步接收，3=退货，4=报废，5=挑选使用）
+   * 处理方式（字典 logistics_quality_defect_handling_method）
    */
   handlingMethod?: number;
 
@@ -194,17 +199,17 @@ export interface FqcDefectHandlingQuery extends TaktPagedQuery {
   handlingDescription?: string;
 
   /**
-   * 责任部门
+   * 责任部门（选项 TaktDepts/tree-options，DictValue=DeptCode）
    */
   responsibleDept?: string;
 
   /**
-   * 责任人（人员代码）
+   * 责任人（选项 TaktEmployees/options，DictValue=EmployeeCode）
    */
   responsibleBy?: string;
 
   /**
-   * 处理人（人员代码）
+   * 处理人（选项 TaktEmployees/options，DictValue=EmployeeCode）
    */
   handlerBy?: string;
 
@@ -219,11 +224,6 @@ export interface FqcDefectHandlingQuery extends TaktPagedQuery {
   handlingAtEnd?: string;
 
   /**
-   * 处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）
-   */
-  handlingStatus?: number;
-
-  /**
    * 预防措施/纠正措施
    */
   correctiveAction?: string;
@@ -232,6 +232,16 @@ export interface FqcDefectHandlingQuery extends TaktPagedQuery {
    * 不良图片（JSON格式，存储不良图片URL列表）
    */
   defectImages?: string;
+
+  /**
+   * 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+   */
+  attachments?: string;
+
+  /**
+   * 处理状态（字典 logistics_quality_defect_handling_status）
+   */
+  handlingStatus?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -273,7 +283,7 @@ export interface FqcDefectHandlingCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -283,7 +293,7 @@ export interface FqcDefectHandlingCreate {
   fqcDefectHandlingCode: string;
 
   /**
-   * FQC检验单明细ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * FQC检验单明细 ID（关联 TaktFqcOrderItem.Id，选项 TaktFqcOrderItems/options）
    */
   fqcOrderItemId: string;
 
@@ -298,7 +308,7 @@ export interface FqcDefectHandlingCreate {
   lineNumber: number;
 
   /**
-   * 不良类型（0=轻微，1=一般，2=严重，3=致命）
+   * 不良类型（字典 logistics_quality_defect_type）
    */
   defectType: number;
 
@@ -318,7 +328,7 @@ export interface FqcDefectHandlingCreate {
   defectQuantity: number;
 
   /**
-   * 处理方式（0=返工，1=返修，2=让步接收，3=退货，4=报废，5=挑选使用）
+   * 处理方式（字典 logistics_quality_defect_handling_method）
    */
   handlingMethod: number;
 
@@ -328,17 +338,17 @@ export interface FqcDefectHandlingCreate {
   handlingDescription?: string;
 
   /**
-   * 责任部门
+   * 责任部门（选项 TaktDepts/tree-options，DictValue=DeptCode）
    */
   responsibleDept?: string;
 
   /**
-   * 责任人（人员代码）
+   * 责任人（选项 TaktEmployees/options，DictValue=EmployeeCode）
    */
   responsibleBy?: string;
 
   /**
-   * 处理人（人员代码）
+   * 处理人（选项 TaktEmployees/options，DictValue=EmployeeCode）
    */
   handlerBy?: string;
 
@@ -346,11 +356,6 @@ export interface FqcDefectHandlingCreate {
    * 处理时间
    */
   handlingAt?: string;
-
-  /**
-   * 处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）
-   */
-  handlingStatus: number;
 
   /**
    * 预防措施/纠正措施
@@ -361,6 +366,16 @@ export interface FqcDefectHandlingCreate {
    * 不良图片（JSON格式，存储不良图片URL列表）
    */
   defectImages?: string;
+
+  /**
+   * 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+   */
+  attachments?: string;
+
+  /**
+   * 处理状态（字典 logistics_quality_defect_handling_status）
+   */
+  handlingStatus: number;
 
   /**
    * 扩展字段JSON
@@ -402,7 +417,7 @@ export interface FqcDefectHandlingStatus {
   fqcDefectHandlingId: string;
 
   /**
-   * 处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）
+   * 处理状态（字典 logistics_quality_defect_handling_status）
    */
   handlingStatus: number;
 
@@ -431,7 +446,7 @@ export interface FqcDefectHandlingTemplate {
   fqcDefectHandlingCode?: string;
 
   /**
-   * FQC检验单明细ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * FQC检验单明细 ID（关联 TaktFqcOrderItem.Id，选项 TaktFqcOrderItems/options）
    */
   fqcOrderItemId?: string;
 
@@ -446,7 +461,7 @@ export interface FqcDefectHandlingTemplate {
   lineNumber?: number;
 
   /**
-   * 不良类型（0=轻微，1=一般，2=严重，3=致命）
+   * 不良类型（字典 logistics_quality_defect_type）
    */
   defectType?: number;
 
@@ -466,7 +481,7 @@ export interface FqcDefectHandlingTemplate {
   defectQuantity?: number;
 
   /**
-   * 处理方式（0=返工，1=返修，2=让步接收，3=退货，4=报废，5=挑选使用）
+   * 处理方式（字典 logistics_quality_defect_handling_method）
    */
   handlingMethod?: number;
 
@@ -476,14 +491,44 @@ export interface FqcDefectHandlingTemplate {
   handlingDescription?: string;
 
   /**
-   * 责任部门
+   * 责任部门（选项 TaktDepts/tree-options，DictValue=DeptCode）
    */
   responsibleDept?: string;
 
   /**
-   * 责任人（人员代码）
+   * 责任人（选项 TaktEmployees/options，DictValue=EmployeeCode）
    */
   responsibleBy?: string;
+
+  /**
+   * 处理人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   */
+  handlerBy?: string;
+
+  /**
+   * 处理时间
+   */
+  handlingAt?: string;
+
+  /**
+   * 预防措施/纠正措施
+   */
+  correctiveAction?: string;
+
+  /**
+   * 不良图片（JSON格式，存储不良图片URL列表）
+   */
+  defectImages?: string;
+
+  /**
+   * 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+   */
+  attachments?: string;
+
+  /**
+   * 处理状态（字典 logistics_quality_defect_handling_status）
+   */
+  handlingStatus?: number;
 
   /**
    * 扩展字段JSON
@@ -515,7 +560,7 @@ export interface FqcDefectHandlingImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -525,7 +570,7 @@ export interface FqcDefectHandlingImport {
   fqcDefectHandlingCode?: string;
 
   /**
-   * FQC检验单明细ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * FQC检验单明细 ID（关联 TaktFqcOrderItem.Id，选项 TaktFqcOrderItems/options）
    */
   fqcOrderItemId?: string;
 
@@ -540,7 +585,7 @@ export interface FqcDefectHandlingImport {
   lineNumber?: number;
 
   /**
-   * 不良类型（0=轻微，1=一般，2=严重，3=致命）
+   * 不良类型（字典 logistics_quality_defect_type）
    */
   defectType?: number;
 
@@ -560,7 +605,7 @@ export interface FqcDefectHandlingImport {
   defectQuantity?: number;
 
   /**
-   * 处理方式（0=返工，1=返修，2=让步接收，3=退货，4=报废，5=挑选使用）
+   * 处理方式（字典 logistics_quality_defect_handling_method）
    */
   handlingMethod?: number;
 
@@ -570,14 +615,44 @@ export interface FqcDefectHandlingImport {
   handlingDescription?: string;
 
   /**
-   * 责任部门
+   * 责任部门（选项 TaktDepts/tree-options，DictValue=DeptCode）
    */
   responsibleDept?: string;
 
   /**
-   * 责任人（人员代码）
+   * 责任人（选项 TaktEmployees/options，DictValue=EmployeeCode）
    */
   responsibleBy?: string;
+
+  /**
+   * 处理人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   */
+  handlerBy?: string;
+
+  /**
+   * 处理时间
+   */
+  handlingAt?: string;
+
+  /**
+   * 预防措施/纠正措施
+   */
+  correctiveAction?: string;
+
+  /**
+   * 不良图片（JSON格式，存储不良图片URL列表）
+   */
+  defectImages?: string;
+
+  /**
+   * 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+   */
+  attachments?: string;
+
+  /**
+   * 处理状态（字典 logistics_quality_defect_handling_status）
+   */
+  handlingStatus?: number;
 
   /**
    * 扩展字段JSON
@@ -614,7 +689,7 @@ export interface FqcDefectHandlingExport {
   fqcDefectHandlingCode: string;
 
   /**
-   * FQC检验单明细ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * FQC检验单明细 ID（关联 TaktFqcOrderItem.Id，选项 TaktFqcOrderItems/options）
    */
   fqcOrderItemId: string;
 
@@ -629,7 +704,7 @@ export interface FqcDefectHandlingExport {
   lineNumber: number;
 
   /**
-   * 不良类型（0=轻微，1=一般，2=严重，3=致命）
+   * 不良类型（字典 logistics_quality_defect_type）
    */
   defectType: number;
 
@@ -649,7 +724,7 @@ export interface FqcDefectHandlingExport {
   defectQuantity: number;
 
   /**
-   * 处理方式（0=返工，1=返修，2=让步接收，3=退货，4=报废，5=挑选使用）
+   * 处理方式（字典 logistics_quality_defect_handling_method）
    */
   handlingMethod: number;
 
@@ -659,17 +734,17 @@ export interface FqcDefectHandlingExport {
   handlingDescription?: string;
 
   /**
-   * 责任部门
+   * 责任部门（选项 TaktDepts/tree-options，DictValue=DeptCode）
    */
   responsibleDept?: string;
 
   /**
-   * 责任人（人员代码）
+   * 责任人（选项 TaktEmployees/options，DictValue=EmployeeCode）
    */
   responsibleBy?: string;
 
   /**
-   * 处理人（人员代码）
+   * 处理人（选项 TaktEmployees/options，DictValue=EmployeeCode）
    */
   handlerBy?: string;
 
@@ -677,11 +752,6 @@ export interface FqcDefectHandlingExport {
    * 处理时间
    */
   handlingAt?: string;
-
-  /**
-   * 处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）
-   */
-  handlingStatus: number;
 
   /**
    * 预防措施/纠正措施
@@ -692,6 +762,16 @@ export interface FqcDefectHandlingExport {
    * 不良图片（JSON格式，存储不良图片URL列表）
    */
   defectImages?: string;
+
+  /**
+   * 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+   */
+  attachments?: string;
+
+  /**
+   * 处理状态（字典 logistics_quality_defect_handling_status）
+   */
+  handlingStatus: number;
 
   /**
    * 扩展字段JSON

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Routine.HelpDesk
 // 文件名称：TaktTicketDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Ticket 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktTicket 生成，请按需审阅）
 // 
@@ -43,58 +43,37 @@ public class TaktTicketDto : TaktCompanyDtoBase
     /// <summary>
     /// 工单标题
     /// </summary>
-    public string Title { get; set; } = string.Empty;
+    public string TicketTitle { get; set; } = string.Empty;
 
     /// <summary>
     /// 工单内容描述
     /// </summary>
-    public string? Content { get; set; } = string.Empty;
+    public string? TicketContent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件列表 JSON。格式：[{ "FileId": 0, "FileName": "", "FilePath": "", "FileSize": 0, "FileType": "", "FileExtension": "", "SortOrder": 0 }]
+    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）。格式：[{ "FileId": 0, "FileName": "", "FilePath": "", "FileSize": 0, "FileType": "", "FileExtension": "", "SortOrder": 0 }]
     /// </summary>
-    public string? AttachmentsJson { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）
-    /// </summary>
-    public int TicketStatus { get; set; } = 0;
+    public string? attachments { get; set; } = string.Empty;
 
     /// <summary>
     /// 优先级（字典 sys_priority_level_category）
     /// </summary>
-    public int Priority { get; set; } = 3;
+    public int Priority { get; set; } = 0;
 
     /// <summary>
     /// 紧急度（字典 sys_urgency_level_category）
     /// </summary>
-    public int Urgency { get; set; } = 3;
+    public int Urgency { get; set; } = 0;
 
     /// <summary>
     /// 影响范围（字典 sys_impact_level_category）
     /// </summary>
-    public int Impact { get; set; } = 3;
+    public int Impact { get; set; } = 0;
 
     /// <summary>
     /// 分类编码（如 incident/request 等）
     /// </summary>
     public string? CategoryCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 资产号码（冗余；与 TaktItAsset.AssetCode / TaktAsset.AssetCode 一致）
-    /// </summary>
-    public string? AssetCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// IT 设备保修扩展 ID（关联 TaktItAsset.Id）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ItAssetId { get; set; }
-
-    /// <summary>
-    /// 资产名称（填充字段，来自 TaktAsset）
-    /// </summary>
-    public string? AssetName { get; set; }
 
     /// <summary>
     /// 工单来源（0=门户网站，1=邮件，2=电话，3=API接入）
@@ -171,15 +150,30 @@ public class TaktTicketDto : TaktCompanyDtoBase
     public DateTime? ClosedAt { get; set; }
 
     /// <summary>
-    /// 流程实例ID（关联工作流；流程侧 BusinessType=Ticket、BusinessKey=本表 Id）
+    /// 关联 IT 设备保修扩展 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
+    public long? ItAssetId { get; set; }
 
     /// <summary>
-    /// 流程实例名称（填充字段）
+    /// 关联 IT 设备保修扩展 名称（填充字段）
     /// </summary>
-    public string? FlowInstanceName { get; set; }
+    public string? ItAssetName { get; set; }
+
+    /// <summary>
+    /// 资产号码（冗余；与 TaktItAsset.AssetCode 一致）
+    /// </summary>
+    public string? AssetCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 资产名称（填充字段，来自 TaktAsset）
+    /// </summary>
+    public string? AssetName { get; set; }
+
+    /// <summary>
+    /// 工单回复列表（详情填充）
+    /// </summary>
+    public List<TaktTicketReplyDto>? Replies { get; set; }
 
     /// <summary>
     /// 申请部门ID
@@ -199,6 +193,11 @@ public class TaktTicketDto : TaktCompanyDtoBase
     public long ApplicantBy { get; set; }
 
     /// <summary>
+    /// 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）
+    /// </summary>
+    public int TicketStatus { get; set; } = 0;
+
+    /// <summary>
     /// 子工单列表（父工单时有效；外键：本表 Id = 子工单 ParentTicketId）
     /// （子表：TaktTicket）
     /// </summary>
@@ -209,11 +208,6 @@ public class TaktTicketDto : TaktCompanyDtoBase
     /// （子表：TaktTicketChangeLog）
     /// </summary>
     public List<TaktTicketChangeLogDto>? ChangeLogs { get; set; }
-
-    /// <summary>
-    /// 工单回复列表（会话，详情填充）
-    /// </summary>
-    public List<TaktTicketReplyDto>? Replies { get; set; }
 
 }
 
@@ -245,22 +239,17 @@ public class TaktTicketQueryDto : TaktPagedQuery
     /// <summary>
     /// 工单标题
     /// </summary>
-    public string? Title { get; set; } = string.Empty;
+    public string? TicketTitle { get; set; } = string.Empty;
 
     /// <summary>
     /// 工单内容描述
     /// </summary>
-    public string? Content { get; set; } = string.Empty;
+    public string? TicketContent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件列表 JSON。格式：[{ "FileId": 0, "FileName": "", "FilePath": "", "FileSize": 0, "FileType": "", "FileExtension": "", "SortOrder": 0 }]
+    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）。格式：[{ "FileId": 0, "FileName": "", "FilePath": "", "FileSize": 0, "FileType": "", "FileExtension": "", "SortOrder": 0 }]
     /// </summary>
-    public string? AttachmentsJson { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 工单状态（0=待处理，1=处理中，2=已解决，3=已关闭）
-    /// </summary>
-    public int? TicketStatus { get; set; }
+    public string? attachments { get; set; } = string.Empty;
 
     /// <summary>
     /// 优先级（字典 sys_priority_level_category）
@@ -281,17 +270,6 @@ public class TaktTicketQueryDto : TaktPagedQuery
     /// 分类编码（如 incident/request 等）
     /// </summary>
     public string? CategoryCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 资产号码（冗余；与 TaktItAsset.AssetCode / TaktAsset.AssetCode 一致）
-    /// </summary>
-    public string? AssetCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// IT 设备保修扩展 ID（关联 TaktItAsset.Id）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ItAssetId { get; set; }
 
     /// <summary>
     /// 工单来源（0=门户网站，1=邮件，2=电话，3=API接入）
@@ -383,10 +361,15 @@ public class TaktTicketQueryDto : TaktPagedQuery
     public DateTime? ClosedAtEnd { get; set; }
 
     /// <summary>
-    /// 流程实例ID（关联工作流；流程侧 BusinessType=Ticket、BusinessKey=本表 Id）
+    /// 关联 IT 设备保修扩展 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
+    public long? ItAssetId { get; set; }
+
+    /// <summary>
+    /// 资产号码（冗余；与 TaktItAsset.AssetCode 一致）
+    /// </summary>
+    public string? AssetCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 申请部门ID
@@ -404,6 +387,11 @@ public class TaktTicketQueryDto : TaktPagedQuery
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ApplicantBy { get; set; }
+
+    /// <summary>
+    /// 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）
+    /// </summary>
+    public int? TicketStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -446,7 +434,7 @@ public class TaktTicketCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -460,53 +448,37 @@ public class TaktTicketCreateDto
     /// 工单标题
     /// </summary>
     [Required(ErrorMessage = "工单标题不能为空")]
-    public string Title { get; set; } = string.Empty;
+    public string TicketTitle { get; set; } = string.Empty;
 
     /// <summary>
     /// 工单内容描述
     /// </summary>
-    public string? Content { get; set; } = string.Empty;
+    public string? TicketContent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件列表 JSON。格式：[{ "FileId": 0, "FileName": "", "FilePath": "", "FileSize": 0, "FileType": "", "FileExtension": "", "SortOrder": 0 }]
+    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）。格式：[{ "FileId": 0, "FileName": "", "FilePath": "", "FileSize": 0, "FileType": "", "FileExtension": "", "SortOrder": 0 }]
     /// </summary>
-    public string? AttachmentsJson { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）
-    /// </summary>
-    public int TicketStatus { get; set; } = 0;
+    public string? attachments { get; set; } = string.Empty;
 
     /// <summary>
     /// 优先级（字典 sys_priority_level_category）
     /// </summary>
-    public int Priority { get; set; } = 3;
+    public int Priority { get; set; } = 0;
 
     /// <summary>
     /// 紧急度（字典 sys_urgency_level_category）
     /// </summary>
-    public int Urgency { get; set; } = 3;
+    public int Urgency { get; set; } = 0;
 
     /// <summary>
     /// 影响范围（字典 sys_impact_level_category）
     /// </summary>
-    public int Impact { get; set; } = 3;
+    public int Impact { get; set; } = 0;
 
     /// <summary>
     /// 分类编码（如 incident/request 等）
     /// </summary>
     public string? CategoryCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 资产号码（冗余；与 TaktItAsset.AssetCode / TaktAsset.AssetCode 一致）
-    /// </summary>
-    public string? AssetCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// IT 设备保修扩展 ID（关联 TaktItAsset.Id）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ItAssetId { get; set; }
 
     /// <summary>
     /// 工单来源（0=门户网站，1=邮件，2=电话，3=API接入）
@@ -573,10 +545,15 @@ public class TaktTicketCreateDto
     public DateTime? ClosedAt { get; set; }
 
     /// <summary>
-    /// 流程实例ID（关联工作流；流程侧 BusinessType=Ticket、BusinessKey=本表 Id）
+    /// 关联 IT 设备保修扩展 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
+    public long? ItAssetId { get; set; }
+
+    /// <summary>
+    /// 资产号码（冗余；与 TaktItAsset.AssetCode 一致）
+    /// </summary>
+    public string? AssetCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 申请部门ID
@@ -594,6 +571,11 @@ public class TaktTicketCreateDto
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ApplicantBy { get; set; }
+
+    /// <summary>
+    /// 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）
+    /// </summary>
+    public int TicketStatus { get; set; } = 0;
 
     /// <summary>
     /// 子工单列表（父工单时有效；外键：本表 Id = 子工单 ParentTicketId）（子表，级联保存）
@@ -655,9 +637,9 @@ public class TaktTicketStatusDto
     public long TicketId { get; set; }
 
     /// <summary>
-    /// 工单状态（0=待处理，1=处理中，2=已解决，3=已关闭）
+    /// 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）
     /// </summary>
-    [Required(ErrorMessage = "工单状态（0=待处理，1=处理中，2=已解决，3=已关闭）不能为空")]
+    [Required(ErrorMessage = "工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）不能为空")]
     public int TicketStatus { get; set; } = 0;
 }
 
@@ -688,22 +670,17 @@ public class TaktTicketTemplateDto
     /// <summary>
     /// 工单标题
     /// </summary>
-    public string? Title { get; set; } = string.Empty;
+    public string? TicketTitle { get; set; } = string.Empty;
 
     /// <summary>
     /// 工单内容描述
     /// </summary>
-    public string? Content { get; set; } = string.Empty;
+    public string? TicketContent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件列表 JSON。格式：[{ "FileId": 0, "FileName": "", "FilePath": "", "FileSize": 0, "FileType": "", "FileExtension": "", "SortOrder": 0 }]
+    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）。格式：[{ "FileId": 0, "FileName": "", "FilePath": "", "FileSize": 0, "FileType": "", "FileExtension": "", "SortOrder": 0 }]
     /// </summary>
-    public string? AttachmentsJson { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 工单状态（0=待处理，1=处理中，2=已解决，3=已关闭）
-    /// </summary>
-    public int? TicketStatus { get; set; }
+    public string? attachments { get; set; } = string.Empty;
 
     /// <summary>
     /// 优先级（字典 sys_priority_level_category）
@@ -724,17 +701,6 @@ public class TaktTicketTemplateDto
     /// 分类编码（如 incident/request 等）
     /// </summary>
     public string? CategoryCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 资产号码（冗余；与 TaktItAsset.AssetCode / TaktAsset.AssetCode 一致）
-    /// </summary>
-    public string? AssetCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// IT 设备保修扩展 ID（关联 TaktItAsset.Id）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ItAssetId { get; set; }
 
     /// <summary>
     /// 工单来源（0=门户网站，1=邮件，2=电话，3=API接入）
@@ -762,6 +728,86 @@ public class TaktTicketTemplateDto
     /// 处理人姓名
     /// </summary>
     public string? AssigneeName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 关联知识ID（可选，序列化为string以避免Javascript精度问题）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? KnowledgeId { get; set; }
+
+    /// <summary>
+    /// 父工单ID（为空表示顶级工单；非空表示该工单为子工单，序列化为string以避免Javascript精度问题）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ParentTicketId { get; set; }
+
+    /// <summary>
+    /// 首次响应时间（支持人员首次回复用户的时间，SLA/OLA 时间追踪）
+    /// </summary>
+    public DateTime? FirstResponseAt { get; set; }
+
+    /// <summary>
+    /// 首次响应期限（根据 SLA 计算出的首次响应截止时间）
+    /// </summary>
+    public DateTime? FirstResponseDueBy { get; set; }
+
+    /// <summary>
+    /// 解决时间（问题被标记为已解决的时间）
+    /// </summary>
+    public DateTime? ResolvedAt { get; set; }
+
+    /// <summary>
+    /// 解决期限（根据 SLA 计算出的解决截止时间）
+    /// </summary>
+    public DateTime? ResolutionDueBy { get; set; }
+
+    /// <summary>
+    /// 关闭时间（工单最终关闭的时间）
+    /// </summary>
+    public DateTime? ClosedAt { get; set; }
+
+    /// <summary>
+    /// 关联 IT 设备保修扩展 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ItAssetId { get; set; }
+
+    /// <summary>
+    /// 资产号码（冗余；与 TaktItAsset.AssetCode 一致）
+    /// </summary>
+    public string? AssetCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 申请部门ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ApplicantDeptId { get; set; }
+
+    /// <summary>
+    /// 申请部门名称
+    /// </summary>
+    public string? ApplicantDeptName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 申请人（实际申请人；代理人代提时填被代理人）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ApplicantBy { get; set; }
+
+    /// <summary>
+    /// 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）
+    /// </summary>
+    public int? TicketStatus { get; set; }
+
+    /// <summary>
+    /// 子工单列表（父工单时有效；外键：本表 Id = 子工单 ParentTicketId）（子表，级联保存）
+    /// </summary>
+    public List<TaktTicketCreateDto>? ChildTickets { get; set; }
+
+    /// <summary>
+    /// 工单变更日志列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktTicketChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -791,7 +837,7 @@ public class TaktTicketImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -803,22 +849,17 @@ public class TaktTicketImportDto
     /// <summary>
     /// 工单标题
     /// </summary>
-    public string? Title { get; set; } = string.Empty;
+    public string? TicketTitle { get; set; } = string.Empty;
 
     /// <summary>
     /// 工单内容描述
     /// </summary>
-    public string? Content { get; set; } = string.Empty;
+    public string? TicketContent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件列表 JSON。格式：[{ "FileId": 0, "FileName": "", "FilePath": "", "FileSize": 0, "FileType": "", "FileExtension": "", "SortOrder": 0 }]
+    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）。格式：[{ "FileId": 0, "FileName": "", "FilePath": "", "FileSize": 0, "FileType": "", "FileExtension": "", "SortOrder": 0 }]
     /// </summary>
-    public string? AttachmentsJson { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 工单状态（0=待处理，1=处理中，2=已解决，3=已关闭）
-    /// </summary>
-    public int? TicketStatus { get; set; }
+    public string? attachments { get; set; } = string.Empty;
 
     /// <summary>
     /// 优先级（字典 sys_priority_level_category）
@@ -839,17 +880,6 @@ public class TaktTicketImportDto
     /// 分类编码（如 incident/request 等）
     /// </summary>
     public string? CategoryCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 资产号码（冗余；与 TaktItAsset.AssetCode / TaktAsset.AssetCode 一致）
-    /// </summary>
-    public string? AssetCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// IT 设备保修扩展 ID（关联 TaktItAsset.Id）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ItAssetId { get; set; }
 
     /// <summary>
     /// 工单来源（0=门户网站，1=邮件，2=电话，3=API接入）
@@ -877,6 +907,86 @@ public class TaktTicketImportDto
     /// 处理人姓名
     /// </summary>
     public string? AssigneeName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 关联知识ID（可选，序列化为string以避免Javascript精度问题）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? KnowledgeId { get; set; }
+
+    /// <summary>
+    /// 父工单ID（为空表示顶级工单；非空表示该工单为子工单，序列化为string以避免Javascript精度问题）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ParentTicketId { get; set; }
+
+    /// <summary>
+    /// 首次响应时间（支持人员首次回复用户的时间，SLA/OLA 时间追踪）
+    /// </summary>
+    public DateTime? FirstResponseAt { get; set; }
+
+    /// <summary>
+    /// 首次响应期限（根据 SLA 计算出的首次响应截止时间）
+    /// </summary>
+    public DateTime? FirstResponseDueBy { get; set; }
+
+    /// <summary>
+    /// 解决时间（问题被标记为已解决的时间）
+    /// </summary>
+    public DateTime? ResolvedAt { get; set; }
+
+    /// <summary>
+    /// 解决期限（根据 SLA 计算出的解决截止时间）
+    /// </summary>
+    public DateTime? ResolutionDueBy { get; set; }
+
+    /// <summary>
+    /// 关闭时间（工单最终关闭的时间）
+    /// </summary>
+    public DateTime? ClosedAt { get; set; }
+
+    /// <summary>
+    /// 关联 IT 设备保修扩展 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ItAssetId { get; set; }
+
+    /// <summary>
+    /// 资产号码（冗余；与 TaktItAsset.AssetCode 一致）
+    /// </summary>
+    public string? AssetCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 申请部门ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ApplicantDeptId { get; set; }
+
+    /// <summary>
+    /// 申请部门名称
+    /// </summary>
+    public string? ApplicantDeptName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 申请人（实际申请人；代理人代提时填被代理人）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ApplicantBy { get; set; }
+
+    /// <summary>
+    /// 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）
+    /// </summary>
+    public int? TicketStatus { get; set; }
+
+    /// <summary>
+    /// 子工单列表（父工单时有效；外键：本表 Id = 子工单 ParentTicketId）（子表，级联保存）
+    /// </summary>
+    public List<TaktTicketCreateDto>? ChildTickets { get; set; }
+
+    /// <summary>
+    /// 工单变更日志列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktTicketChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -919,53 +1029,37 @@ public class TaktTicketExportDto
     /// <summary>
     /// 工单标题
     /// </summary>
-    public string Title { get; set; } = string.Empty;
+    public string TicketTitle { get; set; } = string.Empty;
 
     /// <summary>
     /// 工单内容描述
     /// </summary>
-    public string? Content { get; set; } = string.Empty;
+    public string? TicketContent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件列表 JSON。格式：[{ "FileId": 0, "FileName": "", "FilePath": "", "FileSize": 0, "FileType": "", "FileExtension": "", "SortOrder": 0 }]
+    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）。格式：[{ "FileId": 0, "FileName": "", "FilePath": "", "FileSize": 0, "FileType": "", "FileExtension": "", "SortOrder": 0 }]
     /// </summary>
-    public string? AttachmentsJson { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）
-    /// </summary>
-    public int TicketStatus { get; set; } = 0;
+    public string? attachments { get; set; } = string.Empty;
 
     /// <summary>
     /// 优先级（字典 sys_priority_level_category）
     /// </summary>
-    public int Priority { get; set; } = 3;
+    public int Priority { get; set; } = 0;
 
     /// <summary>
     /// 紧急度（字典 sys_urgency_level_category）
     /// </summary>
-    public int Urgency { get; set; } = 3;
+    public int Urgency { get; set; } = 0;
 
     /// <summary>
     /// 影响范围（字典 sys_impact_level_category）
     /// </summary>
-    public int Impact { get; set; } = 3;
+    public int Impact { get; set; } = 0;
 
     /// <summary>
     /// 分类编码（如 incident/request 等）
     /// </summary>
     public string? CategoryCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 资产号码（冗余；与 TaktItAsset.AssetCode / TaktAsset.AssetCode 一致）
-    /// </summary>
-    public string? AssetCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// IT 设备保修扩展 ID（关联 TaktItAsset.Id）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ItAssetId { get; set; }
 
     /// <summary>
     /// 工单来源（0=门户网站，1=邮件，2=电话，3=API接入）
@@ -1032,10 +1126,15 @@ public class TaktTicketExportDto
     public DateTime? ClosedAt { get; set; }
 
     /// <summary>
-    /// 流程实例ID（关联工作流；流程侧 BusinessType=Ticket、BusinessKey=本表 Id）
+    /// 关联 IT 设备保修扩展 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
+    public long? ItAssetId { get; set; }
+
+    /// <summary>
+    /// 资产号码（冗余；与 TaktItAsset.AssetCode 一致）
+    /// </summary>
+    public string? AssetCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 申请部门ID
@@ -1053,6 +1152,11 @@ public class TaktTicketExportDto
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ApplicantBy { get; set; }
+
+    /// <summary>
+    /// 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）
+    /// </summary>
+    public int TicketStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

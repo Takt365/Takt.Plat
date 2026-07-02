@@ -60,7 +60,7 @@ public class TaktBillOfMaterialSubstitute : TaktCompanyEntityBase
     public int LineNumber { get; set; } = 10;
 
     /// <summary>
-    /// 替代物料ID（关联工厂物料主数据，序列化为string以避免Javascript精度问题）
+    /// 替代物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
     /// </summary>
     [SugarColumn(ColumnName = "substitute_material_id", ColumnDescription = "替代物料ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -91,10 +91,10 @@ public class TaktBillOfMaterialSubstitute : TaktCompanyEntityBase
     public decimal UsageQuantity { get; set; } = 0;
 
     /// <summary>
-    /// 单位
+    /// 单位（字典 logistics_unit_of_measure_code）
     /// </summary>
-    [SugarColumn(ColumnName = "material_unit", ColumnDescription = "单位", ColumnDataType = "nvarchar", Length = 20, IsNullable = false, DefaultValue = "个")]
-    public string MaterialUnit { get; set; } = "个";
+    [SugarColumn(ColumnName = "material_unit", ColumnDescription = "单位", ColumnDataType = "nvarchar", Length = 20, IsNullable = false, DefaultValue = "PC")]
+    public string MaterialUnit { get; set; } = "PC";
 
     /// <summary>
     /// 替代比例（相对主件用量，默认1表示等量替代）

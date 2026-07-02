@@ -101,6 +101,35 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
+                :label="t('entity.purchaserequest.countersignid')"
+                name="countersignId"
+              >
+                <a-input
+                  v-model:value="formState.countersignId"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaserequest.countersignid') })"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.purchaserequest.countersigncode')"
+                name="countersignCode"
+              >
+                <a-input
+                  v-model:value="formState.countersignCode"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaserequest.countersigncode') })"
+                  show-count
+                  :maxlength="50"
+                  allow-clear
+                  :disabled="!!formData?.purchaseRequestId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
                 :label="t('entity.purchaserequest.requestdate')"
                 name="requestDate"
               >
@@ -139,6 +168,16 @@
                 />
               </a-form-item>
             </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
                 :label="t('entity.purchaserequest.requestby')"
@@ -165,17 +204,7 @@
                 />
               </a-form-item>
             </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
                 :label="t('entity.purchaserequest.totalamount')"
                 name="totalAmount"
@@ -187,7 +216,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
                 :label="t('entity.purchaserequest.convertedquantity')"
                 name="convertedQuantity"
@@ -199,7 +228,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
                 :label="t('entity.purchaserequest.convertedamount')"
                 name="convertedAmount"
@@ -211,7 +240,21 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.purchaserequest.requestreason')"
+                name="requestReason"
+              >
+                <a-input
+                  v-model:value="formState.requestReason"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaserequest.requestreason') })"
+                  show-count
+                  :maxlength="1000"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
               <a-form-item
                 :label="t('entity.purchaserequest.requeststatus')"
                 name="requestStatus"
@@ -223,28 +266,15 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
                 :label="t('entity.purchaserequest.convertedstatus')"
                 name="convertedStatus"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.convertedStatus"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaserequest.convertedstatus') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.purchaserequest.requestreason')"
-                name="requestReason"
-              >
-                <a-input
-                  v-model:value="formState.requestReason"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaserequest.requestreason') })"
-                  show-count
-                  :maxlength="1000"
+                  dict-type="sys_convert_status"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.purchaserequest.convertedstatus') })"
                   allow-clear
                 />
               </a-form-item>
@@ -353,7 +383,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","purchaseRequestCode","requestDate","requiredArrivalDate","requestId","requestBy","totalQuantity","totalAmount","convertedQuantity","convertedAmount","requestStatus","convertedStatus","requestReason","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","purchaseRequestCode","countersignId","countersignCode","requestDate","requiredArrivalDate","requestId","requestBy","totalQuantity","totalAmount","convertedQuantity","convertedAmount","requestReason","requestStatus","convertedStatus","extField","remark"]
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
 
@@ -366,7 +396,53 @@ const purchaseRequestChangeLogTableRef = ref<{
 
 /** 子表 purchaseRequestChangeLog 可编辑列 */
 const purchaseRequestChangeLogFormColumns = computed<TaktEditableTableColumn[]>(() => [
-,
+  {
+    key: 'requestCode',
+    title: t('entity.purchaserequestchangelog.requestcode'),
+    editor: 'input',
+    width: 140,
+  },
+  {
+    key: 'changeFields',
+    title: t('entity.purchaserequestchangelog.changefields'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.purchaserequestchangelog.changefields') }),
+  },
+  {
+    key: 'changeTime',
+    title: t('entity.purchaserequestchangelog.changetime'),
+    editor: 'datePicker',
+    valueFormat: 'YYYY-MM-DD HH:mm:ss', showTime: true,
+    width: 140,
+  },
+  {
+    key: 'changeBy',
+    title: t('entity.purchaserequestchangelog.changeby'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.purchaserequestchangelog.changeby') }),
+  },
+  {
+    key: 'changeReason',
+    title: t('entity.purchaserequestchangelog.changereason'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.purchaserequestchangelog.changereason') }),
+  },
+  {
+    key: 'extField',
+    title: t('common.page.entity.extfield'),
+    editor: 'textarea',
+    rows: 2,
+    placeholder: t('common.page.form.placeholder.optional', { field: t('common.page.entity.extfield') }),
+    width: 140,
+  },
+  {
+    key: 'remark',
+    title: t('common.page.entity.remark'),
+    editor: 'textarea',
+    rows: 2,
+    placeholder: t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') }),
+    width: 140,
+  },
 ])
 
 /** 编辑态从 formData 同步各子表行 */
@@ -376,7 +452,13 @@ function syncChildRowsFromFormData(val: Partial<PurchaseRequestCreate & { purcha
 
 function createDefaultPurchaseRequestChangeLogRow(): Record<string, unknown> {
   return {
-
+    requestCode: '',
+    changeFields: '',
+    changeTime: '',
+    changeBy: '',
+    changeReason: '',
+    extField: '',
+    remark: '',
   }
 }
 

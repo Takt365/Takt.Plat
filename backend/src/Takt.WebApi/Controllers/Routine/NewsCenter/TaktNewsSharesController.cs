@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Routine.NewsCenter
 // 文件名称：TaktNewsSharesController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-27
 // 创建人：Takt365(Cursor AI)
 // 功能描述：新闻中心分享记录控制器
 // 
@@ -41,7 +41,7 @@ public class TaktNewsSharesController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("routine:newscenter:newsshare:list", "新闻中心分享记录列表")]
+    [TaktPermission("routine:news:center:list", "新闻中心分享记录列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetNewsShareListAsync([FromQuery] TaktNewsShareQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktNewsSharesController : TaktControllerBase
     /// </summary>
     /// <param name="id">新闻中心分享记录ID</param>
     /// <returns>新闻中心分享记录DTO</returns>
-    [TaktPermission("routine:newscenter:newsshare:query", "新闻中心分享记录详情")]
+    [TaktPermission("routine:news:center:query", "新闻中心分享记录详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetNewsShareByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktNewsSharesController : TaktControllerBase
     /// 获取新闻分享记录选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("routine:newscenter:newsshare:query", "新闻中心分享记录选项")]
+    [TaktPermission("routine:news:center:query", "新闻中心分享记录选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetNewsShareOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktNewsSharesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>新闻中心分享记录DTO</returns>
-    [TaktPermission("routine:newscenter:newsshare:create", "创建新闻中心分享记录")]
+    [TaktPermission("routine:news:center:create", "创建新闻中心分享记录")]
     [HttpPost]
     public async Task<IActionResult> CreateNewsShareAsync([FromBody] TaktNewsShareCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktNewsSharesController : TaktControllerBase
     /// <param name="id">新闻中心分享记录ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>新闻中心分享记录DTO</returns>
-    [TaktPermission("routine:newscenter:newsshare:update", "更新新闻中心分享记录")]
+    [TaktPermission("routine:news:center:update", "更新新闻中心分享记录")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateNewsShareAsync(long id, [FromBody] TaktNewsShareUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktNewsSharesController : TaktControllerBase
     /// </summary>
     /// <param name="id">新闻中心分享记录ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("routine:newscenter:newsshare:delete", "删除新闻中心分享记录")]
+    [TaktPermission("routine:news:center:delete", "删除新闻中心分享记录")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteNewsShareByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktNewsSharesController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("routine:newscenter:newsshare:delete", "批量删除新闻中心分享记录")]
+    [TaktPermission("routine:news:center:delete", "批量删除新闻中心分享记录")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteNewsShareBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktNewsSharesController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("routine:newscenter:newsshare:import", "获取新闻中心分享记录导入模板")]
+    [TaktPermission("routine:news:center:import", "获取新闻中心分享记录导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetNewsShareTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -204,7 +204,7 @@ public class TaktNewsSharesController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("routine:newscenter:newsshare:import", "导入新闻中心分享记录")]
+    [TaktPermission("routine:news:center:import", "导入新闻中心分享记录")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportNewsShareAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -234,7 +234,7 @@ public class TaktNewsSharesController : TaktControllerBase
     /// 导出新闻中心分享记录
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("routine:newscenter:newsshare:export", "导出新闻中心分享记录")]
+    [TaktPermission("routine:news:center:export", "导出新闻中心分享记录")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportNewsShareAsync([FromQuery] TaktNewsShareQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

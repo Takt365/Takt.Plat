@@ -30,13 +30,13 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Bom;
 public class TaktRouting : TaktApprovalEntityBase
 {
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作中心
+    /// 工作中心（选项 TaktWorkCenters/options，按工厂 ExtValue 过滤）
     /// </summary>
     [SugarColumn(ColumnName = "work_center", ColumnDescription = "工作中心", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string WorkCenter { get; set; } = string.Empty;
@@ -54,13 +54,13 @@ public class TaktRouting : TaktApprovalEntityBase
     public string RoutingName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 用途（1=生产，2=工程/设计，3=万能，4=工厂维护）
+    /// 用途（字典 logistics_routing_purpose：1=生产，2=工程/设计，3=万能，4=工厂维护）
     /// </summary>
     [SugarColumn(ColumnName = "purpose", ColumnDescription = "用途", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int Purpose { get; set; } = 1;
 
     /// <summary>
-    /// 适用物料编码
+    /// 适用物料编码（选项 TaktMaterials/options）
     /// </summary>
     [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string MaterialCode { get; set; } = string.Empty;
@@ -72,7 +72,7 @@ public class TaktRouting : TaktApprovalEntityBase
     public string Version { get; set; } = "V1.0";
 
     /// <summary>
-    /// 状态（1=生成的，2=对订单下达，3=对成本核算下达，4=下达的（通用））
+    /// 状态（字典 logistics_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）
     /// </summary>
     [SugarColumn(ColumnName = "routing_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "4")]
     public int RoutingStatus { get; set; } = 4;

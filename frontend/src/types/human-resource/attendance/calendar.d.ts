@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/human-resource/attendance
 // 文件名称：calendar.d.ts
-// 创建时间：2026-06-20
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/attendance 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -16,7 +16,7 @@ import type {
 } from '@/types/common';
 
 /**
- * 工厂日历（公司级；RelatedPlant 为空表示公司通用，有值表示工厂专属）
+ * 工厂日历（公司级；按 RelatedPlant 区分工厂维度）
  * 对应前端 TaktCalendarDto
  * 继承 TaktCompanyDtoBase
  * 对应前端 Calendar
@@ -34,12 +34,12 @@ export interface Calendar extends CompanyDtoBase {
   calendarDate: string;
 
   /**
-   * 是否工作日（0=非工作日 1=工作日 2=调休工作日等）
+   * 是否工作日（字典 hr_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
    */
   isWorkingDay: number;
 
   /**
-   * 关联假日 ID（TaktHoliday）
+   * 关联假日（关联 TaktHoliday.Id，选项 TaktHolidays/options）
    */
   holidayId?: string;
 
@@ -49,7 +49,7 @@ export interface Calendar extends CompanyDtoBase {
   holidayName?: string;
 
   /**
-   * 关联班次 ID（TaktWorkShift）
+   * 关联班次（关联 TaktWorkShift.Id，选项 TaktWorkShifts/options）
    */
   shiftId?: string;
 
@@ -59,7 +59,7 @@ export interface Calendar extends CompanyDtoBase {
   shiftName?: string;
 
   /**
-   * 关联工厂（为空表示公司级通用日历）
+   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
   relatedPlant?: string;
 
@@ -94,22 +94,22 @@ export interface CalendarQuery extends TaktPagedQuery {
   calendarDateEnd?: string;
 
   /**
-   * 是否工作日（0=非工作日 1=工作日 2=调休工作日等）
+   * 是否工作日（字典 hr_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
    */
   isWorkingDay?: number;
 
   /**
-   * 关联假日 ID（TaktHoliday）
+   * 关联假日（关联 TaktHoliday.Id，选项 TaktHolidays/options）
    */
   holidayId?: string;
 
   /**
-   * 关联班次 ID（TaktWorkShift）
+   * 关联班次（关联 TaktWorkShift.Id，选项 TaktWorkShifts/options）
    */
   shiftId?: string;
 
   /**
-   * 关联工厂（为空表示公司级通用日历）
+   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
   relatedPlant?: string;
 
@@ -153,7 +153,7 @@ export interface CalendarCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -163,22 +163,22 @@ export interface CalendarCreate {
   calendarDate: string;
 
   /**
-   * 是否工作日（0=非工作日 1=工作日 2=调休工作日等）
+   * 是否工作日（字典 hr_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
    */
   isWorkingDay: number;
 
   /**
-   * 关联假日 ID（TaktHoliday）
+   * 关联假日（关联 TaktHoliday.Id，选项 TaktHolidays/options）
    */
   holidayId?: string;
 
   /**
-   * 关联班次 ID（TaktWorkShift）
+   * 关联班次（关联 TaktWorkShift.Id，选项 TaktWorkShifts/options）
    */
   shiftId?: string;
 
   /**
-   * 关联工厂（为空表示公司级通用日历）
+   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
   relatedPlant?: string;
 
@@ -227,22 +227,27 @@ export interface CalendarTemplate {
   companyCode?: string;
 
   /**
-   * 是否工作日（0=非工作日 1=工作日 2=调休工作日等）
+   * 日历日期
+   */
+  calendarDate?: string;
+
+  /**
+   * 是否工作日（字典 hr_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
    */
   isWorkingDay?: number;
 
   /**
-   * 关联假日 ID（TaktHoliday）
+   * 关联假日（关联 TaktHoliday.Id，选项 TaktHolidays/options）
    */
   holidayId?: string;
 
   /**
-   * 关联班次 ID（TaktWorkShift）
+   * 关联班次（关联 TaktWorkShift.Id，选项 TaktWorkShifts/options）
    */
   shiftId?: string;
 
   /**
-   * 关联工厂（为空表示公司级通用日历）
+   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
   relatedPlant?: string;
 
@@ -276,27 +281,32 @@ export interface CalendarImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
   /**
-   * 是否工作日（0=非工作日 1=工作日 2=调休工作日等）
+   * 日历日期
+   */
+  calendarDate?: string;
+
+  /**
+   * 是否工作日（字典 hr_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
    */
   isWorkingDay?: number;
 
   /**
-   * 关联假日 ID（TaktHoliday）
+   * 关联假日（关联 TaktHoliday.Id，选项 TaktHolidays/options）
    */
   holidayId?: string;
 
   /**
-   * 关联班次 ID（TaktWorkShift）
+   * 关联班次（关联 TaktWorkShift.Id，选项 TaktWorkShifts/options）
    */
   shiftId?: string;
 
   /**
-   * 关联工厂（为空表示公司级通用日历）
+   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
   relatedPlant?: string;
 
@@ -335,22 +345,22 @@ export interface CalendarExport {
   calendarDate: string;
 
   /**
-   * 是否工作日（0=非工作日 1=工作日 2=调休工作日等）
+   * 是否工作日（字典 hr_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
    */
   isWorkingDay: number;
 
   /**
-   * 关联假日 ID（TaktHoliday）
+   * 关联假日（关联 TaktHoliday.Id，选项 TaktHolidays/options）
    */
   holidayId?: string;
 
   /**
-   * 关联班次 ID（TaktWorkShift）
+   * 关联班次（关联 TaktWorkShift.Id，选项 TaktWorkShifts/options）
    */
   shiftId?: string;
 
   /**
-   * 关联工厂（为空表示公司级通用日历）
+   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
   relatedPlant?: string;
 

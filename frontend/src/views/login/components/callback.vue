@@ -26,6 +26,7 @@ import { useUserStore } from '@/stores/identity/user';
 import { useTenantStore } from '@/stores/identity/tenant';
 import { useMenuStore } from '@/stores/identity/menu';
 import { useTranslationStore } from '@/stores/foundation/translation';
+import i18n from '@/locales';
 import { EventBus } from '@/utils/event-bus';
 import { ensureMenuAndRoutesLoaded } from '@/router';
 import { resolveDefaultMenuPath } from '@/router/menu-routes';
@@ -99,7 +100,7 @@ onMounted(async () => {
     tenantStore.resetCompanySelection();
     await userStore.loadUserProfile(true);
 
-    await useTranslationStore().loadTranslationMessagesAsync();
+    await useTranslationStore().loadTranslationMessagesAsync(String(i18n.global.locale.value));
     menuStore.syncMenusFromUserProfile();
     await ensureMenuAndRoutesLoaded();
 

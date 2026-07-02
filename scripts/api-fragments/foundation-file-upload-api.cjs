@@ -10,8 +10,7 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
-const UPLOAD_TYPE_IMPORT = `import type {
-  FileChunkCancel,
+const UPLOAD_TYPE_NAMES = `  FileChunkCancel,
   FileChunkCheck,
   FileChunkCheckResult,
   FileChunkList,
@@ -20,8 +19,7 @@ const UPLOAD_TYPE_IMPORT = `import type {
   FileChunkUpload,
   FileUploadMeta,
   FileUploadPolicy,
-  FileUploadResult,
-} from '@/types/foundation/file-upload';`;
+  FileUploadResult,`;
 
 /**
  * 上传/分片 API 段（使用 FILE_API_BASE 常量名）
@@ -183,10 +181,10 @@ function mergeFoundationFileUploadApi(content) {
     return content;
   }
   let merged = content;
-  if (!merged.includes("@/types/foundation/file-upload'")) {
+  if (!merged.includes('FileUploadPolicy')) {
     merged = merged.replace(
       "} from '@/types/foundation/file';",
-      `} from '@/types/foundation/file';\n${UPLOAD_TYPE_IMPORT}`
+      `,\n${UPLOAD_TYPE_NAMES}\n} from '@/types/foundation/file';`
     );
   }
   const optionsMarker = '// ========================================\n// 选项';

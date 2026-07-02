@@ -29,6 +29,7 @@ const MENU_CODE_OVERRIDES = {
 const VIEW_MODULE_PATH_ENTITY_OVERRIDES = {
   'logistics/procurement/purchase-request': 'PurchaseRequest',
   'logistics/procurement/purchase-request-change-log': 'PurchaseRequestChangeLog',
+  'logistics/procurement/purchase-inquiry': 'PurchaseInquiry',
   'logistics/procurement/purchase-order': 'PurchaseOrder',
   'logistics/procurement/purchase-order-change-log': 'PurchaseOrderChangeLog',
   'logistics/procurement/purchase-price': 'PurchasePrice',

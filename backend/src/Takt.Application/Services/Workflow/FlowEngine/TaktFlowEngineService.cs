@@ -10,6 +10,7 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
+using System.Linq.Expressions;
 using SqlSugar;
 using Takt.Application.Dtos.Workflow;
 using Takt.Application.Services.Workflow.FlowEngine.Business;
@@ -18,6 +19,7 @@ using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
 using Takt.Shared.Enums;
 using Takt.Shared.Exceptions;
+using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 
 namespace Takt.Application.Services.Workflow.FlowEngine;
@@ -269,6 +271,95 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
             CurrentCompanyCode,
             userId);
         return new TaktFlowTodoCountDto { TodoCount = todoCount };
+    }
+
+    /// <summary>
+    /// 获取工作流待办统计（数据看板）
+    /// </summary>
+    /// <returns>待办统计</returns>
+    public async Task<TaktWorkflowTodoStatDto> GetWorkflowTodoStatAsync()
+    {
+        var count = await GetFlowInstanceTodoCountAsync();
+        return new TaktWorkflowTodoStatDto
+        {
+            PendingTodoCount = count.TodoCount,
+        };
+    }
+
+    /// <summary>
+    /// 获取我发起的流程统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>我发起的流程统计</returns>
+    public async Task<TaktWorkflowMyInstanceStatDto> GetWorkflowMyInstanceStatAsync(TaktWorkflowMyInstanceStatQueryDto queryDto)
+    {
+        EnsureThreeLayerContext();
+        var (start, end, statMonth) = TaktStatMonthRangeHelper.ResolveMonthRange(
+            queryDto.StartTimeStart,
+            queryDto.StartTimeEnd);
+        var tenantCode = CurrentTenantCode;
+        var companyCode = CurrentCompanyCode;
+        var userId = GetCurrentUserIdForApproval();
+        Expression<Func<TaktFlowInstance, bool>> basePredicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.StartUserId == userId
+            && ((x.StartTime != null && x.StartTime >= start && x.StartTime <= end)
+                || (x.StartTime == null && x.CreatedAt >= start && x.CreatedAt <= end));
+        var monthMyInstanceCount = await _flowInstanceRepository.CountAsync(basePredicate);
+        Expression<Func<TaktFlowInstance, bool>> runningPredicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.StartUserId == userId
+            && x.InstanceStatus == TaktFlowInstanceStatus.Running
+            && ((x.StartTime != null && x.StartTime >= start && x.StartTime <= end)
+                || (x.StartTime == null && x.CreatedAt >= start && x.CreatedAt <= end));
+        var monthMyRunningCount = await _flowInstanceRepository.CountAsync(runningPredicate);
+        Expression<Func<TaktFlowInstance, bool>> completedPredicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.StartUserId == userId
+            && x.InstanceStatus == TaktFlowInstanceStatus.Completed
+            && ((x.StartTime != null && x.StartTime >= start && x.StartTime <= end)
+                || (x.StartTime == null && x.CreatedAt >= start && x.CreatedAt <= end));
+        var monthMyCompletedCount = await _flowInstanceRepository.CountAsync(completedPredicate);
+        return new TaktWorkflowMyInstanceStatDto
+        {
+            StatMonth = statMonth,
+            MonthMyInstanceCount = monthMyInstanceCount,
+            MonthMyRunningCount = monthMyRunningCount,
+            MonthMyCompletedCount = monthMyCompletedCount,
+        };
+    }
+
+    /// <summary>
+    /// 获取已办任务统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>已办任务统计</returns>
+    public async Task<TaktWorkflowProcessedStatDto> GetWorkflowProcessedStatAsync(TaktWorkflowProcessedStatQueryDto queryDto)
+    {
+        EnsureThreeLayerContext();
+        var (start, end, statMonth) = TaktStatMonthRangeHelper.ResolveMonthRange(
+            queryDto.CompletedAtStart,
+            queryDto.CompletedAtEnd);
+        var tenantCode = CurrentTenantCode;
+        var companyCode = CurrentCompanyCode;
+        var userId = GetCurrentUserIdForApproval();
+        Expression<Func<TaktFlowTask, bool>> predicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.AssigneeUserId == userId
+            && x.TaskStatus == TaktFlowTaskStatus.Completed
+            && x.CompletedAt != null
+            && x.CompletedAt >= start
+            && x.CompletedAt <= end;
+        var monthProcessedTaskCount = await _flowTaskRepository.CountAsync(predicate);
+        return new TaktWorkflowProcessedStatDto
+        {
+            StatMonth = statMonth,
+            MonthProcessedTaskCount = monthProcessedTaskCount,
+        };
     }
 
     /// <summary>

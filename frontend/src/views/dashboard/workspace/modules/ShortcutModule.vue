@@ -19,7 +19,7 @@
               v-if="item.icon"
               class="shortcut-icon"
               :style="item.iconColor ? { color: item.iconColor } : undefined"
-            ><component :is="item.icon" /></span>
+            ><component :is="item.icon" :class="[TAKT_REMIX_ICON_CLASS, 'takt-remix-icon-xl']" /></span>
           </a>
         </a-tooltip>
       </a-col>
@@ -60,6 +60,8 @@ import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useMenuStore } from '@/stores/identity/menu'
 import { useWorkspaceShortcutStore } from '@/stores/dashboard/workspace-shortcut'
+import { TAKT_REMIX_ICON_CLASS } from '@/utils/common'
+import { resolveThemeColorCssVar } from '@/utils/theme'
 
 const router = useRouter()
 const { t } = useI18n()
@@ -68,16 +70,11 @@ const shortcutStore = useWorkspaceShortcutStore()
 
 const availableShortcuts = computed(() => menuStore.leafMenus)
 
-const FAMOUS_COLORS: string[] = [
-  '#2e8b57', '#00a0b0', '#FF0000', '#FF6347', '#990033',
-  '#8c1515', '#002FA7', '#4c2b18', '#003153', '#F4D35E', '#808080'
-]
-
 function getColorForPath(path: string): string {
   let n = 0
   const safePath = path || ''
   for (let i = 0; i < safePath.length; i++) n = (n * 31 + safePath.charCodeAt(i)) >>> 0
-  return FAMOUS_COLORS[n % FAMOUS_COLORS.length] as string
+  return resolveThemeColorCssVar(n)
 }
 
 watch(
@@ -93,23 +90,16 @@ watch(
 
 const shortcuts = computed(() => {
   const list = availableShortcuts.value
-  const getIconRenderer = menuStore.getIconRenderer
   const selected = shortcutStore.selectedPaths
   return list
     .filter(x => x.path && selected.includes(x.path))
     .slice(0, 16)
-    .map(x => {
-      const iconRenderer = x.iconName ? getIconRenderer(x.iconName) : undefined
-      // 渲染函数返回的是 VNode,我们需要在模板中使用 h() 函数来渲染
-      // 但为了在 <component :is="..."> 中使用,我们需要创建一个包装组件
-      const iconComponent = iconRenderer ? { render: () => iconRenderer({ key: x.path as string }) } : undefined
-      return {
-        path: x.path as string,
-        title: x.title || '',
-        icon: iconComponent,
-        iconColor: getColorForPath(x.path as string)
-      }
-    })
+    .map(x => ({
+      path: x.path,
+      title: x.title || '',
+      icon: x.icon,
+      iconColor: getColorForPath(x.path)
+    }))
 })
 
 const manageVisible = ref(false)
@@ -147,8 +137,8 @@ defineExpose({ openManage })
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
+  width: 52px;
+  height: 52px;
   padding: 0;
   border-radius: 8px;
   color: var(--ant-color-text);
@@ -174,8 +164,9 @@ defineExpose({ openManage })
     outline-offset: 2px;
   }
   .shortcut-icon {
-    font-size: 22px;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     transform: rotateY(0deg);
     transition: color 0.2s ease, transform 0.3s ease;
     will-change: transform;

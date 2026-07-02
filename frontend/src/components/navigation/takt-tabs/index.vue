@@ -130,6 +130,9 @@ import {
 } from '@/utils/takt-remix-icon'
 import { TAKT_REMIX_ICON_CLASS } from '@/utils/common'
 import { normalizeRoutePath } from '@/utils/permission'
+import { NOT_FOUND_ROUTE_NAME } from '@/router/menu-routes'
+import { TAKT_TABS_STORAGE_KEY } from '@/bootstrap/takt-logout-flow'
+import { EventBus } from '@/utils/event-bus'
 
 interface Tab {
   key: string
@@ -214,6 +217,30 @@ const findMenuByPath = (menus: MenuTree[], path: string): MenuTree | null => {
  * @param menu 菜单节点
  * @param routeMeta 路由 meta
  */
+/**
+ * 动态路由已注册时解析 tab 对应 route meta；未注册时跳过 resolve（避免登出/清路由后 Vue Router 警告）
+ * @param path 标签 path
+ */
+function resolveTabRouteMeta(path: string): RouteMeta | null {
+  if (!menuStore.isDynamicRoutesRegistered) {
+    return null
+  }
+
+  const resolved = router.resolve(path)
+  if (resolved.matched.length === 0 || resolved.name === NOT_FOUND_ROUTE_NAME) {
+    return null
+  }
+
+  return resolved.matched[resolved.matched.length - 1]?.meta ?? null
+}
+
+/** 登出后清空内存标签与持久化，避免恢复已注销的动态路由 path */
+function resetTabsForLogout(): void {
+  tabsList.value = []
+  activeKey.value = ''
+  localStorage.removeItem(TAKT_TABS_STORAGE_KEY)
+}
+
 const getTranslatedTitle = (menu: MenuTree | null, routeMeta: RouteMeta | null | undefined): string => {
   if (menu?.i18nKey) {
     const translated = t(menu.i18nKey)
@@ -408,12 +435,14 @@ watch(() => route.path, () => {
 
 // 重新计算所有标签页的标题（用于语言切换后更新）
 const refreshTabsTitles = () => {
+  if (tabsList.value.length === 0) {
+    return
+  }
+
   tabsList.value.forEach(tab => {
     const menu = findMenuByPath(menuStore.menuList, tab.path)
-    // 从路由匹配中查找对应的路由 meta
-    const matchedRoute = router.resolve(tab.path)
-    const routeMeta = matchedRoute.matched[matchedRoute.matched.length - 1]?.meta
-    const newTitle = getTranslatedTitle(menu, routeMeta ?? null) || tab.title
+    const routeMeta = resolveTabRouteMeta(tab.path)
+    const newTitle = getTranslatedTitle(menu, routeMeta) || tab.title
     tab.title = newTitle
   })
   saveTabsToStorage()
@@ -467,11 +496,16 @@ watch(activeKey, () => {
   saveTabsToStorage()
 })
 
-// 组件挂载时恢复标签页
+// 组件挂载时恢复标签页；登出时清标签（须在 performLogout 清路由之后仍可兜底）
 onMounted(() => {
+  EventBus.on('user:logout', resetTabsForLogout)
   if (settingSafe.value.persistTabs) {
     loadTabsFromStorage()
   }
+})
+
+onBeforeUnmount(() => {
+  EventBus.off('user:logout', resetTabsForLogout)
 })
 
 // 标签切换

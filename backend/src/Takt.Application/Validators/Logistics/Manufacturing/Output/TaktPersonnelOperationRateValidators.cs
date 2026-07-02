@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Manufacturing.Output
 // 文件名称：TaktPersonnelOperationRateValidators.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PersonnelOperationRate 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktPersonnelOperationRate 生成，请按需审阅）
 // 
@@ -38,17 +38,9 @@ public class TaktPersonnelOperationRateCreateValidator : AbstractValidator<TaktP
         RuleFor(x => x.PlantCode)
             .NotEmpty().WithMessage("工厂代码不能为空")
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
-        RuleFor(x => x.ProductionLine)
-            .NotEmpty().WithMessage("生产线不能为空")
-            .MaximumLength(20).WithMessage("生产线长度不能超过20个字符");
-        RuleFor(x => x.ProductionLineName)
-            .MaximumLength(100).WithMessage("生产线名称长度不能超过100个字符");
-        RuleFor(x => x.IdleReason)
-            .MaximumLength(500).WithMessage("空闲原因描述长度不能超过500个字符");
-        RuleFor(x => x.TeamLeader)
-            .MaximumLength(50).WithMessage("班组长长度不能超过50个字符");
-        RuleFor(x => x.Supervisor)
-            .MaximumLength(50).WithMessage("主管长度不能超过50个字符");
+        RuleFor(x => x.ProdTeam)
+            .NotEmpty().WithMessage("生产班组不能为空")
+            .MaximumLength(20).WithMessage("生产班组长度不能超过20个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -72,6 +64,22 @@ public class TaktPersonnelOperationRateUpdateValidator : AbstractValidator<TaktP
     {
         RuleFor(x => x.PersonnelOperationRateId)
             .GreaterThan(0).WithMessage("PersonnelOperationRateID无效");
+        RuleFor(x => x.TenantCode)
+            .NotEmpty().WithMessage("租户编码不能为空")
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.CompanyCode)
+            .NotEmpty().WithMessage("公司代码不能为空")
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.PlantCode)
+            .NotEmpty().WithMessage("工厂代码不能为空")
+            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
+        RuleFor(x => x.ProdTeam)
+            .NotEmpty().WithMessage("生产班组不能为空")
+            .MaximumLength(20).WithMessage("生产班组长度不能超过20个字符");
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
     }
 }
 
@@ -96,11 +104,9 @@ public class TaktPersonnelOperationRateImportValidator : AbstractValidator<TaktP
         RuleFor(x => x.PlantCode)
             .NotEmpty().WithMessage("工厂代码不能为空")
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
-        RuleFor(x => x.ProductionLine)
-            .NotEmpty().WithMessage("生产线不能为空")
-            .MaximumLength(20).WithMessage("生产线长度不能超过20个字符");
-        RuleFor(x => x.ProductionLineName)
-            .MaximumLength(100).WithMessage("生产线名称长度不能超过100个字符").When(x => !string.IsNullOrWhiteSpace(x.ProductionLineName));
+        RuleFor(x => x.ProdTeam)
+            .NotEmpty().WithMessage("生产班组不能为空")
+            .MaximumLength(20).WithMessage("生产班组长度不能超过20个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

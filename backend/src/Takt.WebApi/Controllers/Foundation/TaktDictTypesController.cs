@@ -201,11 +201,11 @@ public class TaktDictTypesController : TaktControllerBase
     }
 
     /// <summary>
-    /// 更新字典类型是否内置
+    /// 更新字典类型内置
     /// </summary>
-    /// <param name="dto">是否内置 DTO</param>
+    /// <param name="dto">内置 DTO</param>
     /// <returns>字典类型DTO</returns>
-    [TaktPermission("foundation:dict:update", "更新字典类型是否内置")]
+    [TaktPermission("foundation:dict:update", "更新字典类型内置")]
     [HttpPut("built-in")]
     public async Task<IActionResult> UpdateDictTypeBuiltInAsync([FromBody] TaktDictTypeBuiltInDto dto)
     {

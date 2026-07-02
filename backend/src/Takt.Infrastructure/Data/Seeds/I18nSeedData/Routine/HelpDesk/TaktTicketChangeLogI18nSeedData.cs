@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.HelpDesk
 // 文件名称：TaktTicketChangeLogI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktTicketChangeLog 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktTicketChangeLogI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ticketchangelog._self", "zh-HK", "工单变更日志信息_hk", "实体名称"),
 
             // entity.ticketchangelog.ticketid
-            new TranslationSeedItem("entity.ticketchangelog.ticketid", "en-US", "工单ID_us", "工单 ID"),
+            new TranslationSeedItem("entity.ticketchangelog.ticketid", "en-US", "工单ID_us", "工单 ID（关联 TaktTicket.Id，选项 TaktTickets/options）"),
             // entity.ticketchangelog.ticketid
-            new TranslationSeedItem("entity.ticketchangelog.ticketid", "ja-JP", "工单ID_jp", "工单 ID"),
+            new TranslationSeedItem("entity.ticketchangelog.ticketid", "ja-JP", "工单ID_jp", "工单 ID（关联 TaktTicket.Id，选项 TaktTickets/options）"),
             // entity.ticketchangelog.ticketid
-            new TranslationSeedItem("entity.ticketchangelog.ticketid", "zh-CN", "工单ID", "工单 ID"),
+            new TranslationSeedItem("entity.ticketchangelog.ticketid", "zh-CN", "工单ID", "工单 ID（关联 TaktTicket.Id，选项 TaktTickets/options）"),
             // entity.ticketchangelog.ticketid
-            new TranslationSeedItem("entity.ticketchangelog.ticketid", "zh-HK", "工单ID_hk", "工单 ID"),
+            new TranslationSeedItem("entity.ticketchangelog.ticketid", "zh-HK", "工单ID_hk", "工单 ID（关联 TaktTicket.Id，选项 TaktTickets/options）"),
 
             // entity.ticketchangelog.ticketno
             new TranslationSeedItem("entity.ticketchangelog.ticketno", "en-US", "工单编号_us", "工单编号（冗余，便于日志列表展示）"),
@@ -109,13 +109,13 @@ public class TaktTicketChangeLogI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ticketchangelog.ticketno", "zh-HK", "工单编号_hk", "工单编号（冗余，便于日志列表展示）"),
 
             // entity.ticketchangelog.changetype
-            new TranslationSeedItem("entity.ticketchangelog.changetype", "en-US", "变更类型_us", "变更类型（0=创建，1=更新，2=关闭/删除）"),
+            new TranslationSeedItem("entity.ticketchangelog.changetype", "en-US", "变更类型_us", "变更类型（字典 sys_entity_change_type；0=创建 1=更新 2=删除 3=状态变更）"),
             // entity.ticketchangelog.changetype
-            new TranslationSeedItem("entity.ticketchangelog.changetype", "ja-JP", "变更类型_jp", "变更类型（0=创建，1=更新，2=关闭/删除）"),
+            new TranslationSeedItem("entity.ticketchangelog.changetype", "ja-JP", "变更类型_jp", "变更类型（字典 sys_entity_change_type；0=创建 1=更新 2=删除 3=状态变更）"),
             // entity.ticketchangelog.changetype
-            new TranslationSeedItem("entity.ticketchangelog.changetype", "zh-CN", "变更类型", "变更类型（0=创建，1=更新，2=关闭/删除）"),
+            new TranslationSeedItem("entity.ticketchangelog.changetype", "zh-CN", "变更类型", "变更类型（字典 sys_entity_change_type；0=创建 1=更新 2=删除 3=状态变更）"),
             // entity.ticketchangelog.changetype
-            new TranslationSeedItem("entity.ticketchangelog.changetype", "zh-HK", "变更类型_hk", "变更类型（0=创建，1=更新，2=关闭/删除）"),
+            new TranslationSeedItem("entity.ticketchangelog.changetype", "zh-HK", "变更类型_hk", "变更类型（字典 sys_entity_change_type；0=创建 1=更新 2=删除 3=状态变更）"),
 
             // entity.ticketchangelog.changesummary
             new TranslationSeedItem("entity.ticketchangelog.changesummary", "en-US", "修改工单内容摘要_us", "修改工单内容摘要"),

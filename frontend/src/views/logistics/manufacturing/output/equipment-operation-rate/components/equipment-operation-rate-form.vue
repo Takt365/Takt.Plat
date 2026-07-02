@@ -74,13 +74,11 @@
                 :label="t('entity.equipmentoperationrate.plantcode')"
                 name="plantCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.plantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentoperationrate.plantcode') })"
-                  show-count
-                  :maxlength="4"
-                  allow-clear
-                  :disabled="!!formData?.equipmentOperationRateId"
+                  api-url="TaktPlants/options"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.equipmentoperationrate.plantcode') })"
+                  :disabled="!!formData?.equipmentOperationRateId || loading"
                 />
               </a-form-item>
             </a-col>
@@ -151,13 +149,11 @@
                 :label="t('entity.equipmentoperationrate.equipmentcode')"
                 name="equipmentCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.equipmentCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentoperationrate.equipmentcode') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                  :disabled="!!formData?.equipmentOperationRateId"
+                  api-url="TaktEquipments/options"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.equipmentoperationrate.equipmentcode') })"
+                  :disabled="!!formData?.equipmentOperationRateId || loading"
                 />
               </a-form-item>
             </a-col>
@@ -190,24 +186,25 @@
                 :label="t('entity.equipmentoperationrate.equipmenttype')"
                 name="equipmentType"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.equipmentType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentoperationrate.equipmenttype') })"
-                  style="width: 100%"
+                  dict-type="logistics_equipment_type"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.equipmentoperationrate.equipmenttype') })"
+                  :disabled="loading"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.equipmentoperationrate.productionline')"
-                name="productionLine"
+                :label="t('entity.equipmentoperationrate.prodteam')"
+                name="prodTeam"
               >
-                <a-input
-                  v-model:value="formState.productionLine"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentoperationrate.productionline') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                <TaktSelect
+                  v-model:value="formState.prodTeam"
+                  :options="filteredProductionTeamOptions"
+                  :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.equipmentoperationrate.prodteam') })"
+                  :disabled="loading || !formState.plantCode"
                 />
               </a-form-item>
             </a-col>
@@ -216,10 +213,11 @@
                 :label="t('entity.equipmentoperationrate.shiftno')"
                 name="shiftNo"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.shiftNo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentoperationrate.shiftno') })"
-                  style="width: 100%"
+                  dict-type="logistics_shift_category"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.equipmentoperationrate.shiftno') })"
+                  :disabled="loading"
                 />
               </a-form-item>
             </a-col>
@@ -369,26 +367,13 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.equipmentoperationrate.equipmentstatus')"
-                name="equipmentStatus"
-              >
-                <a-input-number
-                  v-model:value="formState.equipmentStatus"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentoperationrate.equipmentstatus') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
                 :label="t('entity.equipmentoperationrate.equipmentoperator')"
                 name="equipmentOperator"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.equipmentOperator"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentoperationrate.equipmentoperator') })"
-                  show-count
-                  :maxlength="50"
+                  api-url="TaktEmployees/options"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.equipmentoperationrate.equipmentoperator') })"
                   allow-clear
                 />
               </a-form-item>
@@ -398,11 +383,10 @@
                 :label="t('entity.equipmentoperationrate.equipmentmaintainer')"
                 name="equipmentMaintainer"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.equipmentMaintainer"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentoperationrate.equipmentmaintainer') })"
-                  show-count
-                  :maxlength="50"
+                  api-url="TaktEmployees/options"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.equipmentoperationrate.equipmentmaintainer') })"
                   allow-clear
                 />
               </a-form-item>
@@ -412,11 +396,10 @@
                 :label="t('entity.equipmentoperationrate.teamleader')"
                 name="teamLeader"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.teamLeader"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentoperationrate.teamleader') })"
-                  show-count
-                  :maxlength="50"
+                  api-url="TaktEmployees/options"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.equipmentoperationrate.teamleader') })"
                   allow-clear
                 />
               </a-form-item>
@@ -424,10 +407,10 @@
             <a-col :span="12">
               <a-form-item
                 :label="t('entity.equipmentoperationrate.status')"
-                name="status"
+                name="equipmentOperationRateStatus"
               >
                 <a-input-number
-                  v-model:value="formState.status"
+                  v-model:value="formState.equipmentOperationRateStatus"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentoperationrate.status') })"
                   style="width: 100%"
                 />
@@ -496,21 +479,49 @@
  * 机器稼动率实体维护表单 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/logistics/manufacturing/output/equipment-operation-rate/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import type { EquipmentOperationRateCreate } from '@/types/logistics/manufacturing/output/equipment-operation-rate'
+import type { TaktSelectOption } from '@/types/common'
+import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
+import { getProductionTeamOptions } from '@/api/logistics/manufacturing/output/production-team'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
+
+/** Pinia：字典缓存 */
+const dictDataStore = useDictDataStore()
+/** 生产班组下拉全量选项 */
+const productionTeamOptions = ref<TaktSelectOption[]>([])
+/** 按当前工厂过滤的生产线选项 */
+const filteredProductionTeamOptions = computed(() => {
+  const plantCode = formState.plantCode
+  if (!plantCode) {
+    return []
+  }
+  return productionTeamOptions.value.filter((item) => String(item.extValue ?? '') === String(plantCode))
+})
+
+/** 加载生产班组选项 */
+async function loadProductionTeamOptions() {
+  productionTeamOptions.value = await getProductionTeamOptions()
+}
 
 /** Pinia：租户/公司上下文 */
 const tenantStore = useTenantStore()
 /** Pinia：用户上下文 */
 const userStore = useUserStore()
+
+/** 表单挂载时预加载字典与班组选项 */
+onMounted(async () => {
+  void dictDataStore.loadAllDictDataAsync()
+  await loadProductionTeamOptions()
+})
 
 /**
  * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
@@ -533,7 +544,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","timeCategory","startDate","endDate","weekNumber","monthNumber","equipmentCode","equipmentName","equipmentType","productionLine","shiftNo","plannedRuntime","actualRuntime","downtime","equipmentOperationRate","plannedOutput","actualOutput","qualifiedQuantity","defectiveQuantity","yieldRate","downtimeReasonType","downtimeReason","equipmentStatus","equipmentOperator","equipmentMaintainer","teamLeader","status","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","timeCategory","startDate","endDate","weekNumber","monthNumber","equipmentCode","equipmentName","equipmentType","prodTeam","shiftNo","plannedRuntime","actualRuntime","downtime","equipmentOperationRate","plannedOutput","actualOutput","qualifiedQuantity","defectiveQuantity","yieldRate","downtimeReasonType","downtimeReason","equipmentOperator","equipmentMaintainer","teamLeader","equipmentOperationRateStatus","extField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -552,9 +563,15 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
-/** 表单字段默认值（无字典默认项） */
+/** 表单字段默认值 */
+const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  shiftNo: 1,
+  equipmentType: 0,
+}
+
+/** 写入表单默认值 */
 function applyFormDefaults(target: Record<string, unknown>) {
-  void target
+  Object.assign(target, FORM_FIELD_DEFAULTS)
 }
 
 
@@ -589,6 +606,28 @@ watch(
     const isCreate = !props.formData?.equipmentOperationRateId
     if (isCreate) {
       applyScopeDefaults(formState, true)
+    }
+  },
+)
+
+/** 工厂变更时清理无效生产线 */
+watch(
+  () => formState.plantCode,
+  (plantCode, prevPlantCode) => {
+    if (props.formData?.equipmentOperationRateId) {
+      return
+    }
+    if (!plantCode) {
+      formState.prodTeam = undefined
+      return
+    }
+    if (prevPlantCode && prevPlantCode !== plantCode && formState.prodTeam) {
+      const lineStillValid = filteredProductionTeamOptions.value.some(
+        (item) => String(item.dictValue ?? '') === String(formState.prodTeam)
+      )
+      if (!lineStillValid) {
+        formState.prodTeam = undefined
+      }
     }
   },
 )
@@ -786,20 +825,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
-  equipmentStatus: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.equipmentoperationrate.equipmentstatus') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.equipmentoperationrate.equipmentstatus') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  status: [{
+  equipmentOperationRateStatus: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
         return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.equipmentoperationrate.status') }))
@@ -883,13 +909,9 @@ function getValues(): Record<string, any> {
     const rawdowntimeReasonType = payload.downtimeReasonType
     payload.downtimeReasonType = typeof rawdowntimeReasonType === 'number' ? rawdowntimeReasonType : Number(rawdowntimeReasonType)
   }
-  if ('equipmentStatus' in payload) {
-    const rawequipmentStatus = payload.equipmentStatus
-    payload.equipmentStatus = typeof rawequipmentStatus === 'number' ? rawequipmentStatus : Number(rawequipmentStatus)
-  }
-  if ('status' in payload) {
-    const rawstatus = payload.status
-    payload.status = typeof rawstatus === 'number' ? rawstatus : Number(rawstatus)
+  if ('equipmentOperationRateStatus' in payload) {
+    const rawEquipmentOperationRateStatus = payload.equipmentOperationRateStatus
+    payload.equipmentOperationRateStatus = typeof rawEquipmentOperationRateStatus === 'number' ? rawEquipmentOperationRateStatus : Number(rawEquipmentOperationRateStatus)
   }
   if ('sortOrder' in payload) delete payload.sortOrder
   return payload

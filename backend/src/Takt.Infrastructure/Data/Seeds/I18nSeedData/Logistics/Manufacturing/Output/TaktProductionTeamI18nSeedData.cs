@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Output
 // 文件名称：TaktProductionTeamI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktProductionTeam 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktProductionTeamI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.productionteam._self", "zh-HK", "生产班组信息_hk", "实体名称"),
 
             // entity.productionteam.plantcode
-            new TranslationSeedItem("entity.productionteam.plantcode", "en-US", "工厂代码_us", "工厂代码"),
+            new TranslationSeedItem("entity.productionteam.plantcode", "en-US", "工厂代码_us", "工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
             // entity.productionteam.plantcode
-            new TranslationSeedItem("entity.productionteam.plantcode", "ja-JP", "工厂代码_jp", "工厂代码"),
+            new TranslationSeedItem("entity.productionteam.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
             // entity.productionteam.plantcode
-            new TranslationSeedItem("entity.productionteam.plantcode", "zh-CN", "工厂代码", "工厂代码"),
+            new TranslationSeedItem("entity.productionteam.plantcode", "zh-CN", "工厂代码", "工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
             // entity.productionteam.plantcode
-            new TranslationSeedItem("entity.productionteam.plantcode", "zh-HK", "工厂代码_hk", "工厂代码"),
+            new TranslationSeedItem("entity.productionteam.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
 
             // entity.productionteam.teamcode
             new TranslationSeedItem("entity.productionteam.teamcode", "en-US", "班组编码_us", "班组编码（唯一标识，例如：1、1SMT1、1SMT2、2自插A 等）"),
@@ -118,67 +118,40 @@ public class TaktProductionTeamI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.productionteam.teamname", "zh-HK", "班组名称_hk", "班组名称（显示名称，如：SMT一班、手插二班等）"),
 
             // entity.productionteam.teamcategory
-            new TranslationSeedItem("entity.productionteam.teamcategory", "en-US", "班组分类编码_us", "班组分类编码（M=组立，P=PCBA，S=SMT，Q=质检，O=其他）"),
+            new TranslationSeedItem("entity.productionteam.teamcategory", "en-US", "班组分类编码_us", "班组分类（字典 logistics_team_category，存 DictValue；A=组立 P=PCBA S=SMT Q=质检 O=其他）"),
             // entity.productionteam.teamcategory
-            new TranslationSeedItem("entity.productionteam.teamcategory", "ja-JP", "班组分类编码_jp", "班组分类编码（M=组立，P=PCBA，S=SMT，Q=质检，O=其他）"),
+            new TranslationSeedItem("entity.productionteam.teamcategory", "ja-JP", "班组分类编码_jp", "班组分类（字典 logistics_team_category，存 DictValue；A=组立 P=PCBA S=SMT Q=质检 O=其他）"),
             // entity.productionteam.teamcategory
-            new TranslationSeedItem("entity.productionteam.teamcategory", "zh-CN", "班组分类编码", "班组分类编码（M=组立，P=PCBA，S=SMT，Q=质检，O=其他）"),
+            new TranslationSeedItem("entity.productionteam.teamcategory", "zh-CN", "班组分类编码", "班组分类（字典 logistics_team_category，存 DictValue；A=组立 P=PCBA S=SMT Q=质检 O=其他）"),
             // entity.productionteam.teamcategory
-            new TranslationSeedItem("entity.productionteam.teamcategory", "zh-HK", "班组分类编码_hk", "班组分类编码（M=组立，P=PCBA，S=SMT，Q=质检，O=其他）"),
-
-            // entity.productionteam.teamcategoryname
-            new TranslationSeedItem("entity.productionteam.teamcategoryname", "en-US", "班组分类名称_us", "班组分类名称（如：组立、PCBA、SMT、质检等）"),
-            // entity.productionteam.teamcategoryname
-            new TranslationSeedItem("entity.productionteam.teamcategoryname", "ja-JP", "班组分类名称_jp", "班组分类名称（如：组立、PCBA、SMT、质检等）"),
-            // entity.productionteam.teamcategoryname
-            new TranslationSeedItem("entity.productionteam.teamcategoryname", "zh-CN", "班组分类名称", "班组分类名称（如：组立、PCBA、SMT、质检等）"),
-            // entity.productionteam.teamcategoryname
-            new TranslationSeedItem("entity.productionteam.teamcategoryname", "zh-HK", "班组分类名称_hk", "班组分类名称（如：组立、PCBA、SMT、质检等）"),
-
-            // entity.productionteam.productionline
-            new TranslationSeedItem("entity.productionteam.productionline", "en-US", "生产线代码_us", "生产线代码（如：SMT1、ASSY1 等，与 TeamCode 区分，TeamCode 可包含班组信息）"),
-            // entity.productionteam.productionline
-            new TranslationSeedItem("entity.productionteam.productionline", "ja-JP", "生产线代码_jp", "生产线代码（如：SMT1、ASSY1 等，与 TeamCode 区分，TeamCode 可包含班组信息）"),
-            // entity.productionteam.productionline
-            new TranslationSeedItem("entity.productionteam.productionline", "zh-CN", "生产线代码", "生产线代码（如：SMT1、ASSY1 等，与 TeamCode 区分，TeamCode 可包含班组信息）"),
-            // entity.productionteam.productionline
-            new TranslationSeedItem("entity.productionteam.productionline", "zh-HK", "生产线代码_hk", "生产线代码（如：SMT1、ASSY1 等，与 TeamCode 区分，TeamCode 可包含班组信息）"),
-
-            // entity.productionteam.teamleaderid
-            new TranslationSeedItem("entity.productionteam.teamleaderid", "en-US", "班组长员工Id_us", "班组长员工Id"),
-            // entity.productionteam.teamleaderid
-            new TranslationSeedItem("entity.productionteam.teamleaderid", "ja-JP", "班组长员工Id_jp", "班组长员工Id"),
-            // entity.productionteam.teamleaderid
-            new TranslationSeedItem("entity.productionteam.teamleaderid", "zh-CN", "班组长员工Id", "班组长员工Id"),
-            // entity.productionteam.teamleaderid
-            new TranslationSeedItem("entity.productionteam.teamleaderid", "zh-HK", "班组长员工Id_hk", "班组长员工Id"),
+            new TranslationSeedItem("entity.productionteam.teamcategory", "zh-HK", "班组分类编码_hk", "班组分类（字典 logistics_team_category，存 DictValue；A=组立 P=PCBA S=SMT Q=质检 O=其他）"),
 
             // entity.productionteam.teamleadername
-            new TranslationSeedItem("entity.productionteam.teamleadername", "en-US", "班组长姓名_us", "班组长姓名"),
+            new TranslationSeedItem("entity.productionteam.teamleadername", "en-US", "班组长姓名_us", "班组长姓名（选项 TaktEmployees/options，存员工姓名或工号）"),
             // entity.productionteam.teamleadername
-            new TranslationSeedItem("entity.productionteam.teamleadername", "ja-JP", "班组长姓名_jp", "班组长姓名"),
+            new TranslationSeedItem("entity.productionteam.teamleadername", "ja-JP", "班组长姓名_jp", "班组长姓名（选项 TaktEmployees/options，存员工姓名或工号）"),
             // entity.productionteam.teamleadername
-            new TranslationSeedItem("entity.productionteam.teamleadername", "zh-CN", "班组长姓名", "班组长姓名"),
+            new TranslationSeedItem("entity.productionteam.teamleadername", "zh-CN", "班组长姓名", "班组长姓名（选项 TaktEmployees/options，存员工姓名或工号）"),
             // entity.productionteam.teamleadername
-            new TranslationSeedItem("entity.productionteam.teamleadername", "zh-HK", "班组长姓名_hk", "班组长姓名"),
+            new TranslationSeedItem("entity.productionteam.teamleadername", "zh-HK", "班组长姓名_hk", "班组长姓名（选项 TaktEmployees/options，存员工姓名或工号）"),
 
             // entity.productionteam.shiftno
-            new TranslationSeedItem("entity.productionteam.shiftno", "en-US", "班次_us", "班次（1=早班，2=中班，3=晚班）"),
+            new TranslationSeedItem("entity.productionteam.shiftno", "en-US", "班次_us", "班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
             // entity.productionteam.shiftno
-            new TranslationSeedItem("entity.productionteam.shiftno", "ja-JP", "班次_jp", "班次（1=早班，2=中班，3=晚班）"),
+            new TranslationSeedItem("entity.productionteam.shiftno", "ja-JP", "班次_jp", "班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
             // entity.productionteam.shiftno
-            new TranslationSeedItem("entity.productionteam.shiftno", "zh-CN", "班次", "班次（1=早班，2=中班，3=晚班）"),
+            new TranslationSeedItem("entity.productionteam.shiftno", "zh-CN", "班次", "班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
             // entity.productionteam.shiftno
-            new TranslationSeedItem("entity.productionteam.shiftno", "zh-HK", "班次_hk", "班次（1=早班，2=中班，3=晚班）"),
+            new TranslationSeedItem("entity.productionteam.shiftno", "zh-HK", "班次_hk", "班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
 
             // entity.productionteam.status
-            new TranslationSeedItem("entity.productionteam.status", "en-US", "启用状态_us", "启用状态（1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.productionteam.status", "en-US", "启用状态_us", "启用状态（字典 sys_normal_disable_status；0=禁用，1=启用）"),
             // entity.productionteam.status
-            new TranslationSeedItem("entity.productionteam.status", "ja-JP", "启用状态_jp", "启用状态（1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.productionteam.status", "ja-JP", "启用状态_jp", "启用状态（字典 sys_normal_disable_status；0=禁用，1=启用）"),
             // entity.productionteam.status
-            new TranslationSeedItem("entity.productionteam.status", "zh-CN", "启用状态", "启用状态（1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.productionteam.status", "zh-CN", "启用状态", "启用状态（字典 sys_normal_disable_status；0=禁用，1=启用）"),
             // entity.productionteam.status
-            new TranslationSeedItem("entity.productionteam.status", "zh-HK", "启用状态_hk", "启用状态（1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.productionteam.status", "zh-HK", "启用状态_hk", "启用状态（字典 sys_normal_disable_status；0=禁用，1=启用）"),
         };
     }
 

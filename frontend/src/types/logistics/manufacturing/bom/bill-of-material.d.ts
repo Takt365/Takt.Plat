@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/bom
 // 文件名称：bill-of-material.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/bom 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -92,11 +92,6 @@ export interface BillOfMaterial extends CompanyDtoBase {
    * 基本数量（BOM基数，对应SAP Base quantity）
    */
   parentMaterialQuantity: number;
-
-  /**
-   * 是否启用（0=否，1=是）
-   */
-  isEnabled: number;
 
   /**
    * BOM状态（0=草稿，1=已发布，2=已停用）
@@ -219,11 +214,6 @@ export interface BillOfMaterialQuery extends TaktPagedQuery {
   parentMaterialQuantity?: number;
 
   /**
-   * 是否启用（0=否，1=是）
-   */
-  isEnabled?: number;
-
-  /**
    * BOM状态（0=草稿，1=已发布，2=已停用）
    */
   bomStatus?: number;
@@ -251,7 +241,7 @@ export interface BillOfMaterialQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -278,7 +268,7 @@ export interface BillOfMaterialCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -348,11 +338,6 @@ export interface BillOfMaterialCreate {
   parentMaterialQuantity: number;
 
   /**
-   * 是否启用（0=否，1=是）
-   */
-  isEnabled: number;
-
-  /**
    * BOM状态（0=草稿，1=已发布，2=已停用）
    */
   bomStatus: number;
@@ -361,11 +346,6 @@ export interface BillOfMaterialCreate {
    * BOM描述
    */
   bomDescription?: string;
-
-  /**
-   * 排序号（越小越靠前）
-   */
-  sortOrder: number;
 
   /**
    * BOM组成件明细（扁平单层；多层通过子件物料关联其BOM头递归展开）（子表，级联保存）
@@ -380,7 +360,7 @@ export interface BillOfMaterialCreate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -505,14 +485,24 @@ export interface BillOfMaterialTemplate {
   alternativeBomNumber?: string;
 
   /**
+   * 生效日期
+   */
+  effectiveDate?: string;
+
+  /**
+   * 失效日期（为空表示永久有效）
+   */
+  expiryDate?: string;
+
+  /**
    * 父物料单位
    */
   parentMaterialUnit?: string;
 
   /**
-   * 是否启用（0=否，1=是）
+   * 基本数量（BOM基数，对应SAP Base quantity）
    */
-  isEnabled?: number;
+  parentMaterialQuantity?: number;
 
   /**
    * BOM状态（0=草稿，1=已发布，2=已停用）
@@ -520,9 +510,24 @@ export interface BillOfMaterialTemplate {
   bomStatus?: number;
 
   /**
+   * BOM描述
+   */
+  bomDescription?: string;
+
+  /**
+   * BOM组成件明细（扁平单层；多层通过子件物料关联其BOM头递归展开）（子表，级联保存）
+   */
+  items?: BillOfMaterialItemCreate[];
+
+  /**
+   * BOM变更记录列表（外键在子表 TaktBillOfMaterialChangeLog.BillOfMaterialId）（子表，级联保存）
+   */
+  changeLogs?: BillOfMaterialChangeLogCreate[];
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -549,7 +554,7 @@ export interface BillOfMaterialImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -599,14 +604,24 @@ export interface BillOfMaterialImport {
   alternativeBomNumber?: string;
 
   /**
+   * 生效日期
+   */
+  effectiveDate?: string;
+
+  /**
+   * 失效日期（为空表示永久有效）
+   */
+  expiryDate?: string;
+
+  /**
    * 父物料单位
    */
   parentMaterialUnit?: string;
 
   /**
-   * 是否启用（0=否，1=是）
+   * 基本数量（BOM基数，对应SAP Base quantity）
    */
-  isEnabled?: number;
+  parentMaterialQuantity?: number;
 
   /**
    * BOM状态（0=草稿，1=已发布，2=已停用）
@@ -614,9 +629,24 @@ export interface BillOfMaterialImport {
   bomStatus?: number;
 
   /**
+   * BOM描述
+   */
+  bomDescription?: string;
+
+  /**
+   * BOM组成件明细（扁平单层；多层通过子件物料关联其BOM头递归展开）（子表，级联保存）
+   */
+  items?: BillOfMaterialItemCreate[];
+
+  /**
+   * BOM变更记录列表（外键在子表 TaktBillOfMaterialChangeLog.BillOfMaterialId）（子表，级联保存）
+   */
+  changeLogs?: BillOfMaterialChangeLogCreate[];
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -708,11 +738,6 @@ export interface BillOfMaterialExport {
   parentMaterialQuantity: number;
 
   /**
-   * 是否启用（0=否，1=是）
-   */
-  isEnabled: number;
-
-  /**
    * BOM状态（0=草稿，1=已发布，2=已停用）
    */
   bomStatus: number;
@@ -730,7 +755,7 @@ export interface BillOfMaterialExport {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注

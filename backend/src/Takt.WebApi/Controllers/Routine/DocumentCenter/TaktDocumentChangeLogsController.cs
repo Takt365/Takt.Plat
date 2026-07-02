@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Routine.DocumentCenter
 // 文件名称：TaktDocumentChangeLogsController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-27
 // 创建人：Takt365(Cursor AI)
 // 功能描述：文管文档变更日志控制器
 // 
@@ -41,7 +41,7 @@ public class TaktDocumentChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("routine:document:center:document:change:log:list", "文管文档变更日志列表")]
+    [TaktPermission("routine:document:center:list", "文管文档变更日志列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetDocumentChangeLogListAsync([FromQuery] TaktDocumentChangeLogQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktDocumentChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="id">文管文档变更日志ID</param>
     /// <returns>文管文档变更日志DTO</returns>
-    [TaktPermission("routine:document:center:document:change:log:query", "文管文档变更日志详情")]
+    [TaktPermission("routine:document:center:query", "文管文档变更日志详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetDocumentChangeLogByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktDocumentChangeLogsController : TaktControllerBase
     /// 获取文管文档变更日志选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("routine:document:center:document:change:log:query", "文管文档变更日志选项")]
+    [TaktPermission("routine:document:center:query", "文管文档变更日志选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetDocumentChangeLogOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktDocumentChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>文管文档变更日志DTO</returns>
-    [TaktPermission("routine:document:center:document:change:log:create", "创建文管文档变更日志")]
+    [TaktPermission("routine:document:center:create", "创建文管文档变更日志")]
     [HttpPost]
     public async Task<IActionResult> CreateDocumentChangeLogAsync([FromBody] TaktDocumentChangeLogCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktDocumentChangeLogsController : TaktControllerBase
     /// <param name="id">文管文档变更日志ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>文管文档变更日志DTO</returns>
-    [TaktPermission("routine:document:center:document:change:log:update", "更新文管文档变更日志")]
+    [TaktPermission("routine:document:center:update", "更新文管文档变更日志")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateDocumentChangeLogAsync(long id, [FromBody] TaktDocumentChangeLogUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktDocumentChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="id">文管文档变更日志ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("routine:document:center:document:change:log:delete", "删除文管文档变更日志")]
+    [TaktPermission("routine:document:center:delete", "删除文管文档变更日志")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteDocumentChangeLogByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktDocumentChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("routine:document:center:document:change:log:delete", "批量删除文管文档变更日志")]
+    [TaktPermission("routine:document:center:delete", "批量删除文管文档变更日志")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteDocumentChangeLogBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktDocumentChangeLogsController : TaktControllerBase
     /// 导出文管文档变更日志
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("routine:document:center:document:change:log:export", "导出文管文档变更日志")]
+    [TaktPermission("routine:document:center:export", "导出文管文档变更日志")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportDocumentChangeLogAsync([FromQuery] TaktDocumentChangeLogQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

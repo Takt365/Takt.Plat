@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/routine/news-center
 // 文件名称：news-comment.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：routine/news-center 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -81,7 +81,7 @@ export interface NewsComment extends ApprovalDtoBase {
   /**
    * 点赞次数
    */
-  likeCount: number;
+  newsCommentLikeCount: number;
 
   /**
    * 回复次数（子评论数量）
@@ -92,16 +92,6 @@ export interface NewsComment extends ApprovalDtoBase {
    * 评论层级（0=顶级，最多 3 级）
    */
   commentLevel: number;
-
-  /**
-   * 流程实例 ID（评论审核工作流）
-   */
-  flowInstanceId?: string;
-
-  /**
-   * 流程实例 名称（填充字段）
-   */
-  flowInstanceName?: string;
 
   /**
    * 评论状态
@@ -206,7 +196,7 @@ export interface NewsCommentQuery extends TaktPagedQuery {
   /**
    * 点赞次数
    */
-  likeCount?: number;
+  newsCommentLikeCount?: number;
 
   /**
    * 回复次数（子评论数量）
@@ -219,17 +209,12 @@ export interface NewsCommentQuery extends TaktPagedQuery {
   commentLevel?: number;
 
   /**
-   * 流程实例 ID（评论审核工作流）
-   */
-  flowInstanceId?: string;
-
-  /**
    * 评论状态
    */
   commentStatus?: number;
 
   /**
-   * 审批状态（TaktApprovalStatus）
+   * 审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）
    */
   approvalStatus?: number;
 
@@ -264,6 +249,11 @@ export interface NewsCommentQuery extends TaktPagedQuery {
   approvedAtEnd?: string;
 
   /**
+   * 流程实例 ID
+   */
+  flowInstanceId?: string;
+
+  /**
    * 创建时间（范围查询-开始）
    */
   createdAtStart?: string;
@@ -276,7 +266,7 @@ export interface NewsCommentQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -303,7 +293,7 @@ export interface NewsCommentCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -355,7 +345,7 @@ export interface NewsCommentCreate {
   /**
    * 点赞次数
    */
-  likeCount: number;
+  newsCommentLikeCount: number;
 
   /**
    * 回复次数（子评论数量）
@@ -366,11 +356,6 @@ export interface NewsCommentCreate {
    * 评论层级（0=顶级，最多 3 级）
    */
   commentLevel: number;
-
-  /**
-   * 流程实例 ID（评论审核工作流）
-   */
-  flowInstanceId?: string;
 
   /**
    * 评论状态
@@ -385,7 +370,7 @@ export interface NewsCommentCreate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -486,9 +471,14 @@ export interface NewsCommentTemplate {
   commentContent?: string;
 
   /**
+   * 评论时间
+   */
+  commentTime?: string;
+
+  /**
    * 点赞次数
    */
-  likeCount?: number;
+  newsCommentLikeCount?: number;
 
   /**
    * 回复次数（子评论数量）
@@ -501,14 +491,19 @@ export interface NewsCommentTemplate {
   commentLevel?: number;
 
   /**
-   * 流程实例 ID（评论审核工作流）
+   * 评论状态
    */
-  flowInstanceId?: string;
+  commentStatus?: number;
+
+  /**
+   * 评论点赞记录列表（主子表关系）（子表，级联保存）
+   */
+  likes?: NewsCommentLikeCreate[];
 
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -535,7 +530,7 @@ export interface NewsCommentImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -580,9 +575,14 @@ export interface NewsCommentImport {
   commentContent?: string;
 
   /**
+   * 评论时间
+   */
+  commentTime?: string;
+
+  /**
    * 点赞次数
    */
-  likeCount?: number;
+  newsCommentLikeCount?: number;
 
   /**
    * 回复次数（子评论数量）
@@ -595,14 +595,19 @@ export interface NewsCommentImport {
   commentLevel?: number;
 
   /**
-   * 流程实例 ID（评论审核工作流）
+   * 评论状态
    */
-  flowInstanceId?: string;
+  commentStatus?: number;
+
+  /**
+   * 评论点赞记录列表（主子表关系）（子表，级联保存）
+   */
+  likes?: NewsCommentLikeCreate[];
 
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -671,7 +676,7 @@ export interface NewsCommentExport {
   /**
    * 点赞次数
    */
-  likeCount: number;
+  newsCommentLikeCount: number;
 
   /**
    * 回复次数（子评论数量）
@@ -684,11 +689,6 @@ export interface NewsCommentExport {
   commentLevel: number;
 
   /**
-   * 流程实例 ID（评论审核工作流）
-   */
-  flowInstanceId?: string;
-
-  /**
    * 评论状态
    */
   commentStatus: number;
@@ -696,7 +696,7 @@ export interface NewsCommentExport {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注

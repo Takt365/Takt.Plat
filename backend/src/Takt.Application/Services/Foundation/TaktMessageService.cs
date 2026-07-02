@@ -18,6 +18,7 @@ using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Entities.Identity;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
+using Takt.Shared.Constants;
 using Takt.Shared.Enums;
 using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
@@ -41,6 +42,16 @@ public class TaktMessageService : TaktServiceBase, ITaktMessageService
     /// 指定用户列表模式最大接收者数量
     /// </summary>
     private const int MaxListRecipients = 5;
+
+    /// <summary>
+    /// 单条消息标题中正文前缀最大长度
+    /// </summary>
+    private const int MessageTitleContentMax = 40;
+
+    /// <summary>
+    /// 消息标题最大长度
+    /// </summary>
+    private const int MessageTitleMaxLength = 200;
 
     private readonly ITaktCompanyRepository<TaktMessage> _messageRepository;
     private readonly ITaktTenantRepository<TaktUser> _userRepository;
@@ -86,6 +97,7 @@ public class TaktMessageService : TaktServiceBase, ITaktMessageService
             orderBy: x => x.CreatedAt,
             isDesc: true);
         var dtos = items.Adapt<List<TaktMessageDto>>();
+        await FillMessageSenderNicknamesAsync(dtos);
         return TaktPagedResult<TaktMessageDto>.Create(dtos, total, queryDto.PageIndex, queryDto.PageSize);
     }
 
@@ -124,7 +136,9 @@ public class TaktMessageService : TaktServiceBase, ITaktMessageService
         {
             return null;
         }
-        return entity.Adapt<TaktMessageDto>();
+        var dto = entity.Adapt<TaktMessageDto>();
+        await FillMessageSenderNicknamesAsync(new List<TaktMessageDto> { dto });
+        return dto;
     }
 
     /// <summary>
@@ -156,16 +170,14 @@ public class TaktMessageService : TaktServiceBase, ITaktMessageService
         var entity = dto.Adapt<TaktMessage>();
         entity.TenantCode = CurrentTenantCode;
         entity.CompanyCode = CurrentCompanyCode;
-        entity.ToUserId = await ResolveMessageToUserIdAsync(dto.ToUserId, dto.ToUserName);
+        entity.ToUserId = await ResolveMessageToUserIdAsync(dto.ToUserId ?? 0, dto.ToUserName);
         entity.ToUserName = await ResolveMessageUserNameAsync(entity.ToUserId, dto.ToUserName);
-        entity.FromUserId = await ResolveMessageFromUserIdAsync(dto.FromUserId, dto.FromUserName);
+        entity.FromUserId = await ResolveMessageFromUserIdAsync(dto.FromUserId ?? 0, dto.FromUserName);
         entity.FromUserName = await ResolveMessageUserNameAsync(entity.FromUserId, dto.FromUserName);
         entity.IsCc = dto.IsCc;
-        entity.MessageTitle = dto.MessageTitle ?? string.Empty;
-        if (entity.MessageGroup == default)
-        {
-            entity.MessageGroup = 1;
-        }
+        entity.MessageTitle = dto.MessageTitle;
+        entity.MessageType = string.IsNullOrWhiteSpace(dto.MessageType) ? "system" : dto.MessageType.Trim();
+        entity.MessageGroup = string.IsNullOrWhiteSpace(dto.MessageGroup) ? "message" : dto.MessageGroup.Trim();
         if (entity.SendTime == default)
         {
             entity.SendTime = DateTime.Now;
@@ -197,7 +209,7 @@ public class TaktMessageService : TaktServiceBase, ITaktMessageService
         }
 
         var recipientUserIds = await ResolveBatchRecipientUserIdsAsync(dto);
-        var senderUserId = await ResolveMessageFromUserIdAsync(dto.FromUserId, dto.FromUserName);
+        var senderUserId = await ResolveMessageFromUserIdAsync(dto.FromUserId ?? 0, dto.FromUserName);
         var senderUserName = await ResolveMessageUserNameAsync(senderUserId, dto.FromUserName);
         recipientUserIds = recipientUserIds
             .Where(id => id != senderUserId)
@@ -297,7 +309,7 @@ public class TaktMessageService : TaktServiceBase, ITaktMessageService
         createDto.ToUserId = senderUserId;
         createDto.ToUserName = senderUserName;
         createDto.SendTime = sendTime;
-        createDto.IsCc = 0;
+        createDto.IsCc = 1;
         return await CreateMessageAsync(createDto);
     }
 
@@ -350,6 +362,72 @@ public class TaktMessageService : TaktServiceBase, ITaktMessageService
         {
             ThrowIfPushFailures(pushFailures, pushTargets.Count);
         }
+    }
+
+    /// <inheritdoc />
+    public async Task CreateAndSendOnlineKickMessageAsync(
+        TaktOnline online,
+        string messageContent,
+        string messageGroup,
+        long? fromUserId = null,
+        string? fromUserName = null)
+    {
+        ArgumentNullException.ThrowIfNull(online);
+        ArgumentException.ThrowIfNullOrWhiteSpace(messageContent);
+        var tenantCode = online.TenantCode?.Trim() ?? string.Empty;
+        var companyCode = online.CompanyCode?.Trim() ?? string.Empty;
+        var toUserName = online.UserName?.Trim() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(tenantCode)
+            || string.IsNullOrWhiteSpace(companyCode)
+            || string.IsNullOrWhiteSpace(toUserName)
+            || online.UserId <= 0)
+        {
+            throw new TaktBusinessException("强退消息缺少在线用户租户/公司/接收者信息");
+        }
+
+        var content = messageContent.Trim();
+        var group = string.IsNullOrWhiteSpace(messageGroup)
+            ? TaktOnlineConstants.KickExecuteMessageGroup
+            : messageGroup.Trim();
+        var (senderUserId, senderUserName) = await ResolveKickMessageSenderAsync(
+            tenantCode,
+            fromUserId,
+            fromUserName);
+        var entity = new TaktMessage
+        {
+            TenantCode = tenantCode,
+            CompanyCode = companyCode,
+            FromUserId = senderUserId,
+            FromUserName = senderUserName,
+            ToUserId = online.UserId,
+            ToUserName = toUserName,
+            MessageTitle = BuildAutoMessageTitle(TaktOnlineConstants.KickMessageType, group, content),
+            MessageContent = content,
+            MessageType = TaktOnlineConstants.KickMessageType,
+            MessageGroup = group,
+            SendTime = DateTime.Now,
+            IsCc = 0,
+            ReadStatus = 0,
+        };
+        entity = await _messageRepository.CreateAsync(entity);
+        var push = new TaktSignalRPrivateMessagePush
+        {
+            CompanyCode = companyCode,
+            MessageId = entity.Id,
+            FromUserName = entity.FromUserName,
+            FromUserId = entity.FromUserId,
+            ToUserName = entity.ToUserName,
+            ToUserId = entity.ToUserId,
+            MessageTitle = entity.MessageTitle,
+            MessageContent = entity.MessageContent,
+            Attachments = entity.MessageAttachments,
+            MessageType = entity.MessageType,
+            MessageGroup = entity.MessageGroup,
+            SendTime = entity.SendTime,
+            ReadTime = entity.ReadTime,
+            ReadStatus = entity.ReadStatus,
+        };
+        await _signalRDispatchService.PushPrivateMessageAsync(push);
     }
 
     /// <summary>
@@ -588,11 +666,11 @@ public class TaktMessageService : TaktServiceBase, ITaktMessageService
                 || (x.ToUserName != null && x.ToUserName.Contains(keywords))
                 || SqlFunc.ToString(x.ToUserId).Contains(keywords)
                 || SqlFunc.ToString(x.IsCc).Contains(keywords)
-                || (x.MessageTitle != null && x.MessageTitle.Contains(keywords))
+                || x.MessageTitle.Contains(keywords)
                 || (x.MessageContent != null && x.MessageContent.Contains(keywords))
-                || (x.Attachments != null && x.Attachments.Contains(keywords))
-                || SqlFunc.ToString(x.MessageType).Contains(keywords)
-                || SqlFunc.ToString(x.MessageGroup).Contains(keywords)
+                || (x.MessageAttachments != null && x.MessageAttachments.Contains(keywords))
+                || x.MessageType.Contains(keywords)
+                || x.MessageGroup.Contains(keywords)
                 || SqlFunc.ToString(x.ReadStatus).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
@@ -630,7 +708,7 @@ public class TaktMessageService : TaktServiceBase, ITaktMessageService
 
         if (!string.IsNullOrEmpty(queryDto?.MessageTitle))
         {
-            exp = exp.And(x => x.MessageTitle != null && x.MessageTitle.Contains(queryDto.MessageTitle));
+            exp = exp.And(x => x.MessageTitle.Contains(queryDto.MessageTitle));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.MessageContent))
@@ -638,19 +716,21 @@ public class TaktMessageService : TaktServiceBase, ITaktMessageService
             exp = exp.And(x => x.MessageContent != null && x.MessageContent.Contains(queryDto.MessageContent));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Attachments))
+        if (!string.IsNullOrEmpty(queryDto?.MessageAttachments))
         {
-            exp = exp.And(x => x.Attachments != null && x.Attachments.Contains(queryDto.Attachments));
+            exp = exp.And(x => x.MessageAttachments != null && x.MessageAttachments.Contains(queryDto.MessageAttachments));
         }
 
-        if (queryDto?.MessageType.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.MessageType))
         {
-            exp = exp.And(x => x.MessageType == queryDto.MessageType);
+            var messageType = queryDto.MessageType.Trim();
+            exp = exp.And(x => x.MessageType == messageType);
         }
 
-        if (queryDto?.MessageGroup.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.MessageGroup))
         {
-            exp = exp.And(x => x.MessageGroup == queryDto.MessageGroup);
+            var messageGroup = queryDto.MessageGroup.Trim();
+            exp = exp.And(x => x.MessageGroup == messageGroup);
         }
 
         if (queryDto?.ReadStatus.HasValue == true)
@@ -702,6 +782,44 @@ public class TaktMessageService : TaktServiceBase, ITaktMessageService
     }
 
     /// <summary>
+    /// 批量填充消息 DTO 发送者昵称（来自用户表 Nickname）
+    /// </summary>
+    /// <param name="messages">消息 DTO 列表</param>
+    /// <returns>任务</returns>
+    private async Task FillMessageSenderNicknamesAsync(IReadOnlyList<TaktMessageDto> messages)
+    {
+        if (messages == null || messages.Count == 0)
+        {
+            return;
+        }
+
+        var userIds = messages
+            .Select(message => message.FromUserId)
+            .Where(userId => userId > 0)
+            .Distinct()
+            .ToList();
+        if (userIds.Count == 0)
+        {
+            return;
+        }
+
+        var users = await _userRepository.GetListAsync(user =>
+            user.TenantCode == CurrentTenantCode && userIds.Contains(user.Id));
+        var nicknameByUserId = users.ToDictionary(
+            user => user.Id,
+            user => string.IsNullOrWhiteSpace(user.Nickname) ? null : user.Nickname.Trim());
+
+        foreach (var message in messages)
+        {
+            if (message.FromUserId > 0
+                && nicknameByUserId.TryGetValue(message.FromUserId, out var nickname))
+            {
+                message.FromUserNickname = nickname;
+            }
+        }
+    }
+
+    /// <summary>
     /// 构建 SignalR 私信推送模型（单接收者）
     /// </summary>
     /// <param name="message">在线消息 DTO</param>
@@ -736,11 +854,12 @@ public class TaktMessageService : TaktServiceBase, ITaktMessageService
             MessageId = message.MessageId,
             FromUserName = message.FromUserName,
             FromUserId = message.FromUserId,
+            FromUserNickname = message.FromUserNickname,
             ToUserName = toUserName,
             ToUserId = toUserId,
             MessageTitle = message.MessageTitle,
             MessageContent = message.MessageContent,
-            Attachments = message.Attachments,
+            Attachments = message.MessageAttachments,
             MessageType = message.MessageType,
             MessageGroup = message.MessageGroup,
             SendTime = message.SendTime,
@@ -980,6 +1099,71 @@ public class TaktMessageService : TaktServiceBase, ITaktMessageService
         }
 
         return trimmed;
+    }
+
+    /// <summary>
+    /// 解析强退消息发送者（优先操作者；否则按租户用户名查库）
+    /// </summary>
+    /// <param name="tenantCode">租户编码</param>
+    /// <param name="fromUserId">操作者用户 ID</param>
+    /// <param name="fromUserName">操作者登录名</param>
+    /// <returns>发送者 ID 与登录名</returns>
+    private async Task<(long UserId, string UserName)> ResolveKickMessageSenderAsync(
+        string tenantCode,
+        long? fromUserId,
+        string? fromUserName)
+    {
+        if (fromUserId.HasValue && fromUserId.Value > 0)
+        {
+            var operatorUser = await _userRepository.GetByIdAsync(fromUserId.Value);
+            if (operatorUser != null
+                && operatorUser.TenantCode == tenantCode
+                && !string.IsNullOrWhiteSpace(operatorUser.Username))
+            {
+                return (operatorUser.Id, operatorUser.Username.Trim());
+            }
+        }
+
+        var normalizedUserName = NormalizeMessageUserNameLabel(fromUserName);
+        if (!string.IsNullOrWhiteSpace(normalizedUserName))
+        {
+            var byName = await _userRepository.FirstAsync(user =>
+                user.TenantCode == tenantCode && user.Username == normalizedUserName);
+            if (byName != null && !string.IsNullOrWhiteSpace(byName.Username))
+            {
+                return (byName.Id, byName.Username.Trim());
+            }
+        }
+
+        throw new TaktBusinessException("强退消息缺少有效发送者");
+    }
+
+    /// <summary>
+    /// 自动生成消息标题：{messageType}-{messageGroup}:{消息内容前 40 字符}
+    /// </summary>
+    /// <param name="messageType">消息类型 DictValue</param>
+    /// <param name="messageGroup">消息分组 DictValue</param>
+    /// <param name="messageContent">消息正文</param>
+    /// <returns>落库标题（最长 200 字符）</returns>
+    private static string BuildAutoMessageTitle(string messageType, string messageGroup, string messageContent)
+    {
+        var type = string.IsNullOrWhiteSpace(messageType) ? TaktOnlineConstants.KickMessageType : messageType.Trim();
+        var group = string.IsNullOrWhiteSpace(messageGroup)
+            ? TaktOnlineConstants.KickExecuteMessageGroup
+            : messageGroup.Trim();
+        var contentPrefix = messageContent.Trim();
+        if (contentPrefix.Length > MessageTitleContentMax)
+        {
+            contentPrefix = contentPrefix[..MessageTitleContentMax];
+        }
+
+        var title = $"{type}-{group}:{contentPrefix}";
+        if (title.Length <= MessageTitleMaxLength)
+        {
+            return title;
+        }
+
+        return title[..MessageTitleMaxLength];
     }
 
     /// <summary>

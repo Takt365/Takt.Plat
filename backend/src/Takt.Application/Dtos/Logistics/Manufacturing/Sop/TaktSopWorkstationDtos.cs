@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopWorkstationDtos.cs
-// 创建时间：2026-06-15
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SopWorkstation 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSopWorkstation 生成，请按需审阅）
 // 
@@ -56,7 +56,7 @@ public class TaktSopWorkstationDto : TaktCompanyDtoBase
     public string? WorkCenter { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产线
+    /// 生产班组
     /// </summary>
     public string? ProductionLine { get; set; } = string.Empty;
 
@@ -71,14 +71,14 @@ public class TaktSopWorkstationDto : TaktCompanyDtoBase
     public int ProcessSegmentType { get; set; } = 0;
 
     /// <summary>
-    /// 启用状态（字典 sys_normal_disable_status，0=停用，1=启用）
-    /// </summary>
-    public int WorkstationStatus { get; set; } = 0;
-
-    /// <summary>
     /// 排序号
     /// </summary>
     public int SortOrder { get; set; } = 0;
+
+    /// <summary>
+    /// 启用状态（字典 sys_normal_disable_status，0=停用，1=启用）
+    /// </summary>
+    public int WorkstationStatus { get; set; } = 0;
 
 }
 
@@ -123,7 +123,7 @@ public class TaktSopWorkstationQueryDto : TaktPagedQuery
     public string? WorkCenter { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产线
+    /// 生产班组
     /// </summary>
     public string? ProductionLine { get; set; } = string.Empty;
 
@@ -138,14 +138,14 @@ public class TaktSopWorkstationQueryDto : TaktPagedQuery
     public int? ProcessSegmentType { get; set; }
 
     /// <summary>
-    /// 启用状态（字典 sys_normal_disable_status，0=停用，1=启用）
-    /// </summary>
-    public int? WorkstationStatus { get; set; }
-
-    /// <summary>
     /// 排序号
     /// </summary>
     public int? SortOrder { get; set; }
+
+    /// <summary>
+    /// 启用状态（字典 sys_normal_disable_status，0=停用，1=启用）
+    /// </summary>
+    public int? WorkstationStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -188,7 +188,7 @@ public class TaktSopWorkstationCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -216,7 +216,7 @@ public class TaktSopWorkstationCreateDto
     public string? WorkCenter { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产线
+    /// 生产班组
     /// </summary>
     public string? ProductionLine { get; set; } = string.Empty;
 
@@ -355,7 +355,7 @@ public class TaktSopWorkstationTemplateDto
     public string? WorkCenter { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产线
+    /// 生产班组
     /// </summary>
     public string? ProductionLine { get; set; } = string.Empty;
 
@@ -402,7 +402,7 @@ public class TaktSopWorkstationImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -427,7 +427,7 @@ public class TaktSopWorkstationImportDto
     public string? WorkCenter { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产线
+    /// 生产班组
     /// </summary>
     public string? ProductionLine { get; set; } = string.Empty;
 
@@ -500,7 +500,7 @@ public class TaktSopWorkstationExportDto
     public string? WorkCenter { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产线
+    /// 生产班组
     /// </summary>
     public string? ProductionLine { get; set; } = string.Empty;
 
@@ -515,14 +515,14 @@ public class TaktSopWorkstationExportDto
     public int ProcessSegmentType { get; set; } = 0;
 
     /// <summary>
-    /// 启用状态（字典 sys_normal_disable_status，0=停用，1=启用）
-    /// </summary>
-    public int WorkstationStatus { get; set; } = 0;
-
-    /// <summary>
     /// 排序号
     /// </summary>
     public int SortOrder { get; set; } = 0;
+
+    /// <summary>
+    /// 启用状态（字典 sys_normal_disable_status，0=停用，1=启用）
+    /// </summary>
+    public int WorkstationStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

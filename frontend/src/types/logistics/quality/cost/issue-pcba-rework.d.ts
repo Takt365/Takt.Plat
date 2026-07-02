@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/quality/cost
 // 文件名称：issue-pcba-rework.d.ts
-// 创建时间：2026-06-21
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/cost 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -268,7 +268,7 @@ export interface QualityIssuePcbaReworkCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -422,6 +422,11 @@ export interface QualityIssuePcbaReworkTemplate {
   pcbaDefectParts?: string;
 
   /**
+   * PCBA选别・改修费用（元）
+   */
+  pcbaReworkCost?: number;
+
+  /**
    * PCBA选别・改修时间（分钟）
    */
   pcbaReworkTimeMinutes?: number;
@@ -432,9 +437,29 @@ export interface QualityIssuePcbaReworkTemplate {
   pcbaReinspectionTimeMinutes?: number;
 
   /**
+   * PCBA交通费、旅费（元）
+   */
+  pcbaTravelCost?: number;
+
+  /**
+   * PCBA仓库管理费（元）
+   */
+  pcbaWarehouseCost?: number;
+
+  /**
+   * PCBA选别・改修其他费用（元）
+   */
+  pcbaOtherExpenses?: number;
+
+  /**
    * PCBA选别・改修备注
    */
   pcbaReworkNote?: string;
+
+  /**
+   * PCBA向顾客的费用请求（元）
+   */
+  pcbaScrapCost?: number;
 
   /**
    * PCBA顾客名
@@ -445,6 +470,11 @@ export interface QualityIssuePcbaReworkTemplate {
    * PCBA Debit Note No
    */
   pcbaDebitNoteNo?: string;
+
+  /**
+   * PCBA其他费用（元）
+   */
+  pcbaOtherExpenses2?: number;
 
   /**
    * PCBA备注
@@ -486,7 +516,7 @@ export interface QualityIssuePcbaReworkImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -511,6 +541,11 @@ export interface QualityIssuePcbaReworkImport {
   pcbaDefectParts?: string;
 
   /**
+   * PCBA选别・改修费用（元）
+   */
+  pcbaReworkCost?: number;
+
+  /**
    * PCBA选别・改修时间（分钟）
    */
   pcbaReworkTimeMinutes?: number;
@@ -521,9 +556,29 @@ export interface QualityIssuePcbaReworkImport {
   pcbaReinspectionTimeMinutes?: number;
 
   /**
+   * PCBA交通费、旅费（元）
+   */
+  pcbaTravelCost?: number;
+
+  /**
+   * PCBA仓库管理费（元）
+   */
+  pcbaWarehouseCost?: number;
+
+  /**
+   * PCBA选别・改修其他费用（元）
+   */
+  pcbaOtherExpenses?: number;
+
+  /**
    * PCBA选别・改修备注
    */
   pcbaReworkNote?: string;
+
+  /**
+   * PCBA向顾客的费用请求（元）
+   */
+  pcbaScrapCost?: number;
 
   /**
    * PCBA顾客名
@@ -534,6 +589,11 @@ export interface QualityIssuePcbaReworkImport {
    * PCBA Debit Note No
    */
   pcbaDebitNoteNo?: string;
+
+  /**
+   * PCBA其他费用（元）
+   */
+  pcbaOtherExpenses2?: number;
 
   /**
    * PCBA备注

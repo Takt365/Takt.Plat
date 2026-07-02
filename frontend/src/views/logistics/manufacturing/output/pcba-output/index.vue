@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/output/pcba-output -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：PCBA日报实体管理页面，含查询、增删改，由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成 -->
+<!-- 功能描述：PCBA日报实体 达成率管理页面，含查询、增删改，由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -65,6 +65,8 @@
       :master-row-selection="rowSelection"
       master-id-column-key="pcbaOutputId"
       :master-visible-column-keys="visibleColumnKeys"
+      master-table-mode="masterDetailMaster"
+      master-scroll-layout="masterDetailLr"
       :master-total="total"
       master-entity-scope="company"
       @master-change="handleTableChange"
@@ -72,6 +74,21 @@
       @master-pagination-change="handleMasterPaginationChange"
       @master-select="handleMasterSelect"
     >
+      <!-- 字典/开关列渲染 -->
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'prodCategory'">
+          <TaktDictTag
+            :value="getPcbaOutputField(record, 'prodCategory')"
+            dict-type="logistics_prod_category"
+          />
+        </template>
+        <template v-else-if="column.key === 'shiftNo'">
+          <TaktDictTag
+            :value="getPcbaOutputField(record, 'shiftNo')"
+            dict-type="logistics_shift_category"
+          />
+        </template>
+      </template>
       <template #detail>
         <PcbaOutputDetailPanel
           ref="pcbaOutputDetailPanelRef"
@@ -121,11 +138,10 @@
       </div>
       <div v-show="isFieldVisible('prodCategory')">
       <a-form-item :label="t('entity.pcbaoutput.prodcategory')">
-        <a-input
+        <TaktSelect
           v-model:value="advancedQueryForm.prodCategory"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaoutput.prodcategory') })"
-          show-count
-          :maxlength="20"
+          dict-type="logistics_prod_category"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbaoutput.prodcategory') })"
           allow-clear
         />
       </a-form-item>
@@ -150,11 +166,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('prodLine')">
-      <a-form-item :label="t('entity.pcbaoutput.prodline')">
+      <div v-show="isFieldVisible('prodTeam')">
+      <a-form-item :label="t('entity.pcbaoutput.prodteam')">
         <a-input
-          v-model:value="advancedQueryForm.prodLine"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaoutput.prodline') })"
+          v-model:value="advancedQueryForm.prodTeam"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaoutput.prodteam') })"
           show-count
           :maxlength="20"
           allow-clear
@@ -163,10 +179,11 @@
       </div>
       <div v-show="isFieldVisible('shiftNo')">
       <a-form-item :label="t('entity.pcbaoutput.shiftno')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.shiftNo"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaoutput.shiftno') })"
-          style="width: 100%"
+          dict-type="logistics_shift_category"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbaoutput.shiftno') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -256,7 +273,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -267,7 +284,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -325,6 +342,7 @@
       @cancel="handleImportCancel"
     >
       <TaktImportFile
+        v-if="importVisible"
         entity-i18n-key="entity.pcbaoutput._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
@@ -344,7 +362,7 @@
       :id-column-key="'pcbaOutputId'"
       :action-column-key="'action'"
       entity-scope="company"
-      table-mode="single"
+      table-mode="masterDetailMaster"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -353,7 +371,7 @@
 
 <script setup lang="ts">
 /**
- * PCBA日报实体管理页 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
+ * PCBA日报实体 达成率管理页 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/manufacturing/output/pcba-output
  */
 import { ref, computed, onMounted } from 'vue'
@@ -367,8 +385,10 @@ import PcbaOutputDetailPanel from './components/pcba-output-detail-panel.vue'
 import { providePcbaOutputMasterContext } from './composables/use-pcba-output-master-context'
 import { getPcbaOutputList, getPcbaOutputById, createPcbaOutput, updatePcbaOutput, deletePcbaOutputById, deletePcbaOutputBatch, getPcbaOutputTemplate, importPcbaOutput, exportPcbaOutput } from '@/api/logistics/manufacturing/output/pcba-output'
 import type { PcbaOutput, PcbaOutputQuery } from '@/types/logistics/manufacturing/output/pcba-output'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
@@ -418,7 +438,7 @@ const advancedQueryForm = ref({
   prodCategory: '',
   prodDateStart: '',
   prodDateEnd: '',
-  prodLine: '',
+  prodTeam: '',
   shiftNo: undefined as number | undefined,
   prodOrderCode: '',
   modelCode: '',
@@ -439,7 +459,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'prodCategory', label: t('entity.pcbaoutput.prodcategory') },
   { key: 'prodDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.pcbaoutput.proddate')) },
   { key: 'prodDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.pcbaoutput.proddate')) },
-  { key: 'prodLine', label: t('entity.pcbaoutput.prodline') },
+  { key: 'prodTeam', label: t('entity.pcbaoutput.prodteam') },
   { key: 'shiftNo', label: t('entity.pcbaoutput.shiftno') },
   { key: 'prodOrderCode', label: t('entity.pcbaoutput.prodordercode') },
   { key: 'modelCode', label: t('entity.pcbaoutput.modelcode') },
@@ -469,6 +489,8 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
+/** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
+const dictDataStore = useDictDataStore()
 /** 主表选中行上下文（右侧明细面板读取） */
 const { selectedMasterRow } = providePcbaOutputMasterContext()
 const pcbaOutputDetailPanelRef = ref<InstanceType<typeof PcbaOutputDetailPanel> | null>(null)
@@ -499,7 +521,7 @@ function buildListQuery(overrides?: Partial<PcbaOutputQuery>): PcbaOutputQuery {
   assignTrimmed('prodCategory', form.prodCategory)
   assignTrimmed('prodDateStart', form.prodDateStart)
   assignTrimmed('prodDateEnd', form.prodDateEnd)
-  assignTrimmed('prodLine', form.prodLine)
+  assignTrimmed('prodTeam', form.prodTeam)
   if (form.shiftNo !== undefined && form.shiftNo !== null) {
     query.shiftNo = form.shiftNo
   }
@@ -528,6 +550,7 @@ function buildListQuery(overrides?: Partial<PcbaOutputQuery>): PcbaOutputQuery {
 /** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
+  void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
 
@@ -610,7 +633,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPcbaOutputField(record, 'prodCategory') ?? ''
   },
   {
     title: t('entity.pcbaoutput.proddate'),
@@ -622,13 +644,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPcbaOutputField(record, 'prodDate') ?? ''
   },
   {
-    title: t('entity.pcbaoutput.prodline'),
-    dataIndex: 'prodLine',
-    key: 'prodLine',
+    title: t('entity.pcbaoutput.prodteam'),
+    dataIndex: 'prodTeam',
+    key: 'prodTeam',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPcbaOutputField(record, 'prodLine') ?? ''
+    customRender: ({ record }: { record: any }) => getPcbaOutputField(record, 'prodTeam') ?? ''
   },
   {
     title: t('entity.pcbaoutput.shiftno'),
@@ -637,7 +659,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPcbaOutputField(record, 'shiftNo') ?? ''
   },
   {
     title: t('entity.pcbaoutput.prodordercode'),
@@ -760,7 +781,7 @@ const rowSelection = computed(() => ({
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
-    } else if (getPcbaOutputId(selectedRow.value) === getPcbaOutputId(record)) {
+    } else if (selectedRow.value && getPcbaOutputId(selectedRow.value) === getPcbaOutputId(record)) {
       selectedRow.value = null
       syncMasterSelection(null)
     }
@@ -805,7 +826,7 @@ function handleReset() {
   prodCategory: '',
   prodDateStart: '',
   prodDateEnd: '',
-  prodLine: '',
+  prodTeam: '',
   shiftNo: undefined as number | undefined,
   prodOrderCode: '',
   modelCode: '',
@@ -901,15 +922,22 @@ async function handleDownloadTemplate(sheetName?: string, fileName?: string): Pr
   return (res as any)?.data ?? res
 }
 
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importPcbaOutput(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importPcbaOutput(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
+
+      if (selectedMasterKey.value) {
+    pcbaOutputDetailPanelRef.value?.reload?.()
+      }
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
+  }
 }
 
 /** 关闭导入对话框 */
@@ -1010,7 +1038,7 @@ function handleAdvancedQueryReset() {
   prodCategory: '',
   prodDateStart: '',
   prodDateEnd: '',
-  prodLine: '',
+  prodTeam: '',
   shiftNo: undefined as number | undefined,
   prodOrderCode: '',
   modelCode: '',

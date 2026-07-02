@@ -71,11 +71,40 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.announcement.title')"
-                name="title"
+                :label="t('entity.numbering.rulecode')"
+                name="numberingRuleCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.numberingRuleCode"
+                  api-url="TaktNumberings/options"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.numbering.rulecode') })"
+                  :disabled="!!formData?.announcementId"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.announcement.code')"
+                name="announcementCode"
               >
                 <a-input
-                  v-model:value="formState.title"
+                  v-model:value="formState.announcementCode"
+                  :placeholder="t('routine.announcement.page.placeholder.autocode')"
+                  show-count
+                  :maxlength="50"
+                  allow-clear
+                  :disabled="!!formData?.announcementId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.announcement.title')"
+                name="announcementTitle"
+              >
+                <a-input
+                  v-model:value="formState.announcementTitle"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.announcement.title') })"
                   show-count
                   :maxlength="200"
@@ -149,6 +178,16 @@
                 />
               </a-form-item>
             </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
                 :label="t('entity.announcement.publishtime')"
@@ -162,16 +201,6 @@
                 />
               </a-form-item>
             </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
                 :label="t('entity.announcement.isscheduled')"
@@ -285,6 +314,16 @@
                 />
               </a-form-item>
             </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-2"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
                 name="extField"
@@ -311,16 +350,6 @@
                 />
               </a-form-item>
             </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
                 :label="t('common.page.entity.remark')"
@@ -387,7 +416,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","title","announcementType","content","summary","tags","attachments","publishTime","isScheduled","isTop","topPriority","expireTime","viewCount","targetScope","targetDepartments","targetUsers","announcementStatus","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","numberingRuleCode","announcementCode","announcementTitle","announcementType","content","summary","tags","attachments","publishTime","isScheduled","isTop","topPriority","expireTime","viewCount","targetScope","targetDepartments","targetUsers","announcementStatus","extField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -462,7 +491,37 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  title: [
+  numberingRuleCode: [{
+    validator: async (_rule, value) => {
+      const isCreate = !props.formData?.announcementId
+      const code = formState.announcementCode
+      const hasCode = typeof code === 'string' && code.trim().length > 0
+      if (!isCreate || hasCode) {
+        return Promise.resolve()
+      }
+      if (value === undefined || value === null || String(value).trim() === '') {
+        return Promise.reject(t('routine.announcement.page.validation.numberingRuleRequired'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  announcementCode: [{
+    validator: async (_rule, value) => {
+      const isCreate = !props.formData?.announcementId
+      if (!isCreate) {
+        return Promise.resolve()
+      }
+      const hasCode = typeof value === 'string' && value.trim().length > 0
+      const hasRule = formState.numberingRuleCode != null && String(formState.numberingRuleCode).trim() !== ''
+      if (hasCode || hasRule) {
+        return Promise.resolve()
+      }
+      return Promise.reject(t('routine.announcement.page.validation.codeOrRuleRequired'))
+    },
+    trigger: 'blur'
+  }],
+  announcementTitle: [
     {
       required: true,
       message: t('common.page.form.placeholder.required', { field: t('entity.announcement.title') }),
@@ -572,25 +631,28 @@ async function validate() {
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
+  if (props.formData?.announcementId) {
+    delete payload.numberingRuleCode
+  }
   if ('announcementType' in payload) {
     const rawannouncementType = payload.announcementType
     payload.announcementType = typeof rawannouncementType === 'number' ? rawannouncementType : Number(rawannouncementType)
   }
   if ('isScheduled' in payload) {
-    const rawisScheduled = payload.isScheduled
-    payload.isScheduled = typeof rawisScheduled === 'number' ? rawisScheduled : Number(rawisScheduled)
+    const rawIsScheduled = payload.isScheduled
+    payload.isScheduled = typeof rawIsScheduled === 'number' ? rawIsScheduled : Number(rawIsScheduled)
   }
   if ('isTop' in payload) {
-    const rawisTop = payload.isTop
-    payload.isTop = typeof rawisTop === 'number' ? rawisTop : Number(rawisTop)
+    const rawIsTop = payload.isTop
+    payload.isTop = typeof rawIsTop === 'number' ? rawIsTop : Number(rawIsTop)
   }
   if ('topPriority' in payload) {
     const rawtopPriority = payload.topPriority
     payload.topPriority = typeof rawtopPriority === 'number' ? rawtopPriority : Number(rawtopPriority)
   }
   if ('viewCount' in payload) {
-    const rawviewCount = payload.viewCount
-    payload.viewCount = typeof rawviewCount === 'number' ? rawviewCount : Number(rawviewCount)
+    const rawViewCount = payload.viewCount
+    payload.viewCount = typeof rawViewCount === 'number' ? rawViewCount : Number(rawViewCount)
   }
   if ('announcementStatus' in payload) {
     const rawannouncementStatus = payload.announcementStatus

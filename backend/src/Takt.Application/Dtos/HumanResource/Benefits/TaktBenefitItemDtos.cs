@@ -2,9 +2,9 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Benefits
 // 文件名称：TaktBenefitItemDtos.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
-// 功能描述：Benefit 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktBenefitItem 生成，请按需审阅）
+// 功能描述：BenefitItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktBenefitItem 生成，请按需审阅）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -18,7 +18,7 @@ using Takt.Shared.Models;
 namespace Takt.Application.Dtos.HumanResource.Benefits;
 
 // ========================================
-// Benefit 响应 DTO
+// BenefitItem 响应 DTO
 // ========================================
 
 /// <summary>
@@ -29,7 +29,7 @@ namespace Takt.Application.Dtos.HumanResource.Benefits;
 public class TaktBenefitItemDto : TaktCompanyDtoBase
 {
     /// <summary>
-    /// BenefitID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
+    /// BenefitItemID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -86,6 +86,11 @@ public class TaktBenefitItemDto : TaktCompanyDtoBase
     public int IsMandatory { get; set; } = 0;
 
     /// <summary>
+    /// 关联工厂
+    /// </summary>
+    public string RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
     /// 排序号
     /// </summary>
     public int SortOrder { get; set; } = 0;
@@ -95,19 +100,14 @@ public class TaktBenefitItemDto : TaktCompanyDtoBase
     /// </summary>
     public int ItemStatus { get; set; } = 0;
 
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
-
 }
 
 // ========================================
-// Benefit 查询 DTO
+// BenefitItem 查询 DTO
 // ========================================
 
 /// <summary>
-/// Benefit 分页查询 DTO
+/// BenefitItem 分页查询 DTO
 /// 继承 TaktPagedQuery
 /// </summary>
 public class TaktBenefitItemQueryDto : TaktPagedQuery
@@ -173,6 +173,11 @@ public class TaktBenefitItemQueryDto : TaktPagedQuery
     public int? IsMandatory { get; set; }
 
     /// <summary>
+    /// 关联工厂
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
     /// 排序号
     /// </summary>
     public int? SortOrder { get; set; }
@@ -181,11 +186,6 @@ public class TaktBenefitItemQueryDto : TaktPagedQuery
     /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int? ItemStatus { get; set; }
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -209,11 +209,11 @@ public class TaktBenefitItemQueryDto : TaktPagedQuery
 }
 
 // ========================================
-// 创建Benefit DTO
+// 创建BenefitItem DTO
 // ========================================
 
 /// <summary>
-/// 创建Benefit DTO
+/// 创建BenefitItem DTO
 /// </summary>
 public class TaktBenefitItemCreateDto
 {
@@ -228,7 +228,7 @@ public class TaktBenefitItemCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -285,19 +285,15 @@ public class TaktBenefitItemCreateDto
     public int IsMandatory { get; set; } = 0;
 
     /// <summary>
-    /// 排序号
+    /// 关联工厂
     /// </summary>
-    public int SortOrder { get; set; } = 0;
+    [Required(ErrorMessage = "关联工厂不能为空")]
+    public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int ItemStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON
@@ -312,17 +308,17 @@ public class TaktBenefitItemCreateDto
 }
 
 // ========================================
-// 更新Benefit DTO
+// 更新BenefitItem DTO
 // ========================================
 
 /// <summary>
-/// 更新Benefit DTO
+/// 更新BenefitItem DTO
 /// 继承 TaktBenefitItemCreateDto，添加 BenefitItemId 字段
 /// </summary>
 public class TaktBenefitItemUpdateDto : TaktBenefitItemCreateDto
 {
     /// <summary>
-    /// BenefitID（标识要更新的实体）
+    /// BenefitItemID（标识要更新的实体）
     /// </summary>
     [Required(ErrorMessage = "ID不能为空")]
     [AdaptMember("Id")]
@@ -332,16 +328,16 @@ public class TaktBenefitItemUpdateDto : TaktBenefitItemCreateDto
 }
 
 // ========================================
-// Benefit 状态 DTO
+// BenefitItem 状态 DTO
 // ========================================
 
 /// <summary>
-/// Benefit 状态更新 DTO
+/// BenefitItem 状态更新 DTO
 /// </summary>
 public class TaktBenefitItemStatusDto
 {
     /// <summary>
-    /// BenefitID
+    /// BenefitItemID
     /// </summary>
     [Required(ErrorMessage = "ID不能为空")]
     [AdaptMember("Id")]
@@ -356,16 +352,16 @@ public class TaktBenefitItemStatusDto
 }
 
 // ========================================
-// Benefit 排序 DTO
+// BenefitItem 排序 DTO
 // ========================================
 
 /// <summary>
-/// Benefit 排序更新 DTO
+/// BenefitItem 排序更新 DTO
 /// </summary>
 public class TaktBenefitItemSortDto
 {
     /// <summary>
-    /// BenefitID
+    /// BenefitItemID
     /// </summary>
     [Required(ErrorMessage = "ID不能为空")]
     [AdaptMember("Id")]
@@ -384,7 +380,7 @@ public class TaktBenefitItemSortDto
 // ========================================
 
 /// <summary>
-/// Benefit 导入模板行 DTO
+/// BenefitItem 导入模板行 DTO
 /// </summary>
 public class TaktBenefitItemTemplateDto
 {
@@ -424,24 +420,39 @@ public class TaktBenefitItemTemplateDto
     public int? PaymentCycle { get; set; }
 
     /// <summary>
+    /// 默认金额或补贴标准（元）
+    /// </summary>
+    public decimal? DefaultAmount { get; set; }
+
+    /// <summary>
+    /// 金额上限（元，0 表示不限制）
+    /// </summary>
+    public decimal? MaxAmount { get; set; }
+
+    /// <summary>
+    /// 公司承担比例（%，如公积金单位缴存比例）
+    /// </summary>
+    public decimal? EmployerRatio { get; set; }
+
+    /// <summary>
+    /// 个人承担比例（%，如公积金个人缴存比例）
+    /// </summary>
+    public decimal? EmployeeRatio { get; set; }
+
+    /// <summary>
     /// 是否强制福利（字典 sys_yes_no_type）
     /// </summary>
     public int? IsMandatory { get; set; }
 
     /// <summary>
-    /// 排序号
+    /// 关联工厂
     /// </summary>
-    public int? SortOrder { get; set; }
+    public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int? ItemStatus { get; set; }
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON
@@ -456,7 +467,7 @@ public class TaktBenefitItemTemplateDto
 }
 
 /// <summary>
-/// Benefit 导入 DTO（独立实现，不继承 TemplateDto）
+/// BenefitItem 导入 DTO（独立实现，不继承 TemplateDto）
 /// </summary>
 public class TaktBenefitItemImportDto
 {
@@ -471,7 +482,7 @@ public class TaktBenefitItemImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -501,24 +512,39 @@ public class TaktBenefitItemImportDto
     public int? PaymentCycle { get; set; }
 
     /// <summary>
+    /// 默认金额或补贴标准（元）
+    /// </summary>
+    public decimal? DefaultAmount { get; set; }
+
+    /// <summary>
+    /// 金额上限（元，0 表示不限制）
+    /// </summary>
+    public decimal? MaxAmount { get; set; }
+
+    /// <summary>
+    /// 公司承担比例（%，如公积金单位缴存比例）
+    /// </summary>
+    public decimal? EmployerRatio { get; set; }
+
+    /// <summary>
+    /// 个人承担比例（%，如公积金个人缴存比例）
+    /// </summary>
+    public decimal? EmployeeRatio { get; set; }
+
+    /// <summary>
     /// 是否强制福利（字典 sys_yes_no_type）
     /// </summary>
     public int? IsMandatory { get; set; }
 
     /// <summary>
-    /// 排序号
+    /// 关联工厂
     /// </summary>
-    public int? SortOrder { get; set; }
+    public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int? ItemStatus { get; set; }
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON
@@ -537,12 +563,12 @@ public class TaktBenefitItemImportDto
 // ========================================
 
 /// <summary>
-/// Benefit 导出 DTO（独立实现，不继承响应 Dto）
+/// BenefitItem 导出 DTO（独立实现，不继承响应 Dto）
 /// </summary>
 public class TaktBenefitItemExportDto
 {
     /// <summary>
-    /// BenefitID
+    /// BenefitItemID
     /// </summary>
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -604,6 +630,11 @@ public class TaktBenefitItemExportDto
     public int IsMandatory { get; set; } = 0;
 
     /// <summary>
+    /// 关联工厂
+    /// </summary>
+    public string RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
     /// 排序号
     /// </summary>
     public int SortOrder { get; set; } = 0;
@@ -612,11 +643,6 @@ public class TaktBenefitItemExportDto
     /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int ItemStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON

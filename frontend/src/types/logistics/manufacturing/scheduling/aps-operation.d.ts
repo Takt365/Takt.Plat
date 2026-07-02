@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/scheduling
 // 文件名称：aps-operation.d.ts
-// 创建时间：2026-06-22
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/scheduling 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -49,7 +49,7 @@ export interface ApsOperation extends CompanyDtoBase {
   lineNumber: number;
 
   /**
-   * 工艺路线工序 ID（关联 TaktRoutingItem）
+   * 工艺路线工序 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
    */
   routingItemId?: string;
 
@@ -69,12 +69,12 @@ export interface ApsOperation extends CompanyDtoBase {
   processName?: string;
 
   /**
-   * 工作中心编码
+   * 工作中心编码（关联 TaktWorkCenter.WorkCenterCode，选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
    */
   workCenterCode?: string;
 
   /**
-   * 工作中心资源 ID（可选）
+   * 工作中心资源 ID（关联 TaktWorkCenterResource.Id，选项 TaktWorkCenterResources/options）
    */
   workCenterResourceId?: string;
 
@@ -144,7 +144,7 @@ export interface ApsOperationQuery extends TaktPagedQuery {
   lineNumber?: number;
 
   /**
-   * 工艺路线工序 ID（关联 TaktRoutingItem）
+   * 工艺路线工序 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
    */
   routingItemId?: string;
 
@@ -159,12 +159,12 @@ export interface ApsOperationQuery extends TaktPagedQuery {
   processName?: string;
 
   /**
-   * 工作中心编码
+   * 工作中心编码（关联 TaktWorkCenter.WorkCenterCode，选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
    */
   workCenterCode?: string;
 
   /**
-   * 工作中心资源 ID（可选）
+   * 工作中心资源 ID（关联 TaktWorkCenterResource.Id，选项 TaktWorkCenterResources/options）
    */
   workCenterResourceId?: string;
 
@@ -243,7 +243,7 @@ export interface ApsOperationCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -263,7 +263,7 @@ export interface ApsOperationCreate {
   lineNumber: number;
 
   /**
-   * 工艺路线工序 ID（关联 TaktRoutingItem）
+   * 工艺路线工序 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
    */
   routingItemId?: string;
 
@@ -278,12 +278,12 @@ export interface ApsOperationCreate {
   processName?: string;
 
   /**
-   * 工作中心编码
+   * 工作中心编码（关联 TaktWorkCenter.WorkCenterCode，选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
    */
   workCenterCode?: string;
 
   /**
-   * 工作中心资源 ID（可选）
+   * 工作中心资源 ID（关联 TaktWorkCenterResource.Id，选项 TaktWorkCenterResources/options）
    */
   workCenterResourceId?: string;
 
@@ -391,7 +391,7 @@ export interface ApsOperationTemplate {
   lineNumber?: number;
 
   /**
-   * 工艺路线工序 ID（关联 TaktRoutingItem）
+   * 工艺路线工序 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
    */
   routingItemId?: string;
 
@@ -406,14 +406,34 @@ export interface ApsOperationTemplate {
   processName?: string;
 
   /**
-   * 工作中心编码
+   * 工作中心编码（关联 TaktWorkCenter.WorkCenterCode，选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
    */
   workCenterCode?: string;
 
   /**
-   * 工作中心资源 ID（可选）
+   * 工作中心资源 ID（关联 TaktWorkCenterResource.Id，选项 TaktWorkCenterResources/options）
    */
   workCenterResourceId?: string;
+
+  /**
+   * 计划开始时间
+   */
+  plannedStartTime?: string;
+
+  /**
+   * 计划结束时间
+   */
+  plannedEndTime?: string;
+
+  /**
+   * 计划工时（分钟）
+   */
+  plannedDurationMinutes?: number;
+
+  /**
+   * 换型时间（分钟）
+   */
+  changeoverMinutes?: number;
 
   /**
    * 工序状态（字典 aps_operation_status；0=待排程，1=已排程，2=执行中，3=已完成）
@@ -450,7 +470,7 @@ export interface ApsOperationImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -470,7 +490,7 @@ export interface ApsOperationImport {
   lineNumber?: number;
 
   /**
-   * 工艺路线工序 ID（关联 TaktRoutingItem）
+   * 工艺路线工序 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
    */
   routingItemId?: string;
 
@@ -485,14 +505,34 @@ export interface ApsOperationImport {
   processName?: string;
 
   /**
-   * 工作中心编码
+   * 工作中心编码（关联 TaktWorkCenter.WorkCenterCode，选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
    */
   workCenterCode?: string;
 
   /**
-   * 工作中心资源 ID（可选）
+   * 工作中心资源 ID（关联 TaktWorkCenterResource.Id，选项 TaktWorkCenterResources/options）
    */
   workCenterResourceId?: string;
+
+  /**
+   * 计划开始时间
+   */
+  plannedStartTime?: string;
+
+  /**
+   * 计划结束时间
+   */
+  plannedEndTime?: string;
+
+  /**
+   * 计划工时（分钟）
+   */
+  plannedDurationMinutes?: number;
+
+  /**
+   * 换型时间（分钟）
+   */
+  changeoverMinutes?: number;
 
   /**
    * 工序状态（字典 aps_operation_status；0=待排程，1=已排程，2=执行中，3=已完成）
@@ -544,7 +584,7 @@ export interface ApsOperationExport {
   lineNumber: number;
 
   /**
-   * 工艺路线工序 ID（关联 TaktRoutingItem）
+   * 工艺路线工序 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
    */
   routingItemId?: string;
 
@@ -559,12 +599,12 @@ export interface ApsOperationExport {
   processName?: string;
 
   /**
-   * 工作中心编码
+   * 工作中心编码（关联 TaktWorkCenter.WorkCenterCode，选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
    */
   workCenterCode?: string;
 
   /**
-   * 工作中心资源 ID（可选）
+   * 工作中心资源 ID（关联 TaktWorkCenterResource.Id，选项 TaktWorkCenterResources/options）
    */
   workCenterResourceId?: string;
 

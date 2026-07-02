@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Maintenance
 // 文件名称：TaktMaintenanceWorkOrderLaborsController.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-27
 // 创建人：Takt365(Cursor AI)
 // 功能描述：维护工单报工控制器
 // 
@@ -41,7 +41,7 @@ public class TaktMaintenanceWorkOrderLaborsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:maintenance:equipment:list", "维护工单报工列表")]
+    [TaktPermission("logistics:maintenance:work:order:list", "维护工单报工列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetMaintenanceWorkOrderLaborListAsync([FromQuery] TaktMaintenanceWorkOrderLaborQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktMaintenanceWorkOrderLaborsController : TaktControllerBase
     /// </summary>
     /// <param name="id">维护工单报工ID</param>
     /// <returns>维护工单报工DTO</returns>
-    [TaktPermission("logistics:maintenance:equipment:query", "维护工单报工详情")]
+    [TaktPermission("logistics:maintenance:work:order:query", "维护工单报工详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetMaintenanceWorkOrderLaborByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktMaintenanceWorkOrderLaborsController : TaktControllerBase
     /// 获取维护工单报工选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:maintenance:equipment:query", "维护工单报工选项")]
+    [TaktPermission("logistics:maintenance:work:order:query", "维护工单报工选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetMaintenanceWorkOrderLaborOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktMaintenanceWorkOrderLaborsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>维护工单报工DTO</returns>
-    [TaktPermission("logistics:maintenance:equipment:create", "创建维护工单报工")]
+    [TaktPermission("logistics:maintenance:work:order:create", "创建维护工单报工")]
     [HttpPost]
     public async Task<IActionResult> CreateMaintenanceWorkOrderLaborAsync([FromBody] TaktMaintenanceWorkOrderLaborCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktMaintenanceWorkOrderLaborsController : TaktControllerBase
     /// <param name="id">维护工单报工ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>维护工单报工DTO</returns>
-    [TaktPermission("logistics:maintenance:equipment:update", "更新维护工单报工")]
+    [TaktPermission("logistics:maintenance:work:order:update", "更新维护工单报工")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateMaintenanceWorkOrderLaborAsync(long id, [FromBody] TaktMaintenanceWorkOrderLaborUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktMaintenanceWorkOrderLaborsController : TaktControllerBase
     /// </summary>
     /// <param name="id">维护工单报工ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:maintenance:equipment:delete", "删除维护工单报工")]
+    [TaktPermission("logistics:maintenance:work:order:delete", "删除维护工单报工")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteMaintenanceWorkOrderLaborByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktMaintenanceWorkOrderLaborsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:maintenance:equipment:delete", "批量删除维护工单报工")]
+    [TaktPermission("logistics:maintenance:work:order:delete", "批量删除维护工单报工")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteMaintenanceWorkOrderLaborBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktMaintenanceWorkOrderLaborsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO</param>
     /// <returns>维护工单报工DTO</returns>
-    [TaktPermission("logistics:maintenance:equipment:update", "更新维护工单报工状态")]
+    [TaktPermission("logistics:maintenance:work:order:update", "更新维护工单报工状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateMaintenanceWorkOrderLaborStatusAsync([FromBody] TaktMaintenanceWorkOrderLaborStatusDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktMaintenanceWorkOrderLaborsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:maintenance:equipment:import", "获取维护工单报工导入模板")]
+    [TaktPermission("logistics:maintenance:work:order:import", "获取维护工单报工导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetMaintenanceWorkOrderLaborTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +224,7 @@ public class TaktMaintenanceWorkOrderLaborsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:maintenance:equipment:import", "导入维护工单报工")]
+    [TaktPermission("logistics:maintenance:work:order:import", "导入维护工单报工")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportMaintenanceWorkOrderLaborAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +254,7 @@ public class TaktMaintenanceWorkOrderLaborsController : TaktControllerBase
     /// 导出维护工单报工
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:maintenance:equipment:export", "导出维护工单报工")]
+    [TaktPermission("logistics:maintenance:work:order:export", "导出维护工单报工")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportMaintenanceWorkOrderLaborAsync([FromQuery] TaktMaintenanceWorkOrderLaborQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

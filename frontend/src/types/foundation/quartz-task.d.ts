@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/foundation
 // 文件名称：quartz-task.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-29
 // 创建人：Takt365(Auto Generated)
 // 功能描述：foundation 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -14,11 +14,6 @@ import type {
   CompanyDtoBase,
   TaktPagedQuery
 } from '@/types/common';
-
-import type {
-  QuartzLog,
-  QuartzLogCreate
-} from '@/types/statistics/logging/quartz-log';
 
 /**
  * Quartz 定时任务实体
@@ -49,14 +44,14 @@ export interface QuartzTask extends CompanyDtoBase {
   jobName: string;
 
   /**
-   * Quartz Job 分组
+   * Quartz Job 分组（字典 sys_quartz_job_group 的 DictValue）
    */
   jobGroup: string;
 
   /**
-   * 任务类型（1=程序集 2=网络请求 3=SQL语句）
+   * 任务类型（字典 sys_quartz_task_type 的 DictValue：assembly=程序集、http=网络请求、sql=SQL语句）
    */
-  taskType: number;
+  taskType: string;
 
   /**
    * 程序集名称（任务类型为程序集时使用）
@@ -84,7 +79,7 @@ export interface QuartzTask extends CompanyDtoBase {
   sqlScript?: string;
 
   /**
-   * 触发器类型（0=Simple 1=Cron）
+   * 触发器类型（字典 sys_quartz_trigger_type；0=Simple 1=Cron）
    */
   triggerType: number;
 
@@ -104,22 +99,17 @@ export interface QuartzTask extends CompanyDtoBase {
   executeParams?: string;
 
   /**
-   * 任务状态
-   */
-  taskStatus: number;
-
-  /**
-   * 是否允许并发执行（0=禁止，1=允许）
+   * 是否允许并发执行（字典 sys_yes_no_type；0=否 1=是）
    */
   concurrent: number;
 
   /**
-   * Misfire 策略
+   * Misfire 策略（字典 sys_quartz_misfire_policy；0=默认 1=忽略 2=立即触发 3=不触发）
    */
   misfirePolicy: number;
 
   /**
-   * 首次执行时间（调度生效开始时间）
+   * 首次执行（调度生效开始时间）
    */
   firstRunAt?: string;
 
@@ -129,19 +119,24 @@ export interface QuartzTask extends CompanyDtoBase {
   executeCount: number;
 
   /**
-   * 上次执行时间
+   * 上次执行
    */
   lastRunAt?: string;
 
   /**
-   * 下次执行时间
+   * 下次执行
    */
   nextRunAt?: string;
 
   /**
    * 任务描述
    */
-  description?: string;
+  taskDescription?: string;
+
+  /**
+   * 任务状态（字典 sys_quartz_task_status；0=正常 1=暂停）
+   */
+  taskStatus: number;
 
   /**
    * 关联的任务执行日志列表（主子表关系：QuartzTaskId） （子表：TaktQuartzLog）
@@ -184,14 +179,14 @@ export interface QuartzTaskQuery extends TaktPagedQuery {
   jobName?: string;
 
   /**
-   * Quartz Job 分组
+   * Quartz Job 分组（字典 sys_quartz_job_group 的 DictValue）
    */
   jobGroup?: string;
 
   /**
-   * 任务类型（1=程序集 2=网络请求 3=SQL语句）
+   * 任务类型（字典 sys_quartz_task_type 的 DictValue：assembly=程序集、http=网络请求、sql=SQL语句）
    */
-  taskType?: number;
+  taskType?: string;
 
   /**
    * 程序集名称（任务类型为程序集时使用）
@@ -219,7 +214,7 @@ export interface QuartzTaskQuery extends TaktPagedQuery {
   sqlScript?: string;
 
   /**
-   * 触发器类型（0=Simple 1=Cron）
+   * 触发器类型（字典 sys_quartz_trigger_type；0=Simple 1=Cron）
    */
   triggerType?: number;
 
@@ -239,27 +234,22 @@ export interface QuartzTaskQuery extends TaktPagedQuery {
   executeParams?: string;
 
   /**
-   * 任务状态
-   */
-  taskStatus?: number;
-
-  /**
-   * 是否允许并发执行（0=禁止，1=允许）
+   * 是否允许并发执行（字典 sys_yes_no_type；0=否 1=是）
    */
   concurrent?: number;
 
   /**
-   * Misfire 策略
+   * Misfire 策略（字典 sys_quartz_misfire_policy；0=默认 1=忽略 2=立即触发 3=不触发）
    */
   misfirePolicy?: number;
 
   /**
-   * 首次执行时间（调度生效开始时间）（范围查询-开始）
+   * 首次执行（调度生效开始时间）（范围查询-开始）
    */
   firstRunAtStart?: string;
 
   /**
-   * 首次执行时间（调度生效开始时间）（范围查询-结束）
+   * 首次执行（调度生效开始时间）（范围查询-结束）
    */
   firstRunAtEnd?: string;
 
@@ -269,29 +259,34 @@ export interface QuartzTaskQuery extends TaktPagedQuery {
   executeCount?: number;
 
   /**
-   * 上次执行时间（范围查询-开始）
+   * 上次执行（范围查询-开始）
    */
   lastRunAtStart?: string;
 
   /**
-   * 上次执行时间（范围查询-结束）
+   * 上次执行（范围查询-结束）
    */
   lastRunAtEnd?: string;
 
   /**
-   * 下次执行时间（范围查询-开始）
+   * 下次执行（范围查询-开始）
    */
   nextRunAtStart?: string;
 
   /**
-   * 下次执行时间（范围查询-结束）
+   * 下次执行（范围查询-结束）
    */
   nextRunAtEnd?: string;
 
   /**
    * 任务描述
    */
-  description?: string;
+  taskDescription?: string;
+
+  /**
+   * 任务状态（字典 sys_quartz_task_status；0=正常 1=暂停）
+   */
+  taskStatus?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -306,7 +301,7 @@ export interface QuartzTaskQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -333,7 +328,7 @@ export interface QuartzTaskCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -353,14 +348,14 @@ export interface QuartzTaskCreate {
   jobName: string;
 
   /**
-   * Quartz Job 分组
+   * Quartz Job 分组（字典 sys_quartz_job_group 的 DictValue）
    */
   jobGroup: string;
 
   /**
-   * 任务类型（1=程序集 2=网络请求 3=SQL语句）
+   * 任务类型（字典 sys_quartz_task_type 的 DictValue：assembly=程序集、http=网络请求、sql=SQL语句）
    */
-  taskType: number;
+  taskType: string;
 
   /**
    * 程序集名称（任务类型为程序集时使用）
@@ -388,7 +383,7 @@ export interface QuartzTaskCreate {
   sqlScript?: string;
 
   /**
-   * 触发器类型（0=Simple 1=Cron）
+   * 触发器类型（字典 sys_quartz_trigger_type；0=Simple 1=Cron）
    */
   triggerType: number;
 
@@ -408,22 +403,17 @@ export interface QuartzTaskCreate {
   executeParams?: string;
 
   /**
-   * 任务状态
-   */
-  taskStatus: number;
-
-  /**
-   * 是否允许并发执行（0=禁止，1=允许）
+   * 是否允许并发执行（字典 sys_yes_no_type；0=否 1=是）
    */
   concurrent: number;
 
   /**
-   * Misfire 策略
+   * Misfire 策略（字典 sys_quartz_misfire_policy；0=默认 1=忽略 2=立即触发 3=不触发）
    */
   misfirePolicy: number;
 
   /**
-   * 首次执行时间（调度生效开始时间）
+   * 首次执行（调度生效开始时间）
    */
   firstRunAt?: string;
 
@@ -433,19 +423,24 @@ export interface QuartzTaskCreate {
   executeCount: number;
 
   /**
-   * 上次执行时间
+   * 上次执行
    */
   lastRunAt?: string;
 
   /**
-   * 下次执行时间
+   * 下次执行
    */
   nextRunAt?: string;
 
   /**
    * 任务描述
    */
-  description?: string;
+  taskDescription?: string;
+
+  /**
+   * 任务状态（字典 sys_quartz_task_status；0=正常 1=暂停）
+   */
+  taskStatus: number;
 
   /**
    * 关联的任务执行日志列表（主子表关系：QuartzTaskId）（子表，级联保存）
@@ -455,7 +450,7 @@ export interface QuartzTaskCreate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -492,7 +487,7 @@ export interface QuartzTaskStatus {
   quartzTaskId: string;
 
   /**
-   * 任务状态
+   * 任务状态（字典 sys_quartz_task_status；0=正常 1=暂停）
    */
   taskStatus: number;
 
@@ -531,14 +526,14 @@ export interface QuartzTaskTemplate {
   jobName?: string;
 
   /**
-   * Quartz Job 分组
+   * Quartz Job 分组（字典 sys_quartz_job_group 的 DictValue）
    */
   jobGroup?: string;
 
   /**
-   * 任务类型（1=程序集 2=网络请求 3=SQL语句）
+   * 任务类型（字典 sys_quartz_task_type 的 DictValue：assembly=程序集、http=网络请求、sql=SQL语句）
    */
-  taskType?: number;
+  taskType?: string;
 
   /**
    * 程序集名称（任务类型为程序集时使用）
@@ -566,7 +561,7 @@ export interface QuartzTaskTemplate {
   sqlScript?: string;
 
   /**
-   * 触发器类型（0=Simple 1=Cron）
+   * 触发器类型（字典 sys_quartz_trigger_type；0=Simple 1=Cron）
    */
   triggerType?: number;
 
@@ -576,9 +571,64 @@ export interface QuartzTaskTemplate {
   cronExpression?: string;
 
   /**
+   * 执行间隔时间（秒，触发器类型为 Simple 时使用）
+   */
+  intervalSeconds?: number;
+
+  /**
+   * 执行参数
+   */
+  executeParams?: string;
+
+  /**
+   * 是否允许并发执行（字典 sys_yes_no_type；0=否 1=是）
+   */
+  concurrent?: number;
+
+  /**
+   * Misfire 策略（字典 sys_quartz_misfire_policy；0=默认 1=忽略 2=立即触发 3=不触发）
+   */
+  misfirePolicy?: number;
+
+  /**
+   * 首次执行（调度生效开始时间）
+   */
+  firstRunAt?: string;
+
+  /**
+   * 执行次数
+   */
+  executeCount?: number;
+
+  /**
+   * 上次执行
+   */
+  lastRunAt?: string;
+
+  /**
+   * 下次执行
+   */
+  nextRunAt?: string;
+
+  /**
+   * 任务描述
+   */
+  taskDescription?: string;
+
+  /**
+   * 任务状态（字典 sys_quartz_task_status；0=正常 1=暂停）
+   */
+  taskStatus?: number;
+
+  /**
+   * 关联的任务执行日志列表（主子表关系：QuartzTaskId）（子表，级联保存）
+   */
+  quartzLogs?: QuartzLogCreate[];
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -605,7 +655,7 @@ export interface QuartzTaskImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -625,14 +675,14 @@ export interface QuartzTaskImport {
   jobName?: string;
 
   /**
-   * Quartz Job 分组
+   * Quartz Job 分组（字典 sys_quartz_job_group 的 DictValue）
    */
   jobGroup?: string;
 
   /**
-   * 任务类型（1=程序集 2=网络请求 3=SQL语句）
+   * 任务类型（字典 sys_quartz_task_type 的 DictValue：assembly=程序集、http=网络请求、sql=SQL语句）
    */
-  taskType?: number;
+  taskType?: string;
 
   /**
    * 程序集名称（任务类型为程序集时使用）
@@ -660,7 +710,7 @@ export interface QuartzTaskImport {
   sqlScript?: string;
 
   /**
-   * 触发器类型（0=Simple 1=Cron）
+   * 触发器类型（字典 sys_quartz_trigger_type；0=Simple 1=Cron）
    */
   triggerType?: number;
 
@@ -670,9 +720,64 @@ export interface QuartzTaskImport {
   cronExpression?: string;
 
   /**
+   * 执行间隔时间（秒，触发器类型为 Simple 时使用）
+   */
+  intervalSeconds?: number;
+
+  /**
+   * 执行参数
+   */
+  executeParams?: string;
+
+  /**
+   * 是否允许并发执行（字典 sys_yes_no_type；0=否 1=是）
+   */
+  concurrent?: number;
+
+  /**
+   * Misfire 策略（字典 sys_quartz_misfire_policy；0=默认 1=忽略 2=立即触发 3=不触发）
+   */
+  misfirePolicy?: number;
+
+  /**
+   * 首次执行（调度生效开始时间）
+   */
+  firstRunAt?: string;
+
+  /**
+   * 执行次数
+   */
+  executeCount?: number;
+
+  /**
+   * 上次执行
+   */
+  lastRunAt?: string;
+
+  /**
+   * 下次执行
+   */
+  nextRunAt?: string;
+
+  /**
+   * 任务描述
+   */
+  taskDescription?: string;
+
+  /**
+   * 任务状态（字典 sys_quartz_task_status；0=正常 1=暂停）
+   */
+  taskStatus?: number;
+
+  /**
+   * 关联的任务执行日志列表（主子表关系：QuartzTaskId）（子表，级联保存）
+   */
+  quartzLogs?: QuartzLogCreate[];
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -714,14 +819,14 @@ export interface QuartzTaskExport {
   jobName: string;
 
   /**
-   * Quartz Job 分组
+   * Quartz Job 分组（字典 sys_quartz_job_group 的 DictValue）
    */
   jobGroup: string;
 
   /**
-   * 任务类型（1=程序集 2=网络请求 3=SQL语句）
+   * 任务类型（字典 sys_quartz_task_type 的 DictValue：assembly=程序集、http=网络请求、sql=SQL语句）
    */
-  taskType: number;
+  taskType: string;
 
   /**
    * 程序集名称（任务类型为程序集时使用）
@@ -749,7 +854,7 @@ export interface QuartzTaskExport {
   sqlScript?: string;
 
   /**
-   * 触发器类型（0=Simple 1=Cron）
+   * 触发器类型（字典 sys_quartz_trigger_type；0=Simple 1=Cron）
    */
   triggerType: number;
 
@@ -769,22 +874,17 @@ export interface QuartzTaskExport {
   executeParams?: string;
 
   /**
-   * 任务状态
-   */
-  taskStatus: number;
-
-  /**
-   * 是否允许并发执行（0=禁止，1=允许）
+   * 是否允许并发执行（字典 sys_yes_no_type；0=否 1=是）
    */
   concurrent: number;
 
   /**
-   * Misfire 策略
+   * Misfire 策略（字典 sys_quartz_misfire_policy；0=默认 1=忽略 2=立即触发 3=不触发）
    */
   misfirePolicy: number;
 
   /**
-   * 首次执行时间（调度生效开始时间）
+   * 首次执行（调度生效开始时间）
    */
   firstRunAt?: string;
 
@@ -794,24 +894,29 @@ export interface QuartzTaskExport {
   executeCount: number;
 
   /**
-   * 上次执行时间
+   * 上次执行
    */
   lastRunAt?: string;
 
   /**
-   * 下次执行时间
+   * 下次执行
    */
   nextRunAt?: string;
 
   /**
    * 任务描述
    */
-  description?: string;
+  taskDescription?: string;
+
+  /**
+   * 任务状态（字典 sys_quartz_task_status；0=正常 1=暂停）
+   */
+  taskStatus: number;
 
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注

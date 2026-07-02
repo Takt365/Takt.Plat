@@ -11,6 +11,7 @@
 // ========================================
 
 import type { GlobalToken } from 'ant-design-vue/es/theme/interface';
+import type { AppSetting, ThemeColorConfig } from '@/types/setting';
 import { TAKT_THEME_COLOR_STORAGE_KEY, TAKT_THEME_STORAGE_KEY } from '@/utils/common';
 
 export { TAKT_THEME_COLOR_STORAGE_KEY, TAKT_THEME_STORAGE_KEY };
@@ -68,6 +69,23 @@ export const themeColorMap: Record<TaktThemeColorPreset, string> = {
   'memorial-gray': '#808080',
 };
 
+/** color-base.css「著名色彩」CSS 变量（与 themeColorPresetKeys 顺序一致） */
+export const themeColorCssVars: readonly string[] = themeColorPresetKeys.map(
+  (preset) => `var(--takt-${preset})`,
+);
+
+/**
+ * 按序号取著名色 CSS 变量（循环）
+ * @param index 序号（0 起）
+ * @returns var(--takt-*) 字符串
+ */
+export function resolveThemeColorCssVar(index: number): string {
+  if (!Number.isFinite(index)) {
+    return themeColorCssVars[0] as string;
+  }
+  return themeColorCssVars[Math.abs(Math.trunc(index)) % themeColorCssVars.length] as string;
+}
+
 /**
  * 主题色预设（存储/CSS 用连字符 slug）→ common.page.color.* 翻译键后缀（仅小写点分段，禁止连字符）
  */
@@ -88,6 +106,127 @@ export const themeColorPresetI18nKeyMap: Record<TaktThemeColorPreset, string> = 
 /** 默认预设（列表首项） */
 export const defaultThemeColorPreset: TaktThemeColorPreset = themeColorPresetKeys[0];
 
+/** 系统默认主题色（与 defaultSetting.themeColor 一致） */
+export const systemDefaultThemeColorConfig: ThemeColorConfig = { type: 'blue' };
+
+/** 系统默认明暗（与 defaultSetting.theme 一致） */
+export const systemDefaultThemeMode: TaktResolvedTheme = 'dark';
+
+/** 假日主题 DTO 中影响主题色解析的字段 */
+export interface TaktHolidayThemeHint {
+  isHolidayToday?: boolean;
+  holidayTheme?: string | null;
+}
+
+/**
+ * AppSetting.themeColor.type 短键 → TaktThemeColorPreset（与 types/setting ThemeColor 一致）
+ */
+export const appSettingThemeColorToPreset = {
+  green: 'mars-green',
+  cyan: 'tiffany-blue',
+  red: 'chinese-red',
+  orange: 'titian-red',
+  purple: 'burgundy-red',
+  pink: 'bordeaux-red',
+  blue: 'klein-blue',
+  brown: 'vandyke-brown',
+  indigo: 'prussian-blue',
+  yellow: 'sennelier-yellow',
+  gray: 'memorial-gray',
+} as const satisfies Record<string, TaktThemeColorPreset>;
+
+/** AppSetting 主题色短键（不含 custom） */
+export type AppSettingThemeColorKey = keyof typeof appSettingThemeColorToPreset;
+
+/**
+ * AppSetting.themeColor.type 短键 → TaktThemeColorPreset（custom 回退 klein-blue）
+ * @param type 主题色类型
+ * @returns 主题色预设
+ */
+export function mapAppSettingThemeColorToPreset(type: ThemeColorConfig['type']): TaktThemeColorPreset {
+  if (type === 'custom') {
+    return appSettingThemeColorToPreset.blue;
+  }
+  return appSettingThemeColorToPreset[type];
+}
+
+/** TaktThemeColorPreset → AppSetting.themeColor.type 短键 */
+export const presetToAppSettingThemeColor: Record<TaktThemeColorPreset, AppSettingThemeColorKey> =
+  Object.fromEntries(
+    Object.entries(appSettingThemeColorToPreset).map(([shortKey, preset]) => [preset, shortKey])
+  ) as Record<TaktThemeColorPreset, AppSettingThemeColorKey>;
+
+/** app-setting localStorage 键名（与 @/setting STORAGE_KEY 一致，此处只读避免循环依赖） */
+const APP_SETTING_STORAGE_KEY = 'app-setting';
+
+/**
+ * 从 app-setting 读取主题模式（light / dark）
+ * @returns 模式或 null
+ */
+export function readAppSettingThemeMode(): 'light' | 'dark' | null {
+  if (typeof window === 'undefined' || !localStorage) {
+    return null;
+  }
+  try {
+    const raw = localStorage.getItem(APP_SETTING_STORAGE_KEY);
+    if (!raw) {
+      return null;
+    }
+    const parsed = JSON.parse(raw) as { theme?: unknown };
+    if (parsed.theme === 'light' || parsed.theme === 'dark') {
+      return parsed.theme;
+    }
+  } catch {
+    return null;
+  }
+  return null;
+}
+
+/**
+ * 从 app-setting 读取主题色预设
+ * @returns 预设或 null
+ */
+export function readAppSettingThemeColorPreset(): TaktThemeColorPreset | null {
+  if (typeof window === 'undefined' || !localStorage) {
+    return null;
+  }
+  try {
+    const raw = localStorage.getItem(APP_SETTING_STORAGE_KEY);
+    if (!raw) {
+      return null;
+    }
+    const parsed = JSON.parse(raw) as { themeColor?: { type?: unknown } };
+    const type = parsed.themeColor?.type;
+    if (typeof type !== 'string' || type === 'custom') {
+      return null;
+    }
+    const preset = appSettingThemeColorToPreset[type as AppSettingThemeColorKey];
+    return preset ?? null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * 从 app-setting 读取用户是否手动改过外观
+ * @returns 是否用户锁定
+ */
+export function readAppSettingAppearanceUserOverride(): boolean {
+  if (typeof window === 'undefined' || !localStorage) {
+    return false;
+  }
+  try {
+    const raw = localStorage.getItem(APP_SETTING_STORAGE_KEY);
+    if (!raw) {
+      return false;
+    }
+    const parsed = JSON.parse(raw) as { appearanceUserOverride?: unknown };
+    return parsed.appearanceUserOverride === true;
+  } catch {
+    return false;
+  }
+}
+
 /**
  * 将 camelCase 转为 kebab-case
  * @param key 原始键名
@@ -106,7 +245,11 @@ export function readStoredThemeMode(): TaktThemeMode {
   if (stored === 'light' || stored === 'dark' || stored === 'system') {
     return stored;
   }
-  return 'system';
+  const fromAppSetting = readAppSettingThemeMode();
+  if (fromAppSetting) {
+    return fromAppSetting;
+  }
+  return systemDefaultThemeMode;
 }
 
 /**
@@ -132,8 +275,13 @@ export function applyThemeDom(resolved: TaktResolvedTheme): void {
 
 /**
  * 应用启动前初始化主题 DOM，避免首屏闪烁
+ * 未手动选外观：系统默认 dark；已选手动：TAKT_THEME / app-setting
  */
 export function initTaktThemeDom(): void {
+  if (!readAppSettingAppearanceUserOverride()) {
+    applyThemeDom(systemDefaultThemeMode);
+    return;
+  }
   applyThemeDom(resolveThemeMode(readStoredThemeMode()));
 }
 
@@ -166,7 +314,15 @@ export function resolveThemeColorPreset(stored: string | null | undefined): Takt
  * @returns 主题色预设
  */
 export function readStoredThemeColorPreset(): TaktThemeColorPreset {
-  return resolveThemeColorPreset(localStorage.getItem(TAKT_THEME_COLOR_STORAGE_KEY)) ?? defaultThemeColorPreset;
+  const fromAppSetting = readAppSettingThemeColorPreset();
+  if (fromAppSetting) {
+    return fromAppSetting;
+  }
+  const fromStorage = resolveThemeColorPreset(localStorage.getItem(TAKT_THEME_COLOR_STORAGE_KEY));
+  if (fromStorage) {
+    return fromStorage;
+  }
+  return mapAppSettingThemeColorToPreset(systemDefaultThemeColorConfig.type);
 }
 
 /**
@@ -176,6 +332,73 @@ export function readStoredThemeColorPreset(): TaktThemeColorPreset {
  */
 export function getThemeColorValue(preset: TaktThemeColorPreset): string {
   return themeColorMap[preset];
+}
+
+/**
+ * 将 AppSetting.themeColor 解析为 hex（不含假日优先级）
+ * @param config 主题色配置
+ * @returns 十六进制色值
+ */
+export function resolveThemeColorConfigHex(config: ThemeColorConfig): string {
+  if (config.type === 'custom' && config.customColor) {
+    return config.customColor;
+  }
+  return getThemeColorValue(mapAppSettingThemeColorToPreset(config.type));
+}
+
+/**
+ * 解析生效主题色
+ * 叠加顺序（由低到高）：系统默认 → 假日适配 → 用户自定义；解析时自顶向下判断
+ * @param setting 当前 AppSetting
+ * @param holiday 假日主题 DTO 片段
+ * @param systemDefaultColor 系统默认主题色配置
+ * @returns 十六进制主色
+ */
+export function resolveEffectiveColorPrimary(
+  setting: AppSetting,
+  holiday: TaktHolidayThemeHint | null | undefined,
+  systemDefaultColor: ThemeColorConfig = systemDefaultThemeColorConfig,
+): string {
+  if (setting.appearanceUserOverride) {
+    if (setting.themeColor.type === 'custom' && setting.themeColor.customColor) {
+      return setting.themeColor.customColor;
+    }
+    return resolveThemeColorConfigHex(setting.themeColor);
+  }
+  if (holiday?.isHolidayToday) {
+    const preset = resolveThemeColorPreset(holiday.holidayTheme);
+    if (preset) {
+      return getThemeColorValue(preset);
+    }
+  }
+  return resolveThemeColorConfigHex(systemDefaultColor);
+}
+
+/**
+ * 解析生效主题色 preset（用于色板选中态；custom 时返回 null）
+ * @param setting 当前 AppSetting
+ * @param holiday 假日主题 DTO 片段
+ * @param storedPreset 持久化 preset
+ * @returns preset 或 null
+ */
+export function resolveEffectiveColorPreset(
+  setting: AppSetting,
+  holiday: TaktHolidayThemeHint | null | undefined,
+  storedPreset: TaktThemeColorPreset,
+): TaktThemeColorPreset | null {
+  if (setting.appearanceUserOverride) {
+    if (setting.themeColor.type === 'custom') {
+      return null;
+    }
+    return storedPreset;
+  }
+  if (holiday?.isHolidayToday) {
+    const resolved = resolveThemeColorPreset(holiday.holidayTheme);
+    if (resolved) {
+      return resolved;
+    }
+  }
+  return mapAppSettingThemeColorToPreset(systemDefaultThemeColorConfig.type);
 }
 
 /**

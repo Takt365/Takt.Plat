@@ -210,14 +210,8 @@ public class TaktLocalizationService : ITaktLocalizationService
             return true;
         }
 
-        var headerTenant = httpContext.Request.Headers[_tenantContextOptions.TenantHeaderName].FirstOrDefault();
-        if (!string.IsNullOrWhiteSpace(headerTenant))
-        {
-            return true;
-        }
-
-        var queryTenant = httpContext.Request.Query["tenantCode"].FirstOrDefault();
-        return !string.IsNullOrWhiteSpace(queryTenant);
+        return !string.IsNullOrWhiteSpace(
+            TaktUserContext.TryResolveTenantCode(httpContext, _tenantContextOptions.TenantHeaderName));
     }
 
     /// <summary>

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/statistics/report
 // 文件名称：configurable.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：statistics/report 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -13,25 +13,30 @@
 import request from '@/api/request';
 import type {
   TaktPagedResult,
-  TaktSelectOption,
-  TaktBinaryDownload
+  TaktSelectOption
 } from '@/types/common';
 import type {
   Configurable,
   ConfigurableCreate,
   ConfigurableSort,
   ConfigurableStatus,
-  ConfigurableUpdate,
-  ConfigurableRuntimeScreen,
-  ConfigurableExecuteQuery,
-  ConfigurableQueryResult,
-  ConfigurableExportData
+  ConfigurableUpdate
 } from '@/types/statistics/report/configurable';
 import type {
-  DatabaseInfo,
-  DatabaseTableColumnInfo,
-  DatabaseTableInfo
-} from '@/types/code/database/database-info';
+  ConfigurableExecuteQuery
+} from '@/types/statistics/report/configurable-execute-query';
+import type {
+  ConfigurableExportData
+} from '@/types/statistics/report/configurable-export-data';
+import type {
+  ConfigurablePreviewQuery
+} from '@/types/statistics/report/configurable-preview-query';
+import type {
+  ConfigurableQueryResult
+} from '@/types/statistics/report/configurable-query-result';
+import type {
+  ConfigurableRuntimeScreen
+} from '@/types/statistics/report/configurable-runtime-screen';
 
 /**
  * API 路径前缀（相对 request baseURL，对应后端 [controller]）
@@ -146,6 +151,88 @@ export function updateConfigurableSort(dto: ConfigurableSort): Promise<Configura
   });
 }
 
+/**
+ * 获取可选租户业务库列表（报表设计选库）
+ * @returns {Promise<unknown>} 数据库摘要列表
+ */
+export function getConfigurableSchemaDatabases(): Promise<unknown> {
+  return request({
+    url: `${CONFIGURABLE_API_BASE}/schema/databases`,
+    method: 'get',
+  });
+}
+
+/**
+ * 获取指定租户库物理表列表（报表设计选表）
+ * @param {string} tenantCode 租户编码
+ * @returns {Promise<unknown>} 表摘要列表
+ */
+export function getConfigurableSchemaTables(tenantCode: string): Promise<unknown> {
+  return request({
+    url: `${CONFIGURABLE_API_BASE}/schema/tables`,
+    method: 'get',
+    params: {
+      tenantCode
+    },
+  });
+}
+
+/**
+ * 获取指定物理表列列表（报表设计选列）
+ * @param {string} tenantCode 租户编码
+ * @param {string} tableName 表名
+ * @returns {Promise<unknown>} 列摘要列表
+ */
+export function getConfigurableSchemaColumns(tenantCode: string, tableName: string): Promise<unknown> {
+  return request({
+    url: `${CONFIGURABLE_API_BASE}/schema/columns`,
+    method: 'get',
+    params: {
+      tenantCode,
+      tableName
+    },
+  });
+}
+
+/**
+ * 获取 SQVI 运行时筛选条件
+ * @param {string} id 报表主键
+ * @returns {Promise<ConfigurableRuntimeScreen>} 运行时屏幕定义
+ */
+export function getConfigurableRuntimeScreen(id: string): Promise<ConfigurableRuntimeScreen> {
+  return request<ConfigurableRuntimeScreen>({
+    url: `${CONFIGURABLE_API_BASE}/${id}/runtime-screen`,
+    method: 'get',
+  });
+}
+
+/**
+ * 执行报表查询（分页）
+ * @param {string} id 报表主键
+ * @param {ConfigurableExecuteQuery} queryDto 查询参数
+ * @returns {Promise<ConfigurableQueryResult>} 查询结果
+ */
+export function executeConfigurableQuery(id: string, queryDto: ConfigurableExecuteQuery): Promise<ConfigurableQueryResult> {
+  return request<ConfigurableQueryResult>({
+    url: `${CONFIGURABLE_API_BASE}/${id}/query`,
+    method: 'post',
+    data: queryDto,
+  });
+}
+
+/**
+ * 设计态预览查询（未保存定义）
+ * @param {ConfigurablePreviewQuery} queryDto 报表定义与分页
+ * @returns {Promise<ConfigurableQueryResult>} 查询结果
+ */
+export function previewConfigurableQuery(queryDto: ConfigurablePreviewQuery): Promise<ConfigurableQueryResult> {
+  return request<ConfigurableQueryResult>({
+    url: `${CONFIGURABLE_API_BASE}/preview-query`,
+    method: 'post',
+    data: queryDto,
+  });
+}
+
 // ========================================
 // 选项
 // ========================================
@@ -230,112 +317,27 @@ export function exportConfigurable(
   });
 }
 
-// ========================================
-// Schema 选库选表（报表设计）
-// ========================================
-
-/**
- * 获取可选租户业务库列表
- * @returns {Promise<DatabaseInfo[]>} 数据库摘要列表
- */
-export function getConfigurableSchemaDatabases(): Promise<DatabaseInfo[]> {
-  return request<DatabaseInfo[]>({
-    url: `${CONFIGURABLE_API_BASE}/schema/databases`,
-    method: 'get',
-  });
-}
-
-/**
- * 获取指定租户库物理表列表
- * @param {string} tenantCode 租户编码
- * @returns {Promise<DatabaseTableInfo[]>} 表摘要列表
- */
-export function getConfigurableSchemaTables(tenantCode: string): Promise<DatabaseTableInfo[]> {
-  return request<DatabaseTableInfo[]>({
-    url: `${CONFIGURABLE_API_BASE}/schema/tables`,
-    method: 'get',
-    params: {
-      tenantCode,
-    },
-  });
-}
-
-/**
- * 获取指定物理表列列表
- * @param {string} tenantCode 租户编码
- * @param {string} tableName 表名
- * @returns {Promise<DatabaseTableColumnInfo[]>} 列摘要列表
- */
-export function getConfigurableSchemaColumns(
-  tenantCode: string,
-  tableName: string
-): Promise<DatabaseTableColumnInfo[]> {
-  return request<DatabaseTableColumnInfo[]>({
-    url: `${CONFIGURABLE_API_BASE}/schema/columns`,
-    method: 'get',
-    params: {
-      tenantCode,
-      tableName,
-    },
-  });
-}
-
-// ========================================
-// SQVI 运行时
-// ========================================
-
-/**
- * 获取 SQVI 运行时筛选条件
- * @param {string} id 报表主键
- * @returns {Promise<ConfigurableRuntimeScreen>} 运行时屏幕定义
- */
-export function getConfigurableRuntimeScreen(id: string): Promise<ConfigurableRuntimeScreen> {
-  return request<ConfigurableRuntimeScreen>({
-    url: `${CONFIGURABLE_API_BASE}/${id}/runtime-screen`,
-    method: 'get',
-  });
-}
-
-/**
- * 执行报表查询（分页）
- * @param {string} id 报表主键
- * @param {ConfigurableExecuteQuery} dto 查询参数
- * @returns {Promise<ConfigurableQueryResult>} 查询结果
- */
-export function executeConfigurableQuery(
-  id: string,
-  dto: ConfigurableExecuteQuery
-): Promise<ConfigurableQueryResult> {
-  return request<ConfigurableQueryResult>({
-    url: `${CONFIGURABLE_API_BASE}/${id}/query`,
-    method: 'post',
-    data: dto,
-  });
-}
-
 /**
  * 导出报表数据（Excel）
  * @param {string} id 报表主键
  * @param {ConfigurableExportData} dto 筛选值
  * @param {string} sheetName 工作表名
  * @param {string} exportName 文件名
- * @returns {Promise<TaktBinaryDownload>} Excel 文件
+ * @returns {Promise<{ success: number; fail: number; errors: string[] }>} Excel 文件
  */
 export function exportConfigurableData(
   id: string,
   dto: ConfigurableExportData,
   sheetName?: string,
   exportName?: string
-): Promise<TaktBinaryDownload> {
-  return request<TaktBinaryDownload>({
+): Promise<{ success: number; fail: number; errors: string[] }> {
+  return request<{ success: number; fail: number; errors: string[] }>({
     url: `${CONFIGURABLE_API_BASE}/${id}/export-data`,
     method: 'post',
     data: dto,
     params: {
       sheetName,
-      exportName,
+      exportName
     },
-    responseType: 'blob',
-    returnBinaryMeta: true,
   });
 }

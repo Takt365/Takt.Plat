@@ -25,58 +25,50 @@ namespace Takt.Domain.Entities.HumanResource.Talent;
 public class TaktTalentJobPosting : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 用人需求ID
+    /// 用人需求（关联 TaktTalentStaffingRequirement.Id，选项 TaktTalentStaffingRequirements/options）
     /// </summary>
     [SugarColumn(ColumnName = "staffing_requirement_id", ColumnDescription = "用人需求ID", ColumnDataType = "bigint", IsNullable = false)]
     public long StaffingRequirementId { get; set; }
-
     /// <summary>
     /// 发布编号（租户+公司内唯一）
     /// </summary>
     [SugarColumn(ColumnName = "posting_code", ColumnDescription = "发布编号", ColumnDataType = "varchar", Length = 20, IsNullable = false)]
     public string PostingCode { get; set; } = string.Empty;
-
     /// <summary>
     /// 职位标题
     /// </summary>
-    [SugarColumn(ColumnName = "title", ColumnDescription = "职位标题", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
-    public string Title { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 发布状态（0=草稿，1=招聘中，2=已暂停，3=已关闭）
-    /// </summary>
-    [SugarColumn(ColumnName = "posting_status", ColumnDescription = "发布状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int PostingStatus { get; set; }
-
+    [SugarColumn(ColumnName = "talent_job_posting_title", ColumnDescription = "职位标题", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
+    public string TalentJobPostingTitle { get; set; } = string.Empty;
     /// <summary>
     /// 职位发布日期
     /// </summary>
     [SugarColumn(ColumnName = "publish_date", ColumnDescription = "职位发布日期", ColumnDataType = "datetime", IsNullable = false)]
     public DateTime PublishDate { get; set; }
-
     /// <summary>
     /// 招聘开放日期
     /// </summary>
     [SugarColumn(ColumnName = "open_date", ColumnDescription = "招聘开放日期", ColumnDataType = "datetime", IsNullable = false)]
     public DateTime OpenDate { get; set; }
-
     /// <summary>
     /// 招聘关闭日期
     /// </summary>
     [SugarColumn(ColumnName = "close_date", ColumnDescription = "招聘关闭日期", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? CloseDate { get; set; }
-
     /// <summary>
-    /// 发布渠道（0=官网，1=招聘网站，2=内推，3=校园，9=其他）
+    /// 发布渠道（字典 hr_talent_publish_channel_type；0=官网 1=招聘网站 2=内推 3=校园 9=其他）
     /// </summary>
     [SugarColumn(ColumnName = "publish_channel", ColumnDescription = "发布渠道", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int PublishChannel { get; set; }
-
     /// <summary>
     /// 发布说明
     /// </summary>
     [SugarColumn(ColumnName = "reason", ColumnDescription = "发布说明", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
     public string? Reason { get; set; }
+    /// <summary>
+    /// 发布状态（字典 hr_talent_job_posting_status；0=草稿 1=招聘中 2=已暂停 3=已关闭）
+    /// </summary>
+    [SugarColumn(ColumnName = "posting_status", ColumnDescription = "发布状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int PostingStatus { get; set; }
 
     // ========================================
     // 导航属性区域

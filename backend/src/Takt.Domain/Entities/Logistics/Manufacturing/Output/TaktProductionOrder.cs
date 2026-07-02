@@ -27,19 +27,13 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Output;
 public class TaktProductionOrder : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产工单类型
-    /// ZDTA=製造指図：DTA通常生産
-    /// ZDTB=製造指図：DTA改造改修
-    /// ZDTC=製造指図：DTA開発試作
-    /// ZDTD=製造指図：DTA通常生産 PCBA
-    /// ZDTE=製造指図：DTA改造改修 PCBA
-    /// ZDTF=製造指図：DTA開発試作 PCBA
+    /// 生产工单类型（字典 logistics_prod_order_type，存 DictValue，如 ZDTA/ZDTB/ZDTC/ZDTD/ZDTE/ZDTF）
     /// </summary>
     [SugarColumn(ColumnName = "prod_order_type", ColumnDescription = "生产工单类型", ColumnDataType = "nvarchar", Length = 10, IsNullable = false, DefaultValue = "ZDTA")]
     public string ProdOrderType { get; set; } = "ZDTA";
@@ -51,7 +45,7 @@ public class TaktProductionOrder : TaktCompanyEntityBase
     public string ProdOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码
+    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
     /// </summary>
     [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string MaterialCode { get; set; } = string.Empty;
@@ -69,7 +63,7 @@ public class TaktProductionOrder : TaktCompanyEntityBase
     public decimal ProducedQty { get; set; } = 0;
 
     /// <summary>
-    /// 计量单位
+    /// 计量单位（字典 logistics_unit_of_measure_code，存 DictValue）
     /// </summary>
     [SugarColumn(ColumnName = "unit_of_measure", ColumnDescription = "计量单位", ColumnDataType = "nvarchar", Length = 10, IsNullable = false)]
     public string UnitOfMeasure { get; set; } = string.Empty;
@@ -87,22 +81,16 @@ public class TaktProductionOrder : TaktCompanyEntityBase
     public DateTime? ActualEndDate { get; set; }
 
     /// <summary>
-    /// 优先级（1=低，2=中，3=高，4=紧急）
+    /// 优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）
     /// </summary>
-    [SugarColumn(ColumnName = "priority", ColumnDescription = "优先级", ColumnDataType = "int", IsNullable = false, DefaultValue = "2")]
-    public int Priority { get; set; } = 2;
+    [SugarColumn(ColumnName = "priority", ColumnDescription = "优先级", ColumnDataType = "int", IsNullable = false, DefaultValue = "3")]
+    public int Priority { get; set; } = 3;
 
     /// <summary>
-    /// 工作中心
+    /// 工作中心（选项 TaktWorkCenters/options，存 WorkCenterCode，ExtValue=PlantCode 过滤）
     /// </summary>
-    [SugarColumn(ColumnName = "work_center", ColumnDescription = "工作中心", ColumnDataType = "nvarchar", Length = 20, IsNullable = true)]
+    [SugarColumn(ColumnName = "work_center", ColumnDescription = "工作中心", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
     public string? WorkCenter { get; set; }
-
-    /// <summary>
-    /// 生产线
-    /// </summary>
-    [SugarColumn(ColumnName = "prod_line", ColumnDescription = "生产线", ColumnDataType = "nvarchar", Length = 20, IsNullable = true)]
-    public string? ProdLine { get; set; }
 
     /// <summary>
     /// 生产批次
@@ -123,14 +111,14 @@ public class TaktProductionOrder : TaktCompanyEntityBase
     public string? RoutingCode { get; set; }
 
     /// <summary>
-    /// 来源计划订单 ID（可选）
+    /// 来源计划订单 ID（关联 TaktPlannedOrder.Id，选项 TaktPlannedOrders/options，ExtValue=PlantCode 过滤）
     /// </summary>
     [SugarColumn(ColumnName = "planned_order_id", ColumnDescription = "来源计划订单ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PlannedOrderId { get; set; }
 
     /// <summary>
-    /// 来源 APS 订单 ID（可选）
+    /// 来源 APS 订单 ID（关联 TaktApsOrder.Id，选项 TaktApsOrders/options，ExtValue=PlantCode 过滤）
     /// </summary>
     [SugarColumn(ColumnName = "aps_order_id", ColumnDescription = "来源APS订单ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -149,10 +137,10 @@ public class TaktProductionOrder : TaktCompanyEntityBase
     public DateTime? PlannedEndTime { get; set; }
 
     /// <summary>
-    /// 状态（0=正常，1=生产中，2=已完成）
+    /// 状态（字典 logistics_prod_status；1=进行中 2=已完成）
     /// </summary>
-    [SugarColumn(ColumnName = "status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int Status { get; set; } = 0;
+    [SugarColumn(ColumnName = "status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
+    public int Status { get; set; } = 1;
 
     /// <summary>
     /// 生产工单变更记录列表（外键在子表 TaktProductionOrderChangeLog.ProductionOrderId）

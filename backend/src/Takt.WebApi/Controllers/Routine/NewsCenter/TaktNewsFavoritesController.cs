@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Routine.NewsCenter
 // 文件名称：TaktNewsFavoritesController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-27
 // 创建人：Takt365(Cursor AI)
 // 功能描述：新闻中心收藏记录控制器
 // 
@@ -41,7 +41,7 @@ public class TaktNewsFavoritesController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("routine:newscenter:newsfavorite:list", "新闻中心收藏记录列表")]
+    [TaktPermission("routine:news:center:list", "新闻中心收藏记录列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetNewsFavoriteListAsync([FromQuery] TaktNewsFavoriteQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktNewsFavoritesController : TaktControllerBase
     /// </summary>
     /// <param name="id">新闻中心收藏记录ID</param>
     /// <returns>新闻中心收藏记录DTO</returns>
-    [TaktPermission("routine:newscenter:newsfavorite:query", "新闻中心收藏记录详情")]
+    [TaktPermission("routine:news:center:query", "新闻中心收藏记录详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetNewsFavoriteByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktNewsFavoritesController : TaktControllerBase
     /// 获取新闻收藏记录选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("routine:newscenter:newsfavorite:query", "新闻中心收藏记录选项")]
+    [TaktPermission("routine:news:center:query", "新闻中心收藏记录选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetNewsFavoriteOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktNewsFavoritesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>新闻中心收藏记录DTO</returns>
-    [TaktPermission("routine:newscenter:newsfavorite:create", "创建新闻中心收藏记录")]
+    [TaktPermission("routine:news:center:create", "创建新闻中心收藏记录")]
     [HttpPost]
     public async Task<IActionResult> CreateNewsFavoriteAsync([FromBody] TaktNewsFavoriteCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktNewsFavoritesController : TaktControllerBase
     /// <param name="id">新闻中心收藏记录ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>新闻中心收藏记录DTO</returns>
-    [TaktPermission("routine:newscenter:newsfavorite:update", "更新新闻中心收藏记录")]
+    [TaktPermission("routine:news:center:update", "更新新闻中心收藏记录")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateNewsFavoriteAsync(long id, [FromBody] TaktNewsFavoriteUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktNewsFavoritesController : TaktControllerBase
     /// </summary>
     /// <param name="id">新闻中心收藏记录ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("routine:newscenter:newsfavorite:delete", "删除新闻中心收藏记录")]
+    [TaktPermission("routine:news:center:delete", "删除新闻中心收藏记录")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteNewsFavoriteByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktNewsFavoritesController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("routine:newscenter:newsfavorite:delete", "批量删除新闻中心收藏记录")]
+    [TaktPermission("routine:news:center:delete", "批量删除新闻中心收藏记录")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteNewsFavoriteBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktNewsFavoritesController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("routine:newscenter:newsfavorite:import", "获取新闻中心收藏记录导入模板")]
+    [TaktPermission("routine:news:center:import", "获取新闻中心收藏记录导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetNewsFavoriteTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -204,7 +204,7 @@ public class TaktNewsFavoritesController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("routine:newscenter:newsfavorite:import", "导入新闻中心收藏记录")]
+    [TaktPermission("routine:news:center:import", "导入新闻中心收藏记录")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportNewsFavoriteAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -234,7 +234,7 @@ public class TaktNewsFavoritesController : TaktControllerBase
     /// 导出新闻中心收藏记录
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("routine:newscenter:newsfavorite:export", "导出新闻中心收藏记录")]
+    [TaktPermission("routine:news:center:export", "导出新闻中心收藏记录")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportNewsFavoriteAsync([FromQuery] TaktNewsFavoriteQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

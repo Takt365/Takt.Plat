@@ -365,3 +365,22 @@ a:active {
   min-height: 0;
   overflow: hidden;
 }
+
+/** Quartz Cron 弹窗：card Tabs + 预览区（参照博客园自定义 cron 组件） */
+.takt-cron-modal-wrap {
+  z-index: 1100 !important;
+}
+
+.takt-cron-modal .takt-cron-modal-body .takt-cron-tabs.ant-tabs-card > .ant-tabs-nav .ant-tabs-tab {
+  padding: 8px 16px;
+}
+
+.takt-cron-modal .takt-cron-modal-body .takt-cron-tabs .ant-tabs-content {
+  padding: 12px 8px 4px;
+}
+
+.takt-cron-modal .takt-cron-modal-body .ant-radio-wrapper {
+  align-items: flex-start;
+  white-space: normal;
+  line-height: 1.6;
+}

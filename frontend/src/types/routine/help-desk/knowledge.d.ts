@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/routine/help-desk
 // 文件名称：knowledge.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：routine/help-desk 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -31,17 +31,17 @@ export interface Knowledge extends CompanyDtoBase {
   /**
    * 知识标题
    */
-  title: string;
+  knowledgeTitle: string;
 
   /**
    * 知识内容（富文本/HTML）
    */
-  content?: string;
+  knowledgeContent?: string;
 
   /**
    * 知识摘要（简短描述，列表/搜索展示）
    */
-  summary?: string;
+  knowledgeSummary?: string;
 
   /**
    * 分类编码（如 faq/guide 等）
@@ -51,7 +51,7 @@ export interface Knowledge extends CompanyDtoBase {
   /**
    * 标签（逗号分隔或 JSON 数组存储）
    */
-  tags?: string;
+  knowledgeTags?: string;
 
   /**
    * 知识状态（0=草稿，1=已发布，2=已下架）
@@ -66,7 +66,7 @@ export interface Knowledge extends CompanyDtoBase {
   /**
    * 浏览次数
    */
-  viewCount: number;
+  knowledgeViewCount: number;
 
   /**
    * 有用评价数
@@ -81,7 +81,7 @@ export interface Knowledge extends CompanyDtoBase {
   /**
    * 是否已发布（0=否，1=是）
    */
-  isPublished: number;
+  knowledgeIsPublished: number;
 
   /**
    * 版本号
@@ -97,6 +97,11 @@ export interface Knowledge extends CompanyDtoBase {
    * 最后修订时间
    */
   revisedAt?: string;
+
+  /**
+   * 附件 JSON（列表形式，由TaktFile 统一上传到服务器）
+   */
+  attachments?: string;
 
   /**
    * 知识库变更日志列表 （子表：TaktKnowledgeChangeLog）
@@ -126,17 +131,17 @@ export interface KnowledgeQuery extends TaktPagedQuery {
   /**
    * 知识标题
    */
-  title?: string;
+  knowledgeTitle?: string;
 
   /**
    * 知识内容（富文本/HTML）
    */
-  content?: string;
+  knowledgeContent?: string;
 
   /**
    * 知识摘要（简短描述，列表/搜索展示）
    */
-  summary?: string;
+  knowledgeSummary?: string;
 
   /**
    * 分类编码（如 faq/guide 等）
@@ -146,7 +151,7 @@ export interface KnowledgeQuery extends TaktPagedQuery {
   /**
    * 标签（逗号分隔或 JSON 数组存储）
    */
-  tags?: string;
+  knowledgeTags?: string;
 
   /**
    * 知识状态（0=草稿，1=已发布，2=已下架）
@@ -161,7 +166,7 @@ export interface KnowledgeQuery extends TaktPagedQuery {
   /**
    * 浏览次数
    */
-  viewCount?: number;
+  knowledgeViewCount?: number;
 
   /**
    * 有用评价数
@@ -176,7 +181,7 @@ export interface KnowledgeQuery extends TaktPagedQuery {
   /**
    * 是否已发布（0=否，1=是）
    */
-  isPublished?: number;
+  knowledgeIsPublished?: number;
 
   /**
    * 版本号
@@ -204,6 +209,11 @@ export interface KnowledgeQuery extends TaktPagedQuery {
   revisedAtEnd?: string;
 
   /**
+   * 附件 JSON（列表形式，由TaktFile 统一上传到服务器）
+   */
+  attachments?: string;
+
+  /**
    * 创建时间（范围查询-开始）
    */
   createdAtStart?: string;
@@ -216,7 +226,7 @@ export interface KnowledgeQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -243,24 +253,24 @@ export interface KnowledgeCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
   /**
    * 知识标题
    */
-  title: string;
+  knowledgeTitle: string;
 
   /**
    * 知识内容（富文本/HTML）
    */
-  content?: string;
+  knowledgeContent?: string;
 
   /**
    * 知识摘要（简短描述，列表/搜索展示）
    */
-  summary?: string;
+  knowledgeSummary?: string;
 
   /**
    * 分类编码（如 faq/guide 等）
@@ -270,7 +280,7 @@ export interface KnowledgeCreate {
   /**
    * 标签（逗号分隔或 JSON 数组存储）
    */
-  tags?: string;
+  knowledgeTags?: string;
 
   /**
    * 知识状态（0=草稿，1=已发布，2=已下架）
@@ -278,14 +288,9 @@ export interface KnowledgeCreate {
   knowledgeStatus: number;
 
   /**
-   * 排序号（越小越靠前）
-   */
-  sortOrder: number;
-
-  /**
    * 浏览次数
    */
-  viewCount: number;
+  knowledgeViewCount: number;
 
   /**
    * 有用评价数
@@ -300,7 +305,7 @@ export interface KnowledgeCreate {
   /**
    * 是否已发布（0=否，1=是）
    */
-  isPublished: number;
+  knowledgeIsPublished: number;
 
   /**
    * 版本号
@@ -318,6 +323,11 @@ export interface KnowledgeCreate {
   revisedAt?: string;
 
   /**
+   * 附件 JSON（列表形式，由TaktFile 统一上传到服务器）
+   */
+  attachments?: string;
+
+  /**
    * 知识库变更日志列表（子表，级联保存）
    */
   changeLogs?: KnowledgeChangeLogCreate[];
@@ -325,7 +335,7 @@ export interface KnowledgeCreate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -407,17 +417,17 @@ export interface KnowledgeTemplate {
   /**
    * 知识标题
    */
-  title?: string;
+  knowledgeTitle?: string;
 
   /**
    * 知识内容（富文本/HTML）
    */
-  content?: string;
+  knowledgeContent?: string;
 
   /**
    * 知识摘要（简短描述，列表/搜索展示）
    */
-  summary?: string;
+  knowledgeSummary?: string;
 
   /**
    * 分类编码（如 faq/guide 等）
@@ -427,7 +437,7 @@ export interface KnowledgeTemplate {
   /**
    * 标签（逗号分隔或 JSON 数组存储）
    */
-  tags?: string;
+  knowledgeTags?: string;
 
   /**
    * 知识状态（0=草稿，1=已发布，2=已下架）
@@ -435,14 +445,9 @@ export interface KnowledgeTemplate {
   knowledgeStatus?: number;
 
   /**
-   * 排序号（越小越靠前）
-   */
-  sortOrder?: number;
-
-  /**
    * 浏览次数
    */
-  viewCount?: number;
+  knowledgeViewCount?: number;
 
   /**
    * 有用评价数
@@ -457,7 +462,7 @@ export interface KnowledgeTemplate {
   /**
    * 是否已发布（0=否，1=是）
    */
-  isPublished?: number;
+  knowledgeIsPublished?: number;
 
   /**
    * 版本号
@@ -465,9 +470,29 @@ export interface KnowledgeTemplate {
   version?: number;
 
   /**
+   * 发布时间
+   */
+  publishedAt?: string;
+
+  /**
+   * 最后修订时间
+   */
+  revisedAt?: string;
+
+  /**
+   * 附件 JSON（列表形式，由TaktFile 统一上传到服务器）
+   */
+  attachments?: string;
+
+  /**
+   * 知识库变更日志列表（子表，级联保存）
+   */
+  changeLogs?: KnowledgeChangeLogCreate[];
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -494,24 +519,24 @@ export interface KnowledgeImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
   /**
    * 知识标题
    */
-  title?: string;
+  knowledgeTitle?: string;
 
   /**
    * 知识内容（富文本/HTML）
    */
-  content?: string;
+  knowledgeContent?: string;
 
   /**
    * 知识摘要（简短描述，列表/搜索展示）
    */
-  summary?: string;
+  knowledgeSummary?: string;
 
   /**
    * 分类编码（如 faq/guide 等）
@@ -521,7 +546,7 @@ export interface KnowledgeImport {
   /**
    * 标签（逗号分隔或 JSON 数组存储）
    */
-  tags?: string;
+  knowledgeTags?: string;
 
   /**
    * 知识状态（0=草稿，1=已发布，2=已下架）
@@ -529,14 +554,9 @@ export interface KnowledgeImport {
   knowledgeStatus?: number;
 
   /**
-   * 排序号（越小越靠前）
-   */
-  sortOrder?: number;
-
-  /**
    * 浏览次数
    */
-  viewCount?: number;
+  knowledgeViewCount?: number;
 
   /**
    * 有用评价数
@@ -551,7 +571,7 @@ export interface KnowledgeImport {
   /**
    * 是否已发布（0=否，1=是）
    */
-  isPublished?: number;
+  knowledgeIsPublished?: number;
 
   /**
    * 版本号
@@ -559,9 +579,29 @@ export interface KnowledgeImport {
   version?: number;
 
   /**
+   * 发布时间
+   */
+  publishedAt?: string;
+
+  /**
+   * 最后修订时间
+   */
+  revisedAt?: string;
+
+  /**
+   * 附件 JSON（列表形式，由TaktFile 统一上传到服务器）
+   */
+  attachments?: string;
+
+  /**
+   * 知识库变更日志列表（子表，级联保存）
+   */
+  changeLogs?: KnowledgeChangeLogCreate[];
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -590,17 +630,17 @@ export interface KnowledgeExport {
   /**
    * 知识标题
    */
-  title: string;
+  knowledgeTitle: string;
 
   /**
    * 知识内容（富文本/HTML）
    */
-  content?: string;
+  knowledgeContent?: string;
 
   /**
    * 知识摘要（简短描述，列表/搜索展示）
    */
-  summary?: string;
+  knowledgeSummary?: string;
 
   /**
    * 分类编码（如 faq/guide 等）
@@ -610,7 +650,7 @@ export interface KnowledgeExport {
   /**
    * 标签（逗号分隔或 JSON 数组存储）
    */
-  tags?: string;
+  knowledgeTags?: string;
 
   /**
    * 知识状态（0=草稿，1=已发布，2=已下架）
@@ -625,7 +665,7 @@ export interface KnowledgeExport {
   /**
    * 浏览次数
    */
-  viewCount: number;
+  knowledgeViewCount: number;
 
   /**
    * 有用评价数
@@ -640,7 +680,7 @@ export interface KnowledgeExport {
   /**
    * 是否已发布（0=否，1=是）
    */
-  isPublished: number;
+  knowledgeIsPublished: number;
 
   /**
    * 版本号
@@ -658,9 +698,14 @@ export interface KnowledgeExport {
   revisedAt?: string;
 
   /**
+   * 附件 JSON（列表形式，由TaktFile 统一上传到服务器）
+   */
+  attachments?: string;
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注

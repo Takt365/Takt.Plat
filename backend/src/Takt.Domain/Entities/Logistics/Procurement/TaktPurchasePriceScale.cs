@@ -26,7 +26,7 @@ namespace Takt.Domain.Entities.Logistics.Procurement;
 public class TaktPurchasePriceScale : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 采购价格明细ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 采购价格明细 ID（关联 TaktPurchasePriceItem.Id，选项 TaktPurchasePriceItems/options）
     /// </summary>
     [SugarColumn(ColumnName = "purchase_price_item_id", ColumnDescription = "采购价格明细ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -47,19 +47,19 @@ public class TaktPurchasePriceScale : TaktCompanyEntityBase
     /// <summary>
     /// 起始数量（基本单位数量，包含此数量）
     /// </summary>
-    [SugarColumn(ColumnName = "start_quantity", ColumnDescription = "起始数量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 4, IsNullable = false, DefaultValue = "0")]
-    public decimal StartQuantity { get; set; } = 0;
+    [SugarColumn(ColumnName = "start_quantity", ColumnDescription = "起始数量", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int StartQuantity { get; set; } = 0;
 
     /// <summary>
     /// 结束数量（基本单位数量，包含此数量，0表示无上限）
     /// </summary>
-    [SugarColumn(ColumnName = "end_quantity", ColumnDescription = "结束数量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 4, IsNullable = false, DefaultValue = "0")]
-    public decimal EndQuantity { get; set; } = 0;
+    [SugarColumn(ColumnName = "end_quantity", ColumnDescription = "结束数量", ColumnDataType = "int",  IsNullable = false, DefaultValue = "0")]
+    public int EndQuantity { get; set; } = 0;
 
     /// <summary>
     /// 阶梯价格（精确到分，存储为整数，单位为分）
     /// </summary>
-    [SugarColumn(ColumnName = "scale_price", ColumnDescription = "阶梯价格", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
+    [SugarColumn(ColumnName = "scale_price", ColumnDescription = "阶梯价格", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "0")]
     public decimal ScalePrice { get; set; } = 0;
 
     /// <summary>

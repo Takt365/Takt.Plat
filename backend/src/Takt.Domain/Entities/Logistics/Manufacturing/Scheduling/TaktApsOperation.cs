@@ -44,7 +44,7 @@ public class TaktApsOperation : TaktCompanyEntityBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 工艺路线工序 ID（关联 TaktRoutingItem）
+    /// 工艺路线工序 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
     /// </summary>
     [SugarColumn(ColumnName = "routing_item_id", ColumnDescription = "工艺路线工序ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -63,13 +63,13 @@ public class TaktApsOperation : TaktCompanyEntityBase
     public string? ProcessName { get; set; }
 
     /// <summary>
-    /// 工作中心编码
+    /// 工作中心编码（关联 TaktWorkCenter.WorkCenterCode，选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
     /// </summary>
     [SugarColumn(ColumnName = "work_center_code", ColumnDescription = "工作中心编码", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
     public string? WorkCenterCode { get; set; }
 
     /// <summary>
-    /// 工作中心资源 ID（可选）
+    /// 工作中心资源 ID（关联 TaktWorkCenterResource.Id，选项 TaktWorkCenterResources/options）
     /// </summary>
     [SugarColumn(ColumnName = "work_center_resource_id", ColumnDescription = "工作中心资源ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]

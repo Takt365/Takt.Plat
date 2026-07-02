@@ -10,6 +10,7 @@
 <template>
   <a-form
     ref="formRef"
+    class="takt-generated-form"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -21,138 +22,134 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/5)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/4)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.tenantcode')"
+                :label="pi.label('tenantCode')"
                 name="tenantCode"
               >
                 <a-input
                   v-model:value="formState.tenantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  size="small"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.company.name')"
+                :label="pi.label('companyName')"
                 name="companyName"
               >
                 <a-input
                   v-model:value="formState.companyName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.company.name') })"
-                  size="small"
+                  :placeholder="pi.ph('companyName')"
+                  show-count
+                  :maxlength="200"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.company.shortname')"
+                :label="pi.label('companyShortName')"
                 name="companyShortName"
               >
                 <a-input
                   v-model:value="formState.companyShortName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.company.shortname') })"
-                  size="small"
+                  :placeholder="pi.ph('companyShortName')"
+                  show-count
+                  :maxlength="50"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.company.type')"
-                name="companyType"
-              >
-                <a-input-number
-                  v-model:value="formState.companyType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.company.type') })"
-                  size="small"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.company.enterprisenature')"
+                :label="pi.label('enterpriseNature')"
                 name="enterpriseNature"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.enterpriseNature"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.company.enterprisenature') })"
-                  size="small"
-                  style="width: 100%"
+                  dict-type="sys_enterprise_nature_type"
+                  :placeholder="pi.ph('enterpriseNature')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.company.industryattribute')"
+                :label="pi.label('industryAttribute')"
                 name="industryAttribute"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.industryAttribute"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.company.industryattribute') })"
-                  size="small"
-                  style="width: 100%"
+                  dict-type="sys_industry_attribute_type"
+                  :placeholder="pi.ph('industryAttribute')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.company.enterprisescale')"
+                :label="pi.label('enterpriseScale')"
                 name="enterpriseScale"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.enterpriseScale"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.company.enterprisescale') })"
-                  size="small"
-                  style="width: 100%"
+                  dict-type="sys_enterprise_scale_type"
+                  :placeholder="pi.ph('enterpriseScale')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.company.businessscope')"
+                :label="pi.label('businessScope')"
                 name="businessScope"
               >
                 <a-textarea
                   v-model:value="formState.businessScope"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.company.businessscope') })"
+                  :placeholder="pi.ph('businessScope')"
                   :rows="2"
-                  size="small"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.company.registrationaddress1')"
+                :label="pi.label('registrationAddress1')"
                 name="registrationAddress1"
               >
                 <a-textarea
                   v-model:value="formState.registrationAddress1"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.company.registrationaddress1') })"
+                  :placeholder="pi.ph('registrationAddress1')"
                   :rows="2"
-                  size="small"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.company.registrationaddress2')"
+                :label="pi.label('registrationAddress2')"
                 name="registrationAddress2"
               >
                 <a-textarea
                   v-model:value="formState.registrationAddress2"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.company.registrationaddress2') })"
+                  :placeholder="pi.ph('registrationAddress2')"
                   :rows="2"
-                  size="small"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('registrationAddress3')"
+                name="registrationAddress3"
+              >
+                <a-textarea
+                  v-model:value="formState.registrationAddress3"
+                  :placeholder="pi.ph('registrationAddress3')"
+                  :rows="2"
                 />
               </a-form-item>
             </a-col>
@@ -161,138 +158,142 @@
       </a-tab-pane>
       <a-tab-pane
         key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/5)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/4)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.company.registrationaddress3')"
-                name="registrationAddress3"
-              >
-                <a-textarea
-                  v-model:value="formState.registrationAddress3"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.company.registrationaddress3') })"
-                  :rows="2"
-                  size="small"
-                />
-              </a-form-item>
-            </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.company.registrationregion')"
+                :label="pi.label('registrationRegion')"
                 name="registrationRegion"
               >
                 <a-input
                   v-model:value="formState.registrationRegion"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.company.registrationregion') })"
-                  size="small"
+                  :placeholder="pi.ph('registrationRegion')"
+                  show-count
+                  :maxlength="50"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.company.registrationprovince')"
+                :label="pi.label('registrationProvince')"
                 name="registrationProvince"
               >
                 <a-input
                   v-model:value="formState.registrationProvince"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.company.registrationprovince') })"
-                  size="small"
+                  :placeholder="pi.ph('registrationProvince')"
+                  show-count
+                  :maxlength="50"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.company.registrationcity')"
+                :label="pi.label('registrationCity')"
                 name="registrationCity"
               >
                 <a-input
                   v-model:value="formState.registrationCity"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.company.registrationcity') })"
-                  size="small"
+                  :placeholder="pi.ph('registrationCity')"
+                  show-count
+                  :maxlength="50"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.company.businessregion')"
+                :label="pi.label('businessRegion')"
                 name="businessRegion"
               >
                 <a-input
                   v-model:value="formState.businessRegion"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.company.businessregion') })"
-                  size="small"
+                  :placeholder="pi.ph('businessRegion')"
+                  show-count
+                  :maxlength="50"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.company.businessprovince')"
+                :label="pi.label('businessProvince')"
                 name="businessProvince"
               >
                 <a-input
                   v-model:value="formState.businessProvince"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.company.businessprovince') })"
-                  size="small"
+                  :placeholder="pi.ph('businessProvince')"
+                  show-count
+                  :maxlength="50"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.company.businesscity')"
+                :label="pi.label('businessCity')"
                 name="businessCity"
               >
                 <a-input
                   v-model:value="formState.businessCity"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.company.businesscity') })"
-                  size="small"
+                  :placeholder="pi.ph('businessCity')"
+                  show-count
+                  :maxlength="50"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.company.businessaddress1')"
+                :label="pi.label('businessAddress1')"
                 name="businessAddress1"
               >
                 <a-textarea
                   v-model:value="formState.businessAddress1"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.company.businessaddress1') })"
+                  :placeholder="pi.ph('businessAddress1')"
                   :rows="2"
-                  size="small"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.company.businessaddress2')"
+                :label="pi.label('businessAddress2')"
                 name="businessAddress2"
               >
                 <a-textarea
                   v-model:value="formState.businessAddress2"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.company.businessaddress2') })"
+                  :placeholder="pi.ph('businessAddress2')"
                   :rows="2"
-                  size="small"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.company.businessaddress3')"
+                :label="pi.label('businessAddress3')"
                 name="businessAddress3"
               >
                 <a-textarea
                   v-model:value="formState.businessAddress3"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.company.businessaddress3') })"
+                  :placeholder="pi.ph('businessAddress3')"
                   :rows="2"
-                  size="small"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('companyPhone')"
+                name="companyPhone"
+              >
+                <a-input
+                  v-model:value="formState.companyPhone"
+                  :placeholder="pi.ph('companyPhone')"
+                  show-count
+                  :maxlength="50"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -301,138 +302,144 @@
       </a-tab-pane>
       <a-tab-pane
         key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/5)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/4)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.company.phone')"
-                name="companyPhone"
-              >
-                <a-input
-                  v-model:value="formState.companyPhone"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.company.phone') })"
-                  size="small"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.company.email')"
+                :label="pi.label('companyEmail')"
                 name="companyEmail"
               >
                 <a-input
                   v-model:value="formState.companyEmail"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.company.email') })"
-                  size="small"
+                  :placeholder="pi.ph('companyEmail')"
+                  show-count
+                  :maxlength="100"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.company.fax')"
+                :label="pi.label('companyFax')"
                 name="companyFax"
               >
                 <a-input
                   v-model:value="formState.companyFax"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.company.fax') })"
-                  size="small"
+                  :placeholder="pi.ph('companyFax')"
+                  show-count
+                  :maxlength="50"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.company.website')"
+                :label="pi.label('companyWebsite')"
                 name="companyWebsite"
               >
                 <a-input
                   v-model:value="formState.companyWebsite"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.company.website') })"
-                  size="small"
+                  :placeholder="pi.ph('companyWebsite')"
+                  show-count
+                  :maxlength="200"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.company.unifiedsocialcreditcode')"
+                :label="pi.label('unifiedSocialCreditCode')"
                 name="unifiedSocialCreditCode"
               >
                 <a-input
                   v-model:value="formState.unifiedSocialCreditCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.company.unifiedsocialcreditcode') })"
-                  size="small"
+                  :placeholder="pi.ph('unifiedSocialCreditCode')"
+                  show-count
+                  :maxlength="50"
                   allow-clear
+                  :disabled="!!formData?.companyId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.company.taxregistrationnumber')"
+                :label="pi.label('taxRegistrationNumber')"
                 name="taxRegistrationNumber"
               >
                 <a-input
                   v-model:value="formState.taxRegistrationNumber"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.company.taxregistrationnumber') })"
-                  size="small"
+                  :placeholder="pi.ph('taxRegistrationNumber')"
+                  show-count
+                  :maxlength="50"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.company.legalrepresentative')"
+                :label="pi.label('legalRepresentative')"
                 name="legalRepresentative"
               >
                 <a-input
                   v-model:value="formState.legalRepresentative"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.company.legalrepresentative') })"
-                  size="small"
+                  :placeholder="pi.ph('legalRepresentative')"
+                  show-count
+                  :maxlength="50"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.company.manager')"
+                :label="pi.label('companyManager')"
                 name="companyManager"
               >
                 <a-input
                   v-model:value="formState.companyManager"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.company.manager') })"
-                  size="small"
+                  :placeholder="pi.ph('companyManager')"
+                  show-count
+                  :maxlength="50"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.company.registeredcapital')"
+                :label="pi.label('registeredCapital')"
                 name="registeredCapital"
               >
                 <a-input-number
                   v-model:value="formState.registeredCapital"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.company.registeredcapital') })"
-                  size="small"
+                  :placeholder="pi.ph('registeredCapital')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.company.establishmentdate')"
+                :label="pi.label('establishmentDate')"
                 name="establishmentDate"
               >
                 <a-date-picker
                   v-model:value="formState.establishmentDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.company.establishmentdate') })"
+                  :placeholder="pi.ph('establishmentDate')"
                   value-format="YYYY-MM-DD"
-                  size="small"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('closingDate')"
+                name="closingDate"
+              >
+                <a-date-picker
+                  v-model:value="formState.closingDate"
+                  :placeholder="pi.ph('closingDate')"
+                  value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -442,169 +449,145 @@
       </a-tab-pane>
       <a-tab-pane
         key="tab-3"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (4/5)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.company.closingdate')"
-                name="closingDate"
-              >
-                <a-date-picker
-                  v-model:value="formState.closingDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.company.closingdate') })"
-                  value-format="YYYY-MM-DD"
-                  size="small"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.company.existence')"
-                name="companyExistence"
-              >
-                <a-input-number
-                  v-model:value="formState.companyExistence"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.company.existence') })"
-                  size="small"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.company.relatedplant')"
-                name="relatedPlant"
-              >
-                <a-input
-                  v-model:value="formState.relatedPlant"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.company.relatedplant') })"
-                  size="small"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.company.defaultculture')"
-                name="defaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.defaultCulture"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.company.defaultculture') })"
-                  size="small"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.company.codealias')"
-                name="codeAlias"
-              >
-                <a-input
-                  v-model:value="formState.codeAlias"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.company.codealias') })"
-                  size="small"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.company.status')"
-                name="companyStatus"
-              >
-                <a-input-number
-                  v-model:value="formState.companyStatus"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.company.status') })"
-                  size="small"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.company.sortorder')"
-                name="sortOrder"
-              >
-                <a-input-number
-                  v-model:value="formState.sortOrder"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.company.sortorder') })"
-                  size="small"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.company.roleids')"
-                name="roleIds"
-              >
-                <a-input
-                  v-model:value="formState.roleIds"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.company.roleids') })"
-                  size="small"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.company.userids')"
-                name="userIds"
-              >
-                <a-input
-                  v-model:value="formState.userIds"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.company.userids') })"
-                  size="small"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.ExtField')"
-                name="ExtField"
-              >
-                <a-input
-                  v-model:value="formState.ExtField"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
-                  size="small"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-4"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (5/5)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (4/4)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.remark')"
+                :label="pi.label('companyExistence')"
+                name="companyExistence"
+              >
+                <TaktSelect
+                  v-model:value="formState.companyExistence"
+                  dict-type="sys_entity_existence_status"
+                  :placeholder="pi.ph('companyExistence')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('defaultCulture')"
+                name="defaultCulture"
+              >
+                <TaktSelect
+                  v-model:value="formState.defaultCulture"
+                  dict-type="sys_culture_code"
+                  :placeholder="pi.ph('defaultCulture')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('codeAlias')"
+                name="codeAlias"
+              >
+                <a-input
+                  v-model:value="formState.codeAlias"
+                  :placeholder="pi.ph('codeAlias')"
+                  show-count
+                  :maxlength="3"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('relatedPlant')"
+                name="relatedPlant"
+              >
+                <TaktSelect
+                  v-model:value="formState.relatedPlant"
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('relatedPlant')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyStatus')"
+                name="companyStatus"
+              >
+                <TaktSelect
+                  v-model:value="formState.companyStatus"
+                  dict-type="sys_normal_disable_status"
+                  :placeholder="pi.ph('companyStatus')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('roleIds')"
+                name="roleIds"
+              >
+                <a-input
+                  v-model:value="formState.roleIds"
+                  :placeholder="pi.ph('roleIds')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('userIds')"
+                name="userIds"
+              >
+                <a-input
+                  v-model:value="formState.userIds"
+                  :placeholder="pi.ph('userIds')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                name="extField"
+                class="takt-form-item-ext-field"
+              >
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t('common.page.entity.extfieldhint')"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ pi.label('extField') }}</span>
+                  </span>
+                </template>
+                <a-textarea
+                  v-model:value="formState.extField"
+                  :placeholder="t('common.page.form.placeholder.extfield')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('remark')"
                 name="remark"
               >
                 <a-textarea
                   v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                  :rows="2"
-                  size="small"
+                  :placeholder="pi.ph('remark')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
           </a-row>
         </div>
       </a-tab-pane>
-
     </a-tabs>
   </a-form>
 </template>
@@ -614,43 +597,39 @@
  * 公司实体 代表租户下的独立公司/工厂维护表单 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/accounting/financial/company/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useCompanyI18n } from '../composables/use-company-i18n'
+
+/** 实体字段 i18n */
+const pi = useCompanyI18n()
 import type { CompanyCreate } from '@/types/accounting/financial/company'
+import TaktSelect from '@/components/business/takt-select/index.vue'
+import { RiQuestionLine } from '@remixicon/vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useTenantStore } from '@/stores/identity/tenant'
-import { useUserStore } from '@/stores/identity/user'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
 
-/** Pinia：租户/公司上下文 */
+/** Pinia：租户上下文 */
 const tenantStore = useTenantStore()
-/** Pinia：用户上下文 */
-const userStore = useUserStore()
 
 /**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
+ * 上下文隔离字段：租户级实体仅注入 tenantCode，表单只读
  * @param target 表单数据
- * @param force 为 true 时强制覆盖（新增态或公司切换）
+ * @param force 为 true 时强制覆盖（新增态或上下文切换）
  */
 function applyScopeDefaults(target: Record<string, unknown>, force = false) {
-  if (formFields.includes('tenantCode') && (force || !target.tenantCode)) {
+  if (force || !target.tenantCode) {
     target.tenantCode = tenantStore.tenantCode
   }
-  if (formFields.includes('companyCode') && (force || !target.companyCode)) {
-    target.companyCode = tenantStore.companyCode
-  }
-  if (formFields.includes('companyDefaultCulture') && (force || !target.companyDefaultCulture)) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
-  }
 }
-/** 表单内容区高度 class（字段多时 tab-10 行） */
-const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
+/** 表单内容区高度 class（多 Tab 大表单固定 10 行高度） */
+const formContentClass = 'takt-form-content-rows-10'
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
-/** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyName","companyShortName","companyType","enterpriseNature","industryAttribute","enterpriseScale","businessScope","registrationAddress1","registrationAddress2","registrationAddress3","registrationRegion","registrationProvince","registrationCity","businessRegion","businessProvince","businessCity","businessAddress1","businessAddress2","businessAddress3","companyPhone","companyEmail","companyFax","companyWebsite","unifiedSocialCreditCode","taxRegistrationNumber","legalRepresentative","companyManager","registeredCapital","establishmentDate","closingDate","companyExistence","relatedPlant","defaultCulture","codeAlias","companyStatus","sortOrder","roleIds","userIds","ExtField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -661,7 +640,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  formData: () => ({}),
+  formData: null,
   loading: false,
 })
 
@@ -669,26 +648,57 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
+/** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
+const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  enterpriseNature: "150",
+  industryAttribute: "C",
+  enterpriseScale: "M",
+  companyExistence: 1,
+  defaultCulture: "zh-CN"
+}
 
-/** 编辑态灌入 formData；新增态 reset */
+/** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  Object.assign(target, FORM_FIELD_DEFAULTS)
+}
+
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载全量字典 */
+onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
+})
+
+/** 编辑态灌入 formData；新增态恢复默认值（须含 companyId 才视为编辑） */
 watch(
   () => props.formData,
   (val) => {
-    const next = val ? { ...val } : {}
-    Object.keys(formState).forEach((k) => delete formState[k])
+    if (val?.companyId) {
+      const next = { ...val } as Record<string, unknown>
+      Object.keys(formState).forEach((k) => delete formState[k])
 
-    applyScopeDefaults(next)
-    Object.assign(formState, next)
+      applyScopeDefaults(next)
+      Object.assign(formState, next)
+      formRef.value?.clearValidate()
+    } else {
+      Object.keys(formState).forEach((k) => delete formState[k])
+      if (val && typeof val === 'object' && Object.keys(val).length > 0) {
+        Object.assign(formState, val)
+      }
+      applyFormDefaults(formState)
+      applyScopeDefaults(formState as Record<string, unknown>, true)
+      formRef.value?.clearValidate()
+    }
   },
-  { immediate: true, deep: true }
+  { immediate: true }
 )
 
-/** 公司/租户切换时，新增态表单同步隔离字段 */
+/** 租户切换时，新增态表单同步隔离字段 */
 watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
+  () => tenantStore.tenantCode,
   () => {
-    const isCreate = !props.formData?.companyId
-    if (isCreate) {
+    if (!props.formData?.companyId) {
       applyScopeDefaults(formState, true)
     }
   },
@@ -699,220 +709,224 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   companyName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.company.name') }),
+      message: pi.ph('companyName'),
       trigger: 'blur'
     }
   ],
   companyShortName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.company.shortname') }),
+      message: pi.ph('companyShortName'),
       trigger: 'blur'
-    }
-  ],
-  companyType: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.company.type') }),
-      trigger: 'change'
     }
   ],
   enterpriseNature: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.company.enterprisenature') }),
+      message: pi.ph('enterpriseNature'),
       trigger: 'change'
     }
   ],
   industryAttribute: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.company.industryattribute') }),
+      message: pi.ph('industryAttribute'),
       trigger: 'change'
     }
   ],
   enterpriseScale: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.company.enterprisescale') }),
+      message: pi.ph('enterpriseScale'),
       trigger: 'change'
     }
   ],
   businessScope: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.company.businessscope') }),
+      message: pi.ph('businessScope'),
       trigger: 'blur'
     }
   ],
   registrationAddress1: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.company.registrationaddress1') }),
+      message: pi.ph('registrationAddress1'),
       trigger: 'blur'
     }
   ],
   registrationRegion: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.company.registrationregion') }),
+      message: pi.ph('registrationRegion'),
       trigger: 'blur'
     }
   ],
   registrationProvince: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.company.registrationprovince') }),
+      message: pi.ph('registrationProvince'),
       trigger: 'blur'
     }
   ],
   registrationCity: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.company.registrationcity') }),
+      message: pi.ph('registrationCity'),
       trigger: 'blur'
     }
   ],
   businessRegion: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.company.businessregion') }),
+      message: pi.ph('businessRegion'),
       trigger: 'blur'
     }
   ],
   businessProvince: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.company.businessprovince') }),
+      message: pi.ph('businessProvince'),
       trigger: 'blur'
     }
   ],
   businessCity: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.company.businesscity') }),
+      message: pi.ph('businessCity'),
       trigger: 'blur'
     }
   ],
   businessAddress1: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.company.businessaddress1') }),
+      message: pi.ph('businessAddress1'),
       trigger: 'blur'
     }
   ],
   companyPhone: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.company.phone') }),
+      message: pi.ph('companyPhone'),
       trigger: 'blur'
     }
   ],
   companyEmail: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.company.email') }),
+      message: pi.ph('companyEmail'),
       trigger: 'blur'
     }
   ],
   companyFax: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.company.fax') }),
+      message: pi.ph('companyFax'),
       trigger: 'blur'
     }
   ],
   companyWebsite: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.company.website') }),
+      message: pi.ph('companyWebsite'),
       trigger: 'blur'
     }
   ],
   unifiedSocialCreditCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.company.unifiedsocialcreditcode') }),
+      message: pi.ph('unifiedSocialCreditCode'),
       trigger: 'blur'
     }
   ],
   taxRegistrationNumber: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.company.taxregistrationnumber') }),
+      message: pi.ph('taxRegistrationNumber'),
       trigger: 'blur'
     }
   ],
   legalRepresentative: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.company.legalrepresentative') }),
+      message: pi.ph('legalRepresentative'),
       trigger: 'blur'
     }
   ],
   companyManager: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.company.manager') }),
+      message: pi.ph('companyManager'),
       trigger: 'blur'
     }
   ],
-  registeredCapital: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.company.registeredcapital') }),
-      trigger: 'change'
-    }
-  ],
+  registeredCapital: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('registeredCapital'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('registeredCapital'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
   establishmentDate: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.company.establishmentdate') }),
+      message: pi.ph('establishmentDate'),
       trigger: 'change'
     }
   ],
-  companyExistence: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.company.existence') }),
-      trigger: 'change'
-    }
-  ],
-  relatedPlant: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.company.relatedplant') }),
-      trigger: 'blur'
-    }
-  ],
+  companyExistence: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('companyExistence'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('companyExistence'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
   defaultCulture: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.company.defaultculture') }),
-      trigger: 'blur'
+      message: pi.ph('defaultCulture'),
+      trigger: 'change'
     }
   ],
   codeAlias: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.company.codealias') }),
+      message: pi.ph('codeAlias'),
       trigger: 'blur'
     }
   ],
-  companyStatus: [
+  relatedPlant: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.company.status') }),
+      message: pi.ph('relatedPlant'),
       trigger: 'change'
     }
   ],
-  sortOrder: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.company.sortorder') }),
-      trigger: 'change'
-    }
-  ],
+  companyStatus: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('companyStatus'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('companyStatus'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -923,15 +937,34 @@ async function validate() {
 
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
-  return { ...formState }
+  const payload = { ...formState }
+  if ('registeredCapital' in payload) {
+    const rawregisteredCapital = payload.registeredCapital
+    payload.registeredCapital = typeof rawregisteredCapital === 'number' ? rawregisteredCapital : Number(rawregisteredCapital)
+  }
+  if ('companyExistence' in payload) {
+    const rawcompanyExistence = payload.companyExistence
+    payload.companyExistence = typeof rawcompanyExistence === 'number' ? rawcompanyExistence : Number(rawcompanyExistence)
+  }
+  if ('companyStatus' in payload) {
+    const rawcompanyStatus = payload.companyStatus
+    payload.companyStatus = typeof rawcompanyStatus === 'number' ? rawcompanyStatus : Number(rawcompanyStatus)
+  }
+  if ('sortOrder' in payload) delete payload.sortOrder
+  return payload
 }
 
-/** 重置表单与子表行 */
+/** 重置表单与子表行（弹窗未 destroy 时父级 nextTick 也会调用） */
 function resetFields() {
-  formRef.value?.resetFields()
   Object.keys(formState).forEach((k) => delete formState[k])
+  if (props.formData && typeof props.formData === 'object') {
+    Object.assign(formState, props.formData)
+  }
+  applyFormDefaults(formState)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.companyId)
 
   activeTab.value = 'tab-0'
+  formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })

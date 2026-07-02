@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Accounting.Controlling
 // 文件名称：TaktCostElementsController.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：成本要素控制器
 // 
@@ -91,6 +91,25 @@ public class TaktCostElementsController : TaktControllerBase
         try
         {
             var result = await _costElementService.GetCostElementTreeOptionsAsync();
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 获取成本要素父级树形选项列表
+    /// </summary>
+    /// <returns>树形选项</returns>
+    [TaktPermission("accounting:controlling:cost:element:query", "成本要素父级树形选项")]
+    [HttpGet("parent-tree-options")]
+    public async Task<IActionResult> GetCostElementParentTreeOptionsAsync()
+    {
+        try
+        {
+            var result = await _costElementService.GetCostElementParentTreeOptionsAsync();
             return Success(result, "查询成功");
         }
         catch (Exception ex)

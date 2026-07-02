@@ -11,8 +11,6 @@
 // ========================================
 
 using System.Diagnostics;
-using System.Net;
-using System.Net.Sockets;
 using Microsoft.Extensions.Configuration;
 using Quartz;
 using Takt.Domain.Entities.Foundation;
@@ -156,12 +154,13 @@ public sealed class TaktQuartzJobExecutor
         TaktSeedContext seedContext,
         CancellationToken cancellationToken)
     {
-        return task.TaskType switch
+        var taskType = (task.TaskType ?? string.Empty).Trim().ToLowerInvariant();
+        return taskType switch
         {
-            TaktQuartzSchedulingHelper.TaskTypeAssembly => await ExecuteAssemblyAsync(
+            "assembly" => await ExecuteAssemblyAsync(
                 task, executeParams, userName, cancellationToken),
-            TaktQuartzSchedulingHelper.TaskTypeHttp => await ExecuteHttpAsync(task, executeParams, cancellationToken),
-            TaktQuartzSchedulingHelper.TaskTypeSql => await ExecuteSqlAsync(task, seedContext, cancellationToken),
+            "http" => await ExecuteHttpAsync(task, executeParams, cancellationToken),
+            "sql" => await ExecuteSqlAsync(task, seedContext, cancellationToken),
             _ => throw new InvalidOperationException($"不支持的任务类型：{task.TaskType}"),
         };
     }
@@ -276,6 +275,7 @@ public sealed class TaktQuartzJobExecutor
         IJobExecutionContext context,
         CancellationToken cancellationToken)
     {
+        var (executeIp, executeHost) = TaktServerHostHelper.ResolveQuartzExecuteEndpoint();
         var log = TaktQuartzSchedulingHelper.BuildQuartzLog(
             task,
             executeTime,
@@ -284,9 +284,13 @@ public sealed class TaktQuartzJobExecutor
             executeMessage,
             string.IsNullOrWhiteSpace(errorInfo) ? null : errorInfo,
             executeStatus,
-            ResolveLocalIp(),
-            Environment.MachineName);
-        log.Id = await seedContext.Db.Insertable(log).ExecuteReturnSnowflakeIdAsync(cancellationToken);
+            executeIp,
+            executeHost);
+        log.Id = await TaktPrimaryKeyInsertHelper.InsertEntityReturnInt64Async(
+            seedContext.Db,
+            log,
+            TaktPrimaryKeyInsertHelper.RuntimeOptions,
+            cancellationToken);
         task.ExecuteCount = checked(task.ExecuteCount + 1);
         task.LastRunAt = executeTime;
         task.NextRunAt = TaktQuartzSchedulingHelper.ResolveNextRunAt(context);
@@ -294,23 +298,5 @@ public sealed class TaktQuartzJobExecutor
             .UpdateColumns(x => new { x.ExecuteCount, x.LastRunAt, x.NextRunAt })
             .ExecuteCommandAsync(cancellationToken);
         return log;
-    }
-
-    /// <summary>
-    /// 解析本机 IPv4 地址
-    /// </summary>
-    /// <returns>IP 字符串</returns>
-    private static string ResolveLocalIp()
-    {
-        try
-        {
-            var host = Dns.GetHostEntry(Dns.GetHostName());
-            var ip = host.AddressList.FirstOrDefault(x => x.AddressFamily == AddressFamily.InterNetwork);
-            return ip?.ToString() ?? "127.0.0.1";
-        }
-        catch
-        {
-            return "127.0.0.1";
-        }
     }
 }

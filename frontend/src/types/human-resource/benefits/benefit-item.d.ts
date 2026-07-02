@@ -1,8 +1,8 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/human-resource/benefits
-// 文件名称：benefit.d.ts
-// 创建时间：2026-06-12
+// 文件名称：benefit-item.d.ts
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/benefits 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -19,12 +19,12 @@ import type {
  * 福利项目（非直接现金福利主数据；年假请假走考勤模块，培训实施走培训模块，此处仅配置福利项）
  * 对应前端 TaktBenefitItemDto
  * 继承 TaktCompanyDtoBase
- * 对应前端 Benefit
+ * 对应前端 BenefitItem
  * @description 对应后端 TaktBenefitItemDto
  */
 export interface BenefitItem extends CompanyDtoBase {
   /**
-   * BenefitID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
+   * BenefitItemID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
    */
   benefitItemId: string;
 
@@ -97,7 +97,7 @@ export interface BenefitItem extends CompanyDtoBase {
 
 
 /**
- * Benefit 分页查询 DTO
+ * BenefitItem 分页查询 DTO
  * 继承 TaktPagedQuery
  * 对应前端 BenefitItemQuery
  * @description 对应后端 TaktBenefitItemQueryDto
@@ -191,7 +191,7 @@ export interface BenefitItemQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -202,7 +202,7 @@ export interface BenefitItemQuery extends TaktPagedQuery {
 
 
 /**
- * 创建Benefit DTO
+ * 创建BenefitItem DTO
  * 对应前端 BenefitItemCreate
  * @description 对应后端 TaktBenefitItemCreateDto
  */
@@ -218,7 +218,7 @@ export interface BenefitItemCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -273,11 +273,6 @@ export interface BenefitItemCreate {
   isMandatory: number;
 
   /**
-   * 排序号
-   */
-  sortOrder: number;
-
-  /**
    * 状态（字典 sys_normal_disable_status）
    */
   itemStatus: number;
@@ -290,7 +285,7 @@ export interface BenefitItemCreate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -301,14 +296,14 @@ export interface BenefitItemCreate {
 
 
 /**
- * 更新Benefit DTO
+ * 更新BenefitItem DTO
  * 继承 TaktBenefitItemCreateDto，添加 BenefitItemId 字段
  * 对应前端 BenefitItemUpdate
  * @description 对应后端 TaktBenefitItemUpdateDto
  */
 export interface BenefitItemUpdate extends BenefitItemCreate {
   /**
-   * BenefitID（标识要更新的实体）
+   * BenefitItemID（标识要更新的实体）
    */
   benefitItemId: string;
 
@@ -316,13 +311,13 @@ export interface BenefitItemUpdate extends BenefitItemCreate {
 
 
 /**
- * Benefit 状态更新 DTO
- * 对应前端 ItemStatus
+ * BenefitItem 状态更新 DTO
+ * 对应前端 BenefitItemStatus
  * @description 对应后端 TaktBenefitItemStatusDto
  */
 export interface BenefitItemStatus {
   /**
-   * BenefitID
+   * BenefitItemID
    */
   benefitItemId: string;
 
@@ -335,13 +330,13 @@ export interface BenefitItemStatus {
 
 
 /**
- * Benefit 排序更新 DTO
- * 对应前端 BenefitSort
+ * BenefitItem 排序更新 DTO
+ * 对应前端 BenefitItemSort
  * @description 对应后端 TaktBenefitItemSortDto
  */
 export interface BenefitItemSort {
   /**
-   * BenefitID
+   * BenefitItemID
    */
   benefitItemId: string;
 
@@ -354,8 +349,8 @@ export interface BenefitItemSort {
 
 
 /**
- * Benefit 导入模板行 DTO
- * 对应前端 BenefitTemplate
+ * BenefitItem 导入模板行 DTO
+ * 对应前端 BenefitItemTemplate
  * @description 对应后端 TaktBenefitItemTemplateDto
  */
 export interface BenefitItemTemplate {
@@ -395,14 +390,29 @@ export interface BenefitItemTemplate {
   paymentCycle?: number;
 
   /**
+   * 默认金额或补贴标准（元）
+   */
+  defaultAmount?: number;
+
+  /**
+   * 金额上限（元，0 表示不限制）
+   */
+  maxAmount?: number;
+
+  /**
+   * 公司承担比例（%，如公积金单位缴存比例）
+   */
+  employerRatio?: number;
+
+  /**
+   * 个人承担比例（%，如公积金个人缴存比例）
+   */
+  employeeRatio?: number;
+
+  /**
    * 是否强制福利（字典 sys_yes_no_type）
    */
   isMandatory?: number;
-
-  /**
-   * 排序号
-   */
-  sortOrder?: number;
 
   /**
    * 状态（字典 sys_normal_disable_status）
@@ -417,7 +427,7 @@ export interface BenefitItemTemplate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -428,8 +438,8 @@ export interface BenefitItemTemplate {
 
 
 /**
- * Benefit 导入 DTO（独立实现，不继承 TemplateDto）
- * 对应前端 BenefitImport
+ * BenefitItem 导入 DTO（独立实现，不继承 TemplateDto）
+ * 对应前端 BenefitItemImport
  * @description 对应后端 TaktBenefitItemImportDto
  */
 export interface BenefitItemImport {
@@ -444,7 +454,7 @@ export interface BenefitItemImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -474,14 +484,29 @@ export interface BenefitItemImport {
   paymentCycle?: number;
 
   /**
+   * 默认金额或补贴标准（元）
+   */
+  defaultAmount?: number;
+
+  /**
+   * 金额上限（元，0 表示不限制）
+   */
+  maxAmount?: number;
+
+  /**
+   * 公司承担比例（%，如公积金单位缴存比例）
+   */
+  employerRatio?: number;
+
+  /**
+   * 个人承担比例（%，如公积金个人缴存比例）
+   */
+  employeeRatio?: number;
+
+  /**
    * 是否强制福利（字典 sys_yes_no_type）
    */
   isMandatory?: number;
-
-  /**
-   * 排序号
-   */
-  sortOrder?: number;
 
   /**
    * 状态（字典 sys_normal_disable_status）
@@ -496,7 +521,7 @@ export interface BenefitItemImport {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -507,13 +532,13 @@ export interface BenefitItemImport {
 
 
 /**
- * Benefit 导出 DTO（独立实现，不继承响应 Dto）
- * 对应前端 BenefitExport
+ * BenefitItem 导出 DTO（独立实现，不继承响应 Dto）
+ * 对应前端 BenefitItemExport
  * @description 对应后端 TaktBenefitItemExportDto
  */
 export interface BenefitItemExport {
   /**
-   * BenefitID
+   * BenefitItemID
    */
   benefitItemId: string;
 
@@ -590,7 +615,7 @@ export interface BenefitItemExport {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注

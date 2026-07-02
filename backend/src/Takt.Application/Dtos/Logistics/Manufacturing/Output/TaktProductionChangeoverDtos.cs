@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Output
 // 文件名称：TaktProductionChangeoverDtos.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ProductionChangeover 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktProductionChangeover 生成，请按需审阅）
 // 
@@ -43,17 +43,17 @@ public class TaktProductionChangeoverDto : TaktCompanyDtoBase
     /// <summary>
     /// 生产类别
     /// </summary>
-    public string? ProductionCategory { get; set; } = string.Empty;
+    public string? ProdCategory { get; set; } = string.Empty;
 
     /// <summary>
     /// 生产日期
     /// </summary>
-    public DateTime ProductionDate { get; set; }
+    public DateTime ProdDate { get; set; }
 
     /// <summary>
-    /// 生产线
+    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode）
     /// </summary>
-    public string? ProductionLine { get; set; } = string.Empty;
+    public string? ProdTeam { get; set; } = string.Empty;
 
     /// <summary>
     /// 读取SOP时间
@@ -115,22 +115,22 @@ public class TaktProductionChangeoverQueryDto : TaktPagedQuery
     /// <summary>
     /// 生产类别
     /// </summary>
-    public string? ProductionCategory { get; set; } = string.Empty;
+    public string? ProdCategory { get; set; } = string.Empty;
 
     /// <summary>
     /// 生产日期（范围查询-开始）
     /// </summary>
-    public DateTime? ProductionDateStart { get; set; }
+    public DateTime? ProdDateStart { get; set; }
 
     /// <summary>
     /// 生产日期（范围查询-结束）
     /// </summary>
-    public DateTime? ProductionDateEnd { get; set; }
+    public DateTime? ProdDateEnd { get; set; }
 
     /// <summary>
-    /// 生产线
+    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode）
     /// </summary>
-    public string? ProductionLine { get; set; } = string.Empty;
+    public string? ProdTeam { get; set; } = string.Empty;
 
     /// <summary>
     /// 读取SOP时间
@@ -203,7 +203,7 @@ public class TaktProductionChangeoverCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -216,17 +216,17 @@ public class TaktProductionChangeoverCreateDto
     /// <summary>
     /// 生产类别
     /// </summary>
-    public string? ProductionCategory { get; set; } = string.Empty;
+    public string? ProdCategory { get; set; } = string.Empty;
 
     /// <summary>
     /// 生产日期
     /// </summary>
-    public DateTime ProductionDate { get; set; }
+    public DateTime ProdDate { get; set; }
 
     /// <summary>
-    /// 生产线
+    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode）
     /// </summary>
-    public string? ProductionLine { get; set; } = string.Empty;
+    public string? ProdTeam { get; set; } = string.Empty;
 
     /// <summary>
     /// 读取SOP时间
@@ -317,12 +317,22 @@ public class TaktProductionChangeoverTemplateDto
     /// <summary>
     /// 生产类别
     /// </summary>
-    public string? ProductionCategory { get; set; } = string.Empty;
+    public string? ProdCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产线
+    /// 生产日期
     /// </summary>
-    public string? ProductionLine { get; set; } = string.Empty;
+    public DateTime? ProdDate { get; set; }
+
+    /// <summary>
+    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode）
+    /// </summary>
+    public string? ProdTeam { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 读取SOP时间
+    /// </summary>
+    public decimal? ReadSopTime { get; set; }
 
     /// <summary>
     /// 人数
@@ -330,9 +340,24 @@ public class TaktProductionChangeoverTemplateDto
     public int? PersonCount { get; set; }
 
     /// <summary>
+    /// SOP总时间
+    /// </summary>
+    public decimal? TotalSopTime { get; set; }
+
+    /// <summary>
     /// 切换次数
     /// </summary>
     public int? ChangeoverCount { get; set; }
+
+    /// <summary>
+    /// 切换时间（单次）
+    /// </summary>
+    public decimal? ChangeoverTime { get; set; }
+
+    /// <summary>
+    /// 切换总时间
+    /// </summary>
+    public decimal? TotalChangeoverTime { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -362,7 +387,7 @@ public class TaktProductionChangeoverImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -374,12 +399,22 @@ public class TaktProductionChangeoverImportDto
     /// <summary>
     /// 生产类别
     /// </summary>
-    public string? ProductionCategory { get; set; } = string.Empty;
+    public string? ProdCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产线
+    /// 生产日期
     /// </summary>
-    public string? ProductionLine { get; set; } = string.Empty;
+    public DateTime? ProdDate { get; set; }
+
+    /// <summary>
+    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode）
+    /// </summary>
+    public string? ProdTeam { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 读取SOP时间
+    /// </summary>
+    public decimal? ReadSopTime { get; set; }
 
     /// <summary>
     /// 人数
@@ -387,9 +422,24 @@ public class TaktProductionChangeoverImportDto
     public int? PersonCount { get; set; }
 
     /// <summary>
+    /// SOP总时间
+    /// </summary>
+    public decimal? TotalSopTime { get; set; }
+
+    /// <summary>
     /// 切换次数
     /// </summary>
     public int? ChangeoverCount { get; set; }
+
+    /// <summary>
+    /// 切换时间（单次）
+    /// </summary>
+    public decimal? ChangeoverTime { get; set; }
+
+    /// <summary>
+    /// 切换总时间
+    /// </summary>
+    public decimal? TotalChangeoverTime { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -432,17 +482,17 @@ public class TaktProductionChangeoverExportDto
     /// <summary>
     /// 生产类别
     /// </summary>
-    public string? ProductionCategory { get; set; } = string.Empty;
+    public string? ProdCategory { get; set; } = string.Empty;
 
     /// <summary>
     /// 生产日期
     /// </summary>
-    public DateTime ProductionDate { get; set; }
+    public DateTime ProdDate { get; set; }
 
     /// <summary>
-    /// 生产线
+    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode）
     /// </summary>
-    public string? ProductionLine { get; set; } = string.Empty;
+    public string? ProdTeam { get; set; } = string.Empty;
 
     /// <summary>
     /// 读取SOP时间

@@ -187,10 +187,11 @@
       </div>
       <div v-show="isFieldVisible('bomType')">
       <a-form-item :label="t('entity.billofmaterial.bomtype')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.bomType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterial.bomtype') })"
-          style="width: 100%"
+          dict-type="logistics_bom_type"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.billofmaterial.bomtype') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -265,21 +266,13 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('isEnabled')">
-      <a-form-item :label="t('entity.billofmaterial.isenabled')">
-        <a-input-number
-          v-model:value="advancedQueryForm.isEnabled"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterial.isenabled') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
       <div v-show="isFieldVisible('bomStatus')">
       <a-form-item :label="t('entity.billofmaterial.bomstatus')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.bomStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterial.bomstatus') })"
-          style="width: 100%"
+          dict-type="logistics_bom_status"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.billofmaterial.bomstatus') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -299,7 +292,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -310,18 +303,36 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('ExtField')">
-      <a-form-item :label="t('entity.billofmaterial.extfield')">
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
         <a-textarea
-          v-model:value="advancedQueryForm.ExtField"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.billofmaterial.extfield') })"
-          :rows="2"
-          allow-clear
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -339,6 +350,12 @@
       </div>
       </template>
     </TaktQueryDrawer>
+
+    <!-- BOM 多层展开清单 -->
+    <BillOfMaterialExplosionModal
+      v-model:open="explosionVisible"
+      :record="explosionRecord"
+    />
 
     <!-- 导入对话框 -->
     <TaktModal
@@ -381,7 +398,7 @@
  * Takt物料清单实体管理页 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/manufacturing/bom/bill-of-material
  */
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, h } from 'vue'
 import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
@@ -389,12 +406,14 @@ import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import BillOfMaterialForm from './components/bill-of-material-form.vue'
 import BillOfMaterialItemPanel from './components/bill-of-material-item-panel.vue'
+import BillOfMaterialExplosionModal from './components/bill-of-material-explosion-modal.vue'
 import { provideBillOfMaterialMasterContext } from './composables/use-bill-of-material-master-context'
 import { getBillOfMaterialList, getBillOfMaterialById, createBillOfMaterial, updateBillOfMaterial, deleteBillOfMaterialById, deleteBillOfMaterialBatch, getBillOfMaterialTemplate, importBillOfMaterial, exportBillOfMaterial, updateBillOfMaterialStatus } from '@/api/logistics/manufacturing/bom/bill-of-material'
 import type { BillOfMaterial, BillOfMaterialQuery } from '@/types/logistics/manufacturing/bom/bill-of-material'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine, RiNodeTree } from '@remixicon/vue'
+import TaktDictTag from '@/components/common/takt-dict-tag/index.vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -454,12 +473,11 @@ const advancedQueryForm = ref({
   expiryDateEnd: '',
   parentMaterialUnit: '',
   parentMaterialQuantity: undefined as number | undefined,
-  isEnabled: undefined as number | undefined,
   bomStatus: undefined as number | undefined,
   bomDescription: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
@@ -479,12 +497,11 @@ const queryFieldsMeta = computed(() => [
   { key: 'expiryDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.billofmaterial.expirydate')) },
   { key: 'parentMaterialUnit', label: t('entity.billofmaterial.parentmaterialunit') },
   { key: 'parentMaterialQuantity', label: t('entity.billofmaterial.parentmaterialquantity') },
-  { key: 'isEnabled', label: t('entity.billofmaterial.isenabled') },
   { key: 'bomStatus', label: t('entity.billofmaterial.bomstatus') },
   { key: 'bomDescription', label: t('entity.billofmaterial.bomdescription') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'ExtField', label: t('entity.billofmaterial.extfield') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -493,6 +510,10 @@ const visibleQueryFieldKeys = ref<string[]>([])
 const columnSettingVisible = ref(false)
 /** 导入对话框是否打开 */
 const importVisible = ref(false)
+/** BOM 展开清单弹窗是否打开 */
+const explosionVisible = ref(false)
+/** BOM 展开根记录 */
+const explosionRecord = ref<BillOfMaterial | null>(null)
 /** 表格当前可见列 key */
 const visibleColumnKeys = ref<string[]>([])
 /** 实体主键字段名（row-key、API 路径参数） */
@@ -547,16 +568,13 @@ function buildListQuery(overrides?: Partial<BillOfMaterialQuery>): BillOfMateria
   if (form.parentMaterialQuantity !== undefined && form.parentMaterialQuantity !== null) {
     query.parentMaterialQuantity = form.parentMaterialQuantity
   }
-  if (form.isEnabled !== undefined && form.isEnabled !== null) {
-    query.isEnabled = form.isEnabled
-  }
   if (form.bomStatus !== undefined && form.bomStatus !== null) {
     query.bomStatus = form.bomStatus
   }
   assignTrimmed('bomDescription', form.bomDescription)
   assignTrimmed('createdAtStart', form.createdAtStart)
   assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('ExtField', form.ExtField)
+  assignTrimmed('extField', form.extField)
   assignTrimmed('remark', form.remark)
   return query
 }
@@ -699,7 +717,10 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getBillOfMaterialField(record, 'bomType') ?? ''
+    customRender: ({ record }: { record: any }) => h(TaktDictTag, {
+      dictType: 'logistics_bom_type',
+      value: getBillOfMaterialField(record, 'bomType'),
+    })
   },
   {
     title: t('entity.billofmaterial.alternativebomnumber'),
@@ -735,7 +756,10 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getBillOfMaterialField(record, 'parentMaterialUnit') ?? ''
+    customRender: ({ record }: { record: any }) => h(TaktDictTag, {
+      dictType: 'logistics_unit_of_measure_code',
+      value: getBillOfMaterialField(record, 'parentMaterialUnit'),
+    })
   },
   {
     title: t('entity.billofmaterial.parentmaterialquantity'),
@@ -747,22 +771,16 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getBillOfMaterialField(record, 'parentMaterialQuantity') ?? ''
   },
   {
-    title: t('entity.billofmaterial.isenabled'),
-    dataIndex: 'isEnabled',
-    key: 'isEnabled',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getBillOfMaterialField(record, 'isEnabled') ?? ''
-  },
-  {
     title: t('entity.billofmaterial.bomstatus'),
     dataIndex: 'bomStatus',
     key: 'bomStatus',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getBillOfMaterialField(record, 'bomStatus') ?? ''
+    customRender: ({ record }: { record: any }) => h(TaktDictTag, {
+      dictType: 'logistics_bom_status',
+      value: getBillOfMaterialField(record, 'bomStatus'),
+    })
   },
   {
     title: t('entity.billofmaterial.bomdescription'),
@@ -775,6 +793,14 @@ const columns = computed<TableColumnsType>(() => [
   },
   CreateActionColumn({
     actions: [
+      {
+        key: 'explosion',
+        label: t('logistics.manufacturing.bom.bill-of-material.page.explosion.action'),
+        shape: 'plain',
+        icon: RiNodeTree,
+        permission: 'logistics:manufacturing:bom:bill:of:material:query',
+        onClick: (record: BillOfMaterial) => handleExplosion(record)
+      },
       {
         key: 'update',
         label: t('common.page.button.edit'),
@@ -822,7 +848,7 @@ const rowSelection = computed(() => ({
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
-    } else if (getBillOfMaterialId(selectedRow.value) === getBillOfMaterialId(record)) {
+    } else if (selectedRow.value && getBillOfMaterialId(selectedRow.value) === getBillOfMaterialId(record)) {
       selectedRow.value = null
       syncMasterSelection(null)
     }
@@ -878,12 +904,11 @@ function handleReset() {
   expiryDateEnd: '',
   parentMaterialUnit: '',
   parentMaterialQuantity: undefined as number | undefined,
-  isEnabled: undefined as number | undefined,
   bomStatus: undefined as number | undefined,
   bomDescription: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
   currentPage.value = getTaktDefaultPageIndex()
@@ -956,6 +981,12 @@ function handleFormCancel() {
   formData.value = null
   nextTick(() => formRef.value?.resetFields())
 }
+/** 打开 BOM 多层展开清单 */
+function handleExplosion(record: BillOfMaterial) {
+  explosionRecord.value = record
+  explosionVisible.value = true
+}
+
 /** 打开导入对话框 */
 function handleImport() {
   importVisible.value = true
@@ -1087,12 +1118,11 @@ function handleAdvancedQueryReset() {
   expiryDateEnd: '',
   parentMaterialUnit: '',
   parentMaterialQuantity: undefined as number | undefined,
-  isEnabled: undefined as number | undefined,
   bomStatus: undefined as number | undefined,
   bomDescription: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
 }

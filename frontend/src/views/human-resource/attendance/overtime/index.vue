@@ -90,7 +90,7 @@
       <template #detail>
         <OvertimeItemPanel
           ref="overtimeItemPanelRef"
-          class="min-h-0 flex-1"
+          class="h-full min-h-0 flex-1"
         />
       </template>
     </TaktMasterDetailTableLr>
@@ -150,8 +150,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.overtimeDateStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.overtime.datestart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -161,8 +160,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.overtimeDateEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.overtime.dateend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -172,8 +170,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.plannedStartTimeStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.overtime.plannedstarttimestart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -183,8 +180,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.plannedStartTimeEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.overtime.plannedstarttimeend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -194,8 +190,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.plannedEndTimeStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.overtime.plannedendtimestart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -205,8 +200,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.plannedEndTimeEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.overtime.plannedendtimeend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -326,10 +320,11 @@
       </div>
       <div v-show="isFieldVisible('approvalStatus')">
       <a-form-item :label="t('entity.overtime.approvalstatus')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.approvalStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.overtime.approvalstatus') })"
-          style="width: 100%"
+          dict-type="sys_approval_status"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.overtime.approvalstatus') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -414,7 +409,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -425,7 +420,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -609,12 +604,12 @@ const advancedQueryForm = ref({
 const queryFieldsMeta = computed(() => [
   { key: 'deptId', label: t('entity.overtime.deptid') },
   { key: 'deptName', label: t('entity.overtime.deptname') },
-  { key: 'overtimeDateStart', label: t('entity.overtime.datestart') },
-  { key: 'overtimeDateEnd', label: t('entity.overtime.dateend') },
-  { key: 'plannedStartTimeStart', label: t('entity.overtime.plannedstarttimestart') },
-  { key: 'plannedStartTimeEnd', label: t('entity.overtime.plannedstarttimeend') },
-  { key: 'plannedEndTimeStart', label: t('entity.overtime.plannedendtimestart') },
-  { key: 'plannedEndTimeEnd', label: t('entity.overtime.plannedendtimeend') },
+  { key: 'overtimeDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.overtime.date')) },
+  { key: 'overtimeDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.overtime.date')) },
+  { key: 'plannedStartTimeStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.overtime.plannedstarttime')) },
+  { key: 'plannedStartTimeEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.overtime.plannedstarttime')) },
+  { key: 'plannedEndTimeStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.overtime.plannedendtime')) },
+  { key: 'plannedEndTimeEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.overtime.plannedendtime')) },
   { key: 'totalEmployees', label: t('entity.overtime.totalemployees') },
   { key: 'totalPlannedHours', label: t('entity.overtime.totalplannedhours') },
   { key: 'totalActualHours', label: t('entity.overtime.totalactualhours') },
@@ -738,11 +733,10 @@ onMounted(async () => {
 /** 主表行点击选中 key（左右主子表高亮） */
 const selectedMasterKey = ref('')
 
-/** 同步主表选中行到右侧明细并刷新子表 */
+/** 同步主表选中行到右侧明细（子表由 *-panel watch 自动 reload） */
 function syncMasterSelection(record: Overtime | null) {
   selectedMasterRow.value = record
   selectedMasterKey.value = record ? getOvertimeId(record) : ''
-  overtimeItemPanelRef.value?.reload?.()
 }
 
 /**
@@ -980,7 +974,7 @@ const rowSelection = computed(() => ({
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
-    } else if (getOvertimeId(selectedRow.value) === getOvertimeId(record)) {
+    } else if (selectedRow.value && getOvertimeId(selectedRow.value) === getOvertimeId(record)) {
       selectedRow.value = null
       syncMasterSelection(null)
     }

@@ -74,13 +74,11 @@
                 :label="t('entity.personneloperationrate.plantcode')"
                 name="plantCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.plantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationrate.plantcode') })"
-                  show-count
-                  :maxlength="4"
-                  allow-clear
-                  :disabled="!!formData?.personnelOperationRateId"
+                  api-url="TaktPlants/options"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.personneloperationrate.plantcode') })"
+                  :disabled="!!formData?.personnelOperationRateId || loading"
                 />
               </a-form-item>
             </a-col>
@@ -148,15 +146,15 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.personneloperationrate.productionline')"
-                name="productionLine"
+                :label="t('entity.personneloperationrate.prodteam')"
+                name="prodTeam"
               >
-                <a-input
-                  v-model:value="formState.productionLine"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationrate.productionline') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                <TaktSelect
+                  v-model:value="formState.prodTeam"
+                  :options="filteredProductionTeamOptions"
+                  :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.personneloperationrate.prodteam') })"
+                  :disabled="loading || !formState.plantCode"
                 />
               </a-form-item>
             </a-col>
@@ -172,12 +170,12 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.personneloperationrate.productionlinename')"
-                name="productionLineName"
+                :label="t('entity.personneloperationrate.prodteamname')"
+                name="prodTeamName"
               >
                 <a-input
-                  v-model:value="formState.productionLineName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationrate.productionlinename') })"
+                  v-model:value="formState.prodTeamName"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationrate.prodteamname') })"
                   show-count
                   :maxlength="100"
                   allow-clear
@@ -189,10 +187,11 @@
                 :label="t('entity.personneloperationrate.shiftno')"
                 name="shiftNo"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.shiftNo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationrate.shiftno') })"
-                  style="width: 100%"
+                  dict-type="logistics_shift_category"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.personneloperationrate.shiftno') })"
+                  :disabled="loading"
                 />
               </a-form-item>
             </a-col>
@@ -439,11 +438,10 @@
                 :label="t('entity.personneloperationrate.teamleader')"
                 name="teamLeader"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.teamLeader"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationrate.teamleader') })"
-                  show-count
-                  :maxlength="50"
+                  api-url="TaktEmployees/options"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.personneloperationrate.teamleader') })"
                   allow-clear
                 />
               </a-form-item>
@@ -453,11 +451,10 @@
                 :label="t('entity.personneloperationrate.supervisor')"
                 name="supervisor"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.supervisor"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationrate.supervisor') })"
-                  show-count
-                  :maxlength="50"
+                  api-url="TaktEmployees/options"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.personneloperationrate.supervisor') })"
                   allow-clear
                 />
               </a-form-item>
@@ -465,10 +462,10 @@
             <a-col :span="24">
               <a-form-item
                 :label="t('entity.personneloperationrate.status')"
-                name="status"
+                name="personnelOperationRateStatus"
               >
                 <a-input-number
-                  v-model:value="formState.status"
+                  v-model:value="formState.personnelOperationRateStatus"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationrate.status') })"
                   style="width: 100%"
                 />
@@ -527,21 +524,49 @@
  * 人员稼动率实体维护表单 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/logistics/manufacturing/output/personnel-operation-rate/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import type { PersonnelOperationRateCreate } from '@/types/logistics/manufacturing/output/personnel-operation-rate'
+import type { TaktSelectOption } from '@/types/common'
+import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
+import { getProductionTeamOptions } from '@/api/logistics/manufacturing/output/production-team'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
+
+/** Pinia：字典缓存 */
+const dictDataStore = useDictDataStore()
+/** 生产班组下拉全量选项 */
+const productionTeamOptions = ref<TaktSelectOption[]>([])
+/** 按当前工厂过滤的生产线选项 */
+const filteredProductionTeamOptions = computed(() => {
+  const plantCode = formState.plantCode
+  if (!plantCode) {
+    return []
+  }
+  return productionTeamOptions.value.filter((item) => String(item.extValue ?? '') === String(plantCode))
+})
+
+/** 加载生产班组选项 */
+async function loadProductionTeamOptions() {
+  productionTeamOptions.value = await getProductionTeamOptions()
+}
 
 /** Pinia：租户/公司上下文 */
 const tenantStore = useTenantStore()
 /** Pinia：用户上下文 */
 const userStore = useUserStore()
+
+/** 表单挂载时预加载字典与班组选项 */
+onMounted(async () => {
+  void dictDataStore.loadAllDictDataAsync()
+  await loadProductionTeamOptions()
+})
 
 /**
  * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
@@ -564,7 +589,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","timeCategory","startDate","endDate","weekNumber","monthNumber","productionLine","productionLineName","shiftNo","plannedDirectPersonnelCount","actualDirectPersonnelCount","plannedIndirectPersonnelCount","actualIndirectPersonnelCount","plannedWorkTime","actualWorkTime","breakTime","idleTime","personnelOperationRate","plannedOutput","actualOutput","qualifiedQuantity","defectiveQuantity","yieldRate","workEfficiency","idleReasonType","idleReason","overtimeHours","teamLeader","supervisor","status","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","timeCategory","startDate","endDate","weekNumber","monthNumber","prodTeam","prodTeamName","shiftNo","plannedDirectPersonnelCount","actualDirectPersonnelCount","plannedIndirectPersonnelCount","actualIndirectPersonnelCount","plannedWorkTime","actualWorkTime","breakTime","idleTime","personnelOperationRate","plannedOutput","actualOutput","qualifiedQuantity","defectiveQuantity","yieldRate","workEfficiency","idleReasonType","idleReason","overtimeHours","teamLeader","supervisor","personnelOperationRateStatus","extField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -583,9 +608,14 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
-/** 表单字段默认值（无字典默认项） */
+/** 表单字段默认值 */
+const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  shiftNo: 1,
+}
+
+/** 写入表单默认值 */
 function applyFormDefaults(target: Record<string, unknown>) {
-  void target
+  Object.assign(target, FORM_FIELD_DEFAULTS)
 }
 
 
@@ -620,6 +650,28 @@ watch(
     const isCreate = !props.formData?.personnelOperationRateId
     if (isCreate) {
       applyScopeDefaults(formState, true)
+    }
+  },
+)
+
+/** 工厂变更时清理无效生产线 */
+watch(
+  () => formState.plantCode,
+  (plantCode, prevPlantCode) => {
+    if (props.formData?.personnelOperationRateId) {
+      return
+    }
+    if (!plantCode) {
+      formState.prodTeam = undefined
+      return
+    }
+    if (prevPlantCode && prevPlantCode !== plantCode && formState.prodTeam) {
+      const lineStillValid = filteredProductionTeamOptions.value.some(
+        (item) => String(item.dictValue ?? '') === String(formState.prodTeam)
+      )
+      if (!lineStillValid) {
+        formState.prodTeam = undefined
+      }
     }
   },
 )
@@ -660,10 +712,10 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'change'
     }
   ],
-  productionLine: [
+  prodTeam: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.personneloperationrate.productionline') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.personneloperationrate.prodteam') }),
       trigger: 'blur'
     }
   ],
@@ -888,7 +940,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
-  status: [{
+  personnelOperationRateStatus: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
         return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.personneloperationrate.status') }))
@@ -996,9 +1048,9 @@ function getValues(): Record<string, any> {
     const rawovertimeHours = payload.overtimeHours
     payload.overtimeHours = typeof rawovertimeHours === 'number' ? rawovertimeHours : Number(rawovertimeHours)
   }
-  if ('status' in payload) {
-    const rawstatus = payload.status
-    payload.status = typeof rawstatus === 'number' ? rawstatus : Number(rawstatus)
+  if ('personnelOperationRateStatus' in payload) {
+    const rawPersonnelOperationRateStatus = payload.personnelOperationRateStatus
+    payload.personnelOperationRateStatus = typeof rawPersonnelOperationRateStatus === 'number' ? rawPersonnelOperationRateStatus : Number(rawPersonnelOperationRateStatus)
   }
   if ('sortOrder' in payload) delete payload.sortOrder
   return payload

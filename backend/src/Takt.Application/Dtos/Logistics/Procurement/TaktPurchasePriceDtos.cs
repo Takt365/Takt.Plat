@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Procurement
 // 文件名称：TaktPurchasePriceDtos.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchasePrice 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPurchasePrice 生成，请按需审阅）
 // 
@@ -49,6 +49,22 @@ public class TaktPurchasePriceDto : TaktCompanyDtoBase
     /// 供应商编码
     /// </summary>
     public string SupplierCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 来源采购询价 ID（采购链路自动生成时写入）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? PurchaseInquiryId { get; set; }
+
+    /// <summary>
+    /// 来源采购询价 名称（填充字段）
+    /// </summary>
+    public string? PurchaseInquiryName { get; set; }
+
+    /// <summary>
+    /// 来源采购询价编码（冗余）
+    /// </summary>
+    public string? PurchaseInquiryCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 价格类型（字典 logistics_price_type；0=标准价格，1=合同价格，2=临时价格，3=询价价格，4=历史价格）
@@ -118,6 +134,17 @@ public class TaktPurchasePriceQueryDto : TaktPagedQuery
     /// 供应商编码
     /// </summary>
     public string? SupplierCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 来源采购询价 ID（采购链路自动生成时写入）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? PurchaseInquiryId { get; set; }
+
+    /// <summary>
+    /// 来源采购询价编码（冗余）
+    /// </summary>
+    public string? PurchaseInquiryCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 价格类型（字典 logistics_price_type；0=标准价格，1=合同价格，2=临时价格，3=询价价格，4=历史价格）
@@ -190,7 +217,7 @@ public class TaktPurchasePriceCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -211,6 +238,17 @@ public class TaktPurchasePriceCreateDto
     /// </summary>
     [Required(ErrorMessage = "供应商编码不能为空")]
     public string SupplierCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 来源采购询价 ID（采购链路自动生成时写入）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? PurchaseInquiryId { get; set; }
+
+    /// <summary>
+    /// 来源采购询价编码（冗余）
+    /// </summary>
+    public string? PurchaseInquiryCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 价格类型（字典 logistics_price_type；0=标准价格，1=合同价格，2=临时价格，3=询价价格，4=历史价格）
@@ -333,14 +371,45 @@ public class TaktPurchasePriceTemplateDto
     public string? SupplierCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 来源采购询价 ID（采购链路自动生成时写入）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? PurchaseInquiryId { get; set; }
+
+    /// <summary>
+    /// 来源采购询价编码（冗余）
+    /// </summary>
+    public string? PurchaseInquiryCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 价格类型（字典 logistics_price_type；0=标准价格，1=合同价格，2=临时价格，3=询价价格，4=历史价格）
     /// </summary>
     public int? PriceType { get; set; }
 
     /// <summary>
+    /// 生效日期
+    /// </summary>
+    public DateTime? EffectiveStartDate { get; set; }
+
+    /// <summary>
+    /// 失效日期（空表示长期有效）
+    /// </summary>
+    public DateTime? EffectiveEndDate { get; set; }
+
+    /// <summary>
     /// 价格状态（1=启用，0=禁用）
     /// </summary>
     public int? PriceStatus { get; set; }
+
+    /// <summary>
+    /// 物料价格明细列表（主子表关系，一个供应商价格可以有多个物料价格）（子表，级联保存）
+    /// </summary>
+    public List<TaktPurchasePriceItemCreateDto>? Items { get; set; }
+
+    /// <summary>
+    /// 采购价格变更记录列表（外键在子表 TaktPurchasePriceChangeLog.PriceId）（子表，级联保存）
+    /// </summary>
+    public List<TaktPurchasePriceChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -370,7 +439,7 @@ public class TaktPurchasePriceImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -390,14 +459,45 @@ public class TaktPurchasePriceImportDto
     public string? SupplierCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 来源采购询价 ID（采购链路自动生成时写入）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? PurchaseInquiryId { get; set; }
+
+    /// <summary>
+    /// 来源采购询价编码（冗余）
+    /// </summary>
+    public string? PurchaseInquiryCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 价格类型（字典 logistics_price_type；0=标准价格，1=合同价格，2=临时价格，3=询价价格，4=历史价格）
     /// </summary>
     public int? PriceType { get; set; }
 
     /// <summary>
+    /// 生效日期
+    /// </summary>
+    public DateTime? EffectiveStartDate { get; set; }
+
+    /// <summary>
+    /// 失效日期（空表示长期有效）
+    /// </summary>
+    public DateTime? EffectiveEndDate { get; set; }
+
+    /// <summary>
     /// 价格状态（1=启用，0=禁用）
     /// </summary>
     public int? PriceStatus { get; set; }
+
+    /// <summary>
+    /// 物料价格明细列表（主子表关系，一个供应商价格可以有多个物料价格）（子表，级联保存）
+    /// </summary>
+    public List<TaktPurchasePriceItemCreateDto>? Items { get; set; }
+
+    /// <summary>
+    /// 采购价格变更记录列表（外键在子表 TaktPurchasePriceChangeLog.PriceId）（子表，级联保存）
+    /// </summary>
+    public List<TaktPurchasePriceChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -446,6 +546,17 @@ public class TaktPurchasePriceExportDto
     /// 供应商编码
     /// </summary>
     public string SupplierCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 来源采购询价 ID（采购链路自动生成时写入）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? PurchaseInquiryId { get; set; }
+
+    /// <summary>
+    /// 来源采购询价编码（冗余）
+    /// </summary>
+    public string? PurchaseInquiryCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 价格类型（字典 logistics_price_type；0=标准价格，1=合同价格，2=临时价格，3=询价价格，4=历史价格）

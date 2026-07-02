@@ -36,27 +36,27 @@ export interface LoginLog extends CompanyDtoBase {
   /**
    * 登录方式
    */
-  loginType?: number;
+  loginType?: string;
 
   /**
-   * 浏览器类型
+   * 浏览器
    */
-  browser?: number;
+  browser?: string;
 
   /**
-   * 操作系统
+   * 操作系统（TaktConstants.OperatingSystem）
    */
-  os?: number;
+  os?: string;
 
   /**
-   * 用户代理字符串（User-Agent）
+   * 用户代理（User-Agent）
    */
   userAgent?: string;
 
   /**
    * 登录结果
    */
-  loginResult: number;
+  loginResult: string;
 
   /**
    * 登录结果消息
@@ -77,11 +77,6 @@ export interface LoginLog extends CompanyDtoBase {
    * 登出时间
    */
   logoutAt?: string;
-
-  /**
-   * 会话时长（秒，从登录到登出的时长）
-   */
-  sessionDuration?: number;
 
 }
 
@@ -111,27 +106,27 @@ export interface LoginLogQuery extends TaktPagedQuery {
   /**
    * 登录方式
    */
-  loginType?: number;
+  loginType?: string;
 
   /**
-   * 浏览器类型
+   * 浏览器
    */
-  browser?: number;
+  browser?: string;
 
   /**
-   * 操作系统
+   * 操作系统（TaktConstants.OperatingSystem）
    */
-  os?: number;
+  os?: string;
 
   /**
-   * 用户代理字符串（User-Agent）
+   * 用户代理（User-Agent）
    */
   userAgent?: string;
 
   /**
    * 登录结果
    */
-  loginResult?: number;
+  loginResult?: string;
 
   /**
    * 登录结果消息
@@ -157,11 +152,6 @@ export interface LoginLogQuery extends TaktPagedQuery {
    * 登出时间（范围查询-结束）
    */
   logoutAtEnd?: string;
-
-  /**
-   * 会话时长（秒，从登录到登出的时长）
-   */
-  sessionDuration?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -203,7 +193,7 @@ export interface LoginLogCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -215,27 +205,27 @@ export interface LoginLogCreate {
   /**
    * 登录方式
    */
-  loginType?: number;
+  loginType?: string;
 
   /**
-   * 浏览器类型
+   * 浏览器
    */
-  browser?: number;
+  browser?: string;
 
   /**
-   * 操作系统
+   * 操作系统（TaktConstants.OperatingSystem）
    */
-  os?: number;
+  os?: string;
 
   /**
-   * 用户代理字符串（User-Agent）
+   * 用户代理（User-Agent）
    */
   userAgent?: string;
 
   /**
    * 登录结果
    */
-  loginResult: number;
+  loginResult: string;
 
   /**
    * 登录结果消息
@@ -309,27 +299,27 @@ export interface LoginLogExport {
   /**
    * 登录方式
    */
-  loginType?: number;
+  loginType?: string;
 
   /**
-   * 浏览器类型
+   * 浏览器
    */
-  browser?: number;
+  browser?: string;
 
   /**
-   * 操作系统
+   * 操作系统（TaktConstants.OperatingSystem）
    */
-  os?: number;
+  os?: string;
 
   /**
-   * 用户代理字符串（User-Agent）
+   * 用户代理（User-Agent）
    */
   userAgent?: string;
 
   /**
    * 登录结果
    */
-  loginResult: number;
+  loginResult: string;
 
   /**
    * 登录结果消息
@@ -350,11 +340,6 @@ export interface LoginLogExport {
    * 登出时间
    */
   logoutAt?: string;
-
-  /**
-   * 会话时长（秒，从登录到登出的时长）
-   */
-  sessionDuration?: number;
 
   /**
    * 扩展字段JSON

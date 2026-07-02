@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Manufacturing.Output
 // 文件名称：TaktPcbaOutputDetailsController.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-30
 // 创建人：Takt365(Cursor AI)
 // 功能描述：PCBA日报明细控制器
 // 
@@ -41,7 +41,7 @@ public class TaktPcbaOutputDetailsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:manufacturing:output:pcbaoutput:list", "PCBA日报明细列表")]
+    [TaktPermission("logistics:manufacturing:output:pcba:list", "PCBA日报明细列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetPcbaOutputDetailListAsync([FromQuery] TaktPcbaOutputDetailQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktPcbaOutputDetailsController : TaktControllerBase
     /// </summary>
     /// <param name="id">PCBA日报明细ID</param>
     /// <returns>PCBA日报明细DTO</returns>
-    [TaktPermission("logistics:manufacturing:output:pcbaoutput:query", "PCBA日报明细详情")]
+    [TaktPermission("logistics:manufacturing:output:pcba:query", "PCBA日报明细详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetPcbaOutputDetailByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktPcbaOutputDetailsController : TaktControllerBase
     /// 获取PCBA日报明细选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:manufacturing:output:pcbaoutput:query", "PCBA日报明细选项")]
+    [TaktPermission("logistics:manufacturing:output:pcba:query", "PCBA日报明细选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetPcbaOutputDetailOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktPcbaOutputDetailsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>PCBA日报明细DTO</returns>
-    [TaktPermission("logistics:manufacturing:output:pcbaoutput:create", "创建PCBA日报明细")]
+    [TaktPermission("logistics:manufacturing:output:pcba:create", "创建PCBA日报明细")]
     [HttpPost]
     public async Task<IActionResult> CreatePcbaOutputDetailAsync([FromBody] TaktPcbaOutputDetailCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktPcbaOutputDetailsController : TaktControllerBase
     /// <param name="id">PCBA日报明细ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>PCBA日报明细DTO</returns>
-    [TaktPermission("logistics:manufacturing:output:pcbaoutput:update", "更新PCBA日报明细")]
+    [TaktPermission("logistics:manufacturing:output:pcba:update", "更新PCBA日报明细")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdatePcbaOutputDetailAsync(long id, [FromBody] TaktPcbaOutputDetailUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktPcbaOutputDetailsController : TaktControllerBase
     /// </summary>
     /// <param name="id">PCBA日报明细ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:output:pcbaoutput:delete", "删除PCBA日报明细")]
+    [TaktPermission("logistics:manufacturing:output:pcba:delete", "删除PCBA日报明细")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeletePcbaOutputDetailByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktPcbaOutputDetailsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:output:pcbaoutput:delete", "批量删除PCBA日报明细")]
+    [TaktPermission("logistics:manufacturing:output:pcba:delete", "批量删除PCBA日报明细")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeletePcbaOutputDetailBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktPcbaOutputDetailsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO</param>
     /// <returns>PCBA日报明细DTO</returns>
-    [TaktPermission("logistics:manufacturing:output:pcbaoutput:update", "更新PCBA日报明细状态")]
+    [TaktPermission("logistics:manufacturing:output:pcba:update", "更新PCBA日报明细状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdatePcbaOutputDetailStatusAsync([FromBody] TaktPcbaOutputDetailStatusDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktPcbaOutputDetailsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:output:pcbaoutput:import", "获取PCBA日报明细导入模板")]
+    [TaktPermission("logistics:manufacturing:output:pcba:import", "获取PCBA日报明细导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetPcbaOutputDetailTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +224,7 @@ public class TaktPcbaOutputDetailsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:manufacturing:output:pcbaoutput:import", "导入PCBA日报明细")]
+    [TaktPermission("logistics:manufacturing:output:pcba:import", "导入PCBA日报明细")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportPcbaOutputDetailAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +254,7 @@ public class TaktPcbaOutputDetailsController : TaktControllerBase
     /// 导出PCBA日报明细
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:output:pcbaoutput:export", "导出PCBA日报明细")]
+    [TaktPermission("logistics:manufacturing:output:pcba:export", "导出PCBA日报明细")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportPcbaOutputDetailAsync([FromQuery] TaktPcbaOutputDetailQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

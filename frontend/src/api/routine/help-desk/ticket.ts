@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/routine/help-desk
 // 文件名称：ticket.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：routine/help-desk 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -16,19 +16,35 @@ import type {
   TaktSelectOption
 } from '@/types/common';
 import type {
+  MyTicketReply
+} from '@/types/routine/help-desk/my-ticket-reply';
+import type {
   Ticket,
   TicketCreate,
   TicketStatus,
-  TicketUpdate,
-  TicketSubmit,
-  TicketCreateFromChannel,
-  TicketAssign,
-  TicketWorkflowAction,
-  TicketReply,
-  TicketReplyCreate,
-  TicketReplyQuery,
-  TicketMyAsset
+  TicketUpdate
 } from '@/types/routine/help-desk/ticket';
+import type {
+  TicketAssign
+} from '@/types/routine/help-desk/ticket-assign';
+import type {
+  TicketCreateFromChannel
+} from '@/types/routine/help-desk/ticket-create-from-channel';
+import type {
+  TicketMyAsset
+} from '@/types/routine/help-desk/ticket-my-asset';
+import type {
+  TicketReply
+} from '@/types/routine/help-desk/ticket-reply';
+import type {
+  TicketSessionReplyCreate
+} from '@/types/routine/help-desk/ticket-session-reply-create';
+import type {
+  TicketSubmit
+} from '@/types/routine/help-desk/ticket-submit';
+import type {
+  TicketWorkflowAction
+} from '@/types/routine/help-desk/ticket-workflow-action';
 
 /**
  * API 路径前缀（相对 request baseURL，对应后端 [controller]）
@@ -54,28 +70,61 @@ export function getTicketList(queryDto: any): Promise<TaktPagedResult<Ticket>> {
 }
 
 /**
- * 获取当前用户的工单列表（我的工单）
- * @param {any} queryDto 查询DTO
+ * 获取当前用户提交的工单列表（分页）
+ * @param {any} queryDto 查询 DTO
  * @returns {Promise<TaktPagedResult<Ticket>>} 分页结果
  */
 export function getMyTicketList(queryDto: any): Promise<TaktPagedResult<Ticket>> {
   return request<TaktPagedResult<Ticket>>({
-    url: `${TICKET_API_BASE}/my-list`,
+    url: `${TICKET_API_BASE}/my-tickets`,
     method: 'get',
     params: queryDto,
   });
 }
 
 /**
- * 获取当前用户工单关联的资产汇总（我的资产，按 AssetCode 聚合）
- * @param {any} queryDto 查询DTO
- * @returns {Promise<TaktPagedResult<TicketMyAsset>>} 分页结果
+ * 获取当前用户提交的工单详情
+ * @param {string} id 工单 ID
+ * @returns {Promise<Ticket>} 工单 DTO
  */
-export function getMyTicketAssetList(queryDto: any): Promise<TaktPagedResult<TicketMyAsset>> {
-  return request<TaktPagedResult<TicketMyAsset>>({
-    url: `${TICKET_API_BASE}/my-assets`,
+export function getMyTicketById(id: string): Promise<Ticket> {
+  return request<Ticket>({
+    url: `${TICKET_API_BASE}/my-tickets/{id:long}`,
     method: 'get',
-    params: queryDto,
+    params: {
+      id
+    },
+  });
+}
+
+/**
+ * 获取当前用户工单的回复列表（分页，不含内部备注）
+ * @param {string} id 工单 ID
+ * @param {any} queryDto 分页查询
+ * @returns {Promise<TaktPagedResult<MyTicketReply>>} 分页结果
+ */
+export function getMyTicketReplyList(id: string, queryDto: any): Promise<TaktPagedResult<MyTicketReply>> {
+  return request<TaktPagedResult<MyTicketReply>>({
+    url: `${TICKET_API_BASE}/my-tickets/{id:long}/replies`,
+    method: 'get',
+    params: {
+      id,
+      ...queryDto
+    },
+  });
+}
+
+/**
+ * 门户用户回复自己的工单
+ * @param {string} id 工单 ID
+ * @param {TicketSessionReplyCreate} dto 回复 DTO
+ * @returns {Promise<TicketSessionReplyCreate>} 回复 DTO
+ */
+export function replyMyTicket(id: string, dto: TicketSessionReplyCreate): Promise<TicketSessionReplyCreate> {
+  return request<TicketSessionReplyCreate>({
+    url: `${TICKET_API_BASE}/my-tickets/{id:long}/reply`,
+    method: 'post',
+    data: dto,
   });
 }
 
@@ -86,8 +135,11 @@ export function getMyTicketAssetList(queryDto: any): Promise<TaktPagedResult<Tic
  */
 export function getTicketById(id: string): Promise<Ticket> {
   return request<Ticket>({
-    url: `${TICKET_API_BASE}/${id}`,
+    url: `${TICKET_API_BASE}/{id:long}`,
     method: 'get',
+    params: {
+      id
+    },
   });
 }
 
@@ -112,7 +164,7 @@ export function createTicket(dto: TicketCreate): Promise<Ticket> {
  */
 export function updateTicket(id: string, dto: TicketUpdate): Promise<Ticket> {
   return request<Ticket>({
-    url: `${TICKET_API_BASE}/${id}`,
+    url: `${TICKET_API_BASE}/{id:long}`,
     method: 'put',
     data: dto,
   });
@@ -125,8 +177,11 @@ export function updateTicket(id: string, dto: TicketUpdate): Promise<Ticket> {
  */
 export function deleteTicketById(id: string): Promise<void> {
   return request({
-    url: `${TICKET_API_BASE}/${id}`,
+    url: `${TICKET_API_BASE}/{id:long}`,
     method: 'delete',
+    params: {
+      id
+    },
   });
 }
 
@@ -142,23 +197,6 @@ export function deleteTicketBatch(ids: string[]): Promise<void> {
     data: ids,
   });
 }
-
-/**
- * 更新工单状态
- * @param {TicketStatus} dto 状态 DTO
- * @returns {Promise<Ticket>} 工单DTO
- */
-export function updateTicketStatus(dto: TicketStatus): Promise<Ticket> {
-  return request<Ticket>({
-    url: `${TICKET_API_BASE}/status`,
-    method: 'put',
-    data: dto,
-  });
-}
-
-// ========================================
-// ITSM 工作流
-// ========================================
 
 /**
  * 门户用户提交工单
@@ -187,19 +225,6 @@ export function createTicketFromChannel(dto: TicketCreateFromChannel): Promise<T
 }
 
 /**
- * 指派或领取工单
- * @param {TicketAssign} dto 指派 DTO
- * @returns {Promise<Ticket>} 工单 DTO
- */
-export function assignTicket(dto: TicketAssign): Promise<Ticket> {
-  return request<Ticket>({
-    url: `${TICKET_API_BASE}/assign`,
-    method: 'put',
-    data: dto,
-  });
-}
-
-/**
  * 开始处理工单
  * @param {TicketWorkflowAction} dto 动作 DTO
  * @returns {Promise<Ticket>} 工单 DTO
@@ -207,7 +232,7 @@ export function assignTicket(dto: TicketAssign): Promise<Ticket> {
 export function startTicketProgress(dto: TicketWorkflowAction): Promise<Ticket> {
   return request<Ticket>({
     url: `${TICKET_API_BASE}/start`,
-    method: 'put',
+    method: 'post',
     data: dto,
   });
 }
@@ -219,34 +244,34 @@ export function startTicketProgress(dto: TicketWorkflowAction): Promise<Ticket> 
  */
 export function waitForRequester(dto: TicketWorkflowAction): Promise<Ticket> {
   return request<Ticket>({
-    url: `${TICKET_API_BASE}/wait-requester`,
-    method: 'put',
+    url: `${TICKET_API_BASE}/wait`,
+    method: 'post',
     data: dto,
   });
 }
 
 /**
- * 标记已解决
+ * 标记工单已解决
  * @param {TicketWorkflowAction} dto 动作 DTO
  * @returns {Promise<Ticket>} 工单 DTO
  */
 export function resolveTicket(dto: TicketWorkflowAction): Promise<Ticket> {
   return request<Ticket>({
     url: `${TICKET_API_BASE}/resolve`,
-    method: 'put',
+    method: 'post',
     data: dto,
   });
 }
 
 /**
- * 用户确认关闭
+ * 用户确认关闭工单
  * @param {TicketWorkflowAction} dto 动作 DTO
  * @returns {Promise<Ticket>} 工单 DTO
  */
 export function confirmCloseTicket(dto: TicketWorkflowAction): Promise<Ticket> {
   return request<Ticket>({
     url: `${TICKET_API_BASE}/confirm-close`,
-    method: 'put',
+    method: 'post',
     data: dto,
   });
 }
@@ -259,17 +284,17 @@ export function confirmCloseTicket(dto: TicketWorkflowAction): Promise<Ticket> {
 export function reopenTicket(dto: TicketWorkflowAction): Promise<Ticket> {
   return request<Ticket>({
     url: `${TICKET_API_BASE}/reopen`,
-    method: 'put',
+    method: 'post',
     data: dto,
   });
 }
 
 /**
- * 添加工单回复
- * @param {TicketReplyCreate} dto 回复 DTO
+ * 添加工单回复（会话）
+ * @param {TicketSessionReplyCreate} dto 回复 DTO
  * @returns {Promise<TicketReply>} 回复 DTO
  */
-export function replyTicket(dto: TicketReplyCreate): Promise<TicketReply> {
+export function replyTicket(dto: TicketSessionReplyCreate): Promise<TicketReply> {
   return request<TicketReply>({
     url: `${TICKET_API_BASE}/reply`,
     method: 'post',
@@ -279,14 +304,40 @@ export function replyTicket(dto: TicketReplyCreate): Promise<TicketReply> {
 
 /**
  * 获取工单回复列表（分页）
- * @param {TicketReplyQuery} queryDto 查询 DTO
+ * @param {any} queryDto 查询 DTO
  * @returns {Promise<TaktPagedResult<TicketReply>>} 分页结果
  */
-export function getTicketReplyList(queryDto: TicketReplyQuery): Promise<TaktPagedResult<TicketReply>> {
+export function getTicketReplyList(queryDto: any): Promise<TaktPagedResult<TicketReply>> {
   return request<TaktPagedResult<TicketReply>>({
     url: `${TICKET_API_BASE}/replies`,
     method: 'get',
     params: queryDto,
+  });
+}
+
+/**
+ * 获取当前用户工单关联资产汇总
+ * @param {any} queryDto 分页查询
+ * @returns {Promise<TaktPagedResult<TicketMyAsset>>} 分页结果
+ */
+export function getMyAssetList(queryDto: any): Promise<TaktPagedResult<TicketMyAsset>> {
+  return request<TaktPagedResult<TicketMyAsset>>({
+    url: `${TICKET_API_BASE}/my-assets`,
+    method: 'get',
+    params: queryDto,
+  });
+}
+
+/**
+ * 更新工单状态
+ * @param {TicketStatus} dto 状态 DTO
+ * @returns {Promise<Ticket>} 工单DTO
+ */
+export function updateTicketStatus(dto: TicketStatus): Promise<Ticket> {
+  return request<Ticket>({
+    url: `${TICKET_API_BASE}/status`,
+    method: 'put',
+    data: dto,
   });
 }
 
@@ -302,6 +353,23 @@ export function getTicketOptions(): Promise<TaktSelectOption[]> {
   return request<TaktSelectOption[]>({
     url: `${TICKET_API_BASE}/options`,
     method: 'get',
+  });
+}
+
+// ========================================
+// 关联分配
+// ========================================
+
+/**
+ * 指派或领取工单
+ * @param {TicketAssign} dto 指派 DTO
+ * @returns {Promise<Ticket>} 工单 DTO
+ */
+export function assignTicket(dto: TicketAssign): Promise<Ticket> {
+  return request<Ticket>({
+    url: `${TICKET_API_BASE}/assign`,
+    method: 'post',
+    data: dto,
   });
 }
 

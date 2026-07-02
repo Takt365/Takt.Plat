@@ -24,56 +24,48 @@ namespace Takt.Domain.Entities.HumanResource.Personnel;
 public class TaktEmployeeContract : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 员工ID
+    /// 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [SugarColumn(ColumnName = "employee_id", ColumnDescription = "员工ID", ColumnDataType = "bigint", IsNullable = false)]
     public long EmployeeId { get; set; }
-
     /// <summary>
     /// 合同编号
     /// </summary>
     [SugarColumn(ColumnName = "contract_no", ColumnDescription = "合同编号", ColumnDataType = "varchar", Length = 50, IsNullable = false)]
     public string ContractNo { get; set; } = string.Empty;
-
     /// <summary>
-    /// 合同类型（0=固定期限，1=无固定期限，2=以完成一定工作任务为期限，3=实习）
+    /// 合同类型（字典 hr_employee_contract_type；0=固定期限 1=无固定期限 2=以完成一定工作任务为期限 3=实习）
     /// </summary>
     [SugarColumn(ColumnName = "contract_type", ColumnDescription = "合同类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int ContractType { get; set; }
-
-    /// <summary>
-    /// 合同状态（0=草稿，1=生效，2=到期，3=终止）
-    /// </summary>
-    [SugarColumn(ColumnName = "contract_status", ColumnDescription = "合同状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int ContractStatus { get; set; }
-
     /// <summary>
     /// 合同开始日期
     /// </summary>
     [SugarColumn(ColumnName = "start_date", ColumnDescription = "合同开始日期", ColumnDataType = "datetime", IsNullable = false)]
     public DateTime StartDate { get; set; }
-
     /// <summary>
     /// 合同结束日期
     /// </summary>
     [SugarColumn(ColumnName = "end_date", ColumnDescription = "合同结束日期", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? EndDate { get; set; }
-
     /// <summary>
     /// 试用期结束日期
     /// </summary>
     [SugarColumn(ColumnName = "probation_end_date", ColumnDescription = "试用期结束日期", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? ProbationEndDate { get; set; }
-
     /// <summary>
     /// 签订日期
     /// </summary>
     [SugarColumn(ColumnName = "sign_date", ColumnDescription = "签订日期", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? SignDate { get; set; }
-
     /// <summary>
     /// 签约单位
     /// </summary>
     [SugarColumn(ColumnName = "sign_company", ColumnDescription = "签约单位", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
     public string? SignCompany { get; set; }
+    /// <summary>
+    /// 合同状态（字典 hr_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）
+    /// </summary>
+    [SugarColumn(ColumnName = "contract_status", ColumnDescription = "合同状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int ContractStatus { get; set; }
 }

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Procurement
 // 文件名称：TaktPurchaseOrderI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPurchaseOrder 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktPurchaseOrderI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.purchaseorder._self", "zh-HK", "Takt采购订单信息_hk", "实体名称"),
 
             // entity.purchaseorder.plantcode
-            new TranslationSeedItem("entity.purchaseorder.plantcode", "en-US", "工厂代码_us", "工厂代码（不可空）"),
+            new TranslationSeedItem("entity.purchaseorder.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
             // entity.purchaseorder.plantcode
-            new TranslationSeedItem("entity.purchaseorder.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（不可空）"),
+            new TranslationSeedItem("entity.purchaseorder.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
             // entity.purchaseorder.plantcode
-            new TranslationSeedItem("entity.purchaseorder.plantcode", "zh-CN", "工厂代码", "工厂代码（不可空）"),
+            new TranslationSeedItem("entity.purchaseorder.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
             // entity.purchaseorder.plantcode
-            new TranslationSeedItem("entity.purchaseorder.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（不可空）"),
+            new TranslationSeedItem("entity.purchaseorder.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
 
             // entity.purchaseorder.code
             new TranslationSeedItem("entity.purchaseorder.code", "en-US", "采购订单编码_us", "采购订单编码（唯一索引）"),
@@ -108,14 +108,32 @@ public class TaktPurchaseOrderI18nSeedData : ITaktSeedDataCoordinator
             // entity.purchaseorder.code
             new TranslationSeedItem("entity.purchaseorder.code", "zh-HK", "采购订单编码_hk", "采购订单编码（唯一索引）"),
 
+            // entity.purchaseorder.purchaserequestid
+            new TranslationSeedItem("entity.purchaseorder.purchaserequestid", "en-US", "来源采购申请ID_us", "来源采购申请 ID（关联 TaktPurchaseRequest.Id，选项 TaktPurchaseRequests/options）"),
+            // entity.purchaseorder.purchaserequestid
+            new TranslationSeedItem("entity.purchaseorder.purchaserequestid", "ja-JP", "来源采购申请ID_jp", "来源采购申请 ID（关联 TaktPurchaseRequest.Id，选项 TaktPurchaseRequests/options）"),
+            // entity.purchaseorder.purchaserequestid
+            new TranslationSeedItem("entity.purchaseorder.purchaserequestid", "zh-CN", "来源采购申请ID", "来源采购申请 ID（关联 TaktPurchaseRequest.Id，选项 TaktPurchaseRequests/options）"),
+            // entity.purchaseorder.purchaserequestid
+            new TranslationSeedItem("entity.purchaseorder.purchaserequestid", "zh-HK", "来源采购申请ID_hk", "来源采购申请 ID（关联 TaktPurchaseRequest.Id，选项 TaktPurchaseRequests/options）"),
+
+            // entity.purchaseorder.purchaserequestcode
+            new TranslationSeedItem("entity.purchaseorder.purchaserequestcode", "en-US", "来源采购申请编码_us", "来源采购申请编码（冗余）"),
+            // entity.purchaseorder.purchaserequestcode
+            new TranslationSeedItem("entity.purchaseorder.purchaserequestcode", "ja-JP", "来源采购申请编码_jp", "来源采购申请编码（冗余）"),
+            // entity.purchaseorder.purchaserequestcode
+            new TranslationSeedItem("entity.purchaseorder.purchaserequestcode", "zh-CN", "来源采购申请编码", "来源采购申请编码（冗余）"),
+            // entity.purchaseorder.purchaserequestcode
+            new TranslationSeedItem("entity.purchaseorder.purchaserequestcode", "zh-HK", "来源采购申请编码_hk", "来源采购申请编码（冗余）"),
+
             // entity.purchaseorder.suppliercode
-            new TranslationSeedItem("entity.purchaseorder.suppliercode", "en-US", "供应商编码_us", "供应商编码"),
+            new TranslationSeedItem("entity.purchaseorder.suppliercode", "en-US", "供应商编码_us", "供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）"),
             // entity.purchaseorder.suppliercode
-            new TranslationSeedItem("entity.purchaseorder.suppliercode", "ja-JP", "供应商编码_jp", "供应商编码"),
+            new TranslationSeedItem("entity.purchaseorder.suppliercode", "ja-JP", "供应商编码_jp", "供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）"),
             // entity.purchaseorder.suppliercode
-            new TranslationSeedItem("entity.purchaseorder.suppliercode", "zh-CN", "供应商编码", "供应商编码"),
+            new TranslationSeedItem("entity.purchaseorder.suppliercode", "zh-CN", "供应商编码", "供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）"),
             // entity.purchaseorder.suppliercode
-            new TranslationSeedItem("entity.purchaseorder.suppliercode", "zh-HK", "供应商编码_hk", "供应商编码"),
+            new TranslationSeedItem("entity.purchaseorder.suppliercode", "zh-HK", "供应商编码_hk", "供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）"),
 
             // entity.purchaseorder.suppliername
             new TranslationSeedItem("entity.purchaseorder.suppliername", "en-US", "供应商名称_us", "供应商名称"),
@@ -154,13 +172,13 @@ public class TaktPurchaseOrderI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.purchaseorder.actualarrivaldate", "zh-HK", "实际到货日期_hk", "实际到货日期"),
 
             // entity.purchaseorder.purchasegroup
-            new TranslationSeedItem("entity.purchaseorder.purchasegroup", "en-US", "采购组代码_us", "采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）"),
+            new TranslationSeedItem("entity.purchaseorder.purchasegroup", "en-US", "采购组代码_us", "采购组编码（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）"),
             // entity.purchaseorder.purchasegroup
-            new TranslationSeedItem("entity.purchaseorder.purchasegroup", "ja-JP", "采购组代码_jp", "采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）"),
+            new TranslationSeedItem("entity.purchaseorder.purchasegroup", "ja-JP", "采购组代码_jp", "采购组编码（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）"),
             // entity.purchaseorder.purchasegroup
-            new TranslationSeedItem("entity.purchaseorder.purchasegroup", "zh-CN", "采购组代码", "采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）"),
+            new TranslationSeedItem("entity.purchaseorder.purchasegroup", "zh-CN", "采购组代码", "采购组编码（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）"),
             // entity.purchaseorder.purchasegroup
-            new TranslationSeedItem("entity.purchaseorder.purchasegroup", "zh-HK", "采购组代码_hk", "采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）"),
+            new TranslationSeedItem("entity.purchaseorder.purchasegroup", "zh-HK", "采购组代码_hk", "采购组编码（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）"),
 
             // entity.purchaseorder.totalquantity
             new TranslationSeedItem("entity.purchaseorder.totalquantity", "en-US", "订单总数量_us", "订单总数量（基本单位数量）"),
@@ -234,32 +252,14 @@ public class TaktPurchaseOrderI18nSeedData : ITaktSeedDataCoordinator
             // entity.purchaseorder.paidamount
             new TranslationSeedItem("entity.purchaseorder.paidamount", "zh-HK", "已付款金额_hk", "已付款金额（精确到分，存储为整数，单位为分）"),
 
-            // entity.purchaseorder.orderstatus
-            new TranslationSeedItem("entity.purchaseorder.orderstatus", "en-US", "订单状态_us", "订单状态（1=启用，0=禁用）"),
-            // entity.purchaseorder.orderstatus
-            new TranslationSeedItem("entity.purchaseorder.orderstatus", "ja-JP", "订单状态_jp", "订单状态（1=启用，0=禁用）"),
-            // entity.purchaseorder.orderstatus
-            new TranslationSeedItem("entity.purchaseorder.orderstatus", "zh-CN", "订单状态", "订单状态（1=启用，0=禁用）"),
-            // entity.purchaseorder.orderstatus
-            new TranslationSeedItem("entity.purchaseorder.orderstatus", "zh-HK", "订单状态_hk", "订单状态（1=启用，0=禁用）"),
-
-            // entity.purchaseorder.deliverystatus
-            new TranslationSeedItem("entity.purchaseorder.deliverystatus", "en-US", "交货状态_us", "交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）"),
-            // entity.purchaseorder.deliverystatus
-            new TranslationSeedItem("entity.purchaseorder.deliverystatus", "ja-JP", "交货状态_jp", "交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）"),
-            // entity.purchaseorder.deliverystatus
-            new TranslationSeedItem("entity.purchaseorder.deliverystatus", "zh-CN", "交货状态", "交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）"),
-            // entity.purchaseorder.deliverystatus
-            new TranslationSeedItem("entity.purchaseorder.deliverystatus", "zh-HK", "交货状态_hk", "交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）"),
-
             // entity.purchaseorder.paymentmethod
-            new TranslationSeedItem("entity.purchaseorder.paymentmethod", "en-US", "支付方式_us", "支付方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）"),
+            new TranslationSeedItem("entity.purchaseorder.paymentmethod", "en-US", "支付方式_us", "支付方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）"),
             // entity.purchaseorder.paymentmethod
-            new TranslationSeedItem("entity.purchaseorder.paymentmethod", "ja-JP", "支付方式_jp", "支付方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）"),
+            new TranslationSeedItem("entity.purchaseorder.paymentmethod", "ja-JP", "支付方式_jp", "支付方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）"),
             // entity.purchaseorder.paymentmethod
-            new TranslationSeedItem("entity.purchaseorder.paymentmethod", "zh-CN", "支付方式", "支付方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）"),
+            new TranslationSeedItem("entity.purchaseorder.paymentmethod", "zh-CN", "支付方式", "支付方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）"),
             // entity.purchaseorder.paymentmethod
-            new TranslationSeedItem("entity.purchaseorder.paymentmethod", "zh-HK", "支付方式_hk", "支付方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）"),
+            new TranslationSeedItem("entity.purchaseorder.paymentmethod", "zh-HK", "支付方式_hk", "支付方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）"),
 
             // entity.purchaseorder.deliverymethod
             new TranslationSeedItem("entity.purchaseorder.deliverymethod", "en-US", "交货方式_us", "交货方式（字典 logistics_delivery_method_type；0=自提，1=送货上门（采购为供应商送货），2=物流配送，3=快递）"),
@@ -279,6 +279,24 @@ public class TaktPurchaseOrderI18nSeedData : ITaktSeedDataCoordinator
             // entity.purchaseorder.deliveryaddress
             new TranslationSeedItem("entity.purchaseorder.deliveryaddress", "zh-HK", "交货地址_hk", "交货地址"),
 
+            // entity.purchaseorder.orderstatus
+            new TranslationSeedItem("entity.purchaseorder.orderstatus", "en-US", "订单状态_us", "订单状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            // entity.purchaseorder.orderstatus
+            new TranslationSeedItem("entity.purchaseorder.orderstatus", "ja-JP", "订单状态_jp", "订单状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            // entity.purchaseorder.orderstatus
+            new TranslationSeedItem("entity.purchaseorder.orderstatus", "zh-CN", "订单状态", "订单状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            // entity.purchaseorder.orderstatus
+            new TranslationSeedItem("entity.purchaseorder.orderstatus", "zh-HK", "订单状态_hk", "订单状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+
+            // entity.purchaseorder.deliverystatus
+            new TranslationSeedItem("entity.purchaseorder.deliverystatus", "en-US", "交货状态_us", "交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）"),
+            // entity.purchaseorder.deliverystatus
+            new TranslationSeedItem("entity.purchaseorder.deliverystatus", "ja-JP", "交货状态_jp", "交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）"),
+            // entity.purchaseorder.deliverystatus
+            new TranslationSeedItem("entity.purchaseorder.deliverystatus", "zh-CN", "交货状态", "交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）"),
+            // entity.purchaseorder.deliverystatus
+            new TranslationSeedItem("entity.purchaseorder.deliverystatus", "zh-HK", "交货状态_hk", "交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）"),
+
             // entity.purchaseorder.items
             new TranslationSeedItem("entity.purchaseorder.items", "en-US", "订单明细列表_us", "订单明细列表（主子表关系，一个订单可以有多个明细）"),
             // entity.purchaseorder.items
@@ -289,13 +307,13 @@ public class TaktPurchaseOrderI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.purchaseorder.items", "zh-HK", "订单明细列表_hk", "订单明细列表（主子表关系，一个订单可以有多个明细）"),
 
             // entity.purchaseorder.changelogs
-            new TranslationSeedItem("entity.purchaseorder.changelogs", "en-US", "采购订单变更记录列表_us", "采购订单变更记录列表（外键在子表 TaktPurchaseOrderChangeLog.OrderId）"),
+            new TranslationSeedItem("entity.purchaseorder.changelogs", "en-US", "采购订单变更记录列表_us", "采购订单变更记录列表（外键在子表 TaktPurchaseOrderChangeLog.PurchaseOrderId）"),
             // entity.purchaseorder.changelogs
-            new TranslationSeedItem("entity.purchaseorder.changelogs", "ja-JP", "采购订单变更记录列表_jp", "采购订单变更记录列表（外键在子表 TaktPurchaseOrderChangeLog.OrderId）"),
+            new TranslationSeedItem("entity.purchaseorder.changelogs", "ja-JP", "采购订单变更记录列表_jp", "采购订单变更记录列表（外键在子表 TaktPurchaseOrderChangeLog.PurchaseOrderId）"),
             // entity.purchaseorder.changelogs
-            new TranslationSeedItem("entity.purchaseorder.changelogs", "zh-CN", "采购订单变更记录列表", "采购订单变更记录列表（外键在子表 TaktPurchaseOrderChangeLog.OrderId）"),
+            new TranslationSeedItem("entity.purchaseorder.changelogs", "zh-CN", "采购订单变更记录列表", "采购订单变更记录列表（外键在子表 TaktPurchaseOrderChangeLog.PurchaseOrderId）"),
             // entity.purchaseorder.changelogs
-            new TranslationSeedItem("entity.purchaseorder.changelogs", "zh-HK", "采购订单变更记录列表_hk", "采购订单变更记录列表（外键在子表 TaktPurchaseOrderChangeLog.OrderId）"),
+            new TranslationSeedItem("entity.purchaseorder.changelogs", "zh-HK", "采购订单变更记录列表_hk", "采购订单变更记录列表（外键在子表 TaktPurchaseOrderChangeLog.PurchaseOrderId）"),
         };
     }
 

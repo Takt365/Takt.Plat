@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/human-resource/personnel
 // 文件名称：employee-reassignment.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/personnel 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -16,7 +16,7 @@ import type {
 } from '@/types/common';
 
 /**
- * 员工调动记录（审批单，状态见 TaktApprovalEntityBase.ApprovalStatus）
+ * 员工调动记录（审批单，状态见 <see cref="TaktApprovalEntityBase.ApprovalStatus"/>）
  * 对应前端 TaktEmployeeReassignmentDto
  * 继承 TaktApprovalDtoBase
  * 对应前端 EmployeeReassignment
@@ -179,7 +179,7 @@ export interface EmployeeReassignmentQuery extends TaktPagedQuery {
   reason?: string;
 
   /**
-   * 审批状态（TaktApprovalStatus）
+   * 审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）
    */
   approvalStatus?: number;
 
@@ -214,6 +214,11 @@ export interface EmployeeReassignmentQuery extends TaktPagedQuery {
   approvedAtEnd?: string;
 
   /**
+   * 流程实例 ID
+   */
+  flowInstanceId?: string;
+
+  /**
    * 创建时间（范围查询-开始）
    */
   createdAtStart?: string;
@@ -226,7 +231,7 @@ export interface EmployeeReassignmentQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -253,7 +258,7 @@ export interface EmployeeReassignmentCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -320,7 +325,7 @@ export interface EmployeeReassignmentCreate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -412,6 +417,11 @@ export interface EmployeeReassignmentTemplate {
   toPostName?: string;
 
   /**
+   * 生效日期
+   */
+  effectiveDate?: string;
+
+  /**
    * 调动原因
    */
   reason?: string;
@@ -419,7 +429,7 @@ export interface EmployeeReassignmentTemplate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -446,7 +456,7 @@ export interface EmployeeReassignmentImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -501,6 +511,11 @@ export interface EmployeeReassignmentImport {
   toPostName?: string;
 
   /**
+   * 生效日期
+   */
+  effectiveDate?: string;
+
+  /**
    * 调动原因
    */
   reason?: string;
@@ -508,7 +523,7 @@ export interface EmployeeReassignmentImport {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -592,7 +607,7 @@ export interface EmployeeReassignmentExport {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注

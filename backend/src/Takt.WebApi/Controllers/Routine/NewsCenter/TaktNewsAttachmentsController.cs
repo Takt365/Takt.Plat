@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Routine.NewsCenter
 // 文件名称：TaktNewsAttachmentsController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-27
 // 创建人：Takt365(Cursor AI)
 // 功能描述：新闻中心附件控制器
 // 
@@ -41,7 +41,7 @@ public class TaktNewsAttachmentsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("routine:newscenter:newsattachment:list", "新闻中心附件列表")]
+    [TaktPermission("routine:news:center:list", "新闻中心附件列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetNewsAttachmentListAsync([FromQuery] TaktNewsAttachmentQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktNewsAttachmentsController : TaktControllerBase
     /// </summary>
     /// <param name="id">新闻中心附件ID</param>
     /// <returns>新闻中心附件DTO</returns>
-    [TaktPermission("routine:newscenter:newsattachment:query", "新闻中心附件详情")]
+    [TaktPermission("routine:news:center:query", "新闻中心附件详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetNewsAttachmentByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktNewsAttachmentsController : TaktControllerBase
     /// 获取新闻附件选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("routine:newscenter:newsattachment:query", "新闻中心附件选项")]
+    [TaktPermission("routine:news:center:query", "新闻中心附件选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetNewsAttachmentOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktNewsAttachmentsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>新闻中心附件DTO</returns>
-    [TaktPermission("routine:newscenter:newsattachment:create", "创建新闻中心附件")]
+    [TaktPermission("routine:news:center:create", "创建新闻中心附件")]
     [HttpPost]
     public async Task<IActionResult> CreateNewsAttachmentAsync([FromBody] TaktNewsAttachmentCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktNewsAttachmentsController : TaktControllerBase
     /// <param name="id">新闻中心附件ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>新闻中心附件DTO</returns>
-    [TaktPermission("routine:newscenter:newsattachment:update", "更新新闻中心附件")]
+    [TaktPermission("routine:news:center:update", "更新新闻中心附件")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateNewsAttachmentAsync(long id, [FromBody] TaktNewsAttachmentUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktNewsAttachmentsController : TaktControllerBase
     /// </summary>
     /// <param name="id">新闻中心附件ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("routine:newscenter:newsattachment:delete", "删除新闻中心附件")]
+    [TaktPermission("routine:news:center:delete", "删除新闻中心附件")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteNewsAttachmentByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktNewsAttachmentsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("routine:newscenter:newsattachment:delete", "批量删除新闻中心附件")]
+    [TaktPermission("routine:news:center:delete", "批量删除新闻中心附件")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteNewsAttachmentBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktNewsAttachmentsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">排序DTO</param>
     /// <returns>新闻中心附件DTO</returns>
-    [TaktPermission("routine:newscenter:newsattachment:update", "更新新闻中心附件排序")]
+    [TaktPermission("routine:news:center:update", "更新新闻中心附件排序")]
     [HttpPut("sort")]
     public async Task<IActionResult> UpdateNewsAttachmentSortAsync([FromBody] TaktNewsAttachmentSortDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktNewsAttachmentsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("routine:newscenter:newsattachment:import", "获取新闻中心附件导入模板")]
+    [TaktPermission("routine:news:center:import", "获取新闻中心附件导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetNewsAttachmentTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +224,7 @@ public class TaktNewsAttachmentsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("routine:newscenter:newsattachment:import", "导入新闻中心附件")]
+    [TaktPermission("routine:news:center:import", "导入新闻中心附件")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportNewsAttachmentAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +254,7 @@ public class TaktNewsAttachmentsController : TaktControllerBase
     /// 导出新闻中心附件
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("routine:newscenter:newsattachment:export", "导出新闻中心附件")]
+    [TaktPermission("routine:news:center:export", "导出新闻中心附件")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportNewsAttachmentAsync([FromQuery] TaktNewsAttachmentQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

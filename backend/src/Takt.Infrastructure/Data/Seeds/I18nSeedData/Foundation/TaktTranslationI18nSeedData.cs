@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation
 // 文件名称：TaktTranslationI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktTranslation 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,31 +91,31 @@ public class TaktTranslationI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.translation._self", "zh-HK", "翻译信息_hk", "实体名称"),
 
             // entity.translation.cultureid
-            new TranslationSeedItem("entity.translation.cultureid", "en-US", "区域文化ID_us", "语言ID（关联 TaktCulture.Id）"),
+            new TranslationSeedItem("entity.translation.cultureid", "en-US", "文化ID_us", "文化ID（关联 TaktCulture.Id）"),
             // entity.translation.cultureid
-            new TranslationSeedItem("entity.translation.cultureid", "ja-JP", "区域文化ID_jp", "语言ID（关联 TaktCulture.Id）"),
+            new TranslationSeedItem("entity.translation.cultureid", "ja-JP", "文化ID_jp", "文化ID（关联 TaktCulture.Id）"),
             // entity.translation.cultureid
-            new TranslationSeedItem("entity.translation.cultureid", "zh-CN", "区域文化ID", "语言ID（关联 TaktCulture.Id）"),
+            new TranslationSeedItem("entity.translation.cultureid", "zh-CN", "文化ID", "文化ID（关联 TaktCulture.Id）"),
             // entity.translation.cultureid
-            new TranslationSeedItem("entity.translation.cultureid", "zh-HK", "区域文化ID_hk", "语言ID（关联 TaktCulture.Id）"),
+            new TranslationSeedItem("entity.translation.cultureid", "zh-HK", "文化ID_hk", "文化ID（关联 TaktCulture.Id）"),
 
             // entity.translation.culturecode
-            new TranslationSeedItem("entity.translation.culturecode", "en-US", "区域文化编码_us", "区域文化编码（如：zh-CN, en-US, ja-JP）"),
+            new TranslationSeedItem("entity.translation.culturecode", "en-US", "文化编码_us", "文化编码（关联 TaktCulture.CultureCode，选项 TaktCultures/options）"),
             // entity.translation.culturecode
-            new TranslationSeedItem("entity.translation.culturecode", "ja-JP", "区域文化编码_jp", "区域文化编码（如：zh-CN, en-US, ja-JP）"),
+            new TranslationSeedItem("entity.translation.culturecode", "ja-JP", "文化编码_jp", "文化编码（关联 TaktCulture.CultureCode，选项 TaktCultures/options）"),
             // entity.translation.culturecode
-            new TranslationSeedItem("entity.translation.culturecode", "zh-CN", "区域文化编码", "区域文化编码（如：zh-CN, en-US, ja-JP）"),
+            new TranslationSeedItem("entity.translation.culturecode", "zh-CN", "文化编码", "文化编码（关联 TaktCulture.CultureCode，选项 TaktCultures/options）"),
             // entity.translation.culturecode
-            new TranslationSeedItem("entity.translation.culturecode", "zh-HK", "区域文化编码_hk", "区域文化编码（如：zh-CN, en-US, ja-JP）"),
+            new TranslationSeedItem("entity.translation.culturecode", "zh-HK", "文化编码_hk", "文化编码（关联 TaktCulture.CultureCode，选项 TaktCultures/options）"),
 
             // entity.translation.i18nkey
-            new TranslationSeedItem("entity.translation.i18nkey", "en-US", "国际化翻译键_us", "国际化翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；如 common.confirm）"),
+            new TranslationSeedItem("entity.translation.i18nkey", "en-US", "翻译键_us", "翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；如 common.confirm）"),
             // entity.translation.i18nkey
-            new TranslationSeedItem("entity.translation.i18nkey", "ja-JP", "国际化翻译键_jp", "国际化翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；如 common.confirm）"),
+            new TranslationSeedItem("entity.translation.i18nkey", "ja-JP", "翻译键_jp", "翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；如 common.confirm）"),
             // entity.translation.i18nkey
-            new TranslationSeedItem("entity.translation.i18nkey", "zh-CN", "国际化翻译键", "国际化翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；如 common.confirm）"),
+            new TranslationSeedItem("entity.translation.i18nkey", "zh-CN", "翻译键", "翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；如 common.confirm）"),
             // entity.translation.i18nkey
-            new TranslationSeedItem("entity.translation.i18nkey", "zh-HK", "国际化翻译键_hk", "国际化翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；如 common.confirm）"),
+            new TranslationSeedItem("entity.translation.i18nkey", "zh-HK", "翻译键_hk", "翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；如 common.confirm）"),
 
             // entity.translation.text
             new TranslationSeedItem("entity.translation.text", "en-US", "翻译文本_us", "翻译文本（该语言下的显示文本）"),
@@ -127,22 +127,22 @@ public class TaktTranslationI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.translation.text", "zh-HK", "翻译文本_hk", "翻译文本（该语言下的显示文本）"),
 
             // entity.translation.resourcegroup
-            new TranslationSeedItem("entity.translation.resourcegroup", "en-US", "资源分组_us", "资源分组（用于分类管理翻译，如 page、menu、模块编号字符串）"),
+            new TranslationSeedItem("entity.translation.resourcegroup", "en-US", "资源分组_us", "资源分组（关联 TaktMenu.Id，选项 TaktMenus/tree-options）"),
             // entity.translation.resourcegroup
-            new TranslationSeedItem("entity.translation.resourcegroup", "ja-JP", "资源分组_jp", "资源分组（用于分类管理翻译，如 page、menu、模块编号字符串）"),
+            new TranslationSeedItem("entity.translation.resourcegroup", "ja-JP", "资源分组_jp", "资源分组（关联 TaktMenu.Id，选项 TaktMenus/tree-options）"),
             // entity.translation.resourcegroup
-            new TranslationSeedItem("entity.translation.resourcegroup", "zh-CN", "资源分组", "资源分组（用于分类管理翻译，如 page、menu、模块编号字符串）"),
+            new TranslationSeedItem("entity.translation.resourcegroup", "zh-CN", "资源分组", "资源分组（关联 TaktMenu.Id，选项 TaktMenus/tree-options）"),
             // entity.translation.resourcegroup
-            new TranslationSeedItem("entity.translation.resourcegroup", "zh-HK", "资源分组_hk", "资源分组（用于分类管理翻译，如 page、menu、模块编号字符串）"),
+            new TranslationSeedItem("entity.translation.resourcegroup", "zh-HK", "资源分组_hk", "资源分组（关联 TaktMenu.Id，选项 TaktMenus/tree-options）"),
 
             // entity.translation.resourcetype
-            new TranslationSeedItem("entity.translation.resourcetype", "en-US", "资源类别_us", "资源类别（字典 sys_resource_type；frontend=前端，backend=后端）"),
+            new TranslationSeedItem("entity.translation.resourcetype", "en-US", "资源类别_us", "资源类别（字典 sys_resource_type；frontend=前端 backend=后端）"),
             // entity.translation.resourcetype
-            new TranslationSeedItem("entity.translation.resourcetype", "ja-JP", "资源类别_jp", "资源类别（字典 sys_resource_type；frontend=前端，backend=后端）"),
+            new TranslationSeedItem("entity.translation.resourcetype", "ja-JP", "资源类别_jp", "资源类别（字典 sys_resource_type；frontend=前端 backend=后端）"),
             // entity.translation.resourcetype
-            new TranslationSeedItem("entity.translation.resourcetype", "zh-CN", "资源类别", "资源类别（字典 sys_resource_type；frontend=前端，backend=后端）"),
+            new TranslationSeedItem("entity.translation.resourcetype", "zh-CN", "资源类别", "资源类别（字典 sys_resource_type；frontend=前端 backend=后端）"),
             // entity.translation.resourcetype
-            new TranslationSeedItem("entity.translation.resourcetype", "zh-HK", "资源类别_hk", "资源类别（字典 sys_resource_type；frontend=前端，backend=后端）"),
+            new TranslationSeedItem("entity.translation.resourcetype", "zh-HK", "资源类别_hk", "资源类别（字典 sys_resource_type；frontend=前端 backend=后端）"),
 
             // entity.translation.contextnote
             new TranslationSeedItem("entity.translation.contextnote", "en-US", "上下文注释_us", "上下文注释（帮助翻译人员理解使用场景）"),
@@ -154,13 +154,13 @@ public class TaktTranslationI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.translation.contextnote", "zh-HK", "上下文注释_hk", "上下文注释（帮助翻译人员理解使用场景）"),
 
             // entity.translation.culture
-            new TranslationSeedItem("entity.translation.culture", "en-US", "区域文化_us", "区域文化（多对一关联）"),
+            new TranslationSeedItem("entity.translation.culture", "en-US", "文化_us", "文化（多对一关联）"),
             // entity.translation.culture
-            new TranslationSeedItem("entity.translation.culture", "ja-JP", "区域文化_jp", "区域文化（多对一关联）"),
+            new TranslationSeedItem("entity.translation.culture", "ja-JP", "文化_jp", "文化（多对一关联）"),
             // entity.translation.culture
-            new TranslationSeedItem("entity.translation.culture", "zh-CN", "区域文化", "区域文化（多对一关联）"),
+            new TranslationSeedItem("entity.translation.culture", "zh-CN", "文化", "文化（多对一关联）"),
             // entity.translation.culture
-            new TranslationSeedItem("entity.translation.culture", "zh-HK", "区域文化_hk", "区域文化（多对一关联）"),
+            new TranslationSeedItem("entity.translation.culture", "zh-HK", "文化_hk", "文化（多对一关联）"),
         };
     }
 

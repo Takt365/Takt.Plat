@@ -29,7 +29,11 @@ const {
   buildQueryFieldMetaLine,
   computeFormTabCount,
   buildFormTabLabelAttr,
-  buildFormContentClassComputedExpr,
+  buildFormContentClassExpr,
+  buildAdvancedQueryFactoryBlock,
+  buildListColumnsGeneratorBlock,
+  resolveScopeFormFieldPresence,
+  buildScopeContextFormScriptFragments,
   buildGeneratedFormTemplateBody,
   buildMasterDetailFormTypeImportLines,
   buildFormTabsScopedStyleBlock,
@@ -53,6 +57,16 @@ const {
   buildServerPagedIndexStyleBlock,
   buildFormResetScopeDefaultsBlock,
   isChangeLogOnlySeparateMenuMaster,
+  buildVueImportResultUtilImportLine,
+  buildImportModalVueBlock,
+  buildImportHandlersScriptBlock,
+  entityRowRecordTypeName,
+  buildEntityRowRecordTypeAlias,
+  buildEntityDictValueHelper,
+  buildEntityNumericCoerceHelper,
+  buildEntityI18nComposableFile,
+  buildEntityI18nIndexImportBlock,
+  buildEntityI18nFormImportBlock,
 } = require('./generate-vue-common.cjs');
 
 const EMPTY_MD_INDEX_PARTS = {
@@ -85,6 +99,8 @@ function generateCrudIndexVue(ctx) {
     comment,
   } = ctx;
   const generatorScript = 'generate-vue-crud-from-api.cjs';
+  const rowRecordType = entityRowRecordTypeName(entityPascal);
+  const rowRecordTypeAlias = buildEntityRowRecordTypeAlias(entityPascal);
   const mdParts = { state: '', columns: '', helpers: '', handlers: '', childApiImports: '', expandProps: '', expandTemplate: '' };
   const hasMasterDetail = false;
   const entityScope = fields.entityScope || 'company';
@@ -121,35 +137,21 @@ function generateCrudIndexVue(ctx) {
   const indexDictOnMounted = needsDictInIndex ? '  void dictDataStore.loadAllDictDataAsync()\n' : '';
   const resetPeriodListMapperBlock = buildResetPeriodListMapperScriptBlock(dictTagListCols);
   const dictBodyCellBlock = buildListBodyCellBlock(dictTagListCols, switchListCols, entityPascal);
+  const dictValueHelperBlock = [
+    (dictTagListCols.length > 0 || switchListCols.length > 0)
+      ? buildEntityDictValueHelper(entityPascal, rowRecordType)
+      : '',
+    switchListCols.length > 0 ? buildEntityNumericCoerceHelper(entityPascal) : '',
+  ].filter(Boolean).join('\n');
   const listSwitchHandlersBlock = buildListSwitchHandlersBlock(switchListCols, entityPascal, caps);
   const queryItems = fields.queryFields.map((f) => renderQueryFormItem(f)).join('\n');
-  const queryFieldsMetaBlock = fields.queryFields.map((f) => buildQueryFieldMetaLine(f, entityI18nSlug)).join('\n');
-  const queryFieldStorageKey = `takt-query-fields-${viewModulePath.replace(/\//g, '-')}`;
+  const queryFactoryBlock = buildAdvancedQueryFactoryBlock(entityPascal, fields.queryFields);
   const queryInit = fields.queryFields.map((f) => {
     const val = f.type === 'number' ? 'undefined as number | undefined' : "''";
     return `  ${f.name}: ${val},`;
   }).join('\n');
-  const columnBlocks = listCols.map((f) => {
-    if (f.dictType) {
-      return `  {
-    title: ${fieldLabelTExpr(f)},
-    dataIndex: '${f.name}',
-    key: '${f.name}',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },`;
-    }
-    return `  {
-    title: ${fieldLabelTExpr(f)},
-    dataIndex: '${f.name}',
-    key: '${f.name}',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => get${entityPascal}Field(record, '${f.name}') ?? ''
-  },`;
-  }).join('\n');
+  const queryFieldStorageKey = `takt-query-fields-${viewModulePath.replace(/\//g, '-')}`;
+  const listColumnsBlock = buildListColumnsGeneratorBlock(entityPascal, caps.entityIdName);
   const actionItems = [];
   if (caps.hasUpdate) {
     actionItems.push(`      {
@@ -158,7 +160,7 @@ function generateCrudIndexVue(ctx) {
         shape: 'plain',
         icon: RiEditLine,
         permission: '${permissionPrefix}:update',
-        onClick: (record: ${entityPascal}) => handleEdit(record)
+        onClick: (record: ${rowRecordType}) => handleEdit(record)
       },`);
   }
   if (caps.hasDelete) {
@@ -168,7 +170,7 @@ function generateCrudIndexVue(ctx) {
         shape: 'plain',
         icon: RiDeleteBinLine,
         permission: '${permissionPrefix}:delete',
-        onClick: (record: ${entityPascal}) => handleDeleteOne(record)
+        onClick: (record: ${rowRecordType}) => handleDeleteOne(record)
       }`);
   }
   const formBlock = (caps.hasCreate || caps.hasUpdate) ? `
@@ -189,28 +191,9 @@ function generateCrudIndexVue(ctx) {
         :loading="formLoading"
       />
     </TaktModal>` : '';
-  const importBlock = (caps.hasImport && caps.hasGetTemplate) ? `
-    <!-- 导入对话框 -->
-    <TaktModal
-      v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.${entityI18nSlug}._self') })"
-      :width="600"
-      :footer="null"
-      :cancel-text="t('common.page.button.close')"
-      @cancel="handleImportCancel"
-    >
-      <TaktImportFile
-        entity-i18n-key="entity.${entityI18nSlug}._self"
-        file-type="xlsx"
-        :sheet-name="excelNames.sheet"
-        :template-file-name="excelNames.fileBase"
-        :download-template="handleDownloadTemplate"
-        :import-file="handleImportFile"
-        :max-size="10"
-        :max-rows="1000"
-        @success="handleImportSuccess"
-      />
-    </TaktModal>` : '';
+  const importBlock = (caps.hasImport && caps.hasGetTemplate)
+    ? buildImportModalVueBlock(entityPascal)
+    : '';
   const formImports = (caps.hasCreate || caps.hasUpdate)
     ? `import ${entityPascal}Form from './components/${viewEntityKebab}-form.vue'\n`
     : '';
@@ -224,35 +207,38 @@ function generateCrudIndexVue(ctx) {
   const exportImport = caps.hasExport
     ? "import { resolveExportDownloadFileName } from '@/utils/export-download-name'\n"
     : '';
+  const importResultImport = (caps.hasImport && caps.hasGetTemplate)
+    ? buildVueImportResultUtilImportLine()
+    : '';
   const excelConst = (caps.hasImport || caps.hasExport)
     ? `/** Excel 导入/导出默认 sheet 名与文件名前缀 */
 const excelNames = taktExcelEntityNames('${caps.entityClassName}')
 `
     : '';
+  const entityI18nIndexImport = buildEntityI18nIndexImportBlock(entityPascal, viewEntityKebab);
   const singleStateBlock = buildSingleIndexStateRefs(entityPascal, {
     hasForm: caps.hasCreate || caps.hasUpdate,
     hasImport: caps.hasImport && caps.hasGetTemplate,
     hasUpdate: caps.hasUpdate,
     hasDelete: caps.hasDelete || caps.hasDeleteBatch,
     queryInit,
-    queryFieldsMetaBlock,
+    queryFactoryBlock,
+    entityPascal,
     entityIdName: caps.entityIdName,
-    entityCamel,
-    entityI18nSlug,
     excelConst,
   });
   const formStateBlock = '';
   const createHandler = caps.hasCreate ? `
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.${entityI18nSlug}._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = null
   formVisible.value = true${INDEX_FORM_RESET_NEXT_TICK}
 }` : '';
   const updateHandler = caps.hasUpdate ? (hasMasterDetail && caps.hasGetById ? `
 /** 打开编辑弹窗（主子表：先拉详情含子表） */
-async function handleEdit(record: ${entityPascal}) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.${entityI18nSlug}._self') })
+async function handleEdit(record: ${rowRecordType}) {
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
   formLoading.value = true
   try {
     const detail = await load${entityPascal}Detail(record)
@@ -268,12 +254,39 @@ function handleUpdate() {
   if (selectedRow.value) {
     void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.${entityI18nSlug}._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
+  }
+}` : caps.hasGetById ? `
+/** 打开编辑弹窗（拉取详情，避免列表列裁剪字段） */
+async function handleEdit(record: ${rowRecordType}) {
+  const id = get${entityPascal}Id(record)
+  if (!id) {
+    return
+  }
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
+  formLoading.value = true
+  try {
+    const detail = await ${caps.apiGetById}(id)
+    formData.value = detail ?? ({ ...record } as Partial<${entityPascal}>)
+    formVisible.value = true
+  } catch (error: unknown) {
+    message.error(t('common.feedback.load.data.failed'))
+  } finally {
+    formLoading.value = false
+  }
+}
+
+/** 工具栏编辑：打开当前单选行 */
+function handleUpdate() {
+  if (selectedRow.value) {
+    void handleEdit(selectedRow.value)
+  } else {
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
   }
 }` : `
 /** 打开编辑弹窗 */
-function handleEdit(record: ${entityPascal}) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.${entityI18nSlug}._self') })
+function handleEdit(record: ${rowRecordType}) {
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
   formData.value = { ...record }
   formVisible.value = true
 }
@@ -283,7 +296,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.${entityI18nSlug}._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
   }
 }`) : '';
   const formSubmitHandler = (caps.hasCreate || caps.hasUpdate) ? `
@@ -301,9 +314,9 @@ async function handleFormSubmit() {
     const payload = refInst.getValues?.() ?? { ...(formData.value as any) }
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
-${caps.hasUpdate ? `      await ${caps.apiUpdate}(id, payload as any)\n      message.success(t('common.feedback.updated', { target: t('entity.${entityI18nSlug}._self') }))` : ''}
+${caps.hasUpdate ? `      await ${caps.apiUpdate}(id, payload as any)\n      message.success(t('common.feedback.updated', { target: pi.self() }))` : ''}
     } else {
-${caps.hasCreate ? `      await ${caps.apiCreate}(payload as any)\n      message.success(t('common.feedback.created', { target: t('entity.${entityI18nSlug}._self') }))` : ''}
+${caps.hasCreate ? `      await ${caps.apiCreate}(payload as any)\n      message.success(t('common.feedback.created', { target: pi.self() }))` : ''}
     }
     formVisible.value = false
     formData.value = null${INDEX_FORM_RESET_NEXT_TICK}
@@ -318,33 +331,12 @@ function handleFormCancel() {
   formVisible.value = false
   formData.value = null${INDEX_FORM_RESET_NEXT_TICK}
 }` : '';
-  const importHandlers = (caps.hasImport && caps.hasGetTemplate) ? `
-/** 打开导入对话框 */
-function handleImport() {
-  importVisible.value = true
-}
-
-/** 下载导入模板 Excel */
-async function handleDownloadTemplate(sheetName?: string, fileName?: string): Promise<Blob> {
-  const res = await ${caps.apiGetTemplate}(sheetName, fileName)
-  return (res as any)?.data ?? res
-}
-
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await ${caps.apiImport}(file, sheetName)
-}
-
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
-  loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
-}
-
-/** 关闭导入对话框 */
-function handleImportCancel() {
-  importVisible.value = false
-}` : '';
+  const importHandlers = (caps.hasImport && caps.hasGetTemplate)
+    ? buildImportHandlersScriptBlock({
+      apiGetTemplate: caps.apiGetTemplate,
+      apiImport: caps.apiImport,
+    })
+    : '';
   const exportHandler = caps.hasExport ? `
 /** 导出当前查询条件下的 Excel */
 async function handleExport() {
@@ -369,25 +361,25 @@ ${buildServerPagedExportApiCall(caps.apiExport)}
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.${entityI18nSlug}._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: any) {
     logger.error('[${entityPascal}] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.${entityI18nSlug}._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }
 }` : '';
   const deleteOneHandler = caps.hasDelete ? `
 /** 删除单行 */
-async function handleDeleteOne(record: ${entityPascal}) {
+async function handleDeleteOne(record: ${rowRecordType}) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.${entityI18nSlug}._self'), name: t('common.tip.this.target', { target: t('entity.${entityI18nSlug}._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await ${caps.apiDelete}((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.${entityI18nSlug}._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       loadData()
     }
   })
@@ -396,18 +388,18 @@ async function handleDeleteOne(record: ${entityPascal}) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.${entityI18nSlug}._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.${entityI18nSlug}._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await ${caps.apiDeleteBatch}(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.${entityI18nSlug}._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       loadData()
     }
   })
@@ -542,30 +534,12 @@ import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 ${formImports}import { ${importApiNames.join(', ')} } from '@/api/${modulePath}/${entityKebab}'
 ${mdParts.childApiImports ? `${mdParts.childApiImports}\n` : ''}${childTypeImportLines ? `${childTypeImportLines}\n` : ''}import type { ${typeImports.join(', ')} } from '@/types/${modulePath}/${entityKebab}'
-${indexDictImport}${excelImport}${exportImport}${iconImports}
-${singleStateBlock}
+${indexDictImport}${excelImport}${exportImport}${importResultImport}${iconImports}
+${entityI18nIndexImport}${rowRecordTypeAlias}${singleStateBlock}
 ${indexDictSetup}${mdParts.state}
 ${serverPagedScriptBlock}${buildServerPagedOnMountedBlock(indexDictOnMounted)}
 
-${mdParts.columns}
-
-${mdParts.helpers}
-${mdParts.handlers}
-
-/** 表格列定义（i18n 随 locale 变化） */
-const columns = computed<TableColumnsType>(() => [
-  {
-    title: t('common.page.entity.id'),
-    dataIndex: '${caps.entityIdName}',
-    key: '${caps.entityIdName}',
-    width: 80,
-    resizable: true,
-    ellipsis: true,
-    fixed: 'left',
-    customRender: ({ record }: { record: any }) => get${entityPascal}Field(record, '${caps.entityIdName}') ?? ''
-  },
-${columnBlocks}
-  CreateActionColumn({
+${listColumnsBlock}
     actions: [
 ${actionItems.join('\n')}
     ]
@@ -573,37 +547,35 @@ ${actionItems.join('\n')}
 ])
 
 /** 表格 row-key（优先实体主键字段） */
-const get${entityPascal}Id = (record: any): string => record?.[entityIdName] ?? ''
-/**
- * 读取行字段值
- * @param record 行数据
- * @param field 字段名
- */
-const get${entityPascal}Field = (record: any, field: string): any => record?.[field]
+const get${entityPascal}Id = (record: ${rowRecordType}): string => {
+  const id = (record as Record<string, unknown>)?.[entityIdName]
+  return id != null ? String(id) : ''
+}
+${dictValueHelperBlock}
 ${resetPeriodListMapperBlock}
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: ${entityPascal}[]) => {
+  onChange: (keys: (string | number)[], rows: ${rowRecordType}[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
   },
-  onSelect: (record: ${entityPascal}, selected: boolean) => {
+  onSelect: (record: ${rowRecordType}, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (get${entityPascal}Id(selectedRow.value) === get${entityPascal}Id(record)) {
+    } else if (selectedRow.value && get${entityPascal}Id(selectedRow.value) === get${entityPascal}Id(record)) {
       selectedRow.value = null
     }
   },
-  onSelectAll: (selected: boolean, selectedRowsData: ${entityPascal}[]) => {
+  onSelectAll: (selected: boolean, selectedRowsData: ${rowRecordType}[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
   }
 }))
 
 /** 行点击切换选中（与 rowSelection 联动） */
-const onClickRow = (record: ${entityPascal}) => ({
+const onClickRow = (record: ${rowRecordType}) => ({
   onClick: () => {
     const key = get${entityPascal}Id(record)
     const index = selectedRowKeys.value.indexOf(key)
@@ -647,9 +619,7 @@ function handleSearch() {
 /** 重置查询条件并刷新列表 */
 function handleReset() {
   queryKeyword.value = ''
-  advancedQueryForm.value = {
-${queryInit}
-  }
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
   currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
@@ -667,9 +637,7 @@ function handleAdvancedQuerySubmit() {
 }
 
 function handleAdvancedQueryReset() {
-  advancedQueryForm.value = {
-${queryInit}
-  }
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
 }
 
 /** 打开列设置抽屉 */
@@ -716,7 +684,6 @@ function generateCrudFormVue(ctx) {
   const formFields = fields.formFields;
   const entityIdField = caps?.entityIdName ?? `${entityCamel}Id`;
   const formCodeControlOptions = { entityIdField };
-  const formContentClassExpr = buildFormContentClassComputedExpr();
   const formTemplate = buildGeneratedFormTemplateBody({
     formFields,
     formCodeControlOptions,
@@ -725,47 +692,17 @@ function generateCrudFormVue(ctx) {
     entityKebab: viewEntityKebab,
   });
   const useFormTabs = formTemplate.useFormTabs;
+  const formTabCount = computeFormTabCount(formFields.length);
+  const formContentClassExpr = buildFormContentClassExpr(useFormTabs, formTabCount);
+  const omitFormFieldsArray = useFormTabs && formTabCount > 1;
   const needsTaktSelect = formFields.some((f) => f.htmlType === 'select' && f.dictType) || mdFormParts.needsTaktSelect;
   const masterDetailChildren = fields.masterDetailChildren || [];
   const hasScopeContextFields = hasScopeContextFormFields(formFields, masterDetailChildren);
-  const scopeStoreImports = hasScopeContextFields
-    ? "import { useTenantStore } from '@/stores/identity/tenant'\nimport { useUserStore } from '@/stores/identity/user'\n"
-    : '';
-  const scopeStoreScript = hasScopeContextFields ? `
-/** Pinia：租户/公司上下文 */
-const tenantStore = useTenantStore()
-/** Pinia：用户上下文 */
-const userStore = useUserStore()
-
-/**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
- * @param target 表单数据
- * @param force 为 true 时强制覆盖（新增态或公司切换）
- */
-function applyScopeDefaults(target: Record<string, unknown>, force = false) {
-  if (formFields.includes('tenantCode') && (force || !target.tenantCode)) {
-    target.tenantCode = tenantStore.tenantCode
-  }
-  if (formFields.includes('companyCode') && (force || !target.companyCode)) {
-    target.companyCode = tenantStore.companyCode
-  }
-  if (formFields.includes('companyDefaultCulture') && (force || !target.companyDefaultCulture)) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
-  }
-}
-` : '';
-  const scopeContextWatch = hasScopeContextFields ? `
-/** 公司/租户切换时，新增态表单同步隔离字段 */
-watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
-  () => {
-    const isCreate = !props.formData?.${entityIdField}
-    if (isCreate) {
-      applyScopeDefaults(formState, true)
-    }
-  },
-)
-` : '';
+  const scopePresence = resolveScopeFormFieldPresence(formFields, masterDetailChildren);
+  const scopeFragments = buildScopeContextFormScriptFragments(scopePresence, entityIdField);
+  const scopeStoreImports = hasScopeContextFields ? scopeFragments.imports : '';
+  const scopeStoreScript = hasScopeContextFields ? scopeFragments.script : '';
+  const scopeContextWatch = hasScopeContextFields ? scopeFragments.watch : '';
   const { masterTypeImport } = buildMasterDetailFormTypeImportLines({
     entityPascal,
     entityKebab,
@@ -800,6 +737,7 @@ watch(
     entityPascal,
     entityIdField,
     useFormTabs,
+    omitFormFieldsArray,
   });
   return `<!-- ======================================== -->
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
@@ -831,7 +769,7 @@ ${formTemplate.body}
 ${formScriptFragments.vueImportLine}
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
-${masterTypeImport}
+${buildEntityI18nFormImportBlock(entityPascal, viewEntityKebab)}${masterTypeImport}
 ${taktSelectImport}${extFieldIconImport}${formScriptFragments.dictImportLine}${scopeStoreImports}
 ${formScriptState}
 ${formScriptFragments.defaultsBlock}
@@ -918,7 +856,20 @@ function processCrudApiModule(apiFilePath, options, registry) {
     : bundle.fullCtx;
   const indexContent = generateCrudIndexVue(crudCtx);
   const formContent = bundle.needsForm ? generateCrudFormVue(crudCtx) : '';
-  return writeVueModuleOutputs(bundle, indexContent, formContent, options);
+  const listCols = crudCtx.fields.listFields.filter((f) => f.name !== crudCtx.caps.entityIdName);
+  const i18nComposableContent = buildEntityI18nComposableFile({
+    entityPascal: crudCtx.entityPascal,
+    entityI18nSlug: crudCtx.entityI18nSlug,
+    entityKebab: crudCtx.entityKebab,
+    viewModulePath: crudCtx.viewModulePath,
+    viewEntityKebab: crudCtx.viewEntityKebab,
+    modulePath: crudCtx.modulePath,
+    listFields: listCols,
+    formFields: crudCtx.fields.formFields,
+    queryFields: crudCtx.fields.queryFields,
+    comment: crudCtx.comment,
+  });
+  return writeVueModuleOutputs(bundle, indexContent, formContent, options, i18nComposableContent);
 }
 
 function printCrudUsage() {

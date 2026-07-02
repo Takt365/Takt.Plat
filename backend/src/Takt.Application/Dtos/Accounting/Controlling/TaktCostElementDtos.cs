@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Accounting.Controlling
 // 文件名称：TaktCostElementDtos.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：CostElement 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktCostElement 生成，请按需审阅）
 // 
@@ -46,14 +46,14 @@ public class TaktCostElementDto : TaktCompanyDtoBase
     public string CostElementName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 成本要素类型（0=初级，1=次级）
+    /// 成本要素类型（字典 accounting_cost_element_type；0=初级，1=次级；由 KATYP 推导）
     /// </summary>
     public int CostElementType { get; set; } = 0;
 
     /// <summary>
-    /// 成本要素类别（0=人工，1=材料，2=制造费用，3=其他）
+    /// 成本要素类别（字典 accounting_cost_element_category；SAP KATYP 整型值）
     /// </summary>
-    public int CostElementCategory { get; set; } = 0;
+    public int CostElementCategory { get; set; } = 1;
 
     /// <summary>
     /// 父级 ID
@@ -67,11 +67,6 @@ public class TaktCostElementDto : TaktCompanyDtoBase
     public int CostElementLevel { get; set; } = 0;
 
     /// <summary>
-    /// 成本要素状态（1=启用，0=禁用）
-    /// </summary>
-    public int CostElementStatus { get; set; } = 0;
-
-    /// <summary>
     /// 生效日期
     /// </summary>
     public DateTime ValidFrom { get; set; }
@@ -82,9 +77,19 @@ public class TaktCostElementDto : TaktCompanyDtoBase
     public DateTime ValidTo { get; set; }
 
     /// <summary>
+    /// 关联工厂
+    /// </summary>
+    public string RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
     /// 排序号
     /// </summary>
     public int SortOrder { get; set; } = 0;
+
+    /// <summary>
+    /// 成本要素状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// </summary>
+    public int CostElementStatus { get; set; } = 0;
 
     /// <summary>
     /// 成本要素变更记录列表（外键在子表 TaktCostElementChangeLog.CostElementId）
@@ -162,11 +167,6 @@ public class TaktCostElementQueryDto : TaktPagedQuery
     public int? CostElementLevel { get; set; }
 
     /// <summary>
-    /// 成本要素状态（1=启用，0=禁用）
-    /// </summary>
-    public int? CostElementStatus { get; set; }
-
-    /// <summary>
     /// 生效日期（范围查询-开始）
     /// </summary>
     public DateTime? ValidFromStart { get; set; }
@@ -187,9 +187,19 @@ public class TaktCostElementQueryDto : TaktPagedQuery
     public DateTime? ValidToEnd { get; set; }
 
     /// <summary>
+    /// 关联工厂
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
     /// 排序号
     /// </summary>
     public int? SortOrder { get; set; }
+
+    /// <summary>
+    /// 成本要素状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// </summary>
+    public int? CostElementStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -232,7 +242,7 @@ public class TaktCostElementCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -249,14 +259,14 @@ public class TaktCostElementCreateDto
     public string CostElementName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 成本要素类型（0=初级，1=次级）
+    /// 成本要素类型（字典 accounting_cost_element_type；0=初级，1=次级；由 KATYP 推导）
     /// </summary>
     public int CostElementType { get; set; } = 0;
 
     /// <summary>
-    /// 成本要素类别（0=人工，1=材料，2=制造费用，3=其他）
+    /// 成本要素类别（字典 accounting_cost_element_category；SAP KATYP 整型值）
     /// </summary>
-    public int CostElementCategory { get; set; } = 0;
+    public int CostElementCategory { get; set; } = 1;
 
     /// <summary>
     /// 父级 ID
@@ -270,11 +280,6 @@ public class TaktCostElementCreateDto
     public int CostElementLevel { get; set; } = 0;
 
     /// <summary>
-    /// 成本要素状态（1=启用，0=禁用）
-    /// </summary>
-    public int CostElementStatus { get; set; } = 0;
-
-    /// <summary>
     /// 生效日期
     /// </summary>
     public DateTime ValidFrom { get; set; }
@@ -283,6 +288,17 @@ public class TaktCostElementCreateDto
     /// 失效日期
     /// </summary>
     public DateTime ValidTo { get; set; }
+
+    /// <summary>
+    /// 关联工厂
+    /// </summary>
+    [Required(ErrorMessage = "关联工厂不能为空")]
+    public string RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 成本要素状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// </summary>
+    public int CostElementStatus { get; set; } = 0;
 
     /// <summary>
     /// 成本要素变更记录列表（外键在子表 TaktCostElementChangeLog.CostElementId）（子表，级联保存）
@@ -339,9 +355,9 @@ public class TaktCostElementStatusDto
     public long CostElementId { get; set; }
 
     /// <summary>
-    /// 成本要素状态（1=启用，0=禁用）
+    /// 成本要素状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
-    [Required(ErrorMessage = "成本要素状态（1=启用，0=禁用）不能为空")]
+    [Required(ErrorMessage = "成本要素状态（字典 sys_normal_disable_status；1=启用，0=禁用）不能为空")]
     public int CostElementStatus { get; set; } = 0;
 }
 
@@ -420,9 +436,29 @@ public class TaktCostElementTemplateDto
     public int? CostElementLevel { get; set; }
 
     /// <summary>
-    /// 成本要素状态（1=启用，0=禁用）
+    /// 生效日期
+    /// </summary>
+    public DateTime? ValidFrom { get; set; }
+
+    /// <summary>
+    /// 失效日期
+    /// </summary>
+    public DateTime? ValidTo { get; set; }
+
+    /// <summary>
+    /// 关联工厂
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 成本要素状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
     public int? CostElementStatus { get; set; }
+
+    /// <summary>
+    /// 成本要素变更记录列表（外键在子表 TaktCostElementChangeLog.CostElementId）（子表，级联保存）
+    /// </summary>
+    public List<TaktCostElementChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -452,7 +488,7 @@ public class TaktCostElementImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -488,9 +524,29 @@ public class TaktCostElementImportDto
     public int? CostElementLevel { get; set; }
 
     /// <summary>
-    /// 成本要素状态（1=启用，0=禁用）
+    /// 生效日期
+    /// </summary>
+    public DateTime? ValidFrom { get; set; }
+
+    /// <summary>
+    /// 失效日期
+    /// </summary>
+    public DateTime? ValidTo { get; set; }
+
+    /// <summary>
+    /// 关联工厂
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 成本要素状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
     public int? CostElementStatus { get; set; }
+
+    /// <summary>
+    /// 成本要素变更记录列表（外键在子表 TaktCostElementChangeLog.CostElementId）（子表，级联保存）
+    /// </summary>
+    public List<TaktCostElementChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -536,14 +592,14 @@ public class TaktCostElementExportDto
     public string CostElementName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 成本要素类型（0=初级，1=次级）
+    /// 成本要素类型（字典 accounting_cost_element_type；0=初级，1=次级；由 KATYP 推导）
     /// </summary>
     public int CostElementType { get; set; } = 0;
 
     /// <summary>
-    /// 成本要素类别（0=人工，1=材料，2=制造费用，3=其他）
+    /// 成本要素类别（字典 accounting_cost_element_category；SAP KATYP 整型值）
     /// </summary>
-    public int CostElementCategory { get; set; } = 0;
+    public int CostElementCategory { get; set; } = 1;
 
     /// <summary>
     /// 父级 ID
@@ -557,11 +613,6 @@ public class TaktCostElementExportDto
     public int CostElementLevel { get; set; } = 0;
 
     /// <summary>
-    /// 成本要素状态（1=启用，0=禁用）
-    /// </summary>
-    public int CostElementStatus { get; set; } = 0;
-
-    /// <summary>
     /// 生效日期
     /// </summary>
     public DateTime ValidFrom { get; set; }
@@ -572,9 +623,19 @@ public class TaktCostElementExportDto
     public DateTime ValidTo { get; set; }
 
     /// <summary>
+    /// 关联工厂
+    /// </summary>
+    public string RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
     /// 排序号
     /// </summary>
     public int SortOrder { get; set; } = 0;
+
+    /// <summary>
+    /// 成本要素状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// </summary>
+    public int CostElementStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

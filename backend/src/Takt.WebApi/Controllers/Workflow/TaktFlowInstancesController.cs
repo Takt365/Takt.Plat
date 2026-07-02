@@ -57,6 +57,26 @@ public class TaktFlowInstancesController : TaktControllerBase
     }
 
     /// <summary>
+    /// 获取流程实例统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>流程实例统计</returns>
+    [TaktPermission("workflow:instance:list", "流程实例统计")]
+    [HttpGet("instance-stat")]
+    public async Task<IActionResult> GetWorkflowInstanceStatAsync([FromQuery] TaktWorkflowInstanceStatQueryDto queryDto)
+    {
+        try
+        {
+            var result = await _flowInstanceService.GetWorkflowInstanceStatAsync(queryDto);
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
     /// 根据ID获取流程实例
     /// </summary>
     /// <param name="id">流程实例ID</param>

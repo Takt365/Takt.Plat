@@ -65,6 +65,8 @@
       :master-row-selection="rowSelection"
       master-id-column-key="salesOrderId"
       :master-visible-column-keys="visibleColumnKeys"
+      master-table-mode="masterDetailMaster"
+      master-scroll-layout="masterDetailLr"
       :master-total="total"
       master-entity-scope="company"
       @master-change="handleTableChange"
@@ -76,27 +78,27 @@
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'orderStatus'">
           <a-switch
-            :checked="getSalesOrderField(record, 'orderStatus') === 1"
+            :checked="getSalesOrderDictValue(record, 'orderStatus') === 1"
             :checked-children="t('common.page.button.enable')" :un-checked-children="t('common.page.button.disable')"
             @change="(checked: unknown) => handleOrderStatusChange(record, Boolean(checked))"
           />
         </template>
-        <template v-else-if="column.key === 'deliveryStatus'">
-          <TaktDictTag
-            :value="getSalesOrderField(record, 'deliveryStatus')"
-            dict-type="logistics_delivery_status"
-          />
-        </template>
         <template v-else-if="column.key === 'deliveryMethod'">
           <TaktDictTag
-            :value="getSalesOrderField(record, 'deliveryMethod')"
+            :value="getSalesOrderDictValue(record, 'deliveryMethod')"
             dict-type="logistics_delivery_method_type"
           />
         </template>
         <template v-else-if="column.key === 'paymentMethod'">
           <TaktDictTag
-            :value="getSalesOrderField(record, 'paymentMethod')"
-            dict-type="logistics_payment_method_type"
+            :value="getSalesOrderDictValue(record, 'paymentMethod')"
+            dict-type="accounting_payment_method_type"
+          />
+        </template>
+        <template v-else-if="column.key === 'deliveryStatus'">
+          <TaktDictTag
+            :value="getSalesOrderDictValue(record, 'deliveryStatus')"
+            dict-type="logistics_delivery_status"
           />
         </template>
       </template>
@@ -137,21 +139,20 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="t('entity.salesorder.plantcode')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('plantCode')">
+        <TaktSelect
           v-model:value="advancedQueryForm.plantCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesorder.plantcode') })"
-          show-count
-          :maxlength="50"
+          api-url="TaktPlants/options"
+          :placeholder="pi.queryPh('plantCode', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('salesOrderCode')">
-      <a-form-item :label="t('entity.salesorder.code')">
+      <a-form-item :label="pi.queryLabel('salesOrderCode')">
         <a-input
           v-model:value="advancedQueryForm.salesOrderCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesorder.code') })"
+          :placeholder="pi.queryPh('salesOrderCode', 'required')"
           show-count
           :maxlength="50"
           allow-clear
@@ -159,21 +160,20 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('customerCode')">
-      <a-form-item :label="t('entity.salesorder.customercode')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('customerCode')">
+        <TaktSelect
           v-model:value="advancedQueryForm.customerCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesorder.customercode') })"
-          show-count
-          :maxlength="50"
+          api-url="TaktCustomers/options"
+          :placeholder="pi.queryPh('customerCode', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('customerName')">
-      <a-form-item :label="t('entity.salesorder.customername')">
+      <a-form-item :label="pi.queryLabel('customerName')">
         <a-input
           v-model:value="advancedQueryForm.customerName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesorder.customername') })"
+          :placeholder="pi.queryPh('customerName', 'required')"
           show-count
           :maxlength="200"
           allow-clear
@@ -181,216 +181,215 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('orderDateStart')">
-      <a-form-item :label="t('entity.salesorder.orderdatestart')">
+      <a-form-item :label="pi.queryLabel('orderDateStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.orderDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesorder.orderdatestart') })"
+          :placeholder="pi.queryPh('orderDateStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('orderDateEnd')">
-      <a-form-item :label="t('entity.salesorder.orderdateend')">
+      <a-form-item :label="pi.queryLabel('orderDateEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.orderDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesorder.orderdateend') })"
+          :placeholder="pi.queryPh('orderDateEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('requiredDeliveryDateStart')">
-      <a-form-item :label="t('entity.salesorder.requireddeliverydatestart')">
+      <a-form-item :label="pi.queryLabel('requiredDeliveryDateStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.requiredDeliveryDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesorder.requireddeliverydatestart') })"
+          :placeholder="pi.queryPh('requiredDeliveryDateStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('requiredDeliveryDateEnd')">
-      <a-form-item :label="t('entity.salesorder.requireddeliverydateend')">
+      <a-form-item :label="pi.queryLabel('requiredDeliveryDateEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.requiredDeliveryDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesorder.requireddeliverydateend') })"
+          :placeholder="pi.queryPh('requiredDeliveryDateEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('actualDeliveryDateStart')">
-      <a-form-item :label="t('entity.salesorder.actualdeliverydatestart')">
+      <a-form-item :label="pi.queryLabel('actualDeliveryDateStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.actualDeliveryDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesorder.actualdeliverydatestart') })"
+          :placeholder="pi.queryPh('actualDeliveryDateStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('actualDeliveryDateEnd')">
-      <a-form-item :label="t('entity.salesorder.actualdeliverydateend')">
+      <a-form-item :label="pi.queryLabel('actualDeliveryDateEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.actualDeliveryDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesorder.actualdeliverydateend') })"
+          :placeholder="pi.queryPh('actualDeliveryDateEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('salesBy')">
-      <a-form-item :label="t('entity.salesorder.salesby')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('salesBy')">
+        <TaktSelect
           v-model:value="advancedQueryForm.salesBy"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesorder.salesby') })"
-          show-count
-          :maxlength="50"
+          api-url="TaktEmployees/options"
+          :placeholder="pi.queryPh('salesBy', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('totalQuantity')">
-      <a-form-item :label="t('entity.salesorder.totalquantity')">
+      <a-form-item :label="pi.queryLabel('totalQuantity')">
         <a-input-number
           v-model:value="advancedQueryForm.totalQuantity"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesorder.totalquantity') })"
+          :placeholder="pi.queryPh('totalQuantity', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('totalAmount')">
-      <a-form-item :label="t('entity.salesorder.totalamount')">
+      <a-form-item :label="pi.queryLabel('totalAmount')">
         <a-input-number
           v-model:value="advancedQueryForm.totalAmount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesorder.totalamount') })"
+          :placeholder="pi.queryPh('totalAmount', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('discountAmount')">
-      <a-form-item :label="t('entity.salesorder.discountamount')">
+      <a-form-item :label="pi.queryLabel('discountAmount')">
         <a-input-number
           v-model:value="advancedQueryForm.discountAmount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesorder.discountamount') })"
+          :placeholder="pi.queryPh('discountAmount', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('taxAmount')">
-      <a-form-item :label="t('entity.salesorder.taxamount')">
+      <a-form-item :label="pi.queryLabel('taxAmount')">
         <a-input-number
           v-model:value="advancedQueryForm.taxAmount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesorder.taxamount') })"
+          :placeholder="pi.queryPh('taxAmount', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('actualAmount')">
-      <a-form-item :label="t('entity.salesorder.actualamount')">
+      <a-form-item :label="pi.queryLabel('actualAmount')">
         <a-input-number
           v-model:value="advancedQueryForm.actualAmount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesorder.actualamount') })"
+          :placeholder="pi.queryPh('actualAmount', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('shippedQuantity')">
-      <a-form-item :label="t('entity.salesorder.shippedquantity')">
+      <a-form-item :label="pi.queryLabel('shippedQuantity')">
         <a-input-number
           v-model:value="advancedQueryForm.shippedQuantity"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesorder.shippedquantity') })"
+          :placeholder="pi.queryPh('shippedQuantity', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('shippedAmount')">
-      <a-form-item :label="t('entity.salesorder.shippedamount')">
+      <a-form-item :label="pi.queryLabel('shippedAmount')">
         <a-input-number
           v-model:value="advancedQueryForm.shippedAmount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesorder.shippedamount') })"
+          :placeholder="pi.queryPh('shippedAmount', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('receivedAmount')">
-      <a-form-item :label="t('entity.salesorder.receivedamount')">
+      <a-form-item :label="pi.queryLabel('receivedAmount')">
         <a-input-number
           v-model:value="advancedQueryForm.receivedAmount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesorder.receivedamount') })"
+          :placeholder="pi.queryPh('receivedAmount', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('orderStatus')">
-      <a-form-item :label="t('entity.salesorder.orderstatus')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.orderStatus"
-          dict-type="sys_normal_disable_status"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesorder.orderstatus') })"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('deliveryStatus')">
-      <a-form-item :label="t('entity.salesorder.deliverystatus')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.deliveryStatus"
-          dict-type="logistics_delivery_status"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesorder.deliverystatus') })"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
       <div v-show="isFieldVisible('deliveryMethod')">
-      <a-form-item :label="t('entity.salesorder.deliverymethod')">
+      <a-form-item :label="pi.queryLabel('deliveryMethod')">
         <TaktSelect
           v-model:value="advancedQueryForm.deliveryMethod"
           dict-type="logistics_delivery_method_type"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesorder.deliverymethod') })"
+          :placeholder="pi.queryPh('deliveryMethod', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('paymentMethod')">
-      <a-form-item :label="t('entity.salesorder.paymentmethod')">
+      <a-form-item :label="pi.queryLabel('paymentMethod')">
         <TaktSelect
           v-model:value="advancedQueryForm.paymentMethod"
-          dict-type="logistics_payment_method_type"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesorder.paymentmethod') })"
+          dict-type="accounting_payment_method_type"
+          :placeholder="pi.queryPh('paymentMethod', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('deliveryAddress')">
-      <a-form-item :label="t('entity.salesorder.deliveryaddress')">
+      <a-form-item :label="pi.queryLabel('deliveryAddress')">
         <a-textarea
           v-model:value="advancedQueryForm.deliveryAddress"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.salesorder.deliveryaddress') })"
+          :placeholder="pi.queryPh('deliveryAddress', 'optional')"
           :rows="2"
           allow-clear
         />
       </a-form-item>
       </div>
+      <div v-show="isFieldVisible('orderStatus')">
+      <a-form-item :label="pi.queryLabel('orderStatus')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.orderStatus"
+          dict-type="sys_normal_disable_status"
+          :placeholder="pi.queryPh('orderStatus', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('deliveryStatus')">
+      <a-form-item :label="pi.queryLabel('deliveryStatus')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.deliveryStatus"
+          dict-type="logistics_delivery_status"
+          :placeholder="pi.queryPh('deliveryStatus', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="t('common.page.entity.createdatstart')">
+      <a-form-item :label="pi.queryLabel('createdAtStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          :placeholder="pi.queryPh('createdAtStart', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="t('common.page.entity.createdatend')">
+      <a-form-item :label="pi.queryLabel('createdAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          :placeholder="pi.queryPh('createdAtEnd', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -410,7 +409,7 @@
             >
               <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
             </a-tooltip>
-            <span>{{ t('common.page.entity.extfield') }}</span>
+            <span>{{ pi.queryLabel('extField') }}</span>
           </span>
         </template>
         <a-textarea
@@ -424,10 +423,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="t('common.page.entity.remark')">
+      <a-form-item :label="pi.queryLabel('remark')">
         <a-textarea
           v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+          :placeholder="pi.queryPh('remark', 'optional')"
             :rows="4"
             show-count
             :maxlength="400"
@@ -441,14 +440,15 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.salesorder._self') })"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.salesorder._self"
+        v-if="importVisible"
+        :entity-i18n-key="SALESORDER_SELF_I18N_KEY"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -467,7 +467,7 @@
       :id-column-key="'salesOrderId'"
       :action-column-key="'action'"
       entity-scope="company"
-      table-mode="single"
+      table-mode="masterDetailMaster"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -487,13 +487,25 @@ import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import SalesOrderForm from './components/order-form.vue'
 import SalesOrderChangeLogPanel from './components/order-change-log-panel.vue'
-import { provideSalesOrderMasterContext } from './composables/use-order-master-context'
+import { provideSalesOrderMasterContext, type SalesOrderRowRecord } from './composables/use-order-master-context'
 import { getSalesOrderList, getSalesOrderById, createSalesOrder, updateSalesOrder, deleteSalesOrderById, deleteSalesOrderBatch, getSalesOrderTemplate, importSalesOrder, exportSalesOrder, updateSalesOrderStatus } from '@/api/logistics/sales/order'
 import type { SalesOrder, SalesOrderQuery } from '@/types/logistics/sales/order'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+
+import {
+  useSalesOrderI18n,
+  SALESORDER_LIST_FIELDS,
+  SALESORDER_QUERY_STRING_FIELDS,
+  SALESORDER_QUERY_FIELDS,
+  SALESORDER_SELF_I18N_KEY,
+} from './composables/use-order-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = useSalesOrderI18n()
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -501,7 +513,7 @@ const { t } = useI18n()
 const excelNames = taktExcelEntityNames('TaktSalesOrder')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.salesorder._self') })
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() })
 )
 
 /** 快捷查询关键字 */
@@ -517,9 +529,9 @@ const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
-const selectedRow = ref<SalesOrder | null>(null)
+const selectedRow = ref<SalesOrderRowRecord | null>(null)
 /** 表格多选行 */
-const selectedRows = ref<SalesOrder[]>([])
+const selectedRows = ref<SalesOrderRowRecord[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 
@@ -536,68 +548,37 @@ const formRef = ref()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
+/**
+ * 创建空的高级查询表单
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(SALESORDER_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof SALESORDER_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  return {
+    ...form,
+    totalQuantity: undefined as number | undefined,
+    totalAmount: undefined as number | undefined,
+    discountAmount: undefined as number | undefined,
+    taxAmount: undefined as number | undefined,
+    actualAmount: undefined as number | undefined,
+    shippedQuantity: undefined as number | undefined,
+    shippedAmount: undefined as number | undefined,
+    receivedAmount: undefined as number | undefined,
+    deliveryMethod: undefined as number | undefined,
+    paymentMethod: undefined as number | undefined,
+    orderStatus: undefined as number | undefined,
+    deliveryStatus: undefined as number | undefined,
+  }
+}
 /** 高级查询表单模型 */
-const advancedQueryForm = ref({
-  plantCode: '',
-  salesOrderCode: '',
-  customerCode: '',
-  customerName: '',
-  orderDateStart: '',
-  orderDateEnd: '',
-  requiredDeliveryDateStart: '',
-  requiredDeliveryDateEnd: '',
-  actualDeliveryDateStart: '',
-  actualDeliveryDateEnd: '',
-  salesBy: '',
-  totalQuantity: undefined as number | undefined,
-  totalAmount: undefined as number | undefined,
-  discountAmount: undefined as number | undefined,
-  taxAmount: undefined as number | undefined,
-  actualAmount: undefined as number | undefined,
-  shippedQuantity: undefined as number | undefined,
-  shippedAmount: undefined as number | undefined,
-  receivedAmount: undefined as number | undefined,
-  orderStatus: undefined as number | undefined,
-  deliveryStatus: undefined as number | undefined,
-  deliveryMethod: undefined as number | undefined,
-  paymentMethod: undefined as number | undefined,
-  deliveryAddress: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-})
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 /** 高级查询字段元数据（列显隐配置） */
-const queryFieldsMeta = computed(() => [
-  { key: 'plantCode', label: t('entity.salesorder.plantcode') },
-  { key: 'salesOrderCode', label: t('entity.salesorder.code') },
-  { key: 'customerCode', label: t('entity.salesorder.customercode') },
-  { key: 'customerName', label: t('entity.salesorder.customername') },
-  { key: 'orderDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.salesorder.orderdate')) },
-  { key: 'orderDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.salesorder.orderdate')) },
-  { key: 'requiredDeliveryDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.salesorder.requireddeliverydate')) },
-  { key: 'requiredDeliveryDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.salesorder.requireddeliverydate')) },
-  { key: 'actualDeliveryDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.salesorder.actualdeliverydate')) },
-  { key: 'actualDeliveryDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.salesorder.actualdeliverydate')) },
-  { key: 'salesBy', label: t('entity.salesorder.salesby') },
-  { key: 'totalQuantity', label: t('entity.salesorder.totalquantity') },
-  { key: 'totalAmount', label: t('entity.salesorder.totalamount') },
-  { key: 'discountAmount', label: t('entity.salesorder.discountamount') },
-  { key: 'taxAmount', label: t('entity.salesorder.taxamount') },
-  { key: 'actualAmount', label: t('entity.salesorder.actualamount') },
-  { key: 'shippedQuantity', label: t('entity.salesorder.shippedquantity') },
-  { key: 'shippedAmount', label: t('entity.salesorder.shippedamount') },
-  { key: 'receivedAmount', label: t('entity.salesorder.receivedamount') },
-  { key: 'orderStatus', label: t('entity.salesorder.orderstatus') },
-  { key: 'deliveryStatus', label: t('entity.salesorder.deliverystatus') },
-  { key: 'deliveryMethod', label: t('entity.salesorder.deliverymethod') },
-  { key: 'paymentMethod', label: t('entity.salesorder.paymentmethod') },
-  { key: 'deliveryAddress', label: t('entity.salesorder.deliveryaddress') },
-  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
-  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+const queryFieldsMeta = computed(() =>
+  SALESORDER_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -641,17 +622,9 @@ function buildListQuery(overrides?: Partial<SalesOrderQuery>): SalesOrderQuery {
       query[key] = v as never
     }
   }
-  assignTrimmed('plantCode', form.plantCode)
-  assignTrimmed('salesOrderCode', form.salesOrderCode)
-  assignTrimmed('customerCode', form.customerCode)
-  assignTrimmed('customerName', form.customerName)
-  assignTrimmed('orderDateStart', form.orderDateStart)
-  assignTrimmed('orderDateEnd', form.orderDateEnd)
-  assignTrimmed('requiredDeliveryDateStart', form.requiredDeliveryDateStart)
-  assignTrimmed('requiredDeliveryDateEnd', form.requiredDeliveryDateEnd)
-  assignTrimmed('actualDeliveryDateStart', form.actualDeliveryDateStart)
-  assignTrimmed('actualDeliveryDateEnd', form.actualDeliveryDateEnd)
-  assignTrimmed('salesBy', form.salesBy)
+  for (const key of SALESORDER_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
+  }
   if (form.totalQuantity !== undefined && form.totalQuantity !== null) {
     query.totalQuantity = form.totalQuantity
   }
@@ -676,23 +649,18 @@ function buildListQuery(overrides?: Partial<SalesOrderQuery>): SalesOrderQuery {
   if (form.receivedAmount !== undefined && form.receivedAmount !== null) {
     query.receivedAmount = form.receivedAmount
   }
-  if (form.orderStatus !== undefined && form.orderStatus !== null) {
-    query.orderStatus = form.orderStatus
-  }
-  if (form.deliveryStatus !== undefined && form.deliveryStatus !== null) {
-    query.deliveryStatus = form.deliveryStatus
-  }
   if (form.deliveryMethod !== undefined && form.deliveryMethod !== null) {
     query.deliveryMethod = form.deliveryMethod
   }
   if (form.paymentMethod !== undefined && form.paymentMethod !== null) {
     query.paymentMethod = form.paymentMethod
   }
-  assignTrimmed('deliveryAddress', form.deliveryAddress)
-  assignTrimmed('createdAtStart', form.createdAtStart)
-  assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('extField', form.extField)
-  assignTrimmed('remark', form.remark)
+  if (form.orderStatus !== undefined && form.orderStatus !== null) {
+    query.orderStatus = form.orderStatus
+  }
+  if (form.deliveryStatus !== undefined && form.deliveryStatus !== null) {
+    query.deliveryStatus = form.deliveryStatus
+  }
   return query
 }
 /** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
@@ -707,7 +675,7 @@ onMounted(async () => {
 const selectedMasterKey = ref('')
 
 /** 同步主表选中行到右侧明细（子表由 *-panel watch 自动 reload） */
-function syncMasterSelection(record: SalesOrder | null) {
+function syncMasterSelection(record: SalesOrderRowRecord | null) {
   selectedMasterRow.value = record
   selectedMasterKey.value = record ? getSalesOrderId(record) : ''
 }
@@ -717,7 +685,7 @@ function syncMasterSelection(record: SalesOrder | null) {
  * @param record 主表行
  */
 function handleMasterSelect(record: Record<string, unknown>) {
-  const row = record as unknown as SalesOrder
+  const row = record as unknown as SalesOrderRowRecord
   const key = getSalesOrderId(row)
   selectedRowKeys.value = [key]
   selectedRows.value = [row]
@@ -735,7 +703,7 @@ function handleMasterPaginationChange(_page: number, _pageSize: number) {
 }
 
 /** 加载主表详情并回填当前页 dataSource */
-async function loadSalesOrderDetail(record: SalesOrder): Promise<SalesOrder | null> {
+async function loadSalesOrderDetail(record: SalesOrderRowRecord): Promise<SalesOrder | null> {
   const id = getSalesOrderId(record)
   if (!id) {
     return null
@@ -766,7 +734,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesOrderField(record, 'salesOrderId') ?? ''
   },
   {
-    title: t('entity.salesorder.plantcode'),
+    title: pi.label('plantCode'),
     dataIndex: 'plantCode',
     key: 'plantCode',
     width: 120,
@@ -775,7 +743,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesOrderField(record, 'plantCode') ?? ''
   },
   {
-    title: t('entity.salesorder.code'),
+    title: pi.label('salesOrderCode'),
     dataIndex: 'salesOrderCode',
     key: 'salesOrderCode',
     width: 120,
@@ -784,7 +752,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesOrderField(record, 'salesOrderCode') ?? ''
   },
   {
-    title: t('entity.salesorder.customercode'),
+    title: pi.label('customerCode'),
     dataIndex: 'customerCode',
     key: 'customerCode',
     width: 120,
@@ -793,7 +761,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesOrderField(record, 'customerCode') ?? ''
   },
   {
-    title: t('entity.salesorder.customername'),
+    title: pi.label('customerName'),
     dataIndex: 'customerName',
     key: 'customerName',
     width: 120,
@@ -802,7 +770,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesOrderField(record, 'customerName') ?? ''
   },
   {
-    title: t('entity.salesorder.orderdate'),
+    title: pi.label('orderDate'),
     dataIndex: 'orderDate',
     key: 'orderDate',
     width: 120,
@@ -811,7 +779,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesOrderField(record, 'orderDate') ?? ''
   },
   {
-    title: t('entity.salesorder.requireddeliverydate'),
+    title: pi.label('requiredDeliveryDate'),
     dataIndex: 'requiredDeliveryDate',
     key: 'requiredDeliveryDate',
     width: 120,
@@ -820,7 +788,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesOrderField(record, 'requiredDeliveryDate') ?? ''
   },
   {
-    title: t('entity.salesorder.actualdeliverydate'),
+    title: pi.label('actualDeliveryDate'),
     dataIndex: 'actualDeliveryDate',
     key: 'actualDeliveryDate',
     width: 120,
@@ -829,7 +797,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesOrderField(record, 'actualDeliveryDate') ?? ''
   },
   {
-    title: t('entity.salesorder.salesby'),
+    title: pi.label('salesBy'),
     dataIndex: 'salesBy',
     key: 'salesBy',
     width: 120,
@@ -838,7 +806,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesOrderField(record, 'salesBy') ?? ''
   },
   {
-    title: t('entity.salesorder.totalquantity'),
+    title: pi.label('totalQuantity'),
     dataIndex: 'totalQuantity',
     key: 'totalQuantity',
     width: 120,
@@ -847,7 +815,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesOrderField(record, 'totalQuantity') ?? ''
   },
   {
-    title: t('entity.salesorder.totalamount'),
+    title: pi.label('totalAmount'),
     dataIndex: 'totalAmount',
     key: 'totalAmount',
     width: 120,
@@ -856,7 +824,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesOrderField(record, 'totalAmount') ?? ''
   },
   {
-    title: t('entity.salesorder.discountamount'),
+    title: pi.label('discountAmount'),
     dataIndex: 'discountAmount',
     key: 'discountAmount',
     width: 120,
@@ -865,7 +833,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesOrderField(record, 'discountAmount') ?? ''
   },
   {
-    title: t('entity.salesorder.taxamount'),
+    title: pi.label('taxAmount'),
     dataIndex: 'taxAmount',
     key: 'taxAmount',
     width: 120,
@@ -874,7 +842,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesOrderField(record, 'taxAmount') ?? ''
   },
   {
-    title: t('entity.salesorder.actualamount'),
+    title: pi.label('actualAmount'),
     dataIndex: 'actualAmount',
     key: 'actualAmount',
     width: 120,
@@ -883,7 +851,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesOrderField(record, 'actualAmount') ?? ''
   },
   {
-    title: t('entity.salesorder.shippedquantity'),
+    title: pi.label('shippedQuantity'),
     dataIndex: 'shippedQuantity',
     key: 'shippedQuantity',
     width: 120,
@@ -892,7 +860,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesOrderField(record, 'shippedQuantity') ?? ''
   },
   {
-    title: t('entity.salesorder.shippedamount'),
+    title: pi.label('shippedAmount'),
     dataIndex: 'shippedAmount',
     key: 'shippedAmount',
     width: 120,
@@ -901,7 +869,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesOrderField(record, 'shippedAmount') ?? ''
   },
   {
-    title: t('entity.salesorder.receivedamount'),
+    title: pi.label('receivedAmount'),
     dataIndex: 'receivedAmount',
     key: 'receivedAmount',
     width: 120,
@@ -910,23 +878,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesOrderField(record, 'receivedAmount') ?? ''
   },
   {
-    title: t('entity.salesorder.orderstatus'),
-    dataIndex: 'orderStatus',
-    key: 'orderStatus',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: t('entity.salesorder.deliverystatus'),
-    dataIndex: 'deliveryStatus',
-    key: 'deliveryStatus',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: t('entity.salesorder.deliverymethod'),
+    title: pi.label('deliveryMethod'),
     dataIndex: 'deliveryMethod',
     key: 'deliveryMethod',
     width: 120,
@@ -934,7 +886,7 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
   },
   {
-    title: t('entity.salesorder.paymentmethod'),
+    title: pi.label('paymentMethod'),
     dataIndex: 'paymentMethod',
     key: 'paymentMethod',
     width: 120,
@@ -942,13 +894,29 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
   },
   {
-    title: t('entity.salesorder.deliveryaddress'),
+    title: pi.label('deliveryAddress'),
     dataIndex: 'deliveryAddress',
     key: 'deliveryAddress',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getSalesOrderField(record, 'deliveryAddress') ?? ''
+  },
+  {
+    title: pi.label('orderStatus'),
+    dataIndex: 'orderStatus',
+    key: 'orderStatus',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
+    title: pi.label('deliveryStatus'),
+    dataIndex: 'deliveryStatus',
+    key: 'deliveryStatus',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
   },
   CreateActionColumn({
     actions: [
@@ -958,7 +926,7 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiEditLine,
         permission: 'logistics:sales:order:update',
-        onClick: (record: SalesOrder) => handleEdit(record)
+        onClick: (record: SalesOrderRowRecord) => handleEdit(record)
       },
       {
         key: 'delete',
@@ -966,26 +934,51 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiDeleteBinLine,
         permission: 'logistics:sales:order:delete',
-        onClick: (record: SalesOrder) => handleDeleteOne(record)
+        onClick: (record: SalesOrderRowRecord) => handleDeleteOne(record)
       }
     ]
   })
 ])
 
 /** 表格 row-key（优先实体主键字段） */
-const getSalesOrderId = (record: any): string => record?.[entityIdName] ?? ''
+const getSalesOrderId = (record: SalesOrderRowRecord): string => {
+  const id = (record as Record<string, unknown>)?.[entityIdName]
+  return id != null ? String(id) : ''
+}
 /**
  * 读取行字段值
  * @param record 行数据
  * @param field 字段名
  */
 const getSalesOrderField = (record: any, field: string): any => record?.[field]
+/**
+ * 供 TaktDictTag 等组件使用的标量字典值
+ * @param record 行数据
+ * @param field 字段名
+ */
+const getSalesOrderDictValue = (
+  record: SalesOrderRowRecord,
+  field: string,
+): string | number | undefined => {
+  const value = (record as Record<string, unknown>)?.[field]
+  if (value === null || value === undefined) return undefined
+  if (typeof value === 'string' || typeof value === 'number') return value
+  return String(value)
+}
+
+/** 将行字段/字典值转为有限 number */
+const toSalesOrderNumber = (value: string | number | undefined | null): number => {
+  if (typeof value === 'number' && Number.isFinite(value)) return value
+  const num = Number(value ?? 0)
+  return Number.isFinite(num) ? num : 0
+}
+
 
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: SalesOrder[]) => {
+  onChange: (keys: (string | number)[], rows: SalesOrderRowRecord[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
@@ -995,16 +988,16 @@ const rowSelection = computed(() => ({
       syncMasterSelection(null)
     }
   },
-  onSelect: (record: SalesOrder, selected: boolean) => {
+  onSelect: (record: SalesOrderRowRecord, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
-    } else if (getSalesOrderId(selectedRow.value) === getSalesOrderId(record)) {
+    } else if (selectedRow.value && getSalesOrderId(selectedRow.value) === getSalesOrderId(record)) {
       selectedRow.value = null
       syncMasterSelection(null)
     }
   },
-  onSelectAll: (selected: boolean, selectedRowsData: SalesOrder[]) => {
+  onSelectAll: (selected: boolean, selectedRowsData: SalesOrderRowRecord[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
     syncMasterSelection(selectedRow.value)
   }
@@ -1059,11 +1052,11 @@ function handleReset() {
   shippedQuantity: undefined as number | undefined,
   shippedAmount: undefined as number | undefined,
   receivedAmount: undefined as number | undefined,
-  orderStatus: undefined as number | undefined,
-  deliveryStatus: undefined as number | undefined,
   deliveryMethod: undefined as number | undefined,
   paymentMethod: undefined as number | undefined,
   deliveryAddress: '',
+  orderStatus: undefined as number | undefined,
+  deliveryStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -1075,14 +1068,14 @@ function handleReset() {
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.salesorder._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = null
   formVisible.value = true
   nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗（主子表：先拉详情含子表） */
-async function handleEdit(record: SalesOrder) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.salesorder._self') })
+async function handleEdit(record: SalesOrderRowRecord) {
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
   formLoading.value = true
   try {
     const detail = await loadSalesOrderDetail(record)
@@ -1098,7 +1091,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.salesorder._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -1116,10 +1109,10 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateSalesOrder(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.salesorder._self') }))
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
       await createSalesOrder(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.salesorder._self') }))
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     formData.value = null
@@ -1150,15 +1143,22 @@ async function handleDownloadTemplate(sheetName?: string, fileName?: string): Pr
   return (res as any)?.data ?? res
 }
 
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importSalesOrder(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importSalesOrder(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
+
+      if (selectedMasterKey.value) {
+    salesOrderChangeLogPanelRef.value?.reload?.()
+      }
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
+  }
 }
 
 /** 关闭导入对话框 */
@@ -1192,24 +1192,24 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.salesorder._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: any) {
     logger.error('[SalesOrder] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.salesorder._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }
 }
 /** 删除单行 */
-async function handleDeleteOne(record: SalesOrder) {
+async function handleDeleteOne(record: SalesOrderRowRecord) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.salesorder._self'), name: t('common.tip.this.target', { target: t('entity.salesorder._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteSalesOrderById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.salesorder._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       selectedRowKeys.value = []
       selectedRows.value = []
       selectedRow.value = null
@@ -1221,18 +1221,18 @@ async function handleDeleteOne(record: SalesOrder) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.salesorder._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.salesorder._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteSalesOrderBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.salesorder._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       selectedRowKeys.value = []
       selectedRows.value = []
       selectedRow.value = null
@@ -1246,9 +1246,9 @@ async function handleDelete() {
  * @param record 当前行
  * @param checked 是否启用
  */
-async function handleOrderStatusChange(record: SalesOrder, checked: boolean) {
+async function handleOrderStatusChange(record: SalesOrderRowRecord, checked: boolean) {
   const newVal = checked ? 1 : 0
-  const oldVal = getSalesOrderField(record, 'orderStatus')
+  const oldVal = toSalesOrderNumber(getSalesOrderDictValue(record, 'orderStatus'))
   const id = getSalesOrderId(record)
   const row = dataSource.value.find((item) => getSalesOrderId(item) === id)
   if (row) {
@@ -1298,11 +1298,11 @@ function handleAdvancedQueryReset() {
   shippedQuantity: undefined as number | undefined,
   shippedAmount: undefined as number | undefined,
   receivedAmount: undefined as number | undefined,
-  orderStatus: undefined as number | undefined,
-  deliveryStatus: undefined as number | undefined,
   deliveryMethod: undefined as number | undefined,
   paymentMethod: undefined as number | undefined,
   deliveryAddress: '',
+  orderStatus: undefined as number | undefined,
+  deliveryStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Sales
 // 文件名称：TaktSalesOrderService.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-07-01
 // 创建人：Takt365(Cursor AI)
 // 功能描述：销售订单应用服务实现
 // 
@@ -106,12 +106,14 @@ public class TaktSalesOrderService : TaktServiceBase, ITaktSalesOrderService
         EnsureThreeLayerContext();
         var list = await _salesOrderRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.OrderStatus == 1,
-            x => x.CustomerName ?? string.Empty,
+            x => x.SalesOrderCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.CustomerName ?? e.Id.ToString(),
+            DictValue = e.SalesOrderCode,
+            DictLabel = string.IsNullOrWhiteSpace(e.CustomerName)
+                ? e.SalesOrderCode
+                : $"{e.SalesOrderCode} {e.CustomerName}",
         }).ToList();
     }
 
@@ -440,11 +442,11 @@ public class TaktSalesOrderService : TaktServiceBase, ITaktSalesOrderService
                 || SqlFunc.ToString(x.ShippedQuantity).Contains(keywords)
                 || SqlFunc.ToString(x.ShippedAmount).Contains(keywords)
                 || SqlFunc.ToString(x.ReceivedAmount).Contains(keywords)
-                || SqlFunc.ToString(x.OrderStatus).Contains(keywords)
-                || SqlFunc.ToString(x.DeliveryStatus).Contains(keywords)
                 || SqlFunc.ToString(x.DeliveryMethod).Contains(keywords)
                 || SqlFunc.ToString(x.PaymentMethod).Contains(keywords)
                 || (x.DeliveryAddress != null && x.DeliveryAddress.Contains(keywords))
+                || SqlFunc.ToString(x.OrderStatus).Contains(keywords)
+                || SqlFunc.ToString(x.DeliveryStatus).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.OrderDate).Contains(keywords)
@@ -519,16 +521,6 @@ public class TaktSalesOrderService : TaktServiceBase, ITaktSalesOrderService
             exp = exp.And(x => x.ReceivedAmount == queryDto.ReceivedAmount);
         }
 
-        if (queryDto?.OrderStatus.HasValue == true)
-        {
-            exp = exp.And(x => x.OrderStatus == queryDto.OrderStatus);
-        }
-
-        if (queryDto?.DeliveryStatus.HasValue == true)
-        {
-            exp = exp.And(x => x.DeliveryStatus == queryDto.DeliveryStatus);
-        }
-
         if (queryDto?.DeliveryMethod.HasValue == true)
         {
             exp = exp.And(x => x.DeliveryMethod == queryDto.DeliveryMethod);
@@ -542,6 +534,16 @@ public class TaktSalesOrderService : TaktServiceBase, ITaktSalesOrderService
         if (!string.IsNullOrEmpty(queryDto?.DeliveryAddress))
         {
             exp = exp.And(x => x.DeliveryAddress != null && x.DeliveryAddress.Contains(queryDto.DeliveryAddress));
+        }
+
+        if (queryDto?.OrderStatus.HasValue == true)
+        {
+            exp = exp.And(x => x.OrderStatus == queryDto.OrderStatus);
+        }
+
+        if (queryDto?.DeliveryStatus.HasValue == true)
+        {
+            exp = exp.And(x => x.DeliveryStatus == queryDto.DeliveryStatus);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

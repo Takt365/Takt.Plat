@@ -26,21 +26,21 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Sop;
 public class TaktSopExecScan : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 执行追溯 ID（关联 TaktSopExec.Id，选项 TaktSopExecs/options）
     /// </summary>
     [SugarColumn(ColumnName = "exec_id", ColumnDescription = "执行追溯ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ExecId { get; set; }
 
     /// <summary>
-    /// 工步执行明细 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工步执行明细 ID（关联 TaktSopExecStep.Id，选项 TaktSopExecSteps/options）
     /// </summary>
     [SugarColumn(ColumnName = "exec_step_id", ColumnDescription = "工步执行明细ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ExecStepId { get; set; }
 
     /// <summary>
-    /// 工步 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
     /// </summary>
     [SugarColumn(ColumnName = "step_id", ColumnDescription = "工步ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -53,13 +53,13 @@ public class TaktSopExecScan : TaktCompanyEntityBase
     public string ScannedBarcode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 期望物料编码
+    /// 期望物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
     /// </summary>
     [SugarColumn(ColumnName = "expected_material_code", ColumnDescription = "期望物料编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? ExpectedMaterialCode { get; set; }
 
     /// <summary>
-    /// 扫码结果（1=PASS，2=NG；字典 logistics_sop_scan_result_type）
+    /// 扫码结果（字典 logistics_sop_scan_result_type；1=PASS，2=NG）
     /// </summary>
     [SugarColumn(ColumnName = "scan_result", ColumnDescription = "扫码结果", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int ScanResult { get; set; } = 1;

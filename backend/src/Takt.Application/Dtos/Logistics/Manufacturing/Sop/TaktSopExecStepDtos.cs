@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopExecStepDtos.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SopExecStep 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSopExecStep 生成，请按需审阅）
 // 
@@ -225,7 +225,7 @@ public class TaktSopExecStepCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -346,6 +346,16 @@ public class TaktSopExecStepTemplateDto
     public int? StepNo { get; set; }
 
     /// <summary>
+    /// 开始时间
+    /// </summary>
+    public DateTime? StartedAt { get; set; }
+
+    /// <summary>
+    /// 结束时间
+    /// </summary>
+    public DateTime? EndedAt { get; set; }
+
+    /// <summary>
     /// 工步结果（1=合格，2=不合格，3=跳过；字典 logistics_sop_check_result_type）
     /// </summary>
     public int? StepResult { get; set; }
@@ -355,6 +365,11 @@ public class TaktSopExecStepTemplateDto
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ConfirmedBy { get; set; }
+
+    /// <summary>
+    /// 确认时间
+    /// </summary>
+    public DateTime? ConfirmedAt { get; set; }
 
     /// <summary>
     /// 是否禁止下一步（字典 sys_yes_no_type，扫码 NG 等）
@@ -389,7 +404,7 @@ public class TaktSopExecStepImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -411,6 +426,16 @@ public class TaktSopExecStepImportDto
     public int? StepNo { get; set; }
 
     /// <summary>
+    /// 开始时间
+    /// </summary>
+    public DateTime? StartedAt { get; set; }
+
+    /// <summary>
+    /// 结束时间
+    /// </summary>
+    public DateTime? EndedAt { get; set; }
+
+    /// <summary>
     /// 工步结果（1=合格，2=不合格，3=跳过；字典 logistics_sop_check_result_type）
     /// </summary>
     public int? StepResult { get; set; }
@@ -420,6 +445,11 @@ public class TaktSopExecStepImportDto
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ConfirmedBy { get; set; }
+
+    /// <summary>
+    /// 确认时间
+    /// </summary>
+    public DateTime? ConfirmedAt { get; set; }
 
     /// <summary>
     /// 是否禁止下一步（字典 sys_yes_no_type，扫码 NG 等）

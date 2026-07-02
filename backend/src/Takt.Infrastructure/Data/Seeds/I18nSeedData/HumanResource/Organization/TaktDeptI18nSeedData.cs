@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Organization
 // 文件名称：TaktDeptI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktDept 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -109,13 +109,13 @@ public class TaktDeptI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.dept.name", "zh-HK", "部门名称_hk", "部门名称"),
 
             // entity.dept.parentid
-            new TranslationSeedItem("entity.dept.parentid", "en-US", "父部门ID_us", "父部门ID（0表示根部门）"),
+            new TranslationSeedItem("entity.dept.parentid", "en-US", "父部门ID_us", "父部门（关联 TaktDept.Id，选项 TaktDepts/tree-options；0=根部门）"),
             // entity.dept.parentid
-            new TranslationSeedItem("entity.dept.parentid", "ja-JP", "父部门ID_jp", "父部门ID（0表示根部门）"),
+            new TranslationSeedItem("entity.dept.parentid", "ja-JP", "父部门ID_jp", "父部门（关联 TaktDept.Id，选项 TaktDepts/tree-options；0=根部门）"),
             // entity.dept.parentid
-            new TranslationSeedItem("entity.dept.parentid", "zh-CN", "父部门ID", "父部门ID（0表示根部门）"),
+            new TranslationSeedItem("entity.dept.parentid", "zh-CN", "父部门ID", "父部门（关联 TaktDept.Id，选项 TaktDepts/tree-options；0=根部门）"),
             // entity.dept.parentid
-            new TranslationSeedItem("entity.dept.parentid", "zh-HK", "父部门ID_hk", "父部门ID（0表示根部门）"),
+            new TranslationSeedItem("entity.dept.parentid", "zh-HK", "父部门ID_hk", "父部门（关联 TaktDept.Id，选项 TaktDepts/tree-options；0=根部门）"),
 
             // entity.dept.level
             new TranslationSeedItem("entity.dept.level", "en-US", "层级_us", "层级（1=一级部门，2=二级部门，以此类推）"),
@@ -136,40 +136,40 @@ public class TaktDeptI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.dept.path", "zh-HK", "部门路径_hk", "部门路径（如：/1/3/5/，用于快速查询子部门）"),
 
             // entity.dept.isleaf
-            new TranslationSeedItem("entity.dept.isleaf", "en-US", "是否叶子节点_us", "是否叶子节点（0=否，1=是）"),
+            new TranslationSeedItem("entity.dept.isleaf", "en-US", "是否叶子节点_us", "是否叶子节点（字典 sys_yes_no_type；0=否 1=是）"),
             // entity.dept.isleaf
-            new TranslationSeedItem("entity.dept.isleaf", "ja-JP", "是否叶子节点_jp", "是否叶子节点（0=否，1=是）"),
+            new TranslationSeedItem("entity.dept.isleaf", "ja-JP", "是否叶子节点_jp", "是否叶子节点（字典 sys_yes_no_type；0=否 1=是）"),
             // entity.dept.isleaf
-            new TranslationSeedItem("entity.dept.isleaf", "zh-CN", "是否叶子节点", "是否叶子节点（0=否，1=是）"),
+            new TranslationSeedItem("entity.dept.isleaf", "zh-CN", "是否叶子节点", "是否叶子节点（字典 sys_yes_no_type；0=否 1=是）"),
             // entity.dept.isleaf
-            new TranslationSeedItem("entity.dept.isleaf", "zh-HK", "是否叶子节点_hk", "是否叶子节点（0=否，1=是）"),
+            new TranslationSeedItem("entity.dept.isleaf", "zh-HK", "是否叶子节点_hk", "是否叶子节点（字典 sys_yes_no_type；0=否 1=是）"),
 
             // entity.dept.costcentercode
-            new TranslationSeedItem("entity.dept.costcentercode", "en-US", "成本中心编码_us", "成本中心编码（关联财务成本中心）"),
+            new TranslationSeedItem("entity.dept.costcentercode", "en-US", "成本中心编码_us", "成本中心编码（关联 TaktCostCenter.CostCenterCode，选项 TaktCostCenters/tree-options）"),
             // entity.dept.costcentercode
-            new TranslationSeedItem("entity.dept.costcentercode", "ja-JP", "成本中心编码_jp", "成本中心编码（关联财务成本中心）"),
+            new TranslationSeedItem("entity.dept.costcentercode", "ja-JP", "成本中心编码_jp", "成本中心编码（关联 TaktCostCenter.CostCenterCode，选项 TaktCostCenters/tree-options）"),
             // entity.dept.costcentercode
-            new TranslationSeedItem("entity.dept.costcentercode", "zh-CN", "成本中心编码", "成本中心编码（关联财务成本中心）"),
+            new TranslationSeedItem("entity.dept.costcentercode", "zh-CN", "成本中心编码", "成本中心编码（关联 TaktCostCenter.CostCenterCode，选项 TaktCostCenters/tree-options）"),
             // entity.dept.costcentercode
-            new TranslationSeedItem("entity.dept.costcentercode", "zh-HK", "成本中心编码_hk", "成本中心编码（关联财务成本中心）"),
+            new TranslationSeedItem("entity.dept.costcentercode", "zh-HK", "成本中心编码_hk", "成本中心编码（关联 TaktCostCenter.CostCenterCode，选项 TaktCostCenters/tree-options）"),
 
             // entity.dept.costcategory
-            new TranslationSeedItem("entity.dept.costcategory", "en-US", "费用类别_us", "费用类别（1=直接，2=间接）"),
+            new TranslationSeedItem("entity.dept.costcategory", "en-US", "费用类别_us", "费用类别（字典 hr_dept_cost_category；1=直接 2=间接）"),
             // entity.dept.costcategory
-            new TranslationSeedItem("entity.dept.costcategory", "ja-JP", "费用类别_jp", "费用类别（1=直接，2=间接）"),
+            new TranslationSeedItem("entity.dept.costcategory", "ja-JP", "费用类别_jp", "费用类别（字典 hr_dept_cost_category；1=直接 2=间接）"),
             // entity.dept.costcategory
-            new TranslationSeedItem("entity.dept.costcategory", "zh-CN", "费用类别", "费用类别（1=直接，2=间接）"),
+            new TranslationSeedItem("entity.dept.costcategory", "zh-CN", "费用类别", "费用类别（字典 hr_dept_cost_category；1=直接 2=间接）"),
             // entity.dept.costcategory
-            new TranslationSeedItem("entity.dept.costcategory", "zh-HK", "费用类别_hk", "费用类别（1=直接，2=间接）"),
+            new TranslationSeedItem("entity.dept.costcategory", "zh-HK", "费用类别_hk", "费用类别（字典 hr_dept_cost_category；1=直接 2=间接）"),
 
             // entity.dept.headuserid
-            new TranslationSeedItem("entity.dept.headuserid", "en-US", "部门负责人ID_us", "部门负责人ID（关联TaktUser.Id）"),
+            new TranslationSeedItem("entity.dept.headuserid", "en-US", "部门负责人ID_us", "部门负责人（关联 TaktUser.Id，选项 TaktUsers/options）"),
             // entity.dept.headuserid
-            new TranslationSeedItem("entity.dept.headuserid", "ja-JP", "部门负责人ID_jp", "部门负责人ID（关联TaktUser.Id）"),
+            new TranslationSeedItem("entity.dept.headuserid", "ja-JP", "部门负责人ID_jp", "部门负责人（关联 TaktUser.Id，选项 TaktUsers/options）"),
             // entity.dept.headuserid
-            new TranslationSeedItem("entity.dept.headuserid", "zh-CN", "部门负责人ID", "部门负责人ID（关联TaktUser.Id）"),
+            new TranslationSeedItem("entity.dept.headuserid", "zh-CN", "部门负责人ID", "部门负责人（关联 TaktUser.Id，选项 TaktUsers/options）"),
             // entity.dept.headuserid
-            new TranslationSeedItem("entity.dept.headuserid", "zh-HK", "部门负责人ID_hk", "部门负责人ID（关联TaktUser.Id）"),
+            new TranslationSeedItem("entity.dept.headuserid", "zh-HK", "部门负责人ID_hk", "部门负责人（关联 TaktUser.Id，选项 TaktUsers/options）"),
 
             // entity.dept.phone
             new TranslationSeedItem("entity.dept.phone", "en-US", "联系电话_us", "联系电话"),
@@ -198,32 +198,14 @@ public class TaktDeptI18nSeedData : ITaktSeedDataCoordinator
             // entity.dept.location
             new TranslationSeedItem("entity.dept.location", "zh-HK", "办公地点_hk", "办公地点"),
 
-            // entity.dept.status
-            new TranslationSeedItem("entity.dept.status", "en-US", "状态_us", "状态（1=启用，0=禁用）"),
-            // entity.dept.status
-            new TranslationSeedItem("entity.dept.status", "ja-JP", "状态_jp", "状态（1=启用，0=禁用）"),
-            // entity.dept.status
-            new TranslationSeedItem("entity.dept.status", "zh-CN", "状态", "状态（1=启用，0=禁用）"),
-            // entity.dept.status
-            new TranslationSeedItem("entity.dept.status", "zh-HK", "状态_hk", "状态（1=启用，0=禁用）"),
-
             // entity.dept.isbuiltin
-            new TranslationSeedItem("entity.dept.isbuiltin", "en-US", "是否内置_us", "是否内置（1=是，0=否） 种子部门为内置，不允许删除"),
+            new TranslationSeedItem("entity.dept.isbuiltin", "en-US", "内置_us", "内置（字典 sys_yes_no_type；0=否 1=是；种子部门为内置，不允许删除）"),
             // entity.dept.isbuiltin
-            new TranslationSeedItem("entity.dept.isbuiltin", "ja-JP", "是否内置_jp", "是否内置（1=是，0=否） 种子部门为内置，不允许删除"),
+            new TranslationSeedItem("entity.dept.isbuiltin", "ja-JP", "内置_jp", "内置（字典 sys_yes_no_type；0=否 1=是；种子部门为内置，不允许删除）"),
             // entity.dept.isbuiltin
-            new TranslationSeedItem("entity.dept.isbuiltin", "zh-CN", "是否内置", "是否内置（1=是，0=否） 种子部门为内置，不允许删除"),
+            new TranslationSeedItem("entity.dept.isbuiltin", "zh-CN", "内置", "内置（字典 sys_yes_no_type；0=否 1=是；种子部门为内置，不允许删除）"),
             // entity.dept.isbuiltin
-            new TranslationSeedItem("entity.dept.isbuiltin", "zh-HK", "是否内置_hk", "是否内置（1=是，0=否） 种子部门为内置，不允许删除"),
-
-            // entity.dept.sortorder
-            new TranslationSeedItem("entity.dept.sortorder", "en-US", "排序号_us", "排序号（同级部门排序）"),
-            // entity.dept.sortorder
-            new TranslationSeedItem("entity.dept.sortorder", "ja-JP", "排序号_jp", "排序号（同级部门排序）"),
-            // entity.dept.sortorder
-            new TranslationSeedItem("entity.dept.sortorder", "zh-CN", "排序号", "排序号（同级部门排序）"),
-            // entity.dept.sortorder
-            new TranslationSeedItem("entity.dept.sortorder", "zh-HK", "排序号_hk", "排序号（同级部门排序）"),
+            new TranslationSeedItem("entity.dept.isbuiltin", "zh-HK", "内置_hk", "内置（字典 sys_yes_no_type；0=否 1=是；种子部门为内置，不允许删除）"),
 
             // entity.dept.description
             new TranslationSeedItem("entity.dept.description", "en-US", "部门描述_us", "部门描述"),
@@ -234,23 +216,41 @@ public class TaktDeptI18nSeedData : ITaktSeedDataCoordinator
             // entity.dept.description
             new TranslationSeedItem("entity.dept.description", "zh-HK", "部门描述_hk", "部门描述"),
 
+            // entity.dept.sortorder
+            new TranslationSeedItem("entity.dept.sortorder", "en-US", "排序号_us", "排序号（同级部门排序）"),
+            // entity.dept.sortorder
+            new TranslationSeedItem("entity.dept.sortorder", "ja-JP", "排序号_jp", "排序号（同级部门排序）"),
+            // entity.dept.sortorder
+            new TranslationSeedItem("entity.dept.sortorder", "zh-CN", "排序号", "排序号（同级部门排序）"),
+            // entity.dept.sortorder
+            new TranslationSeedItem("entity.dept.sortorder", "zh-HK", "排序号_hk", "排序号（同级部门排序）"),
+
+            // entity.dept.status
+            new TranslationSeedItem("entity.dept.status", "en-US", "状态_us", "状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）"),
+            // entity.dept.status
+            new TranslationSeedItem("entity.dept.status", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）"),
+            // entity.dept.status
+            new TranslationSeedItem("entity.dept.status", "zh-CN", "状态", "状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）"),
+            // entity.dept.status
+            new TranslationSeedItem("entity.dept.status", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）"),
+
             // entity.dept.roledepts
-            new TranslationSeedItem("entity.dept.roledepts", "en-US", "角色数据权限关联该部门_us", "角色数据权限关联该部门（RBAC，表 takt_human_resource_organization_roledept）"),
+            new TranslationSeedItem("entity.dept.roledepts", "en-US", "角色数据权限关联该部门_us", "角色数据权限关联该部门（RBAC，表 takt_human_resource_organization_role_dept）"),
             // entity.dept.roledepts
-            new TranslationSeedItem("entity.dept.roledepts", "ja-JP", "角色数据权限关联该部门_jp", "角色数据权限关联该部门（RBAC，表 takt_human_resource_organization_roledept）"),
+            new TranslationSeedItem("entity.dept.roledepts", "ja-JP", "角色数据权限关联该部门_jp", "角色数据权限关联该部门（RBAC，表 takt_human_resource_organization_role_dept）"),
             // entity.dept.roledepts
-            new TranslationSeedItem("entity.dept.roledepts", "zh-CN", "角色数据权限关联该部门", "角色数据权限关联该部门（RBAC，表 takt_human_resource_organization_roledept）"),
+            new TranslationSeedItem("entity.dept.roledepts", "zh-CN", "角色数据权限关联该部门", "角色数据权限关联该部门（RBAC，表 takt_human_resource_organization_role_dept）"),
             // entity.dept.roledepts
-            new TranslationSeedItem("entity.dept.roledepts", "zh-HK", "角色数据权限关联该部门_hk", "角色数据权限关联该部门（RBAC，表 takt_human_resource_organization_roledept）"),
+            new TranslationSeedItem("entity.dept.roledepts", "zh-HK", "角色数据权限关联该部门_hk", "角色数据权限关联该部门（RBAC，表 takt_human_resource_organization_role_dept）"),
 
             // entity.dept.employeedepts
-            new TranslationSeedItem("entity.dept.employeedepts", "en-US", "员工部门关联_us", "员工部门关联（RBAC，表 takt_human_resource_organization_employeedept）"),
+            new TranslationSeedItem("entity.dept.employeedepts", "en-US", "员工部门关联_us", "员工部门关联（RBAC，表 takt_human_resource_organization_employee_dept）"),
             // entity.dept.employeedepts
-            new TranslationSeedItem("entity.dept.employeedepts", "ja-JP", "员工部门关联_jp", "员工部门关联（RBAC，表 takt_human_resource_organization_employeedept）"),
+            new TranslationSeedItem("entity.dept.employeedepts", "ja-JP", "员工部门关联_jp", "员工部门关联（RBAC，表 takt_human_resource_organization_employee_dept）"),
             // entity.dept.employeedepts
-            new TranslationSeedItem("entity.dept.employeedepts", "zh-CN", "员工部门关联", "员工部门关联（RBAC，表 takt_human_resource_organization_employeedept）"),
+            new TranslationSeedItem("entity.dept.employeedepts", "zh-CN", "员工部门关联", "员工部门关联（RBAC，表 takt_human_resource_organization_employee_dept）"),
             // entity.dept.employeedepts
-            new TranslationSeedItem("entity.dept.employeedepts", "zh-HK", "员工部门关联_hk", "员工部门关联（RBAC，表 takt_human_resource_organization_employeedept）"),
+            new TranslationSeedItem("entity.dept.employeedepts", "zh-HK", "员工部门关联_hk", "员工部门关联（RBAC，表 takt_human_resource_organization_employee_dept）"),
         };
     }
 

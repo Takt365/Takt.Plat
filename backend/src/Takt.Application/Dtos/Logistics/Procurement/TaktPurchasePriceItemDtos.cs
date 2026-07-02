@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Procurement
 // 文件名称：TaktPurchasePriceItemDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-27
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchasePriceItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPurchasePriceItem 生成，请按需审阅）
 // 
@@ -77,19 +77,24 @@ public class TaktPurchasePriceItemDto : TaktCompanyDtoBase
     public string PurchaseUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购价格（精确到分，存储为整数，单位为分）
+    /// 价格单位（字典 logistics_price_unit_param：1/100/1000/10000；默认 1000）
+    /// </summary>
+    public int PurchasePerUnit { get; set; } = 0;
+
+    /// <summary>
+    /// 采购价格（decimal(18,5)）
     /// </summary>
     public decimal PurchasePrice { get; set; }
 
     /// <summary>
     /// 最小采购量（基本单位数量）
     /// </summary>
-    public decimal MinPurchaseQuantity { get; set; }
+    public int MinPurchaseQuantity { get; set; } = 0;
 
     /// <summary>
     /// 最大采购量（基本单位数量，0表示无限制）
     /// </summary>
-    public decimal MaxPurchaseQuantity { get; set; }
+    public int MaxPurchaseQuantity { get; set; } = 0;
 
     /// <summary>
     /// 排序号（越小越靠前）
@@ -161,19 +166,24 @@ public class TaktPurchasePriceItemQueryDto : TaktPagedQuery
     public string? PurchaseUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购价格（精确到分，存储为整数，单位为分）
+    /// 价格单位（字典 logistics_price_unit_param：1/100/1000/10000；默认 1000）
+    /// </summary>
+    public int? PurchasePerUnit { get; set; }
+
+    /// <summary>
+    /// 采购价格（decimal(18,5)）
     /// </summary>
     public decimal? PurchasePrice { get; set; }
 
     /// <summary>
     /// 最小采购量（基本单位数量）
     /// </summary>
-    public decimal? MinPurchaseQuantity { get; set; }
+    public int? MinPurchaseQuantity { get; set; }
 
     /// <summary>
     /// 最大采购量（基本单位数量，0表示无限制）
     /// </summary>
-    public decimal? MaxPurchaseQuantity { get; set; }
+    public int? MaxPurchaseQuantity { get; set; }
 
     /// <summary>
     /// 排序号（越小越靠前）
@@ -221,7 +231,7 @@ public class TaktPurchasePriceItemCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -265,24 +275,24 @@ public class TaktPurchasePriceItemCreateDto
     public string PurchaseUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购价格（精确到分，存储为整数，单位为分）
+    /// 价格单位（字典 logistics_price_unit_param：1/100/1000/10000；默认 1000）
+    /// </summary>
+    public int PurchasePerUnit { get; set; } = 0;
+
+    /// <summary>
+    /// 采购价格（decimal(18,5)）
     /// </summary>
     public decimal PurchasePrice { get; set; }
 
     /// <summary>
     /// 最小采购量（基本单位数量）
     /// </summary>
-    public decimal MinPurchaseQuantity { get; set; }
+    public int MinPurchaseQuantity { get; set; } = 0;
 
     /// <summary>
     /// 最大采购量（基本单位数量，0表示无限制）
     /// </summary>
-    public decimal MaxPurchaseQuantity { get; set; }
-
-    /// <summary>
-    /// 排序号（越小越靠前）
-    /// </summary>
-    public int SortOrder { get; set; } = 0;
+    public int MaxPurchaseQuantity { get; set; } = 0;
 
     /// <summary>
     /// 价格阶梯列表（主子表关系，一个物料价格可以有多个阶梯）（子表，级联保存）
@@ -401,9 +411,29 @@ public class TaktPurchasePriceItemTemplateDto
     public string? PurchaseUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 价格单位（字典 logistics_price_unit_param：1/100/1000/10000；默认 1000）
     /// </summary>
-    public int? SortOrder { get; set; }
+    public int? PurchasePerUnit { get; set; }
+
+    /// <summary>
+    /// 采购价格（decimal(18,5)）
+    /// </summary>
+    public decimal? PurchasePrice { get; set; }
+
+    /// <summary>
+    /// 最小采购量（基本单位数量）
+    /// </summary>
+    public int? MinPurchaseQuantity { get; set; }
+
+    /// <summary>
+    /// 最大采购量（基本单位数量，0表示无限制）
+    /// </summary>
+    public int? MaxPurchaseQuantity { get; set; }
+
+    /// <summary>
+    /// 价格阶梯列表（主子表关系，一个物料价格可以有多个阶梯）（子表，级联保存）
+    /// </summary>
+    public List<TaktPurchasePriceScaleCreateDto>? Scales { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -433,7 +463,7 @@ public class TaktPurchasePriceItemImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -474,9 +504,29 @@ public class TaktPurchasePriceItemImportDto
     public string? PurchaseUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号（越小越靠前）
+    /// 价格单位（字典 logistics_price_unit_param：1/100/1000/10000；默认 1000）
     /// </summary>
-    public int? SortOrder { get; set; }
+    public int? PurchasePerUnit { get; set; }
+
+    /// <summary>
+    /// 采购价格（decimal(18,5)）
+    /// </summary>
+    public decimal? PurchasePrice { get; set; }
+
+    /// <summary>
+    /// 最小采购量（基本单位数量）
+    /// </summary>
+    public int? MinPurchaseQuantity { get; set; }
+
+    /// <summary>
+    /// 最大采购量（基本单位数量，0表示无限制）
+    /// </summary>
+    public int? MaxPurchaseQuantity { get; set; }
+
+    /// <summary>
+    /// 价格阶梯列表（主子表关系，一个物料价格可以有多个阶梯）（子表，级联保存）
+    /// </summary>
+    public List<TaktPurchasePriceScaleCreateDto>? Scales { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -548,19 +598,24 @@ public class TaktPurchasePriceItemExportDto
     public string PurchaseUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购价格（精确到分，存储为整数，单位为分）
+    /// 价格单位（字典 logistics_price_unit_param：1/100/1000/10000；默认 1000）
+    /// </summary>
+    public int PurchasePerUnit { get; set; } = 0;
+
+    /// <summary>
+    /// 采购价格（decimal(18,5)）
     /// </summary>
     public decimal PurchasePrice { get; set; }
 
     /// <summary>
     /// 最小采购量（基本单位数量）
     /// </summary>
-    public decimal MinPurchaseQuantity { get; set; }
+    public int MinPurchaseQuantity { get; set; } = 0;
 
     /// <summary>
     /// 最大采购量（基本单位数量，0表示无限制）
     /// </summary>
-    public decimal MaxPurchaseQuantity { get; set; }
+    public int MaxPurchaseQuantity { get; set; } = 0;
 
     /// <summary>
     /// 排序号（越小越靠前）

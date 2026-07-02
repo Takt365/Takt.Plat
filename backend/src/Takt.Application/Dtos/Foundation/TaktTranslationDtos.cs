@@ -37,7 +37,7 @@ public class TaktTranslationDto : TaktTenantDtoBase
     public long TranslationId { get; set; }
 
     /// <summary>
-    /// 语言ID（关联 TaktCulture.Id）
+    /// 文化ID（关联 TaktCulture.Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long CultureId { get; set; }
@@ -48,12 +48,12 @@ public class TaktTranslationDto : TaktTenantDtoBase
     public string? CultureName { get; set; }
 
     /// <summary>
-    /// 区域文化编码（如：zh-CN, en-US, ja-JP）
+    /// 文化编码（关联 TaktCulture.CultureCode，选项 TaktCultures/options）
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 国际化翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；如 common.confirm）
+    /// 翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；如 common.confirm）
     /// </summary>
     public string I18nKey { get; set; } = string.Empty;
 
@@ -63,12 +63,12 @@ public class TaktTranslationDto : TaktTenantDtoBase
     public string TranslationText { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资源分组（用于分类管理翻译）
+    /// 资源分组（关联 TaktMenu.Id，选项 TaktMenus/tree-options）
     /// </summary>
     public string ResourceGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资源类别（字典 sys_resource_type；frontend=前端，backend=后端）
+    /// 资源类别（字典 sys_resource_type；frontend=前端 backend=后端）
     /// </summary>
     public string ResourceType { get; set; } = "frontend";
 
@@ -78,7 +78,7 @@ public class TaktTranslationDto : TaktTenantDtoBase
     public string? ContextNote { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化（多对一关联）
+    /// 文化（多对一关联）
     /// （主表：TaktCulture）
     /// </summary>
     public TaktCultureDto? Culture { get; set; }
@@ -101,18 +101,18 @@ public class TaktTranslationQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 语言ID（关联 TaktCulture.Id）
+    /// 文化ID（关联 TaktCulture.Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CultureId { get; set; }
 
     /// <summary>
-    /// 区域文化编码（如：zh-CN, en-US, ja-JP）
+    /// 文化编码（关联 TaktCulture.CultureCode，选项 TaktCultures/options）
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 国际化翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；如 common.confirm）
+    /// 翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；如 common.confirm）
     /// </summary>
     public string? I18nKey { get; set; } = string.Empty;
 
@@ -122,12 +122,12 @@ public class TaktTranslationQueryDto : TaktPagedQuery
     public string? TranslationText { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资源分组（用于分类管理翻译）
+    /// 资源分组（关联 TaktMenu.Id，选项 TaktMenus/tree-options）
     /// </summary>
     public string? ResourceGroup { get; set; }
 
     /// <summary>
-    /// 资源类别（字典 sys_resource_type；frontend=前端，backend=后端）
+    /// 资源类别（字典 sys_resource_type；frontend=前端 backend=后端）
     /// </summary>
     public string? ResourceType { get; set; }
 
@@ -172,21 +172,21 @@ public class TaktTranslationCreateDto
     public string TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 语言ID（关联 TaktCulture.Id）
+    /// 文化ID（关联 TaktCulture.Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long CultureId { get; set; }
 
     /// <summary>
-    /// 区域文化编码（如：zh-CN, en-US, ja-JP）
+    /// 文化编码（关联 TaktCulture.CultureCode，选项 TaktCultures/options）
     /// </summary>
-    [Required(ErrorMessage = "区域文化编码（如：zh-CN, en-US, ja-JP）不能为空")]
+    [Required(ErrorMessage = "文化编码不能为空")]
     public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 国际化翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；如 common.confirm）
+    /// 翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；如 common.confirm）
     /// </summary>
-    [Required(ErrorMessage = "国际化翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；如 common.confirm）不能为空")]
+    [Required(ErrorMessage = "翻译键不能为空")]
     public string I18nKey { get; set; } = string.Empty;
 
     /// <summary>
@@ -196,12 +196,12 @@ public class TaktTranslationCreateDto
     public string TranslationText { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资源分组（用于分类管理翻译）
+    /// 资源分组（关联 TaktMenu.Id，选项 TaktMenus/tree-options）
     /// </summary>
     public string ResourceGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资源类别（字典 sys_resource_type；frontend=前端，backend=后端）
+    /// 资源类别（字典 sys_resource_type；frontend=前端 backend=后端）
     /// </summary>
     public string ResourceType { get; set; } = "frontend";
 
@@ -257,18 +257,18 @@ public class TaktTranslationTemplateDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 语言ID（关联 TaktCulture.Id）
+    /// 文化ID（关联 TaktCulture.Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CultureId { get; set; }
 
     /// <summary>
-    /// 区域文化编码（如：zh-CN, en-US, ja-JP）
+    /// 文化编码（关联 TaktCulture.CultureCode，选项 TaktCultures/options）
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 国际化翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；如 common.confirm）
+    /// 翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；如 common.confirm）
     /// </summary>
     public string? I18nKey { get; set; } = string.Empty;
 
@@ -278,12 +278,12 @@ public class TaktTranslationTemplateDto
     public string? TranslationText { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资源分组（用于分类管理翻译）
+    /// 资源分组（关联 TaktMenu.Id，选项 TaktMenus/tree-options）
     /// </summary>
     public string? ResourceGroup { get; set; }
 
     /// <summary>
-    /// 资源类别（字典 sys_resource_type；frontend=前端，backend=后端）
+    /// 资源类别（字典 sys_resource_type；frontend=前端 backend=后端）
     /// </summary>
     public string? ResourceType { get; set; }
 
@@ -315,18 +315,18 @@ public class TaktTranslationImportDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 语言ID（关联 TaktCulture.Id）
+    /// 文化ID（关联 TaktCulture.Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CultureId { get; set; }
 
     /// <summary>
-    /// 区域文化编码（如：zh-CN, en-US, ja-JP）
+    /// 文化编码（关联 TaktCulture.CultureCode，选项 TaktCultures/options）
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 国际化翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；如 common.confirm）
+    /// 翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；如 common.confirm）
     /// </summary>
     public string? I18nKey { get; set; } = string.Empty;
 
@@ -336,12 +336,12 @@ public class TaktTranslationImportDto
     public string? TranslationText { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资源分组（用于分类管理翻译）
+    /// 资源分组（关联 TaktMenu.Id，选项 TaktMenus/tree-options）
     /// </summary>
     public string? ResourceGroup { get; set; }
 
     /// <summary>
-    /// 资源类别（字典 sys_resource_type；frontend=前端，backend=后端）
+    /// 资源类别（字典 sys_resource_type；frontend=前端 backend=后端）
     /// </summary>
     public string? ResourceType { get; set; }
 
@@ -379,18 +379,18 @@ public class TaktTranslationExportDto
     public long TranslationId { get; set; }
 
     /// <summary>
-    /// 语言ID（关联 TaktCulture.Id）
+    /// 文化ID（关联 TaktCulture.Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long CultureId { get; set; }
 
     /// <summary>
-    /// 区域文化编码（如：zh-CN, en-US, ja-JP）
+    /// 文化编码（关联 TaktCulture.CultureCode，选项 TaktCultures/options）
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 国际化翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；如 common.confirm）
+    /// 翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；如 common.confirm）
     /// </summary>
     public string I18nKey { get; set; } = string.Empty;
 
@@ -400,12 +400,12 @@ public class TaktTranslationExportDto
     public string TranslationText { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资源分组（用于分类管理翻译）
+    /// 资源分组（关联 TaktMenu.Id，选项 TaktMenus/tree-options）
     /// </summary>
     public string ResourceGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资源类别（字典 sys_resource_type；frontend=前端，backend=后端）
+    /// 资源类别（字典 sys_resource_type；frontend=前端 backend=后端）
     /// </summary>
     public string ResourceType { get; set; } = "frontend";
 
@@ -447,17 +447,17 @@ public class TaktTranslationTransposedDto
     public long TranslationId { get; set; }
 
     /// <summary>
-    /// 国际化翻译键（转置行键）
+    /// 翻译键（转置行键）
     /// </summary>
     public required string I18nKey { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资源分组
+    /// 资源分组（关联 TaktMenu.Id，选项 TaktMenus/tree-options）
     /// </summary>
     public string ResourceGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资源类别
+    /// 资源类别（字典 sys_resource_type；frontend=前端 backend=后端）
     /// </summary>
     public string ResourceType { get; set; } = "frontend";
 
@@ -483,17 +483,17 @@ public class TaktTranslationTransposedQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 语言ID
+    /// 文化ID
     /// </summary>
     public long? CultureId { get; set; }
 
     /// <summary>
-    /// 区域文化编码
+    /// 文化编码
     /// </summary>
     public string? CultureCode { get; set; }
 
     /// <summary>
-    /// 国际化翻译键
+    /// 翻译键
     /// </summary>
     public string? I18nKey { get; set; }
 
@@ -503,12 +503,12 @@ public class TaktTranslationTransposedQueryDto : TaktPagedQuery
     public string? TranslationText { get; set; }
 
     /// <summary>
-    /// 资源分组
+    /// 资源分组（关联 TaktMenu.Id，选项 TaktMenus/tree-options）
     /// </summary>
     public string? ResourceGroup { get; set; }
 
     /// <summary>
-    /// 资源类别
+    /// 资源类别（字典 sys_resource_type；frontend=前端 backend=后端）
     /// </summary>
     public string? ResourceType { get; set; }
 
@@ -557,7 +557,7 @@ public class TaktTranslationTransposedBatchDto
 public class TaktTranslationMessagesDto
 {
     /// <summary>
-    /// 区域文化编码（BCP47，如 zh-CN）
+    /// 文化编码（BCP47，如 zh-CN）
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 

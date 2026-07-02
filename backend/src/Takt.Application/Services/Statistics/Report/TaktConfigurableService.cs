@@ -1118,7 +1118,7 @@ public class TaktConfigurableService : TaktServiceBase, ITaktConfigurableService
                 || SqlFunc.ToString(x.IsPublic).Contains(keywords)
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
                 || SqlFunc.ToString(x.ReportStatus).Contains(keywords)
-                || (x.Description != null && x.Description.Contains(keywords))
+                || (x.ConfigurableDescription != null && x.ConfigurableDescription.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
@@ -1175,9 +1175,9 @@ public class TaktConfigurableService : TaktServiceBase, ITaktConfigurableService
             exp = exp.And(x => x.ReportStatus == queryDto.ReportStatus);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Description))
+        if (!string.IsNullOrEmpty(queryDto?.ConfigurableDescription))
         {
-            exp = exp.And(x => x.Description != null && x.Description.Contains(queryDto.Description));
+            exp = exp.And(x => x.ConfigurableDescription != null && x.ConfigurableDescription.Contains(queryDto.ConfigurableDescription));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

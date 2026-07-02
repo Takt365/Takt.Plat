@@ -26,14 +26,14 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Sop;
 public class TaktSopStepMedia : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工步 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
     /// </summary>
     [SugarColumn(ColumnName = "step_id", ColumnDescription = "工步ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long StepId { get; set; }
 
     /// <summary>
-    /// 媒体类型（1=图片JPG/PNG，2=视频MP4，3=PDF，4=3D轻量化；字典 logistics_sop_media_type）
+    /// 媒体类型（字典 logistics_sop_media_type；1=图片JPG/PNG，2=视频MP4，3=PDF，4=3D轻量化）
     /// </summary>
     [SugarColumn(ColumnName = "media_type", ColumnDescription = "媒体类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int MediaType { get; set; } = 1;

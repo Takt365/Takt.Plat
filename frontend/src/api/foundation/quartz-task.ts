@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/foundation
 // 文件名称：quartz-task.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-29
 // 创建人：Takt365(Auto Generated)
 // 功能描述：foundation 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -111,7 +111,7 @@ export function deleteQuartzTaskBatch(ids: string[]): Promise<void> {
 
 /**
  * 更新定时任务状态
- * @param {QuartzTaskStatus} dto 状态 DTO（TaktQuartzTaskStatus 枚举）
+ * @param {QuartzTaskStatus} dto 状态 DTO
  * @returns {Promise<QuartzTask>} 定时任务DTO
  */
 export function updateQuartzTaskStatus(dto: QuartzTaskStatus): Promise<QuartzTask> {

@@ -41,7 +41,7 @@ public class TaktSalaryFormula : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "set_name", ColumnDescription = "公式方案名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = false)]
     public string SetName { get; set; } = string.Empty;
     /// <summary>
-    /// 关联薪酬体系 ID（可选；同 set_code 各行取值应一致）
+    /// 薪酬体系（关联 TaktPayroll.Id，选项 TaktPayrolls/options；同 set_code 各行取值应一致）
     /// </summary>
     [SugarColumn(ColumnName = "payroll_id", ColumnDescription = "薪酬体系ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -57,15 +57,10 @@ public class TaktSalaryFormula : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "formula_name", ColumnDescription = "步骤名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = false)]
     public string FormulaName { get; set; } = string.Empty;
     /// <summary>
-    /// 公式步骤类型（字典 hr_salary_formula_step_type：应发/社保个人/公积金个人/个税/实发）
+    /// 公式步骤类型（字典 hr_salary_formula_step_type；1=应发 2=社保个人 3=公积金个人 4=个税 5=实发）
     /// </summary>
     [SugarColumn(ColumnName = "formula_step", ColumnDescription = "公式步骤", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int FormulaStep { get; set; } = 0;
-    /// <summary>
-    /// 执行顺序（同一 set_code 内从小到大；应发=1 … 实发=5）
-    /// </summary>
-    [SugarColumn(ColumnName = "sort_order", ColumnDescription = "执行顺序", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int SortOrder { get; set; }
     /// <summary>
     /// 结果写入字段（与 TaktPayslip 列名一致，如 gross_amount、net_amount）
     /// </summary>
@@ -92,13 +87,18 @@ public class TaktSalaryFormula : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "expiry_date", ColumnDescription = "失效日期", ColumnDataType = "date", IsNullable = true)]
     public DateTime? ExpiryDate { get; set; }
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// </summary>
+    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
+    public string RelatedPlant { get; set; } = string.Empty;
+    /// <summary>
+    /// 执行顺序（同一 set_code 内从小到大；应发=1 … 实发=5）
+    /// </summary>
+    [SugarColumn(ColumnName = "sort_order", ColumnDescription = "执行顺序", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int SortOrder { get; set; }
+    /// <summary>
+    /// 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
     /// </summary>
     [SugarColumn(ColumnName = "formula_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int FormulaStatus { get; set; } = 1;
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = true)]
-    public string? RelatedPlant { get; set; }
 }

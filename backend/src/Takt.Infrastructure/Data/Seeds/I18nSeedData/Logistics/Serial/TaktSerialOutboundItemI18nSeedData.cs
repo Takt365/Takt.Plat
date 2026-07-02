@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Serial
 // 文件名称：TaktSerialOutboundItemI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSerialOutboundItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktSerialOutboundItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.serialoutbounditem._self", "zh-HK", "序列号出库明细信息_hk", "实体名称"),
 
             // entity.serialoutbounditem.outboundid
-            new TranslationSeedItem("entity.serialoutbounditem.outboundid", "en-US", "出库ID_us", "出库ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.serialoutbounditem.outboundid", "en-US", "出库ID_us", "出库主表 ID（关联 TaktSerialOutbound.Id，选项 TaktSerialOutbounds/options）"),
             // entity.serialoutbounditem.outboundid
-            new TranslationSeedItem("entity.serialoutbounditem.outboundid", "ja-JP", "出库ID_jp", "出库ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.serialoutbounditem.outboundid", "ja-JP", "出库ID_jp", "出库主表 ID（关联 TaktSerialOutbound.Id，选项 TaktSerialOutbounds/options）"),
             // entity.serialoutbounditem.outboundid
-            new TranslationSeedItem("entity.serialoutbounditem.outboundid", "zh-CN", "出库ID", "出库ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.serialoutbounditem.outboundid", "zh-CN", "出库ID", "出库主表 ID（关联 TaktSerialOutbound.Id，选项 TaktSerialOutbounds/options）"),
             // entity.serialoutbounditem.outboundid
-            new TranslationSeedItem("entity.serialoutbounditem.outboundid", "zh-HK", "出库ID_hk", "出库ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.serialoutbounditem.outboundid", "zh-HK", "出库ID_hk", "出库主表 ID（关联 TaktSerialOutbound.Id，选项 TaktSerialOutbounds/options）"),
 
             // entity.serialoutbounditem.outboundno
             new TranslationSeedItem("entity.serialoutbounditem.outboundno", "en-US", "出库单号_us", "出库单号（冗余字段，便于查询）"),
@@ -118,40 +118,40 @@ public class TaktSerialOutboundItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.serialoutbounditem.linenumber", "zh-HK", "行号_hk", "行号（项号/序号，固定步长=10）"),
 
             // entity.serialoutbounditem.outboundserialno
-            new TranslationSeedItem("entity.serialoutbounditem.outboundserialno", "en-US", "出库序列号_us", "出库序列号（唯一索引）"),
+            new TranslationSeedItem("entity.serialoutbounditem.outboundserialno", "en-US", "出库序列号_us", "出库序列号（租户+公司内唯一）"),
             // entity.serialoutbounditem.outboundserialno
-            new TranslationSeedItem("entity.serialoutbounditem.outboundserialno", "ja-JP", "出库序列号_jp", "出库序列号（唯一索引）"),
+            new TranslationSeedItem("entity.serialoutbounditem.outboundserialno", "ja-JP", "出库序列号_jp", "出库序列号（租户+公司内唯一）"),
             // entity.serialoutbounditem.outboundserialno
-            new TranslationSeedItem("entity.serialoutbounditem.outboundserialno", "zh-CN", "出库序列号", "出库序列号（唯一索引）"),
+            new TranslationSeedItem("entity.serialoutbounditem.outboundserialno", "zh-CN", "出库序列号", "出库序列号（租户+公司内唯一）"),
             // entity.serialoutbounditem.outboundserialno
-            new TranslationSeedItem("entity.serialoutbounditem.outboundserialno", "zh-HK", "出库序列号_hk", "出库序列号（唯一索引）"),
+            new TranslationSeedItem("entity.serialoutbounditem.outboundserialno", "zh-HK", "出库序列号_hk", "出库序列号（租户+公司内唯一）"),
 
             // entity.serialoutbounditem.referenceinboundid
-            new TranslationSeedItem("entity.serialoutbounditem.referenceinboundid", "en-US", "关联入库ID_us", "关联入库ID(序列化为string以避免Javascript精度问题)"),
+            new TranslationSeedItem("entity.serialoutbounditem.referenceinboundid", "en-US", "关联入库ID_us", "关联入库主表 ID（关联 TaktSerialInbound.Id，选项 TaktSerialInbounds/options）"),
             // entity.serialoutbounditem.referenceinboundid
-            new TranslationSeedItem("entity.serialoutbounditem.referenceinboundid", "ja-JP", "关联入库ID_jp", "关联入库ID(序列化为string以避免Javascript精度问题)"),
+            new TranslationSeedItem("entity.serialoutbounditem.referenceinboundid", "ja-JP", "关联入库ID_jp", "关联入库主表 ID（关联 TaktSerialInbound.Id，选项 TaktSerialInbounds/options）"),
             // entity.serialoutbounditem.referenceinboundid
-            new TranslationSeedItem("entity.serialoutbounditem.referenceinboundid", "zh-CN", "关联入库ID", "关联入库ID(序列化为string以避免Javascript精度问题)"),
+            new TranslationSeedItem("entity.serialoutbounditem.referenceinboundid", "zh-CN", "关联入库ID", "关联入库主表 ID（关联 TaktSerialInbound.Id，选项 TaktSerialInbounds/options）"),
             // entity.serialoutbounditem.referenceinboundid
-            new TranslationSeedItem("entity.serialoutbounditem.referenceinboundid", "zh-HK", "关联入库ID_hk", "关联入库ID(序列化为string以避免Javascript精度问题)"),
+            new TranslationSeedItem("entity.serialoutbounditem.referenceinboundid", "zh-HK", "关联入库ID_hk", "关联入库主表 ID（关联 TaktSerialInbound.Id，选项 TaktSerialInbounds/options）"),
 
             // entity.serialoutbounditem.referenceinboundno
-            new TranslationSeedItem("entity.serialoutbounditem.referenceinboundno", "en-US", "关联入库单号_us", "关联入库单号"),
+            new TranslationSeedItem("entity.serialoutbounditem.referenceinboundno", "en-US", "关联入库单号_us", "关联入库单号（选项 TaktSerialInbounds/options，DictValue=InboundNo）"),
             // entity.serialoutbounditem.referenceinboundno
-            new TranslationSeedItem("entity.serialoutbounditem.referenceinboundno", "ja-JP", "关联入库单号_jp", "关联入库单号"),
+            new TranslationSeedItem("entity.serialoutbounditem.referenceinboundno", "ja-JP", "关联入库单号_jp", "关联入库单号（选项 TaktSerialInbounds/options，DictValue=InboundNo）"),
             // entity.serialoutbounditem.referenceinboundno
-            new TranslationSeedItem("entity.serialoutbounditem.referenceinboundno", "zh-CN", "关联入库单号", "关联入库单号"),
+            new TranslationSeedItem("entity.serialoutbounditem.referenceinboundno", "zh-CN", "关联入库单号", "关联入库单号（选项 TaktSerialInbounds/options，DictValue=InboundNo）"),
             // entity.serialoutbounditem.referenceinboundno
-            new TranslationSeedItem("entity.serialoutbounditem.referenceinboundno", "zh-HK", "关联入库单号_hk", "关联入库单号"),
+            new TranslationSeedItem("entity.serialoutbounditem.referenceinboundno", "zh-HK", "关联入库单号_hk", "关联入库单号（选项 TaktSerialInbounds/options，DictValue=InboundNo）"),
 
             // entity.serialoutbounditem.referenceinboundlinenumber
-            new TranslationSeedItem("entity.serialoutbounditem.referenceinboundlinenumber", "en-US", "关联入库行号_us", "关联入库行号"),
+            new TranslationSeedItem("entity.serialoutbounditem.referenceinboundlinenumber", "en-US", "关联入库行号_us", "关联入库行号（对应 TaktSerialInboundItem.LineNumber）"),
             // entity.serialoutbounditem.referenceinboundlinenumber
-            new TranslationSeedItem("entity.serialoutbounditem.referenceinboundlinenumber", "ja-JP", "关联入库行号_jp", "关联入库行号"),
+            new TranslationSeedItem("entity.serialoutbounditem.referenceinboundlinenumber", "ja-JP", "关联入库行号_jp", "关联入库行号（对应 TaktSerialInboundItem.LineNumber）"),
             // entity.serialoutbounditem.referenceinboundlinenumber
-            new TranslationSeedItem("entity.serialoutbounditem.referenceinboundlinenumber", "zh-CN", "关联入库行号", "关联入库行号"),
+            new TranslationSeedItem("entity.serialoutbounditem.referenceinboundlinenumber", "zh-CN", "关联入库行号", "关联入库行号（对应 TaktSerialInboundItem.LineNumber）"),
             // entity.serialoutbounditem.referenceinboundlinenumber
-            new TranslationSeedItem("entity.serialoutbounditem.referenceinboundlinenumber", "zh-HK", "关联入库行号_hk", "关联入库行号"),
+            new TranslationSeedItem("entity.serialoutbounditem.referenceinboundlinenumber", "zh-HK", "关联入库行号_hk", "关联入库行号（对应 TaktSerialInboundItem.LineNumber）"),
 
             // entity.serialoutbounditem.outboundtime
             new TranslationSeedItem("entity.serialoutbounditem.outboundtime", "en-US", "出库时间_us", "出库时间"),

@@ -31,11 +31,20 @@ const {
   detectApiCapabilities,
   buildExtFieldIconImportLine,
   buildRemixIconImportLine,
-  buildQueryFieldMetaLine,
   buildGeneratedFormVueScriptFragments,
   buildFormResetScopeDefaultsBlock,
   buildMasterDetailFormTypeImportLines,
   hasScopeContextFormFields,
+  buildVueImportResultUtilImportLine,
+  buildImportModalVueBlock,
+  buildImportHandlersScriptBlock,
+  buildEntityI18nComposableFile,
+  buildEntityI18nIndexImportBlock,
+  buildEntityI18nFormImportBlock,
+  buildAdvancedQueryFactoryBlock,
+  entityI18nHookName,
+  entityI18nComposableFileName,
+  entityRowRecordTypeName,
 } = require('./generate-vue-common.cjs');
 
 /**
@@ -43,8 +52,8 @@ const {
  * @param {object} field
  * @returns {string}
  */
-function mapFormFieldToEditableColumn(field) {
-  const title = fieldLabelTExpr(field);
+function mapFormFieldToEditableColumn(field, piVar = 'pi') {
+  const title = fieldLabelTExpr(field, 'form', piVar);
   const width = 140;
   if (field.readOnly) {
     return `  {
@@ -57,8 +66,8 @@ function mapFormFieldToEditableColumn(field) {
   if (field.htmlType === 'textarea') {
     const rows = isFixedLongTextareaField(field) ? 2 : 1;
     const placeholder = field.optional
-      ? fieldPlaceholderTExpr(field, 'common.page.form.placeholder.optional')
-      : fieldPlaceholderTExpr(field, 'common.page.form.placeholder.required');
+      ? fieldPlaceholderTExpr(field, 'common.page.form.placeholder.optional', 'form', piVar)
+      : fieldPlaceholderTExpr(field, 'common.page.form.placeholder.required', 'form', piVar);
     return `  {
     key: '${field.name}',
     title: ${title},
@@ -91,7 +100,7 @@ function mapFormFieldToEditableColumn(field) {
   const optionalParts = [];
   if (field.optional) {
     optionalParts.push('allowClear: true');
-    optionalParts.push(`placeholder: ${fieldPlaceholderTExpr(field, 'common.page.form.placeholder.optional')}`);
+    optionalParts.push(`placeholder: ${fieldPlaceholderTExpr(field, 'common.page.form.placeholder.optional', 'form', piVar)}`);
   } else if (field.name.endsWith('SerialNo') || field.name.endsWith('serialNo')) {
     optionalParts.push('required: true');
     optionalParts.push('unique: true');
@@ -113,6 +122,7 @@ function mapFormFieldToEditableColumn(field) {
 function generateMasterContextComposable(ctx) {
   const { entityPascal, entityKebab, viewEntityKebab, viewModulePath, comment, modulePath } = ctx;
   const entityCamel = pascalToCamel(entityPascal);
+  const rowRecordType = entityRowRecordTypeName(entityPascal);
   return `// ========================================
 // 项目名称：节拍数字工厂 · Takt Plat (TDF)
 // 命名空间：@/views/${viewModulePath}/composables
@@ -124,10 +134,13 @@ function generateMasterContextComposable(ctx) {
 import { inject, provide, type InjectionKey, type Ref, ref } from 'vue'
 import type { ${entityPascal} } from '@/types/${modulePath}/${entityKebab}'
 
+/** 表格行类型（与 index 列表行、TaktSingleTable slot record 一致） */
+export type ${rowRecordType} = ${entityPascal} | Record<string, unknown>
+
 /** 主表选中行上下文 */
 export interface ${entityPascal}MasterContext {
   /** 当前选中的主表行（右侧明细依赖） */
-  selectedMasterRow: Ref<${entityPascal} | null>
+  selectedMasterRow: Ref<${rowRecordType} | null>
 }
 
 const ${entityCamel}MasterContextKey: InjectionKey<${entityPascal}MasterContext> = Symbol('${viewEntityKebab}MasterContext')
@@ -137,7 +150,7 @@ const ${entityCamel}MasterContextKey: InjectionKey<${entityPascal}MasterContext>
  * @returns {${entityPascal}MasterContext} 主表上下文
  */
 export function provide${entityPascal}MasterContext(): ${entityPascal}MasterContext {
-  const selectedMasterRow = ref<${entityPascal} | null>(null)
+  const selectedMasterRow = ref<${rowRecordType} | null>(null)
   const ctx: ${entityPascal}MasterContext = { selectedMasterRow }
   provide(${entityCamel}MasterContextKey, ctx)
   return ctx
@@ -301,6 +314,7 @@ ${formTemplateBody}
 ${formScriptFragments.vueImportLine}
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+${buildEntityI18nFormImportBlock(childPascal, viewChildKebab)}
 ${masterTypeImport}
 ${taktSelectImport}${extFieldIconImport}${formScriptFragments.dictImportLine}${scopeStoreImports}
 ${formScriptState}
@@ -382,9 +396,16 @@ function generateChildDetailPanelVue(ctx, child) {
     const val = f.type === 'number' ? 'undefined as number | undefined' : "''";
     return `  ${f.name}: ${val},`;
   }).join('\n');
-  const queryFieldsMetaBlock = queryFields.map((f) => buildQueryFieldMetaLine(f, child.childI18nSlug)).join('\n');
+  const queryFactoryBlock = buildAdvancedQueryFactoryBlock(child.childPascal, queryFields);
+  const childI18nPrefix = child.childPascal.toUpperCase();
+  const childEntityI18nImport = buildEntityI18nIndexImportBlock(
+    child.childPascal,
+    viewChildKebab,
+    '../composables',
+  );
   const queryItems = queryFields.map((f) => renderQueryFormItem(f)).join('\n');
   const queryFieldStorageKey = `takt-query-fields-${viewModulePath.replace(/\//g, '-')}-${viewChildKebab}`;
+  const entityScope = ctx.fields?.entityScope || 'company';
   const remixIconImport = buildRemixIconImportLine({ includeActionIcons: true, queryFields });
   const listCols = (child.listFields || []).map((f) => `  {
     title: ${fieldLabelTExpr(f)},
@@ -416,39 +437,17 @@ function generateChildDetailPanelVue(ctx, child) {
     entityPascal,
     queryFields,
   );
-  const importHandlers = (childCaps.hasImport && childCaps.hasGetTemplate) ? `
-function handleImport() {
-  if (!hasMasterSelection.value) {
+  const importHandlers = (childCaps.hasImport && childCaps.hasGetTemplate)
+    ? buildImportHandlersScriptBlock({
+      apiGetTemplate: childCaps.apiGetTemplate,
+      apiImport: childCaps.apiImport,
+      openHandlerPrefix: `if (!hasMasterSelection.value) {
     message.warning(t('common.status.empty'))
     return
-  }
-  importVisible.value = true
-}
-
-async function handleDownloadTemplate(sheetName?: string, fileName?: string): Promise<Blob> {
-  const res = await ${childCaps.apiGetTemplate}(sheetName, fileName)
-  return (res as { data?: Blob }).data ?? (res as Blob)
-}
-
-async function handleImportFile(
-  file: File,
-  sheetName?: string,
-): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await ${childCaps.apiImport}(file, sheetName)
-}
-
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
-  void loadData()
-  if (result.fail === 0) {
-    setTimeout(() => {
-      importVisible.value = false
-    }, 2000)
-  }
-}
-
-function handleImportCancel() {
-  importVisible.value = false
-}` : '';
+  }`,
+      successBody: 'void loadData()',
+    })
+    : '';
   const exportHandler = childCaps.hasExport ? `
 async function handleExport() {
   if (!hasMasterSelection.value) {
@@ -476,35 +475,17 @@ ${buildServerPagedExportApiCall(childCaps.apiExport)}
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.${child.childI18nSlug}._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: unknown) {
     const err = error as { message?: string }
-    message.error(err?.message || t('common.feedback.export.failed', { target: t('entity.${child.childI18nSlug}._self') }))
+    message.error(err?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }
 }` : '';
-  const importModalBlock = (childCaps.hasImport && childCaps.hasGetTemplate) ? `
-    <TaktModal
-      v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.${child.childI18nSlug}._self') })"
-      :width="600"
-      :footer="null"
-      :cancel-text="t('common.page.button.close')"
-      @cancel="handleImportCancel"
-    >
-      <TaktImportFile
-        entity-i18n-key="entity.${child.childI18nSlug}._self"
-        file-type="xlsx"
-        :sheet-name="excelNames.sheet"
-        :template-file-name="excelNames.fileBase"
-        :download-template="handleDownloadTemplate"
-        :import-file="handleImportFile"
-        :max-size="10"
-        :max-rows="1000"
-        @success="handleImportSuccess"
-      />
-    </TaktModal>` : '';
+  const importModalBlock = (childCaps.hasImport && childCaps.hasGetTemplate)
+    ? buildImportModalVueBlock(child.childPascal)
+    : '';
   const queryDrawerBlock = queryFields.length ? `
     <TaktQueryDrawer
       v-model:open="advancedQueryVisible"
@@ -534,27 +515,24 @@ ${childCaps.hasExport ? '      @export="handleExport"' : ''}
 ${queryFields.length ? `      @advanced-query="handleAdvancedQuery"
       @column-setting="handleColumnSetting"` : '      @column-setting="handleColumnSetting"'}`;
   const excelImportLine = (childCaps.hasImport || childCaps.hasExport)
-    ? "import { taktExcelEntityNames } from '@/utils/naming'\nimport { resolveExportDownloadFileName } from '@/utils/export-download-name'"
+    ? [
+      "import { taktExcelEntityNames } from '@/utils/naming'",
+      ...(childCaps.hasExport ? ["import { resolveExportDownloadFileName } from '@/utils/export-download-name'"] : []),
+      ...(childCaps.hasImport && childCaps.hasGetTemplate
+        ? ["import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'"]
+        : []),
+    ].join('\n')
     : '';
   const advancedQueryScript = queryFields.length ? `
 const advancedQueryVisible = ref(false)
-const advancedQueryForm = ref({
-${queryInit}
-})
+${queryFactoryBlock}
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 const visibleQueryFieldKeys = ref<string[]>([])
 
 /** 高级查询字段元数据 */
-const queryFieldsMeta = computed(() => [
-${queryFieldsMetaBlock}
-])
-
-/**
- * 高级查询字段标签
- * @param key 字段 key
- */
-function fieldLabel(key: string): string {
-  return queryFieldsMeta.value.find((f) => f.key === key)?.label ?? key
-}
+const queryFieldsMeta = computed(() =>
+  ${childI18nPrefix}_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 
 function handleAdvancedQuery() {
   advancedQueryVisible.value = true
@@ -567,12 +545,11 @@ function handleAdvancedQuerySubmit() {
 }
 
 function handleAdvancedQueryReset() {
-  advancedQueryForm.value = {
-${queryInit}
-  }
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
 }` : '';
   const columnSettingScript = `
 const columnSettingVisible = ref(false)
+/** 表格当前可见列 key（空数组时按 tableMode=masterDetailDetail 默认 id+4 业务列） */
 const visibleColumnKeys = ref<string[]>([])
 
 function handleColumnSetting() {
@@ -597,7 +574,7 @@ function handleColumnSettingReset() {
 <template>
   <div class="${viewChildKebab}-panel flex h-full min-h-0 flex-col overflow-hidden">
     <div class="mb-2 text-sm font-medium text-text">
-      {{ t('entity.${child.childI18nSlug}._self') }}
+      {{ pi.self() }}
     </div>
     <TaktQueryBar
       v-model="queryKeyword"
@@ -648,7 +625,7 @@ ${toolsBarImportExport}
         v-model:page-size="pageSize"
         :total="total"
         scroll-layout="masterDetailLr"
-        table-mode="single"
+        table-mode="masterDetailDetail"
         :show-row-selection="true"
         @change="handleTableChange"
         @pagination-change="handleMasterDetailPaginationChange"
@@ -678,7 +655,7 @@ ${queryDrawerBlock}${importModalBlock}
       id-column-key="${child.childIdField}"
       action-column-key="action"
       entity-scope="${ctx.fields?.entityScope || 'company'}"
-      table-mode="single"
+      table-mode="masterDetailDetail"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -703,6 +680,7 @@ import {
 } from '@/api/${modulePath}/${child.childKebab}'
 import type { ${child.childType}, ${child.childPascal}Query } from '@/types/${modulePath}/${child.childKebab}'
 
+${childEntityI18nImport}
 const { t } = useI18n()
 const { selectedMasterRow } = use${entityPascal}MasterContext()
 
@@ -710,7 +688,7 @@ ${childCaps.hasImport || childCaps.hasExport ? `/** Excel 导入/导出默认 sh
 const excelNames = taktExcelEntityNames('${child.childEntityClassName || `Takt${child.childPascal}`}')
 ` : ''}/** 快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.${child.childI18nSlug}._self') }),
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() }),
 )
 
 const loading = ref(false)
@@ -730,8 +708,11 @@ const formRef = ref()
 ${advancedQueryScript}${columnSettingScript}
 ${childCaps.hasImport && childCaps.hasGetTemplate ? 'const importVisible = ref(false)\n' : ''}
 const entityIdName = '${child.childIdField}'
-const hasMasterSelection = computed(() => !!selectedMasterRow.value?.${caps.entityIdName})
-const master${entityPascal}Id = computed(() => selectedMasterRow.value?.${caps.entityIdName} ?? '')
+const master${entityPascal}Id = computed((): string => {
+  const id = (selectedMasterRow.value as Record<string, unknown> | null)?.['${caps.entityIdName}']
+  return id != null ? String(id) : ''
+})
+const hasMasterSelection = computed(() => master${entityPascal}Id.value !== '')
 const updateDisabled = computed(() => !hasMasterSelection.value || selectedRows.value.length !== 1)
 const deleteDisabled = computed(() => !hasMasterSelection.value || selectedRows.value.length === 0)
 
@@ -788,7 +769,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: ${child.childType}, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (get${child.childPascal}Id(selectedRow.value) === get${child.childPascal}Id(record)) {
+    } else if (selectedRow.value && get${child.childPascal}Id(selectedRow.value) === get${child.childPascal}Id(record)) {
       selectedRow.value = null
     }
   },
@@ -868,13 +849,13 @@ function handleCreate() {
     message.warning(t('common.status.empty'))
     return
   }
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.${child.childI18nSlug}._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = {}
   formVisible.value = true
 }
 
 async function handleEdit(record: ${child.childType}) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.${child.childI18nSlug}._self') })
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
   formLoading.value = true
   try {
     const detail = await ${childCaps.apiGetById}(get${child.childPascal}Id(record))
@@ -891,7 +872,7 @@ function handleUpdate() {
   } else {
     message.warning(t('common.tip.select.to.action', {
       action: t('common.page.button.edit'),
-      entity: t('entity.${child.childI18nSlug}._self'),
+      entity: pi.self(),
     }))
   }
 }
@@ -910,10 +891,10 @@ async function handleFormSubmit() {
     const id = formData.value?.${child.childIdField}
     if (id) {
       await ${childCaps.apiUpdate}(id, payload)
-      message.success(t('common.feedback.updated', { target: t('entity.${child.childI18nSlug}._self') }))
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
       await ${childCaps.apiCreate}(payload)
-      message.success(t('common.feedback.created', { target: t('entity.${child.childI18nSlug}._self') }))
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     await loadData()
@@ -930,14 +911,14 @@ async function handleDeleteOne(record: ${child.childType}) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
     content: t('common.tip.confirm.delete.entity', {
-      entity: t('entity.${child.childI18nSlug}._self'),
-      name: t('common.tip.this.target', { target: t('entity.${child.childI18nSlug}._self') }),
+      entity: pi.self(),
+      name: t('common.tip.this.target', { target: pi.self() }),
     }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await ${childCaps.apiDelete}(get${child.childPascal}Id(record))
-      message.success(t('common.feedback.deleted', { target: t('entity.${child.childI18nSlug}._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       await loadData()
     },
   })
@@ -947,14 +928,14 @@ async function handleDelete() {
   if (!hasMasterSelection.value || selectedRows.value.length === 0) {
     message.warning(t('common.tip.select.to.action', {
       action: t('common.page.button.delete'),
-      entity: t('entity.${child.childI18nSlug}._self'),
+      entity: pi.self(),
     }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
     content: t('common.tip.confirm.delete.count', {
-      entity: t('entity.${child.childI18nSlug}._self'),
+      entity: pi.self(),
       count: selectedRows.value.length,
     }),
     okText: t('common.page.button.delete'),
@@ -962,7 +943,7 @@ async function handleDelete() {
     onOk: async () => {
       const ids = selectedRows.value.map((r) => get${child.childPascal}Id(r)).filter(Boolean)
       await ${childCaps.apiDeleteBatch}(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.${child.childI18nSlug}._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       await loadData()
     },
   })
@@ -999,6 +980,7 @@ defineExpose({ reload, loadData })
  */
 function generateMasterDetailLrIndexScript(ctx) {
   const { entityPascal, caps, fields } = ctx;
+  const rowRecordType = entityRowRecordTypeName(entityPascal);
   const children = fields.masterDetailChildren || [];
   const panelRefs = children.map((c) => `const ${c.childCamel}PanelRef = ref<InstanceType<typeof ${c.childPascal}Panel> | null>(null)`).join('\n');
   const panelImports = children.map((c) => {
@@ -1020,7 +1002,7 @@ ${children.map((c) => `          <${c.childPascal}Panel ref="${c.childCamel}Pane
       </template>`;
   const detailFn = caps.hasGetById ? `
 /** 加载主表详情并回填当前页 dataSource */
-async function load${entityPascal}Detail(record: ${entityPascal}): Promise<${entityPascal} | null> {
+async function load${entityPascal}Detail(record: ${rowRecordType}): Promise<${entityPascal} | null> {
   const id = get${entityPascal}Id(record)
   if (!id) {
     return null
@@ -1039,7 +1021,7 @@ async function load${entityPascal}Detail(record: ${entityPascal}): Promise<${ent
 }` : '';
   return {
     panelImports,
-    composableImport: `import { provide${entityPascal}MasterContext } from './composables/use-${ctx.viewEntityKebab}-master-context'`,
+    composableImport: `import { provide${entityPascal}MasterContext, type ${rowRecordType} } from './composables/use-${ctx.viewEntityKebab}-master-context'`,
     composableSetup: `/** 主表选中行上下文（右侧明细面板读取） */
 const { selectedMasterRow } = provide${entityPascal}MasterContext()`,
     panelRefs,
@@ -1050,7 +1032,7 @@ const { selectedMasterRow } = provide${entityPascal}MasterContext()`,
 const selectedMasterKey = ref('')
 
 /** 同步主表选中行到右侧明细（子表由 *-panel watch 自动 reload） */
-function syncMasterSelection(record: ${entityPascal} | null) {
+function syncMasterSelection(record: ${rowRecordType} | null) {
   selectedMasterRow.value = record
   selectedMasterKey.value = record ? get${entityPascal}Id(record) : ''
 }
@@ -1060,7 +1042,7 @@ function syncMasterSelection(record: ${entityPascal} | null) {
  * @param record 主表行
  */
 function handleMasterSelect(record: Record<string, unknown>) {
-  const row = record as unknown as ${entityPascal}
+  const row = record as unknown as ${rowRecordType}
   const key = get${entityPascal}Id(row)
   selectedRowKeys.value = [key]
   selectedRows.value = [row]
@@ -1104,13 +1086,23 @@ function generateMasterDetailEditableFormParts(ctx) {
   if (!children.length) {
     return { editableBlocks: '', script: '', tableRefs: '', validateLines: '', resetLines: '' };
   }
+  const childI18nImportLines = children.map((child) => {
+    const viewChildKebab = child.viewChildKebab || child.childKebab;
+    const hookName = entityI18nHookName(child.childPascal);
+    const composableStem = entityI18nComposableFileName(viewChildKebab).replace(/\.ts$/, '');
+    return `import { ${hookName} } from '../composables/${composableStem}'`;
+  }).join('\n');
+  const childI18nSetupLines = children.map((child) => {
+    const hookName = entityI18nHookName(child.childPascal);
+    return `const ${child.childCamel}Pi = ${hookName}()`;
+  }).join('\n');
   const editableBlocks = children.map((child) => `    <!-- 下：子表 ${child.fieldName} -->
     <TaktEditableTable
       ref="${child.childCamel}TableRef"
       v-model="child${child.childPascal}Rows"
       :columns="${child.childCamel}FormColumns"
-      :title="t('entity.${child.childI18nSlug}._self')"
-      :add-button-entity="t('entity.${child.childI18nSlug}._self')"
+      :title="${child.childCamel}Pi.self()"
+      :add-button-entity="${child.childCamel}Pi.self()"
       id-field="${child.childIdField}"
       :default-row="createDefault${child.childPascal}Row"
       :disabled="loading"
@@ -1119,7 +1111,7 @@ function generateMasterDetailEditableFormParts(ctx) {
   const columnDefs = children.map((child) => {
     const cols = child.formFields
       .filter((f) => !f.readOnly || f.name === 'lineNumber')
-      .map((f) => mapFormFieldToEditableColumn(f))
+      .map((f) => mapFormFieldToEditableColumn(f, `${child.childCamel}Pi`))
       .join(',\n');
     return `/** 子表 ${child.childCamel} 可编辑列 */
 const ${child.childCamel}FormColumns = computed<TaktEditableTableColumn[]>(() => [
@@ -1164,6 +1156,9 @@ ${defaults}
   const resetLines = children.map((child) => `  ${child.childCamel}TableRef.value?.resetRows?.()`).join('\n');
   const script = `
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+${childI18nImportLines}
+
+${childI18nSetupLines}
 
 ${rowRefs}
 ${tableRefs}
@@ -1210,12 +1205,28 @@ function writeMasterDetailLayoutOutputs(bundle, ctx, options) {
     const viewChildKebab = child.viewChildKebab || child.childKebab;
     const panelPath = path.join(componentsDir, `${viewChildKebab}-panel.vue`);
     const childFormPath = path.join(componentsDir, `${viewChildKebab}-form.vue`);
+    const childI18nPath = path.join(composableDir, entityI18nComposableFileName(viewChildKebab));
+    const childListCols = (child.listFields || []).filter((f) => f.name !== child.childIdField);
+    const childI18nContent = buildEntityI18nComposableFile({
+      entityPascal: child.childPascal,
+      entityI18nSlug: child.childI18nSlug,
+      entityKebab: child.childKebab,
+      viewModulePath: ctx.viewModulePath,
+      viewEntityKebab: viewChildKebab,
+      modulePath: ctx.modulePath,
+      listFields: childListCols,
+      formFields: child.formFields || [],
+      queryFields: child.queryFields || [],
+      comment: child.childPascal,
+    });
     const panelContent = generateChildDetailPanelVue(ctx, child);
     const childFormContent = generateChildDetailFormVue(ctx, child);
     if (options.dryRun) {
-      console.log(`🔍 [dry-run] 将生成:\n  - ${panelPath}\n  - ${childFormPath}`);
+      console.log(`🔍 [dry-run] 将生成:\n  - ${childI18nPath}\n  - ${panelPath}\n  - ${childFormPath}`);
       return;
     }
+    writeGeneratedFile(childI18nPath, childI18nContent);
+    console.log(`✅ 已生成: ${childI18nPath}`);
     writeGeneratedFile(panelPath, panelContent);
     writeGeneratedFile(childFormPath, childFormContent);
     console.log(`✅ 已生成: ${panelPath}`);

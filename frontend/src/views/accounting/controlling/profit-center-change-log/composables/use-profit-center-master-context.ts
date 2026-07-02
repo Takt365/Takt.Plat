@@ -9,10 +9,13 @@
 import { inject, provide, type InjectionKey, type Ref, ref } from 'vue'
 import type { ProfitCenter } from '@/types/accounting/controlling/profit-center'
 
+/** 表格行类型（与 index 列表行、TaktSingleTable slot record 一致） */
+export type ProfitCenterRowRecord = ProfitCenter | Record<string, unknown>
+
 /** 主表选中行上下文 */
 export interface ProfitCenterMasterContext {
   /** 当前选中的主表行（右侧明细依赖） */
-  selectedMasterRow: Ref<ProfitCenter | null>
+  selectedMasterRow: Ref<ProfitCenterRowRecord | null>
 }
 
 const profitCenterMasterContextKey: InjectionKey<ProfitCenterMasterContext> = Symbol('profit-centerMasterContext')
@@ -22,7 +25,7 @@ const profitCenterMasterContextKey: InjectionKey<ProfitCenterMasterContext> = Sy
  * @returns {ProfitCenterMasterContext} 主表上下文
  */
 export function provideProfitCenterMasterContext(): ProfitCenterMasterContext {
-  const selectedMasterRow = ref<ProfitCenter | null>(null)
+  const selectedMasterRow = ref<ProfitCenterRowRecord | null>(null)
   const ctx: ProfitCenterMasterContext = { selectedMasterRow }
   provide(profitCenterMasterContextKey, ctx)
   return ctx

@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/sop/doc/components -->
 <!-- 文件名称：doc-form.vue -->
-<!-- 功能描述：SOP 文档头实体维护弹窗内嵌表单（上主下从级联保存）。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：SOP 文档头实体维护弹窗内嵌表单。由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -10,7 +10,7 @@
 <template>
   <a-form
     ref="formRef"
-    class="takt-generated-form doc-form flex flex-col min-h-0"
+    class="takt-generated-form"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -66,6 +66,21 @@
                   show-count
                   :maxlength="20"
                   disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.sopdoc.plantcode')"
+                name="plantCode"
+              >
+                <a-input
+                  v-model:value="formState.plantCode"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopdoc.plantcode') })"
+                  show-count
+                  :maxlength="4"
+                  allow-clear
+                  :disabled="!!formData?.sopDocId"
                 />
               </a-form-item>
             </a-col>
@@ -155,7 +170,17 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.sopdoc.defaultlang')"
                 name="defaultLang"
@@ -169,16 +194,6 @@
                 />
               </a-form-item>
             </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
                 :label="t('entity.sopdoc.sopstatus')"
@@ -236,24 +251,12 @@
         </div>
       </a-tab-pane>
     </a-tabs>
-    <!-- 下：子表 revisions -->
-    <TaktEditableTable
-      ref="sopRevisionTableRef"
-      v-model="childSopRevisionRows"
-      :columns="sopRevisionFormColumns"
-      :title="t('entity.soprevision._self')"
-      :add-button-entity="t('entity.soprevision._self')"
-      id-field="sopRevisionId"
-      :default-row="createDefaultSopRevisionRow"
-      :disabled="loading"
-      section-border
-    />
   </a-form>
 </template>
 
 <script setup lang="ts">
 /**
- * SOP 文档头实体维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
+ * SOP 文档头实体维护表单 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/logistics/manufacturing/sop/doc/components
  */
 import { reactive, watch, computed, ref, onMounted } from 'vue'
@@ -295,101 +298,8 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","sopCode","sopName","materialCode","routingItemId","workstationId","currentRevisionId","defaultLang","sopStatus","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","sopCode","sopName","materialCode","routingItemId","workstationId","currentRevisionId","defaultLang","sopStatus","extField","remark"]
 
-import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
-
-const childSopRevisionRows = ref<Record<string, unknown>[]>([])
-const sopRevisionTableRef = ref<{
-  getRows: () => Record<string, unknown>[]
-  validate: () => Promise<unknown>
-  resetRows: () => void
-} | null>(null)
-
-/** 子表 sopRevision 可编辑列 */
-const sopRevisionFormColumns = computed<TaktEditableTableColumn[]>(() => [
-  {
-    key: 'sopId',
-    title: t('entity.soprevision.sopid'),
-    editor: 'input',
-    width: 140,
-  },
-  {
-    key: 'revision',
-    title: t('entity.soprevision.revision'),
-    editor: 'input',
-    width: 140,
-  },
-  {
-    key: 'fileUrl',
-    title: t('entity.soprevision.fileurl'),
-    editor: 'input',
-    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.soprevision.fileurl') }),
-  },
-  {
-    key: 'changeDesc',
-    title: t('entity.soprevision.changedesc'),
-    editor: 'input',
-    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.soprevision.changedesc') }),
-  },
-  {
-    key: 'ecnId',
-    title: t('entity.soprevision.ecnid'),
-    editor: 'input',
-    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.soprevision.ecnid') }),
-  },
-  {
-    key: 'isLocked',
-    title: t('entity.soprevision.islocked'),
-    editor: 'inputNumber',
-    width: 140,
-  },
-  {
-    key: 'forceLeaderAck',
-    title: t('entity.soprevision.forceleaderack'),
-    editor: 'inputNumber',
-    width: 140,
-  },
-  {
-    key: 'revisionStatus',
-    title: t('entity.soprevision.revisionstatus'),
-    editor: 'inputNumber',
-    width: 140,
-  },
-])
-
-/** 编辑态从 formData 同步各子表行 */
-function syncChildRowsFromFormData(val: Partial<SopDocCreate & { sopDocId?: string }> | null | undefined) {
-  childSopRevisionRows.value = ((val as any)?.revisions ?? []) as Record<string, unknown>[]
-}
-
-function createDefaultSopRevisionRow(): Record<string, unknown> {
-  return {
-    sopId: '',
-    revision: '',
-    fileUrl: '',
-    changeDesc: '',
-    ecnId: '',
-    isLocked: 0,
-    forceLeaderAck: 0,
-    revisionStatus: 0,
-  }
-}
-
-/** 组装 Create/Update 载荷（主表 + 子表数组） */
-function buildSubmitPayload() {
-  const masterId = props.formData?.sopDocId ?? ''
-  return {
-    ...formState,
-    revisions: sopRevisionTableRef.value?.getRows?.() ?? childSopRevisionRows.value.map((rest) => ({
-      ...rest,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      sopDocId: masterId,
-    })),
-  }
-}
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -407,9 +317,14 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
-/** 表单字段默认值（无字典默认项） */
+/** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
+const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  sopStatus: 1
+}
+
+/** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
 function applyFormDefaults(target: Record<string, unknown>) {
-  void target
+  Object.assign(target, FORM_FIELD_DEFAULTS)
 }
 
 /** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
@@ -427,10 +342,9 @@ watch(
     if (val?.sopDocId) {
       const next = { ...val } as Record<string, unknown>
       Object.keys(formState).forEach((k) => delete formState[k])
-    delete (next as any).revisions
+
       applyScopeDefaults(next)
       Object.assign(formState, next)
-    syncChildRowsFromFormData(val)
       formRef.value?.clearValidate()
     } else {
       Object.keys(formState).forEach((k) => delete formState[k])
@@ -458,6 +372,13 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
+  plantCode: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.required', { field: t('entity.sopdoc.plantcode') }),
+      trigger: 'blur'
+    }
+  ],
   sopCode: [
     {
       required: true,
@@ -511,13 +432,12 @@ const rules = computed<Record<string, Rule[]>>(() => ({
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
 async function validate() {
   await formRef.value?.validate()
-  await sopRevisionTableRef.value?.validate?.()
   return formState
 }
 
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
-  const payload = buildSubmitPayload() as Record<string, unknown>
+  const payload = { ...formState }
   if ('sopStatus' in payload) {
     const rawsopStatus = payload.sopStatus
     payload.sopStatus = typeof rawsopStatus === 'number' ? rawsopStatus : Number(rawsopStatus)
@@ -534,8 +454,7 @@ function resetFields() {
   }
   applyFormDefaults(formState)
   applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.sopDocId)
-  childSopRevisionRows.value = []
-  sopRevisionTableRef.value?.resetRows?.()
+
   activeTab.value = 'tab-0'
   formRef.value?.clearValidate()
 }

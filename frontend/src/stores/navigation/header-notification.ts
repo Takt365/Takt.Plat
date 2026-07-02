@@ -15,6 +15,7 @@ import { computed, ref } from 'vue';
 import { getMessageUnreadList, markMessageReadById } from '@/api/foundation/message';
 import type { Message } from '@/types/foundation/message';
 import { translateLocaleMessage } from '@/utils/takt-i18n-message';
+import { formatPrivateMessageNotificationContent } from '@/utils/takt-message-display';
 import { createLogger } from '@/utils/logger';
 
 const headerNotificationLogger = createLogger('header-notification');
@@ -121,15 +122,13 @@ export const useHeaderNotificationStore = defineStore('headerNotification', () =
    * @param message 在线消息 DTO
    */
   function formatPersistedMessageDisplay(message: Message): { title: string; content: string } {
-    const sender = message.fromUserName?.trim() || '?';
-    const body = message.messageContent?.trim() || '';
-    const messageTitle = message.messageTitle?.trim();
-    const description = messageTitle && body
-      ? `${messageTitle}\n${body}`
-      : (messageTitle || body);
     return {
       title: translateLocaleMessage('common.page.signalr.new.message'),
-      content: description ? `${sender}: ${description}` : sender,
+      content: formatPrivateMessageNotificationContent(
+        message.fromUserNickname,
+        message.fromUserName,
+        message.messageContent,
+      ),
     };
   }
 

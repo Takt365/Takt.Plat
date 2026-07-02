@@ -108,7 +108,7 @@
                   v-model:value="formState.workCenter"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardoperationtime.workcenter') })"
                   show-count
-                  :maxlength="20"
+                  :maxlength="8"
                   allow-clear
                 />
               </a-form-item>
@@ -194,10 +194,10 @@
                 :label="t('entity.standardoperationtime.pointstominutesrate')"
                 name="pointsToMinutesRate"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.pointsToMinutesRate"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardoperationtime.pointstominutesrate') })"
-                  style="width: 100%"
+                  dict-type="logistics_points_to_minutes_rate"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.standardoperationtime.pointstominutesrate') })"
                 />
               </a-form-item>
             </a-col>
@@ -241,13 +241,27 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.standardoperationtime.extfield')"
-                name="ExtField"
+                name="extField"
+                class="takt-form-item-ext-field"
               >
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t('common.page.entity.extfieldhint')"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ t('common.page.entity.extfield') }}</span>
+                  </span>
+                </template>
                 <a-textarea
-                  v-model:value="formState.ExtField"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.standardoperationtime.extfield') })"
-                  :rows="2"
+                  v-model:value="formState.extField"
+                  :placeholder="t('common.page.form.placeholder.extfield')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -282,6 +296,7 @@ import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import type { StandardOperationTimeCreate } from '@/types/logistics/manufacturing/bom/standard-operation-time'
+import { RiQuestionLine } from '@remixicon/vue'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -314,7 +329,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","materialCode","workCenter","operationDesc","standardMinutes","timeUnit","standardShorts","pointsUnit","pointsToMinutesRate","convertedMinutes","effectiveDate","expiryDate","ExtField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","materialCode","workCenter","operationDesc","standardMinutes","timeUnit","standardShorts","pointsUnit","pointsToMinutesRate","convertedMinutes","effectiveDate","expiryDate","extField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -437,19 +452,13 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
-  pointsToMinutesRate: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.standardoperationtime.pointstominutesrate') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.standardoperationtime.pointstominutesrate') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
+  pointsToMinutesRate: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.select', { field: t('entity.standardoperationtime.pointstominutesrate') }),
+      trigger: 'change'
+    }
+  ],
   convertedMinutes: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
@@ -488,10 +497,6 @@ function getValues(): Record<string, any> {
   if ('standardShorts' in payload) {
     const rawstandardShorts = payload.standardShorts
     payload.standardShorts = typeof rawstandardShorts === 'number' ? rawstandardShorts : Number(rawstandardShorts)
-  }
-  if ('pointsToMinutesRate' in payload) {
-    const rawpointsToMinutesRate = payload.pointsToMinutesRate
-    payload.pointsToMinutesRate = typeof rawpointsToMinutesRate === 'number' ? rawpointsToMinutesRate : Number(rawpointsToMinutesRate)
   }
   if ('convertedMinutes' in payload) {
     const rawconvertedMinutes = payload.convertedMinutes

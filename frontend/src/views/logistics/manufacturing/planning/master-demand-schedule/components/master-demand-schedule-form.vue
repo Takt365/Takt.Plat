@@ -276,7 +276,55 @@ const masterDemandScheduleLineTableRef = ref<{
 
 /** 子表 masterDemandScheduleLine 可编辑列 */
 const masterDemandScheduleLineFormColumns = computed<TaktEditableTableColumn[]>(() => [
-,
+  {
+    key: 'mdsCode',
+    title: t('entity.masterdemandscheduleline.mdscode'),
+    editor: 'input',
+    width: 140,
+  },
+  {
+    key: 'demandSourceType',
+    title: t('entity.masterdemandscheduleline.demandsourcetype'),
+    editor: 'inputNumber',
+    width: 140,
+  },
+  {
+    key: 'salesOrderId',
+    title: t('entity.masterdemandscheduleline.salesorderid'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.masterdemandscheduleline.salesorderid') }),
+  },
+  {
+    key: 'salesOrderLineNumber',
+    title: t('entity.masterdemandscheduleline.salesorderlinenumber'),
+    editor: 'inputNumber',
+    width: 140,
+  },
+  {
+    key: 'salesPlanId',
+    title: t('entity.masterdemandscheduleline.salesplanid'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.masterdemandscheduleline.salesplanid') }),
+  },
+  {
+    key: 'salesPlanLineNumber',
+    title: t('entity.masterdemandscheduleline.salesplanlinenumber'),
+    editor: 'inputNumber',
+    width: 140,
+  },
+  {
+    key: 'materialCode',
+    title: t('entity.masterdemandscheduleline.materialcode'),
+    editor: 'input',
+    width: 140,
+  },
+  {
+    key: 'bucketStart',
+    title: t('entity.masterdemandscheduleline.bucketstart'),
+    editor: 'datePicker',
+    valueFormat: 'YYYY-MM-DD',
+    width: 140,
+  },
 ])
 
 /** 编辑态从 formData 同步各子表行 */
@@ -286,7 +334,14 @@ function syncChildRowsFromFormData(val: Partial<MasterDemandScheduleCreate & { m
 
 function createDefaultMasterDemandScheduleLineRow(): Record<string, unknown> {
   return {
-
+    mdsCode: '',
+    demandSourceType: 0,
+    salesOrderId: '',
+    salesOrderLineNumber: 0,
+    salesPlanId: '',
+    salesPlanLineNumber: 0,
+    materialCode: '',
+    bucketStart: '',
   }
 }
 

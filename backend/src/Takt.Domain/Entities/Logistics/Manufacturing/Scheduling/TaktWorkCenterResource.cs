@@ -25,14 +25,14 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Scheduling;
 public class TaktWorkCenterResource : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工作中心 ID（主子表关系）
+    /// 工作中心 ID（主子表关系，关联 TaktWorkCenter.Id，选项 TaktWorkCenters/options）
     /// </summary>
     [SugarColumn(ColumnName = "work_center_id", ColumnDescription = "工作中心ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long WorkCenterId { get; set; }
 
     /// <summary>
-    /// 工作中心编码（冗余）
+    /// 工作中心编码（关联 TaktWorkCenter.WorkCenterCode，冗余；选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
     /// </summary>
     [SugarColumn(ColumnName = "work_center_code", ColumnDescription = "工作中心编码", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
     public string WorkCenterCode { get; set; } = string.Empty;

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Personnel
 // 文件名称：TaktEmployeeResignationService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：员工离职应用服务实现
 // 
@@ -14,7 +14,6 @@ using System.Linq.Expressions;
 using Mapster;
 using SqlSugar;
 using Takt.Application.Dtos.HumanResource.Personnel;
-using Takt.Application.Services.Workflow.FlowEngine.Business;
 using Takt.Domain.Entities.HumanResource.Personnel;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
@@ -22,39 +21,32 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Services.HumanResource.Personnel;
 
 /// <summary>
 /// 员工离职应用服务
 /// </summary>
-public class TaktEmployeeResignationService : TaktServiceBase, ITaktEmployeeResignationService, ITaktApprovalFlowCompletedContributor
+public class TaktEmployeeResignationService : TaktServiceBase, ITaktEmployeeResignationService
 {
-    private static readonly int ApprovedStatus = (int)TaktApprovalStatus.Approved;
-
     private readonly ITaktApprovalRepository<TaktEmployeeResignation> _employeeResignationRepository;
-    private readonly ITaktCompanyRepository<TaktEmployee> _employeeRepository;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="employeeResignationRepository">员工离职仓储</param>
-    /// <param name="employeeRepository">员工仓储</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktEmployeeResignationService(
         ITaktApprovalRepository<TaktEmployeeResignation> employeeResignationRepository,
-        ITaktCompanyRepository<TaktEmployee> employeeRepository,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
         _employeeResignationRepository = employeeResignationRepository;
-        _employeeRepository = employeeRepository;
         _uniqueValidator = uniqueValidator;
     }
 
@@ -345,47 +337,5 @@ public class TaktEmployeeResignationService : TaktServiceBase, ITaktEmployeeResi
         }
 
         return exp.ToExpression();
-    }
-
-    /// <inheritdoc />
-    public string RelatedTableName => TaktApprovalEntityTableNames.Of<TaktEmployeeResignation>();
-
-    /// <inheritdoc />
-    public Task OnApprovalFlowCompletedAsync(TaktApprovalFlowCompletedContext context) =>
-        OnEmployeeResignationFlowCompletedAsync(context);
-
-    /// <summary>
-    /// 离职审批通过后回写员工主档离职投影
-    /// </summary>
-    /// <param name="context">回写上下文</param>
-    /// <returns>异步任务</returns>
-    private async Task OnEmployeeResignationFlowCompletedAsync(TaktApprovalFlowCompletedContext context)
-    {
-        ArgumentNullException.ThrowIfNull(context);
-        if (context.EntityId <= 0)
-        {
-            return;
-        }
-        var resignation = await _employeeResignationRepository.GetByIdAsync(context.EntityId);
-        if (resignation == null
-            || resignation.TenantCode != context.TenantCode
-            || resignation.CompanyCode != context.CompanyCode
-            || resignation.ApprovalStatus != ApprovedStatus)
-        {
-            return;
-        }
-        var employee = await _employeeRepository.GetByIdAsync(resignation.EmployeeId);
-        if (employee == null
-            || employee.TenantCode != context.TenantCode
-            || employee.CompanyCode != context.CompanyCode)
-        {
-            ThrowBusinessException("员工不存在或无权访问");
-        }
-        employee.TerminationDate = resignation.TerminationDate;
-        employee.LastWorkDate = resignation.LastWorkDate;
-        employee.ResignationType = resignation.ResignationType;
-        employee.ResignationReason = resignation.Reason;
-        employee.EmployeeStatus = resignation.ResignationType == 3 ? 4 : 3;
-        await _employeeRepository.UpdateAsync(employee);
     }
 }

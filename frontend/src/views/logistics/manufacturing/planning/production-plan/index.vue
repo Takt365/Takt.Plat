@@ -81,6 +81,12 @@
             @change="(checked: unknown) => handlePlanStatusChange(record, Boolean(checked))"
           />
         </template>
+        <template v-else-if="column.key === 'convertedStatus'">
+          <TaktDictTag
+            :value="getProductionPlanField(record, 'convertedStatus')"
+            dict-type="sys_convert_status"
+          />
+        </template>
       </template>
       <template #detail>
         <ProductionPlanItemPanel
@@ -162,6 +168,28 @@
         />
       </a-form-item>
       </div>
+      <div v-show="isFieldVisible('masterProductionScheduleId')">
+      <a-form-item :label="t('entity.productionplan.masterproductionscheduleid')">
+        <a-input
+          v-model:value="advancedQueryForm.masterProductionScheduleId"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionplan.masterproductionscheduleid') })"
+          show-count
+          :maxlength="20"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('mpsCode')">
+      <a-form-item :label="t('entity.productionplan.mpscode')">
+        <a-input
+          v-model:value="advancedQueryForm.mpsCode"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionplan.mpscode') })"
+          show-count
+          :maxlength="40"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('planDateStart')">
       <a-form-item :label="t('entity.productionplan.plandatestart')">
         <a-date-picker
@@ -184,45 +212,41 @@
       </div>
       <div v-show="isFieldVisible('planPeriodStartStart')">
       <a-form-item :label="t('entity.productionplan.planperiodstartstart')">
-        <a-input
+        <a-date-picker
           v-model:value="advancedQueryForm.planPeriodStartStart"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionplan.planperiodstartstart') })"
-          show-count
-          :maxlength="20"
-          allow-clear
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionplan.planperiodstartstart') })"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('planPeriodStartEnd')">
       <a-form-item :label="t('entity.productionplan.planperiodstartend')">
-        <a-input
+        <a-date-picker
           v-model:value="advancedQueryForm.planPeriodStartEnd"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionplan.planperiodstartend') })"
-          show-count
-          :maxlength="20"
-          allow-clear
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionplan.planperiodstartend') })"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('planPeriodEndStart')">
       <a-form-item :label="t('entity.productionplan.planperiodendstart')">
-        <a-input
+        <a-date-picker
           v-model:value="advancedQueryForm.planPeriodEndStart"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionplan.planperiodendstart') })"
-          show-count
-          :maxlength="20"
-          allow-clear
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionplan.planperiodendstart') })"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('planPeriodEndEnd')">
       <a-form-item :label="t('entity.productionplan.planperiodendend')">
-        <a-input
+        <a-date-picker
           v-model:value="advancedQueryForm.planPeriodEndEnd"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionplan.planperiodendend') })"
-          show-count
-          :maxlength="20"
-          allow-clear
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionplan.planperiodendend') })"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
         />
       </a-form-item>
       </div>
@@ -296,10 +320,11 @@
       </div>
       <div v-show="isFieldVisible('convertedStatus')">
       <a-form-item :label="t('entity.productionplan.convertedstatus')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.convertedStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionplan.convertedstatus') })"
-          style="width: 100%"
+          dict-type="sys_convert_status"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionplan.convertedstatus') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -315,10 +340,11 @@
       </div>
       <div v-show="isFieldVisible('approvalStatus')">
       <a-form-item :label="t('entity.productionplan.approvalstatus')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.approvalStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionplan.approvalstatus') })"
-          style="width: 100%"
+          dict-type="sys_approval_status"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionplan.approvalstatus') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -403,7 +429,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -414,7 +440,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -566,6 +592,8 @@ const advancedQueryForm = ref({
   productionPlanCode: '',
   salesPlanId: '',
   salesPlanCode: '',
+  masterProductionScheduleId: '',
+  mpsCode: '',
   planDateStart: '',
   planDateEnd: '',
   planPeriodStartStart: '',
@@ -600,6 +628,8 @@ const queryFieldsMeta = computed(() => [
   { key: 'productionPlanCode', label: t('entity.productionplan.code') },
   { key: 'salesPlanId', label: t('entity.productionplan.salesplanid') },
   { key: 'salesPlanCode', label: t('entity.productionplan.salesplancode') },
+  { key: 'masterProductionScheduleId', label: t('entity.productionplan.masterproductionscheduleid') },
+  { key: 'mpsCode', label: t('entity.productionplan.mpscode') },
   { key: 'planDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.productionplan.plandate')) },
   { key: 'planDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.productionplan.plandate')) },
   { key: 'planPeriodStartStart', label: t('entity.productionplan.planperiodstartstart') },
@@ -675,6 +705,8 @@ function buildListQuery(overrides?: Partial<ProductionPlanQuery>): ProductionPla
   assignTrimmed('productionPlanCode', form.productionPlanCode)
   assignTrimmed('salesPlanId', form.salesPlanId)
   assignTrimmed('salesPlanCode', form.salesPlanCode)
+  assignTrimmed('masterProductionScheduleId', form.masterProductionScheduleId)
+  assignTrimmed('mpsCode', form.mpsCode)
   assignTrimmed('planDateStart', form.planDateStart)
   assignTrimmed('planDateEnd', form.planDateEnd)
   assignTrimmed('planPeriodStartStart', form.planPeriodStartStart)
@@ -825,6 +857,24 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getProductionPlanField(record, 'salesPlanCode') ?? ''
   },
   {
+    title: t('entity.productionplan.masterproductionscheduleid'),
+    dataIndex: 'masterProductionScheduleId',
+    key: 'masterProductionScheduleId',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getProductionPlanField(record, 'masterProductionScheduleId') ?? ''
+  },
+  {
+    title: t('entity.productionplan.mpscode'),
+    dataIndex: 'mpsCode',
+    key: 'mpsCode',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getProductionPlanField(record, 'mpsCode') ?? ''
+  },
+  {
     title: t('entity.productionplan.plandate'),
     dataIndex: 'planDate',
     key: 'planDate',
@@ -920,7 +970,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getProductionPlanField(record, 'convertedStatus') ?? ''
   },
   {
     title: t('entity.productionplan.plandescription'),
@@ -980,7 +1029,7 @@ const rowSelection = computed(() => ({
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
-    } else if (getProductionPlanId(selectedRow.value) === getProductionPlanId(record)) {
+    } else if (selectedRow.value && getProductionPlanId(selectedRow.value) === getProductionPlanId(record)) {
       selectedRow.value = null
       syncMasterSelection(null)
     }
@@ -1025,6 +1074,8 @@ function handleReset() {
   productionPlanCode: '',
   salesPlanId: '',
   salesPlanCode: '',
+  masterProductionScheduleId: '',
+  mpsCode: '',
   planDateStart: '',
   planDateEnd: '',
   planPeriodStartStart: '',
@@ -1267,6 +1318,8 @@ function handleAdvancedQueryReset() {
   productionPlanCode: '',
   salesPlanId: '',
   salesPlanCode: '',
+  masterProductionScheduleId: '',
+  mpsCode: '',
   planDateStart: '',
   planDateEnd: '',
   planPeriodStartStart: '',

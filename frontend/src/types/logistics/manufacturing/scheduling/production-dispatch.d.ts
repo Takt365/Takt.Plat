@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/scheduling
 // 文件名称：production-dispatch.d.ts
-// 创建时间：2026-06-22
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/scheduling 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -218,7 +218,7 @@ export interface ProductionDispatchCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -376,6 +376,21 @@ export interface ProductionDispatchTemplate {
   processCode?: string;
 
   /**
+   * 派工数量
+   */
+  dispatchQuantity?: number;
+
+  /**
+   * 计划开始时间
+   */
+  plannedStartTime?: string;
+
+  /**
+   * 计划结束时间
+   */
+  plannedEndTime?: string;
+
+  /**
    * 派工状态（字典 production_dispatch_status；0=待执行，1=执行中，2=已完成，3=已取消）
    */
   dispatchStatus?: number;
@@ -410,7 +425,7 @@ export interface ProductionDispatchImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -448,6 +463,21 @@ export interface ProductionDispatchImport {
    * 工序编码
    */
   processCode?: string;
+
+  /**
+   * 派工数量
+   */
+  dispatchQuantity?: number;
+
+  /**
+   * 计划开始时间
+   */
+  plannedStartTime?: string;
+
+  /**
+   * 计划结束时间
+   */
+  plannedEndTime?: string;
 
   /**
    * 派工状态（字典 production_dispatch_status；0=待执行，1=执行中，2=已完成，3=已取消）

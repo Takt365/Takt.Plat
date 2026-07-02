@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Maintenance
 // 文件名称：TaktMaintenanceWorkOrderValidators.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：MaintenanceWorkOrder 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktMaintenanceWorkOrder 生成，请按需审阅）
 // 
@@ -43,8 +43,6 @@ public class TaktMaintenanceWorkOrderCreateValidator : AbstractValidator<TaktMai
             .MaximumLength(50).WithMessage("维护工单号长度不能超过50个字符");
         RuleFor(x => x.MaintenanceNotificationId)
             .GreaterThanOrEqualTo(0).WithMessage("来源维护通知单ID不能为负数");
-        RuleFor(x => x.NotificationCode)
-            .MaximumLength(50).WithMessage("来源通知单号长度不能超过50个字符");
         RuleFor(x => x.EquipmentId)
             .GreaterThanOrEqualTo(0).WithMessage("设备ID不能为负数");
         RuleFor(x => x.EquipmentCode)
@@ -53,34 +51,10 @@ public class TaktMaintenanceWorkOrderCreateValidator : AbstractValidator<TaktMai
         RuleFor(x => x.EquipmentName)
             .NotEmpty().WithMessage("设备名称不能为空")
             .MaximumLength(200).WithMessage("设备名称长度不能超过200个字符");
-        RuleFor(x => x.WorkCenter)
-            .MaximumLength(50).WithMessage("工作中心长度不能超过50个字符");
-        RuleFor(x => x.AssignedTechnician)
-            .MaximumLength(50).WithMessage("指派技师长度不能超过50个字符");
-        RuleFor(x => x.MaintenanceCompany)
-            .MaximumLength(200).WithMessage("维护单位长度不能超过200个字符");
-        RuleFor(x => x.FaultDescription)
-            .MaximumLength(2000).WithMessage("故障描述长度不能超过2000个字符");
-        RuleFor(x => x.MaintenanceContent)
-            .MaximumLength(2000).WithMessage("维护内容长度不能超过2000个字符");
-        RuleFor(x => x.Solution)
-            .MaximumLength(2000).WithMessage("处理方案长度不能超过2000个字符");
         RuleFor(x => x.CostCenterId)
             .GreaterThanOrEqualTo(0).WithMessage("结算成本中心ID不能为负数");
-        RuleFor(x => x.CostCenterCode)
-            .MaximumLength(50).WithMessage("结算成本中心编码长度不能超过50个字符");
         RuleFor(x => x.CostElementId)
             .GreaterThanOrEqualTo(0).WithMessage("成本要素ID不能为负数");
-        RuleFor(x => x.CostElementCode)
-            .MaximumLength(50).WithMessage("成本要素编码长度不能超过50个字符");
-        RuleFor(x => x.AcceptedBy)
-            .MaximumLength(50).WithMessage("验收人长度不能超过50个字符");
-        RuleFor(x => x.MaintenanceImages)
-            .MaximumLength(2000).WithMessage("维护图片长度不能超过2000个字符");
-        RuleFor(x => x.MaintenanceDocuments)
-            .MaximumLength(2000).WithMessage("维护文档长度不能超过2000个字符");
-        RuleFor(x => x.AcceptedSummary)
-            .MaximumLength(500).WithMessage("验收总结长度不能超过500个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -104,6 +78,36 @@ public class TaktMaintenanceWorkOrderUpdateValidator : AbstractValidator<TaktMai
     {
         RuleFor(x => x.MaintenanceWorkOrderId)
             .GreaterThan(0).WithMessage("MaintenanceWorkOrderID无效");
+        RuleFor(x => x.TenantCode)
+            .NotEmpty().WithMessage("租户编码不能为空")
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.CompanyCode)
+            .NotEmpty().WithMessage("公司代码不能为空")
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.PlantCode)
+            .NotEmpty().WithMessage("工厂代码不能为空")
+            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
+        RuleFor(x => x.WorkOrderCode)
+            .NotEmpty().WithMessage("维护工单号不能为空")
+            .MaximumLength(50).WithMessage("维护工单号长度不能超过50个字符");
+        RuleFor(x => x.MaintenanceNotificationId)
+            .GreaterThanOrEqualTo(0).WithMessage("来源维护通知单ID不能为负数");
+        RuleFor(x => x.EquipmentId)
+            .GreaterThanOrEqualTo(0).WithMessage("设备ID不能为负数");
+        RuleFor(x => x.EquipmentCode)
+            .NotEmpty().WithMessage("设备编码不能为空")
+            .MaximumLength(50).WithMessage("设备编码长度不能超过50个字符");
+        RuleFor(x => x.EquipmentName)
+            .NotEmpty().WithMessage("设备名称不能为空")
+            .MaximumLength(200).WithMessage("设备名称长度不能超过200个字符");
+        RuleFor(x => x.CostCenterId)
+            .GreaterThanOrEqualTo(0).WithMessage("结算成本中心ID不能为负数");
+        RuleFor(x => x.CostElementId)
+            .GreaterThanOrEqualTo(0).WithMessage("成本要素ID不能为负数");
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
     }
 }
 
@@ -133,8 +137,6 @@ public class TaktMaintenanceWorkOrderImportValidator : AbstractValidator<TaktMai
             .MaximumLength(50).WithMessage("维护工单号长度不能超过50个字符");
         RuleFor(x => x.MaintenanceNotificationId)
             .GreaterThanOrEqualTo(0).WithMessage("来源维护通知单ID不能为负数");
-        RuleFor(x => x.NotificationCode)
-            .MaximumLength(50).WithMessage("来源通知单号长度不能超过50个字符").When(x => !string.IsNullOrWhiteSpace(x.NotificationCode));
         RuleFor(x => x.EquipmentId)
             .GreaterThanOrEqualTo(0).WithMessage("设备ID不能为负数");
         RuleFor(x => x.EquipmentCode)
@@ -143,8 +145,10 @@ public class TaktMaintenanceWorkOrderImportValidator : AbstractValidator<TaktMai
         RuleFor(x => x.EquipmentName)
             .NotEmpty().WithMessage("设备名称不能为空")
             .MaximumLength(200).WithMessage("设备名称长度不能超过200个字符");
-        RuleFor(x => x.WorkCenter)
-            .MaximumLength(50).WithMessage("工作中心长度不能超过50个字符").When(x => !string.IsNullOrWhiteSpace(x.WorkCenter));
+        RuleFor(x => x.CostCenterId)
+            .GreaterThanOrEqualTo(0).WithMessage("结算成本中心ID不能为负数");
+        RuleFor(x => x.CostElementId)
+            .GreaterThanOrEqualTo(0).WithMessage("成本要素ID不能为负数");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/materials
 // 文件名称：material-change-log.d.ts
-// 创建时间：2026-06-21
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/materials 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,17 +29,17 @@ export interface MaterialChangeLog extends TenantDtoBase {
   materialChangeLogId: string;
 
   /**
-   * 全局物料ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 全局物料 ID（关联 TaktMaterial.Id，选项 TaktMaterials/options）
    */
   materialId: string;
 
   /**
-   * 全局物料名称（填充字段）
+   * 全局物料 名称（填充字段）
    */
   materialName?: string;
 
   /**
-   * 物料编码
+   * 物料编码（关联 TaktMaterial.MaterialCode，冗余；选项 TaktMaterials/options）
    */
   materialCode: string;
 
@@ -54,7 +54,7 @@ export interface MaterialChangeLog extends TenantDtoBase {
   changeTime: string;
 
   /**
-   * 变更人（人员代码）
+   * 变更人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
    */
   changeBy?: string;
 
@@ -84,12 +84,12 @@ export interface MaterialChangeLogQuery extends TaktPagedQuery {
   tenantCode?: string;
 
   /**
-   * 全局物料ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 全局物料 ID（关联 TaktMaterial.Id，选项 TaktMaterials/options）
    */
   materialId?: string;
 
   /**
-   * 物料编码
+   * 物料编码（关联 TaktMaterial.MaterialCode，冗余；选项 TaktMaterials/options）
    */
   materialCode?: string;
 
@@ -109,7 +109,7 @@ export interface MaterialChangeLogQuery extends TaktPagedQuery {
   changeTimeEnd?: string;
 
   /**
-   * 变更人（人员代码）
+   * 变更人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
    */
   changeBy?: string;
 
@@ -153,12 +153,12 @@ export interface MaterialChangeLogCreate {
   tenantCode: string;
 
   /**
-   * 全局物料ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 全局物料 ID（关联 TaktMaterial.Id，选项 TaktMaterials/options）
    */
   materialId: string;
 
   /**
-   * 物料编码
+   * 物料编码（关联 TaktMaterial.MaterialCode，冗余；选项 TaktMaterials/options）
    */
   materialCode: string;
 
@@ -173,7 +173,7 @@ export interface MaterialChangeLogCreate {
   changeTime: string;
 
   /**
-   * 变更人（人员代码）
+   * 变更人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
    */
   changeBy?: string;
 
@@ -222,12 +222,12 @@ export interface MaterialChangeLogExport {
   materialChangeLogId: string;
 
   /**
-   * 全局物料ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 全局物料 ID（关联 TaktMaterial.Id，选项 TaktMaterials/options）
    */
   materialId: string;
 
   /**
-   * 物料编码
+   * 物料编码（关联 TaktMaterial.MaterialCode，冗余；选项 TaktMaterials/options）
    */
   materialCode: string;
 
@@ -242,7 +242,7 @@ export interface MaterialChangeLogExport {
   changeTime: string;
 
   /**
-   * 变更人（人员代码）
+   * 变更人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
    */
   changeBy?: string;
 

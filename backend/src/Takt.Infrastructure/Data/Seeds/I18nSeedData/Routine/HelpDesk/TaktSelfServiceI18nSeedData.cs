@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.HelpDesk
 // 文件名称：TaktSelfServiceI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSelfService 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,13 +100,13 @@ public class TaktSelfServiceI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.selfservice.servicename", "zh-HK", "服务名称_hk", "自助服务名称"),
 
             // entity.selfservice.servicetype
-            new TranslationSeedItem("entity.selfservice.servicetype", "en-US", "服务类型_us", "服务类型（0=链接，1=表单，2=知识引导）"),
+            new TranslationSeedItem("entity.selfservice.servicetype", "en-US", "服务类型_us", "服务类型（字典 routine_self_service_type；0=链接 1=表单 2=知识引导）"),
             // entity.selfservice.servicetype
-            new TranslationSeedItem("entity.selfservice.servicetype", "ja-JP", "服务类型_jp", "服务类型（0=链接，1=表单，2=知识引导）"),
+            new TranslationSeedItem("entity.selfservice.servicetype", "ja-JP", "服务类型_jp", "服务类型（字典 routine_self_service_type；0=链接 1=表单 2=知识引导）"),
             // entity.selfservice.servicetype
-            new TranslationSeedItem("entity.selfservice.servicetype", "zh-CN", "服务类型", "服务类型（0=链接，1=表单，2=知识引导）"),
+            new TranslationSeedItem("entity.selfservice.servicetype", "zh-CN", "服务类型", "服务类型（字典 routine_self_service_type；0=链接 1=表单 2=知识引导）"),
             // entity.selfservice.servicetype
-            new TranslationSeedItem("entity.selfservice.servicetype", "zh-HK", "服务类型_hk", "服务类型（0=链接，1=表单，2=知识引导）"),
+            new TranslationSeedItem("entity.selfservice.servicetype", "zh-HK", "服务类型_hk", "服务类型（字典 routine_self_service_type；0=链接 1=表单 2=知识引导）"),
 
             // entity.selfservice.description
             new TranslationSeedItem("entity.selfservice.description", "en-US", "描述_us", "描述"),
@@ -135,14 +135,14 @@ public class TaktSelfServiceI18nSeedData : ITaktSeedDataCoordinator
             // entity.selfservice.iconurl
             new TranslationSeedItem("entity.selfservice.iconurl", "zh-HK", "图标URL_hk", "图标或图片 URL"),
 
-            // entity.selfservice.status
-            new TranslationSeedItem("entity.selfservice.status", "en-US", "状态_us", "自助服务状态（1=启用，0=禁用）"),
-            // entity.selfservice.status
-            new TranslationSeedItem("entity.selfservice.status", "ja-JP", "状态_jp", "自助服务状态（1=启用，0=禁用）"),
-            // entity.selfservice.status
-            new TranslationSeedItem("entity.selfservice.status", "zh-CN", "状态", "自助服务状态（1=启用，0=禁用）"),
-            // entity.selfservice.status
-            new TranslationSeedItem("entity.selfservice.status", "zh-HK", "状态_hk", "自助服务状态（1=启用，0=禁用）"),
+            // entity.selfservice.attachments
+            new TranslationSeedItem("entity.selfservice.attachments", "en-US", "附件_us", "附件（JSON 列表形式，由 TaktFile 统一上传到服务器）"),
+            // entity.selfservice.attachments
+            new TranslationSeedItem("entity.selfservice.attachments", "ja-JP", "附件_jp", "附件（JSON 列表形式，由 TaktFile 统一上传到服务器）"),
+            // entity.selfservice.attachments
+            new TranslationSeedItem("entity.selfservice.attachments", "zh-CN", "附件", "附件（JSON 列表形式，由 TaktFile 统一上传到服务器）"),
+            // entity.selfservice.attachments
+            new TranslationSeedItem("entity.selfservice.attachments", "zh-HK", "附件_hk", "附件（JSON 列表形式，由 TaktFile 统一上传到服务器）"),
 
             // entity.selfservice.sortorder
             new TranslationSeedItem("entity.selfservice.sortorder", "en-US", "排序号_us", "排序号（越小越靠前）"),
@@ -152,6 +152,15 @@ public class TaktSelfServiceI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.selfservice.sortorder", "zh-CN", "排序号", "排序号（越小越靠前）"),
             // entity.selfservice.sortorder
             new TranslationSeedItem("entity.selfservice.sortorder", "zh-HK", "排序号_hk", "排序号（越小越靠前）"),
+
+            // entity.selfservice.status
+            new TranslationSeedItem("entity.selfservice.status", "en-US", "状态_us", "自助服务状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
+            // entity.selfservice.status
+            new TranslationSeedItem("entity.selfservice.status", "ja-JP", "状态_jp", "自助服务状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
+            // entity.selfservice.status
+            new TranslationSeedItem("entity.selfservice.status", "zh-CN", "状态", "自助服务状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
+            // entity.selfservice.status
+            new TranslationSeedItem("entity.selfservice.status", "zh-HK", "状态_hk", "自助服务状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
         };
     }
 

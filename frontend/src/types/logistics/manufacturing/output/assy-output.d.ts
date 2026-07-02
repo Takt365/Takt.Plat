@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/output
 // 文件名称：assy-output.d.ts
-// 创建时间：2026-06-20
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/output 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -16,7 +16,7 @@ import type {
 } from '@/types/common';
 
 /**
- * 组立日报（产出）主表实体
+ * 组立日报（产出）主表实体 达成率(%) = 明细实际生产数量合计 ÷ 主表标准产能合计 × 100%。
  * 对应前端 TaktAssyOutputDto
  * 继承 TaktCompanyDtoBase
  * 对应前端 AssyOutput
@@ -29,12 +29,12 @@ export interface AssyOutput extends CompanyDtoBase {
   assyOutputId: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
   plantCode: string;
 
   /**
-   * 生产类别 RD: 研发 EVT: 工程验证测试 DVT: 设计验证测试 EPP: 工程试产 PP: 试产 FPP: 正式生产 MP: 大规模生产 RPR: 维修生产 RWR: 返工生产
+   * 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
    */
   prodCategory: string;
 
@@ -44,9 +44,9 @@ export interface AssyOutput extends CompanyDtoBase {
   prodDate: string;
 
   /**
-   * 生产线
+   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
    */
-  prodLine: string;
+  prodTeam: string;
 
   /**
    * 直接人员
@@ -59,17 +59,17 @@ export interface AssyOutput extends CompanyDtoBase {
   indirectLabor: number;
 
   /**
-   * 班次(1=早班 2=中班 3=晚班)
+   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo: number;
 
   /**
-   * 生产订单类型
+   * 生产订单类型（选项 TaktProductionOrders/options 的 ExtLabel，随工单回填）
    */
   prodOrderType?: string;
 
   /**
-   * 生产工单号
+   * 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
    */
   prodOrderCode: string;
 
@@ -104,11 +104,6 @@ export interface AssyOutput extends CompanyDtoBase {
   stdCapacity: number;
 
   /**
-   * 状态
-   */
-  status: number;
-
-  /**
    * 组立日报明细列表 （子表：TaktAssyOutputDetail）
    */
   assyOutputDetails?: AssyOutputDetail[];
@@ -134,12 +129,12 @@ export interface AssyOutputQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
   plantCode?: string;
 
   /**
-   * 生产类别 RD: 研发 EVT: 工程验证测试 DVT: 设计验证测试 EPP: 工程试产 PP: 试产 FPP: 正式生产 MP: 大规模生产 RPR: 维修生产 RWR: 返工生产
+   * 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
    */
   prodCategory?: string;
 
@@ -154,9 +149,9 @@ export interface AssyOutputQuery extends TaktPagedQuery {
   prodDateEnd?: string;
 
   /**
-   * 生产线
+   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
    */
-  prodLine?: string;
+  prodTeam?: string;
 
   /**
    * 直接人员
@@ -169,17 +164,17 @@ export interface AssyOutputQuery extends TaktPagedQuery {
   indirectLabor?: number;
 
   /**
-   * 班次(1=早班 2=中班 3=晚班)
+   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo?: number;
 
   /**
-   * 生产订单类型
+   * 生产订单类型（选项 TaktProductionOrders/options 的 ExtLabel，随工单回填）
    */
   prodOrderType?: string;
 
   /**
-   * 生产工单号
+   * 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
    */
   prodOrderCode?: string;
 
@@ -212,11 +207,6 @@ export interface AssyOutputQuery extends TaktPagedQuery {
    * 标准产能
    */
   stdCapacity?: number;
-
-  /**
-   * 状态
-   */
-  status?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -258,17 +248,17 @@ export interface AssyOutputCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
   plantCode: string;
 
   /**
-   * 生产类别 RD: 研发 EVT: 工程验证测试 DVT: 设计验证测试 EPP: 工程试产 PP: 试产 FPP: 正式生产 MP: 大规模生产 RPR: 维修生产 RWR: 返工生产
+   * 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
    */
   prodCategory: string;
 
@@ -278,9 +268,9 @@ export interface AssyOutputCreate {
   prodDate: string;
 
   /**
-   * 生产线
+   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
    */
-  prodLine: string;
+  prodTeam: string;
 
   /**
    * 直接人员
@@ -293,17 +283,17 @@ export interface AssyOutputCreate {
   indirectLabor: number;
 
   /**
-   * 班次(1=早班 2=中班 3=晚班)
+   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo: number;
 
   /**
-   * 生产订单类型
+   * 生产订单类型（选项 TaktProductionOrders/options 的 ExtLabel，随工单回填）
    */
   prodOrderType?: string;
 
   /**
-   * 生产工单号
+   * 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
    */
   prodOrderCode: string;
 
@@ -336,11 +326,6 @@ export interface AssyOutputCreate {
    * 标准产能
    */
   stdCapacity: number;
-
-  /**
-   * 状态
-   */
-  status: number;
 
   /**
    * 组立日报明细列表（子表，级联保存）
@@ -376,25 +361,6 @@ export interface AssyOutputUpdate extends AssyOutputCreate {
 
 
 /**
- * AssyOutput 状态更新 DTO
- * 对应前端 AssyOutputStatus
- * @description 对应后端 TaktAssyOutputStatusDto
- */
-export interface AssyOutputStatus {
-  /**
-   * AssyOutputID
-   */
-  assyOutputId: string;
-
-  /**
-   * 状态
-   */
-  status: number;
-
-}
-
-
-/**
  * AssyOutput 导入模板行 DTO
  * 对应前端 AssyOutputTemplate
  * @description 对应后端 TaktAssyOutputTemplateDto
@@ -411,19 +377,24 @@ export interface AssyOutputTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
   plantCode?: string;
 
   /**
-   * 生产类别 RD: 研发 EVT: 工程验证测试 DVT: 设计验证测试 EPP: 工程试产 PP: 试产 FPP: 正式生产 MP: 大规模生产 RPR: 维修生产 RWR: 返工生产
+   * 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
    */
   prodCategory?: string;
 
   /**
-   * 生产线
+   * 生产日期
    */
-  prodLine?: string;
+  prodDate?: string;
+
+  /**
+   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+   */
+  prodTeam?: string;
 
   /**
    * 直接人员
@@ -436,17 +407,17 @@ export interface AssyOutputTemplate {
   indirectLabor?: number;
 
   /**
-   * 班次(1=早班 2=中班 3=晚班)
+   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo?: number;
 
   /**
-   * 生产订单类型
+   * 生产订单类型（选项 TaktProductionOrders/options 的 ExtLabel，随工单回填）
    */
   prodOrderType?: string;
 
   /**
-   * 生产工单号
+   * 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
    */
   prodOrderCode?: string;
 
@@ -466,9 +437,24 @@ export interface AssyOutputTemplate {
   batchNo?: string;
 
   /**
-   * 状态
+   * 订单数量
    */
-  status?: number;
+  prodOrderQty?: number;
+
+  /**
+   * 标准工时(分钟)
+   */
+  stdMinutes?: number;
+
+  /**
+   * 标准产能
+   */
+  stdCapacity?: number;
+
+  /**
+   * 组立日报明细列表（子表，级联保存）
+   */
+  assyOutputDetails?: AssyOutputDetailCreate[];
 
   /**
    * 扩展字段JSON
@@ -500,24 +486,29 @@ export interface AssyOutputImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
   plantCode?: string;
 
   /**
-   * 生产类别 RD: 研发 EVT: 工程验证测试 DVT: 设计验证测试 EPP: 工程试产 PP: 试产 FPP: 正式生产 MP: 大规模生产 RPR: 维修生产 RWR: 返工生产
+   * 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
    */
   prodCategory?: string;
 
   /**
-   * 生产线
+   * 生产日期
    */
-  prodLine?: string;
+  prodDate?: string;
+
+  /**
+   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+   */
+  prodTeam?: string;
 
   /**
    * 直接人员
@@ -530,17 +521,17 @@ export interface AssyOutputImport {
   indirectLabor?: number;
 
   /**
-   * 班次(1=早班 2=中班 3=晚班)
+   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo?: number;
 
   /**
-   * 生产订单类型
+   * 生产订单类型（选项 TaktProductionOrders/options 的 ExtLabel，随工单回填）
    */
   prodOrderType?: string;
 
   /**
-   * 生产工单号
+   * 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
    */
   prodOrderCode?: string;
 
@@ -560,9 +551,24 @@ export interface AssyOutputImport {
   batchNo?: string;
 
   /**
-   * 状态
+   * 订单数量
    */
-  status?: number;
+  prodOrderQty?: number;
+
+  /**
+   * 标准工时(分钟)
+   */
+  stdMinutes?: number;
+
+  /**
+   * 标准产能
+   */
+  stdCapacity?: number;
+
+  /**
+   * 组立日报明细列表（子表，级联保存）
+   */
+  assyOutputDetails?: AssyOutputDetailCreate[];
 
   /**
    * 扩展字段JSON
@@ -594,12 +600,12 @@ export interface AssyOutputExport {
   companyCode: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
   plantCode: string;
 
   /**
-   * 生产类别 RD: 研发 EVT: 工程验证测试 DVT: 设计验证测试 EPP: 工程试产 PP: 试产 FPP: 正式生产 MP: 大规模生产 RPR: 维修生产 RWR: 返工生产
+   * 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
    */
   prodCategory: string;
 
@@ -609,9 +615,9 @@ export interface AssyOutputExport {
   prodDate: string;
 
   /**
-   * 生产线
+   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
    */
-  prodLine: string;
+  prodTeam: string;
 
   /**
    * 直接人员
@@ -624,17 +630,17 @@ export interface AssyOutputExport {
   indirectLabor: number;
 
   /**
-   * 班次(1=早班 2=中班 3=晚班)
+   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo: number;
 
   /**
-   * 生产订单类型
+   * 生产订单类型（选项 TaktProductionOrders/options 的 ExtLabel，随工单回填）
    */
   prodOrderType?: string;
 
   /**
-   * 生产工单号
+   * 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
    */
   prodOrderCode: string;
 
@@ -669,11 +675,6 @@ export interface AssyOutputExport {
   stdCapacity: number;
 
   /**
-   * 状态
-   */
-  status: number;
-
-  /**
    * 扩展字段JSON
    */
   extField?: string;
@@ -688,5 +689,28 @@ export interface AssyOutputExport {
    */
   createdAt: string;
 
+}
+
+/**
+ * 组立生产统计（数据看板 production-stat）
+ * @description 对应后端 TaktAssyOutputProductionStatDto
+ */
+export interface AssyOutputProductionStat {
+  /** 统计月份 yyyy-MM */
+  statMonth: string;
+  /** 月标准产能合计 */
+  monthStdCapacity: number;
+  /** 月实际产量合计 */
+  monthProdActualQty: number;
+  /** 月达成率（%） */
+  monthAchievementRate: number;
+  /** 月停线损失（分钟） */
+  monthDowntimeMinutes: number;
+  /** 月投入工时（分钟） */
+  monthInputMinutes: number;
+  /** 月生产工时（分钟） */
+  monthProdMinutes: number;
+  /** 月实际工时（分钟） */
+  monthActualMinutes: number;
 }
 

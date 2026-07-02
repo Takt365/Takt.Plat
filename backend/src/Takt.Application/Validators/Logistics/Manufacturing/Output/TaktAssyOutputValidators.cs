@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Manufacturing.Output
 // 文件名称：TaktAssyOutputValidators.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：AssyOutput 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktAssyOutput 生成，请按需审阅）
 // 
@@ -39,13 +39,11 @@ public class TaktAssyOutputCreateValidator : AbstractValidator<TaktAssyOutputCre
             .NotEmpty().WithMessage("工厂代码不能为空")
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.ProdCategory)
-            .NotEmpty().WithMessage("生产类别 RD: 研发 EVT: 工程验证测试 DVT: 设计验证测试 EPP:不能为空")
-            .MaximumLength(20).WithMessage("生产类别 RD: 研发 EVT: 工程验证测试 DVT: 设计验证测试 EPP:长度不能超过20个字符");
-        RuleFor(x => x.ProdLine)
-            .NotEmpty().WithMessage("生产线不能为空")
-            .MaximumLength(20).WithMessage("生产线长度不能超过20个字符");
-        RuleFor(x => x.ProdOrderType)
-            .MaximumLength(20).WithMessage("生产订单类型长度不能超过20个字符");
+            .NotEmpty().WithMessage("生产类别不能为空")
+            .MaximumLength(20).WithMessage("生产类别长度不能超过20个字符");
+        RuleFor(x => x.ProdTeam)
+            .NotEmpty().WithMessage("生产班组不能为空")
+            .MaximumLength(20).WithMessage("生产班组长度不能超过20个字符");
         RuleFor(x => x.ProdOrderCode)
             .NotEmpty().WithMessage("生产工单号不能为空")
             .MaximumLength(20).WithMessage("生产工单号长度不能超过20个字符");
@@ -55,8 +53,6 @@ public class TaktAssyOutputCreateValidator : AbstractValidator<TaktAssyOutputCre
         RuleFor(x => x.MaterialCode)
             .NotEmpty().WithMessage("物料编码不能为空")
             .MaximumLength(20).WithMessage("物料编码长度不能超过20个字符");
-        RuleFor(x => x.BatchNo)
-            .MaximumLength(20).WithMessage("批次长度不能超过20个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -80,6 +76,34 @@ public class TaktAssyOutputUpdateValidator : AbstractValidator<TaktAssyOutputUpd
     {
         RuleFor(x => x.AssyOutputId)
             .GreaterThan(0).WithMessage("AssyOutputID无效");
+        RuleFor(x => x.TenantCode)
+            .NotEmpty().WithMessage("租户编码不能为空")
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.CompanyCode)
+            .NotEmpty().WithMessage("公司代码不能为空")
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.PlantCode)
+            .NotEmpty().WithMessage("工厂代码不能为空")
+            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
+        RuleFor(x => x.ProdCategory)
+            .NotEmpty().WithMessage("生产类别不能为空")
+            .MaximumLength(20).WithMessage("生产类别长度不能超过20个字符");
+        RuleFor(x => x.ProdTeam)
+            .NotEmpty().WithMessage("生产班组不能为空")
+            .MaximumLength(20).WithMessage("生产班组长度不能超过20个字符");
+        RuleFor(x => x.ProdOrderCode)
+            .NotEmpty().WithMessage("生产工单号不能为空")
+            .MaximumLength(20).WithMessage("生产工单号长度不能超过20个字符");
+        RuleFor(x => x.ModelCode)
+            .NotEmpty().WithMessage("机种不能为空")
+            .MaximumLength(20).WithMessage("机种长度不能超过20个字符");
+        RuleFor(x => x.MaterialCode)
+            .NotEmpty().WithMessage("物料编码不能为空")
+            .MaximumLength(20).WithMessage("物料编码长度不能超过20个字符");
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
     }
 }
 
@@ -105,13 +129,11 @@ public class TaktAssyOutputImportValidator : AbstractValidator<TaktAssyOutputImp
             .NotEmpty().WithMessage("工厂代码不能为空")
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.ProdCategory)
-            .NotEmpty().WithMessage("生产类别 RD: 研发 EVT: 工程验证测试 DVT: 设计验证测试 EPP:不能为空")
-            .MaximumLength(20).WithMessage("生产类别 RD: 研发 EVT: 工程验证测试 DVT: 设计验证测试 EPP:长度不能超过20个字符");
-        RuleFor(x => x.ProdLine)
-            .NotEmpty().WithMessage("生产线不能为空")
-            .MaximumLength(20).WithMessage("生产线长度不能超过20个字符");
-        RuleFor(x => x.ProdOrderType)
-            .MaximumLength(20).WithMessage("生产订单类型长度不能超过20个字符").When(x => !string.IsNullOrWhiteSpace(x.ProdOrderType));
+            .NotEmpty().WithMessage("生产类别不能为空")
+            .MaximumLength(20).WithMessage("生产类别长度不能超过20个字符");
+        RuleFor(x => x.ProdTeam)
+            .NotEmpty().WithMessage("生产班组不能为空")
+            .MaximumLength(20).WithMessage("生产班组长度不能超过20个字符");
         RuleFor(x => x.ProdOrderCode)
             .NotEmpty().WithMessage("生产工单号不能为空")
             .MaximumLength(20).WithMessage("生产工单号长度不能超过20个字符");
@@ -121,8 +143,6 @@ public class TaktAssyOutputImportValidator : AbstractValidator<TaktAssyOutputImp
         RuleFor(x => x.MaterialCode)
             .NotEmpty().WithMessage("物料编码不能为空")
             .MaximumLength(20).WithMessage("物料编码长度不能超过20个字符");
-        RuleFor(x => x.BatchNo)
-            .MaximumLength(20).WithMessage("批次长度不能超过20个字符").When(x => !string.IsNullOrWhiteSpace(x.BatchNo));
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

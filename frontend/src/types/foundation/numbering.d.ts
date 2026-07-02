@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/foundation
 // 文件名称：numbering.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：foundation 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -39,32 +39,32 @@ export interface Numbering extends CompanyDtoBase {
   ruleName: string;
 
   /**
-   * 单据类型
+   * 单据类型（关联 TaktMenu.Id，选项 TaktMenus/tree-options）
    */
   documentType: string;
 
   /**
-   * 部门编码（如：DEPT01, DEPT02，不可为空） 从 TaktDepartment 实体自动获取 DisplayCode
+   * 部门编码（关联 TaktIsoCode.IsoCode，选项 TaktIsoCodes/options）
    */
-  departmentCode: string;
+  deptCode: string;
 
   /**
-   * 前缀编码（如：PUR、SORD，最多 4 位）
+   * 前缀编码（如：PUR、SORD、ANN）
    */
   prefixCode?: string;
 
   /**
-   * 日期格式（yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH） 为空表示不使用日期
+   * 日期格式（字典 sys_numbering_date_format_config；none/空=不使用日期；yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH；须与 reset_period 粒度匹配）
    */
   dateFormat?: string;
 
   /**
-   * 流水号位数（3=001, 4=0001, 5=00001, 6=000001）
+   * 流水位数（3=001, 4=0001, 5=00001, 6=000001）
    */
   sequenceLength: number;
 
   /**
-   * 流水号步长（每次递增的数值，默认1）
+   * 流水步长（每次递增的数值，默认1）
    */
   sequenceStep: number;
 
@@ -74,39 +74,39 @@ export interface Numbering extends CompanyDtoBase {
   suffixCode?: string;
 
   /**
-   * 重置周期（daily=每日重置，monthly=每月重置，yearly=每年重置，none=不重置）
+   * 重置周期（字典 sys_reset_period_config；none=不重置，day/month/year/hour=按日/月/年/时；须与 date_format 粒度匹配）
    */
   resetPeriod: string;
 
   /**
-   * 当前流水号（用于记录下一个流水号值）
+   * 当前流水（用于记录下一个流水号值）
    */
   currentSequence: number;
 
   /**
-   * 起始编码（完整业务编号，末段为流水号） 如：SO-20250120-000001
+   * 起始编码（新增时必填；完整业务编号样例，末段为当前流水号） 如：SO-20250120-000001；生成编号后会更新为最近一次产出编码
    */
   exampleCode: string;
 
   /**
    * 分隔符（空=段直接拼接；-=连字符分隔，默认 -）
    */
-  separator: string;
+  separator?: string;
 
   /**
-   * 是否内置（0=否，1=是，系统内置的不可删除）
+   * 内置（字典 sys_yes_no_type；0=否 1=是）
    */
   isBuiltIn: number;
 
   /**
-   * 状态（1=启用，0=禁用）
+   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
    */
-  status: number;
+  numberingStatus: number;
 
   /**
-   * 描述说明；可选配置编码段顺序，格式：segments:DocumentType,CompanyCode,DepartmentCode,Prefix,DateFormat,Sequence（段名为实体属性名，Sequence 为流水号占位）
+   * 描述说明；可选配置编码段顺序，格式：segments:CompanyCode,DeptCode,PrefixCode,DateSequence（段名为实体属性名）
    */
-  description?: string;
+  numberingDescription?: string;
 
 }
 
@@ -139,32 +139,32 @@ export interface NumberingQuery extends TaktPagedQuery {
   ruleName?: string;
 
   /**
-   * 单据类型
+   * 单据类型（关联 TaktMenu.Id，选项 TaktMenus/tree-options）
    */
   documentType?: string;
 
   /**
-   * 部门编码（如：DEPT01, DEPT02，不可为空） 从 TaktDepartment 实体自动获取 DisplayCode
+   * 部门编码（关联 TaktIsoCode.IsoCode，选项 TaktIsoCodes/options）
    */
-  departmentCode?: string;
+  deptCode?: string;
 
   /**
-   * 前缀编码（如：PUR、SORD，最多 4 位）
+   * 前缀编码（如：PUR、SORD、ANN）
    */
   prefixCode?: string;
 
   /**
-   * 日期格式（yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH） 为空表示不使用日期
+   * 日期格式（字典 sys_numbering_date_format_config；none/空=不使用日期；yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH；须与 reset_period 粒度匹配）
    */
   dateFormat?: string;
 
   /**
-   * 流水号位数（3=001, 4=0001, 5=00001, 6=000001）
+   * 流水位数（3=001, 4=0001, 5=00001, 6=000001）
    */
   sequenceLength?: number;
 
   /**
-   * 流水号步长（每次递增的数值，默认1）
+   * 流水步长（每次递增的数值，默认1）
    */
   sequenceStep?: number;
 
@@ -174,34 +174,39 @@ export interface NumberingQuery extends TaktPagedQuery {
   suffixCode?: string;
 
   /**
-   * 重置周期（daily=每日重置，monthly=每月重置，yearly=每年重置，none=不重置）
+   * 重置周期（字典 sys_reset_period_config；none=不重置，day/month/year/hour=按日/月/年/时；须与 date_format 粒度匹配）
    */
   resetPeriod?: string;
 
   /**
-   * 当前流水号（用于记录下一个流水号值）
+   * 当前流水（用于记录下一个流水号值）
    */
   currentSequence?: number;
 
   /**
-   * 起始编码（模糊查询，可选） 如：SO-20250120-000001
+   * 起始编码（新增时必填；完整业务编号样例，末段为当前流水号） 如：SO-20250120-000001；生成编号后会更新为最近一次产出编码
    */
   exampleCode?: string;
 
   /**
-   * 是否内置（0=否，1=是，系统内置的不可删除）
+   * 分隔符（空=段直接拼接；-=连字符分隔，默认 -）
+   */
+  separator?: string;
+
+  /**
+   * 内置（字典 sys_yes_no_type；0=否 1=是）
    */
   isBuiltIn?: number;
 
   /**
-   * 状态（1=启用，0=禁用）
+   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
    */
-  status?: number;
+  numberingStatus?: number;
 
   /**
-   * 描述说明；可选配置编码段顺序，格式：segments:DocumentType,CompanyCode,DepartmentCode,Prefix,DateFormat,Sequence（段名为实体属性名，Sequence 为流水号占位）
+   * 描述说明；可选配置编码段顺序，格式：segments:CompanyCode,DeptCode,PrefixCode,DateSequence（段名为实体属性名）
    */
-  description?: string;
+  numberingDescription?: string;
 
   /**
    * 创建时间（范围查询-开始）
@@ -216,7 +221,7 @@ export interface NumberingQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -243,7 +248,7 @@ export interface NumberingCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -258,32 +263,32 @@ export interface NumberingCreate {
   ruleName: string;
 
   /**
-   * 单据类型
+   * 单据类型（关联 TaktMenu.Id，选项 TaktMenus/tree-options）
    */
   documentType: string;
 
   /**
-   * 部门编码（如：DEPT01, DEPT02，不可为空） 从 TaktDepartment 实体自动获取 DisplayCode
+   * 部门编码（关联 TaktIsoCode.IsoCode，选项 TaktIsoCodes/options）
    */
-  departmentCode: string;
+  deptCode: string;
 
   /**
-   * 前缀编码（如：PUR、SORD，最多 4 位）
+   * 前缀编码（如：PUR、SORD、ANN）
    */
   prefixCode?: string;
 
   /**
-   * 日期格式（yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH） 为空表示不使用日期
+   * 日期格式（字典 sys_numbering_date_format_config；none/空=不使用日期；yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH；须与 reset_period 粒度匹配）
    */
   dateFormat?: string;
 
   /**
-   * 流水号位数（3=001, 4=0001, 5=00001, 6=000001）
+   * 流水位数（3=001, 4=0001, 5=00001, 6=000001）
    */
   sequenceLength: number;
 
   /**
-   * 流水号步长（每次递增的数值，默认1）
+   * 流水步长（每次递增的数值，默认1）
    */
   sequenceStep: number;
 
@@ -293,44 +298,44 @@ export interface NumberingCreate {
   suffixCode?: string;
 
   /**
-   * 重置周期（daily=每日重置，monthly=每月重置，yearly=每年重置，none=不重置）
+   * 重置周期（字典 sys_reset_period_config；none=不重置，day/month/year/hour=按日/月/年/时；须与 date_format 粒度匹配）
    */
   resetPeriod: string;
 
   /**
-   * 当前流水号（服务端创建/导入时写入，客户端无须提交）
+   * 当前流水（用于记录下一个流水号值）
    */
-  currentSequence?: number;
+  currentSequence: number;
 
   /**
-   * 起始编码（服务端创建/导入/更新时按规则生成，客户端无须提交） 如：SO-20250120-000001
+   * 起始编码（新增时必填；完整业务编号样例，末段为当前流水号） 如：SO-20250120-000001；生成编号后会更新为最近一次产出编码
    */
-  exampleCode?: string;
+  exampleCode: string;
 
   /**
    * 分隔符（空=段直接拼接；-=连字符分隔，默认 -）
    */
-  separator: string;
+  separator?: string;
 
   /**
-   * 是否内置（0=否，1=是，系统内置的不可删除）
+   * 内置（字典 sys_yes_no_type；0=否 1=是）
    */
   isBuiltIn: number;
 
   /**
-   * 状态（1=启用，0=禁用）
+   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
    */
-  status: number;
+  numberingStatus: number;
 
   /**
-   * 描述说明；可选配置编码段顺序，格式：segments:DocumentType,CompanyCode,DepartmentCode,Prefix,DateFormat,Sequence（段名为实体属性名，Sequence 为流水号占位）
+   * 描述说明；可选配置编码段顺序，格式：segments:CompanyCode,DeptCode,PrefixCode,DateSequence（段名为实体属性名）
    */
-  description?: string;
+  numberingDescription?: string;
 
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -367,9 +372,9 @@ export interface NumberingStatus {
   numberingId: string;
 
   /**
-   * 状态（1=启用，0=禁用）
+   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
    */
-  status: number;
+  numberingStatus: number;
 
 }
 
@@ -401,32 +406,32 @@ export interface NumberingTemplate {
   ruleName?: string;
 
   /**
-   * 单据类型
+   * 单据类型（关联 TaktMenu.Id，选项 TaktMenus/tree-options）
    */
   documentType?: string;
 
   /**
-   * 部门编码（如：DEPT01, DEPT02，不可为空） 从 TaktDepartment 实体自动获取 DisplayCode
+   * 部门编码（关联 TaktIsoCode.IsoCode，选项 TaktIsoCodes/options）
    */
-  departmentCode?: string;
+  deptCode?: string;
 
   /**
-   * 前缀编码（如：PUR、SORD，最多 4 位）
+   * 前缀编码（如：PUR、SORD、ANN）
    */
   prefixCode?: string;
 
   /**
-   * 日期格式（yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH） 为空表示不使用日期
+   * 日期格式（字典 sys_numbering_date_format_config；none/空=不使用日期；yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH；须与 reset_period 粒度匹配）
    */
   dateFormat?: string;
 
   /**
-   * 流水号位数（3=001, 4=0001, 5=00001, 6=000001）
+   * 流水位数（3=001, 4=0001, 5=00001, 6=000001）
    */
   sequenceLength?: number;
 
   /**
-   * 流水号步长（每次递增的数值，默认1）
+   * 流水步长（每次递增的数值，默认1）
    */
   sequenceStep?: number;
 
@@ -436,24 +441,44 @@ export interface NumberingTemplate {
   suffixCode?: string;
 
   /**
-   * 重置周期（daily=每日重置，monthly=每月重置，yearly=每年重置，none=不重置）
+   * 重置周期（字典 sys_reset_period_config；none=不重置，day/month/year/hour=按日/月/年/时；须与 date_format 粒度匹配）
    */
   resetPeriod?: string;
 
   /**
-   * 当前流水号（用于记录下一个流水号值）
+   * 当前流水（用于记录下一个流水号值）
    */
   currentSequence?: number;
 
   /**
-   * 起始编码（完整业务编号，末段为流水号） 如：SO-20250120-000001
+   * 起始编码（新增时必填；完整业务编号样例，末段为当前流水号） 如：SO-20250120-000001；生成编号后会更新为最近一次产出编码
    */
-  exampleCode: string;
+  exampleCode?: string;
+
+  /**
+   * 分隔符（空=段直接拼接；-=连字符分隔，默认 -）
+   */
+  separator?: string;
+
+  /**
+   * 内置（字典 sys_yes_no_type；0=否 1=是）
+   */
+  isBuiltIn?: number;
+
+  /**
+   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+   */
+  numberingStatus?: number;
+
+  /**
+   * 描述说明；可选配置编码段顺序，格式：segments:CompanyCode,DeptCode,PrefixCode,DateSequence（段名为实体属性名）
+   */
+  numberingDescription?: string;
 
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -480,7 +505,7 @@ export interface NumberingImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -495,32 +520,32 @@ export interface NumberingImport {
   ruleName?: string;
 
   /**
-   * 单据类型
+   * 单据类型（关联 TaktMenu.Id，选项 TaktMenus/tree-options）
    */
   documentType?: string;
 
   /**
-   * 部门编码（如：DEPT01, DEPT02，不可为空） 从 TaktDepartment 实体自动获取 DisplayCode
+   * 部门编码（关联 TaktIsoCode.IsoCode，选项 TaktIsoCodes/options）
    */
-  departmentCode?: string;
+  deptCode?: string;
 
   /**
-   * 前缀编码（如：PUR、SORD，最多 4 位）
+   * 前缀编码（如：PUR、SORD、ANN）
    */
   prefixCode?: string;
 
   /**
-   * 日期格式（yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH） 为空表示不使用日期
+   * 日期格式（字典 sys_numbering_date_format_config；none/空=不使用日期；yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH；须与 reset_period 粒度匹配）
    */
   dateFormat?: string;
 
   /**
-   * 流水号位数（3=001, 4=0001, 5=00001, 6=000001）
+   * 流水位数（3=001, 4=0001, 5=00001, 6=000001）
    */
   sequenceLength?: number;
 
   /**
-   * 流水号步长（每次递增的数值，默认1）
+   * 流水步长（每次递增的数值，默认1）
    */
   sequenceStep?: number;
 
@@ -530,24 +555,44 @@ export interface NumberingImport {
   suffixCode?: string;
 
   /**
-   * 重置周期（daily=每日重置，monthly=每月重置，yearly=每年重置，none=不重置）
+   * 重置周期（字典 sys_reset_period_config；none=不重置，day/month/year/hour=按日/月/年/时；须与 date_format 粒度匹配）
    */
   resetPeriod?: string;
 
   /**
-   * 当前流水号（用于记录下一个流水号值）
+   * 当前流水（用于记录下一个流水号值）
    */
   currentSequence?: number;
 
   /**
-   * 起始编码（完整业务编号，末段为流水号） 如：SO-20250120-000001
+   * 起始编码（新增时必填；完整业务编号样例，末段为当前流水号） 如：SO-20250120-000001；生成编号后会更新为最近一次产出编码
    */
-  exampleCode: string;
+  exampleCode?: string;
+
+  /**
+   * 分隔符（空=段直接拼接；-=连字符分隔，默认 -）
+   */
+  separator?: string;
+
+  /**
+   * 内置（字典 sys_yes_no_type；0=否 1=是）
+   */
+  isBuiltIn?: number;
+
+  /**
+   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+   */
+  numberingStatus?: number;
+
+  /**
+   * 描述说明；可选配置编码段顺序，格式：segments:CompanyCode,DeptCode,PrefixCode,DateSequence（段名为实体属性名）
+   */
+  numberingDescription?: string;
 
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -584,32 +629,32 @@ export interface NumberingExport {
   ruleName: string;
 
   /**
-   * 单据类型
+   * 单据类型（关联 TaktMenu.Id，选项 TaktMenus/tree-options）
    */
   documentType: string;
 
   /**
-   * 部门编码（如：DEPT01, DEPT02，不可为空） 从 TaktDepartment 实体自动获取 DisplayCode
+   * 部门编码（关联 TaktIsoCode.IsoCode，选项 TaktIsoCodes/options）
    */
-  departmentCode: string;
+  deptCode: string;
 
   /**
-   * 前缀编码（如：PUR、SORD，最多 4 位）
+   * 前缀编码（如：PUR、SORD、ANN）
    */
   prefixCode?: string;
 
   /**
-   * 日期格式（yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH） 为空表示不使用日期
+   * 日期格式（字典 sys_numbering_date_format_config；none/空=不使用日期；yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH；须与 reset_period 粒度匹配）
    */
   dateFormat?: string;
 
   /**
-   * 流水号位数（3=001, 4=0001, 5=00001, 6=000001）
+   * 流水位数（3=001, 4=0001, 5=00001, 6=000001）
    */
   sequenceLength: number;
 
   /**
-   * 流水号步长（每次递增的数值，默认1）
+   * 流水步长（每次递增的数值，默认1）
    */
   sequenceStep: number;
 
@@ -619,44 +664,44 @@ export interface NumberingExport {
   suffixCode?: string;
 
   /**
-   * 重置周期（daily=每日重置，monthly=每月重置，yearly=每年重置，none=不重置）
+   * 重置周期（字典 sys_reset_period_config；none=不重置，day/month/year/hour=按日/月/年/时；须与 date_format 粒度匹配）
    */
   resetPeriod: string;
 
   /**
-   * 当前流水号（用于记录下一个流水号值）
+   * 当前流水（用于记录下一个流水号值）
    */
   currentSequence: number;
 
   /**
-   * 起始编码（完整业务编号，末段为流水号） 如：SO-20250120-000001
+   * 起始编码（新增时必填；完整业务编号样例，末段为当前流水号） 如：SO-20250120-000001；生成编号后会更新为最近一次产出编码
    */
   exampleCode: string;
 
   /**
    * 分隔符（空=段直接拼接；-=连字符分隔，默认 -）
    */
-  separator: string;
+  separator?: string;
 
   /**
-   * 是否内置（0=否，1=是，系统内置的不可删除）
+   * 内置（字典 sys_yes_no_type；0=否 1=是）
    */
   isBuiltIn: number;
 
   /**
-   * 状态（1=启用，0=禁用）
+   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
    */
-  status: number;
+  numberingStatus: number;
 
   /**
-   * 描述说明；可选配置编码段顺序，格式：segments:DocumentType,CompanyCode,DepartmentCode,Prefix,DateFormat,Sequence（段名为实体属性名，Sequence 为流水号占位）
+   * 描述说明；可选配置编码段顺序，格式：segments:CompanyCode,DeptCode,PrefixCode,DateSequence（段名为实体属性名）
    */
-  description?: string;
+  numberingDescription?: string;
 
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -668,134 +713,5 @@ export interface NumberingExport {
    */
   createdAt: string;
 
-}
-
-/**
- * 编号预览请求 DTO
- * @description 对应后端 TaktNumberingPreviewRequestDto
- */
-export interface NumberingPreviewRequest {
-  /**
-   * 编号规则 Id（优先）
-   */
-  numberingId: string;
-
-  /**
-   * 规则编码
-   */
-  ruleCode?: string;
-
-  /**
-   * 规则名称（草稿预览）
-   */
-  ruleName?: string;
-
-  /**
-   * 单据类型（草稿预览）
-   */
-  documentType: string;
-
-  /**
-   * 部门编码（草稿预览必填）
-   */
-  departmentCode?: string;
-
-  /**
-   * 前缀
-   */
-  prefixCode?: string;
-
-  /**
-   * 日期格式
-   */
-  dateFormat?: string;
-
-  /**
-   * 流水号位数
-   */
-  sequenceLength: number;
-
-  /**
-   * 流水号步长
-   */
-  sequenceStep: number;
-
-  /**
-   * 后缀
-   */
-  suffixCode?: string;
-
-  /**
-   * 重置周期
-   */
-  resetPeriod?: string;
-
-  /**
-   * 当前流水号（草稿预览）
-   */
-  currentSequence: number;
-
-  /**
-   * 分隔符
-   */
-  separator?: string;
-
-  /**
-   * 覆盖预览流水号（不传则按规则推算下一号）
-   */
-  sequenceOverride?: number;
-}
-
-/**
- * 编号预览结果 DTO
- * @description 对应后端 TaktNumberingPreviewResultDto
- */
-export interface NumberingPreviewResult {
-  /**
-   * 预览业务编号
-   */
-  businessCode: string;
-
-  /**
-   * 预览所用流水号
-   */
-  nextSequence: number;
-
-  /**
-   * 规则编码
-   */
-  ruleCode: string;
-}
-
-/**
- * 编号生成请求 DTO
- * @description 对应后端 TaktNumberingGenerateRequestDto
- */
-export interface NumberingGenerateRequest {
-  /**
-   * 规则编码
-   */
-  ruleCode: string;
-}
-
-/**
- * 编号生成结果 DTO
- * @description 对应后端 TaktNumberingGenerateResultDto
- */
-export interface NumberingGenerateResult {
-  /**
-   * 业务编号
-   */
-  businessCode: string;
-
-  /**
-   * 更新后的当前流水号
-   */
-  currentSequence: number;
-
-  /**
-   * 规则编码
-   */
-  ruleCode: string;
 }
 

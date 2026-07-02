@@ -19,11 +19,11 @@
       @reset="handleQueryReset"
     />
     <TaktToolsBar
-      create-permission="logistics:quality:operation:ipqcorder:create"
-      update-permission="logistics:quality:operation:ipqcorder:update"
-      delete-permission="logistics:quality:operation:ipqcorder:delete"
+      create-permission="logistics:quality:operation:ipqc:order:create"
+      update-permission="logistics:quality:operation:ipqc:order:update"
+      delete-permission="logistics:quality:operation:ipqc:order:delete"
 
-      export-permission="logistics:quality:operation:ipqcorder:export"
+      export-permission="logistics:quality:operation:ipqc:order:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -73,7 +73,7 @@
         v-model:page-size="pageSize"
         :total="total"
         scroll-layout="masterDetailLr"
-        table-mode="single"
+        table-mode="masterDetailDetail"
         :show-row-selection="true"
         @change="handleTableChange"
         @pagination-change="handleMasterDetailPaginationChange"
@@ -153,8 +153,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.changeTimeStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ipqcorderchangelog.changetimestart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -164,8 +163,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.changeTimeEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ipqcorderchangelog.changetimeend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -176,7 +174,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -187,18 +185,36 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('ExtField')">
-      <a-form-item :label="t('entity.ipqcorderchangelog.extfield')">
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
         <a-textarea
-          v-model:value="advancedQueryForm.ExtField"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.ipqcorderchangelog.extfield') })"
-          :rows="2"
-          allow-clear
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -223,7 +239,7 @@
       id-column-key="ipqcOrderChangeLogId"
       action-column-key="action"
       entity-scope="company"
-      table-mode="single"
+      table-mode="masterDetailDetail"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -243,7 +259,7 @@ import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-pa
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 import IpqcOrderChangeLogForm from './ipqc-order-change-log-form.vue'
 import { useIpqcOrderMasterContext } from '../composables/use-ipqc-order-master-context'
 import {
@@ -292,7 +308,7 @@ const advancedQueryForm = ref({
   changeTimeEnd: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
 })
 const visibleQueryFieldKeys = ref<string[]>([])
@@ -307,7 +323,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'changeTimeEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.ipqcorderchangelog.changetime')) },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'ExtField', label: t('entity.ipqcorderchangelog.extfield') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 
@@ -339,11 +355,12 @@ function handleAdvancedQueryReset() {
   changeTimeEnd: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
 }
 const columnSettingVisible = ref(false)
+/** 表格当前可见列 key（空数组时按 tableMode=masterDetailDetail 默认 id+4 业务列） */
 const visibleColumnKeys = ref<string[]>([])
 
 function handleColumnSetting() {
@@ -451,7 +468,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:quality:operation:ipqcorder:update',
+        permission: 'logistics:quality:operation:ipqc:order:update',
         onClick: (record: IpqcOrderChangeLog) => void handleEdit(record),
       },
       {
@@ -459,7 +476,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:quality:operation:ipqcorder:delete',
+        permission: 'logistics:quality:operation:ipqc:order:delete',
         onClick: (record: IpqcOrderChangeLog) => void handleDeleteOne(record),
       },
     ],
@@ -476,7 +493,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: IpqcOrderChangeLog, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getIpqcOrderChangeLogId(selectedRow.value) === getIpqcOrderChangeLogId(record)) {
+    } else if (selectedRow.value && getIpqcOrderChangeLogId(selectedRow.value) === getIpqcOrderChangeLogId(record)) {
       selectedRow.value = null
     }
   },
@@ -536,7 +553,7 @@ function buildListQuery(overrides?: Partial<IpqcOrderChangeLogQuery>): IpqcOrder
   assignTrimmed('changeTimeEnd', form.changeTimeEnd)
   assignTrimmed('createdAtStart', form.createdAtStart)
   assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('ExtField', form.ExtField)
+  assignTrimmed('extField', form.extField)
   assignTrimmed('remark', form.remark)
   return query
 }

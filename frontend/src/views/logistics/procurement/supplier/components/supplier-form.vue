@@ -167,6 +167,18 @@
                 />
               </a-form-item>
             </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.supplier.taxrate')"
+                name="taxRate"
+              >
+                <TaktSelect
+                  v-model:value="formState.taxRate"
+                  dict-type="accounting_tax_rate_param"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.supplier.taxrate') })"
+                />
+              </a-form-item>
+            </a-col>
           </a-row>
         </div>
       </a-tab-pane>
@@ -344,7 +356,7 @@
                   v-model:value="formState.currencyCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplier.currencycode') })"
                   show-count
-                  :maxlength="10"
+                  :maxlength="3"
                   allow-clear
                   :disabled="!!formData?.supplierId"
                 />
@@ -357,7 +369,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.paymentTerms"
-                  dict-type="logistics_payment_terms_param"
+                  dict-type="accounting_payment_terms_param"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.supplier.paymentterms') })"
                 />
               </a-form-item>
@@ -382,18 +394,6 @@
                 <a-input-number
                   v-model:value="formState.evaluationScore"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplier.evaluationscore') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.supplier.isqualified')"
-                name="isQualified"
-              >
-                <a-input-number
-                  v-model:value="formState.isQualified"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplier.isqualified') })"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -502,7 +502,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","supplierCode","supplierName","supplierShortName","supplierType","industrySector","supplierTaxNumber","registrationCountry","registrationAddress1","registrationAddress2","registrationAddress3","supplierPhone","supplierFax","supplierEmail","supplierWebsite","contactPerson","contactPhone","contactEmail","currencyCode","paymentTerms","supplierLevel","evaluationScore","isQualified","supplierStatus","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","supplierCode","supplierName","supplierShortName","supplierType","industrySector","supplierTaxNumber","taxRate","registrationCountry","registrationAddress1","registrationAddress2","registrationAddress3","supplierPhone","supplierFax","supplierEmail","supplierWebsite","contactPerson","contactPhone","contactEmail","currencyCode","paymentTerms","supplierLevel","evaluationScore","supplierStatus","extField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -524,6 +524,7 @@ const formState = reactive<Record<string, any>>({})
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
   supplierType: 0,
+  taxRate: 13,
   paymentTerms: 0,
   supplierLevel: 0,
   supplierStatus: 1
@@ -633,6 +634,19 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
+  taxRate: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.supplier.taxrate') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.supplier.taxrate') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
   supplierLevel: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
@@ -654,19 +668,6 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
         return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.supplier.evaluationscore') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  isQualified: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.supplier.isqualified') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.supplier.isqualified') }))
       }
       return Promise.resolve()
     },
@@ -704,6 +705,10 @@ function getValues(): Record<string, any> {
     const rawpaymentTerms = payload.paymentTerms
     payload.paymentTerms = typeof rawpaymentTerms === 'number' ? rawpaymentTerms : Number(rawpaymentTerms)
   }
+  if ('taxRate' in payload) {
+    const rawTaxRate = payload.taxRate
+    payload.taxRate = typeof rawTaxRate === 'number' ? rawTaxRate : Number(rawTaxRate)
+  }
   if ('supplierLevel' in payload) {
     const rawsupplierLevel = payload.supplierLevel
     payload.supplierLevel = typeof rawsupplierLevel === 'number' ? rawsupplierLevel : Number(rawsupplierLevel)
@@ -711,10 +716,6 @@ function getValues(): Record<string, any> {
   if ('evaluationScore' in payload) {
     const rawevaluationScore = payload.evaluationScore
     payload.evaluationScore = typeof rawevaluationScore === 'number' ? rawevaluationScore : Number(rawevaluationScore)
-  }
-  if ('isQualified' in payload) {
-    const rawisQualified = payload.isQualified
-    payload.isQualified = typeof rawisQualified === 'number' ? rawisQualified : Number(rawisQualified)
   }
   if ('supplierStatus' in payload) {
     const rawsupplierStatus = payload.supplierStatus

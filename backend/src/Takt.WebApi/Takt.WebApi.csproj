@@ -1,9 +1,22 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
+  <PropertyGroup>
+    <!-- 运行时 uploads 写入不触发 dotnet watch 热重载（.NET 10 SDK 亦生效） -->
+    <DefaultItemExcludes>$(DefaultItemExcludes);wwwroot/uploads/**;wwwroot/upload/**</DefaultItemExcludes>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\Takt.Application\Takt.Application.csproj" />
     <ProjectReference Include="..\Takt.Infrastructure\Takt.Infrastructure.csproj" />
     <ProjectReference Include="..\Takt.Shared\Takt.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- 运行时上传目录变更不触发 dotnet watch 热重载/重启 -->
+    <Content Update="wwwroot\uploads\**\*" Watch="false" />
+    <Content Update="wwwroot\upload\**\*" Watch="false" />
+    <Watch Remove="wwwroot\uploads\**\*" />
+    <Watch Remove="wwwroot\upload\**\*" />
   </ItemGroup>
 
   <ItemGroup>

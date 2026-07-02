@@ -115,12 +115,11 @@
                 :label="t('entity.overtime.plannedstarttime')"
                 name="plannedStartTime"
               >
-                <a-input
+                <a-date-picker
                   v-model:value="formState.plannedStartTime"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.overtime.plannedstarttime') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.overtime.plannedstarttime') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
@@ -129,12 +128,11 @@
                 :label="t('entity.overtime.plannedendtime')"
                 name="plannedEndTime"
               >
-                <a-input
+                <a-date-picker
                   v-model:value="formState.plannedEndTime"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.overtime.plannedendtime') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.overtime.plannedendtime') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
@@ -243,12 +241,11 @@
                 :label="t('entity.overtime.handlingat')"
                 name="handlingAt"
               >
-                <a-input
+                <a-date-picker
                   v-model:value="formState.handlingAt"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.overtime.handlingat') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.overtime.handlingat') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
@@ -422,14 +419,16 @@ const overtimeItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
     key: 'actualStartTime',
     title: t('entity.overtimeitem.actualstarttime'),
-    editor: 'input',
-    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.overtimeitem.actualstarttime') }),
+    editor: 'datePicker',
+    valueFormat: 'YYYY-MM-DD HH:mm:ss', showTime: true,
+    width: 140,
   },
   {
     key: 'actualEndTime',
     title: t('entity.overtimeitem.actualendtime'),
-    editor: 'input',
-    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.overtimeitem.actualendtime') }),
+    editor: 'datePicker',
+    valueFormat: 'YYYY-MM-DD HH:mm:ss', showTime: true,
+    width: 140,
   },
   {
     key: 'actualHours',
@@ -438,11 +437,11 @@ const overtimeItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
     width: 140,
   },
   {
-    key: 'ExtField',
-    title: t('entity.overtimeitem.extfield'),
+    key: 'extField',
+    title: t('common.page.entity.extfield'),
     editor: 'textarea',
-    rows: 1,
-    placeholder: t('common.page.form.placeholder.optional', { field: t('entity.overtimeitem.extfield') }),
+    rows: 2,
+    placeholder: t('common.page.form.placeholder.optional', { field: t('common.page.entity.extfield') }),
     width: 140,
   },
 ])
@@ -461,7 +460,7 @@ function createDefaultOvertimeItemRow(): Record<string, unknown> {
     actualStartTime: '',
     actualEndTime: '',
     actualHours: 0,
-    ExtField: '',
+    extField: '',
   }
 }
 
@@ -569,15 +568,15 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   plannedStartTime: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.overtime.plannedstarttime') }),
-      trigger: 'blur'
+      message: t('common.page.form.placeholder.select', { field: t('entity.overtime.plannedstarttime') }),
+      trigger: 'change'
     }
   ],
   plannedEndTime: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.overtime.plannedendtime') }),
-      trigger: 'blur'
+      message: t('common.page.form.placeholder.select', { field: t('entity.overtime.plannedendtime') }),
+      trigger: 'change'
     }
   ],
   totalEmployees: [{

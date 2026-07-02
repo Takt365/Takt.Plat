@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/identity
 // 文件名称：menu.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：identity 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -69,7 +69,7 @@ export interface Menu extends TenantDtoBase {
   isLeaf: number;
 
   /**
-   * 菜单类型（字典 sys_menu_type：0=目录，1=菜单，2=按钮）
+   * 菜单类型（与 TaktMenuType 一致：0=目录，1=页面菜单，2=按钮）
    */
   menuType: number;
 
@@ -119,14 +119,14 @@ export interface Menu extends TenantDtoBase {
   menuStatus: number;
 
   /**
-   * 是否内置（1=是，0=否） 种子菜单为内置，不允许删除
+   * 内置（1=是，0=否） 种子菜单为内置，不允许删除
    */
   isBuiltIn: number;
 
   /**
    * 菜单描述
    */
-  description: string;
+  menuDescription: string;
 
   /**
    * 拥有该菜单权限的角色关联（RBAC，表 takt_identity_role_menu） （子表：TaktRoleMenu）
@@ -204,7 +204,7 @@ export interface MenuQuery extends TaktPagedQuery {
   isLeaf?: number;
 
   /**
-   * 菜单类型（字典 sys_menu_type：0=目录，1=菜单，2=按钮）
+   * 菜单类型（与 TaktMenuType 一致：0=目录，1=页面菜单，2=按钮）
    */
   menuType?: number;
 
@@ -254,14 +254,14 @@ export interface MenuQuery extends TaktPagedQuery {
   menuStatus?: number;
 
   /**
-   * 是否内置（1=是，0=否） 种子菜单为内置，不允许删除
+   * 内置（1=是，0=否） 种子菜单为内置，不允许删除
    */
   isBuiltIn?: number;
 
   /**
    * 菜单描述
    */
-  description?: string;
+  menuDescription?: string;
 
   /**
    * 创建时间（范围查询-开始）
@@ -276,7 +276,7 @@ export interface MenuQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -328,7 +328,7 @@ export interface MenuCreate {
   menuPath: string;
 
   /**
-   * 菜单类型（字典 sys_menu_type：0=目录，1=菜单，2=按钮）
+   * 菜单类型（与 TaktMenuType 一致：0=目录，1=页面菜单，2=按钮）
    */
   menuType: number;
 
@@ -346,11 +346,6 @@ export interface MenuCreate {
    * 组件路径（前端组件路径）
    */
   componentPath: string;
-
-  /**
-   * 排序号（同级菜单排序）
-   */
-  sortOrder: number;
 
   /**
    * 是否外部链接
@@ -378,14 +373,14 @@ export interface MenuCreate {
   menuStatus: number;
 
   /**
-   * 是否内置（1=是，0=否） 种子菜单为内置，不允许删除
+   * 内置（1=是，0=否） 种子菜单为内置，不允许删除
    */
   isBuiltIn: number;
 
   /**
    * 菜单描述
    */
-  description: string;
+  menuDescription: string;
 
   /**
    * 拥有该菜单权限的角色 ID 列表（RBAC 反向合并，分配走 ITaktRbacService）
@@ -395,7 +390,7 @@ export interface MenuCreate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -500,7 +495,7 @@ export interface MenuTemplate {
   menuPath?: string;
 
   /**
-   * 菜单类型（字典 sys_menu_type：0=目录，1=菜单，2=按钮）
+   * 菜单类型（与 TaktMenuType 一致：0=目录，1=页面菜单，2=按钮）
    */
   menuType?: number;
 
@@ -520,19 +515,49 @@ export interface MenuTemplate {
   componentPath?: string;
 
   /**
-   * 排序号（同级菜单排序）
-   */
-  sortOrder?: number;
-
-  /**
    * 是否外部链接
    */
   isExternal?: number;
 
   /**
+   * 外部链接地址
+   */
+  externalUrl?: string;
+
+  /**
+   * 是否缓存（前端keep-alive）
+   */
+  isCached?: number;
+
+  /**
+   * 是否显示（0=隐藏，1=显示）
+   */
+  isVisible?: number;
+
+  /**
+   * 状态（1=启用，0=禁用）
+   */
+  menuStatus?: number;
+
+  /**
+   * 内置（1=是，0=否） 种子菜单为内置，不允许删除
+   */
+  isBuiltIn?: number;
+
+  /**
+   * 菜单描述
+   */
+  menuDescription?: string;
+
+  /**
+   * 拥有该菜单权限的角色 ID 列表（RBAC 反向合并，分配走 ITaktRbacService）
+   */
+  roleIds?: any;
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -584,7 +609,7 @@ export interface MenuImport {
   menuPath?: string;
 
   /**
-   * 菜单类型（字典 sys_menu_type：0=目录，1=菜单，2=按钮）
+   * 菜单类型（与 TaktMenuType 一致：0=目录，1=页面菜单，2=按钮）
    */
   menuType?: number;
 
@@ -604,19 +629,49 @@ export interface MenuImport {
   componentPath?: string;
 
   /**
-   * 排序号（同级菜单排序）
-   */
-  sortOrder?: number;
-
-  /**
    * 是否外部链接
    */
   isExternal?: number;
 
   /**
+   * 外部链接地址
+   */
+  externalUrl?: string;
+
+  /**
+   * 是否缓存（前端keep-alive）
+   */
+  isCached?: number;
+
+  /**
+   * 是否显示（0=隐藏，1=显示）
+   */
+  isVisible?: number;
+
+  /**
+   * 状态（1=启用，0=禁用）
+   */
+  menuStatus?: number;
+
+  /**
+   * 内置（1=是，0=否） 种子菜单为内置，不允许删除
+   */
+  isBuiltIn?: number;
+
+  /**
+   * 菜单描述
+   */
+  menuDescription?: string;
+
+  /**
+   * 拥有该菜单权限的角色 ID 列表（RBAC 反向合并，分配走 ITaktRbacService）
+   */
+  roleIds?: any;
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -678,7 +733,7 @@ export interface MenuExport {
   isLeaf: number;
 
   /**
-   * 菜单类型（字典 sys_menu_type：0=目录，1=菜单，2=按钮）
+   * 菜单类型（与 TaktMenuType 一致：0=目录，1=页面菜单，2=按钮）
    */
   menuType: number;
 
@@ -728,19 +783,19 @@ export interface MenuExport {
   menuStatus: number;
 
   /**
-   * 是否内置（1=是，0=否） 种子菜单为内置，不允许删除
+   * 内置（1=是，0=否） 种子菜单为内置，不允许删除
    */
   isBuiltIn: number;
 
   /**
    * 菜单描述
    */
-  description: string;
+  menuDescription: string;
 
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注

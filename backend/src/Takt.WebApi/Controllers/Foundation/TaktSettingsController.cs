@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Foundation
 // 文件名称：TaktSettingsController.cs
-// 创建时间：2026-06-14
+// 创建时间：2026-06-27
 // 创建人：Takt365(Cursor AI)
 // 功能描述：系统设置控制器
 // 
@@ -173,6 +173,26 @@ public class TaktSettingsController : TaktControllerBase
         {
             await _settingService.DeleteSettingBatchAsync(ids);
             return Success("删除成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 更新系统设置状态
+    /// </summary>
+    /// <param name="dto">状态DTO</param>
+    /// <returns>系统设置DTO</returns>
+    [TaktPermission("foundation:setting:update", "更新系统设置状态")]
+    [HttpPut("status")]
+    public async Task<IActionResult> UpdateSettingStatusAsync([FromBody] TaktSettingStatusDto dto)
+    {
+        try
+        {
+            var result = await _settingService.UpdateSettingStatusAsync(dto);
+            return Success(result, "更新成功");
         }
         catch (Exception ex)
         {

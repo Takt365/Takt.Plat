@@ -101,19 +101,4 @@ public interface ITaktNumberingService
     /// <param name="fileName">文件名</param>
     /// <returns>Excel 文件</returns>
     Task<(string fileName, byte[] fileContent)> ExportNumberingAsync(TaktNumberingQueryDto? query = null, string? sheetName = null, string? fileName = null);
-
-    /// <summary>
-    /// 预览编号（不占用流水号、不写库）
-    /// </summary>
-    /// <param name="request">预览参数</param>
-    /// <returns>预览结果</returns>
-    Task<TaktNumberingPreviewResultDto> PreviewNumberingAsync(TaktNumberingPreviewRequestDto request);
-
-    /// <summary>
-    /// 生成下一个业务编号（服务核心：递增流水、写回 ExampleCode，供业务单据取号）
-    /// </summary>
-    /// <param name="request">生成参数</param>
-    /// <returns>生成结果</returns>
-    Task<TaktNumberingGenerateResultDto> GenerateNumberingAsync(TaktNumberingGenerateRequestDto request);
-
 }

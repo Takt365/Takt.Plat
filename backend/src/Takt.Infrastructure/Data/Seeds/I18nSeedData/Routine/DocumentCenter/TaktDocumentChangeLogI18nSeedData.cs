@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.DocumentCenter
 // 文件名称：TaktDocumentChangeLogI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktDocumentChangeLog 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktDocumentChangeLogI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.documentchangelog._self", "zh-HK", "文管文档变更日志信息_hk", "实体名称"),
 
             // entity.documentchangelog.documentid
-            new TranslationSeedItem("entity.documentchangelog.documentid", "en-US", "文档ID_us", "文档 ID"),
+            new TranslationSeedItem("entity.documentchangelog.documentid", "en-US", "文档ID_us", "文档 ID（关联 TaktDocument.Id，选项 TaktDocuments/options）"),
             // entity.documentchangelog.documentid
-            new TranslationSeedItem("entity.documentchangelog.documentid", "ja-JP", "文档ID_jp", "文档 ID"),
+            new TranslationSeedItem("entity.documentchangelog.documentid", "ja-JP", "文档ID_jp", "文档 ID（关联 TaktDocument.Id，选项 TaktDocuments/options）"),
             // entity.documentchangelog.documentid
-            new TranslationSeedItem("entity.documentchangelog.documentid", "zh-CN", "文档ID", "文档 ID"),
+            new TranslationSeedItem("entity.documentchangelog.documentid", "zh-CN", "文档ID", "文档 ID（关联 TaktDocument.Id，选项 TaktDocuments/options）"),
             // entity.documentchangelog.documentid
-            new TranslationSeedItem("entity.documentchangelog.documentid", "zh-HK", "文档ID_hk", "文档 ID"),
+            new TranslationSeedItem("entity.documentchangelog.documentid", "zh-HK", "文档ID_hk", "文档 ID（关联 TaktDocument.Id，选项 TaktDocuments/options）"),
 
             // entity.documentchangelog.documentcode
             new TranslationSeedItem("entity.documentchangelog.documentcode", "en-US", "文档编码_us", "文档编码（冗余，便于日志列表展示）"),
@@ -118,13 +118,13 @@ public class TaktDocumentChangeLogI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.documentchangelog.documenttitle", "zh-HK", "文档标题_hk", "文档标题（冗余，便于日志列表展示）"),
 
             // entity.documentchangelog.changetype
-            new TranslationSeedItem("entity.documentchangelog.changetype", "en-US", "变更类型_us", "变更类型"),
+            new TranslationSeedItem("entity.documentchangelog.changetype", "en-US", "变更类型_us", "变更类型（字典 routine_document_change_type；0=创建 1=修订 2=发布 3=归档 4=删除）"),
             // entity.documentchangelog.changetype
-            new TranslationSeedItem("entity.documentchangelog.changetype", "ja-JP", "变更类型_jp", "变更类型"),
+            new TranslationSeedItem("entity.documentchangelog.changetype", "ja-JP", "变更类型_jp", "变更类型（字典 routine_document_change_type；0=创建 1=修订 2=发布 3=归档 4=删除）"),
             // entity.documentchangelog.changetype
-            new TranslationSeedItem("entity.documentchangelog.changetype", "zh-CN", "变更类型", "变更类型"),
+            new TranslationSeedItem("entity.documentchangelog.changetype", "zh-CN", "变更类型", "变更类型（字典 routine_document_change_type；0=创建 1=修订 2=发布 3=归档 4=删除）"),
             // entity.documentchangelog.changetype
-            new TranslationSeedItem("entity.documentchangelog.changetype", "zh-HK", "变更类型_hk", "变更类型"),
+            new TranslationSeedItem("entity.documentchangelog.changetype", "zh-HK", "变更类型_hk", "变更类型（字典 routine_document_change_type；0=创建 1=修订 2=发布 3=归档 4=删除）"),
 
             // entity.documentchangelog.changesummary
             new TranslationSeedItem("entity.documentchangelog.changesummary", "en-US", "变更内容摘要_us", "变更内容摘要"),

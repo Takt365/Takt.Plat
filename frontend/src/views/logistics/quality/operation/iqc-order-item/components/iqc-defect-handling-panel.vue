@@ -19,11 +19,11 @@
       @reset="handleQueryReset"
     />
     <TaktToolsBar
-      create-permission="logistics:quality:operation:iqcorderitem:create"
-      update-permission="logistics:quality:operation:iqcorderitem:update"
-      delete-permission="logistics:quality:operation:iqcorderitem:delete"
-      import-permission="logistics:quality:operation:iqcorderitem:import"
-      export-permission="logistics:quality:operation:iqcorderitem:export"
+      create-permission="logistics:quality:operation:iqc:order:create"
+      update-permission="logistics:quality:operation:iqc:order:update"
+      delete-permission="logistics:quality:operation:iqc:order:delete"
+      import-permission="logistics:quality:operation:iqc:order:import"
+      export-permission="logistics:quality:operation:iqc:order:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -73,7 +73,7 @@
         v-model:page-size="pageSize"
         :total="total"
         scroll-layout="masterDetailLr"
-        table-mode="single"
+        table-mode="masterDetailDetail"
         :show-row-selection="true"
         @change="handleTableChange"
         @pagination-change="handleMasterDetailPaginationChange"
@@ -250,15 +250,6 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('handlingStatus')">
-      <a-form-item :label="t('entity.iqcdefecthandling.handlingstatus')">
-        <a-input-number
-          v-model:value="advancedQueryForm.handlingStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.iqcdefecthandling.handlingstatus') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
       <div v-show="isFieldVisible('correctiveAction')">
       <a-form-item :label="t('entity.iqcdefecthandling.correctiveaction')">
         <a-input
@@ -281,13 +272,33 @@
         />
       </a-form-item>
       </div>
+      <div v-show="isFieldVisible('attachments')">
+      <a-form-item :label="t('entity.iqcdefecthandling.attachments')">
+        <a-input
+          v-model:value="advancedQueryForm.attachments"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.iqcdefecthandling.attachments') })"
+          show-count
+          :maxlength="20"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('handlingStatus')">
+      <a-form-item :label="t('entity.iqcdefecthandling.handlingstatus')">
+        <a-input-number
+          v-model:value="advancedQueryForm.handlingStatus"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.iqcdefecthandling.handlingstatus') })"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('createdAtStart')">
       <a-form-item :label="t('common.page.entity.createdatstart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -298,7 +309,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -345,6 +356,7 @@
       </div>
       </template>
     </TaktQueryDrawer>
+    <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
       :title="t('common.dialog.title.import', { entity: t('entity.iqcdefecthandling._self') })"
@@ -354,6 +366,7 @@
       @cancel="handleImportCancel"
     >
       <TaktImportFile
+        v-if="importVisible"
         entity-i18n-key="entity.iqcdefecthandling._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
@@ -372,7 +385,7 @@
       id-column-key="iqcDefectHandlingId"
       action-column-key="action"
       entity-scope="company"
-      table-mode="single"
+      table-mode="masterDetailDetail"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -391,6 +404,7 @@ import { useI18n } from 'vue-i18n'
 import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 import IqcDefectHandlingForm from './iqc-defect-handling-form.vue'
@@ -449,9 +463,10 @@ const advancedQueryForm = ref({
   handlerBy: '',
   handlingAtStart: '',
   handlingAtEnd: '',
-  handlingStatus: undefined as number | undefined,
   correctiveAction: '',
   defectImages: '',
+  attachments: '',
+  handlingStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -475,9 +490,10 @@ const queryFieldsMeta = computed(() => [
   { key: 'handlerBy', label: t('entity.iqcdefecthandling.handlerby') },
   { key: 'handlingAtStart', label: t('entity.iqcdefecthandling.handlingatstart') },
   { key: 'handlingAtEnd', label: t('entity.iqcdefecthandling.handlingatend') },
-  { key: 'handlingStatus', label: t('entity.iqcdefecthandling.handlingstatus') },
   { key: 'correctiveAction', label: t('entity.iqcdefecthandling.correctiveaction') },
   { key: 'defectImages', label: t('entity.iqcdefecthandling.defectimages') },
+  { key: 'attachments', label: t('entity.iqcdefecthandling.attachments') },
+  { key: 'handlingStatus', label: t('entity.iqcdefecthandling.handlingstatus') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extField', label: t('common.page.entity.extfield') },
@@ -518,9 +534,10 @@ function handleAdvancedQueryReset() {
   handlerBy: '',
   handlingAtStart: '',
   handlingAtEnd: '',
-  handlingStatus: undefined as number | undefined,
   correctiveAction: '',
   defectImages: '',
+  attachments: '',
+  handlingStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -528,6 +545,7 @@ function handleAdvancedQueryReset() {
   }
 }
 const columnSettingVisible = ref(false)
+/** 表格当前可见列 key（空数组时按 tableMode=masterDetailDetail 默认 id+4 业务列） */
 const visibleColumnKeys = ref<string[]>([])
 
 function handleColumnSetting() {
@@ -649,6 +667,106 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: IqcDefectHandling }) =>
       String(getIqcDefectHandlingField(record, 'handlingMethod') ?? ''),
   },
+  {
+    title: t('entity.iqcdefecthandling.handlingdescription'),
+    dataIndex: 'handlingDescription',
+    key: 'handlingDescription',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: IqcDefectHandling }) =>
+      String(getIqcDefectHandlingField(record, 'handlingDescription') ?? ''),
+  },
+  {
+    title: t('entity.iqcdefecthandling.responsibledept'),
+    dataIndex: 'responsibleDept',
+    key: 'responsibleDept',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: IqcDefectHandling }) =>
+      String(getIqcDefectHandlingField(record, 'responsibleDept') ?? ''),
+  },
+  {
+    title: t('entity.iqcdefecthandling.responsibleby'),
+    dataIndex: 'responsibleBy',
+    key: 'responsibleBy',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: IqcDefectHandling }) =>
+      String(getIqcDefectHandlingField(record, 'responsibleBy') ?? ''),
+  },
+  {
+    title: t('entity.iqcdefecthandling.handlerby'),
+    dataIndex: 'handlerBy',
+    key: 'handlerBy',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: IqcDefectHandling }) =>
+      String(getIqcDefectHandlingField(record, 'handlerBy') ?? ''),
+  },
+  {
+    title: t('entity.iqcdefecthandling.handlingat'),
+    dataIndex: 'handlingAt',
+    key: 'handlingAt',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: IqcDefectHandling }) =>
+      String(getIqcDefectHandlingField(record, 'handlingAt') ?? ''),
+  },
+  {
+    title: t('entity.iqcdefecthandling.correctiveaction'),
+    dataIndex: 'correctiveAction',
+    key: 'correctiveAction',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: IqcDefectHandling }) =>
+      String(getIqcDefectHandlingField(record, 'correctiveAction') ?? ''),
+  },
+  {
+    title: t('entity.iqcdefecthandling.defectimages'),
+    dataIndex: 'defectImages',
+    key: 'defectImages',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: IqcDefectHandling }) =>
+      String(getIqcDefectHandlingField(record, 'defectImages') ?? ''),
+  },
+  {
+    title: t('entity.iqcdefecthandling.attachments'),
+    dataIndex: 'attachments',
+    key: 'attachments',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: IqcDefectHandling }) =>
+      String(getIqcDefectHandlingField(record, 'attachments') ?? ''),
+  },
+  {
+    title: t('entity.iqcdefecthandling.handlingstatus'),
+    dataIndex: 'handlingStatus',
+    key: 'handlingStatus',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: IqcDefectHandling }) =>
+      String(getIqcDefectHandlingField(record, 'handlingStatus') ?? ''),
+  },
+  {
+    title: t('entity.iqcdefecthandling.orderitem'),
+    dataIndex: 'orderItem',
+    key: 'orderItem',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: IqcDefectHandling }) =>
+      String(getIqcDefectHandlingField(record, 'orderItem') ?? ''),
+  },
   CreateActionColumn({
     actions: [
       {
@@ -656,7 +774,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:quality:operation:iqcorderitem:update',
+        permission: 'logistics:quality:operation:iqc:order:update',
         onClick: (record: IqcDefectHandling) => void handleEdit(record),
       },
       {
@@ -664,7 +782,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:quality:operation:iqcorderitem:delete',
+        permission: 'logistics:quality:operation:iqc:order:delete',
         onClick: (record: IqcDefectHandling) => void handleDeleteOne(record),
       },
     ],
@@ -681,7 +799,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: IqcDefectHandling, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getIqcDefectHandlingId(selectedRow.value) === getIqcDefectHandlingId(record)) {
+    } else if (selectedRow.value && getIqcDefectHandlingId(selectedRow.value) === getIqcDefectHandlingId(record)) {
       selectedRow.value = null
     }
   },
@@ -753,11 +871,12 @@ function buildListQuery(overrides?: Partial<IqcDefectHandlingQuery>): IqcDefectH
   assignTrimmed('handlerBy', form.handlerBy)
   assignTrimmed('handlingAtStart', form.handlingAtStart)
   assignTrimmed('handlingAtEnd', form.handlingAtEnd)
+  assignTrimmed('correctiveAction', form.correctiveAction)
+  assignTrimmed('defectImages', form.defectImages)
+  assignTrimmed('attachments', form.attachments)
   if (form.handlingStatus !== undefined && form.handlingStatus !== null) {
     query.handlingStatus = form.handlingStatus
   }
-  assignTrimmed('correctiveAction', form.correctiveAction)
-  assignTrimmed('defectImages', form.defectImages)
   assignTrimmed('createdAtStart', form.createdAtStart)
   assignTrimmed('createdAtEnd', form.createdAtEnd)
   assignTrimmed('extField', form.extField)
@@ -922,35 +1041,36 @@ function handleRefresh() {
   void loadData()
 }
 
+/** 打开导入对话框 */
 function handleImport() {
   if (!hasMasterSelection.value) {
-    message.warning(t('common.status.empty'))
-    return
-  }
+      message.warning(t('common.status.empty'))
+      return
+    }
   importVisible.value = true
 }
 
+/** 下载导入模板 Excel */
 async function handleDownloadTemplate(sheetName?: string, fileName?: string): Promise<Blob> {
   const res = await getIqcDefectHandlingTemplate(sheetName, fileName)
-  return (res as { data?: Blob }).data ?? (res as Blob)
+  return (res as any)?.data ?? res
 }
 
-async function handleImportFile(
-  file: File,
-  sheetName?: string,
-): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importIqcDefectHandling(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importIqcDefectHandling(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   void loadData()
-  if (result.fail === 0) {
-    setTimeout(() => {
-      importVisible.value = false
-    }, 2000)
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
   }
 }
 
+/** 关闭导入对话框 */
 function handleImportCancel() {
   importVisible.value = false
 }

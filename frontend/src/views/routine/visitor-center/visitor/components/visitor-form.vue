@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/routine/visitor-center/visitor/components -->
 <!-- 文件名称：visitor-form.vue -->
-<!-- 功能描述：来访接待主实体维护弹窗内嵌表单。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：来访接待主实体维护弹窗内嵌表单（上主下从级联保存）。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -10,24 +10,15 @@
 <template>
   <a-form
     ref="formRef"
+    class="takt-generated-form visitor-form flex flex-col min-h-0"
     :model="formState"
     :rules="rules"
     layout="horizontal"
     label-align="right"
   >
-    <a-tabs
-      v-model:active-key="activeTab"
-      class="visitor-form-tabs"
-    >
-      <!-- 主表 -->
-      <a-tab-pane
-        key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo')"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="12">
+    <div :class="formContentClass">
+      <a-row :gutter="24">
+            <a-col :span="24">
               <a-form-item
                 :label="t('common.page.entity.tenantcode')"
                 name="tenantCode"
@@ -35,12 +26,13 @@
                 <a-input
                   v-model:value="formState.tenantCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('common.page.entity.companycode')"
                 name="companyCode"
@@ -48,12 +40,13 @@
                 <a-input
                   v-model:value="formState.companyCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('common.page.entity.companydefaultculture')"
                 name="companyDefaultCulture"
@@ -61,12 +54,13 @@
                 <a-input
                   v-model:value="formState.companyDefaultCulture"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.visitor.companyname')"
                 name="visitorCompanyName"
@@ -74,46 +68,60 @@
                 <a-input
                   v-model:value="formState.visitorCompanyName"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.visitor.companyname') })"
-                  size="small"
+                  show-count
+                  :maxlength="100"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.visitor.visitstarttime')"
                 name="visitStartTime"
               >
-                <a-input
+                <a-date-picker
                   v-model:value="formState.visitStartTime"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.visitor.visitstarttime') })"
-                  size="small"
-                  allow-clear
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.visitor.visitstarttime') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.visitor.visitendtime')"
                 name="visitEndTime"
               >
-                <a-input
+                <a-date-picker
                   v-model:value="formState.visitEndTime"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.visitor.visitendtime') })"
-                  size="small"
-                  allow-clear
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.visitor.visitendtime') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.ExtField')"
-                name="ExtField"
+                name="extField"
+                class="takt-form-item-ext-field"
               >
-                <a-input
-                  v-model:value="formState.ExtField"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
-                  size="small"
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t('common.page.entity.extfieldhint')"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ t('common.page.entity.extfield') }}</span>
+                  </span>
+                </template>
+                <a-textarea
+                  v-model:value="formState.extField"
+                  :placeholder="t('common.page.form.placeholder.extfield')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
                   allow-clear
                 />
               </a-form-item>
@@ -126,107 +134,27 @@
                 <a-textarea
                   v-model:value="formState.remark"
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                  :rows="2"
-                  size="small"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <!-- 子表：visitorCompanion -->
-      <a-tab-pane
-        key="child-companions"
-        :tab="t('entity.visitorCompanion._self')"
-        force-render
-      >
-        <div class="mb-2">
-          <a-button type="primary" size="small" @click="handleAddVisitorCompanionRow">
-            {{ t('common.page.button.create') }}{{ t('entity.visitorCompanion._self') }}
-          </a-button>
-        </div>
-        <a-table
-          :columns="visitorCompanionFormColumns"
-          :data-source="childVisitorCompanionRows"
-          :pagination="false"
-          :row-key="(row: Record<string, unknown>, index?: number) => String(row.__rowKey ?? index ?? 0)"
-          size="small"
-          bordered
-        >
-          <template #bodyCell="{ column, record, index }">
-            <template v-if="column.key === 'tenantCode'">
-              <a-input
-                v-model:value="record.tenantCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyCode'">
-              <a-input
-                v-model:value="record.companyCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyDefaultCulture'">
-              <a-input
-                v-model:value="record.companyDefaultCulture"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'department'">
-              <a-input
-                v-model:value="record.department"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.visitorCompanion.department') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'jobTitle'">
-              <a-input
-                v-model:value="record.jobTitle"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.visitorCompanion.jobtitle') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'companionName'">
-              <a-input
-                v-model:value="record.companionName"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.visitorCompanion.companionname') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'ExtField'">
-              <a-input
-                v-model:value="record.ExtField"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'remark'">
-              <a-textarea
-                v-model:value="record.remark"
-                :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                :rows="2"
-                size="small"
-              />
-            </template>
-            <template v-else-if="column.key === '__action'">
-              <a-button type="link" danger size="small" @click="handleRemoveVisitorCompanionRow(index)">
-                {{ t('common.page.button.delete') }}
-              </a-button>
-            </template>
-          </template>
-        </a-table>
-      </a-tab-pane>
-    </a-tabs>
+      </a-row>
+    </div>
+    <!-- 下：子表 companions -->
+    <TaktEditableTable
+      ref="visitorCompanionTableRef"
+      v-model="childVisitorCompanionRows"
+      :columns="visitorCompanionFormColumns"
+      :title="t('entity.visitorcompanion._self')"
+      :add-button-entity="t('entity.visitorcompanion._self')"
+      id-field="visitorCompanionId"
+      :default-row="createDefaultVisitorCompanionRow"
+      :disabled="loading"
+      section-border
+    />
   </a-form>
 </template>
 
@@ -238,7 +166,8 @@
 import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
-import type { VisitorCreate, VisitorCompanionCreate, VisitorCompanion } from '@/types/routine/visitor-center/visitor'
+import type { VisitorCreate } from '@/types/routine/visitor-center/visitor'
+import { RiQuestionLine } from '@remixicon/vue'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -266,107 +195,83 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
     target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
   }
 }
-/** 表单内容区高度 class（字段多时 tab-10 行） */
-const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
-/** 当前激活的 Tab key */
-const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","visitorCompanyName","visitStartTime","visitEndTime","ExtField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","visitorCompanyName","visitStartTime","visitEndTime","extField","remark"]
 
-/** visitorCompanion 子表行（表单 Tab 内嵌） */
+import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+
 const childVisitorCompanionRows = ref<Record<string, unknown>[]>([])
+const visitorCompanionTableRef = ref<{
+  getRows: () => Record<string, unknown>[]
+  validate: () => Promise<unknown>
+  resetRows: () => void
+} | null>(null)
 
-/** 子表 visitorCompanion 表单列定义 */
-const visitorCompanionFormColumns = computed(() => [
+/** 子表 visitorCompanion 可编辑列 */
+const visitorCompanionFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
-    title: t('common.page.entity.tenantcode'),
-    dataIndex: 'tenantCode',
-    key: 'tenantCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companycode'),
-    dataIndex: 'companyCode',
-    key: 'companyCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companydefaultculture'),
-    dataIndex: 'companyDefaultCulture',
-    key: 'companyDefaultCulture',
-    width: 140,
-  },
-  {
-    title: t('entity.visitorCompanion.department'),
-    dataIndex: 'department',
     key: 'department',
+    title: t('entity.visitorcompanion.department'),
+    editor: 'input',
     width: 140,
   },
   {
-    title: t('entity.visitorCompanion.jobtitle'),
-    dataIndex: 'jobTitle',
     key: 'jobTitle',
+    title: t('entity.visitorcompanion.jobtitle'),
+    editor: 'input',
     width: 140,
   },
   {
-    title: t('entity.visitorCompanion.companionname'),
-    dataIndex: 'companionName',
     key: 'companionName',
+    title: t('entity.visitorcompanion.companionname'),
+    editor: 'input',
     width: 140,
   },
   {
-    title: t('common.page.entity.ExtField'),
-    dataIndex: 'ExtField',
-    key: 'ExtField',
+    key: 'extField',
+    title: t('common.page.entity.extfield'),
+    editor: 'textarea',
+    rows: 2,
+    placeholder: t('common.page.form.placeholder.optional', { field: t('common.page.entity.extfield') }),
     width: 140,
   },
   {
-    title: t('common.page.entity.remark'),
-    dataIndex: 'remark',
     key: 'remark',
+    title: t('common.page.entity.remark'),
+    editor: 'textarea',
+    rows: 2,
+    placeholder: t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') }),
     width: 140,
-  },
-  {
-    title: t('common.page.entity.action'),
-    key: '__action',
-    width: 80,
-    fixed: 'right',
   },
 ])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<VisitorCreate & { visitorId?: string }> | null | undefined) {
-  childVisitorCompanionRows.value = ((val as any)?.companions ?? []).map((item: Record<string, unknown>, index: number) => ({
-    ...item,
-    __rowKey: item.visitorCompanionId ?? `new-${index}`,
-  }))
+  childVisitorCompanionRows.value = ((val as any)?.companions ?? []) as Record<string, unknown>[]
 }
 
-/** 表单 Tab 内新增 visitorCompanion 行 */
-function handleAddVisitorCompanionRow() {
-  childVisitorCompanionRows.value.push({
-    __rowKey: `new-${Date.now()}`,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      department: '',
-      jobTitle: '',
-      companionName: '',
-      ExtField: '',
-      remark: '',
-  })
-}
-
-/** 表单 Tab 内删除 visitorCompanion 行 */
-function handleRemoveVisitorCompanionRow(index: number) {
-  childVisitorCompanionRows.value.splice(index, 1)
+function createDefaultVisitorCompanionRow(): Record<string, unknown> {
+  return {
+    department: '',
+    jobTitle: '',
+    companionName: '',
+    extField: '',
+    remark: '',
+  }
 }
 
 /** 组装 Create/Update 载荷（主表 + 子表数组） */
 function buildSubmitPayload() {
+  const masterId = props.formData?.visitorId ?? ''
   return {
     ...formState,
-    companions: childVisitorCompanionRows.value.map(({ __rowKey, ...rest }) => rest),
+    companions: visitorCompanionTableRef.value?.getRows?.() ?? childVisitorCompanionRows.value.map((rest) => ({
+      ...rest,
+      tenantCode: tenantStore.tenantCode,
+      companyCode: tenantStore.companyCode,
+      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+      visitorId: masterId,
+    })),
   }
 }
 
@@ -378,7 +283,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  formData: () => ({}),
+  formData: null,
   loading: false,
 })
 
@@ -386,19 +291,35 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
+/** 表单字段默认值（无字典默认项） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  void target
+}
 
-/** 编辑态灌入 formData；新增态 reset */
+
+/** 编辑态灌入 formData；新增态恢复默认值（须含 visitorId 才视为编辑） */
 watch(
   () => props.formData,
   (val) => {
-    const next = val ? { ...val } : {}
-    Object.keys(formState).forEach((k) => delete formState[k])
+    if (val?.visitorId) {
+      const next = { ...val } as Record<string, unknown>
+      Object.keys(formState).forEach((k) => delete formState[k])
     delete (next as any).companions
-    applyScopeDefaults(next)
-    Object.assign(formState, next)
+      applyScopeDefaults(next)
+      Object.assign(formState, next)
     syncChildRowsFromFormData(val)
+      formRef.value?.clearValidate()
+    } else {
+      Object.keys(formState).forEach((k) => delete formState[k])
+      if (val && typeof val === 'object' && Object.keys(val).length > 0) {
+        Object.assign(formState, val)
+      }
+      applyFormDefaults(formState)
+      applyScopeDefaults(formState as Record<string, unknown>, true)
+      formRef.value?.clearValidate()
+    }
   },
-  { immediate: true, deep: true }
+  { immediate: true }
 )
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
@@ -424,15 +345,15 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   visitStartTime: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.visitor.visitstarttime') }),
-      trigger: 'blur'
+      message: t('common.page.form.placeholder.select', { field: t('entity.visitor.visitstarttime') }),
+      trigger: 'change'
     }
   ],
   visitEndTime: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.visitor.visitendtime') }),
-      trigger: 'blur'
+      message: t('common.page.form.placeholder.select', { field: t('entity.visitor.visitendtime') }),
+      trigger: 'change'
     }
   ],
 }))
@@ -440,31 +361,30 @@ const rules = computed<Record<string, Rule[]>>(() => ({
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
 async function validate() {
   await formRef.value?.validate()
+  await visitorCompanionTableRef.value?.validate?.()
   return formState
 }
 
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
-  return buildSubmitPayload()
+  const payload = buildSubmitPayload() as Record<string, unknown>
+  if ('sortOrder' in payload) delete payload.sortOrder
+  return payload
 }
 
-/** 重置表单与子表行 */
+/** 重置表单与子表行（弹窗未 destroy 时父级 nextTick 也会调用） */
 function resetFields() {
-  formRef.value?.resetFields()
   Object.keys(formState).forEach((k) => delete formState[k])
+  if (props.formData && typeof props.formData === 'object') {
+    Object.assign(formState, props.formData)
+  }
+  applyFormDefaults(formState)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.visitorId)
   childVisitorCompanionRows.value = []
-  activeTab.value = 'tab-0'
+  visitorCompanionTableRef.value?.resetRows?.()
+  formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })
 </script>
 
-<style scoped lang="css">
-:deep(.ant-tabs-content-holder) {
-  min-height: 50vh;
-}
-
-:deep(.ant-tabs-tabpane) {
-  min-height: 50vh;
-}
-</style>

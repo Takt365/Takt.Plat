@@ -23,8 +23,7 @@ namespace Takt.Domain.Entities.Workflow;
 [SugarIndex("ix_flow_task_instance", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(InstanceId), OrderByType.Asc, false)]
 [SugarIndex("ix_flow_task_assignee", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(AssigneeUserId), OrderByType.Asc, nameof(TaskStatus), OrderByType.Asc, false)]
 public class TaktFlowTask : TaktCompanyEntityBase
-{
-    /// <summary>
+{    /// <summary>
     /// 流程实例 ID
     /// </summary>
     [SugarColumn(ColumnName = "instance_id", ColumnDescription = "流程实例ID", ColumnDataType = "bigint", IsNullable = false)]
@@ -54,11 +53,6 @@ public class TaktFlowTask : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "owner_user_id", ColumnDescription = "任务所有者ID", ColumnDataType = "bigint", IsNullable = true)]
     public long? OwnerUserId { get; set; }
-    /// <summary>
-    /// 任务状态
-    /// </summary>
-    [SugarColumn(ColumnName = "task_status", ColumnDescription = "任务状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktFlowTaskStatus TaskStatus { get; set; } = TaktFlowTaskStatus.Pending;
     /// <summary>
     /// 会签类型
     /// </summary>
@@ -95,15 +89,21 @@ public class TaktFlowTask : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "add_sign_id", ColumnDescription = "加签记录ID", ColumnDataType = "bigint", IsNullable = true)]
     public long? AddSignId { get; set; }
     /// <summary>
+    /// 审批意见
+    /// </summary>
+    [SugarColumn(ColumnName = "comment", ColumnDescription = "审批意见", ColumnDataType = "nvarchar", Length = 2000, IsNullable = true)]
+    public string? Comment { get; set; }
+    /// <summary>
     /// 多实例序号
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; }
     /// <summary>
-    /// 审批意见
+    /// 任务状态
     /// </summary>
-    [SugarColumn(ColumnName = "comment", ColumnDescription = "审批意见", ColumnDataType = "nvarchar", Length = 2000, IsNullable = true)]
-    public string? Comment { get; set; }
+    [SugarColumn(ColumnName = "task_status", ColumnDescription = "任务状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public TaktFlowTaskStatus TaskStatus { get; set; } = TaktFlowTaskStatus.Pending;
+
     // ========================================
     // 导航属性区域
     // ========================================

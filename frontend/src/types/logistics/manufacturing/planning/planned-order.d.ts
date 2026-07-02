@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/planning
 // 文件名称：planned-order.d.ts
-// 创建时间：2026-06-22
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/planning 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -218,7 +218,7 @@ export interface PlannedOrderCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -366,9 +366,24 @@ export interface PlannedOrderTemplate {
   materialCode?: string;
 
   /**
+   * 计划数量
+   */
+  plannedQuantity?: number;
+
+  /**
    * 计量单位
    */
   unitOfMeasure?: string;
+
+  /**
+   * 计划开始时间
+   */
+  plannedStartTime?: string;
+
+  /**
+   * 计划结束时间
+   */
+  plannedEndTime?: string;
 
   /**
    * 工艺路线编码（关联 TaktRouting.RoutingCode）
@@ -410,7 +425,7 @@ export interface PlannedOrderImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -440,9 +455,24 @@ export interface PlannedOrderImport {
   materialCode?: string;
 
   /**
+   * 计划数量
+   */
+  plannedQuantity?: number;
+
+  /**
    * 计量单位
    */
   unitOfMeasure?: string;
+
+  /**
+   * 计划开始时间
+   */
+  plannedStartTime?: string;
+
+  /**
+   * 计划结束时间
+   */
+  plannedEndTime?: string;
 
   /**
    * 工艺路线编码（关联 TaktRouting.RoutingCode）

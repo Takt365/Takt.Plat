@@ -2,9 +2,9 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.Announcement
 // 文件名称：TaktAnnouncementI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
-// 功能描述：TaktAnnouncement 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
+// 功能描述：TaktAnnouncement 实体字段国际化种子（已对齐前端 locales：src/locales/routine/announcement）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -90,6 +90,15 @@ public class TaktAnnouncementI18nSeedData : ITaktSeedDataCoordinator
             // entity.announcement._self
             new TranslationSeedItem("entity.announcement._self", "zh-HK", "公告通知信息_hk", "实体名称"),
 
+            // entity.announcement.code
+            new TranslationSeedItem("entity.announcement.code", "en-US", "公告编码_us", "公告编码（租户+公司内唯一）"),
+            // entity.announcement.code
+            new TranslationSeedItem("entity.announcement.code", "ja-JP", "公告编码_jp", "公告编码（租户+公司内唯一）"),
+            // entity.announcement.code
+            new TranslationSeedItem("entity.announcement.code", "zh-CN", "公告编码", "公告编码（租户+公司内唯一）"),
+            // entity.announcement.code
+            new TranslationSeedItem("entity.announcement.code", "zh-HK", "公告编码_hk", "公告编码（租户+公司内唯一）"),
+
             // entity.announcement.title
             new TranslationSeedItem("entity.announcement.title", "en-US", "公告标题_us", "公告标题"),
             // entity.announcement.title
@@ -100,13 +109,13 @@ public class TaktAnnouncementI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.announcement.title", "zh-HK", "公告标题_hk", "公告标题"),
 
             // entity.announcement.type
-            new TranslationSeedItem("entity.announcement.type", "en-US", "公告类型_us", "公告类型（字典 sys_announcement_category）"),
+            new TranslationSeedItem("entity.announcement.type", "en-US", "公告类型_us", "公告类型（字典 sys_announcement_category；1=紧急通知 2=公告 3=通知 4=决议 5=活动 6=安全通告 7=运维通知 8=系统公告）"),
             // entity.announcement.type
-            new TranslationSeedItem("entity.announcement.type", "ja-JP", "公告类型_jp", "公告类型（字典 sys_announcement_category）"),
+            new TranslationSeedItem("entity.announcement.type", "ja-JP", "公告类型_jp", "公告类型（字典 sys_announcement_category；1=紧急通知 2=公告 3=通知 4=决议 5=活动 6=安全通告 7=运维通知 8=系统公告）"),
             // entity.announcement.type
-            new TranslationSeedItem("entity.announcement.type", "zh-CN", "公告类型", "公告类型（字典 sys_announcement_category）"),
+            new TranslationSeedItem("entity.announcement.type", "zh-CN", "公告类型", "公告类型（字典 sys_announcement_category；1=紧急通知 2=公告 3=通知 4=决议 5=活动 6=安全通告 7=运维通知 8=系统公告）"),
             // entity.announcement.type
-            new TranslationSeedItem("entity.announcement.type", "zh-HK", "公告类型_hk", "公告类型（字典 sys_announcement_category）"),
+            new TranslationSeedItem("entity.announcement.type", "zh-HK", "公告类型_hk", "公告类型（字典 sys_announcement_category；1=紧急通知 2=公告 3=通知 4=决议 5=活动 6=安全通告 7=运维通知 8=系统公告）"),
 
             // entity.announcement.content
             new TranslationSeedItem("entity.announcement.content", "en-US", "公告内容_us", "公告内容（富文本 HTML）"),
@@ -154,22 +163,22 @@ public class TaktAnnouncementI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.announcement.publishtime", "zh-HK", "发布时间_hk", "发布时间（定时发布时使用）"),
 
             // entity.announcement.isscheduled
-            new TranslationSeedItem("entity.announcement.isscheduled", "en-US", "是否定时发布_us", "是否定时发布（1=是，0=否）"),
+            new TranslationSeedItem("entity.announcement.isscheduled", "en-US", "定时发布_us", "定时发布（字典 sys_yes_no_type；1=是 0=否）"),
             // entity.announcement.isscheduled
-            new TranslationSeedItem("entity.announcement.isscheduled", "ja-JP", "是否定时发布_jp", "是否定时发布（1=是，0=否）"),
+            new TranslationSeedItem("entity.announcement.isscheduled", "ja-JP", "定时发布_jp", "定时发布（字典 sys_yes_no_type；1=是 0=否）"),
             // entity.announcement.isscheduled
-            new TranslationSeedItem("entity.announcement.isscheduled", "zh-CN", "是否定时发布", "是否定时发布（1=是，0=否）"),
+            new TranslationSeedItem("entity.announcement.isscheduled", "zh-CN", "定时发布", "定时发布（字典 sys_yes_no_type；1=是 0=否）"),
             // entity.announcement.isscheduled
-            new TranslationSeedItem("entity.announcement.isscheduled", "zh-HK", "是否定时发布_hk", "是否定时发布（1=是，0=否）"),
+            new TranslationSeedItem("entity.announcement.isscheduled", "zh-HK", "定时发布_hk", "定时发布（字典 sys_yes_no_type；1=是 0=否）"),
 
             // entity.announcement.istop
-            new TranslationSeedItem("entity.announcement.istop", "en-US", "是否置顶_us", "是否置顶（1=是，0=否）"),
+            new TranslationSeedItem("entity.announcement.istop", "en-US", "置顶_us", "置顶（字典 sys_yes_no_type；1=是 0=否）"),
             // entity.announcement.istop
-            new TranslationSeedItem("entity.announcement.istop", "ja-JP", "是否置顶_jp", "是否置顶（1=是，0=否）"),
+            new TranslationSeedItem("entity.announcement.istop", "ja-JP", "置顶_jp", "置顶（字典 sys_yes_no_type；1=是 0=否）"),
             // entity.announcement.istop
-            new TranslationSeedItem("entity.announcement.istop", "zh-CN", "是否置顶", "是否置顶（1=是，0=否）"),
+            new TranslationSeedItem("entity.announcement.istop", "zh-CN", "置顶", "置顶（字典 sys_yes_no_type；1=是 0=否）"),
             // entity.announcement.istop
-            new TranslationSeedItem("entity.announcement.istop", "zh-HK", "是否置顶_hk", "是否置顶（1=是，0=否）"),
+            new TranslationSeedItem("entity.announcement.istop", "zh-HK", "置顶_hk", "置顶（字典 sys_yes_no_type；1=是 0=否）"),
 
             // entity.announcement.toppriority
             new TranslationSeedItem("entity.announcement.toppriority", "en-US", "置顶优先级_us", "置顶优先级（数字越大越靠前）"),
@@ -199,13 +208,13 @@ public class TaktAnnouncementI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.announcement.viewcount", "zh-HK", "查看次数_hk", "查看次数"),
 
             // entity.announcement.targetscope
-            new TranslationSeedItem("entity.announcement.targetscope", "en-US", "目标范围_us", "目标范围（all=全员，company=本公司，department=本部门，custom=自定义）"),
+            new TranslationSeedItem("entity.announcement.targetscope", "en-US", "目标范围_us", "目标范围（列存业务码 all/company/department/custom；语义对齐 sys_publish_scope_type 的 0=全部/1=指定部门/2=指定用户/3=指定角色）"),
             // entity.announcement.targetscope
-            new TranslationSeedItem("entity.announcement.targetscope", "ja-JP", "目标范围_jp", "目标范围（all=全员，company=本公司，department=本部门，custom=自定义）"),
+            new TranslationSeedItem("entity.announcement.targetscope", "ja-JP", "目标范围_jp", "目标范围（列存业务码 all/company/department/custom；语义对齐 sys_publish_scope_type 的 0=全部/1=指定部门/2=指定用户/3=指定角色）"),
             // entity.announcement.targetscope
-            new TranslationSeedItem("entity.announcement.targetscope", "zh-CN", "目标范围", "目标范围（all=全员，company=本公司，department=本部门，custom=自定义）"),
+            new TranslationSeedItem("entity.announcement.targetscope", "zh-CN", "目标范围", "目标范围（列存业务码 all/company/department/custom；语义对齐 sys_publish_scope_type 的 0=全部/1=指定部门/2=指定用户/3=指定角色）"),
             // entity.announcement.targetscope
-            new TranslationSeedItem("entity.announcement.targetscope", "zh-HK", "目标范围_hk", "目标范围（all=全员，company=本公司，department=本部门，custom=自定义）"),
+            new TranslationSeedItem("entity.announcement.targetscope", "zh-HK", "目标范围_hk", "目标范围（列存业务码 all/company/department/custom；语义对齐 sys_publish_scope_type 的 0=全部/1=指定部门/2=指定用户/3=指定角色）"),
 
             // entity.announcement.targetdepartments
             new TranslationSeedItem("entity.announcement.targetdepartments", "en-US", "目标部门编码_us", "目标部门编码（多个用逗号分隔，当 target_scope=department 时使用）"),
@@ -226,13 +235,13 @@ public class TaktAnnouncementI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.announcement.targetusers", "zh-HK", "目标用户ID_hk", "目标用户 ID（多个用逗号分隔，当 target_scope=custom 时使用）"),
 
             // entity.announcement.status
-            new TranslationSeedItem("entity.announcement.status", "en-US", "状态_us", "状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）"),
+            new TranslationSeedItem("entity.announcement.status", "en-US", "状态_us", "状态（字典 sys_publish_status；0=草稿 1=已发布 2=已撤回 3=已过期）"),
             // entity.announcement.status
-            new TranslationSeedItem("entity.announcement.status", "ja-JP", "状态_jp", "状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）"),
+            new TranslationSeedItem("entity.announcement.status", "ja-JP", "状态_jp", "状态（字典 sys_publish_status；0=草稿 1=已发布 2=已撤回 3=已过期）"),
             // entity.announcement.status
-            new TranslationSeedItem("entity.announcement.status", "zh-CN", "状态", "状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）"),
+            new TranslationSeedItem("entity.announcement.status", "zh-CN", "状态", "状态（字典 sys_publish_status；0=草稿 1=已发布 2=已撤回 3=已过期）"),
             // entity.announcement.status
-            new TranslationSeedItem("entity.announcement.status", "zh-HK", "状态_hk", "状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）"),
+            new TranslationSeedItem("entity.announcement.status", "zh-HK", "状态_hk", "状态（字典 sys_publish_status；0=草稿 1=已发布 2=已撤回 3=已过期）"),
         };
     }
 

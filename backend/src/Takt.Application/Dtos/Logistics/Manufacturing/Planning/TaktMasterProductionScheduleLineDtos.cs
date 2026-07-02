@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Planning
 // 文件名称：TaktMasterProductionScheduleLineDtos.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：MasterProductionScheduleLine 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktMasterProductionScheduleLine 生成，请按需审阅）
 // 
@@ -252,7 +252,7 @@ public class TaktMasterProductionScheduleLineCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -400,6 +400,46 @@ public class TaktMasterProductionScheduleLineTemplateDto
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 时间桶开始
+    /// </summary>
+    public DateTime? BucketStart { get; set; }
+
+    /// <summary>
+    /// 时间桶结束
+    /// </summary>
+    public DateTime? BucketEnd { get; set; }
+
+    /// <summary>
+    /// 毛需求数量
+    /// </summary>
+    public decimal? GrossRequirement { get; set; }
+
+    /// <summary>
+    /// 预计入库（计划接收）
+    /// </summary>
+    public decimal? ScheduledReceipts { get; set; }
+
+    /// <summary>
+    /// 预计可用库存（期初预计库存）
+    /// </summary>
+    public decimal? ProjectedOnHand { get; set; }
+
+    /// <summary>
+    /// 净需求数量
+    /// </summary>
+    public decimal? NetRequirement { get; set; }
+
+    /// <summary>
+    /// 计划订单数量（MPS 产出）
+    /// </summary>
+    public decimal? PlannedOrderQuantity { get; set; }
+
+    /// <summary>
+    /// 可承诺量 ATP
+    /// </summary>
+    public decimal? AtpQuantity { get; set; }
+
+    /// <summary>
     /// 计量单位
     /// </summary>
     public string? UnitOfMeasure { get; set; } = string.Empty;
@@ -432,7 +472,7 @@ public class TaktMasterProductionScheduleLineImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -457,6 +497,46 @@ public class TaktMasterProductionScheduleLineImportDto
     /// 物料编码
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 时间桶开始
+    /// </summary>
+    public DateTime? BucketStart { get; set; }
+
+    /// <summary>
+    /// 时间桶结束
+    /// </summary>
+    public DateTime? BucketEnd { get; set; }
+
+    /// <summary>
+    /// 毛需求数量
+    /// </summary>
+    public decimal? GrossRequirement { get; set; }
+
+    /// <summary>
+    /// 预计入库（计划接收）
+    /// </summary>
+    public decimal? ScheduledReceipts { get; set; }
+
+    /// <summary>
+    /// 预计可用库存（期初预计库存）
+    /// </summary>
+    public decimal? ProjectedOnHand { get; set; }
+
+    /// <summary>
+    /// 净需求数量
+    /// </summary>
+    public decimal? NetRequirement { get; set; }
+
+    /// <summary>
+    /// 计划订单数量（MPS 产出）
+    /// </summary>
+    public decimal? PlannedOrderQuantity { get; set; }
+
+    /// <summary>
+    /// 可承诺量 ATP
+    /// </summary>
+    public decimal? AtpQuantity { get; set; }
 
     /// <summary>
     /// 计量单位

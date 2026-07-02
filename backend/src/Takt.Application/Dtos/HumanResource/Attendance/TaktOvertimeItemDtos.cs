@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Attendance
 // 文件名称：TaktOvertimeItemDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：OvertimeItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktOvertimeItem 生成，请按需审阅）
 // 
@@ -36,7 +36,7 @@ public class TaktOvertimeItemDto : TaktCompanyDtoBase
     public long OvertimeItemId { get; set; }
 
     /// <summary>
-    /// 加班申请单 ID
+    /// 加班申请单（关联 TaktOvertime.Id，主子表关系）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long OvertimeId { get; set; }
@@ -52,7 +52,7 @@ public class TaktOvertimeItemDto : TaktCompanyDtoBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 员工 ID
+    /// 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EmployeeId { get; set; }
@@ -111,7 +111,7 @@ public class TaktOvertimeItemQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 加班申请单 ID
+    /// 加班申请单（关联 TaktOvertime.Id，主子表关系）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? OvertimeId { get; set; }
@@ -122,7 +122,7 @@ public class TaktOvertimeItemQueryDto : TaktPagedQuery
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 员工 ID
+    /// 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
@@ -203,12 +203,12 @@ public class TaktOvertimeItemCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 加班申请单 ID
+    /// 加班申请单（关联 TaktOvertime.Id，主子表关系）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long OvertimeId { get; set; }
@@ -219,7 +219,7 @@ public class TaktOvertimeItemCreateDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 员工 ID
+    /// 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EmployeeId { get; set; }
@@ -302,7 +302,7 @@ public class TaktOvertimeItemTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 加班申请单 ID
+    /// 加班申请单（关联 TaktOvertime.Id，主子表关系）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? OvertimeId { get; set; }
@@ -313,7 +313,7 @@ public class TaktOvertimeItemTemplateDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 员工 ID
+    /// 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
@@ -322,6 +322,26 @@ public class TaktOvertimeItemTemplateDto
     /// 员工姓名
     /// </summary>
     public string? EmployeeName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 计划加班小时数
+    /// </summary>
+    public decimal? PlannedHours { get; set; }
+
+    /// <summary>
+    /// 实际加班开始时间
+    /// </summary>
+    public DateTime? ActualStartTime { get; set; }
+
+    /// <summary>
+    /// 实际加班结束时间
+    /// </summary>
+    public DateTime? ActualEndTime { get; set; }
+
+    /// <summary>
+    /// 实际加班小时数
+    /// </summary>
+    public decimal? ActualHours { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -351,12 +371,12 @@ public class TaktOvertimeItemImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 加班申请单 ID
+    /// 加班申请单（关联 TaktOvertime.Id，主子表关系）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? OvertimeId { get; set; }
@@ -367,7 +387,7 @@ public class TaktOvertimeItemImportDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 员工 ID
+    /// 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
@@ -376,6 +396,26 @@ public class TaktOvertimeItemImportDto
     /// 员工姓名
     /// </summary>
     public string? EmployeeName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 计划加班小时数
+    /// </summary>
+    public decimal? PlannedHours { get; set; }
+
+    /// <summary>
+    /// 实际加班开始时间
+    /// </summary>
+    public DateTime? ActualStartTime { get; set; }
+
+    /// <summary>
+    /// 实际加班结束时间
+    /// </summary>
+    public DateTime? ActualEndTime { get; set; }
+
+    /// <summary>
+    /// 实际加班小时数
+    /// </summary>
+    public decimal? ActualHours { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -411,7 +451,7 @@ public class TaktOvertimeItemExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 加班申请单 ID
+    /// 加班申请单（关联 TaktOvertime.Id，主子表关系）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long OvertimeId { get; set; }
@@ -422,7 +462,7 @@ public class TaktOvertimeItemExportDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 员工 ID
+    /// 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EmployeeId { get; set; }

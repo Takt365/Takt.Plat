@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopEsdCheckDtos.cs
-// 创建时间：2026-06-15
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SopEsdCheck 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSopEsdCheck 生成，请按需审阅）
 // 
@@ -36,7 +36,12 @@ public class TaktSopEsdCheckDto : TaktCompanyDtoBase
     public long SopEsdCheckId { get; set; }
 
     /// <summary>
-    /// 工位 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long WorkstationId { get; set; }
@@ -47,7 +52,7 @@ public class TaktSopEsdCheckDto : TaktCompanyDtoBase
     public string? WorkstationName { get; set; }
 
     /// <summary>
-    /// 执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 执行追溯 ID（关联 TaktSopExec.Id，选项 TaktSopExecs/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ExecId { get; set; }
@@ -58,7 +63,7 @@ public class TaktSopEsdCheckDto : TaktCompanyDtoBase
     public string? ExecName { get; set; }
 
     /// <summary>
-    /// 员工 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EmployeeId { get; set; }
@@ -79,12 +84,12 @@ public class TaktSopEsdCheckDto : TaktCompanyDtoBase
     public decimal? ResistanceValue { get; set; }
 
     /// <summary>
-    /// 是否达标（字典 sys_yes_no_type，0=否，1=是）
+    /// 达标（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int IsCompliant { get; set; } = 0;
 
     /// <summary>
-    /// 是否触发锁屏（字典 sys_yes_no_type，0=否，1=是）
+    /// 锁屏（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int LockScreenTriggered { get; set; } = 0;
 
@@ -122,19 +127,24 @@ public class TaktSopEsdCheckQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工位 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? WorkstationId { get; set; }
 
     /// <summary>
-    /// 执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 执行追溯 ID（关联 TaktSopExec.Id，选项 TaktSopExecs/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ExecId { get; set; }
 
     /// <summary>
-    /// 员工 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
@@ -150,12 +160,12 @@ public class TaktSopEsdCheckQueryDto : TaktPagedQuery
     public decimal? ResistanceValue { get; set; }
 
     /// <summary>
-    /// 是否达标（字典 sys_yes_no_type，0=否，1=是）
+    /// 达标（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int? IsCompliant { get; set; }
 
     /// <summary>
-    /// 是否触发锁屏（字典 sys_yes_no_type，0=否，1=是）
+    /// 锁屏（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int? LockScreenTriggered { get; set; }
 
@@ -210,24 +220,30 @@ public class TaktSopEsdCheckCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工位 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// </summary>
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long WorkstationId { get; set; }
 
     /// <summary>
-    /// 执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 执行追溯 ID（关联 TaktSopExec.Id，选项 TaktSopExecs/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ExecId { get; set; }
 
     /// <summary>
-    /// 员工 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EmployeeId { get; set; }
@@ -243,12 +259,12 @@ public class TaktSopEsdCheckCreateDto
     public decimal? ResistanceValue { get; set; }
 
     /// <summary>
-    /// 是否达标（字典 sys_yes_no_type，0=否，1=是）
+    /// 达标（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int IsCompliant { get; set; } = 0;
 
     /// <summary>
-    /// 是否触发锁屏（字典 sys_yes_no_type，0=否，1=是）
+    /// 锁屏（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int LockScreenTriggered { get; set; } = 0;
 
@@ -309,19 +325,24 @@ public class TaktSopEsdCheckTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工位 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? WorkstationId { get; set; }
 
     /// <summary>
-    /// 执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 执行追溯 ID（关联 TaktSopExec.Id，选项 TaktSopExecs/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ExecId { get; set; }
 
     /// <summary>
-    /// 员工 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
@@ -332,14 +353,24 @@ public class TaktSopEsdCheckTemplateDto
     public string? DeviceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否达标（字典 sys_yes_no_type，0=否，1=是）
+    /// 阻值（兆欧）
+    /// </summary>
+    public decimal? ResistanceValue { get; set; }
+
+    /// <summary>
+    /// 达标（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int? IsCompliant { get; set; }
 
     /// <summary>
-    /// 是否触发锁屏（字典 sys_yes_no_type，0=否，1=是）
+    /// 锁屏（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int? LockScreenTriggered { get; set; }
+
+    /// <summary>
+    /// 检查时间
+    /// </summary>
+    public DateTime? CheckedAt { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -369,24 +400,29 @@ public class TaktSopEsdCheckImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工位 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? WorkstationId { get; set; }
 
     /// <summary>
-    /// 执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 执行追溯 ID（关联 TaktSopExec.Id，选项 TaktSopExecs/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ExecId { get; set; }
 
     /// <summary>
-    /// 员工 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
@@ -397,14 +433,24 @@ public class TaktSopEsdCheckImportDto
     public string? DeviceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否达标（字典 sys_yes_no_type，0=否，1=是）
+    /// 阻值（兆欧）
+    /// </summary>
+    public decimal? ResistanceValue { get; set; }
+
+    /// <summary>
+    /// 达标（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int? IsCompliant { get; set; }
 
     /// <summary>
-    /// 是否触发锁屏（字典 sys_yes_no_type，0=否，1=是）
+    /// 锁屏（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int? LockScreenTriggered { get; set; }
+
+    /// <summary>
+    /// 检查时间
+    /// </summary>
+    public DateTime? CheckedAt { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -440,19 +486,24 @@ public class TaktSopEsdCheckExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工位 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long WorkstationId { get; set; }
 
     /// <summary>
-    /// 执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 执行追溯 ID（关联 TaktSopExec.Id，选项 TaktSopExecs/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ExecId { get; set; }
 
     /// <summary>
-    /// 员工 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EmployeeId { get; set; }
@@ -468,12 +519,12 @@ public class TaktSopEsdCheckExportDto
     public decimal? ResistanceValue { get; set; }
 
     /// <summary>
-    /// 是否达标（字典 sys_yes_no_type，0=否，1=是）
+    /// 达标（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int IsCompliant { get; set; } = 0;
 
     /// <summary>
-    /// 是否触发锁屏（字典 sys_yes_no_type，0=否，1=是）
+    /// 锁屏（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int LockScreenTriggered { get; set; } = 0;
 

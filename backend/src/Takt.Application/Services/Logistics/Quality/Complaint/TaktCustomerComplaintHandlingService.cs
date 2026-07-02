@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Complaint
 // 文件名称：TaktCustomerComplaintHandlingService.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：客诉处理记录应用服务实现
 // 
@@ -329,7 +329,8 @@ public class TaktCustomerComplaintHandlingService : TaktServiceBase, ITaktCustom
         {
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
-                (x.ComplaintHandlingCode != null && x.ComplaintHandlingCode.Contains(keywords))
+                (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                || (x.ComplaintHandlingCode != null && x.ComplaintHandlingCode.Contains(keywords))
                 || SqlFunc.ToString(x.ComplaintId).Contains(keywords)
                 || (x.ComplaintNo != null && x.ComplaintNo.Contains(keywords))
                 || SqlFunc.ToString(x.ComplaintItemId).Contains(keywords)
@@ -354,6 +355,11 @@ public class TaktCustomerComplaintHandlingService : TaktServiceBase, ITaktCustom
                 || SqlFunc.ToString(x.ActualCompletionDate).Contains(keywords)
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
+        {
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ComplaintHandlingCode))

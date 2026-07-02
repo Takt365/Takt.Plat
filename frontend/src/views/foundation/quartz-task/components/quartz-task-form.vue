@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/foundation/quartz-task/components -->
 <!-- 文件名称：quartz-task-form.vue -->
-<!-- 功能描述：Quartz 定时任务实体维护弹窗内嵌表单。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：Quartz 定时任务实体维护弹窗内嵌表单。由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -10,6 +10,7 @@
 <template>
   <a-form
     ref="formRef"
+    class="takt-generated-form"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -19,7 +20,6 @@
       v-model:active-key="activeTab"
       class="quartz-task-form-tabs"
     >
-      <!-- 主表 -->
       <a-tab-pane
         key="tab-0"
         :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
@@ -35,8 +35,9 @@
                 <a-input
                   v-model:value="formState.tenantCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -48,8 +49,9 @@
                 <a-input
                   v-model:value="formState.companyCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -61,98 +63,129 @@
                 <a-input
                   v-model:value="formState.companyDefaultCulture"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.quartzTask.taskcode')"
+                :label="t('entity.quartztask.taskcode')"
                 name="taskCode"
               >
                 <a-input
                   v-model:value="formState.taskCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzTask.taskcode') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartztask.taskcode') })"
+                  show-count
+                  :maxlength="50"
                   allow-clear
+                  :disabled="!!formData?.quartzTaskId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.quartzTask.taskname')"
+                :label="t('entity.quartztask.taskname')"
                 name="taskName"
               >
                 <a-input
                   v-model:value="formState.taskName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzTask.taskname') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartztask.taskname') })"
+                  show-count
+                  :maxlength="100"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.quartzTask.jobname')"
+                :label="t('entity.quartztask.jobname')"
                 name="jobName"
               >
                 <a-input
                   v-model:value="formState.jobName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzTask.jobname') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartztask.jobname') })"
+                  show-count
+                  :maxlength="100"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.quartzTask.jobgroup')"
+                :label="t('entity.quartztask.jobgroup')"
                 name="jobGroup"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.jobGroup"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzTask.jobgroup') })"
-                  size="small"
-                  allow-clear
+                  dict-type="sys_quartz_job_group"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.quartztask.jobgroup') })"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.quartzTask.tasktype')"
+                :label="t('entity.quartztask.tasktype')"
                 name="taskType"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.taskType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzTask.tasktype') })"
-                  size="small"
-                  style="width: 100%"
+                  dict-type="sys_quartz_task_type"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.quartztask.tasktype') })"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col
+              v-if="taskTypeFieldVisibility.assemblyName"
+              :span="12"
+            >
               <a-form-item
-                :label="t('entity.quartzTask.assemblyname')"
                 name="assemblyName"
               >
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t(QUARTZ_TASK_EXEC_FIELD_I18N.assemblyName.hint)"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ t(QUARTZ_TASK_EXEC_FIELD_I18N.assemblyName.label) }}</span>
+                  </span>
+                </template>
                 <a-input
                   v-model:value="formState.assemblyName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzTask.assemblyname') })"
-                  size="small"
+                  :placeholder="t(QUARTZ_TASK_EXEC_FIELD_I18N.assemblyName.placeholder)"
+                  show-count
+                  :maxlength="255"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col
+              v-if="taskTypeFieldVisibility.className"
+              :span="12"
+            >
               <a-form-item
-                :label="t('entity.quartzTask.classname')"
                 name="className"
               >
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t(QUARTZ_TASK_EXEC_FIELD_I18N.className.hint)"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ t(QUARTZ_TASK_EXEC_FIELD_I18N.className.label) }}</span>
+                  </span>
+                </template>
                 <a-input
                   v-model:value="formState.className"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzTask.classname') })"
-                  size="small"
+                  :placeholder="t(QUARTZ_TASK_EXEC_FIELD_I18N.className.placeholder)"
+                  show-count
+                  :maxlength="255"
                   allow-clear
                 />
               </a-form-item>
@@ -167,133 +200,173 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
+            <a-col
+              v-if="taskTypeFieldVisibility.apiUrl"
+              :span="12"
+            >
               <a-form-item
-                :label="t('entity.quartzTask.apiurl')"
                 name="apiUrl"
               >
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t(QUARTZ_TASK_EXEC_FIELD_I18N.apiUrl.hint)"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ t(QUARTZ_TASK_EXEC_FIELD_I18N.apiUrl.label) }}</span>
+                  </span>
+                </template>
                 <a-input
                   v-model:value="formState.apiUrl"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzTask.apiurl') })"
-                  size="small"
+                  :placeholder="t(QUARTZ_TASK_EXEC_FIELD_I18N.apiUrl.placeholder)"
+                  show-count
+                  :maxlength="255"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col
+              v-if="taskTypeFieldVisibility.requestMethod"
+              :span="12"
+            >
               <a-form-item
-                :label="t('entity.quartzTask.requestmethod')"
                 name="requestMethod"
               >
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t(QUARTZ_TASK_EXEC_FIELD_I18N.requestMethod.hint)"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ t(QUARTZ_TASK_EXEC_FIELD_I18N.requestMethod.label) }}</span>
+                  </span>
+                </template>
                 <a-input
                   v-model:value="formState.requestMethod"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzTask.requestmethod') })"
-                  size="small"
+                  :placeholder="t(QUARTZ_TASK_EXEC_FIELD_I18N.requestMethod.placeholder)"
+                  show-count
+                  :maxlength="10"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col
+              v-if="taskTypeFieldVisibility.sqlScript"
+              :span="12"
+            >
               <a-form-item
-                :label="t('entity.quartzTask.sqlscript')"
                 name="sqlScript"
               >
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t(QUARTZ_TASK_EXEC_FIELD_I18N.sqlScript.hint)"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ t(QUARTZ_TASK_EXEC_FIELD_I18N.sqlScript.label) }}</span>
+                  </span>
+                </template>
                 <a-input
                   v-model:value="formState.sqlScript"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzTask.sqlscript') })"
-                  size="small"
+                  :placeholder="t(QUARTZ_TASK_EXEC_FIELD_I18N.sqlScript.placeholder)"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.quartzTask.triggertype')"
+                :label="t('entity.quartztask.triggertype')"
                 name="triggerType"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.triggerType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzTask.triggertype') })"
-                  size="small"
-                  style="width: 100%"
+                  dict-type="sys_quartz_trigger_type"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.quartztask.triggertype') })"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col
+              v-if="triggerTypeFieldVisibility.cronExpression"
+              :span="12"
+            >
               <a-form-item
-                :label="t('entity.quartzTask.cronexpression')"
                 name="cronExpression"
               >
-                <a-input
-                  v-model:value="formState.cronExpression"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzTask.cronexpression') })"
-                  size="small"
-                  allow-clear
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t('common.page.form.placeholder.quartztask.cronexpression')"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ t('entity.quartztask.cronexpression') }}</span>
+                  </span>
+                </template>
+                <takt-cron-editor
+                  v-model="formState.cronExpression"
+                  :placeholder="t('common.page.form.placeholder.quartztask.cronexpression')"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col
+              v-if="triggerTypeFieldVisibility.intervalSeconds"
+              :span="12"
+            >
               <a-form-item
-                :label="t('entity.quartzTask.intervalseconds')"
+                :label="t('entity.quartztask.intervalseconds')"
                 name="intervalSeconds"
               >
                 <a-input-number
                   v-model:value="formState.intervalSeconds"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzTask.intervalseconds') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartztask.intervalseconds') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.quartzTask.executeparams')"
+                :label="t('entity.quartztask.executeparams')"
                 name="executeParams"
               >
                 <a-input
                   v-model:value="formState.executeParams"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzTask.executeparams') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartztask.executeparams') })"
+                  show-count
+                  :maxlength="1000"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.quartzTask.taskstatus')"
-                name="taskStatus"
-              >
-                <a-input-number
-                  v-model:value="formState.taskStatus"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzTask.taskstatus') })"
-                  size="small"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.quartzTask.concurrent')"
+                :label="t('entity.quartztask.concurrent')"
                 name="concurrent"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.concurrent"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzTask.concurrent') })"
-                  size="small"
-                  style="width: 100%"
+                  dict-type="sys_yes_no_type"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.quartztask.concurrent') })"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.quartzTask.misfirepolicy')"
+                :label="t('entity.quartztask.misfirepolicy')"
                 name="misfirePolicy"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.misfirePolicy"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzTask.misfirepolicy') })"
-                  size="small"
-                  style="width: 100%"
+                  dict-type="sys_quartz_misfire_policy"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.quartztask.misfirepolicy') })"
                 />
               </a-form-item>
             </a-col>
@@ -307,80 +380,52 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.quartzTask.firstrunat')"
-                name="firstRunAt"
+                :label="t('entity.quartztask.taskdescription')"
+                name="taskDescription"
               >
-                <a-input
-                  v-model:value="formState.firstRunAt"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzTask.firstrunat') })"
-                  size="small"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.quartzTask.executecount')"
-                name="executeCount"
-              >
-                <a-input-number
-                  v-model:value="formState.executeCount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzTask.executecount') })"
-                  size="small"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.quartzTask.lastrunat')"
-                name="lastRunAt"
-              >
-                <a-input
-                  v-model:value="formState.lastRunAt"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzTask.lastrunat') })"
-                  size="small"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.quartzTask.nextrunat')"
-                name="nextRunAt"
-              >
-                <a-input
-                  v-model:value="formState.nextRunAt"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzTask.nextrunat') })"
-                  size="small"
-                  allow-clear
+                <a-textarea
+                  v-model:value="formState.taskDescription"
+                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.quartztask.taskdescription') })"
+                  :rows="2"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.quartzTask.description')"
-                name="description"
+                :label="t('entity.quartztask.taskstatus')"
+                name="taskStatus"
               >
-                <a-textarea
-                  v-model:value="formState.description"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.quartzTask.description') })"
-                  :rows="2"
-                  size="small"
+                <TaktSelect
+                  v-model:value="formState.taskStatus"
+                  dict-type="sys_quartz_task_status"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.quartztask.taskstatus') })"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.ExtField')"
-                name="ExtField"
+                name="extField"
+                class="takt-form-item-ext-field"
               >
-                <a-input
-                  v-model:value="formState.ExtField"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
-                  size="small"
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t('common.page.entity.extfieldhint')"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ t('common.page.entity.extfield') }}</span>
+                  </span>
+                </template>
+                <a-textarea
+                  v-model:value="formState.extField"
+                  :placeholder="t('common.page.form.placeholder.extfield')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
                   allow-clear
                 />
               </a-form-item>
@@ -393,42 +438,15 @@
                 <a-textarea
                   v-model:value="formState.remark"
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                  :rows="2"
-                  size="small"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
           </a-row>
         </div>
-      </a-tab-pane>
-      <!-- 子表：quartzLog -->
-      <a-tab-pane
-        key="child-quartzLogs"
-        :tab="t('entity.quartzLog._self')"
-        force-render
-      >
-        <div class="mb-2">
-          <a-button type="primary" size="small" @click="handleAddQuartzLogRow">
-            {{ t('common.page.button.create') }}{{ t('entity.quartzLog._self') }}
-          </a-button>
-        </div>
-        <a-table
-          :columns="quartzLogFormColumns"
-          :data-source="childQuartzLogRows"
-          :pagination="false"
-          :row-key="(row: Record<string, unknown>, index?: number) => String(row.__rowKey ?? index ?? 0)"
-          size="small"
-          bordered
-        >
-          <template #bodyCell="{ column, record, index }">
-
-            <template v-else-if="column.key === '__action'">
-              <a-button type="link" danger size="small" @click="handleRemoveQuartzLogRow(index)">
-                {{ t('common.page.button.delete') }}
-              </a-button>
-            </template>
-          </template>
-        </a-table>
       </a-tab-pane>
     </a-tabs>
   </a-form>
@@ -436,15 +454,29 @@
 
 <script setup lang="ts">
 /**
- * Quartz 定时任务实体维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
+ * Quartz 定时任务实体维护表单 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/foundation/quartz-task/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
-import type { QuartzTaskCreate, QuartzLogCreate, QuartzLog } from '@/types/foundation/quartz-task'
+import type { QuartzTaskCreate } from '@/types/foundation/quartz-task'
+import TaktSelect from '@/components/business/takt-select/index.vue'
+import { RiQuestionLine } from '@remixicon/vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
+import {
+  QUARTZ_TASK_EXEC_FIELD_I18N,
+  buildQuartzTaskTypeFieldVisibility,
+  clearQuartzTaskTypeHiddenFields,
+} from '@/views/foundation/quartz-task/utils/quartz-task-type-fields'
+import { stripQuartzTaskEngineManagedFields } from '@/views/foundation/quartz-task/utils/quartz-task-engine-fields'
+import {
+  clearQuartzTriggerHiddenFields,
+  normalizeQuartzTriggerTypeValue,
+} from '@/views/foundation/quartz-task/utils/quartz-task-trigger-fields'
+import { TaktQuartzTriggerType } from '@/constants/takt-constants'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -475,50 +507,8 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","taskCode","taskName","jobName","jobGroup","taskType","assemblyName","className","apiUrl","requestMethod","sqlScript","triggerType","cronExpression","intervalSeconds","executeParams","taskStatus","concurrent","misfirePolicy","firstRunAt","executeCount","lastRunAt","nextRunAt","description","ExtField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","taskCode","taskName","jobName","jobGroup","taskType","assemblyName","className","apiUrl","requestMethod","sqlScript","triggerType","cronExpression","intervalSeconds","executeParams","concurrent","misfirePolicy","taskDescription","taskStatus","extField","remark"]
 
-/** quartzLog 子表行（表单 Tab 内嵌） */
-const childQuartzLogRows = ref<Record<string, unknown>[]>([])
-
-/** 子表 quartzLog 表单列定义 */
-const quartzLogFormColumns = computed(() => [
-
-  {
-    title: t('common.page.entity.action'),
-    key: '__action',
-    width: 80,
-    fixed: 'right',
-  },
-])
-
-/** 编辑态从 formData 同步各子表行 */
-function syncChildRowsFromFormData(val: Partial<QuartzTaskCreate & { quartzTaskId?: string }> | null | undefined) {
-  childQuartzLogRows.value = ((val as any)?.quartzLogs ?? []).map((item: Record<string, unknown>, index: number) => ({
-    ...item,
-    __rowKey: item.quartzLogId ?? `new-${index}`,
-  }))
-}
-
-/** 表单 Tab 内新增 quartzLog 行 */
-function handleAddQuartzLogRow() {
-  childQuartzLogRows.value.push({
-    __rowKey: `new-${Date.now()}`,
-
-  })
-}
-
-/** 表单 Tab 内删除 quartzLog 行 */
-function handleRemoveQuartzLogRow(index: number) {
-  childQuartzLogRows.value.splice(index, 1)
-}
-
-/** 组装 Create/Update 载荷（主表 + 子表数组） */
-function buildSubmitPayload() {
-  return {
-    ...formState,
-    quartzLogs: childQuartzLogRows.value.map(({ __rowKey, ...rest }) => rest),
-  }
-}
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -528,27 +518,71 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  formData: () => ({}),
+  formData: null,
   loading: false,
+})
+
+/** 当前 taskType 下执行参数字段显隐（assembly / http / sql） */
+const taskTypeFieldVisibility = computed(() => buildQuartzTaskTypeFieldVisibility(formState.taskType))
+
+/** 当前 triggerType 下 Cron / Simple 互斥字段显隐 */
+const triggerTypeFieldVisibility = computed(() => {
+  const triggerType = normalizeQuartzTriggerTypeValue(formState.triggerType)
+  return {
+    cronExpression: triggerType === TaktQuartzTriggerType.Cron,
+    intervalSeconds: triggerType === TaktQuartzTriggerType.Simple,
+  }
 })
 
 /** a-form 实例 ref */
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
+/** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
+const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  jobGroup: "default",
+  taskType: "assembly",
+  triggerType: 1,
+  misfirePolicy: 0,
+  taskStatus: 0
+}
 
-/** 编辑态灌入 formData；新增态 reset */
+/** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  Object.assign(target, FORM_FIELD_DEFAULTS)
+}
+
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载全量字典 */
+onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
+})
+
+/** 编辑态灌入 formData；新增态恢复默认值（须含 quartzTaskId 才视为编辑） */
 watch(
   () => props.formData,
   (val) => {
-    const next = val ? { ...val } : {}
-    Object.keys(formState).forEach((k) => delete formState[k])
-    delete (next as any).quartzLogs
-    applyScopeDefaults(next)
-    Object.assign(formState, next)
-    syncChildRowsFromFormData(val)
+    if (val?.quartzTaskId) {
+      const next = { ...val } as Record<string, unknown>
+      Object.keys(formState).forEach((k) => delete formState[k])
+
+      applyScopeDefaults(next)
+      Object.assign(formState, next)
+      stripQuartzTaskEngineManagedFields(formState)
+      formRef.value?.clearValidate()
+    } else {
+      Object.keys(formState).forEach((k) => delete formState[k])
+      if (val && typeof val === 'object' && Object.keys(val).length > 0) {
+        Object.assign(formState, val)
+      }
+      applyFormDefaults(formState)
+      applyScopeDefaults(formState as Record<string, unknown>, true)
+      formRef.value?.clearValidate()
+    }
   },
-  { immediate: true, deep: true }
+  { immediate: true }
 )
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
@@ -562,106 +596,168 @@ watch(
   },
 )
 
+/** 切换任务类型时清空不可见执行参数字段并清除对应校验 */
+watch(
+  () => formState.taskType,
+  (taskType) => {
+    clearQuartzTaskTypeHiddenFields(formState, taskType)
+    formRef.value?.clearValidate(['assemblyName', 'className', 'apiUrl', 'requestMethod', 'sqlScript'])
+  },
+)
+
+/** 切换触发器类型时清空 Cron / Simple 互斥字段并清除对应校验 */
+watch(
+  () => formState.triggerType,
+  (triggerType) => {
+    clearQuartzTriggerHiddenFields(formState, triggerType)
+    formRef.value?.clearValidate(['cronExpression', 'intervalSeconds'])
+  },
+)
+
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
   taskCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.quartzTask.taskcode') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.quartztask.taskcode') }),
       trigger: 'blur'
     }
   ],
   taskName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.quartzTask.taskname') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.quartztask.taskname') }),
       trigger: 'blur'
     }
   ],
   jobName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.quartzTask.jobname') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.quartztask.jobname') }),
       trigger: 'blur'
     }
   ],
   jobGroup: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.quartzTask.jobgroup') }),
-      trigger: 'blur'
+      message: t('common.page.form.placeholder.select', { field: t('entity.quartztask.jobgroup') }),
+      trigger: 'change'
     }
   ],
   taskType: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.quartzTask.tasktype') }),
+      message: t('common.page.form.placeholder.select', { field: t('entity.quartztask.tasktype') }),
       trigger: 'change'
     }
   ],
-  assemblyName: [
+  assemblyName: taskTypeFieldVisibility.value.assemblyName ? [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.quartzTask.assemblyname') }),
+      message: t('common.page.form.placeholder.required', { field: t(QUARTZ_TASK_EXEC_FIELD_I18N.assemblyName.label) }),
       trigger: 'blur'
     }
-  ],
-  className: [
+  ] : [],
+  className: taskTypeFieldVisibility.value.className ? [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.quartzTask.classname') }),
+      message: t('common.page.form.placeholder.required', { field: t(QUARTZ_TASK_EXEC_FIELD_I18N.className.label) }),
       trigger: 'blur'
     }
-  ],
-  triggerType: [
+  ] : [],
+  apiUrl: taskTypeFieldVisibility.value.apiUrl ? [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.quartzTask.triggertype') }),
-      trigger: 'change'
-    }
-  ],
-  cronExpression: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.quartzTask.cronexpression') }),
+      message: t('common.page.form.placeholder.required', { field: t(QUARTZ_TASK_EXEC_FIELD_I18N.apiUrl.label) }),
       trigger: 'blur'
     }
-  ],
-  intervalSeconds: [
+  ] : [],
+  requestMethod: taskTypeFieldVisibility.value.requestMethod ? [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.quartzTask.intervalseconds') }),
-      trigger: 'change'
+      message: t('common.page.form.placeholder.required', { field: t(QUARTZ_TASK_EXEC_FIELD_I18N.requestMethod.label) }),
+      trigger: 'blur'
     }
-  ],
-  taskStatus: [
+  ] : [],
+  sqlScript: taskTypeFieldVisibility.value.sqlScript ? [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.quartzTask.taskstatus') }),
-      trigger: 'change'
+      message: t('common.page.form.placeholder.required', { field: t(QUARTZ_TASK_EXEC_FIELD_I18N.sqlScript.label) }),
+      trigger: 'blur'
     }
-  ],
-  concurrent: [
+  ] : [],
+  triggerType: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.quartztask.triggertype') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.quartztask.triggertype') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  cronExpression: triggerTypeFieldVisibility.value.cronExpression ? [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.quartzTask.concurrent') }),
+      message: t('common.page.form.placeholder.quartztask.cronexpression'),
       trigger: 'change'
     }
-  ],
-  misfirePolicy: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.quartzTask.misfirepolicy') }),
-      trigger: 'change'
-    }
-  ],
-  executeCount: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.quartzTask.executecount') }),
-      trigger: 'change'
-    }
-  ],
+  ] : [],
+  intervalSeconds: triggerTypeFieldVisibility.value.intervalSeconds ? [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.quartztask.intervalseconds') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.quartztask.intervalseconds') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }] : [],
+  concurrent: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.quartztask.concurrent') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.quartztask.concurrent') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  misfirePolicy: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.quartztask.misfirepolicy') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.quartztask.misfirepolicy') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  taskStatus: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.quartztask.taskstatus') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.quartztask.taskstatus') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -672,15 +768,46 @@ async function validate() {
 
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
-  return buildSubmitPayload()
+  const payload = { ...formState }
+  clearQuartzTaskTypeHiddenFields(payload, formState.taskType)
+  clearQuartzTriggerHiddenFields(payload, formState.triggerType)
+  stripQuartzTaskEngineManagedFields(payload)
+  if ('triggerType' in payload) {
+    const rawtriggerType = payload.triggerType
+    payload.triggerType = typeof rawtriggerType === 'number' ? rawtriggerType : Number(rawtriggerType)
+  }
+  if ('intervalSeconds' in payload) {
+    const rawintervalSeconds = payload.intervalSeconds
+    payload.intervalSeconds = typeof rawintervalSeconds === 'number' ? rawintervalSeconds : Number(rawintervalSeconds)
+  }
+  if ('concurrent' in payload) {
+    const rawconcurrent = payload.concurrent
+    payload.concurrent = typeof rawconcurrent === 'number' ? rawconcurrent : Number(rawconcurrent)
+  }
+  if ('misfirePolicy' in payload) {
+    const rawmisfirePolicy = payload.misfirePolicy
+    payload.misfirePolicy = typeof rawmisfirePolicy === 'number' ? rawmisfirePolicy : Number(rawmisfirePolicy)
+  }
+  if ('taskStatus' in payload) {
+    const rawtaskStatus = payload.taskStatus
+    payload.taskStatus = typeof rawtaskStatus === 'number' ? rawtaskStatus : Number(rawtaskStatus)
+  }
+  if ('sortOrder' in payload) delete payload.sortOrder
+  return payload
 }
 
-/** 重置表单与子表行 */
+/** 重置表单与子表行（弹窗未 destroy 时父级 nextTick 也会调用） */
 function resetFields() {
-  formRef.value?.resetFields()
   Object.keys(formState).forEach((k) => delete formState[k])
-  childQuartzLogRows.value = []
+  if (props.formData && typeof props.formData === 'object') {
+    Object.assign(formState, props.formData)
+    stripQuartzTaskEngineManagedFields(formState)
+  }
+  applyFormDefaults(formState)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.quartzTaskId)
+
   activeTab.value = 'tab-0'
+  formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })

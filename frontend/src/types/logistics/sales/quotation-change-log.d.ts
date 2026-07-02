@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/sales
 // 文件名称：quotation-change-log.d.ts
-// 创建时间：2026-06-21
+// 创建时间：2026-07-01
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,12 +29,12 @@ export interface SalesQuotationChangeLog extends CompanyDtoBase {
   salesQuotationChangeLogId: string;
 
   /**
-   * 销售报价ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 销售报价（关联 TaktSalesQuotation.Id，选项 TaktSalesQuotations/options）
    */
   salesQuotationId: string;
 
   /**
-   * 销售报价名称（填充字段）
+   * 销售报价（关联 TaktSalesQuotation.Id，选项 TaktSalesQuotations/options）
    */
   salesQuotationName?: string;
 
@@ -89,7 +89,7 @@ export interface SalesQuotationChangeLogQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 销售报价ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 销售报价（关联 TaktSalesQuotation.Id，选项 TaktSalesQuotations/options）
    */
   salesQuotationId?: string;
 
@@ -163,12 +163,12 @@ export interface SalesQuotationChangeLogCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
   /**
-   * 销售报价ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 销售报价（关联 TaktSalesQuotation.Id，选项 TaktSalesQuotations/options）
    */
   salesQuotationId: string;
 
@@ -242,7 +242,7 @@ export interface SalesQuotationChangeLogExport {
   companyCode: string;
 
   /**
-   * 销售报价ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 销售报价（关联 TaktSalesQuotation.Id，选项 TaktSalesQuotations/options）
    */
   salesQuotationId: string;
 

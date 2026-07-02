@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/customer-service
 // 文件名称：service-ticket.d.ts
-// 创建时间：2026-06-21
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/customer-service 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -423,7 +423,7 @@ export interface ServiceTicketCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -705,6 +705,81 @@ export interface ServiceTicketTemplate {
   ticketType?: number;
 
   /**
+   * 优先级（字典 sys_priority_level_category）
+   */
+  priority?: number;
+
+  /**
+   * 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消）
+   */
+  ticketStatus?: number;
+
+  /**
+   * 工单主题
+   */
+  ticketSubject?: string;
+
+  /**
+   * 故障/问题描述
+   */
+  faultDescription?: string;
+
+  /**
+   * 处理方案/解决说明
+   */
+  solutionDescription?: string;
+
+  /**
+   * 服务地点
+   */
+  serviceLocation?: string;
+
+  /**
+   * 指派服务人员工ID（序列化为string以避免Javascript精度问题）
+   */
+  assignedEmployeeId?: string;
+
+  /**
+   * 指派服务人员姓名
+   */
+  assignedEmployeeName?: string;
+
+  /**
+   * 计划开始时间
+   */
+  scheduledStartTime?: string;
+
+  /**
+   * 计划结束时间
+   */
+  scheduledEndTime?: string;
+
+  /**
+   * 实际开始时间
+   */
+  actualStartTime?: string;
+
+  /**
+   * 实际结束时间
+   */
+  actualEndTime?: string;
+
+  /**
+   * 验收结果（0=不合格，1=合格，2=部分合格）
+   */
+  acceptanceResult?: number;
+
+  /**
+   * 验收人
+   */
+  acceptedBy?: string;
+
+  /**
+   * 验收时间
+   */
+  acceptedAt?: string;
+
+  /**
    * 扩展字段JSON
    */
   extField?: string;
@@ -734,7 +809,7 @@ export interface ServiceTicketImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -797,6 +872,81 @@ export interface ServiceTicketImport {
    * 工单类型（0=维修，1=巡检，2=安装，3=升级，4=其他）
    */
   ticketType?: number;
+
+  /**
+   * 优先级（字典 sys_priority_level_category）
+   */
+  priority?: number;
+
+  /**
+   * 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消）
+   */
+  ticketStatus?: number;
+
+  /**
+   * 工单主题
+   */
+  ticketSubject?: string;
+
+  /**
+   * 故障/问题描述
+   */
+  faultDescription?: string;
+
+  /**
+   * 处理方案/解决说明
+   */
+  solutionDescription?: string;
+
+  /**
+   * 服务地点
+   */
+  serviceLocation?: string;
+
+  /**
+   * 指派服务人员工ID（序列化为string以避免Javascript精度问题）
+   */
+  assignedEmployeeId?: string;
+
+  /**
+   * 指派服务人员姓名
+   */
+  assignedEmployeeName?: string;
+
+  /**
+   * 计划开始时间
+   */
+  scheduledStartTime?: string;
+
+  /**
+   * 计划结束时间
+   */
+  scheduledEndTime?: string;
+
+  /**
+   * 实际开始时间
+   */
+  actualStartTime?: string;
+
+  /**
+   * 实际结束时间
+   */
+  actualEndTime?: string;
+
+  /**
+   * 验收结果（0=不合格，1=合格，2=部分合格）
+   */
+  acceptanceResult?: number;
+
+  /**
+   * 验收人
+   */
+  acceptedBy?: string;
+
+  /**
+   * 验收时间
+   */
+  acceptedAt?: string;
 
   /**
    * 扩展字段JSON

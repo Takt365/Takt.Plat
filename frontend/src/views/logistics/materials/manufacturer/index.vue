@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="logistics:materials:manufacturer:material:create"
-      update-permission="logistics:materials:manufacturer:material:update"
-      delete-permission="logistics:materials:manufacturer:material:delete"
-      import-permission="logistics:materials:manufacturer:material:import"
-      export-permission="logistics:materials:manufacturer:material:export"
+      create-permission="logistics:materials:manufacturer:create"
+      update-permission="logistics:materials:manufacturer:update"
+      delete-permission="logistics:materials:manufacturer:delete"
+      import-permission="logistics:materials:manufacturer:import"
+      export-permission="logistics:materials:manufacturer:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -153,20 +153,20 @@
       </div>
       <div v-show="isFieldVisible('manufacturerType')">
       <a-form-item :label="t('entity.manufacturer.type')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.manufacturerType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.type') })"
-          style="width: 100%"
+          dict-type="logistics_manufacturer_type"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.manufacturer.type') })"
+          allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('industrySector')">
       <a-form-item :label="t('entity.manufacturer.industrysector')">
-        <a-input
+        <TaktSelect
           v-model:value="advancedQueryForm.industrySector"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.industrysector') })"
-          show-count
-          :maxlength="50"
+          dict-type="logistics_industry_sector"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.manufacturer.industrysector') })"
           allow-clear
         />
       </a-form-item>
@@ -311,10 +311,11 @@
       </div>
       <div v-show="isFieldVisible('qualityCertification')">
       <a-form-item :label="t('entity.manufacturer.qualitycertification')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.qualityCertification"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.qualitycertification') })"
-          style="width: 100%"
+          dict-type="logistics_quality_certification"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.manufacturer.qualitycertification') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -323,15 +324,6 @@
         <a-input-number
           v-model:value="advancedQueryForm.evaluationScore"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.evaluationscore') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('isQualified')">
-      <a-form-item :label="t('entity.manufacturer.isqualified')">
-        <a-input-number
-          v-model:value="advancedQueryForm.isQualified"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.isqualified') })"
           style="width: 100%"
         />
       </a-form-item>
@@ -352,7 +344,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -363,7 +355,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -452,9 +444,10 @@
  * Takt制造商实体管理页 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/materials/manufacturer
  */
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, h } from 'vue'
 import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
+import TaktDictTag from '@/components/common/takt-dict-tag/index.vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
@@ -531,7 +524,6 @@ const advancedQueryForm = ref({
   manufacturerLevel: undefined as number | undefined,
   qualityCertification: undefined as number | undefined,
   evaluationScore: undefined as number | undefined,
-  isQualified: undefined as number | undefined,
   manufacturerStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
@@ -560,7 +552,6 @@ const queryFieldsMeta = computed(() => [
   { key: 'manufacturerLevel', label: t('entity.manufacturer.level') },
   { key: 'qualityCertification', label: t('entity.manufacturer.qualitycertification') },
   { key: 'evaluationScore', label: t('entity.manufacturer.evaluationscore') },
-  { key: 'isQualified', label: t('entity.manufacturer.isqualified') },
   { key: 'manufacturerStatus', label: t('entity.manufacturer.status') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
@@ -637,9 +628,6 @@ function buildListQuery(overrides?: Partial<ManufacturerQuery>): ManufacturerQue
   }
   if (form.evaluationScore !== undefined && form.evaluationScore !== null) {
     query.evaluationScore = form.evaluationScore
-  }
-  if (form.isQualified !== undefined && form.isQualified !== null) {
-    query.isQualified = form.isQualified
   }
   if (form.manufacturerStatus !== undefined && form.manufacturerStatus !== null) {
     query.manufacturerStatus = form.manufacturerStatus
@@ -754,7 +742,10 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getManufacturerField(record, 'manufacturerType') ?? ''
+    customRender: ({ record }: { record: any }) => h(TaktDictTag, {
+      value: getManufacturerField(record, 'manufacturerType'),
+      dictType: 'logistics_manufacturer_type',
+    }),
   },
   {
     title: t('entity.manufacturer.industrysector'),
@@ -763,7 +754,10 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getManufacturerField(record, 'industrySector') ?? ''
+    customRender: ({ record }: { record: any }) => h(TaktDictTag, {
+      value: getManufacturerField(record, 'industrySector'),
+      dictType: 'logistics_industry_sector',
+    }),
   },
   {
     title: t('entity.manufacturer.taxnumber'),
@@ -889,7 +883,10 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getManufacturerField(record, 'qualityCertification') ?? ''
+    customRender: ({ record }: { record: any }) => h(TaktDictTag, {
+      value: getManufacturerField(record, 'qualityCertification'),
+      dictType: 'logistics_quality_certification',
+    }),
   },
   {
     title: t('entity.manufacturer.evaluationscore'),
@@ -899,15 +896,6 @@ const columns = computed<TableColumnsType>(() => [
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getManufacturerField(record, 'evaluationScore') ?? ''
-  },
-  {
-    title: t('entity.manufacturer.isqualified'),
-    dataIndex: 'isQualified',
-    key: 'isQualified',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getManufacturerField(record, 'isQualified') ?? ''
   },
   {
     title: t('entity.manufacturer.status'),
@@ -924,7 +912,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:materials:manufacturer:material:update',
+        permission: 'logistics:materials:manufacturer:update',
         onClick: (record: Manufacturer) => handleEdit(record)
       },
       {
@@ -932,7 +920,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:materials:manufacturer:material:delete',
+        permission: 'logistics:materials:manufacturer:delete',
         onClick: (record: Manufacturer) => handleDeleteOne(record)
       }
     ]
@@ -966,7 +954,7 @@ const rowSelection = computed(() => ({
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
-    } else if (getManufacturerId(selectedRow.value) === getManufacturerId(record)) {
+    } else if (selectedRow.value && getManufacturerId(selectedRow.value) === getManufacturerId(record)) {
       selectedRow.value = null
       syncMasterSelection(null)
     }
@@ -1027,7 +1015,6 @@ function handleReset() {
   manufacturerLevel: undefined as number | undefined,
   qualityCertification: undefined as number | undefined,
   evaluationScore: undefined as number | undefined,
-  isQualified: undefined as number | undefined,
   manufacturerStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
@@ -1264,7 +1251,6 @@ function handleAdvancedQueryReset() {
   manufacturerLevel: undefined as number | undefined,
   qualityCertification: undefined as number | undefined,
   evaluationScore: undefined as number | undefined,
-  isQualified: undefined as number | undefined,
   manufacturerStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',

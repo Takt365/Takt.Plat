@@ -19,11 +19,11 @@
       @reset="handleQueryReset"
     />
     <TaktToolsBar
-      create-permission="logistics:materials:materialplant:create"
-      update-permission="logistics:materials:materialplant:update"
-      delete-permission="logistics:materials:materialplant:delete"
+      create-permission="logistics:materials:material:plant:create"
+      update-permission="logistics:materials:material:plant:update"
+      delete-permission="logistics:materials:material:plant:delete"
 
-      export-permission="logistics:materials:materialplant:export"
+      export-permission="logistics:materials:material:plant:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -73,7 +73,7 @@
         v-model:page-size="pageSize"
         :total="total"
         scroll-layout="masterDetailLr"
-        table-mode="single"
+        table-mode="masterDetailDetail"
         :show-row-selection="true"
         @change="handleTableChange"
         @pagination-change="handleMasterDetailPaginationChange"
@@ -144,8 +144,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.changeTimeStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplantchangelog.changetimestart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -155,8 +154,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.changeTimeEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplantchangelog.changetimeend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -189,7 +187,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -200,7 +198,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -254,7 +252,7 @@
       id-column-key="materialPlantChangeLogId"
       action-column-key="action"
       entity-scope="company"
-      table-mode="single"
+      table-mode="masterDetailDetail"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -378,6 +376,7 @@ function handleAdvancedQueryReset() {
   }
 }
 const columnSettingVisible = ref(false)
+/** 表格当前可见列 key（空数组时按 tableMode=masterDetailDetail 默认 id+4 业务列） */
 const visibleColumnKeys = ref<string[]>([])
 
 function handleColumnSetting() {
@@ -495,7 +494,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:materials:materialplant:update',
+        permission: 'logistics:materials:material:plant:update',
         onClick: (record: MaterialPlantChangeLog) => void handleEdit(record),
       },
       {
@@ -503,7 +502,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:materials:materialplant:delete',
+        permission: 'logistics:materials:material:plant:delete',
         onClick: (record: MaterialPlantChangeLog) => void handleDeleteOne(record),
       },
     ],
@@ -520,7 +519,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: MaterialPlantChangeLog, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getMaterialPlantChangeLogId(selectedRow.value) === getMaterialPlantChangeLogId(record)) {
+    } else if (selectedRow.value && getMaterialPlantChangeLogId(selectedRow.value) === getMaterialPlantChangeLogId(record)) {
       selectedRow.value = null
     }
   },

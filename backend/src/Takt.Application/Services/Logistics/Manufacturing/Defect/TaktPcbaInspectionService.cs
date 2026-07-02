@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Defect
 // 文件名称：TaktPcbaInspectionService.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-30
 // 创建人：Takt365(Cursor AI)
 // 功能描述：PCBA检查日报应用服务实现
 // 
@@ -101,7 +101,7 @@ public class TaktPcbaInspectionService : TaktServiceBase, ITaktPcbaInspectionSer
     {
         EnsureThreeLayerContext();
         var list = await _pcbaInspectionRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.Status == 1,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
             x => x.PlantCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
@@ -200,23 +200,6 @@ public class TaktPcbaInspectionService : TaktServiceBase, ITaktPcbaInspectionSer
         {
             await DeletePcbaInspectionByIdAsync(id);
         }
-    }
-
-    /// <summary>
-    /// 更新PCBA检查日报状态
-    /// </summary>
-    /// <param name="dto">状态DTO</param>
-    /// <returns>DTO</returns>
-    public async Task<TaktPcbaInspectionDto> UpdatePcbaInspectionStatusAsync(TaktPcbaInspectionStatusDto dto)
-    {
-        var entity = await _pcbaInspectionRepository.GetByIdAsync(dto.PcbaInspectionId);
-        if (entity == null)
-        {
-            throw new TaktBusinessException("PCBA检查日报不存在");
-        }
-        entity.Status = dto.Status;
-        await _pcbaInspectionRepository.UpdateAsync(entity);
-        return await GetPcbaInspectionByIdAsync(dto.PcbaInspectionId) ?? throw new TaktBusinessException("PCBA检查日报不存在");
     }
 
     /// <summary>
@@ -390,6 +373,53 @@ public class TaktPcbaInspectionService : TaktServiceBase, ITaktPcbaInspectionSer
             await _pcbaInspectionDetailRepository.CreateRangeAsync(pcbainspectiondetails);
         }
     }
+
+    /// <summary>
+    /// 获取 PCBA 检查统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>不良统计</returns>
+    public async Task<TaktPcbaInspectionStatDto> GetPcbaInspectionStatAsync(TaktDefectStatQueryDto queryDto)
+    {
+        EnsureThreeLayerContext();
+        var (start, end, statMonth) = TaktStatMonthRangeHelper.ResolveMonthRange(
+            queryDto.ProdDateStart,
+            queryDto.ProdDateEnd);
+        var tenantCode = CurrentTenantCode;
+        var companyCode = CurrentCompanyCode;
+        Expression<Func<TaktPcbaInspection, bool>> mainPredicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.ProdDate >= start
+            && x.ProdDate <= end;
+        var outputs = await _pcbaInspectionRepository.GetListAsync(mainPredicate);
+        if (outputs.Count == 0)
+        {
+            return new TaktPcbaInspectionStatDto { StatMonth = statMonth };
+        }
+        var outputIds = outputs.Select(x => x.Id).ToList();
+        Expression<Func<TaktPcbaInspectionDetail, bool>> detailPredicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && outputIds.Contains(x.PcbaInspectionId);
+        var monthBaseQty = await _pcbaInspectionDetailRepository.SumAsync(x => x.InspectionQty, detailPredicate);
+        var monthDefectQty = await _pcbaInspectionDetailRepository.SumAsync(x => x.DefectQty, detailPredicate);
+        var monthGoodQty = monthBaseQty - monthDefectQty;
+        if (monthGoodQty < 0)
+        {
+            monthGoodQty = 0;
+        }
+        return new TaktPcbaInspectionStatDto
+        {
+            StatMonth = statMonth,
+            MonthBaseQty = monthBaseQty,
+            MonthGoodQty = monthGoodQty,
+            MonthDefectQty = monthDefectQty,
+            MonthDefectRatePercent = TaktDefectStatHelper.CalculateDefectRatePercent(monthDefectQty, monthBaseQty),
+            MonthYieldRatePercent = TaktDefectStatHelper.CalculateYieldRatePercent(monthGoodQty, monthBaseQty),
+        };
+    }
+
     // ========================================
     // 查询表达式
     // ========================================
@@ -414,7 +444,6 @@ public class TaktPcbaInspectionService : TaktServiceBase, ITaktPcbaInspectionSer
                 || (x.ModelCode != null && x.ModelCode.Contains(keywords))
                 || (x.BatchNo != null && x.BatchNo.Contains(keywords))
                 || (x.MaterialCode != null && x.MaterialCode.Contains(keywords))
-                || SqlFunc.ToString(x.Status).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.ProdDate).Contains(keywords)
@@ -455,11 +484,6 @@ public class TaktPcbaInspectionService : TaktServiceBase, ITaktPcbaInspectionSer
         if (!string.IsNullOrEmpty(queryDto?.MaterialCode))
         {
             exp = exp.And(x => x.MaterialCode != null && x.MaterialCode.Contains(queryDto.MaterialCode));
-        }
-
-        if (queryDto?.Status.HasValue == true)
-        {
-            exp = exp.And(x => x.Status == queryDto.Status);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

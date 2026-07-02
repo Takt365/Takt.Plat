@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Operation
 // 文件名称：TaktIqcOrderItemDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：IqcOrderItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktIqcOrderItem 生成，请按需审阅）
 // 
@@ -36,13 +36,13 @@ public class TaktIqcOrderItemDto : TaktCompanyDtoBase
     public long IqcOrderItemId { get; set; }
 
     /// <summary>
-    /// IQC检验单ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// IQC检验单 ID（关联 TaktIqcOrder.Id，选项 TaktIqcOrders/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long IqcOrderId { get; set; }
 
     /// <summary>
-    /// IQC检验单名称（填充字段）
+    /// IQC检验单 名称（填充字段）
     /// </summary>
     public string? IqcOrderName { get; set; }
 
@@ -57,7 +57,7 @@ public class TaktIqcOrderItemDto : TaktCompanyDtoBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 物料编码
+    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
 
@@ -77,12 +77,12 @@ public class TaktIqcOrderItemDto : TaktCompanyDtoBase
     public decimal PurchaseQuantity { get; set; }
 
     /// <summary>
-    /// 检验标准编码
+    /// 检验标准编码（选项 TaktInspectionStandards/options，DictValue=StandardCode）
     /// </summary>
     public string StandardCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 抽样方案编码
+    /// 抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）
     /// </summary>
     public string SamplingSchemeCode { get; set; } = string.Empty;
 
@@ -112,11 +112,6 @@ public class TaktIqcOrderItemDto : TaktCompanyDtoBase
     public decimal InspectionReturnQuantity { get; set; }
 
     /// <summary>
-    /// 判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）
-    /// </summary>
-    public int JudgeStatus { get; set; } = 0;
-
-    /// <summary>
     /// 抽检序列号
     /// </summary>
     public string? SampleSerialNo { get; set; } = string.Empty;
@@ -135,6 +130,11 @@ public class TaktIqcOrderItemDto : TaktCompanyDtoBase
     /// 检验日期
     /// </summary>
     public DateTime InspectionDate { get; set; }
+
+    /// <summary>
+    /// 判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）
+    /// </summary>
+    public int JudgeStatus { get; set; } = 0;
 
     /// <summary>
     /// IQC检验单（主表）
@@ -171,7 +171,7 @@ public class TaktIqcOrderItemQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// IQC检验单ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// IQC检验单 ID（关联 TaktIqcOrder.Id，选项 TaktIqcOrders/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? IqcOrderId { get; set; }
@@ -187,7 +187,7 @@ public class TaktIqcOrderItemQueryDto : TaktPagedQuery
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 物料编码
+    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
@@ -207,12 +207,12 @@ public class TaktIqcOrderItemQueryDto : TaktPagedQuery
     public decimal? PurchaseQuantity { get; set; }
 
     /// <summary>
-    /// 检验标准编码
+    /// 检验标准编码（选项 TaktInspectionStandards/options，DictValue=StandardCode）
     /// </summary>
     public string? StandardCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 抽样方案编码
+    /// 抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）
     /// </summary>
     public string? SamplingSchemeCode { get; set; } = string.Empty;
 
@@ -242,11 +242,6 @@ public class TaktIqcOrderItemQueryDto : TaktPagedQuery
     public decimal? InspectionReturnQuantity { get; set; }
 
     /// <summary>
-    /// 判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）
-    /// </summary>
-    public int? JudgeStatus { get; set; }
-
-    /// <summary>
     /// 抽检序列号
     /// </summary>
     public string? SampleSerialNo { get; set; } = string.Empty;
@@ -270,6 +265,11 @@ public class TaktIqcOrderItemQueryDto : TaktPagedQuery
     /// 检验日期（范围查询-结束）
     /// </summary>
     public DateTime? InspectionDateEnd { get; set; }
+
+    /// <summary>
+    /// 判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）
+    /// </summary>
+    public int? JudgeStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -312,12 +312,12 @@ public class TaktIqcOrderItemCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// IQC检验单ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// IQC检验单 ID（关联 TaktIqcOrder.Id，选项 TaktIqcOrders/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long IqcOrderId { get; set; }
@@ -334,9 +334,9 @@ public class TaktIqcOrderItemCreateDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 物料编码
+    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
     /// </summary>
-    [Required(ErrorMessage = "物料编码不能为空")]
+    [Required(ErrorMessage = "物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）不能为空")]
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -356,15 +356,15 @@ public class TaktIqcOrderItemCreateDto
     public decimal PurchaseQuantity { get; set; }
 
     /// <summary>
-    /// 检验标准编码
+    /// 检验标准编码（选项 TaktInspectionStandards/options，DictValue=StandardCode）
     /// </summary>
-    [Required(ErrorMessage = "检验标准编码不能为空")]
+    [Required(ErrorMessage = "检验标准编码（选项 TaktInspectionStandards/options，DictValue=StandardCode）不能为空")]
     public string StandardCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 抽样方案编码
+    /// 抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）
     /// </summary>
-    [Required(ErrorMessage = "抽样方案编码不能为空")]
+    [Required(ErrorMessage = "抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）不能为空")]
     public string SamplingSchemeCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -393,11 +393,6 @@ public class TaktIqcOrderItemCreateDto
     public decimal InspectionReturnQuantity { get; set; }
 
     /// <summary>
-    /// 判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）
-    /// </summary>
-    public int JudgeStatus { get; set; } = 0;
-
-    /// <summary>
     /// 抽检序列号
     /// </summary>
     public string? SampleSerialNo { get; set; } = string.Empty;
@@ -417,6 +412,11 @@ public class TaktIqcOrderItemCreateDto
     /// 检验日期
     /// </summary>
     public DateTime InspectionDate { get; set; }
+
+    /// <summary>
+    /// 判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）
+    /// </summary>
+    public int JudgeStatus { get; set; } = 0;
 
     /// <summary>
     /// 不良处理记录列表（主子表关系）（子表，级联保存）
@@ -499,7 +499,7 @@ public class TaktIqcOrderItemTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// IQC检验单ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// IQC检验单 ID（关联 TaktIqcOrder.Id，选项 TaktIqcOrders/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? IqcOrderId { get; set; }
@@ -515,7 +515,7 @@ public class TaktIqcOrderItemTemplateDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 物料编码
+    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
@@ -530,12 +530,17 @@ public class TaktIqcOrderItemTemplateDto
     public string? BatchNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检验标准编码
+    /// 进货数量
+    /// </summary>
+    public decimal? PurchaseQuantity { get; set; }
+
+    /// <summary>
+    /// 检验标准编码（选项 TaktInspectionStandards/options，DictValue=StandardCode）
     /// </summary>
     public string? StandardCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 抽样方案编码
+    /// 抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）
     /// </summary>
     public string? SamplingSchemeCode { get; set; } = string.Empty;
 
@@ -558,6 +563,41 @@ public class TaktIqcOrderItemTemplateDto
     /// 不合格数量
     /// </summary>
     public int? UnqualifiedQuantity { get; set; }
+
+    /// <summary>
+    /// 验退数量
+    /// </summary>
+    public decimal? InspectionReturnQuantity { get; set; }
+
+    /// <summary>
+    /// 抽检序列号
+    /// </summary>
+    public string? SampleSerialNo { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 检验说明
+    /// </summary>
+    public string? InspectionDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 检验员（人员代码）
+    /// </summary>
+    public string? InspectorBy { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 检验日期
+    /// </summary>
+    public DateTime? InspectionDate { get; set; }
+
+    /// <summary>
+    /// 判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）
+    /// </summary>
+    public int? JudgeStatus { get; set; }
+
+    /// <summary>
+    /// 不良处理记录列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktIqcDefectHandlingCreateDto>? DefectHandlings { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -587,12 +627,12 @@ public class TaktIqcOrderItemImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// IQC检验单ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// IQC检验单 ID（关联 TaktIqcOrder.Id，选项 TaktIqcOrders/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? IqcOrderId { get; set; }
@@ -608,7 +648,7 @@ public class TaktIqcOrderItemImportDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 物料编码
+    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
@@ -623,12 +663,17 @@ public class TaktIqcOrderItemImportDto
     public string? BatchNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检验标准编码
+    /// 进货数量
+    /// </summary>
+    public decimal? PurchaseQuantity { get; set; }
+
+    /// <summary>
+    /// 检验标准编码（选项 TaktInspectionStandards/options，DictValue=StandardCode）
     /// </summary>
     public string? StandardCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 抽样方案编码
+    /// 抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）
     /// </summary>
     public string? SamplingSchemeCode { get; set; } = string.Empty;
 
@@ -651,6 +696,41 @@ public class TaktIqcOrderItemImportDto
     /// 不合格数量
     /// </summary>
     public int? UnqualifiedQuantity { get; set; }
+
+    /// <summary>
+    /// 验退数量
+    /// </summary>
+    public decimal? InspectionReturnQuantity { get; set; }
+
+    /// <summary>
+    /// 抽检序列号
+    /// </summary>
+    public string? SampleSerialNo { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 检验说明
+    /// </summary>
+    public string? InspectionDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 检验员（人员代码）
+    /// </summary>
+    public string? InspectorBy { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 检验日期
+    /// </summary>
+    public DateTime? InspectionDate { get; set; }
+
+    /// <summary>
+    /// 判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）
+    /// </summary>
+    public int? JudgeStatus { get; set; }
+
+    /// <summary>
+    /// 不良处理记录列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktIqcDefectHandlingCreateDto>? DefectHandlings { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -686,7 +766,7 @@ public class TaktIqcOrderItemExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// IQC检验单ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// IQC检验单 ID（关联 TaktIqcOrder.Id，选项 TaktIqcOrders/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long IqcOrderId { get; set; }
@@ -702,7 +782,7 @@ public class TaktIqcOrderItemExportDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 物料编码
+    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
 
@@ -722,12 +802,12 @@ public class TaktIqcOrderItemExportDto
     public decimal PurchaseQuantity { get; set; }
 
     /// <summary>
-    /// 检验标准编码
+    /// 检验标准编码（选项 TaktInspectionStandards/options，DictValue=StandardCode）
     /// </summary>
     public string StandardCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 抽样方案编码
+    /// 抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）
     /// </summary>
     public string SamplingSchemeCode { get; set; } = string.Empty;
 
@@ -757,11 +837,6 @@ public class TaktIqcOrderItemExportDto
     public decimal InspectionReturnQuantity { get; set; }
 
     /// <summary>
-    /// 判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）
-    /// </summary>
-    public int JudgeStatus { get; set; } = 0;
-
-    /// <summary>
     /// 抽检序列号
     /// </summary>
     public string? SampleSerialNo { get; set; } = string.Empty;
@@ -780,6 +855,11 @@ public class TaktIqcOrderItemExportDto
     /// 检验日期
     /// </summary>
     public DateTime InspectionDate { get; set; }
+
+    /// <summary>
+    /// 判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）
+    /// </summary>
+    public int JudgeStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

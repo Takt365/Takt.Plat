@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.DocumentCenter
 // 文件名称：TaktDocumentVersionI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktDocumentVersion 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktDocumentVersionI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.documentversion._self", "zh-HK", "文管文档版本子信息_hk", "实体名称"),
 
             // entity.documentversion.documentid
-            new TranslationSeedItem("entity.documentversion.documentid", "en-US", "文档ID_us", "文档 ID"),
+            new TranslationSeedItem("entity.documentversion.documentid", "en-US", "文档ID_us", "文档 ID（关联 TaktDocument.Id，选项 TaktDocuments/options）"),
             // entity.documentversion.documentid
-            new TranslationSeedItem("entity.documentversion.documentid", "ja-JP", "文档ID_jp", "文档 ID"),
+            new TranslationSeedItem("entity.documentversion.documentid", "ja-JP", "文档ID_jp", "文档 ID（关联 TaktDocument.Id，选项 TaktDocuments/options）"),
             // entity.documentversion.documentid
-            new TranslationSeedItem("entity.documentversion.documentid", "zh-CN", "文档ID", "文档 ID"),
+            new TranslationSeedItem("entity.documentversion.documentid", "zh-CN", "文档ID", "文档 ID（关联 TaktDocument.Id，选项 TaktDocuments/options）"),
             // entity.documentversion.documentid
-            new TranslationSeedItem("entity.documentversion.documentid", "zh-HK", "文档ID_hk", "文档 ID"),
+            new TranslationSeedItem("entity.documentversion.documentid", "zh-HK", "文档ID_hk", "文档 ID（关联 TaktDocument.Id，选项 TaktDocuments/options）"),
 
             // entity.documentversion.versionno
             new TranslationSeedItem("entity.documentversion.versionno", "en-US", "版本号_us", "版本号"),
@@ -118,13 +118,13 @@ public class TaktDocumentVersionI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.documentversion.versionnote", "zh-HK", "版本说明_hk", "版本说明"),
 
             // entity.documentversion.fileid
-            new TranslationSeedItem("entity.documentversion.fileid", "en-US", "文件ID_us", "文件 ID"),
+            new TranslationSeedItem("entity.documentversion.fileid", "en-US", "文件ID_us", "文件 ID（关联 TaktFile.Id，选项 TaktFiles/options）"),
             // entity.documentversion.fileid
-            new TranslationSeedItem("entity.documentversion.fileid", "ja-JP", "文件ID_jp", "文件 ID"),
+            new TranslationSeedItem("entity.documentversion.fileid", "ja-JP", "文件ID_jp", "文件 ID（关联 TaktFile.Id，选项 TaktFiles/options）"),
             // entity.documentversion.fileid
-            new TranslationSeedItem("entity.documentversion.fileid", "zh-CN", "文件ID", "文件 ID"),
+            new TranslationSeedItem("entity.documentversion.fileid", "zh-CN", "文件ID", "文件 ID（关联 TaktFile.Id，选项 TaktFiles/options）"),
             // entity.documentversion.fileid
-            new TranslationSeedItem("entity.documentversion.fileid", "zh-HK", "文件ID_hk", "文件 ID"),
+            new TranslationSeedItem("entity.documentversion.fileid", "zh-HK", "文件ID_hk", "文件 ID（关联 TaktFile.Id，选项 TaktFiles/options）"),
 
             // entity.documentversion.filename
             new TranslationSeedItem("entity.documentversion.filename", "en-US", "文件名称_us", "文件名称"),
@@ -172,13 +172,13 @@ public class TaktDocumentVersionI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.documentversion.fileextension", "zh-HK", "文件扩展名_hk", "文件扩展名"),
 
             // entity.documentversion.revisedby
-            new TranslationSeedItem("entity.documentversion.revisedby", "en-US", "修订人ID_us", "修订人 ID"),
+            new TranslationSeedItem("entity.documentversion.revisedby", "en-US", "修订人ID_us", "修订人 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
             // entity.documentversion.revisedby
-            new TranslationSeedItem("entity.documentversion.revisedby", "ja-JP", "修订人ID_jp", "修订人 ID"),
+            new TranslationSeedItem("entity.documentversion.revisedby", "ja-JP", "修订人ID_jp", "修订人 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
             // entity.documentversion.revisedby
-            new TranslationSeedItem("entity.documentversion.revisedby", "zh-CN", "修订人ID", "修订人 ID"),
+            new TranslationSeedItem("entity.documentversion.revisedby", "zh-CN", "修订人ID", "修订人 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
             // entity.documentversion.revisedby
-            new TranslationSeedItem("entity.documentversion.revisedby", "zh-HK", "修订人ID_hk", "修订人 ID"),
+            new TranslationSeedItem("entity.documentversion.revisedby", "zh-HK", "修订人ID_hk", "修订人 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
 
             // entity.documentversion.revisedbyname
             new TranslationSeedItem("entity.documentversion.revisedbyname", "en-US", "修订人姓名_us", "修订人姓名"),

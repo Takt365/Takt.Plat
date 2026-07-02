@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Personnel
 // 文件名称：ITaktEmployeeAttachmentService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：员工附件应用服务接口
 // 
@@ -71,13 +71,6 @@ public interface ITaktEmployeeAttachmentService
     Task DeleteEmployeeAttachmentBatchAsync(IEnumerable<long> ids);
 
     /// <summary>
-    /// 更新员工附件排序
-    /// </summary>
-    /// <param name="dto">排序DTO</param>
-    /// <returns>DTO</returns>
-    Task<TaktEmployeeAttachmentDto> UpdateEmployeeAttachmentSortAsync(TaktEmployeeAttachmentSortDto dto);
-
-    /// <summary>
     /// 获取导入模板
     /// </summary>
     /// <param name="sheetName">工作表名称</param>
@@ -101,5 +94,4 @@ public interface ITaktEmployeeAttachmentService
     /// <param name="fileName">文件名</param>
     /// <returns>Excel 文件</returns>
     Task<(string fileName, byte[] fileContent)> ExportEmployeeAttachmentAsync(TaktEmployeeAttachmentQueryDto? query = null, string? sheetName = null, string? fileName = null);
-
 }

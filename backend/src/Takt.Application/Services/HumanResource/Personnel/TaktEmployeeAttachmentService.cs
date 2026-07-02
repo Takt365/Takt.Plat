@@ -2,9 +2,9 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Personnel
 // 文件名称：TaktEmployeeAttachmentService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
-// 功能描述：员工附件应用服务实现
+// 功能描述：员工附件应用服务实现；文件元数据由 TaktFile 统一管理，本服务仅维护业务附件名称与 AccessUrl 引用。
 // 
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -30,28 +30,20 @@ namespace Takt.Application.Services.HumanResource.Personnel;
 public class TaktEmployeeAttachmentService : TaktServiceBase, ITaktEmployeeAttachmentService
 {
     private readonly ITaktCompanyRepository<TaktEmployeeAttachment> _employeeAttachmentRepository;
-    private readonly ITaktSortOrderGenerator _sortOrderGenerator;
-    private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="employeeAttachmentRepository">员工附件仓储</param>
-    /// <param name="sortOrderGenerator">排序号生成器</param>
-    /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktEmployeeAttachmentService(
         ITaktCompanyRepository<TaktEmployeeAttachment> employeeAttachmentRepository,
-        ITaktSortOrderGenerator sortOrderGenerator,
-        ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
         _employeeAttachmentRepository = employeeAttachmentRepository;
-        _sortOrderGenerator = sortOrderGenerator;
-        _uniqueValidator = uniqueValidator;
     }
 
     /// <summary>
@@ -97,12 +89,12 @@ public class TaktEmployeeAttachmentService : TaktServiceBase, ITaktEmployeeAttac
         EnsureThreeLayerContext();
         var list = await _employeeAttachmentRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.FileName ?? string.Empty,
+            x => x.AttachmentName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
             DictValue = e.Id,
-            DictLabel = e.FileName ?? e.Id.ToString(),
+            DictLabel = e.AttachmentName ?? e.Id.ToString(),
         }).ToList();
     }
 
@@ -114,13 +106,6 @@ public class TaktEmployeeAttachmentService : TaktServiceBase, ITaktEmployeeAttac
     public async Task<TaktEmployeeAttachmentDto> CreateEmployeeAttachmentAsync(TaktEmployeeAttachmentCreateDto dto)
     {
         var entity = dto.Adapt<TaktEmployeeAttachment>();
-        if (entity.SortOrder <= 0)
-        {
-            var maxSort = await _employeeAttachmentRepository.GetMaxIntAsync(
-                x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.EmployeeId == entity.EmployeeId,
-                x => x.SortOrder);
-            entity.SortOrder = _sortOrderGenerator.GenerateNextForMaster(entity.EmployeeId, maxSort);
-        }
         entity = await _employeeAttachmentRepository.CreateAsync(entity);
         return await GetEmployeeAttachmentByIdAsync(entity.Id) ?? entity.Adapt<TaktEmployeeAttachmentDto>();
     }
@@ -176,23 +161,6 @@ public class TaktEmployeeAttachmentService : TaktServiceBase, ITaktEmployeeAttac
     }
 
     /// <summary>
-    /// 更新员工附件排序
-    /// </summary>
-    /// <param name="dto">排序DTO</param>
-    /// <returns>DTO</returns>
-    public async Task<TaktEmployeeAttachmentDto> UpdateEmployeeAttachmentSortAsync(TaktEmployeeAttachmentSortDto dto)
-    {
-        var entity = await _employeeAttachmentRepository.GetByIdAsync(dto.EmployeeAttachmentId);
-        if (entity == null)
-        {
-            throw new TaktBusinessException("员工附件不存在");
-        }
-        entity.SortOrder = dto.SortOrder;
-        await _employeeAttachmentRepository.UpdateAsync(entity);
-        return await GetEmployeeAttachmentByIdAsync(dto.EmployeeAttachmentId) ?? throw new TaktBusinessException("员工附件不存在");
-    }
-
-    /// <summary>
     /// 获取导入模板
     /// </summary>
     /// <param name="sheetName">工作表名称</param>
@@ -227,13 +195,6 @@ public class TaktEmployeeAttachmentService : TaktServiceBase, ITaktEmployeeAttac
             try
             {
                 var entity = rows[i].Adapt<TaktEmployeeAttachment>();
-                if (entity.SortOrder <= 0)
-                {
-                    var maxSort = await _employeeAttachmentRepository.GetMaxIntAsync(
-                        x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.EmployeeId == entity.EmployeeId,
-                        x => x.SortOrder);
-                    entity.SortOrder = _sortOrderGenerator.GenerateNextForMaster(entity.EmployeeId, maxSort);
-                }
                 await _employeeAttachmentRepository.CreateAsync(entity);
                 success += 1;
             }
@@ -289,15 +250,8 @@ public class TaktEmployeeAttachmentService : TaktServiceBase, ITaktEmployeeAttac
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
                 SqlFunc.ToString(x.EmployeeId).Contains(keywords)
-                || SqlFunc.ToString(x.FileId).Contains(keywords)
-                || (x.FileCode != null && x.FileCode.Contains(keywords))
-                || (x.FileName != null && x.FileName.Contains(keywords))
-                || (x.FilePath != null && x.FilePath.Contains(keywords))
-                || SqlFunc.ToString(x.FileSize).Contains(keywords)
-                || (x.FileType != null && x.FileType.Contains(keywords))
-                || SqlFunc.ToString(x.AttachmentType).Contains(keywords)
-                || (x.AttachmentDescription != null && x.AttachmentDescription.Contains(keywords))
-                || SqlFunc.ToString(x.SortOrder).Contains(keywords)
+                || (x.AttachmentName != null && x.AttachmentName.Contains(keywords))
+                || (x.AccessUrl != null && x.AccessUrl.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
@@ -309,49 +263,14 @@ public class TaktEmployeeAttachmentService : TaktServiceBase, ITaktEmployeeAttac
             exp = exp.And(x => x.EmployeeId == queryDto.EmployeeId);
         }
 
-        if (queryDto?.FileId.HasValue == true)
+        if (!string.IsNullOrEmpty(queryDto?.AttachmentName))
         {
-            exp = exp.And(x => x.FileId == queryDto.FileId);
+            exp = exp.And(x => x.AttachmentName != null && x.AttachmentName.Contains(queryDto.AttachmentName));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.FileCode))
+        if (!string.IsNullOrEmpty(queryDto?.AccessUrl))
         {
-            exp = exp.And(x => x.FileCode != null && x.FileCode.Contains(queryDto.FileCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.FileName))
-        {
-            exp = exp.And(x => x.FileName != null && x.FileName.Contains(queryDto.FileName));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.FilePath))
-        {
-            exp = exp.And(x => x.FilePath != null && x.FilePath.Contains(queryDto.FilePath));
-        }
-
-        if (queryDto?.FileSize.HasValue == true)
-        {
-            exp = exp.And(x => x.FileSize == queryDto.FileSize);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.FileType))
-        {
-            exp = exp.And(x => x.FileType != null && x.FileType.Contains(queryDto.FileType));
-        }
-
-        if (queryDto?.AttachmentType.HasValue == true)
-        {
-            exp = exp.And(x => x.AttachmentType == queryDto.AttachmentType);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.AttachmentDescription))
-        {
-            exp = exp.And(x => x.AttachmentDescription != null && x.AttachmentDescription.Contains(queryDto.AttachmentDescription));
-        }
-
-        if (queryDto?.SortOrder.HasValue == true)
-        {
-            exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
+            exp = exp.And(x => x.AccessUrl != null && x.AccessUrl.Contains(queryDto.AccessUrl));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

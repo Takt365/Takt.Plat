@@ -69,12 +69,12 @@ export interface SopEsdCheck extends CompanyDtoBase {
   resistanceValue?: number;
 
   /**
-   * 是否达标（字典 sys_yes_no_type，0=否，1=是）
+   * 达标（字典 sys_yes_no_type，0=否，1=是）
    */
   isCompliant: number;
 
   /**
-   * 是否触发锁屏（字典 sys_yes_no_type，0=否，1=是）
+   * 锁屏（字典 sys_yes_no_type，0=否，1=是）
    */
   lockScreenTriggered: number;
 
@@ -134,12 +134,12 @@ export interface SopEsdCheckQuery extends TaktPagedQuery {
   resistanceValue?: number;
 
   /**
-   * 是否达标（字典 sys_yes_no_type，0=否，1=是）
+   * 达标（字典 sys_yes_no_type，0=否，1=是）
    */
   isCompliant?: number;
 
   /**
-   * 是否触发锁屏（字典 sys_yes_no_type，0=否，1=是）
+   * 锁屏（字典 sys_yes_no_type，0=否，1=是）
    */
   lockScreenTriggered?: number;
 
@@ -193,7 +193,7 @@ export interface SopEsdCheckCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -223,12 +223,12 @@ export interface SopEsdCheckCreate {
   resistanceValue?: number;
 
   /**
-   * 是否达标（字典 sys_yes_no_type，0=否，1=是）
+   * 达标（字典 sys_yes_no_type，0=否，1=是）
    */
   isCompliant: number;
 
   /**
-   * 是否触发锁屏（字典 sys_yes_no_type，0=否，1=是）
+   * 锁屏（字典 sys_yes_no_type，0=否，1=是）
    */
   lockScreenTriggered: number;
 
@@ -302,12 +302,12 @@ export interface SopEsdCheckTemplate {
   deviceCode?: string;
 
   /**
-   * 是否达标（字典 sys_yes_no_type，0=否，1=是）
+   * 达标（字典 sys_yes_no_type，0=否，1=是）
    */
   isCompliant?: number;
 
   /**
-   * 是否触发锁屏（字典 sys_yes_no_type，0=否，1=是）
+   * 锁屏（字典 sys_yes_no_type，0=否，1=是）
    */
   lockScreenTriggered?: number;
 
@@ -341,7 +341,7 @@ export interface SopEsdCheckImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -366,12 +366,12 @@ export interface SopEsdCheckImport {
   deviceCode?: string;
 
   /**
-   * 是否达标（字典 sys_yes_no_type，0=否，1=是）
+   * 达标（字典 sys_yes_no_type，0=否，1=是）
    */
   isCompliant?: number;
 
   /**
-   * 是否触发锁屏（字典 sys_yes_no_type，0=否，1=是）
+   * 锁屏（字典 sys_yes_no_type，0=否，1=是）
    */
   lockScreenTriggered?: number;
 
@@ -430,12 +430,12 @@ export interface SopEsdCheckExport {
   resistanceValue?: number;
 
   /**
-   * 是否达标（字典 sys_yes_no_type，0=否，1=是）
+   * 达标（字典 sys_yes_no_type，0=否，1=是）
    */
   isCompliant: number;
 
   /**
-   * 是否触发锁屏（字典 sys_yes_no_type，0=否，1=是）
+   * 锁屏（字典 sys_yes_no_type，0=否，1=是）
    */
   lockScreenTriggered: number;
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Personnel
 // 文件名称：TaktEmployeeFamilyDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：EmployeeFamily 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktEmployeeFamily 生成，请按需审阅）
 // 
@@ -14,7 +14,6 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Dtos.HumanResource.Personnel;
 
@@ -80,7 +79,7 @@ public class TaktEmployeeFamilyDto : TaktCompanyDtoBase
     /// <summary>
     /// 是否紧急联系人（1=是，0=否）
     /// </summary>
-    public int IsEmergencyContact { get; set; }
+    public int IsEmergencyContact { get; set; } = 0;
 
 }
 
@@ -191,7 +190,7 @@ public class TaktEmployeeFamilyCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -235,7 +234,7 @@ public class TaktEmployeeFamilyCreateDto
     /// <summary>
     /// 是否紧急联系人（1=是，0=否）
     /// </summary>
-    public int IsEmergencyContact { get; set; }
+    public int IsEmergencyContact { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -320,6 +319,11 @@ public class TaktEmployeeFamilyTemplateDto
     public string? JobTitle { get; set; } = string.Empty;
 
     /// <summary>
+    /// 出生日期
+    /// </summary>
+    public DateTime? BirthDate { get; set; }
+
+    /// <summary>
     /// 是否紧急联系人（1=是，0=否）
     /// </summary>
     public int? IsEmergencyContact { get; set; }
@@ -352,7 +356,7 @@ public class TaktEmployeeFamilyImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -386,6 +390,11 @@ public class TaktEmployeeFamilyImportDto
     /// 职务
     /// </summary>
     public string? JobTitle { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 出生日期
+    /// </summary>
+    public DateTime? BirthDate { get; set; }
 
     /// <summary>
     /// 是否紧急联系人（1=是，0=否）
@@ -464,7 +473,7 @@ public class TaktEmployeeFamilyExportDto
     /// <summary>
     /// 是否紧急联系人（1=是，0=否）
     /// </summary>
-    public int IsEmergencyContact { get; set; }
+    public int IsEmergencyContact { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

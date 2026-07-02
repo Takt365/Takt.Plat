@@ -24,7 +24,7 @@ namespace Takt.Domain.Entities.HumanResource.Performance;
 public class TaktPerfAssessment : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 员工 ID
+    /// 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [SugarColumn(ColumnName = "employee_id", ColumnDescription = "员工ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -45,7 +45,7 @@ public class TaktPerfAssessment : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "assessment_date", ColumnDescription = "考核日期", ColumnDataType = "date", IsNullable = false)]
     public DateTime AssessmentDate { get; set; }
     /// <summary>
-    /// 方案指标 ID
+    /// 方案指标（关联 TaktPerfScheme.Id，选项 TaktPerfSchemes/options）
     /// </summary>
     [SugarColumn(ColumnName = "scheme_metric_id", ColumnDescription = "方案指标ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -76,12 +76,12 @@ public class TaktPerfAssessment : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "final_score", ColumnDescription = "综合得分", ColumnDataType = "decimal", Length = 5, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
     public decimal FinalScore { get; set; }
     /// <summary>
-    /// 绩效等级（A/B/C/D/E）
+    /// 绩效等级（字典 hr_perf_grade；列存 DictValue：A/B/C/D/E）
     /// </summary>
     [SugarColumn(ColumnName = "performance_grade", ColumnDescription = "绩效等级", ColumnDataType = "nvarchar", Length = 10, IsNullable = false)]
     public string PerformanceGrade { get; set; } = string.Empty;
     /// <summary>
-    /// 评审人 ID
+    /// 评审人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [SugarColumn(ColumnName = "reviewer_id", ColumnDescription = "评审人ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -97,13 +97,13 @@ public class TaktPerfAssessment : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "interview_notes", ColumnDescription = "面谈记录", ColumnDataType = "nvarchar", Length = 1000, IsNullable = false)]
     public string InterviewNotes { get; set; } = string.Empty;
     /// <summary>
-    /// 状态（0=待自评 1=自评中 2=待主管评审 3=评审中 4=已完成 5=已确认）
+    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// </summary>
+    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
+    public string RelatedPlant { get; set; } = string.Empty;
+    /// <summary>
+    /// 状态（字典 hr_perf_assessment_status；0=待自评 1=自评中 2=待主管评审 3=评审中 4=已完成 5=已确认）
     /// </summary>
     [SugarColumn(ColumnName = "assessment_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int AssessmentStatus { get; set; }
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = true)]
-    public string? RelatedPlant { get; set; }
 }

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Workflow
 // 文件名称：TaktFlowSchemeI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktFlowScheme 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -153,15 +153,6 @@ public class TaktFlowSchemeI18nSeedData : ITaktSeedDataCoordinator
             // entity.flowscheme.processdescription
             new TranslationSeedItem("entity.flowscheme.processdescription", "zh-HK", "流程说明_hk", "流程说明"),
 
-            // entity.flowscheme.processstatus
-            new TranslationSeedItem("entity.flowscheme.processstatus", "en-US", "发布状态_us", "发布状态"),
-            // entity.flowscheme.processstatus
-            new TranslationSeedItem("entity.flowscheme.processstatus", "ja-JP", "发布状态_jp", "发布状态"),
-            // entity.flowscheme.processstatus
-            new TranslationSeedItem("entity.flowscheme.processstatus", "zh-CN", "发布状态", "发布状态"),
-            // entity.flowscheme.processstatus
-            new TranslationSeedItem("entity.flowscheme.processstatus", "zh-HK", "发布状态_hk", "发布状态"),
-
             // entity.flowscheme.suspensionstate
             new TranslationSeedItem("entity.flowscheme.suspensionstate", "en-US", "挂起状态_us", "挂起状态（1 激活，2 挂起）"),
             // entity.flowscheme.suspensionstate
@@ -172,13 +163,13 @@ public class TaktFlowSchemeI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.flowscheme.suspensionstate", "zh-HK", "挂起状态_hk", "挂起状态（1 激活，2 挂起）"),
 
             // entity.flowscheme.processcontent
-            new TranslationSeedItem("entity.flowscheme.processcontent", "en-US", "流程设计JSON_us", "流程设计 JSON（节点、网关、条件、审批人配置）"),
+            new TranslationSeedItem("entity.flowscheme.processcontent", "en-US", "流程设计_us", "流程设计 JSON（节点、网关、条件、审批人配置）"),
             // entity.flowscheme.processcontent
-            new TranslationSeedItem("entity.flowscheme.processcontent", "ja-JP", "流程设计JSON_jp", "流程设计 JSON（节点、网关、条件、审批人配置）"),
+            new TranslationSeedItem("entity.flowscheme.processcontent", "ja-JP", "流程设计_jp", "流程设计 JSON（节点、网关、条件、审批人配置）"),
             // entity.flowscheme.processcontent
-            new TranslationSeedItem("entity.flowscheme.processcontent", "zh-CN", "流程设计JSON", "流程设计 JSON（节点、网关、条件、审批人配置）"),
+            new TranslationSeedItem("entity.flowscheme.processcontent", "zh-CN", "流程设计", "流程设计 JSON（节点、网关、条件、审批人配置）"),
             // entity.flowscheme.processcontent
-            new TranslationSeedItem("entity.flowscheme.processcontent", "zh-HK", "流程设计JSON_hk", "流程设计 JSON（节点、网关、条件、审批人配置）"),
+            new TranslationSeedItem("entity.flowscheme.processcontent", "zh-HK", "流程设计_hk", "流程设计 JSON（节点、网关、条件、审批人配置）"),
 
             // entity.flowscheme.deploymentid
             new TranslationSeedItem("entity.flowscheme.deploymentid", "en-US", "部署批次号_us", "部署批次号"),
@@ -215,6 +206,15 @@ public class TaktFlowSchemeI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.flowscheme.sortorder", "zh-CN", "排序号", "排序号"),
             // entity.flowscheme.sortorder
             new TranslationSeedItem("entity.flowscheme.sortorder", "zh-HK", "排序号_hk", "排序号"),
+
+            // entity.flowscheme.processstatus
+            new TranslationSeedItem("entity.flowscheme.processstatus", "en-US", "发布状态_us", "发布状态"),
+            // entity.flowscheme.processstatus
+            new TranslationSeedItem("entity.flowscheme.processstatus", "ja-JP", "发布状态_jp", "发布状态"),
+            // entity.flowscheme.processstatus
+            new TranslationSeedItem("entity.flowscheme.processstatus", "zh-CN", "发布状态", "发布状态"),
+            // entity.flowscheme.processstatus
+            new TranslationSeedItem("entity.flowscheme.processstatus", "zh-HK", "发布状态_hk", "发布状态"),
 
             // entity.flowscheme.form
             new TranslationSeedItem("entity.flowscheme.form", "en-US", "关联表单_us", "关联表单"),

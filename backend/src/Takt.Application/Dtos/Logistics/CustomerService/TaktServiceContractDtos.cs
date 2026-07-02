@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.CustomerService
 // 文件名称：TaktServiceContractDtos.cs
-// 创建时间：2026-06-16
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ServiceContract 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktServiceContract 生成，请按需审阅）
 // 
@@ -72,11 +72,6 @@ public class TaktServiceContractDto : TaktCompanyDtoBase
     public int ContractType { get; set; } = 0;
 
     /// <summary>
-    /// 合同状态（0=草稿，1=生效，2=暂停，3=到期，4=终止）
-    /// </summary>
-    public int ContractStatus { get; set; } = 0;
-
-    /// <summary>
     /// 签订日期
     /// </summary>
     public DateTime? SignDate { get; set; }
@@ -130,6 +125,11 @@ public class TaktServiceContractDto : TaktCompanyDtoBase
     /// 排序号（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
+
+    /// <summary>
+    /// 合同状态（0=草稿，1=生效，2=暂停，3=到期，4=终止）
+    /// </summary>
+    public int ContractStatus { get; set; } = 0;
 
     /// <summary>
     /// 服务订单列表（外键在子表 TaktServiceOrder.ServiceContractId）
@@ -202,11 +202,6 @@ public class TaktServiceContractQueryDto : TaktPagedQuery
     public int? ContractType { get; set; }
 
     /// <summary>
-    /// 合同状态（0=草稿，1=生效，2=暂停，3=到期，4=终止）
-    /// </summary>
-    public int? ContractStatus { get; set; }
-
-    /// <summary>
     /// 签订日期（范围查询-开始）
     /// </summary>
     public DateTime? SignDateStart { get; set; }
@@ -277,6 +272,11 @@ public class TaktServiceContractQueryDto : TaktPagedQuery
     public int? SortOrder { get; set; }
 
     /// <summary>
+    /// 合同状态（0=草稿，1=生效，2=暂停，3=到期，4=终止）
+    /// </summary>
+    public int? ContractStatus { get; set; }
+
+    /// <summary>
     /// 创建时间（范围查询-开始）
     /// </summary>
     public DateTime? CreatedAtStart { get; set; }
@@ -317,7 +317,7 @@ public class TaktServiceContractCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -361,11 +361,6 @@ public class TaktServiceContractCreateDto
     /// 合同类型（0=维保，1=单次，2=框架，3=SLA，4=其他）
     /// </summary>
     public int ContractType { get; set; } = 0;
-
-    /// <summary>
-    /// 合同状态（0=草稿，1=生效，2=暂停，3=到期，4=终止）
-    /// </summary>
-    public int ContractStatus { get; set; } = 0;
 
     /// <summary>
     /// 签订日期
@@ -417,6 +412,11 @@ public class TaktServiceContractCreateDto
     /// 客户经理（人员代码）
     /// </summary>
     public string? AccountManager { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 合同状态（0=草稿，1=生效，2=暂停，3=到期，4=终止）
+    /// </summary>
+    public int ContractStatus { get; set; } = 0;
 
     /// <summary>
     /// 服务订单列表（外键在子表 TaktServiceOrder.ServiceContractId）（子表，级联保存）
@@ -564,9 +564,24 @@ public class TaktServiceContractTemplateDto
     public int? ContractType { get; set; }
 
     /// <summary>
-    /// 合同状态（0=草稿，1=生效，2=暂停，3=到期，4=终止）
+    /// 签订日期
     /// </summary>
-    public int? ContractStatus { get; set; }
+    public DateTime? SignDate { get; set; }
+
+    /// <summary>
+    /// 生效日期
+    /// </summary>
+    public DateTime? EffectiveDate { get; set; }
+
+    /// <summary>
+    /// 到期日期
+    /// </summary>
+    public DateTime? ExpiryDate { get; set; }
+
+    /// <summary>
+    /// 合同金额
+    /// </summary>
+    public decimal? ContractAmount { get; set; }
 
     /// <summary>
     /// 结算币种代码
@@ -587,6 +602,31 @@ public class TaktServiceContractTemplateDto
     /// SLA 响应时限（小时）
     /// </summary>
     public int? SlaResponseHours { get; set; }
+
+    /// <summary>
+    /// SLA 解决时限（小时）
+    /// </summary>
+    public int? SlaResolveHours { get; set; }
+
+    /// <summary>
+    /// 客户经理（人员代码）
+    /// </summary>
+    public string? AccountManager { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 合同状态（0=草稿，1=生效，2=暂停，3=到期，4=终止）
+    /// </summary>
+    public int? ContractStatus { get; set; }
+
+    /// <summary>
+    /// 服务订单列表（外键在子表 TaktServiceOrder.ServiceContractId）（子表，级联保存）
+    /// </summary>
+    public List<TaktServiceOrderCreateDto>? ServiceOrders { get; set; }
+
+    /// <summary>
+    /// 服务请求列表（外键在子表 TaktServiceRequest.ServiceContractId）（子表，级联保存）
+    /// </summary>
+    public List<TaktServiceRequestCreateDto>? ServiceRequests { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -616,7 +656,7 @@ public class TaktServiceContractImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -657,9 +697,24 @@ public class TaktServiceContractImportDto
     public int? ContractType { get; set; }
 
     /// <summary>
-    /// 合同状态（0=草稿，1=生效，2=暂停，3=到期，4=终止）
+    /// 签订日期
     /// </summary>
-    public int? ContractStatus { get; set; }
+    public DateTime? SignDate { get; set; }
+
+    /// <summary>
+    /// 生效日期
+    /// </summary>
+    public DateTime? EffectiveDate { get; set; }
+
+    /// <summary>
+    /// 到期日期
+    /// </summary>
+    public DateTime? ExpiryDate { get; set; }
+
+    /// <summary>
+    /// 合同金额
+    /// </summary>
+    public decimal? ContractAmount { get; set; }
 
     /// <summary>
     /// 结算币种代码
@@ -680,6 +735,31 @@ public class TaktServiceContractImportDto
     /// SLA 响应时限（小时）
     /// </summary>
     public int? SlaResponseHours { get; set; }
+
+    /// <summary>
+    /// SLA 解决时限（小时）
+    /// </summary>
+    public int? SlaResolveHours { get; set; }
+
+    /// <summary>
+    /// 客户经理（人员代码）
+    /// </summary>
+    public string? AccountManager { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 合同状态（0=草稿，1=生效，2=暂停，3=到期，4=终止）
+    /// </summary>
+    public int? ContractStatus { get; set; }
+
+    /// <summary>
+    /// 服务订单列表（外键在子表 TaktServiceOrder.ServiceContractId）（子表，级联保存）
+    /// </summary>
+    public List<TaktServiceOrderCreateDto>? ServiceOrders { get; set; }
+
+    /// <summary>
+    /// 服务请求列表（外键在子表 TaktServiceRequest.ServiceContractId）（子表，级联保存）
+    /// </summary>
+    public List<TaktServiceRequestCreateDto>? ServiceRequests { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -751,11 +831,6 @@ public class TaktServiceContractExportDto
     public int ContractType { get; set; } = 0;
 
     /// <summary>
-    /// 合同状态（0=草稿，1=生效，2=暂停，3=到期，4=终止）
-    /// </summary>
-    public int ContractStatus { get; set; } = 0;
-
-    /// <summary>
     /// 签订日期
     /// </summary>
     public DateTime? SignDate { get; set; }
@@ -809,6 +884,11 @@ public class TaktServiceContractExportDto
     /// 排序号（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
+
+    /// <summary>
+    /// 合同状态（0=草稿，1=生效，2=暂停，3=到期，4=终止）
+    /// </summary>
+    public int ContractStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

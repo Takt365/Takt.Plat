@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Compensation
 // 文件名称：TaktEmpSalaryI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmpSalary 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktEmpSalaryI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.empsalary._self", "zh-HK", "员工薪酬档案信息_hk", "实体名称"),
 
             // entity.empsalary.employeeid
-            new TranslationSeedItem("entity.empsalary.employeeid", "en-US", "员工ID_us", "员工 ID"),
+            new TranslationSeedItem("entity.empsalary.employeeid", "en-US", "员工ID_us", "员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
             // entity.empsalary.employeeid
-            new TranslationSeedItem("entity.empsalary.employeeid", "ja-JP", "员工ID_jp", "员工 ID"),
+            new TranslationSeedItem("entity.empsalary.employeeid", "ja-JP", "员工ID_jp", "员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
             // entity.empsalary.employeeid
-            new TranslationSeedItem("entity.empsalary.employeeid", "zh-CN", "员工ID", "员工 ID"),
+            new TranslationSeedItem("entity.empsalary.employeeid", "zh-CN", "员工ID", "员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
             // entity.empsalary.employeeid
-            new TranslationSeedItem("entity.empsalary.employeeid", "zh-HK", "员工ID_hk", "员工 ID"),
+            new TranslationSeedItem("entity.empsalary.employeeid", "zh-HK", "员工ID_hk", "员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
 
             // entity.empsalary.employeename
             new TranslationSeedItem("entity.empsalary.employeename", "en-US", "员工姓名_us", "员工姓名"),
@@ -109,22 +109,22 @@ public class TaktEmpSalaryI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.empsalary.employeename", "zh-HK", "员工姓名_hk", "员工姓名"),
 
             // entity.empsalary.payrollid
-            new TranslationSeedItem("entity.empsalary.payrollid", "en-US", "薪酬体系ID_us", "关联薪酬体系 ID"),
+            new TranslationSeedItem("entity.empsalary.payrollid", "en-US", "薪酬体系ID_us", "薪酬体系（关联 TaktPayroll.Id，选项 TaktPayrolls/options）"),
             // entity.empsalary.payrollid
-            new TranslationSeedItem("entity.empsalary.payrollid", "ja-JP", "薪酬体系ID_jp", "关联薪酬体系 ID"),
+            new TranslationSeedItem("entity.empsalary.payrollid", "ja-JP", "薪酬体系ID_jp", "薪酬体系（关联 TaktPayroll.Id，选项 TaktPayrolls/options）"),
             // entity.empsalary.payrollid
-            new TranslationSeedItem("entity.empsalary.payrollid", "zh-CN", "薪酬体系ID", "关联薪酬体系 ID"),
+            new TranslationSeedItem("entity.empsalary.payrollid", "zh-CN", "薪酬体系ID", "薪酬体系（关联 TaktPayroll.Id，选项 TaktPayrolls/options）"),
             // entity.empsalary.payrollid
-            new TranslationSeedItem("entity.empsalary.payrollid", "zh-HK", "薪酬体系ID_hk", "关联薪酬体系 ID"),
+            new TranslationSeedItem("entity.empsalary.payrollid", "zh-HK", "薪酬体系ID_hk", "薪酬体系（关联 TaktPayroll.Id，选项 TaktPayrolls/options）"),
 
             // entity.empsalary.payscaleid
-            new TranslationSeedItem("entity.empsalary.payscaleid", "en-US", "薪级ID_us", "关联薪级 ID"),
+            new TranslationSeedItem("entity.empsalary.payscaleid", "en-US", "薪级ID_us", "薪级（关联 TaktPayScale.Id，选项 TaktPayScales/options）"),
             // entity.empsalary.payscaleid
-            new TranslationSeedItem("entity.empsalary.payscaleid", "ja-JP", "薪级ID_jp", "关联薪级 ID"),
+            new TranslationSeedItem("entity.empsalary.payscaleid", "ja-JP", "薪级ID_jp", "薪级（关联 TaktPayScale.Id，选项 TaktPayScales/options）"),
             // entity.empsalary.payscaleid
-            new TranslationSeedItem("entity.empsalary.payscaleid", "zh-CN", "薪级ID", "关联薪级 ID"),
+            new TranslationSeedItem("entity.empsalary.payscaleid", "zh-CN", "薪级ID", "薪级（关联 TaktPayScale.Id，选项 TaktPayScales/options）"),
             // entity.empsalary.payscaleid
-            new TranslationSeedItem("entity.empsalary.payscaleid", "zh-HK", "薪级ID_hk", "关联薪级 ID"),
+            new TranslationSeedItem("entity.empsalary.payscaleid", "zh-HK", "薪级ID_hk", "薪级（关联 TaktPayScale.Id，选项 TaktPayScales/options）"),
 
             // entity.empsalary.basesalary
             new TranslationSeedItem("entity.empsalary.basesalary", "en-US", "基本工资_us", "基本工资（元）"),
@@ -154,13 +154,13 @@ public class TaktEmpSalaryI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.empsalary.allowancetotal", "zh-HK", "津贴合计_hk", "津贴合计（元）"),
 
             // entity.empsalary.salaryitemid
-            new TranslationSeedItem("entity.empsalary.salaryitemid", "en-US", "薪资项目ID_us", "关联薪资项目 ID（如股权激励项，对应 TaktSalaryItem 中 item_type 为股权激励的记录）"),
+            new TranslationSeedItem("entity.empsalary.salaryitemid", "en-US", "薪资项目ID_us", "薪资项目（关联 TaktSalaryItem.Id，选项 TaktSalaryItems/options；item_type=5 股权激励时使用）"),
             // entity.empsalary.salaryitemid
-            new TranslationSeedItem("entity.empsalary.salaryitemid", "ja-JP", "薪资项目ID_jp", "关联薪资项目 ID（如股权激励项，对应 TaktSalaryItem 中 item_type 为股权激励的记录）"),
+            new TranslationSeedItem("entity.empsalary.salaryitemid", "ja-JP", "薪资项目ID_jp", "薪资项目（关联 TaktSalaryItem.Id，选项 TaktSalaryItems/options；item_type=5 股权激励时使用）"),
             // entity.empsalary.salaryitemid
-            new TranslationSeedItem("entity.empsalary.salaryitemid", "zh-CN", "薪资项目ID", "关联薪资项目 ID（如股权激励项，对应 TaktSalaryItem 中 item_type 为股权激励的记录）"),
+            new TranslationSeedItem("entity.empsalary.salaryitemid", "zh-CN", "薪资项目ID", "薪资项目（关联 TaktSalaryItem.Id，选项 TaktSalaryItems/options；item_type=5 股权激励时使用）"),
             // entity.empsalary.salaryitemid
-            new TranslationSeedItem("entity.empsalary.salaryitemid", "zh-HK", "薪资项目ID_hk", "关联薪资项目 ID（如股权激励项，对应 TaktSalaryItem 中 item_type 为股权激励的记录）"),
+            new TranslationSeedItem("entity.empsalary.salaryitemid", "zh-HK", "薪资项目ID_hk", "薪资项目（关联 TaktSalaryItem.Id，选项 TaktSalaryItems/options；item_type=5 股权激励时使用）"),
 
             // entity.empsalary.sharecount
             new TranslationSeedItem("entity.empsalary.sharecount", "en-US", "授予股数_us", "授予股数/份数（股权激励定薪时使用）"),
@@ -180,23 +180,23 @@ public class TaktEmpSalaryI18nSeedData : ITaktSeedDataCoordinator
             // entity.empsalary.effectivedate
             new TranslationSeedItem("entity.empsalary.effectivedate", "zh-HK", "生效日期_hk", "生效日期"),
 
-            // entity.empsalary.status
-            new TranslationSeedItem("entity.empsalary.status", "en-US", "状态_us", "状态（字典 sys_normal_disable_status）"),
-            // entity.empsalary.status
-            new TranslationSeedItem("entity.empsalary.status", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable_status）"),
-            // entity.empsalary.status
-            new TranslationSeedItem("entity.empsalary.status", "zh-CN", "状态", "状态（字典 sys_normal_disable_status）"),
-            // entity.empsalary.status
-            new TranslationSeedItem("entity.empsalary.status", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable_status）"),
+            // entity.empsalary.relatedplant
+            new TranslationSeedItem("entity.empsalary.relatedplant", "en-US", "关联工厂_us", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            // entity.empsalary.relatedplant
+            new TranslationSeedItem("entity.empsalary.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            // entity.empsalary.relatedplant
+            new TranslationSeedItem("entity.empsalary.relatedplant", "zh-CN", "关联工厂", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            // entity.empsalary.relatedplant
+            new TranslationSeedItem("entity.empsalary.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
 
-            // entity.empsalary.relatedplant
-            new TranslationSeedItem("entity.empsalary.relatedplant", "en-US", "关联工厂_us", "关联工厂"),
-            // entity.empsalary.relatedplant
-            new TranslationSeedItem("entity.empsalary.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂"),
-            // entity.empsalary.relatedplant
-            new TranslationSeedItem("entity.empsalary.relatedplant", "zh-CN", "关联工厂", "关联工厂"),
-            // entity.empsalary.relatedplant
-            new TranslationSeedItem("entity.empsalary.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂"),
+            // entity.empsalary.status
+            new TranslationSeedItem("entity.empsalary.status", "en-US", "状态_us", "状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）"),
+            // entity.empsalary.status
+            new TranslationSeedItem("entity.empsalary.status", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）"),
+            // entity.empsalary.status
+            new TranslationSeedItem("entity.empsalary.status", "zh-CN", "状态", "状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）"),
+            // entity.empsalary.status
+            new TranslationSeedItem("entity.empsalary.status", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）"),
         };
     }
 

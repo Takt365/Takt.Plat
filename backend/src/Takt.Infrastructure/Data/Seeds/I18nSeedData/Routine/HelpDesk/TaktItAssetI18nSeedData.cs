@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.HelpDesk
 // 文件名称：TaktItAssetI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktItAsset 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,22 +91,22 @@ public class TaktItAssetI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.itasset._self", "zh-HK", "服务台 IT 设备保修扩展信息_hk", "实体名称"),
 
             // entity.itasset.assetcode
-            new TranslationSeedItem("entity.itasset.assetcode", "en-US", "资产号码_us", "资产号码"),
+            new TranslationSeedItem("entity.itasset.assetcode", "en-US", "资产号码_us", "资产号码（选项 TaktAssets/options，DictValue=AssetCode）"),
             // entity.itasset.assetcode
-            new TranslationSeedItem("entity.itasset.assetcode", "ja-JP", "资产号码_jp", "资产号码"),
+            new TranslationSeedItem("entity.itasset.assetcode", "ja-JP", "资产号码_jp", "资产号码（选项 TaktAssets/options，DictValue=AssetCode）"),
             // entity.itasset.assetcode
-            new TranslationSeedItem("entity.itasset.assetcode", "zh-CN", "资产号码", "资产号码"),
+            new TranslationSeedItem("entity.itasset.assetcode", "zh-CN", "资产号码", "资产号码（选项 TaktAssets/options，DictValue=AssetCode）"),
             // entity.itasset.assetcode
-            new TranslationSeedItem("entity.itasset.assetcode", "zh-HK", "资产号码_hk", "资产号码"),
+            new TranslationSeedItem("entity.itasset.assetcode", "zh-HK", "资产号码_hk", "资产号码（选项 TaktAssets/options，DictValue=AssetCode）"),
 
             // entity.itasset.warrantytype
-            new TranslationSeedItem("entity.itasset.warrantytype", "en-US", "保修类型_us", "保修类型（见 TaktWarrantyType）"),
+            new TranslationSeedItem("entity.itasset.warrantytype", "en-US", "保修类型_us", "保修类型（字典 sys_warranty_type；0=原厂保修 1=延长保修 2=上门保修 3=寄修保修 4=维保合同 5=付费保养）"),
             // entity.itasset.warrantytype
-            new TranslationSeedItem("entity.itasset.warrantytype", "ja-JP", "保修类型_jp", "保修类型（见 TaktWarrantyType）"),
+            new TranslationSeedItem("entity.itasset.warrantytype", "ja-JP", "保修类型_jp", "保修类型（字典 sys_warranty_type；0=原厂保修 1=延长保修 2=上门保修 3=寄修保修 4=维保合同 5=付费保养）"),
             // entity.itasset.warrantytype
-            new TranslationSeedItem("entity.itasset.warrantytype", "zh-CN", "保修类型", "保修类型（见 TaktWarrantyType）"),
+            new TranslationSeedItem("entity.itasset.warrantytype", "zh-CN", "保修类型", "保修类型（字典 sys_warranty_type；0=原厂保修 1=延长保修 2=上门保修 3=寄修保修 4=维保合同 5=付费保养）"),
             // entity.itasset.warrantytype
-            new TranslationSeedItem("entity.itasset.warrantytype", "zh-HK", "保修类型_hk", "保修类型（见 TaktWarrantyType）"),
+            new TranslationSeedItem("entity.itasset.warrantytype", "zh-HK", "保修类型_hk", "保修类型（字典 sys_warranty_type；0=原厂保修 1=延长保修 2=上门保修 3=寄修保修 4=维保合同 5=付费保养）"),
 
             // entity.itasset.warrantystartdate
             new TranslationSeedItem("entity.itasset.warrantystartdate", "en-US", "保修开始日期_us", "保修开始日期"),

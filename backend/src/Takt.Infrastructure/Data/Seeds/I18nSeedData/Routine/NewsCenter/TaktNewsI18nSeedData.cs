@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.NewsCenter
 // 文件名称：TaktNewsI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktNews 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,13 +100,13 @@ public class TaktNewsI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.news.code", "zh-HK", "新闻编码_hk", "新闻编码（租户+公司内唯一）"),
 
             // entity.news.category
-            new TranslationSeedItem("entity.news.category", "en-US", "新闻分类_us", "新闻分类"),
+            new TranslationSeedItem("entity.news.category", "en-US", "新闻分类_us", "新闻分类（字典 sys_news_category；0=公司新闻 1=行业动态 2=技术分享 3=产品发布 4=活动资讯 5=其他）"),
             // entity.news.category
-            new TranslationSeedItem("entity.news.category", "ja-JP", "新闻分类_jp", "新闻分类"),
+            new TranslationSeedItem("entity.news.category", "ja-JP", "新闻分类_jp", "新闻分类（字典 sys_news_category；0=公司新闻 1=行业动态 2=技术分享 3=产品发布 4=活动资讯 5=其他）"),
             // entity.news.category
-            new TranslationSeedItem("entity.news.category", "zh-CN", "新闻分类", "新闻分类"),
+            new TranslationSeedItem("entity.news.category", "zh-CN", "新闻分类", "新闻分类（字典 sys_news_category；0=公司新闻 1=行业动态 2=技术分享 3=产品发布 4=活动资讯 5=其他）"),
             // entity.news.category
-            new TranslationSeedItem("entity.news.category", "zh-HK", "新闻分类_hk", "新闻分类"),
+            new TranslationSeedItem("entity.news.category", "zh-HK", "新闻分类_hk", "新闻分类（字典 sys_news_category；0=公司新闻 1=行业动态 2=技术分享 3=产品发布 4=活动资讯 5=其他）"),
 
             // entity.news.title
             new TranslationSeedItem("entity.news.title", "en-US", "新闻标题_us", "新闻标题"),
@@ -154,22 +154,22 @@ public class TaktNewsI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.news.coverimage", "zh-HK", "新闻封面图片URL_hk", "新闻封面图片 URL"),
 
             // entity.news.istop
-            new TranslationSeedItem("entity.news.istop", "en-US", "是否置顶_us", "是否置顶"),
+            new TranslationSeedItem("entity.news.istop", "en-US", "置顶_us", "置顶（字典 sys_yes_no_type；1=是 0=否）"),
             // entity.news.istop
-            new TranslationSeedItem("entity.news.istop", "ja-JP", "是否置顶_jp", "是否置顶"),
+            new TranslationSeedItem("entity.news.istop", "ja-JP", "置顶_jp", "置顶（字典 sys_yes_no_type；1=是 0=否）"),
             // entity.news.istop
-            new TranslationSeedItem("entity.news.istop", "zh-CN", "是否置顶", "是否置顶"),
+            new TranslationSeedItem("entity.news.istop", "zh-CN", "置顶", "置顶（字典 sys_yes_no_type；1=是 0=否）"),
             // entity.news.istop
-            new TranslationSeedItem("entity.news.istop", "zh-HK", "是否置顶_hk", "是否置顶"),
+            new TranslationSeedItem("entity.news.istop", "zh-HK", "置顶_hk", "置顶（字典 sys_yes_no_type；1=是 0=否）"),
 
             // entity.news.isrecommended
-            new TranslationSeedItem("entity.news.isrecommended", "en-US", "是否推荐_us", "是否推荐"),
+            new TranslationSeedItem("entity.news.isrecommended", "en-US", "推荐_us", "推荐（字典 sys_yes_no_type；1=是 0=否）"),
             // entity.news.isrecommended
-            new TranslationSeedItem("entity.news.isrecommended", "ja-JP", "是否推荐_jp", "是否推荐"),
+            new TranslationSeedItem("entity.news.isrecommended", "ja-JP", "推荐_jp", "推荐（字典 sys_yes_no_type；1=是 0=否）"),
             // entity.news.isrecommended
-            new TranslationSeedItem("entity.news.isrecommended", "zh-CN", "是否推荐", "是否推荐"),
+            new TranslationSeedItem("entity.news.isrecommended", "zh-CN", "推荐", "推荐（字典 sys_yes_no_type；1=是 0=否）"),
             // entity.news.isrecommended
-            new TranslationSeedItem("entity.news.isrecommended", "zh-HK", "是否推荐_hk", "是否推荐"),
+            new TranslationSeedItem("entity.news.isrecommended", "zh-HK", "推荐_hk", "推荐（字典 sys_yes_no_type；1=是 0=否）"),
 
             // entity.news.effectivetime
             new TranslationSeedItem("entity.news.effectivetime", "en-US", "生效时间_us", "生效时间"),
@@ -244,13 +244,13 @@ public class TaktNewsI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.news.attachmentcount", "zh-HK", "附件数量_hk", "附件数量"),
 
             // entity.news.deptid
-            new TranslationSeedItem("entity.news.deptid", "en-US", "发布部门ID_us", "发布部门 ID"),
+            new TranslationSeedItem("entity.news.deptid", "en-US", "发布部门ID_us", "发布部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
             // entity.news.deptid
-            new TranslationSeedItem("entity.news.deptid", "ja-JP", "发布部门ID_jp", "发布部门 ID"),
+            new TranslationSeedItem("entity.news.deptid", "ja-JP", "发布部门ID_jp", "发布部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
             // entity.news.deptid
-            new TranslationSeedItem("entity.news.deptid", "zh-CN", "发布部门ID", "发布部门 ID"),
+            new TranslationSeedItem("entity.news.deptid", "zh-CN", "发布部门ID", "发布部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
             // entity.news.deptid
-            new TranslationSeedItem("entity.news.deptid", "zh-HK", "发布部门ID_hk", "发布部门 ID"),
+            new TranslationSeedItem("entity.news.deptid", "zh-HK", "发布部门ID_hk", "发布部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
 
             // entity.news.deptname
             new TranslationSeedItem("entity.news.deptname", "en-US", "发布部门名称_us", "发布部门名称"),
@@ -262,13 +262,13 @@ public class TaktNewsI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.news.deptname", "zh-HK", "发布部门名称_hk", "发布部门名称"),
 
             // entity.news.publisherid
-            new TranslationSeedItem("entity.news.publisherid", "en-US", "发布人ID_us", "发布人 ID"),
+            new TranslationSeedItem("entity.news.publisherid", "en-US", "发布人ID_us", "发布人 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
             // entity.news.publisherid
-            new TranslationSeedItem("entity.news.publisherid", "ja-JP", "发布人ID_jp", "发布人 ID"),
+            new TranslationSeedItem("entity.news.publisherid", "ja-JP", "发布人ID_jp", "发布人 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
             // entity.news.publisherid
-            new TranslationSeedItem("entity.news.publisherid", "zh-CN", "发布人ID", "发布人 ID"),
+            new TranslationSeedItem("entity.news.publisherid", "zh-CN", "发布人ID", "发布人 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
             // entity.news.publisherid
-            new TranslationSeedItem("entity.news.publisherid", "zh-HK", "发布人ID_hk", "发布人 ID"),
+            new TranslationSeedItem("entity.news.publisherid", "zh-HK", "发布人ID_hk", "发布人 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
 
             // entity.news.publishername
             new TranslationSeedItem("entity.news.publishername", "en-US", "发布人姓名_us", "发布人姓名"),
@@ -298,13 +298,13 @@ public class TaktNewsI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.news.sortorder", "zh-HK", "排序号_hk", "排序号（越小越靠前）"),
 
             // entity.news.status
-            new TranslationSeedItem("entity.news.status", "en-US", "新闻状态_us", "新闻状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）"),
+            new TranslationSeedItem("entity.news.status", "en-US", "新闻状态_us", "新闻状态（字典 sys_publish_status；0=草稿 1=已发布 2=已撤回 3=已过期）"),
             // entity.news.status
-            new TranslationSeedItem("entity.news.status", "ja-JP", "新闻状态_jp", "新闻状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）"),
+            new TranslationSeedItem("entity.news.status", "ja-JP", "新闻状态_jp", "新闻状态（字典 sys_publish_status；0=草稿 1=已发布 2=已撤回 3=已过期）"),
             // entity.news.status
-            new TranslationSeedItem("entity.news.status", "zh-CN", "新闻状态", "新闻状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）"),
+            new TranslationSeedItem("entity.news.status", "zh-CN", "新闻状态", "新闻状态（字典 sys_publish_status；0=草稿 1=已发布 2=已撤回 3=已过期）"),
             // entity.news.status
-            new TranslationSeedItem("entity.news.status", "zh-HK", "新闻状态_hk", "新闻状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）"),
+            new TranslationSeedItem("entity.news.status", "zh-HK", "新闻状态_hk", "新闻状态（字典 sys_publish_status；0=草稿 1=已发布 2=已撤回 3=已过期）"),
 
             // entity.news.attachments
             new TranslationSeedItem("entity.news.attachments", "en-US", "新闻附件列表_us", "新闻附件列表（主子表关系）"),

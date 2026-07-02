@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/engineering-change
 // 文件名称：ec-notification.d.ts
-// 创建时间：2026-06-16
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/engineering-change 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -16,7 +16,7 @@ import type {
 } from '@/types/common';
 
 /**
- * 工程变更通知单实体（EC Notification）。FlowInstanceId 由业务在发起流程后写入；流程引擎通过 BusinessKey/BusinessType 与本模块对接。
+ * 工程变更通知单（技术阶段一 ④，隶属 TaktEcGijutsu）。技术完成 ①主表 ②附件 ③明细 保存后由 TaktEcGijutsuService 自动生成并派发； 各部门确认后在 TaktEcExec* 执行，技术通过看板/批次监控。FlowInstanceId 由通知审批流程写入（可选）。
  * 对应前端 TaktEcNotificationDto
  * 继承 TaktApprovalDtoBase
  * 对应前端 EcNotification
@@ -54,7 +54,7 @@ export interface EcNotification extends ApprovalDtoBase {
   ecNo: string;
 
   /**
-   * 设变主题（冗余字段）
+   * 设变标题（冗余字段）
    */
   ecTitle?: string;
 
@@ -94,9 +94,9 @@ export interface EcNotification extends ApprovalDtoBase {
   ecNotificationStatus: number;
 
   /**
-   * 关联的设变主表 （主表：TaktEc）
+   * 关联的设变主表 （主表：TaktEcGijutsu）
    */
-  ec?: Ec;
+  ecEng?: EcGijutsu;
 
 }
 
@@ -139,7 +139,7 @@ export interface EcNotificationQuery extends TaktPagedQuery {
   ecNo?: string;
 
   /**
-   * 设变主题（冗余字段）
+   * 设变标题（冗余字段）
    */
   ecTitle?: string;
 
@@ -184,7 +184,7 @@ export interface EcNotificationQuery extends TaktPagedQuery {
   ecNotificationStatus?: number;
 
   /**
-   * 审批状态（TaktApprovalStatus）
+   * 审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）
    */
   approvalStatus?: number;
 
@@ -263,7 +263,7 @@ export interface EcNotificationCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -288,7 +288,7 @@ export interface EcNotificationCreate {
   ecNo: string;
 
   /**
-   * 设变主题（冗余字段）
+   * 设变标题（冗余字段）
    */
   ecTitle?: string;
 
@@ -411,9 +411,14 @@ export interface EcNotificationTemplate {
   ecNo?: string;
 
   /**
-   * 设变主题（冗余字段）
+   * 设变标题（冗余字段）
    */
   ecTitle?: string;
+
+  /**
+   * 通知日期
+   */
+  ecNotificationDate?: string;
 
   /**
    * 通知部门编码（多个部门用逗号分隔，如：Assy,PCBA,QC）
@@ -475,7 +480,7 @@ export interface EcNotificationImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -500,9 +505,14 @@ export interface EcNotificationImport {
   ecNo?: string;
 
   /**
-   * 设变主题（冗余字段）
+   * 设变标题（冗余字段）
    */
   ecTitle?: string;
+
+  /**
+   * 通知日期
+   */
+  ecNotificationDate?: string;
 
   /**
    * 通知部门编码（多个部门用逗号分隔，如：Assy,PCBA,QC）
@@ -579,7 +589,7 @@ export interface EcNotificationExport {
   ecNo: string;
 
   /**
-   * 设变主题（冗余字段）
+   * 设变标题（冗余字段）
    */
   ecTitle?: string;
 

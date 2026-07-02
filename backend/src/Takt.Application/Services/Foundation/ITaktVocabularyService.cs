@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Foundation
 // 文件名称：ITaktVocabularyService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：敏感词应用服务接口
 // 
@@ -101,19 +101,5 @@ public interface ITaktVocabularyService
     /// <param name="fileName">文件名</param>
     /// <returns>Excel 文件</returns>
     Task<(string fileName, byte[] fileContent)> ExportVocabularyAsync(TaktVocabularyQueryDto? query = null, string? sheetName = null, string? fileName = null);
-
-    /// <summary>
-    /// 检测文本是否包含敏感词
-    /// </summary>
-    /// <param name="dto">检测请求</param>
-    /// <returns>检测结果</returns>
-    Task<TaktVocabularyDetectResultDto> DetectVocabularyTextAsync(TaktVocabularyFilterRequestDto dto);
-
-    /// <summary>
-    /// 过滤文本中的敏感词
-    /// </summary>
-    /// <param name="dto">过滤请求</param>
-    /// <returns>过滤结果</returns>
-    Task<TaktVocabularyFilterResultDto> FilterVocabularyTextAsync(TaktVocabularyFilterRequestDto dto);
 
 }

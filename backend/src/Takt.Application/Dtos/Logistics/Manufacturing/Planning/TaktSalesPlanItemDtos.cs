@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Planning
 // 文件名称：TaktSalesPlanItemDtos.cs
-// 创建时间：2026-06-16
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SalesPlanItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSalesPlanItem 生成，请按需审阅）
 // 
@@ -250,7 +250,7 @@ public class TaktSalesPlanItemCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -427,6 +427,31 @@ public class TaktSalesPlanItemTemplateDto
     public string? PlanUnit { get; set; } = string.Empty;
 
     /// <summary>
+    /// 计划数量（基本单位数量）
+    /// </summary>
+    public decimal? PlanQuantity { get; set; }
+
+    /// <summary>
+    /// 计划交货日期
+    /// </summary>
+    public DateTime? PlannedDeliveryDate { get; set; }
+
+    /// <summary>
+    /// 已转生产/销售数量（基本单位数量）
+    /// </summary>
+    public decimal? ConvertedQuantity { get; set; }
+
+    /// <summary>
+    /// 预计单价
+    /// </summary>
+    public decimal? EstimatedUnitPrice { get; set; }
+
+    /// <summary>
+    /// 预计金额
+    /// </summary>
+    public decimal? EstimatedAmount { get; set; }
+
+    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -454,7 +479,7 @@ public class TaktSalesPlanItemImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -503,6 +528,31 @@ public class TaktSalesPlanItemImportDto
     /// 计划单位
     /// </summary>
     public string? PlanUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 计划数量（基本单位数量）
+    /// </summary>
+    public decimal? PlanQuantity { get; set; }
+
+    /// <summary>
+    /// 计划交货日期
+    /// </summary>
+    public DateTime? PlannedDeliveryDate { get; set; }
+
+    /// <summary>
+    /// 已转生产/销售数量（基本单位数量）
+    /// </summary>
+    public decimal? ConvertedQuantity { get; set; }
+
+    /// <summary>
+    /// 预计单价
+    /// </summary>
+    public decimal? EstimatedUnitPrice { get; set; }
+
+    /// <summary>
+    /// 预计金额
+    /// </summary>
+    public decimal? EstimatedAmount { get; set; }
 
     /// <summary>
     /// 扩展字段JSON

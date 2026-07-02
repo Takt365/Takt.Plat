@@ -4,8 +4,8 @@
 // 文件名称：main.ts
 // 创建时间：2026-05-22
 // 创建人：Takt365(Cursor AI)
-// 功能描述：应用入口文件，初始化Vue、路由、状态管理、国际化
-// 
+// 功能描述：应用入口；Pinia/路由/i18n/日志/性能监控 bootstrap
+//
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
@@ -13,42 +13,30 @@
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import Antd from 'ant-design-vue';
-import formCreate from '@form-create/ant-design-vue';
-import { install as installFcDesigner } from '@form-create/antd-designer';
+import FcDesigner from '@form-create/antd-designer';
 import App from './App.vue';
 import router from './router';
-import { setRuntimeRouter } from '@/utils/runtime-context';
 import i18n from './locales';
-import { useUserStore } from '@/stores/identity/user';
-import { useTenantStore } from '@/stores/identity/tenant';
-
-setRuntimeRouter(router);
 import { registerTaktEventHandlers } from '@/bootstrap/takt-event-handlers';
 import { initTaktIdleSession } from '@/bootstrap/takt-idle-session';
+import { initTaktClientPerformanceMonitor } from '@/bootstrap/takt-client-performance-monitor';
+import { ensureTaktPaginationConfigAsync } from '@/config/takt-pagination';
 import { registerPermissionDirective } from '@/directives/permission';
+import { useLocaleStore } from '@/stores/foundation/locale';
+import { useSettingStore } from '@/stores/common/setting';
+import { useUserStore } from '@/stores/identity/user';
+import { useTenantStore } from '@/stores/identity/tenant';
+import { applySettings } from '@/utils/apply-settings';
 import { initEventBus } from '@/utils/event-bus';
 import { initLogger } from '@/utils/logger';
+import { parseEnvBoolean, setRuntimeRouter } from '@/utils/runtime-context';
 import { initTaktThemeDom } from '@/utils/theme';
-import { applySettings } from '@/utils/apply-settings';
-import { ensureTaktPaginationConfigAsync } from '@/config/takt-pagination';
-import { useSettingStore } from '@/stores/common/setting';
-import { useLocaleStore } from '@/stores/foundation/locale';
 import 'ant-design-vue/dist/reset.css';
 import 'flag-icons/css/flag-icons.min.css';
 import './styles/global.css';
 
+setRuntimeRouter(router);
 initTaktThemeDom();
-/**
- * 解析布尔型环境变量
- * @param value 环境变量字符串
- * @param defaultValue 默认值
- */
-function parseEnvBoolean(value: string | undefined, defaultValue: boolean): boolean {
-  if (value === undefined || value === '') {
-    return defaultValue;
-  }
-  return value === 'true' || value === '1';
-}
 
 /**
  * 注册 PWA Service Worker（仅当 VITE_PWA_ENABLED 且构建已启用 vite-plugin-pwa）
@@ -66,13 +54,13 @@ async function registerPwaServiceWorker(): Promise<void> {
 void registerPwaServiceWorker();
 
 const app = createApp(App);
-
 const pinia = createPinia();
 
 app.use(pinia);
 
 useSettingStore();
 applySettings();
+
 const userStore = useUserStore();
 const tenantStore = useTenantStore();
 if (userStore.isLoggedIn) {
@@ -81,23 +69,25 @@ if (userStore.isLoggedIn) {
 if (tenantStore.tenantCode?.trim()) {
   await ensureTaktPaginationConfigAsync();
 }
+
 const isLoginEntryPath =
   typeof window !== 'undefined'
   && (window.location.pathname === '/login' || window.location.pathname.startsWith('/login/'));
 if (!isLoginEntryPath) {
   useLocaleStore().initLocaleFromStorage();
 }
+
 app.use(router);
 app.use(i18n);
 app.use(Antd);
-app.use(formCreate);
-installFcDesigner(app);
+app.use(FcDesigner);
+app.use(FcDesigner.formCreate);
 
 registerTaktEventHandlers();
 initTaktIdleSession();
 registerPermissionDirective(app);
 initEventBus();
-// 全局日志：main 中 initLogger 初始化；logger / createLogger 由 auto-import 注入
 initLogger(app, undefined, router);
+initTaktClientPerformanceMonitor();
 
 app.mount('#app');

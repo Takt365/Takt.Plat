@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.CustomerService
 // 文件名称：TaktServiceContractService.cs
-// 创建时间：2026-06-16
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：服务合同应用服务实现
 // 
@@ -474,6 +474,35 @@ public class TaktServiceContractService : TaktServiceBase, ITaktServiceContractS
             await _serviceRequestRepository.CreateRangeAsync(servicerequests);
         }
     }
+
+    /// <summary>
+    /// 获取服务合同统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>服务合同统计</returns>
+    public async Task<TaktServiceContractStatDto> GetServiceContractStatAsync(TaktServiceContractStatQueryDto queryDto)
+    {
+        EnsureThreeLayerContext();
+        var (start, end, statMonth) = TaktStatMonthRangeHelper.ResolveMonthRange(
+            queryDto.EffectiveDateStart,
+            queryDto.EffectiveDateEnd);
+        var tenantCode = CurrentTenantCode;
+        var companyCode = CurrentCompanyCode;
+        Expression<Func<TaktServiceContract, bool>> predicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.EffectiveDate >= start
+            && x.EffectiveDate <= end;
+        var monthContractCount = await _serviceContractRepository.CountAsync(predicate);
+        var monthContractAmount = await _serviceContractRepository.SumAsync(x => x.ContractAmount, predicate);
+        return new TaktServiceContractStatDto
+        {
+            StatMonth = statMonth,
+            MonthContractCount = monthContractCount,
+            MonthContractAmount = monthContractAmount,
+        };
+    }
+
     // ========================================
     // 查询表达式
     // ========================================

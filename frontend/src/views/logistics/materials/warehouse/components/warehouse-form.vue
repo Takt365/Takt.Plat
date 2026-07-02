@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/materials/warehouse/components -->
 <!-- 文件名称：warehouse-form.vue -->
-<!-- 功能描述：Takt仓库主数据实体维护弹窗内嵌表单。由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：Takt仓库主数据实体维护弹窗内嵌表单（上主下从级联保存）。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -10,7 +10,7 @@
 <template>
   <a-form
     ref="formRef"
-    class="takt-generated-form"
+    class="takt-generated-form warehouse-form flex flex-col min-h-0"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -93,7 +93,7 @@
                   v-model:value="formState.warehouseCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.warehouse.code') })"
                   show-count
-                  :maxlength="50"
+                  :maxlength="4"
                   allow-clear
                   :disabled="!!formData?.warehouseId"
                 />
@@ -108,7 +108,7 @@
                   v-model:value="formState.warehouseName"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.warehouse.name') })"
                   show-count
-                  :maxlength="100"
+                  :maxlength="80"
                   allow-clear
                 />
               </a-form-item>
@@ -122,7 +122,7 @@
                   v-model:value="formState.warehouseShortName"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.warehouse.shortname') })"
                   show-count
-                  :maxlength="50"
+                  :maxlength="40"
                   allow-clear
                 />
               </a-form-item>
@@ -209,10 +209,10 @@
                 :label="t('entity.warehouse.type')"
                 name="warehouseType"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.warehouseType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.warehouse.type') })"
-                  style="width: 100%"
+                  dict-type="logistics_warehouse_type"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.warehouse.type') })"
                 />
               </a-form-item>
             </a-col>
@@ -285,12 +285,24 @@
         </div>
       </a-tab-pane>
     </a-tabs>
+    <!-- 下：子表 storageLocations -->
+    <TaktEditableTable
+      ref="storageLocationTableRef"
+      v-model="childStorageLocationRows"
+      :columns="storageLocationFormColumns"
+      :title="t('entity.storagelocation._self')"
+      :add-button-entity="t('entity.storagelocation._self')"
+      id-field="storageLocationId"
+      :default-row="createDefaultStorageLocationRow"
+      :disabled="loading"
+      section-border
+    />
   </a-form>
 </template>
 
 <script setup lang="ts">
 /**
- * Takt仓库主数据实体维护表单 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
+ * Takt仓库主数据实体维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/materials/warehouse/components
  */
 import { reactive, watch, computed, ref, onMounted } from 'vue'
@@ -334,6 +346,103 @@ const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
 const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","warehouseCode","warehouseName","warehouseShortName","address","contactPerson","contactPhone","managerUserCode","isVirtual","warehouseType","warehouseStatus","isBuiltIn","extField","remark"]
 
+import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+
+const childStorageLocationRows = ref<Record<string, unknown>[]>([])
+const storageLocationTableRef = ref<{
+  getRows: () => Record<string, unknown>[]
+  validate: () => Promise<unknown>
+  resetRows: () => void
+} | null>(null)
+
+/** 子表 storageLocation 可编辑列 */
+const storageLocationFormColumns = computed<TaktEditableTableColumn[]>(() => [
+  {
+    key: 'plantCode',
+    title: t('entity.storagelocation.plantcode'),
+    editor: 'input',
+    width: 140,
+  },
+  {
+    key: 'locationCode',
+    title: t('entity.storagelocation.locationcode'),
+    editor: 'input',
+    width: 140,
+  },
+  {
+    key: 'locationName',
+    title: t('entity.storagelocation.locationname'),
+    editor: 'input',
+    width: 140,
+  },
+  {
+    key: 'locationType',
+    title: t('entity.storagelocation.locationtype'),
+    editor: 'inputNumber',
+    width: 140,
+  },
+  {
+    key: 'locationStatus',
+    title: t('entity.storagelocation.locationstatus'),
+    editor: 'inputNumber',
+    width: 140,
+  },
+  {
+    key: 'isBuiltIn',
+    title: t('entity.storagelocation.isbuiltin'),
+    editor: 'inputNumber',
+    width: 140,
+  },
+  {
+    key: 'extField',
+    title: t('common.page.entity.extfield'),
+    editor: 'textarea',
+    rows: 2,
+    placeholder: t('common.page.form.placeholder.optional', { field: t('common.page.entity.extfield') }),
+    width: 140,
+  },
+  {
+    key: 'remark',
+    title: t('common.page.entity.remark'),
+    editor: 'textarea',
+    rows: 2,
+    placeholder: t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') }),
+    width: 140,
+  },
+])
+
+/** 编辑态从 formData 同步各子表行 */
+function syncChildRowsFromFormData(val: Partial<WarehouseCreate & { warehouseId?: string }> | null | undefined) {
+  childStorageLocationRows.value = ((val as any)?.storageLocations ?? []) as Record<string, unknown>[]
+}
+
+function createDefaultStorageLocationRow(): Record<string, unknown> {
+  return {
+    plantCode: '',
+    locationCode: '',
+    locationName: '',
+    locationType: 0,
+    locationStatus: 0,
+    isBuiltIn: 0,
+    extField: '',
+    remark: '',
+  }
+}
+
+/** 组装 Create/Update 载荷（主表 + 子表数组） */
+function buildSubmitPayload() {
+  const masterId = props.formData?.warehouseId ?? ''
+  return {
+    ...formState,
+    storageLocations: storageLocationTableRef.value?.getRows?.() ?? childStorageLocationRows.value.map((rest) => ({
+      ...rest,
+      tenantCode: tenantStore.tenantCode,
+      companyCode: tenantStore.companyCode,
+      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+      warehouseId: masterId,
+    })),
+  }
+}
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -377,9 +486,10 @@ watch(
     if (val?.warehouseId) {
       const next = { ...val } as Record<string, unknown>
       Object.keys(formState).forEach((k) => delete formState[k])
-
+    delete (next as any).storageLocations
       applyScopeDefaults(next)
       Object.assign(formState, next)
+    syncChildRowsFromFormData(val)
       formRef.value?.clearValidate()
     } else {
       Object.keys(formState).forEach((k) => delete formState[k])
@@ -485,12 +595,13 @@ const rules = computed<Record<string, Rule[]>>(() => ({
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
 async function validate() {
   await formRef.value?.validate()
+  await storageLocationTableRef.value?.validate?.()
   return formState
 }
 
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
-  const payload = { ...formState }
+  const payload = buildSubmitPayload() as Record<string, unknown>
   if ('isVirtual' in payload) {
     const rawisVirtual = payload.isVirtual
     payload.isVirtual = typeof rawisVirtual === 'number' ? rawisVirtual : Number(rawisVirtual)
@@ -519,7 +630,8 @@ function resetFields() {
   }
   applyFormDefaults(formState)
   applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.warehouseId)
-
+  childStorageLocationRows.value = []
+  storageLocationTableRef.value?.resetRows?.()
   activeTab.value = 'tab-0'
   formRef.value?.clearValidate()
 }

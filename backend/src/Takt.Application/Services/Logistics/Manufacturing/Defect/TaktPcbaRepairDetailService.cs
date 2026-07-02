@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Defect
 // 文件名称：TaktPcbaRepairDetailService.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-30
 // 创建人：Takt365(Cursor AI)
 // 功能描述：PCBA改修明细应用服务实现
 // 
@@ -340,7 +340,7 @@ public class TaktPcbaRepairDetailService : TaktServiceBase, ITaktPcbaRepairDetai
                 || SqlFunc.ToString(x.LineNumber).Contains(keywords)
                 || (x.PcbaBoardType != null && x.PcbaBoardType.Contains(keywords))
                 || SqlFunc.ToString(x.ProdActualQty).Contains(keywords)
-                || (x.ProdLine != null && x.ProdLine.Contains(keywords))
+                || (x.ProdTeam != null && x.ProdTeam.Contains(keywords))
                 || (x.CardNo != null && x.CardNo.Contains(keywords))
                 || (x.DefectSymptom != null && x.DefectSymptom.Contains(keywords))
                 || (x.DefectEngineering != null && x.DefectEngineering.Contains(keywords))
@@ -380,9 +380,9 @@ public class TaktPcbaRepairDetailService : TaktServiceBase, ITaktPcbaRepairDetai
             exp = exp.And(x => x.ProdActualQty == queryDto.ProdActualQty);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ProdLine))
+        if (!string.IsNullOrEmpty(queryDto?.ProdTeam))
         {
-            exp = exp.And(x => x.ProdLine != null && x.ProdLine.Contains(queryDto.ProdLine));
+            exp = exp.And(x => x.ProdTeam != null && x.ProdTeam.Contains(queryDto.ProdTeam));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.CardNo))

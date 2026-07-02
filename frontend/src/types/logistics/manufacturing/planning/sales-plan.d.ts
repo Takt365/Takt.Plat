@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/planning
 // 文件名称：sales-plan.d.ts
-// 创建时间：2026-06-20
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/planning 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -104,7 +104,7 @@ export interface SalesPlan extends ApprovalDtoBase {
   planStatus: number;
 
   /**
-   * 转单状态（0=未转单，1=部分转单，2=全部转单）
+   * 转单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
    */
   convertedStatus: number;
 
@@ -224,7 +224,7 @@ export interface SalesPlanQuery extends TaktPagedQuery {
   planStatus?: number;
 
   /**
-   * 转单状态（0=未转单，1=部分转单，2=全部转单）
+   * 转单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
    */
   convertedStatus?: number;
 
@@ -234,7 +234,7 @@ export interface SalesPlanQuery extends TaktPagedQuery {
   planDescription?: string;
 
   /**
-   * 审批状态（TaktApprovalStatus）
+   * 审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）
    */
   approvalStatus?: number;
 
@@ -313,7 +313,7 @@ export interface SalesPlanCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -388,7 +388,7 @@ export interface SalesPlanCreate {
   planStatus: number;
 
   /**
-   * 转单状态（0=未转单，1=部分转单，2=全部转单）
+   * 转单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
    */
   convertedStatus: number;
 
@@ -476,6 +476,21 @@ export interface SalesPlanTemplate {
   salesPlanCode?: string;
 
   /**
+   * 计划编制日期
+   */
+  planDate?: string;
+
+  /**
+   * 计划周期开始日期
+   */
+  planPeriodStart?: string;
+
+  /**
+   * 计划周期结束日期
+   */
+  planPeriodEnd?: string;
+
+  /**
    * 客户编码（可选；汇总计划时为空，关联 TaktCustomer.CustomerCode）
    */
   customerCode?: string;
@@ -496,12 +511,32 @@ export interface SalesPlanTemplate {
   planBy?: string;
 
   /**
+   * 计划总数量（基本单位数量）
+   */
+  totalQuantity?: number;
+
+  /**
+   * 计划总金额
+   */
+  totalAmount?: number;
+
+  /**
+   * 已转生产/销售数量（基本单位数量）
+   */
+  convertedQuantity?: number;
+
+  /**
+   * 已转生产/销售金额
+   */
+  convertedAmount?: number;
+
+  /**
    * 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   planStatus?: number;
 
   /**
-   * 转单状态（0=未转单，1=部分转单，2=全部转单）
+   * 转单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
    */
   convertedStatus?: number;
 
@@ -509,6 +544,11 @@ export interface SalesPlanTemplate {
    * 计划说明
    */
   planDescription?: string;
+
+  /**
+   * 销售计划明细列表（主子表关系）（子表，级联保存）
+   */
+  items?: SalesPlanItemCreate[];
 
   /**
    * 扩展字段JSON
@@ -540,7 +580,7 @@ export interface SalesPlanImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -553,6 +593,21 @@ export interface SalesPlanImport {
    * 销售计划编码（租户+公司+工厂内业务唯一）
    */
   salesPlanCode?: string;
+
+  /**
+   * 计划编制日期
+   */
+  planDate?: string;
+
+  /**
+   * 计划周期开始日期
+   */
+  planPeriodStart?: string;
+
+  /**
+   * 计划周期结束日期
+   */
+  planPeriodEnd?: string;
 
   /**
    * 客户编码（可选；汇总计划时为空，关联 TaktCustomer.CustomerCode）
@@ -575,12 +630,32 @@ export interface SalesPlanImport {
   planBy?: string;
 
   /**
+   * 计划总数量（基本单位数量）
+   */
+  totalQuantity?: number;
+
+  /**
+   * 计划总金额
+   */
+  totalAmount?: number;
+
+  /**
+   * 已转生产/销售数量（基本单位数量）
+   */
+  convertedQuantity?: number;
+
+  /**
+   * 已转生产/销售金额
+   */
+  convertedAmount?: number;
+
+  /**
    * 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   planStatus?: number;
 
   /**
-   * 转单状态（0=未转单，1=部分转单，2=全部转单）
+   * 转单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
    */
   convertedStatus?: number;
 
@@ -588,6 +663,11 @@ export interface SalesPlanImport {
    * 计划说明
    */
   planDescription?: string;
+
+  /**
+   * 销售计划明细列表（主子表关系）（子表，级联保存）
+   */
+  items?: SalesPlanItemCreate[];
 
   /**
    * 扩展字段JSON
@@ -684,7 +764,7 @@ export interface SalesPlanExport {
   planStatus: number;
 
   /**
-   * 转单状态（0=未转单，1=部分转单，2=全部转单）
+   * 转单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
    */
   convertedStatus: number;
 

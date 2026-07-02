@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/output
 // 文件名称：production-order.d.ts
-// 创建时间：2026-06-20
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/output 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -34,7 +34,7 @@ export interface ProductionOrder extends CompanyDtoBase {
   plantCode: string;
 
   /**
-   * 生产工单类型 ZDTA=製造指図：DTA通常生産 ZDTB=製造指図：DTA改造改修 ZDTC=製造指図：DTA開発試作 ZDTD=製造指図：DTA通常生産 PCBA ZDTE=製造指図：DTA改造改修 PCBA ZDTF=製造指図：DTA開発試作 PCBA
+   * 生产工单类型（字典 logistics_prod_order_type，存 DictValue）
    */
   prodOrderType: string;
 
@@ -44,7 +44,7 @@ export interface ProductionOrder extends CompanyDtoBase {
   prodOrderCode: string;
 
   /**
-   * 物料编码
+   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
    */
   materialCode: string;
 
@@ -74,19 +74,14 @@ export interface ProductionOrder extends CompanyDtoBase {
   actualEndDate?: string;
 
   /**
-   * 优先级（1=低，2=中，3=高，4=紧急）
+   * 优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）
    */
   priority: number;
 
   /**
-   * 工作中心
+   * 工作中心（选项 TaktWorkCenters/options，存 WorkCenterCode，ExtValue=PlantCode 过滤）
    */
   workCenter?: string;
-
-  /**
-   * 生产线
-   */
-  prodLine?: string;
 
   /**
    * 生产批次
@@ -104,9 +99,44 @@ export interface ProductionOrder extends CompanyDtoBase {
   routingCode?: string;
 
   /**
-   * 状态（0=正常，1=生产中，2=已完成）
+   * 来源计划订单 ID（选项 TaktPlannedOrders/options，ExtValue=PlantCode）
    */
-  status: number;
+  plannedOrderId?: string;
+
+  /**
+   * 来源计划订单 名称（填充字段）
+   */
+  plannedOrderName?: string;
+
+  /**
+   * 来源 APS 订单 ID（选项 TaktApsOrders/options，ExtValue=PlantCode，ExtLabel=PlannedOrderId）
+   */
+  apsOrderId?: string;
+
+  /**
+   * 来源 APS 订单 名称（填充字段）
+   */
+  apsOrderName?: string;
+
+  /**
+   * 计划开工时间
+   */
+  plannedStartTime: string;
+
+  /**
+   * 计划完工时间
+   */
+  plannedEndTime: string;
+
+  /**
+   * 状态（字典 logistics_prod_status：1=进行中，2=已完成）
+   */
+  productionOrderStatus: number;
+
+  /**
+   * 生产工单变更记录列表（外键在子表 TaktProductionOrderChangeLog.ProductionOrderId） （子表：TaktProductionOrderChangeLog）
+   */
+  changeLogs?: ProductionOrderChangeLog[];
 
 }
 
@@ -134,7 +164,7 @@ export interface ProductionOrderQuery extends TaktPagedQuery {
   plantCode?: string;
 
   /**
-   * 生产工单类型 ZDTA=製造指図：DTA通常生産 ZDTB=製造指図：DTA改造改修 ZDTC=製造指図：DTA開発試作 ZDTD=製造指図：DTA通常生産 PCBA ZDTE=製造指図：DTA改造改修 PCBA ZDTF=製造指図：DTA開発試作 PCBA
+   * 生产工单类型（字典 logistics_prod_order_type，存 DictValue）
    */
   prodOrderType?: string;
 
@@ -144,7 +174,7 @@ export interface ProductionOrderQuery extends TaktPagedQuery {
   prodOrderCode?: string;
 
   /**
-   * 物料编码
+   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
    */
   materialCode?: string;
 
@@ -184,19 +214,14 @@ export interface ProductionOrderQuery extends TaktPagedQuery {
   actualEndDateEnd?: string;
 
   /**
-   * 优先级（1=低，2=中，3=高，4=紧急）
+   * 优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）
    */
   priority?: number;
 
   /**
-   * 工作中心
+   * 工作中心（选项 TaktWorkCenters/options，存 WorkCenterCode，ExtValue=PlantCode 过滤）
    */
   workCenter?: string;
-
-  /**
-   * 生产线
-   */
-  prodLine?: string;
 
   /**
    * 生产批次
@@ -214,9 +239,39 @@ export interface ProductionOrderQuery extends TaktPagedQuery {
   routingCode?: string;
 
   /**
-   * 状态（0=正常，1=生产中，2=已完成）
+   * 来源计划订单 ID（选项 TaktPlannedOrders/options，ExtValue=PlantCode）
    */
-  status?: number;
+  plannedOrderId?: string;
+
+  /**
+   * 来源 APS 订单 ID（选项 TaktApsOrders/options，ExtValue=PlantCode，ExtLabel=PlannedOrderId）
+   */
+  apsOrderId?: string;
+
+  /**
+   * 计划开工时间（范围查询-开始）
+   */
+  plannedStartTimeStart?: string;
+
+  /**
+   * 计划开工时间（范围查询-结束）
+   */
+  plannedStartTimeEnd?: string;
+
+  /**
+   * 计划完工时间（范围查询-开始）
+   */
+  plannedEndTimeStart?: string;
+
+  /**
+   * 计划完工时间（范围查询-结束）
+   */
+  plannedEndTimeEnd?: string;
+
+  /**
+   * 状态（字典 logistics_prod_status：1=进行中，2=已完成）
+   */
+  productionOrderStatus?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -258,7 +313,7 @@ export interface ProductionOrderCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -268,7 +323,7 @@ export interface ProductionOrderCreate {
   plantCode: string;
 
   /**
-   * 生产工单类型 ZDTA=製造指図：DTA通常生産 ZDTB=製造指図：DTA改造改修 ZDTC=製造指図：DTA開発試作 ZDTD=製造指図：DTA通常生産 PCBA ZDTE=製造指図：DTA改造改修 PCBA ZDTF=製造指図：DTA開発試作 PCBA
+   * 生产工单类型（字典 logistics_prod_order_type，存 DictValue）
    */
   prodOrderType: string;
 
@@ -278,7 +333,7 @@ export interface ProductionOrderCreate {
   prodOrderCode: string;
 
   /**
-   * 物料编码
+   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
    */
   materialCode: string;
 
@@ -308,19 +363,14 @@ export interface ProductionOrderCreate {
   actualEndDate?: string;
 
   /**
-   * 优先级（1=低，2=中，3=高，4=紧急）
+   * 优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）
    */
   priority: number;
 
   /**
-   * 工作中心
+   * 工作中心（选项 TaktWorkCenters/options，存 WorkCenterCode，ExtValue=PlantCode 过滤）
    */
   workCenter?: string;
-
-  /**
-   * 生产线
-   */
-  prodLine?: string;
 
   /**
    * 生产批次
@@ -338,9 +388,34 @@ export interface ProductionOrderCreate {
   routingCode?: string;
 
   /**
-   * 状态（0=正常，1=生产中，2=已完成）
+   * 来源计划订单 ID（选项 TaktPlannedOrders/options，ExtValue=PlantCode）
    */
-  status: number;
+  plannedOrderId?: string;
+
+  /**
+   * 来源 APS 订单 ID（选项 TaktApsOrders/options，ExtValue=PlantCode，ExtLabel=PlannedOrderId）
+   */
+  apsOrderId?: string;
+
+  /**
+   * 计划开工时间
+   */
+  plannedStartTime: string;
+
+  /**
+   * 计划完工时间
+   */
+  plannedEndTime: string;
+
+  /**
+   * 状态（字典 logistics_prod_status：1=进行中，2=已完成）
+   */
+  productionOrderStatus: number;
+
+  /**
+   * 生产工单变更记录列表（外键在子表 TaktProductionOrderChangeLog.ProductionOrderId）（子表，级联保存）
+   */
+  changeLogs?: ProductionOrderChangeLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -382,9 +457,9 @@ export interface ProductionOrderStatus {
   productionOrderId: string;
 
   /**
-   * 状态（0=正常，1=生产中，2=已完成）
+   * 状态（字典 logistics_prod_status：1=进行中，2=已完成）
    */
-  status: number;
+  productionOrderStatus: number;
 
 }
 
@@ -411,7 +486,7 @@ export interface ProductionOrderTemplate {
   plantCode?: string;
 
   /**
-   * 生产工单类型 ZDTA=製造指図：DTA通常生産 ZDTB=製造指図：DTA改造改修 ZDTC=製造指図：DTA開発試作 ZDTD=製造指図：DTA通常生産 PCBA ZDTE=製造指図：DTA改造改修 PCBA ZDTF=製造指図：DTA開発試作 PCBA
+   * 生产工单类型（字典 logistics_prod_order_type，存 DictValue）
    */
   prodOrderType?: string;
 
@@ -421,9 +496,19 @@ export interface ProductionOrderTemplate {
   prodOrderCode?: string;
 
   /**
-   * 物料编码
+   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
    */
   materialCode?: string;
+
+  /**
+   * 生产工单数量
+   */
+  prodOrderQty?: number;
+
+  /**
+   * 已生产数量
+   */
+  producedQty?: number;
 
   /**
    * 计量单位
@@ -431,19 +516,24 @@ export interface ProductionOrderTemplate {
   unitOfMeasure?: string;
 
   /**
-   * 优先级（1=低，2=中，3=高，4=紧急）
+   * 实际开始日期
+   */
+  actualStartDate?: string;
+
+  /**
+   * 实际完成日期
+   */
+  actualEndDate?: string;
+
+  /**
+   * 优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）
    */
   priority?: number;
 
   /**
-   * 工作中心
+   * 工作中心（选项 TaktWorkCenters/options，存 WorkCenterCode，ExtValue=PlantCode 过滤）
    */
   workCenter?: string;
-
-  /**
-   * 生产线
-   */
-  prodLine?: string;
 
   /**
    * 生产批次
@@ -461,9 +551,34 @@ export interface ProductionOrderTemplate {
   routingCode?: string;
 
   /**
-   * 状态（0=正常，1=生产中，2=已完成）
+   * 来源计划订单 ID（选项 TaktPlannedOrders/options，ExtValue=PlantCode）
    */
-  status?: number;
+  plannedOrderId?: string;
+
+  /**
+   * 来源 APS 订单 ID（选项 TaktApsOrders/options，ExtValue=PlantCode，ExtLabel=PlannedOrderId）
+   */
+  apsOrderId?: string;
+
+  /**
+   * 计划开工时间
+   */
+  plannedStartTime: string;
+
+  /**
+   * 计划完工时间
+   */
+  plannedEndTime: string;
+
+  /**
+   * 状态（字典 logistics_prod_status：1=进行中，2=已完成）
+   */
+  productionOrderStatus?: number;
+
+  /**
+   * 生产工单变更记录列表（外键在子表 TaktProductionOrderChangeLog.ProductionOrderId）（子表，级联保存）
+   */
+  changeLogs?: ProductionOrderChangeLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -495,7 +610,7 @@ export interface ProductionOrderImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -505,7 +620,7 @@ export interface ProductionOrderImport {
   plantCode?: string;
 
   /**
-   * 生产工单类型 ZDTA=製造指図：DTA通常生産 ZDTB=製造指図：DTA改造改修 ZDTC=製造指図：DTA開発試作 ZDTD=製造指図：DTA通常生産 PCBA ZDTE=製造指図：DTA改造改修 PCBA ZDTF=製造指図：DTA開発試作 PCBA
+   * 生产工单类型（字典 logistics_prod_order_type，存 DictValue）
    */
   prodOrderType?: string;
 
@@ -515,9 +630,19 @@ export interface ProductionOrderImport {
   prodOrderCode?: string;
 
   /**
-   * 物料编码
+   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
    */
   materialCode?: string;
+
+  /**
+   * 生产工单数量
+   */
+  prodOrderQty?: number;
+
+  /**
+   * 已生产数量
+   */
+  producedQty?: number;
 
   /**
    * 计量单位
@@ -525,19 +650,24 @@ export interface ProductionOrderImport {
   unitOfMeasure?: string;
 
   /**
-   * 优先级（1=低，2=中，3=高，4=紧急）
+   * 实际开始日期
+   */
+  actualStartDate?: string;
+
+  /**
+   * 实际完成日期
+   */
+  actualEndDate?: string;
+
+  /**
+   * 优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）
    */
   priority?: number;
 
   /**
-   * 工作中心
+   * 工作中心（选项 TaktWorkCenters/options，存 WorkCenterCode，ExtValue=PlantCode 过滤）
    */
   workCenter?: string;
-
-  /**
-   * 生产线
-   */
-  prodLine?: string;
 
   /**
    * 生产批次
@@ -555,9 +685,34 @@ export interface ProductionOrderImport {
   routingCode?: string;
 
   /**
-   * 状态（0=正常，1=生产中，2=已完成）
+   * 来源计划订单 ID（选项 TaktPlannedOrders/options，ExtValue=PlantCode）
    */
-  status?: number;
+  plannedOrderId?: string;
+
+  /**
+   * 来源 APS 订单 ID（选项 TaktApsOrders/options，ExtValue=PlantCode，ExtLabel=PlannedOrderId）
+   */
+  apsOrderId?: string;
+
+  /**
+   * 计划开工时间
+   */
+  plannedStartTime: string;
+
+  /**
+   * 计划完工时间
+   */
+  plannedEndTime: string;
+
+  /**
+   * 状态（字典 logistics_prod_status：1=进行中，2=已完成）
+   */
+  productionOrderStatus?: number;
+
+  /**
+   * 生产工单变更记录列表（外键在子表 TaktProductionOrderChangeLog.ProductionOrderId）（子表，级联保存）
+   */
+  changeLogs?: ProductionOrderChangeLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -594,7 +749,7 @@ export interface ProductionOrderExport {
   plantCode: string;
 
   /**
-   * 生产工单类型 ZDTA=製造指図：DTA通常生産 ZDTB=製造指図：DTA改造改修 ZDTC=製造指図：DTA開発試作 ZDTD=製造指図：DTA通常生産 PCBA ZDTE=製造指図：DTA改造改修 PCBA ZDTF=製造指図：DTA開発試作 PCBA
+   * 生产工单类型（字典 logistics_prod_order_type，存 DictValue）
    */
   prodOrderType: string;
 
@@ -604,7 +759,7 @@ export interface ProductionOrderExport {
   prodOrderCode: string;
 
   /**
-   * 物料编码
+   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
    */
   materialCode: string;
 
@@ -634,19 +789,14 @@ export interface ProductionOrderExport {
   actualEndDate?: string;
 
   /**
-   * 优先级（1=低，2=中，3=高，4=紧急）
+   * 优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）
    */
   priority: number;
 
   /**
-   * 工作中心
+   * 工作中心（选项 TaktWorkCenters/options，存 WorkCenterCode，ExtValue=PlantCode 过滤）
    */
   workCenter?: string;
-
-  /**
-   * 生产线
-   */
-  prodLine?: string;
 
   /**
    * 生产批次
@@ -664,9 +814,29 @@ export interface ProductionOrderExport {
   routingCode?: string;
 
   /**
-   * 状态（0=正常，1=生产中，2=已完成）
+   * 来源计划订单 ID（选项 TaktPlannedOrders/options，ExtValue=PlantCode）
    */
-  status: number;
+  plannedOrderId?: string;
+
+  /**
+   * 来源 APS 订单 ID（选项 TaktApsOrders/options，ExtValue=PlantCode，ExtLabel=PlannedOrderId）
+   */
+  apsOrderId?: string;
+
+  /**
+   * 计划开工时间
+   */
+  plannedStartTime: string;
+
+  /**
+   * 计划完工时间
+   */
+  plannedEndTime: string;
+
+  /**
+   * 状态（字典 logistics_prod_status：1=进行中，2=已完成）
+   */
+  productionOrderStatus: number;
 
   /**
    * 扩展字段JSON

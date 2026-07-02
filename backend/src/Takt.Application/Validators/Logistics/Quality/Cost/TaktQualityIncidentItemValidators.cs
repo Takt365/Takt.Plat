@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Quality.Cost
 // 文件名称：TaktQualityIncidentItemValidators.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：QualityIncidentItem 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktQualityIncidentItem 生成，请按需审阅）
 // 
@@ -36,7 +36,7 @@ public class TaktQualityIncidentItemCreateValidator : AbstractValidator<TaktQual
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.QualityIncidentId)
-            .GreaterThanOrEqualTo(0).WithMessage("品质事故主表ID不能为负数");
+            .GreaterThanOrEqualTo(0).WithMessage("品质事故主表 ID不能为负数");
         RuleFor(x => x.QualityIncidentCode)
             .NotEmpty().WithMessage("品质事故编码不能为空")
             .MaximumLength(30).WithMessage("品质事故编码长度不能超过30个字符");
@@ -69,6 +69,27 @@ public class TaktQualityIncidentItemUpdateValidator : AbstractValidator<TaktQual
     {
         RuleFor(x => x.QualityIncidentItemId)
             .GreaterThan(0).WithMessage("QualityIncidentItemID无效");
+        RuleFor(x => x.TenantCode)
+            .NotEmpty().WithMessage("租户编码不能为空")
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.CompanyCode)
+            .NotEmpty().WithMessage("公司代码不能为空")
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.QualityIncidentId)
+            .GreaterThanOrEqualTo(0).WithMessage("品质事故主表 ID不能为负数");
+        RuleFor(x => x.QualityIncidentCode)
+            .NotEmpty().WithMessage("品质事故编码不能为空")
+            .MaximumLength(30).WithMessage("品质事故编码长度不能超过30个字符");
+        RuleFor(x => x.MaterialCode)
+            .NotEmpty().WithMessage("物料编码不能为空")
+            .MaximumLength(20).WithMessage("物料编码长度不能超过20个字符");
+        RuleFor(x => x.MaterialName)
+            .NotEmpty().WithMessage("物料名称不能为空")
+            .MaximumLength(40).WithMessage("物料名称长度不能超过40个字符");
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
     }
 }
 
@@ -91,7 +112,7 @@ public class TaktQualityIncidentItemImportValidator : AbstractValidator<TaktQual
         RuleFor(x => x.CompanyCode)
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
         RuleFor(x => x.QualityIncidentId)
-            .GreaterThanOrEqualTo(0).WithMessage("品质事故主表ID不能为负数");
+            .GreaterThanOrEqualTo(0).WithMessage("品质事故主表 ID不能为负数");
         RuleFor(x => x.QualityIncidentCode)
             .NotEmpty().WithMessage("品质事故编码不能为空")
             .MaximumLength(30).WithMessage("品质事故编码长度不能超过30个字符");

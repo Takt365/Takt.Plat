@@ -144,12 +144,10 @@
                 :label="t('entity.materialplant.industrysector')"
                 name="industrySector"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.industrySector"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.industrysector') })"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
+                  dict-type="logistics_industry_sector"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplant.industrysector') })"
                 />
               </a-form-item>
             </a-col>
@@ -179,16 +177,15 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.materialplant.materialgroupcode')"
-                name="materialGroupCode"
+                :label="t('entity.materialplant.materialgroup')"
+                name="materialGroup"
               >
                 <a-input
-                  v-model:value="formState.materialGroupCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.materialgroupcode') })"
+                  v-model:value="formState.materialGroup"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.materialgroup') })"
                   show-count
                   :maxlength="20"
                   allow-clear
-                  :disabled="!!formData?.materialPlantId"
                 />
               </a-form-item>
             </a-col>
@@ -197,38 +194,10 @@
                 :label="t('entity.materialplant.materialtype')"
                 name="materialType"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.materialType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.materialtype') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.materialplant.materialmodel')"
-                name="materialModel"
-              >
-                <a-input
-                  v-model:value="formState.materialModel"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.materialmodel') })"
-                  show-count
-                  :maxlength="100"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.materialplant.materialbrand')"
-                name="materialBrand"
-              >
-                <a-input
-                  v-model:value="formState.materialBrand"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.materialbrand') })"
-                  show-count
-                  :maxlength="100"
-                  allow-clear
+                  dict-type="logistics_material_type"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplant.materialtype') })"
                 />
               </a-form-item>
             </a-col>
@@ -237,12 +206,10 @@
                 :label="t('entity.materialplant.baseunit')"
                 name="baseUnit"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.baseUnit"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.baseunit') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  dict-type="logistics_unit_of_measure_code"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplant.baseunit') })"
                 />
               </a-form-item>
             </a-col>
@@ -255,7 +222,7 @@
                   v-model:value="formState.purchaseGroup"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.purchasegroup') })"
                   show-count
-                  :maxlength="50"
+                  :maxlength="3"
                   allow-clear
                 />
               </a-form-item>
@@ -265,10 +232,10 @@
                 :label="t('entity.materialplant.purchasetype')"
                 name="purchaseType"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.purchaseType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.purchasetype') })"
-                  style="width: 100%"
+                  dict-type="logistics_procurement_type"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplant.purchasetype') })"
                 />
               </a-form-item>
             </a-col>
@@ -277,10 +244,10 @@
                 :label="t('entity.materialplant.specialprocurement')"
                 name="specialProcurement"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.specialProcurement"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.specialprocurement') })"
-                  style="width: 100%"
+                  dict-type="logistics_special_procurement_type"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplant.specialprocurement') })"
                 />
               </a-form-item>
             </a-col>
@@ -289,10 +256,10 @@
                 :label="t('entity.materialplant.isbulk')"
                 name="isBulk"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.isBulk"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.isbulk') })"
-                  style="width: 100%"
+                  dict-type="logistics_bulk_material_type"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplant.isbulk') })"
                 />
               </a-form-item>
             </a-col>
@@ -303,6 +270,9 @@
               >
                 <a-input-number
                   v-model:value="formState.minOrderQuantity"
+                  :min="0"
+                  :precision="0"
+                  :step="1"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.minorderquantity') })"
                   style="width: 100%"
                 />
@@ -325,6 +295,9 @@
               >
                 <a-input-number
                   v-model:value="formState.roundingValue"
+                  :min="0"
+                  :precision="0"
+                  :step="1"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.roundingvalue') })"
                   style="width: 100%"
                 />
@@ -337,6 +310,9 @@
               >
                 <a-input-number
                   v-model:value="formState.plannedDeliveryTimeDays"
+                  :min="0"
+                  :precision="0"
+                  :step="1"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.planneddeliverytimedays') })"
                   style="width: 100%"
                 />
@@ -349,6 +325,9 @@
               >
                 <a-input-number
                   v-model:value="formState.inHouseProductionDays"
+                  :min="0"
+                  :precision="1"
+                  :step="0.5"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.inhouseproductiondays') })"
                   style="width: 100%"
                 />
@@ -370,30 +349,27 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.materialplant.manufacturerpartnumber')"
-                name="manufacturerPartNumber"
+                :label="t('entity.materialplant.manufacturermaterialcode')"
+                name="manufacturerMaterialCode"
               >
-                <a-input
-                  v-model:value="formState.manufacturerPartNumber"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.manufacturerpartnumber') })"
-                  show-count
-                  :maxlength="100"
+                <TaktSelect
+                  v-model:value="formState.manufacturerMaterialCode"
+                  api-url="TaktManufacturerMaterials/options"
+                  :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplant.manufacturermaterialcode') })"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.materialplant.currencycode')"
-                name="currencyCode"
+                :label="t('entity.materialplant.currency')"
+                name="currency"
               >
-                <a-input
-                  v-model:value="formState.currencyCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.currencycode') })"
-                  show-count
-                  :maxlength="10"
-                  allow-clear
-                  :disabled="!!formData?.materialPlantId"
+                <TaktSelect
+                  v-model:value="formState.currency"
+                  dict-type="accounting_currency_code"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplant.currency') })"
                 />
               </a-form-item>
             </a-col>
@@ -402,10 +378,10 @@
                 :label="t('entity.materialplant.pricecontrol')"
                 name="priceControl"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.priceControl"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.pricecontrol') })"
-                  style="width: 100%"
+                  dict-type="logistics_price_control_type"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplant.pricecontrol') })"
                 />
               </a-form-item>
             </a-col>
@@ -414,24 +390,36 @@
                 :label="t('entity.materialplant.priceunit')"
                 name="priceUnit"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.priceUnit"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.priceunit') })"
-                  style="width: 100%"
+                  dict-type="logistics_price_unit_param"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplant.priceunit') })"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.materialplant.valuationcategory')"
-                name="valuationCategory"
+                :label="t('entity.materialplant.valuation')"
+                name="valuation"
               >
-                <a-input
-                  v-model:value="formState.valuationCategory"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.valuationcategory') })"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
+                <TaktSelect
+                  v-model:value="formState.valuation"
+                  dict-type="logistics_valuation_class_category"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplant.valuation') })"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.materialplant.movingprice')"
+                name="movingPrice"
+              >
+                <a-input-number
+                  v-model:value="formState.movingPrice"
+                  :precision="4"
+                  :step="0.0001"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.movingprice') })"
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
@@ -444,7 +432,7 @@
                   v-model:value="formState.differenceCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.differencecode') })"
                   show-count
-                  :maxlength="50"
+                  :maxlength="6"
                   allow-clear
                   :disabled="!!formData?.materialPlantId"
                 />
@@ -469,68 +457,8 @@
                   v-model:value="formState.profitCenter"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.profitcenter') })"
                   show-count
-                  :maxlength="50"
+                  :maxlength="4"
                   allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.materialplant.latestpurchaseprice')"
-                name="latestPurchasePrice"
-              >
-                <a-input-number
-                  v-model:value="formState.latestPurchasePrice"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.latestpurchaseprice') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.materialplant.salesprice')"
-                name="salesPrice"
-              >
-                <a-input-number
-                  v-model:value="formState.salesPrice"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.salesprice') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.materialplant.safetystock')"
-                name="safetyStock"
-              >
-                <a-input-number
-                  v-model:value="formState.safetyStock"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.safetystock') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.materialplant.maxstock')"
-                name="maxStock"
-              >
-                <a-input-number
-                  v-model:value="formState.maxStock"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.maxstock') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.materialplant.minstock')"
-                name="minStock"
-              >
-                <a-input-number
-                  v-model:value="formState.minStock"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.minstock') })"
-                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
@@ -541,6 +469,8 @@
               >
                 <a-input-number
                   v-model:value="formState.currentStock"
+                  :precision="4"
+                  :step="0.0001"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.currentstock') })"
                   style="width: 100%"
                 />
@@ -555,7 +485,7 @@
                   v-model:value="formState.productionLocation"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.productionlocation') })"
                   show-count
-                  :maxlength="50"
+                  :maxlength="4"
                   allow-clear
                 />
               </a-form-item>
@@ -569,20 +499,34 @@
                   v-model:value="formState.purchasingLocation"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.purchasinglocation') })"
                   show-count
-                  :maxlength="50"
+                  :maxlength="4"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.materialplant.inspectionrequired')"
-                name="inspectionRequired"
+                :label="t('entity.materialplant.storagelocation')"
+                name="storageLocation"
               >
-                <a-input-number
-                  v-model:value="formState.inspectionRequired"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.inspectionrequired') })"
-                  style="width: 100%"
+                <a-input
+                  v-model:value="formState.storageLocation"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.storagelocation') })"
+                  show-count
+                  :maxlength="40"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.materialplant.isinspection')"
+                name="isInspection"
+              >
+                <TaktSelect
+                  v-model:value="formState.isInspection"
+                  dict-type="sys_yes_no_type"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplant.isinspection') })"
                 />
               </a-form-item>
             </a-col>
@@ -601,34 +545,22 @@
                 :label="t('entity.materialplant.isbatch')"
                 name="isBatch"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.isBatch"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.isbatch') })"
-                  style="width: 100%"
+                  dict-type="sys_yes_no_type"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplant.isbatch') })"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.materialplant.isexpiry')"
-                name="isExpiry"
+                :label="t('entity.materialplant.isendoflife')"
+                name="isEndOfLife"
               >
-                <a-input-number
-                  v-model:value="formState.isExpiry"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.isexpiry') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.materialplant.expirydays')"
-                name="expiryDays"
-              >
-                <a-input-number
-                  v-model:value="formState.expiryDays"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.expirydays') })"
-                  style="width: 100%"
+                <TaktSelect
+                  v-model:value="formState.isEndOfLife"
+                  dict-type="logistics_material_eol_status"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplant.isendoflife') })"
                 />
               </a-form-item>
             </a-col>
@@ -641,47 +573,6 @@
                   v-model:value="formState.materialStatus"
                   dict-type="sys_normal_disable_status"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplant.materialstatus') })"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.materialplant.materialattributes')"
-                name="materialAttributes"
-              >
-                <a-input
-                  v-model:value="formState.materialAttributes"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.materialattributes') })"
-                  show-count
-                  :maxlength="4000"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.materialplant.isendoflife')"
-                name="isEndOfLife"
-              >
-                <a-input
-                  v-model:value="formState.isEndOfLife"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.isendoflife') })"
-                  show-count
-                  :maxlength="10"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.materialplant.endoflifedate')"
-                name="endOfLifeDate"
-              >
-                <a-date-picker
-                  v-model:value="formState.endOfLifeDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplant.endoflifedate') })"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
@@ -777,7 +668,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","materialCode","materialName","materialSpecification","materialDescription","industrySector","materialHierarchy","materialGroupCode","materialType","materialModel","materialBrand","baseUnit","purchaseGroup","purchaseType","specialProcurement","isBulk","minOrderQuantity","roundingValue","plannedDeliveryTimeDays","inHouseProductionDays","manufacturer","manufacturerPartNumber","currencyCode","priceControl","priceUnit","valuationCategory","differenceCode","profitCenter","latestPurchasePrice","salesPrice","safetyStock","maxStock","minStock","currentStock","productionLocation","purchasingLocation","inspectionRequired","isBatch","isExpiry","expiryDays","materialStatus","materialAttributes","isEndOfLife","endOfLifeDate","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","materialCode","materialName","materialSpecification","materialDescription","industrySector","materialHierarchy","materialGroup","materialType","baseUnit","purchaseGroup","purchaseType","specialProcurement","isBulk","minOrderQuantity","roundingValue","plannedDeliveryTimeDays","inHouseProductionDays","manufacturer","manufacturerMaterialCode","currency","priceControl","priceUnit","valuation","movingPrice","differenceCode","profitCenter","currentStock","productionLocation","purchasingLocation","storageLocation","isInspection","isBatch","isEndOfLife","materialStatus","extField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -798,6 +689,12 @@ const formRef = ref()
 const formState = reactive<Record<string, any>>({})
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  materialType: "ROH",
+  purchaseType: "f",
+  currency: "CNY",
+  priceControl: "V",
+  priceUnit: 1000,
+  movingPrice: 0,
   materialStatus: 1
 }
 
@@ -872,39 +769,48 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
-  materialType: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.materialplant.materialtype') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.materialplant.materialtype') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  baseUnit: [
+  industrySector: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.materialplant.baseunit') }),
+      message: t('common.page.form.placeholder.select', { field: t('entity.materialplant.industrysector') }),
+      trigger: 'change'
+    }
+  ],
+  materialGroup: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.required', { field: t('entity.materialplant.materialgroup') }),
       trigger: 'blur'
     }
   ],
-  purchaseType: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.materialplant.purchasetype') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.materialplant.purchasetype') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
+  materialType: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.select', { field: t('entity.materialplant.materialtype') }),
+      trigger: 'change'
+    }
+  ],
+  baseUnit: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.select', { field: t('entity.materialplant.baseunit') }),
+      trigger: 'change'
+    }
+  ],
+  purchaseGroup: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.required', { field: t('entity.materialplant.purchasegroup') }),
+      trigger: 'blur'
+    }
+  ],
+  purchaseType: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.select', { field: t('entity.materialplant.purchasetype') }),
+      trigger: 'change'
+    }
+  ],
   specialProcurement: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
@@ -937,7 +843,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
         return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.materialplant.minorderquantity') }))
       }
       const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
+      if (!Number.isFinite(num) || !Number.isInteger(num) || num < 0) {
         return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.materialplant.minorderquantity') }))
       }
       return Promise.resolve()
@@ -950,7 +856,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
         return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.materialplant.roundingvalue') }))
       }
       const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
+      if (!Number.isFinite(num) || !Number.isInteger(num) || num < 0) {
         return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.materialplant.roundingvalue') }))
       }
       return Promise.resolve()
@@ -963,7 +869,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
         return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.materialplant.planneddeliverytimedays') }))
       }
       const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
+      if (!Number.isFinite(num) || !Number.isInteger(num) || num < 0) {
         return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.materialplant.planneddeliverytimedays') }))
       }
       return Promise.resolve()
@@ -976,33 +882,31 @@ const rules = computed<Record<string, Rule[]>>(() => ({
         return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.materialplant.inhouseproductiondays') }))
       }
       const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
+      if (!Number.isFinite(num) || num < 0) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.materialplant.inhouseproductiondays') }))
+      }
+      const scaled = num * 10
+      if (Math.abs(scaled - Math.round(scaled)) > 1e-6) {
         return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.materialplant.inhouseproductiondays') }))
       }
       return Promise.resolve()
     },
     trigger: 'change'
   }],
-  currencyCode: [
+  currency: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.materialplant.currencycode') }),
-      trigger: 'blur'
+      message: t('common.page.form.placeholder.select', { field: t('entity.materialplant.currency') }),
+      trigger: 'change'
     }
   ],
-  priceControl: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.materialplant.pricecontrol') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.materialplant.pricecontrol') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
+  priceControl: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.select', { field: t('entity.materialplant.pricecontrol') }),
+      trigger: 'change'
+    }
+  ],
   priceUnit: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
@@ -1016,71 +920,37 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
-  latestPurchasePrice: [{
+  valuation: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.select', { field: t('entity.materialplant.valuation') }),
+      trigger: 'change'
+    }
+  ],
+  movingPrice: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.materialplant.latestpurchaseprice') }))
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.materialplant.movingprice') }))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.materialplant.latestpurchaseprice') }))
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.materialplant.movingprice') }))
+      }
+      const scaled = num * 10000
+      if (Math.abs(scaled - Math.round(scaled)) > 1e-4) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.materialplant.movingprice') }))
       }
       return Promise.resolve()
     },
     trigger: 'change'
   }],
-  salesPrice: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.materialplant.salesprice') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.materialplant.salesprice') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  safetyStock: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.materialplant.safetystock') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.materialplant.safetystock') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  maxStock: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.materialplant.maxstock') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.materialplant.maxstock') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  minStock: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.materialplant.minstock') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.materialplant.minstock') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
+  profitCenter: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.required', { field: t('entity.materialplant.profitcenter') }),
+      trigger: 'blur'
+    }
+  ],
   currentStock: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
@@ -1090,18 +960,43 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       if (!Number.isFinite(num)) {
         return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.materialplant.currentstock') }))
       }
+      const scaled = num * 10000
+      if (Math.abs(scaled - Math.round(scaled)) > 1e-4) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.materialplant.currentstock') }))
+      }
       return Promise.resolve()
     },
     trigger: 'change'
   }],
-  inspectionRequired: [{
+  productionLocation: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.required', { field: t('entity.materialplant.productionlocation') }),
+      trigger: 'blur'
+    }
+  ],
+  purchasingLocation: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.required', { field: t('entity.materialplant.purchasinglocation') }),
+      trigger: 'blur'
+    }
+  ],
+  storageLocation: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.required', { field: t('entity.materialplant.storagelocation') }),
+      trigger: 'blur'
+    }
+  ],
+  isInspection: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.materialplant.inspectionrequired') }))
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.materialplant.isinspection') }))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.materialplant.inspectionrequired') }))
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.materialplant.isinspection') }))
       }
       return Promise.resolve()
     },
@@ -1120,32 +1015,13 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
-  isExpiry: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.materialplant.isexpiry') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.materialplant.isexpiry') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  expiryDays: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.materialplant.expirydays') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.materialplant.expirydays') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
+  isEndOfLife: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.select', { field: t('entity.materialplant.isendoflife') }),
+      trigger: 'change'
+    }
+  ],
   materialStatus: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
@@ -1170,14 +1046,6 @@ async function validate() {
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
-  if ('materialType' in payload) {
-    const rawmaterialType = payload.materialType
-    payload.materialType = typeof rawmaterialType === 'number' ? rawmaterialType : Number(rawmaterialType)
-  }
-  if ('purchaseType' in payload) {
-    const rawpurchaseType = payload.purchaseType
-    payload.purchaseType = typeof rawpurchaseType === 'number' ? rawpurchaseType : Number(rawpurchaseType)
-  }
   if ('specialProcurement' in payload) {
     const rawspecialProcurement = payload.specialProcurement
     payload.specialProcurement = typeof rawspecialProcurement === 'number' ? rawspecialProcurement : Number(rawspecialProcurement)
@@ -1188,67 +1056,45 @@ function getValues(): Record<string, any> {
   }
   if ('minOrderQuantity' in payload) {
     const rawminOrderQuantity = payload.minOrderQuantity
-    payload.minOrderQuantity = typeof rawminOrderQuantity === 'number' ? rawminOrderQuantity : Number(rawminOrderQuantity)
+    const n = typeof rawminOrderQuantity === 'number' ? rawminOrderQuantity : Number(rawminOrderQuantity)
+    payload.minOrderQuantity = Number.isFinite(n) ? Math.trunc(n) : 0
   }
   if ('roundingValue' in payload) {
     const rawroundingValue = payload.roundingValue
-    payload.roundingValue = typeof rawroundingValue === 'number' ? rawroundingValue : Number(rawroundingValue)
+    const n = typeof rawroundingValue === 'number' ? rawroundingValue : Number(rawroundingValue)
+    payload.roundingValue = Number.isFinite(n) ? Math.trunc(n) : 0
   }
   if ('plannedDeliveryTimeDays' in payload) {
     const rawplannedDeliveryTimeDays = payload.plannedDeliveryTimeDays
-    payload.plannedDeliveryTimeDays = typeof rawplannedDeliveryTimeDays === 'number' ? rawplannedDeliveryTimeDays : Number(rawplannedDeliveryTimeDays)
+    const n = typeof rawplannedDeliveryTimeDays === 'number' ? rawplannedDeliveryTimeDays : Number(rawplannedDeliveryTimeDays)
+    payload.plannedDeliveryTimeDays = Number.isFinite(n) ? Math.trunc(n) : 0
   }
   if ('inHouseProductionDays' in payload) {
     const rawinHouseProductionDays = payload.inHouseProductionDays
-    payload.inHouseProductionDays = typeof rawinHouseProductionDays === 'number' ? rawinHouseProductionDays : Number(rawinHouseProductionDays)
-  }
-  if ('priceControl' in payload) {
-    const rawpriceControl = payload.priceControl
-    payload.priceControl = typeof rawpriceControl === 'number' ? rawpriceControl : Number(rawpriceControl)
+    const n = typeof rawinHouseProductionDays === 'number' ? rawinHouseProductionDays : Number(rawinHouseProductionDays)
+    payload.inHouseProductionDays = Number.isFinite(n) ? Math.round(n * 10) / 10 : 0
   }
   if ('priceUnit' in payload) {
     const rawpriceUnit = payload.priceUnit
     payload.priceUnit = typeof rawpriceUnit === 'number' ? rawpriceUnit : Number(rawpriceUnit)
   }
-  if ('latestPurchasePrice' in payload) {
-    const rawlatestPurchasePrice = payload.latestPurchasePrice
-    payload.latestPurchasePrice = typeof rawlatestPurchasePrice === 'number' ? rawlatestPurchasePrice : Number(rawlatestPurchasePrice)
-  }
-  if ('salesPrice' in payload) {
-    const rawsalesPrice = payload.salesPrice
-    payload.salesPrice = typeof rawsalesPrice === 'number' ? rawsalesPrice : Number(rawsalesPrice)
-  }
-  if ('safetyStock' in payload) {
-    const rawsafetyStock = payload.safetyStock
-    payload.safetyStock = typeof rawsafetyStock === 'number' ? rawsafetyStock : Number(rawsafetyStock)
-  }
-  if ('maxStock' in payload) {
-    const rawmaxStock = payload.maxStock
-    payload.maxStock = typeof rawmaxStock === 'number' ? rawmaxStock : Number(rawmaxStock)
-  }
-  if ('minStock' in payload) {
-    const rawminStock = payload.minStock
-    payload.minStock = typeof rawminStock === 'number' ? rawminStock : Number(rawminStock)
+  if ('movingPrice' in payload) {
+    const rawmovingPrice = payload.movingPrice
+    const n = typeof rawmovingPrice === 'number' ? rawmovingPrice : Number(rawmovingPrice)
+    payload.movingPrice = Number.isFinite(n) ? Math.round(n * 10000) / 10000 : 0
   }
   if ('currentStock' in payload) {
     const rawcurrentStock = payload.currentStock
-    payload.currentStock = typeof rawcurrentStock === 'number' ? rawcurrentStock : Number(rawcurrentStock)
+    const n = typeof rawcurrentStock === 'number' ? rawcurrentStock : Number(rawcurrentStock)
+    payload.currentStock = Number.isFinite(n) ? Math.round(n * 10000) / 10000 : 0
   }
-  if ('inspectionRequired' in payload) {
-    const rawinspectionRequired = payload.inspectionRequired
-    payload.inspectionRequired = typeof rawinspectionRequired === 'number' ? rawinspectionRequired : Number(rawinspectionRequired)
+  if ('isInspection' in payload) {
+    const rawisInspection = payload.isInspection
+    payload.isInspection = typeof rawisInspection === 'number' ? rawisInspection : Number(rawisInspection)
   }
   if ('isBatch' in payload) {
     const rawisBatch = payload.isBatch
     payload.isBatch = typeof rawisBatch === 'number' ? rawisBatch : Number(rawisBatch)
-  }
-  if ('isExpiry' in payload) {
-    const rawisExpiry = payload.isExpiry
-    payload.isExpiry = typeof rawisExpiry === 'number' ? rawisExpiry : Number(rawisExpiry)
-  }
-  if ('expiryDays' in payload) {
-    const rawexpiryDays = payload.expiryDays
-    payload.expiryDays = typeof rawexpiryDays === 'number' ? rawexpiryDays : Number(rawexpiryDays)
   }
   if ('materialStatus' in payload) {
     const rawmaterialStatus = payload.materialStatus

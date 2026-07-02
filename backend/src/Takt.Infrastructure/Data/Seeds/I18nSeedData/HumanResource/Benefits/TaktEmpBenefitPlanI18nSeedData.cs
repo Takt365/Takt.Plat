@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Benefits
 // 文件名称：TaktEmpBenefitPlanI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmpBenefitPlan 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktEmpBenefitPlanI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.empbenefitplan._self", "zh-HK", "员工福利方案信息_hk", "实体名称"),
 
             // entity.empbenefitplan.employeeid
-            new TranslationSeedItem("entity.empbenefitplan.employeeid", "en-US", "员工ID_us", "员工 ID"),
+            new TranslationSeedItem("entity.empbenefitplan.employeeid", "en-US", "员工ID_us", "员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
             // entity.empbenefitplan.employeeid
-            new TranslationSeedItem("entity.empbenefitplan.employeeid", "ja-JP", "员工ID_jp", "员工 ID"),
+            new TranslationSeedItem("entity.empbenefitplan.employeeid", "ja-JP", "员工ID_jp", "员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
             // entity.empbenefitplan.employeeid
-            new TranslationSeedItem("entity.empbenefitplan.employeeid", "zh-CN", "员工ID", "员工 ID"),
+            new TranslationSeedItem("entity.empbenefitplan.employeeid", "zh-CN", "员工ID", "员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
             // entity.empbenefitplan.employeeid
-            new TranslationSeedItem("entity.empbenefitplan.employeeid", "zh-HK", "员工ID_hk", "员工 ID"),
+            new TranslationSeedItem("entity.empbenefitplan.employeeid", "zh-HK", "员工ID_hk", "员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
 
             // entity.empbenefitplan.employeename
             new TranslationSeedItem("entity.empbenefitplan.employeename", "en-US", "员工姓名_us", "员工姓名"),
@@ -109,13 +109,13 @@ public class TaktEmpBenefitPlanI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.empbenefitplan.employeename", "zh-HK", "员工姓名_hk", "员工姓名"),
 
             // entity.empbenefitplan.benefititemid
-            new TranslationSeedItem("entity.empbenefitplan.benefititemid", "en-US", "福利项目ID_us", "福利项目 ID"),
+            new TranslationSeedItem("entity.empbenefitplan.benefititemid", "en-US", "福利项目ID_us", "福利项目（关联 TaktBenefitItem.Id，选项 TaktBenefitItems/options）"),
             // entity.empbenefitplan.benefititemid
-            new TranslationSeedItem("entity.empbenefitplan.benefititemid", "ja-JP", "福利项目ID_jp", "福利项目 ID"),
+            new TranslationSeedItem("entity.empbenefitplan.benefititemid", "ja-JP", "福利项目ID_jp", "福利项目（关联 TaktBenefitItem.Id，选项 TaktBenefitItems/options）"),
             // entity.empbenefitplan.benefititemid
-            new TranslationSeedItem("entity.empbenefitplan.benefititemid", "zh-CN", "福利项目ID", "福利项目 ID"),
+            new TranslationSeedItem("entity.empbenefitplan.benefititemid", "zh-CN", "福利项目ID", "福利项目（关联 TaktBenefitItem.Id，选项 TaktBenefitItems/options）"),
             // entity.empbenefitplan.benefititemid
-            new TranslationSeedItem("entity.empbenefitplan.benefititemid", "zh-HK", "福利项目ID_hk", "福利项目 ID"),
+            new TranslationSeedItem("entity.empbenefitplan.benefititemid", "zh-HK", "福利项目ID_hk", "福利项目（关联 TaktBenefitItem.Id，选项 TaktBenefitItems/options）"),
 
             // entity.empbenefitplan.plancode
             new TranslationSeedItem("entity.empbenefitplan.plancode", "en-US", "方案编码_us", "方案编码"),
@@ -144,23 +144,23 @@ public class TaktEmpBenefitPlanI18nSeedData : ITaktSeedDataCoordinator
             // entity.empbenefitplan.expirydate
             new TranslationSeedItem("entity.empbenefitplan.expirydate", "zh-HK", "失效日期_hk", "失效日期"),
 
-            // entity.empbenefitplan.empbenefitstatus
-            new TranslationSeedItem("entity.empbenefitplan.empbenefitstatus", "en-US", "状态_us", "状态（字典 hr_emp_benefit_plan_status）"),
-            // entity.empbenefitplan.empbenefitstatus
-            new TranslationSeedItem("entity.empbenefitplan.empbenefitstatus", "ja-JP", "状态_jp", "状态（字典 hr_emp_benefit_plan_status）"),
-            // entity.empbenefitplan.empbenefitstatus
-            new TranslationSeedItem("entity.empbenefitplan.empbenefitstatus", "zh-CN", "状态", "状态（字典 hr_emp_benefit_plan_status）"),
-            // entity.empbenefitplan.empbenefitstatus
-            new TranslationSeedItem("entity.empbenefitplan.empbenefitstatus", "zh-HK", "状态_hk", "状态（字典 hr_emp_benefit_plan_status）"),
+            // entity.empbenefitplan.relatedplant
+            new TranslationSeedItem("entity.empbenefitplan.relatedplant", "en-US", "关联工厂_us", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            // entity.empbenefitplan.relatedplant
+            new TranslationSeedItem("entity.empbenefitplan.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            // entity.empbenefitplan.relatedplant
+            new TranslationSeedItem("entity.empbenefitplan.relatedplant", "zh-CN", "关联工厂", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            // entity.empbenefitplan.relatedplant
+            new TranslationSeedItem("entity.empbenefitplan.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
 
-            // entity.empbenefitplan.relatedplant
-            new TranslationSeedItem("entity.empbenefitplan.relatedplant", "en-US", "关联工厂_us", "关联工厂"),
-            // entity.empbenefitplan.relatedplant
-            new TranslationSeedItem("entity.empbenefitplan.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂"),
-            // entity.empbenefitplan.relatedplant
-            new TranslationSeedItem("entity.empbenefitplan.relatedplant", "zh-CN", "关联工厂", "关联工厂"),
-            // entity.empbenefitplan.relatedplant
-            new TranslationSeedItem("entity.empbenefitplan.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂"),
+            // entity.empbenefitplan.empbenefitstatus
+            new TranslationSeedItem("entity.empbenefitplan.empbenefitstatus", "en-US", "状态_us", "状态（字典 hr_emp_benefit_plan_status；0=待生效 1=生效中 2=已失效）"),
+            // entity.empbenefitplan.empbenefitstatus
+            new TranslationSeedItem("entity.empbenefitplan.empbenefitstatus", "ja-JP", "状态_jp", "状态（字典 hr_emp_benefit_plan_status；0=待生效 1=生效中 2=已失效）"),
+            // entity.empbenefitplan.empbenefitstatus
+            new TranslationSeedItem("entity.empbenefitplan.empbenefitstatus", "zh-CN", "状态", "状态（字典 hr_emp_benefit_plan_status；0=待生效 1=生效中 2=已失效）"),
+            // entity.empbenefitplan.empbenefitstatus
+            new TranslationSeedItem("entity.empbenefitplan.empbenefitstatus", "zh-HK", "状态_hk", "状态（字典 hr_emp_benefit_plan_status；0=待生效 1=生效中 2=已失效）"),
         };
     }
 

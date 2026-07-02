@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/human-resource/compensation
 // 文件名称：salary-item.d.ts
-// 创建时间：2026-06-12
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/compensation 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -236,7 +236,7 @@ export interface SalaryItemQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -263,7 +263,7 @@ export interface SalaryItemCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -338,11 +338,6 @@ export interface SalaryItemCreate {
   includeHousingFundBase: number;
 
   /**
-   * 排序号
-   */
-  sortOrder: number;
-
-  /**
    * 状态（字典 sys_normal_disable_status）
    */
   itemStatus: number;
@@ -355,7 +350,7 @@ export interface SalaryItemCreate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -465,6 +460,21 @@ export interface SalaryItemTemplate {
   salaryFormulaId?: string;
 
   /**
+   * 默认金额（元）
+   */
+  defaultAmount?: number;
+
+  /**
+   * 默认比例（%，0~100）
+   */
+  defaultRate?: number;
+
+  /**
+   * 默认行权/授予价格（元；item_type 为股权激励时使用）
+   */
+  strikePrice?: number;
+
+  /**
    * 默认归属年限（年；item_type 为股权激励时使用）
    */
   vestingYears?: number;
@@ -490,14 +500,19 @@ export interface SalaryItemTemplate {
   includeHousingFundBase?: number;
 
   /**
-   * 排序号
+   * 状态（字典 sys_normal_disable_status）
    */
-  sortOrder?: number;
+  itemStatus?: number;
+
+  /**
+   * 关联工厂
+   */
+  relatedPlant?: string;
 
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -524,7 +539,7 @@ export interface SalaryItemImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -559,6 +574,21 @@ export interface SalaryItemImport {
   salaryFormulaId?: string;
 
   /**
+   * 默认金额（元）
+   */
+  defaultAmount?: number;
+
+  /**
+   * 默认比例（%，0~100）
+   */
+  defaultRate?: number;
+
+  /**
+   * 默认行权/授予价格（元；item_type 为股权激励时使用）
+   */
+  strikePrice?: number;
+
+  /**
    * 默认归属年限（年；item_type 为股权激励时使用）
    */
   vestingYears?: number;
@@ -584,14 +614,19 @@ export interface SalaryItemImport {
   includeHousingFundBase?: number;
 
   /**
-   * 排序号
+   * 状态（字典 sys_normal_disable_status）
    */
-  sortOrder?: number;
+  itemStatus?: number;
+
+  /**
+   * 关联工厂
+   */
+  relatedPlant?: string;
 
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -705,7 +740,7 @@ export interface SalaryItemExport {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注

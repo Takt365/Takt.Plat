@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/quality/complaint
 // 文件名称：customer-complaint.d.ts
-// 创建时间：2026-06-21
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/complaint 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -308,7 +308,7 @@ export interface CustomerComplaintCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -515,6 +515,11 @@ export interface CustomerComplaintTemplate {
   customerCode?: string;
 
   /**
+   * 投诉日期
+   */
+  complaintDate?: string;
+
+  /**
    * 投诉方式（0=电话，1=邮件，2=传真，3=现场，4=其他）
    */
   complaintMethod?: number;
@@ -550,9 +555,44 @@ export interface CustomerComplaintTemplate {
   responsiblePersonName?: string;
 
   /**
+   * 要求回复日期
+   */
+  requiredReplyDate?: string;
+
+  /**
+   * 实际回复日期
+   */
+  actualReplyDate?: string;
+
+  /**
    * 客诉状态（0=待处理，1=处理中，2=已回复，3=已关闭，4=已驳回）
    */
   complaintStatus?: number;
+
+  /**
+   * 客诉描述
+   */
+  complaintDescription?: string;
+
+  /**
+   * 处理结果/回复内容
+   */
+  handlingResult?: string;
+
+  /**
+   * 客户满意度（0=不满意，1=一般，2=满意，3=非常满意）
+   */
+  customerSatisfaction?: number;
+
+  /**
+   * 关联工厂
+   */
+  relatedPlant?: string;
+
+  /**
+   * 客诉明细列表（主子表关系）（子表，级联保存）
+   */
+  items?: CustomerComplaintItemCreate[];
 
   /**
    * 扩展字段JSON
@@ -584,7 +624,7 @@ export interface CustomerComplaintImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -607,6 +647,11 @@ export interface CustomerComplaintImport {
    * 客户编码
    */
   customerCode?: string;
+
+  /**
+   * 投诉日期
+   */
+  complaintDate?: string;
 
   /**
    * 投诉方式（0=电话，1=邮件，2=传真，3=现场，4=其他）
@@ -644,9 +689,44 @@ export interface CustomerComplaintImport {
   responsiblePersonName?: string;
 
   /**
+   * 要求回复日期
+   */
+  requiredReplyDate?: string;
+
+  /**
+   * 实际回复日期
+   */
+  actualReplyDate?: string;
+
+  /**
    * 客诉状态（0=待处理，1=处理中，2=已回复，3=已关闭，4=已驳回）
    */
   complaintStatus?: number;
+
+  /**
+   * 客诉描述
+   */
+  complaintDescription?: string;
+
+  /**
+   * 处理结果/回复内容
+   */
+  handlingResult?: string;
+
+  /**
+   * 客户满意度（0=不满意，1=一般，2=满意，3=非常满意）
+   */
+  customerSatisfaction?: number;
+
+  /**
+   * 关联工厂
+   */
+  relatedPlant?: string;
+
+  /**
+   * 客诉明细列表（主子表关系）（子表，级联保存）
+   */
+  items?: CustomerComplaintItemCreate[];
 
   /**
    * 扩展字段JSON

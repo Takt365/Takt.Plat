@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="logistics:manufacturing:defect:pcbainspection:create"
-      update-permission="logistics:manufacturing:defect:pcbainspection:update"
-      delete-permission="logistics:manufacturing:defect:pcbainspection:delete"
-      import-permission="logistics:manufacturing:defect:pcbainspection:import"
-      export-permission="logistics:manufacturing:defect:pcbainspection:export"
+      create-permission="logistics:manufacturing:defect:pcba:inspection:create"
+      update-permission="logistics:manufacturing:defect:pcba:inspection:update"
+      delete-permission="logistics:manufacturing:defect:pcba:inspection:delete"
+      import-permission="logistics:manufacturing:defect:pcba:inspection:import"
+      export-permission="logistics:manufacturing:defect:pcba:inspection:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -110,22 +110,21 @@
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('plantCode')">
       <a-form-item :label="t('entity.pcbainspection.plantcode')">
-        <a-input
+        <TaktSelect
           v-model:value="advancedQueryForm.plantCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbainspection.plantcode') })"
-          show-count
-          :maxlength="4"
+          api-url="TaktPlants/options"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbainspection.plantcode') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('prodCategory')">
       <a-form-item :label="t('entity.pcbainspection.prodcategory')">
-        <a-input
+        <TaktSelect
           v-model:value="advancedQueryForm.prodCategory"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbainspection.prodcategory') })"
-          show-count
-          :maxlength="20"
+          dict-type="logistics_prod_category"
+          :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbainspection.prodcategory') })"
           allow-clear
         />
       </a-form-item>
@@ -203,22 +202,13 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('status')">
-      <a-form-item :label="t('entity.pcbainspection.status')">
-        <a-input-number
-          v-model:value="advancedQueryForm.status"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbainspection.status') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
       <div v-show="isFieldVisible('createdAtStart')">
       <a-form-item :label="t('common.page.entity.createdatstart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -229,7 +219,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -318,17 +308,18 @@
  * PCBA检查日报实体管理页 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/manufacturing/defect/pcba-inspection-detail
  */
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, h } from 'vue'
 import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
+import TaktDictTag from '@/components/common/takt-dict-tag/index.vue'
 import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import PcbaInspectionForm from './components/pcba-inspection-form.vue'
 import PcbaInspectionDetailPanel from './components/pcba-inspection-detail-panel.vue'
 import { providePcbaInspectionMasterContext } from './composables/use-pcba-inspection-master-context'
-import { getPcbaInspectionList, getPcbaInspectionById, createPcbaInspection, updatePcbaInspection, deletePcbaInspectionById, deletePcbaInspectionBatch, getPcbaInspectionTemplate, importPcbaInspection, exportPcbaInspection, updatePcbaInspectionStatus } from '@/api/logistics/manufacturing/defect/pcba-inspection'
-import type { PcbaInspection, PcbaInspectionQuery } from '@/types/logistics/manufacturing/defect/pcba-inspection'
+import { getPcbaInspectionList, getPcbaInspectionById, createPcbaInspection, updatePcbaInspection, deletePcbaInspectionById, deletePcbaInspectionBatch, getPcbaInspectionTemplate, importPcbaInspection, exportPcbaInspection } from '@/api/logistics/manufacturing/defect/pcba-inspection-detail'
+import type { PcbaInspection, PcbaInspectionQuery } from '@/types/logistics/manufacturing/defect/pcba-inspection-detail'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
@@ -385,7 +376,6 @@ const advancedQueryForm = ref({
   modelCode: '',
   batchNo: '',
   materialCode: '',
-  status: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -402,7 +392,6 @@ const queryFieldsMeta = computed(() => [
   { key: 'modelCode', label: t('entity.pcbainspection.modelcode') },
   { key: 'batchNo', label: t('entity.pcbainspection.batchno') },
   { key: 'materialCode', label: t('entity.pcbainspection.materialcode') },
-  { key: 'status', label: t('entity.pcbainspection.status') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extField', label: t('common.page.entity.extfield') },
@@ -460,9 +449,6 @@ function buildListQuery(overrides?: Partial<PcbaInspectionQuery>): PcbaInspectio
   assignTrimmed('modelCode', form.modelCode)
   assignTrimmed('batchNo', form.batchNo)
   assignTrimmed('materialCode', form.materialCode)
-  if (form.status !== undefined && form.status !== null) {
-    query.status = form.status
-  }
   assignTrimmed('createdAtStart', form.createdAtStart)
   assignTrimmed('createdAtEnd', form.createdAtEnd)
   assignTrimmed('extField', form.extField)
@@ -554,7 +540,10 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPcbaInspectionField(record, 'prodCategory') ?? ''
+    customRender: ({ record }: { record: any }) => h(TaktDictTag, {
+      dictType: 'logistics_prod_category',
+      value: getPcbaInspectionField(record, 'prodCategory'),
+    })
   },
   {
     title: t('entity.pcbainspection.proddate'),
@@ -610,15 +599,6 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getPcbaInspectionField(record, 'materialCode') ?? ''
   },
-  {
-    title: t('entity.pcbainspection.status'),
-    dataIndex: 'status',
-    key: 'status',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPcbaInspectionField(record, 'status') ?? ''
-  },
   CreateActionColumn({
     actions: [
       {
@@ -626,7 +606,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:manufacturing:defect:pcbainspection:update',
+        permission: 'logistics:manufacturing:defect:pcba:inspection:update',
         onClick: (record: PcbaInspection) => handleEdit(record)
       },
       {
@@ -634,7 +614,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:manufacturing:defect:pcbainspection:delete',
+        permission: 'logistics:manufacturing:defect:pcba:inspection:delete',
         onClick: (record: PcbaInspection) => handleDeleteOne(record)
       }
     ]
@@ -668,7 +648,7 @@ const rowSelection = computed(() => ({
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
-    } else if (getPcbaInspectionId(selectedRow.value) === getPcbaInspectionId(record)) {
+    } else if (selectedRow.value && getPcbaInspectionId(selectedRow.value) === getPcbaInspectionId(record)) {
       selectedRow.value = null
       syncMasterSelection(null)
     }
@@ -718,7 +698,6 @@ function handleReset() {
   modelCode: '',
   batchNo: '',
   materialCode: '',
-  status: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -919,7 +898,6 @@ function handleAdvancedQueryReset() {
   modelCode: '',
   batchNo: '',
   materialCode: '',
-  status: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',

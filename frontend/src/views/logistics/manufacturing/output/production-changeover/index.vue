@@ -120,44 +120,44 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('productionCategory')">
-      <a-form-item :label="t('entity.productionchangeover.productioncategory')">
+      <div v-show="isFieldVisible('prodCategory')">
+      <a-form-item :label="t('entity.productionchangeover.prodcategory')">
         <a-input
-          v-model:value="advancedQueryForm.productionCategory"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionchangeover.productioncategory') })"
+          v-model:value="advancedQueryForm.prodCategory"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionchangeover.prodcategory') })"
           show-count
           :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('productionDateStart')">
-      <a-form-item :label="t('entity.productionchangeover.productiondatestart')">
+      <div v-show="isFieldVisible('prodDateStart')">
+      <a-form-item :label="t('entity.productionchangeover.proddatestart')">
         <a-date-picker
-          v-model:value="advancedQueryForm.productionDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionchangeover.productiondatestart') })"
+          v-model:value="advancedQueryForm.prodDateStart"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionchangeover.proddatestart') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('productionDateEnd')">
-      <a-form-item :label="t('entity.productionchangeover.productiondateend')">
+      <div v-show="isFieldVisible('prodDateEnd')">
+      <a-form-item :label="t('entity.productionchangeover.proddateend')">
         <a-date-picker
-          v-model:value="advancedQueryForm.productionDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionchangeover.productiondateend') })"
+          v-model:value="advancedQueryForm.prodDateEnd"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionchangeover.proddateend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('productionLine')">
-      <a-form-item :label="t('entity.productionchangeover.productionline')">
+      <div v-show="isFieldVisible('prodTeam')">
+      <a-form-item :label="t('entity.productionchangeover.prodteam')">
         <a-input
-          v-model:value="advancedQueryForm.productionLine"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionchangeover.productionline') })"
+          v-model:value="advancedQueryForm.prodTeam"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionchangeover.prodteam') })"
           show-count
-          :maxlength="50"
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -222,7 +222,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -233,7 +233,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -379,10 +379,10 @@ const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
   plantCode: '',
-  productionCategory: '',
-  productionDateStart: '',
-  productionDateEnd: '',
-  productionLine: '',
+  prodCategory: '',
+  prodDateStart: '',
+  prodDateEnd: '',
+  prodTeam: '',
   readSopTime: undefined as number | undefined,
   personCount: undefined as number | undefined,
   totalSopTime: undefined as number | undefined,
@@ -397,10 +397,10 @@ const advancedQueryForm = ref({
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
   { key: 'plantCode', label: t('entity.productionchangeover.plantcode') },
-  { key: 'productionCategory', label: t('entity.productionchangeover.productioncategory') },
-  { key: 'productionDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.productionchangeover.productiondate')) },
-  { key: 'productionDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.productionchangeover.productiondate')) },
-  { key: 'productionLine', label: t('entity.productionchangeover.productionline') },
+  { key: 'prodCategory', label: t('entity.productionchangeover.prodcategory') },
+  { key: 'prodDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.productionchangeover.proddate')) },
+  { key: 'prodDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.productionchangeover.proddate')) },
+  { key: 'prodTeam', label: t('entity.productionchangeover.prodteam') },
   { key: 'readSopTime', label: t('entity.productionchangeover.readsoptime') },
   { key: 'personCount', label: t('entity.productionchangeover.personcount') },
   { key: 'totalSopTime', label: t('entity.productionchangeover.totalsoptime') },
@@ -452,10 +452,10 @@ function buildListQuery(overrides?: Partial<ProductionChangeoverQuery>): Product
     }
   }
   assignTrimmed('plantCode', form.plantCode)
-  assignTrimmed('productionCategory', form.productionCategory)
-  assignTrimmed('productionDateStart', form.productionDateStart)
-  assignTrimmed('productionDateEnd', form.productionDateEnd)
-  assignTrimmed('productionLine', form.productionLine)
+  assignTrimmed('prodCategory', form.prodCategory)
+  assignTrimmed('prodDateStart', form.prodDateStart)
+  assignTrimmed('prodDateEnd', form.prodDateEnd)
+  assignTrimmed('prodTeam', form.prodTeam)
   if (form.readSopTime !== undefined && form.readSopTime !== null) {
     query.readSopTime = form.readSopTime
   }
@@ -514,31 +514,31 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getProductionChangeoverField(record, 'plantCode') ?? ''
   },
   {
-    title: t('entity.productionchangeover.productioncategory'),
-    dataIndex: 'productionCategory',
-    key: 'productionCategory',
+    title: t('entity.productionchangeover.prodcategory'),
+    dataIndex: 'prodCategory',
+    key: 'prodCategory',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getProductionChangeoverField(record, 'productionCategory') ?? ''
+    customRender: ({ record }: { record: any }) => getProductionChangeoverField(record, 'prodCategory') ?? ''
   },
   {
-    title: t('entity.productionchangeover.productiondate'),
-    dataIndex: 'productionDate',
-    key: 'productionDate',
+    title: t('entity.productionchangeover.proddate'),
+    dataIndex: 'prodDate',
+    key: 'prodDate',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getProductionChangeoverField(record, 'productionDate') ?? ''
+    customRender: ({ record }: { record: any }) => getProductionChangeoverField(record, 'prodDate') ?? ''
   },
   {
-    title: t('entity.productionchangeover.productionline'),
-    dataIndex: 'productionLine',
-    key: 'productionLine',
+    title: t('entity.productionchangeover.prodteam'),
+    dataIndex: 'prodTeam',
+    key: 'prodTeam',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getProductionChangeoverField(record, 'productionLine') ?? ''
+    customRender: ({ record }: { record: any }) => getProductionChangeoverField(record, 'prodTeam') ?? ''
   },
   {
     title: t('entity.productionchangeover.readsoptime'),
@@ -637,7 +637,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: ProductionChangeover, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getProductionChangeoverId(selectedRow.value) === getProductionChangeoverId(record)) {
+    } else if (selectedRow.value && getProductionChangeoverId(selectedRow.value) === getProductionChangeoverId(record)) {
       selectedRow.value = null
     }
   },
@@ -695,10 +695,10 @@ function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
   plantCode: '',
-  productionCategory: '',
-  productionDateStart: '',
-  productionDateEnd: '',
-  productionLine: '',
+  prodCategory: '',
+  prodDateStart: '',
+  prodDateEnd: '',
+  prodTeam: '',
   readSopTime: undefined as number | undefined,
   personCount: undefined as number | undefined,
   totalSopTime: undefined as number | undefined,
@@ -880,10 +880,10 @@ function handleAdvancedQuerySubmit() {
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
   plantCode: '',
-  productionCategory: '',
-  productionDateStart: '',
-  productionDateEnd: '',
-  productionLine: '',
+  prodCategory: '',
+  prodDateStart: '',
+  prodDateEnd: '',
+  prodTeam: '',
   readSopTime: undefined as number | undefined,
   personCount: undefined as number | undefined,
   totalSopTime: undefined as number | undefined,

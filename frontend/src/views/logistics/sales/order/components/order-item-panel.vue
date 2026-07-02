@@ -2,14 +2,14 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/sales/order/components -->
 <!-- 文件名称：order-item-panel.vue -->
-<!-- 功能描述：Takt采购订单实体主表实体右侧明细 purchaseOrderItem 独立 CRUD（按主表选中 purchaseOrderId 分页） -->
+<!-- 功能描述：Takt销售订单实体主表实体右侧明细 salesOrderItem 独立 CRUD（按主表选中 salesOrderId 分页） -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- ======================================== -->
 
 <template>
   <div class="order-item-panel flex h-full min-h-0 flex-col overflow-hidden">
     <div class="mb-2 text-sm font-medium text-text">
-      {{ t('entity.purchaseorderitem._self') }}
+      {{ pi.self() }}
     </div>
     <TaktQueryBar
       v-model="queryKeyword"
@@ -63,17 +63,17 @@
         :data-source="dataSource"
         :loading="loading"
         :stripe="true"
-        :row-key="getPurchaseOrderItemId"
+        :row-key="getSalesOrderItemId"
         :row-selection="rowSelection"
         :custom-row="onClickRow"
         :visible-column-keys="visibleColumnKeys"
-        id-column-key="purchaseOrderItemId"
+        id-column-key="salesOrderItemId"
         :show-pagination="true"
         v-model:current="currentPage"
         v-model:page-size="pageSize"
         :total="total"
         scroll-layout="masterDetailLr"
-        table-mode="single"
+        table-mode="masterDetailDetail"
         :show-row-selection="true"
         @change="handleTableChange"
         @pagination-change="handleMasterDetailPaginationChange"
@@ -88,10 +88,10 @@
       @ok="handleFormSubmit"
       @cancel="handleFormCancel"
     >
-      <PurchaseOrderItemForm
+      <SalesOrderItemForm
         ref="formRef"
         :form-data="formData"
-        :master-id="masterPurchaseOrderId"
+        :master-id="masterSalesOrderId"
         :loading="formLoading"
       />
     </TaktModal>
@@ -106,62 +106,41 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('purchaseOrderCode')">
-      <a-form-item :label="t('entity.purchaseorderitem.purchaseordercode')">
+      <div v-show="isFieldVisible('salesOrderCode')">
+      <a-form-item :label="pi.queryLabel('salesOrderCode')">
         <a-input
-          v-model:value="advancedQueryForm.purchaseOrderCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorderitem.purchaseordercode') })"
+          v-model:value="advancedQueryForm.salesOrderCode"
+          :placeholder="pi.queryPh('salesOrderCode', 'required')"
           show-count
-          :maxlength="10"
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('lineNumber')">
-      <a-form-item :label="t('entity.purchaseorderitem.linenumber')">
+      <a-form-item :label="pi.queryLabel('lineNumber')">
         <a-input-number
           v-model:value="advancedQueryForm.lineNumber"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorderitem.linenumber') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('requestCode')">
-      <a-form-item :label="t('entity.purchaseorderitem.requestcode')">
-        <a-input
-          v-model:value="advancedQueryForm.requestCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorderitem.requestcode') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('requestLineNumber')">
-      <a-form-item :label="t('entity.purchaseorderitem.requestlinenumber')">
-        <a-input-number
-          v-model:value="advancedQueryForm.requestLineNumber"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorderitem.requestlinenumber') })"
+          :placeholder="pi.queryPh('lineNumber', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('materialCode')">
-      <a-form-item :label="t('entity.purchaseorderitem.materialcode')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('materialCode')">
+        <TaktSelect
           v-model:value="advancedQueryForm.materialCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorderitem.materialcode') })"
-          show-count
-          :maxlength="20"
+          api-url="TaktMaterials/options"
+          :placeholder="pi.queryPh('materialCode', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('materialName')">
-      <a-form-item :label="t('entity.purchaseorderitem.materialname')">
+      <a-form-item :label="pi.queryLabel('materialName')">
         <a-input
           v-model:value="advancedQueryForm.materialName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorderitem.materialname') })"
+          :placeholder="pi.queryPh('materialName', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -169,145 +148,174 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('materialSpecification')">
-      <a-form-item :label="t('entity.purchaseorderitem.materialspecification')">
+      <a-form-item :label="pi.queryLabel('materialSpecification')">
         <a-input
           v-model:value="advancedQueryForm.materialSpecification"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorderitem.materialspecification') })"
+          :placeholder="pi.queryPh('materialSpecification', 'required')"
           show-count
           :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('purchaseUnit')">
-      <a-form-item :label="t('entity.purchaseorderitem.purchaseunit')">
-        <a-input
-          v-model:value="advancedQueryForm.purchaseUnit"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorderitem.purchaseunit') })"
-          show-count
-          :maxlength="20"
+      <div v-show="isFieldVisible('salesUnit')">
+      <a-form-item :label="pi.queryLabel('salesUnit')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.salesUnit"
+          dict-type="logistics_unit_of_measure_code"
+          :placeholder="pi.queryPh('salesUnit', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('orderQuantity')">
-      <a-form-item :label="t('entity.purchaseorderitem.orderquantity')">
+      <a-form-item :label="pi.queryLabel('orderQuantity')">
         <a-input-number
           v-model:value="advancedQueryForm.orderQuantity"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorderitem.orderquantity') })"
+          :placeholder="pi.queryPh('orderQuantity', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('receivedQuantity')">
-      <a-form-item :label="t('entity.purchaseorderitem.receivedquantity')">
+      <div v-show="isFieldVisible('shippedQuantity')">
+      <a-form-item :label="pi.queryLabel('shippedQuantity')">
         <a-input-number
-          v-model:value="advancedQueryForm.receivedQuantity"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorderitem.receivedquantity') })"
+          v-model:value="advancedQueryForm.shippedQuantity"
+          :placeholder="pi.queryPh('shippedQuantity', 'required')"
           style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('salesPerUnit')">
+      <a-form-item :label="pi.queryLabel('salesPerUnit')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.salesPerUnit"
+          dict-type="logistics_price_unit_param"
+          :placeholder="pi.queryPh('salesPerUnit', 'select')"
+          allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('unitPrice')">
-      <a-form-item :label="t('entity.purchaseorderitem.unitprice')">
+      <a-form-item :label="pi.queryLabel('unitPrice')">
         <a-input-number
           v-model:value="advancedQueryForm.unitPrice"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorderitem.unitprice') })"
+          :placeholder="pi.queryPh('unitPrice', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('discountRate')">
-      <a-form-item :label="t('entity.purchaseorderitem.discountrate')">
+      <a-form-item :label="pi.queryLabel('discountRate')">
         <a-input-number
           v-model:value="advancedQueryForm.discountRate"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorderitem.discountrate') })"
+          :placeholder="pi.queryPh('discountRate', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('discountAmount')">
-      <a-form-item :label="t('entity.purchaseorderitem.discountamount')">
+      <a-form-item :label="pi.queryLabel('discountAmount')">
         <a-input-number
           v-model:value="advancedQueryForm.discountAmount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorderitem.discountamount') })"
+          :placeholder="pi.queryPh('discountAmount', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('taxRate')">
-      <a-form-item :label="t('entity.purchaseorderitem.taxrate')">
-        <a-input-number
+      <a-form-item :label="pi.queryLabel('taxRate')">
+        <TaktSelect
           v-model:value="advancedQueryForm.taxRate"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorderitem.taxrate') })"
-          style="width: 100%"
+          dict-type="accounting_tax_rate_param"
+          :placeholder="pi.queryPh('taxRate', 'select')"
+          allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('taxAmount')">
-      <a-form-item :label="t('entity.purchaseorderitem.taxamount')">
+      <a-form-item :label="pi.queryLabel('taxAmount')">
         <a-input-number
           v-model:value="advancedQueryForm.taxAmount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorderitem.taxamount') })"
+          :placeholder="pi.queryPh('taxAmount', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('subtotalAmount')">
-      <a-form-item :label="t('entity.purchaseorderitem.subtotalamount')">
+      <a-form-item :label="pi.queryLabel('subtotalAmount')">
         <a-input-number
           v-model:value="advancedQueryForm.subtotalAmount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorderitem.subtotalamount') })"
+          :placeholder="pi.queryPh('subtotalAmount', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('deliveryStatus')">
-      <a-form-item :label="t('entity.purchaseorderitem.deliverystatus')">
-        <a-input-number
+      <a-form-item :label="pi.queryLabel('deliveryStatus')">
+        <TaktSelect
           v-model:value="advancedQueryForm.deliveryStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorderitem.deliverystatus') })"
-          style="width: 100%"
+          dict-type="logistics_delivery_status"
+          :placeholder="pi.queryPh('deliveryStatus', 'select')"
+          allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="t('common.page.entity.createdatstart')">
+      <a-form-item :label="pi.queryLabel('createdAtStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          :placeholder="pi.queryPh('createdAtStart', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="t('common.page.entity.createdatend')">
+      <a-form-item :label="pi.queryLabel('createdAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          :placeholder="pi.queryPh('createdAtEnd', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('ExtField')">
-      <a-form-item :label="t('entity.purchaseorderitem.extfield')">
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ pi.queryLabel('extField') }}</span>
+          </span>
+        </template>
         <a-textarea
-          v-model:value="advancedQueryForm.ExtField"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.purchaseorderitem.extfield') })"
-          :rows="2"
-          allow-clear
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="t('common.page.entity.remark')">
+      <a-form-item :label="pi.queryLabel('remark')">
         <a-textarea
           v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+          :placeholder="pi.queryPh('remark', 'optional')"
             :rows="4"
             show-count
             :maxlength="400"
@@ -317,16 +325,18 @@
       </div>
       </template>
     </TaktQueryDrawer>
+    <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.purchaseorderitem._self') })"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.purchaseorderitem._self"
+        v-if="importVisible"
+        :entity-i18n-key="SALESORDERITEM_SELF_I18N_KEY"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -341,10 +351,10 @@
       v-model:open="columnSettingVisible"
       :columns="columns"
       :checked-keys="visibleColumnKeys"
-      id-column-key="purchaseOrderItemId"
+      id-column-key="salesOrderItemId"
       action-column-key="action"
       entity-scope="company"
-      table-mode="single"
+      table-mode="masterDetailDetail"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -353,7 +363,7 @@
 
 <script setup lang="ts">
 /**
- * Takt采购订单实体子表 purchaseOrderItem 右栏面板
+ * Takt销售订单实体子表 salesOrderItem 右栏面板
  * @module views/logistics/sales/order/components
  */
 import { ref, computed, watch } from 'vue'
@@ -363,106 +373,92 @@ import { useI18n } from 'vue-i18n'
 import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
-import PurchaseOrderItemForm from './order-item-form.vue'
-import { usePurchaseOrderMasterContext } from '../composables/use-order-master-context'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+import SalesOrderItemForm from './order-item-form.vue'
+import { useSalesOrderMasterContext } from '../composables/use-order-master-context'
 import {
-  getPurchaseOrderItemList,
-  getPurchaseOrderItemById,
-  createPurchaseOrderItem,
-  updatePurchaseOrderItem,
-  deletePurchaseOrderItemById,
-  deletePurchaseOrderItemBatch,
-  getPurchaseOrderItemTemplate,
-  importPurchaseOrderItem,
-  exportPurchaseOrderItem,
-} from '@/api/logistics/procurement/order-item'
-import type { PurchaseOrderItem, PurchaseOrderItemQuery } from '@/types/logistics/procurement/order-item'
+  getSalesOrderItemList,
+  getSalesOrderItemById,
+  createSalesOrderItem,
+  updateSalesOrderItem,
+  deleteSalesOrderItemById,
+  deleteSalesOrderItemBatch,
+  getSalesOrderItemTemplate,
+  importSalesOrderItem,
+  exportSalesOrderItem,
+} from '@/api/logistics/sales/order-item'
+import type { SalesOrderItem, SalesOrderItemQuery } from '@/types/logistics/sales/order-item'
+
+import {
+  useSalesOrderItemI18n,
+  SALESORDERITEM_LIST_FIELDS,
+  SALESORDERITEM_QUERY_STRING_FIELDS,
+  SALESORDERITEM_QUERY_FIELDS,
+  SALESORDERITEM_SELF_I18N_KEY,
+} from '../composables/use-order-item-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = useSalesOrderItemI18n()
 
 const { t } = useI18n()
-const { selectedMasterRow } = usePurchaseOrderMasterContext()
+const { selectedMasterRow } = useSalesOrderMasterContext()
 
 /** Excel 导入/导出默认 sheet 名与文件名前缀 */
-const excelNames = taktExcelEntityNames('TaktPurchaseOrderItem')
+const excelNames = taktExcelEntityNames('TaktSalesOrderItem')
 /** 快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.purchaseorderitem._self') }),
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() }),
 )
 
 const loading = ref(false)
-const dataSource = ref<PurchaseOrderItem[]>([])
+const dataSource = ref<SalesOrderItem[]>([])
 const currentPage = ref(getTaktDefaultPageIndex())
 const pageSize = ref(getTaktDefaultPageSize())
 const total = ref(0)
 const queryKeyword = ref('')
-const selectedRow = ref<PurchaseOrderItem | null>(null)
-const selectedRows = ref<PurchaseOrderItem[]>([])
+const selectedRow = ref<SalesOrderItem | null>(null)
+const selectedRows = ref<SalesOrderItem[]>([])
 const selectedRowKeys = ref<(string | number)[]>([])
 const formVisible = ref(false)
 const formTitle = ref('')
-const formData = ref<Partial<PurchaseOrderItem>>({})
+const formData = ref<Partial<SalesOrderItem>>({})
 const formLoading = ref(false)
 const formRef = ref()
 
 const advancedQueryVisible = ref(false)
-const advancedQueryForm = ref({
-  purchaseOrderCode: '',
-  lineNumber: undefined as number | undefined,
-  requestCode: '',
-  requestLineNumber: undefined as number | undefined,
-  materialCode: '',
-  materialName: '',
-  materialSpecification: '',
-  purchaseUnit: '',
-  orderQuantity: undefined as number | undefined,
-  receivedQuantity: undefined as number | undefined,
-  unitPrice: undefined as number | undefined,
-  discountRate: undefined as number | undefined,
-  discountAmount: undefined as number | undefined,
-  taxRate: undefined as number | undefined,
-  taxAmount: undefined as number | undefined,
-  subtotalAmount: undefined as number | undefined,
-  deliveryStatus: undefined as number | undefined,
-  createdAtStart: '',
-  createdAtEnd: '',
-  ExtField: '',
-  remark: '',
-})
+/**
+ * 创建空的高级查询表单
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(SALESORDERITEM_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof SALESORDERITEM_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  return {
+    ...form,
+    lineNumber: undefined as number | undefined,
+    orderQuantity: undefined as number | undefined,
+    shippedQuantity: undefined as number | undefined,
+    salesPerUnit: undefined as number | undefined,
+    unitPrice: undefined as number | undefined,
+    discountRate: undefined as number | undefined,
+    discountAmount: undefined as number | undefined,
+    taxRate: undefined as number | undefined,
+    taxAmount: undefined as number | undefined,
+    subtotalAmount: undefined as number | undefined,
+    deliveryStatus: undefined as number | undefined,
+  }
+}
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 const visibleQueryFieldKeys = ref<string[]>([])
 
 /** 高级查询字段元数据 */
-const queryFieldsMeta = computed(() => [
-  { key: 'purchaseOrderCode', label: t('entity.purchaseorderitem.purchaseordercode') },
-  { key: 'lineNumber', label: t('entity.purchaseorderitem.linenumber') },
-  { key: 'requestCode', label: t('entity.purchaseorderitem.requestcode') },
-  { key: 'requestLineNumber', label: t('entity.purchaseorderitem.requestlinenumber') },
-  { key: 'materialCode', label: t('entity.purchaseorderitem.materialcode') },
-  { key: 'materialName', label: t('entity.purchaseorderitem.materialname') },
-  { key: 'materialSpecification', label: t('entity.purchaseorderitem.materialspecification') },
-  { key: 'purchaseUnit', label: t('entity.purchaseorderitem.purchaseunit') },
-  { key: 'orderQuantity', label: t('entity.purchaseorderitem.orderquantity') },
-  { key: 'receivedQuantity', label: t('entity.purchaseorderitem.receivedquantity') },
-  { key: 'unitPrice', label: t('entity.purchaseorderitem.unitprice') },
-  { key: 'discountRate', label: t('entity.purchaseorderitem.discountrate') },
-  { key: 'discountAmount', label: t('entity.purchaseorderitem.discountamount') },
-  { key: 'taxRate', label: t('entity.purchaseorderitem.taxrate') },
-  { key: 'taxAmount', label: t('entity.purchaseorderitem.taxamount') },
-  { key: 'subtotalAmount', label: t('entity.purchaseorderitem.subtotalamount') },
-  { key: 'deliveryStatus', label: t('entity.purchaseorderitem.deliverystatus') },
-  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
-  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'ExtField', label: t('entity.purchaseorderitem.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
-
-/**
- * 高级查询字段标签
- * @param key 字段 key
- */
-function fieldLabel(key: string): string {
-  return queryFieldsMeta.value.find((f) => f.key === key)?.label ?? key
-}
+const queryFieldsMeta = computed(() =>
+  SALESORDERITEM_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 
 function handleAdvancedQuery() {
   advancedQueryVisible.value = true
@@ -475,31 +471,10 @@ function handleAdvancedQuerySubmit() {
 }
 
 function handleAdvancedQueryReset() {
-  advancedQueryForm.value = {
-  purchaseOrderCode: '',
-  lineNumber: undefined as number | undefined,
-  requestCode: '',
-  requestLineNumber: undefined as number | undefined,
-  materialCode: '',
-  materialName: '',
-  materialSpecification: '',
-  purchaseUnit: '',
-  orderQuantity: undefined as number | undefined,
-  receivedQuantity: undefined as number | undefined,
-  unitPrice: undefined as number | undefined,
-  discountRate: undefined as number | undefined,
-  discountAmount: undefined as number | undefined,
-  taxRate: undefined as number | undefined,
-  taxAmount: undefined as number | undefined,
-  subtotalAmount: undefined as number | undefined,
-  deliveryStatus: undefined as number | undefined,
-  createdAtStart: '',
-  createdAtEnd: '',
-  ExtField: '',
-  remark: '',
-  }
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
 }
 const columnSettingVisible = ref(false)
+/** 表格当前可见列 key（空数组时按 tableMode=masterDetailDetail 默认 id+4 业务列） */
 const visibleColumnKeys = ref<string[]>([])
 
 function handleColumnSetting() {
@@ -515,111 +490,214 @@ function handleColumnSettingReset() {
 }
 const importVisible = ref(false)
 
-const entityIdName = 'purchaseOrderItemId'
-const hasMasterSelection = computed(() => !!selectedMasterRow.value?.purchaseOrderId)
-const masterPurchaseOrderId = computed(() => selectedMasterRow.value?.purchaseOrderId ?? '')
+const entityIdName = 'salesOrderItemId'
+const masterSalesOrderId = computed((): string => {
+  const id = (selectedMasterRow.value as Record<string, unknown> | null)?.['salesOrderId']
+  return id != null ? String(id) : ''
+})
+const hasMasterSelection = computed(() => masterSalesOrderId.value !== '')
 const updateDisabled = computed(() => !hasMasterSelection.value || selectedRows.value.length !== 1)
 const deleteDisabled = computed(() => !hasMasterSelection.value || selectedRows.value.length === 0)
 
-function getPurchaseOrderItemId(record: PurchaseOrderItem | Record<string, unknown>): string {
-  return String((record as PurchaseOrderItem)?.[entityIdName] ?? '')
+function getSalesOrderItemId(record: SalesOrderItem | Record<string, unknown>): string {
+  return String((record as SalesOrderItem)?.[entityIdName] ?? '')
 }
 
-function getPurchaseOrderItemField(record: PurchaseOrderItem | Record<string, unknown>, field: string): unknown {
-  return (record as PurchaseOrderItem)?.[field as keyof PurchaseOrderItem]
+function getSalesOrderItemField(record: SalesOrderItem | Record<string, unknown>, field: string): unknown {
+  return (record as SalesOrderItem)?.[field as keyof SalesOrderItem]
 }
 
 const columns = computed<TableColumnsType>(() => [
   {
     title: t('common.page.entity.id'),
-    dataIndex: 'purchaseOrderItemId',
-    key: 'purchaseOrderItemId',
+    dataIndex: 'salesOrderItemId',
+    key: 'salesOrderItemId',
     width: 80,
     resizable: true,
     ellipsis: true,
     fixed: 'left',
-    customRender: ({ record }: { record: PurchaseOrderItem }) =>
-      String(getPurchaseOrderItemField(record, 'purchaseOrderItemId') ?? ''),
+    customRender: ({ record }: { record: SalesOrderItem }) =>
+      String(getSalesOrderItemField(record, 'salesOrderItemId') ?? ''),
   },
   {
-    title: t('entity.purchaseorderitem.purchaseordercode'),
-    dataIndex: 'purchaseOrderCode',
-    key: 'purchaseOrderCode',
+    title: pi.label('salesOrderName'),
+    dataIndex: 'salesOrderName',
+    key: 'salesOrderName',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: PurchaseOrderItem }) =>
-      String(getPurchaseOrderItemField(record, 'purchaseOrderCode') ?? ''),
+    customRender: ({ record }: { record: SalesOrderItem }) =>
+      String(getSalesOrderItemField(record, 'salesOrderName') ?? ''),
   },
   {
-    title: t('entity.purchaseorderitem.linenumber'),
+    title: pi.label('salesOrderCode'),
+    dataIndex: 'salesOrderCode',
+    key: 'salesOrderCode',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: SalesOrderItem }) =>
+      String(getSalesOrderItemField(record, 'salesOrderCode') ?? ''),
+  },
+  {
+    title: pi.label('lineNumber'),
     dataIndex: 'lineNumber',
     key: 'lineNumber',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: PurchaseOrderItem }) =>
-      String(getPurchaseOrderItemField(record, 'lineNumber') ?? ''),
+    customRender: ({ record }: { record: SalesOrderItem }) =>
+      String(getSalesOrderItemField(record, 'lineNumber') ?? ''),
   },
   {
-    title: t('entity.purchaseorderitem.requestcode'),
-    dataIndex: 'requestCode',
-    key: 'requestCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: PurchaseOrderItem }) =>
-      String(getPurchaseOrderItemField(record, 'requestCode') ?? ''),
-  },
-  {
-    title: t('entity.purchaseorderitem.requestlinenumber'),
-    dataIndex: 'requestLineNumber',
-    key: 'requestLineNumber',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: PurchaseOrderItem }) =>
-      String(getPurchaseOrderItemField(record, 'requestLineNumber') ?? ''),
-  },
-  {
-    title: t('entity.purchaseorderitem.materialcode'),
+    title: pi.label('materialCode'),
     dataIndex: 'materialCode',
     key: 'materialCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: PurchaseOrderItem }) =>
-      String(getPurchaseOrderItemField(record, 'materialCode') ?? ''),
+    customRender: ({ record }: { record: SalesOrderItem }) =>
+      String(getSalesOrderItemField(record, 'materialCode') ?? ''),
   },
   {
-    title: t('entity.purchaseorderitem.materialname'),
+    title: pi.label('materialName'),
     dataIndex: 'materialName',
     key: 'materialName',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: PurchaseOrderItem }) =>
-      String(getPurchaseOrderItemField(record, 'materialName') ?? ''),
+    customRender: ({ record }: { record: SalesOrderItem }) =>
+      String(getSalesOrderItemField(record, 'materialName') ?? ''),
   },
   {
-    title: t('entity.purchaseorderitem.materialspecification'),
+    title: pi.label('materialSpecification'),
     dataIndex: 'materialSpecification',
     key: 'materialSpecification',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: PurchaseOrderItem }) =>
-      String(getPurchaseOrderItemField(record, 'materialSpecification') ?? ''),
+    customRender: ({ record }: { record: SalesOrderItem }) =>
+      String(getSalesOrderItemField(record, 'materialSpecification') ?? ''),
   },
   {
-    title: t('entity.purchaseorderitem.purchaseunit'),
-    dataIndex: 'purchaseUnit',
-    key: 'purchaseUnit',
+    title: pi.label('salesUnit'),
+    dataIndex: 'salesUnit',
+    key: 'salesUnit',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: PurchaseOrderItem }) =>
-      String(getPurchaseOrderItemField(record, 'purchaseUnit') ?? ''),
+    customRender: ({ record }: { record: SalesOrderItem }) =>
+      String(getSalesOrderItemField(record, 'salesUnit') ?? ''),
+  },
+  {
+    title: pi.label('orderQuantity'),
+    dataIndex: 'orderQuantity',
+    key: 'orderQuantity',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: SalesOrderItem }) =>
+      String(getSalesOrderItemField(record, 'orderQuantity') ?? ''),
+  },
+  {
+    title: pi.label('shippedQuantity'),
+    dataIndex: 'shippedQuantity',
+    key: 'shippedQuantity',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: SalesOrderItem }) =>
+      String(getSalesOrderItemField(record, 'shippedQuantity') ?? ''),
+  },
+  {
+    title: pi.label('salesPerUnit'),
+    dataIndex: 'salesPerUnit',
+    key: 'salesPerUnit',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: SalesOrderItem }) =>
+      String(getSalesOrderItemField(record, 'salesPerUnit') ?? ''),
+  },
+  {
+    title: pi.label('unitPrice'),
+    dataIndex: 'unitPrice',
+    key: 'unitPrice',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: SalesOrderItem }) =>
+      String(getSalesOrderItemField(record, 'unitPrice') ?? ''),
+  },
+  {
+    title: pi.label('discountRate'),
+    dataIndex: 'discountRate',
+    key: 'discountRate',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: SalesOrderItem }) =>
+      String(getSalesOrderItemField(record, 'discountRate') ?? ''),
+  },
+  {
+    title: pi.label('discountAmount'),
+    dataIndex: 'discountAmount',
+    key: 'discountAmount',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: SalesOrderItem }) =>
+      String(getSalesOrderItemField(record, 'discountAmount') ?? ''),
+  },
+  {
+    title: pi.label('taxRate'),
+    dataIndex: 'taxRate',
+    key: 'taxRate',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: SalesOrderItem }) =>
+      String(getSalesOrderItemField(record, 'taxRate') ?? ''),
+  },
+  {
+    title: pi.label('taxAmount'),
+    dataIndex: 'taxAmount',
+    key: 'taxAmount',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: SalesOrderItem }) =>
+      String(getSalesOrderItemField(record, 'taxAmount') ?? ''),
+  },
+  {
+    title: pi.label('subtotalAmount'),
+    dataIndex: 'subtotalAmount',
+    key: 'subtotalAmount',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: SalesOrderItem }) =>
+      String(getSalesOrderItemField(record, 'subtotalAmount') ?? ''),
+  },
+  {
+    title: pi.label('deliveryStatus'),
+    dataIndex: 'deliveryStatus',
+    key: 'deliveryStatus',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: SalesOrderItem }) =>
+      String(getSalesOrderItemField(record, 'deliveryStatus') ?? ''),
+  },
+  {
+    title: pi.label('salesOrder'),
+    dataIndex: 'salesOrder',
+    key: 'salesOrder',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: SalesOrderItem }) =>
+      String(getSalesOrderItemField(record, 'salesOrder') ?? ''),
   },
   CreateActionColumn({
     actions: [
@@ -629,7 +707,7 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiEditLine,
         permission: 'logistics:sales:order:update',
-        onClick: (record: PurchaseOrderItem) => void handleEdit(record),
+        onClick: (record: SalesOrderItem) => void handleEdit(record),
       },
       {
         key: 'delete',
@@ -637,7 +715,7 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiDeleteBinLine,
         permission: 'logistics:sales:order:delete',
-        onClick: (record: PurchaseOrderItem) => void handleDeleteOne(record),
+        onClick: (record: SalesOrderItem) => void handleDeleteOne(record),
       },
     ],
   }),
@@ -645,19 +723,19 @@ const columns = computed<TableColumnsType>(() => [
 
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: PurchaseOrderItem[]) => {
+  onChange: (keys: (string | number)[], rows: SalesOrderItem[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
   },
-  onSelect: (record: PurchaseOrderItem, selected: boolean) => {
+  onSelect: (record: SalesOrderItem, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getPurchaseOrderItemId(selectedRow.value) === getPurchaseOrderItemId(record)) {
+    } else if (selectedRow.value && getSalesOrderItemId(selectedRow.value) === getSalesOrderItemId(record)) {
       selectedRow.value = null
     }
   },
-  onSelectAll: (selected: boolean, selectedRowsData: PurchaseOrderItem[]) => {
+  onSelectAll: (selected: boolean, selectedRowsData: SalesOrderItem[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
   },
 }))
@@ -666,8 +744,8 @@ const rowSelection = computed(() => ({
  * 行点击选中（与左主表 masterCustomRow 一致，联动 rowSelection）
  * @param record 行数据
  */
-function onClickRow(record: PurchaseOrderItem) {
-  const key = getPurchaseOrderItemId(record)
+function onClickRow(record: SalesOrderItem) {
+  const key = getSalesOrderItemId(record)
   return {
     onClick: () => {
       selectedRowKeys.value = [key]
@@ -683,43 +761,40 @@ function onClickRow(record: PurchaseOrderItem) {
 /**
  * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
  * @param overrides 覆盖分页或导出上限等字段
- * @returns {PurchaseOrderItemQuery} 查询 DTO
+ * @returns {SalesOrderItemQuery} 查询 DTO
  */
-function buildListQuery(overrides?: Partial<PurchaseOrderItemQuery>): PurchaseOrderItemQuery {
+function buildListQuery(overrides?: Partial<SalesOrderItemQuery>): SalesOrderItemQuery {
   const form = advancedQueryForm.value
   const kw = (queryKeyword.value ?? '').trim()
-  const query: PurchaseOrderItemQuery = {
+  const query: SalesOrderItemQuery = {
     pageIndex: currentPage.value,
     pageSize: pageSize.value,
-    purchaseOrderId: masterPurchaseOrderId.value,
+    salesOrderId: masterSalesOrderId.value,
     ...overrides,
   }
   if (kw.length > 0) {
     query.keyWords = kw
   }
-  const assignTrimmed = (key: keyof PurchaseOrderItemQuery, value: string | undefined) => {
+  const assignTrimmed = (key: keyof SalesOrderItemQuery, value: string | undefined) => {
     const v = (value ?? '').trim()
     if (v.length > 0) {
       query[key] = v as never
     }
   }
-  assignTrimmed('purchaseOrderCode', form.purchaseOrderCode)
+  for (const key of SALESORDERITEM_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
+  }
   if (form.lineNumber !== undefined && form.lineNumber !== null) {
     query.lineNumber = form.lineNumber
   }
-  assignTrimmed('requestCode', form.requestCode)
-  if (form.requestLineNumber !== undefined && form.requestLineNumber !== null) {
-    query.requestLineNumber = form.requestLineNumber
-  }
-  assignTrimmed('materialCode', form.materialCode)
-  assignTrimmed('materialName', form.materialName)
-  assignTrimmed('materialSpecification', form.materialSpecification)
-  assignTrimmed('purchaseUnit', form.purchaseUnit)
   if (form.orderQuantity !== undefined && form.orderQuantity !== null) {
     query.orderQuantity = form.orderQuantity
   }
-  if (form.receivedQuantity !== undefined && form.receivedQuantity !== null) {
-    query.receivedQuantity = form.receivedQuantity
+  if (form.shippedQuantity !== undefined && form.shippedQuantity !== null) {
+    query.shippedQuantity = form.shippedQuantity
+  }
+  if (form.salesPerUnit !== undefined && form.salesPerUnit !== null) {
+    query.salesPerUnit = form.salesPerUnit
   }
   if (form.unitPrice !== undefined && form.unitPrice !== null) {
     query.unitPrice = form.unitPrice
@@ -742,10 +817,6 @@ function buildListQuery(overrides?: Partial<PurchaseOrderItemQuery>): PurchaseOr
   if (form.deliveryStatus !== undefined && form.deliveryStatus !== null) {
     query.deliveryStatus = form.deliveryStatus
   }
-  assignTrimmed('createdAtStart', form.createdAtStart)
-  assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('ExtField', form.ExtField)
-  assignTrimmed('remark', form.remark)
   return query
 }
 
@@ -760,7 +831,7 @@ async function loadData() {
   }
   loading.value = true
   try {
-    const res = await getPurchaseOrderItemList(buildListQuery())
+    const res = await getSalesOrderItemList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: unknown) {
@@ -779,7 +850,7 @@ function reload() {
 }
 
 /** 主表选中变更时自动加载子表 */
-watch(masterPurchaseOrderId, () => {
+watch(masterSalesOrderId, () => {
   reload()
 })
 
@@ -802,16 +873,16 @@ function handleCreate() {
     message.warning(t('common.status.empty'))
     return
   }
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.purchaseorderitem._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = {}
   formVisible.value = true
 }
 
-async function handleEdit(record: PurchaseOrderItem) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.purchaseorderitem._self') })
+async function handleEdit(record: SalesOrderItem) {
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
   formLoading.value = true
   try {
-    const detail = await getPurchaseOrderItemById(getPurchaseOrderItemId(record))
+    const detail = await getSalesOrderItemById(getSalesOrderItemId(record))
     formData.value = detail ? { ...detail } : { ...record }
     formVisible.value = true
   } finally {
@@ -825,7 +896,7 @@ function handleUpdate() {
   } else {
     message.warning(t('common.tip.select.to.action', {
       action: t('common.page.button.edit'),
-      entity: t('entity.purchaseorderitem._self'),
+      entity: pi.self(),
     }))
   }
 }
@@ -841,13 +912,13 @@ async function handleFormSubmit() {
   formLoading.value = true
   try {
     const payload = refInst.getValues?.()
-    const id = formData.value?.purchaseOrderItemId
+    const id = formData.value?.salesOrderItemId
     if (id) {
-      await updatePurchaseOrderItem(id, payload)
-      message.success(t('common.feedback.updated', { target: t('entity.purchaseorderitem._self') }))
+      await updateSalesOrderItem(id, payload)
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
-      await createPurchaseOrderItem(payload)
-      message.success(t('common.feedback.created', { target: t('entity.purchaseorderitem._self') }))
+      await createSalesOrderItem(payload)
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     await loadData()
@@ -860,18 +931,18 @@ function handleFormCancel() {
   formVisible.value = false
 }
 
-async function handleDeleteOne(record: PurchaseOrderItem) {
+async function handleDeleteOne(record: SalesOrderItem) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
     content: t('common.tip.confirm.delete.entity', {
-      entity: t('entity.purchaseorderitem._self'),
-      name: t('common.tip.this.target', { target: t('entity.purchaseorderitem._self') }),
+      entity: pi.self(),
+      name: t('common.tip.this.target', { target: pi.self() }),
     }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
-      await deletePurchaseOrderItemById(getPurchaseOrderItemId(record))
-      message.success(t('common.feedback.deleted', { target: t('entity.purchaseorderitem._self') }))
+      await deleteSalesOrderItemById(getSalesOrderItemId(record))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       await loadData()
     },
   })
@@ -881,22 +952,22 @@ async function handleDelete() {
   if (!hasMasterSelection.value || selectedRows.value.length === 0) {
     message.warning(t('common.tip.select.to.action', {
       action: t('common.page.button.delete'),
-      entity: t('entity.purchaseorderitem._self'),
+      entity: pi.self(),
     }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
     content: t('common.tip.confirm.delete.count', {
-      entity: t('entity.purchaseorderitem._self'),
+      entity: pi.self(),
       count: selectedRows.value.length,
     }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
-      const ids = selectedRows.value.map((r) => getPurchaseOrderItemId(r)).filter(Boolean)
-      await deletePurchaseOrderItemBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.purchaseorderitem._self') }))
+      const ids = selectedRows.value.map((r) => getSalesOrderItemId(r)).filter(Boolean)
+      await deleteSalesOrderItemBatch(ids)
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       await loadData()
     },
   })
@@ -906,35 +977,36 @@ function handleRefresh() {
   void loadData()
 }
 
+/** 打开导入对话框 */
 function handleImport() {
   if (!hasMasterSelection.value) {
-    message.warning(t('common.status.empty'))
-    return
-  }
+      message.warning(t('common.status.empty'))
+      return
+    }
   importVisible.value = true
 }
 
+/** 下载导入模板 Excel */
 async function handleDownloadTemplate(sheetName?: string, fileName?: string): Promise<Blob> {
-  const res = await getPurchaseOrderItemTemplate(sheetName, fileName)
-  return (res as { data?: Blob }).data ?? (res as Blob)
+  const res = await getSalesOrderItemTemplate(sheetName, fileName)
+  return (res as any)?.data ?? res
 }
 
-async function handleImportFile(
-  file: File,
-  sheetName?: string,
-): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importPurchaseOrderItem(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importSalesOrderItem(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   void loadData()
-  if (result.fail === 0) {
-    setTimeout(() => {
-      importVisible.value = false
-    }, 2000)
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
   }
 }
 
+/** 关闭导入对话框 */
 function handleImportCancel() {
   importVisible.value = false
 }
@@ -945,7 +1017,7 @@ async function handleExport() {
   }
   try {
     loading.value = true
-    const exportMeta = await exportPurchaseOrderItem(
+    const exportMeta = await exportSalesOrderItem(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,
       excelNames.fileBase
@@ -968,10 +1040,10 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.purchaseorderitem._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: unknown) {
     const err = error as { message?: string }
-    message.error(err?.message || t('common.feedback.export.failed', { target: t('entity.purchaseorderitem._self') }))
+    message.error(err?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }

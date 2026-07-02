@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/customer-service
 // 文件名称：service-request.d.ts
-// 创建时间：2026-06-21
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/customer-service 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -152,6 +152,16 @@ export interface ServiceRequest extends CompanyDtoBase {
    * 排序号（越小越靠前）
    */
   sortOrder: number;
+
+  /**
+   * 关联服务合同 （主表：TaktServiceContract）
+   */
+  serviceContract?: ServiceContract;
+
+  /**
+   * 关联服务订单列表（外键在子表 TaktServiceOrder.ServiceRequestId） （子表：TaktServiceOrder）
+   */
+  serviceOrders?: ServiceOrder[];
 
   /**
    * 服务工单列表（外键在子表 TaktServiceTicket.ServiceRequestId） （子表：TaktServiceTicket）
@@ -358,7 +368,7 @@ export interface ServiceRequestCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -476,6 +486,11 @@ export interface ServiceRequestCreate {
    * 关闭时间
    */
   closedAt?: string;
+
+  /**
+   * 关联服务订单列表（外键在子表 TaktServiceOrder.ServiceRequestId）（子表，级联保存）
+   */
+  serviceOrders?: ServiceOrderCreate[];
 
   /**
    * 服务工单列表（外键在子表 TaktServiceTicket.ServiceRequestId）（子表，级联保存）
@@ -600,6 +615,16 @@ export interface ServiceRequestTemplate {
   serviceContractCode?: string;
 
   /**
+   * 请求日期
+   */
+  requestDate?: string;
+
+  /**
+   * 期望服务日期
+   */
+  expectedServiceDate?: string;
+
+  /**
    * 请求类型（0=咨询，1=报修，2=投诉，3=安装，4=巡检，5=其他）
    */
   requestType?: number;
@@ -623,6 +648,61 @@ export interface ServiceRequestTemplate {
    * 请求主题
    */
   requestSubject?: string;
+
+  /**
+   * 请求描述
+   */
+  requestDescription?: string;
+
+  /**
+   * 联系人
+   */
+  contactPerson?: string;
+
+  /**
+   * 联系电话
+   */
+  contactPhone?: string;
+
+  /**
+   * 联系邮箱
+   */
+  contactEmail?: string;
+
+  /**
+   * 服务地址
+   */
+  serviceAddress?: string;
+
+  /**
+   * 受理人员工ID（序列化为string以避免Javascript精度问题）
+   */
+  assignedEmployeeId?: string;
+
+  /**
+   * 受理人姓名
+   */
+  assignedEmployeeName?: string;
+
+  /**
+   * 受理时间
+   */
+  assignedAt?: string;
+
+  /**
+   * 关闭时间
+   */
+  closedAt?: string;
+
+  /**
+   * 关联服务订单列表（外键在子表 TaktServiceOrder.ServiceRequestId）（子表，级联保存）
+   */
+  serviceOrders?: ServiceOrderCreate[];
+
+  /**
+   * 服务工单列表（外键在子表 TaktServiceTicket.ServiceRequestId）（子表，级联保存）
+   */
+  tickets?: ServiceTicketCreate[];
 
   /**
    * 扩展字段JSON
@@ -654,7 +734,7 @@ export interface ServiceRequestImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -694,6 +774,16 @@ export interface ServiceRequestImport {
   serviceContractCode?: string;
 
   /**
+   * 请求日期
+   */
+  requestDate?: string;
+
+  /**
+   * 期望服务日期
+   */
+  expectedServiceDate?: string;
+
+  /**
    * 请求类型（0=咨询，1=报修，2=投诉，3=安装，4=巡检，5=其他）
    */
   requestType?: number;
@@ -717,6 +807,61 @@ export interface ServiceRequestImport {
    * 请求主题
    */
   requestSubject?: string;
+
+  /**
+   * 请求描述
+   */
+  requestDescription?: string;
+
+  /**
+   * 联系人
+   */
+  contactPerson?: string;
+
+  /**
+   * 联系电话
+   */
+  contactPhone?: string;
+
+  /**
+   * 联系邮箱
+   */
+  contactEmail?: string;
+
+  /**
+   * 服务地址
+   */
+  serviceAddress?: string;
+
+  /**
+   * 受理人员工ID（序列化为string以避免Javascript精度问题）
+   */
+  assignedEmployeeId?: string;
+
+  /**
+   * 受理人姓名
+   */
+  assignedEmployeeName?: string;
+
+  /**
+   * 受理时间
+   */
+  assignedAt?: string;
+
+  /**
+   * 关闭时间
+   */
+  closedAt?: string;
+
+  /**
+   * 关联服务订单列表（外键在子表 TaktServiceOrder.ServiceRequestId）（子表，级联保存）
+   */
+  serviceOrders?: ServiceOrderCreate[];
+
+  /**
+   * 服务工单列表（外键在子表 TaktServiceTicket.ServiceRequestId）（子表，级联保存）
+   */
+  tickets?: ServiceTicketCreate[];
 
   /**
    * 扩展字段JSON

@@ -11,10 +11,10 @@
 // ========================================
 
 using System.Diagnostics;
-using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Http;
 using Takt.Infrastructure.Data.Context;
+using Takt.Infrastructure.Services;
 using Takt.Infrastructure.SignalR;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models.Logging;
@@ -252,7 +252,7 @@ public class TaktLoggingMiddleware
     /// </returns>
     private static TaktLogContext BuildRequestContext(HttpContext context, string requestId)
     {
-        var user = context.User;
+        var principal = TaktUserContext.ResolvePrincipal(context);
         return new TaktLogContext
         {
             Module = "request",
@@ -260,10 +260,10 @@ public class TaktLoggingMiddleware
             RequestId = requestId,
             Route = context.Request.Path.Value,
             ClientIp = context.Connection.RemoteIpAddress?.ToString(),
-            TenantCode = context.Request.Headers["X-Tenant-Code"].FirstOrDefault(),
-            CompanyCode = context.Request.Headers["X-Company-Code"].FirstOrDefault(),
-            UserId = user.FindFirstValue(ClaimTypes.NameIdentifier),
-            Username = user.Identity?.Name
+            TenantCode = TaktUserContext.TryResolveTenantCode(context),
+            CompanyCode = TaktUserContext.TryResolveCompanyCode(context),
+            UserId = TaktUserContext.TryResolveUserId(principal)?.ToString(),
+            Username = TaktUserContext.TryResolveUserName(principal)
         };
     }
 }

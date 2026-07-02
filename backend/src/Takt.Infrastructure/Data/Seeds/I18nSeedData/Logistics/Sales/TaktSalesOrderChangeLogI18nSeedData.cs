@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Sales
 // 文件名称：TaktSalesOrderChangeLogI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSalesOrderChangeLog 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktSalesOrderChangeLogI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salesorderchangelog._self", "zh-HK", "销售订单变更记录信息_hk", "实体名称"),
 
             // entity.salesorderchangelog.salesorderid
-            new TranslationSeedItem("entity.salesorderchangelog.salesorderid", "en-US", "销售订单ID_us", "销售订单ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.salesorderchangelog.salesorderid", "en-US", "销售订单ID_us", "销售订单（关联 TaktSalesOrder.Id，选项 TaktSalesOrders/options）"),
             // entity.salesorderchangelog.salesorderid
-            new TranslationSeedItem("entity.salesorderchangelog.salesorderid", "ja-JP", "销售订单ID_jp", "销售订单ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.salesorderchangelog.salesorderid", "ja-JP", "销售订单ID_jp", "销售订单（关联 TaktSalesOrder.Id，选项 TaktSalesOrders/options）"),
             // entity.salesorderchangelog.salesorderid
-            new TranslationSeedItem("entity.salesorderchangelog.salesorderid", "zh-CN", "销售订单ID", "销售订单ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.salesorderchangelog.salesorderid", "zh-CN", "销售订单ID", "销售订单（关联 TaktSalesOrder.Id，选项 TaktSalesOrders/options）"),
             // entity.salesorderchangelog.salesorderid
-            new TranslationSeedItem("entity.salesorderchangelog.salesorderid", "zh-HK", "销售订单ID_hk", "销售订单ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.salesorderchangelog.salesorderid", "zh-HK", "销售订单ID_hk", "销售订单（关联 TaktSalesOrder.Id，选项 TaktSalesOrders/options）"),
 
             // entity.salesorderchangelog.ordercode
             new TranslationSeedItem("entity.salesorderchangelog.ordercode", "en-US", "订单编码_us", "订单编码"),

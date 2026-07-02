@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/foundation
 // 文件名称：setting.d.ts
-// 创建时间：2026-06-14
+// 创建时间：2026-06-27
 // 创建人：Takt365(Auto Generated)
 // 功能描述：foundation 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -46,30 +46,30 @@ export interface Setting extends CompanyDtoBase {
   /**
    * 设置描述
    */
-  description?: string;
+  settingDescription?: string;
 
   /**
-   * 设置类别（0=前端，1=后端）
+   * 设置类别（字典 sys_resource_type；frontend=前端 backend=后端）
    */
-  settingGroup: number;
+  settingGroup: string;
 
   /**
-   * 值类型（用于前端渲染不同的输入控件）
+   * 值类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）
    */
-  valueType: number;
+  valueType: string;
 
   /**
-   * 是否内置（字典 sys_yes_no_type；0=否 1=是）
+   * 内置（字典 sys_yes_no_type；0=否 1=是）
    */
   isBuiltIn: number;
 
   /**
-   * 是否只读（字典 sys_yes_no_type；0=否 1=是）
+   * 只读（字典 sys_yes_no_type；0=否 1=是）
    */
   isReadonly: number;
 
   /**
-   * 是否加密存储（字典 sys_yes_no_type；0=否 1=是）
+   * 加密（字典 sys_yes_no_type；0=否 1=是）
    */
   isEncrypted: number;
 
@@ -77,6 +77,11 @@ export interface Setting extends CompanyDtoBase {
    * 排序号
    */
   sortOrder: number;
+
+  /**
+   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+   */
+  settingStatus: number;
 
 }
 
@@ -116,30 +121,30 @@ export interface SettingQuery extends TaktPagedQuery {
   /**
    * 设置描述
    */
-  description?: string;
+  settingDescription?: string;
 
   /**
-   * 设置类别（0=前端，1=后端）
+   * 设置类别（字典 sys_resource_type；frontend=前端 backend=后端）
    */
-  settingGroup?: number;
+  settingGroup?: string;
 
   /**
-   * 值类型（用于前端渲染不同的输入控件）
+   * 值类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）
    */
-  valueType?: number;
+  valueType?: string;
 
   /**
-   * 是否内置（字典 sys_yes_no_type；0=否 1=是）
+   * 内置（字典 sys_yes_no_type；0=否 1=是）
    */
   isBuiltIn?: number;
 
   /**
-   * 是否只读（字典 sys_yes_no_type；0=否 1=是）
+   * 只读（字典 sys_yes_no_type；0=否 1=是）
    */
   isReadonly?: number;
 
   /**
-   * 是否加密存储（字典 sys_yes_no_type；0=否 1=是）
+   * 加密（字典 sys_yes_no_type；0=否 1=是）
    */
   isEncrypted?: number;
 
@@ -147,6 +152,11 @@ export interface SettingQuery extends TaktPagedQuery {
    * 排序号
    */
   sortOrder?: number;
+
+  /**
+   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+   */
+  settingStatus?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -188,7 +198,7 @@ export interface SettingCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -210,32 +220,37 @@ export interface SettingCreate {
   /**
    * 设置描述
    */
-  description?: string;
+  settingDescription?: string;
 
   /**
-   * 设置类别（0=前端，1=后端）
+   * 设置类别（字典 sys_resource_type；frontend=前端 backend=后端）
    */
-  settingGroup: number;
+  settingGroup: string;
 
   /**
-   * 值类型（用于前端渲染不同的输入控件）
+   * 值类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）
    */
-  valueType: number;
+  valueType: string;
 
   /**
-   * 是否内置（字典 sys_yes_no_type；0=否 1=是）
+   * 内置（字典 sys_yes_no_type；0=否 1=是）
    */
   isBuiltIn: number;
 
   /**
-   * 是否只读（字典 sys_yes_no_type；0=否 1=是）
+   * 只读（字典 sys_yes_no_type；0=否 1=是）
    */
   isReadonly: number;
 
   /**
-   * 是否加密存储（字典 sys_yes_no_type；0=否 1=是）
+   * 加密（字典 sys_yes_no_type；0=否 1=是）
    */
   isEncrypted: number;
+
+  /**
+   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+   */
+  settingStatus: number;
 
   /**
    * 扩展字段JSON
@@ -285,6 +300,25 @@ export interface SettingSort {
 
 
 /**
+ * Setting 状态更新 DTO
+ * 对应前端 SettingStatus
+ * @description 对应后端 TaktSettingStatusDto
+ */
+export interface SettingStatus {
+  /**
+   * SettingID
+   */
+  settingId: string;
+
+  /**
+   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+   */
+  settingStatus: number;
+
+}
+
+
+/**
  * Setting 导入模板行 DTO
  * 对应前端 SettingTemplate
  * @description 对应后端 TaktSettingTemplateDto
@@ -318,32 +352,37 @@ export interface SettingTemplate {
   /**
    * 设置描述
    */
-  description?: string;
+  settingDescription?: string;
 
   /**
-   * 设置类别（0=前端，1=后端）
+   * 设置类别（字典 sys_resource_type；frontend=前端 backend=后端）
    */
-  settingGroup?: number;
+  settingGroup?: string;
 
   /**
-   * 值类型（用于前端渲染不同的输入控件）
+   * 值类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）
    */
-  valueType?: number;
+  valueType?: string;
 
   /**
-   * 是否内置（字典 sys_yes_no_type；0=否 1=是）
+   * 内置（字典 sys_yes_no_type；0=否 1=是）
    */
   isBuiltIn?: number;
 
   /**
-   * 是否只读（字典 sys_yes_no_type；0=否 1=是）
+   * 只读（字典 sys_yes_no_type；0=否 1=是）
    */
   isReadonly?: number;
 
   /**
-   * 是否加密存储（字典 sys_yes_no_type；0=否 1=是）
+   * 加密（字典 sys_yes_no_type；0=否 1=是）
    */
   isEncrypted?: number;
+
+  /**
+   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+   */
+  settingStatus?: number;
 
   /**
    * 扩展字段JSON
@@ -375,7 +414,7 @@ export interface SettingImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -397,32 +436,37 @@ export interface SettingImport {
   /**
    * 设置描述
    */
-  description?: string;
+  settingDescription?: string;
 
   /**
-   * 设置类别（0=前端，1=后端）
+   * 设置类别（字典 sys_resource_type；frontend=前端 backend=后端）
    */
-  settingGroup?: number;
+  settingGroup?: string;
 
   /**
-   * 值类型（用于前端渲染不同的输入控件）
+   * 值类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）
    */
-  valueType?: number;
+  valueType?: string;
 
   /**
-   * 是否内置（字典 sys_yes_no_type；0=否 1=是）
+   * 内置（字典 sys_yes_no_type；0=否 1=是）
    */
   isBuiltIn?: number;
 
   /**
-   * 是否只读（字典 sys_yes_no_type；0=否 1=是）
+   * 只读（字典 sys_yes_no_type；0=否 1=是）
    */
   isReadonly?: number;
 
   /**
-   * 是否加密存储（字典 sys_yes_no_type；0=否 1=是）
+   * 加密（字典 sys_yes_no_type；0=否 1=是）
    */
   isEncrypted?: number;
+
+  /**
+   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+   */
+  settingStatus?: number;
 
   /**
    * 扩展字段JSON
@@ -471,30 +515,30 @@ export interface SettingExport {
   /**
    * 设置描述
    */
-  description?: string;
+  settingDescription?: string;
 
   /**
-   * 设置类别（0=前端，1=后端）
+   * 设置类别（字典 sys_resource_type；frontend=前端 backend=后端）
    */
-  settingGroup: number;
+  settingGroup: string;
 
   /**
-   * 值类型（用于前端渲染不同的输入控件）
+   * 值类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）
    */
-  valueType: number;
+  valueType: string;
 
   /**
-   * 是否内置（字典 sys_yes_no_type；0=否 1=是）
+   * 内置（字典 sys_yes_no_type；0=否 1=是）
    */
   isBuiltIn: number;
 
   /**
-   * 是否只读（字典 sys_yes_no_type；0=否 1=是）
+   * 只读（字典 sys_yes_no_type；0=否 1=是）
    */
   isReadonly: number;
 
   /**
-   * 是否加密存储（字典 sys_yes_no_type；0=否 1=是）
+   * 加密（字典 sys_yes_no_type；0=否 1=是）
    */
   isEncrypted: number;
 
@@ -502,6 +546,11 @@ export interface SettingExport {
    * 排序号
    */
   sortOrder: number;
+
+  /**
+   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+   */
+  settingStatus: number;
 
   /**
    * 扩展字段JSON

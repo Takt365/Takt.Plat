@@ -1,0 +1,313 @@
+// ========================================
+// 项目名称：节拍工厂·Takt Plat
+// 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Procurement
+// 文件名称：TaktPurchaseInquiryI18nSeedData.cs
+// 创建时间：2026-07-02
+// 创建人：Takt365(Auto Generated)
+// 功能描述：TaktPurchaseInquiry 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
+// 
+// 版权信息：Copyright (c) 2025 Takt  All rights reserved.
+// 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
+// ========================================
+
+using System.Linq;
+using Microsoft.Extensions.DependencyInjection;
+using Takt.Domain.Entities.Foundation;
+using Takt.Domain.Interfaces;
+using Takt.Domain.Repositories;
+using Takt.Shared.Helpers;
+
+namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Procurement;
+
+/// <summary>
+/// TaktPurchaseInquiry 实体国际化翻译种子（键前缀 entity.purchaseinquiry.*）
+/// 幂等性：存在则更新，不存在则创建
+/// </summary>
+public class TaktPurchaseInquiryI18nSeedData : ITaktSeedDataCoordinator
+{
+    /// <summary>
+    /// 执行顺序（实体翻译种子，位于部门翻译之后）
+    /// </summary>
+    public int Order => 52;
+
+    /// <summary>
+    /// 初始化实体字段翻译种子
+    /// </summary>
+    public async Task<(int InsertCount, int UpdateCount)> SeedAsync(IServiceProvider serviceProvider, string? tenantCode = null)
+    {
+        TaktLogger.Information("开始初始化 TaktPurchaseInquiry 实体国际化翻译种子...");
+
+        if (string.IsNullOrEmpty(tenantCode))
+        {
+            TaktLogger.Warning("租户编码为空，跳过实体国际化翻译种子初始化");
+            return (0, 0);
+        }
+
+        var repository = serviceProvider.GetRequiredService<ITaktTenantSeedRepository<TaktTranslation>>();
+        var cultureRepository = serviceProvider.GetRequiredService<ITaktTenantSeedRepository<TaktCulture>>();
+        var cultureIdByCode = (await cultureRepository.GetListAsync(c => c.TenantCode == tenantCode))
+            .ToDictionary(c => c.CultureCode, c => c.Id);
+        int insertCount = 0;
+        int updateCount = 0;
+
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 purchaseinquiry 实体翻译...", tenantCode);
+
+        foreach (var item in GetPurchaseInquiryTranslations())
+        {
+            if (!cultureIdByCode.TryGetValue(item.CultureCode, out var cultureId))
+            {
+                TaktLogger.Warning("未找到区域文化 {CultureCode}，跳过翻译 {I18nKey}", item.CultureCode, item.I18nKey);
+                continue;
+            }
+
+            var (translation, i, u) = await CreateOrUpdateTranslationAsync(
+                repository,
+                tenantCode,
+                cultureId,
+                item);
+            insertCount += i;
+            updateCount += u;
+        }
+
+        TaktLogger.Information("TaktPurchaseInquiry 实体翻译种子完成: 插入 {InsertCount} 条，更新 {UpdateCount} 条", insertCount, updateCount);
+        return (insertCount, updateCount);
+    }
+
+    /// <summary>
+    /// TaktPurchaseInquiry 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
+    /// I18nKey：entity.purchaseinquiry._self / entity.purchaseinquiry.{{field}}；ResourceGroup=Procurement；ResourceType=frontend
+    /// </summary>
+    private static List<TranslationSeedItem> GetPurchaseInquiryTranslations()
+    {
+        return new List<TranslationSeedItem>
+        {
+            // entity.purchaseinquiry._self
+            new TranslationSeedItem("entity.purchaseinquiry._self", "en-US", "Purchase Inquiry Information_us", "实体名称"),
+            // entity.purchaseinquiry._self
+            new TranslationSeedItem("entity.purchaseinquiry._self", "ja-JP", "采购询价信息_jp", "实体名称"),
+            // entity.purchaseinquiry._self
+            new TranslationSeedItem("entity.purchaseinquiry._self", "zh-CN", "采购询价信息", "实体名称"),
+            // entity.purchaseinquiry._self
+            new TranslationSeedItem("entity.purchaseinquiry._self", "zh-HK", "采购询价信息_hk", "实体名称"),
+
+            // entity.purchaseinquiry.plantcode
+            new TranslationSeedItem("entity.purchaseinquiry.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            // entity.purchaseinquiry.plantcode
+            new TranslationSeedItem("entity.purchaseinquiry.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            // entity.purchaseinquiry.plantcode
+            new TranslationSeedItem("entity.purchaseinquiry.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            // entity.purchaseinquiry.plantcode
+            new TranslationSeedItem("entity.purchaseinquiry.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+
+            // entity.purchaseinquiry.code
+            new TranslationSeedItem("entity.purchaseinquiry.code", "en-US", "采购询价编码_us", "采购询价编码（租户+公司+工厂内业务唯一）"),
+            // entity.purchaseinquiry.code
+            new TranslationSeedItem("entity.purchaseinquiry.code", "ja-JP", "采购询价编码_jp", "采购询价编码（租户+公司+工厂内业务唯一）"),
+            // entity.purchaseinquiry.code
+            new TranslationSeedItem("entity.purchaseinquiry.code", "zh-CN", "采购询价编码", "采购询价编码（租户+公司+工厂内业务唯一）"),
+            // entity.purchaseinquiry.code
+            new TranslationSeedItem("entity.purchaseinquiry.code", "zh-HK", "采购询价编码_hk", "采购询价编码（租户+公司+工厂内业务唯一）"),
+
+            // entity.purchaseinquiry.inquirydate
+            new TranslationSeedItem("entity.purchaseinquiry.inquirydate", "en-US", "询价日期_us", "询价日期"),
+            // entity.purchaseinquiry.inquirydate
+            new TranslationSeedItem("entity.purchaseinquiry.inquirydate", "ja-JP", "询价日期_jp", "询价日期"),
+            // entity.purchaseinquiry.inquirydate
+            new TranslationSeedItem("entity.purchaseinquiry.inquirydate", "zh-CN", "询价日期", "询价日期"),
+            // entity.purchaseinquiry.inquirydate
+            new TranslationSeedItem("entity.purchaseinquiry.inquirydate", "zh-HK", "询价日期_hk", "询价日期"),
+
+            // entity.purchaseinquiry.quotedeadlinedate
+            new TranslationSeedItem("entity.purchaseinquiry.quotedeadlinedate", "en-US", "报价截止日期_us", "报价截止日期"),
+            // entity.purchaseinquiry.quotedeadlinedate
+            new TranslationSeedItem("entity.purchaseinquiry.quotedeadlinedate", "ja-JP", "报价截止日期_jp", "报价截止日期"),
+            // entity.purchaseinquiry.quotedeadlinedate
+            new TranslationSeedItem("entity.purchaseinquiry.quotedeadlinedate", "zh-CN", "报价截止日期", "报价截止日期"),
+            // entity.purchaseinquiry.quotedeadlinedate
+            new TranslationSeedItem("entity.purchaseinquiry.quotedeadlinedate", "zh-HK", "报价截止日期_hk", "报价截止日期"),
+
+            // entity.purchaseinquiry.inquiryid
+            new TranslationSeedItem("entity.purchaseinquiry.inquiryid", "en-US", "询价人员工ID_us", "询价人员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            // entity.purchaseinquiry.inquiryid
+            new TranslationSeedItem("entity.purchaseinquiry.inquiryid", "ja-JP", "询价人员工ID_jp", "询价人员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            // entity.purchaseinquiry.inquiryid
+            new TranslationSeedItem("entity.purchaseinquiry.inquiryid", "zh-CN", "询价人员工ID", "询价人员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            // entity.purchaseinquiry.inquiryid
+            new TranslationSeedItem("entity.purchaseinquiry.inquiryid", "zh-HK", "询价人员工ID_hk", "询价人员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+
+            // entity.purchaseinquiry.inquiryby
+            new TranslationSeedItem("entity.purchaseinquiry.inquiryby", "en-US", "询价人_us", "询价人（人员代码）"),
+            // entity.purchaseinquiry.inquiryby
+            new TranslationSeedItem("entity.purchaseinquiry.inquiryby", "ja-JP", "询价人_jp", "询价人（人员代码）"),
+            // entity.purchaseinquiry.inquiryby
+            new TranslationSeedItem("entity.purchaseinquiry.inquiryby", "zh-CN", "询价人", "询价人（人员代码）"),
+            // entity.purchaseinquiry.inquiryby
+            new TranslationSeedItem("entity.purchaseinquiry.inquiryby", "zh-HK", "询价人_hk", "询价人（人员代码）"),
+
+            // entity.purchaseinquiry.suppliercode
+            new TranslationSeedItem("entity.purchaseinquiry.suppliercode", "en-US", "询价供应商编码_us", "询价供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）"),
+            // entity.purchaseinquiry.suppliercode
+            new TranslationSeedItem("entity.purchaseinquiry.suppliercode", "ja-JP", "询价供应商编码_jp", "询价供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）"),
+            // entity.purchaseinquiry.suppliercode
+            new TranslationSeedItem("entity.purchaseinquiry.suppliercode", "zh-CN", "询价供应商编码", "询价供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）"),
+            // entity.purchaseinquiry.suppliercode
+            new TranslationSeedItem("entity.purchaseinquiry.suppliercode", "zh-HK", "询价供应商编码_hk", "询价供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）"),
+
+            // entity.purchaseinquiry.suppliername
+            new TranslationSeedItem("entity.purchaseinquiry.suppliername", "en-US", "询价供应商名称_us", "询价供应商名称"),
+            // entity.purchaseinquiry.suppliername
+            new TranslationSeedItem("entity.purchaseinquiry.suppliername", "ja-JP", "询价供应商名称_jp", "询价供应商名称"),
+            // entity.purchaseinquiry.suppliername
+            new TranslationSeedItem("entity.purchaseinquiry.suppliername", "zh-CN", "询价供应商名称", "询价供应商名称"),
+            // entity.purchaseinquiry.suppliername
+            new TranslationSeedItem("entity.purchaseinquiry.suppliername", "zh-HK", "询价供应商名称_hk", "询价供应商名称"),
+
+            // entity.purchaseinquiry.paymentmode
+            new TranslationSeedItem("entity.purchaseinquiry.paymentmode", "en-US", "付款方式_us", "付款方式（字典 logistics_payment_mode：vendorpay=供应商付款，employeereimburse=员工报销）"),
+            // entity.purchaseinquiry.paymentmode
+            new TranslationSeedItem("entity.purchaseinquiry.paymentmode", "ja-JP", "付款方式_jp", "付款方式（字典 logistics_payment_mode：vendorpay=供应商付款，employeereimburse=员工报销）"),
+            // entity.purchaseinquiry.paymentmode
+            new TranslationSeedItem("entity.purchaseinquiry.paymentmode", "zh-CN", "付款方式", "付款方式（字典 logistics_payment_mode：vendorpay=供应商付款，employeereimburse=员工报销）"),
+            // entity.purchaseinquiry.paymentmode
+            new TranslationSeedItem("entity.purchaseinquiry.paymentmode", "zh-HK", "付款方式_hk", "付款方式（字典 logistics_payment_mode：vendorpay=供应商付款，employeereimburse=员工报销）"),
+
+            // entity.purchaseinquiry.chainscheme
+            new TranslationSeedItem("entity.purchaseinquiry.chainscheme", "en-US", "采购链路方案_us", "采购链路方案（字典 logistics_procurement_chain_scheme；1=方案一含报销，2=方案二仅 PO）"),
+            // entity.purchaseinquiry.chainscheme
+            new TranslationSeedItem("entity.purchaseinquiry.chainscheme", "ja-JP", "采购链路方案_jp", "采购链路方案（字典 logistics_procurement_chain_scheme；1=方案一含报销，2=方案二仅 PO）"),
+            // entity.purchaseinquiry.chainscheme
+            new TranslationSeedItem("entity.purchaseinquiry.chainscheme", "zh-CN", "采购链路方案", "采购链路方案（字典 logistics_procurement_chain_scheme；1=方案一含报销，2=方案二仅 PO）"),
+            // entity.purchaseinquiry.chainscheme
+            new TranslationSeedItem("entity.purchaseinquiry.chainscheme", "zh-HK", "采购链路方案_hk", "采购链路方案（字典 logistics_procurement_chain_scheme；1=方案一含报销，2=方案二仅 PO）"),
+
+            // entity.purchaseinquiry.totalquantity
+            new TranslationSeedItem("entity.purchaseinquiry.totalquantity", "en-US", "询价总数量_us", "询价总数量（基本单位数量）"),
+            // entity.purchaseinquiry.totalquantity
+            new TranslationSeedItem("entity.purchaseinquiry.totalquantity", "ja-JP", "询价总数量_jp", "询价总数量（基本单位数量）"),
+            // entity.purchaseinquiry.totalquantity
+            new TranslationSeedItem("entity.purchaseinquiry.totalquantity", "zh-CN", "询价总数量", "询价总数量（基本单位数量）"),
+            // entity.purchaseinquiry.totalquantity
+            new TranslationSeedItem("entity.purchaseinquiry.totalquantity", "zh-HK", "询价总数量_hk", "询价总数量（基本单位数量）"),
+
+            // entity.purchaseinquiry.totalamount
+            new TranslationSeedItem("entity.purchaseinquiry.totalamount", "en-US", "询价总金额_us", "询价总金额"),
+            // entity.purchaseinquiry.totalamount
+            new TranslationSeedItem("entity.purchaseinquiry.totalamount", "ja-JP", "询价总金额_jp", "询价总金额"),
+            // entity.purchaseinquiry.totalamount
+            new TranslationSeedItem("entity.purchaseinquiry.totalamount", "zh-CN", "询价总金额", "询价总金额"),
+            // entity.purchaseinquiry.totalamount
+            new TranslationSeedItem("entity.purchaseinquiry.totalamount", "zh-HK", "询价总金额_hk", "询价总金额"),
+
+            // entity.purchaseinquiry.convertedquantity
+            new TranslationSeedItem("entity.purchaseinquiry.convertedquantity", "en-US", "已转价格数量_us", "已转价格数量（基本单位数量）"),
+            // entity.purchaseinquiry.convertedquantity
+            new TranslationSeedItem("entity.purchaseinquiry.convertedquantity", "ja-JP", "已转价格数量_jp", "已转价格数量（基本单位数量）"),
+            // entity.purchaseinquiry.convertedquantity
+            new TranslationSeedItem("entity.purchaseinquiry.convertedquantity", "zh-CN", "已转价格数量", "已转价格数量（基本单位数量）"),
+            // entity.purchaseinquiry.convertedquantity
+            new TranslationSeedItem("entity.purchaseinquiry.convertedquantity", "zh-HK", "已转价格数量_hk", "已转价格数量（基本单位数量）"),
+
+            // entity.purchaseinquiry.convertedamount
+            new TranslationSeedItem("entity.purchaseinquiry.convertedamount", "en-US", "已转价格金额_us", "已转价格金额"),
+            // entity.purchaseinquiry.convertedamount
+            new TranslationSeedItem("entity.purchaseinquiry.convertedamount", "ja-JP", "已转价格金额_jp", "已转价格金额"),
+            // entity.purchaseinquiry.convertedamount
+            new TranslationSeedItem("entity.purchaseinquiry.convertedamount", "zh-CN", "已转价格金额", "已转价格金额"),
+            // entity.purchaseinquiry.convertedamount
+            new TranslationSeedItem("entity.purchaseinquiry.convertedamount", "zh-HK", "已转价格金额_hk", "已转价格金额"),
+
+            // entity.purchaseinquiry.inquiryreason
+            new TranslationSeedItem("entity.purchaseinquiry.inquiryreason", "en-US", "询价原因_us", "询价原因"),
+            // entity.purchaseinquiry.inquiryreason
+            new TranslationSeedItem("entity.purchaseinquiry.inquiryreason", "ja-JP", "询价原因_jp", "询价原因"),
+            // entity.purchaseinquiry.inquiryreason
+            new TranslationSeedItem("entity.purchaseinquiry.inquiryreason", "zh-CN", "询价原因", "询价原因"),
+            // entity.purchaseinquiry.inquiryreason
+            new TranslationSeedItem("entity.purchaseinquiry.inquiryreason", "zh-HK", "询价原因_hk", "询价原因"),
+
+            // entity.purchaseinquiry.inquirystatus
+            new TranslationSeedItem("entity.purchaseinquiry.inquirystatus", "en-US", "询价状态_us", "询价状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            // entity.purchaseinquiry.inquirystatus
+            new TranslationSeedItem("entity.purchaseinquiry.inquirystatus", "ja-JP", "询价状态_jp", "询价状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            // entity.purchaseinquiry.inquirystatus
+            new TranslationSeedItem("entity.purchaseinquiry.inquirystatus", "zh-CN", "询价状态", "询价状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            // entity.purchaseinquiry.inquirystatus
+            new TranslationSeedItem("entity.purchaseinquiry.inquirystatus", "zh-HK", "询价状态_hk", "询价状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+
+            // entity.purchaseinquiry.convertedstatus
+            new TranslationSeedItem("entity.purchaseinquiry.convertedstatus", "en-US", "转价格状态_us", "转价格状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）"),
+            // entity.purchaseinquiry.convertedstatus
+            new TranslationSeedItem("entity.purchaseinquiry.convertedstatus", "ja-JP", "转价格状态_jp", "转价格状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）"),
+            // entity.purchaseinquiry.convertedstatus
+            new TranslationSeedItem("entity.purchaseinquiry.convertedstatus", "zh-CN", "转价格状态", "转价格状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）"),
+            // entity.purchaseinquiry.convertedstatus
+            new TranslationSeedItem("entity.purchaseinquiry.convertedstatus", "zh-HK", "转价格状态_hk", "转价格状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）"),
+
+            // entity.purchaseinquiry.items
+            new TranslationSeedItem("entity.purchaseinquiry.items", "en-US", "采购询价明细列表_us", "采购询价明细列表（主子表关系）"),
+            // entity.purchaseinquiry.items
+            new TranslationSeedItem("entity.purchaseinquiry.items", "ja-JP", "采购询价明细列表_jp", "采购询价明细列表（主子表关系）"),
+            // entity.purchaseinquiry.items
+            new TranslationSeedItem("entity.purchaseinquiry.items", "zh-CN", "采购询价明细列表", "采购询价明细列表（主子表关系）"),
+            // entity.purchaseinquiry.items
+            new TranslationSeedItem("entity.purchaseinquiry.items", "zh-HK", "采购询价明细列表_hk", "采购询价明细列表（主子表关系）"),
+        };
+    }
+
+    /// <summary>
+    /// 填充 TaktTranslation 全部业务字段（含租户基类字段）
+    /// </summary>
+    private static void ApplyTranslationFields(
+        TaktTranslation translation,
+        string tenantCode,
+        long cultureId,
+        TranslationSeedItem item)
+    {
+        translation.TenantCode = tenantCode;
+        translation.CultureId = cultureId;
+        translation.CultureCode = item.CultureCode;
+        translation.I18nKey = item.I18nKey;
+        translation.TranslationText = item.TranslationText;
+        translation.ResourceGroup = "Procurement";
+        translation.ResourceType = "frontend";
+        translation.ContextNote = item.ContextNote;
+        translation.ExtField = null;
+        translation.Remark = null;
+        translation.IsDeleted = 0;
+        translation.DeletedBy = null;
+        translation.DeletedAt = null;
+    }
+
+    private static async Task<(TaktTranslation Translation, int InsertCount, int UpdateCount)> CreateOrUpdateTranslationAsync(
+        ITaktTenantSeedRepository<TaktTranslation> repository,
+        string tenantCode,
+        long cultureId,
+        TranslationSeedItem item)
+    {
+        var translation = await repository.FirstAsync(t =>
+            t.TenantCode == tenantCode &&
+            t.I18nKey == item.I18nKey &&
+            t.CultureCode == item.CultureCode);
+
+        if (translation == null)
+        {
+            translation = new TaktTranslation();
+            ApplyTranslationFields(translation, tenantCode, cultureId, item);
+            translation = await repository.CreateAsync(translation);
+            return (translation, 1, 0);
+        }
+
+        ApplyTranslationFields(translation, tenantCode, cultureId, item);
+        await repository.UpdateAsync(translation);
+        return (translation, 0, 1);
+    }
+
+    /// <summary>
+    /// 翻译种子项（对应 TaktTranslation 全部可写字段，CultureId 由 SeedAsync 解析）
+    /// </summary>
+    private sealed record TranslationSeedItem(
+        string I18nKey,
+        string CultureCode,
+        string TranslationText,
+        string? ContextNote);
+}

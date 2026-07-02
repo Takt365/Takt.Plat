@@ -26,228 +26,186 @@ namespace Takt.Domain.Entities.Accounting.Financial;
 [SugarIndex("ix_company_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
 [SugarIndex("ix_company_code_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, true)]
 public class TaktCompany : TaktTenantEntityBase
-{
-    /// <summary>
+{    /// <summary>
     /// 公司代码（唯一索引：租户内唯一，见 ix_company_code_unique）
     /// </summary>
     [SugarColumn(ColumnName = "company_code", ColumnDescription = "公司代码", ColumnDataType = "varchar", Length = 4, IsNullable = false)]
     public string CompanyCode { get; set; } = string.Empty;
-
     /// <summary>
     /// 公司名称
     /// </summary>
     [SugarColumn(ColumnName = "company_name", ColumnDescription = "公司名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = false)]
     public string CompanyName { get; set; } = string.Empty;
-
     /// <summary>
     /// 公司简称
     /// </summary>
     [SugarColumn(ColumnName = "company_short_name", ColumnDescription = "公司简称", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string CompanyShortName { get; set; } = string.Empty;
-
     /// <summary>
-    /// 公司类型
+    /// 企业性质（字典 sys_enterprise_nature_type）
     /// </summary>
-    [SugarColumn(ColumnName = "company_type", ColumnDescription = "公司类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public int CompanyType { get; set; } = 1;
-
+    [SugarColumn(ColumnName = "enterprise_nature", ColumnDescription = "企业性质", ColumnDataType = "varchar", Length = 4, IsNullable = false, DefaultValue = "150")]
+    public string EnterpriseNature { get; set; } = "150";
     /// <summary>
-    /// 企业性质（统计用登记注册类型代码，国统字〔1998〕200号）
+    /// 行业属性（字典 sys_industry_attribute_type）
     /// </summary>
-    [SugarColumn(ColumnName = "enterprise_nature", ColumnDescription = "企业性质（登记注册类型代码）", ColumnDataType = "int", IsNullable = false, DefaultValue = "150")]
-    public int EnterpriseNature { get; set; } = 150;
-
+    [SugarColumn(ColumnName = "industry_attribute", ColumnDescription = "行业属性", ColumnDataType = "varchar", Length = 4, IsNullable = false, DefaultValue = "C")]
+    public string IndustryAttribute { get; set; } = "C";
     /// <summary>
-    /// 行业属性（GB/T 4754-2017 国民经济行业分类门类）
+    /// 企业规模（字典 sys_enterprise_scale_type）
     /// </summary>
-    [SugarColumn(ColumnName = "industry_attribute", ColumnDescription = "行业属性（国民经济行业门类）", ColumnDataType = "int", IsNullable = false, DefaultValue = "3")]
-    public int IndustryAttribute { get; set; } = 3;
-
-    /// <summary>
-    /// 企业规模（统计上大中小微型划分代码 1–4）
-    /// </summary>
-    [SugarColumn(ColumnName = "enterprise_scale", ColumnDescription = "企业规模（大中小微型代码）", ColumnDataType = "int", IsNullable = false, DefaultValue = "2")]
-    public int EnterpriseScale { get; set; } = 2;
-
+    [SugarColumn(ColumnName = "enterprise_scale", ColumnDescription = "企业规模", ColumnDataType = "varchar", Length = 2, IsNullable = false, DefaultValue = "M")]
+    public string EnterpriseScale { get; set; } = "M";
     /// <summary>
     /// 经营范围
     /// </summary>
     [SugarColumn(ColumnName = "business_scope", ColumnDescription = "经营范围", ColumnDataType = "nvarchar", Length = -1, IsNullable = false, DefaultValue = "")]
     public string BusinessScope { get; set; } = string.Empty;
-
     /// <summary>
     /// 注册地址1
     /// </summary>
     [SugarColumn(ColumnName = "registration_address1", ColumnDescription = "注册地址1", ColumnDataType = "nvarchar", Length = 200, IsNullable = false, DefaultValue = "")]
     public string RegistrationAddress1 { get; set; } = string.Empty;
-
     /// <summary>
     /// 注册地址2
     /// </summary>
     [SugarColumn(ColumnName = "registration_address2", ColumnDescription = "注册地址2", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
     public string? RegistrationAddress2 { get; set; }
-
     /// <summary>
     /// 注册地址3
     /// </summary>
     [SugarColumn(ColumnName = "registration_address3", ColumnDescription = "注册地址3", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
     public string? RegistrationAddress3 { get; set; }
-
     /// <summary>
     /// 注册国家
     /// </summary>
     [SugarColumn(ColumnName = "registration_region", ColumnDescription = "注册国家", ColumnDataType = "nvarchar", Length = 50, IsNullable = false, DefaultValue = "")]
     public string RegistrationRegion { get; set; } = string.Empty;
-
     /// <summary>
     /// 注册省
     /// </summary>
     [SugarColumn(ColumnName = "registration_province", ColumnDescription = "注册省", ColumnDataType = "nvarchar", Length = 50, IsNullable = false, DefaultValue = "")]
     public string RegistrationProvince { get; set; } = string.Empty;
-
     /// <summary>
     /// 注册市
     /// </summary>
     [SugarColumn(ColumnName = "registration_city", ColumnDescription = "注册市", ColumnDataType = "nvarchar", Length = 50, IsNullable = false, DefaultValue = "")]
     public string RegistrationCity { get; set; } = string.Empty;
-
     /// <summary>
     /// 经营国家
     /// </summary>
     [SugarColumn(ColumnName = "business_region", ColumnDescription = "经营国家", ColumnDataType = "nvarchar", Length = 50, IsNullable = false, DefaultValue = "")]
     public string BusinessRegion { get; set; } = string.Empty;
-
     /// <summary>
     /// 经营地区-省
     /// </summary>
     [SugarColumn(ColumnName = "business_province", ColumnDescription = "经营地区-省", ColumnDataType = "nvarchar", Length = 50, IsNullable = false, DefaultValue = "")]
     public string BusinessProvince { get; set; } = string.Empty;
-
     /// <summary>
     /// 经营地区-市
     /// </summary>
     [SugarColumn(ColumnName = "business_city", ColumnDescription = "经营地区-市", ColumnDataType = "nvarchar", Length = 50, IsNullable = false, DefaultValue = "")]
     public string BusinessCity { get; set; } = string.Empty;
-
     /// <summary>
     /// 经营地址1
     /// </summary>
     [SugarColumn(ColumnName = "business_address1", ColumnDescription = "经营地址1", ColumnDataType = "nvarchar", Length = 200, IsNullable = false, DefaultValue = "")]
     public string BusinessAddress1 { get; set; } = string.Empty;
-
     /// <summary>
     /// 经营地址2
     /// </summary>
     [SugarColumn(ColumnName = "business_address2", ColumnDescription = "经营地址2", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
     public string? BusinessAddress2 { get; set; }
-
     /// <summary>
     /// 经营地址3
     /// </summary>
     [SugarColumn(ColumnName = "business_address3", ColumnDescription = "经营地址3", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
     public string? BusinessAddress3 { get; set; }
-
     /// <summary>
     /// 公司电话
     /// </summary>
     [SugarColumn(ColumnName = "company_phone", ColumnDescription = "公司电话", ColumnDataType = "nvarchar", Length = 50, IsNullable = false, DefaultValue = "")]
     public string CompanyPhone { get; set; } = string.Empty;
-
     /// <summary>
     /// 公司邮箱
     /// </summary>
     [SugarColumn(ColumnName = "company_email", ColumnDescription = "公司邮箱", ColumnDataType = "nvarchar", Length = 100, IsNullable = false, DefaultValue = "")]
     public string CompanyEmail { get; set; } = string.Empty;
-
     /// <summary>
     /// 公司传真
     /// </summary>
     [SugarColumn(ColumnName = "company_fax", ColumnDescription = "公司传真", ColumnDataType = "nvarchar", Length = 50, IsNullable = false, DefaultValue = "")]
     public string CompanyFax { get; set; } = string.Empty;
-
     /// <summary>
     /// 公司网站
     /// </summary>
     [SugarColumn(ColumnName = "company_website", ColumnDescription = "公司网站", ColumnDataType = "nvarchar", Length = 200, IsNullable = false, DefaultValue = "")]
     public string CompanyWebsite { get; set; } = string.Empty;
-
     /// <summary>
     /// 统一社会信用代码
     /// </summary>
     [SugarColumn(ColumnName = "unified_social_credit_code", ColumnDescription = "统一社会信用代码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false, DefaultValue = "")]
     public string UnifiedSocialCreditCode { get; set; } = string.Empty;
-
     /// <summary>
     /// 税务登记号
     /// </summary>
     [SugarColumn(ColumnName = "tax_registration_number", ColumnDescription = "税务登记号", ColumnDataType = "nvarchar", Length = 50, IsNullable = false, DefaultValue = "")]
     public string TaxRegistrationNumber { get; set; } = string.Empty;
-
     /// <summary>
     /// 法定代表人
     /// </summary>
     [SugarColumn(ColumnName = "legal_representative", ColumnDescription = "法定代表人", ColumnDataType = "nvarchar", Length = 50, IsNullable = false, DefaultValue = "")]
     public string LegalRepresentative { get; set; } = string.Empty;
-
     /// <summary>
     /// 公司负责人
     /// </summary>
     [SugarColumn(ColumnName = "company_manager", ColumnDescription = "公司负责人", ColumnDataType = "nvarchar", Length = 50, IsNullable = false, DefaultValue = "")]
     public string CompanyManager { get; set; } = string.Empty;
-
     /// <summary>
     /// 注册资本（万元）
     /// </summary>
     [SugarColumn(ColumnName = "registered_capital", ColumnDescription = "注册资本", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
     public decimal RegisteredCapital { get; set; } = 0;
-
     /// <summary>
     /// 成立日期
     /// </summary>
     [SugarColumn(ColumnName = "establishment_date", ColumnDescription = "成立日期", ColumnDataType = "datetime", IsNullable = false)]
     public DateTime EstablishmentDate { get; set; }
-
     /// <summary>
     /// 关闭日期（注销/停业；未关闭则为 null）
     /// </summary>
     [SugarColumn(ColumnName = "closing_date", ColumnDescription = "关闭日期", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? ClosingDate { get; set; }
-
     /// <summary>
-    /// 存续状态（市场主体登记状态）
+    /// 存续状态（字典 sys_entity_existence_status）
     /// </summary>
-    [SugarColumn(ColumnName = "company_existence", ColumnDescription = "存续状态（登记状态代码）", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
+    [SugarColumn(ColumnName = "company_existence", ColumnDescription = "存续状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int CompanyExistence { get; set; } = 1;
-
     /// <summary>
-    /// 关联工厂编码（如 0001、C100）
+    /// 区域文化编码（字典 sys_culture_code）
     /// </summary>
-    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂编码", ColumnDataType = "varchar", Length = 4, IsNullable = false, DefaultValue = "0001")]
-    public string RelatedPlant { get; set; } = "0001";
-
-    /// <summary>
-    /// 默认区域文化编码（BCP47，如 zh-CN、en-US、ja-JP、zh-HK）
-    /// </summary>
-    [SugarColumn(ColumnName = "default_culture", ColumnDescription = "默认区域文化编码", ColumnDataType = "varchar", Length = 5, IsNullable = false, DefaultValue = "en-US")]
-    public string DefaultCulture { get; set; } = "en-US";
-
+    [SugarColumn(ColumnName = "default_culture", ColumnDescription = "区域文化", ColumnDataType = "varchar", Length = 5, IsNullable = false, DefaultValue = "en-US")]
+    public string DefaultCulture { get; set; } = string.Empty;
     /// <summary>
     /// 编码代号（如 TKC、TCJ、DTA；前端字典录入）
     /// </summary>
     [SugarColumn(ColumnName = "code_alias", ColumnDescription = "编码代号", ColumnDataType = "varchar", Length = 3, IsNullable = false, DefaultValue = "TKC")]
-    public string CodeAlias { get; set; } = "TKC";
-
+    public string CodeAlias { get; set; } = string.Empty;
     /// <summary>
-    /// 公司状态
+    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
-    [SugarColumn(ColumnName = "company_status", ColumnDescription = "公司状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public int CompanyStatus { get; set; } = 1;
-
+    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "varchar", Length = 4, IsNullable = false)]
+    public string RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 排序号（越小越靠前）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; } = 0;
+    /// <summary>
+    /// 公司状态（字典 sys_normal_disable_status）
+    /// </summary>
+    [SugarColumn(ColumnName = "company_status", ColumnDescription = "公司状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
+    public int CompanyStatus { get; set; } = 1;
 
     // ========================================
     // 导航属性区域

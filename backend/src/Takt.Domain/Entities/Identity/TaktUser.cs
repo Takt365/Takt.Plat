@@ -24,90 +24,76 @@ namespace Takt.Domain.Entities.Identity;
 [SugarIndex("ix_user_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
 [SugarIndex("ix_user_username_unique", nameof(TenantCode), OrderByType.Asc, nameof(Username), OrderByType.Asc, true)]
 public class TaktUser : TaktTenantEntityBase
-{
-    /// <summary>
+{    /// <summary>
     /// 用户名（唯一索引：租户内唯一，见 ix_user_username_unique；登录账号，最长 20 位，与 varchar(20) 一致）
     /// </summary>
     [SugarColumn(ColumnName = "username", ColumnDescription = "用户名", ColumnDataType = "varchar", Length = 20, IsNullable = false)]
     public string Username { get; set; } = string.Empty;
-
     /// <summary>
     /// 昵称（显示名称，2–40 位，与 nvarchar(40) 一致）
     /// </summary>
-    [SugarColumn(ColumnName = "nickname", ColumnDescription = "昵称", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
-    public string? Nickname { get; set; }
-
+    [SugarColumn(ColumnName = "nickname", ColumnDescription = "昵称", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
+    public string Nickname { get; set; } = string.Empty;
     /// <summary>
     /// 用户类型（字典 sys_user_type）
     /// </summary>
     [SugarColumn(ColumnName = "user_type", ColumnDescription = "用户类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int UserType { get; set; } = 0;
-
     /// <summary>
     /// 密码哈希值（bcrypt加密）
     /// </summary>
     [SugarColumn(ColumnName = "password_hash", ColumnDescription = "密码哈希", ColumnDataType = "varchar", Length = 255, IsNullable = false)]
     public string PasswordHash { get; set; } = string.Empty;
-
     /// <summary>
     /// 关联的员工ID（必须关联人事档案）
     /// </summary>
     [SugarColumn(ColumnName = "employee_id", ColumnDescription = "员工ID", ColumnDataType = "bigint", IsNullable = false)]
     public long EmployeeId { get; set; }
-
     /// <summary>
-    /// 默认区域文化编码（BCP47，对齐 TaktCulture.CultureCode，如 zh-CN、en-US、ja-JP、zh-HK）
+    /// 区域文化编码（BCP47，对齐 TaktCulture.CultureCode，如 zh-CN、en-US、ja-JP、zh-HK）
     /// </summary>
-    [SugarColumn(ColumnName = "default_culture", ColumnDescription = "默认区域文化编码", ColumnDataType = "varchar", Length = 5, IsNullable = false, DefaultValue = "en-US")]
+    [SugarColumn(ColumnName = "default_culture", ColumnDescription = "区域文化编码", ColumnDataType = "varchar", Length = 5, IsNullable = false, DefaultValue = "en-US")]
     public string DefaultCulture { get; set; } = "en-US";
-    
     /// <summary>
-    /// 是否内置（字典 sys_yes_no_type；种子用户 admin/guest/demo 为内置，不允许删除）
+    /// 内置（字典 sys_yes_no_type；种子用户 admin/guest/demo 为内置，不允许删除）
     /// </summary>
-    [SugarColumn(ColumnName = "is_built_in", ColumnDescription = "是否内置", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    [SugarColumn(ColumnName = "is_built_in", ColumnDescription = "内置", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsBuiltIn { get; set; } = 0;
-
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
-    /// </summary>
-    [SugarColumn(ColumnName = "user_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public int UserStatus { get; set; } = 1;
-
-    /// <summary>
-    /// 最后登录时间
+    /// 最后登录时间（登录成功时 RecordUserLastLoginAsync 写入；登出不修改本字段）
     /// </summary>
     [SugarColumn(ColumnName = "last_login_at", ColumnDescription = "最后登录时间", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? LastLoginAt { get; set; }
-
     /// <summary>
     /// 最后登录IP
     /// </summary>
     [SugarColumn(ColumnName = "last_login_ip", ColumnDescription = "最后登录IP", ColumnDataType = "varchar", Length = 50, IsNullable = true)]
     public string? LastLoginIp { get; set; }
-
     /// <summary>
     /// 登录次数
     /// </summary>
     [SugarColumn(ColumnName = "login_count", ColumnDescription = "登录次数", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int LoginCount { get; set; } = 0;
-
     /// <summary>
     /// 密码过期天数（0=永不过期，30=30天后过期）
     /// </summary>
     [SugarColumn(ColumnName = "password_expire_days", ColumnDescription = "密码过期天数", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int PasswordExpireDays { get; set; } = 0;
-
     /// <summary>
     /// 失败登录次数
     /// </summary>
     [SugarColumn(ColumnName = "login_fail_count", ColumnDescription = "失败登录次数", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int LoginFailCount { get; set; } = 0;
-
     /// <summary>
     /// 锁定时间（登录失败过多时锁定）
     /// </summary>
     [SugarColumn(ColumnName = "locked_until", ColumnDescription = "锁定时间", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? LockedUntil { get; set; }
+    /// <summary>
+    /// 状态（字典 sys_normal_disable_status）
+    /// </summary>
+    [SugarColumn(ColumnName = "user_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
+    public int UserStatus { get; set; } = 1;
 
     // ========================================
     // 导航属性区域

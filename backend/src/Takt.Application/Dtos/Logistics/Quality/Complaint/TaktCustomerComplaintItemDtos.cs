@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Complaint
 // 文件名称：TaktCustomerComplaintItemDtos.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：CustomerComplaintItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktCustomerComplaintItem 生成，请按需审阅）
 // 
@@ -36,13 +36,13 @@ public class TaktCustomerComplaintItemDto : TaktCompanyDtoBase
     public long CustomerComplaintItemId { get; set; }
 
     /// <summary>
-    /// 客诉ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 客诉 ID（关联 TaktCustomerComplaint.Id，选项 TaktCustomerComplaints/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ComplaintId { get; set; }
 
     /// <summary>
-    /// 客诉名称（填充字段）
+    /// 客诉 名称（填充字段）
     /// </summary>
     public string? ComplaintName { get; set; }
 
@@ -57,7 +57,7 @@ public class TaktCustomerComplaintItemDto : TaktCompanyDtoBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 产品编码
+    /// 产品编码（选项 TaktMaterials/options，DictValue=MaterialCode）
     /// </summary>
     public string? ProductCode { get; set; } = string.Empty;
 
@@ -72,7 +72,7 @@ public class TaktCustomerComplaintItemDto : TaktCompanyDtoBase
     public string? BatchNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良项目类型（0=外观，1=尺寸，2=性能，3=功能，4=包装，5=其他）
+    /// 不良项目类型（字典 logistics_quality_complaint_item_type）
     /// </summary>
     public int ItemType { get; set; } = 0;
 
@@ -82,7 +82,7 @@ public class TaktCustomerComplaintItemDto : TaktCompanyDtoBase
     public string DefectDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 缺点等级（CR=严重，MA=主要，MI=次要）
+    /// 缺点等级（字典 logistics_quality_defect_severity_code，DictValue=CR/MA/MI）
     /// </summary>
     public string DefectLevel { get; set; } = string.Empty;
 
@@ -107,7 +107,7 @@ public class TaktCustomerComplaintItemDto : TaktCompanyDtoBase
     public string? ImprovementAction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 改善责任人
+    /// 改善责任人（选项 TaktEmployees/options，DictValue=EmployeeCode）
     /// </summary>
     public string? ImprovementResponsible { get; set; } = string.Empty;
 
@@ -122,14 +122,14 @@ public class TaktCustomerComplaintItemDto : TaktCompanyDtoBase
     public DateTime? ActualCompletionDate { get; set; }
 
     /// <summary>
-    /// 改善状态（0=待改善，1=改善中，2=已完成，3=已验证）
-    /// </summary>
-    public int ImprovementStatus { get; set; } = 0;
-
-    /// <summary>
     /// 附件路径（多个附件用逗号分隔）
     /// </summary>
     public string? AttachmentPaths { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 改善状态（字典 logistics_quality_improvement_status）
+    /// </summary>
+    public int ImprovementStatus { get; set; } = 0;
 
     /// <summary>
     /// 客诉主表
@@ -160,7 +160,7 @@ public class TaktCustomerComplaintItemQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客诉ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 客诉 ID（关联 TaktCustomerComplaint.Id，选项 TaktCustomerComplaints/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ComplaintId { get; set; }
@@ -176,7 +176,7 @@ public class TaktCustomerComplaintItemQueryDto : TaktPagedQuery
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 产品编码
+    /// 产品编码（选项 TaktMaterials/options，DictValue=MaterialCode）
     /// </summary>
     public string? ProductCode { get; set; } = string.Empty;
 
@@ -191,7 +191,7 @@ public class TaktCustomerComplaintItemQueryDto : TaktPagedQuery
     public string? BatchNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良项目类型（0=外观，1=尺寸，2=性能，3=功能，4=包装，5=其他）
+    /// 不良项目类型（字典 logistics_quality_complaint_item_type）
     /// </summary>
     public int? ItemType { get; set; }
 
@@ -201,7 +201,7 @@ public class TaktCustomerComplaintItemQueryDto : TaktPagedQuery
     public string? DefectDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 缺点等级（CR=严重，MA=主要，MI=次要）
+    /// 缺点等级（字典 logistics_quality_defect_severity_code，DictValue=CR/MA/MI）
     /// </summary>
     public string? DefectLevel { get; set; } = string.Empty;
 
@@ -226,7 +226,7 @@ public class TaktCustomerComplaintItemQueryDto : TaktPagedQuery
     public string? ImprovementAction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 改善责任人
+    /// 改善责任人（选项 TaktEmployees/options，DictValue=EmployeeCode）
     /// </summary>
     public string? ImprovementResponsible { get; set; } = string.Empty;
 
@@ -251,14 +251,14 @@ public class TaktCustomerComplaintItemQueryDto : TaktPagedQuery
     public DateTime? ActualCompletionDateEnd { get; set; }
 
     /// <summary>
-    /// 改善状态（0=待改善，1=改善中，2=已完成，3=已验证）
-    /// </summary>
-    public int? ImprovementStatus { get; set; }
-
-    /// <summary>
     /// 附件路径（多个附件用逗号分隔）
     /// </summary>
     public string? AttachmentPaths { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 改善状态（字典 logistics_quality_improvement_status）
+    /// </summary>
+    public int? ImprovementStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -301,12 +301,12 @@ public class TaktCustomerComplaintItemCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客诉ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 客诉 ID（关联 TaktCustomerComplaint.Id，选项 TaktCustomerComplaints/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ComplaintId { get; set; }
@@ -323,7 +323,7 @@ public class TaktCustomerComplaintItemCreateDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 产品编码
+    /// 产品编码（选项 TaktMaterials/options，DictValue=MaterialCode）
     /// </summary>
     public string? ProductCode { get; set; } = string.Empty;
 
@@ -338,7 +338,7 @@ public class TaktCustomerComplaintItemCreateDto
     public string? BatchNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良项目类型（0=外观，1=尺寸，2=性能，3=功能，4=包装，5=其他）
+    /// 不良项目类型（字典 logistics_quality_complaint_item_type）
     /// </summary>
     public int ItemType { get; set; } = 0;
 
@@ -349,9 +349,9 @@ public class TaktCustomerComplaintItemCreateDto
     public string DefectDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 缺点等级（CR=严重，MA=主要，MI=次要）
+    /// 缺点等级（字典 logistics_quality_defect_severity_code，DictValue=CR/MA/MI）
     /// </summary>
-    [Required(ErrorMessage = "缺点等级（CR=严重，MA=主要，MI=次要）不能为空")]
+    [Required(ErrorMessage = "缺点等级（字典 logistics_quality_defect_severity_code，DictValue=CR/MA/MI）不能为空")]
     public string DefectLevel { get; set; } = string.Empty;
 
     /// <summary>
@@ -375,7 +375,7 @@ public class TaktCustomerComplaintItemCreateDto
     public string? ImprovementAction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 改善责任人
+    /// 改善责任人（选项 TaktEmployees/options，DictValue=EmployeeCode）
     /// </summary>
     public string? ImprovementResponsible { get; set; } = string.Empty;
 
@@ -390,14 +390,14 @@ public class TaktCustomerComplaintItemCreateDto
     public DateTime? ActualCompletionDate { get; set; }
 
     /// <summary>
-    /// 改善状态（0=待改善，1=改善中，2=已完成，3=已验证）
-    /// </summary>
-    public int ImprovementStatus { get; set; } = 0;
-
-    /// <summary>
     /// 附件路径（多个附件用逗号分隔）
     /// </summary>
     public string? AttachmentPaths { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 改善状态（字典 logistics_quality_improvement_status）
+    /// </summary>
+    public int ImprovementStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -449,9 +449,9 @@ public class TaktCustomerComplaintItemStatusDto
     public long CustomerComplaintItemId { get; set; }
 
     /// <summary>
-    /// 改善状态（0=待改善，1=改善中，2=已完成，3=已验证）
+    /// 改善状态（字典 logistics_quality_improvement_status）
     /// </summary>
-    [Required(ErrorMessage = "改善状态（0=待改善，1=改善中，2=已完成，3=已验证）不能为空")]
+    [Required(ErrorMessage = "改善状态（字典 logistics_quality_improvement_status）不能为空")]
     public int ImprovementStatus { get; set; } = 0;
 }
 
@@ -475,7 +475,7 @@ public class TaktCustomerComplaintItemTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客诉ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 客诉 ID（关联 TaktCustomerComplaint.Id，选项 TaktCustomerComplaints/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ComplaintId { get; set; }
@@ -491,7 +491,7 @@ public class TaktCustomerComplaintItemTemplateDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 产品编码
+    /// 产品编码（选项 TaktMaterials/options，DictValue=MaterialCode）
     /// </summary>
     public string? ProductCode { get; set; } = string.Empty;
 
@@ -506,7 +506,7 @@ public class TaktCustomerComplaintItemTemplateDto
     public string? BatchNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良项目类型（0=外观，1=尺寸，2=性能，3=功能，4=包装，5=其他）
+    /// 不良项目类型（字典 logistics_quality_complaint_item_type）
     /// </summary>
     public int? ItemType { get; set; }
 
@@ -516,7 +516,7 @@ public class TaktCustomerComplaintItemTemplateDto
     public string? DefectDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 缺点等级（CR=严重，MA=主要，MI=次要）
+    /// 缺点等级（字典 logistics_quality_defect_severity_code，DictValue=CR/MA/MI）
     /// </summary>
     public string? DefectLevel { get; set; } = string.Empty;
 
@@ -524,6 +524,11 @@ public class TaktCustomerComplaintItemTemplateDto
     /// 不良数量
     /// </summary>
     public int? DefectQuantity { get; set; }
+
+    /// <summary>
+    /// 不良率（%）
+    /// </summary>
+    public decimal? DefectRate { get; set; }
 
     /// <summary>
     /// 原因分析
@@ -534,6 +539,31 @@ public class TaktCustomerComplaintItemTemplateDto
     /// 改善对策
     /// </summary>
     public string? ImprovementAction { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 改善责任人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// </summary>
+    public string? ImprovementResponsible { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 计划完成日期
+    /// </summary>
+    public DateTime? PlannedCompletionDate { get; set; }
+
+    /// <summary>
+    /// 实际完成日期
+    /// </summary>
+    public DateTime? ActualCompletionDate { get; set; }
+
+    /// <summary>
+    /// 附件路径（多个附件用逗号分隔）
+    /// </summary>
+    public string? AttachmentPaths { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 改善状态（字典 logistics_quality_improvement_status）
+    /// </summary>
+    public int? ImprovementStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -563,12 +593,12 @@ public class TaktCustomerComplaintItemImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客诉ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 客诉 ID（关联 TaktCustomerComplaint.Id，选项 TaktCustomerComplaints/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ComplaintId { get; set; }
@@ -584,7 +614,7 @@ public class TaktCustomerComplaintItemImportDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 产品编码
+    /// 产品编码（选项 TaktMaterials/options，DictValue=MaterialCode）
     /// </summary>
     public string? ProductCode { get; set; } = string.Empty;
 
@@ -599,7 +629,7 @@ public class TaktCustomerComplaintItemImportDto
     public string? BatchNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良项目类型（0=外观，1=尺寸，2=性能，3=功能，4=包装，5=其他）
+    /// 不良项目类型（字典 logistics_quality_complaint_item_type）
     /// </summary>
     public int? ItemType { get; set; }
 
@@ -609,7 +639,7 @@ public class TaktCustomerComplaintItemImportDto
     public string? DefectDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 缺点等级（CR=严重，MA=主要，MI=次要）
+    /// 缺点等级（字典 logistics_quality_defect_severity_code，DictValue=CR/MA/MI）
     /// </summary>
     public string? DefectLevel { get; set; } = string.Empty;
 
@@ -617,6 +647,11 @@ public class TaktCustomerComplaintItemImportDto
     /// 不良数量
     /// </summary>
     public int? DefectQuantity { get; set; }
+
+    /// <summary>
+    /// 不良率（%）
+    /// </summary>
+    public decimal? DefectRate { get; set; }
 
     /// <summary>
     /// 原因分析
@@ -627,6 +662,31 @@ public class TaktCustomerComplaintItemImportDto
     /// 改善对策
     /// </summary>
     public string? ImprovementAction { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 改善责任人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// </summary>
+    public string? ImprovementResponsible { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 计划完成日期
+    /// </summary>
+    public DateTime? PlannedCompletionDate { get; set; }
+
+    /// <summary>
+    /// 实际完成日期
+    /// </summary>
+    public DateTime? ActualCompletionDate { get; set; }
+
+    /// <summary>
+    /// 附件路径（多个附件用逗号分隔）
+    /// </summary>
+    public string? AttachmentPaths { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 改善状态（字典 logistics_quality_improvement_status）
+    /// </summary>
+    public int? ImprovementStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -662,7 +722,7 @@ public class TaktCustomerComplaintItemExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客诉ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 客诉 ID（关联 TaktCustomerComplaint.Id，选项 TaktCustomerComplaints/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ComplaintId { get; set; }
@@ -678,7 +738,7 @@ public class TaktCustomerComplaintItemExportDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 产品编码
+    /// 产品编码（选项 TaktMaterials/options，DictValue=MaterialCode）
     /// </summary>
     public string? ProductCode { get; set; } = string.Empty;
 
@@ -693,7 +753,7 @@ public class TaktCustomerComplaintItemExportDto
     public string? BatchNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良项目类型（0=外观，1=尺寸，2=性能，3=功能，4=包装，5=其他）
+    /// 不良项目类型（字典 logistics_quality_complaint_item_type）
     /// </summary>
     public int ItemType { get; set; } = 0;
 
@@ -703,7 +763,7 @@ public class TaktCustomerComplaintItemExportDto
     public string DefectDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 缺点等级（CR=严重，MA=主要，MI=次要）
+    /// 缺点等级（字典 logistics_quality_defect_severity_code，DictValue=CR/MA/MI）
     /// </summary>
     public string DefectLevel { get; set; } = string.Empty;
 
@@ -728,7 +788,7 @@ public class TaktCustomerComplaintItemExportDto
     public string? ImprovementAction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 改善责任人
+    /// 改善责任人（选项 TaktEmployees/options，DictValue=EmployeeCode）
     /// </summary>
     public string? ImprovementResponsible { get; set; } = string.Empty;
 
@@ -743,14 +803,14 @@ public class TaktCustomerComplaintItemExportDto
     public DateTime? ActualCompletionDate { get; set; }
 
     /// <summary>
-    /// 改善状态（0=待改善，1=改善中，2=已完成，3=已验证）
-    /// </summary>
-    public int ImprovementStatus { get; set; } = 0;
-
-    /// <summary>
     /// 附件路径（多个附件用逗号分隔）
     /// </summary>
     public string? AttachmentPaths { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 改善状态（字典 logistics_quality_improvement_status）
+    /// </summary>
+    public int ImprovementStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

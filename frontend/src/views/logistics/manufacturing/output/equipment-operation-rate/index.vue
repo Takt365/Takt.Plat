@@ -218,11 +218,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('productionLine')">
-      <a-form-item :label="t('entity.equipmentoperationrate.productionline')">
+      <div v-show="isFieldVisible('prodTeam')">
+      <a-form-item :label="t('entity.equipmentoperationrate.prodteam')">
         <a-input
-          v-model:value="advancedQueryForm.productionLine"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentoperationrate.productionline') })"
+          v-model:value="advancedQueryForm.prodTeam"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentoperationrate.prodteam') })"
           show-count
           :maxlength="20"
           allow-clear
@@ -339,15 +339,6 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('equipmentStatus')">
-      <a-form-item :label="t('entity.equipmentoperationrate.equipmentstatus')">
-        <a-input-number
-          v-model:value="advancedQueryForm.equipmentStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentoperationrate.equipmentstatus') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
       <div v-show="isFieldVisible('equipmentOperator')">
       <a-form-item :label="t('entity.equipmentoperationrate.equipmentoperator')">
         <a-input
@@ -381,10 +372,10 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('status')">
+      <div v-show="isFieldVisible('equipmentOperationRateStatus')">
       <a-form-item :label="t('entity.equipmentoperationrate.status')">
         <a-input-number
-          v-model:value="advancedQueryForm.status"
+          v-model:value="advancedQueryForm.equipmentOperationRateStatus"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentoperationrate.status') })"
           style="width: 100%"
         />
@@ -396,7 +387,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -407,7 +398,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -563,7 +554,7 @@ const advancedQueryForm = ref({
   equipmentCode: '',
   equipmentName: '',
   equipmentType: undefined as number | undefined,
-  productionLine: '',
+  prodTeam: '',
   shiftNo: undefined as number | undefined,
   plannedRuntime: undefined as number | undefined,
   actualRuntime: undefined as number | undefined,
@@ -576,7 +567,7 @@ const advancedQueryForm = ref({
   yieldRate: undefined as number | undefined,
   downtimeReasonType: undefined as number | undefined,
   downtimeReason: '',
-  equipmentStatus: undefined as number | undefined,
+  equipmentOperationRateStatus: undefined as number | undefined,
   equipmentOperator: '',
   equipmentMaintainer: '',
   teamLeader: '',
@@ -599,7 +590,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'equipmentCode', label: t('entity.equipmentoperationrate.equipmentcode') },
   { key: 'equipmentName', label: t('entity.equipmentoperationrate.equipmentname') },
   { key: 'equipmentType', label: t('entity.equipmentoperationrate.equipmenttype') },
-  { key: 'productionLine', label: t('entity.equipmentoperationrate.productionline') },
+  { key: 'prodTeam', label: t('entity.equipmentoperationrate.prodteam') },
   { key: 'shiftNo', label: t('entity.equipmentoperationrate.shiftno') },
   { key: 'plannedRuntime', label: t('entity.equipmentoperationrate.plannedruntime') },
   { key: 'actualRuntime', label: t('entity.equipmentoperationrate.actualruntime') },
@@ -612,11 +603,10 @@ const queryFieldsMeta = computed(() => [
   { key: 'yieldRate', label: t('entity.equipmentoperationrate.yieldrate') },
   { key: 'downtimeReasonType', label: t('entity.equipmentoperationrate.downtimereasontype') },
   { key: 'downtimeReason', label: t('entity.equipmentoperationrate.downtimereason') },
-  { key: 'equipmentStatus', label: t('entity.equipmentoperationrate.equipmentstatus') },
   { key: 'equipmentOperator', label: t('entity.equipmentoperationrate.equipmentoperator') },
   { key: 'equipmentMaintainer', label: t('entity.equipmentoperationrate.equipmentmaintainer') },
   { key: 'teamLeader', label: t('entity.equipmentoperationrate.teamleader') },
-  { key: 'status', label: t('entity.equipmentoperationrate.status') },
+  { key: 'equipmentOperationRateStatus', label: t('entity.equipmentoperationrate.status') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extField', label: t('common.page.entity.extfield') },
@@ -680,7 +670,7 @@ function buildListQuery(overrides?: Partial<EquipmentOperationRateQuery>): Equip
   if (form.equipmentType !== undefined && form.equipmentType !== null) {
     query.equipmentType = form.equipmentType
   }
-  assignTrimmed('productionLine', form.productionLine)
+  assignTrimmed('prodTeam', form.prodTeam)
   if (form.shiftNo !== undefined && form.shiftNo !== null) {
     query.shiftNo = form.shiftNo
   }
@@ -715,15 +705,12 @@ function buildListQuery(overrides?: Partial<EquipmentOperationRateQuery>): Equip
     query.downtimeReasonType = form.downtimeReasonType
   }
   assignTrimmed('downtimeReason', form.downtimeReason)
-  if (form.equipmentStatus !== undefined && form.equipmentStatus !== null) {
-    query.equipmentStatus = form.equipmentStatus
+  if (form.equipmentOperationRateStatus !== undefined && form.equipmentOperationRateStatus !== null) {
+    query.equipmentOperationRateStatus = form.equipmentOperationRateStatus
   }
   assignTrimmed('equipmentOperator', form.equipmentOperator)
   assignTrimmed('equipmentMaintainer', form.equipmentMaintainer)
   assignTrimmed('teamLeader', form.teamLeader)
-  if (form.status !== undefined && form.status !== null) {
-    query.status = form.status
-  }
   assignTrimmed('createdAtStart', form.createdAtStart)
   assignTrimmed('createdAtEnd', form.createdAtEnd)
   assignTrimmed('extField', form.extField)
@@ -836,13 +823,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEquipmentOperationRateField(record, 'equipmentType') ?? ''
   },
   {
-    title: t('entity.equipmentoperationrate.productionline'),
-    dataIndex: 'productionLine',
-    key: 'productionLine',
+    title: t('entity.equipmentoperationrate.prodteam'),
+    dataIndex: 'prodTeam',
+    key: 'prodTeam',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEquipmentOperationRateField(record, 'productionLine') ?? ''
+    customRender: ({ record }: { record: any }) => getEquipmentOperationRateField(record, 'prodTeam') ?? ''
   },
   {
     title: t('entity.equipmentoperationrate.shiftno'),
@@ -953,15 +940,6 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEquipmentOperationRateField(record, 'downtimeReason') ?? ''
   },
   {
-    title: t('entity.equipmentoperationrate.equipmentstatus'),
-    dataIndex: 'equipmentStatus',
-    key: 'equipmentStatus',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEquipmentOperationRateField(record, 'equipmentStatus') ?? ''
-  },
-  {
     title: t('entity.equipmentoperationrate.equipmentoperator'),
     dataIndex: 'equipmentOperator',
     key: 'equipmentOperator',
@@ -990,12 +968,12 @@ const columns = computed<TableColumnsType>(() => [
   },
   {
     title: t('entity.equipmentoperationrate.status'),
-    dataIndex: 'status',
-    key: 'status',
+    dataIndex: 'equipmentOperationRateStatus',
+    key: 'equipmentOperationRateStatus',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEquipmentOperationRateField(record, 'status') ?? ''
+    customRender: ({ record }: { record: any }) => getEquipmentOperationRateField(record, 'equipmentOperationRateStatus') ?? ''
   },
   CreateActionColumn({
     actions: [
@@ -1040,7 +1018,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: EquipmentOperationRate, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getEquipmentOperationRateId(selectedRow.value) === getEquipmentOperationRateId(record)) {
+    } else if (selectedRow.value && getEquipmentOperationRateId(selectedRow.value) === getEquipmentOperationRateId(record)) {
       selectedRow.value = null
     }
   },
@@ -1108,7 +1086,7 @@ function handleReset() {
   equipmentCode: '',
   equipmentName: '',
   equipmentType: undefined as number | undefined,
-  productionLine: '',
+  prodTeam: '',
   shiftNo: undefined as number | undefined,
   plannedRuntime: undefined as number | undefined,
   actualRuntime: undefined as number | undefined,
@@ -1121,7 +1099,7 @@ function handleReset() {
   yieldRate: undefined as number | undefined,
   downtimeReasonType: undefined as number | undefined,
   downtimeReason: '',
-  equipmentStatus: undefined as number | undefined,
+  equipmentOperationRateStatus: undefined as number | undefined,
   equipmentOperator: '',
   equipmentMaintainer: '',
   teamLeader: '',
@@ -1311,7 +1289,7 @@ function handleAdvancedQueryReset() {
   equipmentCode: '',
   equipmentName: '',
   equipmentType: undefined as number | undefined,
-  productionLine: '',
+  prodTeam: '',
   shiftNo: undefined as number | undefined,
   plannedRuntime: undefined as number | undefined,
   actualRuntime: undefined as number | undefined,
@@ -1324,7 +1302,7 @@ function handleAdvancedQueryReset() {
   yieldRate: undefined as number | undefined,
   downtimeReasonType: undefined as number | undefined,
   downtimeReason: '',
-  equipmentStatus: undefined as number | undefined,
+  equipmentOperationRateStatus: undefined as number | undefined,
   equipmentOperator: '',
   equipmentMaintainer: '',
   teamLeader: '',

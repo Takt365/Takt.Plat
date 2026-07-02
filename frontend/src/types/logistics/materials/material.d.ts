@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/materials
 // 文件名称：material.d.ts
-// 创建时间：2026-06-20
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/materials 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -49,24 +49,24 @@ export interface Material extends TenantDtoBase {
   materialDescription?: string;
 
   /**
-   * 行业领域
+   * 行业领域（字典 logistics_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
    */
-  industrySector?: string;
+  industrySector: string;
 
   /**
-   * 品目阶层
+   * 物料层级
    */
   materialHierarchy?: string;
 
   /**
-   * 品目组代码（关联 TaktMaterialGroup.MaterialGroupCode）
+   * 物料组（关联 TaktMaterialGroup.MaterialGroupCode，选项 TaktMaterialGroups/options，DictValue=MaterialGroupCode）
    */
-  materialGroupCode?: string;
+  materialGroup: string;
 
   /**
-   * 物料类型（0=原材料，1=半成品，2=成品，3=辅料，4=包装材料，5=其他）
+   * 物料类型（字典 logistics_material_type，DictValue=ROH/HALB 等；默认 ROH）
    */
-  materialType: number;
+  materialType: string;
 
   /**
    * 物料型号
@@ -79,7 +79,7 @@ export interface Material extends TenantDtoBase {
   materialBrand?: string;
 
   /**
-   * 基本单位（主单位）
+   * 基本单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   baseUnit: string;
 
@@ -89,14 +89,9 @@ export interface Material extends TenantDtoBase {
   manufacturer?: string;
 
   /**
-   * 制造商零件编号
+   * 制造商物料编码（制造商内部的物料编号）
    */
-  manufacturerPartNumber?: string;
-
-  /**
-   * 物料状态（1=启用，0=禁用）
-   */
-  materialStatus: number;
+  manufacturerMaterialCode?: string;
 
   /**
    * 物料属性（JSON格式，存储物料自定义属性）
@@ -104,14 +99,19 @@ export interface Material extends TenantDtoBase {
   materialAttributes?: string;
 
   /**
-   * 停产状态（EOL）
+   * 停产状态（字典 logistics_material_eol_status，DictValue=01/Z0 等；默认 Z0=计划物料）
    */
-  isEndOfLife?: string;
+  isEndOfLife: string;
 
   /**
-   * 停产日期
+   * 物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
    */
-  endOfLifeDate?: string;
+  materialStatus: number;
+
+  /**
+   * 全局物料变更记录列表（外键在子表 TaktMaterialChangeLog.MaterialId） （子表：TaktMaterialChangeLog）
+   */
+  changeLogs?: MaterialChangeLog[];
 
 }
 
@@ -149,24 +149,24 @@ export interface MaterialQuery extends TaktPagedQuery {
   materialDescription?: string;
 
   /**
-   * 行业领域
+   * 行业领域（字典 logistics_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
    */
   industrySector?: string;
 
   /**
-   * 品目阶层
+   * 物料层级
    */
   materialHierarchy?: string;
 
   /**
-   * 品目组代码（关联 TaktMaterialGroup.MaterialGroupCode）
+   * 物料组（关联 TaktMaterialGroup.MaterialGroupCode，选项 TaktMaterialGroups/options，DictValue=MaterialGroupCode）
    */
-  materialGroupCode?: string;
+  materialGroup?: string;
 
   /**
-   * 物料类型（0=原材料，1=半成品，2=成品，3=辅料，4=包装材料，5=其他）
+   * 物料类型（字典 logistics_material_type，DictValue=ROH/HALB 等；默认 ROH）
    */
-  materialType?: number;
+  materialType?: string;
 
   /**
    * 物料型号
@@ -179,7 +179,7 @@ export interface MaterialQuery extends TaktPagedQuery {
   materialBrand?: string;
 
   /**
-   * 基本单位（主单位）
+   * 基本单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   baseUnit?: string;
 
@@ -189,14 +189,9 @@ export interface MaterialQuery extends TaktPagedQuery {
   manufacturer?: string;
 
   /**
-   * 制造商零件编号
+   * 制造商物料编码（制造商内部的物料编号）
    */
-  manufacturerPartNumber?: string;
-
-  /**
-   * 物料状态（1=启用，0=禁用）
-   */
-  materialStatus?: number;
+  manufacturerMaterialCode?: string;
 
   /**
    * 物料属性（JSON格式，存储物料自定义属性）
@@ -204,19 +199,14 @@ export interface MaterialQuery extends TaktPagedQuery {
   materialAttributes?: string;
 
   /**
-   * 停产状态（EOL）
+   * 停产状态（字典 logistics_material_eol_status，DictValue=01/Z0 等；默认 Z0=计划物料）
    */
   isEndOfLife?: string;
 
   /**
-   * 停产日期（范围查询-开始）
+   * 物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
    */
-  endOfLifeDateStart?: string;
-
-  /**
-   * 停产日期（范围查询-结束）
-   */
-  endOfLifeDateEnd?: string;
+  materialStatus?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -273,24 +263,24 @@ export interface MaterialCreate {
   materialDescription?: string;
 
   /**
-   * 行业领域
+   * 行业领域（字典 logistics_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
    */
-  industrySector?: string;
+  industrySector: string;
 
   /**
-   * 品目阶层
+   * 物料层级
    */
   materialHierarchy?: string;
 
   /**
-   * 品目组代码（关联 TaktMaterialGroup.MaterialGroupCode）
+   * 物料组（关联 TaktMaterialGroup.MaterialGroupCode，选项 TaktMaterialGroups/options，DictValue=MaterialGroupCode）
    */
-  materialGroupCode?: string;
+  materialGroup: string;
 
   /**
-   * 物料类型（0=原材料，1=半成品，2=成品，3=辅料，4=包装材料，5=其他）
+   * 物料类型（字典 logistics_material_type，DictValue=ROH/HALB 等；默认 ROH）
    */
-  materialType: number;
+  materialType: string;
 
   /**
    * 物料型号
@@ -303,7 +293,7 @@ export interface MaterialCreate {
   materialBrand?: string;
 
   /**
-   * 基本单位（主单位）
+   * 基本单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   baseUnit: string;
 
@@ -313,14 +303,9 @@ export interface MaterialCreate {
   manufacturer?: string;
 
   /**
-   * 制造商零件编号
+   * 制造商物料编码（制造商内部的物料编号）
    */
-  manufacturerPartNumber?: string;
-
-  /**
-   * 物料状态（1=启用，0=禁用）
-   */
-  materialStatus: number;
+  manufacturerMaterialCode?: string;
 
   /**
    * 物料属性（JSON格式，存储物料自定义属性）
@@ -328,14 +313,19 @@ export interface MaterialCreate {
   materialAttributes?: string;
 
   /**
-   * 停产状态（EOL）
+   * 停产状态（字典 logistics_material_eol_status，DictValue=01/Z0 等；默认 Z0=计划物料）
    */
-  isEndOfLife?: string;
+  isEndOfLife: string;
 
   /**
-   * 停产日期
+   * 物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
    */
-  endOfLifeDate?: string;
+  materialStatus: number;
+
+  /**
+   * 全局物料变更记录列表（外键在子表 TaktMaterialChangeLog.MaterialId）（子表，级联保存）
+   */
+  changeLogs?: MaterialChangeLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -377,7 +367,7 @@ export interface MaterialStatus {
   materialId: string;
 
   /**
-   * 物料状态（1=启用，0=禁用）
+   * 物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
    */
   materialStatus: number;
 
@@ -416,24 +406,24 @@ export interface MaterialTemplate {
   materialDescription?: string;
 
   /**
-   * 行业领域
+   * 行业领域（字典 logistics_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
    */
   industrySector?: string;
 
   /**
-   * 品目阶层
+   * 物料层级
    */
   materialHierarchy?: string;
 
   /**
-   * 品目组代码（关联 TaktMaterialGroup.MaterialGroupCode）
+   * 物料组（关联 TaktMaterialGroup.MaterialGroupCode，选项 TaktMaterialGroups/options，DictValue=MaterialGroupCode）
    */
-  materialGroupCode?: string;
+  materialGroup?: string;
 
   /**
-   * 物料类型（0=原材料，1=半成品，2=成品，3=辅料，4=包装材料，5=其他）
+   * 物料类型（字典 logistics_material_type，DictValue=ROH/HALB 等；默认 ROH）
    */
-  materialType?: number;
+  materialType?: string;
 
   /**
    * 物料型号
@@ -446,7 +436,7 @@ export interface MaterialTemplate {
   materialBrand?: string;
 
   /**
-   * 基本单位（主单位）
+   * 基本单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   baseUnit?: string;
 
@@ -454,6 +444,31 @@ export interface MaterialTemplate {
    * 制造商
    */
   manufacturer?: string;
+
+  /**
+   * 制造商物料编码（制造商内部的物料编号）
+   */
+  manufacturerMaterialCode?: string;
+
+  /**
+   * 物料属性（JSON格式，存储物料自定义属性）
+   */
+  materialAttributes?: string;
+
+  /**
+   * 停产状态（字典 logistics_material_eol_status，DictValue=01/Z0 等；默认 Z0=计划物料）
+   */
+  isEndOfLife?: string;
+
+  /**
+   * 物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+   */
+  materialStatus?: number;
+
+  /**
+   * 全局物料变更记录列表（外键在子表 TaktMaterialChangeLog.MaterialId）（子表，级联保存）
+   */
+  changeLogs?: MaterialChangeLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -500,24 +515,24 @@ export interface MaterialImport {
   materialDescription?: string;
 
   /**
-   * 行业领域
+   * 行业领域（字典 logistics_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
    */
   industrySector?: string;
 
   /**
-   * 品目阶层
+   * 物料层级
    */
   materialHierarchy?: string;
 
   /**
-   * 品目组代码（关联 TaktMaterialGroup.MaterialGroupCode）
+   * 物料组（关联 TaktMaterialGroup.MaterialGroupCode，选项 TaktMaterialGroups/options，DictValue=MaterialGroupCode）
    */
-  materialGroupCode?: string;
+  materialGroup?: string;
 
   /**
-   * 物料类型（0=原材料，1=半成品，2=成品，3=辅料，4=包装材料，5=其他）
+   * 物料类型（字典 logistics_material_type，DictValue=ROH/HALB 等；默认 ROH）
    */
-  materialType?: number;
+  materialType?: string;
 
   /**
    * 物料型号
@@ -530,7 +545,7 @@ export interface MaterialImport {
   materialBrand?: string;
 
   /**
-   * 基本单位（主单位）
+   * 基本单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   baseUnit?: string;
 
@@ -538,6 +553,31 @@ export interface MaterialImport {
    * 制造商
    */
   manufacturer?: string;
+
+  /**
+   * 制造商物料编码（制造商内部的物料编号）
+   */
+  manufacturerMaterialCode?: string;
+
+  /**
+   * 物料属性（JSON格式，存储物料自定义属性）
+   */
+  materialAttributes?: string;
+
+  /**
+   * 停产状态（字典 logistics_material_eol_status，DictValue=01/Z0 等；默认 Z0=计划物料）
+   */
+  isEndOfLife?: string;
+
+  /**
+   * 物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+   */
+  materialStatus?: number;
+
+  /**
+   * 全局物料变更记录列表（外键在子表 TaktMaterialChangeLog.MaterialId）（子表，级联保存）
+   */
+  changeLogs?: MaterialChangeLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -584,24 +624,24 @@ export interface MaterialExport {
   materialDescription?: string;
 
   /**
-   * 行业领域
+   * 行业领域（字典 logistics_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
    */
-  industrySector?: string;
+  industrySector: string;
 
   /**
-   * 品目阶层
+   * 物料层级
    */
   materialHierarchy?: string;
 
   /**
-   * 品目组代码（关联 TaktMaterialGroup.MaterialGroupCode）
+   * 物料组（关联 TaktMaterialGroup.MaterialGroupCode，选项 TaktMaterialGroups/options，DictValue=MaterialGroupCode）
    */
-  materialGroupCode?: string;
+  materialGroup: string;
 
   /**
-   * 物料类型（0=原材料，1=半成品，2=成品，3=辅料，4=包装材料，5=其他）
+   * 物料类型（字典 logistics_material_type，DictValue=ROH/HALB 等；默认 ROH）
    */
-  materialType: number;
+  materialType: string;
 
   /**
    * 物料型号
@@ -614,7 +654,7 @@ export interface MaterialExport {
   materialBrand?: string;
 
   /**
-   * 基本单位（主单位）
+   * 基本单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   baseUnit: string;
 
@@ -624,14 +664,9 @@ export interface MaterialExport {
   manufacturer?: string;
 
   /**
-   * 制造商零件编号
+   * 制造商物料编码（制造商内部的物料编号）
    */
-  manufacturerPartNumber?: string;
-
-  /**
-   * 物料状态（1=启用，0=禁用）
-   */
-  materialStatus: number;
+  manufacturerMaterialCode?: string;
 
   /**
    * 物料属性（JSON格式，存储物料自定义属性）
@@ -639,14 +674,14 @@ export interface MaterialExport {
   materialAttributes?: string;
 
   /**
-   * 停产状态（EOL）
+   * 停产状态（字典 logistics_material_eol_status，DictValue=01/Z0 等；默认 Z0=计划物料）
    */
-  isEndOfLife?: string;
+  isEndOfLife: string;
 
   /**
-   * 停产日期
+   * 物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
    */
-  endOfLifeDate?: string;
+  materialStatus: number;
 
   /**
    * 扩展字段JSON

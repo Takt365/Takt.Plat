@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/identity
 // 文件名称：menu.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：identity 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -62,7 +62,7 @@ export function getMenuById(id: string): Promise<Menu> {
 /**
  * 获取菜单树形列表
  * @param {string} parentId parentId
- * @param {boolean} includeDisabled 为 false 时过滤禁用项（按实体 *Status 枚举字段，如 TaktCommonStatus.Enabled）
+ * @param {boolean} includeDisabled 为 false 时过滤禁用项（按实体 *Status 枚举字段，如 1）
  * @returns {Promise<MenuTree[]>} 树形数据
  */
 export function getMenuTree(parentId: string, includeDisabled: boolean): Promise<MenuTree[]> {

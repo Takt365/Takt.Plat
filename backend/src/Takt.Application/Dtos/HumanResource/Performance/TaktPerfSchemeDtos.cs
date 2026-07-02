@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Performance
 // 文件名称：TaktPerfSchemeDtos.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PerfScheme 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPerfScheme 生成，请按需审阅）
 // 
@@ -101,6 +101,11 @@ public class TaktPerfSchemeDto : TaktCompanyDtoBase
     public decimal StandardWeight { get; set; }
 
     /// <summary>
+    /// 关联工厂
+    /// </summary>
+    public string RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
     /// 排序号
     /// </summary>
     public int SortOrder { get; set; } = 0;
@@ -109,11 +114,6 @@ public class TaktPerfSchemeDto : TaktCompanyDtoBase
     /// 状态（0=启用 1=停用）
     /// </summary>
     public int SchemeMetricStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
 
 }
 
@@ -203,6 +203,11 @@ public class TaktPerfSchemeQueryDto : TaktPagedQuery
     public decimal? StandardWeight { get; set; }
 
     /// <summary>
+    /// 关联工厂
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
     /// 排序号
     /// </summary>
     public int? SortOrder { get; set; }
@@ -211,11 +216,6 @@ public class TaktPerfSchemeQueryDto : TaktPagedQuery
     /// 状态（0=启用 1=停用）
     /// </summary>
     public int? SchemeMetricStatus { get; set; }
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -258,7 +258,7 @@ public class TaktPerfSchemeCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -338,19 +338,15 @@ public class TaktPerfSchemeCreateDto
     public decimal StandardWeight { get; set; }
 
     /// <summary>
-    /// 排序号
+    /// 关联工厂
     /// </summary>
-    public int SortOrder { get; set; } = 0;
+    [Required(ErrorMessage = "关联工厂不能为空")]
+    public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（0=启用 1=停用）
     /// </summary>
     public int SchemeMetricStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON
@@ -477,6 +473,16 @@ public class TaktPerfSchemeTemplateDto
     public string? ScoringStandard { get; set; } = string.Empty;
 
     /// <summary>
+    /// 自评权重（%）
+    /// </summary>
+    public decimal? SelfEvaluationWeight { get; set; }
+
+    /// <summary>
+    /// 主管评分权重（%）
+    /// </summary>
+    public decimal? SupervisorWeight { get; set; }
+
+    /// <summary>
     /// 指标编码
     /// </summary>
     public string? MetricCode { get; set; } = string.Empty;
@@ -502,9 +508,14 @@ public class TaktPerfSchemeTemplateDto
     public string? ScoringCriteria { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号
+    /// 标准权重（%）
     /// </summary>
-    public int? SortOrder { get; set; }
+    public decimal? StandardWeight { get; set; }
+
+    /// <summary>
+    /// 关联工厂
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（0=启用 1=停用）
@@ -539,7 +550,7 @@ public class TaktPerfSchemeImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -569,6 +580,16 @@ public class TaktPerfSchemeImportDto
     public string? ScoringStandard { get; set; } = string.Empty;
 
     /// <summary>
+    /// 自评权重（%）
+    /// </summary>
+    public decimal? SelfEvaluationWeight { get; set; }
+
+    /// <summary>
+    /// 主管评分权重（%）
+    /// </summary>
+    public decimal? SupervisorWeight { get; set; }
+
+    /// <summary>
     /// 指标编码
     /// </summary>
     public string? MetricCode { get; set; } = string.Empty;
@@ -594,9 +615,14 @@ public class TaktPerfSchemeImportDto
     public string? ScoringCriteria { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号
+    /// 标准权重（%）
     /// </summary>
-    public int? SortOrder { get; set; }
+    public decimal? StandardWeight { get; set; }
+
+    /// <summary>
+    /// 关联工厂
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（0=启用 1=停用）
@@ -702,6 +728,11 @@ public class TaktPerfSchemeExportDto
     public decimal StandardWeight { get; set; }
 
     /// <summary>
+    /// 关联工厂
+    /// </summary>
+    public string RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
     /// 排序号
     /// </summary>
     public int SortOrder { get; set; } = 0;
@@ -710,11 +741,6 @@ public class TaktPerfSchemeExportDto
     /// 状态（0=启用 1=停用）
     /// </summary>
     public int SchemeMetricStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON

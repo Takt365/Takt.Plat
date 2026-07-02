@@ -57,7 +57,7 @@ import {
 import { RiUserLine } from '@remixicon/vue'
 import { storeToRefs } from 'pinia'
 import { useUserStore } from '@/stores/identity/user'
-import { EventBus } from '@/utils/event-bus'
+import { executeUserLogoutAsync } from '@/bootstrap/takt-event-handlers'
 
 const emit = defineEmits<{
   'profile': []
@@ -98,7 +98,7 @@ const handleLogout = () => {
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       emit('logout')
-      EventBus.emit('user:logout', undefined)
+      await executeUserLogoutAsync()
     }
   })
 }

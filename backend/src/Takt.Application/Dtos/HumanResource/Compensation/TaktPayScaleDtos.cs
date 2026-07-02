@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Compensation
 // 文件名称：TaktPayScaleDtos.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PayScale 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPayScale 生成，请按需审阅）
 // 
@@ -66,6 +66,11 @@ public class TaktPayScaleDto : TaktCompanyDtoBase
     public decimal MaxSalary { get; set; }
 
     /// <summary>
+    /// 关联工厂
+    /// </summary>
+    public string RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
     /// 排序号
     /// </summary>
     public int SortOrder { get; set; } = 0;
@@ -74,11 +79,6 @@ public class TaktPayScaleDto : TaktCompanyDtoBase
     /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int ScaleStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
 
 }
 
@@ -133,6 +133,11 @@ public class TaktPayScaleQueryDto : TaktPagedQuery
     public decimal? MaxSalary { get; set; }
 
     /// <summary>
+    /// 关联工厂
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
     /// 排序号
     /// </summary>
     public int? SortOrder { get; set; }
@@ -141,11 +146,6 @@ public class TaktPayScaleQueryDto : TaktPagedQuery
     /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int? ScaleStatus { get; set; }
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -188,7 +188,7 @@ public class TaktPayScaleCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -225,19 +225,15 @@ public class TaktPayScaleCreateDto
     public decimal MaxSalary { get; set; }
 
     /// <summary>
-    /// 排序号
+    /// 关联工厂
     /// </summary>
-    public int SortOrder { get; set; } = 0;
+    [Required(ErrorMessage = "关联工厂不能为空")]
+    public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int ScaleStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON
@@ -354,19 +350,29 @@ public class TaktPayScaleTemplateDto
     public int? GradeLevel { get; set; }
 
     /// <summary>
-    /// 排序号
+    /// 下限金额（元）
     /// </summary>
-    public int? SortOrder { get; set; }
+    public decimal? MinSalary { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 中位金额（元）
     /// </summary>
-    public int? ScaleStatus { get; set; }
+    public decimal? MidSalary { get; set; }
+
+    /// <summary>
+    /// 上限金额（元）
+    /// </summary>
+    public decimal? MaxSalary { get; set; }
 
     /// <summary>
     /// 关联工厂
     /// </summary>
     public string? RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 状态（字典 sys_normal_disable_status）
+    /// </summary>
+    public int? ScaleStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -396,7 +402,7 @@ public class TaktPayScaleImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -416,19 +422,29 @@ public class TaktPayScaleImportDto
     public int? GradeLevel { get; set; }
 
     /// <summary>
-    /// 排序号
+    /// 下限金额（元）
     /// </summary>
-    public int? SortOrder { get; set; }
+    public decimal? MinSalary { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 中位金额（元）
     /// </summary>
-    public int? ScaleStatus { get; set; }
+    public decimal? MidSalary { get; set; }
+
+    /// <summary>
+    /// 上限金额（元）
+    /// </summary>
+    public decimal? MaxSalary { get; set; }
 
     /// <summary>
     /// 关联工厂
     /// </summary>
     public string? RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 状态（字典 sys_normal_disable_status）
+    /// </summary>
+    public int? ScaleStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -494,6 +510,11 @@ public class TaktPayScaleExportDto
     public decimal MaxSalary { get; set; }
 
     /// <summary>
+    /// 关联工厂
+    /// </summary>
+    public string RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
     /// 排序号
     /// </summary>
     public int SortOrder { get; set; } = 0;
@@ -502,11 +523,6 @@ public class TaktPayScaleExportDto
     /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int ScaleStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON

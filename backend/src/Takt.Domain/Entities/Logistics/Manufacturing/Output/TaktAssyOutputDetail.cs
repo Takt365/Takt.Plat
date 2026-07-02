@@ -62,9 +62,9 @@ public class TaktAssyOutputDetail : TaktCompanyEntityBase
     public int DowntimeMinutes { get; set; } = 0;
 
     /// <summary>
-    /// 停线原因
+    /// 停线原因（字典 logistics_stop_reason_category，存 DictValue）
     /// </summary>
-    [SugarColumn(ColumnName = "downtime_reason", ColumnDescription = "停线原因", Length = 500, ColumnDataType = "nvarchar", IsNullable = true)]
+    [SugarColumn(ColumnName = "downtime_reason", ColumnDescription = "停线原因", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? DowntimeReason { get; set; }
 
     /// <summary>
@@ -74,9 +74,9 @@ public class TaktAssyOutputDetail : TaktCompanyEntityBase
     public string? DowntimeDescription { get; set; }
 
     /// <summary>
-    /// 未达成原因
+    /// 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
     /// </summary>
-    [SugarColumn(ColumnName = "unachieved_reason", ColumnDescription = "未达成原因", Length = 500, ColumnDataType = "nvarchar", IsNullable = true)]
+    [SugarColumn(ColumnName = "unachieved_reason", ColumnDescription = "未达成原因", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? UnachievedReason { get; set; }
 
     /// <summary>

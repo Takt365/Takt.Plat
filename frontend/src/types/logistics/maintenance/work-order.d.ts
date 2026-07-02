@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/maintenance
 // 文件名称：work-order.d.ts
-// 创建时间：2026-06-20
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/maintenance 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -534,7 +534,7 @@ export interface MaintenanceWorkOrderQuery extends TaktPagedQuery {
   isHistoryArchived?: number;
 
   /**
-   * 审批状态（TaktApprovalStatus）
+   * 审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）
    */
   approvalStatus?: number;
 
@@ -613,7 +613,7 @@ export interface MaintenanceWorkOrderCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -956,6 +956,161 @@ export interface MaintenanceWorkOrderTemplate {
   workCenter?: string;
 
   /**
+   * 指派技师（人员编码）
+   */
+  assignedTechnician?: string;
+
+  /**
+   * 维护单位
+   */
+  maintenanceCompany?: string;
+
+  /**
+   * 计划开始时间
+   */
+  plannedStartTime?: string;
+
+  /**
+   * 计划结束时间
+   */
+  plannedEndTime?: string;
+
+  /**
+   * 实际开始时间
+   */
+  actualStartTime?: string;
+
+  /**
+   * 实际结束时间
+   */
+  actualEndTime?: string;
+
+  /**
+   * 故障描述
+   */
+  faultDescription?: string;
+
+  /**
+   * 维护内容
+   */
+  maintenanceContent?: string;
+
+  /**
+   * 处理方案
+   */
+  solution?: string;
+
+  /**
+   * 结算成本中心ID（序列化为string以避免Javascript精度问题）
+   */
+  costCenterId?: string;
+
+  /**
+   * 结算成本中心编码（冗余）
+   */
+  costCenterCode?: string;
+
+  /**
+   * 成本要素ID（序列化为string以避免Javascript精度问题）
+   */
+  costElementId?: string;
+
+  /**
+   * 成本要素编码（冗余）
+   */
+  costElementCode?: string;
+
+  /**
+   * 材料成本合计
+   */
+  totalMaterialCost?: number;
+
+  /**
+   * 人工成本合计
+   */
+  totalLaborCost?: number;
+
+  /**
+   * 其他成本合计
+   */
+  totalOtherCost?: number;
+
+  /**
+   * 总成本
+   */
+  totalCost?: number;
+
+  /**
+   * 结算状态（0=未结算，1=部分结算，2=已结算）
+   */
+  settlementStatus?: number;
+
+  /**
+   * 结算时间
+   */
+  settlementTime?: string;
+
+  /**
+   * 完工时间
+   */
+  completedAt?: string;
+
+  /**
+   * 验收人（人员编码）
+   */
+  acceptedBy?: string;
+
+  /**
+   * 验收时间
+   */
+  acceptedAt?: string;
+
+  /**
+   * 维护结果（0=正常，1=待观察，2=需再次维修，3=已报废）
+   */
+  maintenanceResult?: number;
+
+  /**
+   * 下次维护日期
+   */
+  nextMaintenanceDate?: string;
+
+  /**
+   * 维护周期（天）
+   */
+  maintenanceCycleDays?: number;
+
+  /**
+   * 维护图片（JSON格式，存储维护图片URL列表）
+   */
+  maintenanceImages?: string;
+
+  /**
+   * 维护文档（JSON格式，存储维护文档ID列表）
+   */
+  maintenanceDocuments?: string;
+
+  /**
+   * 验收总结
+   */
+  acceptedSummary?: string;
+
+  /**
+   * 是否已归档至维护履历（字典 sys_yes_no_type；0=否，1=是）
+   */
+  isHistoryArchived?: number;
+
+  /**
+   * 领料明细（子表，级联保存）
+   */
+  materials?: MaintenanceWorkOrderMaterialCreate[];
+
+  /**
+   * 报工明细（子表，级联保存）
+   */
+  labors?: MaintenanceWorkOrderLaborCreate[];
+
+  /**
    * 扩展字段JSON
    */
   extField?: string;
@@ -985,7 +1140,7 @@ export interface MaintenanceWorkOrderImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -1048,6 +1203,161 @@ export interface MaintenanceWorkOrderImport {
    * 工作中心
    */
   workCenter?: string;
+
+  /**
+   * 指派技师（人员编码）
+   */
+  assignedTechnician?: string;
+
+  /**
+   * 维护单位
+   */
+  maintenanceCompany?: string;
+
+  /**
+   * 计划开始时间
+   */
+  plannedStartTime?: string;
+
+  /**
+   * 计划结束时间
+   */
+  plannedEndTime?: string;
+
+  /**
+   * 实际开始时间
+   */
+  actualStartTime?: string;
+
+  /**
+   * 实际结束时间
+   */
+  actualEndTime?: string;
+
+  /**
+   * 故障描述
+   */
+  faultDescription?: string;
+
+  /**
+   * 维护内容
+   */
+  maintenanceContent?: string;
+
+  /**
+   * 处理方案
+   */
+  solution?: string;
+
+  /**
+   * 结算成本中心ID（序列化为string以避免Javascript精度问题）
+   */
+  costCenterId?: string;
+
+  /**
+   * 结算成本中心编码（冗余）
+   */
+  costCenterCode?: string;
+
+  /**
+   * 成本要素ID（序列化为string以避免Javascript精度问题）
+   */
+  costElementId?: string;
+
+  /**
+   * 成本要素编码（冗余）
+   */
+  costElementCode?: string;
+
+  /**
+   * 材料成本合计
+   */
+  totalMaterialCost?: number;
+
+  /**
+   * 人工成本合计
+   */
+  totalLaborCost?: number;
+
+  /**
+   * 其他成本合计
+   */
+  totalOtherCost?: number;
+
+  /**
+   * 总成本
+   */
+  totalCost?: number;
+
+  /**
+   * 结算状态（0=未结算，1=部分结算，2=已结算）
+   */
+  settlementStatus?: number;
+
+  /**
+   * 结算时间
+   */
+  settlementTime?: string;
+
+  /**
+   * 完工时间
+   */
+  completedAt?: string;
+
+  /**
+   * 验收人（人员编码）
+   */
+  acceptedBy?: string;
+
+  /**
+   * 验收时间
+   */
+  acceptedAt?: string;
+
+  /**
+   * 维护结果（0=正常，1=待观察，2=需再次维修，3=已报废）
+   */
+  maintenanceResult?: number;
+
+  /**
+   * 下次维护日期
+   */
+  nextMaintenanceDate?: string;
+
+  /**
+   * 维护周期（天）
+   */
+  maintenanceCycleDays?: number;
+
+  /**
+   * 维护图片（JSON格式，存储维护图片URL列表）
+   */
+  maintenanceImages?: string;
+
+  /**
+   * 维护文档（JSON格式，存储维护文档ID列表）
+   */
+  maintenanceDocuments?: string;
+
+  /**
+   * 验收总结
+   */
+  acceptedSummary?: string;
+
+  /**
+   * 是否已归档至维护履历（字典 sys_yes_no_type；0=否，1=是）
+   */
+  isHistoryArchived?: number;
+
+  /**
+   * 领料明细（子表，级联保存）
+   */
+  materials?: MaintenanceWorkOrderMaterialCreate[];
+
+  /**
+   * 报工明细（子表，级联保存）
+   */
+  labors?: MaintenanceWorkOrderLaborCreate[];
 
   /**
    * 扩展字段JSON

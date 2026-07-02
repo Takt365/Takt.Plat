@@ -77,7 +77,7 @@ public class TaktFlowFormDto : TaktCompanyDtoBase
     public int IsDatasource { get; set; } = 0;
 
     /// <summary>
-    /// 关联数据库名
+    /// 关联库名
     /// </summary>
     public string? RelatedDataBaseName { get; set; } = string.Empty;
 
@@ -87,7 +87,7 @@ public class TaktFlowFormDto : TaktCompanyDtoBase
     public string? RelatedTableName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联字段映射 JSON
+    /// 关联映射 JSON
     /// </summary>
     public string? RelatedFormField { get; set; } = string.Empty;
 
@@ -164,7 +164,7 @@ public class TaktFlowFormQueryDto : TaktPagedQuery
     public int? IsDatasource { get; set; }
 
     /// <summary>
-    /// 关联数据库名
+    /// 关联库名
     /// </summary>
     public string? RelatedDataBaseName { get; set; } = string.Empty;
 
@@ -174,7 +174,7 @@ public class TaktFlowFormQueryDto : TaktPagedQuery
     public string? RelatedTableName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联字段映射 JSON
+    /// 关联映射 JSON
     /// </summary>
     public string? RelatedFormField { get; set; } = string.Empty;
 
@@ -229,7 +229,7 @@ public class TaktFlowFormCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -277,7 +277,7 @@ public class TaktFlowFormCreateDto
     public int IsDatasource { get; set; } = 0;
 
     /// <summary>
-    /// 关联数据库名
+    /// 关联库名
     /// </summary>
     public string? RelatedDataBaseName { get; set; } = string.Empty;
 
@@ -287,7 +287,7 @@ public class TaktFlowFormCreateDto
     public string? RelatedTableName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联字段映射 JSON
+    /// 关联映射 JSON
     /// </summary>
     public string? RelatedFormField { get; set; } = string.Empty;
 
@@ -441,7 +441,7 @@ public class TaktFlowFormTemplateDto
     public int? IsDatasource { get; set; }
 
     /// <summary>
-    /// 关联数据库名
+    /// 关联库名
     /// </summary>
     public string? RelatedDataBaseName { get; set; } = string.Empty;
 
@@ -451,7 +451,7 @@ public class TaktFlowFormTemplateDto
     public string? RelatedTableName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联字段映射 JSON
+    /// 关联映射 JSON
     /// </summary>
     public string? RelatedFormField { get; set; } = string.Empty;
 
@@ -488,7 +488,7 @@ public class TaktFlowFormImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -533,7 +533,7 @@ public class TaktFlowFormImportDto
     public int? IsDatasource { get; set; }
 
     /// <summary>
-    /// 关联数据库名
+    /// 关联库名
     /// </summary>
     public string? RelatedDataBaseName { get; set; } = string.Empty;
 
@@ -543,7 +543,7 @@ public class TaktFlowFormImportDto
     public string? RelatedTableName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联字段映射 JSON
+    /// 关联映射 JSON
     /// </summary>
     public string? RelatedFormField { get; set; } = string.Empty;
 
@@ -626,7 +626,7 @@ public class TaktFlowFormExportDto
     public int IsDatasource { get; set; } = 0;
 
     /// <summary>
-    /// 关联数据库名
+    /// 关联库名
     /// </summary>
     public string? RelatedDataBaseName { get; set; } = string.Empty;
 
@@ -636,7 +636,7 @@ public class TaktFlowFormExportDto
     public string? RelatedTableName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联字段映射 JSON
+    /// 关联映射 JSON
     /// </summary>
     public string? RelatedFormField { get; set; } = string.Empty;
 

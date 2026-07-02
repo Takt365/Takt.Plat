@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.CustomerService
 // 文件名称：TaktServiceOrderService.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：服务订单应用服务实现
 // 
@@ -414,6 +414,35 @@ public class TaktServiceOrderService : TaktServiceBase, ITaktServiceOrderService
             await _serviceTicketRepository.CreateRangeAsync(tickets);
         }
     }
+
+    /// <summary>
+    /// 获取服务订单统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>服务订单统计</returns>
+    public async Task<TaktServiceOrderStatDto> GetServiceOrderStatAsync(TaktServiceOrderStatQueryDto queryDto)
+    {
+        EnsureThreeLayerContext();
+        var (start, end, statMonth) = TaktStatMonthRangeHelper.ResolveMonthRange(
+            queryDto.OrderDateStart,
+            queryDto.OrderDateEnd);
+        var tenantCode = CurrentTenantCode;
+        var companyCode = CurrentCompanyCode;
+        Expression<Func<TaktServiceOrder, bool>> predicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.OrderDate >= start
+            && x.OrderDate <= end;
+        var monthOrderCount = await _serviceOrderRepository.CountAsync(predicate);
+        var monthTotalAmount = await _serviceOrderRepository.SumAsync(x => x.TotalAmount, predicate);
+        return new TaktServiceOrderStatDto
+        {
+            StatMonth = statMonth,
+            MonthOrderCount = monthOrderCount,
+            MonthTotalAmount = monthTotalAmount,
+        };
+    }
+
     // ========================================
     // 查询表达式
     // ========================================

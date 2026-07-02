@@ -23,31 +23,38 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Sop;
 [SugarIndex("ix_sop_ack_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_sop_ack_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_manufacturing_sop_ack_revision", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(RevisionId), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_sop_ack_plant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
 public class TaktSopAck : TaktCompanyEntityBase
 {
     /// <summary>
-    /// SOP 主档 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// </summary>
+    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
     /// </summary>
     [SugarColumn(ColumnName = "sop_id", ColumnDescription = "SOP主档ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SopId { get; set; }
 
     /// <summary>
-    /// SOP 版本 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// SOP 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
     /// </summary>
     [SugarColumn(ColumnName = "revision_id", ColumnDescription = "SOP版本ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long RevisionId { get; set; }
 
     /// <summary>
-    /// 工位 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
     /// </summary>
     [SugarColumn(ColumnName = "workstation_id", ColumnDescription = "工位ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? WorkstationId { get; set; }
 
     /// <summary>
-    /// 确认人 ID（班组长，序列化为 string 以避免 Javascript 精度问题）
+    /// 确认人 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [SugarColumn(ColumnName = "acknowledged_by", ColumnDescription = "确认人ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]

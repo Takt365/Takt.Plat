@@ -22,7 +22,7 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
         force-render
       >
         <div :class="formContentClass">
@@ -89,12 +89,10 @@
                 :label="t('entity.assyoutput.prodcategory')"
                 name="prodCategory"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.prodCategory"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyoutput.prodcategory') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  dict-type="logistics_prod_category"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.assyoutput.prodcategory') })"
                 />
               </a-form-item>
             </a-col>
@@ -113,12 +111,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.assyoutput.prodline')"
-                name="prodLine"
+                :label="t('entity.assyoutput.prodteam')"
+                name="prodTeam"
               >
                 <a-input
-                  v-model:value="formState.prodLine"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyoutput.prodline') })"
+                  v-model:value="formState.prodTeam"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyoutput.prodteam') })"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -154,10 +152,10 @@
                 :label="t('entity.assyoutput.shiftno')"
                 name="shiftNo"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.shiftNo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyoutput.shiftno') })"
-                  style="width: 100%"
+                  dict-type="logistics_shift_category"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.assyoutput.shiftno') })"
                 />
               </a-form-item>
             </a-col>
@@ -166,7 +164,7 @@
       </a-tab-pane>
       <a-tab-pane
         key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
         force-render
       >
         <div :class="formContentClass">
@@ -280,18 +278,6 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.assyoutput.status')"
-                name="status"
-              >
-                <a-input-number
-                  v-model:value="formState.status"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyoutput.status') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
             <a-col :span="24">
               <a-form-item
                 name="extField"
@@ -318,16 +304,6 @@
                 />
               </a-form-item>
             </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
                 :label="t('common.page.entity.remark')"
@@ -367,11 +343,13 @@
  * 组立日报维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/manufacturing/output/assy-output/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import type { AssyOutputCreate } from '@/types/logistics/manufacturing/output/assy-output'
+import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -404,7 +382,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","prodCategory","prodDate","prodLine","directLabor","indirectLabor","shiftNo","prodOrderType","prodOrderCode","modelCode","materialCode","batchNo","prodOrderQty","stdMinutes","stdCapacity","status","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","prodCategory","prodDate","prodTeam","directLabor","indirectLabor","shiftNo","prodOrderType","prodOrderCode","modelCode","materialCode","batchNo","prodOrderQty","stdMinutes","stdCapacity","extField","remark"]
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
 
@@ -523,6 +501,13 @@ function applyFormDefaults(target: Record<string, unknown>) {
   void target
 }
 
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载全量字典 */
+onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
+})
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 assyOutputId 才视为编辑） */
 watch(
@@ -572,8 +557,8 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   prodCategory: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.assyoutput.prodcategory') }),
-      trigger: 'blur'
+      message: t('common.page.form.placeholder.select', { field: t('entity.assyoutput.prodcategory') }),
+      trigger: 'change'
     }
   ],
   prodDate: [
@@ -583,10 +568,10 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'change'
     }
   ],
-  prodLine: [
+  prodTeam: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.assyoutput.prodline') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.assyoutput.prodteam') }),
       trigger: 'blur'
     }
   ],
@@ -689,19 +674,6 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
-  status: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.assyoutput.status') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.assyoutput.status') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -737,10 +709,6 @@ function getValues(): Record<string, any> {
   if ('stdCapacity' in payload) {
     const rawstdCapacity = payload.stdCapacity
     payload.stdCapacity = typeof rawstdCapacity === 'number' ? rawstdCapacity : Number(rawstdCapacity)
-  }
-  if ('status' in payload) {
-    const rawstatus = payload.status
-    payload.status = typeof rawstatus === 'number' ? rawstatus : Number(rawstatus)
   }
   if ('sortOrder' in payload) delete payload.sortOrder
   return payload

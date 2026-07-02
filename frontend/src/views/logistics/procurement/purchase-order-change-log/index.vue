@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="logistics:procurement:purchase:order:change:log:create"
-      update-permission="logistics:procurement:purchase:order:change:log:update"
-      delete-permission="logistics:procurement:purchase:order:change:log:delete"
-      import-permission="logistics:procurement:purchase:order:change:log:import"
-      export-permission="logistics:procurement:purchase:order:change:log:export"
+      create-permission="logistics:procurement:purchase:order:create"
+      update-permission="logistics:procurement:purchase:order:update"
+      delete-permission="logistics:procurement:purchase:order:delete"
+      import-permission="logistics:procurement:purchase:order:import"
+      export-permission="logistics:procurement:purchase:order:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -81,22 +81,22 @@
             @change="(checked: unknown) => handleOrderStatusChange(record, Boolean(checked))"
           />
         </template>
-        <template v-else-if="column.key === 'deliveryStatus'">
-          <TaktDictTag
-            :value="getPurchaseOrderField(record, 'deliveryStatus')"
-            dict-type="logistics_delivery_status"
-          />
-        </template>
         <template v-else-if="column.key === 'paymentMethod'">
           <TaktDictTag
             :value="getPurchaseOrderField(record, 'paymentMethod')"
-            dict-type="logistics_payment_method_type"
+            dict-type="accounting_payment_method_type"
           />
         </template>
         <template v-else-if="column.key === 'deliveryMethod'">
           <TaktDictTag
             :value="getPurchaseOrderField(record, 'deliveryMethod')"
             dict-type="logistics_delivery_method_type"
+          />
+        </template>
+        <template v-else-if="column.key === 'deliveryStatus'">
+          <TaktDictTag
+            :value="getPurchaseOrderField(record, 'deliveryStatus')"
+            dict-type="logistics_delivery_status"
           />
         </template>
       </template>
@@ -152,6 +152,28 @@
         <a-input
           v-model:value="advancedQueryForm.purchaseOrderCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorder.code') })"
+          show-count
+          :maxlength="10"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('purchaseRequestId')">
+      <a-form-item :label="t('entity.purchaseorder.purchaserequestid')">
+        <a-input
+          v-model:value="advancedQueryForm.purchaseRequestId"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorder.purchaserequestid') })"
+          show-count
+          :maxlength="20"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('purchaseRequestCode')">
+      <a-form-item :label="t('entity.purchaseorder.purchaserequestcode')">
+        <a-input
+          v-model:value="advancedQueryForm.purchaseRequestCode"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorder.purchaserequestcode') })"
           show-count
           :maxlength="10"
           allow-clear
@@ -323,31 +345,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('orderStatus')">
-      <a-form-item :label="t('entity.purchaseorder.orderstatus')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.orderStatus"
-          dict-type="sys_normal_disable_status"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.orderstatus') })"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('deliveryStatus')">
-      <a-form-item :label="t('entity.purchaseorder.deliverystatus')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.deliveryStatus"
-          dict-type="logistics_delivery_status"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.deliverystatus') })"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
       <div v-show="isFieldVisible('paymentMethod')">
       <a-form-item :label="t('entity.purchaseorder.paymentmethod')">
         <TaktSelect
           v-model:value="advancedQueryForm.paymentMethod"
-          dict-type="logistics_payment_method_type"
+          dict-type="accounting_payment_method_type"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.paymentmethod') })"
           allow-clear
         />
@@ -373,13 +375,33 @@
         />
       </a-form-item>
       </div>
+      <div v-show="isFieldVisible('orderStatus')">
+      <a-form-item :label="t('entity.purchaseorder.orderstatus')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.orderStatus"
+          dict-type="sys_normal_disable_status"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.orderstatus') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('deliveryStatus')">
+      <a-form-item :label="t('entity.purchaseorder.deliverystatus')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.deliveryStatus"
+          dict-type="logistics_delivery_status"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.deliverystatus') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('createdAtStart')">
       <a-form-item :label="t('common.page.entity.createdatstart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -390,7 +412,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -540,6 +562,8 @@ const advancedQueryVisible = ref(false)
 const advancedQueryForm = ref({
   plantCode: '',
   purchaseOrderCode: '',
+  purchaseRequestId: '',
+  purchaseRequestCode: '',
   supplierCode: '',
   supplierName: '',
   orderDateStart: '',
@@ -557,11 +581,11 @@ const advancedQueryForm = ref({
   receivedQuantity: undefined as number | undefined,
   receivedAmount: undefined as number | undefined,
   paidAmount: undefined as number | undefined,
-  orderStatus: undefined as number | undefined,
-  deliveryStatus: undefined as number | undefined,
   paymentMethod: undefined as number | undefined,
   deliveryMethod: undefined as number | undefined,
   deliveryAddress: '',
+  orderStatus: undefined as number | undefined,
+  deliveryStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -571,6 +595,8 @@ const advancedQueryForm = ref({
 const queryFieldsMeta = computed(() => [
   { key: 'plantCode', label: t('entity.purchaseorder.plantcode') },
   { key: 'purchaseOrderCode', label: t('entity.purchaseorder.code') },
+  { key: 'purchaseRequestId', label: t('entity.purchaseorder.purchaserequestid') },
+  { key: 'purchaseRequestCode', label: t('entity.purchaseorder.purchaserequestcode') },
   { key: 'supplierCode', label: t('entity.purchaseorder.suppliercode') },
   { key: 'supplierName', label: t('entity.purchaseorder.suppliername') },
   { key: 'orderDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.purchaseorder.orderdate')) },
@@ -588,11 +614,11 @@ const queryFieldsMeta = computed(() => [
   { key: 'receivedQuantity', label: t('entity.purchaseorder.receivedquantity') },
   { key: 'receivedAmount', label: t('entity.purchaseorder.receivedamount') },
   { key: 'paidAmount', label: t('entity.purchaseorder.paidamount') },
-  { key: 'orderStatus', label: t('entity.purchaseorder.orderstatus') },
-  { key: 'deliveryStatus', label: t('entity.purchaseorder.deliverystatus') },
   { key: 'paymentMethod', label: t('entity.purchaseorder.paymentmethod') },
   { key: 'deliveryMethod', label: t('entity.purchaseorder.deliverymethod') },
   { key: 'deliveryAddress', label: t('entity.purchaseorder.deliveryaddress') },
+  { key: 'orderStatus', label: t('entity.purchaseorder.orderstatus') },
+  { key: 'deliveryStatus', label: t('entity.purchaseorder.deliverystatus') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extField', label: t('common.page.entity.extfield') },
@@ -643,6 +669,8 @@ function buildListQuery(overrides?: Partial<PurchaseOrderQuery>): PurchaseOrderQ
   }
   assignTrimmed('plantCode', form.plantCode)
   assignTrimmed('purchaseOrderCode', form.purchaseOrderCode)
+  assignTrimmed('purchaseRequestId', form.purchaseRequestId)
+  assignTrimmed('purchaseRequestCode', form.purchaseRequestCode)
   assignTrimmed('supplierCode', form.supplierCode)
   assignTrimmed('supplierName', form.supplierName)
   assignTrimmed('orderDateStart', form.orderDateStart)
@@ -676,12 +704,6 @@ function buildListQuery(overrides?: Partial<PurchaseOrderQuery>): PurchaseOrderQ
   if (form.paidAmount !== undefined && form.paidAmount !== null) {
     query.paidAmount = form.paidAmount
   }
-  if (form.orderStatus !== undefined && form.orderStatus !== null) {
-    query.orderStatus = form.orderStatus
-  }
-  if (form.deliveryStatus !== undefined && form.deliveryStatus !== null) {
-    query.deliveryStatus = form.deliveryStatus
-  }
   if (form.paymentMethod !== undefined && form.paymentMethod !== null) {
     query.paymentMethod = form.paymentMethod
   }
@@ -689,6 +711,12 @@ function buildListQuery(overrides?: Partial<PurchaseOrderQuery>): PurchaseOrderQ
     query.deliveryMethod = form.deliveryMethod
   }
   assignTrimmed('deliveryAddress', form.deliveryAddress)
+  if (form.orderStatus !== undefined && form.orderStatus !== null) {
+    query.orderStatus = form.orderStatus
+  }
+  if (form.deliveryStatus !== undefined && form.deliveryStatus !== null) {
+    query.deliveryStatus = form.deliveryStatus
+  }
   assignTrimmed('createdAtStart', form.createdAtStart)
   assignTrimmed('createdAtEnd', form.createdAtEnd)
   assignTrimmed('extField', form.extField)
@@ -782,6 +810,24 @@ const columns = computed<TableColumnsType>(() => [
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getPurchaseOrderField(record, 'purchaseOrderCode') ?? ''
+  },
+  {
+    title: t('entity.purchaseorder.purchaserequestid'),
+    dataIndex: 'purchaseRequestId',
+    key: 'purchaseRequestId',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getPurchaseOrderField(record, 'purchaseRequestId') ?? ''
+  },
+  {
+    title: t('entity.purchaseorder.purchaserequestcode'),
+    dataIndex: 'purchaseRequestCode',
+    key: 'purchaseRequestCode',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getPurchaseOrderField(record, 'purchaseRequestCode') ?? ''
   },
   {
     title: t('entity.purchaseorder.suppliercode'),
@@ -910,22 +956,6 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPurchaseOrderField(record, 'paidAmount') ?? ''
   },
   {
-    title: t('entity.purchaseorder.orderstatus'),
-    dataIndex: 'orderStatus',
-    key: 'orderStatus',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: t('entity.purchaseorder.deliverystatus'),
-    dataIndex: 'deliveryStatus',
-    key: 'deliveryStatus',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
     title: t('entity.purchaseorder.paymentmethod'),
     dataIndex: 'paymentMethod',
     key: 'paymentMethod',
@@ -950,6 +980,22 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getPurchaseOrderField(record, 'deliveryAddress') ?? ''
   },
+  {
+    title: t('entity.purchaseorder.orderstatus'),
+    dataIndex: 'orderStatus',
+    key: 'orderStatus',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
+    title: t('entity.purchaseorder.deliverystatus'),
+    dataIndex: 'deliveryStatus',
+    key: 'deliveryStatus',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
   CreateActionColumn({
     actions: [
       {
@@ -957,7 +1003,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:procurement:purchase:order:change:log:update',
+        permission: 'logistics:procurement:purchase:order:update',
         onClick: (record: PurchaseOrder) => handleEdit(record)
       },
       {
@@ -965,7 +1011,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:procurement:purchase:order:change:log:delete',
+        permission: 'logistics:procurement:purchase:order:delete',
         onClick: (record: PurchaseOrder) => handleDeleteOne(record)
       }
     ]
@@ -999,7 +1045,7 @@ const rowSelection = computed(() => ({
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
-    } else if (getPurchaseOrderId(selectedRow.value) === getPurchaseOrderId(record)) {
+    } else if (selectedRow.value && getPurchaseOrderId(selectedRow.value) === getPurchaseOrderId(record)) {
       selectedRow.value = null
       syncMasterSelection(null)
     }
@@ -1042,6 +1088,8 @@ function handleReset() {
   advancedQueryForm.value = {
   plantCode: '',
   purchaseOrderCode: '',
+  purchaseRequestId: '',
+  purchaseRequestCode: '',
   supplierCode: '',
   supplierName: '',
   orderDateStart: '',
@@ -1059,11 +1107,11 @@ function handleReset() {
   receivedQuantity: undefined as number | undefined,
   receivedAmount: undefined as number | undefined,
   paidAmount: undefined as number | undefined,
-  orderStatus: undefined as number | undefined,
-  deliveryStatus: undefined as number | undefined,
   paymentMethod: undefined as number | undefined,
   deliveryMethod: undefined as number | undefined,
   deliveryAddress: '',
+  orderStatus: undefined as number | undefined,
+  deliveryStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -1281,6 +1329,8 @@ function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
   plantCode: '',
   purchaseOrderCode: '',
+  purchaseRequestId: '',
+  purchaseRequestCode: '',
   supplierCode: '',
   supplierName: '',
   orderDateStart: '',
@@ -1298,11 +1348,11 @@ function handleAdvancedQueryReset() {
   receivedQuantity: undefined as number | undefined,
   receivedAmount: undefined as number | undefined,
   paidAmount: undefined as number | undefined,
-  orderStatus: undefined as number | undefined,
-  deliveryStatus: undefined as number | undefined,
   paymentMethod: undefined as number | undefined,
   deliveryMethod: undefined as number | undefined,
   deliveryAddress: '',
+  orderStatus: undefined as number | undefined,
+  deliveryStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',

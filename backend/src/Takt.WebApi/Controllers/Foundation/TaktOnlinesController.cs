@@ -1,4 +1,4 @@
-﻿// ========================================
+// ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Foundation
 // 文件名称：TaktOnlinesController.cs
@@ -169,16 +169,35 @@ public class TaktOnlinesController : TaktControllerBase
     }
 
     /// <summary>
-    /// 获取当前登录用户在线统计
+    /// 获取在线时长统计（唯一 API：当天/本周日均/本月日均，实现见 ITaktOnlineService.GetOnlineStatisticsAsync）
     /// </summary>
     /// <returns>统计结果</returns>
     [TaktPermission("foundation:online:query", "当前用户在线统计")]
     [HttpGet("statistics")]
-    public async Task<IActionResult> GetOnlineStatisticsAsync()
+    public async Task<IActionResult> GetOnlineStatisticsAsync([FromQuery] TaktOnlineStatisticsQueryDto? queryDto)
     {
         try
         {
-            var result = await _onlineService.GetOnlineStatisticsAsync();
+            var result = await _onlineService.GetOnlineStatisticsAsync(queryDto);
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 获取在线看板统计（公司维度：在线人数、当日总访问量、当前会话）
+    /// </summary>
+    /// <returns>看板统计结果</returns>
+    [TaktPermission("foundation:online:list", "在线看板统计")]
+    [HttpGet("statistics/dashboard")]
+    public async Task<IActionResult> GetOnlineDashboardStatisticsAsync()
+    {
+        try
+        {
+            var result = await _onlineService.GetOnlineDashboardStatisticsAsync();
             return Success(result, "查询成功");
         }
         catch (Exception ex)
@@ -234,7 +253,8 @@ public class TaktOnlinesController : TaktControllerBase
             await _signalRDispatchService.ForceKickOnlineAsync(
                 parsedOnlineId,
                 dto?.Reason,
-                connectionId);
+                connectionId,
+                dto?.DelaySeconds ?? 0);
             return Success("强退成功");
         }
         catch (Exception ex)
@@ -254,7 +274,7 @@ public class TaktOnlinesController : TaktControllerBase
     {
         try
         {
-            await _signalRDispatchService.ForceKickOnlineBatchAsync(dto.OnlineIds, dto.Reason);
+            await _signalRDispatchService.ForceKickOnlineBatchAsync(dto.OnlineIds, dto.Reason, dto.DelaySeconds);
             return Success("批量强退完成");
         }
         catch (Exception ex)

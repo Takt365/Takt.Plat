@@ -9,10 +9,13 @@
 import { inject, provide, type InjectionKey, type Ref, ref } from 'vue'
 import type { SalesQuotation } from '@/types/logistics/sales/quotation'
 
+/** 表格行类型（与 index 列表行、TaktSingleTable slot record 一致） */
+export type SalesQuotationRowRecord = SalesQuotation | Record<string, unknown>
+
 /** 主表选中行上下文 */
 export interface SalesQuotationMasterContext {
   /** 当前选中的主表行（右侧明细依赖） */
-  selectedMasterRow: Ref<SalesQuotation | null>
+  selectedMasterRow: Ref<SalesQuotationRowRecord | null>
 }
 
 const salesQuotationMasterContextKey: InjectionKey<SalesQuotationMasterContext> = Symbol('quotationMasterContext')
@@ -22,7 +25,7 @@ const salesQuotationMasterContextKey: InjectionKey<SalesQuotationMasterContext> 
  * @returns {SalesQuotationMasterContext} 主表上下文
  */
 export function provideSalesQuotationMasterContext(): SalesQuotationMasterContext {
-  const selectedMasterRow = ref<SalesQuotation | null>(null)
+  const selectedMasterRow = ref<SalesQuotationRowRecord | null>(null)
   const ctx: SalesQuotationMasterContext = { selectedMasterRow }
   provide(salesQuotationMasterContextKey, ctx)
   return ctx

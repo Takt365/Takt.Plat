@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Procurement
 // 文件名称：TaktVendorService.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：经销商信息应用服务实现
 // 
@@ -341,6 +341,7 @@ public class TaktVendorService : TaktServiceBase, ITaktVendorService
                 || SqlFunc.ToString(x.VendorType).Contains(keywords)
                 || (x.IndustrySector != null && x.IndustrySector.Contains(keywords))
                 || (x.VendorTaxNumber != null && x.VendorTaxNumber.Contains(keywords))
+                || SqlFunc.ToString(x.TaxRate).Contains(keywords)
                 || (x.RegistrationCountry != null && x.RegistrationCountry.Contains(keywords))
                 || (x.RegistrationAddress1 != null && x.RegistrationAddress1.Contains(keywords))
                 || (x.RegistrationAddress2 != null && x.RegistrationAddress2.Contains(keywords))
@@ -360,7 +361,6 @@ public class TaktVendorService : TaktServiceBase, ITaktVendorService
                 || (x.AgentRegion != null && x.AgentRegion.Contains(keywords))
                 || SqlFunc.ToString(x.VendorLevel).Contains(keywords)
                 || SqlFunc.ToString(x.EvaluationScore).Contains(keywords)
-                || SqlFunc.ToString(x.IsQualified).Contains(keywords)
                 || SqlFunc.ToString(x.VendorStatus).Contains(keywords)
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
@@ -402,6 +402,11 @@ public class TaktVendorService : TaktServiceBase, ITaktVendorService
         if (!string.IsNullOrEmpty(queryDto?.VendorTaxNumber))
         {
             exp = exp.And(x => x.VendorTaxNumber != null && x.VendorTaxNumber.Contains(queryDto.VendorTaxNumber));
+        }
+
+        if (queryDto?.TaxRate.HasValue == true)
+        {
+            exp = exp.And(x => x.TaxRate == queryDto.TaxRate);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.RegistrationCountry))
@@ -464,7 +469,7 @@ public class TaktVendorService : TaktServiceBase, ITaktVendorService
             exp = exp.And(x => x.CurrencyCode != null && x.CurrencyCode.Contains(queryDto.CurrencyCode));
         }
 
-        if (queryDto?.PaymentTerms.HasValue == true)
+        if (!string.IsNullOrEmpty(queryDto?.PaymentTerms))
         {
             exp = exp.And(x => x.PaymentTerms == queryDto.PaymentTerms);
         }
@@ -497,11 +502,6 @@ public class TaktVendorService : TaktServiceBase, ITaktVendorService
         if (queryDto?.EvaluationScore.HasValue == true)
         {
             exp = exp.And(x => x.EvaluationScore == queryDto.EvaluationScore);
-        }
-
-        if (queryDto?.IsQualified.HasValue == true)
-        {
-            exp = exp.And(x => x.IsQualified == queryDto.IsQualified);
         }
 
         if (queryDto?.VendorStatus.HasValue == true)

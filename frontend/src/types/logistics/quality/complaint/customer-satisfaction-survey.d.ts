@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/quality/complaint
 // 文件名称：customer-satisfaction-survey.d.ts
-// 创建时间：2026-06-21
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/complaint 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -363,7 +363,7 @@ export interface CustomerSatisfactionSurveyCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -600,6 +600,11 @@ export interface CustomerSatisfactionSurveyTemplate {
   customerCode?: string;
 
   /**
+   * 调查日期
+   */
+  surveyDate?: string;
+
+  /**
    * 调查方式（0=问卷，1=电话，2=邮件，3=现场，4=在线）
    */
   surveyMethod?: number;
@@ -638,6 +643,71 @@ export interface CustomerSatisfactionSurveyTemplate {
    * 综合评分（0-100分）
    */
   totalScore?: number;
+
+  /**
+   * 产品质量评分（0-100分）
+   */
+  qualityScore?: number;
+
+  /**
+   * 交付准时率评分（0-100分）
+   */
+  deliveryScore?: number;
+
+  /**
+   * 服务质量评分（0-100分）
+   */
+  serviceScore?: number;
+
+  /**
+   * 价格竞争力评分（0-100分）
+   */
+  priceScore?: number;
+
+  /**
+   * 技术支持评分（0-100分）
+   */
+  technicalScore?: number;
+
+  /**
+   * 客户主要表扬
+   */
+  customerPraise?: string;
+
+  /**
+   * 客户主要意见/建议
+   */
+  customerFeedback?: string;
+
+  /**
+   * 改进计划/措施
+   */
+  improvementPlan?: string;
+
+  /**
+   * 调查状态（0=草稿，1=进行中，2=已完成，3=已归档）
+   */
+  surveyStatus?: number;
+
+  /**
+   * 跟进状态（0=无需跟进，1=待跟进，2=跟进中，3=已完成）
+   */
+  followUpStatus?: number;
+
+  /**
+   * 关联客诉ID（序列化为string以避免Javascript精度问题）
+   */
+  relatedComplaintId?: string;
+
+  /**
+   * 关联工厂
+   */
+  relatedPlant?: string;
+
+  /**
+   * 调查项目明细列表（主子表关系）（子表，级联保存）
+   */
+  items?: CustomerSatisfactionSurveyItemCreate[];
 
   /**
    * 扩展字段JSON
@@ -669,7 +739,7 @@ export interface CustomerSatisfactionSurveyImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -692,6 +762,11 @@ export interface CustomerSatisfactionSurveyImport {
    * 客户编码
    */
   customerCode?: string;
+
+  /**
+   * 调查日期
+   */
+  surveyDate?: string;
 
   /**
    * 调查方式（0=问卷，1=电话，2=邮件，3=现场，4=在线）
@@ -732,6 +807,71 @@ export interface CustomerSatisfactionSurveyImport {
    * 综合评分（0-100分）
    */
   totalScore?: number;
+
+  /**
+   * 产品质量评分（0-100分）
+   */
+  qualityScore?: number;
+
+  /**
+   * 交付准时率评分（0-100分）
+   */
+  deliveryScore?: number;
+
+  /**
+   * 服务质量评分（0-100分）
+   */
+  serviceScore?: number;
+
+  /**
+   * 价格竞争力评分（0-100分）
+   */
+  priceScore?: number;
+
+  /**
+   * 技术支持评分（0-100分）
+   */
+  technicalScore?: number;
+
+  /**
+   * 客户主要表扬
+   */
+  customerPraise?: string;
+
+  /**
+   * 客户主要意见/建议
+   */
+  customerFeedback?: string;
+
+  /**
+   * 改进计划/措施
+   */
+  improvementPlan?: string;
+
+  /**
+   * 调查状态（0=草稿，1=进行中，2=已完成，3=已归档）
+   */
+  surveyStatus?: number;
+
+  /**
+   * 跟进状态（0=无需跟进，1=待跟进，2=跟进中，3=已完成）
+   */
+  followUpStatus?: number;
+
+  /**
+   * 关联客诉ID（序列化为string以避免Javascript精度问题）
+   */
+  relatedComplaintId?: string;
+
+  /**
+   * 关联工厂
+   */
+  relatedPlant?: string;
+
+  /**
+   * 调查项目明细列表（主子表关系）（子表，级联保存）
+   */
+  items?: CustomerSatisfactionSurveyItemCreate[];
 
   /**
    * 扩展字段JSON

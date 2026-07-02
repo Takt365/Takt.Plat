@@ -163,7 +163,7 @@
                   v-model:value="formState.unitOfMeasure"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.plannedorder.unitofmeasure') })"
                   show-count
-                  :maxlength="40"
+                  :maxlength="5"
                   allow-clear
                 />
               </a-form-item>

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Controlling
 // 文件名称：TaktStandardWageRateI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktStandardWageRate 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -208,13 +208,13 @@ public class TaktStandardWageRateI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.standardwagerate.indirectwagerate", "zh-HK", "间接工资率_hk", "间接工资率"),
 
             // entity.standardwagerate.relatedplant
-            new TranslationSeedItem("entity.standardwagerate.relatedplant", "en-US", "关联工厂_us", "关联工厂"),
+            new TranslationSeedItem("entity.standardwagerate.relatedplant", "en-US", "关联工厂_us", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
             // entity.standardwagerate.relatedplant
-            new TranslationSeedItem("entity.standardwagerate.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂"),
+            new TranslationSeedItem("entity.standardwagerate.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
             // entity.standardwagerate.relatedplant
-            new TranslationSeedItem("entity.standardwagerate.relatedplant", "zh-CN", "关联工厂", "关联工厂"),
+            new TranslationSeedItem("entity.standardwagerate.relatedplant", "zh-CN", "关联工厂", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
             // entity.standardwagerate.relatedplant
-            new TranslationSeedItem("entity.standardwagerate.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂"),
+            new TranslationSeedItem("entity.standardwagerate.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
         };
     }
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Personnel
 // 文件名称：TaktEmployeeDelegationDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：EmployeeDelegation 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktEmployeeDelegation 生成，请按需审阅）
 // 
@@ -209,7 +209,7 @@ public class TaktEmployeeDelegationCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -342,6 +342,16 @@ public class TaktEmployeeDelegationTemplateDto
     public string? Reason { get; set; } = string.Empty;
 
     /// <summary>
+    /// 代理开始时间
+    /// </summary>
+    public DateTime? StartDate { get; set; }
+
+    /// <summary>
+    /// 代理结束时间 null = 长期有效，直到手动删除
+    /// </summary>
+    public DateTime? EndDate { get; set; }
+
+    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -369,7 +379,7 @@ public class TaktEmployeeDelegationImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -405,6 +415,16 @@ public class TaktEmployeeDelegationImportDto
     /// 代理原因 如：休假、出差、培训、岗位空缺、病假等
     /// </summary>
     public string? Reason { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 代理开始时间
+    /// </summary>
+    public DateTime? StartDate { get; set; }
+
+    /// <summary>
+    /// 代理结束时间 null = 长期有效，直到手动删除
+    /// </summary>
+    public DateTime? EndDate { get; set; }
 
     /// <summary>
     /// 扩展字段JSON

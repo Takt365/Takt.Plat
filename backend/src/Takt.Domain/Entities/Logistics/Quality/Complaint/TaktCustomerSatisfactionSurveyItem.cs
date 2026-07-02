@@ -27,7 +27,7 @@ namespace Takt.Domain.Entities.Logistics.Quality.Complaint;
 public class TaktCustomerSatisfactionSurveyItem : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 调查表ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 调查表 ID（关联 TaktCustomerSatisfactionSurvey.Id，选项 TaktCustomerSatisfactionSurveys/options）
     /// </summary>
     [SugarColumn(ColumnName = "survey_id", ColumnDescription = "调查表ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -46,7 +46,7 @@ public class TaktCustomerSatisfactionSurveyItem : TaktCompanyEntityBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 调查类别类型（0=产品质量，1=交付服务，2=售后服务，3=技术支持，4=价格，5=其他）
+    /// 调查类别类型（字典 logistics_quality_satisfaction_category）
     /// </summary>
     [SugarColumn(ColumnName = "category_type", ColumnDescription = "调查类别", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int CategoryType { get; set; } = 0;
@@ -76,7 +76,7 @@ public class TaktCustomerSatisfactionSurveyItem : TaktCompanyEntityBase
     public int? Score { get; set; }
 
     /// <summary>
-    /// 满意度等级（0=非常不满意，1=不满意，2=一般，3=满意，4=非常满意）
+    /// 满意度等级（字典 logistics_quality_satisfaction_level）
     /// </summary>
     [SugarColumn(ColumnName = "satisfaction_level", ColumnDescription = "满意度等级", ColumnDataType = "int", IsNullable = true)]
     public int? SatisfactionLevel { get; set; }
@@ -100,7 +100,7 @@ public class TaktCustomerSatisfactionSurveyItem : TaktCompanyEntityBase
     public string? FollowUpAction { get; set; }
 
     /// <summary>
-    /// 跟进状态（0=无需跟进，1=待跟进，2=跟进中，3=已完成）
+    /// 跟进状态（字典 logistics_quality_follow_up_status）
     /// </summary>
     [SugarColumn(ColumnName = "follow_up_status", ColumnDescription = "跟进状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int FollowUpStatus { get; set; } = 0;

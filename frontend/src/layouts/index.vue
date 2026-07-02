@@ -12,6 +12,7 @@
 
 <template>
   <takt-watermark>
+    <takt-force-logout-banner />
     <side-layout v-if="settingSafe.layout === 'side'" />
     <top-layout v-else-if="settingSafe.layout === 'top'" />
     <mix-layout v-else-if="settingSafe.layout === 'mix'" />

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData
 // 文件名称：TaktDictI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Cursor AI)
 // 功能描述：字典项国际化翻译种子（dict.* 键，与 TaktDictDataSeedData I18nKey 对齐）
 // 
@@ -140,158 +140,329 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             // dict.accounting.account.category.expense
             ("dict.accounting.account.category.expense", "zh-HK", "费用类_hk", "科目类别.费用类"),
 
-            // dict.accounting.asset.category.building
-            ("dict.accounting.asset.category.building", "en-US", "房屋建筑_us", "资产类别.房屋建筑"),
-            // dict.accounting.asset.category.building
-            ("dict.accounting.asset.category.building", "ja-JP", "房屋建筑_jp", "资产类别.房屋建筑"),
-            // dict.accounting.asset.category.building
-            ("dict.accounting.asset.category.building", "zh-CN", "房屋建筑", "资产类别.房屋建筑"),
-            // dict.accounting.asset.category.building
-            ("dict.accounting.asset.category.building", "zh-HK", "房屋建筑_hk", "资产类别.房屋建筑"),
+            // dict.accounting.account.title.type.x
+            ("dict.accounting.account.title.type.x", "en-US", "X 资产负债表科目_us", "科目类型.X 资产负债表科目.资产/负债/权益，余额结转下年"),
+            // dict.accounting.account.title.type.x
+            ("dict.accounting.account.title.type.x", "ja-JP", "X 资产负债表科目_jp", "科目类型.X 资产负债表科目.资产/负债/权益，余额结转下年"),
+            // dict.accounting.account.title.type.x
+            ("dict.accounting.account.title.type.x", "zh-CN", "X 资产负债表科目", "科目类型.X 资产负债表科目.资产/负债/权益，余额结转下年"),
+            // dict.accounting.account.title.type.x
+            ("dict.accounting.account.title.type.x", "zh-HK", "X 资产负债表科目_hk", "科目类型.X 资产负债表科目.资产/负债/权益，余额结转下年"),
 
-            // dict.accounting.asset.category.machinery
-            ("dict.accounting.asset.category.machinery", "en-US", "机器设备_us", "资产类别.机器设备"),
-            // dict.accounting.asset.category.machinery
-            ("dict.accounting.asset.category.machinery", "ja-JP", "机器设备_jp", "资产类别.机器设备"),
-            // dict.accounting.asset.category.machinery
-            ("dict.accounting.asset.category.machinery", "zh-CN", "机器设备", "资产类别.机器设备"),
-            // dict.accounting.asset.category.machinery
-            ("dict.accounting.asset.category.machinery", "zh-HK", "机器设备_hk", "资产类别.机器设备"),
+            // dict.accounting.account.title.type.p
+            ("dict.accounting.account.title.type.p", "en-US", "P 初级成本或收入_us", "科目类型.P 初级成本或收入.需 CO 对象，替代原初级成本要素"),
+            // dict.accounting.account.title.type.p
+            ("dict.accounting.account.title.type.p", "ja-JP", "P 初级成本或收入_jp", "科目类型.P 初级成本或收入.需 CO 对象，替代原初级成本要素"),
+            // dict.accounting.account.title.type.p
+            ("dict.accounting.account.title.type.p", "zh-CN", "P 初级成本或收入", "科目类型.P 初级成本或收入.需 CO 对象，替代原初级成本要素"),
+            // dict.accounting.account.title.type.p
+            ("dict.accounting.account.title.type.p", "zh-HK", "P 初级成本或收入_hk", "科目类型.P 初级成本或收入.需 CO 对象，替代原初级成本要素"),
 
-            // dict.accounting.asset.category.vehicle
-            ("dict.accounting.asset.category.vehicle", "en-US", "运输工具_us", "资产类别.运输工具"),
-            // dict.accounting.asset.category.vehicle
-            ("dict.accounting.asset.category.vehicle", "ja-JP", "运输工具_jp", "资产类别.运输工具"),
-            // dict.accounting.asset.category.vehicle
-            ("dict.accounting.asset.category.vehicle", "zh-CN", "运输工具", "资产类别.运输工具"),
-            // dict.accounting.asset.category.vehicle
-            ("dict.accounting.asset.category.vehicle", "zh-HK", "运输工具_hk", "资产类别.运输工具"),
+            // dict.accounting.account.title.type.s
+            ("dict.accounting.account.title.type.s", "en-US", "S 次级成本_us", "科目类型.S 次级成本.仅 CO 内部分配/结算，无外部过账"),
+            // dict.accounting.account.title.type.s
+            ("dict.accounting.account.title.type.s", "ja-JP", "S 次级成本_jp", "科目类型.S 次级成本.仅 CO 内部分配/结算，无外部过账"),
+            // dict.accounting.account.title.type.s
+            ("dict.accounting.account.title.type.s", "zh-CN", "S 次级成本", "科目类型.S 次级成本.仅 CO 内部分配/结算，无外部过账"),
+            // dict.accounting.account.title.type.s
+            ("dict.accounting.account.title.type.s", "zh-HK", "S 次级成本_hk", "科目类型.S 次级成本.仅 CO 内部分配/结算，无外部过账"),
 
-            // dict.accounting.asset.category.electronic
-            ("dict.accounting.asset.category.electronic", "en-US", "电子设备_us", "资产类别.电子设备"),
-            // dict.accounting.asset.category.electronic
-            ("dict.accounting.asset.category.electronic", "ja-JP", "电子设备_jp", "资产类别.电子设备"),
-            // dict.accounting.asset.category.electronic
-            ("dict.accounting.asset.category.electronic", "zh-CN", "电子设备", "资产类别.电子设备"),
-            // dict.accounting.asset.category.electronic
-            ("dict.accounting.asset.category.electronic", "zh-HK", "电子设备_hk", "资产类别.电子设备"),
+            // dict.accounting.account.title.type.n
+            ("dict.accounting.account.title.type.n", "en-US", "N 非经营性收支_us", "科目类型.N 非经营性收支.损益类但不连 CO"),
+            // dict.accounting.account.title.type.n
+            ("dict.accounting.account.title.type.n", "ja-JP", "N 非经营性收支_jp", "科目类型.N 非经营性收支.损益类但不连 CO"),
+            // dict.accounting.account.title.type.n
+            ("dict.accounting.account.title.type.n", "zh-CN", "N 非经营性收支", "科目类型.N 非经营性收支.损益类但不连 CO"),
+            // dict.accounting.account.title.type.n
+            ("dict.accounting.account.title.type.n", "zh-HK", "N 非经营性收支_hk", "科目类型.N 非经营性收支.损益类但不连 CO"),
 
-            // dict.accounting.asset.category.office_equip
-            ("dict.accounting.asset.category.office_equip", "en-US", "办公设备_us", "资产类别.办公设备"),
-            // dict.accounting.asset.category.office_equip
-            ("dict.accounting.asset.category.office_equip", "ja-JP", "办公设备_jp", "资产类别.办公设备"),
-            // dict.accounting.asset.category.office_equip
-            ("dict.accounting.asset.category.office_equip", "zh-CN", "办公设备", "资产类别.办公设备"),
-            // dict.accounting.asset.category.office_equip
-            ("dict.accounting.asset.category.office_equip", "zh-HK", "办公设备_hk", "资产类别.办公设备"),
+            // dict.accounting.account.title.type.c
+            ("dict.accounting.account.title.type.c", "en-US", "C 现金/银行账户_us", "科目类型.C 现金/银行账户.S/4HANA 银行对账"),
+            // dict.accounting.account.title.type.c
+            ("dict.accounting.account.title.type.c", "ja-JP", "C 现金/银行账户_jp", "科目类型.C 现金/银行账户.S/4HANA 银行对账"),
+            // dict.accounting.account.title.type.c
+            ("dict.accounting.account.title.type.c", "zh-CN", "C 现金/银行账户", "科目类型.C 现金/银行账户.S/4HANA 银行对账"),
+            // dict.accounting.account.title.type.c
+            ("dict.accounting.account.title.type.c", "zh-HK", "C 现金/银行账户_hk", "科目类型.C 现金/银行账户.S/4HANA 银行对账"),
 
-            // dict.accounting.asset.category.furniture
-            ("dict.accounting.asset.category.furniture", "en-US", "家具用具_us", "资产类别.家具用具"),
-            // dict.accounting.asset.category.furniture
-            ("dict.accounting.asset.category.furniture", "ja-JP", "家具用具_jp", "资产类别.家具用具"),
-            // dict.accounting.asset.category.furniture
-            ("dict.accounting.asset.category.furniture", "zh-CN", "家具用具", "资产类别.家具用具"),
-            // dict.accounting.asset.category.furniture
-            ("dict.accounting.asset.category.furniture", "zh-HK", "家具用具_hk", "资产类别.家具用具"),
+            // dict.accounting.auxiliary.type.d
+            ("dict.accounting.auxiliary.type.d", "en-US", "D 客户_us", "辅助核算类型.D 客户.AR 统驭科目类型=D"),
+            // dict.accounting.auxiliary.type.d
+            ("dict.accounting.auxiliary.type.d", "ja-JP", "D 客户_jp", "辅助核算类型.D 客户.AR 统驭科目类型=D"),
+            // dict.accounting.auxiliary.type.d
+            ("dict.accounting.auxiliary.type.d", "zh-CN", "D 客户", "辅助核算类型.D 客户.AR 统驭科目类型=D"),
+            // dict.accounting.auxiliary.type.d
+            ("dict.accounting.auxiliary.type.d", "zh-HK", "D 客户_hk", "辅助核算类型.D 客户.AR 统驭科目类型=D"),
 
-            // dict.accounting.asset.category.intangible
-            ("dict.accounting.asset.category.intangible", "en-US", "无形资产_us", "资产类别.无形资产"),
-            // dict.accounting.asset.category.intangible
-            ("dict.accounting.asset.category.intangible", "ja-JP", "无形资产_jp", "资产类别.无形资产"),
-            // dict.accounting.asset.category.intangible
-            ("dict.accounting.asset.category.intangible", "zh-CN", "无形资产", "资产类别.无形资产"),
-            // dict.accounting.asset.category.intangible
-            ("dict.accounting.asset.category.intangible", "zh-HK", "无形资产_hk", "资产类别.无形资产"),
+            // dict.accounting.auxiliary.type.k
+            ("dict.accounting.auxiliary.type.k", "en-US", "K 供应商_us", "辅助核算类型.K 供应商.AP 统驭科目类型=K"),
+            // dict.accounting.auxiliary.type.k
+            ("dict.accounting.auxiliary.type.k", "ja-JP", "K 供应商_jp", "辅助核算类型.K 供应商.AP 统驭科目类型=K"),
+            // dict.accounting.auxiliary.type.k
+            ("dict.accounting.auxiliary.type.k", "zh-CN", "K 供应商", "辅助核算类型.K 供应商.AP 统驭科目类型=K"),
+            // dict.accounting.auxiliary.type.k
+            ("dict.accounting.auxiliary.type.k", "zh-HK", "K 供应商_hk", "辅助核算类型.K 供应商.AP 统驭科目类型=K"),
 
-            // dict.accounting.asset.category.land_use_right
-            ("dict.accounting.asset.category.land_use_right", "en-US", "土地使用权_us", "资产类别.土地使用权"),
-            // dict.accounting.asset.category.land_use_right
-            ("dict.accounting.asset.category.land_use_right", "ja-JP", "土地使用权_jp", "资产类别.土地使用权"),
-            // dict.accounting.asset.category.land_use_right
-            ("dict.accounting.asset.category.land_use_right", "zh-CN", "土地使用权", "资产类别.土地使用权"),
-            // dict.accounting.asset.category.land_use_right
-            ("dict.accounting.asset.category.land_use_right", "zh-HK", "土地使用权_hk", "资产类别.土地使用权"),
+            // dict.accounting.auxiliary.type.a
+            ("dict.accounting.auxiliary.type.a", "en-US", "A 资产_us", "辅助核算类型.A 资产.AA 统驭科目类型=A"),
+            // dict.accounting.auxiliary.type.a
+            ("dict.accounting.auxiliary.type.a", "ja-JP", "A 资产_jp", "辅助核算类型.A 资产.AA 统驭科目类型=A"),
+            // dict.accounting.auxiliary.type.a
+            ("dict.accounting.auxiliary.type.a", "zh-CN", "A 资产", "辅助核算类型.A 资产.AA 统驭科目类型=A"),
+            // dict.accounting.auxiliary.type.a
+            ("dict.accounting.auxiliary.type.a", "zh-HK", "A 资产_hk", "辅助核算类型.A 资产.AA 统驭科目类型=A"),
 
-            // dict.accounting.asset.category.software
-            ("dict.accounting.asset.category.software", "en-US", "软件系统_us", "资产类别.软件系统"),
-            // dict.accounting.asset.category.software
-            ("dict.accounting.asset.category.software", "ja-JP", "软件系统_jp", "资产类别.软件系统"),
-            // dict.accounting.asset.category.software
-            ("dict.accounting.asset.category.software", "zh-CN", "软件系统", "资产类别.软件系统"),
-            // dict.accounting.asset.category.software
-            ("dict.accounting.asset.category.software", "zh-HK", "软件系统_hk", "资产类别.软件系统"),
+            // dict.accounting.auxiliary.type.s
+            ("dict.accounting.auxiliary.type.s", "en-US", "S 总账科目_us", "辅助核算类型.S 总账科目.普通 GL 无辅助核算"),
+            // dict.accounting.auxiliary.type.s
+            ("dict.accounting.auxiliary.type.s", "ja-JP", "S 总账科目_jp", "辅助核算类型.S 总账科目.普通 GL 无辅助核算"),
+            // dict.accounting.auxiliary.type.s
+            ("dict.accounting.auxiliary.type.s", "zh-CN", "S 总账科目", "辅助核算类型.S 总账科目.普通 GL 无辅助核算"),
+            // dict.accounting.auxiliary.type.s
+            ("dict.accounting.auxiliary.type.s", "zh-HK", "S 总账科目_hk", "辅助核算类型.S 总账科目.普通 GL 无辅助核算"),
 
-            // dict.accounting.asset.category.other
-            ("dict.accounting.asset.category.other", "en-US", "其他资产_us", "资产类别.其他资产"),
-            // dict.accounting.asset.category.other
-            ("dict.accounting.asset.category.other", "ja-JP", "其他资产_jp", "资产类别.其他资产"),
-            // dict.accounting.asset.category.other
-            ("dict.accounting.asset.category.other", "zh-CN", "其他资产", "资产类别.其他资产"),
-            // dict.accounting.asset.category.other
-            ("dict.accounting.asset.category.other", "zh-HK", "其他资产_hk", "资产类别.其他资产"),
+            // dict.accounting.auxiliary.type.m
+            ("dict.accounting.auxiliary.type.m", "en-US", "M 物料_us", "辅助核算类型.M 物料.MM 存货科目自动过账"),
+            // dict.accounting.auxiliary.type.m
+            ("dict.accounting.auxiliary.type.m", "ja-JP", "M 物料_jp", "辅助核算类型.M 物料.MM 存货科目自动过账"),
+            // dict.accounting.auxiliary.type.m
+            ("dict.accounting.auxiliary.type.m", "zh-CN", "M 物料", "辅助核算类型.M 物料.MM 存货科目自动过账"),
+            // dict.accounting.auxiliary.type.m
+            ("dict.accounting.auxiliary.type.m", "zh-HK", "M 物料_hk", "辅助核算类型.M 物料.MM 存货科目自动过账"),
 
-            // dict.accounting.asset.type.fixed
-            ("dict.accounting.asset.type.fixed", "en-US", "固定资产_us", "资产类型.固定资产"),
-            // dict.accounting.asset.type.fixed
-            ("dict.accounting.asset.type.fixed", "ja-JP", "固定资产_jp", "资产类型.固定资产"),
-            // dict.accounting.asset.type.fixed
-            ("dict.accounting.asset.type.fixed", "zh-CN", "固定资产", "资产类型.固定资产"),
-            // dict.accounting.asset.type.fixed
-            ("dict.accounting.asset.type.fixed", "zh-HK", "固定资产_hk", "资产类型.固定资产"),
+            // dict.accounting.asset.category.anlkl1000
+            ("dict.accounting.asset.category.anlkl1000", "en-US", "房屋建筑物_us", "资产分类.ANLKL1000"),
+            // dict.accounting.asset.category.anlkl1000
+            ("dict.accounting.asset.category.anlkl1000", "ja-JP", "房屋建筑物_jp", "资产分类.ANLKL1000"),
+            // dict.accounting.asset.category.anlkl1000
+            ("dict.accounting.asset.category.anlkl1000", "zh-CN", "房屋建筑物", "资产分类.ANLKL1000"),
+            // dict.accounting.asset.category.anlkl1000
+            ("dict.accounting.asset.category.anlkl1000", "zh-HK", "房屋建筑物_hk", "资产分类.ANLKL1000"),
 
-            // dict.accounting.asset.type.intangible
-            ("dict.accounting.asset.type.intangible", "en-US", "无形资产_us", "资产类型.无形资产"),
-            // dict.accounting.asset.type.intangible
-            ("dict.accounting.asset.type.intangible", "ja-JP", "无形资产_jp", "资产类型.无形资产"),
-            // dict.accounting.asset.type.intangible
-            ("dict.accounting.asset.type.intangible", "zh-CN", "无形资产", "资产类型.无形资产"),
-            // dict.accounting.asset.type.intangible
-            ("dict.accounting.asset.type.intangible", "zh-HK", "无形资产_hk", "资产类型.无形资产"),
+            // dict.accounting.asset.category.anlkl2000
+            ("dict.accounting.asset.category.anlkl2000", "en-US", "机器设备_us", "资产分类.ANLKL2000"),
+            // dict.accounting.asset.category.anlkl2000
+            ("dict.accounting.asset.category.anlkl2000", "ja-JP", "机器设备_jp", "资产分类.ANLKL2000"),
+            // dict.accounting.asset.category.anlkl2000
+            ("dict.accounting.asset.category.anlkl2000", "zh-CN", "机器设备", "资产分类.ANLKL2000"),
+            // dict.accounting.asset.category.anlkl2000
+            ("dict.accounting.asset.category.anlkl2000", "zh-HK", "机器设备_hk", "资产分类.ANLKL2000"),
 
-            // dict.accounting.asset.type.investment
-            ("dict.accounting.asset.type.investment", "en-US", "投资性房地产_us", "资产类型.投资性房地产"),
-            // dict.accounting.asset.type.investment
-            ("dict.accounting.asset.type.investment", "ja-JP", "投资性房地产_jp", "资产类型.投资性房地产"),
-            // dict.accounting.asset.type.investment
-            ("dict.accounting.asset.type.investment", "zh-CN", "投资性房地产", "资产类型.投资性房地产"),
-            // dict.accounting.asset.type.investment
-            ("dict.accounting.asset.type.investment", "zh-HK", "投资性房地产_hk", "资产类型.投资性房地产"),
+            // dict.accounting.asset.category.anlkl3000
+            ("dict.accounting.asset.category.anlkl3000", "en-US", "电子设备/办公设备_us", "资产分类.ANLKL3000"),
+            // dict.accounting.asset.category.anlkl3000
+            ("dict.accounting.asset.category.anlkl3000", "ja-JP", "电子设备/办公设备_jp", "资产分类.ANLKL3000"),
+            // dict.accounting.asset.category.anlkl3000
+            ("dict.accounting.asset.category.anlkl3000", "zh-CN", "电子设备/办公设备", "资产分类.ANLKL3000"),
+            // dict.accounting.asset.category.anlkl3000
+            ("dict.accounting.asset.category.anlkl3000", "zh-HK", "电子设备/办公设备_hk", "资产分类.ANLKL3000"),
 
-            // dict.accounting.asset.type.construction
-            ("dict.accounting.asset.type.construction", "en-US", "在建工程_us", "资产类型.在建工程"),
-            // dict.accounting.asset.type.construction
-            ("dict.accounting.asset.type.construction", "ja-JP", "在建工程_jp", "资产类型.在建工程"),
-            // dict.accounting.asset.type.construction
-            ("dict.accounting.asset.type.construction", "zh-CN", "在建工程", "资产类型.在建工程"),
-            // dict.accounting.asset.type.construction
-            ("dict.accounting.asset.type.construction", "zh-HK", "在建工程_hk", "资产类型.在建工程"),
+            // dict.accounting.asset.category.anlkl3100
+            ("dict.accounting.asset.category.anlkl3100", "en-US", "运输设备_us", "资产分类.ANLKL3100"),
+            // dict.accounting.asset.category.anlkl3100
+            ("dict.accounting.asset.category.anlkl3100", "ja-JP", "运输设备_jp", "资产分类.ANLKL3100"),
+            // dict.accounting.asset.category.anlkl3100
+            ("dict.accounting.asset.category.anlkl3100", "zh-CN", "运输设备", "资产分类.ANLKL3100"),
+            // dict.accounting.asset.category.anlkl3100
+            ("dict.accounting.asset.category.anlkl3100", "zh-HK", "运输设备_hk", "资产分类.ANLKL3100"),
 
-            // dict.accounting.asset.type.lowvalue
-            ("dict.accounting.asset.type.lowvalue", "en-US", "低值易耗品_us", "资产类型.低值易耗品"),
-            // dict.accounting.asset.type.lowvalue
-            ("dict.accounting.asset.type.lowvalue", "ja-JP", "低值易耗品_jp", "资产类型.低值易耗品"),
-            // dict.accounting.asset.type.lowvalue
-            ("dict.accounting.asset.type.lowvalue", "zh-CN", "低值易耗品", "资产类型.低值易耗品"),
-            // dict.accounting.asset.type.lowvalue
-            ("dict.accounting.asset.type.lowvalue", "zh-HK", "低值易耗品_hk", "资产类型.低值易耗品"),
+            // dict.accounting.asset.category.anlkl3200
+            ("dict.accounting.asset.category.anlkl3200", "en-US", "家具及装置_us", "资产分类.ANLKL3200"),
+            // dict.accounting.asset.category.anlkl3200
+            ("dict.accounting.asset.category.anlkl3200", "ja-JP", "家具及装置_jp", "资产分类.ANLKL3200"),
+            // dict.accounting.asset.category.anlkl3200
+            ("dict.accounting.asset.category.anlkl3200", "zh-CN", "家具及装置", "资产分类.ANLKL3200"),
+            // dict.accounting.asset.category.anlkl3200
+            ("dict.accounting.asset.category.anlkl3200", "zh-HK", "家具及装置_hk", "资产分类.ANLKL3200"),
 
-            // dict.accounting.asset.type.deferred
-            ("dict.accounting.asset.type.deferred", "en-US", "长期待摊费用_us", "资产类型.长期待摊费用"),
-            // dict.accounting.asset.type.deferred
-            ("dict.accounting.asset.type.deferred", "ja-JP", "长期待摊费用_jp", "资产类型.长期待摊费用"),
-            // dict.accounting.asset.type.deferred
-            ("dict.accounting.asset.type.deferred", "zh-CN", "长期待摊费用", "资产类型.长期待摊费用"),
-            // dict.accounting.asset.type.deferred
-            ("dict.accounting.asset.type.deferred", "zh-HK", "长期待摊费用_hk", "资产类型.长期待摊费用"),
+            // dict.accounting.asset.category.anlkl3300
+            ("dict.accounting.asset.category.anlkl3300", "en-US", "低值易耗品_us", "资产分类.ANLKL3300"),
+            // dict.accounting.asset.category.anlkl3300
+            ("dict.accounting.asset.category.anlkl3300", "ja-JP", "低值易耗品_jp", "资产分类.ANLKL3300"),
+            // dict.accounting.asset.category.anlkl3300
+            ("dict.accounting.asset.category.anlkl3300", "zh-CN", "低值易耗品", "资产分类.ANLKL3300"),
+            // dict.accounting.asset.category.anlkl3300
+            ("dict.accounting.asset.category.anlkl3300", "zh-HK", "低值易耗品_hk", "资产分类.ANLKL3300"),
 
-            // dict.accounting.asset.type.other
-            ("dict.accounting.asset.type.other", "en-US", "其他_us", "资产类型.其他"),
-            // dict.accounting.asset.type.other
-            ("dict.accounting.asset.type.other", "ja-JP", "其他_jp", "资产类型.其他"),
-            // dict.accounting.asset.type.other
-            ("dict.accounting.asset.type.other", "zh-CN", "其他", "资产类型.其他"),
-            // dict.accounting.asset.type.other
-            ("dict.accounting.asset.type.other", "zh-HK", "其他_hk", "资产类型.其他"),
+            // dict.accounting.asset.category.anlkl4000
+            ("dict.accounting.asset.category.anlkl4000", "en-US", "在建工程_us", "资产分类.ANLKL4000"),
+            // dict.accounting.asset.category.anlkl4000
+            ("dict.accounting.asset.category.anlkl4000", "ja-JP", "在建工程_jp", "资产分类.ANLKL4000"),
+            // dict.accounting.asset.category.anlkl4000
+            ("dict.accounting.asset.category.anlkl4000", "zh-CN", "在建工程", "资产分类.ANLKL4000"),
+            // dict.accounting.asset.category.anlkl4000
+            ("dict.accounting.asset.category.anlkl4000", "zh-HK", "在建工程_hk", "资产分类.ANLKL4000"),
+
+            // dict.accounting.asset.category.anlkl5000
+            ("dict.accounting.asset.category.anlkl5000", "en-US", "低值易耗品（备选）_us", "资产分类.ANLKL5000"),
+            // dict.accounting.asset.category.anlkl5000
+            ("dict.accounting.asset.category.anlkl5000", "ja-JP", "低值易耗品（备选）_jp", "资产分类.ANLKL5000"),
+            // dict.accounting.asset.category.anlkl5000
+            ("dict.accounting.asset.category.anlkl5000", "zh-CN", "低值易耗品（备选）", "资产分类.ANLKL5000"),
+            // dict.accounting.asset.category.anlkl5000
+            ("dict.accounting.asset.category.anlkl5000", "zh-HK", "低值易耗品（备选）_hk", "资产分类.ANLKL5000"),
+
+            // dict.accounting.asset.category.anlkl6000
+            ("dict.accounting.asset.category.anlkl6000", "en-US", "无形资产_us", "资产分类.ANLKL6000"),
+            // dict.accounting.asset.category.anlkl6000
+            ("dict.accounting.asset.category.anlkl6000", "ja-JP", "无形资产_jp", "资产分类.ANLKL6000"),
+            // dict.accounting.asset.category.anlkl6000
+            ("dict.accounting.asset.category.anlkl6000", "zh-CN", "无形资产", "资产分类.ANLKL6000"),
+            // dict.accounting.asset.category.anlkl6000
+            ("dict.accounting.asset.category.anlkl6000", "zh-HK", "无形资产_hk", "资产分类.ANLKL6000"),
+
+            // dict.accounting.asset.category.anlkl7000
+            ("dict.accounting.asset.category.anlkl7000", "en-US", "融资租赁资产_us", "资产分类.ANLKL7000"),
+            // dict.accounting.asset.category.anlkl7000
+            ("dict.accounting.asset.category.anlkl7000", "ja-JP", "融资租赁资产_jp", "资产分类.ANLKL7000"),
+            // dict.accounting.asset.category.anlkl7000
+            ("dict.accounting.asset.category.anlkl7000", "zh-CN", "融资租赁资产", "资产分类.ANLKL7000"),
+            // dict.accounting.asset.category.anlkl7000
+            ("dict.accounting.asset.category.anlkl7000", "zh-HK", "融资租赁资产_hk", "资产分类.ANLKL7000"),
+
+            // dict.accounting.asset.type.norm
+            ("dict.accounting.asset.type.norm", "en-US", "普通资产_us", "资产类型.普通资产"),
+            // dict.accounting.asset.type.norm
+            ("dict.accounting.asset.type.norm", "ja-JP", "普通资产_jp", "资产类型.普通资产"),
+            // dict.accounting.asset.type.norm
+            ("dict.accounting.asset.type.norm", "zh-CN", "普通资产", "资产类型.普通资产"),
+            // dict.accounting.asset.type.norm
+            ("dict.accounting.asset.type.norm", "zh-HK", "普通资产_hk", "资产类型.普通资产"),
+
+            // dict.accounting.asset.type.immo
+            ("dict.accounting.asset.type.immo", "en-US", "不动产_us", "资产类型.不动产"),
+            // dict.accounting.asset.type.immo
+            ("dict.accounting.asset.type.immo", "ja-JP", "不动产_jp", "资产类型.不动产"),
+            // dict.accounting.asset.type.immo
+            ("dict.accounting.asset.type.immo", "zh-CN", "不动产", "资产类型.不动产"),
+            // dict.accounting.asset.type.immo
+            ("dict.accounting.asset.type.immo", "zh-HK", "不动产_hk", "资产类型.不动产"),
+
+            // dict.accounting.asset.type.leas
+            ("dict.accounting.asset.type.leas", "en-US", "租赁资产_us", "资产类型.租赁资产"),
+            // dict.accounting.asset.type.leas
+            ("dict.accounting.asset.type.leas", "ja-JP", "租赁资产_jp", "资产类型.租赁资产"),
+            // dict.accounting.asset.type.leas
+            ("dict.accounting.asset.type.leas", "zh-CN", "租赁资产", "资产类型.租赁资产"),
+            // dict.accounting.asset.type.leas
+            ("dict.accounting.asset.type.leas", "zh-HK", "租赁资产_hk", "资产类型.租赁资产"),
+
+            // dict.accounting.asset.type.inv
+            ("dict.accounting.asset.type.inv", "en-US", "投资资产_us", "资产类型.投资资产"),
+            // dict.accounting.asset.type.inv
+            ("dict.accounting.asset.type.inv", "ja-JP", "投资资产_jp", "资产类型.投资资产"),
+            // dict.accounting.asset.type.inv
+            ("dict.accounting.asset.type.inv", "zh-CN", "投资资产", "资产类型.投资资产"),
+            // dict.accounting.asset.type.inv
+            ("dict.accounting.asset.type.inv", "zh-HK", "投资资产_hk", "资产类型.投资资产"),
+
+            // dict.accounting.asset.status.0
+            ("dict.accounting.asset.status.0", "en-US", "未使用_us", "资产状态.未使用"),
+            // dict.accounting.asset.status.0
+            ("dict.accounting.asset.status.0", "ja-JP", "未使用_jp", "资产状态.未使用"),
+            // dict.accounting.asset.status.0
+            ("dict.accounting.asset.status.0", "zh-CN", "未使用", "资产状态.未使用"),
+            // dict.accounting.asset.status.0
+            ("dict.accounting.asset.status.0", "zh-HK", "未使用_hk", "资产状态.未使用"),
+
+            // dict.accounting.asset.status.1
+            ("dict.accounting.asset.status.1", "en-US", "使用中_us", "资产状态.使用中"),
+            // dict.accounting.asset.status.1
+            ("dict.accounting.asset.status.1", "ja-JP", "使用中_jp", "资产状态.使用中"),
+            // dict.accounting.asset.status.1
+            ("dict.accounting.asset.status.1", "zh-CN", "使用中", "资产状态.使用中"),
+            // dict.accounting.asset.status.1
+            ("dict.accounting.asset.status.1", "zh-HK", "使用中_hk", "资产状态.使用中"),
+
+            // dict.accounting.asset.status.2
+            ("dict.accounting.asset.status.2", "en-US", "报废_us", "资产状态.报废"),
+            // dict.accounting.asset.status.2
+            ("dict.accounting.asset.status.2", "ja-JP", "报废_jp", "资产状态.报废"),
+            // dict.accounting.asset.status.2
+            ("dict.accounting.asset.status.2", "zh-CN", "报废", "资产状态.报废"),
+            // dict.accounting.asset.status.2
+            ("dict.accounting.asset.status.2", "zh-HK", "报废_hk", "资产状态.报废"),
+
+            // dict.accounting.asset.status.3
+            ("dict.accounting.asset.status.3", "en-US", "处置_us", "资产状态.处置"),
+            // dict.accounting.asset.status.3
+            ("dict.accounting.asset.status.3", "ja-JP", "处置_jp", "资产状态.处置"),
+            // dict.accounting.asset.status.3
+            ("dict.accounting.asset.status.3", "zh-CN", "处置", "资产状态.处置"),
+            // dict.accounting.asset.status.3
+            ("dict.accounting.asset.status.3", "zh-HK", "处置_hk", "资产状态.处置"),
+
+            // dict.accounting.asset.status.4
+            ("dict.accounting.asset.status.4", "en-US", "实物不存在_us", "资产状态.实物不存在"),
+            // dict.accounting.asset.status.4
+            ("dict.accounting.asset.status.4", "ja-JP", "实物不存在_jp", "资产状态.实物不存在"),
+            // dict.accounting.asset.status.4
+            ("dict.accounting.asset.status.4", "zh-CN", "实物不存在", "资产状态.实物不存在"),
+            // dict.accounting.asset.status.4
+            ("dict.accounting.asset.status.4", "zh-HK", "实物不存在_hk", "资产状态.实物不存在"),
+
+            // dict.accounting.depreciation.method.0
+            ("dict.accounting.depreciation.method.0", "en-US", "不自动计提折旧_us", "折旧方法.不自动计提折旧"),
+            // dict.accounting.depreciation.method.0
+            ("dict.accounting.depreciation.method.0", "ja-JP", "不自动计提折旧_jp", "折旧方法.不自动计提折旧"),
+            // dict.accounting.depreciation.method.0
+            ("dict.accounting.depreciation.method.0", "zh-CN", "不自动计提折旧", "折旧方法.不自动计提折旧"),
+            // dict.accounting.depreciation.method.0
+            ("dict.accounting.depreciation.method.0", "zh-HK", "不自动计提折旧_hk", "折旧方法.不自动计提折旧"),
+
+            // dict.accounting.depreciation.method.1
+            ("dict.accounting.depreciation.method.1", "en-US", "直线法_us", "折旧方法.直线法"),
+            // dict.accounting.depreciation.method.1
+            ("dict.accounting.depreciation.method.1", "ja-JP", "直线法_jp", "折旧方法.直线法"),
+            // dict.accounting.depreciation.method.1
+            ("dict.accounting.depreciation.method.1", "zh-CN", "直线法", "折旧方法.直线法"),
+            // dict.accounting.depreciation.method.1
+            ("dict.accounting.depreciation.method.1", "zh-HK", "直线法_hk", "折旧方法.直线法"),
+
+            // dict.accounting.depreciation.method.2
+            ("dict.accounting.depreciation.method.2", "en-US", "双倍余额递减法_us", "折旧方法.双倍余额递减法"),
+            // dict.accounting.depreciation.method.2
+            ("dict.accounting.depreciation.method.2", "ja-JP", "双倍余额递减法_jp", "折旧方法.双倍余额递减法"),
+            // dict.accounting.depreciation.method.2
+            ("dict.accounting.depreciation.method.2", "zh-CN", "双倍余额递减法", "折旧方法.双倍余额递减法"),
+            // dict.accounting.depreciation.method.2
+            ("dict.accounting.depreciation.method.2", "zh-HK", "双倍余额递减法_hk", "折旧方法.双倍余额递减法"),
+
+            // dict.accounting.depreciation.method.3
+            ("dict.accounting.depreciation.method.3", "en-US", "年数总和法_us", "折旧方法.年数总和法"),
+            // dict.accounting.depreciation.method.3
+            ("dict.accounting.depreciation.method.3", "ja-JP", "年数总和法_jp", "折旧方法.年数总和法"),
+            // dict.accounting.depreciation.method.3
+            ("dict.accounting.depreciation.method.3", "zh-CN", "年数总和法", "折旧方法.年数总和法"),
+            // dict.accounting.depreciation.method.3
+            ("dict.accounting.depreciation.method.3", "zh-HK", "年数总和法_hk", "折旧方法.年数总和法"),
+
+            // dict.accounting.depreciation.method.4
+            ("dict.accounting.depreciation.method.4", "en-US", "产量法_us", "折旧方法.产量法"),
+            // dict.accounting.depreciation.method.4
+            ("dict.accounting.depreciation.method.4", "ja-JP", "产量法_jp", "折旧方法.产量法"),
+            // dict.accounting.depreciation.method.4
+            ("dict.accounting.depreciation.method.4", "zh-CN", "产量法", "折旧方法.产量法"),
+            // dict.accounting.depreciation.method.4
+            ("dict.accounting.depreciation.method.4", "zh-HK", "产量法_hk", "折旧方法.产量法"),
+
+            // dict.accounting.depreciation.method.5
+            ("dict.accounting.depreciation.method.5", "en-US", "手工折旧_us", "折旧方法.手工折旧"),
+            // dict.accounting.depreciation.method.5
+            ("dict.accounting.depreciation.method.5", "ja-JP", "手工折旧_jp", "折旧方法.手工折旧"),
+            // dict.accounting.depreciation.method.5
+            ("dict.accounting.depreciation.method.5", "zh-CN", "手工折旧", "折旧方法.手工折旧"),
+            // dict.accounting.depreciation.method.5
+            ("dict.accounting.depreciation.method.5", "zh-HK", "手工折旧_hk", "折旧方法.手工折旧"),
+
+            // dict.accounting.depreciation.method.6
+            ("dict.accounting.depreciation.method.6", "en-US", "剩余年限直线法_us", "折旧方法.剩余年限直线法"),
+            // dict.accounting.depreciation.method.6
+            ("dict.accounting.depreciation.method.6", "ja-JP", "剩余年限直线法_jp", "折旧方法.剩余年限直线法"),
+            // dict.accounting.depreciation.method.6
+            ("dict.accounting.depreciation.method.6", "zh-CN", "剩余年限直线法", "折旧方法.剩余年限直线法"),
+            // dict.accounting.depreciation.method.6
+            ("dict.accounting.depreciation.method.6", "zh-HK", "剩余年限直线法_hk", "折旧方法.剩余年限直线法"),
 
             // dict.accounting.cost.center.category.pro
             ("dict.accounting.cost.center.category.pro", "en-US", "专业级_us", "成本中心类别.专业级"),
@@ -338,77 +509,176 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             // dict.accounting.cost.center.category.ems
             ("dict.accounting.cost.center.category.ems", "zh-HK", "ems_hk", "成本中心类别.ems"),
 
-            // dict.accounting.cost.element.category.direct_material
-            ("dict.accounting.cost.element.category.direct_material", "en-US", "直接材料_us", "成本要素类别.直接材料"),
-            // dict.accounting.cost.element.category.direct_material
-            ("dict.accounting.cost.element.category.direct_material", "ja-JP", "直接材料_jp", "成本要素类别.直接材料"),
-            // dict.accounting.cost.element.category.direct_material
-            ("dict.accounting.cost.element.category.direct_material", "zh-CN", "直接材料", "成本要素类别.直接材料"),
-            // dict.accounting.cost.element.category.direct_material
-            ("dict.accounting.cost.element.category.direct_material", "zh-HK", "直接材料_hk", "成本要素类别.直接材料"),
+            // dict.accounting.cost.element.category.katyp01
+            ("dict.accounting.cost.element.category.katyp01", "en-US", "01 初级成本/成本抵减收入_us", "成本要素类别.KATYP01"),
+            // dict.accounting.cost.element.category.katyp01
+            ("dict.accounting.cost.element.category.katyp01", "ja-JP", "01 初级成本/成本抵减收入_jp", "成本要素类别.KATYP01"),
+            // dict.accounting.cost.element.category.katyp01
+            ("dict.accounting.cost.element.category.katyp01", "zh-CN", "01 初级成本/成本抵减收入", "成本要素类别.KATYP01"),
+            // dict.accounting.cost.element.category.katyp01
+            ("dict.accounting.cost.element.category.katyp01", "zh-HK", "01 初级成本/成本抵减收入_hk", "成本要素类别.KATYP01"),
 
-            // dict.accounting.cost.element.category.direct_labor
-            ("dict.accounting.cost.element.category.direct_labor", "en-US", "直接人工_us", "成本要素类别.直接人工"),
-            // dict.accounting.cost.element.category.direct_labor
-            ("dict.accounting.cost.element.category.direct_labor", "ja-JP", "直接人工_jp", "成本要素类别.直接人工"),
-            // dict.accounting.cost.element.category.direct_labor
-            ("dict.accounting.cost.element.category.direct_labor", "zh-CN", "直接人工", "成本要素类别.直接人工"),
-            // dict.accounting.cost.element.category.direct_labor
-            ("dict.accounting.cost.element.category.direct_labor", "zh-HK", "直接人工_hk", "成本要素类别.直接人工"),
+            // dict.accounting.cost.element.category.katyp03
+            ("dict.accounting.cost.element.category.katyp03", "en-US", "03 预提/递延（百分比法）_us", "成本要素类别.KATYP03"),
+            // dict.accounting.cost.element.category.katyp03
+            ("dict.accounting.cost.element.category.katyp03", "ja-JP", "03 预提/递延（百分比法）_jp", "成本要素类别.KATYP03"),
+            // dict.accounting.cost.element.category.katyp03
+            ("dict.accounting.cost.element.category.katyp03", "zh-CN", "03 预提/递延（百分比法）", "成本要素类别.KATYP03"),
+            // dict.accounting.cost.element.category.katyp03
+            ("dict.accounting.cost.element.category.katyp03", "zh-HK", "03 预提/递延（百分比法）_hk", "成本要素类别.KATYP03"),
 
-            // dict.accounting.cost.element.category.manufacturing_overhead
-            ("dict.accounting.cost.element.category.manufacturing_overhead", "en-US", "制造费用_us", "成本要素类别.制造费用"),
-            // dict.accounting.cost.element.category.manufacturing_overhead
-            ("dict.accounting.cost.element.category.manufacturing_overhead", "ja-JP", "制造费用_jp", "成本要素类别.制造费用"),
-            // dict.accounting.cost.element.category.manufacturing_overhead
-            ("dict.accounting.cost.element.category.manufacturing_overhead", "zh-CN", "制造费用", "成本要素类别.制造费用"),
-            // dict.accounting.cost.element.category.manufacturing_overhead
-            ("dict.accounting.cost.element.category.manufacturing_overhead", "zh-HK", "制造费用_hk", "成本要素类别.制造费用"),
+            // dict.accounting.cost.element.category.katyp04
+            ("dict.accounting.cost.element.category.katyp04", "en-US", "04 预提/递延（实际法）_us", "成本要素类别.KATYP04"),
+            // dict.accounting.cost.element.category.katyp04
+            ("dict.accounting.cost.element.category.katyp04", "ja-JP", "04 预提/递延（实际法）_jp", "成本要素类别.KATYP04"),
+            // dict.accounting.cost.element.category.katyp04
+            ("dict.accounting.cost.element.category.katyp04", "zh-CN", "04 预提/递延（实际法）", "成本要素类别.KATYP04"),
+            // dict.accounting.cost.element.category.katyp04
+            ("dict.accounting.cost.element.category.katyp04", "zh-HK", "04 预提/递延（实际法）_hk", "成本要素类别.KATYP04"),
 
-            // dict.accounting.cost.element.category.depreciation
-            ("dict.accounting.cost.element.category.depreciation", "en-US", "折旧费_us", "成本要素类别.折旧费"),
-            // dict.accounting.cost.element.category.depreciation
-            ("dict.accounting.cost.element.category.depreciation", "ja-JP", "折旧费_jp", "成本要素类别.折旧费"),
-            // dict.accounting.cost.element.category.depreciation
-            ("dict.accounting.cost.element.category.depreciation", "zh-CN", "折旧费", "成本要素类别.折旧费"),
-            // dict.accounting.cost.element.category.depreciation
-            ("dict.accounting.cost.element.category.depreciation", "zh-HK", "折旧费_hk", "成本要素类别.折旧费"),
+            // dict.accounting.cost.element.category.katyp11
+            ("dict.accounting.cost.element.category.katyp11", "en-US", "11 收入_us", "成本要素类别.KATYP11"),
+            // dict.accounting.cost.element.category.katyp11
+            ("dict.accounting.cost.element.category.katyp11", "ja-JP", "11 收入_jp", "成本要素类别.KATYP11"),
+            // dict.accounting.cost.element.category.katyp11
+            ("dict.accounting.cost.element.category.katyp11", "zh-CN", "11 收入", "成本要素类别.KATYP11"),
+            // dict.accounting.cost.element.category.katyp11
+            ("dict.accounting.cost.element.category.katyp11", "zh-HK", "11 收入_hk", "成本要素类别.KATYP11"),
 
-            // dict.accounting.cost.element.category.energy
-            ("dict.accounting.cost.element.category.energy", "en-US", "能源费_us", "成本要素类别.能源费"),
-            // dict.accounting.cost.element.category.energy
-            ("dict.accounting.cost.element.category.energy", "ja-JP", "能源费_jp", "成本要素类别.能源费"),
-            // dict.accounting.cost.element.category.energy
-            ("dict.accounting.cost.element.category.energy", "zh-CN", "能源费", "成本要素类别.能源费"),
-            // dict.accounting.cost.element.category.energy
-            ("dict.accounting.cost.element.category.energy", "zh-HK", "能源费_hk", "成本要素类别.能源费"),
+            // dict.accounting.cost.element.category.katyp12
+            ("dict.accounting.cost.element.category.katyp12", "en-US", "12 销售扣除（折扣/折让）_us", "成本要素类别.KATYP12"),
+            // dict.accounting.cost.element.category.katyp12
+            ("dict.accounting.cost.element.category.katyp12", "ja-JP", "12 销售扣除（折扣/折让）_jp", "成本要素类别.KATYP12"),
+            // dict.accounting.cost.element.category.katyp12
+            ("dict.accounting.cost.element.category.katyp12", "zh-CN", "12 销售扣除（折扣/折让）", "成本要素类别.KATYP12"),
+            // dict.accounting.cost.element.category.katyp12
+            ("dict.accounting.cost.element.category.katyp12", "zh-HK", "12 销售扣除（折扣/折让）_hk", "成本要素类别.KATYP12"),
 
-            // dict.accounting.cost.element.category.maintenance
-            ("dict.accounting.cost.element.category.maintenance", "en-US", "维修费_us", "成本要素类别.维修费"),
-            // dict.accounting.cost.element.category.maintenance
-            ("dict.accounting.cost.element.category.maintenance", "ja-JP", "维修费_jp", "成本要素类别.维修费"),
-            // dict.accounting.cost.element.category.maintenance
-            ("dict.accounting.cost.element.category.maintenance", "zh-CN", "维修费", "成本要素类别.维修费"),
-            // dict.accounting.cost.element.category.maintenance
-            ("dict.accounting.cost.element.category.maintenance", "zh-HK", "维修费_hk", "成本要素类别.维修费"),
+            // dict.accounting.cost.element.category.katyp22
+            ("dict.accounting.cost.element.category.katyp22", "en-US", "22 外部结算_us", "成本要素类别.KATYP22"),
+            // dict.accounting.cost.element.category.katyp22
+            ("dict.accounting.cost.element.category.katyp22", "ja-JP", "22 外部结算_jp", "成本要素类别.KATYP22"),
+            // dict.accounting.cost.element.category.katyp22
+            ("dict.accounting.cost.element.category.katyp22", "zh-CN", "22 外部结算", "成本要素类别.KATYP22"),
+            // dict.accounting.cost.element.category.katyp22
+            ("dict.accounting.cost.element.category.katyp22", "zh-HK", "22 外部结算_hk", "成本要素类别.KATYP22"),
 
-            // dict.accounting.cost.element.category.indirect_material
-            ("dict.accounting.cost.element.category.indirect_material", "en-US", "辅助材料_us", "成本要素类别.辅助材料"),
-            // dict.accounting.cost.element.category.indirect_material
-            ("dict.accounting.cost.element.category.indirect_material", "ja-JP", "辅助材料_jp", "成本要素类别.辅助材料"),
-            // dict.accounting.cost.element.category.indirect_material
-            ("dict.accounting.cost.element.category.indirect_material", "zh-CN", "辅助材料", "成本要素类别.辅助材料"),
-            // dict.accounting.cost.element.category.indirect_material
-            ("dict.accounting.cost.element.category.indirect_material", "zh-HK", "辅助材料_hk", "成本要素类别.辅助材料"),
+            // dict.accounting.cost.element.category.katyp90
+            ("dict.accounting.cost.element.category.katyp90", "en-US", "90 资产负债表科目统计成本要素_us", "成本要素类别.KATYP90"),
+            // dict.accounting.cost.element.category.katyp90
+            ("dict.accounting.cost.element.category.katyp90", "ja-JP", "90 资产负债表科目统计成本要素_jp", "成本要素类别.KATYP90"),
+            // dict.accounting.cost.element.category.katyp90
+            ("dict.accounting.cost.element.category.katyp90", "zh-CN", "90 资产负债表科目统计成本要素", "成本要素类别.KATYP90"),
+            // dict.accounting.cost.element.category.katyp90
+            ("dict.accounting.cost.element.category.katyp90", "zh-HK", "90 资产负债表科目统计成本要素_hk", "成本要素类别.KATYP90"),
 
-            // dict.accounting.cost.element.category.other
-            ("dict.accounting.cost.element.category.other", "en-US", "其他费用_us", "成本要素类别.其他费用"),
-            // dict.accounting.cost.element.category.other
-            ("dict.accounting.cost.element.category.other", "ja-JP", "其他费用_jp", "成本要素类别.其他费用"),
-            // dict.accounting.cost.element.category.other
-            ("dict.accounting.cost.element.category.other", "zh-CN", "其他费用", "成本要素类别.其他费用"),
-            // dict.accounting.cost.element.category.other
-            ("dict.accounting.cost.element.category.other", "zh-HK", "其他费用_hk", "成本要素类别.其他费用"),
+            // dict.accounting.cost.element.category.katyp21
+            ("dict.accounting.cost.element.category.katyp21", "en-US", "21 内部结算_us", "成本要素类别.KATYP21"),
+            // dict.accounting.cost.element.category.katyp21
+            ("dict.accounting.cost.element.category.katyp21", "ja-JP", "21 内部结算_jp", "成本要素类别.KATYP21"),
+            // dict.accounting.cost.element.category.katyp21
+            ("dict.accounting.cost.element.category.katyp21", "zh-CN", "21 内部结算", "成本要素类别.KATYP21"),
+            // dict.accounting.cost.element.category.katyp21
+            ("dict.accounting.cost.element.category.katyp21", "zh-HK", "21 内部结算_hk", "成本要素类别.KATYP21"),
+
+            // dict.accounting.cost.element.category.katyp31
+            ("dict.accounting.cost.element.category.katyp31", "en-US", "31 订单/项目结果分析（WIP）_us", "成本要素类别.KATYP31"),
+            // dict.accounting.cost.element.category.katyp31
+            ("dict.accounting.cost.element.category.katyp31", "ja-JP", "31 订单/项目结果分析（WIP）_jp", "成本要素类别.KATYP31"),
+            // dict.accounting.cost.element.category.katyp31
+            ("dict.accounting.cost.element.category.katyp31", "zh-CN", "31 订单/项目结果分析（WIP）", "成本要素类别.KATYP31"),
+            // dict.accounting.cost.element.category.katyp31
+            ("dict.accounting.cost.element.category.katyp31", "zh-HK", "31 订单/项目结果分析（WIP）_hk", "成本要素类别.KATYP31"),
+
+            // dict.accounting.cost.element.category.katyp41
+            ("dict.accounting.cost.element.category.katyp41", "en-US", "41 间接费用率_us", "成本要素类别.KATYP41"),
+            // dict.accounting.cost.element.category.katyp41
+            ("dict.accounting.cost.element.category.katyp41", "ja-JP", "41 间接费用率_jp", "成本要素类别.KATYP41"),
+            // dict.accounting.cost.element.category.katyp41
+            ("dict.accounting.cost.element.category.katyp41", "zh-CN", "41 间接费用率", "成本要素类别.KATYP41"),
+            // dict.accounting.cost.element.category.katyp41
+            ("dict.accounting.cost.element.category.katyp41", "zh-HK", "41 间接费用率_hk", "成本要素类别.KATYP41"),
+
+            // dict.accounting.cost.element.category.katyp42
+            ("dict.accounting.cost.element.category.katyp42", "en-US", "42 分摊/分配_us", "成本要素类别.KATYP42"),
+            // dict.accounting.cost.element.category.katyp42
+            ("dict.accounting.cost.element.category.katyp42", "ja-JP", "42 分摊/分配_jp", "成本要素类别.KATYP42"),
+            // dict.accounting.cost.element.category.katyp42
+            ("dict.accounting.cost.element.category.katyp42", "zh-CN", "42 分摊/分配", "成本要素类别.KATYP42"),
+            // dict.accounting.cost.element.category.katyp42
+            ("dict.accounting.cost.element.category.katyp42", "zh-HK", "42 分摊/分配_hk", "成本要素类别.KATYP42"),
+
+            // dict.accounting.cost.element.category.katyp43
+            ("dict.accounting.cost.element.category.katyp43", "en-US", "43 内部作业分配_us", "成本要素类别.KATYP43"),
+            // dict.accounting.cost.element.category.katyp43
+            ("dict.accounting.cost.element.category.katyp43", "ja-JP", "43 内部作业分配_jp", "成本要素类别.KATYP43"),
+            // dict.accounting.cost.element.category.katyp43
+            ("dict.accounting.cost.element.category.katyp43", "zh-CN", "43 内部作业分配", "成本要素类别.KATYP43"),
+            // dict.accounting.cost.element.category.katyp43
+            ("dict.accounting.cost.element.category.katyp43", "zh-HK", "43 内部作业分配_hk", "成本要素类别.KATYP43"),
+
+            // dict.accounting.cost.element.category.katyp50
+            ("dict.accounting.cost.element.category.katyp50", "en-US", "50 项目相关订单—销售收入_us", "成本要素类别.KATYP50"),
+            // dict.accounting.cost.element.category.katyp50
+            ("dict.accounting.cost.element.category.katyp50", "ja-JP", "50 项目相关订单—销售收入_jp", "成本要素类别.KATYP50"),
+            // dict.accounting.cost.element.category.katyp50
+            ("dict.accounting.cost.element.category.katyp50", "zh-CN", "50 项目相关订单—销售收入", "成本要素类别.KATYP50"),
+            // dict.accounting.cost.element.category.katyp50
+            ("dict.accounting.cost.element.category.katyp50", "zh-HK", "50 项目相关订单—销售收入_hk", "成本要素类别.KATYP50"),
+
+            // dict.accounting.cost.element.category.katyp51
+            ("dict.accounting.cost.element.category.katyp51", "en-US", "51 项目相关订单—其他收入_us", "成本要素类别.KATYP51"),
+            // dict.accounting.cost.element.category.katyp51
+            ("dict.accounting.cost.element.category.katyp51", "ja-JP", "51 项目相关订单—其他收入_jp", "成本要素类别.KATYP51"),
+            // dict.accounting.cost.element.category.katyp51
+            ("dict.accounting.cost.element.category.katyp51", "zh-CN", "51 项目相关订单—其他收入", "成本要素类别.KATYP51"),
+            // dict.accounting.cost.element.category.katyp51
+            ("dict.accounting.cost.element.category.katyp51", "zh-HK", "51 项目相关订单—其他收入_hk", "成本要素类别.KATYP51"),
+
+            // dict.accounting.cost.element.category.katyp52
+            ("dict.accounting.cost.element.category.katyp52", "en-US", "52 项目相关订单—成本_us", "成本要素类别.KATYP52"),
+            // dict.accounting.cost.element.category.katyp52
+            ("dict.accounting.cost.element.category.katyp52", "ja-JP", "52 项目相关订单—成本_jp", "成本要素类别.KATYP52"),
+            // dict.accounting.cost.element.category.katyp52
+            ("dict.accounting.cost.element.category.katyp52", "zh-CN", "52 项目相关订单—成本", "成本要素类别.KATYP52"),
+            // dict.accounting.cost.element.category.katyp52
+            ("dict.accounting.cost.element.category.katyp52", "zh-HK", "52 项目相关订单—成本_hk", "成本要素类别.KATYP52"),
+
+            // dict.accounting.cost.element.category.katyp61
+            ("dict.accounting.cost.element.category.katyp61", "en-US", "61 挣值分析_us", "成本要素类别.KATYP61"),
+            // dict.accounting.cost.element.category.katyp61
+            ("dict.accounting.cost.element.category.katyp61", "ja-JP", "61 挣值分析_jp", "成本要素类别.KATYP61"),
+            // dict.accounting.cost.element.category.katyp61
+            ("dict.accounting.cost.element.category.katyp61", "zh-CN", "61 挣值分析", "成本要素类别.KATYP61"),
+            // dict.accounting.cost.element.category.katyp61
+            ("dict.accounting.cost.element.category.katyp61", "zh-HK", "61 挣值分析_hk", "成本要素类别.KATYP61"),
+
+            // dict.accounting.cost.element.category.katyp66
+            ("dict.accounting.cost.element.category.katyp66", "en-US", "66 报表成本要素（CO-PA）_us", "成本要素类别.KATYP66"),
+            // dict.accounting.cost.element.category.katyp66
+            ("dict.accounting.cost.element.category.katyp66", "ja-JP", "66 报表成本要素（CO-PA）_jp", "成本要素类别.KATYP66"),
+            // dict.accounting.cost.element.category.katyp66
+            ("dict.accounting.cost.element.category.katyp66", "zh-CN", "66 报表成本要素（CO-PA）", "成本要素类别.KATYP66"),
+            // dict.accounting.cost.element.category.katyp66
+            ("dict.accounting.cost.element.category.katyp66", "zh-HK", "66 报表成本要素（CO-PA）_hk", "成本要素类别.KATYP66"),
+
+            // dict.accounting.cost.element.type.primary
+            ("dict.accounting.cost.element.type.primary", "en-US", "初级成本要素_us", "成本要素类型.初级"),
+            // dict.accounting.cost.element.type.primary
+            ("dict.accounting.cost.element.type.primary", "ja-JP", "初级成本要素_jp", "成本要素类型.初级"),
+            // dict.accounting.cost.element.type.primary
+            ("dict.accounting.cost.element.type.primary", "zh-CN", "初级成本要素", "成本要素类型.初级"),
+            // dict.accounting.cost.element.type.primary
+            ("dict.accounting.cost.element.type.primary", "zh-HK", "初级成本要素_hk", "成本要素类型.初级"),
+
+            // dict.accounting.cost.element.type.secondary
+            ("dict.accounting.cost.element.type.secondary", "en-US", "次级成本要素_us", "成本要素类型.次级"),
+            // dict.accounting.cost.element.type.secondary
+            ("dict.accounting.cost.element.type.secondary", "ja-JP", "次级成本要素_jp", "成本要素类型.次级"),
+            // dict.accounting.cost.element.type.secondary
+            ("dict.accounting.cost.element.type.secondary", "zh-CN", "次级成本要素", "成本要素类型.次级"),
+            // dict.accounting.cost.element.type.secondary
+            ("dict.accounting.cost.element.type.secondary", "zh-HK", "次级成本要素_hk", "成本要素类型.次级"),
 
             // dict.accounting.currency.code.cny
             ("dict.accounting.currency.code.cny", "en-US", "人民币_us", "币种.人民币"),
@@ -581,122 +851,68 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             // dict.accounting.payment.terms.param.lc
             ("dict.accounting.payment.terms.param.lc", "zh-HK", "信用证_hk", "付款条件.信用证"),
 
-            // dict.accounting.profit.center.category.pro
-            ("dict.accounting.profit.center.category.pro", "en-US", "专业级_us", "利润中心类别.专业级"),
-            // dict.accounting.profit.center.category.pro
-            ("dict.accounting.profit.center.category.pro", "ja-JP", "专业级_jp", "利润中心类别.专业级"),
-            // dict.accounting.profit.center.category.pro
-            ("dict.accounting.profit.center.category.pro", "zh-CN", "专业级", "利润中心类别.专业级"),
-            // dict.accounting.profit.center.category.pro
-            ("dict.accounting.profit.center.category.pro", "zh-HK", "专业级_hk", "利润中心类别.专业级"),
+            // dict.accounting.payment.terms.param.prepayship
+            ("dict.accounting.payment.terms.param.prepayship", "en-US", "款到发货_us", "付款条件.款到发货"),
+            // dict.accounting.payment.terms.param.prepayship
+            ("dict.accounting.payment.terms.param.prepayship", "ja-JP", "款到发货_jp", "付款条件.款到发货"),
+            // dict.accounting.payment.terms.param.prepayship
+            ("dict.accounting.payment.terms.param.prepayship", "zh-CN", "款到发货", "付款条件.款到发货"),
+            // dict.accounting.payment.terms.param.prepayship
+            ("dict.accounting.payment.terms.param.prepayship", "zh-HK", "款到发货_hk", "付款条件.款到发货"),
 
-            // dict.accounting.profit.center.category.cons
-            ("dict.accounting.profit.center.category.cons", "en-US", "消费级_us", "利润中心类别.消费级"),
-            // dict.accounting.profit.center.category.cons
-            ("dict.accounting.profit.center.category.cons", "ja-JP", "消费级_jp", "利润中心类别.消费级"),
-            // dict.accounting.profit.center.category.cons
-            ("dict.accounting.profit.center.category.cons", "zh-CN", "消费级", "利润中心类别.消费级"),
-            // dict.accounting.profit.center.category.cons
-            ("dict.accounting.profit.center.category.cons", "zh-HK", "消费级_hk", "利润中心类别.消费级"),
+            // dict.accounting.payment.terms.param.other
+            ("dict.accounting.payment.terms.param.other", "en-US", "其他_us", "付款条件.其他"),
+            // dict.accounting.payment.terms.param.other
+            ("dict.accounting.payment.terms.param.other", "ja-JP", "其他_jp", "付款条件.其他"),
+            // dict.accounting.payment.terms.param.other
+            ("dict.accounting.payment.terms.param.other", "zh-CN", "其他", "付款条件.其他"),
+            // dict.accounting.payment.terms.param.other
+            ("dict.accounting.payment.terms.param.other", "zh-HK", "其他_hk", "付款条件.其他"),
 
-            // dict.accounting.profit.center.category.medi
-            ("dict.accounting.profit.center.category.medi", "en-US", "医用级_us", "利润中心类别.医用级"),
-            // dict.accounting.profit.center.category.medi
-            ("dict.accounting.profit.center.category.medi", "ja-JP", "医用级_jp", "利润中心类别.医用级"),
-            // dict.accounting.profit.center.category.medi
-            ("dict.accounting.profit.center.category.medi", "zh-CN", "医用级", "利润中心类别.医用级"),
-            // dict.accounting.profit.center.category.medi
-            ("dict.accounting.profit.center.category.medi", "zh-HK", "医用级_hk", "利润中心类别.医用级"),
+            // dict.accounting.payment.method.type.0
+            ("dict.accounting.payment.method.type.0", "en-US", "现金_us", "支付方式.现金"),
+            // dict.accounting.payment.method.type.0
+            ("dict.accounting.payment.method.type.0", "ja-JP", "现金_jp", "支付方式.现金"),
+            // dict.accounting.payment.method.type.0
+            ("dict.accounting.payment.method.type.0", "zh-CN", "现金", "支付方式.现金"),
+            // dict.accounting.payment.method.type.0
+            ("dict.accounting.payment.method.type.0", "zh-HK", "现金_hk", "支付方式.现金"),
 
-            // dict.accounting.profit.center.category.info
-            ("dict.accounting.profit.center.category.info", "en-US", "信息类_us", "利润中心类别.信息类"),
-            // dict.accounting.profit.center.category.info
-            ("dict.accounting.profit.center.category.info", "ja-JP", "信息类_jp", "利润中心类别.信息类"),
-            // dict.accounting.profit.center.category.info
-            ("dict.accounting.profit.center.category.info", "zh-CN", "信息类", "利润中心类别.信息类"),
-            // dict.accounting.profit.center.category.info
-            ("dict.accounting.profit.center.category.info", "zh-HK", "信息类_hk", "利润中心类别.信息类"),
+            // dict.accounting.payment.method.type.1
+            ("dict.accounting.payment.method.type.1", "en-US", "银行转账_us", "支付方式.银行转账"),
+            // dict.accounting.payment.method.type.1
+            ("dict.accounting.payment.method.type.1", "ja-JP", "银行转账_jp", "支付方式.银行转账"),
+            // dict.accounting.payment.method.type.1
+            ("dict.accounting.payment.method.type.1", "zh-CN", "银行转账", "支付方式.银行转账"),
+            // dict.accounting.payment.method.type.1
+            ("dict.accounting.payment.method.type.1", "zh-HK", "银行转账_hk", "支付方式.银行转账"),
 
-            // dict.accounting.profit.center.category.ems
-            ("dict.accounting.profit.center.category.ems", "en-US", "ems_us", "利润中心类别.ems"),
-            // dict.accounting.profit.center.category.ems
-            ("dict.accounting.profit.center.category.ems", "ja-JP", "ems_jp", "利润中心类别.ems"),
-            // dict.accounting.profit.center.category.ems
-            ("dict.accounting.profit.center.category.ems", "zh-CN", "ems", "利润中心类别.ems"),
-            // dict.accounting.profit.center.category.ems
-            ("dict.accounting.profit.center.category.ems", "zh-HK", "ems_hk", "利润中心类别.ems"),
+            // dict.accounting.payment.method.type.2
+            ("dict.accounting.payment.method.type.2", "en-US", "支票_us", "支付方式.支票"),
+            // dict.accounting.payment.method.type.2
+            ("dict.accounting.payment.method.type.2", "ja-JP", "支票_jp", "支付方式.支票"),
+            // dict.accounting.payment.method.type.2
+            ("dict.accounting.payment.method.type.2", "zh-CN", "支票", "支付方式.支票"),
+            // dict.accounting.payment.method.type.2
+            ("dict.accounting.payment.method.type.2", "zh-HK", "支票_hk", "支付方式.支票"),
 
-            // dict.accounting.tax.code.vat13
-            ("dict.accounting.tax.code.vat13", "en-US", "增值税13%_us", "税码.增值税13%"),
-            // dict.accounting.tax.code.vat13
-            ("dict.accounting.tax.code.vat13", "ja-JP", "增值税13%_jp", "税码.增值税13%"),
-            // dict.accounting.tax.code.vat13
-            ("dict.accounting.tax.code.vat13", "zh-CN", "增值税13%", "税码.增值税13%"),
-            // dict.accounting.tax.code.vat13
-            ("dict.accounting.tax.code.vat13", "zh-HK", "增值税13%_hk", "税码.增值税13%"),
+            // dict.accounting.payment.method.type.3
+            ("dict.accounting.payment.method.type.3", "en-US", "信用证_us", "支付方式.信用证"),
+            // dict.accounting.payment.method.type.3
+            ("dict.accounting.payment.method.type.3", "ja-JP", "信用证_jp", "支付方式.信用证"),
+            // dict.accounting.payment.method.type.3
+            ("dict.accounting.payment.method.type.3", "zh-CN", "信用证", "支付方式.信用证"),
+            // dict.accounting.payment.method.type.3
+            ("dict.accounting.payment.method.type.3", "zh-HK", "信用证_hk", "支付方式.信用证"),
 
-            // dict.accounting.tax.code.vat9
-            ("dict.accounting.tax.code.vat9", "en-US", "增值税9%_us", "税码.增值税9%"),
-            // dict.accounting.tax.code.vat9
-            ("dict.accounting.tax.code.vat9", "ja-JP", "增值税9%_jp", "税码.增值税9%"),
-            // dict.accounting.tax.code.vat9
-            ("dict.accounting.tax.code.vat9", "zh-CN", "增值税9%", "税码.增值税9%"),
-            // dict.accounting.tax.code.vat9
-            ("dict.accounting.tax.code.vat9", "zh-HK", "增值税9%_hk", "税码.增值税9%"),
-
-            // dict.accounting.tax.code.vat6
-            ("dict.accounting.tax.code.vat6", "en-US", "增值税6%_us", "税码.增值税6%"),
-            // dict.accounting.tax.code.vat6
-            ("dict.accounting.tax.code.vat6", "ja-JP", "增值税6%_jp", "税码.增值税6%"),
-            // dict.accounting.tax.code.vat6
-            ("dict.accounting.tax.code.vat6", "zh-CN", "增值税6%", "税码.增值税6%"),
-            // dict.accounting.tax.code.vat6
-            ("dict.accounting.tax.code.vat6", "zh-HK", "增值税6%_hk", "税码.增值税6%"),
-
-            // dict.accounting.tax.code.vat3
-            ("dict.accounting.tax.code.vat3", "en-US", "增值税3%_us", "税码.增值税3%"),
-            // dict.accounting.tax.code.vat3
-            ("dict.accounting.tax.code.vat3", "ja-JP", "增值税3%_jp", "税码.增值税3%"),
-            // dict.accounting.tax.code.vat3
-            ("dict.accounting.tax.code.vat3", "zh-CN", "增值税3%", "税码.增值税3%"),
-            // dict.accounting.tax.code.vat3
-            ("dict.accounting.tax.code.vat3", "zh-HK", "增值税3%_hk", "税码.增值税3%"),
-
-            // dict.accounting.tax.code.vat0
-            ("dict.accounting.tax.code.vat0", "en-US", "增值税0%_us", "税码.增值税0%"),
-            // dict.accounting.tax.code.vat0
-            ("dict.accounting.tax.code.vat0", "ja-JP", "增值税0%_jp", "税码.增值税0%"),
-            // dict.accounting.tax.code.vat0
-            ("dict.accounting.tax.code.vat0", "zh-CN", "增值税0%", "税码.增值税0%"),
-            // dict.accounting.tax.code.vat0
-            ("dict.accounting.tax.code.vat0", "zh-HK", "增值税0%_hk", "税码.增值税0%"),
-
-            // dict.accounting.tax.code.taxfree
-            ("dict.accounting.tax.code.taxfree", "en-US", "免税_us", "税码.免税"),
-            // dict.accounting.tax.code.taxfree
-            ("dict.accounting.tax.code.taxfree", "ja-JP", "免税_jp", "税码.免税"),
-            // dict.accounting.tax.code.taxfree
-            ("dict.accounting.tax.code.taxfree", "zh-CN", "免税", "税码.免税"),
-            // dict.accounting.tax.code.taxfree
-            ("dict.accounting.tax.code.taxfree", "zh-HK", "免税_hk", "税码.免税"),
-
-            // dict.accounting.tax.code.input
-            ("dict.accounting.tax.code.input", "en-US", "进项税_us", "税码.进项税"),
-            // dict.accounting.tax.code.input
-            ("dict.accounting.tax.code.input", "ja-JP", "进项税_jp", "税码.进项税"),
-            // dict.accounting.tax.code.input
-            ("dict.accounting.tax.code.input", "zh-CN", "进项税", "税码.进项税"),
-            // dict.accounting.tax.code.input
-            ("dict.accounting.tax.code.input", "zh-HK", "进项税_hk", "税码.进项税"),
-
-            // dict.accounting.tax.code.output
-            ("dict.accounting.tax.code.output", "en-US", "销项税_us", "税码.销项税"),
-            // dict.accounting.tax.code.output
-            ("dict.accounting.tax.code.output", "ja-JP", "销项税_jp", "税码.销项税"),
-            // dict.accounting.tax.code.output
-            ("dict.accounting.tax.code.output", "zh-CN", "销项税", "税码.销项税"),
-            // dict.accounting.tax.code.output
-            ("dict.accounting.tax.code.output", "zh-HK", "销项税_hk", "税码.销项税"),
+            // dict.accounting.payment.method.type.4
+            ("dict.accounting.payment.method.type.4", "en-US", "其他_us", "支付方式.其他"),
+            // dict.accounting.payment.method.type.4
+            ("dict.accounting.payment.method.type.4", "ja-JP", "其他_jp", "支付方式.其他"),
+            // dict.accounting.payment.method.type.4
+            ("dict.accounting.payment.method.type.4", "zh-CN", "其他", "支付方式.其他"),
+            // dict.accounting.payment.method.type.4
+            ("dict.accounting.payment.method.type.4", "zh-HK", "其他_hk", "支付方式.其他"),
 
             // dict.accounting.tax.rate.param.13
             ("dict.accounting.tax.rate.param.13", "en-US", "13%_us", "税率.13%"),
@@ -769,6 +985,60 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.accounting.tax.rate.param.0", "zh-CN", "0%", "税率.0%"),
             // dict.accounting.tax.rate.param.0
             ("dict.accounting.tax.rate.param.0", "zh-HK", "0%_hk", "税率.0%"),
+
+            // dict.accounting.expense.type.monthlysuppliernonraw
+            ("dict.accounting.expense.type.monthlysuppliernonraw", "en-US", "月结供应商除原材料外的费用_us", "费用类型.月结供应商除原材料外的费用"),
+            // dict.accounting.expense.type.monthlysuppliernonraw
+            ("dict.accounting.expense.type.monthlysuppliernonraw", "ja-JP", "月结供应商除原材料外的费用_jp", "费用类型.月结供应商除原材料外的费用"),
+            // dict.accounting.expense.type.monthlysuppliernonraw
+            ("dict.accounting.expense.type.monthlysuppliernonraw", "zh-CN", "月结供应商除原材料外的费用", "费用类型.月结供应商除原材料外的费用"),
+            // dict.accounting.expense.type.monthlysuppliernonraw
+            ("dict.accounting.expense.type.monthlysuppliernonraw", "zh-HK", "月结供应商除原材料外的费用_hk", "费用类型.月结供应商除原材料外的费用"),
+
+            // dict.accounting.expense.type.monthlysupplierother
+            ("dict.accounting.expense.type.monthlysupplierother", "en-US", "月结供应商货款及公司其它费用_us", "费用类型.月结供应商货款及公司其它费用"),
+            // dict.accounting.expense.type.monthlysupplierother
+            ("dict.accounting.expense.type.monthlysupplierother", "ja-JP", "月结供应商货款及公司其它费用_jp", "费用类型.月结供应商货款及公司其它费用"),
+            // dict.accounting.expense.type.monthlysupplierother
+            ("dict.accounting.expense.type.monthlysupplierother", "zh-CN", "月结供应商货款及公司其它费用", "费用类型.月结供应商货款及公司其它费用"),
+            // dict.accounting.expense.type.monthlysupplierother
+            ("dict.accounting.expense.type.monthlysupplierother", "zh-HK", "月结供应商货款及公司其它费用_hk", "费用类型.月结供应商货款及公司其它费用"),
+
+            // dict.accounting.expense.type.miscpurchase
+            ("dict.accounting.expense.type.miscpurchase", "en-US", "杂项购置费用_us", "费用类型.杂项购置费用"),
+            // dict.accounting.expense.type.miscpurchase
+            ("dict.accounting.expense.type.miscpurchase", "ja-JP", "杂项购置费用_jp", "费用类型.杂项购置费用"),
+            // dict.accounting.expense.type.miscpurchase
+            ("dict.accounting.expense.type.miscpurchase", "zh-CN", "杂项购置费用", "费用类型.杂项购置费用"),
+            // dict.accounting.expense.type.miscpurchase
+            ("dict.accounting.expense.type.miscpurchase", "zh-HK", "杂项购置费用_hk", "费用类型.杂项购置费用"),
+
+            // dict.logistics.allocation.category.a
+            ("dict.logistics.allocation.category.a", "en-US", "A 资产_us", "分配类别.A 资产"),
+            // dict.logistics.allocation.category.a
+            ("dict.logistics.allocation.category.a", "ja-JP", "A 资产_jp", "分配类别.A 资产"),
+            // dict.logistics.allocation.category.a
+            ("dict.logistics.allocation.category.a", "zh-CN", "A 资产", "分配类别.A 资产"),
+            // dict.logistics.allocation.category.a
+            ("dict.logistics.allocation.category.a", "zh-HK", "A 资产_hk", "分配类别.A 资产"),
+
+            // dict.logistics.allocation.category.k
+            ("dict.logistics.allocation.category.k", "en-US", "K 成本中心_us", "分配类别.K 成本中心"),
+            // dict.logistics.allocation.category.k
+            ("dict.logistics.allocation.category.k", "ja-JP", "K 成本中心_jp", "分配类别.K 成本中心"),
+            // dict.logistics.allocation.category.k
+            ("dict.logistics.allocation.category.k", "zh-CN", "K 成本中心", "分配类别.K 成本中心"),
+            // dict.logistics.allocation.category.k
+            ("dict.logistics.allocation.category.k", "zh-HK", "K 成本中心_hk", "分配类别.K 成本中心"),
+
+            // dict.logistics.allocation.category.f
+            ("dict.logistics.allocation.category.f", "en-US", "F 订单_us", "分配类别.F 订单"),
+            // dict.logistics.allocation.category.f
+            ("dict.logistics.allocation.category.f", "ja-JP", "F 订单_jp", "分配类别.F 订单"),
+            // dict.logistics.allocation.category.f
+            ("dict.logistics.allocation.category.f", "zh-CN", "F 订单", "分配类别.F 订单"),
+            // dict.logistics.allocation.category.f
+            ("dict.logistics.allocation.category.f", "zh-HK", "F 订单_hk", "分配类别.F 订单"),
 
             // dict.gen.button.category.query
             ("dict.gen.button.category.query", "en-US", "查询_us", "代码生成操作后缀.查询"),
@@ -2030,6 +2300,33 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             // dict.gen.method.type.2
             ("dict.gen.method.type.2", "zh-HK", "当前项目_hk", "生成方式.当前项目"),
 
+            // dict.gen.path.type.root
+            ("dict.gen.path.type.root", "en-US", "默认根路径_us", "生成路径.默认根路径"),
+            // dict.gen.path.type.root
+            ("dict.gen.path.type.root", "ja-JP", "默认根路径_jp", "生成路径.默认根路径"),
+            // dict.gen.path.type.root
+            ("dict.gen.path.type.root", "zh-CN", "默认根路径", "生成路径.默认根路径"),
+            // dict.gen.path.type.root
+            ("dict.gen.path.type.root", "zh-HK", "默认根路径_hk", "生成路径.默认根路径"),
+
+            // dict.gen.path.type.solution
+            ("dict.gen.path.type.solution", "en-US", "Solution 根目录_us", "生成路径.Solution 根目录"),
+            // dict.gen.path.type.solution
+            ("dict.gen.path.type.solution", "ja-JP", "Solution 根目录_jp", "生成路径.Solution 根目录"),
+            // dict.gen.path.type.solution
+            ("dict.gen.path.type.solution", "zh-CN", "Solution 根目录", "生成路径.Solution 根目录"),
+            // dict.gen.path.type.solution
+            ("dict.gen.path.type.solution", "zh-HK", "Solution 根目录_hk", "生成路径.Solution 根目录"),
+
+            // dict.gen.path.type.output
+            ("dict.gen.path.type.output", "en-US", "输出目录_us", "生成路径.输出目录"),
+            // dict.gen.path.type.output
+            ("dict.gen.path.type.output", "ja-JP", "输出目录_jp", "生成路径.输出目录"),
+            // dict.gen.path.type.output
+            ("dict.gen.path.type.output", "zh-CN", "输出目录", "生成路径.输出目录"),
+            // dict.gen.path.type.output
+            ("dict.gen.path.type.output", "zh-HK", "输出目录_hk", "生成路径.输出目录"),
+
             // dict.gen.query.type.eq
             ("dict.gen.query.type.eq", "en-US", "等于_us", "查询方式.等于"),
             // dict.gen.query.type.eq
@@ -2515,6 +2812,24 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.hr.education.level.category.5", "zh-CN", "博士", "学历.博士"),
             // dict.hr.education.level.category.5
             ("dict.hr.education.level.category.5", "zh-HK", "博士_hk", "学历.博士"),
+
+            // dict.hr.dept.cost.category.1
+            ("dict.hr.dept.cost.category.1", "en-US", "直接_us", "部门费用类别.直接"),
+            // dict.hr.dept.cost.category.1
+            ("dict.hr.dept.cost.category.1", "ja-JP", "直接_jp", "部门费用类别.直接"),
+            // dict.hr.dept.cost.category.1
+            ("dict.hr.dept.cost.category.1", "zh-CN", "直接", "部门费用类别.直接"),
+            // dict.hr.dept.cost.category.1
+            ("dict.hr.dept.cost.category.1", "zh-HK", "直接_hk", "部门费用类别.直接"),
+
+            // dict.hr.dept.cost.category.2
+            ("dict.hr.dept.cost.category.2", "en-US", "间接_us", "部门费用类别.间接"),
+            // dict.hr.dept.cost.category.2
+            ("dict.hr.dept.cost.category.2", "ja-JP", "间接_jp", "部门费用类别.间接"),
+            // dict.hr.dept.cost.category.2
+            ("dict.hr.dept.cost.category.2", "zh-CN", "间接", "部门费用类别.间接"),
+            // dict.hr.dept.cost.category.2
+            ("dict.hr.dept.cost.category.2", "zh-HK", "间接_hk", "部门费用类别.间接"),
 
             // dict.hr.ethnic.code.1
             ("dict.hr.ethnic.code.1", "en-US", "汉族_us", "民族.汉族"),
@@ -4712,284 +5027,194 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             // dict.logistics.maintenance.category.upgrade
             ("dict.logistics.maintenance.category.upgrade", "zh-HK", "改造升级_hk", "维护类别.改造升级"),
 
-            // dict.logistics.material.type.abf
-            ("dict.logistics.material.type.abf", "en-US", "废料_us", "物料类型.废料"),
-            // dict.logistics.material.type.abf
-            ("dict.logistics.material.type.abf", "ja-JP", "废料_jp", "物料类型.废料"),
-            // dict.logistics.material.type.abf
-            ("dict.logistics.material.type.abf", "zh-CN", "废料", "物料类型.废料"),
-            // dict.logistics.material.type.abf
-            ("dict.logistics.material.type.abf", "zh-HK", "废料_hk", "物料类型.废料"),
+            // dict.logistics.industry.sector.a
+            ("dict.logistics.industry.sector.a", "en-US", "工厂工程/装备制造_us", "行业领域.工厂工程/装备制造"),
+            // dict.logistics.industry.sector.a
+            ("dict.logistics.industry.sector.a", "ja-JP", "工厂工程/装备制造_jp", "行业领域.工厂工程/装备制造"),
+            // dict.logistics.industry.sector.a
+            ("dict.logistics.industry.sector.a", "zh-CN", "工厂工程/装备制造", "行业领域.工厂工程/装备制造"),
+            // dict.logistics.industry.sector.a
+            ("dict.logistics.industry.sector.a", "zh-HK", "工厂工程/装备制造_hk", "行业领域.工厂工程/装备制造"),
 
-            // dict.logistics.material.type.cbau
-            ("dict.logistics.material.type.cbau", "en-US", "兼容设备_us", "物料类型.兼容设备"),
-            // dict.logistics.material.type.cbau
-            ("dict.logistics.material.type.cbau", "ja-JP", "兼容设备_jp", "物料类型.兼容设备"),
-            // dict.logistics.material.type.cbau
-            ("dict.logistics.material.type.cbau", "zh-CN", "兼容设备", "物料类型.兼容设备"),
-            // dict.logistics.material.type.cbau
-            ("dict.logistics.material.type.cbau", "zh-HK", "兼容设备_hk", "物料类型.兼容设备"),
+            // dict.logistics.industry.sector.c
+            ("dict.logistics.industry.sector.c", "en-US", "化工行业_us", "行业领域.化工行业"),
+            // dict.logistics.industry.sector.c
+            ("dict.logistics.industry.sector.c", "ja-JP", "化工行业_jp", "行业领域.化工行业"),
+            // dict.logistics.industry.sector.c
+            ("dict.logistics.industry.sector.c", "zh-CN", "化工行业", "行业领域.化工行业"),
+            // dict.logistics.industry.sector.c
+            ("dict.logistics.industry.sector.c", "zh-HK", "化工行业_hk", "行业领域.化工行业"),
 
-            // dict.logistics.material.type.ch00
-            ("dict.logistics.material.type.ch00", "en-US", "ch合同操作_us", "物料类型.ch合同操作"),
-            // dict.logistics.material.type.ch00
-            ("dict.logistics.material.type.ch00", "ja-JP", "ch合同操作_jp", "物料类型.ch合同操作"),
-            // dict.logistics.material.type.ch00
-            ("dict.logistics.material.type.ch00", "zh-CN", "ch合同操作", "物料类型.ch合同操作"),
-            // dict.logistics.material.type.ch00
-            ("dict.logistics.material.type.ch00", "zh-HK", "ch合同操作_hk", "物料类型.ch合同操作"),
+            // dict.logistics.industry.sector.m
+            ("dict.logistics.industry.sector.m", "en-US", "机械工程_us", "行业领域.机械工程"),
+            // dict.logistics.industry.sector.m
+            ("dict.logistics.industry.sector.m", "ja-JP", "机械工程_jp", "行业领域.机械工程"),
+            // dict.logistics.industry.sector.m
+            ("dict.logistics.industry.sector.m", "zh-CN", "机械工程", "行业领域.机械工程"),
+            // dict.logistics.industry.sector.m
+            ("dict.logistics.industry.sector.m", "zh-HK", "机械工程_hk", "行业领域.机械工程"),
 
-            // dict.logistics.material.type.cont
-            ("dict.logistics.material.type.cont", "en-US", "看板容器_us", "物料类型.看板容器"),
-            // dict.logistics.material.type.cont
-            ("dict.logistics.material.type.cont", "ja-JP", "看板容器_jp", "物料类型.看板容器"),
-            // dict.logistics.material.type.cont
-            ("dict.logistics.material.type.cont", "zh-CN", "看板容器", "物料类型.看板容器"),
-            // dict.logistics.material.type.cont
-            ("dict.logistics.material.type.cont", "zh-HK", "看板容器_hk", "物料类型.看板容器"),
+            // dict.logistics.industry.sector.p
+            ("dict.logistics.industry.sector.p", "en-US", "制药/医药_us", "行业领域.制药/医药"),
+            // dict.logistics.industry.sector.p
+            ("dict.logistics.industry.sector.p", "ja-JP", "制药/医药_jp", "行业领域.制药/医药"),
+            // dict.logistics.industry.sector.p
+            ("dict.logistics.industry.sector.p", "zh-CN", "制药/医药", "行业领域.制药/医药"),
+            // dict.logistics.industry.sector.p
+            ("dict.logistics.industry.sector.p", "zh-HK", "制药/医药_hk", "行业领域.制药/医药"),
 
-            // dict.logistics.material.type.coup
-            ("dict.logistics.material.type.coup", "en-US", "优惠券_us", "物料类型.优惠券"),
-            // dict.logistics.material.type.coup
-            ("dict.logistics.material.type.coup", "ja-JP", "优惠券_jp", "物料类型.优惠券"),
-            // dict.logistics.material.type.coup
-            ("dict.logistics.material.type.coup", "zh-CN", "优惠券", "物料类型.优惠券"),
-            // dict.logistics.material.type.coup
-            ("dict.logistics.material.type.coup", "zh-HK", "优惠券_hk", "物料类型.优惠券"),
+            // dict.logistics.manufacturer.type.0
+            ("dict.logistics.manufacturer.type.0", "en-US", "原始设备制造商(OEM)_us", "制造商类型.OEM"),
+            // dict.logistics.manufacturer.type.0
+            ("dict.logistics.manufacturer.type.0", "ja-JP", "原始设备制造商(OEM)_jp", "制造商类型.OEM"),
+            // dict.logistics.manufacturer.type.0
+            ("dict.logistics.manufacturer.type.0", "zh-CN", "原始设备制造商(OEM)", "制造商类型.OEM"),
+            // dict.logistics.manufacturer.type.0
+            ("dict.logistics.manufacturer.type.0", "zh-HK", "原始设备制造商(OEM)_hk", "制造商类型.OEM"),
 
-            // dict.logistics.material.type.dien
-            ("dict.logistics.material.type.dien", "en-US", "服务_us", "物料类型.服务"),
-            // dict.logistics.material.type.dien
-            ("dict.logistics.material.type.dien", "ja-JP", "服务_jp", "物料类型.服务"),
-            // dict.logistics.material.type.dien
-            ("dict.logistics.material.type.dien", "zh-CN", "服务", "物料类型.服务"),
-            // dict.logistics.material.type.dien
-            ("dict.logistics.material.type.dien", "zh-HK", "服务_hk", "物料类型.服务"),
+            // dict.logistics.manufacturer.type.1
+            ("dict.logistics.manufacturer.type.1", "en-US", "原始设计制造商(ODM)_us", "制造商类型.ODM"),
+            // dict.logistics.manufacturer.type.1
+            ("dict.logistics.manufacturer.type.1", "ja-JP", "原始设计制造商(ODM)_jp", "制造商类型.ODM"),
+            // dict.logistics.manufacturer.type.1
+            ("dict.logistics.manufacturer.type.1", "zh-CN", "原始设计制造商(ODM)", "制造商类型.ODM"),
+            // dict.logistics.manufacturer.type.1
+            ("dict.logistics.manufacturer.type.1", "zh-HK", "原始设计制造商(ODM)_hk", "制造商类型.ODM"),
 
-            // dict.logistics.material.type.epa
-            ("dict.logistics.material.type.epa", "en-US", "设备包装_us", "物料类型.设备包装"),
-            // dict.logistics.material.type.epa
-            ("dict.logistics.material.type.epa", "ja-JP", "设备包装_jp", "物料类型.设备包装"),
-            // dict.logistics.material.type.epa
-            ("dict.logistics.material.type.epa", "zh-CN", "设备包装", "物料类型.设备包装"),
-            // dict.logistics.material.type.epa
-            ("dict.logistics.material.type.epa", "zh-HK", "设备包装_hk", "物料类型.设备包装"),
+            // dict.logistics.manufacturer.type.2
+            ("dict.logistics.manufacturer.type.2", "en-US", "合同制造商(CM)_us", "制造商类型.CM"),
+            // dict.logistics.manufacturer.type.2
+            ("dict.logistics.manufacturer.type.2", "ja-JP", "合同制造商(CM)_jp", "制造商类型.CM"),
+            // dict.logistics.manufacturer.type.2
+            ("dict.logistics.manufacturer.type.2", "zh-CN", "合同制造商(CM)", "制造商类型.CM"),
+            // dict.logistics.manufacturer.type.2
+            ("dict.logistics.manufacturer.type.2", "zh-HK", "合同制造商(CM)_hk", "制造商类型.CM"),
 
-            // dict.logistics.material.type.ersa
-            ("dict.logistics.material.type.ersa", "en-US", "备件_us", "物料类型.备件"),
-            // dict.logistics.material.type.ersa
-            ("dict.logistics.material.type.ersa", "ja-JP", "备件_jp", "物料类型.备件"),
-            // dict.logistics.material.type.ersa
-            ("dict.logistics.material.type.ersa", "zh-CN", "备件", "物料类型.备件"),
-            // dict.logistics.material.type.ersa
-            ("dict.logistics.material.type.ersa", "zh-HK", "备件_hk", "物料类型.备件"),
+            // dict.logistics.manufacturer.type.3
+            ("dict.logistics.manufacturer.type.3", "en-US", "品牌制造商_us", "制造商类型.品牌制造商"),
+            // dict.logistics.manufacturer.type.3
+            ("dict.logistics.manufacturer.type.3", "ja-JP", "品牌制造商_jp", "制造商类型.品牌制造商"),
+            // dict.logistics.manufacturer.type.3
+            ("dict.logistics.manufacturer.type.3", "zh-CN", "品牌制造商", "制造商类型.品牌制造商"),
+            // dict.logistics.manufacturer.type.3
+            ("dict.logistics.manufacturer.type.3", "zh-HK", "品牌制造商_hk", "制造商类型.品牌制造商"),
 
-            // dict.logistics.material.type.fert
-            ("dict.logistics.material.type.fert", "en-US", "成品_us", "物料类型.成品"),
-            // dict.logistics.material.type.fert
-            ("dict.logistics.material.type.fert", "ja-JP", "成品_jp", "物料类型.成品"),
-            // dict.logistics.material.type.fert
-            ("dict.logistics.material.type.fert", "zh-CN", "成品", "物料类型.成品"),
-            // dict.logistics.material.type.fert
-            ("dict.logistics.material.type.fert", "zh-HK", "成品_hk", "物料类型.成品"),
+            // dict.logistics.manufacturer.type.4
+            ("dict.logistics.manufacturer.type.4", "en-US", "其他_us", "制造商类型.其他"),
+            // dict.logistics.manufacturer.type.4
+            ("dict.logistics.manufacturer.type.4", "ja-JP", "其他_jp", "制造商类型.其他"),
+            // dict.logistics.manufacturer.type.4
+            ("dict.logistics.manufacturer.type.4", "zh-CN", "其他", "制造商类型.其他"),
+            // dict.logistics.manufacturer.type.4
+            ("dict.logistics.manufacturer.type.4", "zh-HK", "其他_hk", "制造商类型.其他"),
 
-            // dict.logistics.material.type.fgtr
-            ("dict.logistics.material.type.fgtr", "en-US", "饮料_us", "物料类型.饮料"),
-            // dict.logistics.material.type.fgtr
-            ("dict.logistics.material.type.fgtr", "ja-JP", "饮料_jp", "物料类型.饮料"),
-            // dict.logistics.material.type.fgtr
-            ("dict.logistics.material.type.fgtr", "zh-CN", "饮料", "物料类型.饮料"),
-            // dict.logistics.material.type.fgtr
-            ("dict.logistics.material.type.fgtr", "zh-HK", "饮料_hk", "物料类型.饮料"),
+            // dict.logistics.quality.certification.0
+            ("dict.logistics.quality.certification.0", "en-US", "无_us", "质量认证.无"),
+            // dict.logistics.quality.certification.0
+            ("dict.logistics.quality.certification.0", "ja-JP", "无_jp", "质量认证.无"),
+            // dict.logistics.quality.certification.0
+            ("dict.logistics.quality.certification.0", "zh-CN", "无", "质量认证.无"),
+            // dict.logistics.quality.certification.0
+            ("dict.logistics.quality.certification.0", "zh-HK", "无_hk", "质量认证.无"),
 
-            // dict.logistics.material.type.fhmi
-            ("dict.logistics.material.type.fhmi", "en-US", "生产资源/工具_us", "物料类型.生产资源/工具"),
-            // dict.logistics.material.type.fhmi
-            ("dict.logistics.material.type.fhmi", "ja-JP", "生产资源/工具_jp", "物料类型.生产资源/工具"),
-            // dict.logistics.material.type.fhmi
-            ("dict.logistics.material.type.fhmi", "zh-CN", "生产资源/工具", "物料类型.生产资源/工具"),
-            // dict.logistics.material.type.fhmi
-            ("dict.logistics.material.type.fhmi", "zh-HK", "生产资源/工具_hk", "物料类型.生产资源/工具"),
+            // dict.logistics.quality.certification.1
+            ("dict.logistics.quality.certification.1", "en-US", "ISO 9001_us", "质量认证.ISO9001"),
+            // dict.logistics.quality.certification.1
+            ("dict.logistics.quality.certification.1", "ja-JP", "ISO 9001_jp", "质量认证.ISO9001"),
+            // dict.logistics.quality.certification.1
+            ("dict.logistics.quality.certification.1", "zh-CN", "ISO 9001", "质量认证.ISO9001"),
+            // dict.logistics.quality.certification.1
+            ("dict.logistics.quality.certification.1", "zh-HK", "ISO 9001_hk", "质量认证.ISO9001"),
 
-            // dict.logistics.material.type.food
-            ("dict.logistics.material.type.food", "en-US", "食品_us", "物料类型.食品"),
-            // dict.logistics.material.type.food
-            ("dict.logistics.material.type.food", "ja-JP", "食品_jp", "物料类型.食品"),
-            // dict.logistics.material.type.food
-            ("dict.logistics.material.type.food", "zh-CN", "食品", "物料类型.食品"),
-            // dict.logistics.material.type.food
-            ("dict.logistics.material.type.food", "zh-HK", "食品_hk", "物料类型.食品"),
+            // dict.logistics.quality.certification.2
+            ("dict.logistics.quality.certification.2", "en-US", "ISO 14001_us", "质量认证.ISO14001"),
+            // dict.logistics.quality.certification.2
+            ("dict.logistics.quality.certification.2", "ja-JP", "ISO 14001_jp", "质量认证.ISO14001"),
+            // dict.logistics.quality.certification.2
+            ("dict.logistics.quality.certification.2", "zh-CN", "ISO 14001", "质量认证.ISO14001"),
+            // dict.logistics.quality.certification.2
+            ("dict.logistics.quality.certification.2", "zh-HK", "ISO 14001_hk", "质量认证.ISO14001"),
 
-            // dict.logistics.material.type.frip
-            ("dict.logistics.material.type.frip", "en-US", "易腐品_us", "物料类型.易腐品"),
-            // dict.logistics.material.type.frip
-            ("dict.logistics.material.type.frip", "ja-JP", "易腐品_jp", "物料类型.易腐品"),
-            // dict.logistics.material.type.frip
-            ("dict.logistics.material.type.frip", "zh-CN", "易腐品", "物料类型.易腐品"),
-            // dict.logistics.material.type.frip
-            ("dict.logistics.material.type.frip", "zh-HK", "易腐品_hk", "物料类型.易腐品"),
+            // dict.logistics.quality.certification.3
+            ("dict.logistics.quality.certification.3", "en-US", "ISO 45001_us", "质量认证.ISO45001"),
+            // dict.logistics.quality.certification.3
+            ("dict.logistics.quality.certification.3", "ja-JP", "ISO 45001_jp", "质量认证.ISO45001"),
+            // dict.logistics.quality.certification.3
+            ("dict.logistics.quality.certification.3", "zh-CN", "ISO 45001", "质量认证.ISO45001"),
+            // dict.logistics.quality.certification.3
+            ("dict.logistics.quality.certification.3", "zh-HK", "ISO 45001_hk", "质量认证.ISO45001"),
 
-            // dict.logistics.material.type.halb
-            ("dict.logistics.material.type.halb", "en-US", "半成品_us", "物料类型.半成品"),
-            // dict.logistics.material.type.halb
-            ("dict.logistics.material.type.halb", "ja-JP", "半成品_jp", "物料类型.半成品"),
-            // dict.logistics.material.type.halb
-            ("dict.logistics.material.type.halb", "zh-CN", "半成品", "物料类型.半成品"),
-            // dict.logistics.material.type.halb
-            ("dict.logistics.material.type.halb", "zh-HK", "半成品_hk", "物料类型.半成品"),
+            // dict.logistics.quality.certification.4
+            ("dict.logistics.quality.certification.4", "en-US", "ISO 22000_us", "质量认证.ISO22000"),
+            // dict.logistics.quality.certification.4
+            ("dict.logistics.quality.certification.4", "ja-JP", "ISO 22000_jp", "质量认证.ISO22000"),
+            // dict.logistics.quality.certification.4
+            ("dict.logistics.quality.certification.4", "zh-CN", "ISO 22000", "质量认证.ISO22000"),
+            // dict.logistics.quality.certification.4
+            ("dict.logistics.quality.certification.4", "zh-HK", "ISO 22000_hk", "质量认证.ISO22000"),
 
-            // dict.logistics.material.type.hawa
-            ("dict.logistics.material.type.hawa", "en-US", "贸易货物_us", "物料类型.贸易货物"),
-            // dict.logistics.material.type.hawa
-            ("dict.logistics.material.type.hawa", "ja-JP", "贸易货物_jp", "物料类型.贸易货物"),
-            // dict.logistics.material.type.hawa
-            ("dict.logistics.material.type.hawa", "zh-CN", "贸易货物", "物料类型.贸易货物"),
-            // dict.logistics.material.type.hawa
-            ("dict.logistics.material.type.hawa", "zh-HK", "贸易货物_hk", "物料类型.贸易货物"),
+            // dict.logistics.quality.certification.5
+            ("dict.logistics.quality.certification.5", "en-US", "ISO 27001_us", "质量认证.ISO27001"),
+            // dict.logistics.quality.certification.5
+            ("dict.logistics.quality.certification.5", "ja-JP", "ISO 27001_jp", "质量认证.ISO27001"),
+            // dict.logistics.quality.certification.5
+            ("dict.logistics.quality.certification.5", "zh-CN", "ISO 27001", "质量认证.ISO27001"),
+            // dict.logistics.quality.certification.5
+            ("dict.logistics.quality.certification.5", "zh-HK", "ISO 27001_hk", "质量认证.ISO27001"),
 
-            // dict.logistics.material.type.hers
-            ("dict.logistics.material.type.hers", "en-US", "制造商部分_us", "物料类型.制造商部分"),
-            // dict.logistics.material.type.hers
-            ("dict.logistics.material.type.hers", "ja-JP", "制造商部分_jp", "物料类型.制造商部分"),
-            // dict.logistics.material.type.hers
-            ("dict.logistics.material.type.hers", "zh-CN", "制造商部分", "物料类型.制造商部分"),
-            // dict.logistics.material.type.hers
-            ("dict.logistics.material.type.hers", "zh-HK", "制造商部分_hk", "物料类型.制造商部分"),
+            // dict.logistics.quality.certification.6
+            ("dict.logistics.quality.certification.6", "en-US", "ISO 20000_us", "质量认证.ISO20000"),
+            // dict.logistics.quality.certification.6
+            ("dict.logistics.quality.certification.6", "ja-JP", "ISO 20000_jp", "质量认证.ISO20000"),
+            // dict.logistics.quality.certification.6
+            ("dict.logistics.quality.certification.6", "zh-CN", "ISO 20000", "质量认证.ISO20000"),
+            // dict.logistics.quality.certification.6
+            ("dict.logistics.quality.certification.6", "zh-HK", "ISO 20000_hk", "质量认证.ISO20000"),
 
-            // dict.logistics.material.type.hibe
-            ("dict.logistics.material.type.hibe", "en-US", "经营供应_us", "物料类型.经营供应"),
-            // dict.logistics.material.type.hibe
-            ("dict.logistics.material.type.hibe", "ja-JP", "经营供应_jp", "物料类型.经营供应"),
-            // dict.logistics.material.type.hibe
-            ("dict.logistics.material.type.hibe", "zh-CN", "经营供应", "物料类型.经营供应"),
-            // dict.logistics.material.type.hibe
-            ("dict.logistics.material.type.hibe", "zh-HK", "经营供应_hk", "物料类型.经营供应"),
+            // dict.logistics.quality.certification.7
+            ("dict.logistics.quality.certification.7", "en-US", "ISO 50001_us", "质量认证.ISO50001"),
+            // dict.logistics.quality.certification.7
+            ("dict.logistics.quality.certification.7", "ja-JP", "ISO 50001_jp", "质量认证.ISO50001"),
+            // dict.logistics.quality.certification.7
+            ("dict.logistics.quality.certification.7", "zh-CN", "ISO 50001", "质量认证.ISO50001"),
+            // dict.logistics.quality.certification.7
+            ("dict.logistics.quality.certification.7", "zh-HK", "ISO 50001_hk", "质量认证.ISO50001"),
 
-            // dict.logistics.material.type.ibau
-            ("dict.logistics.material.type.ibau", "en-US", "维护装配_us", "物料类型.维护装配"),
-            // dict.logistics.material.type.ibau
-            ("dict.logistics.material.type.ibau", "ja-JP", "维护装配_jp", "物料类型.维护装配"),
-            // dict.logistics.material.type.ibau
-            ("dict.logistics.material.type.ibau", "zh-CN", "维护装配", "物料类型.维护装配"),
-            // dict.logistics.material.type.ibau
-            ("dict.logistics.material.type.ibau", "zh-HK", "维护装配_hk", "物料类型.维护装配"),
+            // dict.logistics.quality.certification.8
+            ("dict.logistics.quality.certification.8", "en-US", "ISO 13485_us", "质量认证.ISO13485"),
+            // dict.logistics.quality.certification.8
+            ("dict.logistics.quality.certification.8", "ja-JP", "ISO 13485_jp", "质量认证.ISO13485"),
+            // dict.logistics.quality.certification.8
+            ("dict.logistics.quality.certification.8", "zh-CN", "ISO 13485", "质量认证.ISO13485"),
+            // dict.logistics.quality.certification.8
+            ("dict.logistics.quality.certification.8", "zh-HK", "ISO 13485_hk", "质量认证.ISO13485"),
 
-            // dict.logistics.material.type.intr
-            ("dict.logistics.material.type.intr", "en-US", "内部物料_us", "物料类型.内部物料"),
-            // dict.logistics.material.type.intr
-            ("dict.logistics.material.type.intr", "ja-JP", "内部物料_jp", "物料类型.内部物料"),
-            // dict.logistics.material.type.intr
-            ("dict.logistics.material.type.intr", "zh-CN", "内部物料", "物料类型.内部物料"),
-            // dict.logistics.material.type.intr
-            ("dict.logistics.material.type.intr", "zh-HK", "内部物料_hk", "物料类型.内部物料"),
+            // dict.logistics.quality.certification.9
+            ("dict.logistics.quality.certification.9", "en-US", "IATF 16949_us", "质量认证.IATF16949"),
+            // dict.logistics.quality.certification.9
+            ("dict.logistics.quality.certification.9", "ja-JP", "IATF 16949_jp", "质量认证.IATF16949"),
+            // dict.logistics.quality.certification.9
+            ("dict.logistics.quality.certification.9", "zh-CN", "IATF 16949", "质量认证.IATF16949"),
+            // dict.logistics.quality.certification.9
+            ("dict.logistics.quality.certification.9", "zh-HK", "IATF 16949_hk", "质量认证.IATF16949"),
 
-            // dict.logistics.material.type.kmat
-            ("dict.logistics.material.type.kmat", "en-US", "可配置物料_us", "物料类型.可配置物料"),
-            // dict.logistics.material.type.kmat
-            ("dict.logistics.material.type.kmat", "ja-JP", "可配置物料_jp", "物料类型.可配置物料"),
-            // dict.logistics.material.type.kmat
-            ("dict.logistics.material.type.kmat", "zh-CN", "可配置物料", "物料类型.可配置物料"),
-            // dict.logistics.material.type.kmat
-            ("dict.logistics.material.type.kmat", "zh-HK", "可配置物料_hk", "物料类型.可配置物料"),
+            // dict.logistics.quality.certification.10
+            ("dict.logistics.quality.certification.10", "en-US", "ISO/IEC 17025_us", "质量认证.ISOIEC17025"),
+            // dict.logistics.quality.certification.10
+            ("dict.logistics.quality.certification.10", "ja-JP", "ISO/IEC 17025_jp", "质量认证.ISOIEC17025"),
+            // dict.logistics.quality.certification.10
+            ("dict.logistics.quality.certification.10", "zh-CN", "ISO/IEC 17025", "质量认证.ISOIEC17025"),
+            // dict.logistics.quality.certification.10
+            ("dict.logistics.quality.certification.10", "zh-HK", "ISO/IEC 17025_hk", "质量认证.ISOIEC17025"),
 
-            // dict.logistics.material.type.leer
-            ("dict.logistics.material.type.leer", "en-US", "虚拟件_us", "物料类型.虚拟件"),
-            // dict.logistics.material.type.leer
-            ("dict.logistics.material.type.leer", "ja-JP", "虚拟件_jp", "物料类型.虚拟件"),
-            // dict.logistics.material.type.leer
-            ("dict.logistics.material.type.leer", "zh-CN", "虚拟件", "物料类型.虚拟件"),
-            // dict.logistics.material.type.leer
-            ("dict.logistics.material.type.leer", "zh-HK", "虚拟件_hk", "物料类型.虚拟件"),
-
-            // dict.logistics.material.type.leih
-            ("dict.logistics.material.type.leih", "en-US", "可反复利用包装_us", "物料类型.可反复利用包装"),
-            // dict.logistics.material.type.leih
-            ("dict.logistics.material.type.leih", "ja-JP", "可反复利用包装_jp", "物料类型.可反复利用包装"),
-            // dict.logistics.material.type.leih
-            ("dict.logistics.material.type.leih", "zh-CN", "可反复利用包装", "物料类型.可反复利用包装"),
-            // dict.logistics.material.type.leih
-            ("dict.logistics.material.type.leih", "zh-HK", "可反复利用包装_hk", "物料类型.可反复利用包装"),
-
-            // dict.logistics.material.type.lgut
-            ("dict.logistics.material.type.lgut", "en-US", "空零售_us", "物料类型.空零售"),
-            // dict.logistics.material.type.lgut
-            ("dict.logistics.material.type.lgut", "ja-JP", "空零售_jp", "物料类型.空零售"),
-            // dict.logistics.material.type.lgut
-            ("dict.logistics.material.type.lgut", "zh-CN", "空零售", "物料类型.空零售"),
-            // dict.logistics.material.type.lgut
-            ("dict.logistics.material.type.lgut", "zh-HK", "空零售_hk", "物料类型.空零售"),
-
-            // dict.logistics.material.type.mode
-            ("dict.logistics.material.type.mode", "en-US", "衣物_us", "物料类型.衣物"),
-            // dict.logistics.material.type.mode
-            ("dict.logistics.material.type.mode", "ja-JP", "衣物_jp", "物料类型.衣物"),
-            // dict.logistics.material.type.mode
-            ("dict.logistics.material.type.mode", "zh-CN", "衣物", "物料类型.衣物"),
-            // dict.logistics.material.type.mode
-            ("dict.logistics.material.type.mode", "zh-HK", "衣物_hk", "物料类型.衣物"),
-
-            // dict.logistics.material.type.mpo
-            ("dict.logistics.material.type.mpo", "en-US", "物料计划对象_us", "物料类型.物料计划对象"),
-            // dict.logistics.material.type.mpo
-            ("dict.logistics.material.type.mpo", "ja-JP", "物料计划对象_jp", "物料类型.物料计划对象"),
-            // dict.logistics.material.type.mpo
-            ("dict.logistics.material.type.mpo", "zh-CN", "物料计划对象", "物料类型.物料计划对象"),
-            // dict.logistics.material.type.mpo
-            ("dict.logistics.material.type.mpo", "zh-HK", "物料计划对象_hk", "物料类型.物料计划对象"),
-
-            // dict.logistics.material.type.nlag
-            ("dict.logistics.material.type.nlag", "en-US", "非存储物料_us", "物料类型.非存储物料"),
-            // dict.logistics.material.type.nlag
-            ("dict.logistics.material.type.nlag", "ja-JP", "非存储物料_jp", "物料类型.非存储物料"),
-            // dict.logistics.material.type.nlag
-            ("dict.logistics.material.type.nlag", "zh-CN", "非存储物料", "物料类型.非存储物料"),
-            // dict.logistics.material.type.nlag
-            ("dict.logistics.material.type.nlag", "zh-HK", "非存储物料_hk", "物料类型.非存储物料"),
-
-            // dict.logistics.material.type.nof1
-            ("dict.logistics.material.type.nof1", "en-US", "非食品_us", "物料类型.非食品"),
-            // dict.logistics.material.type.nof1
-            ("dict.logistics.material.type.nof1", "ja-JP", "非食品_jp", "物料类型.非食品"),
-            // dict.logistics.material.type.nof1
-            ("dict.logistics.material.type.nof1", "zh-CN", "非食品", "物料类型.非食品"),
-            // dict.logistics.material.type.nof1
-            ("dict.logistics.material.type.nof1", "zh-HK", "非食品_hk", "物料类型.非食品"),
-
-            // dict.logistics.material.type.pipe
-            ("dict.logistics.material.type.pipe", "en-US", "管线物料_us", "物料类型.管线物料"),
-            // dict.logistics.material.type.pipe
-            ("dict.logistics.material.type.pipe", "ja-JP", "管线物料_jp", "物料类型.管线物料"),
-            // dict.logistics.material.type.pipe
-            ("dict.logistics.material.type.pipe", "zh-CN", "管线物料", "物料类型.管线物料"),
-            // dict.logistics.material.type.pipe
-            ("dict.logistics.material.type.pipe", "zh-HK", "管线物料_hk", "物料类型.管线物料"),
-
-            // dict.logistics.material.type.plan
-            ("dict.logistics.material.type.plan", "en-US", "贸易货物计划_us", "物料类型.贸易货物计划"),
-            // dict.logistics.material.type.plan
-            ("dict.logistics.material.type.plan", "ja-JP", "贸易货物计划_jp", "物料类型.贸易货物计划"),
-            // dict.logistics.material.type.plan
-            ("dict.logistics.material.type.plan", "zh-CN", "贸易货物计划", "物料类型.贸易货物计划"),
-            // dict.logistics.material.type.plan
-            ("dict.logistics.material.type.plan", "zh-HK", "贸易货物计划_hk", "物料类型.贸易货物计划"),
-
-            // dict.logistics.material.type.proc
-            ("dict.logistics.material.type.proc", "en-US", "过程物料_us", "物料类型.过程物料"),
-            // dict.logistics.material.type.proc
-            ("dict.logistics.material.type.proc", "ja-JP", "过程物料_jp", "物料类型.过程物料"),
-            // dict.logistics.material.type.proc
-            ("dict.logistics.material.type.proc", "zh-CN", "过程物料", "物料类型.过程物料"),
-            // dict.logistics.material.type.proc
-            ("dict.logistics.material.type.proc", "zh-HK", "过程物料_hk", "物料类型.过程物料"),
-
-            // dict.logistics.material.type.prod
-            ("dict.logistics.material.type.prod", "en-US", "产品组_us", "物料类型.产品组"),
-            // dict.logistics.material.type.prod
-            ("dict.logistics.material.type.prod", "ja-JP", "产品组_jp", "物料类型.产品组"),
-            // dict.logistics.material.type.prod
-            ("dict.logistics.material.type.prod", "zh-CN", "产品组", "物料类型.产品组"),
-            // dict.logistics.material.type.prod
-            ("dict.logistics.material.type.prod", "zh-HK", "产品组_hk", "物料类型.产品组"),
+            // dict.logistics.quality.certification.11
+            ("dict.logistics.quality.certification.11", "en-US", "GB/T 50430_us", "质量认证.GBT50430"),
+            // dict.logistics.quality.certification.11
+            ("dict.logistics.quality.certification.11", "ja-JP", "GB/T 50430_jp", "质量认证.GBT50430"),
+            // dict.logistics.quality.certification.11
+            ("dict.logistics.quality.certification.11", "zh-CN", "GB/T 50430", "质量认证.GBT50430"),
+            // dict.logistics.quality.certification.11
+            ("dict.logistics.quality.certification.11", "zh-HK", "GB/T 50430_hk", "质量认证.GBT50430"),
 
             // dict.logistics.material.type.roh
             ("dict.logistics.material.type.roh", "en-US", "原材料_us", "物料类型.原材料"),
@@ -5000,14 +5225,50 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             // dict.logistics.material.type.roh
             ("dict.logistics.material.type.roh", "zh-HK", "原材料_hk", "物料类型.原材料"),
 
-            // dict.logistics.material.type.unbw
-            ("dict.logistics.material.type.unbw", "en-US", "未估价物料_us", "物料类型.未估价物料"),
-            // dict.logistics.material.type.unbw
-            ("dict.logistics.material.type.unbw", "ja-JP", "未估价物料_jp", "物料类型.未估价物料"),
-            // dict.logistics.material.type.unbw
-            ("dict.logistics.material.type.unbw", "zh-CN", "未估价物料", "物料类型.未估价物料"),
-            // dict.logistics.material.type.unbw
-            ("dict.logistics.material.type.unbw", "zh-HK", "未估价物料_hk", "物料类型.未估价物料"),
+            // dict.logistics.material.type.halb
+            ("dict.logistics.material.type.halb", "en-US", "半成品_us", "物料类型.半成品"),
+            // dict.logistics.material.type.halb
+            ("dict.logistics.material.type.halb", "ja-JP", "半成品_jp", "物料类型.半成品"),
+            // dict.logistics.material.type.halb
+            ("dict.logistics.material.type.halb", "zh-CN", "半成品", "物料类型.半成品"),
+            // dict.logistics.material.type.halb
+            ("dict.logistics.material.type.halb", "zh-HK", "半成品_hk", "物料类型.半成品"),
+
+            // dict.logistics.material.type.fert
+            ("dict.logistics.material.type.fert", "en-US", "成品_us", "物料类型.成品"),
+            // dict.logistics.material.type.fert
+            ("dict.logistics.material.type.fert", "ja-JP", "成品_jp", "物料类型.成品"),
+            // dict.logistics.material.type.fert
+            ("dict.logistics.material.type.fert", "zh-CN", "成品", "物料类型.成品"),
+            // dict.logistics.material.type.fert
+            ("dict.logistics.material.type.fert", "zh-HK", "成品_hk", "物料类型.成品"),
+
+            // dict.logistics.material.type.hawa
+            ("dict.logistics.material.type.hawa", "en-US", "贸易货物_us", "物料类型.贸易货物"),
+            // dict.logistics.material.type.hawa
+            ("dict.logistics.material.type.hawa", "ja-JP", "贸易货物_jp", "物料类型.贸易货物"),
+            // dict.logistics.material.type.hawa
+            ("dict.logistics.material.type.hawa", "zh-CN", "贸易货物", "物料类型.贸易货物"),
+            // dict.logistics.material.type.hawa
+            ("dict.logistics.material.type.hawa", "zh-HK", "贸易货物_hk", "物料类型.贸易货物"),
+
+            // dict.logistics.material.type.dien
+            ("dict.logistics.material.type.dien", "en-US", "服务_us", "物料类型.服务"),
+            // dict.logistics.material.type.dien
+            ("dict.logistics.material.type.dien", "ja-JP", "服务_jp", "物料类型.服务"),
+            // dict.logistics.material.type.dien
+            ("dict.logistics.material.type.dien", "zh-CN", "服务", "物料类型.服务"),
+            // dict.logistics.material.type.dien
+            ("dict.logistics.material.type.dien", "zh-HK", "服务_hk", "物料类型.服务"),
+
+            // dict.logistics.material.type.ersa
+            ("dict.logistics.material.type.ersa", "en-US", "备件_us", "物料类型.备件"),
+            // dict.logistics.material.type.ersa
+            ("dict.logistics.material.type.ersa", "ja-JP", "备件_jp", "物料类型.备件"),
+            // dict.logistics.material.type.ersa
+            ("dict.logistics.material.type.ersa", "zh-CN", "备件", "物料类型.备件"),
+            // dict.logistics.material.type.ersa
+            ("dict.logistics.material.type.ersa", "zh-HK", "备件_hk", "物料类型.备件"),
 
             // dict.logistics.material.type.verp
             ("dict.logistics.material.type.verp", "en-US", "包装_us", "物料类型.包装"),
@@ -5018,50 +5279,194 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             // dict.logistics.material.type.verp
             ("dict.logistics.material.type.verp", "zh-HK", "包装_hk", "物料类型.包装"),
 
-            // dict.logistics.material.type.vkhm
-            ("dict.logistics.material.type.vkhm", "en-US", "附加_us", "物料类型.附加"),
-            // dict.logistics.material.type.vkhm
-            ("dict.logistics.material.type.vkhm", "ja-JP", "附加_jp", "物料类型.附加"),
-            // dict.logistics.material.type.vkhm
-            ("dict.logistics.material.type.vkhm", "zh-CN", "附加", "物料类型.附加"),
-            // dict.logistics.material.type.vkhm
-            ("dict.logistics.material.type.vkhm", "zh-HK", "附加_hk", "物料类型.附加"),
+            // dict.logistics.material.eol.01
+            ("dict.logistics.material.eol.01", "en-US", "采购/仓库已锁定_us", "停产状态.采购/仓库已锁定"),
+            // dict.logistics.material.eol.01
+            ("dict.logistics.material.eol.01", "ja-JP", "采购/仓库已锁定_jp", "停产状态.采购/仓库已锁定"),
+            // dict.logistics.material.eol.01
+            ("dict.logistics.material.eol.01", "zh-CN", "采购/仓库已锁定", "停产状态.采购/仓库已锁定"),
+            // dict.logistics.material.eol.01
+            ("dict.logistics.material.eol.01", "zh-HK", "采购/仓库已锁定_hk", "停产状态.采购/仓库已锁定"),
 
-            // dict.logistics.material.type.voll
-            ("dict.logistics.material.type.voll", "en-US", "全部产品_us", "物料类型.全部产品"),
-            // dict.logistics.material.type.voll
-            ("dict.logistics.material.type.voll", "ja-JP", "全部产品_jp", "物料类型.全部产品"),
-            // dict.logistics.material.type.voll
-            ("dict.logistics.material.type.voll", "zh-CN", "全部产品", "物料类型.全部产品"),
-            // dict.logistics.material.type.voll
-            ("dict.logistics.material.type.voll", "zh-HK", "全部产品_hk", "物料类型.全部产品"),
+            // dict.logistics.material.eol.02
+            ("dict.logistics.material.eol.02", "en-US", "任务清单/BOM已锁定_us", "停产状态.任务清单/BOM已锁定"),
+            // dict.logistics.material.eol.02
+            ("dict.logistics.material.eol.02", "ja-JP", "任务清单/BOM已锁定_jp", "停产状态.任务清单/BOM已锁定"),
+            // dict.logistics.material.eol.02
+            ("dict.logistics.material.eol.02", "zh-CN", "任务清单/BOM已锁定", "停产状态.任务清单/BOM已锁定"),
+            // dict.logistics.material.eol.02
+            ("dict.logistics.material.eol.02", "zh-HK", "任务清单/BOM已锁定_hk", "停产状态.任务清单/BOM已锁定"),
 
-            // dict.logistics.material.type.werb
-            ("dict.logistics.material.type.werb", "en-US", "产品目录_us", "物料类型.产品目录"),
-            // dict.logistics.material.type.werb
-            ("dict.logistics.material.type.werb", "ja-JP", "产品目录_jp", "物料类型.产品目录"),
-            // dict.logistics.material.type.werb
-            ("dict.logistics.material.type.werb", "zh-CN", "产品目录", "物料类型.产品目录"),
-            // dict.logistics.material.type.werb
-            ("dict.logistics.material.type.werb", "zh-HK", "产品目录_hk", "物料类型.产品目录"),
+            // dict.logistics.material.eol.z0
+            ("dict.logistics.material.eol.z0", "en-US", "计划物料_us", "停产状态.计划物料"),
+            // dict.logistics.material.eol.z0
+            ("dict.logistics.material.eol.z0", "ja-JP", "计划物料_jp", "停产状态.计划物料"),
+            // dict.logistics.material.eol.z0
+            ("dict.logistics.material.eol.z0", "zh-CN", "计划物料", "停产状态.计划物料"),
+            // dict.logistics.material.eol.z0
+            ("dict.logistics.material.eol.z0", "zh-HK", "计划物料_hk", "停产状态.计划物料"),
 
-            // dict.logistics.material.type.wert
-            ("dict.logistics.material.type.wert", "en-US", "只有价值物料_us", "物料类型.只有价值物料"),
-            // dict.logistics.material.type.wert
-            ("dict.logistics.material.type.wert", "ja-JP", "只有价值物料_jp", "物料类型.只有价值物料"),
-            // dict.logistics.material.type.wert
-            ("dict.logistics.material.type.wert", "zh-CN", "只有价值物料", "物料类型.只有价值物料"),
-            // dict.logistics.material.type.wert
-            ("dict.logistics.material.type.wert", "zh-HK", "只有价值物料_hk", "物料类型.只有价值物料"),
+            // dict.logistics.material.eol.zm
+            ("dict.logistics.material.eol.zm", "en-US", "当前库存需确认_us", "停产状态.当前库存需确认"),
+            // dict.logistics.material.eol.zm
+            ("dict.logistics.material.eol.zm", "ja-JP", "当前库存需确认_jp", "停产状态.当前库存需确认"),
+            // dict.logistics.material.eol.zm
+            ("dict.logistics.material.eol.zm", "zh-CN", "当前库存需确认", "停产状态.当前库存需确认"),
+            // dict.logistics.material.eol.zm
+            ("dict.logistics.material.eol.zm", "zh-HK", "当前库存需确认_hk", "停产状态.当前库存需确认"),
 
-            // dict.logistics.material.type.wett
-            ("dict.logistics.material.type.wett", "en-US", "竞争产品_us", "物料类型.竞争产品"),
-            // dict.logistics.material.type.wett
-            ("dict.logistics.material.type.wett", "ja-JP", "竞争产品_jp", "物料类型.竞争产品"),
-            // dict.logistics.material.type.wett
-            ("dict.logistics.material.type.wett", "zh-CN", "竞争产品", "物料类型.竞争产品"),
-            // dict.logistics.material.type.wett
-            ("dict.logistics.material.type.wett", "zh-HK", "竞争产品_hk", "物料类型.竞争产品"),
+            // dict.logistics.material.eol.zp
+            ("dict.logistics.material.eol.zp", "en-US", "制造中止_us", "停产状态.制造中止"),
+            // dict.logistics.material.eol.zp
+            ("dict.logistics.material.eol.zp", "ja-JP", "制造中止_jp", "停产状态.制造中止"),
+            // dict.logistics.material.eol.zp
+            ("dict.logistics.material.eol.zp", "zh-CN", "制造中止", "停产状态.制造中止"),
+            // dict.logistics.material.eol.zp
+            ("dict.logistics.material.eol.zp", "zh-HK", "制造中止_hk", "停产状态.制造中止"),
+
+            // dict.logistics.material.eol.zq
+            ("dict.logistics.material.eol.zq", "en-US", "生产结束（产品）_us", "停产状态.生产结束（产品）"),
+            // dict.logistics.material.eol.zq
+            ("dict.logistics.material.eol.zq", "ja-JP", "生产结束（产品）_jp", "停产状态.生产结束（产品）"),
+            // dict.logistics.material.eol.zq
+            ("dict.logistics.material.eol.zq", "zh-CN", "生产结束（产品）", "停产状态.生产结束（产品）"),
+            // dict.logistics.material.eol.zq
+            ("dict.logistics.material.eol.zq", "zh-HK", "生产结束（产品）_hk", "停产状态.生产结束（产品）"),
+
+            // dict.logistics.material.eol.zw
+            ("dict.logistics.material.eol.zw", "en-US", "PC MRP对象外_us", "停产状态.PC MRP对象外"),
+            // dict.logistics.material.eol.zw
+            ("dict.logistics.material.eol.zw", "ja-JP", "PC MRP对象外_jp", "停产状态.PC MRP对象外"),
+            // dict.logistics.material.eol.zw
+            ("dict.logistics.material.eol.zw", "zh-CN", "PC MRP对象外", "停产状态.PC MRP对象外"),
+            // dict.logistics.material.eol.zw
+            ("dict.logistics.material.eol.zw", "zh-HK", "PC MRP对象外_hk", "停产状态.PC MRP对象外"),
+
+            // dict.logistics.material.eol.zx
+            ("dict.logistics.material.eol.zx", "en-US", "PC 中介专用品_us", "停产状态.PC 中介专用品"),
+            // dict.logistics.material.eol.zx
+            ("dict.logistics.material.eol.zx", "ja-JP", "PC 中介专用品_jp", "停产状态.PC 中介专用品"),
+            // dict.logistics.material.eol.zx
+            ("dict.logistics.material.eol.zx", "zh-CN", "PC 中介专用品", "停产状态.PC 中介专用品"),
+            // dict.logistics.material.eol.zx
+            ("dict.logistics.material.eol.zx", "zh-HK", "PC 中介专用品_hk", "停产状态.PC 中介专用品"),
+
+            // dict.logistics.material.eol.zy
+            ("dict.logistics.material.eol.zy", "en-US", "PC 断开连接(MRP对象外)_us", "停产状态.PC 断开连接(MRP对象外)"),
+            // dict.logistics.material.eol.zy
+            ("dict.logistics.material.eol.zy", "ja-JP", "PC 断开连接(MRP对象外)_jp", "停产状态.PC 断开连接(MRP对象外)"),
+            // dict.logistics.material.eol.zy
+            ("dict.logistics.material.eol.zy", "zh-CN", "PC 断开连接(MRP对象外)", "停产状态.PC 断开连接(MRP对象外)"),
+            // dict.logistics.material.eol.zy
+            ("dict.logistics.material.eol.zy", "zh-HK", "PC 断开连接(MRP对象外)_hk", "停产状态.PC 断开连接(MRP对象外)"),
+
+            // dict.logistics.material.eol.zz
+            ("dict.logistics.material.eol.zz", "en-US", "PC 有替代物料_us", "停产状态.PC 有替代物料"),
+            // dict.logistics.material.eol.zz
+            ("dict.logistics.material.eol.zz", "ja-JP", "PC 有替代物料_jp", "停产状态.PC 有替代物料"),
+            // dict.logistics.material.eol.zz
+            ("dict.logistics.material.eol.zz", "zh-CN", "PC 有替代物料", "停产状态.PC 有替代物料"),
+            // dict.logistics.material.eol.zz
+            ("dict.logistics.material.eol.zz", "zh-HK", "PC 有替代物料_hk", "停产状态.PC 有替代物料"),
+
+            // dict.logistics.warehouse.type.0
+            ("dict.logistics.warehouse.type.0", "en-US", "原材料仓_us", "仓库类型.原材料仓"),
+            // dict.logistics.warehouse.type.0
+            ("dict.logistics.warehouse.type.0", "ja-JP", "原材料仓_jp", "仓库类型.原材料仓"),
+            // dict.logistics.warehouse.type.0
+            ("dict.logistics.warehouse.type.0", "zh-CN", "原材料仓", "仓库类型.原材料仓"),
+            // dict.logistics.warehouse.type.0
+            ("dict.logistics.warehouse.type.0", "zh-HK", "原材料仓_hk", "仓库类型.原材料仓"),
+
+            // dict.logistics.warehouse.type.1
+            ("dict.logistics.warehouse.type.1", "en-US", "半成品仓_us", "仓库类型.半成品仓"),
+            // dict.logistics.warehouse.type.1
+            ("dict.logistics.warehouse.type.1", "ja-JP", "半成品仓_jp", "仓库类型.半成品仓"),
+            // dict.logistics.warehouse.type.1
+            ("dict.logistics.warehouse.type.1", "zh-CN", "半成品仓", "仓库类型.半成品仓"),
+            // dict.logistics.warehouse.type.1
+            ("dict.logistics.warehouse.type.1", "zh-HK", "半成品仓_hk", "仓库类型.半成品仓"),
+
+            // dict.logistics.warehouse.type.2
+            ("dict.logistics.warehouse.type.2", "en-US", "成品仓_us", "仓库类型.成品仓"),
+            // dict.logistics.warehouse.type.2
+            ("dict.logistics.warehouse.type.2", "ja-JP", "成品仓_jp", "仓库类型.成品仓"),
+            // dict.logistics.warehouse.type.2
+            ("dict.logistics.warehouse.type.2", "zh-CN", "成品仓", "仓库类型.成品仓"),
+            // dict.logistics.warehouse.type.2
+            ("dict.logistics.warehouse.type.2", "zh-HK", "成品仓_hk", "仓库类型.成品仓"),
+
+            // dict.logistics.warehouse.type.3
+            ("dict.logistics.warehouse.type.3", "en-US", "不良品仓_us", "仓库类型.不良品仓"),
+            // dict.logistics.warehouse.type.3
+            ("dict.logistics.warehouse.type.3", "ja-JP", "不良品仓_jp", "仓库类型.不良品仓"),
+            // dict.logistics.warehouse.type.3
+            ("dict.logistics.warehouse.type.3", "zh-CN", "不良品仓", "仓库类型.不良品仓"),
+            // dict.logistics.warehouse.type.3
+            ("dict.logistics.warehouse.type.3", "zh-HK", "不良品仓_hk", "仓库类型.不良品仓"),
+
+            // dict.logistics.warehouse.type.4
+            ("dict.logistics.warehouse.type.4", "en-US", "外协仓_us", "仓库类型.外协仓"),
+            // dict.logistics.warehouse.type.4
+            ("dict.logistics.warehouse.type.4", "ja-JP", "外协仓_jp", "仓库类型.外协仓"),
+            // dict.logistics.warehouse.type.4
+            ("dict.logistics.warehouse.type.4", "zh-CN", "外协仓", "仓库类型.外协仓"),
+            // dict.logistics.warehouse.type.4
+            ("dict.logistics.warehouse.type.4", "zh-HK", "外协仓_hk", "仓库类型.外协仓"),
+
+            // dict.logistics.warehouse.type.5
+            ("dict.logistics.warehouse.type.5", "en-US", "其他_us", "仓库类型.其他"),
+            // dict.logistics.warehouse.type.5
+            ("dict.logistics.warehouse.type.5", "ja-JP", "其他_jp", "仓库类型.其他"),
+            // dict.logistics.warehouse.type.5
+            ("dict.logistics.warehouse.type.5", "zh-CN", "其他", "仓库类型.其他"),
+            // dict.logistics.warehouse.type.5
+            ("dict.logistics.warehouse.type.5", "zh-HK", "其他_hk", "仓库类型.其他"),
+
+            // dict.logistics.storage.location.type.0
+            ("dict.logistics.storage.location.type.0", "en-US", "存储区_us", "库位类型.存储区"),
+            // dict.logistics.storage.location.type.0
+            ("dict.logistics.storage.location.type.0", "ja-JP", "存储区_jp", "库位类型.存储区"),
+            // dict.logistics.storage.location.type.0
+            ("dict.logistics.storage.location.type.0", "zh-CN", "存储区", "库位类型.存储区"),
+            // dict.logistics.storage.location.type.0
+            ("dict.logistics.storage.location.type.0", "zh-HK", "存储区_hk", "库位类型.存储区"),
+
+            // dict.logistics.storage.location.type.1
+            ("dict.logistics.storage.location.type.1", "en-US", "拣货区_us", "库位类型.拣货区"),
+            // dict.logistics.storage.location.type.1
+            ("dict.logistics.storage.location.type.1", "ja-JP", "拣货区_jp", "库位类型.拣货区"),
+            // dict.logistics.storage.location.type.1
+            ("dict.logistics.storage.location.type.1", "zh-CN", "拣货区", "库位类型.拣货区"),
+            // dict.logistics.storage.location.type.1
+            ("dict.logistics.storage.location.type.1", "zh-HK", "拣货区_hk", "库位类型.拣货区"),
+
+            // dict.logistics.storage.location.type.2
+            ("dict.logistics.storage.location.type.2", "en-US", "暂存区_us", "库位类型.暂存区"),
+            // dict.logistics.storage.location.type.2
+            ("dict.logistics.storage.location.type.2", "ja-JP", "暂存区_jp", "库位类型.暂存区"),
+            // dict.logistics.storage.location.type.2
+            ("dict.logistics.storage.location.type.2", "zh-CN", "暂存区", "库位类型.暂存区"),
+            // dict.logistics.storage.location.type.2
+            ("dict.logistics.storage.location.type.2", "zh-HK", "暂存区_hk", "库位类型.暂存区"),
+
+            // dict.logistics.storage.location.type.3
+            ("dict.logistics.storage.location.type.3", "en-US", "不良品区_us", "库位类型.不良品区"),
+            // dict.logistics.storage.location.type.3
+            ("dict.logistics.storage.location.type.3", "ja-JP", "不良品区_jp", "库位类型.不良品区"),
+            // dict.logistics.storage.location.type.3
+            ("dict.logistics.storage.location.type.3", "zh-CN", "不良品区", "库位类型.不良品区"),
+            // dict.logistics.storage.location.type.3
+            ("dict.logistics.storage.location.type.3", "zh-HK", "不良品区_hk", "库位类型.不良品区"),
+
+            // dict.logistics.storage.location.type.4
+            ("dict.logistics.storage.location.type.4", "en-US", "其他_us", "库位类型.其他"),
+            // dict.logistics.storage.location.type.4
+            ("dict.logistics.storage.location.type.4", "ja-JP", "其他_jp", "库位类型.其他"),
+            // dict.logistics.storage.location.type.4
+            ("dict.logistics.storage.location.type.4", "zh-CN", "其他", "库位类型.其他"),
+            // dict.logistics.storage.location.type.4
+            ("dict.logistics.storage.location.type.4", "zh-HK", "其他_hk", "库位类型.其他"),
 
             // dict.logistics.planned.delivery.days.param.7
             ("dict.logistics.planned.delivery.days.param.7", "en-US", "7天_us", "计划交货天数.7天"),
@@ -5118,13 +5523,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.price.control.type.s", "zh-HK", "标准价格_hk", "价格控制.标准价格"),
 
             // dict.logistics.price.control.type.v
-            ("dict.logistics.price.control.type.v", "en-US", "移动平均价_us", "价格控制.移动平均价"),
+            ("dict.logistics.price.control.type.v", "en-US", "移动平均价格/周期单价_us", "价格控制.移动平均价格/周期单价"),
             // dict.logistics.price.control.type.v
-            ("dict.logistics.price.control.type.v", "ja-JP", "移动平均价_jp", "价格控制.移动平均价"),
+            ("dict.logistics.price.control.type.v", "ja-JP", "移动平均价格/周期单价_jp", "价格控制.移动平均价格/周期单价"),
             // dict.logistics.price.control.type.v
-            ("dict.logistics.price.control.type.v", "zh-CN", "移动平均价", "价格控制.移动平均价"),
+            ("dict.logistics.price.control.type.v", "zh-CN", "移动平均价格/周期单价", "价格控制.移动平均价格/周期单价"),
             // dict.logistics.price.control.type.v
-            ("dict.logistics.price.control.type.v", "zh-HK", "移动平均价_hk", "价格控制.移动平均价"),
+            ("dict.logistics.price.control.type.v", "zh-HK", "移动平均价格/周期单价_hk", "价格控制.移动平均价格/周期单价"),
 
             // dict.logistics.price.type.0
             ("dict.logistics.price.type.0", "en-US", "标准价格_us", "价格类型.标准价格"),
@@ -5287,6 +5692,78 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.procurement.type.x", "zh-CN", "两种采购类型", "采购类别.两种采购类型"),
             // dict.logistics.procurement.type.x
             ("dict.logistics.procurement.type.x", "zh-HK", "两种采购类型_hk", "采购类别.两种采购类型"),
+
+            // dict.logistics.payment.mode.vendorpay
+            ("dict.logistics.payment.mode.vendorpay", "en-US", "供应商付款_us", "采购付款方式.供应商付款"),
+            // dict.logistics.payment.mode.vendorpay
+            ("dict.logistics.payment.mode.vendorpay", "ja-JP", "供应商付款_jp", "采购付款方式.供应商付款"),
+            // dict.logistics.payment.mode.vendorpay
+            ("dict.logistics.payment.mode.vendorpay", "zh-CN", "供应商付款", "采购付款方式.供应商付款"),
+            // dict.logistics.payment.mode.vendorpay
+            ("dict.logistics.payment.mode.vendorpay", "zh-HK", "供应商付款_hk", "采购付款方式.供应商付款"),
+
+            // dict.logistics.payment.mode.employeereimburse
+            ("dict.logistics.payment.mode.employeereimburse", "en-US", "员工报销_us", "采购付款方式.员工报销"),
+            // dict.logistics.payment.mode.employeereimburse
+            ("dict.logistics.payment.mode.employeereimburse", "ja-JP", "员工报销_jp", "采购付款方式.员工报销"),
+            // dict.logistics.payment.mode.employeereimburse
+            ("dict.logistics.payment.mode.employeereimburse", "zh-CN", "员工报销", "采购付款方式.员工报销"),
+            // dict.logistics.payment.mode.employeereimburse
+            ("dict.logistics.payment.mode.employeereimburse", "zh-HK", "员工报销_hk", "采购付款方式.员工报销"),
+
+            // dict.logistics.procurement.chain.scheme.1
+            ("dict.logistics.procurement.chain.scheme.1", "en-US", "方案一含报销_us", "采购链路方案.方案一含报销"),
+            // dict.logistics.procurement.chain.scheme.1
+            ("dict.logistics.procurement.chain.scheme.1", "ja-JP", "方案一含报销_jp", "采购链路方案.方案一含报销"),
+            // dict.logistics.procurement.chain.scheme.1
+            ("dict.logistics.procurement.chain.scheme.1", "zh-CN", "方案一含报销", "采购链路方案.方案一含报销"),
+            // dict.logistics.procurement.chain.scheme.1
+            ("dict.logistics.procurement.chain.scheme.1", "zh-HK", "方案一含报销_hk", "采购链路方案.方案一含报销"),
+
+            // dict.logistics.procurement.chain.scheme.2
+            ("dict.logistics.procurement.chain.scheme.2", "en-US", "方案二仅PO_us", "采购链路方案.方案二仅PO"),
+            // dict.logistics.procurement.chain.scheme.2
+            ("dict.logistics.procurement.chain.scheme.2", "ja-JP", "方案二仅PO_jp", "采购链路方案.方案二仅PO"),
+            // dict.logistics.procurement.chain.scheme.2
+            ("dict.logistics.procurement.chain.scheme.2", "zh-CN", "方案二仅PO", "采购链路方案.方案二仅PO"),
+            // dict.logistics.procurement.chain.scheme.2
+            ("dict.logistics.procurement.chain.scheme.2", "zh-HK", "方案二仅PO_hk", "采购链路方案.方案二仅PO"),
+
+            // dict.logistics.countersign.business.type.inquiry
+            ("dict.logistics.countersign.business.type.inquiry", "en-US", "询价审批_us", "会签业务类型.询价审批"),
+            // dict.logistics.countersign.business.type.inquiry
+            ("dict.logistics.countersign.business.type.inquiry", "ja-JP", "询价审批_jp", "会签业务类型.询价审批"),
+            // dict.logistics.countersign.business.type.inquiry
+            ("dict.logistics.countersign.business.type.inquiry", "zh-CN", "询价审批", "会签业务类型.询价审批"),
+            // dict.logistics.countersign.business.type.inquiry
+            ("dict.logistics.countersign.business.type.inquiry", "zh-HK", "询价审批_hk", "会签业务类型.询价审批"),
+
+            // dict.logistics.countersign.business.type.pr
+            ("dict.logistics.countersign.business.type.pr", "en-US", "采购申请审批_us", "会签业务类型.采购申请审批"),
+            // dict.logistics.countersign.business.type.pr
+            ("dict.logistics.countersign.business.type.pr", "ja-JP", "采购申请审批_jp", "会签业务类型.采购申请审批"),
+            // dict.logistics.countersign.business.type.pr
+            ("dict.logistics.countersign.business.type.pr", "zh-CN", "采购申请审批", "会签业务类型.采购申请审批"),
+            // dict.logistics.countersign.business.type.pr
+            ("dict.logistics.countersign.business.type.pr", "zh-HK", "采购申请审批_hk", "会签业务类型.采购申请审批"),
+
+            // dict.logistics.countersign.business.type.expense
+            ("dict.logistics.countersign.business.type.expense", "en-US", "费用报销审批_us", "会签业务类型.费用报销审批"),
+            // dict.logistics.countersign.business.type.expense
+            ("dict.logistics.countersign.business.type.expense", "ja-JP", "费用报销审批_jp", "会签业务类型.费用报销审批"),
+            // dict.logistics.countersign.business.type.expense
+            ("dict.logistics.countersign.business.type.expense", "zh-CN", "费用报销审批", "会签业务类型.费用报销审批"),
+            // dict.logistics.countersign.business.type.expense
+            ("dict.logistics.countersign.business.type.expense", "zh-HK", "费用报销审批_hk", "会签业务类型.费用报销审批"),
+
+            // dict.logistics.countersign.business.type.standalone
+            ("dict.logistics.countersign.business.type.standalone", "en-US", "独立会签_us", "会签业务类型.独立会签"),
+            // dict.logistics.countersign.business.type.standalone
+            ("dict.logistics.countersign.business.type.standalone", "ja-JP", "独立会签_jp", "会签业务类型.独立会签"),
+            // dict.logistics.countersign.business.type.standalone
+            ("dict.logistics.countersign.business.type.standalone", "zh-CN", "独立会签", "会签业务类型.独立会签"),
+            // dict.logistics.countersign.business.type.standalone
+            ("dict.logistics.countersign.business.type.standalone", "zh-HK", "独立会签_hk", "会签业务类型.独立会签"),
 
             // dict.logistics.sampling.scheme.type.gb2828
             ("dict.logistics.sampling.scheme.type.gb2828", "en-US", "gb/t 2828.1_us", "抽样方案类型.gb/t 2828.1"),
@@ -5558,41 +6035,50 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             // dict.logistics.unit.of.measure.code.bo
             ("dict.logistics.unit.of.measure.code.bo", "zh-HK", "瓶_hk", "基本单位类别.瓶"),
 
-            // dict.logistics.valuation.class.category.7920
-            ("dict.logistics.valuation.class.category.7920", "en-US", "成品_us", "评估类别.成品"),
-            // dict.logistics.valuation.class.category.7920
-            ("dict.logistics.valuation.class.category.7920", "ja-JP", "成品_jp", "评估类别.成品"),
-            // dict.logistics.valuation.class.category.7920
-            ("dict.logistics.valuation.class.category.7920", "zh-CN", "成品", "评估类别.成品"),
-            // dict.logistics.valuation.class.category.7920
-            ("dict.logistics.valuation.class.category.7920", "zh-HK", "成品_hk", "评估类别.成品"),
+            // dict.logistics.unit.of.measure.code.ea
+            ("dict.logistics.unit.of.measure.code.ea", "en-US", "个_us", "基本单位类别.个"),
+            // dict.logistics.unit.of.measure.code.ea
+            ("dict.logistics.unit.of.measure.code.ea", "ja-JP", "个_jp", "基本单位类别.个"),
+            // dict.logistics.unit.of.measure.code.ea
+            ("dict.logistics.unit.of.measure.code.ea", "zh-CN", "个", "基本单位类别.个"),
+            // dict.logistics.unit.of.measure.code.ea
+            ("dict.logistics.unit.of.measure.code.ea", "zh-HK", "个_hk", "基本单位类别.个"),
 
-            // dict.logistics.valuation.class.category.z300
-            ("dict.logistics.valuation.class.category.z300", "en-US", "原材料(cn)_us", "评估类别.原材料(cn)"),
-            // dict.logistics.valuation.class.category.z300
-            ("dict.logistics.valuation.class.category.z300", "ja-JP", "原材料(cn)_jp", "评估类别.原材料(cn)"),
-            // dict.logistics.valuation.class.category.z300
-            ("dict.logistics.valuation.class.category.z300", "zh-CN", "原材料(cn)", "评估类别.原材料(cn)"),
-            // dict.logistics.valuation.class.category.z300
-            ("dict.logistics.valuation.class.category.z300", "zh-HK", "原材料(cn)_hk", "评估类别.原材料(cn)"),
-
-            // dict.logistics.valuation.class.category.z790
-            ("dict.logistics.valuation.class.category.z790", "en-US", "半成品(cn)_us", "评估类别.半成品(cn)"),
-            // dict.logistics.valuation.class.category.z790
-            ("dict.logistics.valuation.class.category.z790", "ja-JP", "半成品(cn)_jp", "评估类别.半成品(cn)"),
-            // dict.logistics.valuation.class.category.z790
-            ("dict.logistics.valuation.class.category.z790", "zh-CN", "半成品(cn)", "评估类别.半成品(cn)"),
-            // dict.logistics.valuation.class.category.z790
-            ("dict.logistics.valuation.class.category.z790", "zh-HK", "半成品(cn)_hk", "评估类别.半成品(cn)"),
+            // dict.logistics.unit.of.measure.code.can
+            ("dict.logistics.unit.of.measure.code.can", "en-US", "罐_us", "基本单位类别.罐"),
+            // dict.logistics.unit.of.measure.code.can
+            ("dict.logistics.unit.of.measure.code.can", "ja-JP", "罐_jp", "基本单位类别.罐"),
+            // dict.logistics.unit.of.measure.code.can
+            ("dict.logistics.unit.of.measure.code.can", "zh-CN", "罐", "基本单位类别.罐"),
+            // dict.logistics.unit.of.measure.code.can
+            ("dict.logistics.unit.of.measure.code.can", "zh-HK", "罐_hk", "基本单位类别.罐"),
 
             // dict.logistics.valuation.class.category.z792
-            ("dict.logistics.valuation.class.category.z792", "en-US", "成品(cn)_us", "评估类别.成品(cn)"),
+            ("dict.logistics.valuation.class.category.z792", "en-US", "成品_us", "评估类别.成品"),
             // dict.logistics.valuation.class.category.z792
-            ("dict.logistics.valuation.class.category.z792", "ja-JP", "成品(cn)_jp", "评估类别.成品(cn)"),
+            ("dict.logistics.valuation.class.category.z792", "ja-JP", "成品_jp", "评估类别.成品"),
             // dict.logistics.valuation.class.category.z792
-            ("dict.logistics.valuation.class.category.z792", "zh-CN", "成品(cn)", "评估类别.成品(cn)"),
+            ("dict.logistics.valuation.class.category.z792", "zh-CN", "成品", "评估类别.成品"),
             // dict.logistics.valuation.class.category.z792
-            ("dict.logistics.valuation.class.category.z792", "zh-HK", "成品(cn)_hk", "评估类别.成品(cn)"),
+            ("dict.logistics.valuation.class.category.z792", "zh-HK", "成品_hk", "评估类别.成品"),
+
+            // dict.logistics.valuation.class.category.z790
+            ("dict.logistics.valuation.class.category.z790", "en-US", "半成品_us", "评估类别.半成品"),
+            // dict.logistics.valuation.class.category.z790
+            ("dict.logistics.valuation.class.category.z790", "ja-JP", "半成品_jp", "评估类别.半成品"),
+            // dict.logistics.valuation.class.category.z790
+            ("dict.logistics.valuation.class.category.z790", "zh-CN", "半成品", "评估类别.半成品"),
+            // dict.logistics.valuation.class.category.z790
+            ("dict.logistics.valuation.class.category.z790", "zh-HK", "半成品_hk", "评估类别.半成品"),
+
+            // dict.logistics.valuation.class.category.z300
+            ("dict.logistics.valuation.class.category.z300", "en-US", "原材料_us", "评估类别.原材料"),
+            // dict.logistics.valuation.class.category.z300
+            ("dict.logistics.valuation.class.category.z300", "ja-JP", "原材料_jp", "评估类别.原材料"),
+            // dict.logistics.valuation.class.category.z300
+            ("dict.logistics.valuation.class.category.z300", "zh-CN", "原材料", "评估类别.原材料"),
+            // dict.logistics.valuation.class.category.z300
+            ("dict.logistics.valuation.class.category.z300", "zh-HK", "原材料_hk", "评估类别.原材料"),
 
             // dict.logistics.inbound.type.0
             ("dict.logistics.inbound.type.0", "en-US", "采购入库_us", "入库类型.采购入库"),
@@ -5711,6 +6197,2166 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             // dict.logistics.outbound.type.6
             ("dict.logistics.outbound.type.6", "zh-HK", "其他_hk", "出库类型.其他"),
 
+            // dict.logistics.movement.type.101
+            ("dict.logistics.movement.type.101", "en-US", "GR 收货_us", "移动类型.101 GR 收货"),
+            // dict.logistics.movement.type.101
+            ("dict.logistics.movement.type.101", "ja-JP", "GR 收货_jp", "移动类型.101 GR 收货"),
+            // dict.logistics.movement.type.101
+            ("dict.logistics.movement.type.101", "zh-CN", "GR 收货", "移动类型.101 GR 收货"),
+            // dict.logistics.movement.type.101
+            ("dict.logistics.movement.type.101", "zh-HK", "GR 收货_hk", "移动类型.101 GR 收货"),
+
+            // dict.logistics.movement.type.102
+            ("dict.logistics.movement.type.102", "en-US", "为采购订单的收货冲销_us", "移动类型.102 为采购订单的收货冲销"),
+            // dict.logistics.movement.type.102
+            ("dict.logistics.movement.type.102", "ja-JP", "为采购订单的收货冲销_jp", "移动类型.102 为采购订单的收货冲销"),
+            // dict.logistics.movement.type.102
+            ("dict.logistics.movement.type.102", "zh-CN", "为采购订单的收货冲销", "移动类型.102 为采购订单的收货冲销"),
+            // dict.logistics.movement.type.102
+            ("dict.logistics.movement.type.102", "zh-HK", "为采购订单的收货冲销_hk", "移动类型.102 为采购订单的收货冲销"),
+
+            // dict.logistics.movement.type.103
+            ("dict.logistics.movement.type.103", "en-US", "进入冻结库存的收货_us", "移动类型.103 进入冻结库存的收货"),
+            // dict.logistics.movement.type.103
+            ("dict.logistics.movement.type.103", "ja-JP", "进入冻结库存的收货_jp", "移动类型.103 进入冻结库存的收货"),
+            // dict.logistics.movement.type.103
+            ("dict.logistics.movement.type.103", "zh-CN", "进入冻结库存的收货", "移动类型.103 进入冻结库存的收货"),
+            // dict.logistics.movement.type.103
+            ("dict.logistics.movement.type.103", "zh-HK", "进入冻结库存的收货_hk", "移动类型.103 进入冻结库存的收货"),
+
+            // dict.logistics.movement.type.104
+            ("dict.logistics.movement.type.104", "en-US", "到冻结冲销的收货_us", "移动类型.104 到冻结冲销的收货"),
+            // dict.logistics.movement.type.104
+            ("dict.logistics.movement.type.104", "ja-JP", "到冻结冲销的收货_jp", "移动类型.104 到冻结冲销的收货"),
+            // dict.logistics.movement.type.104
+            ("dict.logistics.movement.type.104", "zh-CN", "到冻结冲销的收货", "移动类型.104 到冻结冲销的收货"),
+            // dict.logistics.movement.type.104
+            ("dict.logistics.movement.type.104", "zh-HK", "到冻结冲销的收货_hk", "移动类型.104 到冻结冲销的收货"),
+
+            // dict.logistics.movement.type.105
+            ("dict.logistics.movement.type.105", "en-US", "来自冻结库存的收货_us", "移动类型.105 来自冻结库存的收货"),
+            // dict.logistics.movement.type.105
+            ("dict.logistics.movement.type.105", "ja-JP", "来自冻结库存的收货_jp", "移动类型.105 来自冻结库存的收货"),
+            // dict.logistics.movement.type.105
+            ("dict.logistics.movement.type.105", "zh-CN", "来自冻结库存的收货", "移动类型.105 来自冻结库存的收货"),
+            // dict.logistics.movement.type.105
+            ("dict.logistics.movement.type.105", "zh-HK", "来自冻结库存的收货_hk", "移动类型.105 来自冻结库存的收货"),
+
+            // dict.logistics.movement.type.106
+            ("dict.logistics.movement.type.106", "en-US", "来自冻结的收货冲销_us", "移动类型.106 来自冻结的收货冲销"),
+            // dict.logistics.movement.type.106
+            ("dict.logistics.movement.type.106", "ja-JP", "来自冻结的收货冲销_jp", "移动类型.106 来自冻结的收货冲销"),
+            // dict.logistics.movement.type.106
+            ("dict.logistics.movement.type.106", "zh-CN", "来自冻结的收货冲销", "移动类型.106 来自冻结的收货冲销"),
+            // dict.logistics.movement.type.106
+            ("dict.logistics.movement.type.106", "zh-HK", "来自冻结的收货冲销_hk", "移动类型.106 来自冻结的收货冲销"),
+
+            // dict.logistics.movement.type.107
+            ("dict.logistics.movement.type.107", "en-US", "评估冻结库存的收货_us", "移动类型.107 评估冻结库存的收货"),
+            // dict.logistics.movement.type.107
+            ("dict.logistics.movement.type.107", "ja-JP", "评估冻结库存的收货_jp", "移动类型.107 评估冻结库存的收货"),
+            // dict.logistics.movement.type.107
+            ("dict.logistics.movement.type.107", "zh-CN", "评估冻结库存的收货", "移动类型.107 评估冻结库存的收货"),
+            // dict.logistics.movement.type.107
+            ("dict.logistics.movement.type.107", "zh-HK", "评估冻结库存的收货_hk", "移动类型.107 评估冻结库存的收货"),
+
+            // dict.logistics.movement.type.108
+            ("dict.logistics.movement.type.108", "en-US", "冻结评估冲销的收货_us", "移动类型.108 冻结评估冲销的收货"),
+            // dict.logistics.movement.type.108
+            ("dict.logistics.movement.type.108", "ja-JP", "冻结评估冲销的收货_jp", "移动类型.108 冻结评估冲销的收货"),
+            // dict.logistics.movement.type.108
+            ("dict.logistics.movement.type.108", "zh-CN", "冻结评估冲销的收货", "移动类型.108 冻结评估冲销的收货"),
+            // dict.logistics.movement.type.108
+            ("dict.logistics.movement.type.108", "zh-HK", "冻结评估冲销的收货_hk", "移动类型.108 冻结评估冲销的收货"),
+
+            // dict.logistics.movement.type.109
+            ("dict.logistics.movement.type.109", "en-US", "冻结库存评估的收货_us", "移动类型.109 冻结库存评估的收货"),
+            // dict.logistics.movement.type.109
+            ("dict.logistics.movement.type.109", "ja-JP", "冻结库存评估的收货_jp", "移动类型.109 冻结库存评估的收货"),
+            // dict.logistics.movement.type.109
+            ("dict.logistics.movement.type.109", "zh-CN", "冻结库存评估的收货", "移动类型.109 冻结库存评估的收货"),
+            // dict.logistics.movement.type.109
+            ("dict.logistics.movement.type.109", "zh-HK", "冻结库存评估的收货_hk", "移动类型.109 冻结库存评估的收货"),
+
+            // dict.logistics.movement.type.110
+            ("dict.logistics.movement.type.110", "en-US", "冻结冲销评估的收货_us", "移动类型.110 冻结冲销评估的收货"),
+            // dict.logistics.movement.type.110
+            ("dict.logistics.movement.type.110", "ja-JP", "冻结冲销评估的收货_jp", "移动类型.110 冻结冲销评估的收货"),
+            // dict.logistics.movement.type.110
+            ("dict.logistics.movement.type.110", "zh-CN", "冻结冲销评估的收货", "移动类型.110 冻结冲销评估的收货"),
+            // dict.logistics.movement.type.110
+            ("dict.logistics.movement.type.110", "zh-HK", "冻结冲销评估的收货_hk", "移动类型.110 冻结冲销评估的收货"),
+
+            // dict.logistics.movement.type.121
+            ("dict.logistics.movement.type.121", "en-US", "收货后续调整_us", "移动类型.121 收货后续调整"),
+            // dict.logistics.movement.type.121
+            ("dict.logistics.movement.type.121", "ja-JP", "收货后续调整_jp", "移动类型.121 收货后续调整"),
+            // dict.logistics.movement.type.121
+            ("dict.logistics.movement.type.121", "zh-CN", "收货后续调整", "移动类型.121 收货后续调整"),
+            // dict.logistics.movement.type.121
+            ("dict.logistics.movement.type.121", "zh-HK", "收货后续调整_hk", "移动类型.121 收货后续调整"),
+
+            // dict.logistics.movement.type.122
+            ("dict.logistics.movement.type.122", "en-US", "RE 向供应商退货_us", "移动类型.122 RE 向供应商退货"),
+            // dict.logistics.movement.type.122
+            ("dict.logistics.movement.type.122", "ja-JP", "RE 向供应商退货_jp", "移动类型.122 RE 向供应商退货"),
+            // dict.logistics.movement.type.122
+            ("dict.logistics.movement.type.122", "zh-CN", "RE 向供应商退货", "移动类型.122 RE 向供应商退货"),
+            // dict.logistics.movement.type.122
+            ("dict.logistics.movement.type.122", "zh-HK", "RE 向供应商退货_hk", "移动类型.122 RE 向供应商退货"),
+
+            // dict.logistics.movement.type.123
+            ("dict.logistics.movement.type.123", "en-US", "RE退货供应商冲销_us", "移动类型.123 RE退货供应商冲销"),
+            // dict.logistics.movement.type.123
+            ("dict.logistics.movement.type.123", "ja-JP", "RE退货供应商冲销_jp", "移动类型.123 RE退货供应商冲销"),
+            // dict.logistics.movement.type.123
+            ("dict.logistics.movement.type.123", "zh-CN", "RE退货供应商冲销", "移动类型.123 RE退货供应商冲销"),
+            // dict.logistics.movement.type.123
+            ("dict.logistics.movement.type.123", "zh-HK", "RE退货供应商冲销_hk", "移动类型.123 RE退货供应商冲销"),
+
+            // dict.logistics.movement.type.124
+            ("dict.logistics.movement.type.124", "en-US", "收货退给冻结库存_us", "移动类型.124 收货退给冻结库存"),
+            // dict.logistics.movement.type.124
+            ("dict.logistics.movement.type.124", "ja-JP", "收货退给冻结库存_jp", "移动类型.124 收货退给冻结库存"),
+            // dict.logistics.movement.type.124
+            ("dict.logistics.movement.type.124", "zh-CN", "收货退给冻结库存", "移动类型.124 收货退给冻结库存"),
+            // dict.logistics.movement.type.124
+            ("dict.logistics.movement.type.124", "zh-HK", "收货退给冻结库存_hk", "移动类型.124 收货退给冻结库存"),
+
+            // dict.logistics.movement.type.125
+            ("dict.logistics.movement.type.125", "en-US", "收货退给冻结库存冲销_us", "移动类型.125 收货退给冻结库存冲销"),
+            // dict.logistics.movement.type.125
+            ("dict.logistics.movement.type.125", "ja-JP", "收货退给冻结库存冲销_jp", "移动类型.125 收货退给冻结库存冲销"),
+            // dict.logistics.movement.type.125
+            ("dict.logistics.movement.type.125", "zh-CN", "收货退给冻结库存冲销", "移动类型.125 收货退给冻结库存冲销"),
+            // dict.logistics.movement.type.125
+            ("dict.logistics.movement.type.125", "zh-HK", "收货退给冻结库存冲销_hk", "移动类型.125 收货退给冻结库存冲销"),
+
+            // dict.logistics.movement.type.131
+            ("dict.logistics.movement.type.131", "en-US", "收货_us", "移动类型.131 收货"),
+            // dict.logistics.movement.type.131
+            ("dict.logistics.movement.type.131", "ja-JP", "收货_jp", "移动类型.131 收货"),
+            // dict.logistics.movement.type.131
+            ("dict.logistics.movement.type.131", "zh-CN", "收货", "移动类型.131 收货"),
+            // dict.logistics.movement.type.131
+            ("dict.logistics.movement.type.131", "zh-HK", "收货_hk", "移动类型.131 收货"),
+
+            // dict.logistics.movement.type.132
+            ("dict.logistics.movement.type.132", "en-US", "收货_us", "移动类型.132 收货"),
+            // dict.logistics.movement.type.132
+            ("dict.logistics.movement.type.132", "ja-JP", "收货_jp", "移动类型.132 收货"),
+            // dict.logistics.movement.type.132
+            ("dict.logistics.movement.type.132", "zh-CN", "收货", "移动类型.132 收货"),
+            // dict.logistics.movement.type.132
+            ("dict.logistics.movement.type.132", "zh-HK", "收货_hk", "移动类型.132 收货"),
+
+            // dict.logistics.movement.type.141
+            ("dict.logistics.movement.type.141", "en-US", "收货后续调整_us", "移动类型.141 收货后续调整"),
+            // dict.logistics.movement.type.141
+            ("dict.logistics.movement.type.141", "ja-JP", "收货后续调整_jp", "移动类型.141 收货后续调整"),
+            // dict.logistics.movement.type.141
+            ("dict.logistics.movement.type.141", "zh-CN", "收货后续调整", "移动类型.141 收货后续调整"),
+            // dict.logistics.movement.type.141
+            ("dict.logistics.movement.type.141", "zh-HK", "收货后续调整_hk", "移动类型.141 收货后续调整"),
+
+            // dict.logistics.movement.type.142
+            ("dict.logistics.movement.type.142", "en-US", "收货后续调整_us", "移动类型.142 收货后续调整"),
+            // dict.logistics.movement.type.142
+            ("dict.logistics.movement.type.142", "ja-JP", "收货后续调整_jp", "移动类型.142 收货后续调整"),
+            // dict.logistics.movement.type.142
+            ("dict.logistics.movement.type.142", "zh-CN", "收货后续调整", "移动类型.142 收货后续调整"),
+            // dict.logistics.movement.type.142
+            ("dict.logistics.movement.type.142", "zh-HK", "收货后续调整_hk", "移动类型.142 收货后续调整"),
+
+            // dict.logistics.movement.type.161
+            ("dict.logistics.movement.type.161", "en-US", "收货退货_us", "移动类型.161 收货退货"),
+            // dict.logistics.movement.type.161
+            ("dict.logistics.movement.type.161", "ja-JP", "收货退货_jp", "移动类型.161 收货退货"),
+            // dict.logistics.movement.type.161
+            ("dict.logistics.movement.type.161", "zh-CN", "收货退货", "移动类型.161 收货退货"),
+            // dict.logistics.movement.type.161
+            ("dict.logistics.movement.type.161", "zh-HK", "收货退货_hk", "移动类型.161 收货退货"),
+
+            // dict.logistics.movement.type.162
+            ("dict.logistics.movement.type.162", "en-US", "收货退给冲销_us", "移动类型.162 收货退给冲销"),
+            // dict.logistics.movement.type.162
+            ("dict.logistics.movement.type.162", "ja-JP", "收货退给冲销_jp", "移动类型.162 收货退给冲销"),
+            // dict.logistics.movement.type.162
+            ("dict.logistics.movement.type.162", "zh-CN", "收货退给冲销", "移动类型.162 收货退给冲销"),
+            // dict.logistics.movement.type.162
+            ("dict.logistics.movement.type.162", "zh-HK", "收货退给冲销_hk", "移动类型.162 收货退给冲销"),
+
+            // dict.logistics.movement.type.201
+            ("dict.logistics.movement.type.201", "en-US", "有关成本中心的发货_us", "移动类型.201 有关成本中心的发货"),
+            // dict.logistics.movement.type.201
+            ("dict.logistics.movement.type.201", "ja-JP", "有关成本中心的发货_jp", "移动类型.201 有关成本中心的发货"),
+            // dict.logistics.movement.type.201
+            ("dict.logistics.movement.type.201", "zh-CN", "有关成本中心的发货", "移动类型.201 有关成本中心的发货"),
+            // dict.logistics.movement.type.201
+            ("dict.logistics.movement.type.201", "zh-HK", "有关成本中心的发货_hk", "移动类型.201 有关成本中心的发货"),
+
+            // dict.logistics.movement.type.202
+            ("dict.logistics.movement.type.202", "en-US", "有关成本中心的收货_us", "移动类型.202 有关成本中心的收货"),
+            // dict.logistics.movement.type.202
+            ("dict.logistics.movement.type.202", "ja-JP", "有关成本中心的收货_jp", "移动类型.202 有关成本中心的收货"),
+            // dict.logistics.movement.type.202
+            ("dict.logistics.movement.type.202", "zh-CN", "有关成本中心的收货", "移动类型.202 有关成本中心的收货"),
+            // dict.logistics.movement.type.202
+            ("dict.logistics.movement.type.202", "zh-HK", "有关成本中心的收货_hk", "移动类型.202 有关成本中心的收货"),
+
+            // dict.logistics.movement.type.221
+            ("dict.logistics.movement.type.221", "en-US", "有关项目的发货_us", "移动类型.221 有关项目的发货"),
+            // dict.logistics.movement.type.221
+            ("dict.logistics.movement.type.221", "ja-JP", "有关项目的发货_jp", "移动类型.221 有关项目的发货"),
+            // dict.logistics.movement.type.221
+            ("dict.logistics.movement.type.221", "zh-CN", "有关项目的发货", "移动类型.221 有关项目的发货"),
+            // dict.logistics.movement.type.221
+            ("dict.logistics.movement.type.221", "zh-HK", "有关项目的发货_hk", "移动类型.221 有关项目的发货"),
+
+            // dict.logistics.movement.type.222
+            ("dict.logistics.movement.type.222", "en-US", "有关项目的收货_us", "移动类型.222 有关项目的收货"),
+            // dict.logistics.movement.type.222
+            ("dict.logistics.movement.type.222", "ja-JP", "有关项目的收货_jp", "移动类型.222 有关项目的收货"),
+            // dict.logistics.movement.type.222
+            ("dict.logistics.movement.type.222", "zh-CN", "有关项目的收货", "移动类型.222 有关项目的收货"),
+            // dict.logistics.movement.type.222
+            ("dict.logistics.movement.type.222", "zh-HK", "有关项目的收货_hk", "移动类型.222 有关项目的收货"),
+
+            // dict.logistics.movement.type.231
+            ("dict.logistics.movement.type.231", "en-US", "销售订单的发货_us", "移动类型.231 销售订单的发货"),
+            // dict.logistics.movement.type.231
+            ("dict.logistics.movement.type.231", "ja-JP", "销售订单的发货_jp", "移动类型.231 销售订单的发货"),
+            // dict.logistics.movement.type.231
+            ("dict.logistics.movement.type.231", "zh-CN", "销售订单的发货", "移动类型.231 销售订单的发货"),
+            // dict.logistics.movement.type.231
+            ("dict.logistics.movement.type.231", "zh-HK", "销售订单的发货_hk", "移动类型.231 销售订单的发货"),
+
+            // dict.logistics.movement.type.232
+            ("dict.logistics.movement.type.232", "en-US", "销售订单的取消_us", "移动类型.232 销售订单的取消"),
+            // dict.logistics.movement.type.232
+            ("dict.logistics.movement.type.232", "ja-JP", "销售订单的取消_jp", "移动类型.232 销售订单的取消"),
+            // dict.logistics.movement.type.232
+            ("dict.logistics.movement.type.232", "zh-CN", "销售订单的取消", "移动类型.232 销售订单的取消"),
+            // dict.logistics.movement.type.232
+            ("dict.logistics.movement.type.232", "zh-HK", "销售订单的取消_hk", "移动类型.232 销售订单的取消"),
+
+            // dict.logistics.movement.type.241
+            ("dict.logistics.movement.type.241", "en-US", "有关资产的发货_us", "移动类型.241 有关资产的发货"),
+            // dict.logistics.movement.type.241
+            ("dict.logistics.movement.type.241", "ja-JP", "有关资产的发货_jp", "移动类型.241 有关资产的发货"),
+            // dict.logistics.movement.type.241
+            ("dict.logistics.movement.type.241", "zh-CN", "有关资产的发货", "移动类型.241 有关资产的发货"),
+            // dict.logistics.movement.type.241
+            ("dict.logistics.movement.type.241", "zh-HK", "有关资产的发货_hk", "移动类型.241 有关资产的发货"),
+
+            // dict.logistics.movement.type.242
+            ("dict.logistics.movement.type.242", "en-US", "有关资产的收货_us", "移动类型.242 有关资产的收货"),
+            // dict.logistics.movement.type.242
+            ("dict.logistics.movement.type.242", "ja-JP", "有关资产的收货_jp", "移动类型.242 有关资产的收货"),
+            // dict.logistics.movement.type.242
+            ("dict.logistics.movement.type.242", "zh-CN", "有关资产的收货", "移动类型.242 有关资产的收货"),
+            // dict.logistics.movement.type.242
+            ("dict.logistics.movement.type.242", "zh-HK", "有关资产的收货_hk", "移动类型.242 有关资产的收货"),
+
+            // dict.logistics.movement.type.251
+            ("dict.logistics.movement.type.251", "en-US", "有关销售的发货_us", "移动类型.251 有关销售的发货"),
+            // dict.logistics.movement.type.251
+            ("dict.logistics.movement.type.251", "ja-JP", "有关销售的发货_jp", "移动类型.251 有关销售的发货"),
+            // dict.logistics.movement.type.251
+            ("dict.logistics.movement.type.251", "zh-CN", "有关销售的发货", "移动类型.251 有关销售的发货"),
+            // dict.logistics.movement.type.251
+            ("dict.logistics.movement.type.251", "zh-HK", "有关销售的发货_hk", "移动类型.251 有关销售的发货"),
+
+            // dict.logistics.movement.type.252
+            ("dict.logistics.movement.type.252", "en-US", "有关销售的收货_us", "移动类型.252 有关销售的收货"),
+            // dict.logistics.movement.type.252
+            ("dict.logistics.movement.type.252", "ja-JP", "有关销售的收货_jp", "移动类型.252 有关销售的收货"),
+            // dict.logistics.movement.type.252
+            ("dict.logistics.movement.type.252", "zh-CN", "有关销售的收货", "移动类型.252 有关销售的收货"),
+            // dict.logistics.movement.type.252
+            ("dict.logistics.movement.type.252", "zh-HK", "有关销售的收货_hk", "移动类型.252 有关销售的收货"),
+
+            // dict.logistics.movement.type.261
+            ("dict.logistics.movement.type.261", "en-US", "有关订单的发货_us", "移动类型.261 有关订单的发货"),
+            // dict.logistics.movement.type.261
+            ("dict.logistics.movement.type.261", "ja-JP", "有关订单的发货_jp", "移动类型.261 有关订单的发货"),
+            // dict.logistics.movement.type.261
+            ("dict.logistics.movement.type.261", "zh-CN", "有关订单的发货", "移动类型.261 有关订单的发货"),
+            // dict.logistics.movement.type.261
+            ("dict.logistics.movement.type.261", "zh-HK", "有关订单的发货_hk", "移动类型.261 有关订单的发货"),
+
+            // dict.logistics.movement.type.262
+            ("dict.logistics.movement.type.262", "en-US", "有关订单的收货_us", "移动类型.262 有关订单的收货"),
+            // dict.logistics.movement.type.262
+            ("dict.logistics.movement.type.262", "ja-JP", "有关订单的收货_jp", "移动类型.262 有关订单的收货"),
+            // dict.logistics.movement.type.262
+            ("dict.logistics.movement.type.262", "zh-CN", "有关订单的收货", "移动类型.262 有关订单的收货"),
+            // dict.logistics.movement.type.262
+            ("dict.logistics.movement.type.262", "zh-HK", "有关订单的收货_hk", "移动类型.262 有关订单的收货"),
+
+            // dict.logistics.movement.type.281
+            ("dict.logistics.movement.type.281", "en-US", "有关网络的发货_us", "移动类型.281 有关网络的发货"),
+            // dict.logistics.movement.type.281
+            ("dict.logistics.movement.type.281", "ja-JP", "有关网络的发货_jp", "移动类型.281 有关网络的发货"),
+            // dict.logistics.movement.type.281
+            ("dict.logistics.movement.type.281", "zh-CN", "有关网络的发货", "移动类型.281 有关网络的发货"),
+            // dict.logistics.movement.type.281
+            ("dict.logistics.movement.type.281", "zh-HK", "有关网络的发货_hk", "移动类型.281 有关网络的发货"),
+
+            // dict.logistics.movement.type.282
+            ("dict.logistics.movement.type.282", "en-US", "有关网络的收货_us", "移动类型.282 有关网络的收货"),
+            // dict.logistics.movement.type.282
+            ("dict.logistics.movement.type.282", "ja-JP", "有关网络的收货_jp", "移动类型.282 有关网络的收货"),
+            // dict.logistics.movement.type.282
+            ("dict.logistics.movement.type.282", "zh-CN", "有关网络的收货", "移动类型.282 有关网络的收货"),
+            // dict.logistics.movement.type.282
+            ("dict.logistics.movement.type.282", "zh-HK", "有关网络的收货_hk", "移动类型.282 有关网络的收货"),
+
+            // dict.logistics.movement.type.291
+            ("dict.logistics.movement.type.291", "en-US", "发货的全部帐户分配_us", "移动类型.291 发货的全部帐户分配"),
+            // dict.logistics.movement.type.291
+            ("dict.logistics.movement.type.291", "ja-JP", "发货的全部帐户分配_jp", "移动类型.291 发货的全部帐户分配"),
+            // dict.logistics.movement.type.291
+            ("dict.logistics.movement.type.291", "zh-CN", "发货的全部帐户分配", "移动类型.291 发货的全部帐户分配"),
+            // dict.logistics.movement.type.291
+            ("dict.logistics.movement.type.291", "zh-HK", "发货的全部帐户分配_hk", "移动类型.291 发货的全部帐户分配"),
+
+            // dict.logistics.movement.type.292
+            ("dict.logistics.movement.type.292", "en-US", "收货的全部帐户分配_us", "移动类型.292 收货的全部帐户分配"),
+            // dict.logistics.movement.type.292
+            ("dict.logistics.movement.type.292", "ja-JP", "收货的全部帐户分配_jp", "移动类型.292 收货的全部帐户分配"),
+            // dict.logistics.movement.type.292
+            ("dict.logistics.movement.type.292", "zh-CN", "收货的全部帐户分配", "移动类型.292 收货的全部帐户分配"),
+            // dict.logistics.movement.type.292
+            ("dict.logistics.movement.type.292", "zh-HK", "收货的全部帐户分配_hk", "移动类型.292 收货的全部帐户分配"),
+
+            // dict.logistics.movement.type.301
+            ("dict.logistics.movement.type.301", "en-US", "TF工厂间的转移_us", "移动类型.301 TF工厂间的转移"),
+            // dict.logistics.movement.type.301
+            ("dict.logistics.movement.type.301", "ja-JP", "TF工厂间的转移_jp", "移动类型.301 TF工厂间的转移"),
+            // dict.logistics.movement.type.301
+            ("dict.logistics.movement.type.301", "zh-CN", "TF工厂间的转移", "移动类型.301 TF工厂间的转移"),
+            // dict.logistics.movement.type.301
+            ("dict.logistics.movement.type.301", "zh-HK", "TF工厂间的转移_hk", "移动类型.301 TF工厂间的转移"),
+
+            // dict.logistics.movement.type.302
+            ("dict.logistics.movement.type.302", "en-US", "TR 工厂间的转储_us", "移动类型.302 TR 工厂间的转储"),
+            // dict.logistics.movement.type.302
+            ("dict.logistics.movement.type.302", "ja-JP", "TR 工厂间的转储_jp", "移动类型.302 TR 工厂间的转储"),
+            // dict.logistics.movement.type.302
+            ("dict.logistics.movement.type.302", "zh-CN", "TR 工厂间的转储", "移动类型.302 TR 工厂间的转储"),
+            // dict.logistics.movement.type.302
+            ("dict.logistics.movement.type.302", "zh-HK", "TR 工厂间的转储_hk", "移动类型.302 TR 工厂间的转储"),
+
+            // dict.logistics.movement.type.303
+            ("dict.logistics.movement.type.303", "en-US", "TF 部件从库存到工厂_us", "移动类型.303 TF 部件从库存到工厂"),
+            // dict.logistics.movement.type.303
+            ("dict.logistics.movement.type.303", "ja-JP", "TF 部件从库存到工厂_jp", "移动类型.303 TF 部件从库存到工厂"),
+            // dict.logistics.movement.type.303
+            ("dict.logistics.movement.type.303", "zh-CN", "TF 部件从库存到工厂", "移动类型.303 TF 部件从库存到工厂"),
+            // dict.logistics.movement.type.303
+            ("dict.logistics.movement.type.303", "zh-HK", "TF 部件从库存到工厂_hk", "移动类型.303 TF 部件从库存到工厂"),
+
+            // dict.logistics.movement.type.304
+            ("dict.logistics.movement.type.304", "en-US", "TR 部件从库存到工厂_us", "移动类型.304 TR 部件从库存到工厂"),
+            // dict.logistics.movement.type.304
+            ("dict.logistics.movement.type.304", "ja-JP", "TR 部件从库存到工厂_jp", "移动类型.304 TR 部件从库存到工厂"),
+            // dict.logistics.movement.type.304
+            ("dict.logistics.movement.type.304", "zh-CN", "TR 部件从库存到工厂", "移动类型.304 TR 部件从库存到工厂"),
+            // dict.logistics.movement.type.304
+            ("dict.logistics.movement.type.304", "zh-HK", "TR 部件从库存到工厂_hk", "移动类型.304 TR 部件从库存到工厂"),
+
+            // dict.logistics.movement.type.305
+            ("dict.logistics.movement.type.305", "en-US", "TF厂内库存转储计划_us", "移动类型.305 TF厂内库存转储计划"),
+            // dict.logistics.movement.type.305
+            ("dict.logistics.movement.type.305", "ja-JP", "TF厂内库存转储计划_jp", "移动类型.305 TF厂内库存转储计划"),
+            // dict.logistics.movement.type.305
+            ("dict.logistics.movement.type.305", "zh-CN", "TF厂内库存转储计划", "移动类型.305 TF厂内库存转储计划"),
+            // dict.logistics.movement.type.305
+            ("dict.logistics.movement.type.305", "zh-HK", "TF厂内库存转储计划_hk", "移动类型.305 TF厂内库存转储计划"),
+
+            // dict.logistics.movement.type.306
+            ("dict.logistics.movement.type.306", "en-US", "TR厂内库存交易计划_us", "移动类型.306 TR厂内库存交易计划"),
+            // dict.logistics.movement.type.306
+            ("dict.logistics.movement.type.306", "ja-JP", "TR厂内库存交易计划_jp", "移动类型.306 TR厂内库存交易计划"),
+            // dict.logistics.movement.type.306
+            ("dict.logistics.movement.type.306", "zh-CN", "TR厂内库存交易计划", "移动类型.306 TR厂内库存交易计划"),
+            // dict.logistics.movement.type.306
+            ("dict.logistics.movement.type.306", "zh-HK", "TR厂内库存交易计划_hk", "移动类型.306 TR厂内库存交易计划"),
+
+            // dict.logistics.movement.type.309
+            ("dict.logistics.movement.type.309", "en-US", "TF转储采购物料到物料_us", "移动类型.309 TF转储采购物料到物料"),
+            // dict.logistics.movement.type.309
+            ("dict.logistics.movement.type.309", "ja-JP", "TF转储采购物料到物料_jp", "移动类型.309 TF转储采购物料到物料"),
+            // dict.logistics.movement.type.309
+            ("dict.logistics.movement.type.309", "zh-CN", "TF转储采购物料到物料", "移动类型.309 TF转储采购物料到物料"),
+            // dict.logistics.movement.type.309
+            ("dict.logistics.movement.type.309", "zh-HK", "TF转储采购物料到物料_hk", "移动类型.309 TF转储采购物料到物料"),
+
+            // dict.logistics.movement.type.310
+            ("dict.logistics.movement.type.310", "en-US", "TR转储采购物料到物料_us", "移动类型.310 TR转储采购物料到物料"),
+            // dict.logistics.movement.type.310
+            ("dict.logistics.movement.type.310", "ja-JP", "TR转储采购物料到物料_jp", "移动类型.310 TR转储采购物料到物料"),
+            // dict.logistics.movement.type.310
+            ("dict.logistics.movement.type.310", "zh-CN", "TR转储采购物料到物料", "移动类型.310 TR转储采购物料到物料"),
+            // dict.logistics.movement.type.310
+            ("dict.logistics.movement.type.310", "zh-HK", "TR转储采购物料到物料_hk", "移动类型.310 TR转储采购物料到物料"),
+
+            // dict.logistics.movement.type.311
+            ("dict.logistics.movement.type.311", "en-US", "TF 厂内移储_us", "移动类型.311 TF 厂内移储"),
+            // dict.logistics.movement.type.311
+            ("dict.logistics.movement.type.311", "ja-JP", "TF 厂内移储_jp", "移动类型.311 TF 厂内移储"),
+            // dict.logistics.movement.type.311
+            ("dict.logistics.movement.type.311", "zh-CN", "TF 厂内移储", "移动类型.311 TF 厂内移储"),
+            // dict.logistics.movement.type.311
+            ("dict.logistics.movement.type.311", "zh-HK", "TF 厂内移储_hk", "移动类型.311 TF 厂内移储"),
+
+            // dict.logistics.movement.type.312
+            ("dict.logistics.movement.type.312", "en-US", "TR 厂内转储_us", "移动类型.312 TR 厂内转储"),
+            // dict.logistics.movement.type.312
+            ("dict.logistics.movement.type.312", "ja-JP", "TR 厂内转储_jp", "移动类型.312 TR 厂内转储"),
+            // dict.logistics.movement.type.312
+            ("dict.logistics.movement.type.312", "zh-CN", "TR 厂内转储", "移动类型.312 TR 厂内转储"),
+            // dict.logistics.movement.type.312
+            ("dict.logistics.movement.type.312", "zh-HK", "TR 厂内转储_hk", "移动类型.312 TR 厂内转储"),
+
+            // dict.logistics.movement.type.313
+            ("dict.logistics.movement.type.313", "en-US", "TF部件从库到库存地_us", "移动类型.313 TF部件从库到库存地"),
+            // dict.logistics.movement.type.313
+            ("dict.logistics.movement.type.313", "ja-JP", "TF部件从库到库存地_jp", "移动类型.313 TF部件从库到库存地"),
+            // dict.logistics.movement.type.313
+            ("dict.logistics.movement.type.313", "zh-CN", "TF部件从库到库存地", "移动类型.313 TF部件从库到库存地"),
+            // dict.logistics.movement.type.313
+            ("dict.logistics.movement.type.313", "zh-HK", "TF部件从库到库存地_hk", "移动类型.313 TF部件从库到库存地"),
+
+            // dict.logistics.movement.type.314
+            ("dict.logistics.movement.type.314", "en-US", "TR 部件从库到库存地_us", "移动类型.314 TR 部件从库到库存地"),
+            // dict.logistics.movement.type.314
+            ("dict.logistics.movement.type.314", "ja-JP", "TR 部件从库到库存地_jp", "移动类型.314 TR 部件从库到库存地"),
+            // dict.logistics.movement.type.314
+            ("dict.logistics.movement.type.314", "zh-CN", "TR 部件从库到库存地", "移动类型.314 TR 部件从库到库存地"),
+            // dict.logistics.movement.type.314
+            ("dict.logistics.movement.type.314", "zh-HK", "TR 部件从库到库存地_hk", "移动类型.314 TR 部件从库到库存地"),
+
+            // dict.logistics.movement.type.315
+            ("dict.logistics.movement.type.315", "en-US", "TF库存地库存转储计划_us", "移动类型.315 TF库存地库存转储计划"),
+            // dict.logistics.movement.type.315
+            ("dict.logistics.movement.type.315", "ja-JP", "TF库存地库存转储计划_jp", "移动类型.315 TF库存地库存转储计划"),
+            // dict.logistics.movement.type.315
+            ("dict.logistics.movement.type.315", "zh-CN", "TF库存地库存转储计划", "移动类型.315 TF库存地库存转储计划"),
+            // dict.logistics.movement.type.315
+            ("dict.logistics.movement.type.315", "zh-HK", "TF库存地库存转储计划_hk", "移动类型.315 TF库存地库存转储计划"),
+
+            // dict.logistics.movement.type.316
+            ("dict.logistics.movement.type.316", "en-US", "TR库存地库存转储计划_us", "移动类型.316 TR库存地库存转储计划"),
+            // dict.logistics.movement.type.316
+            ("dict.logistics.movement.type.316", "ja-JP", "TR库存地库存转储计划_jp", "移动类型.316 TR库存地库存转储计划"),
+            // dict.logistics.movement.type.316
+            ("dict.logistics.movement.type.316", "zh-CN", "TR库存地库存转储计划", "移动类型.316 TR库存地库存转储计划"),
+            // dict.logistics.movement.type.316
+            ("dict.logistics.movement.type.316", "zh-HK", "TR库存地库存转储计划_hk", "移动类型.316 TR库存地库存转储计划"),
+
+            // dict.logistics.movement.type.317
+            ("dict.logistics.movement.type.317", "en-US", "创建结构化物料_us", "移动类型.317 创建结构化物料"),
+            // dict.logistics.movement.type.317
+            ("dict.logistics.movement.type.317", "ja-JP", "创建结构化物料_jp", "移动类型.317 创建结构化物料"),
+            // dict.logistics.movement.type.317
+            ("dict.logistics.movement.type.317", "zh-CN", "创建结构化物料", "移动类型.317 创建结构化物料"),
+            // dict.logistics.movement.type.317
+            ("dict.logistics.movement.type.317", "zh-HK", "创建结构化物料_hk", "移动类型.317 创建结构化物料"),
+
+            // dict.logistics.movement.type.318
+            ("dict.logistics.movement.type.318", "en-US", "RE创建结构物料_us", "移动类型.318 RE创建结构物料"),
+            // dict.logistics.movement.type.318
+            ("dict.logistics.movement.type.318", "ja-JP", "RE创建结构物料_jp", "移动类型.318 RE创建结构物料"),
+            // dict.logistics.movement.type.318
+            ("dict.logistics.movement.type.318", "zh-CN", "RE创建结构物料", "移动类型.318 RE创建结构物料"),
+            // dict.logistics.movement.type.318
+            ("dict.logistics.movement.type.318", "zh-HK", "RE创建结构物料_hk", "移动类型.318 RE创建结构物料"),
+
+            // dict.logistics.movement.type.319
+            ("dict.logistics.movement.type.319", "en-US", "拆分结构化物料_us", "移动类型.319 拆分结构化物料"),
+            // dict.logistics.movement.type.319
+            ("dict.logistics.movement.type.319", "ja-JP", "拆分结构化物料_jp", "移动类型.319 拆分结构化物料"),
+            // dict.logistics.movement.type.319
+            ("dict.logistics.movement.type.319", "zh-CN", "拆分结构化物料", "移动类型.319 拆分结构化物料"),
+            // dict.logistics.movement.type.319
+            ("dict.logistics.movement.type.319", "zh-HK", "拆分结构化物料_hk", "移动类型.319 拆分结构化物料"),
+
+            // dict.logistics.movement.type.320
+            ("dict.logistics.movement.type.320", "en-US", "RE拆分结构物料_us", "移动类型.320 RE拆分结构物料"),
+            // dict.logistics.movement.type.320
+            ("dict.logistics.movement.type.320", "ja-JP", "RE拆分结构物料_jp", "移动类型.320 RE拆分结构物料"),
+            // dict.logistics.movement.type.320
+            ("dict.logistics.movement.type.320", "zh-CN", "RE拆分结构物料", "移动类型.320 RE拆分结构物料"),
+            // dict.logistics.movement.type.320
+            ("dict.logistics.movement.type.320", "zh-HK", "RE拆分结构物料_hk", "移动类型.320 RE拆分结构物料"),
+
+            // dict.logistics.movement.type.321
+            ("dict.logistics.movement.type.321", "en-US", "TF质量到非限制_us", "移动类型.321 TF质量到非限制"),
+            // dict.logistics.movement.type.321
+            ("dict.logistics.movement.type.321", "ja-JP", "TF质量到非限制_jp", "移动类型.321 TF质量到非限制"),
+            // dict.logistics.movement.type.321
+            ("dict.logistics.movement.type.321", "zh-CN", "TF质量到非限制", "移动类型.321 TF质量到非限制"),
+            // dict.logistics.movement.type.321
+            ("dict.logistics.movement.type.321", "zh-HK", "TF质量到非限制_hk", "移动类型.321 TF质量到非限制"),
+
+            // dict.logistics.movement.type.322
+            ("dict.logistics.movement.type.322", "en-US", "TR 质量到非限制_us", "移动类型.322 TR 质量到非限制"),
+            // dict.logistics.movement.type.322
+            ("dict.logistics.movement.type.322", "ja-JP", "TR 质量到非限制_jp", "移动类型.322 TR 质量到非限制"),
+            // dict.logistics.movement.type.322
+            ("dict.logistics.movement.type.322", "zh-CN", "TR 质量到非限制", "移动类型.322 TR 质量到非限制"),
+            // dict.logistics.movement.type.322
+            ("dict.logistics.movement.type.322", "zh-HK", "TR 质量到非限制_hk", "移动类型.322 TR 质量到非限制"),
+
+            // dict.logistics.movement.type.323
+            ("dict.logistics.movement.type.323", "en-US", "TF 厂内质量_us", "移动类型.323 TF 厂内质量"),
+            // dict.logistics.movement.type.323
+            ("dict.logistics.movement.type.323", "ja-JP", "TF 厂内质量_jp", "移动类型.323 TF 厂内质量"),
+            // dict.logistics.movement.type.323
+            ("dict.logistics.movement.type.323", "zh-CN", "TF 厂内质量", "移动类型.323 TF 厂内质量"),
+            // dict.logistics.movement.type.323
+            ("dict.logistics.movement.type.323", "zh-HK", "TF 厂内质量_hk", "移动类型.323 TF 厂内质量"),
+
+            // dict.logistics.movement.type.324
+            ("dict.logistics.movement.type.324", "en-US", "工厂内传输请求质量_us", "移动类型.324 工厂内传输请求质量"),
+            // dict.logistics.movement.type.324
+            ("dict.logistics.movement.type.324", "ja-JP", "工厂内传输请求质量_jp", "移动类型.324 工厂内传输请求质量"),
+            // dict.logistics.movement.type.324
+            ("dict.logistics.movement.type.324", "zh-CN", "工厂内传输请求质量", "移动类型.324 工厂内传输请求质量"),
+            // dict.logistics.movement.type.324
+            ("dict.logistics.movement.type.324", "zh-HK", "工厂内传输请求质量_hk", "移动类型.324 工厂内传输请求质量"),
+
+            // dict.logistics.movement.type.325
+            ("dict.logistics.movement.type.325", "en-US", "TF厂内冻结_us", "移动类型.325 TF厂内冻结"),
+            // dict.logistics.movement.type.325
+            ("dict.logistics.movement.type.325", "ja-JP", "TF厂内冻结_jp", "移动类型.325 TF厂内冻结"),
+            // dict.logistics.movement.type.325
+            ("dict.logistics.movement.type.325", "zh-CN", "TF厂内冻结", "移动类型.325 TF厂内冻结"),
+            // dict.logistics.movement.type.325
+            ("dict.logistics.movement.type.325", "zh-HK", "TF厂内冻结_hk", "移动类型.325 TF厂内冻结"),
+
+            // dict.logistics.movement.type.326
+            ("dict.logistics.movement.type.326", "en-US", "TR厂内冻结_us", "移动类型.326 TR厂内冻结"),
+            // dict.logistics.movement.type.326
+            ("dict.logistics.movement.type.326", "ja-JP", "TR厂内冻结_jp", "移动类型.326 TR厂内冻结"),
+            // dict.logistics.movement.type.326
+            ("dict.logistics.movement.type.326", "zh-CN", "TR厂内冻结", "移动类型.326 TR厂内冻结"),
+            // dict.logistics.movement.type.326
+            ("dict.logistics.movement.type.326", "zh-HK", "TR厂内冻结_hk", "移动类型.326 TR厂内冻结"),
+
+            // dict.logistics.movement.type.331
+            ("dict.logistics.movement.type.331", "en-US", "GI 到样品质检_us", "移动类型.331 GI 到样品质检"),
+            // dict.logistics.movement.type.331
+            ("dict.logistics.movement.type.331", "ja-JP", "GI 到样品质检_jp", "移动类型.331 GI 到样品质检"),
+            // dict.logistics.movement.type.331
+            ("dict.logistics.movement.type.331", "zh-CN", "GI 到样品质检", "移动类型.331 GI 到样品质检"),
+            // dict.logistics.movement.type.331
+            ("dict.logistics.movement.type.331", "zh-HK", "GI 到样品质检_hk", "移动类型.331 GI 到样品质检"),
+
+            // dict.logistics.movement.type.332
+            ("dict.logistics.movement.type.332", "en-US", "RE 到样品质检_us", "移动类型.332 RE 到样品质检"),
+            // dict.logistics.movement.type.332
+            ("dict.logistics.movement.type.332", "ja-JP", "RE 到样品质检_jp", "移动类型.332 RE 到样品质检"),
+            // dict.logistics.movement.type.332
+            ("dict.logistics.movement.type.332", "zh-CN", "RE 到样品质检", "移动类型.332 RE 到样品质检"),
+            // dict.logistics.movement.type.332
+            ("dict.logistics.movement.type.332", "zh-HK", "RE 到样品质检_hk", "移动类型.332 RE 到样品质检"),
+
+            // dict.logistics.movement.type.333
+            ("dict.logistics.movement.type.333", "en-US", "GI 到采样非限制_us", "移动类型.333 GI 到采样非限制"),
+            // dict.logistics.movement.type.333
+            ("dict.logistics.movement.type.333", "ja-JP", "GI 到采样非限制_jp", "移动类型.333 GI 到采样非限制"),
+            // dict.logistics.movement.type.333
+            ("dict.logistics.movement.type.333", "zh-CN", "GI 到采样非限制", "移动类型.333 GI 到采样非限制"),
+            // dict.logistics.movement.type.333
+            ("dict.logistics.movement.type.333", "zh-HK", "GI 到采样非限制_hk", "移动类型.333 GI 到采样非限制"),
+
+            // dict.logistics.movement.type.334
+            ("dict.logistics.movement.type.334", "en-US", "RE 到采样非限制_us", "移动类型.334 RE 到采样非限制"),
+            // dict.logistics.movement.type.334
+            ("dict.logistics.movement.type.334", "ja-JP", "RE 到采样非限制_jp", "移动类型.334 RE 到采样非限制"),
+            // dict.logistics.movement.type.334
+            ("dict.logistics.movement.type.334", "zh-CN", "RE 到采样非限制", "移动类型.334 RE 到采样非限制"),
+            // dict.logistics.movement.type.334
+            ("dict.logistics.movement.type.334", "zh-HK", "RE 到采样非限制_hk", "移动类型.334 RE 到采样非限制"),
+
+            // dict.logistics.movement.type.335
+            ("dict.logistics.movement.type.335", "en-US", "发货到冻结的样品_us", "移动类型.335 发货到冻结的样品"),
+            // dict.logistics.movement.type.335
+            ("dict.logistics.movement.type.335", "ja-JP", "发货到冻结的样品_jp", "移动类型.335 发货到冻结的样品"),
+            // dict.logistics.movement.type.335
+            ("dict.logistics.movement.type.335", "zh-CN", "发货到冻结的样品", "移动类型.335 发货到冻结的样品"),
+            // dict.logistics.movement.type.335
+            ("dict.logistics.movement.type.335", "zh-HK", "发货到冻结的样品_hk", "移动类型.335 发货到冻结的样品"),
+
+            // dict.logistics.movement.type.336
+            ("dict.logistics.movement.type.336", "en-US", "RE 到采样冻结_us", "移动类型.336 RE 到采样冻结"),
+            // dict.logistics.movement.type.336
+            ("dict.logistics.movement.type.336", "ja-JP", "RE 到采样冻结_jp", "移动类型.336 RE 到采样冻结"),
+            // dict.logistics.movement.type.336
+            ("dict.logistics.movement.type.336", "zh-CN", "RE 到采样冻结", "移动类型.336 RE 到采样冻结"),
+            // dict.logistics.movement.type.336
+            ("dict.logistics.movement.type.336", "zh-HK", "RE 到采样冻结_hk", "移动类型.336 RE 到采样冻结"),
+
+            // dict.logistics.movement.type.340
+            ("dict.logistics.movement.type.340", "en-US", "批次重估_us", "移动类型.340 批次重估"),
+            // dict.logistics.movement.type.340
+            ("dict.logistics.movement.type.340", "ja-JP", "批次重估_jp", "移动类型.340 批次重估"),
+            // dict.logistics.movement.type.340
+            ("dict.logistics.movement.type.340", "zh-CN", "批次重估", "移动类型.340 批次重估"),
+            // dict.logistics.movement.type.340
+            ("dict.logistics.movement.type.340", "zh-HK", "批次重估_hk", "移动类型.340 批次重估"),
+
+            // dict.logistics.movement.type.341
+            ("dict.logistics.movement.type.341", "en-US", "TF 非限制到限制_us", "移动类型.341 TF 非限制到限制"),
+            // dict.logistics.movement.type.341
+            ("dict.logistics.movement.type.341", "ja-JP", "TF 非限制到限制_jp", "移动类型.341 TF 非限制到限制"),
+            // dict.logistics.movement.type.341
+            ("dict.logistics.movement.type.341", "zh-CN", "TF 非限制到限制", "移动类型.341 TF 非限制到限制"),
+            // dict.logistics.movement.type.341
+            ("dict.logistics.movement.type.341", "zh-HK", "TF 非限制到限制_hk", "移动类型.341 TF 非限制到限制"),
+
+            // dict.logistics.movement.type.342
+            ("dict.logistics.movement.type.342", "en-US", "TF 限制到非限制_us", "移动类型.342 TF 限制到非限制"),
+            // dict.logistics.movement.type.342
+            ("dict.logistics.movement.type.342", "ja-JP", "TF 限制到非限制_jp", "移动类型.342 TF 限制到非限制"),
+            // dict.logistics.movement.type.342
+            ("dict.logistics.movement.type.342", "zh-CN", "TF 限制到非限制", "移动类型.342 TF 限制到非限制"),
+            // dict.logistics.movement.type.342
+            ("dict.logistics.movement.type.342", "zh-HK", "TF 限制到非限制_hk", "移动类型.342 TF 限制到非限制"),
+
+            // dict.logistics.movement.type.343
+            ("dict.logistics.movement.type.343", "en-US", "TF冻结到非限制_us", "移动类型.343 TF冻结到非限制"),
+            // dict.logistics.movement.type.343
+            ("dict.logistics.movement.type.343", "ja-JP", "TF冻结到非限制_jp", "移动类型.343 TF冻结到非限制"),
+            // dict.logistics.movement.type.343
+            ("dict.logistics.movement.type.343", "zh-CN", "TF冻结到非限制", "移动类型.343 TF冻结到非限制"),
+            // dict.logistics.movement.type.343
+            ("dict.logistics.movement.type.343", "zh-HK", "TF冻结到非限制_hk", "移动类型.343 TF冻结到非限制"),
+
+            // dict.logistics.movement.type.344
+            ("dict.logistics.movement.type.344", "en-US", "TR 冻结到非限制_us", "移动类型.344 TR 冻结到非限制"),
+            // dict.logistics.movement.type.344
+            ("dict.logistics.movement.type.344", "ja-JP", "TR 冻结到非限制_jp", "移动类型.344 TR 冻结到非限制"),
+            // dict.logistics.movement.type.344
+            ("dict.logistics.movement.type.344", "zh-CN", "TR 冻结到非限制", "移动类型.344 TR 冻结到非限制"),
+            // dict.logistics.movement.type.344
+            ("dict.logistics.movement.type.344", "zh-HK", "TR 冻结到非限制_hk", "移动类型.344 TR 冻结到非限制"),
+
+            // dict.logistics.movement.type.349
+            ("dict.logistics.movement.type.349", "en-US", "TF 冻结到质检_us", "移动类型.349 TF 冻结到质检"),
+            // dict.logistics.movement.type.349
+            ("dict.logistics.movement.type.349", "ja-JP", "TF 冻结到质检_jp", "移动类型.349 TF 冻结到质检"),
+            // dict.logistics.movement.type.349
+            ("dict.logistics.movement.type.349", "zh-CN", "TF 冻结到质检", "移动类型.349 TF 冻结到质检"),
+            // dict.logistics.movement.type.349
+            ("dict.logistics.movement.type.349", "zh-HK", "TF 冻结到质检_hk", "移动类型.349 TF 冻结到质检"),
+
+            // dict.logistics.movement.type.350
+            ("dict.logistics.movement.type.350", "en-US", "TR 冻结到质检_us", "移动类型.350 TR 冻结到质检"),
+            // dict.logistics.movement.type.350
+            ("dict.logistics.movement.type.350", "ja-JP", "TR 冻结到质检_jp", "移动类型.350 TR 冻结到质检"),
+            // dict.logistics.movement.type.350
+            ("dict.logistics.movement.type.350", "zh-CN", "TR 冻结到质检", "移动类型.350 TR 冻结到质检"),
+            // dict.logistics.movement.type.350
+            ("dict.logistics.movement.type.350", "zh-HK", "TR 冻结到质检_hk", "移动类型.350 TR 冻结到质检"),
+
+            // dict.logistics.movement.type.351
+            ("dict.logistics.movement.type.351", "en-US", "TF 到在途库存_us", "移动类型.351 TF 到在途库存"),
+            // dict.logistics.movement.type.351
+            ("dict.logistics.movement.type.351", "ja-JP", "TF 到在途库存_jp", "移动类型.351 TF 到在途库存"),
+            // dict.logistics.movement.type.351
+            ("dict.logistics.movement.type.351", "zh-CN", "TF 到在途库存", "移动类型.351 TF 到在途库存"),
+            // dict.logistics.movement.type.351
+            ("dict.logistics.movement.type.351", "zh-HK", "TF 到在途库存_hk", "移动类型.351 TF 到在途库存"),
+
+            // dict.logistics.movement.type.352
+            ("dict.logistics.movement.type.352", "en-US", "TR 在途库存_us", "移动类型.352 TR 在途库存"),
+            // dict.logistics.movement.type.352
+            ("dict.logistics.movement.type.352", "ja-JP", "TR 在途库存_jp", "移动类型.352 TR 在途库存"),
+            // dict.logistics.movement.type.352
+            ("dict.logistics.movement.type.352", "zh-CN", "TR 在途库存", "移动类型.352 TR 在途库存"),
+            // dict.logistics.movement.type.352
+            ("dict.logistics.movement.type.352", "zh-HK", "TR 在途库存_hk", "移动类型.352 TR 在途库存"),
+
+            // dict.logistics.movement.type.411
+            ("dict.logistics.movement.type.411", "en-US", "TF库存地到库存地_us", "移动类型.411 TF库存地到库存地"),
+            // dict.logistics.movement.type.411
+            ("dict.logistics.movement.type.411", "ja-JP", "TF库存地到库存地_jp", "移动类型.411 TF库存地到库存地"),
+            // dict.logistics.movement.type.411
+            ("dict.logistics.movement.type.411", "zh-CN", "TF库存地到库存地", "移动类型.411 TF库存地到库存地"),
+            // dict.logistics.movement.type.411
+            ("dict.logistics.movement.type.411", "zh-HK", "TF库存地到库存地_hk", "移动类型.411 TF库存地到库存地"),
+
+            // dict.logistics.movement.type.412
+            ("dict.logistics.movement.type.412", "en-US", "TR库存地到库存地_us", "移动类型.412 TR库存地到库存地"),
+            // dict.logistics.movement.type.412
+            ("dict.logistics.movement.type.412", "ja-JP", "TR库存地到库存地_jp", "移动类型.412 TR库存地到库存地"),
+            // dict.logistics.movement.type.412
+            ("dict.logistics.movement.type.412", "zh-CN", "TR库存地到库存地", "移动类型.412 TR库存地到库存地"),
+            // dict.logistics.movement.type.412
+            ("dict.logistics.movement.type.412", "zh-HK", "TR库存地到库存地_hk", "移动类型.412 TR库存地到库存地"),
+
+            // dict.logistics.movement.type.413
+            ("dict.logistics.movement.type.413", "en-US", "TF库存地到销售订单_us", "移动类型.413 TF库存地到销售订单"),
+            // dict.logistics.movement.type.413
+            ("dict.logistics.movement.type.413", "ja-JP", "TF库存地到销售订单_jp", "移动类型.413 TF库存地到销售订单"),
+            // dict.logistics.movement.type.413
+            ("dict.logistics.movement.type.413", "zh-CN", "TF库存地到销售订单", "移动类型.413 TF库存地到销售订单"),
+            // dict.logistics.movement.type.413
+            ("dict.logistics.movement.type.413", "zh-HK", "TF库存地到销售订单_hk", "移动类型.413 TF库存地到销售订单"),
+
+            // dict.logistics.movement.type.414
+            ("dict.logistics.movement.type.414", "en-US", "TR库存地到销售订单_us", "移动类型.414 TR库存地到销售订单"),
+            // dict.logistics.movement.type.414
+            ("dict.logistics.movement.type.414", "ja-JP", "TR库存地到销售订单_jp", "移动类型.414 TR库存地到销售订单"),
+            // dict.logistics.movement.type.414
+            ("dict.logistics.movement.type.414", "zh-CN", "TR库存地到销售订单", "移动类型.414 TR库存地到销售订单"),
+            // dict.logistics.movement.type.414
+            ("dict.logistics.movement.type.414", "zh-HK", "TR库存地到销售订单_hk", "移动类型.414 TR库存地到销售订单"),
+
+            // dict.logistics.movement.type.415
+            ("dict.logistics.movement.type.415", "en-US", "TF 库存地到项目_us", "移动类型.415 TF 库存地到项目"),
+            // dict.logistics.movement.type.415
+            ("dict.logistics.movement.type.415", "ja-JP", "TF 库存地到项目_jp", "移动类型.415 TF 库存地到项目"),
+            // dict.logistics.movement.type.415
+            ("dict.logistics.movement.type.415", "zh-CN", "TF 库存地到项目", "移动类型.415 TF 库存地到项目"),
+            // dict.logistics.movement.type.415
+            ("dict.logistics.movement.type.415", "zh-HK", "TF 库存地到项目_hk", "移动类型.415 TF 库存地到项目"),
+
+            // dict.logistics.movement.type.416
+            ("dict.logistics.movement.type.416", "en-US", "TR 库存地到项目_us", "移动类型.416 TR 库存地到项目"),
+            // dict.logistics.movement.type.416
+            ("dict.logistics.movement.type.416", "ja-JP", "TR 库存地到项目_jp", "移动类型.416 TR 库存地到项目"),
+            // dict.logistics.movement.type.416
+            ("dict.logistics.movement.type.416", "zh-CN", "TR 库存地到项目", "移动类型.416 TR 库存地到项目"),
+            // dict.logistics.movement.type.416
+            ("dict.logistics.movement.type.416", "zh-HK", "TR 库存地到项目_hk", "移动类型.416 TR 库存地到项目"),
+
+            // dict.logistics.movement.type.441
+            ("dict.logistics.movement.type.441", "en-US", "TP 不受限制到受约束_us", "移动类型.441 TP 不受限制到受约束"),
+            // dict.logistics.movement.type.441
+            ("dict.logistics.movement.type.441", "ja-JP", "TP 不受限制到受约束_jp", "移动类型.441 TP 不受限制到受约束"),
+            // dict.logistics.movement.type.441
+            ("dict.logistics.movement.type.441", "zh-CN", "TP 不受限制到受约束", "移动类型.441 TP 不受限制到受约束"),
+            // dict.logistics.movement.type.441
+            ("dict.logistics.movement.type.441", "zh-HK", "TP 不受限制到受约束_hk", "移动类型.441 TP 不受限制到受约束"),
+
+            // dict.logistics.movement.type.442
+            ("dict.logistics.movement.type.442", "en-US", "TP 受约束到不受限制_us", "移动类型.442 TP 受约束到不受限制"),
+            // dict.logistics.movement.type.442
+            ("dict.logistics.movement.type.442", "ja-JP", "TP 受约束到不受限制_jp", "移动类型.442 TP 受约束到不受限制"),
+            // dict.logistics.movement.type.442
+            ("dict.logistics.movement.type.442", "zh-CN", "TP 受约束到不受限制", "移动类型.442 TP 受约束到不受限制"),
+            // dict.logistics.movement.type.442
+            ("dict.logistics.movement.type.442", "zh-HK", "TP 受约束到不受限制_hk", "移动类型.442 TP 受约束到不受限制"),
+
+            // dict.logistics.movement.type.451
+            ("dict.logistics.movement.type.451", "en-US", "发货退货_us", "移动类型.451 发货退货"),
+            // dict.logistics.movement.type.451
+            ("dict.logistics.movement.type.451", "ja-JP", "发货退货_jp", "移动类型.451 发货退货"),
+            // dict.logistics.movement.type.451
+            ("dict.logistics.movement.type.451", "zh-CN", "发货退货", "移动类型.451 发货退货"),
+            // dict.logistics.movement.type.451
+            ("dict.logistics.movement.type.451", "zh-HK", "发货退货_hk", "移动类型.451 发货退货"),
+
+            // dict.logistics.movement.type.452
+            ("dict.logistics.movement.type.452", "en-US", "收货退货(冲销)_us", "移动类型.452 收货退货(冲销)"),
+            // dict.logistics.movement.type.452
+            ("dict.logistics.movement.type.452", "ja-JP", "收货退货(冲销)_jp", "移动类型.452 收货退货(冲销)"),
+            // dict.logistics.movement.type.452
+            ("dict.logistics.movement.type.452", "zh-CN", "收货退货(冲销)", "移动类型.452 收货退货(冲销)"),
+            // dict.logistics.movement.type.452
+            ("dict.logistics.movement.type.452", "zh-HK", "收货退货(冲销)_hk", "移动类型.452 收货退货(冲销)"),
+
+            // dict.logistics.movement.type.453
+            ("dict.logistics.movement.type.453", "en-US", "总储备退回发出处_us", "移动类型.453 总储备退回发出处"),
+            // dict.logistics.movement.type.453
+            ("dict.logistics.movement.type.453", "ja-JP", "总储备退回发出处_jp", "移动类型.453 总储备退回发出处"),
+            // dict.logistics.movement.type.453
+            ("dict.logistics.movement.type.453", "zh-CN", "总储备退回发出处", "移动类型.453 总储备退回发出处"),
+            // dict.logistics.movement.type.453
+            ("dict.logistics.movement.type.453", "zh-HK", "总储备退回发出处_hk", "移动类型.453 总储备退回发出处"),
+
+            // dict.logistics.movement.type.454
+            ("dict.logistics.movement.type.454", "en-US", "总储备到退货_us", "移动类型.454 总储备到退货"),
+            // dict.logistics.movement.type.454
+            ("dict.logistics.movement.type.454", "ja-JP", "总储备到退货_jp", "移动类型.454 总储备到退货"),
+            // dict.logistics.movement.type.454
+            ("dict.logistics.movement.type.454", "zh-CN", "总储备到退货", "移动类型.454 总储备到退货"),
+            // dict.logistics.movement.type.454
+            ("dict.logistics.movement.type.454", "zh-HK", "总储备到退货_hk", "移动类型.454 总储备到退货"),
+
+            // dict.logistics.movement.type.455
+            ("dict.logistics.movement.type.455", "en-US", "TF库存转储退货_us", "移动类型.455 TF库存转储退货"),
+            // dict.logistics.movement.type.455
+            ("dict.logistics.movement.type.455", "ja-JP", "TF库存转储退货_jp", "移动类型.455 TF库存转储退货"),
+            // dict.logistics.movement.type.455
+            ("dict.logistics.movement.type.455", "zh-CN", "TF库存转储退货", "移动类型.455 TF库存转储退货"),
+            // dict.logistics.movement.type.455
+            ("dict.logistics.movement.type.455", "zh-HK", "TF库存转储退货_hk", "移动类型.455 TF库存转储退货"),
+
+            // dict.logistics.movement.type.456
+            ("dict.logistics.movement.type.456", "en-US", "TR库存转储退货_us", "移动类型.456 TR库存转储退货"),
+            // dict.logistics.movement.type.456
+            ("dict.logistics.movement.type.456", "ja-JP", "TR库存转储退货_jp", "移动类型.456 TR库存转储退货"),
+            // dict.logistics.movement.type.456
+            ("dict.logistics.movement.type.456", "zh-CN", "TR库存转储退货", "移动类型.456 TR库存转储退货"),
+            // dict.logistics.movement.type.456
+            ("dict.logistics.movement.type.456", "zh-HK", "TR库存转储退货_hk", "移动类型.456 TR库存转储退货"),
+
+            // dict.logistics.movement.type.457
+            ("dict.logistics.movement.type.457", "en-US", "TP 退货到自己质检_us", "移动类型.457 TP 退货到自己质检"),
+            // dict.logistics.movement.type.457
+            ("dict.logistics.movement.type.457", "ja-JP", "TP 退货到自己质检_jp", "移动类型.457 TP 退货到自己质检"),
+            // dict.logistics.movement.type.457
+            ("dict.logistics.movement.type.457", "zh-CN", "TP 退货到自己质检", "移动类型.457 TP 退货到自己质检"),
+            // dict.logistics.movement.type.457
+            ("dict.logistics.movement.type.457", "zh-HK", "TP 退货到自己质检_hk", "移动类型.457 TP 退货到自己质检"),
+
+            // dict.logistics.movement.type.458
+            ("dict.logistics.movement.type.458", "en-US", "TP 自己质检到退货_us", "移动类型.458 TP 自己质检到退货"),
+            // dict.logistics.movement.type.458
+            ("dict.logistics.movement.type.458", "ja-JP", "TP 自己质检到退货_jp", "移动类型.458 TP 自己质检到退货"),
+            // dict.logistics.movement.type.458
+            ("dict.logistics.movement.type.458", "zh-CN", "TP 自己质检到退货", "移动类型.458 TP 自己质检到退货"),
+            // dict.logistics.movement.type.458
+            ("dict.logistics.movement.type.458", "zh-HK", "TP 自己质检到退货_hk", "移动类型.458 TP 自己质检到退货"),
+
+            // dict.logistics.movement.type.459
+            ("dict.logistics.movement.type.459", "en-US", "TP 退货到自己冻结_us", "移动类型.459 TP 退货到自己冻结"),
+            // dict.logistics.movement.type.459
+            ("dict.logistics.movement.type.459", "ja-JP", "TP 退货到自己冻结_jp", "移动类型.459 TP 退货到自己冻结"),
+            // dict.logistics.movement.type.459
+            ("dict.logistics.movement.type.459", "zh-CN", "TP 退货到自己冻结", "移动类型.459 TP 退货到自己冻结"),
+            // dict.logistics.movement.type.459
+            ("dict.logistics.movement.type.459", "zh-HK", "TP 退货到自己冻结_hk", "移动类型.459 TP 退货到自己冻结"),
+
+            // dict.logistics.movement.type.460
+            ("dict.logistics.movement.type.460", "en-US", "TP 自己冻结到退货_us", "移动类型.460 TP 自己冻结到退货"),
+            // dict.logistics.movement.type.460
+            ("dict.logistics.movement.type.460", "ja-JP", "TP 自己冻结到退货_jp", "移动类型.460 TP 自己冻结到退货"),
+            // dict.logistics.movement.type.460
+            ("dict.logistics.movement.type.460", "zh-CN", "TP 自己冻结到退货", "移动类型.460 TP 自己冻结到退货"),
+            // dict.logistics.movement.type.460
+            ("dict.logistics.movement.type.460", "zh-HK", "TP 自己冻结到退货_hk", "移动类型.460 TP 自己冻结到退货"),
+
+            // dict.logistics.movement.type.501
+            ("dict.logistics.movement.type.501", "en-US", "无采购订单的收货_us", "移动类型.501 无采购订单的收货"),
+            // dict.logistics.movement.type.501
+            ("dict.logistics.movement.type.501", "ja-JP", "无采购订单的收货_jp", "移动类型.501 无采购订单的收货"),
+            // dict.logistics.movement.type.501
+            ("dict.logistics.movement.type.501", "zh-CN", "无采购订单的收货", "移动类型.501 无采购订单的收货"),
+            // dict.logistics.movement.type.501
+            ("dict.logistics.movement.type.501", "zh-HK", "无采购订单的收货_hk", "移动类型.501 无采购订单的收货"),
+
+            // dict.logistics.movement.type.502
+            ("dict.logistics.movement.type.502", "en-US", "无采购订单的RE收货_us", "移动类型.502 无采购订单的RE收货"),
+            // dict.logistics.movement.type.502
+            ("dict.logistics.movement.type.502", "ja-JP", "无采购订单的RE收货_jp", "移动类型.502 无采购订单的RE收货"),
+            // dict.logistics.movement.type.502
+            ("dict.logistics.movement.type.502", "zh-CN", "无采购订单的RE收货", "移动类型.502 无采购订单的RE收货"),
+            // dict.logistics.movement.type.502
+            ("dict.logistics.movement.type.502", "zh-HK", "无采购订单的RE收货_hk", "移动类型.502 无采购订单的RE收货"),
+
+            // dict.logistics.movement.type.503
+            ("dict.logistics.movement.type.503", "en-US", "收货到质检_us", "移动类型.503 收货到质检"),
+            // dict.logistics.movement.type.503
+            ("dict.logistics.movement.type.503", "ja-JP", "收货到质检_jp", "移动类型.503 收货到质检"),
+            // dict.logistics.movement.type.503
+            ("dict.logistics.movement.type.503", "zh-CN", "收货到质检", "移动类型.503 收货到质检"),
+            // dict.logistics.movement.type.503
+            ("dict.logistics.movement.type.503", "zh-HK", "收货到质检_hk", "移动类型.503 收货到质检"),
+
+            // dict.logistics.movement.type.504
+            ("dict.logistics.movement.type.504", "en-US", "RE收货到质检_us", "移动类型.504 RE收货到质检"),
+            // dict.logistics.movement.type.504
+            ("dict.logistics.movement.type.504", "ja-JP", "RE收货到质检_jp", "移动类型.504 RE收货到质检"),
+            // dict.logistics.movement.type.504
+            ("dict.logistics.movement.type.504", "zh-CN", "RE收货到质检", "移动类型.504 RE收货到质检"),
+            // dict.logistics.movement.type.504
+            ("dict.logistics.movement.type.504", "zh-HK", "RE收货到质检_hk", "移动类型.504 RE收货到质检"),
+
+            // dict.logistics.movement.type.505
+            ("dict.logistics.movement.type.505", "en-US", "收货到冻结_us", "移动类型.505 收货到冻结"),
+            // dict.logistics.movement.type.505
+            ("dict.logistics.movement.type.505", "ja-JP", "收货到冻结_jp", "移动类型.505 收货到冻结"),
+            // dict.logistics.movement.type.505
+            ("dict.logistics.movement.type.505", "zh-CN", "收货到冻结", "移动类型.505 收货到冻结"),
+            // dict.logistics.movement.type.505
+            ("dict.logistics.movement.type.505", "zh-HK", "收货到冻结_hk", "移动类型.505 收货到冻结"),
+
+            // dict.logistics.movement.type.506
+            ("dict.logistics.movement.type.506", "en-US", "RE收货到冻结_us", "移动类型.506 RE收货到冻结"),
+            // dict.logistics.movement.type.506
+            ("dict.logistics.movement.type.506", "ja-JP", "RE收货到冻结_jp", "移动类型.506 RE收货到冻结"),
+            // dict.logistics.movement.type.506
+            ("dict.logistics.movement.type.506", "zh-CN", "RE收货到冻结", "移动类型.506 RE收货到冻结"),
+            // dict.logistics.movement.type.506
+            ("dict.logistics.movement.type.506", "zh-HK", "RE收货到冻结_hk", "移动类型.506 RE收货到冻结"),
+
+            // dict.logistics.movement.type.511
+            ("dict.logistics.movement.type.511", "en-US", "免费交货_us", "移动类型.511 免费交货"),
+            // dict.logistics.movement.type.511
+            ("dict.logistics.movement.type.511", "ja-JP", "免费交货_jp", "移动类型.511 免费交货"),
+            // dict.logistics.movement.type.511
+            ("dict.logistics.movement.type.511", "zh-CN", "免费交货", "移动类型.511 免费交货"),
+            // dict.logistics.movement.type.511
+            ("dict.logistics.movement.type.511", "zh-HK", "免费交货_hk", "移动类型.511 免费交货"),
+
+            // dict.logistics.movement.type.512
+            ("dict.logistics.movement.type.512", "en-US", "无费用的RE交货_us", "移动类型.512 无费用的RE交货"),
+            // dict.logistics.movement.type.512
+            ("dict.logistics.movement.type.512", "ja-JP", "无费用的RE交货_jp", "移动类型.512 无费用的RE交货"),
+            // dict.logistics.movement.type.512
+            ("dict.logistics.movement.type.512", "zh-CN", "无费用的RE交货", "移动类型.512 无费用的RE交货"),
+            // dict.logistics.movement.type.512
+            ("dict.logistics.movement.type.512", "zh-HK", "无费用的RE交货_hk", "移动类型.512 无费用的RE交货"),
+
+            // dict.logistics.movement.type.521
+            ("dict.logistics.movement.type.521", "en-US", "无订单的收货_us", "移动类型.521 无订单的收货"),
+            // dict.logistics.movement.type.521
+            ("dict.logistics.movement.type.521", "ja-JP", "无订单的收货_jp", "移动类型.521 无订单的收货"),
+            // dict.logistics.movement.type.521
+            ("dict.logistics.movement.type.521", "zh-CN", "无订单的收货", "移动类型.521 无订单的收货"),
+            // dict.logistics.movement.type.521
+            ("dict.logistics.movement.type.521", "zh-HK", "无订单的收货_hk", "移动类型.521 无订单的收货"),
+
+            // dict.logistics.movement.type.522
+            ("dict.logistics.movement.type.522", "en-US", "RE无生产订单的收货_us", "移动类型.522 RE无生产订单的收货"),
+            // dict.logistics.movement.type.522
+            ("dict.logistics.movement.type.522", "ja-JP", "RE无生产订单的收货_jp", "移动类型.522 RE无生产订单的收货"),
+            // dict.logistics.movement.type.522
+            ("dict.logistics.movement.type.522", "zh-CN", "RE无生产订单的收货", "移动类型.522 RE无生产订单的收货"),
+            // dict.logistics.movement.type.522
+            ("dict.logistics.movement.type.522", "zh-HK", "RE无生产订单的收货_hk", "移动类型.522 RE无生产订单的收货"),
+
+            // dict.logistics.movement.type.523
+            ("dict.logistics.movement.type.523", "en-US", "无生产订单的QI收货_us", "移动类型.523 无生产订单的QI收货"),
+            // dict.logistics.movement.type.523
+            ("dict.logistics.movement.type.523", "ja-JP", "无生产订单的QI收货_jp", "移动类型.523 无生产订单的QI收货"),
+            // dict.logistics.movement.type.523
+            ("dict.logistics.movement.type.523", "zh-CN", "无生产订单的QI收货", "移动类型.523 无生产订单的QI收货"),
+            // dict.logistics.movement.type.523
+            ("dict.logistics.movement.type.523", "zh-HK", "无生产订单的QI收货_hk", "移动类型.523 无生产订单的QI收货"),
+
+            // dict.logistics.movement.type.524
+            ("dict.logistics.movement.type.524", "en-US", "RE无生产订单的质量_us", "移动类型.524 RE无生产订单的质量"),
+            // dict.logistics.movement.type.524
+            ("dict.logistics.movement.type.524", "ja-JP", "RE无生产订单的质量_jp", "移动类型.524 RE无生产订单的质量"),
+            // dict.logistics.movement.type.524
+            ("dict.logistics.movement.type.524", "zh-CN", "RE无生产订单的质量", "移动类型.524 RE无生产订单的质量"),
+            // dict.logistics.movement.type.524
+            ("dict.logistics.movement.type.524", "zh-HK", "RE无生产订单的质量_hk", "移动类型.524 RE无生产订单的质量"),
+
+            // dict.logistics.movement.type.525
+            ("dict.logistics.movement.type.525", "en-US", "无生产订单的冻结收货_us", "移动类型.525 无生产订单的冻结收货"),
+            // dict.logistics.movement.type.525
+            ("dict.logistics.movement.type.525", "ja-JP", "无生产订单的冻结收货_jp", "移动类型.525 无生产订单的冻结收货"),
+            // dict.logistics.movement.type.525
+            ("dict.logistics.movement.type.525", "zh-CN", "无生产订单的冻结收货", "移动类型.525 无生产订单的冻结收货"),
+            // dict.logistics.movement.type.525
+            ("dict.logistics.movement.type.525", "zh-HK", "无生产订单的冻结收货_hk", "移动类型.525 无生产订单的冻结收货"),
+
+            // dict.logistics.movement.type.526
+            ("dict.logistics.movement.type.526", "en-US", "RE无生产订单冻结_us", "移动类型.526 RE无生产订单冻结"),
+            // dict.logistics.movement.type.526
+            ("dict.logistics.movement.type.526", "ja-JP", "RE无生产订单冻结_jp", "移动类型.526 RE无生产订单冻结"),
+            // dict.logistics.movement.type.526
+            ("dict.logistics.movement.type.526", "zh-CN", "RE无生产订单冻结", "移动类型.526 RE无生产订单冻结"),
+            // dict.logistics.movement.type.526
+            ("dict.logistics.movement.type.526", "zh-HK", "RE无生产订单冻结_hk", "移动类型.526 RE无生产订单冻结"),
+
+            // dict.logistics.movement.type.531
+            ("dict.logistics.movement.type.531", "en-US", "副产品收货_us", "移动类型.531 副产品收货"),
+            // dict.logistics.movement.type.531
+            ("dict.logistics.movement.type.531", "ja-JP", "副产品收货_jp", "移动类型.531 副产品收货"),
+            // dict.logistics.movement.type.531
+            ("dict.logistics.movement.type.531", "zh-CN", "副产品收货", "移动类型.531 副产品收货"),
+            // dict.logistics.movement.type.531
+            ("dict.logistics.movement.type.531", "zh-HK", "副产品收货_hk", "移动类型.531 副产品收货"),
+
+            // dict.logistics.movement.type.532
+            ("dict.logistics.movement.type.532", "en-US", "RE副产品_us", "移动类型.532 RE副产品"),
+            // dict.logistics.movement.type.532
+            ("dict.logistics.movement.type.532", "ja-JP", "RE副产品_jp", "移动类型.532 RE副产品"),
+            // dict.logistics.movement.type.532
+            ("dict.logistics.movement.type.532", "zh-CN", "RE副产品", "移动类型.532 RE副产品"),
+            // dict.logistics.movement.type.532
+            ("dict.logistics.movement.type.532", "zh-HK", "RE副产品_hk", "移动类型.532 RE副产品"),
+
+            // dict.logistics.movement.type.541
+            ("dict.logistics.movement.type.541", "en-US", "发货仓库到转包库存_us", "移动类型.541 发货仓库到转包库存"),
+            // dict.logistics.movement.type.541
+            ("dict.logistics.movement.type.541", "ja-JP", "发货仓库到转包库存_jp", "移动类型.541 发货仓库到转包库存"),
+            // dict.logistics.movement.type.541
+            ("dict.logistics.movement.type.541", "zh-CN", "发货仓库到转包库存", "移动类型.541 发货仓库到转包库存"),
+            // dict.logistics.movement.type.541
+            ("dict.logistics.movement.type.541", "zh-HK", "发货仓库到转包库存_hk", "移动类型.541 发货仓库到转包库存"),
+
+            // dict.logistics.movement.type.542
+            ("dict.logistics.movement.type.542", "en-US", "RE 转包库存到仓库_us", "移动类型.542 RE 转包库存到仓库"),
+            // dict.logistics.movement.type.542
+            ("dict.logistics.movement.type.542", "ja-JP", "RE 转包库存到仓库_jp", "移动类型.542 RE 转包库存到仓库"),
+            // dict.logistics.movement.type.542
+            ("dict.logistics.movement.type.542", "zh-CN", "RE 转包库存到仓库", "移动类型.542 RE 转包库存到仓库"),
+            // dict.logistics.movement.type.542
+            ("dict.logistics.movement.type.542", "zh-HK", "RE 转包库存到仓库_hk", "移动类型.542 RE 转包库存到仓库"),
+
+            // dict.logistics.movement.type.543
+            ("dict.logistics.movement.type.543", "en-US", "GI 发货销售订单存货_us", "移动类型.543 GI 发货销售订单存货"),
+            // dict.logistics.movement.type.543
+            ("dict.logistics.movement.type.543", "ja-JP", "GI 发货销售订单存货_jp", "移动类型.543 GI 发货销售订单存货"),
+            // dict.logistics.movement.type.543
+            ("dict.logistics.movement.type.543", "zh-CN", "GI 发货销售订单存货", "移动类型.543 GI 发货销售订单存货"),
+            // dict.logistics.movement.type.543
+            ("dict.logistics.movement.type.543", "zh-HK", "GI 发货销售订单存货_hk", "移动类型.543 GI 发货销售订单存货"),
+
+            // dict.logistics.movement.type.544
+            ("dict.logistics.movement.type.544", "en-US", "GI 收货销售订单存货_us", "移动类型.544 GI 收货销售订单存货"),
+            // dict.logistics.movement.type.544
+            ("dict.logistics.movement.type.544", "ja-JP", "GI 收货销售订单存货_jp", "移动类型.544 GI 收货销售订单存货"),
+            // dict.logistics.movement.type.544
+            ("dict.logistics.movement.type.544", "zh-CN", "GI 收货销售订单存货", "移动类型.544 GI 收货销售订单存货"),
+            // dict.logistics.movement.type.544
+            ("dict.logistics.movement.type.544", "zh-HK", "GI 收货销售订单存货_hk", "移动类型.544 GI 收货销售订单存货"),
+
+            // dict.logistics.movement.type.545
+            ("dict.logistics.movement.type.545", "en-US", "副产品SC收货_us", "移动类型.545 副产品SC收货"),
+            // dict.logistics.movement.type.545
+            ("dict.logistics.movement.type.545", "ja-JP", "副产品SC收货_jp", "移动类型.545 副产品SC收货"),
+            // dict.logistics.movement.type.545
+            ("dict.logistics.movement.type.545", "zh-CN", "副产品SC收货", "移动类型.545 副产品SC收货"),
+            // dict.logistics.movement.type.545
+            ("dict.logistics.movement.type.545", "zh-HK", "副产品SC收货_hk", "移动类型.545 副产品SC收货"),
+
+            // dict.logistics.movement.type.546
+            ("dict.logistics.movement.type.546", "en-US", "GI 发货 SC 副产品_us", "移动类型.546 GI 发货 SC 副产品"),
+            // dict.logistics.movement.type.546
+            ("dict.logistics.movement.type.546", "ja-JP", "GI 发货 SC 副产品_jp", "移动类型.546 GI 发货 SC 副产品"),
+            // dict.logistics.movement.type.546
+            ("dict.logistics.movement.type.546", "zh-CN", "GI 发货 SC 副产品", "移动类型.546 GI 发货 SC 副产品"),
+            // dict.logistics.movement.type.546
+            ("dict.logistics.movement.type.546", "zh-HK", "GI 发货 SC 副产品_hk", "移动类型.546 GI 发货 SC 副产品"),
+
+            // dict.logistics.movement.type.551
+            ("dict.logistics.movement.type.551", "en-US", "发货报废_us", "移动类型.551 发货报废"),
+            // dict.logistics.movement.type.551
+            ("dict.logistics.movement.type.551", "ja-JP", "发货报废_jp", "移动类型.551 发货报废"),
+            // dict.logistics.movement.type.551
+            ("dict.logistics.movement.type.551", "zh-CN", "发货报废", "移动类型.551 发货报废"),
+            // dict.logistics.movement.type.551
+            ("dict.logistics.movement.type.551", "zh-HK", "发货报废_hk", "移动类型.551 发货报废"),
+
+            // dict.logistics.movement.type.552
+            ("dict.logistics.movement.type.552", "en-US", "RE报废_us", "移动类型.552 RE报废"),
+            // dict.logistics.movement.type.552
+            ("dict.logistics.movement.type.552", "ja-JP", "RE报废_jp", "移动类型.552 RE报废"),
+            // dict.logistics.movement.type.552
+            ("dict.logistics.movement.type.552", "zh-CN", "RE报废", "移动类型.552 RE报废"),
+            // dict.logistics.movement.type.552
+            ("dict.logistics.movement.type.552", "zh-HK", "RE报废_hk", "移动类型.552 RE报废"),
+
+            // dict.logistics.movement.type.553
+            ("dict.logistics.movement.type.553", "en-US", "发货报废质检_us", "移动类型.553 发货报废质检"),
+            // dict.logistics.movement.type.553
+            ("dict.logistics.movement.type.553", "ja-JP", "发货报废质检_jp", "移动类型.553 发货报废质检"),
+            // dict.logistics.movement.type.553
+            ("dict.logistics.movement.type.553", "zh-CN", "发货报废质检", "移动类型.553 发货报废质检"),
+            // dict.logistics.movement.type.553
+            ("dict.logistics.movement.type.553", "zh-HK", "发货报废质检_hk", "移动类型.553 发货报废质检"),
+
+            // dict.logistics.movement.type.554
+            ("dict.logistics.movement.type.554", "en-US", "收货报废质检_us", "移动类型.554 收货报废质检"),
+            // dict.logistics.movement.type.554
+            ("dict.logistics.movement.type.554", "ja-JP", "收货报废质检_jp", "移动类型.554 收货报废质检"),
+            // dict.logistics.movement.type.554
+            ("dict.logistics.movement.type.554", "zh-CN", "收货报废质检", "移动类型.554 收货报废质检"),
+            // dict.logistics.movement.type.554
+            ("dict.logistics.movement.type.554", "zh-HK", "收货报废质检_hk", "移动类型.554 收货报废质检"),
+
+            // dict.logistics.movement.type.555
+            ("dict.logistics.movement.type.555", "en-US", "GI报废冻结_us", "移动类型.555 GI报废冻结"),
+            // dict.logistics.movement.type.555
+            ("dict.logistics.movement.type.555", "ja-JP", "GI报废冻结_jp", "移动类型.555 GI报废冻结"),
+            // dict.logistics.movement.type.555
+            ("dict.logistics.movement.type.555", "zh-CN", "GI报废冻结", "移动类型.555 GI报废冻结"),
+            // dict.logistics.movement.type.555
+            ("dict.logistics.movement.type.555", "zh-HK", "GI报废冻结_hk", "移动类型.555 GI报废冻结"),
+
+            // dict.logistics.movement.type.556
+            ("dict.logistics.movement.type.556", "en-US", "RE报废冻结_us", "移动类型.556 RE报废冻结"),
+            // dict.logistics.movement.type.556
+            ("dict.logistics.movement.type.556", "ja-JP", "RE报废冻结_jp", "移动类型.556 RE报废冻结"),
+            // dict.logistics.movement.type.556
+            ("dict.logistics.movement.type.556", "zh-CN", "RE报废冻结", "移动类型.556 RE报废冻结"),
+            // dict.logistics.movement.type.556
+            ("dict.logistics.movement.type.556", "zh-HK", "RE报废冻结_hk", "移动类型.556 RE报废冻结"),
+
+            // dict.logistics.movement.type.557
+            ("dict.logistics.movement.type.557", "en-US", "GI调整转运_us", "移动类型.557 GI调整转运"),
+            // dict.logistics.movement.type.557
+            ("dict.logistics.movement.type.557", "ja-JP", "GI调整转运_jp", "移动类型.557 GI调整转运"),
+            // dict.logistics.movement.type.557
+            ("dict.logistics.movement.type.557", "zh-CN", "GI调整转运", "移动类型.557 GI调整转运"),
+            // dict.logistics.movement.type.557
+            ("dict.logistics.movement.type.557", "zh-HK", "GI调整转运_hk", "移动类型.557 GI调整转运"),
+
+            // dict.logistics.movement.type.558
+            ("dict.logistics.movement.type.558", "en-US", "GI调整转运_us", "移动类型.558 GI调整转运"),
+            // dict.logistics.movement.type.558
+            ("dict.logistics.movement.type.558", "ja-JP", "GI调整转运_jp", "移动类型.558 GI调整转运"),
+            // dict.logistics.movement.type.558
+            ("dict.logistics.movement.type.558", "zh-CN", "GI调整转运", "移动类型.558 GI调整转运"),
+            // dict.logistics.movement.type.558
+            ("dict.logistics.movement.type.558", "zh-HK", "GI调整转运_hk", "移动类型.558 GI调整转运"),
+
+            // dict.logistics.movement.type.561
+            ("dict.logistics.movement.type.561", "en-US", "库存余额的初始条目_us", "移动类型.561 库存余额的初始条目"),
+            // dict.logistics.movement.type.561
+            ("dict.logistics.movement.type.561", "ja-JP", "库存余额的初始条目_jp", "移动类型.561 库存余额的初始条目"),
+            // dict.logistics.movement.type.561
+            ("dict.logistics.movement.type.561", "zh-CN", "库存余额的初始条目", "移动类型.561 库存余额的初始条目"),
+            // dict.logistics.movement.type.561
+            ("dict.logistics.movement.type.561", "zh-HK", "库存余额的初始条目_hk", "移动类型.561 库存余额的初始条目"),
+
+            // dict.logistics.movement.type.562
+            ("dict.logistics.movement.type.562", "en-US", "RE初始条目库存余额_us", "移动类型.562 RE初始条目库存余额"),
+            // dict.logistics.movement.type.562
+            ("dict.logistics.movement.type.562", "ja-JP", "RE初始条目库存余额_jp", "移动类型.562 RE初始条目库存余额"),
+            // dict.logistics.movement.type.562
+            ("dict.logistics.movement.type.562", "zh-CN", "RE初始条目库存余额", "移动类型.562 RE初始条目库存余额"),
+            // dict.logistics.movement.type.562
+            ("dict.logistics.movement.type.562", "zh-HK", "RE初始条目库存余额_hk", "移动类型.562 RE初始条目库存余额"),
+
+            // dict.logistics.movement.type.563
+            ("dict.logistics.movement.type.563", "en-US", "初始条目库存余额:QI_us", "移动类型.563 初始条目库存余额:QI"),
+            // dict.logistics.movement.type.563
+            ("dict.logistics.movement.type.563", "ja-JP", "初始条目库存余额:QI_jp", "移动类型.563 初始条目库存余额:QI"),
+            // dict.logistics.movement.type.563
+            ("dict.logistics.movement.type.563", "zh-CN", "初始条目库存余额:QI", "移动类型.563 初始条目库存余额:QI"),
+            // dict.logistics.movement.type.563
+            ("dict.logistics.movement.type.563", "zh-HK", "初始条目库存余额:QI_hk", "移动类型.563 初始条目库存余额:QI"),
+
+            // dict.logistics.movement.type.564
+            ("dict.logistics.movement.type.564", "en-US", "RE库存余额输入:QI_us", "移动类型.564 RE库存余额输入:QI"),
+            // dict.logistics.movement.type.564
+            ("dict.logistics.movement.type.564", "ja-JP", "RE库存余额输入:QI_jp", "移动类型.564 RE库存余额输入:QI"),
+            // dict.logistics.movement.type.564
+            ("dict.logistics.movement.type.564", "zh-CN", "RE库存余额输入:QI", "移动类型.564 RE库存余额输入:QI"),
+            // dict.logistics.movement.type.564
+            ("dict.logistics.movement.type.564", "zh-HK", "RE库存余额输入:QI_hk", "移动类型.564 RE库存余额输入:QI"),
+
+            // dict.logistics.movement.type.565
+            ("dict.logistics.movement.type.565", "en-US", "库存余额输入:冻结_us", "移动类型.565 库存余额输入:冻结"),
+            // dict.logistics.movement.type.565
+            ("dict.logistics.movement.type.565", "ja-JP", "库存余额输入:冻结_jp", "移动类型.565 库存余额输入:冻结"),
+            // dict.logistics.movement.type.565
+            ("dict.logistics.movement.type.565", "zh-CN", "库存余额输入:冻结", "移动类型.565 库存余额输入:冻结"),
+            // dict.logistics.movement.type.565
+            ("dict.logistics.movement.type.565", "zh-HK", "库存余额输入:冻结_hk", "移动类型.565 库存余额输入:冻结"),
+
+            // dict.logistics.movement.type.566
+            ("dict.logistics.movement.type.566", "en-US", "RE库存余额条目：冻结_us", "移动类型.566 RE库存余额条目：冻结"),
+            // dict.logistics.movement.type.566
+            ("dict.logistics.movement.type.566", "ja-JP", "RE库存余额条目：冻结_jp", "移动类型.566 RE库存余额条目：冻结"),
+            // dict.logistics.movement.type.566
+            ("dict.logistics.movement.type.566", "zh-CN", "RE库存余额条目：冻结", "移动类型.566 RE库存余额条目：冻结"),
+            // dict.logistics.movement.type.566
+            ("dict.logistics.movement.type.566", "zh-HK", "RE库存余额条目：冻结_hk", "移动类型.566 RE库存余额条目：冻结"),
+
+            // dict.logistics.movement.type.571
+            ("dict.logistics.movement.type.571", "en-US", "收货装配_us", "移动类型.571 收货装配"),
+            // dict.logistics.movement.type.571
+            ("dict.logistics.movement.type.571", "ja-JP", "收货装配_jp", "移动类型.571 收货装配"),
+            // dict.logistics.movement.type.571
+            ("dict.logistics.movement.type.571", "zh-CN", "收货装配", "移动类型.571 收货装配"),
+            // dict.logistics.movement.type.571
+            ("dict.logistics.movement.type.571", "zh-HK", "收货装配_hk", "移动类型.571 收货装配"),
+
+            // dict.logistics.movement.type.572
+            ("dict.logistics.movement.type.572", "en-US", "RE 收货装配_us", "移动类型.572 RE 收货装配"),
+            // dict.logistics.movement.type.572
+            ("dict.logistics.movement.type.572", "ja-JP", "RE 收货装配_jp", "移动类型.572 RE 收货装配"),
+            // dict.logistics.movement.type.572
+            ("dict.logistics.movement.type.572", "zh-CN", "RE 收货装配", "移动类型.572 RE 收货装配"),
+            // dict.logistics.movement.type.572
+            ("dict.logistics.movement.type.572", "zh-HK", "RE 收货装配_hk", "移动类型.572 RE 收货装配"),
+
+            // dict.logistics.movement.type.573
+            ("dict.logistics.movement.type.573", "en-US", "收货 QI 装配_us", "移动类型.573 收货 QI 装配"),
+            // dict.logistics.movement.type.573
+            ("dict.logistics.movement.type.573", "ja-JP", "收货 QI 装配_jp", "移动类型.573 收货 QI 装配"),
+            // dict.logistics.movement.type.573
+            ("dict.logistics.movement.type.573", "zh-CN", "收货 QI 装配", "移动类型.573 收货 QI 装配"),
+            // dict.logistics.movement.type.573
+            ("dict.logistics.movement.type.573", "zh-HK", "收货 QI 装配_hk", "移动类型.573 收货 QI 装配"),
+
+            // dict.logistics.movement.type.574
+            ("dict.logistics.movement.type.574", "en-US", "RE 收货 QI 装配_us", "移动类型.574 RE 收货 QI 装配"),
+            // dict.logistics.movement.type.574
+            ("dict.logistics.movement.type.574", "ja-JP", "RE 收货 QI 装配_jp", "移动类型.574 RE 收货 QI 装配"),
+            // dict.logistics.movement.type.574
+            ("dict.logistics.movement.type.574", "zh-CN", "RE 收货 QI 装配", "移动类型.574 RE 收货 QI 装配"),
+            // dict.logistics.movement.type.574
+            ("dict.logistics.movement.type.574", "zh-HK", "RE 收货 QI 装配_hk", "移动类型.574 RE 收货 QI 装配"),
+
+            // dict.logistics.movement.type.575
+            ("dict.logistics.movement.type.575", "en-US", "收货冻结装配_us", "移动类型.575 收货冻结装配"),
+            // dict.logistics.movement.type.575
+            ("dict.logistics.movement.type.575", "ja-JP", "收货冻结装配_jp", "移动类型.575 收货冻结装配"),
+            // dict.logistics.movement.type.575
+            ("dict.logistics.movement.type.575", "zh-CN", "收货冻结装配", "移动类型.575 收货冻结装配"),
+            // dict.logistics.movement.type.575
+            ("dict.logistics.movement.type.575", "zh-HK", "收货冻结装配_hk", "移动类型.575 收货冻结装配"),
+
+            // dict.logistics.movement.type.576
+            ("dict.logistics.movement.type.576", "en-US", "RE 收货冻结装配_us", "移动类型.576 RE 收货冻结装配"),
+            // dict.logistics.movement.type.576
+            ("dict.logistics.movement.type.576", "ja-JP", "RE 收货冻结装配_jp", "移动类型.576 RE 收货冻结装配"),
+            // dict.logistics.movement.type.576
+            ("dict.logistics.movement.type.576", "zh-CN", "RE 收货冻结装配", "移动类型.576 RE 收货冻结装配"),
+            // dict.logistics.movement.type.576
+            ("dict.logistics.movement.type.576", "zh-HK", "RE 收货冻结装配_hk", "移动类型.576 RE 收货冻结装配"),
+
+            // dict.logistics.movement.type.581
+            ("dict.logistics.movement.type.581", "en-US", "收货副产品网络_us", "移动类型.581 收货副产品网络"),
+            // dict.logistics.movement.type.581
+            ("dict.logistics.movement.type.581", "ja-JP", "收货副产品网络_jp", "移动类型.581 收货副产品网络"),
+            // dict.logistics.movement.type.581
+            ("dict.logistics.movement.type.581", "zh-CN", "收货副产品网络", "移动类型.581 收货副产品网络"),
+            // dict.logistics.movement.type.581
+            ("dict.logistics.movement.type.581", "zh-HK", "收货副产品网络_hk", "移动类型.581 收货副产品网络"),
+
+            // dict.logistics.movement.type.582
+            ("dict.logistics.movement.type.582", "en-US", "RE 副产品    网络_us", "移动类型.582 RE 副产品    网络"),
+            // dict.logistics.movement.type.582
+            ("dict.logistics.movement.type.582", "ja-JP", "RE 副产品    网络_jp", "移动类型.582 RE 副产品    网络"),
+            // dict.logistics.movement.type.582
+            ("dict.logistics.movement.type.582", "zh-CN", "RE 副产品    网络", "移动类型.582 RE 副产品    网络"),
+            // dict.logistics.movement.type.582
+            ("dict.logistics.movement.type.582", "zh-HK", "RE 副产品    网络_hk", "移动类型.582 RE 副产品    网络"),
+
+            // dict.logistics.movement.type.601
+            ("dict.logistics.movement.type.601", "en-US", "GD发货: 交货_us", "移动类型.601 GD发货: 交货"),
+            // dict.logistics.movement.type.601
+            ("dict.logistics.movement.type.601", "ja-JP", "GD发货: 交货_jp", "移动类型.601 GD发货: 交货"),
+            // dict.logistics.movement.type.601
+            ("dict.logistics.movement.type.601", "zh-CN", "GD发货: 交货", "移动类型.601 GD发货: 交货"),
+            // dict.logistics.movement.type.601
+            ("dict.logistics.movement.type.601", "zh-HK", "GD发货: 交货_hk", "移动类型.601 GD发货: 交货"),
+
+            // dict.logistics.movement.type.602
+            ("dict.logistics.movement.type.602", "en-US", "RE交货冲销_us", "移动类型.602 RE交货冲销"),
+            // dict.logistics.movement.type.602
+            ("dict.logistics.movement.type.602", "ja-JP", "RE交货冲销_jp", "移动类型.602 RE交货冲销"),
+            // dict.logistics.movement.type.602
+            ("dict.logistics.movement.type.602", "zh-CN", "RE交货冲销", "移动类型.602 RE交货冲销"),
+            // dict.logistics.movement.type.602
+            ("dict.logistics.movement.type.602", "zh-HK", "RE交货冲销_hk", "移动类型.602 RE交货冲销"),
+
+            // dict.logistics.movement.type.603
+            ("dict.logistics.movement.type.603", "en-US", "TF 部件从库存到工厂_us", "移动类型.603 TF 部件从库存到工厂"),
+            // dict.logistics.movement.type.603
+            ("dict.logistics.movement.type.603", "ja-JP", "TF 部件从库存到工厂_jp", "移动类型.603 TF 部件从库存到工厂"),
+            // dict.logistics.movement.type.603
+            ("dict.logistics.movement.type.603", "zh-CN", "TF 部件从库存到工厂", "移动类型.603 TF 部件从库存到工厂"),
+            // dict.logistics.movement.type.603
+            ("dict.logistics.movement.type.603", "zh-HK", "TF 部件从库存到工厂_hk", "移动类型.603 TF 部件从库存到工厂"),
+
+            // dict.logistics.movement.type.604
+            ("dict.logistics.movement.type.604", "en-US", "TR 部件从库存到工厂_us", "移动类型.604 TR 部件从库存到工厂"),
+            // dict.logistics.movement.type.604
+            ("dict.logistics.movement.type.604", "ja-JP", "TR 部件从库存到工厂_jp", "移动类型.604 TR 部件从库存到工厂"),
+            // dict.logistics.movement.type.604
+            ("dict.logistics.movement.type.604", "zh-CN", "TR 部件从库存到工厂", "移动类型.604 TR 部件从库存到工厂"),
+            // dict.logistics.movement.type.604
+            ("dict.logistics.movement.type.604", "zh-HK", "TR 部件从库存到工厂_hk", "移动类型.604 TR 部件从库存到工厂"),
+
+            // dict.logistics.movement.type.605
+            ("dict.logistics.movement.type.605", "en-US", "TF厂内库存转储计划_us", "移动类型.605 TF厂内库存转储计划"),
+            // dict.logistics.movement.type.605
+            ("dict.logistics.movement.type.605", "ja-JP", "TF厂内库存转储计划_jp", "移动类型.605 TF厂内库存转储计划"),
+            // dict.logistics.movement.type.605
+            ("dict.logistics.movement.type.605", "zh-CN", "TF厂内库存转储计划", "移动类型.605 TF厂内库存转储计划"),
+            // dict.logistics.movement.type.605
+            ("dict.logistics.movement.type.605", "zh-HK", "TF厂内库存转储计划_hk", "移动类型.605 TF厂内库存转储计划"),
+
+            // dict.logistics.movement.type.606
+            ("dict.logistics.movement.type.606", "en-US", "TR厂内库存交易计划_us", "移动类型.606 TR厂内库存交易计划"),
+            // dict.logistics.movement.type.606
+            ("dict.logistics.movement.type.606", "ja-JP", "TR厂内库存交易计划_jp", "移动类型.606 TR厂内库存交易计划"),
+            // dict.logistics.movement.type.606
+            ("dict.logistics.movement.type.606", "zh-CN", "TR厂内库存交易计划", "移动类型.606 TR厂内库存交易计划"),
+            // dict.logistics.movement.type.606
+            ("dict.logistics.movement.type.606", "zh-HK", "TR厂内库存交易计划_hk", "移动类型.606 TR厂内库存交易计划"),
+
+            // dict.logistics.movement.type.617
+            ("dict.logistics.movement.type.617", "en-US", "创建字符串物料条件_us", "移动类型.617 创建字符串物料条件"),
+            // dict.logistics.movement.type.617
+            ("dict.logistics.movement.type.617", "ja-JP", "创建字符串物料条件_jp", "移动类型.617 创建字符串物料条件"),
+            // dict.logistics.movement.type.617
+            ("dict.logistics.movement.type.617", "zh-CN", "创建字符串物料条件", "移动类型.617 创建字符串物料条件"),
+            // dict.logistics.movement.type.617
+            ("dict.logistics.movement.type.617", "zh-HK", "创建字符串物料条件_hk", "移动类型.617 创建字符串物料条件"),
+
+            // dict.logistics.movement.type.618
+            ("dict.logistics.movement.type.618", "en-US", "FE 创建字符串物料条_us", "移动类型.618 FE 创建字符串物料条"),
+            // dict.logistics.movement.type.618
+            ("dict.logistics.movement.type.618", "ja-JP", "FE 创建字符串物料条_jp", "移动类型.618 FE 创建字符串物料条"),
+            // dict.logistics.movement.type.618
+            ("dict.logistics.movement.type.618", "zh-CN", "FE 创建字符串物料条", "移动类型.618 FE 创建字符串物料条"),
+            // dict.logistics.movement.type.618
+            ("dict.logistics.movement.type.618", "zh-HK", "FE 创建字符串物料条_hk", "移动类型.618 FE 创建字符串物料条"),
+
+            // dict.logistics.movement.type.619
+            ("dict.logistics.movement.type.619", "en-US", "组合字符串物料条件_us", "移动类型.619 组合字符串物料条件"),
+            // dict.logistics.movement.type.619
+            ("dict.logistics.movement.type.619", "ja-JP", "组合字符串物料条件_jp", "移动类型.619 组合字符串物料条件"),
+            // dict.logistics.movement.type.619
+            ("dict.logistics.movement.type.619", "zh-CN", "组合字符串物料条件", "移动类型.619 组合字符串物料条件"),
+            // dict.logistics.movement.type.619
+            ("dict.logistics.movement.type.619", "zh-HK", "组合字符串物料条件_hk", "移动类型.619 组合字符串物料条件"),
+
+            // dict.logistics.movement.type.620
+            ("dict.logistics.movement.type.620", "en-US", "FE 组合字符串物料条_us", "移动类型.620 FE 组合字符串物料条"),
+            // dict.logistics.movement.type.620
+            ("dict.logistics.movement.type.620", "ja-JP", "FE 组合字符串物料条_jp", "移动类型.620 FE 组合字符串物料条"),
+            // dict.logistics.movement.type.620
+            ("dict.logistics.movement.type.620", "zh-CN", "FE 组合字符串物料条", "移动类型.620 FE 组合字符串物料条"),
+            // dict.logistics.movement.type.620
+            ("dict.logistics.movement.type.620", "zh-HK", "FE 组合字符串物料条_hk", "移动类型.620 FE 组合字符串物料条"),
+
+            // dict.logistics.movement.type.621
+            ("dict.logistics.movement.type.621", "en-US", "GI返回式包装:借贷_us", "移动类型.621 GI返回式包装:借贷"),
+            // dict.logistics.movement.type.621
+            ("dict.logistics.movement.type.621", "ja-JP", "GI返回式包装:借贷_jp", "移动类型.621 GI返回式包装:借贷"),
+            // dict.logistics.movement.type.621
+            ("dict.logistics.movement.type.621", "zh-CN", "GI返回式包装:借贷", "移动类型.621 GI返回式包装:借贷"),
+            // dict.logistics.movement.type.621
+            ("dict.logistics.movement.type.621", "zh-HK", "GI返回式包装:借贷_hk", "移动类型.621 GI返回式包装:借贷"),
+
+            // dict.logistics.movement.type.622
+            ("dict.logistics.movement.type.622", "en-US", "GI返回式包装:退货_us", "移动类型.622 GI返回式包装:退货"),
+            // dict.logistics.movement.type.622
+            ("dict.logistics.movement.type.622", "ja-JP", "GI返回式包装:退货_jp", "移动类型.622 GI返回式包装:退货"),
+            // dict.logistics.movement.type.622
+            ("dict.logistics.movement.type.622", "zh-CN", "GI返回式包装:退货", "移动类型.622 GI返回式包装:退货"),
+            // dict.logistics.movement.type.622
+            ("dict.logistics.movement.type.622", "zh-HK", "GI返回式包装:退货_hk", "移动类型.622 GI返回式包装:退货"),
+
+            // dict.logistics.movement.type.623
+            ("dict.logistics.movement.type.623", "en-US", "GI发货:客户退货包装_us", "移动类型.623 GI发货:客户退货包装"),
+            // dict.logistics.movement.type.623
+            ("dict.logistics.movement.type.623", "ja-JP", "GI发货:客户退货包装_jp", "移动类型.623 GI发货:客户退货包装"),
+            // dict.logistics.movement.type.623
+            ("dict.logistics.movement.type.623", "zh-CN", "GI发货:客户退货包装", "移动类型.623 GI发货:客户退货包装"),
+            // dict.logistics.movement.type.623
+            ("dict.logistics.movement.type.623", "zh-HK", "GI发货:客户退货包装_hk", "移动类型.623 GI发货:客户退货包装"),
+
+            // dict.logistics.movement.type.624
+            ("dict.logistics.movement.type.624", "en-US", "GI收货:客户退货包装_us", "移动类型.624 GI收货:客户退货包装"),
+            // dict.logistics.movement.type.624
+            ("dict.logistics.movement.type.624", "ja-JP", "GI收货:客户退货包装_jp", "移动类型.624 GI收货:客户退货包装"),
+            // dict.logistics.movement.type.624
+            ("dict.logistics.movement.type.624", "zh-CN", "GI收货:客户退货包装", "移动类型.624 GI收货:客户退货包装"),
+            // dict.logistics.movement.type.624
+            ("dict.logistics.movement.type.624", "zh-HK", "GI收货:客户退货包装_hk", "移动类型.624 GI收货:客户退货包装"),
+
+            // dict.logistics.movement.type.631
+            ("dict.logistics.movement.type.631", "en-US", "GI寄售: 借贷_us", "移动类型.631 GI寄售: 借贷"),
+            // dict.logistics.movement.type.631
+            ("dict.logistics.movement.type.631", "ja-JP", "GI寄售: 借贷_jp", "移动类型.631 GI寄售: 借贷"),
+            // dict.logistics.movement.type.631
+            ("dict.logistics.movement.type.631", "zh-CN", "GI寄售: 借贷", "移动类型.631 GI寄售: 借贷"),
+            // dict.logistics.movement.type.631
+            ("dict.logistics.movement.type.631", "zh-HK", "GI寄售: 借贷_hk", "移动类型.631 GI寄售: 借贷"),
+
+            // dict.logistics.movement.type.632
+            ("dict.logistics.movement.type.632", "en-US", "GI寄售: 退货_us", "移动类型.632 GI寄售: 退货"),
+            // dict.logistics.movement.type.632
+            ("dict.logistics.movement.type.632", "ja-JP", "GI寄售: 退货_jp", "移动类型.632 GI寄售: 退货"),
+            // dict.logistics.movement.type.632
+            ("dict.logistics.movement.type.632", "zh-CN", "GI寄售: 退货", "移动类型.632 GI寄售: 退货"),
+            // dict.logistics.movement.type.632
+            ("dict.logistics.movement.type.632", "zh-HK", "GI寄售: 退货_hk", "移动类型.632 GI寄售: 退货"),
+
+            // dict.logistics.movement.type.633
+            ("dict.logistics.movement.type.633", "en-US", "GI发货: 客户寄售_us", "移动类型.633 GI发货: 客户寄售"),
+            // dict.logistics.movement.type.633
+            ("dict.logistics.movement.type.633", "ja-JP", "GI发货: 客户寄售_jp", "移动类型.633 GI发货: 客户寄售"),
+            // dict.logistics.movement.type.633
+            ("dict.logistics.movement.type.633", "zh-CN", "GI发货: 客户寄售", "移动类型.633 GI发货: 客户寄售"),
+            // dict.logistics.movement.type.633
+            ("dict.logistics.movement.type.633", "zh-HK", "GI发货: 客户寄售_hk", "移动类型.633 GI发货: 客户寄售"),
+
+            // dict.logistics.movement.type.634
+            ("dict.logistics.movement.type.634", "en-US", "GI收货: 客户寄售_us", "移动类型.634 GI收货: 客户寄售"),
+            // dict.logistics.movement.type.634
+            ("dict.logistics.movement.type.634", "ja-JP", "GI收货: 客户寄售_jp", "移动类型.634 GI收货: 客户寄售"),
+            // dict.logistics.movement.type.634
+            ("dict.logistics.movement.type.634", "zh-CN", "GI收货: 客户寄售", "移动类型.634 GI收货: 客户寄售"),
+            // dict.logistics.movement.type.634
+            ("dict.logistics.movement.type.634", "zh-HK", "GI收货: 客户寄售_hk", "移动类型.634 GI收货: 客户寄售"),
+
+            // dict.logistics.movement.type.635
+            ("dict.logistics.movement.type.635", "en-US", "TF托售出租_us", "移动类型.635 TF托售出租"),
+            // dict.logistics.movement.type.635
+            ("dict.logistics.movement.type.635", "ja-JP", "TF托售出租_jp", "移动类型.635 TF托售出租"),
+            // dict.logistics.movement.type.635
+            ("dict.logistics.movement.type.635", "zh-CN", "TF托售出租", "移动类型.635 TF托售出租"),
+            // dict.logistics.movement.type.635
+            ("dict.logistics.movement.type.635", "zh-HK", "TF托售出租_hk", "移动类型.635 TF托售出租"),
+
+            // dict.logistics.movement.type.636
+            ("dict.logistics.movement.type.636", "en-US", "TR寄售退货交货_us", "移动类型.636 TR寄售退货交货"),
+            // dict.logistics.movement.type.636
+            ("dict.logistics.movement.type.636", "ja-JP", "TR寄售退货交货_jp", "移动类型.636 TR寄售退货交货"),
+            // dict.logistics.movement.type.636
+            ("dict.logistics.movement.type.636", "zh-CN", "TR寄售退货交货", "移动类型.636 TR寄售退货交货"),
+            // dict.logistics.movement.type.636
+            ("dict.logistics.movement.type.636", "zh-HK", "TR寄售退货交货_hk", "移动类型.636 TR寄售退货交货"),
+
+            // dict.logistics.movement.type.641
+            ("dict.logistics.movement.type.641", "en-US", "TF 到在途库存_us", "移动类型.641 TF 到在途库存"),
+            // dict.logistics.movement.type.641
+            ("dict.logistics.movement.type.641", "ja-JP", "TF 到在途库存_jp", "移动类型.641 TF 到在途库存"),
+            // dict.logistics.movement.type.641
+            ("dict.logistics.movement.type.641", "zh-CN", "TF 到在途库存", "移动类型.641 TF 到在途库存"),
+            // dict.logistics.movement.type.641
+            ("dict.logistics.movement.type.641", "zh-HK", "TF 到在途库存_hk", "移动类型.641 TF 到在途库存"),
+
+            // dict.logistics.movement.type.642
+            ("dict.logistics.movement.type.642", "en-US", "TR 在途库存_us", "移动类型.642 TR 在途库存"),
+            // dict.logistics.movement.type.642
+            ("dict.logistics.movement.type.642", "ja-JP", "TR 在途库存_jp", "移动类型.642 TR 在途库存"),
+            // dict.logistics.movement.type.642
+            ("dict.logistics.movement.type.642", "zh-CN", "TR 在途库存", "移动类型.642 TR 在途库存"),
+            // dict.logistics.movement.type.642
+            ("dict.logistics.movement.type.642", "zh-HK", "TR 在途库存_hk", "移动类型.642 TR 在途库存"),
+
+            // dict.logistics.movement.type.643
+            ("dict.logistics.movement.type.643", "en-US", "TF 至跨公司间_us", "移动类型.643 TF 至跨公司间"),
+            // dict.logistics.movement.type.643
+            ("dict.logistics.movement.type.643", "ja-JP", "TF 至跨公司间_jp", "移动类型.643 TF 至跨公司间"),
+            // dict.logistics.movement.type.643
+            ("dict.logistics.movement.type.643", "zh-CN", "TF 至跨公司间", "移动类型.643 TF 至跨公司间"),
+            // dict.logistics.movement.type.643
+            ("dict.logistics.movement.type.643", "zh-HK", "TF 至跨公司间_hk", "移动类型.643 TF 至跨公司间"),
+
+            // dict.logistics.movement.type.644
+            ("dict.logistics.movement.type.644", "en-US", "TR 至跨公司间_us", "移动类型.644 TR 至跨公司间"),
+            // dict.logistics.movement.type.644
+            ("dict.logistics.movement.type.644", "ja-JP", "TR 至跨公司间_jp", "移动类型.644 TR 至跨公司间"),
+            // dict.logistics.movement.type.644
+            ("dict.logistics.movement.type.644", "zh-CN", "TR 至跨公司间", "移动类型.644 TR 至跨公司间"),
+            // dict.logistics.movement.type.644
+            ("dict.logistics.movement.type.644", "zh-HK", "TR 至跨公司间_hk", "移动类型.644 TR 至跨公司间"),
+
+            // dict.logistics.movement.type.645
+            ("dict.logistics.movement.type.645", "en-US", "TF 跨公司_us", "移动类型.645 TF 跨公司"),
+            // dict.logistics.movement.type.645
+            ("dict.logistics.movement.type.645", "ja-JP", "TF 跨公司_jp", "移动类型.645 TF 跨公司"),
+            // dict.logistics.movement.type.645
+            ("dict.logistics.movement.type.645", "zh-CN", "TF 跨公司", "移动类型.645 TF 跨公司"),
+            // dict.logistics.movement.type.645
+            ("dict.logistics.movement.type.645", "zh-HK", "TF 跨公司_hk", "移动类型.645 TF 跨公司"),
+
+            // dict.logistics.movement.type.646
+            ("dict.logistics.movement.type.646", "en-US", "TR 跨公司_us", "移动类型.646 TR 跨公司"),
+            // dict.logistics.movement.type.646
+            ("dict.logistics.movement.type.646", "ja-JP", "TR 跨公司_jp", "移动类型.646 TR 跨公司"),
+            // dict.logistics.movement.type.646
+            ("dict.logistics.movement.type.646", "zh-CN", "TR 跨公司", "移动类型.646 TR 跨公司"),
+            // dict.logistics.movement.type.646
+            ("dict.logistics.movement.type.646", "zh-HK", "TR 跨公司_hk", "移动类型.646 TR 跨公司"),
+
+            // dict.logistics.movement.type.647
+            ("dict.logistics.movement.type.647", "en-US", "TF 到在途库存_us", "移动类型.647 TF 到在途库存"),
+            // dict.logistics.movement.type.647
+            ("dict.logistics.movement.type.647", "ja-JP", "TF 到在途库存_jp", "移动类型.647 TF 到在途库存"),
+            // dict.logistics.movement.type.647
+            ("dict.logistics.movement.type.647", "zh-CN", "TF 到在途库存", "移动类型.647 TF 到在途库存"),
+            // dict.logistics.movement.type.647
+            ("dict.logistics.movement.type.647", "zh-HK", "TF 到在途库存_hk", "移动类型.647 TF 到在途库存"),
+
+            // dict.logistics.movement.type.648
+            ("dict.logistics.movement.type.648", "en-US", "TR 在途库存_us", "移动类型.648 TR 在途库存"),
+            // dict.logistics.movement.type.648
+            ("dict.logistics.movement.type.648", "ja-JP", "TR 在途库存_jp", "移动类型.648 TR 在途库存"),
+            // dict.logistics.movement.type.648
+            ("dict.logistics.movement.type.648", "zh-CN", "TR 在途库存", "移动类型.648 TR 在途库存"),
+            // dict.logistics.movement.type.648
+            ("dict.logistics.movement.type.648", "zh-HK", "TR 在途库存_hk", "移动类型.648 TR 在途库存"),
+
+            // dict.logistics.movement.type.651
+            ("dict.logistics.movement.type.651", "en-US", "GD退货  退回_us", "移动类型.651 GD退货  退回"),
+            // dict.logistics.movement.type.651
+            ("dict.logistics.movement.type.651", "ja-JP", "GD退货  退回_jp", "移动类型.651 GD退货  退回"),
+            // dict.logistics.movement.type.651
+            ("dict.logistics.movement.type.651", "zh-CN", "GD退货  退回", "移动类型.651 GD退货  退回"),
+            // dict.logistics.movement.type.651
+            ("dict.logistics.movement.type.651", "zh-HK", "GD退货  退回_hk", "移动类型.651 GD退货  退回"),
+
+            // dict.logistics.movement.type.652
+            ("dict.logistics.movement.type.652", "en-US", "GD退货  退货冲销_us", "移动类型.652 GD退货  退货冲销"),
+            // dict.logistics.movement.type.652
+            ("dict.logistics.movement.type.652", "ja-JP", "GD退货  退货冲销_jp", "移动类型.652 GD退货  退货冲销"),
+            // dict.logistics.movement.type.652
+            ("dict.logistics.movement.type.652", "zh-CN", "GD退货  退货冲销", "移动类型.652 GD退货  退货冲销"),
+            // dict.logistics.movement.type.652
+            ("dict.logistics.movement.type.652", "zh-HK", "GD退货  退货冲销_hk", "移动类型.652 GD退货  退货冲销"),
+
+            // dict.logistics.movement.type.653
+            ("dict.logistics.movement.type.653", "en-US", "GD 退货    非限制_us", "移动类型.653 GD 退货    非限制"),
+            // dict.logistics.movement.type.653
+            ("dict.logistics.movement.type.653", "ja-JP", "GD 退货    非限制_jp", "移动类型.653 GD 退货    非限制"),
+            // dict.logistics.movement.type.653
+            ("dict.logistics.movement.type.653", "zh-CN", "GD 退货    非限制", "移动类型.653 GD 退货    非限制"),
+            // dict.logistics.movement.type.653
+            ("dict.logistics.movement.type.653", "zh-HK", "GD 退货    非限制_hk", "移动类型.653 GD 退货    非限制"),
+
+            // dict.logistics.movement.type.654
+            ("dict.logistics.movement.type.654", "en-US", "GD 退货 非限制 冲销_us", "移动类型.654 GD 退货 非限制 冲销"),
+            // dict.logistics.movement.type.654
+            ("dict.logistics.movement.type.654", "ja-JP", "GD 退货 非限制 冲销_jp", "移动类型.654 GD 退货 非限制 冲销"),
+            // dict.logistics.movement.type.654
+            ("dict.logistics.movement.type.654", "zh-CN", "GD 退货 非限制 冲销", "移动类型.654 GD 退货 非限制 冲销"),
+            // dict.logistics.movement.type.654
+            ("dict.logistics.movement.type.654", "zh-HK", "GD 退货 非限制 冲销_hk", "移动类型.654 GD 退货 非限制 冲销"),
+
+            // dict.logistics.movement.type.655
+            ("dict.logistics.movement.type.655", "en-US", "GD 退货质检_us", "移动类型.655 GD 退货质检"),
+            // dict.logistics.movement.type.655
+            ("dict.logistics.movement.type.655", "ja-JP", "GD 退货质检_jp", "移动类型.655 GD 退货质检"),
+            // dict.logistics.movement.type.655
+            ("dict.logistics.movement.type.655", "zh-CN", "GD 退货质检", "移动类型.655 GD 退货质检"),
+            // dict.logistics.movement.type.655
+            ("dict.logistics.movement.type.655", "zh-HK", "GD 退货质检_hk", "移动类型.655 GD 退货质检"),
+
+            // dict.logistics.movement.type.656
+            ("dict.logistics.movement.type.656", "en-US", "GD 退货 QI 冲销_us", "移动类型.656 GD 退货 QI 冲销"),
+            // dict.logistics.movement.type.656
+            ("dict.logistics.movement.type.656", "ja-JP", "GD 退货 QI 冲销_jp", "移动类型.656 GD 退货 QI 冲销"),
+            // dict.logistics.movement.type.656
+            ("dict.logistics.movement.type.656", "zh-CN", "GD 退货 QI 冲销", "移动类型.656 GD 退货 QI 冲销"),
+            // dict.logistics.movement.type.656
+            ("dict.logistics.movement.type.656", "zh-HK", "GD 退货 QI 冲销_hk", "移动类型.656 GD 退货 QI 冲销"),
+
+            // dict.logistics.movement.type.657
+            ("dict.logistics.movement.type.657", "en-US", "GD 退货冻结_us", "移动类型.657 GD 退货冻结"),
+            // dict.logistics.movement.type.657
+            ("dict.logistics.movement.type.657", "ja-JP", "GD 退货冻结_jp", "移动类型.657 GD 退货冻结"),
+            // dict.logistics.movement.type.657
+            ("dict.logistics.movement.type.657", "zh-CN", "GD 退货冻结", "移动类型.657 GD 退货冻结"),
+            // dict.logistics.movement.type.657
+            ("dict.logistics.movement.type.657", "zh-HK", "GD 退货冻结_hk", "移动类型.657 GD 退货冻结"),
+
+            // dict.logistics.movement.type.658
+            ("dict.logistics.movement.type.658", "en-US", "GD 退货冻结冲销_us", "移动类型.658 GD 退货冻结冲销"),
+            // dict.logistics.movement.type.658
+            ("dict.logistics.movement.type.658", "ja-JP", "GD 退货冻结冲销_jp", "移动类型.658 GD 退货冻结冲销"),
+            // dict.logistics.movement.type.658
+            ("dict.logistics.movement.type.658", "zh-CN", "GD 退货冻结冲销", "移动类型.658 GD 退货冻结冲销"),
+            // dict.logistics.movement.type.658
+            ("dict.logistics.movement.type.658", "zh-HK", "GD 退货冻结冲销_hk", "移动类型.658 GD 退货冻结冲销"),
+
+            // dict.logistics.movement.type.661
+            ("dict.logistics.movement.type.661", "en-US", "GI向供应商退货_us", "移动类型.661 GI向供应商退货"),
+            // dict.logistics.movement.type.661
+            ("dict.logistics.movement.type.661", "ja-JP", "GI向供应商退货_jp", "移动类型.661 GI向供应商退货"),
+            // dict.logistics.movement.type.661
+            ("dict.logistics.movement.type.661", "zh-CN", "GI向供应商退货", "移动类型.661 GI向供应商退货"),
+            // dict.logistics.movement.type.661
+            ("dict.logistics.movement.type.661", "zh-HK", "GI向供应商退货_hk", "移动类型.661 GI向供应商退货"),
+
+            // dict.logistics.movement.type.662
+            ("dict.logistics.movement.type.662", "en-US", "RE退货到供应商冲销_us", "移动类型.662 RE退货到供应商冲销"),
+            // dict.logistics.movement.type.662
+            ("dict.logistics.movement.type.662", "ja-JP", "RE退货到供应商冲销_jp", "移动类型.662 RE退货到供应商冲销"),
+            // dict.logistics.movement.type.662
+            ("dict.logistics.movement.type.662", "zh-CN", "RE退货到供应商冲销", "移动类型.662 RE退货到供应商冲销"),
+            // dict.logistics.movement.type.662
+            ("dict.logistics.movement.type.662", "zh-HK", "RE退货到供应商冲销_hk", "移动类型.662 RE退货到供应商冲销"),
+
+            // dict.logistics.movement.type.671
+            ("dict.logistics.movement.type.671", "en-US", "TR 在途库存_us", "移动类型.671 TR 在途库存"),
+            // dict.logistics.movement.type.671
+            ("dict.logistics.movement.type.671", "ja-JP", "TR 在途库存_jp", "移动类型.671 TR 在途库存"),
+            // dict.logistics.movement.type.671
+            ("dict.logistics.movement.type.671", "zh-CN", "TR 在途库存", "移动类型.671 TR 在途库存"),
+            // dict.logistics.movement.type.671
+            ("dict.logistics.movement.type.671", "zh-HK", "TR 在途库存_hk", "移动类型.671 TR 在途库存"),
+
+            // dict.logistics.movement.type.672
+            ("dict.logistics.movement.type.672", "en-US", "TF 到在途库存_us", "移动类型.672 TF 到在途库存"),
+            // dict.logistics.movement.type.672
+            ("dict.logistics.movement.type.672", "ja-JP", "TF 到在途库存_jp", "移动类型.672 TF 到在途库存"),
+            // dict.logistics.movement.type.672
+            ("dict.logistics.movement.type.672", "zh-CN", "TF 到在途库存", "移动类型.672 TF 到在途库存"),
+            // dict.logistics.movement.type.672
+            ("dict.logistics.movement.type.672", "zh-HK", "TF 到在途库存_hk", "移动类型.672 TF 到在途库存"),
+
+            // dict.logistics.movement.type.673
+            ("dict.logistics.movement.type.673", "en-US", "TF 至跨公司间_us", "移动类型.673 TF 至跨公司间"),
+            // dict.logistics.movement.type.673
+            ("dict.logistics.movement.type.673", "ja-JP", "TF 至跨公司间_jp", "移动类型.673 TF 至跨公司间"),
+            // dict.logistics.movement.type.673
+            ("dict.logistics.movement.type.673", "zh-CN", "TF 至跨公司间", "移动类型.673 TF 至跨公司间"),
+            // dict.logistics.movement.type.673
+            ("dict.logistics.movement.type.673", "zh-HK", "TF 至跨公司间_hk", "移动类型.673 TF 至跨公司间"),
+
+            // dict.logistics.movement.type.674
+            ("dict.logistics.movement.type.674", "en-US", "TR 至跨公司间_us", "移动类型.674 TR 至跨公司间"),
+            // dict.logistics.movement.type.674
+            ("dict.logistics.movement.type.674", "ja-JP", "TR 至跨公司间_jp", "移动类型.674 TR 至跨公司间"),
+            // dict.logistics.movement.type.674
+            ("dict.logistics.movement.type.674", "zh-CN", "TR 至跨公司间", "移动类型.674 TR 至跨公司间"),
+            // dict.logistics.movement.type.674
+            ("dict.logistics.movement.type.674", "zh-HK", "TR 至跨公司间_hk", "移动类型.674 TR 至跨公司间"),
+
+            // dict.logistics.movement.type.675
+            ("dict.logistics.movement.type.675", "en-US", "TR 跨公司_us", "移动类型.675 TR 跨公司"),
+            // dict.logistics.movement.type.675
+            ("dict.logistics.movement.type.675", "ja-JP", "TR 跨公司_jp", "移动类型.675 TR 跨公司"),
+            // dict.logistics.movement.type.675
+            ("dict.logistics.movement.type.675", "zh-CN", "TR 跨公司", "移动类型.675 TR 跨公司"),
+            // dict.logistics.movement.type.675
+            ("dict.logistics.movement.type.675", "zh-HK", "TR 跨公司_hk", "移动类型.675 TR 跨公司"),
+
+            // dict.logistics.movement.type.676
+            ("dict.logistics.movement.type.676", "en-US", "TF 跨公司_us", "移动类型.676 TF 跨公司"),
+            // dict.logistics.movement.type.676
+            ("dict.logistics.movement.type.676", "ja-JP", "TF 跨公司_jp", "移动类型.676 TF 跨公司"),
+            // dict.logistics.movement.type.676
+            ("dict.logistics.movement.type.676", "zh-CN", "TF 跨公司", "移动类型.676 TF 跨公司"),
+            // dict.logistics.movement.type.676
+            ("dict.logistics.movement.type.676", "zh-HK", "TF 跨公司_hk", "移动类型.676 TF 跨公司"),
+
+            // dict.logistics.movement.type.677
+            ("dict.logistics.movement.type.677", "en-US", "TR 在途库存_us", "移动类型.677 TR 在途库存"),
+            // dict.logistics.movement.type.677
+            ("dict.logistics.movement.type.677", "ja-JP", "TR 在途库存_jp", "移动类型.677 TR 在途库存"),
+            // dict.logistics.movement.type.677
+            ("dict.logistics.movement.type.677", "zh-CN", "TR 在途库存", "移动类型.677 TR 在途库存"),
+            // dict.logistics.movement.type.677
+            ("dict.logistics.movement.type.677", "zh-HK", "TR 在途库存_hk", "移动类型.677 TR 在途库存"),
+
+            // dict.logistics.movement.type.678
+            ("dict.logistics.movement.type.678", "en-US", "TF 到在途库存_us", "移动类型.678 TF 到在途库存"),
+            // dict.logistics.movement.type.678
+            ("dict.logistics.movement.type.678", "ja-JP", "TF 到在途库存_jp", "移动类型.678 TF 到在途库存"),
+            // dict.logistics.movement.type.678
+            ("dict.logistics.movement.type.678", "zh-CN", "TF 到在途库存", "移动类型.678 TF 到在途库存"),
+            // dict.logistics.movement.type.678
+            ("dict.logistics.movement.type.678", "zh-HK", "TF 到在途库存_hk", "移动类型.678 TF 到在途库存"),
+
+            // dict.logistics.movement.type.6a1
+            ("dict.logistics.movement.type.6a1", "en-US", "TF GI1_us", "移动类型.6A1 TF GI1"),
+            // dict.logistics.movement.type.6a1
+            ("dict.logistics.movement.type.6a1", "ja-JP", "TF GI1_jp", "移动类型.6A1 TF GI1"),
+            // dict.logistics.movement.type.6a1
+            ("dict.logistics.movement.type.6a1", "zh-CN", "TF GI1", "移动类型.6A1 TF GI1"),
+            // dict.logistics.movement.type.6a1
+            ("dict.logistics.movement.type.6a1", "zh-HK", "TF GI1_hk", "移动类型.6A1 TF GI1"),
+
+            // dict.logistics.movement.type.6a2
+            ("dict.logistics.movement.type.6a2", "en-US", "TR GI1_us", "移动类型.6A2 TR GI1"),
+            // dict.logistics.movement.type.6a2
+            ("dict.logistics.movement.type.6a2", "ja-JP", "TR GI1_jp", "移动类型.6A2 TR GI1"),
+            // dict.logistics.movement.type.6a2
+            ("dict.logistics.movement.type.6a2", "zh-CN", "TR GI1", "移动类型.6A2 TR GI1"),
+            // dict.logistics.movement.type.6a2
+            ("dict.logistics.movement.type.6a2", "zh-HK", "TR GI1_hk", "移动类型.6A2 TR GI1"),
+
+            // dict.logistics.movement.type.6a3
+            ("dict.logistics.movement.type.6a3", "en-US", "TF CC GI1_us", "移动类型.6A3 TF CC GI1"),
+            // dict.logistics.movement.type.6a3
+            ("dict.logistics.movement.type.6a3", "ja-JP", "TF CC GI1_jp", "移动类型.6A3 TF CC GI1"),
+            // dict.logistics.movement.type.6a3
+            ("dict.logistics.movement.type.6a3", "zh-CN", "TF CC GI1", "移动类型.6A3 TF CC GI1"),
+            // dict.logistics.movement.type.6a3
+            ("dict.logistics.movement.type.6a3", "zh-HK", "TF CC GI1_hk", "移动类型.6A3 TF CC GI1"),
+
+            // dict.logistics.movement.type.6a4
+            ("dict.logistics.movement.type.6a4", "en-US", "TR CC GI1_us", "移动类型.6A4 TR CC GI1"),
+            // dict.logistics.movement.type.6a4
+            ("dict.logistics.movement.type.6a4", "ja-JP", "TR CC GI1_jp", "移动类型.6A4 TR CC GI1"),
+            // dict.logistics.movement.type.6a4
+            ("dict.logistics.movement.type.6a4", "zh-CN", "TR CC GI1", "移动类型.6A4 TR CC GI1"),
+            // dict.logistics.movement.type.6a4
+            ("dict.logistics.movement.type.6a4", "zh-HK", "TR CC GI1_hk", "移动类型.6A4 TR CC GI1"),
+
+            // dict.logistics.movement.type.6a5
+            ("dict.logistics.movement.type.6a5", "en-US", "TF CC GI1_us", "移动类型.6A5 TF CC GI1"),
+            // dict.logistics.movement.type.6a5
+            ("dict.logistics.movement.type.6a5", "ja-JP", "TF CC GI1_jp", "移动类型.6A5 TF CC GI1"),
+            // dict.logistics.movement.type.6a5
+            ("dict.logistics.movement.type.6a5", "zh-CN", "TF CC GI1", "移动类型.6A5 TF CC GI1"),
+            // dict.logistics.movement.type.6a5
+            ("dict.logistics.movement.type.6a5", "zh-HK", "TF CC GI1_hk", "移动类型.6A5 TF CC GI1"),
+
+            // dict.logistics.movement.type.6a6
+            ("dict.logistics.movement.type.6a6", "en-US", "TR CC GI1_us", "移动类型.6A6 TR CC GI1"),
+            // dict.logistics.movement.type.6a6
+            ("dict.logistics.movement.type.6a6", "ja-JP", "TR CC GI1_jp", "移动类型.6A6 TR CC GI1"),
+            // dict.logistics.movement.type.6a6
+            ("dict.logistics.movement.type.6a6", "zh-CN", "TR CC GI1", "移动类型.6A6 TR CC GI1"),
+            // dict.logistics.movement.type.6a6
+            ("dict.logistics.movement.type.6a6", "zh-HK", "TR CC GI1_hk", "移动类型.6A6 TR CC GI1"),
+
+            // dict.logistics.movement.type.6a7
+            ("dict.logistics.movement.type.6a7", "en-US", "TF GI1_us", "移动类型.6A7 TF GI1"),
+            // dict.logistics.movement.type.6a7
+            ("dict.logistics.movement.type.6a7", "ja-JP", "TF GI1_jp", "移动类型.6A7 TF GI1"),
+            // dict.logistics.movement.type.6a7
+            ("dict.logistics.movement.type.6a7", "zh-CN", "TF GI1", "移动类型.6A7 TF GI1"),
+            // dict.logistics.movement.type.6a7
+            ("dict.logistics.movement.type.6a7", "zh-HK", "TF GI1_hk", "移动类型.6A7 TF GI1"),
+
+            // dict.logistics.movement.type.6a8
+            ("dict.logistics.movement.type.6a8", "en-US", "TR GI1_us", "移动类型.6A8 TR GI1"),
+            // dict.logistics.movement.type.6a8
+            ("dict.logistics.movement.type.6a8", "ja-JP", "TR GI1_jp", "移动类型.6A8 TR GI1"),
+            // dict.logistics.movement.type.6a8
+            ("dict.logistics.movement.type.6a8", "zh-CN", "TR GI1", "移动类型.6A8 TR GI1"),
+            // dict.logistics.movement.type.6a8
+            ("dict.logistics.movement.type.6a8", "zh-HK", "TR GI1_hk", "移动类型.6A8 TR GI1"),
+
+            // dict.logistics.movement.type.6b1
+            ("dict.logistics.movement.type.6b1", "en-US", "TF GI2_us", "移动类型.6B1 TF GI2"),
+            // dict.logistics.movement.type.6b1
+            ("dict.logistics.movement.type.6b1", "ja-JP", "TF GI2_jp", "移动类型.6B1 TF GI2"),
+            // dict.logistics.movement.type.6b1
+            ("dict.logistics.movement.type.6b1", "zh-CN", "TF GI2", "移动类型.6B1 TF GI2"),
+            // dict.logistics.movement.type.6b1
+            ("dict.logistics.movement.type.6b1", "zh-HK", "TF GI2_hk", "移动类型.6B1 TF GI2"),
+
+            // dict.logistics.movement.type.6b2
+            ("dict.logistics.movement.type.6b2", "en-US", "TR GI2_us", "移动类型.6B2 TR GI2"),
+            // dict.logistics.movement.type.6b2
+            ("dict.logistics.movement.type.6b2", "ja-JP", "TR GI2_jp", "移动类型.6B2 TR GI2"),
+            // dict.logistics.movement.type.6b2
+            ("dict.logistics.movement.type.6b2", "zh-CN", "TR GI2", "移动类型.6B2 TR GI2"),
+            // dict.logistics.movement.type.6b2
+            ("dict.logistics.movement.type.6b2", "zh-HK", "TR GI2_hk", "移动类型.6B2 TR GI2"),
+
+            // dict.logistics.movement.type.6b3
+            ("dict.logistics.movement.type.6b3", "en-US", "TF CC GI2_us", "移动类型.6B3 TF CC GI2"),
+            // dict.logistics.movement.type.6b3
+            ("dict.logistics.movement.type.6b3", "ja-JP", "TF CC GI2_jp", "移动类型.6B3 TF CC GI2"),
+            // dict.logistics.movement.type.6b3
+            ("dict.logistics.movement.type.6b3", "zh-CN", "TF CC GI2", "移动类型.6B3 TF CC GI2"),
+            // dict.logistics.movement.type.6b3
+            ("dict.logistics.movement.type.6b3", "zh-HK", "TF CC GI2_hk", "移动类型.6B3 TF CC GI2"),
+
+            // dict.logistics.movement.type.6b4
+            ("dict.logistics.movement.type.6b4", "en-US", "TR CC GI2_us", "移动类型.6B4 TR CC GI2"),
+            // dict.logistics.movement.type.6b4
+            ("dict.logistics.movement.type.6b4", "ja-JP", "TR CC GI2_jp", "移动类型.6B4 TR CC GI2"),
+            // dict.logistics.movement.type.6b4
+            ("dict.logistics.movement.type.6b4", "zh-CN", "TR CC GI2", "移动类型.6B4 TR CC GI2"),
+            // dict.logistics.movement.type.6b4
+            ("dict.logistics.movement.type.6b4", "zh-HK", "TR CC GI2_hk", "移动类型.6B4 TR CC GI2"),
+
+            // dict.logistics.movement.type.6b5
+            ("dict.logistics.movement.type.6b5", "en-US", "TF CC GI2_us", "移动类型.6B5 TF CC GI2"),
+            // dict.logistics.movement.type.6b5
+            ("dict.logistics.movement.type.6b5", "ja-JP", "TF CC GI2_jp", "移动类型.6B5 TF CC GI2"),
+            // dict.logistics.movement.type.6b5
+            ("dict.logistics.movement.type.6b5", "zh-CN", "TF CC GI2", "移动类型.6B5 TF CC GI2"),
+            // dict.logistics.movement.type.6b5
+            ("dict.logistics.movement.type.6b5", "zh-HK", "TF CC GI2_hk", "移动类型.6B5 TF CC GI2"),
+
+            // dict.logistics.movement.type.6b6
+            ("dict.logistics.movement.type.6b6", "en-US", "TR CC GI2_us", "移动类型.6B6 TR CC GI2"),
+            // dict.logistics.movement.type.6b6
+            ("dict.logistics.movement.type.6b6", "ja-JP", "TR CC GI2_jp", "移动类型.6B6 TR CC GI2"),
+            // dict.logistics.movement.type.6b6
+            ("dict.logistics.movement.type.6b6", "zh-CN", "TR CC GI2", "移动类型.6B6 TR CC GI2"),
+            // dict.logistics.movement.type.6b6
+            ("dict.logistics.movement.type.6b6", "zh-HK", "TR CC GI2_hk", "移动类型.6B6 TR CC GI2"),
+
+            // dict.logistics.movement.type.6b7
+            ("dict.logistics.movement.type.6b7", "en-US", "TF GI2_us", "移动类型.6B7 TF GI2"),
+            // dict.logistics.movement.type.6b7
+            ("dict.logistics.movement.type.6b7", "ja-JP", "TF GI2_jp", "移动类型.6B7 TF GI2"),
+            // dict.logistics.movement.type.6b7
+            ("dict.logistics.movement.type.6b7", "zh-CN", "TF GI2", "移动类型.6B7 TF GI2"),
+            // dict.logistics.movement.type.6b7
+            ("dict.logistics.movement.type.6b7", "zh-HK", "TF GI2_hk", "移动类型.6B7 TF GI2"),
+
+            // dict.logistics.movement.type.6b8
+            ("dict.logistics.movement.type.6b8", "en-US", "TR GI2_us", "移动类型.6B8 TR GI2"),
+            // dict.logistics.movement.type.6b8
+            ("dict.logistics.movement.type.6b8", "ja-JP", "TR GI2_jp", "移动类型.6B8 TR GI2"),
+            // dict.logistics.movement.type.6b8
+            ("dict.logistics.movement.type.6b8", "zh-CN", "TR GI2", "移动类型.6B8 TR GI2"),
+            // dict.logistics.movement.type.6b8
+            ("dict.logistics.movement.type.6b8", "zh-HK", "TR GI2_hk", "移动类型.6B8 TR GI2"),
+
+            // dict.logistics.movement.type.6k5
+            ("dict.logistics.movement.type.6k5", "en-US", "TF GI2 托售_us", "移动类型.6K5 TF GI2 托售"),
+            // dict.logistics.movement.type.6k5
+            ("dict.logistics.movement.type.6k5", "ja-JP", "TF GI2 托售_jp", "移动类型.6K5 TF GI2 托售"),
+            // dict.logistics.movement.type.6k5
+            ("dict.logistics.movement.type.6k5", "zh-CN", "TF GI2 托售", "移动类型.6K5 TF GI2 托售"),
+            // dict.logistics.movement.type.6k5
+            ("dict.logistics.movement.type.6k5", "zh-HK", "TF GI2 托售_hk", "移动类型.6K5 TF GI2 托售"),
+
+            // dict.logistics.movement.type.6k6
+            ("dict.logistics.movement.type.6k6", "en-US", "TR GI2 托售_us", "移动类型.6K6 TR GI2 托售"),
+            // dict.logistics.movement.type.6k6
+            ("dict.logistics.movement.type.6k6", "ja-JP", "TR GI2 托售_jp", "移动类型.6K6 TR GI2 托售"),
+            // dict.logistics.movement.type.6k6
+            ("dict.logistics.movement.type.6k6", "zh-CN", "TR GI2 托售", "移动类型.6K6 TR GI2 托售"),
+            // dict.logistics.movement.type.6k6
+            ("dict.logistics.movement.type.6k6", "zh-HK", "TR GI2 托售_hk", "移动类型.6K6 TR GI2 托售"),
+
+            // dict.logistics.movement.type.6w5
+            ("dict.logistics.movement.type.6w5", "en-US", "TF GI1 托售_us", "移动类型.6W5 TF GI1 托售"),
+            // dict.logistics.movement.type.6w5
+            ("dict.logistics.movement.type.6w5", "ja-JP", "TF GI1 托售_jp", "移动类型.6W5 TF GI1 托售"),
+            // dict.logistics.movement.type.6w5
+            ("dict.logistics.movement.type.6w5", "zh-CN", "TF GI1 托售", "移动类型.6W5 TF GI1 托售"),
+            // dict.logistics.movement.type.6w5
+            ("dict.logistics.movement.type.6w5", "zh-HK", "TF GI1 托售_hk", "移动类型.6W5 TF GI1 托售"),
+
+            // dict.logistics.movement.type.6w6
+            ("dict.logistics.movement.type.6w6", "en-US", "TR GI1 托售_us", "移动类型.6W6 TR GI1 托售"),
+            // dict.logistics.movement.type.6w6
+            ("dict.logistics.movement.type.6w6", "ja-JP", "TR GI1 托售_jp", "移动类型.6W6 TR GI1 托售"),
+            // dict.logistics.movement.type.6w6
+            ("dict.logistics.movement.type.6w6", "zh-CN", "TR GI1 托售", "移动类型.6W6 TR GI1 托售"),
+            // dict.logistics.movement.type.6w6
+            ("dict.logistics.movement.type.6w6", "zh-HK", "TR GI1 托售_hk", "移动类型.6W6 TR GI1 托售"),
+
+            // dict.logistics.movement.type.701
+            ("dict.logistics.movement.type.701", "en-US", "GR实际盘点: 仓库_us", "移动类型.701 GR实际盘点: 仓库"),
+            // dict.logistics.movement.type.701
+            ("dict.logistics.movement.type.701", "ja-JP", "GR实际盘点: 仓库_jp", "移动类型.701 GR实际盘点: 仓库"),
+            // dict.logistics.movement.type.701
+            ("dict.logistics.movement.type.701", "zh-CN", "GR实际盘点: 仓库", "移动类型.701 GR实际盘点: 仓库"),
+            // dict.logistics.movement.type.701
+            ("dict.logistics.movement.type.701", "zh-HK", "GR实际盘点: 仓库_hk", "移动类型.701 GR实际盘点: 仓库"),
+
+            // dict.logistics.movement.type.702
+            ("dict.logistics.movement.type.702", "en-US", "GI实际盘点: 仓库_us", "移动类型.702 GI实际盘点: 仓库"),
+            // dict.logistics.movement.type.702
+            ("dict.logistics.movement.type.702", "ja-JP", "GI实际盘点: 仓库_jp", "移动类型.702 GI实际盘点: 仓库"),
+            // dict.logistics.movement.type.702
+            ("dict.logistics.movement.type.702", "zh-CN", "GI实际盘点: 仓库", "移动类型.702 GI实际盘点: 仓库"),
+            // dict.logistics.movement.type.702
+            ("dict.logistics.movement.type.702", "zh-HK", "GI实际盘点: 仓库_hk", "移动类型.702 GI实际盘点: 仓库"),
+
+            // dict.logistics.movement.type.703
+            ("dict.logistics.movement.type.703", "en-US", "GR 盘点: 质检_us", "移动类型.703 GR 盘点: 质检"),
+            // dict.logistics.movement.type.703
+            ("dict.logistics.movement.type.703", "ja-JP", "GR 盘点: 质检_jp", "移动类型.703 GR 盘点: 质检"),
+            // dict.logistics.movement.type.703
+            ("dict.logistics.movement.type.703", "zh-CN", "GR 盘点: 质检", "移动类型.703 GR 盘点: 质检"),
+            // dict.logistics.movement.type.703
+            ("dict.logistics.movement.type.703", "zh-HK", "GR 盘点: 质检_hk", "移动类型.703 GR 盘点: 质检"),
+
+            // dict.logistics.movement.type.704
+            ("dict.logistics.movement.type.704", "en-US", "GI 盘点: 质检_us", "移动类型.704 GI 盘点: 质检"),
+            // dict.logistics.movement.type.704
+            ("dict.logistics.movement.type.704", "ja-JP", "GI 盘点: 质检_jp", "移动类型.704 GI 盘点: 质检"),
+            // dict.logistics.movement.type.704
+            ("dict.logistics.movement.type.704", "zh-CN", "GI 盘点: 质检", "移动类型.704 GI 盘点: 质检"),
+            // dict.logistics.movement.type.704
+            ("dict.logistics.movement.type.704", "zh-HK", "GI 盘点: 质检_hk", "移动类型.704 GI 盘点: 质检"),
+
+            // dict.logistics.movement.type.707
+            ("dict.logistics.movement.type.707", "en-US", "收货实地盘存：已冻结_us", "移动类型.707 收货实地盘存：已冻结"),
+            // dict.logistics.movement.type.707
+            ("dict.logistics.movement.type.707", "ja-JP", "收货实地盘存：已冻结_jp", "移动类型.707 收货实地盘存：已冻结"),
+            // dict.logistics.movement.type.707
+            ("dict.logistics.movement.type.707", "zh-CN", "收货实地盘存：已冻结", "移动类型.707 收货实地盘存：已冻结"),
+            // dict.logistics.movement.type.707
+            ("dict.logistics.movement.type.707", "zh-HK", "收货实地盘存：已冻结_hk", "移动类型.707 收货实地盘存：已冻结"),
+
+            // dict.logistics.movement.type.708
+            ("dict.logistics.movement.type.708", "en-US", "发货盘存盘点：已冻结_us", "移动类型.708 发货盘存盘点：已冻结"),
+            // dict.logistics.movement.type.708
+            ("dict.logistics.movement.type.708", "ja-JP", "发货盘存盘点：已冻结_jp", "移动类型.708 发货盘存盘点：已冻结"),
+            // dict.logistics.movement.type.708
+            ("dict.logistics.movement.type.708", "zh-CN", "发货盘存盘点：已冻结", "移动类型.708 发货盘存盘点：已冻结"),
+            // dict.logistics.movement.type.708
+            ("dict.logistics.movement.type.708", "zh-HK", "发货盘存盘点：已冻结_hk", "移动类型.708 发货盘存盘点：已冻结"),
+
+            // dict.logistics.movement.type.711
+            ("dict.logistics.movement.type.711", "en-US", "GI存货差异: 仓库_us", "移动类型.711 GI存货差异: 仓库"),
+            // dict.logistics.movement.type.711
+            ("dict.logistics.movement.type.711", "ja-JP", "GI存货差异: 仓库_jp", "移动类型.711 GI存货差异: 仓库"),
+            // dict.logistics.movement.type.711
+            ("dict.logistics.movement.type.711", "zh-CN", "GI存货差异: 仓库", "移动类型.711 GI存货差异: 仓库"),
+            // dict.logistics.movement.type.711
+            ("dict.logistics.movement.type.711", "zh-HK", "GI存货差异: 仓库_hk", "移动类型.711 GI存货差异: 仓库"),
+
+            // dict.logistics.movement.type.712
+            ("dict.logistics.movement.type.712", "en-US", "GR存货差异: 仓库_us", "移动类型.712 GR存货差异: 仓库"),
+            // dict.logistics.movement.type.712
+            ("dict.logistics.movement.type.712", "ja-JP", "GR存货差异: 仓库_jp", "移动类型.712 GR存货差异: 仓库"),
+            // dict.logistics.movement.type.712
+            ("dict.logistics.movement.type.712", "zh-CN", "GR存货差异: 仓库", "移动类型.712 GR存货差异: 仓库"),
+            // dict.logistics.movement.type.712
+            ("dict.logistics.movement.type.712", "zh-HK", "GR存货差异: 仓库_hk", "移动类型.712 GR存货差异: 仓库"),
+
+            // dict.logistics.movement.type.713
+            ("dict.logistics.movement.type.713", "en-US", "GI存货差异:QI_us", "移动类型.713 GI存货差异:QI"),
+            // dict.logistics.movement.type.713
+            ("dict.logistics.movement.type.713", "ja-JP", "GI存货差异:QI_jp", "移动类型.713 GI存货差异:QI"),
+            // dict.logistics.movement.type.713
+            ("dict.logistics.movement.type.713", "zh-CN", "GI存货差异:QI", "移动类型.713 GI存货差异:QI"),
+            // dict.logistics.movement.type.713
+            ("dict.logistics.movement.type.713", "zh-HK", "GI存货差异:QI_hk", "移动类型.713 GI存货差异:QI"),
+
+            // dict.logistics.movement.type.714
+            ("dict.logistics.movement.type.714", "en-US", "GR存货差异: 质检_us", "移动类型.714 GR存货差异: 质检"),
+            // dict.logistics.movement.type.714
+            ("dict.logistics.movement.type.714", "ja-JP", "GR存货差异: 质检_jp", "移动类型.714 GR存货差异: 质检"),
+            // dict.logistics.movement.type.714
+            ("dict.logistics.movement.type.714", "zh-CN", "GR存货差异: 质检", "移动类型.714 GR存货差异: 质检"),
+            // dict.logistics.movement.type.714
+            ("dict.logistics.movement.type.714", "zh-HK", "GR存货差异: 质检_hk", "移动类型.714 GR存货差异: 质检"),
+
+            // dict.logistics.movement.type.715
+            ("dict.logistics.movement.type.715", "en-US", "GI存货差异: 退货_us", "移动类型.715 GI存货差异: 退货"),
+            // dict.logistics.movement.type.715
+            ("dict.logistics.movement.type.715", "ja-JP", "GI存货差异: 退货_jp", "移动类型.715 GI存货差异: 退货"),
+            // dict.logistics.movement.type.715
+            ("dict.logistics.movement.type.715", "zh-CN", "GI存货差异: 退货", "移动类型.715 GI存货差异: 退货"),
+            // dict.logistics.movement.type.715
+            ("dict.logistics.movement.type.715", "zh-HK", "GI存货差异: 退货_hk", "移动类型.715 GI存货差异: 退货"),
+
+            // dict.logistics.movement.type.716
+            ("dict.logistics.movement.type.716", "en-US", "GR存货差异: 退货_us", "移动类型.716 GR存货差异: 退货"),
+            // dict.logistics.movement.type.716
+            ("dict.logistics.movement.type.716", "ja-JP", "GR存货差异: 退货_jp", "移动类型.716 GR存货差异: 退货"),
+            // dict.logistics.movement.type.716
+            ("dict.logistics.movement.type.716", "zh-CN", "GR存货差异: 退货", "移动类型.716 GR存货差异: 退货"),
+            // dict.logistics.movement.type.716
+            ("dict.logistics.movement.type.716", "zh-HK", "GR存货差异: 退货_hk", "移动类型.716 GR存货差异: 退货"),
+
+            // dict.logistics.movement.type.717
+            ("dict.logistics.movement.type.717", "en-US", "GI存货差异: 冻结_us", "移动类型.717 GI存货差异: 冻结"),
+            // dict.logistics.movement.type.717
+            ("dict.logistics.movement.type.717", "ja-JP", "GI存货差异: 冻结_jp", "移动类型.717 GI存货差异: 冻结"),
+            // dict.logistics.movement.type.717
+            ("dict.logistics.movement.type.717", "zh-CN", "GI存货差异: 冻结", "移动类型.717 GI存货差异: 冻结"),
+            // dict.logistics.movement.type.717
+            ("dict.logistics.movement.type.717", "zh-HK", "GI存货差异: 冻结_hk", "移动类型.717 GI存货差异: 冻结"),
+
+            // dict.logistics.movement.type.718
+            ("dict.logistics.movement.type.718", "en-US", "GR存货差异: 冻结_us", "移动类型.718 GR存货差异: 冻结"),
+            // dict.logistics.movement.type.718
+            ("dict.logistics.movement.type.718", "ja-JP", "GR存货差异: 冻结_jp", "移动类型.718 GR存货差异: 冻结"),
+            // dict.logistics.movement.type.718
+            ("dict.logistics.movement.type.718", "zh-CN", "GR存货差异: 冻结", "移动类型.718 GR存货差异: 冻结"),
+            // dict.logistics.movement.type.718
+            ("dict.logistics.movement.type.718", "zh-HK", "GR存货差异: 冻结_hk", "移动类型.718 GR存货差异: 冻结"),
+
+            // dict.logistics.movement.type.721
+            ("dict.logistics.movement.type.721", "en-US", "销售评估含未影响盈余_us", "移动类型.721 销售评估含未影响盈余"),
+            // dict.logistics.movement.type.721
+            ("dict.logistics.movement.type.721", "ja-JP", "销售评估含未影响盈余_jp", "移动类型.721 销售评估含未影响盈余"),
+            // dict.logistics.movement.type.721
+            ("dict.logistics.movement.type.721", "zh-CN", "销售评估含未影响盈余", "移动类型.721 销售评估含未影响盈余"),
+            // dict.logistics.movement.type.721
+            ("dict.logistics.movement.type.721", "zh-HK", "销售评估含未影响盈余_hk", "移动类型.721 销售评估含未影响盈余"),
+
+            // dict.logistics.movement.type.722
+            ("dict.logistics.movement.type.722", "en-US", "销售评估不含影响盈余_us", "移动类型.722 销售评估不含影响盈余"),
+            // dict.logistics.movement.type.722
+            ("dict.logistics.movement.type.722", "ja-JP", "销售评估不含影响盈余_jp", "移动类型.722 销售评估不含影响盈余"),
+            // dict.logistics.movement.type.722
+            ("dict.logistics.movement.type.722", "zh-CN", "销售评估不含影响盈余", "移动类型.722 销售评估不含影响盈余"),
+            // dict.logistics.movement.type.722
+            ("dict.logistics.movement.type.722", "zh-HK", "销售评估不含影响盈余_hk", "移动类型.722 销售评估不含影响盈余"),
+
+            // dict.logistics.movement.type.731
+            ("dict.logistics.movement.type.731", "en-US", "销售评估含影响盈余_us", "移动类型.731 销售评估含影响盈余"),
+            // dict.logistics.movement.type.731
+            ("dict.logistics.movement.type.731", "ja-JP", "销售评估含影响盈余_jp", "移动类型.731 销售评估含影响盈余"),
+            // dict.logistics.movement.type.731
+            ("dict.logistics.movement.type.731", "zh-CN", "销售评估含影响盈余", "移动类型.731 销售评估含影响盈余"),
+            // dict.logistics.movement.type.731
+            ("dict.logistics.movement.type.731", "zh-HK", "销售评估含影响盈余_hk", "移动类型.731 销售评估含影响盈余"),
+
+            // dict.logistics.movement.type.732
+            ("dict.logistics.movement.type.732", "en-US", "销售评估不含影响盈余_us", "移动类型.732 销售评估不含影响盈余"),
+            // dict.logistics.movement.type.732
+            ("dict.logistics.movement.type.732", "ja-JP", "销售评估不含影响盈余_jp", "移动类型.732 销售评估不含影响盈余"),
+            // dict.logistics.movement.type.732
+            ("dict.logistics.movement.type.732", "zh-CN", "销售评估不含影响盈余", "移动类型.732 销售评估不含影响盈余"),
+            // dict.logistics.movement.type.732
+            ("dict.logistics.movement.type.732", "zh-HK", "销售评估不含影响盈余_hk", "移动类型.732 销售评估不含影响盈余"),
+
+            // dict.logistics.movement.type.y01
+            ("dict.logistics.movement.type.y01", "en-US", "GD发货: 交货_us", "移动类型.Y01 GD发货: 交货"),
+            // dict.logistics.movement.type.y01
+            ("dict.logistics.movement.type.y01", "ja-JP", "GD发货: 交货_jp", "移动类型.Y01 GD发货: 交货"),
+            // dict.logistics.movement.type.y01
+            ("dict.logistics.movement.type.y01", "zh-CN", "GD发货: 交货", "移动类型.Y01 GD发货: 交货"),
+            // dict.logistics.movement.type.y01
+            ("dict.logistics.movement.type.y01", "zh-HK", "GD发货: 交货_hk", "移动类型.Y01 GD发货: 交货"),
+
+            // dict.logistics.movement.type.y02
+            ("dict.logistics.movement.type.y02", "en-US", "RE交货冲销_us", "移动类型.Y02 RE交货冲销"),
+            // dict.logistics.movement.type.y02
+            ("dict.logistics.movement.type.y02", "ja-JP", "RE交货冲销_jp", "移动类型.Y02 RE交货冲销"),
+            // dict.logistics.movement.type.y02
+            ("dict.logistics.movement.type.y02", "zh-CN", "RE交货冲销", "移动类型.Y02 RE交货冲销"),
+            // dict.logistics.movement.type.y02
+            ("dict.logistics.movement.type.y02", "zh-HK", "RE交货冲销_hk", "移动类型.Y02 RE交货冲销"),
+
+            // dict.logistics.movement.type.y43
+            ("dict.logistics.movement.type.y43", "en-US", "TF 至跨公司间_us", "移动类型.Y43 TF 至跨公司间"),
+            // dict.logistics.movement.type.y43
+            ("dict.logistics.movement.type.y43", "ja-JP", "TF 至跨公司间_jp", "移动类型.Y43 TF 至跨公司间"),
+            // dict.logistics.movement.type.y43
+            ("dict.logistics.movement.type.y43", "zh-CN", "TF 至跨公司间", "移动类型.Y43 TF 至跨公司间"),
+            // dict.logistics.movement.type.y43
+            ("dict.logistics.movement.type.y43", "zh-HK", "TF 至跨公司间_hk", "移动类型.Y43 TF 至跨公司间"),
+
+            // dict.logistics.movement.type.y44
+            ("dict.logistics.movement.type.y44", "en-US", "TR 至跨公司间_us", "移动类型.Y44 TR 至跨公司间"),
+            // dict.logistics.movement.type.y44
+            ("dict.logistics.movement.type.y44", "ja-JP", "TR 至跨公司间_jp", "移动类型.Y44 TR 至跨公司间"),
+            // dict.logistics.movement.type.y44
+            ("dict.logistics.movement.type.y44", "zh-CN", "TR 至跨公司间", "移动类型.Y44 TR 至跨公司间"),
+            // dict.logistics.movement.type.y44
+            ("dict.logistics.movement.type.y44", "zh-HK", "TR 至跨公司间_hk", "移动类型.Y44 TR 至跨公司间"),
+
+            // dict.logistics.movement.type.y53
+            ("dict.logistics.movement.type.y53", "en-US", "GD 退货    非限制_us", "移动类型.Y53 GD 退货    非限制"),
+            // dict.logistics.movement.type.y53
+            ("dict.logistics.movement.type.y53", "ja-JP", "GD 退货    非限制_jp", "移动类型.Y53 GD 退货    非限制"),
+            // dict.logistics.movement.type.y53
+            ("dict.logistics.movement.type.y53", "zh-CN", "GD 退货    非限制", "移动类型.Y53 GD 退货    非限制"),
+            // dict.logistics.movement.type.y53
+            ("dict.logistics.movement.type.y53", "zh-HK", "GD 退货    非限制_hk", "移动类型.Y53 GD 退货    非限制"),
+
+            // dict.logistics.movement.type.y54
+            ("dict.logistics.movement.type.y54", "en-US", "GD 退货 非限制 冲销_us", "移动类型.Y54 GD 退货 非限制 冲销"),
+            // dict.logistics.movement.type.y54
+            ("dict.logistics.movement.type.y54", "ja-JP", "GD 退货 非限制 冲销_jp", "移动类型.Y54 GD 退货 非限制 冲销"),
+            // dict.logistics.movement.type.y54
+            ("dict.logistics.movement.type.y54", "zh-CN", "GD 退货 非限制 冲销", "移动类型.Y54 GD 退货 非限制 冲销"),
+            // dict.logistics.movement.type.y54
+            ("dict.logistics.movement.type.y54", "zh-HK", "GD 退货 非限制 冲销_hk", "移动类型.Y54 GD 退货 非限制 冲销"),
+
+            // dict.logistics.movement.type.y73
+            ("dict.logistics.movement.type.y73", "en-US", "TF 至跨公司间_us", "移动类型.Y73 TF 至跨公司间"),
+            // dict.logistics.movement.type.y73
+            ("dict.logistics.movement.type.y73", "ja-JP", "TF 至跨公司间_jp", "移动类型.Y73 TF 至跨公司间"),
+            // dict.logistics.movement.type.y73
+            ("dict.logistics.movement.type.y73", "zh-CN", "TF 至跨公司间", "移动类型.Y73 TF 至跨公司间"),
+            // dict.logistics.movement.type.y73
+            ("dict.logistics.movement.type.y73", "zh-HK", "TF 至跨公司间_hk", "移动类型.Y73 TF 至跨公司间"),
+
+            // dict.logistics.movement.type.y74
+            ("dict.logistics.movement.type.y74", "en-US", "TR 至跨公司间_us", "移动类型.Y74 TR 至跨公司间"),
+            // dict.logistics.movement.type.y74
+            ("dict.logistics.movement.type.y74", "ja-JP", "TR 至跨公司间_jp", "移动类型.Y74 TR 至跨公司间"),
+            // dict.logistics.movement.type.y74
+            ("dict.logistics.movement.type.y74", "zh-CN", "TR 至跨公司间", "移动类型.Y74 TR 至跨公司间"),
+            // dict.logistics.movement.type.y74
+            ("dict.logistics.movement.type.y74", "zh-HK", "TR 至跨公司间_hk", "移动类型.Y74 TR 至跨公司间"),
+
+            // dict.logistics.special.stock.type._
+            ("dict.logistics.special.stock.type._", "en-US", "非特殊库存_us", "特殊库存.非特殊库存"),
+            // dict.logistics.special.stock.type._
+            ("dict.logistics.special.stock.type._", "ja-JP", "非特殊库存_jp", "特殊库存.非特殊库存"),
+            // dict.logistics.special.stock.type._
+            ("dict.logistics.special.stock.type._", "zh-CN", "非特殊库存", "特殊库存.非特殊库存"),
+            // dict.logistics.special.stock.type._
+            ("dict.logistics.special.stock.type._", "zh-HK", "非特殊库存_hk", "特殊库存.非特殊库存"),
+
+            // dict.logistics.special.stock.type.e
+            ("dict.logistics.special.stock.type.e", "en-US", "现有订单_us", "特殊库存.现有订单"),
+            // dict.logistics.special.stock.type.e
+            ("dict.logistics.special.stock.type.e", "ja-JP", "现有订单_jp", "特殊库存.现有订单"),
+            // dict.logistics.special.stock.type.e
+            ("dict.logistics.special.stock.type.e", "zh-CN", "现有订单", "特殊库存.现有订单"),
+            // dict.logistics.special.stock.type.e
+            ("dict.logistics.special.stock.type.e", "zh-HK", "现有订单_hk", "特殊库存.现有订单"),
+
+            // dict.logistics.special.stock.type.k
+            ("dict.logistics.special.stock.type.k", "en-US", "寄售（供应商）_us", "特殊库存.寄售（供应商）"),
+            // dict.logistics.special.stock.type.k
+            ("dict.logistics.special.stock.type.k", "ja-JP", "寄售（供应商）_jp", "特殊库存.寄售（供应商）"),
+            // dict.logistics.special.stock.type.k
+            ("dict.logistics.special.stock.type.k", "zh-CN", "寄售（供应商）", "特殊库存.寄售（供应商）"),
+            // dict.logistics.special.stock.type.k
+            ("dict.logistics.special.stock.type.k", "zh-HK", "寄售（供应商）_hk", "特殊库存.寄售（供应商）"),
+
+            // dict.logistics.special.stock.type.m
+            ("dict.logistics.special.stock.type.m", "en-US", "供应商可退回包装_us", "特殊库存.供应商可退回包装"),
+            // dict.logistics.special.stock.type.m
+            ("dict.logistics.special.stock.type.m", "ja-JP", "供应商可退回包装_jp", "特殊库存.供应商可退回包装"),
+            // dict.logistics.special.stock.type.m
+            ("dict.logistics.special.stock.type.m", "zh-CN", "供应商可退回包装", "特殊库存.供应商可退回包装"),
+            // dict.logistics.special.stock.type.m
+            ("dict.logistics.special.stock.type.m", "zh-HK", "供应商可退回包装_hk", "特殊库存.供应商可退回包装"),
+
+            // dict.logistics.special.stock.type.o
+            ("dict.logistics.special.stock.type.o", "en-US", "供应商分包库存_us", "特殊库存.供应商分包库存"),
+            // dict.logistics.special.stock.type.o
+            ("dict.logistics.special.stock.type.o", "ja-JP", "供应商分包库存_jp", "特殊库存.供应商分包库存"),
+            // dict.logistics.special.stock.type.o
+            ("dict.logistics.special.stock.type.o", "zh-CN", "供应商分包库存", "特殊库存.供应商分包库存"),
+            // dict.logistics.special.stock.type.o
+            ("dict.logistics.special.stock.type.o", "zh-HK", "供应商分包库存_hk", "特殊库存.供应商分包库存"),
+
+            // dict.logistics.special.stock.type.p
+            ("dict.logistics.special.stock.type.p", "en-US", "管线材料_us", "特殊库存.管线材料"),
+            // dict.logistics.special.stock.type.p
+            ("dict.logistics.special.stock.type.p", "ja-JP", "管线材料_jp", "特殊库存.管线材料"),
+            // dict.logistics.special.stock.type.p
+            ("dict.logistics.special.stock.type.p", "zh-CN", "管线材料", "特殊库存.管线材料"),
+            // dict.logistics.special.stock.type.p
+            ("dict.logistics.special.stock.type.p", "zh-HK", "管线材料_hk", "特殊库存.管线材料"),
+
+            // dict.logistics.special.stock.type.q
+            ("dict.logistics.special.stock.type.q", "en-US", "项目库存_us", "特殊库存.项目库存"),
+            // dict.logistics.special.stock.type.q
+            ("dict.logistics.special.stock.type.q", "ja-JP", "项目库存_jp", "特殊库存.项目库存"),
+            // dict.logistics.special.stock.type.q
+            ("dict.logistics.special.stock.type.q", "zh-CN", "项目库存", "特殊库存.项目库存"),
+            // dict.logistics.special.stock.type.q
+            ("dict.logistics.special.stock.type.q", "zh-HK", "项目库存_hk", "特殊库存.项目库存"),
+
+            // dict.logistics.special.stock.type.v
+            ("dict.logistics.special.stock.type.v", "en-US", "客户处可退回包装_us", "特殊库存.客户处可退回包装"),
+            // dict.logistics.special.stock.type.v
+            ("dict.logistics.special.stock.type.v", "ja-JP", "客户处可退回包装_jp", "特殊库存.客户处可退回包装"),
+            // dict.logistics.special.stock.type.v
+            ("dict.logistics.special.stock.type.v", "zh-CN", "客户处可退回包装", "特殊库存.客户处可退回包装"),
+            // dict.logistics.special.stock.type.v
+            ("dict.logistics.special.stock.type.v", "zh-HK", "客户处可退回包装_hk", "特殊库存.客户处可退回包装"),
+
+            // dict.logistics.special.stock.type.w
+            ("dict.logistics.special.stock.type.w", "en-US", "寄售（客户方）_us", "特殊库存.寄售（客户方）"),
+            // dict.logistics.special.stock.type.w
+            ("dict.logistics.special.stock.type.w", "ja-JP", "寄售（客户方）_jp", "特殊库存.寄售（客户方）"),
+            // dict.logistics.special.stock.type.w
+            ("dict.logistics.special.stock.type.w", "zh-CN", "寄售（客户方）", "特殊库存.寄售（客户方）"),
+            // dict.logistics.special.stock.type.w
+            ("dict.logistics.special.stock.type.w", "zh-HK", "寄售（客户方）_hk", "特殊库存.寄售（客户方）"),
+
+            // dict.logistics.special.stock.type.y
+            ("dict.logistics.special.stock.type.y", "en-US", "装运单位 (仓库)_us", "特殊库存.装运单位 (仓库)"),
+            // dict.logistics.special.stock.type.y
+            ("dict.logistics.special.stock.type.y", "ja-JP", "装运单位 (仓库)_jp", "特殊库存.装运单位 (仓库)"),
+            // dict.logistics.special.stock.type.y
+            ("dict.logistics.special.stock.type.y", "zh-CN", "装运单位 (仓库)", "特殊库存.装运单位 (仓库)"),
+            // dict.logistics.special.stock.type.y
+            ("dict.logistics.special.stock.type.y", "zh-HK", "装运单位 (仓库)_hk", "特殊库存.装运单位 (仓库)"),
+
             // dict.logistics.shipping.method.type.0
             ("dict.logistics.shipping.method.type.0", "en-US", "海运_us", "运输方式.海运"),
             // dict.logistics.shipping.method.type.0
@@ -5765,6 +8411,780 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             // dict.logistics.shipping.method.type.5
             ("dict.logistics.shipping.method.type.5", "zh-HK", "其他_hk", "运输方式.其他"),
 
+            // dict.logistics.destination.port.code.ace.air
+            ("dict.logistics.destination.port.code.ace.air", "en-US", "安恒利_空运_us", "目的地港.安恒利_空运"),
+            // dict.logistics.destination.port.code.ace.air
+            ("dict.logistics.destination.port.code.ace.air", "ja-JP", "安恒利_空运_jp", "目的地港.安恒利_空运"),
+            // dict.logistics.destination.port.code.ace.air
+            ("dict.logistics.destination.port.code.ace.air", "zh-CN", "安恒利_空运", "目的地港.安恒利_空运"),
+            // dict.logistics.destination.port.code.ace.air
+            ("dict.logistics.destination.port.code.ace.air", "zh-HK", "安恒利_空运_hk", "目的地港.安恒利_空运"),
+
+            // dict.logistics.destination.port.code.ace.boat
+            ("dict.logistics.destination.port.code.ace.boat", "en-US", "安恒利_船运_us", "目的地港.安恒利_船运"),
+            // dict.logistics.destination.port.code.ace.boat
+            ("dict.logistics.destination.port.code.ace.boat", "ja-JP", "安恒利_船运_jp", "目的地港.安恒利_船运"),
+            // dict.logistics.destination.port.code.ace.boat
+            ("dict.logistics.destination.port.code.ace.boat", "zh-CN", "安恒利_船运", "目的地港.安恒利_船运"),
+            // dict.logistics.destination.port.code.ace.boat
+            ("dict.logistics.destination.port.code.ace.boat", "zh-HK", "安恒利_船运_hk", "目的地港.安恒利_船运"),
+
+            // dict.logistics.destination.port.code.ace.truck
+            ("dict.logistics.destination.port.code.ace.truck", "en-US", "安恒利_卡车_us", "目的地港.安恒利_卡车"),
+            // dict.logistics.destination.port.code.ace.truck
+            ("dict.logistics.destination.port.code.ace.truck", "ja-JP", "安恒利_卡车_jp", "目的地港.安恒利_卡车"),
+            // dict.logistics.destination.port.code.ace.truck
+            ("dict.logistics.destination.port.code.ace.truck", "zh-CN", "安恒利_卡车", "目的地港.安恒利_卡车"),
+            // dict.logistics.destination.port.code.ace.truck
+            ("dict.logistics.destination.port.code.ace.truck", "zh-HK", "安恒利_卡车_hk", "目的地港.安恒利_卡车"),
+
+            // dict.logistics.destination.port.code.alps.air
+            ("dict.logistics.destination.port.code.alps.air", "en-US", "ALPS_空运_us", "目的地港.ALPS_空运"),
+            // dict.logistics.destination.port.code.alps.air
+            ("dict.logistics.destination.port.code.alps.air", "ja-JP", "ALPS_空运_jp", "目的地港.ALPS_空运"),
+            // dict.logistics.destination.port.code.alps.air
+            ("dict.logistics.destination.port.code.alps.air", "zh-CN", "ALPS_空运", "目的地港.ALPS_空运"),
+            // dict.logistics.destination.port.code.alps.air
+            ("dict.logistics.destination.port.code.alps.air", "zh-HK", "ALPS_空运_hk", "目的地港.ALPS_空运"),
+
+            // dict.logistics.destination.port.code.alps.boat
+            ("dict.logistics.destination.port.code.alps.boat", "en-US", "ALPS_船运_us", "目的地港.ALPS_船运"),
+            // dict.logistics.destination.port.code.alps.boat
+            ("dict.logistics.destination.port.code.alps.boat", "ja-JP", "ALPS_船运_jp", "目的地港.ALPS_船运"),
+            // dict.logistics.destination.port.code.alps.boat
+            ("dict.logistics.destination.port.code.alps.boat", "zh-CN", "ALPS_船运", "目的地港.ALPS_船运"),
+            // dict.logistics.destination.port.code.alps.boat
+            ("dict.logistics.destination.port.code.alps.boat", "zh-HK", "ALPS_船运_hk", "目的地港.ALPS_船运"),
+
+            // dict.logistics.destination.port.code.alps.truck
+            ("dict.logistics.destination.port.code.alps.truck", "en-US", "ALPS_卡车_us", "目的地港.ALPS_卡车"),
+            // dict.logistics.destination.port.code.alps.truck
+            ("dict.logistics.destination.port.code.alps.truck", "ja-JP", "ALPS_卡车_jp", "目的地港.ALPS_卡车"),
+            // dict.logistics.destination.port.code.alps.truck
+            ("dict.logistics.destination.port.code.alps.truck", "zh-CN", "ALPS_卡车", "目的地港.ALPS_卡车"),
+            // dict.logistics.destination.port.code.alps.truck
+            ("dict.logistics.destination.port.code.alps.truck", "zh-HK", "ALPS_卡车_hk", "目的地港.ALPS_卡车"),
+
+            // dict.logistics.destination.port.code.arts.air
+            ("dict.logistics.destination.port.code.arts.air", "en-US", "雅士_空运_us", "目的地港.雅士_空运"),
+            // dict.logistics.destination.port.code.arts.air
+            ("dict.logistics.destination.port.code.arts.air", "ja-JP", "雅士_空运_jp", "目的地港.雅士_空运"),
+            // dict.logistics.destination.port.code.arts.air
+            ("dict.logistics.destination.port.code.arts.air", "zh-CN", "雅士_空运", "目的地港.雅士_空运"),
+            // dict.logistics.destination.port.code.arts.air
+            ("dict.logistics.destination.port.code.arts.air", "zh-HK", "雅士_空运_hk", "目的地港.雅士_空运"),
+
+            // dict.logistics.destination.port.code.arts.boat
+            ("dict.logistics.destination.port.code.arts.boat", "en-US", "雅士_船运_us", "目的地港.雅士_船运"),
+            // dict.logistics.destination.port.code.arts.boat
+            ("dict.logistics.destination.port.code.arts.boat", "ja-JP", "雅士_船运_jp", "目的地港.雅士_船运"),
+            // dict.logistics.destination.port.code.arts.boat
+            ("dict.logistics.destination.port.code.arts.boat", "zh-CN", "雅士_船运", "目的地港.雅士_船运"),
+            // dict.logistics.destination.port.code.arts.boat
+            ("dict.logistics.destination.port.code.arts.boat", "zh-HK", "雅士_船运_hk", "目的地港.雅士_船运"),
+
+            // dict.logistics.destination.port.code.arts.truck
+            ("dict.logistics.destination.port.code.arts.truck", "en-US", "雅士_卡车_us", "目的地港.雅士_卡车"),
+            // dict.logistics.destination.port.code.arts.truck
+            ("dict.logistics.destination.port.code.arts.truck", "ja-JP", "雅士_卡车_jp", "目的地港.雅士_卡车"),
+            // dict.logistics.destination.port.code.arts.truck
+            ("dict.logistics.destination.port.code.arts.truck", "zh-CN", "雅士_卡车", "目的地港.雅士_卡车"),
+            // dict.logistics.destination.port.code.arts.truck
+            ("dict.logistics.destination.port.code.arts.truck", "zh-HK", "雅士_卡车_hk", "目的地港.雅士_卡车"),
+
+            // dict.logistics.destination.port.code.beijing.air
+            ("dict.logistics.destination.port.code.beijing.air", "en-US", "北京_空运_us", "目的地港.北京_空运"),
+            // dict.logistics.destination.port.code.beijing.air
+            ("dict.logistics.destination.port.code.beijing.air", "ja-JP", "北京_空运_jp", "目的地港.北京_空运"),
+            // dict.logistics.destination.port.code.beijing.air
+            ("dict.logistics.destination.port.code.beijing.air", "zh-CN", "北京_空运", "目的地港.北京_空运"),
+            // dict.logistics.destination.port.code.beijing.air
+            ("dict.logistics.destination.port.code.beijing.air", "zh-HK", "北京_空运_hk", "目的地港.北京_空运"),
+
+            // dict.logistics.destination.port.code.beijing.boat
+            ("dict.logistics.destination.port.code.beijing.boat", "en-US", "北京_船运_us", "目的地港.北京_船运"),
+            // dict.logistics.destination.port.code.beijing.boat
+            ("dict.logistics.destination.port.code.beijing.boat", "ja-JP", "北京_船运_jp", "目的地港.北京_船运"),
+            // dict.logistics.destination.port.code.beijing.boat
+            ("dict.logistics.destination.port.code.beijing.boat", "zh-CN", "北京_船运", "目的地港.北京_船运"),
+            // dict.logistics.destination.port.code.beijing.boat
+            ("dict.logistics.destination.port.code.beijing.boat", "zh-HK", "北京_船运_hk", "目的地港.北京_船运"),
+
+            // dict.logistics.destination.port.code.beijing.truck
+            ("dict.logistics.destination.port.code.beijing.truck", "en-US", "北京_卡车_us", "目的地港.北京_卡车"),
+            // dict.logistics.destination.port.code.beijing.truck
+            ("dict.logistics.destination.port.code.beijing.truck", "ja-JP", "北京_卡车_jp", "目的地港.北京_卡车"),
+            // dict.logistics.destination.port.code.beijing.truck
+            ("dict.logistics.destination.port.code.beijing.truck", "zh-CN", "北京_卡车", "目的地港.北京_卡车"),
+            // dict.logistics.destination.port.code.beijing.truck
+            ("dict.logistics.destination.port.code.beijing.truck", "zh-HK", "北京_卡车_hk", "目的地港.北京_卡车"),
+
+            // dict.logistics.destination.port.code.canada.air
+            ("dict.logistics.destination.port.code.canada.air", "en-US", "加拿大_空运_us", "目的地港.加拿大_空运"),
+            // dict.logistics.destination.port.code.canada.air
+            ("dict.logistics.destination.port.code.canada.air", "ja-JP", "加拿大_空运_jp", "目的地港.加拿大_空运"),
+            // dict.logistics.destination.port.code.canada.air
+            ("dict.logistics.destination.port.code.canada.air", "zh-CN", "加拿大_空运", "目的地港.加拿大_空运"),
+            // dict.logistics.destination.port.code.canada.air
+            ("dict.logistics.destination.port.code.canada.air", "zh-HK", "加拿大_空运_hk", "目的地港.加拿大_空运"),
+
+            // dict.logistics.destination.port.code.canada.boat
+            ("dict.logistics.destination.port.code.canada.boat", "en-US", "加拿大_船运_us", "目的地港.加拿大_船运"),
+            // dict.logistics.destination.port.code.canada.boat
+            ("dict.logistics.destination.port.code.canada.boat", "ja-JP", "加拿大_船运_jp", "目的地港.加拿大_船运"),
+            // dict.logistics.destination.port.code.canada.boat
+            ("dict.logistics.destination.port.code.canada.boat", "zh-CN", "加拿大_船运", "目的地港.加拿大_船运"),
+            // dict.logistics.destination.port.code.canada.boat
+            ("dict.logistics.destination.port.code.canada.boat", "zh-HK", "加拿大_船运_hk", "目的地港.加拿大_船运"),
+
+            // dict.logistics.destination.port.code.canada.truck
+            ("dict.logistics.destination.port.code.canada.truck", "en-US", "加拿大_卡车_us", "目的地港.加拿大_卡车"),
+            // dict.logistics.destination.port.code.canada.truck
+            ("dict.logistics.destination.port.code.canada.truck", "ja-JP", "加拿大_卡车_jp", "目的地港.加拿大_卡车"),
+            // dict.logistics.destination.port.code.canada.truck
+            ("dict.logistics.destination.port.code.canada.truck", "zh-CN", "加拿大_卡车", "目的地港.加拿大_卡车"),
+            // dict.logistics.destination.port.code.canada.truck
+            ("dict.logistics.destination.port.code.canada.truck", "zh-HK", "加拿大_卡车_hk", "目的地港.加拿大_卡车"),
+
+            // dict.logistics.destination.port.code.dchav.air
+            ("dict.logistics.destination.port.code.dchav.air", "en-US", "悦昌_空运_us", "目的地港.悦昌_空运"),
+            // dict.logistics.destination.port.code.dchav.air
+            ("dict.logistics.destination.port.code.dchav.air", "ja-JP", "悦昌_空运_jp", "目的地港.悦昌_空运"),
+            // dict.logistics.destination.port.code.dchav.air
+            ("dict.logistics.destination.port.code.dchav.air", "zh-CN", "悦昌_空运", "目的地港.悦昌_空运"),
+            // dict.logistics.destination.port.code.dchav.air
+            ("dict.logistics.destination.port.code.dchav.air", "zh-HK", "悦昌_空运_hk", "目的地港.悦昌_空运"),
+
+            // dict.logistics.destination.port.code.dchav.boat
+            ("dict.logistics.destination.port.code.dchav.boat", "en-US", "悦昌_船运_us", "目的地港.悦昌_船运"),
+            // dict.logistics.destination.port.code.dchav.boat
+            ("dict.logistics.destination.port.code.dchav.boat", "ja-JP", "悦昌_船运_jp", "目的地港.悦昌_船运"),
+            // dict.logistics.destination.port.code.dchav.boat
+            ("dict.logistics.destination.port.code.dchav.boat", "zh-CN", "悦昌_船运", "目的地港.悦昌_船运"),
+            // dict.logistics.destination.port.code.dchav.boat
+            ("dict.logistics.destination.port.code.dchav.boat", "zh-HK", "悦昌_船运_hk", "目的地港.悦昌_船运"),
+
+            // dict.logistics.destination.port.code.dchav.truck
+            ("dict.logistics.destination.port.code.dchav.truck", "en-US", "悦昌_卡车_us", "目的地港.悦昌_卡车"),
+            // dict.logistics.destination.port.code.dchav.truck
+            ("dict.logistics.destination.port.code.dchav.truck", "ja-JP", "悦昌_卡车_jp", "目的地港.悦昌_卡车"),
+            // dict.logistics.destination.port.code.dchav.truck
+            ("dict.logistics.destination.port.code.dchav.truck", "zh-CN", "悦昌_卡车", "目的地港.悦昌_卡车"),
+            // dict.logistics.destination.port.code.dchav.truck
+            ("dict.logistics.destination.port.code.dchav.truck", "zh-HK", "悦昌_卡车_hk", "目的地港.悦昌_卡车"),
+
+            // dict.logistics.destination.port.code.dta.air
+            ("dict.logistics.destination.port.code.dta.air", "en-US", "DTA_空运_us", "目的地港.DTA_空运"),
+            // dict.logistics.destination.port.code.dta.air
+            ("dict.logistics.destination.port.code.dta.air", "ja-JP", "DTA_空运_jp", "目的地港.DTA_空运"),
+            // dict.logistics.destination.port.code.dta.air
+            ("dict.logistics.destination.port.code.dta.air", "zh-CN", "DTA_空运", "目的地港.DTA_空运"),
+            // dict.logistics.destination.port.code.dta.air
+            ("dict.logistics.destination.port.code.dta.air", "zh-HK", "DTA_空运_hk", "目的地港.DTA_空运"),
+
+            // dict.logistics.destination.port.code.dta.boat
+            ("dict.logistics.destination.port.code.dta.boat", "en-US", "DTA_船运_us", "目的地港.DTA_船运"),
+            // dict.logistics.destination.port.code.dta.boat
+            ("dict.logistics.destination.port.code.dta.boat", "ja-JP", "DTA_船运_jp", "目的地港.DTA_船运"),
+            // dict.logistics.destination.port.code.dta.boat
+            ("dict.logistics.destination.port.code.dta.boat", "zh-CN", "DTA_船运", "目的地港.DTA_船运"),
+            // dict.logistics.destination.port.code.dta.boat
+            ("dict.logistics.destination.port.code.dta.boat", "zh-HK", "DTA_船运_hk", "目的地港.DTA_船运"),
+
+            // dict.logistics.destination.port.code.dta.truck
+            ("dict.logistics.destination.port.code.dta.truck", "en-US", "DTA_卡车_us", "目的地港.DTA_卡车"),
+            // dict.logistics.destination.port.code.dta.truck
+            ("dict.logistics.destination.port.code.dta.truck", "ja-JP", "DTA_卡车_jp", "目的地港.DTA_卡车"),
+            // dict.logistics.destination.port.code.dta.truck
+            ("dict.logistics.destination.port.code.dta.truck", "zh-CN", "DTA_卡车", "目的地港.DTA_卡车"),
+            // dict.logistics.destination.port.code.dta.truck
+            ("dict.logistics.destination.port.code.dta.truck", "zh-HK", "DTA_卡车_hk", "目的地港.DTA_卡车"),
+
+            // dict.logistics.destination.port.code.germany.air
+            ("dict.logistics.destination.port.code.germany.air", "en-US", "德国_空运_us", "目的地港.德国_空运"),
+            // dict.logistics.destination.port.code.germany.air
+            ("dict.logistics.destination.port.code.germany.air", "ja-JP", "德国_空运_jp", "目的地港.德国_空运"),
+            // dict.logistics.destination.port.code.germany.air
+            ("dict.logistics.destination.port.code.germany.air", "zh-CN", "德国_空运", "目的地港.德国_空运"),
+            // dict.logistics.destination.port.code.germany.air
+            ("dict.logistics.destination.port.code.germany.air", "zh-HK", "德国_空运_hk", "目的地港.德国_空运"),
+
+            // dict.logistics.destination.port.code.germany.boat
+            ("dict.logistics.destination.port.code.germany.boat", "en-US", "德国_船运_us", "目的地港.德国_船运"),
+            // dict.logistics.destination.port.code.germany.boat
+            ("dict.logistics.destination.port.code.germany.boat", "ja-JP", "德国_船运_jp", "目的地港.德国_船运"),
+            // dict.logistics.destination.port.code.germany.boat
+            ("dict.logistics.destination.port.code.germany.boat", "zh-CN", "德国_船运", "目的地港.德国_船运"),
+            // dict.logistics.destination.port.code.germany.boat
+            ("dict.logistics.destination.port.code.germany.boat", "zh-HK", "德国_船运_hk", "目的地港.德国_船运"),
+
+            // dict.logistics.destination.port.code.germany.truck
+            ("dict.logistics.destination.port.code.germany.truck", "en-US", "德国_卡车_us", "目的地港.德国_卡车"),
+            // dict.logistics.destination.port.code.germany.truck
+            ("dict.logistics.destination.port.code.germany.truck", "ja-JP", "德国_卡车_jp", "目的地港.德国_卡车"),
+            // dict.logistics.destination.port.code.germany.truck
+            ("dict.logistics.destination.port.code.germany.truck", "zh-CN", "德国_卡车", "目的地港.德国_卡车"),
+            // dict.logistics.destination.port.code.germany.truck
+            ("dict.logistics.destination.port.code.germany.truck", "zh-HK", "德国_卡车_hk", "目的地港.德国_卡车"),
+
+            // dict.logistics.destination.port.code.guangzhou.air
+            ("dict.logistics.destination.port.code.guangzhou.air", "en-US", "广州_空运_us", "目的地港.广州_空运"),
+            // dict.logistics.destination.port.code.guangzhou.air
+            ("dict.logistics.destination.port.code.guangzhou.air", "ja-JP", "广州_空运_jp", "目的地港.广州_空运"),
+            // dict.logistics.destination.port.code.guangzhou.air
+            ("dict.logistics.destination.port.code.guangzhou.air", "zh-CN", "广州_空运", "目的地港.广州_空运"),
+            // dict.logistics.destination.port.code.guangzhou.air
+            ("dict.logistics.destination.port.code.guangzhou.air", "zh-HK", "广州_空运_hk", "目的地港.广州_空运"),
+
+            // dict.logistics.destination.port.code.guangzhou.boat
+            ("dict.logistics.destination.port.code.guangzhou.boat", "en-US", "广州_船运_us", "目的地港.广州_船运"),
+            // dict.logistics.destination.port.code.guangzhou.boat
+            ("dict.logistics.destination.port.code.guangzhou.boat", "ja-JP", "广州_船运_jp", "目的地港.广州_船运"),
+            // dict.logistics.destination.port.code.guangzhou.boat
+            ("dict.logistics.destination.port.code.guangzhou.boat", "zh-CN", "广州_船运", "目的地港.广州_船运"),
+            // dict.logistics.destination.port.code.guangzhou.boat
+            ("dict.logistics.destination.port.code.guangzhou.boat", "zh-HK", "广州_船运_hk", "目的地港.广州_船运"),
+
+            // dict.logistics.destination.port.code.guangzhou.truck
+            ("dict.logistics.destination.port.code.guangzhou.truck", "en-US", "广州_卡车_us", "目的地港.广州_卡车"),
+            // dict.logistics.destination.port.code.guangzhou.truck
+            ("dict.logistics.destination.port.code.guangzhou.truck", "ja-JP", "广州_卡车_jp", "目的地港.广州_卡车"),
+            // dict.logistics.destination.port.code.guangzhou.truck
+            ("dict.logistics.destination.port.code.guangzhou.truck", "zh-CN", "广州_卡车", "目的地港.广州_卡车"),
+            // dict.logistics.destination.port.code.guangzhou.truck
+            ("dict.logistics.destination.port.code.guangzhou.truck", "zh-HK", "广州_卡车_hk", "目的地港.广州_卡车"),
+
+            // dict.logistics.destination.port.code.gw.air
+            ("dict.logistics.destination.port.code.gw.air", "en-US", "长城_空运_us", "目的地港.长城_空运"),
+            // dict.logistics.destination.port.code.gw.air
+            ("dict.logistics.destination.port.code.gw.air", "ja-JP", "长城_空运_jp", "目的地港.长城_空运"),
+            // dict.logistics.destination.port.code.gw.air
+            ("dict.logistics.destination.port.code.gw.air", "zh-CN", "长城_空运", "目的地港.长城_空运"),
+            // dict.logistics.destination.port.code.gw.air
+            ("dict.logistics.destination.port.code.gw.air", "zh-HK", "长城_空运_hk", "目的地港.长城_空运"),
+
+            // dict.logistics.destination.port.code.gw.boat
+            ("dict.logistics.destination.port.code.gw.boat", "en-US", "长城_船运_us", "目的地港.长城_船运"),
+            // dict.logistics.destination.port.code.gw.boat
+            ("dict.logistics.destination.port.code.gw.boat", "ja-JP", "长城_船运_jp", "目的地港.长城_船运"),
+            // dict.logistics.destination.port.code.gw.boat
+            ("dict.logistics.destination.port.code.gw.boat", "zh-CN", "长城_船运", "目的地港.长城_船运"),
+            // dict.logistics.destination.port.code.gw.boat
+            ("dict.logistics.destination.port.code.gw.boat", "zh-HK", "长城_船运_hk", "目的地港.长城_船运"),
+
+            // dict.logistics.destination.port.code.gw.truck
+            ("dict.logistics.destination.port.code.gw.truck", "en-US", "长城_卡车_us", "目的地港.长城_卡车"),
+            // dict.logistics.destination.port.code.gw.truck
+            ("dict.logistics.destination.port.code.gw.truck", "ja-JP", "长城_卡车_jp", "目的地港.长城_卡车"),
+            // dict.logistics.destination.port.code.gw.truck
+            ("dict.logistics.destination.port.code.gw.truck", "zh-CN", "长城_卡车", "目的地港.长城_卡车"),
+            // dict.logistics.destination.port.code.gw.truck
+            ("dict.logistics.destination.port.code.gw.truck", "zh-HK", "长城_卡车_hk", "目的地港.长城_卡车"),
+
+            // dict.logistics.destination.port.code.holland.air
+            ("dict.logistics.destination.port.code.holland.air", "en-US", "荷兰_空运_us", "目的地港.荷兰_空运"),
+            // dict.logistics.destination.port.code.holland.air
+            ("dict.logistics.destination.port.code.holland.air", "ja-JP", "荷兰_空运_jp", "目的地港.荷兰_空运"),
+            // dict.logistics.destination.port.code.holland.air
+            ("dict.logistics.destination.port.code.holland.air", "zh-CN", "荷兰_空运", "目的地港.荷兰_空运"),
+            // dict.logistics.destination.port.code.holland.air
+            ("dict.logistics.destination.port.code.holland.air", "zh-HK", "荷兰_空运_hk", "目的地港.荷兰_空运"),
+
+            // dict.logistics.destination.port.code.holland.boat
+            ("dict.logistics.destination.port.code.holland.boat", "en-US", "荷兰_船运_us", "目的地港.荷兰_船运"),
+            // dict.logistics.destination.port.code.holland.boat
+            ("dict.logistics.destination.port.code.holland.boat", "ja-JP", "荷兰_船运_jp", "目的地港.荷兰_船运"),
+            // dict.logistics.destination.port.code.holland.boat
+            ("dict.logistics.destination.port.code.holland.boat", "zh-CN", "荷兰_船运", "目的地港.荷兰_船运"),
+            // dict.logistics.destination.port.code.holland.boat
+            ("dict.logistics.destination.port.code.holland.boat", "zh-HK", "荷兰_船运_hk", "目的地港.荷兰_船运"),
+
+            // dict.logistics.destination.port.code.holland.truck
+            ("dict.logistics.destination.port.code.holland.truck", "en-US", "荷兰_卡车_us", "目的地港.荷兰_卡车"),
+            // dict.logistics.destination.port.code.holland.truck
+            ("dict.logistics.destination.port.code.holland.truck", "ja-JP", "荷兰_卡车_jp", "目的地港.荷兰_卡车"),
+            // dict.logistics.destination.port.code.holland.truck
+            ("dict.logistics.destination.port.code.holland.truck", "zh-CN", "荷兰_卡车", "目的地港.荷兰_卡车"),
+            // dict.logistics.destination.port.code.holland.truck
+            ("dict.logistics.destination.port.code.holland.truck", "zh-HK", "荷兰_卡车_hk", "目的地港.荷兰_卡车"),
+
+            // dict.logistics.destination.port.code.hongkong.air
+            ("dict.logistics.destination.port.code.hongkong.air", "en-US", "香港_空运_us", "目的地港.香港_空运"),
+            // dict.logistics.destination.port.code.hongkong.air
+            ("dict.logistics.destination.port.code.hongkong.air", "ja-JP", "香港_空运_jp", "目的地港.香港_空运"),
+            // dict.logistics.destination.port.code.hongkong.air
+            ("dict.logistics.destination.port.code.hongkong.air", "zh-CN", "香港_空运", "目的地港.香港_空运"),
+            // dict.logistics.destination.port.code.hongkong.air
+            ("dict.logistics.destination.port.code.hongkong.air", "zh-HK", "香港_空运_hk", "目的地港.香港_空运"),
+
+            // dict.logistics.destination.port.code.hongkong.boat
+            ("dict.logistics.destination.port.code.hongkong.boat", "en-US", "香港_船运_us", "目的地港.香港_船运"),
+            // dict.logistics.destination.port.code.hongkong.boat
+            ("dict.logistics.destination.port.code.hongkong.boat", "ja-JP", "香港_船运_jp", "目的地港.香港_船运"),
+            // dict.logistics.destination.port.code.hongkong.boat
+            ("dict.logistics.destination.port.code.hongkong.boat", "zh-CN", "香港_船运", "目的地港.香港_船运"),
+            // dict.logistics.destination.port.code.hongkong.boat
+            ("dict.logistics.destination.port.code.hongkong.boat", "zh-HK", "香港_船运_hk", "目的地港.香港_船运"),
+
+            // dict.logistics.destination.port.code.hongkong.truck
+            ("dict.logistics.destination.port.code.hongkong.truck", "en-US", "香港_卡车_us", "目的地港.香港_卡车"),
+            // dict.logistics.destination.port.code.hongkong.truck
+            ("dict.logistics.destination.port.code.hongkong.truck", "ja-JP", "香港_卡车_jp", "目的地港.香港_卡车"),
+            // dict.logistics.destination.port.code.hongkong.truck
+            ("dict.logistics.destination.port.code.hongkong.truck", "zh-CN", "香港_卡车", "目的地港.香港_卡车"),
+            // dict.logistics.destination.port.code.hongkong.truck
+            ("dict.logistics.destination.port.code.hongkong.truck", "zh-HK", "香港_卡车_hk", "目的地港.香港_卡车"),
+
+            // dict.logistics.destination.port.code.italy.air
+            ("dict.logistics.destination.port.code.italy.air", "en-US", "意大利_空运_us", "目的地港.意大利_空运"),
+            // dict.logistics.destination.port.code.italy.air
+            ("dict.logistics.destination.port.code.italy.air", "ja-JP", "意大利_空运_jp", "目的地港.意大利_空运"),
+            // dict.logistics.destination.port.code.italy.air
+            ("dict.logistics.destination.port.code.italy.air", "zh-CN", "意大利_空运", "目的地港.意大利_空运"),
+            // dict.logistics.destination.port.code.italy.air
+            ("dict.logistics.destination.port.code.italy.air", "zh-HK", "意大利_空运_hk", "目的地港.意大利_空运"),
+
+            // dict.logistics.destination.port.code.italy.boat
+            ("dict.logistics.destination.port.code.italy.boat", "en-US", "意大利_船运_us", "目的地港.意大利_船运"),
+            // dict.logistics.destination.port.code.italy.boat
+            ("dict.logistics.destination.port.code.italy.boat", "ja-JP", "意大利_船运_jp", "目的地港.意大利_船运"),
+            // dict.logistics.destination.port.code.italy.boat
+            ("dict.logistics.destination.port.code.italy.boat", "zh-CN", "意大利_船运", "目的地港.意大利_船运"),
+            // dict.logistics.destination.port.code.italy.boat
+            ("dict.logistics.destination.port.code.italy.boat", "zh-HK", "意大利_船运_hk", "目的地港.意大利_船运"),
+
+            // dict.logistics.destination.port.code.italy.truck
+            ("dict.logistics.destination.port.code.italy.truck", "en-US", "意大利_卡车_us", "目的地港.意大利_卡车"),
+            // dict.logistics.destination.port.code.italy.truck
+            ("dict.logistics.destination.port.code.italy.truck", "ja-JP", "意大利_卡车_jp", "目的地港.意大利_卡车"),
+            // dict.logistics.destination.port.code.italy.truck
+            ("dict.logistics.destination.port.code.italy.truck", "zh-CN", "意大利_卡车", "目的地港.意大利_卡车"),
+            // dict.logistics.destination.port.code.italy.truck
+            ("dict.logistics.destination.port.code.italy.truck", "zh-HK", "意大利_卡车_hk", "目的地港.意大利_卡车"),
+
+            // dict.logistics.destination.port.code.japan.air
+            ("dict.logistics.destination.port.code.japan.air", "en-US", "日本_空运_us", "目的地港.日本_空运"),
+            // dict.logistics.destination.port.code.japan.air
+            ("dict.logistics.destination.port.code.japan.air", "ja-JP", "日本_空运_jp", "目的地港.日本_空运"),
+            // dict.logistics.destination.port.code.japan.air
+            ("dict.logistics.destination.port.code.japan.air", "zh-CN", "日本_空运", "目的地港.日本_空运"),
+            // dict.logistics.destination.port.code.japan.air
+            ("dict.logistics.destination.port.code.japan.air", "zh-HK", "日本_空运_hk", "目的地港.日本_空运"),
+
+            // dict.logistics.destination.port.code.japan.boat
+            ("dict.logistics.destination.port.code.japan.boat", "en-US", "日本_船运_us", "目的地港.日本_船运"),
+            // dict.logistics.destination.port.code.japan.boat
+            ("dict.logistics.destination.port.code.japan.boat", "ja-JP", "日本_船运_jp", "目的地港.日本_船运"),
+            // dict.logistics.destination.port.code.japan.boat
+            ("dict.logistics.destination.port.code.japan.boat", "zh-CN", "日本_船运", "目的地港.日本_船运"),
+            // dict.logistics.destination.port.code.japan.boat
+            ("dict.logistics.destination.port.code.japan.boat", "zh-HK", "日本_船运_hk", "目的地港.日本_船运"),
+
+            // dict.logistics.destination.port.code.japan.truck
+            ("dict.logistics.destination.port.code.japan.truck", "en-US", "日本_卡车_us", "目的地港.日本_卡车"),
+            // dict.logistics.destination.port.code.japan.truck
+            ("dict.logistics.destination.port.code.japan.truck", "ja-JP", "日本_卡车_jp", "目的地港.日本_卡车"),
+            // dict.logistics.destination.port.code.japan.truck
+            ("dict.logistics.destination.port.code.japan.truck", "zh-CN", "日本_卡车", "目的地港.日本_卡车"),
+            // dict.logistics.destination.port.code.japan.truck
+            ("dict.logistics.destination.port.code.japan.truck", "zh-HK", "日本_卡车_hk", "目的地港.日本_卡车"),
+
+            // dict.logistics.destination.port.code.malaysia.air
+            ("dict.logistics.destination.port.code.malaysia.air", "en-US", "马来西亚_空运_us", "目的地港.马来西亚_空运"),
+            // dict.logistics.destination.port.code.malaysia.air
+            ("dict.logistics.destination.port.code.malaysia.air", "ja-JP", "马来西亚_空运_jp", "目的地港.马来西亚_空运"),
+            // dict.logistics.destination.port.code.malaysia.air
+            ("dict.logistics.destination.port.code.malaysia.air", "zh-CN", "马来西亚_空运", "目的地港.马来西亚_空运"),
+            // dict.logistics.destination.port.code.malaysia.air
+            ("dict.logistics.destination.port.code.malaysia.air", "zh-HK", "马来西亚_空运_hk", "目的地港.马来西亚_空运"),
+
+            // dict.logistics.destination.port.code.malaysia.boat
+            ("dict.logistics.destination.port.code.malaysia.boat", "en-US", "马来西亚_船运_us", "目的地港.马来西亚_船运"),
+            // dict.logistics.destination.port.code.malaysia.boat
+            ("dict.logistics.destination.port.code.malaysia.boat", "ja-JP", "马来西亚_船运_jp", "目的地港.马来西亚_船运"),
+            // dict.logistics.destination.port.code.malaysia.boat
+            ("dict.logistics.destination.port.code.malaysia.boat", "zh-CN", "马来西亚_船运", "目的地港.马来西亚_船运"),
+            // dict.logistics.destination.port.code.malaysia.boat
+            ("dict.logistics.destination.port.code.malaysia.boat", "zh-HK", "马来西亚_船运_hk", "目的地港.马来西亚_船运"),
+
+            // dict.logistics.destination.port.code.malaysia.truck
+            ("dict.logistics.destination.port.code.malaysia.truck", "en-US", "马来西亚_卡车_us", "目的地港.马来西亚_卡车"),
+            // dict.logistics.destination.port.code.malaysia.truck
+            ("dict.logistics.destination.port.code.malaysia.truck", "ja-JP", "马来西亚_卡车_jp", "目的地港.马来西亚_卡车"),
+            // dict.logistics.destination.port.code.malaysia.truck
+            ("dict.logistics.destination.port.code.malaysia.truck", "zh-CN", "马来西亚_卡车", "目的地港.马来西亚_卡车"),
+            // dict.logistics.destination.port.code.malaysia.truck
+            ("dict.logistics.destination.port.code.malaysia.truck", "zh-HK", "马来西亚_卡车_hk", "目的地港.马来西亚_卡车"),
+
+            // dict.logistics.destination.port.code.muji.air
+            ("dict.logistics.destination.port.code.muji.air", "en-US", "无印良品_空运_us", "目的地港.无印良品_空运"),
+            // dict.logistics.destination.port.code.muji.air
+            ("dict.logistics.destination.port.code.muji.air", "ja-JP", "无印良品_空运_jp", "目的地港.无印良品_空运"),
+            // dict.logistics.destination.port.code.muji.air
+            ("dict.logistics.destination.port.code.muji.air", "zh-CN", "无印良品_空运", "目的地港.无印良品_空运"),
+            // dict.logistics.destination.port.code.muji.air
+            ("dict.logistics.destination.port.code.muji.air", "zh-HK", "无印良品_空运_hk", "目的地港.无印良品_空运"),
+
+            // dict.logistics.destination.port.code.muji.boat
+            ("dict.logistics.destination.port.code.muji.boat", "en-US", "无印良品_船运_us", "目的地港.无印良品_船运"),
+            // dict.logistics.destination.port.code.muji.boat
+            ("dict.logistics.destination.port.code.muji.boat", "ja-JP", "无印良品_船运_jp", "目的地港.无印良品_船运"),
+            // dict.logistics.destination.port.code.muji.boat
+            ("dict.logistics.destination.port.code.muji.boat", "zh-CN", "无印良品_船运", "目的地港.无印良品_船运"),
+            // dict.logistics.destination.port.code.muji.boat
+            ("dict.logistics.destination.port.code.muji.boat", "zh-HK", "无印良品_船运_hk", "目的地港.无印良品_船运"),
+
+            // dict.logistics.destination.port.code.muji.truck
+            ("dict.logistics.destination.port.code.muji.truck", "en-US", "无印良品_卡车_us", "目的地港.无印良品_卡车"),
+            // dict.logistics.destination.port.code.muji.truck
+            ("dict.logistics.destination.port.code.muji.truck", "ja-JP", "无印良品_卡车_jp", "目的地港.无印良品_卡车"),
+            // dict.logistics.destination.port.code.muji.truck
+            ("dict.logistics.destination.port.code.muji.truck", "zh-CN", "无印良品_卡车", "目的地港.无印良品_卡车"),
+            // dict.logistics.destination.port.code.muji.truck
+            ("dict.logistics.destination.port.code.muji.truck", "zh-HK", "无印良品_卡车_hk", "目的地港.无印良品_卡车"),
+
+            // dict.logistics.destination.port.code.musicgw.air
+            ("dict.logistics.destination.port.code.musicgw.air", "en-US", "长秦城_空运_us", "目的地港.长秦城_空运"),
+            // dict.logistics.destination.port.code.musicgw.air
+            ("dict.logistics.destination.port.code.musicgw.air", "ja-JP", "长秦城_空运_jp", "目的地港.长秦城_空运"),
+            // dict.logistics.destination.port.code.musicgw.air
+            ("dict.logistics.destination.port.code.musicgw.air", "zh-CN", "长秦城_空运", "目的地港.长秦城_空运"),
+            // dict.logistics.destination.port.code.musicgw.air
+            ("dict.logistics.destination.port.code.musicgw.air", "zh-HK", "长秦城_空运_hk", "目的地港.长秦城_空运"),
+
+            // dict.logistics.destination.port.code.musicgw.boat
+            ("dict.logistics.destination.port.code.musicgw.boat", "en-US", "长秦城_船运_us", "目的地港.长秦城_船运"),
+            // dict.logistics.destination.port.code.musicgw.boat
+            ("dict.logistics.destination.port.code.musicgw.boat", "ja-JP", "长秦城_船运_jp", "目的地港.长秦城_船运"),
+            // dict.logistics.destination.port.code.musicgw.boat
+            ("dict.logistics.destination.port.code.musicgw.boat", "zh-CN", "长秦城_船运", "目的地港.长秦城_船运"),
+            // dict.logistics.destination.port.code.musicgw.boat
+            ("dict.logistics.destination.port.code.musicgw.boat", "zh-HK", "长秦城_船运_hk", "目的地港.长秦城_船运"),
+
+            // dict.logistics.destination.port.code.musicgw.truck
+            ("dict.logistics.destination.port.code.musicgw.truck", "en-US", "长秦城_卡车_us", "目的地港.长秦城_卡车"),
+            // dict.logistics.destination.port.code.musicgw.truck
+            ("dict.logistics.destination.port.code.musicgw.truck", "ja-JP", "长秦城_卡车_jp", "目的地港.长秦城_卡车"),
+            // dict.logistics.destination.port.code.musicgw.truck
+            ("dict.logistics.destination.port.code.musicgw.truck", "zh-CN", "长秦城_卡车", "目的地港.长秦城_卡车"),
+            // dict.logistics.destination.port.code.musicgw.truck
+            ("dict.logistics.destination.port.code.musicgw.truck", "zh-HK", "长秦城_卡车_hk", "目的地港.长秦城_卡车"),
+
+            // dict.logistics.destination.port.code.naisha.air
+            ("dict.logistics.destination.port.code.naisha.air", "en-US", "南沙_空运_us", "目的地港.南沙_空运"),
+            // dict.logistics.destination.port.code.naisha.air
+            ("dict.logistics.destination.port.code.naisha.air", "ja-JP", "南沙_空运_jp", "目的地港.南沙_空运"),
+            // dict.logistics.destination.port.code.naisha.air
+            ("dict.logistics.destination.port.code.naisha.air", "zh-CN", "南沙_空运", "目的地港.南沙_空运"),
+            // dict.logistics.destination.port.code.naisha.air
+            ("dict.logistics.destination.port.code.naisha.air", "zh-HK", "南沙_空运_hk", "目的地港.南沙_空运"),
+
+            // dict.logistics.destination.port.code.naisha.boat
+            ("dict.logistics.destination.port.code.naisha.boat", "en-US", "南沙_船运_us", "目的地港.南沙_船运"),
+            // dict.logistics.destination.port.code.naisha.boat
+            ("dict.logistics.destination.port.code.naisha.boat", "ja-JP", "南沙_船运_jp", "目的地港.南沙_船运"),
+            // dict.logistics.destination.port.code.naisha.boat
+            ("dict.logistics.destination.port.code.naisha.boat", "zh-CN", "南沙_船运", "目的地港.南沙_船运"),
+            // dict.logistics.destination.port.code.naisha.boat
+            ("dict.logistics.destination.port.code.naisha.boat", "zh-HK", "南沙_船运_hk", "目的地港.南沙_船运"),
+
+            // dict.logistics.destination.port.code.naisha.truck
+            ("dict.logistics.destination.port.code.naisha.truck", "en-US", "南沙_卡车_us", "目的地港.南沙_卡车"),
+            // dict.logistics.destination.port.code.naisha.truck
+            ("dict.logistics.destination.port.code.naisha.truck", "ja-JP", "南沙_卡车_jp", "目的地港.南沙_卡车"),
+            // dict.logistics.destination.port.code.naisha.truck
+            ("dict.logistics.destination.port.code.naisha.truck", "zh-CN", "南沙_卡车", "目的地港.南沙_卡车"),
+            // dict.logistics.destination.port.code.naisha.truck
+            ("dict.logistics.destination.port.code.naisha.truck", "zh-HK", "南沙_卡车_hk", "目的地港.南沙_卡车"),
+
+            // dict.logistics.destination.port.code.other.air
+            ("dict.logistics.destination.port.code.other.air", "en-US", "其它_空运_us", "目的地港.其它_空运"),
+            // dict.logistics.destination.port.code.other.air
+            ("dict.logistics.destination.port.code.other.air", "ja-JP", "其它_空运_jp", "目的地港.其它_空运"),
+            // dict.logistics.destination.port.code.other.air
+            ("dict.logistics.destination.port.code.other.air", "zh-CN", "其它_空运", "目的地港.其它_空运"),
+            // dict.logistics.destination.port.code.other.air
+            ("dict.logistics.destination.port.code.other.air", "zh-HK", "其它_空运_hk", "目的地港.其它_空运"),
+
+            // dict.logistics.destination.port.code.other.boat
+            ("dict.logistics.destination.port.code.other.boat", "en-US", "其它_船运_us", "目的地港.其它_船运"),
+            // dict.logistics.destination.port.code.other.boat
+            ("dict.logistics.destination.port.code.other.boat", "ja-JP", "其它_船运_jp", "目的地港.其它_船运"),
+            // dict.logistics.destination.port.code.other.boat
+            ("dict.logistics.destination.port.code.other.boat", "zh-CN", "其它_船运", "目的地港.其它_船运"),
+            // dict.logistics.destination.port.code.other.boat
+            ("dict.logistics.destination.port.code.other.boat", "zh-HK", "其它_船运_hk", "目的地港.其它_船运"),
+
+            // dict.logistics.destination.port.code.other.truck
+            ("dict.logistics.destination.port.code.other.truck", "en-US", "其它_卡车_us", "目的地港.其它_卡车"),
+            // dict.logistics.destination.port.code.other.truck
+            ("dict.logistics.destination.port.code.other.truck", "ja-JP", "其它_卡车_jp", "目的地港.其它_卡车"),
+            // dict.logistics.destination.port.code.other.truck
+            ("dict.logistics.destination.port.code.other.truck", "zh-CN", "其它_卡车", "目的地港.其它_卡车"),
+            // dict.logistics.destination.port.code.other.truck
+            ("dict.logistics.destination.port.code.other.truck", "zh-HK", "其它_卡车_hk", "目的地港.其它_卡车"),
+
+            // dict.logistics.destination.port.code.rotterdam.air
+            ("dict.logistics.destination.port.code.rotterdam.air", "en-US", "鹿特丹_空运_us", "目的地港.鹿特丹_空运"),
+            // dict.logistics.destination.port.code.rotterdam.air
+            ("dict.logistics.destination.port.code.rotterdam.air", "ja-JP", "鹿特丹_空运_jp", "目的地港.鹿特丹_空运"),
+            // dict.logistics.destination.port.code.rotterdam.air
+            ("dict.logistics.destination.port.code.rotterdam.air", "zh-CN", "鹿特丹_空运", "目的地港.鹿特丹_空运"),
+            // dict.logistics.destination.port.code.rotterdam.air
+            ("dict.logistics.destination.port.code.rotterdam.air", "zh-HK", "鹿特丹_空运_hk", "目的地港.鹿特丹_空运"),
+
+            // dict.logistics.destination.port.code.rotterdam.boat
+            ("dict.logistics.destination.port.code.rotterdam.boat", "en-US", "鹿特丹_船运_us", "目的地港.鹿特丹_船运"),
+            // dict.logistics.destination.port.code.rotterdam.boat
+            ("dict.logistics.destination.port.code.rotterdam.boat", "ja-JP", "鹿特丹_船运_jp", "目的地港.鹿特丹_船运"),
+            // dict.logistics.destination.port.code.rotterdam.boat
+            ("dict.logistics.destination.port.code.rotterdam.boat", "zh-CN", "鹿特丹_船运", "目的地港.鹿特丹_船运"),
+            // dict.logistics.destination.port.code.rotterdam.boat
+            ("dict.logistics.destination.port.code.rotterdam.boat", "zh-HK", "鹿特丹_船运_hk", "目的地港.鹿特丹_船运"),
+
+            // dict.logistics.destination.port.code.rotterdam.truck
+            ("dict.logistics.destination.port.code.rotterdam.truck", "en-US", "鹿特丹_卡车_us", "目的地港.鹿特丹_卡车"),
+            // dict.logistics.destination.port.code.rotterdam.truck
+            ("dict.logistics.destination.port.code.rotterdam.truck", "ja-JP", "鹿特丹_卡车_jp", "目的地港.鹿特丹_卡车"),
+            // dict.logistics.destination.port.code.rotterdam.truck
+            ("dict.logistics.destination.port.code.rotterdam.truck", "zh-CN", "鹿特丹_卡车", "目的地港.鹿特丹_卡车"),
+            // dict.logistics.destination.port.code.rotterdam.truck
+            ("dict.logistics.destination.port.code.rotterdam.truck", "zh-HK", "鹿特丹_卡车_hk", "目的地港.鹿特丹_卡车"),
+
+            // dict.logistics.destination.port.code.shanghai.air
+            ("dict.logistics.destination.port.code.shanghai.air", "en-US", "上海_空运_us", "目的地港.上海_空运"),
+            // dict.logistics.destination.port.code.shanghai.air
+            ("dict.logistics.destination.port.code.shanghai.air", "ja-JP", "上海_空运_jp", "目的地港.上海_空运"),
+            // dict.logistics.destination.port.code.shanghai.air
+            ("dict.logistics.destination.port.code.shanghai.air", "zh-CN", "上海_空运", "目的地港.上海_空运"),
+            // dict.logistics.destination.port.code.shanghai.air
+            ("dict.logistics.destination.port.code.shanghai.air", "zh-HK", "上海_空运_hk", "目的地港.上海_空运"),
+
+            // dict.logistics.destination.port.code.shanghai.boat
+            ("dict.logistics.destination.port.code.shanghai.boat", "en-US", "上海_船运_us", "目的地港.上海_船运"),
+            // dict.logistics.destination.port.code.shanghai.boat
+            ("dict.logistics.destination.port.code.shanghai.boat", "ja-JP", "上海_船运_jp", "目的地港.上海_船运"),
+            // dict.logistics.destination.port.code.shanghai.boat
+            ("dict.logistics.destination.port.code.shanghai.boat", "zh-CN", "上海_船运", "目的地港.上海_船运"),
+            // dict.logistics.destination.port.code.shanghai.boat
+            ("dict.logistics.destination.port.code.shanghai.boat", "zh-HK", "上海_船运_hk", "目的地港.上海_船运"),
+
+            // dict.logistics.destination.port.code.shanghai.truck
+            ("dict.logistics.destination.port.code.shanghai.truck", "en-US", "上海_卡车_us", "目的地港.上海_卡车"),
+            // dict.logistics.destination.port.code.shanghai.truck
+            ("dict.logistics.destination.port.code.shanghai.truck", "ja-JP", "上海_卡车_jp", "目的地港.上海_卡车"),
+            // dict.logistics.destination.port.code.shanghai.truck
+            ("dict.logistics.destination.port.code.shanghai.truck", "zh-CN", "上海_卡车", "目的地港.上海_卡车"),
+            // dict.logistics.destination.port.code.shanghai.truck
+            ("dict.logistics.destination.port.code.shanghai.truck", "zh-HK", "上海_卡车_hk", "目的地港.上海_卡车"),
+
+            // dict.logistics.destination.port.code.shengzhen.air
+            ("dict.logistics.destination.port.code.shengzhen.air", "en-US", "深圳_空运_us", "目的地港.深圳_空运"),
+            // dict.logistics.destination.port.code.shengzhen.air
+            ("dict.logistics.destination.port.code.shengzhen.air", "ja-JP", "深圳_空运_jp", "目的地港.深圳_空运"),
+            // dict.logistics.destination.port.code.shengzhen.air
+            ("dict.logistics.destination.port.code.shengzhen.air", "zh-CN", "深圳_空运", "目的地港.深圳_空运"),
+            // dict.logistics.destination.port.code.shengzhen.air
+            ("dict.logistics.destination.port.code.shengzhen.air", "zh-HK", "深圳_空运_hk", "目的地港.深圳_空运"),
+
+            // dict.logistics.destination.port.code.shengzhen.boat
+            ("dict.logistics.destination.port.code.shengzhen.boat", "en-US", "深圳_船运_us", "目的地港.深圳_船运"),
+            // dict.logistics.destination.port.code.shengzhen.boat
+            ("dict.logistics.destination.port.code.shengzhen.boat", "ja-JP", "深圳_船运_jp", "目的地港.深圳_船运"),
+            // dict.logistics.destination.port.code.shengzhen.boat
+            ("dict.logistics.destination.port.code.shengzhen.boat", "zh-CN", "深圳_船运", "目的地港.深圳_船运"),
+            // dict.logistics.destination.port.code.shengzhen.boat
+            ("dict.logistics.destination.port.code.shengzhen.boat", "zh-HK", "深圳_船运_hk", "目的地港.深圳_船运"),
+
+            // dict.logistics.destination.port.code.shengzhen.truck
+            ("dict.logistics.destination.port.code.shengzhen.truck", "en-US", "深圳_卡车_us", "目的地港.深圳_卡车"),
+            // dict.logistics.destination.port.code.shengzhen.truck
+            ("dict.logistics.destination.port.code.shengzhen.truck", "ja-JP", "深圳_卡车_jp", "目的地港.深圳_卡车"),
+            // dict.logistics.destination.port.code.shengzhen.truck
+            ("dict.logistics.destination.port.code.shengzhen.truck", "zh-CN", "深圳_卡车", "目的地港.深圳_卡车"),
+            // dict.logistics.destination.port.code.shengzhen.truck
+            ("dict.logistics.destination.port.code.shengzhen.truck", "zh-HK", "深圳_卡车_hk", "目的地港.深圳_卡车"),
+
+            // dict.logistics.destination.port.code.tac.air
+            ("dict.logistics.destination.port.code.tac.air", "en-US", "TAC_空运_us", "目的地港.TAC_空运"),
+            // dict.logistics.destination.port.code.tac.air
+            ("dict.logistics.destination.port.code.tac.air", "ja-JP", "TAC_空运_jp", "目的地港.TAC_空运"),
+            // dict.logistics.destination.port.code.tac.air
+            ("dict.logistics.destination.port.code.tac.air", "zh-CN", "TAC_空运", "目的地港.TAC_空运"),
+            // dict.logistics.destination.port.code.tac.air
+            ("dict.logistics.destination.port.code.tac.air", "zh-HK", "TAC_空运_hk", "目的地港.TAC_空运"),
+
+            // dict.logistics.destination.port.code.tac.boat
+            ("dict.logistics.destination.port.code.tac.boat", "en-US", "TAC_船运_us", "目的地港.TAC_船运"),
+            // dict.logistics.destination.port.code.tac.boat
+            ("dict.logistics.destination.port.code.tac.boat", "ja-JP", "TAC_船运_jp", "目的地港.TAC_船运"),
+            // dict.logistics.destination.port.code.tac.boat
+            ("dict.logistics.destination.port.code.tac.boat", "zh-CN", "TAC_船运", "目的地港.TAC_船运"),
+            // dict.logistics.destination.port.code.tac.boat
+            ("dict.logistics.destination.port.code.tac.boat", "zh-HK", "TAC_船运_hk", "目的地港.TAC_船运"),
+
+            // dict.logistics.destination.port.code.tac.truck
+            ("dict.logistics.destination.port.code.tac.truck", "en-US", "TAC_卡车_us", "目的地港.TAC_卡车"),
+            // dict.logistics.destination.port.code.tac.truck
+            ("dict.logistics.destination.port.code.tac.truck", "ja-JP", "TAC_卡车_jp", "目的地港.TAC_卡车"),
+            // dict.logistics.destination.port.code.tac.truck
+            ("dict.logistics.destination.port.code.tac.truck", "zh-CN", "TAC_卡车", "目的地港.TAC_卡车"),
+            // dict.logistics.destination.port.code.tac.truck
+            ("dict.logistics.destination.port.code.tac.truck", "zh-HK", "TAC_卡车_hk", "目的地港.TAC_卡车"),
+
+            // dict.logistics.destination.port.code.tca.air
+            ("dict.logistics.destination.port.code.tca.air", "en-US", "TCA_空运_us", "目的地港.TCA_空运"),
+            // dict.logistics.destination.port.code.tca.air
+            ("dict.logistics.destination.port.code.tca.air", "ja-JP", "TCA_空运_jp", "目的地港.TCA_空运"),
+            // dict.logistics.destination.port.code.tca.air
+            ("dict.logistics.destination.port.code.tca.air", "zh-CN", "TCA_空运", "目的地港.TCA_空运"),
+            // dict.logistics.destination.port.code.tca.air
+            ("dict.logistics.destination.port.code.tca.air", "zh-HK", "TCA_空运_hk", "目的地港.TCA_空运"),
+
+            // dict.logistics.destination.port.code.tca.boat
+            ("dict.logistics.destination.port.code.tca.boat", "en-US", "TCA_船运_us", "目的地港.TCA_船运"),
+            // dict.logistics.destination.port.code.tca.boat
+            ("dict.logistics.destination.port.code.tca.boat", "ja-JP", "TCA_船运_jp", "目的地港.TCA_船运"),
+            // dict.logistics.destination.port.code.tca.boat
+            ("dict.logistics.destination.port.code.tca.boat", "zh-CN", "TCA_船运", "目的地港.TCA_船运"),
+            // dict.logistics.destination.port.code.tca.boat
+            ("dict.logistics.destination.port.code.tca.boat", "zh-HK", "TCA_船运_hk", "目的地港.TCA_船运"),
+
+            // dict.logistics.destination.port.code.tca.truck
+            ("dict.logistics.destination.port.code.tca.truck", "en-US", "TCA_卡车_us", "目的地港.TCA_卡车"),
+            // dict.logistics.destination.port.code.tca.truck
+            ("dict.logistics.destination.port.code.tca.truck", "ja-JP", "TCA_卡车_jp", "目的地港.TCA_卡车"),
+            // dict.logistics.destination.port.code.tca.truck
+            ("dict.logistics.destination.port.code.tca.truck", "zh-CN", "TCA_卡车", "目的地港.TCA_卡车"),
+            // dict.logistics.destination.port.code.tca.truck
+            ("dict.logistics.destination.port.code.tca.truck", "zh-HK", "TCA_卡车_hk", "目的地港.TCA_卡车"),
+
+            // dict.logistics.destination.port.code.toa.air
+            ("dict.logistics.destination.port.code.toa.air", "en-US", "TOA_空运_us", "目的地港.TOA_空运"),
+            // dict.logistics.destination.port.code.toa.air
+            ("dict.logistics.destination.port.code.toa.air", "ja-JP", "TOA_空运_jp", "目的地港.TOA_空运"),
+            // dict.logistics.destination.port.code.toa.air
+            ("dict.logistics.destination.port.code.toa.air", "zh-CN", "TOA_空运", "目的地港.TOA_空运"),
+            // dict.logistics.destination.port.code.toa.air
+            ("dict.logistics.destination.port.code.toa.air", "zh-HK", "TOA_空运_hk", "目的地港.TOA_空运"),
+
+            // dict.logistics.destination.port.code.toa.boat
+            ("dict.logistics.destination.port.code.toa.boat", "en-US", "TOA_船运_us", "目的地港.TOA_船运"),
+            // dict.logistics.destination.port.code.toa.boat
+            ("dict.logistics.destination.port.code.toa.boat", "ja-JP", "TOA_船运_jp", "目的地港.TOA_船运"),
+            // dict.logistics.destination.port.code.toa.boat
+            ("dict.logistics.destination.port.code.toa.boat", "zh-CN", "TOA_船运", "目的地港.TOA_船运"),
+            // dict.logistics.destination.port.code.toa.boat
+            ("dict.logistics.destination.port.code.toa.boat", "zh-HK", "TOA_船运_hk", "目的地港.TOA_船运"),
+
+            // dict.logistics.destination.port.code.toa.truck
+            ("dict.logistics.destination.port.code.toa.truck", "en-US", "TOA_卡车_us", "目的地港.TOA_卡车"),
+            // dict.logistics.destination.port.code.toa.truck
+            ("dict.logistics.destination.port.code.toa.truck", "ja-JP", "TOA_卡车_jp", "目的地港.TOA_卡车"),
+            // dict.logistics.destination.port.code.toa.truck
+            ("dict.logistics.destination.port.code.toa.truck", "zh-CN", "TOA_卡车", "目的地港.TOA_卡车"),
+            // dict.logistics.destination.port.code.toa.truck
+            ("dict.logistics.destination.port.code.toa.truck", "zh-HK", "TOA_卡车_hk", "目的地港.TOA_卡车"),
+
+            // dict.logistics.destination.port.code.usa.air
+            ("dict.logistics.destination.port.code.usa.air", "en-US", "美国_空运_us", "目的地港.美国_空运"),
+            // dict.logistics.destination.port.code.usa.air
+            ("dict.logistics.destination.port.code.usa.air", "ja-JP", "美国_空运_jp", "目的地港.美国_空运"),
+            // dict.logistics.destination.port.code.usa.air
+            ("dict.logistics.destination.port.code.usa.air", "zh-CN", "美国_空运", "目的地港.美国_空运"),
+            // dict.logistics.destination.port.code.usa.air
+            ("dict.logistics.destination.port.code.usa.air", "zh-HK", "美国_空运_hk", "目的地港.美国_空运"),
+
+            // dict.logistics.destination.port.code.usa.boat
+            ("dict.logistics.destination.port.code.usa.boat", "en-US", "美国_船运_us", "目的地港.美国_船运"),
+            // dict.logistics.destination.port.code.usa.boat
+            ("dict.logistics.destination.port.code.usa.boat", "ja-JP", "美国_船运_jp", "目的地港.美国_船运"),
+            // dict.logistics.destination.port.code.usa.boat
+            ("dict.logistics.destination.port.code.usa.boat", "zh-CN", "美国_船运", "目的地港.美国_船运"),
+            // dict.logistics.destination.port.code.usa.boat
+            ("dict.logistics.destination.port.code.usa.boat", "zh-HK", "美国_船运_hk", "目的地港.美国_船运"),
+
+            // dict.logistics.destination.port.code.usa.truck
+            ("dict.logistics.destination.port.code.usa.truck", "en-US", "美国_卡车_us", "目的地港.美国_卡车"),
+            // dict.logistics.destination.port.code.usa.truck
+            ("dict.logistics.destination.port.code.usa.truck", "ja-JP", "美国_卡车_jp", "目的地港.美国_卡车"),
+            // dict.logistics.destination.port.code.usa.truck
+            ("dict.logistics.destination.port.code.usa.truck", "zh-CN", "美国_卡车", "目的地港.美国_卡车"),
+            // dict.logistics.destination.port.code.usa.truck
+            ("dict.logistics.destination.port.code.usa.truck", "zh-HK", "美国_卡车_hk", "目的地港.美国_卡车"),
+
+            // dict.logistics.destination.port.code.wuxi.air
+            ("dict.logistics.destination.port.code.wuxi.air", "en-US", "无锡_空运_us", "目的地港.无锡_空运"),
+            // dict.logistics.destination.port.code.wuxi.air
+            ("dict.logistics.destination.port.code.wuxi.air", "ja-JP", "无锡_空运_jp", "目的地港.无锡_空运"),
+            // dict.logistics.destination.port.code.wuxi.air
+            ("dict.logistics.destination.port.code.wuxi.air", "zh-CN", "无锡_空运", "目的地港.无锡_空运"),
+            // dict.logistics.destination.port.code.wuxi.air
+            ("dict.logistics.destination.port.code.wuxi.air", "zh-HK", "无锡_空运_hk", "目的地港.无锡_空运"),
+
+            // dict.logistics.destination.port.code.wuxi.boat
+            ("dict.logistics.destination.port.code.wuxi.boat", "en-US", "无锡_船运_us", "目的地港.无锡_船运"),
+            // dict.logistics.destination.port.code.wuxi.boat
+            ("dict.logistics.destination.port.code.wuxi.boat", "ja-JP", "无锡_船运_jp", "目的地港.无锡_船运"),
+            // dict.logistics.destination.port.code.wuxi.boat
+            ("dict.logistics.destination.port.code.wuxi.boat", "zh-CN", "无锡_船运", "目的地港.无锡_船运"),
+            // dict.logistics.destination.port.code.wuxi.boat
+            ("dict.logistics.destination.port.code.wuxi.boat", "zh-HK", "无锡_船运_hk", "目的地港.无锡_船运"),
+
+            // dict.logistics.destination.port.code.wuxi.truck
+            ("dict.logistics.destination.port.code.wuxi.truck", "en-US", "无锡_卡车_us", "目的地港.无锡_卡车"),
+            // dict.logistics.destination.port.code.wuxi.truck
+            ("dict.logistics.destination.port.code.wuxi.truck", "ja-JP", "无锡_卡车_jp", "目的地港.无锡_卡车"),
+            // dict.logistics.destination.port.code.wuxi.truck
+            ("dict.logistics.destination.port.code.wuxi.truck", "zh-CN", "无锡_卡车", "目的地港.无锡_卡车"),
+            // dict.logistics.destination.port.code.wuxi.truck
+            ("dict.logistics.destination.port.code.wuxi.truck", "zh-HK", "无锡_卡车_hk", "目的地港.无锡_卡车"),
+
+            // dict.logistics.destination.port.code.incheon.air
+            ("dict.logistics.destination.port.code.incheon.air", "en-US", "韩国－空运_us", "目的地港.韩国－空运"),
+            // dict.logistics.destination.port.code.incheon.air
+            ("dict.logistics.destination.port.code.incheon.air", "ja-JP", "韩国－空运_jp", "目的地港.韩国－空运"),
+            // dict.logistics.destination.port.code.incheon.air
+            ("dict.logistics.destination.port.code.incheon.air", "zh-CN", "韩国－空运", "目的地港.韩国－空运"),
+            // dict.logistics.destination.port.code.incheon.air
+            ("dict.logistics.destination.port.code.incheon.air", "zh-HK", "韩国－空运_hk", "目的地港.韩国－空运"),
+
+            // dict.logistics.destination.port.code.vie
+            ("dict.logistics.destination.port.code.vie", "en-US", "越南-卡车_us", "目的地港.越南-卡车"),
+            // dict.logistics.destination.port.code.vie
+            ("dict.logistics.destination.port.code.vie", "ja-JP", "越南-卡车_jp", "目的地港.越南-卡车"),
+            // dict.logistics.destination.port.code.vie
+            ("dict.logistics.destination.port.code.vie", "zh-CN", "越南-卡车", "目的地港.越南-卡车"),
+            // dict.logistics.destination.port.code.vie
+            ("dict.logistics.destination.port.code.vie", "zh-HK", "越南-卡车_hk", "目的地港.越南-卡车"),
+
+            // dict.logistics.destination.port.code.frankfurt
+            ("dict.logistics.destination.port.code.frankfurt", "en-US", "法兰克福_us", "目的地港.法兰克福"),
+            // dict.logistics.destination.port.code.frankfurt
+            ("dict.logistics.destination.port.code.frankfurt", "ja-JP", "法兰克福_jp", "目的地港.法兰克福"),
+            // dict.logistics.destination.port.code.frankfurt
+            ("dict.logistics.destination.port.code.frankfurt", "zh-CN", "法兰克福", "目的地港.法兰克福"),
+            // dict.logistics.destination.port.code.frankfurt
+            ("dict.logistics.destination.port.code.frankfurt", "zh-HK", "法兰克福_hk", "目的地港.法兰克福"),
+
+            // dict.logistics.destination.port.code.slovenia
+            ("dict.logistics.destination.port.code.slovenia", "en-US", "斯洛文尼亚-船运_us", "目的地港.斯洛文尼亚-船运"),
+            // dict.logistics.destination.port.code.slovenia
+            ("dict.logistics.destination.port.code.slovenia", "ja-JP", "斯洛文尼亚-船运_jp", "目的地港.斯洛文尼亚-船运"),
+            // dict.logistics.destination.port.code.slovenia
+            ("dict.logistics.destination.port.code.slovenia", "zh-CN", "斯洛文尼亚-船运", "目的地港.斯洛文尼亚-船运"),
+            // dict.logistics.destination.port.code.slovenia
+            ("dict.logistics.destination.port.code.slovenia", "zh-HK", "斯洛文尼亚-船运_hk", "目的地港.斯洛文尼亚-船运"),
+
+            // dict.logistics.destination.port.code.andas
+            ("dict.logistics.destination.port.code.andas", "en-US", "安达斯_us", "目的地港.安达斯"),
+            // dict.logistics.destination.port.code.andas
+            ("dict.logistics.destination.port.code.andas", "ja-JP", "安达斯_jp", "目的地港.安达斯"),
+            // dict.logistics.destination.port.code.andas
+            ("dict.logistics.destination.port.code.andas", "zh-CN", "安达斯", "目的地港.安达斯"),
+            // dict.logistics.destination.port.code.andas
+            ("dict.logistics.destination.port.code.andas", "zh-HK", "安达斯_hk", "目的地港.安达斯"),
+
             // dict.logistics.delivery.status.0
             ("dict.logistics.delivery.status.0", "en-US", "未交货_us", "交货状态.未交货"),
             // dict.logistics.delivery.status.0
@@ -5791,51 +9211,6 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.delivery.status.2", "zh-CN", "全部交货", "交货状态.全部交货"),
             // dict.logistics.delivery.status.2
             ("dict.logistics.delivery.status.2", "zh-HK", "全部交货_hk", "交货状态.全部交货"),
-
-            // dict.logistics.payment.method.type.0
-            ("dict.logistics.payment.method.type.0", "en-US", "现金_us", "支付方式.现金"),
-            // dict.logistics.payment.method.type.0
-            ("dict.logistics.payment.method.type.0", "ja-JP", "现金_jp", "支付方式.现金"),
-            // dict.logistics.payment.method.type.0
-            ("dict.logistics.payment.method.type.0", "zh-CN", "现金", "支付方式.现金"),
-            // dict.logistics.payment.method.type.0
-            ("dict.logistics.payment.method.type.0", "zh-HK", "现金_hk", "支付方式.现金"),
-
-            // dict.logistics.payment.method.type.1
-            ("dict.logistics.payment.method.type.1", "en-US", "银行转账_us", "支付方式.银行转账"),
-            // dict.logistics.payment.method.type.1
-            ("dict.logistics.payment.method.type.1", "ja-JP", "银行转账_jp", "支付方式.银行转账"),
-            // dict.logistics.payment.method.type.1
-            ("dict.logistics.payment.method.type.1", "zh-CN", "银行转账", "支付方式.银行转账"),
-            // dict.logistics.payment.method.type.1
-            ("dict.logistics.payment.method.type.1", "zh-HK", "银行转账_hk", "支付方式.银行转账"),
-
-            // dict.logistics.payment.method.type.2
-            ("dict.logistics.payment.method.type.2", "en-US", "支票_us", "支付方式.支票"),
-            // dict.logistics.payment.method.type.2
-            ("dict.logistics.payment.method.type.2", "ja-JP", "支票_jp", "支付方式.支票"),
-            // dict.logistics.payment.method.type.2
-            ("dict.logistics.payment.method.type.2", "zh-CN", "支票", "支付方式.支票"),
-            // dict.logistics.payment.method.type.2
-            ("dict.logistics.payment.method.type.2", "zh-HK", "支票_hk", "支付方式.支票"),
-
-            // dict.logistics.payment.method.type.3
-            ("dict.logistics.payment.method.type.3", "en-US", "信用证_us", "支付方式.信用证"),
-            // dict.logistics.payment.method.type.3
-            ("dict.logistics.payment.method.type.3", "ja-JP", "信用证_jp", "支付方式.信用证"),
-            // dict.logistics.payment.method.type.3
-            ("dict.logistics.payment.method.type.3", "zh-CN", "信用证", "支付方式.信用证"),
-            // dict.logistics.payment.method.type.3
-            ("dict.logistics.payment.method.type.3", "zh-HK", "信用证_hk", "支付方式.信用证"),
-
-            // dict.logistics.payment.method.type.4
-            ("dict.logistics.payment.method.type.4", "en-US", "其他_us", "支付方式.其他"),
-            // dict.logistics.payment.method.type.4
-            ("dict.logistics.payment.method.type.4", "ja-JP", "其他_jp", "支付方式.其他"),
-            // dict.logistics.payment.method.type.4
-            ("dict.logistics.payment.method.type.4", "zh-CN", "其他", "支付方式.其他"),
-            // dict.logistics.payment.method.type.4
-            ("dict.logistics.payment.method.type.4", "zh-HK", "其他_hk", "支付方式.其他"),
 
             // dict.logistics.discount.rate.param.0
             ("dict.logistics.discount.rate.param.0", "en-US", "0%_us", "折扣率.0%"),
@@ -5918,51 +9293,6 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             // dict.logistics.discount.rate.param.100
             ("dict.logistics.discount.rate.param.100", "zh-HK", "100%_hk", "折扣率.100%"),
 
-            // dict.logistics.tax.rate.param.0
-            ("dict.logistics.tax.rate.param.0", "en-US", "0%_us", "税费率.0%"),
-            // dict.logistics.tax.rate.param.0
-            ("dict.logistics.tax.rate.param.0", "ja-JP", "0%_jp", "税费率.0%"),
-            // dict.logistics.tax.rate.param.0
-            ("dict.logistics.tax.rate.param.0", "zh-CN", "0%", "税费率.0%"),
-            // dict.logistics.tax.rate.param.0
-            ("dict.logistics.tax.rate.param.0", "zh-HK", "0%_hk", "税费率.0%"),
-
-            // dict.logistics.tax.rate.param.3
-            ("dict.logistics.tax.rate.param.3", "en-US", "3%_us", "税费率.3%"),
-            // dict.logistics.tax.rate.param.3
-            ("dict.logistics.tax.rate.param.3", "ja-JP", "3%_jp", "税费率.3%"),
-            // dict.logistics.tax.rate.param.3
-            ("dict.logistics.tax.rate.param.3", "zh-CN", "3%", "税费率.3%"),
-            // dict.logistics.tax.rate.param.3
-            ("dict.logistics.tax.rate.param.3", "zh-HK", "3%_hk", "税费率.3%"),
-
-            // dict.logistics.tax.rate.param.6
-            ("dict.logistics.tax.rate.param.6", "en-US", "6%_us", "税费率.6%"),
-            // dict.logistics.tax.rate.param.6
-            ("dict.logistics.tax.rate.param.6", "ja-JP", "6%_jp", "税费率.6%"),
-            // dict.logistics.tax.rate.param.6
-            ("dict.logistics.tax.rate.param.6", "zh-CN", "6%", "税费率.6%"),
-            // dict.logistics.tax.rate.param.6
-            ("dict.logistics.tax.rate.param.6", "zh-HK", "6%_hk", "税费率.6%"),
-
-            // dict.logistics.tax.rate.param.9
-            ("dict.logistics.tax.rate.param.9", "en-US", "9%_us", "税费率.9%"),
-            // dict.logistics.tax.rate.param.9
-            ("dict.logistics.tax.rate.param.9", "ja-JP", "9%_jp", "税费率.9%"),
-            // dict.logistics.tax.rate.param.9
-            ("dict.logistics.tax.rate.param.9", "zh-CN", "9%", "税费率.9%"),
-            // dict.logistics.tax.rate.param.9
-            ("dict.logistics.tax.rate.param.9", "zh-HK", "9%_hk", "税费率.9%"),
-
-            // dict.logistics.tax.rate.param.13
-            ("dict.logistics.tax.rate.param.13", "en-US", "13%_us", "税费率.13%"),
-            // dict.logistics.tax.rate.param.13
-            ("dict.logistics.tax.rate.param.13", "ja-JP", "13%_jp", "税费率.13%"),
-            // dict.logistics.tax.rate.param.13
-            ("dict.logistics.tax.rate.param.13", "zh-CN", "13%", "税费率.13%"),
-            // dict.logistics.tax.rate.param.13
-            ("dict.logistics.tax.rate.param.13", "zh-HK", "13%_hk", "税费率.13%"),
-
             // dict.logistics.supplier.category.0
             ("dict.logistics.supplier.category.0", "en-US", "生产商_us", "供货商类型.生产商"),
             // dict.logistics.supplier.category.0
@@ -6007,60 +9337,6 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.supplier.category.4", "zh-CN", "其他", "供货商类型.其他"),
             // dict.logistics.supplier.category.4
             ("dict.logistics.supplier.category.4", "zh-HK", "其他_hk", "供货商类型.其他"),
-
-            // dict.logistics.payment.terms.param.0
-            ("dict.logistics.payment.terms.param.0", "en-US", "款到发货_us", "付款条件.款到发货"),
-            // dict.logistics.payment.terms.param.0
-            ("dict.logistics.payment.terms.param.0", "ja-JP", "款到发货_jp", "付款条件.款到发货"),
-            // dict.logistics.payment.terms.param.0
-            ("dict.logistics.payment.terms.param.0", "zh-CN", "款到发货", "付款条件.款到发货"),
-            // dict.logistics.payment.terms.param.0
-            ("dict.logistics.payment.terms.param.0", "zh-HK", "款到发货_hk", "付款条件.款到发货"),
-
-            // dict.logistics.payment.terms.param.1
-            ("dict.logistics.payment.terms.param.1", "en-US", "货到付款_us", "付款条件.货到付款"),
-            // dict.logistics.payment.terms.param.1
-            ("dict.logistics.payment.terms.param.1", "ja-JP", "货到付款_jp", "付款条件.货到付款"),
-            // dict.logistics.payment.terms.param.1
-            ("dict.logistics.payment.terms.param.1", "zh-CN", "货到付款", "付款条件.货到付款"),
-            // dict.logistics.payment.terms.param.1
-            ("dict.logistics.payment.terms.param.1", "zh-HK", "货到付款_hk", "付款条件.货到付款"),
-
-            // dict.logistics.payment.terms.param.2
-            ("dict.logistics.payment.terms.param.2", "en-US", "月结30天_us", "付款条件.月结30天"),
-            // dict.logistics.payment.terms.param.2
-            ("dict.logistics.payment.terms.param.2", "ja-JP", "月结30天_jp", "付款条件.月结30天"),
-            // dict.logistics.payment.terms.param.2
-            ("dict.logistics.payment.terms.param.2", "zh-CN", "月结30天", "付款条件.月结30天"),
-            // dict.logistics.payment.terms.param.2
-            ("dict.logistics.payment.terms.param.2", "zh-HK", "月结30天_hk", "付款条件.月结30天"),
-
-            // dict.logistics.payment.terms.param.3
-            ("dict.logistics.payment.terms.param.3", "en-US", "月结60天_us", "付款条件.月结60天"),
-            // dict.logistics.payment.terms.param.3
-            ("dict.logistics.payment.terms.param.3", "ja-JP", "月结60天_jp", "付款条件.月结60天"),
-            // dict.logistics.payment.terms.param.3
-            ("dict.logistics.payment.terms.param.3", "zh-CN", "月结60天", "付款条件.月结60天"),
-            // dict.logistics.payment.terms.param.3
-            ("dict.logistics.payment.terms.param.3", "zh-HK", "月结60天_hk", "付款条件.月结60天"),
-
-            // dict.logistics.payment.terms.param.4
-            ("dict.logistics.payment.terms.param.4", "en-US", "月结90天_us", "付款条件.月结90天"),
-            // dict.logistics.payment.terms.param.4
-            ("dict.logistics.payment.terms.param.4", "ja-JP", "月结90天_jp", "付款条件.月结90天"),
-            // dict.logistics.payment.terms.param.4
-            ("dict.logistics.payment.terms.param.4", "zh-CN", "月结90天", "付款条件.月结90天"),
-            // dict.logistics.payment.terms.param.4
-            ("dict.logistics.payment.terms.param.4", "zh-HK", "月结90天_hk", "付款条件.月结90天"),
-
-            // dict.logistics.payment.terms.param.5
-            ("dict.logistics.payment.terms.param.5", "en-US", "其他_us", "付款条件.其他"),
-            // dict.logistics.payment.terms.param.5
-            ("dict.logistics.payment.terms.param.5", "ja-JP", "其他_jp", "付款条件.其他"),
-            // dict.logistics.payment.terms.param.5
-            ("dict.logistics.payment.terms.param.5", "zh-CN", "其他", "付款条件.其他"),
-            // dict.logistics.payment.terms.param.5
-            ("dict.logistics.payment.terms.param.5", "zh-HK", "其他_hk", "付款条件.其他"),
 
             // dict.logistics.vendor.category.0
             ("dict.logistics.vendor.category.0", "en-US", "授权经销商_us", "经销商类型.授权经销商"),
@@ -6341,50 +9617,140 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             // dict.logistics.delivery.method.type.3
             ("dict.logistics.delivery.method.type.3", "zh-HK", "快递_hk", "交货方式.快递"),
 
-            // dict.logistics.sales.price.type.0
-            ("dict.logistics.sales.price.type.0", "en-US", "标准价格_us", "销售价格类型.标准价格"),
-            // dict.logistics.sales.price.type.0
-            ("dict.logistics.sales.price.type.0", "ja-JP", "标准价格_jp", "销售价格类型.标准价格"),
-            // dict.logistics.sales.price.type.0
-            ("dict.logistics.sales.price.type.0", "zh-CN", "标准价格", "销售价格类型.标准价格"),
-            // dict.logistics.sales.price.type.0
-            ("dict.logistics.sales.price.type.0", "zh-HK", "标准价格_hk", "销售价格类型.标准价格"),
+            // dict.logistics.sales.price.type.pr00
+            ("dict.logistics.sales.price.type.pr00", "en-US", "标准销售价格（净价）_us", "销售价格条件类型.PR00"),
+            // dict.logistics.sales.price.type.pr00
+            ("dict.logistics.sales.price.type.pr00", "ja-JP", "标准销售价格（净价）_jp", "销售价格条件类型.PR00"),
+            // dict.logistics.sales.price.type.pr00
+            ("dict.logistics.sales.price.type.pr00", "zh-CN", "标准销售价格（净价）", "销售价格条件类型.PR00"),
+            // dict.logistics.sales.price.type.pr00
+            ("dict.logistics.sales.price.type.pr00", "zh-HK", "标准销售价格（净价）_hk", "销售价格条件类型.PR00"),
 
-            // dict.logistics.sales.price.type.1
-            ("dict.logistics.sales.price.type.1", "en-US", "客户价格_us", "销售价格类型.客户价格"),
-            // dict.logistics.sales.price.type.1
-            ("dict.logistics.sales.price.type.1", "ja-JP", "客户价格_jp", "销售价格类型.客户价格"),
-            // dict.logistics.sales.price.type.1
-            ("dict.logistics.sales.price.type.1", "zh-CN", "客户价格", "销售价格类型.客户价格"),
-            // dict.logistics.sales.price.type.1
-            ("dict.logistics.sales.price.type.1", "zh-HK", "客户价格_hk", "销售价格类型.客户价格"),
+            // dict.logistics.sales.price.type.pb00
+            ("dict.logistics.sales.price.type.pb00", "en-US", "毛价（Gross Price）_us", "销售价格条件类型.PB00"),
+            // dict.logistics.sales.price.type.pb00
+            ("dict.logistics.sales.price.type.pb00", "ja-JP", "毛价（Gross Price）_jp", "销售价格条件类型.PB00"),
+            // dict.logistics.sales.price.type.pb00
+            ("dict.logistics.sales.price.type.pb00", "zh-CN", "毛价（Gross Price）", "销售价格条件类型.PB00"),
+            // dict.logistics.sales.price.type.pb00
+            ("dict.logistics.sales.price.type.pb00", "zh-HK", "毛价（Gross Price）_hk", "销售价格条件类型.PB00"),
 
-            // dict.logistics.sales.price.type.2
-            ("dict.logistics.sales.price.type.2", "en-US", "促销价格_us", "销售价格类型.促销价格"),
-            // dict.logistics.sales.price.type.2
-            ("dict.logistics.sales.price.type.2", "ja-JP", "促销价格_jp", "销售价格类型.促销价格"),
-            // dict.logistics.sales.price.type.2
-            ("dict.logistics.sales.price.type.2", "zh-CN", "促销价格", "销售价格类型.促销价格"),
-            // dict.logistics.sales.price.type.2
-            ("dict.logistics.sales.price.type.2", "zh-HK", "促销价格_hk", "销售价格类型.促销价格"),
+            // dict.logistics.sales.price.type.vkp0
+            ("dict.logistics.sales.price.type.vkp0", "en-US", "零售价/销售价_us", "销售价格条件类型.VKP0"),
+            // dict.logistics.sales.price.type.vkp0
+            ("dict.logistics.sales.price.type.vkp0", "ja-JP", "零售价/销售价_jp", "销售价格条件类型.VKP0"),
+            // dict.logistics.sales.price.type.vkp0
+            ("dict.logistics.sales.price.type.vkp0", "zh-CN", "零售价/销售价", "销售价格条件类型.VKP0"),
+            // dict.logistics.sales.price.type.vkp0
+            ("dict.logistics.sales.price.type.vkp0", "zh-HK", "零售价/销售价_hk", "销售价格条件类型.VKP0"),
 
-            // dict.logistics.sales.price.type.3
-            ("dict.logistics.sales.price.type.3", "en-US", "合同价格_us", "销售价格类型.合同价格"),
-            // dict.logistics.sales.price.type.3
-            ("dict.logistics.sales.price.type.3", "ja-JP", "合同价格_jp", "销售价格类型.合同价格"),
-            // dict.logistics.sales.price.type.3
-            ("dict.logistics.sales.price.type.3", "zh-CN", "合同价格", "销售价格类型.合同价格"),
-            // dict.logistics.sales.price.type.3
-            ("dict.logistics.sales.price.type.3", "zh-HK", "合同价格_hk", "销售价格类型.合同价格"),
+            // dict.logistics.sales.price.type.pi01
+            ("dict.logistics.sales.price.type.pi01", "en-US", "公司间价格_us", "销售价格条件类型.PI01"),
+            // dict.logistics.sales.price.type.pi01
+            ("dict.logistics.sales.price.type.pi01", "ja-JP", "公司间价格_jp", "销售价格条件类型.PI01"),
+            // dict.logistics.sales.price.type.pi01
+            ("dict.logistics.sales.price.type.pi01", "zh-CN", "公司间价格", "销售价格条件类型.PI01"),
+            // dict.logistics.sales.price.type.pi01
+            ("dict.logistics.sales.price.type.pi01", "zh-HK", "公司间价格_hk", "销售价格条件类型.PI01"),
 
-            // dict.logistics.sales.price.type.4
-            ("dict.logistics.sales.price.type.4", "en-US", "临时价格_us", "销售价格类型.临时价格"),
-            // dict.logistics.sales.price.type.4
-            ("dict.logistics.sales.price.type.4", "ja-JP", "临时价格_jp", "销售价格类型.临时价格"),
-            // dict.logistics.sales.price.type.4
-            ("dict.logistics.sales.price.type.4", "zh-CN", "临时价格", "销售价格类型.临时价格"),
-            // dict.logistics.sales.price.type.4
-            ("dict.logistics.sales.price.type.4", "zh-HK", "临时价格_hk", "销售价格类型.临时价格"),
+            // dict.logistics.sales.price.type.k004
+            ("dict.logistics.sales.price.type.k004", "en-US", "物料折扣_us", "销售价格条件类型.K004"),
+            // dict.logistics.sales.price.type.k004
+            ("dict.logistics.sales.price.type.k004", "ja-JP", "物料折扣_jp", "销售价格条件类型.K004"),
+            // dict.logistics.sales.price.type.k004
+            ("dict.logistics.sales.price.type.k004", "zh-CN", "物料折扣", "销售价格条件类型.K004"),
+            // dict.logistics.sales.price.type.k004
+            ("dict.logistics.sales.price.type.k004", "zh-HK", "物料折扣_hk", "销售价格条件类型.K004"),
+
+            // dict.logistics.sales.price.type.k005
+            ("dict.logistics.sales.price.type.k005", "en-US", "客户-物料折扣_us", "销售价格条件类型.K005"),
+            // dict.logistics.sales.price.type.k005
+            ("dict.logistics.sales.price.type.k005", "ja-JP", "客户-物料折扣_jp", "销售价格条件类型.K005"),
+            // dict.logistics.sales.price.type.k005
+            ("dict.logistics.sales.price.type.k005", "zh-CN", "客户-物料折扣", "销售价格条件类型.K005"),
+            // dict.logistics.sales.price.type.k005
+            ("dict.logistics.sales.price.type.k005", "zh-HK", "客户-物料折扣_hk", "销售价格条件类型.K005"),
+
+            // dict.logistics.sales.price.type.k007
+            ("dict.logistics.sales.price.type.k007", "en-US", "客户折扣_us", "销售价格条件类型.K007"),
+            // dict.logistics.sales.price.type.k007
+            ("dict.logistics.sales.price.type.k007", "ja-JP", "客户折扣_jp", "销售价格条件类型.K007"),
+            // dict.logistics.sales.price.type.k007
+            ("dict.logistics.sales.price.type.k007", "zh-CN", "客户折扣", "销售价格条件类型.K007"),
+            // dict.logistics.sales.price.type.k007
+            ("dict.logistics.sales.price.type.k007", "zh-HK", "客户折扣_hk", "销售价格条件类型.K007"),
+
+            // dict.logistics.sales.price.type.k020
+            ("dict.logistics.sales.price.type.k020", "en-US", "价格组折扣_us", "销售价格条件类型.K020"),
+            // dict.logistics.sales.price.type.k020
+            ("dict.logistics.sales.price.type.k020", "ja-JP", "价格组折扣_jp", "销售价格条件类型.K020"),
+            // dict.logistics.sales.price.type.k020
+            ("dict.logistics.sales.price.type.k020", "zh-CN", "价格组折扣", "销售价格条件类型.K020"),
+            // dict.logistics.sales.price.type.k020
+            ("dict.logistics.sales.price.type.k020", "zh-HK", "价格组折扣_hk", "销售价格条件类型.K020"),
+
+            // dict.logistics.sales.price.type.k021
+            ("dict.logistics.sales.price.type.k021", "en-US", "客户组折扣_us", "销售价格条件类型.K021"),
+            // dict.logistics.sales.price.type.k021
+            ("dict.logistics.sales.price.type.k021", "ja-JP", "客户组折扣_jp", "销售价格条件类型.K021"),
+            // dict.logistics.sales.price.type.k021
+            ("dict.logistics.sales.price.type.k021", "zh-CN", "客户组折扣", "销售价格条件类型.K021"),
+            // dict.logistics.sales.price.type.k021
+            ("dict.logistics.sales.price.type.k021", "zh-HK", "客户组折扣_hk", "销售价格条件类型.K021"),
+
+            // dict.logistics.sales.price.type.ra00
+            ("dict.logistics.sales.price.type.ra00", "en-US", "折扣（按净额%）_us", "销售价格条件类型.RA00"),
+            // dict.logistics.sales.price.type.ra00
+            ("dict.logistics.sales.price.type.ra00", "ja-JP", "折扣（按净额%）_jp", "销售价格条件类型.RA00"),
+            // dict.logistics.sales.price.type.ra00
+            ("dict.logistics.sales.price.type.ra00", "zh-CN", "折扣（按净额%）", "销售价格条件类型.RA00"),
+            // dict.logistics.sales.price.type.ra00
+            ("dict.logistics.sales.price.type.ra00", "zh-HK", "折扣（按净额%）_hk", "销售价格条件类型.RA00"),
+
+            // dict.logistics.sales.price.type.ra01
+            ("dict.logistics.sales.price.type.ra01", "en-US", "折扣（按总额%）_us", "销售价格条件类型.RA01"),
+            // dict.logistics.sales.price.type.ra01
+            ("dict.logistics.sales.price.type.ra01", "ja-JP", "折扣（按总额%）_jp", "销售价格条件类型.RA01"),
+            // dict.logistics.sales.price.type.ra01
+            ("dict.logistics.sales.price.type.ra01", "zh-CN", "折扣（按总额%）", "销售价格条件类型.RA01"),
+            // dict.logistics.sales.price.type.ra01
+            ("dict.logistics.sales.price.type.ra01", "zh-HK", "折扣（按总额%）_hk", "销售价格条件类型.RA01"),
+
+            // dict.logistics.sales.price.type.hb00
+            ("dict.logistics.sales.price.type.hb00", "en-US", "金额折扣_us", "销售价格条件类型.HB00"),
+            // dict.logistics.sales.price.type.hb00
+            ("dict.logistics.sales.price.type.hb00", "ja-JP", "金额折扣_jp", "销售价格条件类型.HB00"),
+            // dict.logistics.sales.price.type.hb00
+            ("dict.logistics.sales.price.type.hb00", "zh-CN", "金额折扣", "销售价格条件类型.HB00"),
+            // dict.logistics.sales.price.type.hb00
+            ("dict.logistics.sales.price.type.hb00", "zh-HK", "金额折扣_hk", "销售价格条件类型.HB00"),
+
+            // dict.logistics.sales.price.type.hd00
+            ("dict.logistics.sales.price.type.hd00", "en-US", "运费/附加费_us", "销售价格条件类型.HD00"),
+            // dict.logistics.sales.price.type.hd00
+            ("dict.logistics.sales.price.type.hd00", "ja-JP", "运费/附加费_jp", "销售价格条件类型.HD00"),
+            // dict.logistics.sales.price.type.hd00
+            ("dict.logistics.sales.price.type.hd00", "zh-CN", "运费/附加费", "销售价格条件类型.HD00"),
+            // dict.logistics.sales.price.type.hd00
+            ("dict.logistics.sales.price.type.hd00", "zh-HK", "运费/附加费_hk", "销售价格条件类型.HD00"),
+
+            // dict.logistics.sales.price.type.kf00
+            ("dict.logistics.sales.price.type.kf00", "en-US", "运费（%）_us", "销售价格条件类型.KF00"),
+            // dict.logistics.sales.price.type.kf00
+            ("dict.logistics.sales.price.type.kf00", "ja-JP", "运费（%）_jp", "销售价格条件类型.KF00"),
+            // dict.logistics.sales.price.type.kf00
+            ("dict.logistics.sales.price.type.kf00", "zh-CN", "运费（%）", "销售价格条件类型.KF00"),
+            // dict.logistics.sales.price.type.kf00
+            ("dict.logistics.sales.price.type.kf00", "zh-HK", "运费（%）_hk", "销售价格条件类型.KF00"),
+
+            // dict.logistics.sales.price.type.fra1
+            ("dict.logistics.sales.price.type.fra1", "en-US", "运费（金额）_us", "销售价格条件类型.FRA1"),
+            // dict.logistics.sales.price.type.fra1
+            ("dict.logistics.sales.price.type.fra1", "ja-JP", "运费（金额）_jp", "销售价格条件类型.FRA1"),
+            // dict.logistics.sales.price.type.fra1
+            ("dict.logistics.sales.price.type.fra1", "zh-CN", "运费（金额）", "销售价格条件类型.FRA1"),
+            // dict.logistics.sales.price.type.fra1
+            ("dict.logistics.sales.price.type.fra1", "zh-HK", "运费（金额）_hk", "销售价格条件类型.FRA1"),
 
             // dict.logistics.quotation.status.0
             ("dict.logistics.quotation.status.0", "en-US", "草稿_us", "报价状态.草稿"),
@@ -6467,86 +9833,86 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             // dict.logistics.aoi.inspection.line.category.1a
             ("dict.logistics.aoi.inspection.line.category.1a", "zh-HK", "1a_hk", "aoi线别.1a"),
 
-            // dict.logistics.assy.location.category.1
-            ("dict.logistics.assy.location.category.1", "en-US", "自插_us", "assy个所.自插"),
-            // dict.logistics.assy.location.category.1
-            ("dict.logistics.assy.location.category.1", "ja-JP", "自插_jp", "assy个所.自插"),
-            // dict.logistics.assy.location.category.1
-            ("dict.logistics.assy.location.category.1", "zh-CN", "自插", "assy个所.自插"),
-            // dict.logistics.assy.location.category.1
-            ("dict.logistics.assy.location.category.1", "zh-HK", "自插_hk", "assy个所.自插"),
+            // dict.logistics.defect.category.1
+            ("dict.logistics.defect.category.1", "en-US", "自插_us", "不良区分.自插"),
+            // dict.logistics.defect.category.1
+            ("dict.logistics.defect.category.1", "ja-JP", "自插_jp", "不良区分.自插"),
+            // dict.logistics.defect.category.1
+            ("dict.logistics.defect.category.1", "zh-CN", "自插", "不良区分.自插"),
+            // dict.logistics.defect.category.1
+            ("dict.logistics.defect.category.1", "zh-HK", "自插_hk", "不良区分.自插"),
 
-            // dict.logistics.assy.location.category.2
-            ("dict.logistics.assy.location.category.2", "en-US", "部品_us", "assy个所.部品"),
-            // dict.logistics.assy.location.category.2
-            ("dict.logistics.assy.location.category.2", "ja-JP", "部品_jp", "assy个所.部品"),
-            // dict.logistics.assy.location.category.2
-            ("dict.logistics.assy.location.category.2", "zh-CN", "部品", "assy个所.部品"),
-            // dict.logistics.assy.location.category.2
-            ("dict.logistics.assy.location.category.2", "zh-HK", "部品_hk", "assy个所.部品"),
+            // dict.logistics.defect.category.2
+            ("dict.logistics.defect.category.2", "en-US", "部品_us", "不良区分.部品"),
+            // dict.logistics.defect.category.2
+            ("dict.logistics.defect.category.2", "ja-JP", "部品_jp", "不良区分.部品"),
+            // dict.logistics.defect.category.2
+            ("dict.logistics.defect.category.2", "zh-CN", "部品", "不良区分.部品"),
+            // dict.logistics.defect.category.2
+            ("dict.logistics.defect.category.2", "zh-HK", "部品_hk", "不良区分.部品"),
 
-            // dict.logistics.assy.location.category.3
-            ("dict.logistics.assy.location.category.3", "en-US", "设计_us", "assy个所.设计"),
-            // dict.logistics.assy.location.category.3
-            ("dict.logistics.assy.location.category.3", "ja-JP", "设计_jp", "assy个所.设计"),
-            // dict.logistics.assy.location.category.3
-            ("dict.logistics.assy.location.category.3", "zh-CN", "设计", "assy个所.设计"),
-            // dict.logistics.assy.location.category.3
-            ("dict.logistics.assy.location.category.3", "zh-HK", "设计_hk", "assy个所.设计"),
+            // dict.logistics.defect.category.3
+            ("dict.logistics.defect.category.3", "en-US", "设计_us", "不良区分.设计"),
+            // dict.logistics.defect.category.3
+            ("dict.logistics.defect.category.3", "ja-JP", "设计_jp", "不良区分.设计"),
+            // dict.logistics.defect.category.3
+            ("dict.logistics.defect.category.3", "zh-CN", "设计", "不良区分.设计"),
+            // dict.logistics.defect.category.3
+            ("dict.logistics.defect.category.3", "zh-HK", "设计_hk", "不良区分.设计"),
 
-            // dict.logistics.assy.location.category.4
-            ("dict.logistics.assy.location.category.4", "en-US", "修正_us", "assy个所.修正"),
-            // dict.logistics.assy.location.category.4
-            ("dict.logistics.assy.location.category.4", "ja-JP", "修正_jp", "assy个所.修正"),
-            // dict.logistics.assy.location.category.4
-            ("dict.logistics.assy.location.category.4", "zh-CN", "修正", "assy个所.修正"),
-            // dict.logistics.assy.location.category.4
-            ("dict.logistics.assy.location.category.4", "zh-HK", "修正_hk", "assy个所.修正"),
+            // dict.logistics.defect.category.4
+            ("dict.logistics.defect.category.4", "en-US", "修正_us", "不良区分.修正"),
+            // dict.logistics.defect.category.4
+            ("dict.logistics.defect.category.4", "ja-JP", "修正_jp", "不良区分.修正"),
+            // dict.logistics.defect.category.4
+            ("dict.logistics.defect.category.4", "zh-CN", "修正", "不良区分.修正"),
+            // dict.logistics.defect.category.4
+            ("dict.logistics.defect.category.4", "zh-HK", "修正_hk", "不良区分.修正"),
 
-            // dict.logistics.assy.location.category.5
-            ("dict.logistics.assy.location.category.5", "en-US", "加工_us", "assy个所.加工"),
-            // dict.logistics.assy.location.category.5
-            ("dict.logistics.assy.location.category.5", "ja-JP", "加工_jp", "assy个所.加工"),
-            // dict.logistics.assy.location.category.5
-            ("dict.logistics.assy.location.category.5", "zh-CN", "加工", "assy个所.加工"),
-            // dict.logistics.assy.location.category.5
-            ("dict.logistics.assy.location.category.5", "zh-HK", "加工_hk", "assy个所.加工"),
+            // dict.logistics.defect.category.5
+            ("dict.logistics.defect.category.5", "en-US", "加工_us", "不良区分.加工"),
+            // dict.logistics.defect.category.5
+            ("dict.logistics.defect.category.5", "ja-JP", "加工_jp", "不良区分.加工"),
+            // dict.logistics.defect.category.5
+            ("dict.logistics.defect.category.5", "zh-CN", "加工", "不良区分.加工"),
+            // dict.logistics.defect.category.5
+            ("dict.logistics.defect.category.5", "zh-HK", "加工_hk", "不良区分.加工"),
 
-            // dict.logistics.assy.location.category.6
-            ("dict.logistics.assy.location.category.6", "en-US", "手插_us", "assy个所.手插"),
-            // dict.logistics.assy.location.category.6
-            ("dict.logistics.assy.location.category.6", "ja-JP", "手插_jp", "assy个所.手插"),
-            // dict.logistics.assy.location.category.6
-            ("dict.logistics.assy.location.category.6", "zh-CN", "手插", "assy个所.手插"),
-            // dict.logistics.assy.location.category.6
-            ("dict.logistics.assy.location.category.6", "zh-HK", "手插_hk", "assy个所.手插"),
+            // dict.logistics.defect.category.6
+            ("dict.logistics.defect.category.6", "en-US", "手插_us", "不良区分.手插"),
+            // dict.logistics.defect.category.6
+            ("dict.logistics.defect.category.6", "ja-JP", "手插_jp", "不良区分.手插"),
+            // dict.logistics.defect.category.6
+            ("dict.logistics.defect.category.6", "zh-CN", "手插", "不良区分.手插"),
+            // dict.logistics.defect.category.6
+            ("dict.logistics.defect.category.6", "zh-HK", "手插_hk", "不良区分.手插"),
 
-            // dict.logistics.assy.location.category.7
-            ("dict.logistics.assy.location.category.7", "en-US", "组立_us", "assy个所.组立"),
-            // dict.logistics.assy.location.category.7
-            ("dict.logistics.assy.location.category.7", "ja-JP", "组立_jp", "assy个所.组立"),
-            // dict.logistics.assy.location.category.7
-            ("dict.logistics.assy.location.category.7", "zh-CN", "组立", "assy个所.组立"),
-            // dict.logistics.assy.location.category.7
-            ("dict.logistics.assy.location.category.7", "zh-HK", "组立_hk", "assy个所.组立"),
+            // dict.logistics.defect.category.7
+            ("dict.logistics.defect.category.7", "en-US", "组立_us", "不良区分.组立"),
+            // dict.logistics.defect.category.7
+            ("dict.logistics.defect.category.7", "ja-JP", "组立_jp", "不良区分.组立"),
+            // dict.logistics.defect.category.7
+            ("dict.logistics.defect.category.7", "zh-CN", "组立", "不良区分.组立"),
+            // dict.logistics.defect.category.7
+            ("dict.logistics.defect.category.7", "zh-HK", "组立_hk", "不良区分.组立"),
 
-            // dict.logistics.assy.location.category.8
-            ("dict.logistics.assy.location.category.8", "en-US", "smt_us", "assy个所.smt"),
-            // dict.logistics.assy.location.category.8
-            ("dict.logistics.assy.location.category.8", "ja-JP", "smt_jp", "assy个所.smt"),
-            // dict.logistics.assy.location.category.8
-            ("dict.logistics.assy.location.category.8", "zh-CN", "smt", "assy个所.smt"),
-            // dict.logistics.assy.location.category.8
-            ("dict.logistics.assy.location.category.8", "zh-HK", "smt_hk", "assy个所.smt"),
+            // dict.logistics.defect.category.8
+            ("dict.logistics.defect.category.8", "en-US", "smt_us", "不良区分.smt"),
+            // dict.logistics.defect.category.8
+            ("dict.logistics.defect.category.8", "ja-JP", "smt_jp", "不良区分.smt"),
+            // dict.logistics.defect.category.8
+            ("dict.logistics.defect.category.8", "zh-CN", "smt", "不良区分.smt"),
+            // dict.logistics.defect.category.8
+            ("dict.logistics.defect.category.8", "zh-HK", "smt_hk", "不良区分.smt"),
 
-            // dict.logistics.assy.location.category.9
-            ("dict.logistics.assy.location.category.9", "en-US", "其他_us", "assy个所.其他"),
-            // dict.logistics.assy.location.category.9
-            ("dict.logistics.assy.location.category.9", "ja-JP", "其他_jp", "assy个所.其他"),
-            // dict.logistics.assy.location.category.9
-            ("dict.logistics.assy.location.category.9", "zh-CN", "其他", "assy个所.其他"),
-            // dict.logistics.assy.location.category.9
-            ("dict.logistics.assy.location.category.9", "zh-HK", "其他_hk", "assy个所.其他"),
+            // dict.logistics.defect.category.9
+            ("dict.logistics.defect.category.9", "en-US", "其他_us", "不良区分.其他"),
+            // dict.logistics.defect.category.9
+            ("dict.logistics.defect.category.9", "ja-JP", "其他_jp", "不良区分.其他"),
+            // dict.logistics.defect.category.9
+            ("dict.logistics.defect.category.9", "zh-CN", "其他", "不良区分.其他"),
+            // dict.logistics.defect.category.9
+            ("dict.logistics.defect.category.9", "zh-HK", "其他_hk", "不良区分.其他"),
 
             // dict.logistics.ec.distinction.category.1
             ("dict.logistics.ec.distinction.category.1", "en-US", "全仕向_us", "设变管理区分.全仕向"),
@@ -6647,6 +10013,60 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             // dict.logistics.ec.status.7
             ("dict.logistics.ec.status.7", "zh-HK", "拒绝的_hk", "设变状态.拒绝的"),
 
+            // dict.logistics.ec.in.stock.status.1
+            ("dict.logistics.ec.in.stock.status.1", "en-US", "在库_us", "设变在库状态.在库"),
+            // dict.logistics.ec.in.stock.status.1
+            ("dict.logistics.ec.in.stock.status.1", "ja-JP", "在库_jp", "设变在库状态.在库"),
+            // dict.logistics.ec.in.stock.status.1
+            ("dict.logistics.ec.in.stock.status.1", "zh-CN", "在库", "设变在库状态.在库"),
+            // dict.logistics.ec.in.stock.status.1
+            ("dict.logistics.ec.in.stock.status.1", "zh-HK", "在库_hk", "设变在库状态.在库"),
+
+            // dict.logistics.ec.in.stock.status.2
+            ("dict.logistics.ec.in.stock.status.2", "en-US", "不在库_us", "设变在库状态.不在库"),
+            // dict.logistics.ec.in.stock.status.2
+            ("dict.logistics.ec.in.stock.status.2", "ja-JP", "不在库_jp", "设变在库状态.不在库"),
+            // dict.logistics.ec.in.stock.status.2
+            ("dict.logistics.ec.in.stock.status.2", "zh-CN", "不在库", "设变在库状态.不在库"),
+            // dict.logistics.ec.in.stock.status.2
+            ("dict.logistics.ec.in.stock.status.2", "zh-HK", "不在库_hk", "设变在库状态.不在库"),
+
+            // dict.logistics.ec.in.stock.status.3
+            ("dict.logistics.ec.in.stock.status.3", "en-US", "待确认_us", "设变在库状态.待确认"),
+            // dict.logistics.ec.in.stock.status.3
+            ("dict.logistics.ec.in.stock.status.3", "ja-JP", "待确认_jp", "设变在库状态.待确认"),
+            // dict.logistics.ec.in.stock.status.3
+            ("dict.logistics.ec.in.stock.status.3", "zh-CN", "待确认", "设变在库状态.待确认"),
+            // dict.logistics.ec.in.stock.status.3
+            ("dict.logistics.ec.in.stock.status.3", "zh-HK", "待确认_hk", "设变在库状态.待确认"),
+
+            // dict.logistics.ec.gijutsu.status.1
+            ("dict.logistics.ec.gijutsu.status.1", "en-US", "发行_us", "设变技术课状态.发行"),
+            // dict.logistics.ec.gijutsu.status.1
+            ("dict.logistics.ec.gijutsu.status.1", "ja-JP", "发行_jp", "设变技术课状态.发行"),
+            // dict.logistics.ec.gijutsu.status.1
+            ("dict.logistics.ec.gijutsu.status.1", "zh-CN", "发行", "设变技术课状态.发行"),
+            // dict.logistics.ec.gijutsu.status.1
+            ("dict.logistics.ec.gijutsu.status.1", "zh-HK", "发行_hk", "设变技术课状态.发行"),
+
+            // dict.logistics.ec.gijutsu.status.2
+            ("dict.logistics.ec.gijutsu.status.2", "en-US", "执行中_us", "设变技术课状态.执行中"),
+            // dict.logistics.ec.gijutsu.status.2
+            ("dict.logistics.ec.gijutsu.status.2", "ja-JP", "执行中_jp", "设变技术课状态.执行中"),
+            // dict.logistics.ec.gijutsu.status.2
+            ("dict.logistics.ec.gijutsu.status.2", "zh-CN", "执行中", "设变技术课状态.执行中"),
+            // dict.logistics.ec.gijutsu.status.2
+            ("dict.logistics.ec.gijutsu.status.2", "zh-HK", "执行中_hk", "设变技术课状态.执行中"),
+
+            // dict.logistics.ec.gijutsu.status.3
+            ("dict.logistics.ec.gijutsu.status.3", "en-US", "完成_us", "设变技术课状态.完成"),
+            // dict.logistics.ec.gijutsu.status.3
+            ("dict.logistics.ec.gijutsu.status.3", "ja-JP", "完成_jp", "设变技术课状态.完成"),
+            // dict.logistics.ec.gijutsu.status.3
+            ("dict.logistics.ec.gijutsu.status.3", "zh-CN", "完成", "设变技术课状态.完成"),
+            // dict.logistics.ec.gijutsu.status.3
+            ("dict.logistics.ec.gijutsu.status.3", "zh-HK", "完成_hk", "设变技术课状态.完成"),
+
             // dict.sys.equipment.status.0
             ("dict.sys.equipment.status.0", "en-US", "运行中_us", "设备状态.运行中"),
             // dict.sys.equipment.status.0
@@ -6702,49 +10122,49 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.sys.equipment.status.5", "zh-HK", "已报废_hk", "设备状态.已报废"),
 
             // dict.logistics.equipment.type.0
-            ("dict.logistics.equipment.type.0", "en-US", "生产设备_us", "设备类型.生产设备"),
+            ("dict.logistics.equipment.type.0", "en-US", "生产设备_us", "登录设备.生产设备"),
             // dict.logistics.equipment.type.0
-            ("dict.logistics.equipment.type.0", "ja-JP", "生产设备_jp", "设备类型.生产设备"),
+            ("dict.logistics.equipment.type.0", "ja-JP", "生产设备_jp", "登录设备.生产设备"),
             // dict.logistics.equipment.type.0
-            ("dict.logistics.equipment.type.0", "zh-CN", "生产设备", "设备类型.生产设备"),
+            ("dict.logistics.equipment.type.0", "zh-CN", "生产设备", "登录设备.生产设备"),
             // dict.logistics.equipment.type.0
-            ("dict.logistics.equipment.type.0", "zh-HK", "生产设备_hk", "设备类型.生产设备"),
+            ("dict.logistics.equipment.type.0", "zh-HK", "生产设备_hk", "登录设备.生产设备"),
 
             // dict.logistics.equipment.type.1
-            ("dict.logistics.equipment.type.1", "en-US", "检测设备_us", "设备类型.检测设备"),
+            ("dict.logistics.equipment.type.1", "en-US", "检测设备_us", "登录设备.检测设备"),
             // dict.logistics.equipment.type.1
-            ("dict.logistics.equipment.type.1", "ja-JP", "检测设备_jp", "设备类型.检测设备"),
+            ("dict.logistics.equipment.type.1", "ja-JP", "检测设备_jp", "登录设备.检测设备"),
             // dict.logistics.equipment.type.1
-            ("dict.logistics.equipment.type.1", "zh-CN", "检测设备", "设备类型.检测设备"),
+            ("dict.logistics.equipment.type.1", "zh-CN", "检测设备", "登录设备.检测设备"),
             // dict.logistics.equipment.type.1
-            ("dict.logistics.equipment.type.1", "zh-HK", "检测设备_hk", "设备类型.检测设备"),
+            ("dict.logistics.equipment.type.1", "zh-HK", "检测设备_hk", "登录设备.检测设备"),
 
             // dict.logistics.equipment.type.2
-            ("dict.logistics.equipment.type.2", "en-US", "包装设备_us", "设备类型.包装设备"),
+            ("dict.logistics.equipment.type.2", "en-US", "包装设备_us", "登录设备.包装设备"),
             // dict.logistics.equipment.type.2
-            ("dict.logistics.equipment.type.2", "ja-JP", "包装设备_jp", "设备类型.包装设备"),
+            ("dict.logistics.equipment.type.2", "ja-JP", "包装设备_jp", "登录设备.包装设备"),
             // dict.logistics.equipment.type.2
-            ("dict.logistics.equipment.type.2", "zh-CN", "包装设备", "设备类型.包装设备"),
+            ("dict.logistics.equipment.type.2", "zh-CN", "包装设备", "登录设备.包装设备"),
             // dict.logistics.equipment.type.2
-            ("dict.logistics.equipment.type.2", "zh-HK", "包装设备_hk", "设备类型.包装设备"),
+            ("dict.logistics.equipment.type.2", "zh-HK", "包装设备_hk", "登录设备.包装设备"),
 
             // dict.logistics.equipment.type.3
-            ("dict.logistics.equipment.type.3", "en-US", "物流设备_us", "设备类型.物流设备"),
+            ("dict.logistics.equipment.type.3", "en-US", "物流设备_us", "登录设备.物流设备"),
             // dict.logistics.equipment.type.3
-            ("dict.logistics.equipment.type.3", "ja-JP", "物流设备_jp", "设备类型.物流设备"),
+            ("dict.logistics.equipment.type.3", "ja-JP", "物流设备_jp", "登录设备.物流设备"),
             // dict.logistics.equipment.type.3
-            ("dict.logistics.equipment.type.3", "zh-CN", "物流设备", "设备类型.物流设备"),
+            ("dict.logistics.equipment.type.3", "zh-CN", "物流设备", "登录设备.物流设备"),
             // dict.logistics.equipment.type.3
-            ("dict.logistics.equipment.type.3", "zh-HK", "物流设备_hk", "设备类型.物流设备"),
+            ("dict.logistics.equipment.type.3", "zh-HK", "物流设备_hk", "登录设备.物流设备"),
 
             // dict.logistics.equipment.type.4
-            ("dict.logistics.equipment.type.4", "en-US", "辅助设备_us", "设备类型.辅助设备"),
+            ("dict.logistics.equipment.type.4", "en-US", "辅助设备_us", "登录设备.辅助设备"),
             // dict.logistics.equipment.type.4
-            ("dict.logistics.equipment.type.4", "ja-JP", "辅助设备_jp", "设备类型.辅助设备"),
+            ("dict.logistics.equipment.type.4", "ja-JP", "辅助设备_jp", "登录设备.辅助设备"),
             // dict.logistics.equipment.type.4
-            ("dict.logistics.equipment.type.4", "zh-CN", "辅助设备", "设备类型.辅助设备"),
+            ("dict.logistics.equipment.type.4", "zh-CN", "辅助设备", "登录设备.辅助设备"),
             // dict.logistics.equipment.type.4
-            ("dict.logistics.equipment.type.4", "zh-HK", "辅助设备_hk", "设备类型.辅助设备"),
+            ("dict.logistics.equipment.type.4", "zh-HK", "辅助设备_hk", "登录设备.辅助设备"),
 
             // dict.logistics.maintenance.type.0
             ("dict.logistics.maintenance.type.0", "en-US", "定期保养_us", "维护类型.定期保养"),
@@ -9626,6 +13046,105 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             // dict.logistics.pcba.side.category.t
             ("dict.logistics.pcba.side.category.t", "zh-HK", "t面_hk", "pcba面别.t面"),
 
+            // dict.logistics.prod.category.rd
+            ("dict.logistics.prod.category.rd", "en-US", "研发_us", "生产类别.研发"),
+            // dict.logistics.prod.category.rd
+            ("dict.logistics.prod.category.rd", "ja-JP", "研发_jp", "生产类别.研发"),
+            // dict.logistics.prod.category.rd
+            ("dict.logistics.prod.category.rd", "zh-CN", "研发", "生产类别.研发"),
+            // dict.logistics.prod.category.rd
+            ("dict.logistics.prod.category.rd", "zh-HK", "研发_hk", "生产类别.研发"),
+
+            // dict.logistics.prod.category.evt
+            ("dict.logistics.prod.category.evt", "en-US", "工程验证测试_us", "生产类别.工程验证测试"),
+            // dict.logistics.prod.category.evt
+            ("dict.logistics.prod.category.evt", "ja-JP", "工程验证测试_jp", "生产类别.工程验证测试"),
+            // dict.logistics.prod.category.evt
+            ("dict.logistics.prod.category.evt", "zh-CN", "工程验证测试", "生产类别.工程验证测试"),
+            // dict.logistics.prod.category.evt
+            ("dict.logistics.prod.category.evt", "zh-HK", "工程验证测试_hk", "生产类别.工程验证测试"),
+
+            // dict.logistics.prod.category.dvt
+            ("dict.logistics.prod.category.dvt", "en-US", "设计验证测试_us", "生产类别.设计验证测试"),
+            // dict.logistics.prod.category.dvt
+            ("dict.logistics.prod.category.dvt", "ja-JP", "设计验证测试_jp", "生产类别.设计验证测试"),
+            // dict.logistics.prod.category.dvt
+            ("dict.logistics.prod.category.dvt", "zh-CN", "设计验证测试", "生产类别.设计验证测试"),
+            // dict.logistics.prod.category.dvt
+            ("dict.logistics.prod.category.dvt", "zh-HK", "设计验证测试_hk", "生产类别.设计验证测试"),
+
+            // dict.logistics.prod.category.epp
+            ("dict.logistics.prod.category.epp", "en-US", "工程试产_us", "生产类别.工程试产"),
+            // dict.logistics.prod.category.epp
+            ("dict.logistics.prod.category.epp", "ja-JP", "工程试产_jp", "生产类别.工程试产"),
+            // dict.logistics.prod.category.epp
+            ("dict.logistics.prod.category.epp", "zh-CN", "工程试产", "生产类别.工程试产"),
+            // dict.logistics.prod.category.epp
+            ("dict.logistics.prod.category.epp", "zh-HK", "工程试产_hk", "生产类别.工程试产"),
+
+            // dict.logistics.prod.category.pp
+            ("dict.logistics.prod.category.pp", "en-US", "试产_us", "生产类别.试产"),
+            // dict.logistics.prod.category.pp
+            ("dict.logistics.prod.category.pp", "ja-JP", "试产_jp", "生产类别.试产"),
+            // dict.logistics.prod.category.pp
+            ("dict.logistics.prod.category.pp", "zh-CN", "试产", "生产类别.试产"),
+            // dict.logistics.prod.category.pp
+            ("dict.logistics.prod.category.pp", "zh-HK", "试产_hk", "生产类别.试产"),
+
+            // dict.logistics.prod.category.fpp
+            ("dict.logistics.prod.category.fpp", "en-US", "正式生产_us", "生产类别.正式生产"),
+            // dict.logistics.prod.category.fpp
+            ("dict.logistics.prod.category.fpp", "ja-JP", "正式生产_jp", "生产类别.正式生产"),
+            // dict.logistics.prod.category.fpp
+            ("dict.logistics.prod.category.fpp", "zh-CN", "正式生产", "生产类别.正式生产"),
+            // dict.logistics.prod.category.fpp
+            ("dict.logistics.prod.category.fpp", "zh-HK", "正式生产_hk", "生产类别.正式生产"),
+
+            // dict.logistics.prod.category.mp
+            ("dict.logistics.prod.category.mp", "en-US", "大规模生产_us", "生产类别.大规模生产"),
+            // dict.logistics.prod.category.mp
+            ("dict.logistics.prod.category.mp", "ja-JP", "大规模生产_jp", "生产类别.大规模生产"),
+            // dict.logistics.prod.category.mp
+            ("dict.logistics.prod.category.mp", "zh-CN", "大规模生产", "生产类别.大规模生产"),
+            // dict.logistics.prod.category.mp
+            ("dict.logistics.prod.category.mp", "zh-HK", "大规模生产_hk", "生产类别.大规模生产"),
+
+            // dict.logistics.prod.category.rpr
+            ("dict.logistics.prod.category.rpr", "en-US", "维修生产_us", "生产类别.维修生产"),
+            // dict.logistics.prod.category.rpr
+            ("dict.logistics.prod.category.rpr", "ja-JP", "维修生产_jp", "生产类别.维修生产"),
+            // dict.logistics.prod.category.rpr
+            ("dict.logistics.prod.category.rpr", "zh-CN", "维修生产", "生产类别.维修生产"),
+            // dict.logistics.prod.category.rpr
+            ("dict.logistics.prod.category.rpr", "zh-HK", "维修生产_hk", "生产类别.维修生产"),
+
+            // dict.logistics.prod.category.rwr
+            ("dict.logistics.prod.category.rwr", "en-US", "返工生产_us", "生产类别.返工生产"),
+            // dict.logistics.prod.category.rwr
+            ("dict.logistics.prod.category.rwr", "ja-JP", "返工生产_jp", "生产类别.返工生产"),
+            // dict.logistics.prod.category.rwr
+            ("dict.logistics.prod.category.rwr", "zh-CN", "返工生产", "生产类别.返工生产"),
+            // dict.logistics.prod.category.rwr
+            ("dict.logistics.prod.category.rwr", "zh-HK", "返工生产_hk", "生产类别.返工生产"),
+
+            // dict.logistics.prod.status.1
+            ("dict.logistics.prod.status.1", "en-US", "进行中_us", "生产状态.进行中"),
+            // dict.logistics.prod.status.1
+            ("dict.logistics.prod.status.1", "ja-JP", "进行中_jp", "生产状态.进行中"),
+            // dict.logistics.prod.status.1
+            ("dict.logistics.prod.status.1", "zh-CN", "进行中", "生产状态.进行中"),
+            // dict.logistics.prod.status.1
+            ("dict.logistics.prod.status.1", "zh-HK", "进行中_hk", "生产状态.进行中"),
+
+            // dict.logistics.prod.status.2
+            ("dict.logistics.prod.status.2", "en-US", "已完成_us", "生产状态.已完成"),
+            // dict.logistics.prod.status.2
+            ("dict.logistics.prod.status.2", "ja-JP", "已完成_jp", "生产状态.已完成"),
+            // dict.logistics.prod.status.2
+            ("dict.logistics.prod.status.2", "zh-CN", "已完成", "生产状态.已完成"),
+            // dict.logistics.prod.status.2
+            ("dict.logistics.prod.status.2", "zh-HK", "已完成_hk", "生产状态.已完成"),
+
             // dict.logistics.shift.category.1
             ("dict.logistics.shift.category.1", "en-US", "早_us", "生产班别.早"),
             // dict.logistics.shift.category.1
@@ -9670,6 +13189,105 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.shift.category.5", "zh-CN", "夜班", "生产班别.夜班"),
             // dict.logistics.shift.category.5
             ("dict.logistics.shift.category.5", "zh-HK", "夜班_hk", "生产班别.夜班"),
+
+            // dict.logistics.team.category.a
+            ("dict.logistics.team.category.a", "en-US", "组立_us", "班组分类.组立"),
+            // dict.logistics.team.category.a
+            ("dict.logistics.team.category.a", "ja-JP", "组立_jp", "班组分类.组立"),
+            // dict.logistics.team.category.a
+            ("dict.logistics.team.category.a", "zh-CN", "组立", "班组分类.组立"),
+            // dict.logistics.team.category.a
+            ("dict.logistics.team.category.a", "zh-HK", "组立_hk", "班组分类.组立"),
+
+            // dict.logistics.team.category.p
+            ("dict.logistics.team.category.p", "en-US", "PCBA_us", "班组分类.PCBA"),
+            // dict.logistics.team.category.p
+            ("dict.logistics.team.category.p", "ja-JP", "PCBA_jp", "班组分类.PCBA"),
+            // dict.logistics.team.category.p
+            ("dict.logistics.team.category.p", "zh-CN", "PCBA", "班组分类.PCBA"),
+            // dict.logistics.team.category.p
+            ("dict.logistics.team.category.p", "zh-HK", "PCBA_hk", "班组分类.PCBA"),
+
+            // dict.logistics.team.category.s
+            ("dict.logistics.team.category.s", "en-US", "SMT_us", "班组分类.SMT"),
+            // dict.logistics.team.category.s
+            ("dict.logistics.team.category.s", "ja-JP", "SMT_jp", "班组分类.SMT"),
+            // dict.logistics.team.category.s
+            ("dict.logistics.team.category.s", "zh-CN", "SMT", "班组分类.SMT"),
+            // dict.logistics.team.category.s
+            ("dict.logistics.team.category.s", "zh-HK", "SMT_hk", "班组分类.SMT"),
+
+            // dict.logistics.team.category.q
+            ("dict.logistics.team.category.q", "en-US", "质检_us", "班组分类.质检"),
+            // dict.logistics.team.category.q
+            ("dict.logistics.team.category.q", "ja-JP", "质检_jp", "班组分类.质检"),
+            // dict.logistics.team.category.q
+            ("dict.logistics.team.category.q", "zh-CN", "质检", "班组分类.质检"),
+            // dict.logistics.team.category.q
+            ("dict.logistics.team.category.q", "zh-HK", "质检_hk", "班组分类.质检"),
+
+            // dict.logistics.team.category.o
+            ("dict.logistics.team.category.o", "en-US", "其他_us", "班组分类.其他"),
+            // dict.logistics.team.category.o
+            ("dict.logistics.team.category.o", "ja-JP", "其他_jp", "班组分类.其他"),
+            // dict.logistics.team.category.o
+            ("dict.logistics.team.category.o", "zh-CN", "其他", "班组分类.其他"),
+            // dict.logistics.team.category.o
+            ("dict.logistics.team.category.o", "zh-HK", "其他_hk", "班组分类.其他"),
+
+            // dict.logistics.prod.order.type.zdta
+            ("dict.logistics.prod.order.type.zdta", "en-US", "通常生産_us", "工单类型.通常生産"),
+            // dict.logistics.prod.order.type.zdta
+            ("dict.logistics.prod.order.type.zdta", "ja-JP", "通常生産_jp", "工单类型.通常生産"),
+            // dict.logistics.prod.order.type.zdta
+            ("dict.logistics.prod.order.type.zdta", "zh-CN", "通常生産", "工单类型.通常生産"),
+            // dict.logistics.prod.order.type.zdta
+            ("dict.logistics.prod.order.type.zdta", "zh-HK", "通常生産_hk", "工单类型.通常生産"),
+
+            // dict.logistics.prod.order.type.zdtb
+            ("dict.logistics.prod.order.type.zdtb", "en-US", "改造改修_us", "工单类型.改造改修"),
+            // dict.logistics.prod.order.type.zdtb
+            ("dict.logistics.prod.order.type.zdtb", "ja-JP", "改造改修_jp", "工单类型.改造改修"),
+            // dict.logistics.prod.order.type.zdtb
+            ("dict.logistics.prod.order.type.zdtb", "zh-CN", "改造改修", "工单类型.改造改修"),
+            // dict.logistics.prod.order.type.zdtb
+            ("dict.logistics.prod.order.type.zdtb", "zh-HK", "改造改修_hk", "工单类型.改造改修"),
+
+            // dict.logistics.prod.order.type.zdtc
+            ("dict.logistics.prod.order.type.zdtc", "en-US", "開発試作_us", "工单类型.開発試作"),
+            // dict.logistics.prod.order.type.zdtc
+            ("dict.logistics.prod.order.type.zdtc", "ja-JP", "開発試作_jp", "工单类型.開発試作"),
+            // dict.logistics.prod.order.type.zdtc
+            ("dict.logistics.prod.order.type.zdtc", "zh-CN", "開発試作", "工单类型.開発試作"),
+            // dict.logistics.prod.order.type.zdtc
+            ("dict.logistics.prod.order.type.zdtc", "zh-HK", "開発試作_hk", "工单类型.開発試作"),
+
+            // dict.logistics.prod.order.type.zdtd
+            ("dict.logistics.prod.order.type.zdtd", "en-US", "通常生産PCBA_us", "工单类型.通常生産PCBA"),
+            // dict.logistics.prod.order.type.zdtd
+            ("dict.logistics.prod.order.type.zdtd", "ja-JP", "通常生産PCBA_jp", "工单类型.通常生産PCBA"),
+            // dict.logistics.prod.order.type.zdtd
+            ("dict.logistics.prod.order.type.zdtd", "zh-CN", "通常生産PCBA", "工单类型.通常生産PCBA"),
+            // dict.logistics.prod.order.type.zdtd
+            ("dict.logistics.prod.order.type.zdtd", "zh-HK", "通常生産PCBA_hk", "工单类型.通常生産PCBA"),
+
+            // dict.logistics.prod.order.type.zdte
+            ("dict.logistics.prod.order.type.zdte", "en-US", "改造改修PCBA_us", "工单类型.改造改修PCBA"),
+            // dict.logistics.prod.order.type.zdte
+            ("dict.logistics.prod.order.type.zdte", "ja-JP", "改造改修PCBA_jp", "工单类型.改造改修PCBA"),
+            // dict.logistics.prod.order.type.zdte
+            ("dict.logistics.prod.order.type.zdte", "zh-CN", "改造改修PCBA", "工单类型.改造改修PCBA"),
+            // dict.logistics.prod.order.type.zdte
+            ("dict.logistics.prod.order.type.zdte", "zh-HK", "改造改修PCBA_hk", "工单类型.改造改修PCBA"),
+
+            // dict.logistics.prod.order.type.zdtf
+            ("dict.logistics.prod.order.type.zdtf", "en-US", "開発試作PCBA_us", "工单类型.開発試作PCBA"),
+            // dict.logistics.prod.order.type.zdtf
+            ("dict.logistics.prod.order.type.zdtf", "ja-JP", "開発試作PCBA_jp", "工单类型.開発試作PCBA"),
+            // dict.logistics.prod.order.type.zdtf
+            ("dict.logistics.prod.order.type.zdtf", "zh-CN", "開発試作PCBA", "工单类型.開発試作PCBA"),
+            // dict.logistics.prod.order.type.zdtf
+            ("dict.logistics.prod.order.type.zdtf", "zh-HK", "開発試作PCBA_hk", "工单类型.開発試作PCBA"),
 
             // dict.logistics.stop.reason.category.1
             ("dict.logistics.stop.reason.category.1", "en-US", "切换停止时间_us", "停线原因.切换停止时间"),
@@ -9796,6 +13414,276 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.visual.inspection.line.category.2", "zh-CN", "2", "目视线别.2"),
             // dict.logistics.visual.inspection.line.category.2
             ("dict.logistics.visual.inspection.line.category.2", "zh-HK", "2_hk", "目视线别.2"),
+
+            // dict.logistics.pcba.inspection.status.1
+            ("dict.logistics.pcba.inspection.status.1", "en-US", "检查中_us", "pcba检查状态.检查中"),
+            // dict.logistics.pcba.inspection.status.1
+            ("dict.logistics.pcba.inspection.status.1", "ja-JP", "检查中_jp", "pcba检查状态.检查中"),
+            // dict.logistics.pcba.inspection.status.1
+            ("dict.logistics.pcba.inspection.status.1", "zh-CN", "检查中", "pcba检查状态.检查中"),
+            // dict.logistics.pcba.inspection.status.1
+            ("dict.logistics.pcba.inspection.status.1", "zh-HK", "检查中_hk", "pcba检查状态.检查中"),
+
+            // dict.logistics.pcba.inspection.status.2
+            ("dict.logistics.pcba.inspection.status.2", "en-US", "测试中_us", "pcba检查状态.测试中"),
+            // dict.logistics.pcba.inspection.status.2
+            ("dict.logistics.pcba.inspection.status.2", "ja-JP", "测试中_jp", "pcba检查状态.测试中"),
+            // dict.logistics.pcba.inspection.status.2
+            ("dict.logistics.pcba.inspection.status.2", "zh-CN", "测试中", "pcba检查状态.测试中"),
+            // dict.logistics.pcba.inspection.status.2
+            ("dict.logistics.pcba.inspection.status.2", "zh-HK", "测试中_hk", "pcba检查状态.测试中"),
+
+            // dict.logistics.pcba.inspection.status.3
+            ("dict.logistics.pcba.inspection.status.3", "en-US", "检查完成_us", "pcba检查状态.检查完成"),
+            // dict.logistics.pcba.inspection.status.3
+            ("dict.logistics.pcba.inspection.status.3", "ja-JP", "检查完成_jp", "pcba检查状态.检查完成"),
+            // dict.logistics.pcba.inspection.status.3
+            ("dict.logistics.pcba.inspection.status.3", "zh-CN", "检查完成", "pcba检查状态.检查完成"),
+            // dict.logistics.pcba.inspection.status.3
+            ("dict.logistics.pcba.inspection.status.3", "zh-HK", "检查完成_hk", "pcba检查状态.检查完成"),
+
+            // dict.logistics.pcba.inspection.status.4
+            ("dict.logistics.pcba.inspection.status.4", "en-US", "测试完成_us", "pcba检查状态.测试完成"),
+            // dict.logistics.pcba.inspection.status.4
+            ("dict.logistics.pcba.inspection.status.4", "ja-JP", "测试完成_jp", "pcba检查状态.测试完成"),
+            // dict.logistics.pcba.inspection.status.4
+            ("dict.logistics.pcba.inspection.status.4", "zh-CN", "测试完成", "pcba检查状态.测试完成"),
+            // dict.logistics.pcba.inspection.status.4
+            ("dict.logistics.pcba.inspection.status.4", "zh-HK", "测试完成_hk", "pcba检查状态.测试完成"),
+
+            // dict.logistics.pcba.completed.status.0
+            ("dict.logistics.pcba.completed.status.0", "en-US", "未完成_us", "pcba完成状态.未完成"),
+            // dict.logistics.pcba.completed.status.0
+            ("dict.logistics.pcba.completed.status.0", "ja-JP", "未完成_jp", "pcba完成状态.未完成"),
+            // dict.logistics.pcba.completed.status.0
+            ("dict.logistics.pcba.completed.status.0", "zh-CN", "未完成", "pcba完成状态.未完成"),
+            // dict.logistics.pcba.completed.status.0
+            ("dict.logistics.pcba.completed.status.0", "zh-HK", "未完成_hk", "pcba完成状态.未完成"),
+
+            // dict.logistics.pcba.completed.status.1
+            ("dict.logistics.pcba.completed.status.1", "en-US", "部分完成_us", "pcba完成状态.部分完成"),
+            // dict.logistics.pcba.completed.status.1
+            ("dict.logistics.pcba.completed.status.1", "ja-JP", "部分完成_jp", "pcba完成状态.部分完成"),
+            // dict.logistics.pcba.completed.status.1
+            ("dict.logistics.pcba.completed.status.1", "zh-CN", "部分完成", "pcba完成状态.部分完成"),
+            // dict.logistics.pcba.completed.status.1
+            ("dict.logistics.pcba.completed.status.1", "zh-HK", "部分完成_hk", "pcba完成状态.部分完成"),
+
+            // dict.logistics.pcba.completed.status.2
+            ("dict.logistics.pcba.completed.status.2", "en-US", "已完成_us", "pcba完成状态.已完成"),
+            // dict.logistics.pcba.completed.status.2
+            ("dict.logistics.pcba.completed.status.2", "ja-JP", "已完成_jp", "pcba完成状态.已完成"),
+            // dict.logistics.pcba.completed.status.2
+            ("dict.logistics.pcba.completed.status.2", "zh-CN", "已完成", "pcba完成状态.已完成"),
+            // dict.logistics.pcba.completed.status.2
+            ("dict.logistics.pcba.completed.status.2", "zh-HK", "已完成_hk", "pcba完成状态.已完成"),
+
+            // dict.logistics.bom.type.0
+            ("dict.logistics.bom.type.0", "en-US", "标准BOM_us", "BOM类型.标准BOM"),
+            // dict.logistics.bom.type.0
+            ("dict.logistics.bom.type.0", "ja-JP", "标准BOM_jp", "BOM类型.标准BOM"),
+            // dict.logistics.bom.type.0
+            ("dict.logistics.bom.type.0", "zh-CN", "标准BOM", "BOM类型.标准BOM"),
+            // dict.logistics.bom.type.0
+            ("dict.logistics.bom.type.0", "zh-HK", "标准BOM_hk", "BOM类型.标准BOM"),
+
+            // dict.logistics.bom.type.1
+            ("dict.logistics.bom.type.1", "en-US", "工程BOM_us", "BOM类型.工程BOM"),
+            // dict.logistics.bom.type.1
+            ("dict.logistics.bom.type.1", "ja-JP", "工程BOM_jp", "BOM类型.工程BOM"),
+            // dict.logistics.bom.type.1
+            ("dict.logistics.bom.type.1", "zh-CN", "工程BOM", "BOM类型.工程BOM"),
+            // dict.logistics.bom.type.1
+            ("dict.logistics.bom.type.1", "zh-HK", "工程BOM_hk", "BOM类型.工程BOM"),
+
+            // dict.logistics.bom.type.2
+            ("dict.logistics.bom.type.2", "en-US", "制造BOM_us", "BOM类型.制造BOM"),
+            // dict.logistics.bom.type.2
+            ("dict.logistics.bom.type.2", "ja-JP", "制造BOM_jp", "BOM类型.制造BOM"),
+            // dict.logistics.bom.type.2
+            ("dict.logistics.bom.type.2", "zh-CN", "制造BOM", "BOM类型.制造BOM"),
+            // dict.logistics.bom.type.2
+            ("dict.logistics.bom.type.2", "zh-HK", "制造BOM_hk", "BOM类型.制造BOM"),
+
+            // dict.logistics.bom.type.3
+            ("dict.logistics.bom.type.3", "en-US", "成本BOM_us", "BOM类型.成本BOM"),
+            // dict.logistics.bom.type.3
+            ("dict.logistics.bom.type.3", "ja-JP", "成本BOM_jp", "BOM类型.成本BOM"),
+            // dict.logistics.bom.type.3
+            ("dict.logistics.bom.type.3", "zh-CN", "成本BOM", "BOM类型.成本BOM"),
+            // dict.logistics.bom.type.3
+            ("dict.logistics.bom.type.3", "zh-HK", "成本BOM_hk", "BOM类型.成本BOM"),
+
+            // dict.logistics.bom.type.4
+            ("dict.logistics.bom.type.4", "en-US", "销售BOM_us", "BOM类型.销售BOM"),
+            // dict.logistics.bom.type.4
+            ("dict.logistics.bom.type.4", "ja-JP", "销售BOM_jp", "BOM类型.销售BOM"),
+            // dict.logistics.bom.type.4
+            ("dict.logistics.bom.type.4", "zh-CN", "销售BOM", "BOM类型.销售BOM"),
+            // dict.logistics.bom.type.4
+            ("dict.logistics.bom.type.4", "zh-HK", "销售BOM_hk", "BOM类型.销售BOM"),
+
+            // dict.logistics.bom.status.0
+            ("dict.logistics.bom.status.0", "en-US", "草稿_us", "BOM状态.草稿"),
+            // dict.logistics.bom.status.0
+            ("dict.logistics.bom.status.0", "ja-JP", "草稿_jp", "BOM状态.草稿"),
+            // dict.logistics.bom.status.0
+            ("dict.logistics.bom.status.0", "zh-CN", "草稿", "BOM状态.草稿"),
+            // dict.logistics.bom.status.0
+            ("dict.logistics.bom.status.0", "zh-HK", "草稿_hk", "BOM状态.草稿"),
+
+            // dict.logistics.bom.status.1
+            ("dict.logistics.bom.status.1", "en-US", "已发布_us", "BOM状态.已发布"),
+            // dict.logistics.bom.status.1
+            ("dict.logistics.bom.status.1", "ja-JP", "已发布_jp", "BOM状态.已发布"),
+            // dict.logistics.bom.status.1
+            ("dict.logistics.bom.status.1", "zh-CN", "已发布", "BOM状态.已发布"),
+            // dict.logistics.bom.status.1
+            ("dict.logistics.bom.status.1", "zh-HK", "已发布_hk", "BOM状态.已发布"),
+
+            // dict.logistics.bom.status.2
+            ("dict.logistics.bom.status.2", "en-US", "已停用_us", "BOM状态.已停用"),
+            // dict.logistics.bom.status.2
+            ("dict.logistics.bom.status.2", "ja-JP", "已停用_jp", "BOM状态.已停用"),
+            // dict.logistics.bom.status.2
+            ("dict.logistics.bom.status.2", "zh-CN", "已停用", "BOM状态.已停用"),
+            // dict.logistics.bom.status.2
+            ("dict.logistics.bom.status.2", "zh-HK", "已停用_hk", "BOM状态.已停用"),
+
+            // dict.logistics.routing.purpose.1
+            ("dict.logistics.routing.purpose.1", "en-US", "生产_us", "工艺路线用途.生产"),
+            // dict.logistics.routing.purpose.1
+            ("dict.logistics.routing.purpose.1", "ja-JP", "生产_jp", "工艺路线用途.生产"),
+            // dict.logistics.routing.purpose.1
+            ("dict.logistics.routing.purpose.1", "zh-CN", "生产", "工艺路线用途.生产"),
+            // dict.logistics.routing.purpose.1
+            ("dict.logistics.routing.purpose.1", "zh-HK", "生产_hk", "工艺路线用途.生产"),
+
+            // dict.logistics.routing.purpose.2
+            ("dict.logistics.routing.purpose.2", "en-US", "工程/设计_us", "工艺路线用途.工程/设计"),
+            // dict.logistics.routing.purpose.2
+            ("dict.logistics.routing.purpose.2", "ja-JP", "工程/设计_jp", "工艺路线用途.工程/设计"),
+            // dict.logistics.routing.purpose.2
+            ("dict.logistics.routing.purpose.2", "zh-CN", "工程/设计", "工艺路线用途.工程/设计"),
+            // dict.logistics.routing.purpose.2
+            ("dict.logistics.routing.purpose.2", "zh-HK", "工程/设计_hk", "工艺路线用途.工程/设计"),
+
+            // dict.logistics.routing.purpose.3
+            ("dict.logistics.routing.purpose.3", "en-US", "万能_us", "工艺路线用途.万能"),
+            // dict.logistics.routing.purpose.3
+            ("dict.logistics.routing.purpose.3", "ja-JP", "万能_jp", "工艺路线用途.万能"),
+            // dict.logistics.routing.purpose.3
+            ("dict.logistics.routing.purpose.3", "zh-CN", "万能", "工艺路线用途.万能"),
+            // dict.logistics.routing.purpose.3
+            ("dict.logistics.routing.purpose.3", "zh-HK", "万能_hk", "工艺路线用途.万能"),
+
+            // dict.logistics.routing.purpose.4
+            ("dict.logistics.routing.purpose.4", "en-US", "工厂维护_us", "工艺路线用途.工厂维护"),
+            // dict.logistics.routing.purpose.4
+            ("dict.logistics.routing.purpose.4", "ja-JP", "工厂维护_jp", "工艺路线用途.工厂维护"),
+            // dict.logistics.routing.purpose.4
+            ("dict.logistics.routing.purpose.4", "zh-CN", "工厂维护", "工艺路线用途.工厂维护"),
+            // dict.logistics.routing.purpose.4
+            ("dict.logistics.routing.purpose.4", "zh-HK", "工厂维护_hk", "工艺路线用途.工厂维护"),
+
+            // dict.logistics.routing.status.1
+            ("dict.logistics.routing.status.1", "en-US", "生成的_us", "工艺路线状态.生成的"),
+            // dict.logistics.routing.status.1
+            ("dict.logistics.routing.status.1", "ja-JP", "生成的_jp", "工艺路线状态.生成的"),
+            // dict.logistics.routing.status.1
+            ("dict.logistics.routing.status.1", "zh-CN", "生成的", "工艺路线状态.生成的"),
+            // dict.logistics.routing.status.1
+            ("dict.logistics.routing.status.1", "zh-HK", "生成的_hk", "工艺路线状态.生成的"),
+
+            // dict.logistics.routing.status.2
+            ("dict.logistics.routing.status.2", "en-US", "对订单下达_us", "工艺路线状态.对订单下达"),
+            // dict.logistics.routing.status.2
+            ("dict.logistics.routing.status.2", "ja-JP", "对订单下达_jp", "工艺路线状态.对订单下达"),
+            // dict.logistics.routing.status.2
+            ("dict.logistics.routing.status.2", "zh-CN", "对订单下达", "工艺路线状态.对订单下达"),
+            // dict.logistics.routing.status.2
+            ("dict.logistics.routing.status.2", "zh-HK", "对订单下达_hk", "工艺路线状态.对订单下达"),
+
+            // dict.logistics.routing.status.3
+            ("dict.logistics.routing.status.3", "en-US", "对成本核算下达_us", "工艺路线状态.对成本核算下达"),
+            // dict.logistics.routing.status.3
+            ("dict.logistics.routing.status.3", "ja-JP", "对成本核算下达_jp", "工艺路线状态.对成本核算下达"),
+            // dict.logistics.routing.status.3
+            ("dict.logistics.routing.status.3", "zh-CN", "对成本核算下达", "工艺路线状态.对成本核算下达"),
+            // dict.logistics.routing.status.3
+            ("dict.logistics.routing.status.3", "zh-HK", "对成本核算下达_hk", "工艺路线状态.对成本核算下达"),
+
+            // dict.logistics.routing.status.4
+            ("dict.logistics.routing.status.4", "en-US", "下达的_us", "工艺路线状态.下达的"),
+            // dict.logistics.routing.status.4
+            ("dict.logistics.routing.status.4", "ja-JP", "下达的_jp", "工艺路线状态.下达的"),
+            // dict.logistics.routing.status.4
+            ("dict.logistics.routing.status.4", "zh-CN", "下达的", "工艺路线状态.下达的"),
+            // dict.logistics.routing.status.4
+            ("dict.logistics.routing.status.4", "zh-HK", "下达的_hk", "工艺路线状态.下达的"),
+
+            // dict.logistics.time.unit.min
+            ("dict.logistics.time.unit.min", "en-US", "分钟_us", "工时单位.分钟"),
+            // dict.logistics.time.unit.min
+            ("dict.logistics.time.unit.min", "ja-JP", "分钟_jp", "工时单位.分钟"),
+            // dict.logistics.time.unit.min
+            ("dict.logistics.time.unit.min", "zh-CN", "分钟", "工时单位.分钟"),
+            // dict.logistics.time.unit.min
+            ("dict.logistics.time.unit.min", "zh-HK", "分钟_hk", "工时单位.分钟"),
+
+            // dict.logistics.time.unit.h
+            ("dict.logistics.time.unit.h", "en-US", "小时_us", "工时单位.小时"),
+            // dict.logistics.time.unit.h
+            ("dict.logistics.time.unit.h", "ja-JP", "小时_jp", "工时单位.小时"),
+            // dict.logistics.time.unit.h
+            ("dict.logistics.time.unit.h", "zh-CN", "小时", "工时单位.小时"),
+            // dict.logistics.time.unit.h
+            ("dict.logistics.time.unit.h", "zh-HK", "小时_hk", "工时单位.小时"),
+
+            // dict.logistics.time.unit.s
+            ("dict.logistics.time.unit.s", "en-US", "秒_us", "工时单位.秒"),
+            // dict.logistics.time.unit.s
+            ("dict.logistics.time.unit.s", "ja-JP", "秒_jp", "工时单位.秒"),
+            // dict.logistics.time.unit.s
+            ("dict.logistics.time.unit.s", "zh-CN", "秒", "工时单位.秒"),
+            // dict.logistics.time.unit.s
+            ("dict.logistics.time.unit.s", "zh-HK", "秒_hk", "工时单位.秒"),
+
+            // dict.logistics.points.unit.short
+            ("dict.logistics.points.unit.short", "en-US", "点数_us", "点数单位.点数"),
+            // dict.logistics.points.unit.short
+            ("dict.logistics.points.unit.short", "ja-JP", "点数_jp", "点数单位.点数"),
+            // dict.logistics.points.unit.short
+            ("dict.logistics.points.unit.short", "zh-CN", "点数", "点数单位.点数"),
+            // dict.logistics.points.unit.short
+            ("dict.logistics.points.unit.short", "zh-HK", "点数_hk", "点数单位.点数"),
+
+            // dict.logistics.points.to.minutes.rate.normal
+            ("dict.logistics.points.to.minutes.rate.normal", "en-US", "普通_us", "点数转分钟汇率.普通"),
+            // dict.logistics.points.to.minutes.rate.normal
+            ("dict.logistics.points.to.minutes.rate.normal", "ja-JP", "普通_jp", "点数转分钟汇率.普通"),
+            // dict.logistics.points.to.minutes.rate.normal
+            ("dict.logistics.points.to.minutes.rate.normal", "zh-CN", "普通", "点数转分钟汇率.普通"),
+            // dict.logistics.points.to.minutes.rate.normal
+            ("dict.logistics.points.to.minutes.rate.normal", "zh-HK", "普通_hk", "点数转分钟汇率.普通"),
+
+            // dict.logistics.points.to.minutes.rate.ai
+            ("dict.logistics.points.to.minutes.rate.ai", "en-US", "AI_us", "点数转分钟汇率.AI"),
+            // dict.logistics.points.to.minutes.rate.ai
+            ("dict.logistics.points.to.minutes.rate.ai", "ja-JP", "AI_jp", "点数转分钟汇率.AI"),
+            // dict.logistics.points.to.minutes.rate.ai
+            ("dict.logistics.points.to.minutes.rate.ai", "zh-CN", "AI", "点数转分钟汇率.AI"),
+            // dict.logistics.points.to.minutes.rate.ai
+            ("dict.logistics.points.to.minutes.rate.ai", "zh-HK", "AI_hk", "点数转分钟汇率.AI"),
+
+            // dict.logistics.points.to.minutes.rate.smt
+            ("dict.logistics.points.to.minutes.rate.smt", "en-US", "SMT_us", "点数转分钟汇率.SMT"),
+            // dict.logistics.points.to.minutes.rate.smt
+            ("dict.logistics.points.to.minutes.rate.smt", "ja-JP", "SMT_jp", "点数转分钟汇率.SMT"),
+            // dict.logistics.points.to.minutes.rate.smt
+            ("dict.logistics.points.to.minutes.rate.smt", "zh-CN", "SMT", "点数转分钟汇率.SMT"),
+            // dict.logistics.points.to.minutes.rate.smt
+            ("dict.logistics.points.to.minutes.rate.smt", "zh-HK", "SMT_hk", "点数转分钟汇率.SMT"),
 
             // dict.logistics.warranty.status.0
             ("dict.logistics.warranty.status.0", "en-US", "无保修_us", "保修状态.无保修"),
@@ -10455,22 +14343,22 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.sys.ftp.provider.type.teac_jp", "zh-HK", "teac ftp日本_hk", "ftp服务提供商.teac ftp日本"),
 
             // dict.sys.is.builtin.type.1
-            ("dict.sys.is.builtin.type.1", "en-US", "是_us", "是否内置.是"),
+            ("dict.sys.is.builtin.type.1", "en-US", "是_us", "内置.是"),
             // dict.sys.is.builtin.type.1
-            ("dict.sys.is.builtin.type.1", "ja-JP", "是_jp", "是否内置.是"),
+            ("dict.sys.is.builtin.type.1", "ja-JP", "是_jp", "内置.是"),
             // dict.sys.is.builtin.type.1
-            ("dict.sys.is.builtin.type.1", "zh-CN", "是", "是否内置.是"),
+            ("dict.sys.is.builtin.type.1", "zh-CN", "是", "内置.是"),
             // dict.sys.is.builtin.type.1
-            ("dict.sys.is.builtin.type.1", "zh-HK", "是_hk", "是否内置.是"),
+            ("dict.sys.is.builtin.type.1", "zh-HK", "是_hk", "内置.是"),
 
             // dict.sys.is.builtin.type.0
-            ("dict.sys.is.builtin.type.0", "en-US", "否_us", "是否内置.否"),
+            ("dict.sys.is.builtin.type.0", "en-US", "否_us", "内置.否"),
             // dict.sys.is.builtin.type.0
-            ("dict.sys.is.builtin.type.0", "ja-JP", "否_jp", "是否内置.否"),
+            ("dict.sys.is.builtin.type.0", "ja-JP", "否_jp", "内置.否"),
             // dict.sys.is.builtin.type.0
-            ("dict.sys.is.builtin.type.0", "zh-CN", "否", "是否内置.否"),
+            ("dict.sys.is.builtin.type.0", "zh-CN", "否", "内置.否"),
             // dict.sys.is.builtin.type.0
-            ("dict.sys.is.builtin.type.0", "zh-HK", "否_hk", "是否内置.否"),
+            ("dict.sys.is.builtin.type.0", "zh-HK", "否_hk", "内置.否"),
 
             // dict.sys.is.default.type.1
             ("dict.sys.is.default.type.1", "en-US", "是_us", "是否默认.是"),
@@ -10715,42 +14603,6 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             // dict.sys.message.group.category.collaboration
             ("dict.sys.message.group.category.collaboration", "zh-HK", "协同_hk", "消息分组.协同"),
 
-            // dict.sys.message.group.category.officialdoc
-            ("dict.sys.message.group.category.officialdoc", "en-US", "公文_us", "消息分组.公文"),
-            // dict.sys.message.group.category.officialdoc
-            ("dict.sys.message.group.category.officialdoc", "ja-JP", "公文_jp", "消息分组.公文"),
-            // dict.sys.message.group.category.officialdoc
-            ("dict.sys.message.group.category.officialdoc", "zh-CN", "公文", "消息分组.公文"),
-            // dict.sys.message.group.category.officialdoc
-            ("dict.sys.message.group.category.officialdoc", "zh-HK", "公文_hk", "消息分组.公文"),
-
-            // dict.sys.message.group.category.document
-            ("dict.sys.message.group.category.document", "en-US", "文档_us", "消息分组.文档"),
-            // dict.sys.message.group.category.document
-            ("dict.sys.message.group.category.document", "ja-JP", "文档_jp", "消息分组.文档"),
-            // dict.sys.message.group.category.document
-            ("dict.sys.message.group.category.document", "zh-CN", "文档", "消息分组.文档"),
-            // dict.sys.message.group.category.document
-            ("dict.sys.message.group.category.document", "zh-HK", "文档_hk", "消息分组.文档"),
-
-            // dict.sys.message.group.category.announcement
-            ("dict.sys.message.group.category.announcement", "en-US", "公告_us", "消息分组.公告"),
-            // dict.sys.message.group.category.announcement
-            ("dict.sys.message.group.category.announcement", "ja-JP", "公告_jp", "消息分组.公告"),
-            // dict.sys.message.group.category.announcement
-            ("dict.sys.message.group.category.announcement", "zh-CN", "公告", "消息分组.公告"),
-            // dict.sys.message.group.category.announcement
-            ("dict.sys.message.group.category.announcement", "zh-HK", "公告_hk", "消息分组.公告"),
-
-            // dict.sys.message.group.category.other
-            ("dict.sys.message.group.category.other", "en-US", "其他_us", "消息分组.其他"),
-            // dict.sys.message.group.category.other
-            ("dict.sys.message.group.category.other", "ja-JP", "其他_jp", "消息分组.其他"),
-            // dict.sys.message.group.category.other
-            ("dict.sys.message.group.category.other", "zh-CN", "其他", "消息分组.其他"),
-            // dict.sys.message.group.category.other
-            ("dict.sys.message.group.category.other", "zh-HK", "其他_hk", "消息分组.其他"),
-
             // dict.sys.message.group.category.message
             ("dict.sys.message.group.category.message", "en-US", "消息_us", "消息分组.消息"),
             // dict.sys.message.group.category.message
@@ -10778,50 +14630,23 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             // dict.sys.message.type.text
             ("dict.sys.message.type.text", "zh-HK", "文本_hk", "消息类型.文本"),
 
-            // dict.sys.message.type.image
-            ("dict.sys.message.type.image", "en-US", "图片_us", "消息类型.图片"),
-            // dict.sys.message.type.image
-            ("dict.sys.message.type.image", "ja-JP", "图片_jp", "消息类型.图片"),
-            // dict.sys.message.type.image
-            ("dict.sys.message.type.image", "zh-CN", "图片", "消息类型.图片"),
-            // dict.sys.message.type.image
-            ("dict.sys.message.type.image", "zh-HK", "图片_hk", "消息类型.图片"),
+            // dict.sys.message.type.system
+            ("dict.sys.message.type.system", "en-US", "系统_us", "消息类型.系统"),
+            // dict.sys.message.type.system
+            ("dict.sys.message.type.system", "ja-JP", "系统_jp", "消息类型.系统"),
+            // dict.sys.message.type.system
+            ("dict.sys.message.type.system", "zh-CN", "系统", "消息类型.系统"),
+            // dict.sys.message.type.system
+            ("dict.sys.message.type.system", "zh-HK", "系统_hk", "消息类型.系统"),
 
-            // dict.sys.message.type.file
-            ("dict.sys.message.type.file", "en-US", "文件_us", "消息类型.文件"),
-            // dict.sys.message.type.file
-            ("dict.sys.message.type.file", "ja-JP", "文件_jp", "消息类型.文件"),
-            // dict.sys.message.type.file
-            ("dict.sys.message.type.file", "zh-CN", "文件", "消息类型.文件"),
-            // dict.sys.message.type.file
-            ("dict.sys.message.type.file", "zh-HK", "文件_hk", "消息类型.文件"),
-
-            // dict.sys.message.type.takt365
-            ("dict.sys.message.type.takt365", "en-US", "系统消息_us", "消息类型.系统消息"),
-            // dict.sys.message.type.takt365
-            ("dict.sys.message.type.takt365", "ja-JP", "系统消息_jp", "消息类型.系统消息"),
-            // dict.sys.message.type.takt365
-            ("dict.sys.message.type.takt365", "zh-CN", "系统消息", "消息类型.系统消息"),
-            // dict.sys.message.type.takt365
-            ("dict.sys.message.type.takt365", "zh-HK", "系统消息_hk", "消息类型.系统消息"),
-
-            // dict.sys.message.type.video
-            ("dict.sys.message.type.video", "en-US", "视频_us", "消息类型.视频"),
-            // dict.sys.message.type.video
-            ("dict.sys.message.type.video", "ja-JP", "视频_jp", "消息类型.视频"),
-            // dict.sys.message.type.video
-            ("dict.sys.message.type.video", "zh-CN", "视频", "消息类型.视频"),
-            // dict.sys.message.type.video
-            ("dict.sys.message.type.video", "zh-HK", "视频_hk", "消息类型.视频"),
-
-            // dict.sys.message.type.voice
-            ("dict.sys.message.type.voice", "en-US", "语音_us", "消息类型.语音"),
-            // dict.sys.message.type.voice
-            ("dict.sys.message.type.voice", "ja-JP", "语音_jp", "消息类型.语音"),
-            // dict.sys.message.type.voice
-            ("dict.sys.message.type.voice", "zh-CN", "语音", "消息类型.语音"),
-            // dict.sys.message.type.voice
-            ("dict.sys.message.type.voice", "zh-HK", "语音_hk", "消息类型.语音"),
+            // dict.sys.message.type.multimedia
+            ("dict.sys.message.type.multimedia", "en-US", "多媒体_us", "消息类型.多媒体"),
+            // dict.sys.message.type.multimedia
+            ("dict.sys.message.type.multimedia", "ja-JP", "多媒体_jp", "消息类型.多媒体"),
+            // dict.sys.message.type.multimedia
+            ("dict.sys.message.type.multimedia", "zh-CN", "多媒体", "消息类型.多媒体"),
+            // dict.sys.message.type.multimedia
+            ("dict.sys.message.type.multimedia", "zh-HK", "多媒体_hk", "消息类型.多媒体"),
 
             // dict.sys.news.category.0
             ("dict.sys.news.category.0", "en-US", "公司新闻_us", "新闻分类.公司新闻"),
@@ -10967,6 +14792,33 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             // dict.sys.approval.status.5
             ("dict.sys.approval.status.5", "zh-HK", "已终止_hk", "审批状态.已终止"),
 
+            // dict.sys.convert.status.0
+            ("dict.sys.convert.status.0", "en-US", "未转换_us", "转单状态.未转换"),
+            // dict.sys.convert.status.0
+            ("dict.sys.convert.status.0", "ja-JP", "未转换_jp", "转单状态.未转换"),
+            // dict.sys.convert.status.0
+            ("dict.sys.convert.status.0", "zh-CN", "未转换", "转单状态.未转换"),
+            // dict.sys.convert.status.0
+            ("dict.sys.convert.status.0", "zh-HK", "未转换_hk", "转单状态.未转换"),
+
+            // dict.sys.convert.status.1
+            ("dict.sys.convert.status.1", "en-US", "部分转换_us", "转单状态.部分转换"),
+            // dict.sys.convert.status.1
+            ("dict.sys.convert.status.1", "ja-JP", "部分转换_jp", "转单状态.部分转换"),
+            // dict.sys.convert.status.1
+            ("dict.sys.convert.status.1", "zh-CN", "部分转换", "转单状态.部分转换"),
+            // dict.sys.convert.status.1
+            ("dict.sys.convert.status.1", "zh-HK", "部分转换_hk", "转单状态.部分转换"),
+
+            // dict.sys.convert.status.2
+            ("dict.sys.convert.status.2", "en-US", "全部转换_us", "转单状态.全部转换"),
+            // dict.sys.convert.status.2
+            ("dict.sys.convert.status.2", "ja-JP", "全部转换_jp", "转单状态.全部转换"),
+            // dict.sys.convert.status.2
+            ("dict.sys.convert.status.2", "zh-CN", "全部转换", "转单状态.全部转换"),
+            // dict.sys.convert.status.2
+            ("dict.sys.convert.status.2", "zh-HK", "全部转换_hk", "转单状态.全部转换"),
+
             // dict.sys.ticket.status.0
             ("dict.sys.ticket.status.0", "en-US", "新建_us", "工单状态.新建"),
             // dict.sys.ticket.status.0
@@ -11066,6 +14918,393 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             // dict.sys.normal.disable.status.2
             ("dict.sys.normal.disable.status.2", "zh-HK", "锁定_hk", "默认状态.锁定"),
 
+            // dict.sys.enterprise.nature.type.110
+            ("dict.sys.enterprise.nature.type.110", "en-US", "国有全资_us", "企业性质.国有全资"),
+            // dict.sys.enterprise.nature.type.110
+            ("dict.sys.enterprise.nature.type.110", "ja-JP", "国有全资_jp", "企业性质.国有全资"),
+            // dict.sys.enterprise.nature.type.110
+            ("dict.sys.enterprise.nature.type.110", "zh-CN", "国有全资", "企业性质.国有全资"),
+            // dict.sys.enterprise.nature.type.110
+            ("dict.sys.enterprise.nature.type.110", "zh-HK", "国有全资_hk", "企业性质.国有全资"),
+
+            // dict.sys.enterprise.nature.type.120
+            ("dict.sys.enterprise.nature.type.120", "en-US", "集体全资_us", "企业性质.集体全资"),
+            // dict.sys.enterprise.nature.type.120
+            ("dict.sys.enterprise.nature.type.120", "ja-JP", "集体全资_jp", "企业性质.集体全资"),
+            // dict.sys.enterprise.nature.type.120
+            ("dict.sys.enterprise.nature.type.120", "zh-CN", "集体全资", "企业性质.集体全资"),
+            // dict.sys.enterprise.nature.type.120
+            ("dict.sys.enterprise.nature.type.120", "zh-HK", "集体全资_hk", "企业性质.集体全资"),
+
+            // dict.sys.enterprise.nature.type.130
+            ("dict.sys.enterprise.nature.type.130", "en-US", "股份合作_us", "企业性质.股份合作"),
+            // dict.sys.enterprise.nature.type.130
+            ("dict.sys.enterprise.nature.type.130", "ja-JP", "股份合作_jp", "企业性质.股份合作"),
+            // dict.sys.enterprise.nature.type.130
+            ("dict.sys.enterprise.nature.type.130", "zh-CN", "股份合作", "企业性质.股份合作"),
+            // dict.sys.enterprise.nature.type.130
+            ("dict.sys.enterprise.nature.type.130", "zh-HK", "股份合作_hk", "企业性质.股份合作"),
+
+            // dict.sys.enterprise.nature.type.150
+            ("dict.sys.enterprise.nature.type.150", "en-US", "有限责任公司_us", "企业性质.有限责任公司"),
+            // dict.sys.enterprise.nature.type.150
+            ("dict.sys.enterprise.nature.type.150", "ja-JP", "有限责任公司_jp", "企业性质.有限责任公司"),
+            // dict.sys.enterprise.nature.type.150
+            ("dict.sys.enterprise.nature.type.150", "zh-CN", "有限责任公司", "企业性质.有限责任公司"),
+            // dict.sys.enterprise.nature.type.150
+            ("dict.sys.enterprise.nature.type.150", "zh-HK", "有限责任公司_hk", "企业性质.有限责任公司"),
+
+            // dict.sys.enterprise.nature.type.160
+            ("dict.sys.enterprise.nature.type.160", "en-US", "股份有限公司_us", "企业性质.股份有限公司"),
+            // dict.sys.enterprise.nature.type.160
+            ("dict.sys.enterprise.nature.type.160", "ja-JP", "股份有限公司_jp", "企业性质.股份有限公司"),
+            // dict.sys.enterprise.nature.type.160
+            ("dict.sys.enterprise.nature.type.160", "zh-CN", "股份有限公司", "企业性质.股份有限公司"),
+            // dict.sys.enterprise.nature.type.160
+            ("dict.sys.enterprise.nature.type.160", "zh-HK", "股份有限公司_hk", "企业性质.股份有限公司"),
+
+            // dict.sys.enterprise.nature.type.170
+            ("dict.sys.enterprise.nature.type.170", "en-US", "私有_us", "企业性质.私有"),
+            // dict.sys.enterprise.nature.type.170
+            ("dict.sys.enterprise.nature.type.170", "ja-JP", "私有_jp", "企业性质.私有"),
+            // dict.sys.enterprise.nature.type.170
+            ("dict.sys.enterprise.nature.type.170", "zh-CN", "私有", "企业性质.私有"),
+            // dict.sys.enterprise.nature.type.170
+            ("dict.sys.enterprise.nature.type.170", "zh-HK", "私有_hk", "企业性质.私有"),
+
+            // dict.sys.enterprise.nature.type.190
+            ("dict.sys.enterprise.nature.type.190", "en-US", "其他内资_us", "企业性质.其他内资"),
+            // dict.sys.enterprise.nature.type.190
+            ("dict.sys.enterprise.nature.type.190", "ja-JP", "其他内资_jp", "企业性质.其他内资"),
+            // dict.sys.enterprise.nature.type.190
+            ("dict.sys.enterprise.nature.type.190", "zh-CN", "其他内资", "企业性质.其他内资"),
+            // dict.sys.enterprise.nature.type.190
+            ("dict.sys.enterprise.nature.type.190", "zh-HK", "其他内资_hk", "企业性质.其他内资"),
+
+            // dict.sys.enterprise.nature.type.210
+            ("dict.sys.enterprise.nature.type.210", "en-US", "内地和港澳台合资_us", "企业性质.内地和港澳台合资"),
+            // dict.sys.enterprise.nature.type.210
+            ("dict.sys.enterprise.nature.type.210", "ja-JP", "内地和港澳台合资_jp", "企业性质.内地和港澳台合资"),
+            // dict.sys.enterprise.nature.type.210
+            ("dict.sys.enterprise.nature.type.210", "zh-CN", "内地和港澳台合资", "企业性质.内地和港澳台合资"),
+            // dict.sys.enterprise.nature.type.210
+            ("dict.sys.enterprise.nature.type.210", "zh-HK", "内地和港澳台合资_hk", "企业性质.内地和港澳台合资"),
+
+            // dict.sys.enterprise.nature.type.220
+            ("dict.sys.enterprise.nature.type.220", "en-US", "内地和港澳台合作_us", "企业性质.内地和港澳台合作"),
+            // dict.sys.enterprise.nature.type.220
+            ("dict.sys.enterprise.nature.type.220", "ja-JP", "内地和港澳台合作_jp", "企业性质.内地和港澳台合作"),
+            // dict.sys.enterprise.nature.type.220
+            ("dict.sys.enterprise.nature.type.220", "zh-CN", "内地和港澳台合作", "企业性质.内地和港澳台合作"),
+            // dict.sys.enterprise.nature.type.220
+            ("dict.sys.enterprise.nature.type.220", "zh-HK", "内地和港澳台合作_hk", "企业性质.内地和港澳台合作"),
+
+            // dict.sys.enterprise.nature.type.230
+            ("dict.sys.enterprise.nature.type.230", "en-US", "港澳台独资_us", "企业性质.港澳台独资"),
+            // dict.sys.enterprise.nature.type.230
+            ("dict.sys.enterprise.nature.type.230", "ja-JP", "港澳台独资_jp", "企业性质.港澳台独资"),
+            // dict.sys.enterprise.nature.type.230
+            ("dict.sys.enterprise.nature.type.230", "zh-CN", "港澳台独资", "企业性质.港澳台独资"),
+            // dict.sys.enterprise.nature.type.230
+            ("dict.sys.enterprise.nature.type.230", "zh-HK", "港澳台独资_hk", "企业性质.港澳台独资"),
+
+            // dict.sys.enterprise.nature.type.310
+            ("dict.sys.enterprise.nature.type.310", "en-US", "中外合资_us", "企业性质.中外合资"),
+            // dict.sys.enterprise.nature.type.310
+            ("dict.sys.enterprise.nature.type.310", "ja-JP", "中外合资_jp", "企业性质.中外合资"),
+            // dict.sys.enterprise.nature.type.310
+            ("dict.sys.enterprise.nature.type.310", "zh-CN", "中外合资", "企业性质.中外合资"),
+            // dict.sys.enterprise.nature.type.310
+            ("dict.sys.enterprise.nature.type.310", "zh-HK", "中外合资_hk", "企业性质.中外合资"),
+
+            // dict.sys.enterprise.nature.type.320
+            ("dict.sys.enterprise.nature.type.320", "en-US", "中外合作_us", "企业性质.中外合作"),
+            // dict.sys.enterprise.nature.type.320
+            ("dict.sys.enterprise.nature.type.320", "ja-JP", "中外合作_jp", "企业性质.中外合作"),
+            // dict.sys.enterprise.nature.type.320
+            ("dict.sys.enterprise.nature.type.320", "zh-CN", "中外合作", "企业性质.中外合作"),
+            // dict.sys.enterprise.nature.type.320
+            ("dict.sys.enterprise.nature.type.320", "zh-HK", "中外合作_hk", "企业性质.中外合作"),
+
+            // dict.sys.enterprise.nature.type.330
+            ("dict.sys.enterprise.nature.type.330", "en-US", "外资（外商独资）_us", "企业性质.外资（外商独资）"),
+            // dict.sys.enterprise.nature.type.330
+            ("dict.sys.enterprise.nature.type.330", "ja-JP", "外资（外商独资）_jp", "企业性质.外资（外商独资）"),
+            // dict.sys.enterprise.nature.type.330
+            ("dict.sys.enterprise.nature.type.330", "zh-CN", "外资（外商独资）", "企业性质.外资（外商独资）"),
+            // dict.sys.enterprise.nature.type.330
+            ("dict.sys.enterprise.nature.type.330", "zh-HK", "外资（外商独资）_hk", "企业性质.外资（外商独资）"),
+
+            // dict.sys.enterprise.nature.type.900
+            ("dict.sys.enterprise.nature.type.900", "en-US", "其他_us", "企业性质.其他"),
+            // dict.sys.enterprise.nature.type.900
+            ("dict.sys.enterprise.nature.type.900", "ja-JP", "其他_jp", "企业性质.其他"),
+            // dict.sys.enterprise.nature.type.900
+            ("dict.sys.enterprise.nature.type.900", "zh-CN", "其他", "企业性质.其他"),
+            // dict.sys.enterprise.nature.type.900
+            ("dict.sys.enterprise.nature.type.900", "zh-HK", "其他_hk", "企业性质.其他"),
+
+            // dict.sys.industry.attribute.type.a
+            ("dict.sys.industry.attribute.type.a", "en-US", "农、林、牧、渔业_us", "行业属性.农、林、牧、渔业"),
+            // dict.sys.industry.attribute.type.a
+            ("dict.sys.industry.attribute.type.a", "ja-JP", "农、林、牧、渔业_jp", "行业属性.农、林、牧、渔业"),
+            // dict.sys.industry.attribute.type.a
+            ("dict.sys.industry.attribute.type.a", "zh-CN", "农、林、牧、渔业", "行业属性.农、林、牧、渔业"),
+            // dict.sys.industry.attribute.type.a
+            ("dict.sys.industry.attribute.type.a", "zh-HK", "农、林、牧、渔业_hk", "行业属性.农、林、牧、渔业"),
+
+            // dict.sys.industry.attribute.type.b
+            ("dict.sys.industry.attribute.type.b", "en-US", "采矿业_us", "行业属性.采矿业"),
+            // dict.sys.industry.attribute.type.b
+            ("dict.sys.industry.attribute.type.b", "ja-JP", "采矿业_jp", "行业属性.采矿业"),
+            // dict.sys.industry.attribute.type.b
+            ("dict.sys.industry.attribute.type.b", "zh-CN", "采矿业", "行业属性.采矿业"),
+            // dict.sys.industry.attribute.type.b
+            ("dict.sys.industry.attribute.type.b", "zh-HK", "采矿业_hk", "行业属性.采矿业"),
+
+            // dict.sys.industry.attribute.type.c
+            ("dict.sys.industry.attribute.type.c", "en-US", "制造业_us", "行业属性.制造业"),
+            // dict.sys.industry.attribute.type.c
+            ("dict.sys.industry.attribute.type.c", "ja-JP", "制造业_jp", "行业属性.制造业"),
+            // dict.sys.industry.attribute.type.c
+            ("dict.sys.industry.attribute.type.c", "zh-CN", "制造业", "行业属性.制造业"),
+            // dict.sys.industry.attribute.type.c
+            ("dict.sys.industry.attribute.type.c", "zh-HK", "制造业_hk", "行业属性.制造业"),
+
+            // dict.sys.industry.attribute.type.d
+            ("dict.sys.industry.attribute.type.d", "en-US", "电力、热力、燃气及水生产和供应业_us", "行业属性.电力、热力、燃气及水生产和供应业"),
+            // dict.sys.industry.attribute.type.d
+            ("dict.sys.industry.attribute.type.d", "ja-JP", "电力、热力、燃气及水生产和供应业_jp", "行业属性.电力、热力、燃气及水生产和供应业"),
+            // dict.sys.industry.attribute.type.d
+            ("dict.sys.industry.attribute.type.d", "zh-CN", "电力、热力、燃气及水生产和供应业", "行业属性.电力、热力、燃气及水生产和供应业"),
+            // dict.sys.industry.attribute.type.d
+            ("dict.sys.industry.attribute.type.d", "zh-HK", "电力、热力、燃气及水生产和供应业_hk", "行业属性.电力、热力、燃气及水生产和供应业"),
+
+            // dict.sys.industry.attribute.type.e
+            ("dict.sys.industry.attribute.type.e", "en-US", "建筑业_us", "行业属性.建筑业"),
+            // dict.sys.industry.attribute.type.e
+            ("dict.sys.industry.attribute.type.e", "ja-JP", "建筑业_jp", "行业属性.建筑业"),
+            // dict.sys.industry.attribute.type.e
+            ("dict.sys.industry.attribute.type.e", "zh-CN", "建筑业", "行业属性.建筑业"),
+            // dict.sys.industry.attribute.type.e
+            ("dict.sys.industry.attribute.type.e", "zh-HK", "建筑业_hk", "行业属性.建筑业"),
+
+            // dict.sys.industry.attribute.type.f
+            ("dict.sys.industry.attribute.type.f", "en-US", "批发和零售业_us", "行业属性.批发和零售业"),
+            // dict.sys.industry.attribute.type.f
+            ("dict.sys.industry.attribute.type.f", "ja-JP", "批发和零售业_jp", "行业属性.批发和零售业"),
+            // dict.sys.industry.attribute.type.f
+            ("dict.sys.industry.attribute.type.f", "zh-CN", "批发和零售业", "行业属性.批发和零售业"),
+            // dict.sys.industry.attribute.type.f
+            ("dict.sys.industry.attribute.type.f", "zh-HK", "批发和零售业_hk", "行业属性.批发和零售业"),
+
+            // dict.sys.industry.attribute.type.g
+            ("dict.sys.industry.attribute.type.g", "en-US", "交通运输、仓储和邮政业_us", "行业属性.交通运输、仓储和邮政业"),
+            // dict.sys.industry.attribute.type.g
+            ("dict.sys.industry.attribute.type.g", "ja-JP", "交通运输、仓储和邮政业_jp", "行业属性.交通运输、仓储和邮政业"),
+            // dict.sys.industry.attribute.type.g
+            ("dict.sys.industry.attribute.type.g", "zh-CN", "交通运输、仓储和邮政业", "行业属性.交通运输、仓储和邮政业"),
+            // dict.sys.industry.attribute.type.g
+            ("dict.sys.industry.attribute.type.g", "zh-HK", "交通运输、仓储和邮政业_hk", "行业属性.交通运输、仓储和邮政业"),
+
+            // dict.sys.industry.attribute.type.h
+            ("dict.sys.industry.attribute.type.h", "en-US", "住宿和餐饮业_us", "行业属性.住宿和餐饮业"),
+            // dict.sys.industry.attribute.type.h
+            ("dict.sys.industry.attribute.type.h", "ja-JP", "住宿和餐饮业_jp", "行业属性.住宿和餐饮业"),
+            // dict.sys.industry.attribute.type.h
+            ("dict.sys.industry.attribute.type.h", "zh-CN", "住宿和餐饮业", "行业属性.住宿和餐饮业"),
+            // dict.sys.industry.attribute.type.h
+            ("dict.sys.industry.attribute.type.h", "zh-HK", "住宿和餐饮业_hk", "行业属性.住宿和餐饮业"),
+
+            // dict.sys.industry.attribute.type.i
+            ("dict.sys.industry.attribute.type.i", "en-US", "信息传输、软件和信息技术服务业_us", "行业属性.信息传输、软件和信息技术服务业"),
+            // dict.sys.industry.attribute.type.i
+            ("dict.sys.industry.attribute.type.i", "ja-JP", "信息传输、软件和信息技术服务业_jp", "行业属性.信息传输、软件和信息技术服务业"),
+            // dict.sys.industry.attribute.type.i
+            ("dict.sys.industry.attribute.type.i", "zh-CN", "信息传输、软件和信息技术服务业", "行业属性.信息传输、软件和信息技术服务业"),
+            // dict.sys.industry.attribute.type.i
+            ("dict.sys.industry.attribute.type.i", "zh-HK", "信息传输、软件和信息技术服务业_hk", "行业属性.信息传输、软件和信息技术服务业"),
+
+            // dict.sys.industry.attribute.type.j
+            ("dict.sys.industry.attribute.type.j", "en-US", "金融业_us", "行业属性.金融业"),
+            // dict.sys.industry.attribute.type.j
+            ("dict.sys.industry.attribute.type.j", "ja-JP", "金融业_jp", "行业属性.金融业"),
+            // dict.sys.industry.attribute.type.j
+            ("dict.sys.industry.attribute.type.j", "zh-CN", "金融业", "行业属性.金融业"),
+            // dict.sys.industry.attribute.type.j
+            ("dict.sys.industry.attribute.type.j", "zh-HK", "金融业_hk", "行业属性.金融业"),
+
+            // dict.sys.industry.attribute.type.k
+            ("dict.sys.industry.attribute.type.k", "en-US", "房地产业_us", "行业属性.房地产业"),
+            // dict.sys.industry.attribute.type.k
+            ("dict.sys.industry.attribute.type.k", "ja-JP", "房地产业_jp", "行业属性.房地产业"),
+            // dict.sys.industry.attribute.type.k
+            ("dict.sys.industry.attribute.type.k", "zh-CN", "房地产业", "行业属性.房地产业"),
+            // dict.sys.industry.attribute.type.k
+            ("dict.sys.industry.attribute.type.k", "zh-HK", "房地产业_hk", "行业属性.房地产业"),
+
+            // dict.sys.industry.attribute.type.l
+            ("dict.sys.industry.attribute.type.l", "en-US", "租赁和商务服务业_us", "行业属性.租赁和商务服务业"),
+            // dict.sys.industry.attribute.type.l
+            ("dict.sys.industry.attribute.type.l", "ja-JP", "租赁和商务服务业_jp", "行业属性.租赁和商务服务业"),
+            // dict.sys.industry.attribute.type.l
+            ("dict.sys.industry.attribute.type.l", "zh-CN", "租赁和商务服务业", "行业属性.租赁和商务服务业"),
+            // dict.sys.industry.attribute.type.l
+            ("dict.sys.industry.attribute.type.l", "zh-HK", "租赁和商务服务业_hk", "行业属性.租赁和商务服务业"),
+
+            // dict.sys.industry.attribute.type.m
+            ("dict.sys.industry.attribute.type.m", "en-US", "科学研究和技术服务业_us", "行业属性.科学研究和技术服务业"),
+            // dict.sys.industry.attribute.type.m
+            ("dict.sys.industry.attribute.type.m", "ja-JP", "科学研究和技术服务业_jp", "行业属性.科学研究和技术服务业"),
+            // dict.sys.industry.attribute.type.m
+            ("dict.sys.industry.attribute.type.m", "zh-CN", "科学研究和技术服务业", "行业属性.科学研究和技术服务业"),
+            // dict.sys.industry.attribute.type.m
+            ("dict.sys.industry.attribute.type.m", "zh-HK", "科学研究和技术服务业_hk", "行业属性.科学研究和技术服务业"),
+
+            // dict.sys.industry.attribute.type.n
+            ("dict.sys.industry.attribute.type.n", "en-US", "水利、环境和公共设施管理业_us", "行业属性.水利、环境和公共设施管理业"),
+            // dict.sys.industry.attribute.type.n
+            ("dict.sys.industry.attribute.type.n", "ja-JP", "水利、环境和公共设施管理业_jp", "行业属性.水利、环境和公共设施管理业"),
+            // dict.sys.industry.attribute.type.n
+            ("dict.sys.industry.attribute.type.n", "zh-CN", "水利、环境和公共设施管理业", "行业属性.水利、环境和公共设施管理业"),
+            // dict.sys.industry.attribute.type.n
+            ("dict.sys.industry.attribute.type.n", "zh-HK", "水利、环境和公共设施管理业_hk", "行业属性.水利、环境和公共设施管理业"),
+
+            // dict.sys.industry.attribute.type.o
+            ("dict.sys.industry.attribute.type.o", "en-US", "居民服务、修理和其他服务业_us", "行业属性.居民服务、修理和其他服务业"),
+            // dict.sys.industry.attribute.type.o
+            ("dict.sys.industry.attribute.type.o", "ja-JP", "居民服务、修理和其他服务业_jp", "行业属性.居民服务、修理和其他服务业"),
+            // dict.sys.industry.attribute.type.o
+            ("dict.sys.industry.attribute.type.o", "zh-CN", "居民服务、修理和其他服务业", "行业属性.居民服务、修理和其他服务业"),
+            // dict.sys.industry.attribute.type.o
+            ("dict.sys.industry.attribute.type.o", "zh-HK", "居民服务、修理和其他服务业_hk", "行业属性.居民服务、修理和其他服务业"),
+
+            // dict.sys.industry.attribute.type.p
+            ("dict.sys.industry.attribute.type.p", "en-US", "教育_us", "行业属性.教育"),
+            // dict.sys.industry.attribute.type.p
+            ("dict.sys.industry.attribute.type.p", "ja-JP", "教育_jp", "行业属性.教育"),
+            // dict.sys.industry.attribute.type.p
+            ("dict.sys.industry.attribute.type.p", "zh-CN", "教育", "行业属性.教育"),
+            // dict.sys.industry.attribute.type.p
+            ("dict.sys.industry.attribute.type.p", "zh-HK", "教育_hk", "行业属性.教育"),
+
+            // dict.sys.industry.attribute.type.q
+            ("dict.sys.industry.attribute.type.q", "en-US", "卫生和社会工作_us", "行业属性.卫生和社会工作"),
+            // dict.sys.industry.attribute.type.q
+            ("dict.sys.industry.attribute.type.q", "ja-JP", "卫生和社会工作_jp", "行业属性.卫生和社会工作"),
+            // dict.sys.industry.attribute.type.q
+            ("dict.sys.industry.attribute.type.q", "zh-CN", "卫生和社会工作", "行业属性.卫生和社会工作"),
+            // dict.sys.industry.attribute.type.q
+            ("dict.sys.industry.attribute.type.q", "zh-HK", "卫生和社会工作_hk", "行业属性.卫生和社会工作"),
+
+            // dict.sys.industry.attribute.type.r
+            ("dict.sys.industry.attribute.type.r", "en-US", "文化、体育和娱乐业_us", "行业属性.文化、体育和娱乐业"),
+            // dict.sys.industry.attribute.type.r
+            ("dict.sys.industry.attribute.type.r", "ja-JP", "文化、体育和娱乐业_jp", "行业属性.文化、体育和娱乐业"),
+            // dict.sys.industry.attribute.type.r
+            ("dict.sys.industry.attribute.type.r", "zh-CN", "文化、体育和娱乐业", "行业属性.文化、体育和娱乐业"),
+            // dict.sys.industry.attribute.type.r
+            ("dict.sys.industry.attribute.type.r", "zh-HK", "文化、体育和娱乐业_hk", "行业属性.文化、体育和娱乐业"),
+
+            // dict.sys.industry.attribute.type.s
+            ("dict.sys.industry.attribute.type.s", "en-US", "公共管理、社会保障和社会组织_us", "行业属性.公共管理、社会保障和社会组织"),
+            // dict.sys.industry.attribute.type.s
+            ("dict.sys.industry.attribute.type.s", "ja-JP", "公共管理、社会保障和社会组织_jp", "行业属性.公共管理、社会保障和社会组织"),
+            // dict.sys.industry.attribute.type.s
+            ("dict.sys.industry.attribute.type.s", "zh-CN", "公共管理、社会保障和社会组织", "行业属性.公共管理、社会保障和社会组织"),
+            // dict.sys.industry.attribute.type.s
+            ("dict.sys.industry.attribute.type.s", "zh-HK", "公共管理、社会保障和社会组织_hk", "行业属性.公共管理、社会保障和社会组织"),
+
+            // dict.sys.industry.attribute.type.t
+            ("dict.sys.industry.attribute.type.t", "en-US", "国际组织_us", "行业属性.国际组织"),
+            // dict.sys.industry.attribute.type.t
+            ("dict.sys.industry.attribute.type.t", "ja-JP", "国际组织_jp", "行业属性.国际组织"),
+            // dict.sys.industry.attribute.type.t
+            ("dict.sys.industry.attribute.type.t", "zh-CN", "国际组织", "行业属性.国际组织"),
+            // dict.sys.industry.attribute.type.t
+            ("dict.sys.industry.attribute.type.t", "zh-HK", "国际组织_hk", "行业属性.国际组织"),
+
+            // dict.sys.enterprise.scale.type.l
+            ("dict.sys.enterprise.scale.type.l", "en-US", "大型_us", "企业规模.大型"),
+            // dict.sys.enterprise.scale.type.l
+            ("dict.sys.enterprise.scale.type.l", "ja-JP", "大型_jp", "企业规模.大型"),
+            // dict.sys.enterprise.scale.type.l
+            ("dict.sys.enterprise.scale.type.l", "zh-CN", "大型", "企业规模.大型"),
+            // dict.sys.enterprise.scale.type.l
+            ("dict.sys.enterprise.scale.type.l", "zh-HK", "大型_hk", "企业规模.大型"),
+
+            // dict.sys.enterprise.scale.type.m
+            ("dict.sys.enterprise.scale.type.m", "en-US", "中型_us", "企业规模.中型"),
+            // dict.sys.enterprise.scale.type.m
+            ("dict.sys.enterprise.scale.type.m", "ja-JP", "中型_jp", "企业规模.中型"),
+            // dict.sys.enterprise.scale.type.m
+            ("dict.sys.enterprise.scale.type.m", "zh-CN", "中型", "企业规模.中型"),
+            // dict.sys.enterprise.scale.type.m
+            ("dict.sys.enterprise.scale.type.m", "zh-HK", "中型_hk", "企业规模.中型"),
+
+            // dict.sys.enterprise.scale.type.s
+            ("dict.sys.enterprise.scale.type.s", "en-US", "小型_us", "企业规模.小型"),
+            // dict.sys.enterprise.scale.type.s
+            ("dict.sys.enterprise.scale.type.s", "ja-JP", "小型_jp", "企业规模.小型"),
+            // dict.sys.enterprise.scale.type.s
+            ("dict.sys.enterprise.scale.type.s", "zh-CN", "小型", "企业规模.小型"),
+            // dict.sys.enterprise.scale.type.s
+            ("dict.sys.enterprise.scale.type.s", "zh-HK", "小型_hk", "企业规模.小型"),
+
+            // dict.sys.enterprise.scale.type.xs
+            ("dict.sys.enterprise.scale.type.xs", "en-US", "微型_us", "企业规模.微型"),
+            // dict.sys.enterprise.scale.type.xs
+            ("dict.sys.enterprise.scale.type.xs", "ja-JP", "微型_jp", "企业规模.微型"),
+            // dict.sys.enterprise.scale.type.xs
+            ("dict.sys.enterprise.scale.type.xs", "zh-CN", "微型", "企业规模.微型"),
+            // dict.sys.enterprise.scale.type.xs
+            ("dict.sys.enterprise.scale.type.xs", "zh-HK", "微型_hk", "企业规模.微型"),
+
+            // dict.sys.entity.existence.status.1
+            ("dict.sys.entity.existence.status.1", "en-US", "存续（在营）_us", "存续状态.存续（在营）"),
+            // dict.sys.entity.existence.status.1
+            ("dict.sys.entity.existence.status.1", "ja-JP", "存续（在营）_jp", "存续状态.存续（在营）"),
+            // dict.sys.entity.existence.status.1
+            ("dict.sys.entity.existence.status.1", "zh-CN", "存续（在营）", "存续状态.存续（在营）"),
+            // dict.sys.entity.existence.status.1
+            ("dict.sys.entity.existence.status.1", "zh-HK", "存续（在营）_hk", "存续状态.存续（在营）"),
+
+            // dict.sys.entity.existence.status.2
+            ("dict.sys.entity.existence.status.2", "en-US", "吊销_us", "存续状态.吊销"),
+            // dict.sys.entity.existence.status.2
+            ("dict.sys.entity.existence.status.2", "ja-JP", "吊销_jp", "存续状态.吊销"),
+            // dict.sys.entity.existence.status.2
+            ("dict.sys.entity.existence.status.2", "zh-CN", "吊销", "存续状态.吊销"),
+            // dict.sys.entity.existence.status.2
+            ("dict.sys.entity.existence.status.2", "zh-HK", "吊销_hk", "存续状态.吊销"),
+
+            // dict.sys.entity.existence.status.3
+            ("dict.sys.entity.existence.status.3", "en-US", "注销_us", "存续状态.注销"),
+            // dict.sys.entity.existence.status.3
+            ("dict.sys.entity.existence.status.3", "ja-JP", "注销_jp", "存续状态.注销"),
+            // dict.sys.entity.existence.status.3
+            ("dict.sys.entity.existence.status.3", "zh-CN", "注销", "存续状态.注销"),
+            // dict.sys.entity.existence.status.3
+            ("dict.sys.entity.existence.status.3", "zh-HK", "注销_hk", "存续状态.注销"),
+
+            // dict.sys.entity.existence.status.4
+            ("dict.sys.entity.existence.status.4", "en-US", "迁出_us", "存续状态.迁出"),
+            // dict.sys.entity.existence.status.4
+            ("dict.sys.entity.existence.status.4", "ja-JP", "迁出_jp", "存续状态.迁出"),
+            // dict.sys.entity.existence.status.4
+            ("dict.sys.entity.existence.status.4", "zh-CN", "迁出", "存续状态.迁出"),
+            // dict.sys.entity.existence.status.4
+            ("dict.sys.entity.existence.status.4", "zh-HK", "迁出_hk", "存续状态.迁出"),
+
+            // dict.sys.entity.existence.status.5
+            ("dict.sys.entity.existence.status.5", "en-US", "停业_us", "存续状态.停业"),
+            // dict.sys.entity.existence.status.5
+            ("dict.sys.entity.existence.status.5", "ja-JP", "停业_jp", "存续状态.停业"),
+            // dict.sys.entity.existence.status.5
+            ("dict.sys.entity.existence.status.5", "zh-CN", "停业", "存续状态.停业"),
+            // dict.sys.entity.existence.status.5
+            ("dict.sys.entity.existence.status.5", "zh-HK", "停业_hk", "存续状态.停业"),
+
             // dict.sys.announcement.category.1
             ("dict.sys.announcement.category.1", "en-US", "紧急通知_us", "公告类型.紧急通知"),
             // dict.sys.announcement.category.1
@@ -11164,96 +15403,6 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.sys.online.status.2", "zh-CN", "离开", "在线状态.离开"),
             // dict.sys.online.status.2
             ("dict.sys.online.status.2", "zh-HK", "离开_hk", "在线状态.离开"),
-
-            // dict.sys.oper.type.1
-            ("dict.sys.oper.type.1", "en-US", "新增_us", "操作类型.新增"),
-            // dict.sys.oper.type.1
-            ("dict.sys.oper.type.1", "ja-JP", "新增_jp", "操作类型.新增"),
-            // dict.sys.oper.type.1
-            ("dict.sys.oper.type.1", "zh-CN", "新增", "操作类型.新增"),
-            // dict.sys.oper.type.1
-            ("dict.sys.oper.type.1", "zh-HK", "新增_hk", "操作类型.新增"),
-
-            // dict.sys.oper.type.2
-            ("dict.sys.oper.type.2", "en-US", "修改_us", "操作类型.修改"),
-            // dict.sys.oper.type.2
-            ("dict.sys.oper.type.2", "ja-JP", "修改_jp", "操作类型.修改"),
-            // dict.sys.oper.type.2
-            ("dict.sys.oper.type.2", "zh-CN", "修改", "操作类型.修改"),
-            // dict.sys.oper.type.2
-            ("dict.sys.oper.type.2", "zh-HK", "修改_hk", "操作类型.修改"),
-
-            // dict.sys.oper.type.3
-            ("dict.sys.oper.type.3", "en-US", "删除_us", "操作类型.删除"),
-            // dict.sys.oper.type.3
-            ("dict.sys.oper.type.3", "ja-JP", "删除_jp", "操作类型.删除"),
-            // dict.sys.oper.type.3
-            ("dict.sys.oper.type.3", "zh-CN", "删除", "操作类型.删除"),
-            // dict.sys.oper.type.3
-            ("dict.sys.oper.type.3", "zh-HK", "删除_hk", "操作类型.删除"),
-
-            // dict.sys.oper.type.4
-            ("dict.sys.oper.type.4", "en-US", "查询_us", "操作类型.查询"),
-            // dict.sys.oper.type.4
-            ("dict.sys.oper.type.4", "ja-JP", "查询_jp", "操作类型.查询"),
-            // dict.sys.oper.type.4
-            ("dict.sys.oper.type.4", "zh-CN", "查询", "操作类型.查询"),
-            // dict.sys.oper.type.4
-            ("dict.sys.oper.type.4", "zh-HK", "查询_hk", "操作类型.查询"),
-
-            // dict.sys.oper.type.5
-            ("dict.sys.oper.type.5", "en-US", "导出_us", "操作类型.导出"),
-            // dict.sys.oper.type.5
-            ("dict.sys.oper.type.5", "ja-JP", "导出_jp", "操作类型.导出"),
-            // dict.sys.oper.type.5
-            ("dict.sys.oper.type.5", "zh-CN", "导出", "操作类型.导出"),
-            // dict.sys.oper.type.5
-            ("dict.sys.oper.type.5", "zh-HK", "导出_hk", "操作类型.导出"),
-
-            // dict.sys.oper.type.6
-            ("dict.sys.oper.type.6", "en-US", "导入_us", "操作类型.导入"),
-            // dict.sys.oper.type.6
-            ("dict.sys.oper.type.6", "ja-JP", "导入_jp", "操作类型.导入"),
-            // dict.sys.oper.type.6
-            ("dict.sys.oper.type.6", "zh-CN", "导入", "操作类型.导入"),
-            // dict.sys.oper.type.6
-            ("dict.sys.oper.type.6", "zh-HK", "导入_hk", "操作类型.导入"),
-
-            // dict.sys.oper.type.7
-            ("dict.sys.oper.type.7", "en-US", "授权_us", "操作类型.授权"),
-            // dict.sys.oper.type.7
-            ("dict.sys.oper.type.7", "ja-JP", "授权_jp", "操作类型.授权"),
-            // dict.sys.oper.type.7
-            ("dict.sys.oper.type.7", "zh-CN", "授权", "操作类型.授权"),
-            // dict.sys.oper.type.7
-            ("dict.sys.oper.type.7", "zh-HK", "授权_hk", "操作类型.授权"),
-
-            // dict.sys.oper.type.8
-            ("dict.sys.oper.type.8", "en-US", "强退_us", "操作类型.强退"),
-            // dict.sys.oper.type.8
-            ("dict.sys.oper.type.8", "ja-JP", "强退_jp", "操作类型.强退"),
-            // dict.sys.oper.type.8
-            ("dict.sys.oper.type.8", "zh-CN", "强退", "操作类型.强退"),
-            // dict.sys.oper.type.8
-            ("dict.sys.oper.type.8", "zh-HK", "强退_hk", "操作类型.强退"),
-
-            // dict.sys.oper.type.9
-            ("dict.sys.oper.type.9", "en-US", "生成代码_us", "操作类型.生成代码"),
-            // dict.sys.oper.type.9
-            ("dict.sys.oper.type.9", "ja-JP", "生成代码_jp", "操作类型.生成代码"),
-            // dict.sys.oper.type.9
-            ("dict.sys.oper.type.9", "zh-CN", "生成代码", "操作类型.生成代码"),
-            // dict.sys.oper.type.9
-            ("dict.sys.oper.type.9", "zh-HK", "生成代码_hk", "操作类型.生成代码"),
-
-            // dict.sys.oper.type.10
-            ("dict.sys.oper.type.10", "en-US", "清空数据_us", "操作类型.清空数据"),
-            // dict.sys.oper.type.10
-            ("dict.sys.oper.type.10", "ja-JP", "清空数据_jp", "操作类型.清空数据"),
-            // dict.sys.oper.type.10
-            ("dict.sys.oper.type.10", "zh-CN", "清空数据", "操作类型.清空数据"),
-            // dict.sys.oper.type.10
-            ("dict.sys.oper.type.10", "zh-HK", "清空数据_hk", "操作类型.清空数据"),
 
             // dict.sys.oss.provider.type.aliyun
             ("dict.sys.oss.provider.type.aliyun", "en-US", "阿里云oss_us", "oss提供商类型.阿里云oss"),
@@ -11840,6 +15989,15 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             // dict.sys.word.category.5
             ("dict.sys.word.category.5", "zh-HK", "辱骂歧视_hk", "敏感词词性类别.辱骂歧视"),
 
+            // dict.sys.iso.code.category.0
+            ("dict.sys.iso.code.category.0", "en-US", "不使用_us", "ISO编码类别.不使用"),
+            // dict.sys.iso.code.category.0
+            ("dict.sys.iso.code.category.0", "ja-JP", "不使用_jp", "ISO编码类别.不使用"),
+            // dict.sys.iso.code.category.0
+            ("dict.sys.iso.code.category.0", "zh-CN", "不使用", "ISO编码类别.不使用"),
+            // dict.sys.iso.code.category.0
+            ("dict.sys.iso.code.category.0", "zh-HK", "不使用_hk", "ISO编码类别.不使用"),
+
             // dict.sys.iso.code.category.1
             ("dict.sys.iso.code.category.1", "en-US", "部门_us", "ISO编码类别.部门"),
             // dict.sys.iso.code.category.1
@@ -11848,33 +16006,6 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.sys.iso.code.category.1", "zh-CN", "部门", "ISO编码类别.部门"),
             // dict.sys.iso.code.category.1
             ("dict.sys.iso.code.category.1", "zh-HK", "部门_hk", "ISO编码类别.部门"),
-
-            // dict.sys.iso.code.category.2
-            ("dict.sys.iso.code.category.2", "en-US", "公司_us", "ISO编码类别.公司"),
-            // dict.sys.iso.code.category.2
-            ("dict.sys.iso.code.category.2", "ja-JP", "公司_jp", "ISO编码类别.公司"),
-            // dict.sys.iso.code.category.2
-            ("dict.sys.iso.code.category.2", "zh-CN", "公司", "ISO编码类别.公司"),
-            // dict.sys.iso.code.category.2
-            ("dict.sys.iso.code.category.2", "zh-HK", "公司_hk", "ISO编码类别.公司"),
-
-            // dict.sys.iso.code.category.3
-            ("dict.sys.iso.code.category.3", "en-US", "产品_us", "ISO编码类别.产品"),
-            // dict.sys.iso.code.category.3
-            ("dict.sys.iso.code.category.3", "ja-JP", "产品_jp", "ISO编码类别.产品"),
-            // dict.sys.iso.code.category.3
-            ("dict.sys.iso.code.category.3", "zh-CN", "产品", "ISO编码类别.产品"),
-            // dict.sys.iso.code.category.3
-            ("dict.sys.iso.code.category.3", "zh-HK", "产品_hk", "ISO编码类别.产品"),
-
-            // dict.sys.iso.code.category.4
-            ("dict.sys.iso.code.category.4", "en-US", "通用_us", "ISO编码类别.通用"),
-            // dict.sys.iso.code.category.4
-            ("dict.sys.iso.code.category.4", "ja-JP", "通用_jp", "ISO编码类别.通用"),
-            // dict.sys.iso.code.category.4
-            ("dict.sys.iso.code.category.4", "zh-CN", "通用", "ISO编码类别.通用"),
-            // dict.sys.iso.code.category.4
-            ("dict.sys.iso.code.category.4", "zh-HK", "通用_hk", "ISO编码类别.通用"),
 
             // dict.sys.word.filter.level.category.1
             ("dict.sys.word.filter.level.category.1", "en-US", "低_us", "敏感词过滤等级.低"),
@@ -12254,14 +16385,2183 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             // dict.hr.social.insurance.pay.status.
             ("dict.hr.social.insurance.pay.status.", "zh-HK", "待缴纳_hk", "社保缴纳状态.待缴纳"),
 
-            // dict.logistics.process.segment.type.
-            ("dict.logistics.process.segment.type.", "en-US", "SMT_us", "工艺段类型.SMT"),
-            // dict.logistics.process.segment.type.
-            ("dict.logistics.process.segment.type.", "ja-JP", "SMT_jp", "工艺段类型.SMT"),
-            // dict.logistics.process.segment.type.
-            ("dict.logistics.process.segment.type.", "zh-CN", "SMT", "工艺段类型.SMT"),
-            // dict.logistics.process.segment.type.
-            ("dict.logistics.process.segment.type.", "zh-HK", "SMT_hk", "工艺段类型.SMT"),
+            // dict.hr.payslip.issue.status.
+            ("dict.hr.payslip.issue.status.", "en-US", "待发放_us", "工资条发放状态.待发放"),
+            // dict.hr.payslip.issue.status.
+            ("dict.hr.payslip.issue.status.", "ja-JP", "待发放_jp", "工资条发放状态.待发放"),
+            // dict.hr.payslip.issue.status.
+            ("dict.hr.payslip.issue.status.", "zh-CN", "待发放", "工资条发放状态.待发放"),
+            // dict.hr.payslip.issue.status.
+            ("dict.hr.payslip.issue.status.", "zh-HK", "待发放_hk", "工资条发放状态.待发放"),
+
+            // dict.hr.perf.improvement.status.0
+            ("dict.hr.perf.improvement.status.0", "en-US", "待审批_us", "绩效改进状态.待审批"),
+            // dict.hr.perf.improvement.status.0
+            ("dict.hr.perf.improvement.status.0", "ja-JP", "待审批_jp", "绩效改进状态.待审批"),
+            // dict.hr.perf.improvement.status.0
+            ("dict.hr.perf.improvement.status.0", "zh-CN", "待审批", "绩效改进状态.待审批"),
+            // dict.hr.perf.improvement.status.0
+            ("dict.hr.perf.improvement.status.0", "zh-HK", "待审批_hk", "绩效改进状态.待审批"),
+
+            // dict.hr.perf.improvement.status.1
+            ("dict.hr.perf.improvement.status.1", "en-US", "进行中_us", "绩效改进状态.进行中"),
+            // dict.hr.perf.improvement.status.1
+            ("dict.hr.perf.improvement.status.1", "ja-JP", "进行中_jp", "绩效改进状态.进行中"),
+            // dict.hr.perf.improvement.status.1
+            ("dict.hr.perf.improvement.status.1", "zh-CN", "进行中", "绩效改进状态.进行中"),
+            // dict.hr.perf.improvement.status.1
+            ("dict.hr.perf.improvement.status.1", "zh-HK", "进行中_hk", "绩效改进状态.进行中"),
+
+            // dict.hr.perf.improvement.status.2
+            ("dict.hr.perf.improvement.status.2", "en-US", "已完成_us", "绩效改进状态.已完成"),
+            // dict.hr.perf.improvement.status.2
+            ("dict.hr.perf.improvement.status.2", "ja-JP", "已完成_jp", "绩效改进状态.已完成"),
+            // dict.hr.perf.improvement.status.2
+            ("dict.hr.perf.improvement.status.2", "zh-CN", "已完成", "绩效改进状态.已完成"),
+            // dict.hr.perf.improvement.status.2
+            ("dict.hr.perf.improvement.status.2", "zh-HK", "已完成_hk", "绩效改进状态.已完成"),
+
+            // dict.hr.perf.improvement.status.3
+            ("dict.hr.perf.improvement.status.3", "en-US", "已关闭_us", "绩效改进状态.已关闭"),
+            // dict.hr.perf.improvement.status.3
+            ("dict.hr.perf.improvement.status.3", "ja-JP", "已关闭_jp", "绩效改进状态.已关闭"),
+            // dict.hr.perf.improvement.status.3
+            ("dict.hr.perf.improvement.status.3", "zh-CN", "已关闭", "绩效改进状态.已关闭"),
+            // dict.hr.perf.improvement.status.3
+            ("dict.hr.perf.improvement.status.3", "zh-HK", "已关闭_hk", "绩效改进状态.已关闭"),
+
+            // dict.hr.perf.assessment.status.0
+            ("dict.hr.perf.assessment.status.0", "en-US", "待自评_us", "绩效考核状态.待自评"),
+            // dict.hr.perf.assessment.status.0
+            ("dict.hr.perf.assessment.status.0", "ja-JP", "待自评_jp", "绩效考核状态.待自评"),
+            // dict.hr.perf.assessment.status.0
+            ("dict.hr.perf.assessment.status.0", "zh-CN", "待自评", "绩效考核状态.待自评"),
+            // dict.hr.perf.assessment.status.0
+            ("dict.hr.perf.assessment.status.0", "zh-HK", "待自评_hk", "绩效考核状态.待自评"),
+
+            // dict.hr.perf.assessment.status.1
+            ("dict.hr.perf.assessment.status.1", "en-US", "自评中_us", "绩效考核状态.自评中"),
+            // dict.hr.perf.assessment.status.1
+            ("dict.hr.perf.assessment.status.1", "ja-JP", "自评中_jp", "绩效考核状态.自评中"),
+            // dict.hr.perf.assessment.status.1
+            ("dict.hr.perf.assessment.status.1", "zh-CN", "自评中", "绩效考核状态.自评中"),
+            // dict.hr.perf.assessment.status.1
+            ("dict.hr.perf.assessment.status.1", "zh-HK", "自评中_hk", "绩效考核状态.自评中"),
+
+            // dict.hr.perf.assessment.status.2
+            ("dict.hr.perf.assessment.status.2", "en-US", "待主管评审_us", "绩效考核状态.待主管评审"),
+            // dict.hr.perf.assessment.status.2
+            ("dict.hr.perf.assessment.status.2", "ja-JP", "待主管评审_jp", "绩效考核状态.待主管评审"),
+            // dict.hr.perf.assessment.status.2
+            ("dict.hr.perf.assessment.status.2", "zh-CN", "待主管评审", "绩效考核状态.待主管评审"),
+            // dict.hr.perf.assessment.status.2
+            ("dict.hr.perf.assessment.status.2", "zh-HK", "待主管评审_hk", "绩效考核状态.待主管评审"),
+
+            // dict.hr.perf.assessment.status.3
+            ("dict.hr.perf.assessment.status.3", "en-US", "评审中_us", "绩效考核状态.评审中"),
+            // dict.hr.perf.assessment.status.3
+            ("dict.hr.perf.assessment.status.3", "ja-JP", "评审中_jp", "绩效考核状态.评审中"),
+            // dict.hr.perf.assessment.status.3
+            ("dict.hr.perf.assessment.status.3", "zh-CN", "评审中", "绩效考核状态.评审中"),
+            // dict.hr.perf.assessment.status.3
+            ("dict.hr.perf.assessment.status.3", "zh-HK", "评审中_hk", "绩效考核状态.评审中"),
+
+            // dict.hr.perf.assessment.status.4
+            ("dict.hr.perf.assessment.status.4", "en-US", "已完成_us", "绩效考核状态.已完成"),
+            // dict.hr.perf.assessment.status.4
+            ("dict.hr.perf.assessment.status.4", "ja-JP", "已完成_jp", "绩效考核状态.已完成"),
+            // dict.hr.perf.assessment.status.4
+            ("dict.hr.perf.assessment.status.4", "zh-CN", "已完成", "绩效考核状态.已完成"),
+            // dict.hr.perf.assessment.status.4
+            ("dict.hr.perf.assessment.status.4", "zh-HK", "已完成_hk", "绩效考核状态.已完成"),
+
+            // dict.hr.perf.assessment.status.5
+            ("dict.hr.perf.assessment.status.5", "en-US", "已确认_us", "绩效考核状态.已确认"),
+            // dict.hr.perf.assessment.status.5
+            ("dict.hr.perf.assessment.status.5", "ja-JP", "已确认_jp", "绩效考核状态.已确认"),
+            // dict.hr.perf.assessment.status.5
+            ("dict.hr.perf.assessment.status.5", "zh-CN", "已确认", "绩效考核状态.已确认"),
+            // dict.hr.perf.assessment.status.5
+            ("dict.hr.perf.assessment.status.5", "zh-HK", "已确认_hk", "绩效考核状态.已确认"),
+
+            // dict.hr.perf.objective.status.0
+            ("dict.hr.perf.objective.status.0", "en-US", "待确认_us", "绩效目标状态.待确认"),
+            // dict.hr.perf.objective.status.0
+            ("dict.hr.perf.objective.status.0", "ja-JP", "待确认_jp", "绩效目标状态.待确认"),
+            // dict.hr.perf.objective.status.0
+            ("dict.hr.perf.objective.status.0", "zh-CN", "待确认", "绩效目标状态.待确认"),
+            // dict.hr.perf.objective.status.0
+            ("dict.hr.perf.objective.status.0", "zh-HK", "待确认_hk", "绩效目标状态.待确认"),
+
+            // dict.hr.perf.objective.status.1
+            ("dict.hr.perf.objective.status.1", "en-US", "进行中_us", "绩效目标状态.进行中"),
+            // dict.hr.perf.objective.status.1
+            ("dict.hr.perf.objective.status.1", "ja-JP", "进行中_jp", "绩效目标状态.进行中"),
+            // dict.hr.perf.objective.status.1
+            ("dict.hr.perf.objective.status.1", "zh-CN", "进行中", "绩效目标状态.进行中"),
+            // dict.hr.perf.objective.status.1
+            ("dict.hr.perf.objective.status.1", "zh-HK", "进行中_hk", "绩效目标状态.进行中"),
+
+            // dict.hr.perf.objective.status.2
+            ("dict.hr.perf.objective.status.2", "en-US", "已完成_us", "绩效目标状态.已完成"),
+            // dict.hr.perf.objective.status.2
+            ("dict.hr.perf.objective.status.2", "ja-JP", "已完成_jp", "绩效目标状态.已完成"),
+            // dict.hr.perf.objective.status.2
+            ("dict.hr.perf.objective.status.2", "zh-CN", "已完成", "绩效目标状态.已完成"),
+            // dict.hr.perf.objective.status.2
+            ("dict.hr.perf.objective.status.2", "zh-HK", "已完成_hk", "绩效目标状态.已完成"),
+
+            // dict.hr.perf.cycle.schedule.status.0
+            ("dict.hr.perf.cycle.schedule.status.0", "en-US", "待启动_us", "绩效周期状态.待启动"),
+            // dict.hr.perf.cycle.schedule.status.0
+            ("dict.hr.perf.cycle.schedule.status.0", "ja-JP", "待启动_jp", "绩效周期状态.待启动"),
+            // dict.hr.perf.cycle.schedule.status.0
+            ("dict.hr.perf.cycle.schedule.status.0", "zh-CN", "待启动", "绩效周期状态.待启动"),
+            // dict.hr.perf.cycle.schedule.status.0
+            ("dict.hr.perf.cycle.schedule.status.0", "zh-HK", "待启动_hk", "绩效周期状态.待启动"),
+
+            // dict.hr.perf.cycle.schedule.status.1
+            ("dict.hr.perf.cycle.schedule.status.1", "en-US", "目标设定中_us", "绩效周期状态.目标设定中"),
+            // dict.hr.perf.cycle.schedule.status.1
+            ("dict.hr.perf.cycle.schedule.status.1", "ja-JP", "目标设定中_jp", "绩效周期状态.目标设定中"),
+            // dict.hr.perf.cycle.schedule.status.1
+            ("dict.hr.perf.cycle.schedule.status.1", "zh-CN", "目标设定中", "绩效周期状态.目标设定中"),
+            // dict.hr.perf.cycle.schedule.status.1
+            ("dict.hr.perf.cycle.schedule.status.1", "zh-HK", "目标设定中_hk", "绩效周期状态.目标设定中"),
+
+            // dict.hr.perf.cycle.schedule.status.2
+            ("dict.hr.perf.cycle.schedule.status.2", "en-US", "进行中_us", "绩效周期状态.进行中"),
+            // dict.hr.perf.cycle.schedule.status.2
+            ("dict.hr.perf.cycle.schedule.status.2", "ja-JP", "进行中_jp", "绩效周期状态.进行中"),
+            // dict.hr.perf.cycle.schedule.status.2
+            ("dict.hr.perf.cycle.schedule.status.2", "zh-CN", "进行中", "绩效周期状态.进行中"),
+            // dict.hr.perf.cycle.schedule.status.2
+            ("dict.hr.perf.cycle.schedule.status.2", "zh-HK", "进行中_hk", "绩效周期状态.进行中"),
+
+            // dict.hr.perf.cycle.schedule.status.3
+            ("dict.hr.perf.cycle.schedule.status.3", "en-US", "评审中_us", "绩效周期状态.评审中"),
+            // dict.hr.perf.cycle.schedule.status.3
+            ("dict.hr.perf.cycle.schedule.status.3", "ja-JP", "评审中_jp", "绩效周期状态.评审中"),
+            // dict.hr.perf.cycle.schedule.status.3
+            ("dict.hr.perf.cycle.schedule.status.3", "zh-CN", "评审中", "绩效周期状态.评审中"),
+            // dict.hr.perf.cycle.schedule.status.3
+            ("dict.hr.perf.cycle.schedule.status.3", "zh-HK", "评审中_hk", "绩效周期状态.评审中"),
+
+            // dict.hr.perf.cycle.schedule.status.4
+            ("dict.hr.perf.cycle.schedule.status.4", "en-US", "已完成_us", "绩效周期状态.已完成"),
+            // dict.hr.perf.cycle.schedule.status.4
+            ("dict.hr.perf.cycle.schedule.status.4", "ja-JP", "已完成_jp", "绩效周期状态.已完成"),
+            // dict.hr.perf.cycle.schedule.status.4
+            ("dict.hr.perf.cycle.schedule.status.4", "zh-CN", "已完成", "绩效周期状态.已完成"),
+            // dict.hr.perf.cycle.schedule.status.4
+            ("dict.hr.perf.cycle.schedule.status.4", "zh-HK", "已完成_hk", "绩效周期状态.已完成"),
+
+            // dict.hr.perf.cycle.schedule.status.5
+            ("dict.hr.perf.cycle.schedule.status.5", "en-US", "已归档_us", "绩效周期状态.已归档"),
+            // dict.hr.perf.cycle.schedule.status.5
+            ("dict.hr.perf.cycle.schedule.status.5", "ja-JP", "已归档_jp", "绩效周期状态.已归档"),
+            // dict.hr.perf.cycle.schedule.status.5
+            ("dict.hr.perf.cycle.schedule.status.5", "zh-CN", "已归档", "绩效周期状态.已归档"),
+            // dict.hr.perf.cycle.schedule.status.5
+            ("dict.hr.perf.cycle.schedule.status.5", "zh-HK", "已归档_hk", "绩效周期状态.已归档"),
+
+            // dict.hr.perf.scheme.metric.status.0
+            ("dict.hr.perf.scheme.metric.status.0", "en-US", "启用_us", "绩效方案指标状态.启用"),
+            // dict.hr.perf.scheme.metric.status.0
+            ("dict.hr.perf.scheme.metric.status.0", "ja-JP", "启用_jp", "绩效方案指标状态.启用"),
+            // dict.hr.perf.scheme.metric.status.0
+            ("dict.hr.perf.scheme.metric.status.0", "zh-CN", "启用", "绩效方案指标状态.启用"),
+            // dict.hr.perf.scheme.metric.status.0
+            ("dict.hr.perf.scheme.metric.status.0", "zh-HK", "启用_hk", "绩效方案指标状态.启用"),
+
+            // dict.hr.perf.scheme.metric.status.1
+            ("dict.hr.perf.scheme.metric.status.1", "en-US", "停用_us", "绩效方案指标状态.停用"),
+            // dict.hr.perf.scheme.metric.status.1
+            ("dict.hr.perf.scheme.metric.status.1", "ja-JP", "停用_jp", "绩效方案指标状态.停用"),
+            // dict.hr.perf.scheme.metric.status.1
+            ("dict.hr.perf.scheme.metric.status.1", "zh-CN", "停用", "绩效方案指标状态.停用"),
+            // dict.hr.perf.scheme.metric.status.1
+            ("dict.hr.perf.scheme.metric.status.1", "zh-HK", "停用_hk", "绩效方案指标状态.停用"),
+
+            // dict.hr.perf.cycle.type.month
+            ("dict.hr.perf.cycle.type.month", "en-US", "月度_us", "绩效周期类型.月度"),
+            // dict.hr.perf.cycle.type.month
+            ("dict.hr.perf.cycle.type.month", "ja-JP", "月度_jp", "绩效周期类型.月度"),
+            // dict.hr.perf.cycle.type.month
+            ("dict.hr.perf.cycle.type.month", "zh-CN", "月度", "绩效周期类型.月度"),
+            // dict.hr.perf.cycle.type.month
+            ("dict.hr.perf.cycle.type.month", "zh-HK", "月度_hk", "绩效周期类型.月度"),
+
+            // dict.hr.perf.cycle.type.quarter
+            ("dict.hr.perf.cycle.type.quarter", "en-US", "季度_us", "绩效周期类型.季度"),
+            // dict.hr.perf.cycle.type.quarter
+            ("dict.hr.perf.cycle.type.quarter", "ja-JP", "季度_jp", "绩效周期类型.季度"),
+            // dict.hr.perf.cycle.type.quarter
+            ("dict.hr.perf.cycle.type.quarter", "zh-CN", "季度", "绩效周期类型.季度"),
+            // dict.hr.perf.cycle.type.quarter
+            ("dict.hr.perf.cycle.type.quarter", "zh-HK", "季度_hk", "绩效周期类型.季度"),
+
+            // dict.hr.perf.cycle.type.halfyear
+            ("dict.hr.perf.cycle.type.halfyear", "en-US", "半年度_us", "绩效周期类型.半年度"),
+            // dict.hr.perf.cycle.type.halfyear
+            ("dict.hr.perf.cycle.type.halfyear", "ja-JP", "半年度_jp", "绩效周期类型.半年度"),
+            // dict.hr.perf.cycle.type.halfyear
+            ("dict.hr.perf.cycle.type.halfyear", "zh-CN", "半年度", "绩效周期类型.半年度"),
+            // dict.hr.perf.cycle.type.halfyear
+            ("dict.hr.perf.cycle.type.halfyear", "zh-HK", "半年度_hk", "绩效周期类型.半年度"),
+
+            // dict.hr.perf.cycle.type.year
+            ("dict.hr.perf.cycle.type.year", "en-US", "年度_us", "绩效周期类型.年度"),
+            // dict.hr.perf.cycle.type.year
+            ("dict.hr.perf.cycle.type.year", "ja-JP", "年度_jp", "绩效周期类型.年度"),
+            // dict.hr.perf.cycle.type.year
+            ("dict.hr.perf.cycle.type.year", "zh-CN", "年度", "绩效周期类型.年度"),
+            // dict.hr.perf.cycle.type.year
+            ("dict.hr.perf.cycle.type.year", "zh-HK", "年度_hk", "绩效周期类型.年度"),
+
+            // dict.hr.perf.scoring.standard.percent
+            ("dict.hr.perf.scoring.standard.percent", "en-US", "百分制_us", "绩效评分标准.百分制"),
+            // dict.hr.perf.scoring.standard.percent
+            ("dict.hr.perf.scoring.standard.percent", "ja-JP", "百分制_jp", "绩效评分标准.百分制"),
+            // dict.hr.perf.scoring.standard.percent
+            ("dict.hr.perf.scoring.standard.percent", "zh-CN", "百分制", "绩效评分标准.百分制"),
+            // dict.hr.perf.scoring.standard.percent
+            ("dict.hr.perf.scoring.standard.percent", "zh-HK", "百分制_hk", "绩效评分标准.百分制"),
+
+            // dict.hr.perf.scoring.standard.five
+            ("dict.hr.perf.scoring.standard.five", "en-US", "五分制_us", "绩效评分标准.五分制"),
+            // dict.hr.perf.scoring.standard.five
+            ("dict.hr.perf.scoring.standard.five", "ja-JP", "五分制_jp", "绩效评分标准.五分制"),
+            // dict.hr.perf.scoring.standard.five
+            ("dict.hr.perf.scoring.standard.five", "zh-CN", "五分制", "绩效评分标准.五分制"),
+            // dict.hr.perf.scoring.standard.five
+            ("dict.hr.perf.scoring.standard.five", "zh-HK", "五分制_hk", "绩效评分标准.五分制"),
+
+            // dict.hr.perf.scoring.standard.grade
+            ("dict.hr.perf.scoring.standard.grade", "en-US", "等级制_us", "绩效评分标准.等级制"),
+            // dict.hr.perf.scoring.standard.grade
+            ("dict.hr.perf.scoring.standard.grade", "ja-JP", "等级制_jp", "绩效评分标准.等级制"),
+            // dict.hr.perf.scoring.standard.grade
+            ("dict.hr.perf.scoring.standard.grade", "zh-CN", "等级制", "绩效评分标准.等级制"),
+            // dict.hr.perf.scoring.standard.grade
+            ("dict.hr.perf.scoring.standard.grade", "zh-HK", "等级制_hk", "绩效评分标准.等级制"),
+
+            // dict.hr.perf.metric.category.perf
+            ("dict.hr.perf.metric.category.perf", "en-US", "业绩_us", "绩效指标类别.业绩"),
+            // dict.hr.perf.metric.category.perf
+            ("dict.hr.perf.metric.category.perf", "ja-JP", "业绩_jp", "绩效指标类别.业绩"),
+            // dict.hr.perf.metric.category.perf
+            ("dict.hr.perf.metric.category.perf", "zh-CN", "业绩", "绩效指标类别.业绩"),
+            // dict.hr.perf.metric.category.perf
+            ("dict.hr.perf.metric.category.perf", "zh-HK", "业绩_hk", "绩效指标类别.业绩"),
+
+            // dict.hr.perf.metric.category.capability
+            ("dict.hr.perf.metric.category.capability", "en-US", "能力_us", "绩效指标类别.能力"),
+            // dict.hr.perf.metric.category.capability
+            ("dict.hr.perf.metric.category.capability", "ja-JP", "能力_jp", "绩效指标类别.能力"),
+            // dict.hr.perf.metric.category.capability
+            ("dict.hr.perf.metric.category.capability", "zh-CN", "能力", "绩效指标类别.能力"),
+            // dict.hr.perf.metric.category.capability
+            ("dict.hr.perf.metric.category.capability", "zh-HK", "能力_hk", "绩效指标类别.能力"),
+
+            // dict.hr.perf.metric.category.attitude
+            ("dict.hr.perf.metric.category.attitude", "en-US", "态度_us", "绩效指标类别.态度"),
+            // dict.hr.perf.metric.category.attitude
+            ("dict.hr.perf.metric.category.attitude", "ja-JP", "态度_jp", "绩效指标类别.态度"),
+            // dict.hr.perf.metric.category.attitude
+            ("dict.hr.perf.metric.category.attitude", "zh-CN", "态度", "绩效指标类别.态度"),
+            // dict.hr.perf.metric.category.attitude
+            ("dict.hr.perf.metric.category.attitude", "zh-HK", "态度_hk", "绩效指标类别.态度"),
+
+            // dict.hr.perf.metric.category.management
+            ("dict.hr.perf.metric.category.management", "en-US", "管理_us", "绩效指标类别.管理"),
+            // dict.hr.perf.metric.category.management
+            ("dict.hr.perf.metric.category.management", "ja-JP", "管理_jp", "绩效指标类别.管理"),
+            // dict.hr.perf.metric.category.management
+            ("dict.hr.perf.metric.category.management", "zh-CN", "管理", "绩效指标类别.管理"),
+            // dict.hr.perf.metric.category.management
+            ("dict.hr.perf.metric.category.management", "zh-HK", "管理_hk", "绩效指标类别.管理"),
+
+            // dict.hr.perf.metric.category.innovation
+            ("dict.hr.perf.metric.category.innovation", "en-US", "创新_us", "绩效指标类别.创新"),
+            // dict.hr.perf.metric.category.innovation
+            ("dict.hr.perf.metric.category.innovation", "ja-JP", "创新_jp", "绩效指标类别.创新"),
+            // dict.hr.perf.metric.category.innovation
+            ("dict.hr.perf.metric.category.innovation", "zh-CN", "创新", "绩效指标类别.创新"),
+            // dict.hr.perf.metric.category.innovation
+            ("dict.hr.perf.metric.category.innovation", "zh-HK", "创新_hk", "绩效指标类别.创新"),
+
+            // dict.hr.perf.metric.category.quality
+            ("dict.hr.perf.metric.category.quality", "en-US", "质量_us", "绩效指标类别.质量"),
+            // dict.hr.perf.metric.category.quality
+            ("dict.hr.perf.metric.category.quality", "ja-JP", "质量_jp", "绩效指标类别.质量"),
+            // dict.hr.perf.metric.category.quality
+            ("dict.hr.perf.metric.category.quality", "zh-CN", "质量", "绩效指标类别.质量"),
+            // dict.hr.perf.metric.category.quality
+            ("dict.hr.perf.metric.category.quality", "zh-HK", "质量_hk", "绩效指标类别.质量"),
+
+            // dict.hr.perf.metric.category.efficiency
+            ("dict.hr.perf.metric.category.efficiency", "en-US", "效率_us", "绩效指标类别.效率"),
+            // dict.hr.perf.metric.category.efficiency
+            ("dict.hr.perf.metric.category.efficiency", "ja-JP", "效率_jp", "绩效指标类别.效率"),
+            // dict.hr.perf.metric.category.efficiency
+            ("dict.hr.perf.metric.category.efficiency", "zh-CN", "效率", "绩效指标类别.效率"),
+            // dict.hr.perf.metric.category.efficiency
+            ("dict.hr.perf.metric.category.efficiency", "zh-HK", "效率_hk", "绩效指标类别.效率"),
+
+            // dict.hr.perf.metric.category.safety
+            ("dict.hr.perf.metric.category.safety", "en-US", "安全_us", "绩效指标类别.安全"),
+            // dict.hr.perf.metric.category.safety
+            ("dict.hr.perf.metric.category.safety", "ja-JP", "安全_jp", "绩效指标类别.安全"),
+            // dict.hr.perf.metric.category.safety
+            ("dict.hr.perf.metric.category.safety", "zh-CN", "安全", "绩效指标类别.安全"),
+            // dict.hr.perf.metric.category.safety
+            ("dict.hr.perf.metric.category.safety", "zh-HK", "安全_hk", "绩效指标类别.安全"),
+
+            // dict.hr.perf.metric.type.quant
+            ("dict.hr.perf.metric.type.quant", "en-US", "定量_us", "绩效指标类型.定量"),
+            // dict.hr.perf.metric.type.quant
+            ("dict.hr.perf.metric.type.quant", "ja-JP", "定量_jp", "绩效指标类型.定量"),
+            // dict.hr.perf.metric.type.quant
+            ("dict.hr.perf.metric.type.quant", "zh-CN", "定量", "绩效指标类型.定量"),
+            // dict.hr.perf.metric.type.quant
+            ("dict.hr.perf.metric.type.quant", "zh-HK", "定量_hk", "绩效指标类型.定量"),
+
+            // dict.hr.perf.metric.type.qual
+            ("dict.hr.perf.metric.type.qual", "en-US", "定性_us", "绩效指标类型.定性"),
+            // dict.hr.perf.metric.type.qual
+            ("dict.hr.perf.metric.type.qual", "ja-JP", "定性_jp", "绩效指标类型.定性"),
+            // dict.hr.perf.metric.type.qual
+            ("dict.hr.perf.metric.type.qual", "zh-CN", "定性", "绩效指标类型.定性"),
+            // dict.hr.perf.metric.type.qual
+            ("dict.hr.perf.metric.type.qual", "zh-HK", "定性_hk", "绩效指标类型.定性"),
+
+            // dict.hr.perf.grade.a
+            ("dict.hr.perf.grade.a", "en-US", "A_us", "绩效等级.A"),
+            // dict.hr.perf.grade.a
+            ("dict.hr.perf.grade.a", "ja-JP", "A_jp", "绩效等级.A"),
+            // dict.hr.perf.grade.a
+            ("dict.hr.perf.grade.a", "zh-CN", "A", "绩效等级.A"),
+            // dict.hr.perf.grade.a
+            ("dict.hr.perf.grade.a", "zh-HK", "A_hk", "绩效等级.A"),
+
+            // dict.hr.perf.grade.b
+            ("dict.hr.perf.grade.b", "en-US", "B_us", "绩效等级.B"),
+            // dict.hr.perf.grade.b
+            ("dict.hr.perf.grade.b", "ja-JP", "B_jp", "绩效等级.B"),
+            // dict.hr.perf.grade.b
+            ("dict.hr.perf.grade.b", "zh-CN", "B", "绩效等级.B"),
+            // dict.hr.perf.grade.b
+            ("dict.hr.perf.grade.b", "zh-HK", "B_hk", "绩效等级.B"),
+
+            // dict.hr.perf.grade.c
+            ("dict.hr.perf.grade.c", "en-US", "C_us", "绩效等级.C"),
+            // dict.hr.perf.grade.c
+            ("dict.hr.perf.grade.c", "ja-JP", "C_jp", "绩效等级.C"),
+            // dict.hr.perf.grade.c
+            ("dict.hr.perf.grade.c", "zh-CN", "C", "绩效等级.C"),
+            // dict.hr.perf.grade.c
+            ("dict.hr.perf.grade.c", "zh-HK", "C_hk", "绩效等级.C"),
+
+            // dict.hr.perf.grade.d
+            ("dict.hr.perf.grade.d", "en-US", "D_us", "绩效等级.D"),
+            // dict.hr.perf.grade.d
+            ("dict.hr.perf.grade.d", "ja-JP", "D_jp", "绩效等级.D"),
+            // dict.hr.perf.grade.d
+            ("dict.hr.perf.grade.d", "zh-CN", "D", "绩效等级.D"),
+            // dict.hr.perf.grade.d
+            ("dict.hr.perf.grade.d", "zh-HK", "D_hk", "绩效等级.D"),
+
+            // dict.hr.perf.grade.e
+            ("dict.hr.perf.grade.e", "en-US", "E_us", "绩效等级.E"),
+            // dict.hr.perf.grade.e
+            ("dict.hr.perf.grade.e", "ja-JP", "E_jp", "绩效等级.E"),
+            // dict.hr.perf.grade.e
+            ("dict.hr.perf.grade.e", "zh-CN", "E", "绩效等级.E"),
+            // dict.hr.perf.grade.e
+            ("dict.hr.perf.grade.e", "zh-HK", "E_hk", "绩效等级.E"),
+
+            // dict.hr.employee.contract.type.0
+            ("dict.hr.employee.contract.type.0", "en-US", "固定期限_us", "劳动合同类型.固定期限"),
+            // dict.hr.employee.contract.type.0
+            ("dict.hr.employee.contract.type.0", "ja-JP", "固定期限_jp", "劳动合同类型.固定期限"),
+            // dict.hr.employee.contract.type.0
+            ("dict.hr.employee.contract.type.0", "zh-CN", "固定期限", "劳动合同类型.固定期限"),
+            // dict.hr.employee.contract.type.0
+            ("dict.hr.employee.contract.type.0", "zh-HK", "固定期限_hk", "劳动合同类型.固定期限"),
+
+            // dict.hr.employee.contract.type.1
+            ("dict.hr.employee.contract.type.1", "en-US", "无固定期限_us", "劳动合同类型.无固定期限"),
+            // dict.hr.employee.contract.type.1
+            ("dict.hr.employee.contract.type.1", "ja-JP", "无固定期限_jp", "劳动合同类型.无固定期限"),
+            // dict.hr.employee.contract.type.1
+            ("dict.hr.employee.contract.type.1", "zh-CN", "无固定期限", "劳动合同类型.无固定期限"),
+            // dict.hr.employee.contract.type.1
+            ("dict.hr.employee.contract.type.1", "zh-HK", "无固定期限_hk", "劳动合同类型.无固定期限"),
+
+            // dict.hr.employee.contract.type.2
+            ("dict.hr.employee.contract.type.2", "en-US", "以完成一定工作任务为期限_us", "劳动合同类型.以完成一定工作任务为期限"),
+            // dict.hr.employee.contract.type.2
+            ("dict.hr.employee.contract.type.2", "ja-JP", "以完成一定工作任务为期限_jp", "劳动合同类型.以完成一定工作任务为期限"),
+            // dict.hr.employee.contract.type.2
+            ("dict.hr.employee.contract.type.2", "zh-CN", "以完成一定工作任务为期限", "劳动合同类型.以完成一定工作任务为期限"),
+            // dict.hr.employee.contract.type.2
+            ("dict.hr.employee.contract.type.2", "zh-HK", "以完成一定工作任务为期限_hk", "劳动合同类型.以完成一定工作任务为期限"),
+
+            // dict.hr.employee.contract.type.3
+            ("dict.hr.employee.contract.type.3", "en-US", "实习_us", "劳动合同类型.实习"),
+            // dict.hr.employee.contract.type.3
+            ("dict.hr.employee.contract.type.3", "ja-JP", "实习_jp", "劳动合同类型.实习"),
+            // dict.hr.employee.contract.type.3
+            ("dict.hr.employee.contract.type.3", "zh-CN", "实习", "劳动合同类型.实习"),
+            // dict.hr.employee.contract.type.3
+            ("dict.hr.employee.contract.type.3", "zh-HK", "实习_hk", "劳动合同类型.实习"),
+
+            // dict.hr.employee.contract.status.0
+            ("dict.hr.employee.contract.status.0", "en-US", "草稿_us", "劳动合同状态.草稿"),
+            // dict.hr.employee.contract.status.0
+            ("dict.hr.employee.contract.status.0", "ja-JP", "草稿_jp", "劳动合同状态.草稿"),
+            // dict.hr.employee.contract.status.0
+            ("dict.hr.employee.contract.status.0", "zh-CN", "草稿", "劳动合同状态.草稿"),
+            // dict.hr.employee.contract.status.0
+            ("dict.hr.employee.contract.status.0", "zh-HK", "草稿_hk", "劳动合同状态.草稿"),
+
+            // dict.hr.employee.contract.status.1
+            ("dict.hr.employee.contract.status.1", "en-US", "生效_us", "劳动合同状态.生效"),
+            // dict.hr.employee.contract.status.1
+            ("dict.hr.employee.contract.status.1", "ja-JP", "生效_jp", "劳动合同状态.生效"),
+            // dict.hr.employee.contract.status.1
+            ("dict.hr.employee.contract.status.1", "zh-CN", "生效", "劳动合同状态.生效"),
+            // dict.hr.employee.contract.status.1
+            ("dict.hr.employee.contract.status.1", "zh-HK", "生效_hk", "劳动合同状态.生效"),
+
+            // dict.hr.employee.contract.status.2
+            ("dict.hr.employee.contract.status.2", "en-US", "到期_us", "劳动合同状态.到期"),
+            // dict.hr.employee.contract.status.2
+            ("dict.hr.employee.contract.status.2", "ja-JP", "到期_jp", "劳动合同状态.到期"),
+            // dict.hr.employee.contract.status.2
+            ("dict.hr.employee.contract.status.2", "zh-CN", "到期", "劳动合同状态.到期"),
+            // dict.hr.employee.contract.status.2
+            ("dict.hr.employee.contract.status.2", "zh-HK", "到期_hk", "劳动合同状态.到期"),
+
+            // dict.hr.employee.contract.status.3
+            ("dict.hr.employee.contract.status.3", "en-US", "终止_us", "劳动合同状态.终止"),
+            // dict.hr.employee.contract.status.3
+            ("dict.hr.employee.contract.status.3", "ja-JP", "终止_jp", "劳动合同状态.终止"),
+            // dict.hr.employee.contract.status.3
+            ("dict.hr.employee.contract.status.3", "zh-CN", "终止", "劳动合同状态.终止"),
+            // dict.hr.employee.contract.status.3
+            ("dict.hr.employee.contract.status.3", "zh-HK", "终止_hk", "劳动合同状态.终止"),
+
+            // dict.hr.employee.delegation.type.1
+            ("dict.hr.employee.delegation.type.1", "en-US", "完全代理_us", "员工代理类型.完全代理"),
+            // dict.hr.employee.delegation.type.1
+            ("dict.hr.employee.delegation.type.1", "ja-JP", "完全代理_jp", "员工代理类型.完全代理"),
+            // dict.hr.employee.delegation.type.1
+            ("dict.hr.employee.delegation.type.1", "zh-CN", "完全代理", "员工代理类型.完全代理"),
+            // dict.hr.employee.delegation.type.1
+            ("dict.hr.employee.delegation.type.1", "zh-HK", "完全代理_hk", "员工代理类型.完全代理"),
+
+            // dict.hr.employee.delegation.type.2
+            ("dict.hr.employee.delegation.type.2", "en-US", "部分代理_us", "员工代理类型.部分代理"),
+            // dict.hr.employee.delegation.type.2
+            ("dict.hr.employee.delegation.type.2", "ja-JP", "部分代理_jp", "员工代理类型.部分代理"),
+            // dict.hr.employee.delegation.type.2
+            ("dict.hr.employee.delegation.type.2", "zh-CN", "部分代理", "员工代理类型.部分代理"),
+            // dict.hr.employee.delegation.type.2
+            ("dict.hr.employee.delegation.type.2", "zh-HK", "部分代理_hk", "员工代理类型.部分代理"),
+
+            // dict.hr.employee.delegation.type.3
+            ("dict.hr.employee.delegation.type.3", "en-US", "审批代理_us", "员工代理类型.审批代理"),
+            // dict.hr.employee.delegation.type.3
+            ("dict.hr.employee.delegation.type.3", "ja-JP", "审批代理_jp", "员工代理类型.审批代理"),
+            // dict.hr.employee.delegation.type.3
+            ("dict.hr.employee.delegation.type.3", "zh-CN", "审批代理", "员工代理类型.审批代理"),
+            // dict.hr.employee.delegation.type.3
+            ("dict.hr.employee.delegation.type.3", "zh-HK", "审批代理_hk", "员工代理类型.审批代理"),
+
+            // dict.hr.employee.delegation.scope.type.1
+            ("dict.hr.employee.delegation.scope.type.1", "en-US", "部门级别_us", "员工代理范围.部门级别"),
+            // dict.hr.employee.delegation.scope.type.1
+            ("dict.hr.employee.delegation.scope.type.1", "ja-JP", "部门级别_jp", "员工代理范围.部门级别"),
+            // dict.hr.employee.delegation.scope.type.1
+            ("dict.hr.employee.delegation.scope.type.1", "zh-CN", "部门级别", "员工代理范围.部门级别"),
+            // dict.hr.employee.delegation.scope.type.1
+            ("dict.hr.employee.delegation.scope.type.1", "zh-HK", "部门级别_hk", "员工代理范围.部门级别"),
+
+            // dict.hr.employee.delegation.scope.type.2
+            ("dict.hr.employee.delegation.scope.type.2", "en-US", "岗位级别_us", "员工代理范围.岗位级别"),
+            // dict.hr.employee.delegation.scope.type.2
+            ("dict.hr.employee.delegation.scope.type.2", "ja-JP", "岗位级别_jp", "员工代理范围.岗位级别"),
+            // dict.hr.employee.delegation.scope.type.2
+            ("dict.hr.employee.delegation.scope.type.2", "zh-CN", "岗位级别", "员工代理范围.岗位级别"),
+            // dict.hr.employee.delegation.scope.type.2
+            ("dict.hr.employee.delegation.scope.type.2", "zh-HK", "岗位级别_hk", "员工代理范围.岗位级别"),
+
+            // dict.hr.employee.delegation.scope.type.3
+            ("dict.hr.employee.delegation.scope.type.3", "en-US", "全局代理_us", "员工代理范围.全局代理"),
+            // dict.hr.employee.delegation.scope.type.3
+            ("dict.hr.employee.delegation.scope.type.3", "ja-JP", "全局代理_jp", "员工代理范围.全局代理"),
+            // dict.hr.employee.delegation.scope.type.3
+            ("dict.hr.employee.delegation.scope.type.3", "zh-CN", "全局代理", "员工代理范围.全局代理"),
+            // dict.hr.employee.delegation.scope.type.3
+            ("dict.hr.employee.delegation.scope.type.3", "zh-HK", "全局代理_hk", "员工代理范围.全局代理"),
+
+            // dict.hr.employee.delegation.scope.type.4
+            ("dict.hr.employee.delegation.scope.type.4", "en-US", "特定业务_us", "员工代理范围.特定业务"),
+            // dict.hr.employee.delegation.scope.type.4
+            ("dict.hr.employee.delegation.scope.type.4", "ja-JP", "特定业务_jp", "员工代理范围.特定业务"),
+            // dict.hr.employee.delegation.scope.type.4
+            ("dict.hr.employee.delegation.scope.type.4", "zh-CN", "特定业务", "员工代理范围.特定业务"),
+            // dict.hr.employee.delegation.scope.type.4
+            ("dict.hr.employee.delegation.scope.type.4", "zh-HK", "特定业务_hk", "员工代理范围.特定业务"),
+
+            // dict.hr.employee.family.relation.type.0
+            ("dict.hr.employee.family.relation.type.0", "en-US", "配偶_us", "家庭成员关系.配偶"),
+            // dict.hr.employee.family.relation.type.0
+            ("dict.hr.employee.family.relation.type.0", "ja-JP", "配偶_jp", "家庭成员关系.配偶"),
+            // dict.hr.employee.family.relation.type.0
+            ("dict.hr.employee.family.relation.type.0", "zh-CN", "配偶", "家庭成员关系.配偶"),
+            // dict.hr.employee.family.relation.type.0
+            ("dict.hr.employee.family.relation.type.0", "zh-HK", "配偶_hk", "家庭成员关系.配偶"),
+
+            // dict.hr.employee.family.relation.type.1
+            ("dict.hr.employee.family.relation.type.1", "en-US", "子女_us", "家庭成员关系.子女"),
+            // dict.hr.employee.family.relation.type.1
+            ("dict.hr.employee.family.relation.type.1", "ja-JP", "子女_jp", "家庭成员关系.子女"),
+            // dict.hr.employee.family.relation.type.1
+            ("dict.hr.employee.family.relation.type.1", "zh-CN", "子女", "家庭成员关系.子女"),
+            // dict.hr.employee.family.relation.type.1
+            ("dict.hr.employee.family.relation.type.1", "zh-HK", "子女_hk", "家庭成员关系.子女"),
+
+            // dict.hr.employee.family.relation.type.2
+            ("dict.hr.employee.family.relation.type.2", "en-US", "父母_us", "家庭成员关系.父母"),
+            // dict.hr.employee.family.relation.type.2
+            ("dict.hr.employee.family.relation.type.2", "ja-JP", "父母_jp", "家庭成员关系.父母"),
+            // dict.hr.employee.family.relation.type.2
+            ("dict.hr.employee.family.relation.type.2", "zh-CN", "父母", "家庭成员关系.父母"),
+            // dict.hr.employee.family.relation.type.2
+            ("dict.hr.employee.family.relation.type.2", "zh-HK", "父母_hk", "家庭成员关系.父母"),
+
+            // dict.hr.employee.family.relation.type.3
+            ("dict.hr.employee.family.relation.type.3", "en-US", "兄弟姐妹_us", "家庭成员关系.兄弟姐妹"),
+            // dict.hr.employee.family.relation.type.3
+            ("dict.hr.employee.family.relation.type.3", "ja-JP", "兄弟姐妹_jp", "家庭成员关系.兄弟姐妹"),
+            // dict.hr.employee.family.relation.type.3
+            ("dict.hr.employee.family.relation.type.3", "zh-CN", "兄弟姐妹", "家庭成员关系.兄弟姐妹"),
+            // dict.hr.employee.family.relation.type.3
+            ("dict.hr.employee.family.relation.type.3", "zh-HK", "兄弟姐妹_hk", "家庭成员关系.兄弟姐妹"),
+
+            // dict.hr.employee.family.relation.type.9
+            ("dict.hr.employee.family.relation.type.9", "en-US", "其他_us", "家庭成员关系.其他"),
+            // dict.hr.employee.family.relation.type.9
+            ("dict.hr.employee.family.relation.type.9", "ja-JP", "其他_jp", "家庭成员关系.其他"),
+            // dict.hr.employee.family.relation.type.9
+            ("dict.hr.employee.family.relation.type.9", "zh-CN", "其他", "家庭成员关系.其他"),
+            // dict.hr.employee.family.relation.type.9
+            ("dict.hr.employee.family.relation.type.9", "zh-HK", "其他_hk", "家庭成员关系.其他"),
+
+            // dict.hr.degree.level.category.0
+            ("dict.hr.degree.level.category.0", "en-US", "无_us", "学位层次.无"),
+            // dict.hr.degree.level.category.0
+            ("dict.hr.degree.level.category.0", "ja-JP", "无_jp", "学位层次.无"),
+            // dict.hr.degree.level.category.0
+            ("dict.hr.degree.level.category.0", "zh-CN", "无", "学位层次.无"),
+            // dict.hr.degree.level.category.0
+            ("dict.hr.degree.level.category.0", "zh-HK", "无_hk", "学位层次.无"),
+
+            // dict.hr.degree.level.category.1
+            ("dict.hr.degree.level.category.1", "en-US", "学士_us", "学位层次.学士"),
+            // dict.hr.degree.level.category.1
+            ("dict.hr.degree.level.category.1", "ja-JP", "学士_jp", "学位层次.学士"),
+            // dict.hr.degree.level.category.1
+            ("dict.hr.degree.level.category.1", "zh-CN", "学士", "学位层次.学士"),
+            // dict.hr.degree.level.category.1
+            ("dict.hr.degree.level.category.1", "zh-HK", "学士_hk", "学位层次.学士"),
+
+            // dict.hr.degree.level.category.2
+            ("dict.hr.degree.level.category.2", "en-US", "硕士_us", "学位层次.硕士"),
+            // dict.hr.degree.level.category.2
+            ("dict.hr.degree.level.category.2", "ja-JP", "硕士_jp", "学位层次.硕士"),
+            // dict.hr.degree.level.category.2
+            ("dict.hr.degree.level.category.2", "zh-CN", "硕士", "学位层次.硕士"),
+            // dict.hr.degree.level.category.2
+            ("dict.hr.degree.level.category.2", "zh-HK", "硕士_hk", "学位层次.硕士"),
+
+            // dict.hr.degree.level.category.3
+            ("dict.hr.degree.level.category.3", "en-US", "博士_us", "学位层次.博士"),
+            // dict.hr.degree.level.category.3
+            ("dict.hr.degree.level.category.3", "ja-JP", "博士_jp", "学位层次.博士"),
+            // dict.hr.degree.level.category.3
+            ("dict.hr.degree.level.category.3", "zh-CN", "博士", "学位层次.博士"),
+            // dict.hr.degree.level.category.3
+            ("dict.hr.degree.level.category.3", "zh-HK", "博士_hk", "学位层次.博士"),
+
+            // dict.hr.employee.skill.level.0
+            ("dict.hr.employee.skill.level.0", "en-US", "入门_us", "员工技能等级.入门"),
+            // dict.hr.employee.skill.level.0
+            ("dict.hr.employee.skill.level.0", "ja-JP", "入门_jp", "员工技能等级.入门"),
+            // dict.hr.employee.skill.level.0
+            ("dict.hr.employee.skill.level.0", "zh-CN", "入门", "员工技能等级.入门"),
+            // dict.hr.employee.skill.level.0
+            ("dict.hr.employee.skill.level.0", "zh-HK", "入门_hk", "员工技能等级.入门"),
+
+            // dict.hr.employee.skill.level.1
+            ("dict.hr.employee.skill.level.1", "en-US", "熟练_us", "员工技能等级.熟练"),
+            // dict.hr.employee.skill.level.1
+            ("dict.hr.employee.skill.level.1", "ja-JP", "熟练_jp", "员工技能等级.熟练"),
+            // dict.hr.employee.skill.level.1
+            ("dict.hr.employee.skill.level.1", "zh-CN", "熟练", "员工技能等级.熟练"),
+            // dict.hr.employee.skill.level.1
+            ("dict.hr.employee.skill.level.1", "zh-HK", "熟练_hk", "员工技能等级.熟练"),
+
+            // dict.hr.employee.skill.level.2
+            ("dict.hr.employee.skill.level.2", "en-US", "精通_us", "员工技能等级.精通"),
+            // dict.hr.employee.skill.level.2
+            ("dict.hr.employee.skill.level.2", "ja-JP", "精通_jp", "员工技能等级.精通"),
+            // dict.hr.employee.skill.level.2
+            ("dict.hr.employee.skill.level.2", "zh-CN", "精通", "员工技能等级.精通"),
+            // dict.hr.employee.skill.level.2
+            ("dict.hr.employee.skill.level.2", "zh-HK", "精通_hk", "员工技能等级.精通"),
+
+            // dict.hr.employee.skill.level.3
+            ("dict.hr.employee.skill.level.3", "en-US", "专家_us", "员工技能等级.专家"),
+            // dict.hr.employee.skill.level.3
+            ("dict.hr.employee.skill.level.3", "ja-JP", "专家_jp", "员工技能等级.专家"),
+            // dict.hr.employee.skill.level.3
+            ("dict.hr.employee.skill.level.3", "zh-CN", "专家", "员工技能等级.专家"),
+            // dict.hr.employee.skill.level.3
+            ("dict.hr.employee.skill.level.3", "zh-HK", "专家_hk", "员工技能等级.专家"),
+
+            // dict.hr.employee.work.nature.type.0
+            ("dict.hr.employee.work.nature.type.0", "en-US", "全职_us", "工作性质.全职"),
+            // dict.hr.employee.work.nature.type.0
+            ("dict.hr.employee.work.nature.type.0", "ja-JP", "全职_jp", "工作性质.全职"),
+            // dict.hr.employee.work.nature.type.0
+            ("dict.hr.employee.work.nature.type.0", "zh-CN", "全职", "工作性质.全职"),
+            // dict.hr.employee.work.nature.type.0
+            ("dict.hr.employee.work.nature.type.0", "zh-HK", "全职_hk", "工作性质.全职"),
+
+            // dict.hr.employee.work.nature.type.1
+            ("dict.hr.employee.work.nature.type.1", "en-US", "兼职_us", "工作性质.兼职"),
+            // dict.hr.employee.work.nature.type.1
+            ("dict.hr.employee.work.nature.type.1", "ja-JP", "兼职_jp", "工作性质.兼职"),
+            // dict.hr.employee.work.nature.type.1
+            ("dict.hr.employee.work.nature.type.1", "zh-CN", "兼职", "工作性质.兼职"),
+            // dict.hr.employee.work.nature.type.1
+            ("dict.hr.employee.work.nature.type.1", "zh-HK", "兼职_hk", "工作性质.兼职"),
+
+            // dict.hr.employee.work.nature.type.2
+            ("dict.hr.employee.work.nature.type.2", "en-US", "实习_us", "工作性质.实习"),
+            // dict.hr.employee.work.nature.type.2
+            ("dict.hr.employee.work.nature.type.2", "ja-JP", "实习_jp", "工作性质.实习"),
+            // dict.hr.employee.work.nature.type.2
+            ("dict.hr.employee.work.nature.type.2", "zh-CN", "实习", "工作性质.实习"),
+            // dict.hr.employee.work.nature.type.2
+            ("dict.hr.employee.work.nature.type.2", "zh-HK", "实习_hk", "工作性质.实习"),
+
+            // dict.hr.employee.work.nature.type.3
+            ("dict.hr.employee.work.nature.type.3", "en-US", "外包_us", "工作性质.外包"),
+            // dict.hr.employee.work.nature.type.3
+            ("dict.hr.employee.work.nature.type.3", "ja-JP", "外包_jp", "工作性质.外包"),
+            // dict.hr.employee.work.nature.type.3
+            ("dict.hr.employee.work.nature.type.3", "zh-CN", "外包", "工作性质.外包"),
+            // dict.hr.employee.work.nature.type.3
+            ("dict.hr.employee.work.nature.type.3", "zh-HK", "外包_hk", "工作性质.外包"),
+
+            // dict.hr.employee.work.nature.type.4
+            ("dict.hr.employee.work.nature.type.4", "en-US", "其他_us", "工作性质.其他"),
+            // dict.hr.employee.work.nature.type.4
+            ("dict.hr.employee.work.nature.type.4", "ja-JP", "其他_jp", "工作性质.其他"),
+            // dict.hr.employee.work.nature.type.4
+            ("dict.hr.employee.work.nature.type.4", "zh-CN", "其他", "工作性质.其他"),
+            // dict.hr.employee.work.nature.type.4
+            ("dict.hr.employee.work.nature.type.4", "zh-HK", "其他_hk", "工作性质.其他"),
+
+            // dict.hr.employee.employment.type.0
+            ("dict.hr.employee.employment.type.0", "en-US", "主职_us", "任职类型.主职"),
+            // dict.hr.employee.employment.type.0
+            ("dict.hr.employee.employment.type.0", "ja-JP", "主职_jp", "任职类型.主职"),
+            // dict.hr.employee.employment.type.0
+            ("dict.hr.employee.employment.type.0", "zh-CN", "主职", "任职类型.主职"),
+            // dict.hr.employee.employment.type.0
+            ("dict.hr.employee.employment.type.0", "zh-HK", "主职_hk", "任职类型.主职"),
+
+            // dict.hr.employee.employment.type.1
+            ("dict.hr.employee.employment.type.1", "en-US", "兼职_us", "任职类型.兼职"),
+            // dict.hr.employee.employment.type.1
+            ("dict.hr.employee.employment.type.1", "ja-JP", "兼职_jp", "任职类型.兼职"),
+            // dict.hr.employee.employment.type.1
+            ("dict.hr.employee.employment.type.1", "zh-CN", "兼职", "任职类型.兼职"),
+            // dict.hr.employee.employment.type.1
+            ("dict.hr.employee.employment.type.1", "zh-HK", "兼职_hk", "任职类型.兼职"),
+
+            // dict.hr.employee.employment.type.2
+            ("dict.hr.employee.employment.type.2", "en-US", "借调_us", "任职类型.借调"),
+            // dict.hr.employee.employment.type.2
+            ("dict.hr.employee.employment.type.2", "ja-JP", "借调_jp", "任职类型.借调"),
+            // dict.hr.employee.employment.type.2
+            ("dict.hr.employee.employment.type.2", "zh-CN", "借调", "任职类型.借调"),
+            // dict.hr.employee.employment.type.2
+            ("dict.hr.employee.employment.type.2", "zh-HK", "借调_hk", "任职类型.借调"),
+
+            // dict.hr.employee.employment.type.3
+            ("dict.hr.employee.employment.type.3", "en-US", "挂职_us", "任职类型.挂职"),
+            // dict.hr.employee.employment.type.3
+            ("dict.hr.employee.employment.type.3", "ja-JP", "挂职_jp", "任职类型.挂职"),
+            // dict.hr.employee.employment.type.3
+            ("dict.hr.employee.employment.type.3", "zh-CN", "挂职", "任职类型.挂职"),
+            // dict.hr.employee.employment.type.3
+            ("dict.hr.employee.employment.type.3", "zh-HK", "挂职_hk", "任职类型.挂职"),
+
+            // dict.hr.talent.headcount.type.formal
+            ("dict.hr.talent.headcount.type.formal", "en-US", "正式_us", "编制类型.正式"),
+            // dict.hr.talent.headcount.type.formal
+            ("dict.hr.talent.headcount.type.formal", "ja-JP", "正式_jp", "编制类型.正式"),
+            // dict.hr.talent.headcount.type.formal
+            ("dict.hr.talent.headcount.type.formal", "zh-CN", "正式", "编制类型.正式"),
+            // dict.hr.talent.headcount.type.formal
+            ("dict.hr.talent.headcount.type.formal", "zh-HK", "正式_hk", "编制类型.正式"),
+
+            // dict.hr.talent.headcount.type.dispatch
+            ("dict.hr.talent.headcount.type.dispatch", "en-US", "派遣_us", "编制类型.派遣"),
+            // dict.hr.talent.headcount.type.dispatch
+            ("dict.hr.talent.headcount.type.dispatch", "ja-JP", "派遣_jp", "编制类型.派遣"),
+            // dict.hr.talent.headcount.type.dispatch
+            ("dict.hr.talent.headcount.type.dispatch", "zh-CN", "派遣", "编制类型.派遣"),
+            // dict.hr.talent.headcount.type.dispatch
+            ("dict.hr.talent.headcount.type.dispatch", "zh-HK", "派遣_hk", "编制类型.派遣"),
+
+            // dict.hr.talent.headcount.type.intern
+            ("dict.hr.talent.headcount.type.intern", "en-US", "实习生_us", "编制类型.实习生"),
+            // dict.hr.talent.headcount.type.intern
+            ("dict.hr.talent.headcount.type.intern", "ja-JP", "实习生_jp", "编制类型.实习生"),
+            // dict.hr.talent.headcount.type.intern
+            ("dict.hr.talent.headcount.type.intern", "zh-CN", "实习生", "编制类型.实习生"),
+            // dict.hr.talent.headcount.type.intern
+            ("dict.hr.talent.headcount.type.intern", "zh-HK", "实习生_hk", "编制类型.实习生"),
+
+            // dict.hr.talent.headcount.type.temp
+            ("dict.hr.talent.headcount.type.temp", "en-US", "临时_us", "编制类型.临时"),
+            // dict.hr.talent.headcount.type.temp
+            ("dict.hr.talent.headcount.type.temp", "ja-JP", "临时_jp", "编制类型.临时"),
+            // dict.hr.talent.headcount.type.temp
+            ("dict.hr.talent.headcount.type.temp", "zh-CN", "临时", "编制类型.临时"),
+            // dict.hr.talent.headcount.type.temp
+            ("dict.hr.talent.headcount.type.temp", "zh-HK", "临时_hk", "编制类型.临时"),
+
+            // dict.hr.talent.staffing.reason.code.newheadcount
+            ("dict.hr.talent.staffing.reason.code.newheadcount", "en-US", "新增编制_us", "用人需求原因.新增编制"),
+            // dict.hr.talent.staffing.reason.code.newheadcount
+            ("dict.hr.talent.staffing.reason.code.newheadcount", "ja-JP", "新增编制_jp", "用人需求原因.新增编制"),
+            // dict.hr.talent.staffing.reason.code.newheadcount
+            ("dict.hr.talent.staffing.reason.code.newheadcount", "zh-CN", "新增编制", "用人需求原因.新增编制"),
+            // dict.hr.talent.staffing.reason.code.newheadcount
+            ("dict.hr.talent.staffing.reason.code.newheadcount", "zh-HK", "新增编制_hk", "用人需求原因.新增编制"),
+
+            // dict.hr.talent.staffing.reason.code.replacement
+            ("dict.hr.talent.staffing.reason.code.replacement", "en-US", "离职补充_us", "用人需求原因.离职补充"),
+            // dict.hr.talent.staffing.reason.code.replacement
+            ("dict.hr.talent.staffing.reason.code.replacement", "ja-JP", "离职补充_jp", "用人需求原因.离职补充"),
+            // dict.hr.talent.staffing.reason.code.replacement
+            ("dict.hr.talent.staffing.reason.code.replacement", "zh-CN", "离职补充", "用人需求原因.离职补充"),
+            // dict.hr.talent.staffing.reason.code.replacement
+            ("dict.hr.talent.staffing.reason.code.replacement", "zh-HK", "离职补充_hk", "用人需求原因.离职补充"),
+
+            // dict.hr.talent.staffing.reason.code.expansion
+            ("dict.hr.talent.staffing.reason.code.expansion", "en-US", "业务扩大_us", "用人需求原因.业务扩大"),
+            // dict.hr.talent.staffing.reason.code.expansion
+            ("dict.hr.talent.staffing.reason.code.expansion", "ja-JP", "业务扩大_jp", "用人需求原因.业务扩大"),
+            // dict.hr.talent.staffing.reason.code.expansion
+            ("dict.hr.talent.staffing.reason.code.expansion", "zh-CN", "业务扩大", "用人需求原因.业务扩大"),
+            // dict.hr.talent.staffing.reason.code.expansion
+            ("dict.hr.talent.staffing.reason.code.expansion", "zh-HK", "业务扩大_hk", "用人需求原因.业务扩大"),
+
+            // dict.hr.talent.staffing.reason.code.substitute
+            ("dict.hr.talent.staffing.reason.code.substitute", "en-US", "替岗_us", "用人需求原因.替岗"),
+            // dict.hr.talent.staffing.reason.code.substitute
+            ("dict.hr.talent.staffing.reason.code.substitute", "ja-JP", "替岗_jp", "用人需求原因.替岗"),
+            // dict.hr.talent.staffing.reason.code.substitute
+            ("dict.hr.talent.staffing.reason.code.substitute", "zh-CN", "替岗", "用人需求原因.替岗"),
+            // dict.hr.talent.staffing.reason.code.substitute
+            ("dict.hr.talent.staffing.reason.code.substitute", "zh-HK", "替岗_hk", "用人需求原因.替岗"),
+
+            // dict.hr.talent.staffing.contract.type.fixed
+            ("dict.hr.talent.staffing.contract.type.fixed", "en-US", "固定期_us", "用人需求合同类型.固定期"),
+            // dict.hr.talent.staffing.contract.type.fixed
+            ("dict.hr.talent.staffing.contract.type.fixed", "ja-JP", "固定期_jp", "用人需求合同类型.固定期"),
+            // dict.hr.talent.staffing.contract.type.fixed
+            ("dict.hr.talent.staffing.contract.type.fixed", "zh-CN", "固定期", "用人需求合同类型.固定期"),
+            // dict.hr.talent.staffing.contract.type.fixed
+            ("dict.hr.talent.staffing.contract.type.fixed", "zh-HK", "固定期_hk", "用人需求合同类型.固定期"),
+
+            // dict.hr.talent.staffing.contract.type.indefinite
+            ("dict.hr.talent.staffing.contract.type.indefinite", "en-US", "无固定_us", "用人需求合同类型.无固定"),
+            // dict.hr.talent.staffing.contract.type.indefinite
+            ("dict.hr.talent.staffing.contract.type.indefinite", "ja-JP", "无固定_jp", "用人需求合同类型.无固定"),
+            // dict.hr.talent.staffing.contract.type.indefinite
+            ("dict.hr.talent.staffing.contract.type.indefinite", "zh-CN", "无固定", "用人需求合同类型.无固定"),
+            // dict.hr.talent.staffing.contract.type.indefinite
+            ("dict.hr.talent.staffing.contract.type.indefinite", "zh-HK", "无固定_hk", "用人需求合同类型.无固定"),
+
+            // dict.hr.talent.staffing.contract.type.internagreement
+            ("dict.hr.talent.staffing.contract.type.internagreement", "en-US", "实习协议_us", "用人需求合同类型.实习协议"),
+            // dict.hr.talent.staffing.contract.type.internagreement
+            ("dict.hr.talent.staffing.contract.type.internagreement", "ja-JP", "实习协议_jp", "用人需求合同类型.实习协议"),
+            // dict.hr.talent.staffing.contract.type.internagreement
+            ("dict.hr.talent.staffing.contract.type.internagreement", "zh-CN", "实习协议", "用人需求合同类型.实习协议"),
+            // dict.hr.talent.staffing.contract.type.internagreement
+            ("dict.hr.talent.staffing.contract.type.internagreement", "zh-HK", "实习协议_hk", "用人需求合同类型.实习协议"),
+
+            // dict.hr.training.course.type.onboard
+            ("dict.hr.training.course.type.onboard", "en-US", "入职培训_us", "培训课程类型.入职培训"),
+            // dict.hr.training.course.type.onboard
+            ("dict.hr.training.course.type.onboard", "ja-JP", "入职培训_jp", "培训课程类型.入职培训"),
+            // dict.hr.training.course.type.onboard
+            ("dict.hr.training.course.type.onboard", "zh-CN", "入职培训", "培训课程类型.入职培训"),
+            // dict.hr.training.course.type.onboard
+            ("dict.hr.training.course.type.onboard", "zh-HK", "入职培训_hk", "培训课程类型.入职培训"),
+
+            // dict.hr.training.course.type.skill
+            ("dict.hr.training.course.type.skill", "en-US", "技能培训_us", "培训课程类型.技能培训"),
+            // dict.hr.training.course.type.skill
+            ("dict.hr.training.course.type.skill", "ja-JP", "技能培训_jp", "培训课程类型.技能培训"),
+            // dict.hr.training.course.type.skill
+            ("dict.hr.training.course.type.skill", "zh-CN", "技能培训", "培训课程类型.技能培训"),
+            // dict.hr.training.course.type.skill
+            ("dict.hr.training.course.type.skill", "zh-HK", "技能培训_hk", "培训课程类型.技能培训"),
+
+            // dict.hr.training.course.type.management
+            ("dict.hr.training.course.type.management", "en-US", "管理培训_us", "培训课程类型.管理培训"),
+            // dict.hr.training.course.type.management
+            ("dict.hr.training.course.type.management", "ja-JP", "管理培训_jp", "培训课程类型.管理培训"),
+            // dict.hr.training.course.type.management
+            ("dict.hr.training.course.type.management", "zh-CN", "管理培训", "培训课程类型.管理培训"),
+            // dict.hr.training.course.type.management
+            ("dict.hr.training.course.type.management", "zh-HK", "管理培训_hk", "培训课程类型.管理培训"),
+
+            // dict.hr.training.course.type.safety
+            ("dict.hr.training.course.type.safety", "en-US", "安全培训_us", "培训课程类型.安全培训"),
+            // dict.hr.training.course.type.safety
+            ("dict.hr.training.course.type.safety", "ja-JP", "安全培训_jp", "培训课程类型.安全培训"),
+            // dict.hr.training.course.type.safety
+            ("dict.hr.training.course.type.safety", "zh-CN", "安全培训", "培训课程类型.安全培训"),
+            // dict.hr.training.course.type.safety
+            ("dict.hr.training.course.type.safety", "zh-HK", "安全培训_hk", "培训课程类型.安全培训"),
+
+            // dict.hr.training.course.type.professional
+            ("dict.hr.training.course.type.professional", "en-US", "专业培训_us", "培训课程类型.专业培训"),
+            // dict.hr.training.course.type.professional
+            ("dict.hr.training.course.type.professional", "ja-JP", "专业培训_jp", "培训课程类型.专业培训"),
+            // dict.hr.training.course.type.professional
+            ("dict.hr.training.course.type.professional", "zh-CN", "专业培训", "培训课程类型.专业培训"),
+            // dict.hr.training.course.type.professional
+            ("dict.hr.training.course.type.professional", "zh-HK", "专业培训_hk", "培训课程类型.专业培训"),
+
+            // dict.hr.training.course.level.beginner
+            ("dict.hr.training.course.level.beginner", "en-US", "初级_us", "培训课程级别.初级"),
+            // dict.hr.training.course.level.beginner
+            ("dict.hr.training.course.level.beginner", "ja-JP", "初级_jp", "培训课程级别.初级"),
+            // dict.hr.training.course.level.beginner
+            ("dict.hr.training.course.level.beginner", "zh-CN", "初级", "培训课程级别.初级"),
+            // dict.hr.training.course.level.beginner
+            ("dict.hr.training.course.level.beginner", "zh-HK", "初级_hk", "培训课程级别.初级"),
+
+            // dict.hr.training.course.level.intermediate
+            ("dict.hr.training.course.level.intermediate", "en-US", "中级_us", "培训课程级别.中级"),
+            // dict.hr.training.course.level.intermediate
+            ("dict.hr.training.course.level.intermediate", "ja-JP", "中级_jp", "培训课程级别.中级"),
+            // dict.hr.training.course.level.intermediate
+            ("dict.hr.training.course.level.intermediate", "zh-CN", "中级", "培训课程级别.中级"),
+            // dict.hr.training.course.level.intermediate
+            ("dict.hr.training.course.level.intermediate", "zh-HK", "中级_hk", "培训课程级别.中级"),
+
+            // dict.hr.training.course.level.advanced
+            ("dict.hr.training.course.level.advanced", "en-US", "高级_us", "培训课程级别.高级"),
+            // dict.hr.training.course.level.advanced
+            ("dict.hr.training.course.level.advanced", "ja-JP", "高级_jp", "培训课程级别.高级"),
+            // dict.hr.training.course.level.advanced
+            ("dict.hr.training.course.level.advanced", "zh-CN", "高级", "培训课程级别.高级"),
+            // dict.hr.training.course.level.advanced
+            ("dict.hr.training.course.level.advanced", "zh-HK", "高级_hk", "培训课程级别.高级"),
+
+            // dict.hr.training.course.level.expert
+            ("dict.hr.training.course.level.expert", "en-US", "专家_us", "培训课程级别.专家"),
+            // dict.hr.training.course.level.expert
+            ("dict.hr.training.course.level.expert", "ja-JP", "专家_jp", "培训课程级别.专家"),
+            // dict.hr.training.course.level.expert
+            ("dict.hr.training.course.level.expert", "zh-CN", "专家", "培训课程级别.专家"),
+            // dict.hr.training.course.level.expert
+            ("dict.hr.training.course.level.expert", "zh-HK", "专家_hk", "培训课程级别.专家"),
+
+            // dict.hr.training.method.type.offline
+            ("dict.hr.training.method.type.offline", "en-US", "线下_us", "培训方式.线下"),
+            // dict.hr.training.method.type.offline
+            ("dict.hr.training.method.type.offline", "ja-JP", "线下_jp", "培训方式.线下"),
+            // dict.hr.training.method.type.offline
+            ("dict.hr.training.method.type.offline", "zh-CN", "线下", "培训方式.线下"),
+            // dict.hr.training.method.type.offline
+            ("dict.hr.training.method.type.offline", "zh-HK", "线下_hk", "培训方式.线下"),
+
+            // dict.hr.training.method.type.online
+            ("dict.hr.training.method.type.online", "en-US", "线上_us", "培训方式.线上"),
+            // dict.hr.training.method.type.online
+            ("dict.hr.training.method.type.online", "ja-JP", "线上_jp", "培训方式.线上"),
+            // dict.hr.training.method.type.online
+            ("dict.hr.training.method.type.online", "zh-CN", "线上", "培训方式.线上"),
+            // dict.hr.training.method.type.online
+            ("dict.hr.training.method.type.online", "zh-HK", "线上_hk", "培训方式.线上"),
+
+            // dict.hr.training.method.type.hybrid
+            ("dict.hr.training.method.type.hybrid", "en-US", "混合_us", "培训方式.混合"),
+            // dict.hr.training.method.type.hybrid
+            ("dict.hr.training.method.type.hybrid", "ja-JP", "混合_jp", "培训方式.混合"),
+            // dict.hr.training.method.type.hybrid
+            ("dict.hr.training.method.type.hybrid", "zh-CN", "混合", "培训方式.混合"),
+            // dict.hr.training.method.type.hybrid
+            ("dict.hr.training.method.type.hybrid", "zh-HK", "混合_hk", "培训方式.混合"),
+
+            // dict.hr.training.assessment.method.type.exam
+            ("dict.hr.training.assessment.method.type.exam", "en-US", "考试_us", "培训考核方式.考试"),
+            // dict.hr.training.assessment.method.type.exam
+            ("dict.hr.training.assessment.method.type.exam", "ja-JP", "考试_jp", "培训考核方式.考试"),
+            // dict.hr.training.assessment.method.type.exam
+            ("dict.hr.training.assessment.method.type.exam", "zh-CN", "考试", "培训考核方式.考试"),
+            // dict.hr.training.assessment.method.type.exam
+            ("dict.hr.training.assessment.method.type.exam", "zh-HK", "考试_hk", "培训考核方式.考试"),
+
+            // dict.hr.training.assessment.method.type.practical
+            ("dict.hr.training.assessment.method.type.practical", "en-US", "实操_us", "培训考核方式.实操"),
+            // dict.hr.training.assessment.method.type.practical
+            ("dict.hr.training.assessment.method.type.practical", "ja-JP", "实操_jp", "培训考核方式.实操"),
+            // dict.hr.training.assessment.method.type.practical
+            ("dict.hr.training.assessment.method.type.practical", "zh-CN", "实操", "培训考核方式.实操"),
+            // dict.hr.training.assessment.method.type.practical
+            ("dict.hr.training.assessment.method.type.practical", "zh-HK", "实操_hk", "培训考核方式.实操"),
+
+            // dict.hr.training.assessment.method.type.assignment
+            ("dict.hr.training.assessment.method.type.assignment", "en-US", "作业_us", "培训考核方式.作业"),
+            // dict.hr.training.assessment.method.type.assignment
+            ("dict.hr.training.assessment.method.type.assignment", "ja-JP", "作业_jp", "培训考核方式.作业"),
+            // dict.hr.training.assessment.method.type.assignment
+            ("dict.hr.training.assessment.method.type.assignment", "zh-CN", "作业", "培训考核方式.作业"),
+            // dict.hr.training.assessment.method.type.assignment
+            ("dict.hr.training.assessment.method.type.assignment", "zh-HK", "作业_hk", "培训考核方式.作业"),
+
+            // dict.hr.training.assessment.method.type.none
+            ("dict.hr.training.assessment.method.type.none", "en-US", "无_us", "培训考核方式.无"),
+            // dict.hr.training.assessment.method.type.none
+            ("dict.hr.training.assessment.method.type.none", "ja-JP", "无_jp", "培训考核方式.无"),
+            // dict.hr.training.assessment.method.type.none
+            ("dict.hr.training.assessment.method.type.none", "zh-CN", "无", "培训考核方式.无"),
+            // dict.hr.training.assessment.method.type.none
+            ("dict.hr.training.assessment.method.type.none", "zh-HK", "无_hk", "培训考核方式.无"),
+
+            // dict.hr.training.plan.type.year
+            ("dict.hr.training.plan.type.year", "en-US", "年度_us", "培训计划类型.年度"),
+            // dict.hr.training.plan.type.year
+            ("dict.hr.training.plan.type.year", "ja-JP", "年度_jp", "培训计划类型.年度"),
+            // dict.hr.training.plan.type.year
+            ("dict.hr.training.plan.type.year", "zh-CN", "年度", "培训计划类型.年度"),
+            // dict.hr.training.plan.type.year
+            ("dict.hr.training.plan.type.year", "zh-HK", "年度_hk", "培训计划类型.年度"),
+
+            // dict.hr.training.plan.type.quarter
+            ("dict.hr.training.plan.type.quarter", "en-US", "季度_us", "培训计划类型.季度"),
+            // dict.hr.training.plan.type.quarter
+            ("dict.hr.training.plan.type.quarter", "ja-JP", "季度_jp", "培训计划类型.季度"),
+            // dict.hr.training.plan.type.quarter
+            ("dict.hr.training.plan.type.quarter", "zh-CN", "季度", "培训计划类型.季度"),
+            // dict.hr.training.plan.type.quarter
+            ("dict.hr.training.plan.type.quarter", "zh-HK", "季度_hk", "培训计划类型.季度"),
+
+            // dict.hr.training.plan.type.month
+            ("dict.hr.training.plan.type.month", "en-US", "月度_us", "培训计划类型.月度"),
+            // dict.hr.training.plan.type.month
+            ("dict.hr.training.plan.type.month", "ja-JP", "月度_jp", "培训计划类型.月度"),
+            // dict.hr.training.plan.type.month
+            ("dict.hr.training.plan.type.month", "zh-CN", "月度", "培训计划类型.月度"),
+            // dict.hr.training.plan.type.month
+            ("dict.hr.training.plan.type.month", "zh-HK", "月度_hk", "培训计划类型.月度"),
+
+            // dict.hr.training.plan.type.special
+            ("dict.hr.training.plan.type.special", "en-US", "专项_us", "培训计划类型.专项"),
+            // dict.hr.training.plan.type.special
+            ("dict.hr.training.plan.type.special", "ja-JP", "专项_jp", "培训计划类型.专项"),
+            // dict.hr.training.plan.type.special
+            ("dict.hr.training.plan.type.special", "zh-CN", "专项", "培训计划类型.专项"),
+            // dict.hr.training.plan.type.special
+            ("dict.hr.training.plan.type.special", "zh-HK", "专项_hk", "培训计划类型.专项"),
+
+            // dict.routine.conference.type.0
+            ("dict.routine.conference.type.0", "en-US", "内部_us", "会议类型.内部"),
+            // dict.routine.conference.type.0
+            ("dict.routine.conference.type.0", "ja-JP", "内部_jp", "会议类型.内部"),
+            // dict.routine.conference.type.0
+            ("dict.routine.conference.type.0", "zh-CN", "内部", "会议类型.内部"),
+            // dict.routine.conference.type.0
+            ("dict.routine.conference.type.0", "zh-HK", "内部_hk", "会议类型.内部"),
+
+            // dict.routine.conference.type.1
+            ("dict.routine.conference.type.1", "en-US", "外部_us", "会议类型.外部"),
+            // dict.routine.conference.type.1
+            ("dict.routine.conference.type.1", "ja-JP", "外部_jp", "会议类型.外部"),
+            // dict.routine.conference.type.1
+            ("dict.routine.conference.type.1", "zh-CN", "外部", "会议类型.外部"),
+            // dict.routine.conference.type.1
+            ("dict.routine.conference.type.1", "zh-HK", "外部_hk", "会议类型.外部"),
+
+            // dict.routine.conference.type.2
+            ("dict.routine.conference.type.2", "en-US", "视频_us", "会议类型.视频"),
+            // dict.routine.conference.type.2
+            ("dict.routine.conference.type.2", "ja-JP", "视频_jp", "会议类型.视频"),
+            // dict.routine.conference.type.2
+            ("dict.routine.conference.type.2", "zh-CN", "视频", "会议类型.视频"),
+            // dict.routine.conference.type.2
+            ("dict.routine.conference.type.2", "zh-HK", "视频_hk", "会议类型.视频"),
+
+            // dict.routine.conference.type.3
+            ("dict.routine.conference.type.3", "en-US", "混合_us", "会议类型.混合"),
+            // dict.routine.conference.type.3
+            ("dict.routine.conference.type.3", "ja-JP", "混合_jp", "会议类型.混合"),
+            // dict.routine.conference.type.3
+            ("dict.routine.conference.type.3", "zh-CN", "混合", "会议类型.混合"),
+            // dict.routine.conference.type.3
+            ("dict.routine.conference.type.3", "zh-HK", "混合_hk", "会议类型.混合"),
+
+            // dict.routine.conference.status.0
+            ("dict.routine.conference.status.0", "en-US", "草稿_us", "会议状态.草稿"),
+            // dict.routine.conference.status.0
+            ("dict.routine.conference.status.0", "ja-JP", "草稿_jp", "会议状态.草稿"),
+            // dict.routine.conference.status.0
+            ("dict.routine.conference.status.0", "zh-CN", "草稿", "会议状态.草稿"),
+            // dict.routine.conference.status.0
+            ("dict.routine.conference.status.0", "zh-HK", "草稿_hk", "会议状态.草稿"),
+
+            // dict.routine.conference.status.1
+            ("dict.routine.conference.status.1", "en-US", "已排期_us", "会议状态.已排期"),
+            // dict.routine.conference.status.1
+            ("dict.routine.conference.status.1", "ja-JP", "已排期_jp", "会议状态.已排期"),
+            // dict.routine.conference.status.1
+            ("dict.routine.conference.status.1", "zh-CN", "已排期", "会议状态.已排期"),
+            // dict.routine.conference.status.1
+            ("dict.routine.conference.status.1", "zh-HK", "已排期_hk", "会议状态.已排期"),
+
+            // dict.routine.conference.status.2
+            ("dict.routine.conference.status.2", "en-US", "进行中_us", "会议状态.进行中"),
+            // dict.routine.conference.status.2
+            ("dict.routine.conference.status.2", "ja-JP", "进行中_jp", "会议状态.进行中"),
+            // dict.routine.conference.status.2
+            ("dict.routine.conference.status.2", "zh-CN", "进行中", "会议状态.进行中"),
+            // dict.routine.conference.status.2
+            ("dict.routine.conference.status.2", "zh-HK", "进行中_hk", "会议状态.进行中"),
+
+            // dict.routine.conference.status.3
+            ("dict.routine.conference.status.3", "en-US", "已结束_us", "会议状态.已结束"),
+            // dict.routine.conference.status.3
+            ("dict.routine.conference.status.3", "ja-JP", "已结束_jp", "会议状态.已结束"),
+            // dict.routine.conference.status.3
+            ("dict.routine.conference.status.3", "zh-CN", "已结束", "会议状态.已结束"),
+            // dict.routine.conference.status.3
+            ("dict.routine.conference.status.3", "zh-HK", "已结束_hk", "会议状态.已结束"),
+
+            // dict.routine.conference.status.4
+            ("dict.routine.conference.status.4", "en-US", "已取消_us", "会议状态.已取消"),
+            // dict.routine.conference.status.4
+            ("dict.routine.conference.status.4", "ja-JP", "已取消_jp", "会议状态.已取消"),
+            // dict.routine.conference.status.4
+            ("dict.routine.conference.status.4", "zh-CN", "已取消", "会议状态.已取消"),
+            // dict.routine.conference.status.4
+            ("dict.routine.conference.status.4", "zh-HK", "已取消_hk", "会议状态.已取消"),
+
+            // dict.routine.conference.room.status.0
+            ("dict.routine.conference.room.status.0", "en-US", "可用_us", "会议室状态.可用"),
+            // dict.routine.conference.room.status.0
+            ("dict.routine.conference.room.status.0", "ja-JP", "可用_jp", "会议室状态.可用"),
+            // dict.routine.conference.room.status.0
+            ("dict.routine.conference.room.status.0", "zh-CN", "可用", "会议室状态.可用"),
+            // dict.routine.conference.room.status.0
+            ("dict.routine.conference.room.status.0", "zh-HK", "可用_hk", "会议室状态.可用"),
+
+            // dict.routine.conference.room.status.1
+            ("dict.routine.conference.room.status.1", "en-US", "使用中_us", "会议室状态.使用中"),
+            // dict.routine.conference.room.status.1
+            ("dict.routine.conference.room.status.1", "ja-JP", "使用中_jp", "会议室状态.使用中"),
+            // dict.routine.conference.room.status.1
+            ("dict.routine.conference.room.status.1", "zh-CN", "使用中", "会议室状态.使用中"),
+            // dict.routine.conference.room.status.1
+            ("dict.routine.conference.room.status.1", "zh-HK", "使用中_hk", "会议室状态.使用中"),
+
+            // dict.routine.conference.room.status.2
+            ("dict.routine.conference.room.status.2", "en-US", "维护中_us", "会议室状态.维护中"),
+            // dict.routine.conference.room.status.2
+            ("dict.routine.conference.room.status.2", "ja-JP", "维护中_jp", "会议室状态.维护中"),
+            // dict.routine.conference.room.status.2
+            ("dict.routine.conference.room.status.2", "zh-CN", "维护中", "会议室状态.维护中"),
+            // dict.routine.conference.room.status.2
+            ("dict.routine.conference.room.status.2", "zh-HK", "维护中_hk", "会议室状态.维护中"),
+
+            // dict.routine.conference.room.status.3
+            ("dict.routine.conference.room.status.3", "en-US", "停用_us", "会议室状态.停用"),
+            // dict.routine.conference.room.status.3
+            ("dict.routine.conference.room.status.3", "ja-JP", "停用_jp", "会议室状态.停用"),
+            // dict.routine.conference.room.status.3
+            ("dict.routine.conference.room.status.3", "zh-CN", "停用", "会议室状态.停用"),
+            // dict.routine.conference.room.status.3
+            ("dict.routine.conference.room.status.3", "zh-HK", "停用_hk", "会议室状态.停用"),
+
+            // dict.routine.conference.participant.role.0
+            ("dict.routine.conference.participant.role.0", "en-US", "参会人_us", "会议参与角色.参会人"),
+            // dict.routine.conference.participant.role.0
+            ("dict.routine.conference.participant.role.0", "ja-JP", "参会人_jp", "会议参与角色.参会人"),
+            // dict.routine.conference.participant.role.0
+            ("dict.routine.conference.participant.role.0", "zh-CN", "参会人", "会议参与角色.参会人"),
+            // dict.routine.conference.participant.role.0
+            ("dict.routine.conference.participant.role.0", "zh-HK", "参会人_hk", "会议参与角色.参会人"),
+
+            // dict.routine.conference.participant.role.1
+            ("dict.routine.conference.participant.role.1", "en-US", "主持人_us", "会议参与角色.主持人"),
+            // dict.routine.conference.participant.role.1
+            ("dict.routine.conference.participant.role.1", "ja-JP", "主持人_jp", "会议参与角色.主持人"),
+            // dict.routine.conference.participant.role.1
+            ("dict.routine.conference.participant.role.1", "zh-CN", "主持人", "会议参与角色.主持人"),
+            // dict.routine.conference.participant.role.1
+            ("dict.routine.conference.participant.role.1", "zh-HK", "主持人_hk", "会议参与角色.主持人"),
+
+            // dict.routine.conference.participant.role.2
+            ("dict.routine.conference.participant.role.2", "en-US", "记录人_us", "会议参与角色.记录人"),
+            // dict.routine.conference.participant.role.2
+            ("dict.routine.conference.participant.role.2", "ja-JP", "记录人_jp", "会议参与角色.记录人"),
+            // dict.routine.conference.participant.role.2
+            ("dict.routine.conference.participant.role.2", "zh-CN", "记录人", "会议参与角色.记录人"),
+            // dict.routine.conference.participant.role.2
+            ("dict.routine.conference.participant.role.2", "zh-HK", "记录人_hk", "会议参与角色.记录人"),
+
+            // dict.routine.conference.participant.role.3
+            ("dict.routine.conference.participant.role.3", "en-US", "嘉宾_us", "会议参与角色.嘉宾"),
+            // dict.routine.conference.participant.role.3
+            ("dict.routine.conference.participant.role.3", "ja-JP", "嘉宾_jp", "会议参与角色.嘉宾"),
+            // dict.routine.conference.participant.role.3
+            ("dict.routine.conference.participant.role.3", "zh-CN", "嘉宾", "会议参与角色.嘉宾"),
+            // dict.routine.conference.participant.role.3
+            ("dict.routine.conference.participant.role.3", "zh-HK", "嘉宾_hk", "会议参与角色.嘉宾"),
+
+            // dict.routine.conference.record.type.0
+            ("dict.routine.conference.record.type.0", "en-US", "议程项_us", "会议议程记录类型.议程项"),
+            // dict.routine.conference.record.type.0
+            ("dict.routine.conference.record.type.0", "ja-JP", "议程项_jp", "会议议程记录类型.议程项"),
+            // dict.routine.conference.record.type.0
+            ("dict.routine.conference.record.type.0", "zh-CN", "议程项", "会议议程记录类型.议程项"),
+            // dict.routine.conference.record.type.0
+            ("dict.routine.conference.record.type.0", "zh-HK", "议程项_hk", "会议议程记录类型.议程项"),
+
+            // dict.routine.conference.record.type.1
+            ("dict.routine.conference.record.type.1", "en-US", "会议纪要_us", "会议议程记录类型.会议纪要"),
+            // dict.routine.conference.record.type.1
+            ("dict.routine.conference.record.type.1", "ja-JP", "会议纪要_jp", "会议议程记录类型.会议纪要"),
+            // dict.routine.conference.record.type.1
+            ("dict.routine.conference.record.type.1", "zh-CN", "会议纪要", "会议议程记录类型.会议纪要"),
+            // dict.routine.conference.record.type.1
+            ("dict.routine.conference.record.type.1", "zh-HK", "会议纪要_hk", "会议议程记录类型.会议纪要"),
+
+            // dict.routine.conference.check.in.method.0
+            ("dict.routine.conference.check.in.method.0", "en-US", "手动_us", "会议签到方式.手动"),
+            // dict.routine.conference.check.in.method.0
+            ("dict.routine.conference.check.in.method.0", "ja-JP", "手动_jp", "会议签到方式.手动"),
+            // dict.routine.conference.check.in.method.0
+            ("dict.routine.conference.check.in.method.0", "zh-CN", "手动", "会议签到方式.手动"),
+            // dict.routine.conference.check.in.method.0
+            ("dict.routine.conference.check.in.method.0", "zh-HK", "手动_hk", "会议签到方式.手动"),
+
+            // dict.routine.conference.check.in.method.1
+            ("dict.routine.conference.check.in.method.1", "en-US", "扫码_us", "会议签到方式.扫码"),
+            // dict.routine.conference.check.in.method.1
+            ("dict.routine.conference.check.in.method.1", "ja-JP", "扫码_jp", "会议签到方式.扫码"),
+            // dict.routine.conference.check.in.method.1
+            ("dict.routine.conference.check.in.method.1", "zh-CN", "扫码", "会议签到方式.扫码"),
+            // dict.routine.conference.check.in.method.1
+            ("dict.routine.conference.check.in.method.1", "zh-HK", "扫码_hk", "会议签到方式.扫码"),
+
+            // dict.routine.conference.check.in.method.2
+            ("dict.routine.conference.check.in.method.2", "en-US", "人脸_us", "会议签到方式.人脸"),
+            // dict.routine.conference.check.in.method.2
+            ("dict.routine.conference.check.in.method.2", "ja-JP", "人脸_jp", "会议签到方式.人脸"),
+            // dict.routine.conference.check.in.method.2
+            ("dict.routine.conference.check.in.method.2", "zh-CN", "人脸", "会议签到方式.人脸"),
+            // dict.routine.conference.check.in.method.2
+            ("dict.routine.conference.check.in.method.2", "zh-HK", "人脸_hk", "会议签到方式.人脸"),
+
+            // dict.routine.conference.check.in.method.3
+            ("dict.routine.conference.check.in.method.3", "en-US", "门禁_us", "会议签到方式.门禁"),
+            // dict.routine.conference.check.in.method.3
+            ("dict.routine.conference.check.in.method.3", "ja-JP", "门禁_jp", "会议签到方式.门禁"),
+            // dict.routine.conference.check.in.method.3
+            ("dict.routine.conference.check.in.method.3", "zh-CN", "门禁", "会议签到方式.门禁"),
+            // dict.routine.conference.check.in.method.3
+            ("dict.routine.conference.check.in.method.3", "zh-HK", "门禁_hk", "会议签到方式.门禁"),
+
+            // dict.routine.conference.attendance.status.0
+            ("dict.routine.conference.attendance.status.0", "en-US", "待确认_us", "会议出席状态.待确认"),
+            // dict.routine.conference.attendance.status.0
+            ("dict.routine.conference.attendance.status.0", "ja-JP", "待确认_jp", "会议出席状态.待确认"),
+            // dict.routine.conference.attendance.status.0
+            ("dict.routine.conference.attendance.status.0", "zh-CN", "待确认", "会议出席状态.待确认"),
+            // dict.routine.conference.attendance.status.0
+            ("dict.routine.conference.attendance.status.0", "zh-HK", "待确认_hk", "会议出席状态.待确认"),
+
+            // dict.routine.conference.attendance.status.1
+            ("dict.routine.conference.attendance.status.1", "en-US", "已出席_us", "会议出席状态.已出席"),
+            // dict.routine.conference.attendance.status.1
+            ("dict.routine.conference.attendance.status.1", "ja-JP", "已出席_jp", "会议出席状态.已出席"),
+            // dict.routine.conference.attendance.status.1
+            ("dict.routine.conference.attendance.status.1", "zh-CN", "已出席", "会议出席状态.已出席"),
+            // dict.routine.conference.attendance.status.1
+            ("dict.routine.conference.attendance.status.1", "zh-HK", "已出席_hk", "会议出席状态.已出席"),
+
+            // dict.routine.conference.attendance.status.2
+            ("dict.routine.conference.attendance.status.2", "en-US", "缺席_us", "会议出席状态.缺席"),
+            // dict.routine.conference.attendance.status.2
+            ("dict.routine.conference.attendance.status.2", "ja-JP", "缺席_jp", "会议出席状态.缺席"),
+            // dict.routine.conference.attendance.status.2
+            ("dict.routine.conference.attendance.status.2", "zh-CN", "缺席", "会议出席状态.缺席"),
+            // dict.routine.conference.attendance.status.2
+            ("dict.routine.conference.attendance.status.2", "zh-HK", "缺席_hk", "会议出席状态.缺席"),
+
+            // dict.routine.conference.attendance.status.3
+            ("dict.routine.conference.attendance.status.3", "en-US", "迟到_us", "会议出席状态.迟到"),
+            // dict.routine.conference.attendance.status.3
+            ("dict.routine.conference.attendance.status.3", "ja-JP", "迟到_jp", "会议出席状态.迟到"),
+            // dict.routine.conference.attendance.status.3
+            ("dict.routine.conference.attendance.status.3", "zh-CN", "迟到", "会议出席状态.迟到"),
+            // dict.routine.conference.attendance.status.3
+            ("dict.routine.conference.attendance.status.3", "zh-HK", "迟到_hk", "会议出席状态.迟到"),
+
+            // dict.routine.conference.attendance.status.4
+            ("dict.routine.conference.attendance.status.4", "en-US", "请假_us", "会议出席状态.请假"),
+            // dict.routine.conference.attendance.status.4
+            ("dict.routine.conference.attendance.status.4", "ja-JP", "请假_jp", "会议出席状态.请假"),
+            // dict.routine.conference.attendance.status.4
+            ("dict.routine.conference.attendance.status.4", "zh-CN", "请假", "会议出席状态.请假"),
+            // dict.routine.conference.attendance.status.4
+            ("dict.routine.conference.attendance.status.4", "zh-HK", "请假_hk", "会议出席状态.请假"),
+
+            // dict.routine.document.category.0
+            ("dict.routine.document.category.0", "en-US", "制度_us", "文档分类.制度"),
+            // dict.routine.document.category.0
+            ("dict.routine.document.category.0", "ja-JP", "制度_jp", "文档分类.制度"),
+            // dict.routine.document.category.0
+            ("dict.routine.document.category.0", "zh-CN", "制度", "文档分类.制度"),
+            // dict.routine.document.category.0
+            ("dict.routine.document.category.0", "zh-HK", "制度_hk", "文档分类.制度"),
+
+            // dict.routine.document.category.1
+            ("dict.routine.document.category.1", "en-US", "流程_us", "文档分类.流程"),
+            // dict.routine.document.category.1
+            ("dict.routine.document.category.1", "ja-JP", "流程_jp", "文档分类.流程"),
+            // dict.routine.document.category.1
+            ("dict.routine.document.category.1", "zh-CN", "流程", "文档分类.流程"),
+            // dict.routine.document.category.1
+            ("dict.routine.document.category.1", "zh-HK", "流程_hk", "文档分类.流程"),
+
+            // dict.routine.document.category.2
+            ("dict.routine.document.category.2", "en-US", "模板_us", "文档分类.模板"),
+            // dict.routine.document.category.2
+            ("dict.routine.document.category.2", "ja-JP", "模板_jp", "文档分类.模板"),
+            // dict.routine.document.category.2
+            ("dict.routine.document.category.2", "zh-CN", "模板", "文档分类.模板"),
+            // dict.routine.document.category.2
+            ("dict.routine.document.category.2", "zh-HK", "模板_hk", "文档分类.模板"),
+
+            // dict.routine.document.category.3
+            ("dict.routine.document.category.3", "en-US", "规范_us", "文档分类.规范"),
+            // dict.routine.document.category.3
+            ("dict.routine.document.category.3", "ja-JP", "规范_jp", "文档分类.规范"),
+            // dict.routine.document.category.3
+            ("dict.routine.document.category.3", "zh-CN", "规范", "文档分类.规范"),
+            // dict.routine.document.category.3
+            ("dict.routine.document.category.3", "zh-HK", "规范_hk", "文档分类.规范"),
+
+            // dict.routine.document.category.4
+            ("dict.routine.document.category.4", "en-US", "其他_us", "文档分类.其他"),
+            // dict.routine.document.category.4
+            ("dict.routine.document.category.4", "ja-JP", "其他_jp", "文档分类.其他"),
+            // dict.routine.document.category.4
+            ("dict.routine.document.category.4", "zh-CN", "其他", "文档分类.其他"),
+            // dict.routine.document.category.4
+            ("dict.routine.document.category.4", "zh-HK", "其他_hk", "文档分类.其他"),
+
+            // dict.routine.document.confidential.level.0
+            ("dict.routine.document.confidential.level.0", "en-US", "公开_us", "文档密级.公开"),
+            // dict.routine.document.confidential.level.0
+            ("dict.routine.document.confidential.level.0", "ja-JP", "公开_jp", "文档密级.公开"),
+            // dict.routine.document.confidential.level.0
+            ("dict.routine.document.confidential.level.0", "zh-CN", "公开", "文档密级.公开"),
+            // dict.routine.document.confidential.level.0
+            ("dict.routine.document.confidential.level.0", "zh-HK", "公开_hk", "文档密级.公开"),
+
+            // dict.routine.document.confidential.level.1
+            ("dict.routine.document.confidential.level.1", "en-US", "内部_us", "文档密级.内部"),
+            // dict.routine.document.confidential.level.1
+            ("dict.routine.document.confidential.level.1", "ja-JP", "内部_jp", "文档密级.内部"),
+            // dict.routine.document.confidential.level.1
+            ("dict.routine.document.confidential.level.1", "zh-CN", "内部", "文档密级.内部"),
+            // dict.routine.document.confidential.level.1
+            ("dict.routine.document.confidential.level.1", "zh-HK", "内部_hk", "文档密级.内部"),
+
+            // dict.routine.document.confidential.level.2
+            ("dict.routine.document.confidential.level.2", "en-US", "机密_us", "文档密级.机密"),
+            // dict.routine.document.confidential.level.2
+            ("dict.routine.document.confidential.level.2", "ja-JP", "机密_jp", "文档密级.机密"),
+            // dict.routine.document.confidential.level.2
+            ("dict.routine.document.confidential.level.2", "zh-CN", "机密", "文档密级.机密"),
+            // dict.routine.document.confidential.level.2
+            ("dict.routine.document.confidential.level.2", "zh-HK", "机密_hk", "文档密级.机密"),
+
+            // dict.routine.document.confidential.level.3
+            ("dict.routine.document.confidential.level.3", "en-US", "绝密_us", "文档密级.绝密"),
+            // dict.routine.document.confidential.level.3
+            ("dict.routine.document.confidential.level.3", "ja-JP", "绝密_jp", "文档密级.绝密"),
+            // dict.routine.document.confidential.level.3
+            ("dict.routine.document.confidential.level.3", "zh-CN", "绝密", "文档密级.绝密"),
+            // dict.routine.document.confidential.level.3
+            ("dict.routine.document.confidential.level.3", "zh-HK", "绝密_hk", "文档密级.绝密"),
+
+            // dict.routine.document.change.type.0
+            ("dict.routine.document.change.type.0", "en-US", "创建_us", "文档变更类型.创建"),
+            // dict.routine.document.change.type.0
+            ("dict.routine.document.change.type.0", "ja-JP", "创建_jp", "文档变更类型.创建"),
+            // dict.routine.document.change.type.0
+            ("dict.routine.document.change.type.0", "zh-CN", "创建", "文档变更类型.创建"),
+            // dict.routine.document.change.type.0
+            ("dict.routine.document.change.type.0", "zh-HK", "创建_hk", "文档变更类型.创建"),
+
+            // dict.routine.document.change.type.1
+            ("dict.routine.document.change.type.1", "en-US", "修订_us", "文档变更类型.修订"),
+            // dict.routine.document.change.type.1
+            ("dict.routine.document.change.type.1", "ja-JP", "修订_jp", "文档变更类型.修订"),
+            // dict.routine.document.change.type.1
+            ("dict.routine.document.change.type.1", "zh-CN", "修订", "文档变更类型.修订"),
+            // dict.routine.document.change.type.1
+            ("dict.routine.document.change.type.1", "zh-HK", "修订_hk", "文档变更类型.修订"),
+
+            // dict.routine.document.change.type.2
+            ("dict.routine.document.change.type.2", "en-US", "发布_us", "文档变更类型.发布"),
+            // dict.routine.document.change.type.2
+            ("dict.routine.document.change.type.2", "ja-JP", "发布_jp", "文档变更类型.发布"),
+            // dict.routine.document.change.type.2
+            ("dict.routine.document.change.type.2", "zh-CN", "发布", "文档变更类型.发布"),
+            // dict.routine.document.change.type.2
+            ("dict.routine.document.change.type.2", "zh-HK", "发布_hk", "文档变更类型.发布"),
+
+            // dict.routine.document.change.type.3
+            ("dict.routine.document.change.type.3", "en-US", "归档_us", "文档变更类型.归档"),
+            // dict.routine.document.change.type.3
+            ("dict.routine.document.change.type.3", "ja-JP", "归档_jp", "文档变更类型.归档"),
+            // dict.routine.document.change.type.3
+            ("dict.routine.document.change.type.3", "zh-CN", "归档", "文档变更类型.归档"),
+            // dict.routine.document.change.type.3
+            ("dict.routine.document.change.type.3", "zh-HK", "归档_hk", "文档变更类型.归档"),
+
+            // dict.routine.document.change.type.4
+            ("dict.routine.document.change.type.4", "en-US", "删除_us", "文档变更类型.删除"),
+            // dict.routine.document.change.type.4
+            ("dict.routine.document.change.type.4", "ja-JP", "删除_jp", "文档变更类型.删除"),
+            // dict.routine.document.change.type.4
+            ("dict.routine.document.change.type.4", "zh-CN", "删除", "文档变更类型.删除"),
+            // dict.routine.document.change.type.4
+            ("dict.routine.document.change.type.4", "zh-HK", "删除_hk", "文档变更类型.删除"),
+
+            // dict.routine.knowledge.status.0
+            ("dict.routine.knowledge.status.0", "en-US", "草稿_us", "知识库状态.草稿"),
+            // dict.routine.knowledge.status.0
+            ("dict.routine.knowledge.status.0", "ja-JP", "草稿_jp", "知识库状态.草稿"),
+            // dict.routine.knowledge.status.0
+            ("dict.routine.knowledge.status.0", "zh-CN", "草稿", "知识库状态.草稿"),
+            // dict.routine.knowledge.status.0
+            ("dict.routine.knowledge.status.0", "zh-HK", "草稿_hk", "知识库状态.草稿"),
+
+            // dict.routine.knowledge.status.1
+            ("dict.routine.knowledge.status.1", "en-US", "已发布_us", "知识库状态.已发布"),
+            // dict.routine.knowledge.status.1
+            ("dict.routine.knowledge.status.1", "ja-JP", "已发布_jp", "知识库状态.已发布"),
+            // dict.routine.knowledge.status.1
+            ("dict.routine.knowledge.status.1", "zh-CN", "已发布", "知识库状态.已发布"),
+            // dict.routine.knowledge.status.1
+            ("dict.routine.knowledge.status.1", "zh-HK", "已发布_hk", "知识库状态.已发布"),
+
+            // dict.routine.knowledge.status.2
+            ("dict.routine.knowledge.status.2", "en-US", "已下架_us", "知识库状态.已下架"),
+            // dict.routine.knowledge.status.2
+            ("dict.routine.knowledge.status.2", "ja-JP", "已下架_jp", "知识库状态.已下架"),
+            // dict.routine.knowledge.status.2
+            ("dict.routine.knowledge.status.2", "zh-CN", "已下架", "知识库状态.已下架"),
+            // dict.routine.knowledge.status.2
+            ("dict.routine.knowledge.status.2", "zh-HK", "已下架_hk", "知识库状态.已下架"),
+
+            // dict.routine.self.service.type.0
+            ("dict.routine.self.service.type.0", "en-US", "链接_us", "自助服务类型.链接"),
+            // dict.routine.self.service.type.0
+            ("dict.routine.self.service.type.0", "ja-JP", "链接_jp", "自助服务类型.链接"),
+            // dict.routine.self.service.type.0
+            ("dict.routine.self.service.type.0", "zh-CN", "链接", "自助服务类型.链接"),
+            // dict.routine.self.service.type.0
+            ("dict.routine.self.service.type.0", "zh-HK", "链接_hk", "自助服务类型.链接"),
+
+            // dict.routine.self.service.type.1
+            ("dict.routine.self.service.type.1", "en-US", "表单_us", "自助服务类型.表单"),
+            // dict.routine.self.service.type.1
+            ("dict.routine.self.service.type.1", "ja-JP", "表单_jp", "自助服务类型.表单"),
+            // dict.routine.self.service.type.1
+            ("dict.routine.self.service.type.1", "zh-CN", "表单", "自助服务类型.表单"),
+            // dict.routine.self.service.type.1
+            ("dict.routine.self.service.type.1", "zh-HK", "表单_hk", "自助服务类型.表单"),
+
+            // dict.routine.self.service.type.2
+            ("dict.routine.self.service.type.2", "en-US", "知识引导_us", "自助服务类型.知识引导"),
+            // dict.routine.self.service.type.2
+            ("dict.routine.self.service.type.2", "ja-JP", "知识引导_jp", "自助服务类型.知识引导"),
+            // dict.routine.self.service.type.2
+            ("dict.routine.self.service.type.2", "zh-CN", "知识引导", "自助服务类型.知识引导"),
+            // dict.routine.self.service.type.2
+            ("dict.routine.self.service.type.2", "zh-HK", "知识引导_hk", "自助服务类型.知识引导"),
+
+            // dict.routine.ticket.reply.author.type.0
+            ("dict.routine.ticket.reply.author.type.0", "en-US", "客服_us", "工单回复作者类型.客服"),
+            // dict.routine.ticket.reply.author.type.0
+            ("dict.routine.ticket.reply.author.type.0", "ja-JP", "客服_jp", "工单回复作者类型.客服"),
+            // dict.routine.ticket.reply.author.type.0
+            ("dict.routine.ticket.reply.author.type.0", "zh-CN", "客服", "工单回复作者类型.客服"),
+            // dict.routine.ticket.reply.author.type.0
+            ("dict.routine.ticket.reply.author.type.0", "zh-HK", "客服_hk", "工单回复作者类型.客服"),
+
+            // dict.routine.ticket.reply.author.type.1
+            ("dict.routine.ticket.reply.author.type.1", "en-US", "用户_us", "工单回复作者类型.用户"),
+            // dict.routine.ticket.reply.author.type.1
+            ("dict.routine.ticket.reply.author.type.1", "ja-JP", "用户_jp", "工单回复作者类型.用户"),
+            // dict.routine.ticket.reply.author.type.1
+            ("dict.routine.ticket.reply.author.type.1", "zh-CN", "用户", "工单回复作者类型.用户"),
+            // dict.routine.ticket.reply.author.type.1
+            ("dict.routine.ticket.reply.author.type.1", "zh-HK", "用户_hk", "工单回复作者类型.用户"),
+
+            // dict.routine.ticket.reply.author.type.2
+            ("dict.routine.ticket.reply.author.type.2", "en-US", "系统_us", "工单回复作者类型.系统"),
+            // dict.routine.ticket.reply.author.type.2
+            ("dict.routine.ticket.reply.author.type.2", "ja-JP", "系统_jp", "工单回复作者类型.系统"),
+            // dict.routine.ticket.reply.author.type.2
+            ("dict.routine.ticket.reply.author.type.2", "zh-CN", "系统", "工单回复作者类型.系统"),
+            // dict.routine.ticket.reply.author.type.2
+            ("dict.routine.ticket.reply.author.type.2", "zh-HK", "系统_hk", "工单回复作者类型.系统"),
+
+            // dict.sys.entity.change.type.0
+            ("dict.sys.entity.change.type.0", "en-US", "创建_us", "实体变更类型.创建"),
+            // dict.sys.entity.change.type.0
+            ("dict.sys.entity.change.type.0", "ja-JP", "创建_jp", "实体变更类型.创建"),
+            // dict.sys.entity.change.type.0
+            ("dict.sys.entity.change.type.0", "zh-CN", "创建", "实体变更类型.创建"),
+            // dict.sys.entity.change.type.0
+            ("dict.sys.entity.change.type.0", "zh-HK", "创建_hk", "实体变更类型.创建"),
+
+            // dict.sys.entity.change.type.1
+            ("dict.sys.entity.change.type.1", "en-US", "更新_us", "实体变更类型.更新"),
+            // dict.sys.entity.change.type.1
+            ("dict.sys.entity.change.type.1", "ja-JP", "更新_jp", "实体变更类型.更新"),
+            // dict.sys.entity.change.type.1
+            ("dict.sys.entity.change.type.1", "zh-CN", "更新", "实体变更类型.更新"),
+            // dict.sys.entity.change.type.1
+            ("dict.sys.entity.change.type.1", "zh-HK", "更新_hk", "实体变更类型.更新"),
+
+            // dict.sys.entity.change.type.2
+            ("dict.sys.entity.change.type.2", "en-US", "删除_us", "实体变更类型.删除"),
+            // dict.sys.entity.change.type.2
+            ("dict.sys.entity.change.type.2", "ja-JP", "删除_jp", "实体变更类型.删除"),
+            // dict.sys.entity.change.type.2
+            ("dict.sys.entity.change.type.2", "zh-CN", "删除", "实体变更类型.删除"),
+            // dict.sys.entity.change.type.2
+            ("dict.sys.entity.change.type.2", "zh-HK", "删除_hk", "实体变更类型.删除"),
+
+            // dict.sys.entity.change.type.3
+            ("dict.sys.entity.change.type.3", "en-US", "状态变更_us", "实体变更类型.状态变更"),
+            // dict.sys.entity.change.type.3
+            ("dict.sys.entity.change.type.3", "ja-JP", "状态变更_jp", "实体变更类型.状态变更"),
+            // dict.sys.entity.change.type.3
+            ("dict.sys.entity.change.type.3", "zh-CN", "状态变更", "实体变更类型.状态变更"),
+            // dict.sys.entity.change.type.3
+            ("dict.sys.entity.change.type.3", "zh-HK", "状态变更_hk", "实体变更类型.状态变更"),
+
+            // dict.routine.news.comment.status.0
+            ("dict.routine.news.comment.status.0", "en-US", "待展示_us", "新闻评论展示状态.待展示"),
+            // dict.routine.news.comment.status.0
+            ("dict.routine.news.comment.status.0", "ja-JP", "待展示_jp", "新闻评论展示状态.待展示"),
+            // dict.routine.news.comment.status.0
+            ("dict.routine.news.comment.status.0", "zh-CN", "待展示", "新闻评论展示状态.待展示"),
+            // dict.routine.news.comment.status.0
+            ("dict.routine.news.comment.status.0", "zh-HK", "待展示_hk", "新闻评论展示状态.待展示"),
+
+            // dict.routine.news.comment.status.1
+            ("dict.routine.news.comment.status.1", "en-US", "已展示_us", "新闻评论展示状态.已展示"),
+            // dict.routine.news.comment.status.1
+            ("dict.routine.news.comment.status.1", "ja-JP", "已展示_jp", "新闻评论展示状态.已展示"),
+            // dict.routine.news.comment.status.1
+            ("dict.routine.news.comment.status.1", "zh-CN", "已展示", "新闻评论展示状态.已展示"),
+            // dict.routine.news.comment.status.1
+            ("dict.routine.news.comment.status.1", "zh-HK", "已展示_hk", "新闻评论展示状态.已展示"),
+
+            // dict.routine.news.comment.status.2
+            ("dict.routine.news.comment.status.2", "en-US", "已隐藏_us", "新闻评论展示状态.已隐藏"),
+            // dict.routine.news.comment.status.2
+            ("dict.routine.news.comment.status.2", "ja-JP", "已隐藏_jp", "新闻评论展示状态.已隐藏"),
+            // dict.routine.news.comment.status.2
+            ("dict.routine.news.comment.status.2", "zh-CN", "已隐藏", "新闻评论展示状态.已隐藏"),
+            // dict.routine.news.comment.status.2
+            ("dict.routine.news.comment.status.2", "zh-HK", "已隐藏_hk", "新闻评论展示状态.已隐藏"),
+
+            // dict.logistics.service.ticket.type.0
+            ("dict.logistics.service.ticket.type.0", "en-US", "维修_us", "服务工单类型.维修"),
+            // dict.logistics.service.ticket.type.0
+            ("dict.logistics.service.ticket.type.0", "ja-JP", "维修_jp", "服务工单类型.维修"),
+            // dict.logistics.service.ticket.type.0
+            ("dict.logistics.service.ticket.type.0", "zh-CN", "维修", "服务工单类型.维修"),
+            // dict.logistics.service.ticket.type.0
+            ("dict.logistics.service.ticket.type.0", "zh-HK", "维修_hk", "服务工单类型.维修"),
+
+            // dict.logistics.service.ticket.type.1
+            ("dict.logistics.service.ticket.type.1", "en-US", "巡检_us", "服务工单类型.巡检"),
+            // dict.logistics.service.ticket.type.1
+            ("dict.logistics.service.ticket.type.1", "ja-JP", "巡检_jp", "服务工单类型.巡检"),
+            // dict.logistics.service.ticket.type.1
+            ("dict.logistics.service.ticket.type.1", "zh-CN", "巡检", "服务工单类型.巡检"),
+            // dict.logistics.service.ticket.type.1
+            ("dict.logistics.service.ticket.type.1", "zh-HK", "巡检_hk", "服务工单类型.巡检"),
+
+            // dict.logistics.service.ticket.type.2
+            ("dict.logistics.service.ticket.type.2", "en-US", "安装_us", "服务工单类型.安装"),
+            // dict.logistics.service.ticket.type.2
+            ("dict.logistics.service.ticket.type.2", "ja-JP", "安装_jp", "服务工单类型.安装"),
+            // dict.logistics.service.ticket.type.2
+            ("dict.logistics.service.ticket.type.2", "zh-CN", "安装", "服务工单类型.安装"),
+            // dict.logistics.service.ticket.type.2
+            ("dict.logistics.service.ticket.type.2", "zh-HK", "安装_hk", "服务工单类型.安装"),
+
+            // dict.logistics.service.ticket.type.3
+            ("dict.logistics.service.ticket.type.3", "en-US", "升级_us", "服务工单类型.升级"),
+            // dict.logistics.service.ticket.type.3
+            ("dict.logistics.service.ticket.type.3", "ja-JP", "升级_jp", "服务工单类型.升级"),
+            // dict.logistics.service.ticket.type.3
+            ("dict.logistics.service.ticket.type.3", "zh-CN", "升级", "服务工单类型.升级"),
+            // dict.logistics.service.ticket.type.3
+            ("dict.logistics.service.ticket.type.3", "zh-HK", "升级_hk", "服务工单类型.升级"),
+
+            // dict.logistics.service.ticket.type.4
+            ("dict.logistics.service.ticket.type.4", "en-US", "其他_us", "服务工单类型.其他"),
+            // dict.logistics.service.ticket.type.4
+            ("dict.logistics.service.ticket.type.4", "ja-JP", "其他_jp", "服务工单类型.其他"),
+            // dict.logistics.service.ticket.type.4
+            ("dict.logistics.service.ticket.type.4", "zh-CN", "其他", "服务工单类型.其他"),
+            // dict.logistics.service.ticket.type.4
+            ("dict.logistics.service.ticket.type.4", "zh-HK", "其他_hk", "服务工单类型.其他"),
+
+            // dict.logistics.service.contract.type.0
+            ("dict.logistics.service.contract.type.0", "en-US", "维保_us", "服务合同类型.维保"),
+            // dict.logistics.service.contract.type.0
+            ("dict.logistics.service.contract.type.0", "ja-JP", "维保_jp", "服务合同类型.维保"),
+            // dict.logistics.service.contract.type.0
+            ("dict.logistics.service.contract.type.0", "zh-CN", "维保", "服务合同类型.维保"),
+            // dict.logistics.service.contract.type.0
+            ("dict.logistics.service.contract.type.0", "zh-HK", "维保_hk", "服务合同类型.维保"),
+
+            // dict.logistics.service.contract.type.1
+            ("dict.logistics.service.contract.type.1", "en-US", "单次_us", "服务合同类型.单次"),
+            // dict.logistics.service.contract.type.1
+            ("dict.logistics.service.contract.type.1", "ja-JP", "单次_jp", "服务合同类型.单次"),
+            // dict.logistics.service.contract.type.1
+            ("dict.logistics.service.contract.type.1", "zh-CN", "单次", "服务合同类型.单次"),
+            // dict.logistics.service.contract.type.1
+            ("dict.logistics.service.contract.type.1", "zh-HK", "单次_hk", "服务合同类型.单次"),
+
+            // dict.logistics.service.contract.type.2
+            ("dict.logistics.service.contract.type.2", "en-US", "框架_us", "服务合同类型.框架"),
+            // dict.logistics.service.contract.type.2
+            ("dict.logistics.service.contract.type.2", "ja-JP", "框架_jp", "服务合同类型.框架"),
+            // dict.logistics.service.contract.type.2
+            ("dict.logistics.service.contract.type.2", "zh-CN", "框架", "服务合同类型.框架"),
+            // dict.logistics.service.contract.type.2
+            ("dict.logistics.service.contract.type.2", "zh-HK", "框架_hk", "服务合同类型.框架"),
+
+            // dict.logistics.service.contract.type.3
+            ("dict.logistics.service.contract.type.3", "en-US", "SLA_us", "服务合同类型.SLA"),
+            // dict.logistics.service.contract.type.3
+            ("dict.logistics.service.contract.type.3", "ja-JP", "SLA_jp", "服务合同类型.SLA"),
+            // dict.logistics.service.contract.type.3
+            ("dict.logistics.service.contract.type.3", "zh-CN", "SLA", "服务合同类型.SLA"),
+            // dict.logistics.service.contract.type.3
+            ("dict.logistics.service.contract.type.3", "zh-HK", "SLA_hk", "服务合同类型.SLA"),
+
+            // dict.logistics.service.contract.type.4
+            ("dict.logistics.service.contract.type.4", "en-US", "其他_us", "服务合同类型.其他"),
+            // dict.logistics.service.contract.type.4
+            ("dict.logistics.service.contract.type.4", "ja-JP", "其他_jp", "服务合同类型.其他"),
+            // dict.logistics.service.contract.type.4
+            ("dict.logistics.service.contract.type.4", "zh-CN", "其他", "服务合同类型.其他"),
+            // dict.logistics.service.contract.type.4
+            ("dict.logistics.service.contract.type.4", "zh-HK", "其他_hk", "服务合同类型.其他"),
+
+            // dict.logistics.service.contract.status.0
+            ("dict.logistics.service.contract.status.0", "en-US", "草稿_us", "服务合同状态.草稿"),
+            // dict.logistics.service.contract.status.0
+            ("dict.logistics.service.contract.status.0", "ja-JP", "草稿_jp", "服务合同状态.草稿"),
+            // dict.logistics.service.contract.status.0
+            ("dict.logistics.service.contract.status.0", "zh-CN", "草稿", "服务合同状态.草稿"),
+            // dict.logistics.service.contract.status.0
+            ("dict.logistics.service.contract.status.0", "zh-HK", "草稿_hk", "服务合同状态.草稿"),
+
+            // dict.logistics.service.contract.status.1
+            ("dict.logistics.service.contract.status.1", "en-US", "生效_us", "服务合同状态.生效"),
+            // dict.logistics.service.contract.status.1
+            ("dict.logistics.service.contract.status.1", "ja-JP", "生效_jp", "服务合同状态.生效"),
+            // dict.logistics.service.contract.status.1
+            ("dict.logistics.service.contract.status.1", "zh-CN", "生效", "服务合同状态.生效"),
+            // dict.logistics.service.contract.status.1
+            ("dict.logistics.service.contract.status.1", "zh-HK", "生效_hk", "服务合同状态.生效"),
+
+            // dict.logistics.service.contract.status.2
+            ("dict.logistics.service.contract.status.2", "en-US", "暂停_us", "服务合同状态.暂停"),
+            // dict.logistics.service.contract.status.2
+            ("dict.logistics.service.contract.status.2", "ja-JP", "暂停_jp", "服务合同状态.暂停"),
+            // dict.logistics.service.contract.status.2
+            ("dict.logistics.service.contract.status.2", "zh-CN", "暂停", "服务合同状态.暂停"),
+            // dict.logistics.service.contract.status.2
+            ("dict.logistics.service.contract.status.2", "zh-HK", "暂停_hk", "服务合同状态.暂停"),
+
+            // dict.logistics.service.contract.status.3
+            ("dict.logistics.service.contract.status.3", "en-US", "到期_us", "服务合同状态.到期"),
+            // dict.logistics.service.contract.status.3
+            ("dict.logistics.service.contract.status.3", "ja-JP", "到期_jp", "服务合同状态.到期"),
+            // dict.logistics.service.contract.status.3
+            ("dict.logistics.service.contract.status.3", "zh-CN", "到期", "服务合同状态.到期"),
+            // dict.logistics.service.contract.status.3
+            ("dict.logistics.service.contract.status.3", "zh-HK", "到期_hk", "服务合同状态.到期"),
+
+            // dict.logistics.service.contract.status.4
+            ("dict.logistics.service.contract.status.4", "en-US", "终止_us", "服务合同状态.终止"),
+            // dict.logistics.service.contract.status.4
+            ("dict.logistics.service.contract.status.4", "ja-JP", "终止_jp", "服务合同状态.终止"),
+            // dict.logistics.service.contract.status.4
+            ("dict.logistics.service.contract.status.4", "zh-CN", "终止", "服务合同状态.终止"),
+            // dict.logistics.service.contract.status.4
+            ("dict.logistics.service.contract.status.4", "zh-HK", "终止_hk", "服务合同状态.终止"),
+
+            // dict.logistics.service.payment.terms.0
+            ("dict.logistics.service.payment.terms.0", "en-US", "预付_us", "服务付款条件.预付"),
+            // dict.logistics.service.payment.terms.0
+            ("dict.logistics.service.payment.terms.0", "ja-JP", "预付_jp", "服务付款条件.预付"),
+            // dict.logistics.service.payment.terms.0
+            ("dict.logistics.service.payment.terms.0", "zh-CN", "预付", "服务付款条件.预付"),
+            // dict.logistics.service.payment.terms.0
+            ("dict.logistics.service.payment.terms.0", "zh-HK", "预付_hk", "服务付款条件.预付"),
+
+            // dict.logistics.service.payment.terms.1
+            ("dict.logistics.service.payment.terms.1", "en-US", "后付_us", "服务付款条件.后付"),
+            // dict.logistics.service.payment.terms.1
+            ("dict.logistics.service.payment.terms.1", "ja-JP", "后付_jp", "服务付款条件.后付"),
+            // dict.logistics.service.payment.terms.1
+            ("dict.logistics.service.payment.terms.1", "zh-CN", "后付", "服务付款条件.后付"),
+            // dict.logistics.service.payment.terms.1
+            ("dict.logistics.service.payment.terms.1", "zh-HK", "后付_hk", "服务付款条件.后付"),
+
+            // dict.logistics.service.payment.terms.2
+            ("dict.logistics.service.payment.terms.2", "en-US", "月结30天_us", "服务付款条件.月结30天"),
+            // dict.logistics.service.payment.terms.2
+            ("dict.logistics.service.payment.terms.2", "ja-JP", "月结30天_jp", "服务付款条件.月结30天"),
+            // dict.logistics.service.payment.terms.2
+            ("dict.logistics.service.payment.terms.2", "zh-CN", "月结30天", "服务付款条件.月结30天"),
+            // dict.logistics.service.payment.terms.2
+            ("dict.logistics.service.payment.terms.2", "zh-HK", "月结30天_hk", "服务付款条件.月结30天"),
+
+            // dict.logistics.service.payment.terms.3
+            ("dict.logistics.service.payment.terms.3", "en-US", "月结60天_us", "服务付款条件.月结60天"),
+            // dict.logistics.service.payment.terms.3
+            ("dict.logistics.service.payment.terms.3", "ja-JP", "月结60天_jp", "服务付款条件.月结60天"),
+            // dict.logistics.service.payment.terms.3
+            ("dict.logistics.service.payment.terms.3", "zh-CN", "月结60天", "服务付款条件.月结60天"),
+            // dict.logistics.service.payment.terms.3
+            ("dict.logistics.service.payment.terms.3", "zh-HK", "月结60天_hk", "服务付款条件.月结60天"),
+
+            // dict.logistics.service.payment.terms.4
+            ("dict.logistics.service.payment.terms.4", "en-US", "其他_us", "服务付款条件.其他"),
+            // dict.logistics.service.payment.terms.4
+            ("dict.logistics.service.payment.terms.4", "ja-JP", "其他_jp", "服务付款条件.其他"),
+            // dict.logistics.service.payment.terms.4
+            ("dict.logistics.service.payment.terms.4", "zh-CN", "其他", "服务付款条件.其他"),
+            // dict.logistics.service.payment.terms.4
+            ("dict.logistics.service.payment.terms.4", "zh-HK", "其他_hk", "服务付款条件.其他"),
+
+            // dict.logistics.service.order.type.0
+            ("dict.logistics.service.order.type.0", "en-US", "现场服务_us", "服务订单类型.现场服务"),
+            // dict.logistics.service.order.type.0
+            ("dict.logistics.service.order.type.0", "ja-JP", "现场服务_jp", "服务订单类型.现场服务"),
+            // dict.logistics.service.order.type.0
+            ("dict.logistics.service.order.type.0", "zh-CN", "现场服务", "服务订单类型.现场服务"),
+            // dict.logistics.service.order.type.0
+            ("dict.logistics.service.order.type.0", "zh-HK", "现场服务_hk", "服务订单类型.现场服务"),
+
+            // dict.logistics.service.order.type.1
+            ("dict.logistics.service.order.type.1", "en-US", "远程支持_us", "服务订单类型.远程支持"),
+            // dict.logistics.service.order.type.1
+            ("dict.logistics.service.order.type.1", "ja-JP", "远程支持_jp", "服务订单类型.远程支持"),
+            // dict.logistics.service.order.type.1
+            ("dict.logistics.service.order.type.1", "zh-CN", "远程支持", "服务订单类型.远程支持"),
+            // dict.logistics.service.order.type.1
+            ("dict.logistics.service.order.type.1", "zh-HK", "远程支持_hk", "服务订单类型.远程支持"),
+
+            // dict.logistics.service.order.type.2
+            ("dict.logistics.service.order.type.2", "en-US", "备件更换_us", "服务订单类型.备件更换"),
+            // dict.logistics.service.order.type.2
+            ("dict.logistics.service.order.type.2", "ja-JP", "备件更换_jp", "服务订单类型.备件更换"),
+            // dict.logistics.service.order.type.2
+            ("dict.logistics.service.order.type.2", "zh-CN", "备件更换", "服务订单类型.备件更换"),
+            // dict.logistics.service.order.type.2
+            ("dict.logistics.service.order.type.2", "zh-HK", "备件更换_hk", "服务订单类型.备件更换"),
+
+            // dict.logistics.service.order.type.3
+            ("dict.logistics.service.order.type.3", "en-US", "安装调试_us", "服务订单类型.安装调试"),
+            // dict.logistics.service.order.type.3
+            ("dict.logistics.service.order.type.3", "ja-JP", "安装调试_jp", "服务订单类型.安装调试"),
+            // dict.logistics.service.order.type.3
+            ("dict.logistics.service.order.type.3", "zh-CN", "安装调试", "服务订单类型.安装调试"),
+            // dict.logistics.service.order.type.3
+            ("dict.logistics.service.order.type.3", "zh-HK", "安装调试_hk", "服务订单类型.安装调试"),
+
+            // dict.logistics.service.order.type.4
+            ("dict.logistics.service.order.type.4", "en-US", "其他_us", "服务订单类型.其他"),
+            // dict.logistics.service.order.type.4
+            ("dict.logistics.service.order.type.4", "ja-JP", "其他_jp", "服务订单类型.其他"),
+            // dict.logistics.service.order.type.4
+            ("dict.logistics.service.order.type.4", "zh-CN", "其他", "服务订单类型.其他"),
+            // dict.logistics.service.order.type.4
+            ("dict.logistics.service.order.type.4", "zh-HK", "其他_hk", "服务订单类型.其他"),
+
+            // dict.logistics.service.order.status.0
+            ("dict.logistics.service.order.status.0", "en-US", "草稿_us", "服务订单状态.草稿"),
+            // dict.logistics.service.order.status.0
+            ("dict.logistics.service.order.status.0", "ja-JP", "草稿_jp", "服务订单状态.草稿"),
+            // dict.logistics.service.order.status.0
+            ("dict.logistics.service.order.status.0", "zh-CN", "草稿", "服务订单状态.草稿"),
+            // dict.logistics.service.order.status.0
+            ("dict.logistics.service.order.status.0", "zh-HK", "草稿_hk", "服务订单状态.草稿"),
+
+            // dict.logistics.service.order.status.1
+            ("dict.logistics.service.order.status.1", "en-US", "已确认_us", "服务订单状态.已确认"),
+            // dict.logistics.service.order.status.1
+            ("dict.logistics.service.order.status.1", "ja-JP", "已确认_jp", "服务订单状态.已确认"),
+            // dict.logistics.service.order.status.1
+            ("dict.logistics.service.order.status.1", "zh-CN", "已确认", "服务订单状态.已确认"),
+            // dict.logistics.service.order.status.1
+            ("dict.logistics.service.order.status.1", "zh-HK", "已确认_hk", "服务订单状态.已确认"),
+
+            // dict.logistics.service.order.status.2
+            ("dict.logistics.service.order.status.2", "en-US", "执行中_us", "服务订单状态.执行中"),
+            // dict.logistics.service.order.status.2
+            ("dict.logistics.service.order.status.2", "ja-JP", "执行中_jp", "服务订单状态.执行中"),
+            // dict.logistics.service.order.status.2
+            ("dict.logistics.service.order.status.2", "zh-CN", "执行中", "服务订单状态.执行中"),
+            // dict.logistics.service.order.status.2
+            ("dict.logistics.service.order.status.2", "zh-HK", "执行中_hk", "服务订单状态.执行中"),
+
+            // dict.logistics.service.order.status.3
+            ("dict.logistics.service.order.status.3", "en-US", "已完成_us", "服务订单状态.已完成"),
+            // dict.logistics.service.order.status.3
+            ("dict.logistics.service.order.status.3", "ja-JP", "已完成_jp", "服务订单状态.已完成"),
+            // dict.logistics.service.order.status.3
+            ("dict.logistics.service.order.status.3", "zh-CN", "已完成", "服务订单状态.已完成"),
+            // dict.logistics.service.order.status.3
+            ("dict.logistics.service.order.status.3", "zh-HK", "已完成_hk", "服务订单状态.已完成"),
+
+            // dict.logistics.service.order.status.4
+            ("dict.logistics.service.order.status.4", "en-US", "已结算_us", "服务订单状态.已结算"),
+            // dict.logistics.service.order.status.4
+            ("dict.logistics.service.order.status.4", "ja-JP", "已结算_jp", "服务订单状态.已结算"),
+            // dict.logistics.service.order.status.4
+            ("dict.logistics.service.order.status.4", "zh-CN", "已结算", "服务订单状态.已结算"),
+            // dict.logistics.service.order.status.4
+            ("dict.logistics.service.order.status.4", "zh-HK", "已结算_hk", "服务订单状态.已结算"),
+
+            // dict.logistics.service.order.status.5
+            ("dict.logistics.service.order.status.5", "en-US", "已取消_us", "服务订单状态.已取消"),
+            // dict.logistics.service.order.status.5
+            ("dict.logistics.service.order.status.5", "ja-JP", "已取消_jp", "服务订单状态.已取消"),
+            // dict.logistics.service.order.status.5
+            ("dict.logistics.service.order.status.5", "zh-CN", "已取消", "服务订单状态.已取消"),
+            // dict.logistics.service.order.status.5
+            ("dict.logistics.service.order.status.5", "zh-HK", "已取消_hk", "服务订单状态.已取消"),
+
+            // dict.logistics.service.request.type.0
+            ("dict.logistics.service.request.type.0", "en-US", "咨询_us", "服务请求类型.咨询"),
+            // dict.logistics.service.request.type.0
+            ("dict.logistics.service.request.type.0", "ja-JP", "咨询_jp", "服务请求类型.咨询"),
+            // dict.logistics.service.request.type.0
+            ("dict.logistics.service.request.type.0", "zh-CN", "咨询", "服务请求类型.咨询"),
+            // dict.logistics.service.request.type.0
+            ("dict.logistics.service.request.type.0", "zh-HK", "咨询_hk", "服务请求类型.咨询"),
+
+            // dict.logistics.service.request.type.1
+            ("dict.logistics.service.request.type.1", "en-US", "报修_us", "服务请求类型.报修"),
+            // dict.logistics.service.request.type.1
+            ("dict.logistics.service.request.type.1", "ja-JP", "报修_jp", "服务请求类型.报修"),
+            // dict.logistics.service.request.type.1
+            ("dict.logistics.service.request.type.1", "zh-CN", "报修", "服务请求类型.报修"),
+            // dict.logistics.service.request.type.1
+            ("dict.logistics.service.request.type.1", "zh-HK", "报修_hk", "服务请求类型.报修"),
+
+            // dict.logistics.service.request.type.2
+            ("dict.logistics.service.request.type.2", "en-US", "投诉_us", "服务请求类型.投诉"),
+            // dict.logistics.service.request.type.2
+            ("dict.logistics.service.request.type.2", "ja-JP", "投诉_jp", "服务请求类型.投诉"),
+            // dict.logistics.service.request.type.2
+            ("dict.logistics.service.request.type.2", "zh-CN", "投诉", "服务请求类型.投诉"),
+            // dict.logistics.service.request.type.2
+            ("dict.logistics.service.request.type.2", "zh-HK", "投诉_hk", "服务请求类型.投诉"),
+
+            // dict.logistics.service.request.type.3
+            ("dict.logistics.service.request.type.3", "en-US", "安装_us", "服务请求类型.安装"),
+            // dict.logistics.service.request.type.3
+            ("dict.logistics.service.request.type.3", "ja-JP", "安装_jp", "服务请求类型.安装"),
+            // dict.logistics.service.request.type.3
+            ("dict.logistics.service.request.type.3", "zh-CN", "安装", "服务请求类型.安装"),
+            // dict.logistics.service.request.type.3
+            ("dict.logistics.service.request.type.3", "zh-HK", "安装_hk", "服务请求类型.安装"),
+
+            // dict.logistics.service.request.type.4
+            ("dict.logistics.service.request.type.4", "en-US", "巡检_us", "服务请求类型.巡检"),
+            // dict.logistics.service.request.type.4
+            ("dict.logistics.service.request.type.4", "ja-JP", "巡检_jp", "服务请求类型.巡检"),
+            // dict.logistics.service.request.type.4
+            ("dict.logistics.service.request.type.4", "zh-CN", "巡检", "服务请求类型.巡检"),
+            // dict.logistics.service.request.type.4
+            ("dict.logistics.service.request.type.4", "zh-HK", "巡检_hk", "服务请求类型.巡检"),
+
+            // dict.logistics.service.request.type.5
+            ("dict.logistics.service.request.type.5", "en-US", "其他_us", "服务请求类型.其他"),
+            // dict.logistics.service.request.type.5
+            ("dict.logistics.service.request.type.5", "ja-JP", "其他_jp", "服务请求类型.其他"),
+            // dict.logistics.service.request.type.5
+            ("dict.logistics.service.request.type.5", "zh-CN", "其他", "服务请求类型.其他"),
+            // dict.logistics.service.request.type.5
+            ("dict.logistics.service.request.type.5", "zh-HK", "其他_hk", "服务请求类型.其他"),
+
+            // dict.logistics.service.source.channel.0
+            ("dict.logistics.service.source.channel.0", "en-US", "电话_us", "服务请求来源.电话"),
+            // dict.logistics.service.source.channel.0
+            ("dict.logistics.service.source.channel.0", "ja-JP", "电话_jp", "服务请求来源.电话"),
+            // dict.logistics.service.source.channel.0
+            ("dict.logistics.service.source.channel.0", "zh-CN", "电话", "服务请求来源.电话"),
+            // dict.logistics.service.source.channel.0
+            ("dict.logistics.service.source.channel.0", "zh-HK", "电话_hk", "服务请求来源.电话"),
+
+            // dict.logistics.service.source.channel.1
+            ("dict.logistics.service.source.channel.1", "en-US", "邮件_us", "服务请求来源.邮件"),
+            // dict.logistics.service.source.channel.1
+            ("dict.logistics.service.source.channel.1", "ja-JP", "邮件_jp", "服务请求来源.邮件"),
+            // dict.logistics.service.source.channel.1
+            ("dict.logistics.service.source.channel.1", "zh-CN", "邮件", "服务请求来源.邮件"),
+            // dict.logistics.service.source.channel.1
+            ("dict.logistics.service.source.channel.1", "zh-HK", "邮件_hk", "服务请求来源.邮件"),
+
+            // dict.logistics.service.source.channel.2
+            ("dict.logistics.service.source.channel.2", "en-US", "门户_us", "服务请求来源.门户"),
+            // dict.logistics.service.source.channel.2
+            ("dict.logistics.service.source.channel.2", "ja-JP", "门户_jp", "服务请求来源.门户"),
+            // dict.logistics.service.source.channel.2
+            ("dict.logistics.service.source.channel.2", "zh-CN", "门户", "服务请求来源.门户"),
+            // dict.logistics.service.source.channel.2
+            ("dict.logistics.service.source.channel.2", "zh-HK", "门户_hk", "服务请求来源.门户"),
+
+            // dict.logistics.service.source.channel.3
+            ("dict.logistics.service.source.channel.3", "en-US", "现场_us", "服务请求来源.现场"),
+            // dict.logistics.service.source.channel.3
+            ("dict.logistics.service.source.channel.3", "ja-JP", "现场_jp", "服务请求来源.现场"),
+            // dict.logistics.service.source.channel.3
+            ("dict.logistics.service.source.channel.3", "zh-CN", "现场", "服务请求来源.现场"),
+            // dict.logistics.service.source.channel.3
+            ("dict.logistics.service.source.channel.3", "zh-HK", "现场_hk", "服务请求来源.现场"),
+
+            // dict.logistics.service.source.channel.4
+            ("dict.logistics.service.source.channel.4", "en-US", "其他_us", "服务请求来源.其他"),
+            // dict.logistics.service.source.channel.4
+            ("dict.logistics.service.source.channel.4", "ja-JP", "其他_jp", "服务请求来源.其他"),
+            // dict.logistics.service.source.channel.4
+            ("dict.logistics.service.source.channel.4", "zh-CN", "其他", "服务请求来源.其他"),
+            // dict.logistics.service.source.channel.4
+            ("dict.logistics.service.source.channel.4", "zh-HK", "其他_hk", "服务请求来源.其他"),
+
+            // dict.logistics.service.request.status.0
+            ("dict.logistics.service.request.status.0", "en-US", "草稿_us", "服务请求状态.草稿"),
+            // dict.logistics.service.request.status.0
+            ("dict.logistics.service.request.status.0", "ja-JP", "草稿_jp", "服务请求状态.草稿"),
+            // dict.logistics.service.request.status.0
+            ("dict.logistics.service.request.status.0", "zh-CN", "草稿", "服务请求状态.草稿"),
+            // dict.logistics.service.request.status.0
+            ("dict.logistics.service.request.status.0", "zh-HK", "草稿_hk", "服务请求状态.草稿"),
+
+            // dict.logistics.service.request.status.1
+            ("dict.logistics.service.request.status.1", "en-US", "已提交_us", "服务请求状态.已提交"),
+            // dict.logistics.service.request.status.1
+            ("dict.logistics.service.request.status.1", "ja-JP", "已提交_jp", "服务请求状态.已提交"),
+            // dict.logistics.service.request.status.1
+            ("dict.logistics.service.request.status.1", "zh-CN", "已提交", "服务请求状态.已提交"),
+            // dict.logistics.service.request.status.1
+            ("dict.logistics.service.request.status.1", "zh-HK", "已提交_hk", "服务请求状态.已提交"),
+
+            // dict.logistics.service.request.status.2
+            ("dict.logistics.service.request.status.2", "en-US", "处理中_us", "服务请求状态.处理中"),
+            // dict.logistics.service.request.status.2
+            ("dict.logistics.service.request.status.2", "ja-JP", "处理中_jp", "服务请求状态.处理中"),
+            // dict.logistics.service.request.status.2
+            ("dict.logistics.service.request.status.2", "zh-CN", "处理中", "服务请求状态.处理中"),
+            // dict.logistics.service.request.status.2
+            ("dict.logistics.service.request.status.2", "zh-HK", "处理中_hk", "服务请求状态.处理中"),
+
+            // dict.logistics.service.request.status.3
+            ("dict.logistics.service.request.status.3", "en-US", "已完成_us", "服务请求状态.已完成"),
+            // dict.logistics.service.request.status.3
+            ("dict.logistics.service.request.status.3", "ja-JP", "已完成_jp", "服务请求状态.已完成"),
+            // dict.logistics.service.request.status.3
+            ("dict.logistics.service.request.status.3", "zh-CN", "已完成", "服务请求状态.已完成"),
+            // dict.logistics.service.request.status.3
+            ("dict.logistics.service.request.status.3", "zh-HK", "已完成_hk", "服务请求状态.已完成"),
+
+            // dict.logistics.service.request.status.4
+            ("dict.logistics.service.request.status.4", "en-US", "已关闭_us", "服务请求状态.已关闭"),
+            // dict.logistics.service.request.status.4
+            ("dict.logistics.service.request.status.4", "ja-JP", "已关闭_jp", "服务请求状态.已关闭"),
+            // dict.logistics.service.request.status.4
+            ("dict.logistics.service.request.status.4", "zh-CN", "已关闭", "服务请求状态.已关闭"),
+            // dict.logistics.service.request.status.4
+            ("dict.logistics.service.request.status.4", "zh-HK", "已关闭_hk", "服务请求状态.已关闭"),
+
+            // dict.logistics.service.request.status.5
+            ("dict.logistics.service.request.status.5", "en-US", "已取消_us", "服务请求状态.已取消"),
+            // dict.logistics.service.request.status.5
+            ("dict.logistics.service.request.status.5", "ja-JP", "已取消_jp", "服务请求状态.已取消"),
+            // dict.logistics.service.request.status.5
+            ("dict.logistics.service.request.status.5", "zh-CN", "已取消", "服务请求状态.已取消"),
+            // dict.logistics.service.request.status.5
+            ("dict.logistics.service.request.status.5", "zh-HK", "已取消_hk", "服务请求状态.已取消"),
+
+            // dict.logistics.acceptance.result.0
+            ("dict.logistics.acceptance.result.0", "en-US", "不合格_us", "验收结果.不合格"),
+            // dict.logistics.acceptance.result.0
+            ("dict.logistics.acceptance.result.0", "ja-JP", "不合格_jp", "验收结果.不合格"),
+            // dict.logistics.acceptance.result.0
+            ("dict.logistics.acceptance.result.0", "zh-CN", "不合格", "验收结果.不合格"),
+            // dict.logistics.acceptance.result.0
+            ("dict.logistics.acceptance.result.0", "zh-HK", "不合格_hk", "验收结果.不合格"),
+
+            // dict.logistics.acceptance.result.1
+            ("dict.logistics.acceptance.result.1", "en-US", "合格_us", "验收结果.合格"),
+            // dict.logistics.acceptance.result.1
+            ("dict.logistics.acceptance.result.1", "ja-JP", "合格_jp", "验收结果.合格"),
+            // dict.logistics.acceptance.result.1
+            ("dict.logistics.acceptance.result.1", "zh-CN", "合格", "验收结果.合格"),
+            // dict.logistics.acceptance.result.1
+            ("dict.logistics.acceptance.result.1", "zh-HK", "合格_hk", "验收结果.合格"),
+
+            // dict.logistics.acceptance.result.2
+            ("dict.logistics.acceptance.result.2", "en-US", "部分合格_us", "验收结果.部分合格"),
+            // dict.logistics.acceptance.result.2
+            ("dict.logistics.acceptance.result.2", "ja-JP", "部分合格_jp", "验收结果.部分合格"),
+            // dict.logistics.acceptance.result.2
+            ("dict.logistics.acceptance.result.2", "zh-CN", "部分合格", "验收结果.部分合格"),
+            // dict.logistics.acceptance.result.2
+            ("dict.logistics.acceptance.result.2", "zh-HK", "部分合格_hk", "验收结果.部分合格"),
+
+            // dict.logistics.maintenance.result.0
+            ("dict.logistics.maintenance.result.0", "en-US", "正常_us", "维护结果.正常"),
+            // dict.logistics.maintenance.result.0
+            ("dict.logistics.maintenance.result.0", "ja-JP", "正常_jp", "维护结果.正常"),
+            // dict.logistics.maintenance.result.0
+            ("dict.logistics.maintenance.result.0", "zh-CN", "正常", "维护结果.正常"),
+            // dict.logistics.maintenance.result.0
+            ("dict.logistics.maintenance.result.0", "zh-HK", "正常_hk", "维护结果.正常"),
+
+            // dict.logistics.maintenance.result.1
+            ("dict.logistics.maintenance.result.1", "en-US", "待观察_us", "维护结果.待观察"),
+            // dict.logistics.maintenance.result.1
+            ("dict.logistics.maintenance.result.1", "ja-JP", "待观察_jp", "维护结果.待观察"),
+            // dict.logistics.maintenance.result.1
+            ("dict.logistics.maintenance.result.1", "zh-CN", "待观察", "维护结果.待观察"),
+            // dict.logistics.maintenance.result.1
+            ("dict.logistics.maintenance.result.1", "zh-HK", "待观察_hk", "维护结果.待观察"),
+
+            // dict.logistics.maintenance.result.2
+            ("dict.logistics.maintenance.result.2", "en-US", "需再次维修_us", "维护结果.需再次维修"),
+            // dict.logistics.maintenance.result.2
+            ("dict.logistics.maintenance.result.2", "ja-JP", "需再次维修_jp", "维护结果.需再次维修"),
+            // dict.logistics.maintenance.result.2
+            ("dict.logistics.maintenance.result.2", "zh-CN", "需再次维修", "维护结果.需再次维修"),
+            // dict.logistics.maintenance.result.2
+            ("dict.logistics.maintenance.result.2", "zh-HK", "需再次维修_hk", "维护结果.需再次维修"),
+
+            // dict.logistics.maintenance.result.3
+            ("dict.logistics.maintenance.result.3", "en-US", "已报废_us", "维护结果.已报废"),
+            // dict.logistics.maintenance.result.3
+            ("dict.logistics.maintenance.result.3", "ja-JP", "已报废_jp", "维护结果.已报废"),
+            // dict.logistics.maintenance.result.3
+            ("dict.logistics.maintenance.result.3", "zh-CN", "已报废", "维护结果.已报废"),
+            // dict.logistics.maintenance.result.3
+            ("dict.logistics.maintenance.result.3", "zh-HK", "已报废_hk", "维护结果.已报废"),
+
+            // dict.logistics.settlement.status.0
+            ("dict.logistics.settlement.status.0", "en-US", "未结算_us", "结算状态.未结算"),
+            // dict.logistics.settlement.status.0
+            ("dict.logistics.settlement.status.0", "ja-JP", "未结算_jp", "结算状态.未结算"),
+            // dict.logistics.settlement.status.0
+            ("dict.logistics.settlement.status.0", "zh-CN", "未结算", "结算状态.未结算"),
+            // dict.logistics.settlement.status.0
+            ("dict.logistics.settlement.status.0", "zh-HK", "未结算_hk", "结算状态.未结算"),
+
+            // dict.logistics.settlement.status.1
+            ("dict.logistics.settlement.status.1", "en-US", "部分结算_us", "结算状态.部分结算"),
+            // dict.logistics.settlement.status.1
+            ("dict.logistics.settlement.status.1", "ja-JP", "部分结算_jp", "结算状态.部分结算"),
+            // dict.logistics.settlement.status.1
+            ("dict.logistics.settlement.status.1", "zh-CN", "部分结算", "结算状态.部分结算"),
+            // dict.logistics.settlement.status.1
+            ("dict.logistics.settlement.status.1", "zh-HK", "部分结算_hk", "结算状态.部分结算"),
+
+            // dict.logistics.settlement.status.2
+            ("dict.logistics.settlement.status.2", "en-US", "已结算_us", "结算状态.已结算"),
+            // dict.logistics.settlement.status.2
+            ("dict.logistics.settlement.status.2", "ja-JP", "已结算_jp", "结算状态.已结算"),
+            // dict.logistics.settlement.status.2
+            ("dict.logistics.settlement.status.2", "zh-CN", "已结算", "结算状态.已结算"),
+            // dict.logistics.settlement.status.2
+            ("dict.logistics.settlement.status.2", "zh-HK", "已结算_hk", "结算状态.已结算"),
+
+            // dict.logistics.maintenance.notification.status.0
+            ("dict.logistics.maintenance.notification.status.0", "en-US", "新建_us", "维护通知单状态.新建"),
+            // dict.logistics.maintenance.notification.status.0
+            ("dict.logistics.maintenance.notification.status.0", "ja-JP", "新建_jp", "维护通知单状态.新建"),
+            // dict.logistics.maintenance.notification.status.0
+            ("dict.logistics.maintenance.notification.status.0", "zh-CN", "新建", "维护通知单状态.新建"),
+            // dict.logistics.maintenance.notification.status.0
+            ("dict.logistics.maintenance.notification.status.0", "zh-HK", "新建_hk", "维护通知单状态.新建"),
+
+            // dict.logistics.maintenance.notification.status.1
+            ("dict.logistics.maintenance.notification.status.1", "en-US", "已转工单_us", "维护通知单状态.已转工单"),
+            // dict.logistics.maintenance.notification.status.1
+            ("dict.logistics.maintenance.notification.status.1", "ja-JP", "已转工单_jp", "维护通知单状态.已转工单"),
+            // dict.logistics.maintenance.notification.status.1
+            ("dict.logistics.maintenance.notification.status.1", "zh-CN", "已转工单", "维护通知单状态.已转工单"),
+            // dict.logistics.maintenance.notification.status.1
+            ("dict.logistics.maintenance.notification.status.1", "zh-HK", "已转工单_hk", "维护通知单状态.已转工单"),
+
+            // dict.logistics.maintenance.notification.status.2
+            ("dict.logistics.maintenance.notification.status.2", "en-US", "已关闭_us", "维护通知单状态.已关闭"),
+            // dict.logistics.maintenance.notification.status.2
+            ("dict.logistics.maintenance.notification.status.2", "ja-JP", "已关闭_jp", "维护通知单状态.已关闭"),
+            // dict.logistics.maintenance.notification.status.2
+            ("dict.logistics.maintenance.notification.status.2", "zh-CN", "已关闭", "维护通知单状态.已关闭"),
+            // dict.logistics.maintenance.notification.status.2
+            ("dict.logistics.maintenance.notification.status.2", "zh-HK", "已关闭_hk", "维护通知单状态.已关闭"),
+
+            // dict.logistics.maintenance.notification.status.3
+            ("dict.logistics.maintenance.notification.status.3", "en-US", "已取消_us", "维护通知单状态.已取消"),
+            // dict.logistics.maintenance.notification.status.3
+            ("dict.logistics.maintenance.notification.status.3", "ja-JP", "已取消_jp", "维护通知单状态.已取消"),
+            // dict.logistics.maintenance.notification.status.3
+            ("dict.logistics.maintenance.notification.status.3", "zh-CN", "已取消", "维护通知单状态.已取消"),
+            // dict.logistics.maintenance.notification.status.3
+            ("dict.logistics.maintenance.notification.status.3", "zh-HK", "已取消_hk", "维护通知单状态.已取消"),
+
+            // dict.logistics.maintenance.issue.status.0
+            ("dict.logistics.maintenance.issue.status.0", "en-US", "待领料_us", "维护领料状态.待领料"),
+            // dict.logistics.maintenance.issue.status.0
+            ("dict.logistics.maintenance.issue.status.0", "ja-JP", "待领料_jp", "维护领料状态.待领料"),
+            // dict.logistics.maintenance.issue.status.0
+            ("dict.logistics.maintenance.issue.status.0", "zh-CN", "待领料", "维护领料状态.待领料"),
+            // dict.logistics.maintenance.issue.status.0
+            ("dict.logistics.maintenance.issue.status.0", "zh-HK", "待领料_hk", "维护领料状态.待领料"),
+
+            // dict.logistics.maintenance.issue.status.1
+            ("dict.logistics.maintenance.issue.status.1", "en-US", "部分领料_us", "维护领料状态.部分领料"),
+            // dict.logistics.maintenance.issue.status.1
+            ("dict.logistics.maintenance.issue.status.1", "ja-JP", "部分领料_jp", "维护领料状态.部分领料"),
+            // dict.logistics.maintenance.issue.status.1
+            ("dict.logistics.maintenance.issue.status.1", "zh-CN", "部分领料", "维护领料状态.部分领料"),
+            // dict.logistics.maintenance.issue.status.1
+            ("dict.logistics.maintenance.issue.status.1", "zh-HK", "部分领料_hk", "维护领料状态.部分领料"),
+
+            // dict.logistics.maintenance.issue.status.2
+            ("dict.logistics.maintenance.issue.status.2", "en-US", "已领料_us", "维护领料状态.已领料"),
+            // dict.logistics.maintenance.issue.status.2
+            ("dict.logistics.maintenance.issue.status.2", "ja-JP", "已领料_jp", "维护领料状态.已领料"),
+            // dict.logistics.maintenance.issue.status.2
+            ("dict.logistics.maintenance.issue.status.2", "zh-CN", "已领料", "维护领料状态.已领料"),
+            // dict.logistics.maintenance.issue.status.2
+            ("dict.logistics.maintenance.issue.status.2", "zh-HK", "已领料_hk", "维护领料状态.已领料"),
+
+            // dict.logistics.maintenance.confirmation.status.0
+            ("dict.logistics.maintenance.confirmation.status.0", "en-US", "待确认_us", "维护报工确认状态.待确认"),
+            // dict.logistics.maintenance.confirmation.status.0
+            ("dict.logistics.maintenance.confirmation.status.0", "ja-JP", "待确认_jp", "维护报工确认状态.待确认"),
+            // dict.logistics.maintenance.confirmation.status.0
+            ("dict.logistics.maintenance.confirmation.status.0", "zh-CN", "待确认", "维护报工确认状态.待确认"),
+            // dict.logistics.maintenance.confirmation.status.0
+            ("dict.logistics.maintenance.confirmation.status.0", "zh-HK", "待确认_hk", "维护报工确认状态.待确认"),
+
+            // dict.logistics.maintenance.confirmation.status.1
+            ("dict.logistics.maintenance.confirmation.status.1", "en-US", "已确认_us", "维护报工确认状态.已确认"),
+            // dict.logistics.maintenance.confirmation.status.1
+            ("dict.logistics.maintenance.confirmation.status.1", "ja-JP", "已确认_jp", "维护报工确认状态.已确认"),
+            // dict.logistics.maintenance.confirmation.status.1
+            ("dict.logistics.maintenance.confirmation.status.1", "zh-CN", "已确认", "维护报工确认状态.已确认"),
+            // dict.logistics.maintenance.confirmation.status.1
+            ("dict.logistics.maintenance.confirmation.status.1", "zh-HK", "已确认_hk", "维护报工确认状态.已确认"),
+
+            // dict.logistics.process.segment.type.1
+            ("dict.logistics.process.segment.type.1", "en-US", "SMT_us", "工艺段类型.SMT"),
+            // dict.logistics.process.segment.type.1
+            ("dict.logistics.process.segment.type.1", "ja-JP", "SMT_jp", "工艺段类型.SMT"),
+            // dict.logistics.process.segment.type.1
+            ("dict.logistics.process.segment.type.1", "zh-CN", "SMT", "工艺段类型.SMT"),
+            // dict.logistics.process.segment.type.1
+            ("dict.logistics.process.segment.type.1", "zh-HK", "SMT_hk", "工艺段类型.SMT"),
+
+            // dict.logistics.process.segment.type.2
+            ("dict.logistics.process.segment.type.2", "en-US", "自插_us", "工艺段类型.自插"),
+            // dict.logistics.process.segment.type.2
+            ("dict.logistics.process.segment.type.2", "ja-JP", "自插_jp", "工艺段类型.自插"),
+            // dict.logistics.process.segment.type.2
+            ("dict.logistics.process.segment.type.2", "zh-CN", "自插", "工艺段类型.自插"),
+            // dict.logistics.process.segment.type.2
+            ("dict.logistics.process.segment.type.2", "zh-HK", "自插_hk", "工艺段类型.自插"),
+
+            // dict.logistics.process.segment.type.3
+            ("dict.logistics.process.segment.type.3", "en-US", "手插_us", "工艺段类型.手插"),
+            // dict.logistics.process.segment.type.3
+            ("dict.logistics.process.segment.type.3", "ja-JP", "手插_jp", "工艺段类型.手插"),
+            // dict.logistics.process.segment.type.3
+            ("dict.logistics.process.segment.type.3", "zh-CN", "手插", "工艺段类型.手插"),
+            // dict.logistics.process.segment.type.3
+            ("dict.logistics.process.segment.type.3", "zh-HK", "手插_hk", "工艺段类型.手插"),
+
+            // dict.logistics.process.segment.type.4
+            ("dict.logistics.process.segment.type.4", "en-US", "修正_us", "工艺段类型.修正"),
+            // dict.logistics.process.segment.type.4
+            ("dict.logistics.process.segment.type.4", "ja-JP", "修正_jp", "工艺段类型.修正"),
+            // dict.logistics.process.segment.type.4
+            ("dict.logistics.process.segment.type.4", "zh-CN", "修正", "工艺段类型.修正"),
+            // dict.logistics.process.segment.type.4
+            ("dict.logistics.process.segment.type.4", "zh-HK", "修正_hk", "工艺段类型.修正"),
+
+            // dict.logistics.process.segment.type.5
+            ("dict.logistics.process.segment.type.5", "en-US", "总装_us", "工艺段类型.总装"),
+            // dict.logistics.process.segment.type.5
+            ("dict.logistics.process.segment.type.5", "ja-JP", "总装_jp", "工艺段类型.总装"),
+            // dict.logistics.process.segment.type.5
+            ("dict.logistics.process.segment.type.5", "zh-CN", "总装", "工艺段类型.总装"),
+            // dict.logistics.process.segment.type.5
+            ("dict.logistics.process.segment.type.5", "zh-HK", "总装_hk", "工艺段类型.总装"),
 
             // dict.logistics.sop.andon.type.
             ("dict.logistics.sop.andon.type.", "en-US", "班长_us", "SOP安灯呼叫类型.班长"),
@@ -12307,6 +18607,1950 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.sop.scan.result.type.", "zh-CN", "PASS", "SOP扫码结果.PASS"),
             // dict.logistics.sop.scan.result.type.
             ("dict.logistics.sop.scan.result.type.", "zh-HK", "PASS_hk", "SOP扫码结果.PASS"),
+
+            // dict.logistics.quality.complaint.type.0
+            ("dict.logistics.quality.complaint.type.0", "en-US", "质量_us", "客诉投诉类型.质量"),
+            // dict.logistics.quality.complaint.type.0
+            ("dict.logistics.quality.complaint.type.0", "ja-JP", "质量_jp", "客诉投诉类型.质量"),
+            // dict.logistics.quality.complaint.type.0
+            ("dict.logistics.quality.complaint.type.0", "zh-CN", "质量", "客诉投诉类型.质量"),
+            // dict.logistics.quality.complaint.type.0
+            ("dict.logistics.quality.complaint.type.0", "zh-HK", "质量_hk", "客诉投诉类型.质量"),
+
+            // dict.logistics.quality.complaint.method.0
+            ("dict.logistics.quality.complaint.method.0", "en-US", "电话_us", "客诉投诉方式.电话"),
+            // dict.logistics.quality.complaint.method.0
+            ("dict.logistics.quality.complaint.method.0", "ja-JP", "电话_jp", "客诉投诉方式.电话"),
+            // dict.logistics.quality.complaint.method.0
+            ("dict.logistics.quality.complaint.method.0", "zh-CN", "电话", "客诉投诉方式.电话"),
+            // dict.logistics.quality.complaint.method.0
+            ("dict.logistics.quality.complaint.method.0", "zh-HK", "电话_hk", "客诉投诉方式.电话"),
+
+            // dict.logistics.quality.complaint.method.1
+            ("dict.logistics.quality.complaint.method.1", "en-US", "邮件_us", "客诉投诉方式.邮件"),
+            // dict.logistics.quality.complaint.method.1
+            ("dict.logistics.quality.complaint.method.1", "ja-JP", "邮件_jp", "客诉投诉方式.邮件"),
+            // dict.logistics.quality.complaint.method.1
+            ("dict.logistics.quality.complaint.method.1", "zh-CN", "邮件", "客诉投诉方式.邮件"),
+            // dict.logistics.quality.complaint.method.1
+            ("dict.logistics.quality.complaint.method.1", "zh-HK", "邮件_hk", "客诉投诉方式.邮件"),
+
+            // dict.logistics.quality.complaint.method.2
+            ("dict.logistics.quality.complaint.method.2", "en-US", "传真_us", "客诉投诉方式.传真"),
+            // dict.logistics.quality.complaint.method.2
+            ("dict.logistics.quality.complaint.method.2", "ja-JP", "传真_jp", "客诉投诉方式.传真"),
+            // dict.logistics.quality.complaint.method.2
+            ("dict.logistics.quality.complaint.method.2", "zh-CN", "传真", "客诉投诉方式.传真"),
+            // dict.logistics.quality.complaint.method.2
+            ("dict.logistics.quality.complaint.method.2", "zh-HK", "传真_hk", "客诉投诉方式.传真"),
+
+            // dict.logistics.quality.complaint.method.3
+            ("dict.logistics.quality.complaint.method.3", "en-US", "现场_us", "客诉投诉方式.现场"),
+            // dict.logistics.quality.complaint.method.3
+            ("dict.logistics.quality.complaint.method.3", "ja-JP", "现场_jp", "客诉投诉方式.现场"),
+            // dict.logistics.quality.complaint.method.3
+            ("dict.logistics.quality.complaint.method.3", "zh-CN", "现场", "客诉投诉方式.现场"),
+            // dict.logistics.quality.complaint.method.3
+            ("dict.logistics.quality.complaint.method.3", "zh-HK", "现场_hk", "客诉投诉方式.现场"),
+
+            // dict.logistics.quality.complaint.method.4
+            ("dict.logistics.quality.complaint.method.4", "en-US", "其他_us", "客诉投诉方式.其他"),
+            // dict.logistics.quality.complaint.method.4
+            ("dict.logistics.quality.complaint.method.4", "ja-JP", "其他_jp", "客诉投诉方式.其他"),
+            // dict.logistics.quality.complaint.method.4
+            ("dict.logistics.quality.complaint.method.4", "zh-CN", "其他", "客诉投诉方式.其他"),
+            // dict.logistics.quality.complaint.method.4
+            ("dict.logistics.quality.complaint.method.4", "zh-HK", "其他_hk", "客诉投诉方式.其他"),
+
+            // dict.logistics.quality.complaint.type.1
+            ("dict.logistics.quality.complaint.type.1", "en-US", "交期_us", "客诉投诉类型.交期"),
+            // dict.logistics.quality.complaint.type.1
+            ("dict.logistics.quality.complaint.type.1", "ja-JP", "交期_jp", "客诉投诉类型.交期"),
+            // dict.logistics.quality.complaint.type.1
+            ("dict.logistics.quality.complaint.type.1", "zh-CN", "交期", "客诉投诉类型.交期"),
+            // dict.logistics.quality.complaint.type.1
+            ("dict.logistics.quality.complaint.type.1", "zh-HK", "交期_hk", "客诉投诉类型.交期"),
+
+            // dict.logistics.quality.complaint.type.2
+            ("dict.logistics.quality.complaint.type.2", "en-US", "服务_us", "客诉投诉类型.服务"),
+            // dict.logistics.quality.complaint.type.2
+            ("dict.logistics.quality.complaint.type.2", "ja-JP", "服务_jp", "客诉投诉类型.服务"),
+            // dict.logistics.quality.complaint.type.2
+            ("dict.logistics.quality.complaint.type.2", "zh-CN", "服务", "客诉投诉类型.服务"),
+            // dict.logistics.quality.complaint.type.2
+            ("dict.logistics.quality.complaint.type.2", "zh-HK", "服务_hk", "客诉投诉类型.服务"),
+
+            // dict.logistics.quality.complaint.type.3
+            ("dict.logistics.quality.complaint.type.3", "en-US", "价格_us", "客诉投诉类型.价格"),
+            // dict.logistics.quality.complaint.type.3
+            ("dict.logistics.quality.complaint.type.3", "ja-JP", "价格_jp", "客诉投诉类型.价格"),
+            // dict.logistics.quality.complaint.type.3
+            ("dict.logistics.quality.complaint.type.3", "zh-CN", "价格", "客诉投诉类型.价格"),
+            // dict.logistics.quality.complaint.type.3
+            ("dict.logistics.quality.complaint.type.3", "zh-HK", "价格_hk", "客诉投诉类型.价格"),
+
+            // dict.logistics.quality.complaint.type.4
+            ("dict.logistics.quality.complaint.type.4", "en-US", "其他_us", "客诉投诉类型.其他"),
+            // dict.logistics.quality.complaint.type.4
+            ("dict.logistics.quality.complaint.type.4", "ja-JP", "其他_jp", "客诉投诉类型.其他"),
+            // dict.logistics.quality.complaint.type.4
+            ("dict.logistics.quality.complaint.type.4", "zh-CN", "其他", "客诉投诉类型.其他"),
+            // dict.logistics.quality.complaint.type.4
+            ("dict.logistics.quality.complaint.type.4", "zh-HK", "其他_hk", "客诉投诉类型.其他"),
+
+            // dict.logistics.quality.complaint.level.0
+            ("dict.logistics.quality.complaint.level.0", "en-US", "一般_us", "客诉投诉等级.一般"),
+            // dict.logistics.quality.complaint.level.0
+            ("dict.logistics.quality.complaint.level.0", "ja-JP", "一般_jp", "客诉投诉等级.一般"),
+            // dict.logistics.quality.complaint.level.0
+            ("dict.logistics.quality.complaint.level.0", "zh-CN", "一般", "客诉投诉等级.一般"),
+            // dict.logistics.quality.complaint.level.0
+            ("dict.logistics.quality.complaint.level.0", "zh-HK", "一般_hk", "客诉投诉等级.一般"),
+
+            // dict.logistics.quality.complaint.level.1
+            ("dict.logistics.quality.complaint.level.1", "en-US", "重要_us", "客诉投诉等级.重要"),
+            // dict.logistics.quality.complaint.level.1
+            ("dict.logistics.quality.complaint.level.1", "ja-JP", "重要_jp", "客诉投诉等级.重要"),
+            // dict.logistics.quality.complaint.level.1
+            ("dict.logistics.quality.complaint.level.1", "zh-CN", "重要", "客诉投诉等级.重要"),
+            // dict.logistics.quality.complaint.level.1
+            ("dict.logistics.quality.complaint.level.1", "zh-HK", "重要_hk", "客诉投诉等级.重要"),
+
+            // dict.logistics.quality.complaint.level.2
+            ("dict.logistics.quality.complaint.level.2", "en-US", "紧急_us", "客诉投诉等级.紧急"),
+            // dict.logistics.quality.complaint.level.2
+            ("dict.logistics.quality.complaint.level.2", "ja-JP", "紧急_jp", "客诉投诉等级.紧急"),
+            // dict.logistics.quality.complaint.level.2
+            ("dict.logistics.quality.complaint.level.2", "zh-CN", "紧急", "客诉投诉等级.紧急"),
+            // dict.logistics.quality.complaint.level.2
+            ("dict.logistics.quality.complaint.level.2", "zh-HK", "紧急_hk", "客诉投诉等级.紧急"),
+
+            // dict.logistics.quality.complaint.level.3
+            ("dict.logistics.quality.complaint.level.3", "en-US", "严重_us", "客诉投诉等级.严重"),
+            // dict.logistics.quality.complaint.level.3
+            ("dict.logistics.quality.complaint.level.3", "ja-JP", "严重_jp", "客诉投诉等级.严重"),
+            // dict.logistics.quality.complaint.level.3
+            ("dict.logistics.quality.complaint.level.3", "zh-CN", "严重", "客诉投诉等级.严重"),
+            // dict.logistics.quality.complaint.level.3
+            ("dict.logistics.quality.complaint.level.3", "zh-HK", "严重_hk", "客诉投诉等级.严重"),
+
+            // dict.logistics.quality.complaint.status.0
+            ("dict.logistics.quality.complaint.status.0", "en-US", "待处理_us", "客诉状态.待处理"),
+            // dict.logistics.quality.complaint.status.0
+            ("dict.logistics.quality.complaint.status.0", "ja-JP", "待处理_jp", "客诉状态.待处理"),
+            // dict.logistics.quality.complaint.status.0
+            ("dict.logistics.quality.complaint.status.0", "zh-CN", "待处理", "客诉状态.待处理"),
+            // dict.logistics.quality.complaint.status.0
+            ("dict.logistics.quality.complaint.status.0", "zh-HK", "待处理_hk", "客诉状态.待处理"),
+
+            // dict.logistics.quality.complaint.status.1
+            ("dict.logistics.quality.complaint.status.1", "en-US", "处理中_us", "客诉状态.处理中"),
+            // dict.logistics.quality.complaint.status.1
+            ("dict.logistics.quality.complaint.status.1", "ja-JP", "处理中_jp", "客诉状态.处理中"),
+            // dict.logistics.quality.complaint.status.1
+            ("dict.logistics.quality.complaint.status.1", "zh-CN", "处理中", "客诉状态.处理中"),
+            // dict.logistics.quality.complaint.status.1
+            ("dict.logistics.quality.complaint.status.1", "zh-HK", "处理中_hk", "客诉状态.处理中"),
+
+            // dict.logistics.quality.complaint.status.2
+            ("dict.logistics.quality.complaint.status.2", "en-US", "已回复_us", "客诉状态.已回复"),
+            // dict.logistics.quality.complaint.status.2
+            ("dict.logistics.quality.complaint.status.2", "ja-JP", "已回复_jp", "客诉状态.已回复"),
+            // dict.logistics.quality.complaint.status.2
+            ("dict.logistics.quality.complaint.status.2", "zh-CN", "已回复", "客诉状态.已回复"),
+            // dict.logistics.quality.complaint.status.2
+            ("dict.logistics.quality.complaint.status.2", "zh-HK", "已回复_hk", "客诉状态.已回复"),
+
+            // dict.logistics.quality.complaint.status.3
+            ("dict.logistics.quality.complaint.status.3", "en-US", "已关闭_us", "客诉状态.已关闭"),
+            // dict.logistics.quality.complaint.status.3
+            ("dict.logistics.quality.complaint.status.3", "ja-JP", "已关闭_jp", "客诉状态.已关闭"),
+            // dict.logistics.quality.complaint.status.3
+            ("dict.logistics.quality.complaint.status.3", "zh-CN", "已关闭", "客诉状态.已关闭"),
+            // dict.logistics.quality.complaint.status.3
+            ("dict.logistics.quality.complaint.status.3", "zh-HK", "已关闭_hk", "客诉状态.已关闭"),
+
+            // dict.logistics.quality.complaint.status.4
+            ("dict.logistics.quality.complaint.status.4", "en-US", "已驳回_us", "客诉状态.已驳回"),
+            // dict.logistics.quality.complaint.status.4
+            ("dict.logistics.quality.complaint.status.4", "ja-JP", "已驳回_jp", "客诉状态.已驳回"),
+            // dict.logistics.quality.complaint.status.4
+            ("dict.logistics.quality.complaint.status.4", "zh-CN", "已驳回", "客诉状态.已驳回"),
+            // dict.logistics.quality.complaint.status.4
+            ("dict.logistics.quality.complaint.status.4", "zh-HK", "已驳回_hk", "客诉状态.已驳回"),
+
+            // dict.logistics.quality.customer.satisfaction.0
+            ("dict.logistics.quality.customer.satisfaction.0", "en-US", "不满意_us", "客户满意度.不满意"),
+            // dict.logistics.quality.customer.satisfaction.0
+            ("dict.logistics.quality.customer.satisfaction.0", "ja-JP", "不满意_jp", "客户满意度.不满意"),
+            // dict.logistics.quality.customer.satisfaction.0
+            ("dict.logistics.quality.customer.satisfaction.0", "zh-CN", "不满意", "客户满意度.不满意"),
+            // dict.logistics.quality.customer.satisfaction.0
+            ("dict.logistics.quality.customer.satisfaction.0", "zh-HK", "不满意_hk", "客户满意度.不满意"),
+
+            // dict.logistics.quality.customer.satisfaction.1
+            ("dict.logistics.quality.customer.satisfaction.1", "en-US", "一般_us", "客户满意度.一般"),
+            // dict.logistics.quality.customer.satisfaction.1
+            ("dict.logistics.quality.customer.satisfaction.1", "ja-JP", "一般_jp", "客户满意度.一般"),
+            // dict.logistics.quality.customer.satisfaction.1
+            ("dict.logistics.quality.customer.satisfaction.1", "zh-CN", "一般", "客户满意度.一般"),
+            // dict.logistics.quality.customer.satisfaction.1
+            ("dict.logistics.quality.customer.satisfaction.1", "zh-HK", "一般_hk", "客户满意度.一般"),
+
+            // dict.logistics.quality.customer.satisfaction.2
+            ("dict.logistics.quality.customer.satisfaction.2", "en-US", "满意_us", "客户满意度.满意"),
+            // dict.logistics.quality.customer.satisfaction.2
+            ("dict.logistics.quality.customer.satisfaction.2", "ja-JP", "满意_jp", "客户满意度.满意"),
+            // dict.logistics.quality.customer.satisfaction.2
+            ("dict.logistics.quality.customer.satisfaction.2", "zh-CN", "满意", "客户满意度.满意"),
+            // dict.logistics.quality.customer.satisfaction.2
+            ("dict.logistics.quality.customer.satisfaction.2", "zh-HK", "满意_hk", "客户满意度.满意"),
+
+            // dict.logistics.quality.customer.satisfaction.3
+            ("dict.logistics.quality.customer.satisfaction.3", "en-US", "非常满意_us", "客户满意度.非常满意"),
+            // dict.logistics.quality.customer.satisfaction.3
+            ("dict.logistics.quality.customer.satisfaction.3", "ja-JP", "非常满意_jp", "客户满意度.非常满意"),
+            // dict.logistics.quality.customer.satisfaction.3
+            ("dict.logistics.quality.customer.satisfaction.3", "zh-CN", "非常满意", "客户满意度.非常满意"),
+            // dict.logistics.quality.customer.satisfaction.3
+            ("dict.logistics.quality.customer.satisfaction.3", "zh-HK", "非常满意_hk", "客户满意度.非常满意"),
+
+            // dict.logistics.quality.complaint.handling.stage.0
+            ("dict.logistics.quality.complaint.handling.stage.0", "en-US", "初步响应_us", "客诉处理阶段.初步响应"),
+            // dict.logistics.quality.complaint.handling.stage.0
+            ("dict.logistics.quality.complaint.handling.stage.0", "ja-JP", "初步响应_jp", "客诉处理阶段.初步响应"),
+            // dict.logistics.quality.complaint.handling.stage.0
+            ("dict.logistics.quality.complaint.handling.stage.0", "zh-CN", "初步响应", "客诉处理阶段.初步响应"),
+            // dict.logistics.quality.complaint.handling.stage.0
+            ("dict.logistics.quality.complaint.handling.stage.0", "zh-HK", "初步响应_hk", "客诉处理阶段.初步响应"),
+
+            // dict.logistics.quality.complaint.handling.stage.1
+            ("dict.logistics.quality.complaint.handling.stage.1", "en-US", "原因分析_us", "客诉处理阶段.原因分析"),
+            // dict.logistics.quality.complaint.handling.stage.1
+            ("dict.logistics.quality.complaint.handling.stage.1", "ja-JP", "原因分析_jp", "客诉处理阶段.原因分析"),
+            // dict.logistics.quality.complaint.handling.stage.1
+            ("dict.logistics.quality.complaint.handling.stage.1", "zh-CN", "原因分析", "客诉处理阶段.原因分析"),
+            // dict.logistics.quality.complaint.handling.stage.1
+            ("dict.logistics.quality.complaint.handling.stage.1", "zh-HK", "原因分析_hk", "客诉处理阶段.原因分析"),
+
+            // dict.logistics.quality.complaint.handling.stage.2
+            ("dict.logistics.quality.complaint.handling.stage.2", "en-US", "改善对策_us", "客诉处理阶段.改善对策"),
+            // dict.logistics.quality.complaint.handling.stage.2
+            ("dict.logistics.quality.complaint.handling.stage.2", "ja-JP", "改善对策_jp", "客诉处理阶段.改善对策"),
+            // dict.logistics.quality.complaint.handling.stage.2
+            ("dict.logistics.quality.complaint.handling.stage.2", "zh-CN", "改善对策", "客诉处理阶段.改善对策"),
+            // dict.logistics.quality.complaint.handling.stage.2
+            ("dict.logistics.quality.complaint.handling.stage.2", "zh-HK", "改善对策_hk", "客诉处理阶段.改善对策"),
+
+            // dict.logistics.quality.complaint.handling.stage.3
+            ("dict.logistics.quality.complaint.handling.stage.3", "en-US", "效果验证_us", "客诉处理阶段.效果验证"),
+            // dict.logistics.quality.complaint.handling.stage.3
+            ("dict.logistics.quality.complaint.handling.stage.3", "ja-JP", "效果验证_jp", "客诉处理阶段.效果验证"),
+            // dict.logistics.quality.complaint.handling.stage.3
+            ("dict.logistics.quality.complaint.handling.stage.3", "zh-CN", "效果验证", "客诉处理阶段.效果验证"),
+            // dict.logistics.quality.complaint.handling.stage.3
+            ("dict.logistics.quality.complaint.handling.stage.3", "zh-HK", "效果验证_hk", "客诉处理阶段.效果验证"),
+
+            // dict.logistics.quality.complaint.handling.stage.4
+            ("dict.logistics.quality.complaint.handling.stage.4", "en-US", "结案_us", "客诉处理阶段.结案"),
+            // dict.logistics.quality.complaint.handling.stage.4
+            ("dict.logistics.quality.complaint.handling.stage.4", "ja-JP", "结案_jp", "客诉处理阶段.结案"),
+            // dict.logistics.quality.complaint.handling.stage.4
+            ("dict.logistics.quality.complaint.handling.stage.4", "zh-CN", "结案", "客诉处理阶段.结案"),
+            // dict.logistics.quality.complaint.handling.stage.4
+            ("dict.logistics.quality.complaint.handling.stage.4", "zh-HK", "结案_hk", "客诉处理阶段.结案"),
+
+            // dict.logistics.quality.complaint.handling.method.0
+            ("dict.logistics.quality.complaint.handling.method.0", "en-US", "返工_us", "客诉处理方式.返工"),
+            // dict.logistics.quality.complaint.handling.method.0
+            ("dict.logistics.quality.complaint.handling.method.0", "ja-JP", "返工_jp", "客诉处理方式.返工"),
+            // dict.logistics.quality.complaint.handling.method.0
+            ("dict.logistics.quality.complaint.handling.method.0", "zh-CN", "返工", "客诉处理方式.返工"),
+            // dict.logistics.quality.complaint.handling.method.0
+            ("dict.logistics.quality.complaint.handling.method.0", "zh-HK", "返工_hk", "客诉处理方式.返工"),
+
+            // dict.logistics.quality.complaint.handling.method.1
+            ("dict.logistics.quality.complaint.handling.method.1", "en-US", "返修_us", "客诉处理方式.返修"),
+            // dict.logistics.quality.complaint.handling.method.1
+            ("dict.logistics.quality.complaint.handling.method.1", "ja-JP", "返修_jp", "客诉处理方式.返修"),
+            // dict.logistics.quality.complaint.handling.method.1
+            ("dict.logistics.quality.complaint.handling.method.1", "zh-CN", "返修", "客诉处理方式.返修"),
+            // dict.logistics.quality.complaint.handling.method.1
+            ("dict.logistics.quality.complaint.handling.method.1", "zh-HK", "返修_hk", "客诉处理方式.返修"),
+
+            // dict.logistics.quality.complaint.handling.method.2
+            ("dict.logistics.quality.complaint.handling.method.2", "en-US", "补货_us", "客诉处理方式.补货"),
+            // dict.logistics.quality.complaint.handling.method.2
+            ("dict.logistics.quality.complaint.handling.method.2", "ja-JP", "补货_jp", "客诉处理方式.补货"),
+            // dict.logistics.quality.complaint.handling.method.2
+            ("dict.logistics.quality.complaint.handling.method.2", "zh-CN", "补货", "客诉处理方式.补货"),
+            // dict.logistics.quality.complaint.handling.method.2
+            ("dict.logistics.quality.complaint.handling.method.2", "zh-HK", "补货_hk", "客诉处理方式.补货"),
+
+            // dict.logistics.quality.complaint.handling.method.3
+            ("dict.logistics.quality.complaint.handling.method.3", "en-US", "退货_us", "客诉处理方式.退货"),
+            // dict.logistics.quality.complaint.handling.method.3
+            ("dict.logistics.quality.complaint.handling.method.3", "ja-JP", "退货_jp", "客诉处理方式.退货"),
+            // dict.logistics.quality.complaint.handling.method.3
+            ("dict.logistics.quality.complaint.handling.method.3", "zh-CN", "退货", "客诉处理方式.退货"),
+            // dict.logistics.quality.complaint.handling.method.3
+            ("dict.logistics.quality.complaint.handling.method.3", "zh-HK", "退货_hk", "客诉处理方式.退货"),
+
+            // dict.logistics.quality.complaint.handling.method.4
+            ("dict.logistics.quality.complaint.handling.method.4", "en-US", "退款_us", "客诉处理方式.退款"),
+            // dict.logistics.quality.complaint.handling.method.4
+            ("dict.logistics.quality.complaint.handling.method.4", "ja-JP", "退款_jp", "客诉处理方式.退款"),
+            // dict.logistics.quality.complaint.handling.method.4
+            ("dict.logistics.quality.complaint.handling.method.4", "zh-CN", "退款", "客诉处理方式.退款"),
+            // dict.logistics.quality.complaint.handling.method.4
+            ("dict.logistics.quality.complaint.handling.method.4", "zh-HK", "退款_hk", "客诉处理方式.退款"),
+
+            // dict.logistics.quality.complaint.handling.method.5
+            ("dict.logistics.quality.complaint.handling.method.5", "en-US", "折扣_us", "客诉处理方式.折扣"),
+            // dict.logistics.quality.complaint.handling.method.5
+            ("dict.logistics.quality.complaint.handling.method.5", "ja-JP", "折扣_jp", "客诉处理方式.折扣"),
+            // dict.logistics.quality.complaint.handling.method.5
+            ("dict.logistics.quality.complaint.handling.method.5", "zh-CN", "折扣", "客诉处理方式.折扣"),
+            // dict.logistics.quality.complaint.handling.method.5
+            ("dict.logistics.quality.complaint.handling.method.5", "zh-HK", "折扣_hk", "客诉处理方式.折扣"),
+
+            // dict.logistics.quality.complaint.handling.method.6
+            ("dict.logistics.quality.complaint.handling.method.6", "en-US", "其他_us", "客诉处理方式.其他"),
+            // dict.logistics.quality.complaint.handling.method.6
+            ("dict.logistics.quality.complaint.handling.method.6", "ja-JP", "其他_jp", "客诉处理方式.其他"),
+            // dict.logistics.quality.complaint.handling.method.6
+            ("dict.logistics.quality.complaint.handling.method.6", "zh-CN", "其他", "客诉处理方式.其他"),
+            // dict.logistics.quality.complaint.handling.method.6
+            ("dict.logistics.quality.complaint.handling.method.6", "zh-HK", "其他_hk", "客诉处理方式.其他"),
+
+            // dict.logistics.quality.complaint.handling.status.0
+            ("dict.logistics.quality.complaint.handling.status.0", "en-US", "待处理_us", "客诉处理状态.待处理"),
+            // dict.logistics.quality.complaint.handling.status.0
+            ("dict.logistics.quality.complaint.handling.status.0", "ja-JP", "待处理_jp", "客诉处理状态.待处理"),
+            // dict.logistics.quality.complaint.handling.status.0
+            ("dict.logistics.quality.complaint.handling.status.0", "zh-CN", "待处理", "客诉处理状态.待处理"),
+            // dict.logistics.quality.complaint.handling.status.0
+            ("dict.logistics.quality.complaint.handling.status.0", "zh-HK", "待处理_hk", "客诉处理状态.待处理"),
+
+            // dict.logistics.quality.complaint.handling.status.1
+            ("dict.logistics.quality.complaint.handling.status.1", "en-US", "处理中_us", "客诉处理状态.处理中"),
+            // dict.logistics.quality.complaint.handling.status.1
+            ("dict.logistics.quality.complaint.handling.status.1", "ja-JP", "处理中_jp", "客诉处理状态.处理中"),
+            // dict.logistics.quality.complaint.handling.status.1
+            ("dict.logistics.quality.complaint.handling.status.1", "zh-CN", "处理中", "客诉处理状态.处理中"),
+            // dict.logistics.quality.complaint.handling.status.1
+            ("dict.logistics.quality.complaint.handling.status.1", "zh-HK", "处理中_hk", "客诉处理状态.处理中"),
+
+            // dict.logistics.quality.complaint.handling.status.2
+            ("dict.logistics.quality.complaint.handling.status.2", "en-US", "已完成_us", "客诉处理状态.已完成"),
+            // dict.logistics.quality.complaint.handling.status.2
+            ("dict.logistics.quality.complaint.handling.status.2", "ja-JP", "已完成_jp", "客诉处理状态.已完成"),
+            // dict.logistics.quality.complaint.handling.status.2
+            ("dict.logistics.quality.complaint.handling.status.2", "zh-CN", "已完成", "客诉处理状态.已完成"),
+            // dict.logistics.quality.complaint.handling.status.2
+            ("dict.logistics.quality.complaint.handling.status.2", "zh-HK", "已完成_hk", "客诉处理状态.已完成"),
+
+            // dict.logistics.quality.complaint.handling.status.3
+            ("dict.logistics.quality.complaint.handling.status.3", "en-US", "已关闭_us", "客诉处理状态.已关闭"),
+            // dict.logistics.quality.complaint.handling.status.3
+            ("dict.logistics.quality.complaint.handling.status.3", "ja-JP", "已关闭_jp", "客诉处理状态.已关闭"),
+            // dict.logistics.quality.complaint.handling.status.3
+            ("dict.logistics.quality.complaint.handling.status.3", "zh-CN", "已关闭", "客诉处理状态.已关闭"),
+            // dict.logistics.quality.complaint.handling.status.3
+            ("dict.logistics.quality.complaint.handling.status.3", "zh-HK", "已关闭_hk", "客诉处理状态.已关闭"),
+
+            // dict.logistics.quality.complaint.handling.status.4
+            ("dict.logistics.quality.complaint.handling.status.4", "en-US", "已驳回_us", "客诉处理状态.已驳回"),
+            // dict.logistics.quality.complaint.handling.status.4
+            ("dict.logistics.quality.complaint.handling.status.4", "ja-JP", "已驳回_jp", "客诉处理状态.已驳回"),
+            // dict.logistics.quality.complaint.handling.status.4
+            ("dict.logistics.quality.complaint.handling.status.4", "zh-CN", "已驳回", "客诉处理状态.已驳回"),
+            // dict.logistics.quality.complaint.handling.status.4
+            ("dict.logistics.quality.complaint.handling.status.4", "zh-HK", "已驳回_hk", "客诉处理状态.已驳回"),
+
+            // dict.logistics.quality.complaint.item.type.0
+            ("dict.logistics.quality.complaint.item.type.0", "en-US", "外观_us", "客诉不良项目类型.外观"),
+            // dict.logistics.quality.complaint.item.type.0
+            ("dict.logistics.quality.complaint.item.type.0", "ja-JP", "外观_jp", "客诉不良项目类型.外观"),
+            // dict.logistics.quality.complaint.item.type.0
+            ("dict.logistics.quality.complaint.item.type.0", "zh-CN", "外观", "客诉不良项目类型.外观"),
+            // dict.logistics.quality.complaint.item.type.0
+            ("dict.logistics.quality.complaint.item.type.0", "zh-HK", "外观_hk", "客诉不良项目类型.外观"),
+
+            // dict.logistics.quality.complaint.item.type.1
+            ("dict.logistics.quality.complaint.item.type.1", "en-US", "尺寸_us", "客诉不良项目类型.尺寸"),
+            // dict.logistics.quality.complaint.item.type.1
+            ("dict.logistics.quality.complaint.item.type.1", "ja-JP", "尺寸_jp", "客诉不良项目类型.尺寸"),
+            // dict.logistics.quality.complaint.item.type.1
+            ("dict.logistics.quality.complaint.item.type.1", "zh-CN", "尺寸", "客诉不良项目类型.尺寸"),
+            // dict.logistics.quality.complaint.item.type.1
+            ("dict.logistics.quality.complaint.item.type.1", "zh-HK", "尺寸_hk", "客诉不良项目类型.尺寸"),
+
+            // dict.logistics.quality.complaint.item.type.2
+            ("dict.logistics.quality.complaint.item.type.2", "en-US", "性能_us", "客诉不良项目类型.性能"),
+            // dict.logistics.quality.complaint.item.type.2
+            ("dict.logistics.quality.complaint.item.type.2", "ja-JP", "性能_jp", "客诉不良项目类型.性能"),
+            // dict.logistics.quality.complaint.item.type.2
+            ("dict.logistics.quality.complaint.item.type.2", "zh-CN", "性能", "客诉不良项目类型.性能"),
+            // dict.logistics.quality.complaint.item.type.2
+            ("dict.logistics.quality.complaint.item.type.2", "zh-HK", "性能_hk", "客诉不良项目类型.性能"),
+
+            // dict.logistics.quality.complaint.item.type.3
+            ("dict.logistics.quality.complaint.item.type.3", "en-US", "功能_us", "客诉不良项目类型.功能"),
+            // dict.logistics.quality.complaint.item.type.3
+            ("dict.logistics.quality.complaint.item.type.3", "ja-JP", "功能_jp", "客诉不良项目类型.功能"),
+            // dict.logistics.quality.complaint.item.type.3
+            ("dict.logistics.quality.complaint.item.type.3", "zh-CN", "功能", "客诉不良项目类型.功能"),
+            // dict.logistics.quality.complaint.item.type.3
+            ("dict.logistics.quality.complaint.item.type.3", "zh-HK", "功能_hk", "客诉不良项目类型.功能"),
+
+            // dict.logistics.quality.complaint.item.type.4
+            ("dict.logistics.quality.complaint.item.type.4", "en-US", "包装_us", "客诉不良项目类型.包装"),
+            // dict.logistics.quality.complaint.item.type.4
+            ("dict.logistics.quality.complaint.item.type.4", "ja-JP", "包装_jp", "客诉不良项目类型.包装"),
+            // dict.logistics.quality.complaint.item.type.4
+            ("dict.logistics.quality.complaint.item.type.4", "zh-CN", "包装", "客诉不良项目类型.包装"),
+            // dict.logistics.quality.complaint.item.type.4
+            ("dict.logistics.quality.complaint.item.type.4", "zh-HK", "包装_hk", "客诉不良项目类型.包装"),
+
+            // dict.logistics.quality.complaint.item.type.5
+            ("dict.logistics.quality.complaint.item.type.5", "en-US", "其他_us", "客诉不良项目类型.其他"),
+            // dict.logistics.quality.complaint.item.type.5
+            ("dict.logistics.quality.complaint.item.type.5", "ja-JP", "其他_jp", "客诉不良项目类型.其他"),
+            // dict.logistics.quality.complaint.item.type.5
+            ("dict.logistics.quality.complaint.item.type.5", "zh-CN", "其他", "客诉不良项目类型.其他"),
+            // dict.logistics.quality.complaint.item.type.5
+            ("dict.logistics.quality.complaint.item.type.5", "zh-HK", "其他_hk", "客诉不良项目类型.其他"),
+
+            // dict.logistics.quality.defect.severity.code.cr
+            ("dict.logistics.quality.defect.severity.code.cr", "en-US", "严重_us", "客诉缺点等级.严重"),
+            // dict.logistics.quality.defect.severity.code.cr
+            ("dict.logistics.quality.defect.severity.code.cr", "ja-JP", "严重_jp", "客诉缺点等级.严重"),
+            // dict.logistics.quality.defect.severity.code.cr
+            ("dict.logistics.quality.defect.severity.code.cr", "zh-CN", "严重", "客诉缺点等级.严重"),
+            // dict.logistics.quality.defect.severity.code.cr
+            ("dict.logistics.quality.defect.severity.code.cr", "zh-HK", "严重_hk", "客诉缺点等级.严重"),
+
+            // dict.logistics.quality.defect.severity.code.ma
+            ("dict.logistics.quality.defect.severity.code.ma", "en-US", "主要_us", "客诉缺点等级.主要"),
+            // dict.logistics.quality.defect.severity.code.ma
+            ("dict.logistics.quality.defect.severity.code.ma", "ja-JP", "主要_jp", "客诉缺点等级.主要"),
+            // dict.logistics.quality.defect.severity.code.ma
+            ("dict.logistics.quality.defect.severity.code.ma", "zh-CN", "主要", "客诉缺点等级.主要"),
+            // dict.logistics.quality.defect.severity.code.ma
+            ("dict.logistics.quality.defect.severity.code.ma", "zh-HK", "主要_hk", "客诉缺点等级.主要"),
+
+            // dict.logistics.quality.defect.severity.code.mi
+            ("dict.logistics.quality.defect.severity.code.mi", "en-US", "次要_us", "客诉缺点等级.次要"),
+            // dict.logistics.quality.defect.severity.code.mi
+            ("dict.logistics.quality.defect.severity.code.mi", "ja-JP", "次要_jp", "客诉缺点等级.次要"),
+            // dict.logistics.quality.defect.severity.code.mi
+            ("dict.logistics.quality.defect.severity.code.mi", "zh-CN", "次要", "客诉缺点等级.次要"),
+            // dict.logistics.quality.defect.severity.code.mi
+            ("dict.logistics.quality.defect.severity.code.mi", "zh-HK", "次要_hk", "客诉缺点等级.次要"),
+
+            // dict.logistics.quality.defect.type.0
+            ("dict.logistics.quality.defect.type.0", "en-US", "轻微_us", "检验不良类型.轻微"),
+            // dict.logistics.quality.defect.type.0
+            ("dict.logistics.quality.defect.type.0", "ja-JP", "轻微_jp", "检验不良类型.轻微"),
+            // dict.logistics.quality.defect.type.0
+            ("dict.logistics.quality.defect.type.0", "zh-CN", "轻微", "检验不良类型.轻微"),
+            // dict.logistics.quality.defect.type.0
+            ("dict.logistics.quality.defect.type.0", "zh-HK", "轻微_hk", "检验不良类型.轻微"),
+
+            // dict.logistics.quality.defect.type.1
+            ("dict.logistics.quality.defect.type.1", "en-US", "一般_us", "检验不良类型.一般"),
+            // dict.logistics.quality.defect.type.1
+            ("dict.logistics.quality.defect.type.1", "ja-JP", "一般_jp", "检验不良类型.一般"),
+            // dict.logistics.quality.defect.type.1
+            ("dict.logistics.quality.defect.type.1", "zh-CN", "一般", "检验不良类型.一般"),
+            // dict.logistics.quality.defect.type.1
+            ("dict.logistics.quality.defect.type.1", "zh-HK", "一般_hk", "检验不良类型.一般"),
+
+            // dict.logistics.quality.defect.type.2
+            ("dict.logistics.quality.defect.type.2", "en-US", "严重_us", "检验不良类型.严重"),
+            // dict.logistics.quality.defect.type.2
+            ("dict.logistics.quality.defect.type.2", "ja-JP", "严重_jp", "检验不良类型.严重"),
+            // dict.logistics.quality.defect.type.2
+            ("dict.logistics.quality.defect.type.2", "zh-CN", "严重", "检验不良类型.严重"),
+            // dict.logistics.quality.defect.type.2
+            ("dict.logistics.quality.defect.type.2", "zh-HK", "严重_hk", "检验不良类型.严重"),
+
+            // dict.logistics.quality.defect.type.3
+            ("dict.logistics.quality.defect.type.3", "en-US", "致命_us", "检验不良类型.致命"),
+            // dict.logistics.quality.defect.type.3
+            ("dict.logistics.quality.defect.type.3", "ja-JP", "致命_jp", "检验不良类型.致命"),
+            // dict.logistics.quality.defect.type.3
+            ("dict.logistics.quality.defect.type.3", "zh-CN", "致命", "检验不良类型.致命"),
+            // dict.logistics.quality.defect.type.3
+            ("dict.logistics.quality.defect.type.3", "zh-HK", "致命_hk", "检验不良类型.致命"),
+
+            // dict.logistics.quality.defect.handling.method.0
+            ("dict.logistics.quality.defect.handling.method.0", "en-US", "返工_us", "检验不良处理方式.返工"),
+            // dict.logistics.quality.defect.handling.method.0
+            ("dict.logistics.quality.defect.handling.method.0", "ja-JP", "返工_jp", "检验不良处理方式.返工"),
+            // dict.logistics.quality.defect.handling.method.0
+            ("dict.logistics.quality.defect.handling.method.0", "zh-CN", "返工", "检验不良处理方式.返工"),
+            // dict.logistics.quality.defect.handling.method.0
+            ("dict.logistics.quality.defect.handling.method.0", "zh-HK", "返工_hk", "检验不良处理方式.返工"),
+
+            // dict.logistics.quality.defect.handling.method.1
+            ("dict.logistics.quality.defect.handling.method.1", "en-US", "返修_us", "检验不良处理方式.返修"),
+            // dict.logistics.quality.defect.handling.method.1
+            ("dict.logistics.quality.defect.handling.method.1", "ja-JP", "返修_jp", "检验不良处理方式.返修"),
+            // dict.logistics.quality.defect.handling.method.1
+            ("dict.logistics.quality.defect.handling.method.1", "zh-CN", "返修", "检验不良处理方式.返修"),
+            // dict.logistics.quality.defect.handling.method.1
+            ("dict.logistics.quality.defect.handling.method.1", "zh-HK", "返修_hk", "检验不良处理方式.返修"),
+
+            // dict.logistics.quality.defect.handling.method.2
+            ("dict.logistics.quality.defect.handling.method.2", "en-US", "让步接收_us", "检验不良处理方式.让步接收"),
+            // dict.logistics.quality.defect.handling.method.2
+            ("dict.logistics.quality.defect.handling.method.2", "ja-JP", "让步接收_jp", "检验不良处理方式.让步接收"),
+            // dict.logistics.quality.defect.handling.method.2
+            ("dict.logistics.quality.defect.handling.method.2", "zh-CN", "让步接收", "检验不良处理方式.让步接收"),
+            // dict.logistics.quality.defect.handling.method.2
+            ("dict.logistics.quality.defect.handling.method.2", "zh-HK", "让步接收_hk", "检验不良处理方式.让步接收"),
+
+            // dict.logistics.quality.defect.handling.method.3
+            ("dict.logistics.quality.defect.handling.method.3", "en-US", "退货_us", "检验不良处理方式.退货"),
+            // dict.logistics.quality.defect.handling.method.3
+            ("dict.logistics.quality.defect.handling.method.3", "ja-JP", "退货_jp", "检验不良处理方式.退货"),
+            // dict.logistics.quality.defect.handling.method.3
+            ("dict.logistics.quality.defect.handling.method.3", "zh-CN", "退货", "检验不良处理方式.退货"),
+            // dict.logistics.quality.defect.handling.method.3
+            ("dict.logistics.quality.defect.handling.method.3", "zh-HK", "退货_hk", "检验不良处理方式.退货"),
+
+            // dict.logistics.quality.defect.handling.method.4
+            ("dict.logistics.quality.defect.handling.method.4", "en-US", "报废_us", "检验不良处理方式.报废"),
+            // dict.logistics.quality.defect.handling.method.4
+            ("dict.logistics.quality.defect.handling.method.4", "ja-JP", "报废_jp", "检验不良处理方式.报废"),
+            // dict.logistics.quality.defect.handling.method.4
+            ("dict.logistics.quality.defect.handling.method.4", "zh-CN", "报废", "检验不良处理方式.报废"),
+            // dict.logistics.quality.defect.handling.method.4
+            ("dict.logistics.quality.defect.handling.method.4", "zh-HK", "报废_hk", "检验不良处理方式.报废"),
+
+            // dict.logistics.quality.defect.handling.method.5
+            ("dict.logistics.quality.defect.handling.method.5", "en-US", "挑选使用_us", "检验不良处理方式.挑选使用"),
+            // dict.logistics.quality.defect.handling.method.5
+            ("dict.logistics.quality.defect.handling.method.5", "ja-JP", "挑选使用_jp", "检验不良处理方式.挑选使用"),
+            // dict.logistics.quality.defect.handling.method.5
+            ("dict.logistics.quality.defect.handling.method.5", "zh-CN", "挑选使用", "检验不良处理方式.挑选使用"),
+            // dict.logistics.quality.defect.handling.method.5
+            ("dict.logistics.quality.defect.handling.method.5", "zh-HK", "挑选使用_hk", "检验不良处理方式.挑选使用"),
+
+            // dict.logistics.quality.defect.handling.status.0
+            ("dict.logistics.quality.defect.handling.status.0", "en-US", "待处理_us", "检验不良处理状态.待处理"),
+            // dict.logistics.quality.defect.handling.status.0
+            ("dict.logistics.quality.defect.handling.status.0", "ja-JP", "待处理_jp", "检验不良处理状态.待处理"),
+            // dict.logistics.quality.defect.handling.status.0
+            ("dict.logistics.quality.defect.handling.status.0", "zh-CN", "待处理", "检验不良处理状态.待处理"),
+            // dict.logistics.quality.defect.handling.status.0
+            ("dict.logistics.quality.defect.handling.status.0", "zh-HK", "待处理_hk", "检验不良处理状态.待处理"),
+
+            // dict.logistics.quality.defect.handling.status.1
+            ("dict.logistics.quality.defect.handling.status.1", "en-US", "处理中_us", "检验不良处理状态.处理中"),
+            // dict.logistics.quality.defect.handling.status.1
+            ("dict.logistics.quality.defect.handling.status.1", "ja-JP", "处理中_jp", "检验不良处理状态.处理中"),
+            // dict.logistics.quality.defect.handling.status.1
+            ("dict.logistics.quality.defect.handling.status.1", "zh-CN", "处理中", "检验不良处理状态.处理中"),
+            // dict.logistics.quality.defect.handling.status.1
+            ("dict.logistics.quality.defect.handling.status.1", "zh-HK", "处理中_hk", "检验不良处理状态.处理中"),
+
+            // dict.logistics.quality.defect.handling.status.2
+            ("dict.logistics.quality.defect.handling.status.2", "en-US", "已完成_us", "检验不良处理状态.已完成"),
+            // dict.logistics.quality.defect.handling.status.2
+            ("dict.logistics.quality.defect.handling.status.2", "ja-JP", "已完成_jp", "检验不良处理状态.已完成"),
+            // dict.logistics.quality.defect.handling.status.2
+            ("dict.logistics.quality.defect.handling.status.2", "zh-CN", "已完成", "检验不良处理状态.已完成"),
+            // dict.logistics.quality.defect.handling.status.2
+            ("dict.logistics.quality.defect.handling.status.2", "zh-HK", "已完成_hk", "检验不良处理状态.已完成"),
+
+            // dict.logistics.quality.defect.handling.status.3
+            ("dict.logistics.quality.defect.handling.status.3", "en-US", "已关闭_us", "检验不良处理状态.已关闭"),
+            // dict.logistics.quality.defect.handling.status.3
+            ("dict.logistics.quality.defect.handling.status.3", "ja-JP", "已关闭_jp", "检验不良处理状态.已关闭"),
+            // dict.logistics.quality.defect.handling.status.3
+            ("dict.logistics.quality.defect.handling.status.3", "zh-CN", "已关闭", "检验不良处理状态.已关闭"),
+            // dict.logistics.quality.defect.handling.status.3
+            ("dict.logistics.quality.defect.handling.status.3", "zh-HK", "已关闭_hk", "检验不良处理状态.已关闭"),
+
+            // dict.logistics.quality.judge.status.0
+            ("dict.logistics.quality.judge.status.0", "en-US", "待判定_us", "检验判定状态.待判定"),
+            // dict.logistics.quality.judge.status.0
+            ("dict.logistics.quality.judge.status.0", "ja-JP", "待判定_jp", "检验判定状态.待判定"),
+            // dict.logistics.quality.judge.status.0
+            ("dict.logistics.quality.judge.status.0", "zh-CN", "待判定", "检验判定状态.待判定"),
+            // dict.logistics.quality.judge.status.0
+            ("dict.logistics.quality.judge.status.0", "zh-HK", "待判定_hk", "检验判定状态.待判定"),
+
+            // dict.logistics.quality.judge.status.1
+            ("dict.logistics.quality.judge.status.1", "en-US", "合格_us", "检验判定状态.合格"),
+            // dict.logistics.quality.judge.status.1
+            ("dict.logistics.quality.judge.status.1", "ja-JP", "合格_jp", "检验判定状态.合格"),
+            // dict.logistics.quality.judge.status.1
+            ("dict.logistics.quality.judge.status.1", "zh-CN", "合格", "检验判定状态.合格"),
+            // dict.logistics.quality.judge.status.1
+            ("dict.logistics.quality.judge.status.1", "zh-HK", "合格_hk", "检验判定状态.合格"),
+
+            // dict.logistics.quality.judge.status.2
+            ("dict.logistics.quality.judge.status.2", "en-US", "不合格_us", "检验判定状态.不合格"),
+            // dict.logistics.quality.judge.status.2
+            ("dict.logistics.quality.judge.status.2", "ja-JP", "不合格_jp", "检验判定状态.不合格"),
+            // dict.logistics.quality.judge.status.2
+            ("dict.logistics.quality.judge.status.2", "zh-CN", "不合格", "检验判定状态.不合格"),
+            // dict.logistics.quality.judge.status.2
+            ("dict.logistics.quality.judge.status.2", "zh-HK", "不合格_hk", "检验判定状态.不合格"),
+
+            // dict.logistics.quality.judge.status.3
+            ("dict.logistics.quality.judge.status.3", "en-US", "让步接收_us", "检验判定状态.让步接收"),
+            // dict.logistics.quality.judge.status.3
+            ("dict.logistics.quality.judge.status.3", "ja-JP", "让步接收_jp", "检验判定状态.让步接收"),
+            // dict.logistics.quality.judge.status.3
+            ("dict.logistics.quality.judge.status.3", "zh-CN", "让步接收", "检验判定状态.让步接收"),
+            // dict.logistics.quality.judge.status.3
+            ("dict.logistics.quality.judge.status.3", "zh-HK", "让步接收_hk", "检验判定状态.让步接收"),
+
+            // dict.logistics.quality.judge.status.4
+            ("dict.logistics.quality.judge.status.4", "en-US", "退货_us", "检验判定状态.退货"),
+            // dict.logistics.quality.judge.status.4
+            ("dict.logistics.quality.judge.status.4", "ja-JP", "退货_jp", "检验判定状态.退货"),
+            // dict.logistics.quality.judge.status.4
+            ("dict.logistics.quality.judge.status.4", "zh-CN", "退货", "检验判定状态.退货"),
+            // dict.logistics.quality.judge.status.4
+            ("dict.logistics.quality.judge.status.4", "zh-HK", "退货_hk", "检验判定状态.退货"),
+
+            // dict.logistics.quality.inspection.method.0
+            ("dict.logistics.quality.inspection.method.0", "en-US", "免检_us", "检验方式.免检"),
+            // dict.logistics.quality.inspection.method.0
+            ("dict.logistics.quality.inspection.method.0", "ja-JP", "免检_jp", "检验方式.免检"),
+            // dict.logistics.quality.inspection.method.0
+            ("dict.logistics.quality.inspection.method.0", "zh-CN", "免检", "检验方式.免检"),
+            // dict.logistics.quality.inspection.method.0
+            ("dict.logistics.quality.inspection.method.0", "zh-HK", "免检_hk", "检验方式.免检"),
+
+            // dict.logistics.quality.inspection.method.1
+            ("dict.logistics.quality.inspection.method.1", "en-US", "减量_us", "检验方式.减量"),
+            // dict.logistics.quality.inspection.method.1
+            ("dict.logistics.quality.inspection.method.1", "ja-JP", "减量_jp", "检验方式.减量"),
+            // dict.logistics.quality.inspection.method.1
+            ("dict.logistics.quality.inspection.method.1", "zh-CN", "减量", "检验方式.减量"),
+            // dict.logistics.quality.inspection.method.1
+            ("dict.logistics.quality.inspection.method.1", "zh-HK", "减量_hk", "检验方式.减量"),
+
+            // dict.logistics.quality.inspection.method.2
+            ("dict.logistics.quality.inspection.method.2", "en-US", "正常_us", "检验方式.正常"),
+            // dict.logistics.quality.inspection.method.2
+            ("dict.logistics.quality.inspection.method.2", "ja-JP", "正常_jp", "检验方式.正常"),
+            // dict.logistics.quality.inspection.method.2
+            ("dict.logistics.quality.inspection.method.2", "zh-CN", "正常", "检验方式.正常"),
+            // dict.logistics.quality.inspection.method.2
+            ("dict.logistics.quality.inspection.method.2", "zh-HK", "正常_hk", "检验方式.正常"),
+
+            // dict.logistics.quality.inspection.method.3
+            ("dict.logistics.quality.inspection.method.3", "en-US", "加严_us", "检验方式.加严"),
+            // dict.logistics.quality.inspection.method.3
+            ("dict.logistics.quality.inspection.method.3", "ja-JP", "加严_jp", "检验方式.加严"),
+            // dict.logistics.quality.inspection.method.3
+            ("dict.logistics.quality.inspection.method.3", "zh-CN", "加严", "检验方式.加严"),
+            // dict.logistics.quality.inspection.method.3
+            ("dict.logistics.quality.inspection.method.3", "zh-HK", "加严_hk", "检验方式.加严"),
+
+            // dict.logistics.quality.inspection.method.4
+            ("dict.logistics.quality.inspection.method.4", "en-US", "全检_us", "检验方式.全检"),
+            // dict.logistics.quality.inspection.method.4
+            ("dict.logistics.quality.inspection.method.4", "ja-JP", "全检_jp", "检验方式.全检"),
+            // dict.logistics.quality.inspection.method.4
+            ("dict.logistics.quality.inspection.method.4", "zh-CN", "全检", "检验方式.全检"),
+            // dict.logistics.quality.inspection.method.4
+            ("dict.logistics.quality.inspection.method.4", "zh-HK", "全检_hk", "检验方式.全检"),
+
+            // dict.logistics.quality.inspection.type.0
+            ("dict.logistics.quality.inspection.type.0", "en-US", "IQC来料检验_us", "检验类型.IQC来料检验"),
+            // dict.logistics.quality.inspection.type.0
+            ("dict.logistics.quality.inspection.type.0", "ja-JP", "IQC来料检验_jp", "检验类型.IQC来料检验"),
+            // dict.logistics.quality.inspection.type.0
+            ("dict.logistics.quality.inspection.type.0", "zh-CN", "IQC来料检验", "检验类型.IQC来料检验"),
+            // dict.logistics.quality.inspection.type.0
+            ("dict.logistics.quality.inspection.type.0", "zh-HK", "IQC来料检验_hk", "检验类型.IQC来料检验"),
+
+            // dict.logistics.quality.inspection.type.1
+            ("dict.logistics.quality.inspection.type.1", "en-US", "IPQC过程检验_us", "检验类型.IPQC过程检验"),
+            // dict.logistics.quality.inspection.type.1
+            ("dict.logistics.quality.inspection.type.1", "ja-JP", "IPQC过程检验_jp", "检验类型.IPQC过程检验"),
+            // dict.logistics.quality.inspection.type.1
+            ("dict.logistics.quality.inspection.type.1", "zh-CN", "IPQC过程检验", "检验类型.IPQC过程检验"),
+            // dict.logistics.quality.inspection.type.1
+            ("dict.logistics.quality.inspection.type.1", "zh-HK", "IPQC过程检验_hk", "检验类型.IPQC过程检验"),
+
+            // dict.logistics.quality.inspection.type.2
+            ("dict.logistics.quality.inspection.type.2", "en-US", "FQC最终检验_us", "检验类型.FQC最终检验"),
+            // dict.logistics.quality.inspection.type.2
+            ("dict.logistics.quality.inspection.type.2", "ja-JP", "FQC最终检验_jp", "检验类型.FQC最终检验"),
+            // dict.logistics.quality.inspection.type.2
+            ("dict.logistics.quality.inspection.type.2", "zh-CN", "FQC最终检验", "检验类型.FQC最终检验"),
+            // dict.logistics.quality.inspection.type.2
+            ("dict.logistics.quality.inspection.type.2", "zh-HK", "FQC最终检验_hk", "检验类型.FQC最终检验"),
+
+            // dict.logistics.quality.standard.status.0
+            ("dict.logistics.quality.standard.status.0", "en-US", "草稿_us", "检验标准状态.草稿"),
+            // dict.logistics.quality.standard.status.0
+            ("dict.logistics.quality.standard.status.0", "ja-JP", "草稿_jp", "检验标准状态.草稿"),
+            // dict.logistics.quality.standard.status.0
+            ("dict.logistics.quality.standard.status.0", "zh-CN", "草稿", "检验标准状态.草稿"),
+            // dict.logistics.quality.standard.status.0
+            ("dict.logistics.quality.standard.status.0", "zh-HK", "草稿_hk", "检验标准状态.草稿"),
+
+            // dict.logistics.quality.standard.status.1
+            ("dict.logistics.quality.standard.status.1", "en-US", "已发布_us", "检验标准状态.已发布"),
+            // dict.logistics.quality.standard.status.1
+            ("dict.logistics.quality.standard.status.1", "ja-JP", "已发布_jp", "检验标准状态.已发布"),
+            // dict.logistics.quality.standard.status.1
+            ("dict.logistics.quality.standard.status.1", "zh-CN", "已发布", "检验标准状态.已发布"),
+            // dict.logistics.quality.standard.status.1
+            ("dict.logistics.quality.standard.status.1", "zh-HK", "已发布_hk", "检验标准状态.已发布"),
+
+            // dict.logistics.quality.standard.status.2
+            ("dict.logistics.quality.standard.status.2", "en-US", "已停用_us", "检验标准状态.已停用"),
+            // dict.logistics.quality.standard.status.2
+            ("dict.logistics.quality.standard.status.2", "ja-JP", "已停用_jp", "检验标准状态.已停用"),
+            // dict.logistics.quality.standard.status.2
+            ("dict.logistics.quality.standard.status.2", "zh-CN", "已停用", "检验标准状态.已停用"),
+            // dict.logistics.quality.standard.status.2
+            ("dict.logistics.quality.standard.status.2", "zh-HK", "已停用_hk", "检验标准状态.已停用"),
+
+            // dict.logistics.quality.inspection.item.type.0
+            ("dict.logistics.quality.inspection.item.type.0", "en-US", "外观_us", "检验项目类型.外观"),
+            // dict.logistics.quality.inspection.item.type.0
+            ("dict.logistics.quality.inspection.item.type.0", "ja-JP", "外观_jp", "检验项目类型.外观"),
+            // dict.logistics.quality.inspection.item.type.0
+            ("dict.logistics.quality.inspection.item.type.0", "zh-CN", "外观", "检验项目类型.外观"),
+            // dict.logistics.quality.inspection.item.type.0
+            ("dict.logistics.quality.inspection.item.type.0", "zh-HK", "外观_hk", "检验项目类型.外观"),
+
+            // dict.logistics.quality.inspection.item.type.1
+            ("dict.logistics.quality.inspection.item.type.1", "en-US", "尺寸_us", "检验项目类型.尺寸"),
+            // dict.logistics.quality.inspection.item.type.1
+            ("dict.logistics.quality.inspection.item.type.1", "ja-JP", "尺寸_jp", "检验项目类型.尺寸"),
+            // dict.logistics.quality.inspection.item.type.1
+            ("dict.logistics.quality.inspection.item.type.1", "zh-CN", "尺寸", "检验项目类型.尺寸"),
+            // dict.logistics.quality.inspection.item.type.1
+            ("dict.logistics.quality.inspection.item.type.1", "zh-HK", "尺寸_hk", "检验项目类型.尺寸"),
+
+            // dict.logistics.quality.inspection.item.type.2
+            ("dict.logistics.quality.inspection.item.type.2", "en-US", "性能_us", "检验项目类型.性能"),
+            // dict.logistics.quality.inspection.item.type.2
+            ("dict.logistics.quality.inspection.item.type.2", "ja-JP", "性能_jp", "检验项目类型.性能"),
+            // dict.logistics.quality.inspection.item.type.2
+            ("dict.logistics.quality.inspection.item.type.2", "zh-CN", "性能", "检验项目类型.性能"),
+            // dict.logistics.quality.inspection.item.type.2
+            ("dict.logistics.quality.inspection.item.type.2", "zh-HK", "性能_hk", "检验项目类型.性能"),
+
+            // dict.logistics.quality.inspection.item.type.3
+            ("dict.logistics.quality.inspection.item.type.3", "en-US", "材质_us", "检验项目类型.材质"),
+            // dict.logistics.quality.inspection.item.type.3
+            ("dict.logistics.quality.inspection.item.type.3", "ja-JP", "材质_jp", "检验项目类型.材质"),
+            // dict.logistics.quality.inspection.item.type.3
+            ("dict.logistics.quality.inspection.item.type.3", "zh-CN", "材质", "检验项目类型.材质"),
+            // dict.logistics.quality.inspection.item.type.3
+            ("dict.logistics.quality.inspection.item.type.3", "zh-HK", "材质_hk", "检验项目类型.材质"),
+
+            // dict.logistics.quality.inspection.item.type.4
+            ("dict.logistics.quality.inspection.item.type.4", "en-US", "功能_us", "检验项目类型.功能"),
+            // dict.logistics.quality.inspection.item.type.4
+            ("dict.logistics.quality.inspection.item.type.4", "ja-JP", "功能_jp", "检验项目类型.功能"),
+            // dict.logistics.quality.inspection.item.type.4
+            ("dict.logistics.quality.inspection.item.type.4", "zh-CN", "功能", "检验项目类型.功能"),
+            // dict.logistics.quality.inspection.item.type.4
+            ("dict.logistics.quality.inspection.item.type.4", "zh-HK", "功能_hk", "检验项目类型.功能"),
+
+            // dict.logistics.quality.inspection.item.type.5
+            ("dict.logistics.quality.inspection.item.type.5", "en-US", "颜色_us", "检验项目类型.颜色"),
+            // dict.logistics.quality.inspection.item.type.5
+            ("dict.logistics.quality.inspection.item.type.5", "ja-JP", "颜色_jp", "检验项目类型.颜色"),
+            // dict.logistics.quality.inspection.item.type.5
+            ("dict.logistics.quality.inspection.item.type.5", "zh-CN", "颜色", "检验项目类型.颜色"),
+            // dict.logistics.quality.inspection.item.type.5
+            ("dict.logistics.quality.inspection.item.type.5", "zh-HK", "颜色_hk", "检验项目类型.颜色"),
+
+            // dict.logistics.quality.inspection.item.type.6
+            ("dict.logistics.quality.inspection.item.type.6", "en-US", "结构_us", "检验项目类型.结构"),
+            // dict.logistics.quality.inspection.item.type.6
+            ("dict.logistics.quality.inspection.item.type.6", "ja-JP", "结构_jp", "检验项目类型.结构"),
+            // dict.logistics.quality.inspection.item.type.6
+            ("dict.logistics.quality.inspection.item.type.6", "zh-CN", "结构", "检验项目类型.结构"),
+            // dict.logistics.quality.inspection.item.type.6
+            ("dict.logistics.quality.inspection.item.type.6", "zh-HK", "结构_hk", "检验项目类型.结构"),
+
+            // dict.logistics.quality.inspection.mode.1
+            ("dict.logistics.quality.inspection.mode.1", "en-US", "计数_us", "检验计数计量.计数"),
+            // dict.logistics.quality.inspection.mode.1
+            ("dict.logistics.quality.inspection.mode.1", "ja-JP", "计数_jp", "检验计数计量.计数"),
+            // dict.logistics.quality.inspection.mode.1
+            ("dict.logistics.quality.inspection.mode.1", "zh-CN", "计数", "检验计数计量.计数"),
+            // dict.logistics.quality.inspection.mode.1
+            ("dict.logistics.quality.inspection.mode.1", "zh-HK", "计数_hk", "检验计数计量.计数"),
+
+            // dict.logistics.quality.inspection.mode.2
+            ("dict.logistics.quality.inspection.mode.2", "en-US", "计量_us", "检验计数计量.计量"),
+            // dict.logistics.quality.inspection.mode.2
+            ("dict.logistics.quality.inspection.mode.2", "ja-JP", "计量_jp", "检验计数计量.计量"),
+            // dict.logistics.quality.inspection.mode.2
+            ("dict.logistics.quality.inspection.mode.2", "zh-CN", "计量", "检验计数计量.计量"),
+            // dict.logistics.quality.inspection.mode.2
+            ("dict.logistics.quality.inspection.mode.2", "zh-HK", "计量_hk", "检验计数计量.计量"),
+
+            // dict.logistics.quality.sampling.scheme.type.0
+            ("dict.logistics.quality.sampling.scheme.type.0", "en-US", "计数型_us", "抽样方案类型.计数型"),
+            // dict.logistics.quality.sampling.scheme.type.0
+            ("dict.logistics.quality.sampling.scheme.type.0", "ja-JP", "计数型_jp", "抽样方案类型.计数型"),
+            // dict.logistics.quality.sampling.scheme.type.0
+            ("dict.logistics.quality.sampling.scheme.type.0", "zh-CN", "计数型", "抽样方案类型.计数型"),
+            // dict.logistics.quality.sampling.scheme.type.0
+            ("dict.logistics.quality.sampling.scheme.type.0", "zh-HK", "计数型_hk", "抽样方案类型.计数型"),
+
+            // dict.logistics.quality.sampling.scheme.type.1
+            ("dict.logistics.quality.sampling.scheme.type.1", "en-US", "计量型_us", "抽样方案类型.计量型"),
+            // dict.logistics.quality.sampling.scheme.type.1
+            ("dict.logistics.quality.sampling.scheme.type.1", "ja-JP", "计量型_jp", "抽样方案类型.计量型"),
+            // dict.logistics.quality.sampling.scheme.type.1
+            ("dict.logistics.quality.sampling.scheme.type.1", "zh-CN", "计量型", "抽样方案类型.计量型"),
+            // dict.logistics.quality.sampling.scheme.type.1
+            ("dict.logistics.quality.sampling.scheme.type.1", "zh-HK", "计量型_hk", "抽样方案类型.计量型"),
+
+            // dict.logistics.quality.sampling.scheme.type.2
+            ("dict.logistics.quality.sampling.scheme.type.2", "en-US", "计数调整型_us", "抽样方案类型.计数调整型"),
+            // dict.logistics.quality.sampling.scheme.type.2
+            ("dict.logistics.quality.sampling.scheme.type.2", "ja-JP", "计数调整型_jp", "抽样方案类型.计数调整型"),
+            // dict.logistics.quality.sampling.scheme.type.2
+            ("dict.logistics.quality.sampling.scheme.type.2", "zh-CN", "计数调整型", "抽样方案类型.计数调整型"),
+            // dict.logistics.quality.sampling.scheme.type.2
+            ("dict.logistics.quality.sampling.scheme.type.2", "zh-HK", "计数调整型_hk", "抽样方案类型.计数调整型"),
+
+            // dict.logistics.quality.sampling.scheme.type.3
+            ("dict.logistics.quality.sampling.scheme.type.3", "en-US", "计量调整型_us", "抽样方案类型.计量调整型"),
+            // dict.logistics.quality.sampling.scheme.type.3
+            ("dict.logistics.quality.sampling.scheme.type.3", "ja-JP", "计量调整型_jp", "抽样方案类型.计量调整型"),
+            // dict.logistics.quality.sampling.scheme.type.3
+            ("dict.logistics.quality.sampling.scheme.type.3", "zh-CN", "计量调整型", "抽样方案类型.计量调整型"),
+            // dict.logistics.quality.sampling.scheme.type.3
+            ("dict.logistics.quality.sampling.scheme.type.3", "zh-HK", "计量调整型_hk", "抽样方案类型.计量调整型"),
+
+            // dict.logistics.quality.sampling.standard.0
+            ("dict.logistics.quality.sampling.standard.0", "en-US", "GB/T 2828.1_us", "抽样标准.GB/T 2828.1"),
+            // dict.logistics.quality.sampling.standard.0
+            ("dict.logistics.quality.sampling.standard.0", "ja-JP", "GB/T 2828.1_jp", "抽样标准.GB/T 2828.1"),
+            // dict.logistics.quality.sampling.standard.0
+            ("dict.logistics.quality.sampling.standard.0", "zh-CN", "GB/T 2828.1", "抽样标准.GB/T 2828.1"),
+            // dict.logistics.quality.sampling.standard.0
+            ("dict.logistics.quality.sampling.standard.0", "zh-HK", "GB/T 2828.1_hk", "抽样标准.GB/T 2828.1"),
+
+            // dict.logistics.quality.sampling.standard.1
+            ("dict.logistics.quality.sampling.standard.1", "en-US", "GB/T 6378_us", "抽样标准.GB/T 6378"),
+            // dict.logistics.quality.sampling.standard.1
+            ("dict.logistics.quality.sampling.standard.1", "ja-JP", "GB/T 6378_jp", "抽样标准.GB/T 6378"),
+            // dict.logistics.quality.sampling.standard.1
+            ("dict.logistics.quality.sampling.standard.1", "zh-CN", "GB/T 6378", "抽样标准.GB/T 6378"),
+            // dict.logistics.quality.sampling.standard.1
+            ("dict.logistics.quality.sampling.standard.1", "zh-HK", "GB/T 6378_hk", "抽样标准.GB/T 6378"),
+
+            // dict.logistics.quality.sampling.standard.2
+            ("dict.logistics.quality.sampling.standard.2", "en-US", "MIL-STD-105E_us", "抽样标准.MIL-STD-105E"),
+            // dict.logistics.quality.sampling.standard.2
+            ("dict.logistics.quality.sampling.standard.2", "ja-JP", "MIL-STD-105E_jp", "抽样标准.MIL-STD-105E"),
+            // dict.logistics.quality.sampling.standard.2
+            ("dict.logistics.quality.sampling.standard.2", "zh-CN", "MIL-STD-105E", "抽样标准.MIL-STD-105E"),
+            // dict.logistics.quality.sampling.standard.2
+            ("dict.logistics.quality.sampling.standard.2", "zh-HK", "MIL-STD-105E_hk", "抽样标准.MIL-STD-105E"),
+
+            // dict.logistics.quality.sampling.standard.3
+            ("dict.logistics.quality.sampling.standard.3", "en-US", "ANSI/ASQ Z1.4_us", "抽样标准.ANSI/ASQ Z1.4"),
+            // dict.logistics.quality.sampling.standard.3
+            ("dict.logistics.quality.sampling.standard.3", "ja-JP", "ANSI/ASQ Z1.4_jp", "抽样标准.ANSI/ASQ Z1.4"),
+            // dict.logistics.quality.sampling.standard.3
+            ("dict.logistics.quality.sampling.standard.3", "zh-CN", "ANSI/ASQ Z1.4", "抽样标准.ANSI/ASQ Z1.4"),
+            // dict.logistics.quality.sampling.standard.3
+            ("dict.logistics.quality.sampling.standard.3", "zh-HK", "ANSI/ASQ Z1.4_hk", "抽样标准.ANSI/ASQ Z1.4"),
+
+            // dict.logistics.quality.sampling.standard.4
+            ("dict.logistics.quality.sampling.standard.4", "en-US", "ISO 2859-1_us", "抽样标准.ISO 2859-1"),
+            // dict.logistics.quality.sampling.standard.4
+            ("dict.logistics.quality.sampling.standard.4", "ja-JP", "ISO 2859-1_jp", "抽样标准.ISO 2859-1"),
+            // dict.logistics.quality.sampling.standard.4
+            ("dict.logistics.quality.sampling.standard.4", "zh-CN", "ISO 2859-1", "抽样标准.ISO 2859-1"),
+            // dict.logistics.quality.sampling.standard.4
+            ("dict.logistics.quality.sampling.standard.4", "zh-HK", "ISO 2859-1_hk", "抽样标准.ISO 2859-1"),
+
+            // dict.logistics.quality.sampling.standard.5
+            ("dict.logistics.quality.sampling.standard.5", "en-US", "自定义_us", "抽样标准.自定义"),
+            // dict.logistics.quality.sampling.standard.5
+            ("dict.logistics.quality.sampling.standard.5", "ja-JP", "自定义_jp", "抽样标准.自定义"),
+            // dict.logistics.quality.sampling.standard.5
+            ("dict.logistics.quality.sampling.standard.5", "zh-CN", "自定义", "抽样标准.自定义"),
+            // dict.logistics.quality.sampling.standard.5
+            ("dict.logistics.quality.sampling.standard.5", "zh-HK", "自定义_hk", "抽样标准.自定义"),
+
+            // dict.logistics.quality.inspection.level.0
+            ("dict.logistics.quality.inspection.level.0", "en-US", "I_us", "检验水平.I"),
+            // dict.logistics.quality.inspection.level.0
+            ("dict.logistics.quality.inspection.level.0", "ja-JP", "I_jp", "检验水平.I"),
+            // dict.logistics.quality.inspection.level.0
+            ("dict.logistics.quality.inspection.level.0", "zh-CN", "I", "检验水平.I"),
+            // dict.logistics.quality.inspection.level.0
+            ("dict.logistics.quality.inspection.level.0", "zh-HK", "I_hk", "检验水平.I"),
+
+            // dict.logistics.quality.inspection.level.1
+            ("dict.logistics.quality.inspection.level.1", "en-US", "II_us", "检验水平.II"),
+            // dict.logistics.quality.inspection.level.1
+            ("dict.logistics.quality.inspection.level.1", "ja-JP", "II_jp", "检验水平.II"),
+            // dict.logistics.quality.inspection.level.1
+            ("dict.logistics.quality.inspection.level.1", "zh-CN", "II", "检验水平.II"),
+            // dict.logistics.quality.inspection.level.1
+            ("dict.logistics.quality.inspection.level.1", "zh-HK", "II_hk", "检验水平.II"),
+
+            // dict.logistics.quality.inspection.level.2
+            ("dict.logistics.quality.inspection.level.2", "en-US", "III_us", "检验水平.III"),
+            // dict.logistics.quality.inspection.level.2
+            ("dict.logistics.quality.inspection.level.2", "ja-JP", "III_jp", "检验水平.III"),
+            // dict.logistics.quality.inspection.level.2
+            ("dict.logistics.quality.inspection.level.2", "zh-CN", "III", "检验水平.III"),
+            // dict.logistics.quality.inspection.level.2
+            ("dict.logistics.quality.inspection.level.2", "zh-HK", "III_hk", "检验水平.III"),
+
+            // dict.logistics.quality.inspection.level.3
+            ("dict.logistics.quality.inspection.level.3", "en-US", "S-1_us", "检验水平.S-1"),
+            // dict.logistics.quality.inspection.level.3
+            ("dict.logistics.quality.inspection.level.3", "ja-JP", "S-1_jp", "检验水平.S-1"),
+            // dict.logistics.quality.inspection.level.3
+            ("dict.logistics.quality.inspection.level.3", "zh-CN", "S-1", "检验水平.S-1"),
+            // dict.logistics.quality.inspection.level.3
+            ("dict.logistics.quality.inspection.level.3", "zh-HK", "S-1_hk", "检验水平.S-1"),
+
+            // dict.logistics.quality.inspection.level.4
+            ("dict.logistics.quality.inspection.level.4", "en-US", "S-2_us", "检验水平.S-2"),
+            // dict.logistics.quality.inspection.level.4
+            ("dict.logistics.quality.inspection.level.4", "ja-JP", "S-2_jp", "检验水平.S-2"),
+            // dict.logistics.quality.inspection.level.4
+            ("dict.logistics.quality.inspection.level.4", "zh-CN", "S-2", "检验水平.S-2"),
+            // dict.logistics.quality.inspection.level.4
+            ("dict.logistics.quality.inspection.level.4", "zh-HK", "S-2_hk", "检验水平.S-2"),
+
+            // dict.logistics.quality.inspection.level.5
+            ("dict.logistics.quality.inspection.level.5", "en-US", "S-3_us", "检验水平.S-3"),
+            // dict.logistics.quality.inspection.level.5
+            ("dict.logistics.quality.inspection.level.5", "ja-JP", "S-3_jp", "检验水平.S-3"),
+            // dict.logistics.quality.inspection.level.5
+            ("dict.logistics.quality.inspection.level.5", "zh-CN", "S-3", "检验水平.S-3"),
+            // dict.logistics.quality.inspection.level.5
+            ("dict.logistics.quality.inspection.level.5", "zh-HK", "S-3_hk", "检验水平.S-3"),
+
+            // dict.logistics.quality.inspection.level.6
+            ("dict.logistics.quality.inspection.level.6", "en-US", "S-4_us", "检验水平.S-4"),
+            // dict.logistics.quality.inspection.level.6
+            ("dict.logistics.quality.inspection.level.6", "ja-JP", "S-4_jp", "检验水平.S-4"),
+            // dict.logistics.quality.inspection.level.6
+            ("dict.logistics.quality.inspection.level.6", "zh-CN", "S-4", "检验水平.S-4"),
+            // dict.logistics.quality.inspection.level.6
+            ("dict.logistics.quality.inspection.level.6", "zh-HK", "S-4_hk", "检验水平.S-4"),
+
+            // dict.logistics.quality.inspection.strictness.0
+            ("dict.logistics.quality.inspection.strictness.0", "en-US", "正常检验_us", "检验严格度.正常检验"),
+            // dict.logistics.quality.inspection.strictness.0
+            ("dict.logistics.quality.inspection.strictness.0", "ja-JP", "正常检验_jp", "检验严格度.正常检验"),
+            // dict.logistics.quality.inspection.strictness.0
+            ("dict.logistics.quality.inspection.strictness.0", "zh-CN", "正常检验", "检验严格度.正常检验"),
+            // dict.logistics.quality.inspection.strictness.0
+            ("dict.logistics.quality.inspection.strictness.0", "zh-HK", "正常检验_hk", "检验严格度.正常检验"),
+
+            // dict.logistics.quality.inspection.strictness.1
+            ("dict.logistics.quality.inspection.strictness.1", "en-US", "加严检验_us", "检验严格度.加严检验"),
+            // dict.logistics.quality.inspection.strictness.1
+            ("dict.logistics.quality.inspection.strictness.1", "ja-JP", "加严检验_jp", "检验严格度.加严检验"),
+            // dict.logistics.quality.inspection.strictness.1
+            ("dict.logistics.quality.inspection.strictness.1", "zh-CN", "加严检验", "检验严格度.加严检验"),
+            // dict.logistics.quality.inspection.strictness.1
+            ("dict.logistics.quality.inspection.strictness.1", "zh-HK", "加严检验_hk", "检验严格度.加严检验"),
+
+            // dict.logistics.quality.inspection.strictness.2
+            ("dict.logistics.quality.inspection.strictness.2", "en-US", "放宽检验_us", "检验严格度.放宽检验"),
+            // dict.logistics.quality.inspection.strictness.2
+            ("dict.logistics.quality.inspection.strictness.2", "ja-JP", "放宽检验_jp", "检验严格度.放宽检验"),
+            // dict.logistics.quality.inspection.strictness.2
+            ("dict.logistics.quality.inspection.strictness.2", "zh-CN", "放宽检验", "检验严格度.放宽检验"),
+            // dict.logistics.quality.inspection.strictness.2
+            ("dict.logistics.quality.inspection.strictness.2", "zh-HK", "放宽检验_hk", "检验严格度.放宽检验"),
+
+            // dict.logistics.accounting.document.type.aa
+            ("dict.logistics.accounting.document.type.aa", "en-US", "AA 资产过帐_us", "会计凭证类型.AA 资产过帐"),
+            // dict.logistics.accounting.document.type.aa
+            ("dict.logistics.accounting.document.type.aa", "ja-JP", "AA 资产过帐_jp", "会计凭证类型.AA 资产过帐"),
+            // dict.logistics.accounting.document.type.aa
+            ("dict.logistics.accounting.document.type.aa", "zh-CN", "AA 资产过帐", "会计凭证类型.AA 资产过帐"),
+            // dict.logistics.accounting.document.type.aa
+            ("dict.logistics.accounting.document.type.aa", "zh-HK", "AA 资产过帐_hk", "会计凭证类型.AA 资产过帐"),
+
+            // dict.logistics.accounting.document.type.ab
+            ("dict.logistics.accounting.document.type.ab", "en-US", "AB 会计凭证_us", "会计凭证类型.AB 会计凭证"),
+            // dict.logistics.accounting.document.type.ab
+            ("dict.logistics.accounting.document.type.ab", "ja-JP", "AB 会计凭证_jp", "会计凭证类型.AB 会计凭证"),
+            // dict.logistics.accounting.document.type.ab
+            ("dict.logistics.accounting.document.type.ab", "zh-CN", "AB 会计凭证", "会计凭证类型.AB 会计凭证"),
+            // dict.logistics.accounting.document.type.ab
+            ("dict.logistics.accounting.document.type.ab", "zh-HK", "AB 会计凭证_hk", "会计凭证类型.AB 会计凭证"),
+
+            // dict.logistics.accounting.document.type.af
+            ("dict.logistics.accounting.document.type.af", "en-US", "AF 折旧过帐_us", "会计凭证类型.AF 折旧过帐"),
+            // dict.logistics.accounting.document.type.af
+            ("dict.logistics.accounting.document.type.af", "ja-JP", "AF 折旧过帐_jp", "会计凭证类型.AF 折旧过帐"),
+            // dict.logistics.accounting.document.type.af
+            ("dict.logistics.accounting.document.type.af", "zh-CN", "AF 折旧过帐", "会计凭证类型.AF 折旧过帐"),
+            // dict.logistics.accounting.document.type.af
+            ("dict.logistics.accounting.document.type.af", "zh-HK", "AF 折旧过帐_hk", "会计凭证类型.AF 折旧过帐"),
+
+            // dict.logistics.accounting.document.type.an
+            ("dict.logistics.accounting.document.type.an", "en-US", "AN 净资产过帐_us", "会计凭证类型.AN 净资产过帐"),
+            // dict.logistics.accounting.document.type.an
+            ("dict.logistics.accounting.document.type.an", "ja-JP", "AN 净资产过帐_jp", "会计凭证类型.AN 净资产过帐"),
+            // dict.logistics.accounting.document.type.an
+            ("dict.logistics.accounting.document.type.an", "zh-CN", "AN 净资产过帐", "会计凭证类型.AN 净资产过帐"),
+            // dict.logistics.accounting.document.type.an
+            ("dict.logistics.accounting.document.type.an", "zh-HK", "AN 净资产过帐_hk", "会计凭证类型.AN 净资产过帐"),
+
+            // dict.logistics.accounting.document.type.da
+            ("dict.logistics.accounting.document.type.da", "en-US", "DA 客户凭证_us", "会计凭证类型.DA 客户凭证"),
+            // dict.logistics.accounting.document.type.da
+            ("dict.logistics.accounting.document.type.da", "ja-JP", "DA 客户凭证_jp", "会计凭证类型.DA 客户凭证"),
+            // dict.logistics.accounting.document.type.da
+            ("dict.logistics.accounting.document.type.da", "zh-CN", "DA 客户凭证", "会计凭证类型.DA 客户凭证"),
+            // dict.logistics.accounting.document.type.da
+            ("dict.logistics.accounting.document.type.da", "zh-HK", "DA 客户凭证_hk", "会计凭证类型.DA 客户凭证"),
+
+            // dict.logistics.accounting.document.type.dg
+            ("dict.logistics.accounting.document.type.dg", "en-US", "DG 客户贷项凭证_us", "会计凭证类型.DG 客户贷项凭证"),
+            // dict.logistics.accounting.document.type.dg
+            ("dict.logistics.accounting.document.type.dg", "ja-JP", "DG 客户贷项凭证_jp", "会计凭证类型.DG 客户贷项凭证"),
+            // dict.logistics.accounting.document.type.dg
+            ("dict.logistics.accounting.document.type.dg", "zh-CN", "DG 客户贷项凭证", "会计凭证类型.DG 客户贷项凭证"),
+            // dict.logistics.accounting.document.type.dg
+            ("dict.logistics.accounting.document.type.dg", "zh-HK", "DG 客户贷项凭证_hk", "会计凭证类型.DG 客户贷项凭证"),
+
+            // dict.logistics.accounting.document.type.dr
+            ("dict.logistics.accounting.document.type.dr", "en-US", "DR 客户发票_us", "会计凭证类型.DR 客户发票"),
+            // dict.logistics.accounting.document.type.dr
+            ("dict.logistics.accounting.document.type.dr", "ja-JP", "DR 客户发票_jp", "会计凭证类型.DR 客户发票"),
+            // dict.logistics.accounting.document.type.dr
+            ("dict.logistics.accounting.document.type.dr", "zh-CN", "DR 客户发票", "会计凭证类型.DR 客户发票"),
+            // dict.logistics.accounting.document.type.dr
+            ("dict.logistics.accounting.document.type.dr", "zh-HK", "DR 客户发票_hk", "会计凭证类型.DR 客户发票"),
+
+            // dict.logistics.accounting.document.type.dz
+            ("dict.logistics.accounting.document.type.dz", "en-US", "DZ 客户付款_us", "会计凭证类型.DZ 客户付款"),
+            // dict.logistics.accounting.document.type.dz
+            ("dict.logistics.accounting.document.type.dz", "ja-JP", "DZ 客户付款_jp", "会计凭证类型.DZ 客户付款"),
+            // dict.logistics.accounting.document.type.dz
+            ("dict.logistics.accounting.document.type.dz", "zh-CN", "DZ 客户付款", "会计凭证类型.DZ 客户付款"),
+            // dict.logistics.accounting.document.type.dz
+            ("dict.logistics.accounting.document.type.dz", "zh-HK", "DZ 客户付款_hk", "会计凭证类型.DZ 客户付款"),
+
+            // dict.logistics.accounting.document.type.eu
+            ("dict.logistics.accounting.document.type.eu", "en-US", "EU 欧元取整差额_us", "会计凭证类型.EU 欧元取整差额"),
+            // dict.logistics.accounting.document.type.eu
+            ("dict.logistics.accounting.document.type.eu", "ja-JP", "EU 欧元取整差额_jp", "会计凭证类型.EU 欧元取整差额"),
+            // dict.logistics.accounting.document.type.eu
+            ("dict.logistics.accounting.document.type.eu", "zh-CN", "EU 欧元取整差额", "会计凭证类型.EU 欧元取整差额"),
+            // dict.logistics.accounting.document.type.eu
+            ("dict.logistics.accounting.document.type.eu", "zh-HK", "EU 欧元取整差额_hk", "会计凭证类型.EU 欧元取整差额"),
+
+            // dict.logistics.accounting.document.type.ex
+            ("dict.logistics.accounting.document.type.ex", "en-US", "EX 外部编号_us", "会计凭证类型.EX 外部编号"),
+            // dict.logistics.accounting.document.type.ex
+            ("dict.logistics.accounting.document.type.ex", "ja-JP", "EX 外部编号_jp", "会计凭证类型.EX 外部编号"),
+            // dict.logistics.accounting.document.type.ex
+            ("dict.logistics.accounting.document.type.ex", "zh-CN", "EX 外部编号", "会计凭证类型.EX 外部编号"),
+            // dict.logistics.accounting.document.type.ex
+            ("dict.logistics.accounting.document.type.ex", "zh-HK", "EX 外部编号_hk", "会计凭证类型.EX 外部编号"),
+
+            // dict.logistics.accounting.document.type.ka
+            ("dict.logistics.accounting.document.type.ka", "en-US", "KA 供应商凭证_us", "会计凭证类型.KA 供应商凭证"),
+            // dict.logistics.accounting.document.type.ka
+            ("dict.logistics.accounting.document.type.ka", "ja-JP", "KA 供应商凭证_jp", "会计凭证类型.KA 供应商凭证"),
+            // dict.logistics.accounting.document.type.ka
+            ("dict.logistics.accounting.document.type.ka", "zh-CN", "KA 供应商凭证", "会计凭证类型.KA 供应商凭证"),
+            // dict.logistics.accounting.document.type.ka
+            ("dict.logistics.accounting.document.type.ka", "zh-HK", "KA 供应商凭证_hk", "会计凭证类型.KA 供应商凭证"),
+
+            // dict.logistics.accounting.document.type.kg
+            ("dict.logistics.accounting.document.type.kg", "en-US", "KG 供应商贷项凭证_us", "会计凭证类型.KG 供应商贷项凭证"),
+            // dict.logistics.accounting.document.type.kg
+            ("dict.logistics.accounting.document.type.kg", "ja-JP", "KG 供应商贷项凭证_jp", "会计凭证类型.KG 供应商贷项凭证"),
+            // dict.logistics.accounting.document.type.kg
+            ("dict.logistics.accounting.document.type.kg", "zh-CN", "KG 供应商贷项凭证", "会计凭证类型.KG 供应商贷项凭证"),
+            // dict.logistics.accounting.document.type.kg
+            ("dict.logistics.accounting.document.type.kg", "zh-HK", "KG 供应商贷项凭证_hk", "会计凭证类型.KG 供应商贷项凭证"),
+
+            // dict.logistics.accounting.document.type.kn
+            ("dict.logistics.accounting.document.type.kn", "en-US", "KN 净供应商_us", "会计凭证类型.KN 净供应商"),
+            // dict.logistics.accounting.document.type.kn
+            ("dict.logistics.accounting.document.type.kn", "ja-JP", "KN 净供应商_jp", "会计凭证类型.KN 净供应商"),
+            // dict.logistics.accounting.document.type.kn
+            ("dict.logistics.accounting.document.type.kn", "zh-CN", "KN 净供应商", "会计凭证类型.KN 净供应商"),
+            // dict.logistics.accounting.document.type.kn
+            ("dict.logistics.accounting.document.type.kn", "zh-HK", "KN 净供应商_hk", "会计凭证类型.KN 净供应商"),
+
+            // dict.logistics.accounting.document.type.kp
+            ("dict.logistics.accounting.document.type.kp", "en-US", "KP 科目维护_us", "会计凭证类型.KP 科目维护"),
+            // dict.logistics.accounting.document.type.kp
+            ("dict.logistics.accounting.document.type.kp", "ja-JP", "KP 科目维护_jp", "会计凭证类型.KP 科目维护"),
+            // dict.logistics.accounting.document.type.kp
+            ("dict.logistics.accounting.document.type.kp", "zh-CN", "KP 科目维护", "会计凭证类型.KP 科目维护"),
+            // dict.logistics.accounting.document.type.kp
+            ("dict.logistics.accounting.document.type.kp", "zh-HK", "KP 科目维护_hk", "会计凭证类型.KP 科目维护"),
+
+            // dict.logistics.accounting.document.type.kr
+            ("dict.logistics.accounting.document.type.kr", "en-US", "KR 供应商发票_us", "会计凭证类型.KR 供应商发票"),
+            // dict.logistics.accounting.document.type.kr
+            ("dict.logistics.accounting.document.type.kr", "ja-JP", "KR 供应商发票_jp", "会计凭证类型.KR 供应商发票"),
+            // dict.logistics.accounting.document.type.kr
+            ("dict.logistics.accounting.document.type.kr", "zh-CN", "KR 供应商发票", "会计凭证类型.KR 供应商发票"),
+            // dict.logistics.accounting.document.type.kr
+            ("dict.logistics.accounting.document.type.kr", "zh-HK", "KR 供应商发票_hk", "会计凭证类型.KR 供应商发票"),
+
+            // dict.logistics.accounting.document.type.kz
+            ("dict.logistics.accounting.document.type.kz", "en-US", "KZ 供应商付款_us", "会计凭证类型.KZ 供应商付款"),
+            // dict.logistics.accounting.document.type.kz
+            ("dict.logistics.accounting.document.type.kz", "ja-JP", "KZ 供应商付款_jp", "会计凭证类型.KZ 供应商付款"),
+            // dict.logistics.accounting.document.type.kz
+            ("dict.logistics.accounting.document.type.kz", "zh-CN", "KZ 供应商付款", "会计凭证类型.KZ 供应商付款"),
+            // dict.logistics.accounting.document.type.kz
+            ("dict.logistics.accounting.document.type.kz", "zh-HK", "KZ 供应商付款_hk", "会计凭证类型.KZ 供应商付款"),
+
+            // dict.logistics.accounting.document.type.ml
+            ("dict.logistics.accounting.document.type.ml", "en-US", "ML ML 结算_us", "会计凭证类型.ML ML 结算"),
+            // dict.logistics.accounting.document.type.ml
+            ("dict.logistics.accounting.document.type.ml", "ja-JP", "ML ML 结算_jp", "会计凭证类型.ML ML 结算"),
+            // dict.logistics.accounting.document.type.ml
+            ("dict.logistics.accounting.document.type.ml", "zh-CN", "ML ML 结算", "会计凭证类型.ML ML 结算"),
+            // dict.logistics.accounting.document.type.ml
+            ("dict.logistics.accounting.document.type.ml", "zh-HK", "ML ML 结算_hk", "会计凭证类型.ML ML 结算"),
+
+            // dict.logistics.accounting.document.type.pr
+            ("dict.logistics.accounting.document.type.pr", "en-US", "PR 价格更改_us", "会计凭证类型.PR 价格更改"),
+            // dict.logistics.accounting.document.type.pr
+            ("dict.logistics.accounting.document.type.pr", "ja-JP", "PR 价格更改_jp", "会计凭证类型.PR 价格更改"),
+            // dict.logistics.accounting.document.type.pr
+            ("dict.logistics.accounting.document.type.pr", "zh-CN", "PR 价格更改", "会计凭证类型.PR 价格更改"),
+            // dict.logistics.accounting.document.type.pr
+            ("dict.logistics.accounting.document.type.pr", "zh-HK", "PR 价格更改_hk", "会计凭证类型.PR 价格更改"),
+
+            // dict.logistics.accounting.document.type.ra
+            ("dict.logistics.accounting.document.type.ra", "en-US", "RA 后续贷项凭证结算_us", "会计凭证类型.RA 后续贷项凭证结算"),
+            // dict.logistics.accounting.document.type.ra
+            ("dict.logistics.accounting.document.type.ra", "ja-JP", "RA 后续贷项凭证结算_jp", "会计凭证类型.RA 后续贷项凭证结算"),
+            // dict.logistics.accounting.document.type.ra
+            ("dict.logistics.accounting.document.type.ra", "zh-CN", "RA 后续贷项凭证结算", "会计凭证类型.RA 后续贷项凭证结算"),
+            // dict.logistics.accounting.document.type.ra
+            ("dict.logistics.accounting.document.type.ra", "zh-HK", "RA 后续贷项凭证结算_hk", "会计凭证类型.RA 后续贷项凭证结算"),
+
+            // dict.logistics.accounting.document.type.rb
+            ("dict.logistics.accounting.document.type.rb", "en-US", "RB 坏帐准备金_us", "会计凭证类型.RB 坏帐准备金"),
+            // dict.logistics.accounting.document.type.rb
+            ("dict.logistics.accounting.document.type.rb", "ja-JP", "RB 坏帐准备金_jp", "会计凭证类型.RB 坏帐准备金"),
+            // dict.logistics.accounting.document.type.rb
+            ("dict.logistics.accounting.document.type.rb", "zh-CN", "RB 坏帐准备金", "会计凭证类型.RB 坏帐准备金"),
+            // dict.logistics.accounting.document.type.rb
+            ("dict.logistics.accounting.document.type.rb", "zh-HK", "RB 坏帐准备金_hk", "会计凭证类型.RB 坏帐准备金"),
+
+            // dict.logistics.accounting.document.type.re
+            ("dict.logistics.accounting.document.type.re", "en-US", "RE 采购发票_us", "会计凭证类型.RE 采购发票"),
+            // dict.logistics.accounting.document.type.re
+            ("dict.logistics.accounting.document.type.re", "ja-JP", "RE 采购发票_jp", "会计凭证类型.RE 采购发票"),
+            // dict.logistics.accounting.document.type.re
+            ("dict.logistics.accounting.document.type.re", "zh-CN", "RE 采购发票", "会计凭证类型.RE 采购发票"),
+            // dict.logistics.accounting.document.type.re
+            ("dict.logistics.accounting.document.type.re", "zh-HK", "RE 采购发票_hk", "会计凭证类型.RE 采购发票"),
+
+            // dict.logistics.accounting.document.type.rn
+            ("dict.logistics.accounting.document.type.rn", "en-US", "RN 发票 - 净额_us", "会计凭证类型.RN 发票 - 净额"),
+            // dict.logistics.accounting.document.type.rn
+            ("dict.logistics.accounting.document.type.rn", "ja-JP", "RN 发票 - 净额_jp", "会计凭证类型.RN 发票 - 净额"),
+            // dict.logistics.accounting.document.type.rn
+            ("dict.logistics.accounting.document.type.rn", "zh-CN", "RN 发票 - 净额", "会计凭证类型.RN 发票 - 净额"),
+            // dict.logistics.accounting.document.type.rn
+            ("dict.logistics.accounting.document.type.rn", "zh-HK", "RN 发票 - 净额_hk", "会计凭证类型.RN 发票 - 净额"),
+
+            // dict.logistics.accounting.document.type.rv
+            ("dict.logistics.accounting.document.type.rv", "en-US", "RV 销售发票_us", "会计凭证类型.RV 销售发票"),
+            // dict.logistics.accounting.document.type.rv
+            ("dict.logistics.accounting.document.type.rv", "ja-JP", "RV 销售发票_jp", "会计凭证类型.RV 销售发票"),
+            // dict.logistics.accounting.document.type.rv
+            ("dict.logistics.accounting.document.type.rv", "zh-CN", "RV 销售发票", "会计凭证类型.RV 销售发票"),
+            // dict.logistics.accounting.document.type.rv
+            ("dict.logistics.accounting.document.type.rv", "zh-HK", "RV 销售发票_hk", "会计凭证类型.RV 销售发票"),
+
+            // dict.logistics.accounting.document.type.sa
+            ("dict.logistics.accounting.document.type.sa", "en-US", "SA 总帐科目凭证_us", "会计凭证类型.SA 总帐科目凭证"),
+            // dict.logistics.accounting.document.type.sa
+            ("dict.logistics.accounting.document.type.sa", "ja-JP", "SA 总帐科目凭证_jp", "会计凭证类型.SA 总帐科目凭证"),
+            // dict.logistics.accounting.document.type.sa
+            ("dict.logistics.accounting.document.type.sa", "zh-CN", "SA 总帐科目凭证", "会计凭证类型.SA 总帐科目凭证"),
+            // dict.logistics.accounting.document.type.sa
+            ("dict.logistics.accounting.document.type.sa", "zh-HK", "SA 总帐科目凭证_hk", "会计凭证类型.SA 总帐科目凭证"),
+
+            // dict.logistics.accounting.document.type.sb
+            ("dict.logistics.accounting.document.type.sb", "en-US", "SB 总帐科目过帐_us", "会计凭证类型.SB 总帐科目过帐"),
+            // dict.logistics.accounting.document.type.sb
+            ("dict.logistics.accounting.document.type.sb", "ja-JP", "SB 总帐科目过帐_jp", "会计凭证类型.SB 总帐科目过帐"),
+            // dict.logistics.accounting.document.type.sb
+            ("dict.logistics.accounting.document.type.sb", "zh-CN", "SB 总帐科目过帐", "会计凭证类型.SB 总帐科目过帐"),
+            // dict.logistics.accounting.document.type.sb
+            ("dict.logistics.accounting.document.type.sb", "zh-HK", "SB 总帐科目过帐_hk", "会计凭证类型.SB 总帐科目过帐"),
+
+            // dict.logistics.accounting.document.type.sk
+            ("dict.logistics.accounting.document.type.sk", "en-US", "SK 现金凭证_us", "会计凭证类型.SK 现金凭证"),
+            // dict.logistics.accounting.document.type.sk
+            ("dict.logistics.accounting.document.type.sk", "ja-JP", "SK 现金凭证_jp", "会计凭证类型.SK 现金凭证"),
+            // dict.logistics.accounting.document.type.sk
+            ("dict.logistics.accounting.document.type.sk", "zh-CN", "SK 现金凭证", "会计凭证类型.SK 现金凭证"),
+            // dict.logistics.accounting.document.type.sk
+            ("dict.logistics.accounting.document.type.sk", "zh-HK", "SK 现金凭证_hk", "会计凭证类型.SK 现金凭证"),
+
+            // dict.logistics.accounting.document.type.su
+            ("dict.logistics.accounting.document.type.su", "en-US", "SU 调整凭证_us", "会计凭证类型.SU 调整凭证"),
+            // dict.logistics.accounting.document.type.su
+            ("dict.logistics.accounting.document.type.su", "ja-JP", "SU 调整凭证_jp", "会计凭证类型.SU 调整凭证"),
+            // dict.logistics.accounting.document.type.su
+            ("dict.logistics.accounting.document.type.su", "zh-CN", "SU 调整凭证", "会计凭证类型.SU 调整凭证"),
+            // dict.logistics.accounting.document.type.su
+            ("dict.logistics.accounting.document.type.su", "zh-HK", "SU 调整凭证_hk", "会计凭证类型.SU 调整凭证"),
+
+            // dict.logistics.accounting.document.type.ue
+            ("dict.logistics.accounting.document.type.ue", "en-US", "UE 数据传输_us", "会计凭证类型.UE 数据传输"),
+            // dict.logistics.accounting.document.type.ue
+            ("dict.logistics.accounting.document.type.ue", "ja-JP", "UE 数据传输_jp", "会计凭证类型.UE 数据传输"),
+            // dict.logistics.accounting.document.type.ue
+            ("dict.logistics.accounting.document.type.ue", "zh-CN", "UE 数据传输", "会计凭证类型.UE 数据传输"),
+            // dict.logistics.accounting.document.type.ue
+            ("dict.logistics.accounting.document.type.ue", "zh-HK", "UE 数据传输_hk", "会计凭证类型.UE 数据传输"),
+
+            // dict.logistics.accounting.document.type.wa
+            ("dict.logistics.accounting.document.type.wa", "en-US", "WA 成品入库、生产领料及其他领料_us", "会计凭证类型.WA 成品入库、生产领料及其他领料"),
+            // dict.logistics.accounting.document.type.wa
+            ("dict.logistics.accounting.document.type.wa", "ja-JP", "WA 成品入库、生产领料及其他领料_jp", "会计凭证类型.WA 成品入库、生产领料及其他领料"),
+            // dict.logistics.accounting.document.type.wa
+            ("dict.logistics.accounting.document.type.wa", "zh-CN", "WA 成品入库、生产领料及其他领料", "会计凭证类型.WA 成品入库、生产领料及其他领料"),
+            // dict.logistics.accounting.document.type.wa
+            ("dict.logistics.accounting.document.type.wa", "zh-HK", "WA 成品入库、生产领料及其他领料_hk", "会计凭证类型.WA 成品入库、生产领料及其他领料"),
+
+            // dict.logistics.accounting.document.type.wb
+            ("dict.logistics.accounting.document.type.wb", "en-US", "WB 采购收货_us", "会计凭证类型.WB 采购收货"),
+            // dict.logistics.accounting.document.type.wb
+            ("dict.logistics.accounting.document.type.wb", "ja-JP", "WB 采购收货_jp", "会计凭证类型.WB 采购收货"),
+            // dict.logistics.accounting.document.type.wb
+            ("dict.logistics.accounting.document.type.wb", "zh-CN", "WB 采购收货", "会计凭证类型.WB 采购收货"),
+            // dict.logistics.accounting.document.type.wb
+            ("dict.logistics.accounting.document.type.wb", "zh-HK", "WB 采购收货_hk", "会计凭证类型.WB 采购收货"),
+
+            // dict.logistics.accounting.document.type.we
+            ("dict.logistics.accounting.document.type.we", "en-US", "WE 公司间采购入库_us", "会计凭证类型.WE 公司间采购入库"),
+            // dict.logistics.accounting.document.type.we
+            ("dict.logistics.accounting.document.type.we", "ja-JP", "WE 公司间采购入库_jp", "会计凭证类型.WE 公司间采购入库"),
+            // dict.logistics.accounting.document.type.we
+            ("dict.logistics.accounting.document.type.we", "zh-CN", "WE 公司间采购入库", "会计凭证类型.WE 公司间采购入库"),
+            // dict.logistics.accounting.document.type.we
+            ("dict.logistics.accounting.document.type.we", "zh-HK", "WE 公司间采购入库_hk", "会计凭证类型.WE 公司间采购入库"),
+
+            // dict.logistics.accounting.document.type.wi
+            ("dict.logistics.accounting.document.type.wi", "en-US", "WI 存货调整_us", "会计凭证类型.WI 存货调整"),
+            // dict.logistics.accounting.document.type.wi
+            ("dict.logistics.accounting.document.type.wi", "ja-JP", "WI 存货调整_jp", "会计凭证类型.WI 存货调整"),
+            // dict.logistics.accounting.document.type.wi
+            ("dict.logistics.accounting.document.type.wi", "zh-CN", "WI 存货调整", "会计凭证类型.WI 存货调整"),
+            // dict.logistics.accounting.document.type.wi
+            ("dict.logistics.accounting.document.type.wi", "zh-HK", "WI 存货调整_hk", "会计凭证类型.WI 存货调整"),
+
+            // dict.logistics.quality.improvement.status.0
+            ("dict.logistics.quality.improvement.status.0", "en-US", "待改善_us", "客诉改善状态.待改善"),
+            // dict.logistics.quality.improvement.status.0
+            ("dict.logistics.quality.improvement.status.0", "ja-JP", "待改善_jp", "客诉改善状态.待改善"),
+            // dict.logistics.quality.improvement.status.0
+            ("dict.logistics.quality.improvement.status.0", "zh-CN", "待改善", "客诉改善状态.待改善"),
+            // dict.logistics.quality.improvement.status.0
+            ("dict.logistics.quality.improvement.status.0", "zh-HK", "待改善_hk", "客诉改善状态.待改善"),
+
+            // dict.logistics.quality.improvement.status.1
+            ("dict.logistics.quality.improvement.status.1", "en-US", "改善中_us", "客诉改善状态.改善中"),
+            // dict.logistics.quality.improvement.status.1
+            ("dict.logistics.quality.improvement.status.1", "ja-JP", "改善中_jp", "客诉改善状态.改善中"),
+            // dict.logistics.quality.improvement.status.1
+            ("dict.logistics.quality.improvement.status.1", "zh-CN", "改善中", "客诉改善状态.改善中"),
+            // dict.logistics.quality.improvement.status.1
+            ("dict.logistics.quality.improvement.status.1", "zh-HK", "改善中_hk", "客诉改善状态.改善中"),
+
+            // dict.logistics.quality.improvement.status.2
+            ("dict.logistics.quality.improvement.status.2", "en-US", "已完成_us", "客诉改善状态.已完成"),
+            // dict.logistics.quality.improvement.status.2
+            ("dict.logistics.quality.improvement.status.2", "ja-JP", "已完成_jp", "客诉改善状态.已完成"),
+            // dict.logistics.quality.improvement.status.2
+            ("dict.logistics.quality.improvement.status.2", "zh-CN", "已完成", "客诉改善状态.已完成"),
+            // dict.logistics.quality.improvement.status.2
+            ("dict.logistics.quality.improvement.status.2", "zh-HK", "已完成_hk", "客诉改善状态.已完成"),
+
+            // dict.logistics.quality.improvement.status.3
+            ("dict.logistics.quality.improvement.status.3", "en-US", "已验证_us", "客诉改善状态.已验证"),
+            // dict.logistics.quality.improvement.status.3
+            ("dict.logistics.quality.improvement.status.3", "ja-JP", "已验证_jp", "客诉改善状态.已验证"),
+            // dict.logistics.quality.improvement.status.3
+            ("dict.logistics.quality.improvement.status.3", "zh-CN", "已验证", "客诉改善状态.已验证"),
+            // dict.logistics.quality.improvement.status.3
+            ("dict.logistics.quality.improvement.status.3", "zh-HK", "已验证_hk", "客诉改善状态.已验证"),
+
+            // dict.logistics.quality.survey.method.0
+            ("dict.logistics.quality.survey.method.0", "en-US", "问卷_us", "满意度调查方式.问卷"),
+            // dict.logistics.quality.survey.method.0
+            ("dict.logistics.quality.survey.method.0", "ja-JP", "问卷_jp", "满意度调查方式.问卷"),
+            // dict.logistics.quality.survey.method.0
+            ("dict.logistics.quality.survey.method.0", "zh-CN", "问卷", "满意度调查方式.问卷"),
+            // dict.logistics.quality.survey.method.0
+            ("dict.logistics.quality.survey.method.0", "zh-HK", "问卷_hk", "满意度调查方式.问卷"),
+
+            // dict.logistics.quality.survey.method.1
+            ("dict.logistics.quality.survey.method.1", "en-US", "电话_us", "满意度调查方式.电话"),
+            // dict.logistics.quality.survey.method.1
+            ("dict.logistics.quality.survey.method.1", "ja-JP", "电话_jp", "满意度调查方式.电话"),
+            // dict.logistics.quality.survey.method.1
+            ("dict.logistics.quality.survey.method.1", "zh-CN", "电话", "满意度调查方式.电话"),
+            // dict.logistics.quality.survey.method.1
+            ("dict.logistics.quality.survey.method.1", "zh-HK", "电话_hk", "满意度调查方式.电话"),
+
+            // dict.logistics.quality.survey.method.2
+            ("dict.logistics.quality.survey.method.2", "en-US", "邮件_us", "满意度调查方式.邮件"),
+            // dict.logistics.quality.survey.method.2
+            ("dict.logistics.quality.survey.method.2", "ja-JP", "邮件_jp", "满意度调查方式.邮件"),
+            // dict.logistics.quality.survey.method.2
+            ("dict.logistics.quality.survey.method.2", "zh-CN", "邮件", "满意度调查方式.邮件"),
+            // dict.logistics.quality.survey.method.2
+            ("dict.logistics.quality.survey.method.2", "zh-HK", "邮件_hk", "满意度调查方式.邮件"),
+
+            // dict.logistics.quality.survey.method.3
+            ("dict.logistics.quality.survey.method.3", "en-US", "现场_us", "满意度调查方式.现场"),
+            // dict.logistics.quality.survey.method.3
+            ("dict.logistics.quality.survey.method.3", "ja-JP", "现场_jp", "满意度调查方式.现场"),
+            // dict.logistics.quality.survey.method.3
+            ("dict.logistics.quality.survey.method.3", "zh-CN", "现场", "满意度调查方式.现场"),
+            // dict.logistics.quality.survey.method.3
+            ("dict.logistics.quality.survey.method.3", "zh-HK", "现场_hk", "满意度调查方式.现场"),
+
+            // dict.logistics.quality.survey.method.4
+            ("dict.logistics.quality.survey.method.4", "en-US", "在线_us", "满意度调查方式.在线"),
+            // dict.logistics.quality.survey.method.4
+            ("dict.logistics.quality.survey.method.4", "ja-JP", "在线_jp", "满意度调查方式.在线"),
+            // dict.logistics.quality.survey.method.4
+            ("dict.logistics.quality.survey.method.4", "zh-CN", "在线", "满意度调查方式.在线"),
+            // dict.logistics.quality.survey.method.4
+            ("dict.logistics.quality.survey.method.4", "zh-HK", "在线_hk", "满意度调查方式.在线"),
+
+            // dict.logistics.quality.survey.type.0
+            ("dict.logistics.quality.survey.type.0", "en-US", "定期调查_us", "满意度调查类型.定期调查"),
+            // dict.logistics.quality.survey.type.0
+            ("dict.logistics.quality.survey.type.0", "ja-JP", "定期调查_jp", "满意度调查类型.定期调查"),
+            // dict.logistics.quality.survey.type.0
+            ("dict.logistics.quality.survey.type.0", "zh-CN", "定期调查", "满意度调查类型.定期调查"),
+            // dict.logistics.quality.survey.type.0
+            ("dict.logistics.quality.survey.type.0", "zh-HK", "定期调查_hk", "满意度调查类型.定期调查"),
+
+            // dict.logistics.quality.survey.type.1
+            ("dict.logistics.quality.survey.type.1", "en-US", "专项调查_us", "满意度调查类型.专项调查"),
+            // dict.logistics.quality.survey.type.1
+            ("dict.logistics.quality.survey.type.1", "ja-JP", "专项调查_jp", "满意度调查类型.专项调查"),
+            // dict.logistics.quality.survey.type.1
+            ("dict.logistics.quality.survey.type.1", "zh-CN", "专项调查", "满意度调查类型.专项调查"),
+            // dict.logistics.quality.survey.type.1
+            ("dict.logistics.quality.survey.type.1", "zh-HK", "专项调查_hk", "满意度调查类型.专项调查"),
+
+            // dict.logistics.quality.survey.type.2
+            ("dict.logistics.quality.survey.type.2", "en-US", "投诉后调查_us", "满意度调查类型.投诉后调查"),
+            // dict.logistics.quality.survey.type.2
+            ("dict.logistics.quality.survey.type.2", "ja-JP", "投诉后调查_jp", "满意度调查类型.投诉后调查"),
+            // dict.logistics.quality.survey.type.2
+            ("dict.logistics.quality.survey.type.2", "zh-CN", "投诉后调查", "满意度调查类型.投诉后调查"),
+            // dict.logistics.quality.survey.type.2
+            ("dict.logistics.quality.survey.type.2", "zh-HK", "投诉后调查_hk", "满意度调查类型.投诉后调查"),
+
+            // dict.logistics.quality.survey.type.3
+            ("dict.logistics.quality.survey.type.3", "en-US", "其他_us", "满意度调查类型.其他"),
+            // dict.logistics.quality.survey.type.3
+            ("dict.logistics.quality.survey.type.3", "ja-JP", "其他_jp", "满意度调查类型.其他"),
+            // dict.logistics.quality.survey.type.3
+            ("dict.logistics.quality.survey.type.3", "zh-CN", "其他", "满意度调查类型.其他"),
+            // dict.logistics.quality.survey.type.3
+            ("dict.logistics.quality.survey.type.3", "zh-HK", "其他_hk", "满意度调查类型.其他"),
+
+            // dict.logistics.quality.period.0
+            ("dict.logistics.quality.period.0", "en-US", "月度_us", "调查评价周期.月度"),
+            // dict.logistics.quality.period.0
+            ("dict.logistics.quality.period.0", "ja-JP", "月度_jp", "调查评价周期.月度"),
+            // dict.logistics.quality.period.0
+            ("dict.logistics.quality.period.0", "zh-CN", "月度", "调查评价周期.月度"),
+            // dict.logistics.quality.period.0
+            ("dict.logistics.quality.period.0", "zh-HK", "月度_hk", "调查评价周期.月度"),
+
+            // dict.logistics.quality.period.1
+            ("dict.logistics.quality.period.1", "en-US", "季度_us", "调查评价周期.季度"),
+            // dict.logistics.quality.period.1
+            ("dict.logistics.quality.period.1", "ja-JP", "季度_jp", "调查评价周期.季度"),
+            // dict.logistics.quality.period.1
+            ("dict.logistics.quality.period.1", "zh-CN", "季度", "调查评价周期.季度"),
+            // dict.logistics.quality.period.1
+            ("dict.logistics.quality.period.1", "zh-HK", "季度_hk", "调查评价周期.季度"),
+
+            // dict.logistics.quality.period.2
+            ("dict.logistics.quality.period.2", "en-US", "半年度_us", "调查评价周期.半年度"),
+            // dict.logistics.quality.period.2
+            ("dict.logistics.quality.period.2", "ja-JP", "半年度_jp", "调查评价周期.半年度"),
+            // dict.logistics.quality.period.2
+            ("dict.logistics.quality.period.2", "zh-CN", "半年度", "调查评价周期.半年度"),
+            // dict.logistics.quality.period.2
+            ("dict.logistics.quality.period.2", "zh-HK", "半年度_hk", "调查评价周期.半年度"),
+
+            // dict.logistics.quality.period.3
+            ("dict.logistics.quality.period.3", "en-US", "年度_us", "调查评价周期.年度"),
+            // dict.logistics.quality.period.3
+            ("dict.logistics.quality.period.3", "ja-JP", "年度_jp", "调查评价周期.年度"),
+            // dict.logistics.quality.period.3
+            ("dict.logistics.quality.period.3", "zh-CN", "年度", "调查评价周期.年度"),
+            // dict.logistics.quality.period.3
+            ("dict.logistics.quality.period.3", "zh-HK", "年度_hk", "调查评价周期.年度"),
+
+            // dict.logistics.quality.satisfaction.level.0
+            ("dict.logistics.quality.satisfaction.level.0", "en-US", "非常不满意_us", "满意度等级.非常不满意"),
+            // dict.logistics.quality.satisfaction.level.0
+            ("dict.logistics.quality.satisfaction.level.0", "ja-JP", "非常不满意_jp", "满意度等级.非常不满意"),
+            // dict.logistics.quality.satisfaction.level.0
+            ("dict.logistics.quality.satisfaction.level.0", "zh-CN", "非常不满意", "满意度等级.非常不满意"),
+            // dict.logistics.quality.satisfaction.level.0
+            ("dict.logistics.quality.satisfaction.level.0", "zh-HK", "非常不满意_hk", "满意度等级.非常不满意"),
+
+            // dict.logistics.quality.satisfaction.level.1
+            ("dict.logistics.quality.satisfaction.level.1", "en-US", "不满意_us", "满意度等级.不满意"),
+            // dict.logistics.quality.satisfaction.level.1
+            ("dict.logistics.quality.satisfaction.level.1", "ja-JP", "不满意_jp", "满意度等级.不满意"),
+            // dict.logistics.quality.satisfaction.level.1
+            ("dict.logistics.quality.satisfaction.level.1", "zh-CN", "不满意", "满意度等级.不满意"),
+            // dict.logistics.quality.satisfaction.level.1
+            ("dict.logistics.quality.satisfaction.level.1", "zh-HK", "不满意_hk", "满意度等级.不满意"),
+
+            // dict.logistics.quality.satisfaction.level.2
+            ("dict.logistics.quality.satisfaction.level.2", "en-US", "一般_us", "满意度等级.一般"),
+            // dict.logistics.quality.satisfaction.level.2
+            ("dict.logistics.quality.satisfaction.level.2", "ja-JP", "一般_jp", "满意度等级.一般"),
+            // dict.logistics.quality.satisfaction.level.2
+            ("dict.logistics.quality.satisfaction.level.2", "zh-CN", "一般", "满意度等级.一般"),
+            // dict.logistics.quality.satisfaction.level.2
+            ("dict.logistics.quality.satisfaction.level.2", "zh-HK", "一般_hk", "满意度等级.一般"),
+
+            // dict.logistics.quality.satisfaction.level.3
+            ("dict.logistics.quality.satisfaction.level.3", "en-US", "满意_us", "满意度等级.满意"),
+            // dict.logistics.quality.satisfaction.level.3
+            ("dict.logistics.quality.satisfaction.level.3", "ja-JP", "满意_jp", "满意度等级.满意"),
+            // dict.logistics.quality.satisfaction.level.3
+            ("dict.logistics.quality.satisfaction.level.3", "zh-CN", "满意", "满意度等级.满意"),
+            // dict.logistics.quality.satisfaction.level.3
+            ("dict.logistics.quality.satisfaction.level.3", "zh-HK", "满意_hk", "满意度等级.满意"),
+
+            // dict.logistics.quality.satisfaction.level.4
+            ("dict.logistics.quality.satisfaction.level.4", "en-US", "非常满意_us", "满意度等级.非常满意"),
+            // dict.logistics.quality.satisfaction.level.4
+            ("dict.logistics.quality.satisfaction.level.4", "ja-JP", "非常满意_jp", "满意度等级.非常满意"),
+            // dict.logistics.quality.satisfaction.level.4
+            ("dict.logistics.quality.satisfaction.level.4", "zh-CN", "非常满意", "满意度等级.非常满意"),
+            // dict.logistics.quality.satisfaction.level.4
+            ("dict.logistics.quality.satisfaction.level.4", "zh-HK", "非常满意_hk", "满意度等级.非常满意"),
+
+            // dict.logistics.quality.survey.status.0
+            ("dict.logistics.quality.survey.status.0", "en-US", "草稿_us", "满意度调查状态.草稿"),
+            // dict.logistics.quality.survey.status.0
+            ("dict.logistics.quality.survey.status.0", "ja-JP", "草稿_jp", "满意度调查状态.草稿"),
+            // dict.logistics.quality.survey.status.0
+            ("dict.logistics.quality.survey.status.0", "zh-CN", "草稿", "满意度调查状态.草稿"),
+            // dict.logistics.quality.survey.status.0
+            ("dict.logistics.quality.survey.status.0", "zh-HK", "草稿_hk", "满意度调查状态.草稿"),
+
+            // dict.logistics.quality.survey.status.1
+            ("dict.logistics.quality.survey.status.1", "en-US", "进行中_us", "满意度调查状态.进行中"),
+            // dict.logistics.quality.survey.status.1
+            ("dict.logistics.quality.survey.status.1", "ja-JP", "进行中_jp", "满意度调查状态.进行中"),
+            // dict.logistics.quality.survey.status.1
+            ("dict.logistics.quality.survey.status.1", "zh-CN", "进行中", "满意度调查状态.进行中"),
+            // dict.logistics.quality.survey.status.1
+            ("dict.logistics.quality.survey.status.1", "zh-HK", "进行中_hk", "满意度调查状态.进行中"),
+
+            // dict.logistics.quality.survey.status.2
+            ("dict.logistics.quality.survey.status.2", "en-US", "已完成_us", "满意度调查状态.已完成"),
+            // dict.logistics.quality.survey.status.2
+            ("dict.logistics.quality.survey.status.2", "ja-JP", "已完成_jp", "满意度调查状态.已完成"),
+            // dict.logistics.quality.survey.status.2
+            ("dict.logistics.quality.survey.status.2", "zh-CN", "已完成", "满意度调查状态.已完成"),
+            // dict.logistics.quality.survey.status.2
+            ("dict.logistics.quality.survey.status.2", "zh-HK", "已完成_hk", "满意度调查状态.已完成"),
+
+            // dict.logistics.quality.survey.status.3
+            ("dict.logistics.quality.survey.status.3", "en-US", "已归档_us", "满意度调查状态.已归档"),
+            // dict.logistics.quality.survey.status.3
+            ("dict.logistics.quality.survey.status.3", "ja-JP", "已归档_jp", "满意度调查状态.已归档"),
+            // dict.logistics.quality.survey.status.3
+            ("dict.logistics.quality.survey.status.3", "zh-CN", "已归档", "满意度调查状态.已归档"),
+            // dict.logistics.quality.survey.status.3
+            ("dict.logistics.quality.survey.status.3", "zh-HK", "已归档_hk", "满意度调查状态.已归档"),
+
+            // dict.logistics.quality.follow.up.status.0
+            ("dict.logistics.quality.follow.up.status.0", "en-US", "无需跟进_us", "跟进状态.无需跟进"),
+            // dict.logistics.quality.follow.up.status.0
+            ("dict.logistics.quality.follow.up.status.0", "ja-JP", "无需跟进_jp", "跟进状态.无需跟进"),
+            // dict.logistics.quality.follow.up.status.0
+            ("dict.logistics.quality.follow.up.status.0", "zh-CN", "无需跟进", "跟进状态.无需跟进"),
+            // dict.logistics.quality.follow.up.status.0
+            ("dict.logistics.quality.follow.up.status.0", "zh-HK", "无需跟进_hk", "跟进状态.无需跟进"),
+
+            // dict.logistics.quality.follow.up.status.1
+            ("dict.logistics.quality.follow.up.status.1", "en-US", "待跟进_us", "跟进状态.待跟进"),
+            // dict.logistics.quality.follow.up.status.1
+            ("dict.logistics.quality.follow.up.status.1", "ja-JP", "待跟进_jp", "跟进状态.待跟进"),
+            // dict.logistics.quality.follow.up.status.1
+            ("dict.logistics.quality.follow.up.status.1", "zh-CN", "待跟进", "跟进状态.待跟进"),
+            // dict.logistics.quality.follow.up.status.1
+            ("dict.logistics.quality.follow.up.status.1", "zh-HK", "待跟进_hk", "跟进状态.待跟进"),
+
+            // dict.logistics.quality.follow.up.status.2
+            ("dict.logistics.quality.follow.up.status.2", "en-US", "跟进中_us", "跟进状态.跟进中"),
+            // dict.logistics.quality.follow.up.status.2
+            ("dict.logistics.quality.follow.up.status.2", "ja-JP", "跟进中_jp", "跟进状态.跟进中"),
+            // dict.logistics.quality.follow.up.status.2
+            ("dict.logistics.quality.follow.up.status.2", "zh-CN", "跟进中", "跟进状态.跟进中"),
+            // dict.logistics.quality.follow.up.status.2
+            ("dict.logistics.quality.follow.up.status.2", "zh-HK", "跟进中_hk", "跟进状态.跟进中"),
+
+            // dict.logistics.quality.follow.up.status.3
+            ("dict.logistics.quality.follow.up.status.3", "en-US", "已完成_us", "跟进状态.已完成"),
+            // dict.logistics.quality.follow.up.status.3
+            ("dict.logistics.quality.follow.up.status.3", "ja-JP", "已完成_jp", "跟进状态.已完成"),
+            // dict.logistics.quality.follow.up.status.3
+            ("dict.logistics.quality.follow.up.status.3", "zh-CN", "已完成", "跟进状态.已完成"),
+            // dict.logistics.quality.follow.up.status.3
+            ("dict.logistics.quality.follow.up.status.3", "zh-HK", "已完成_hk", "跟进状态.已完成"),
+
+            // dict.logistics.quality.satisfaction.category.0
+            ("dict.logistics.quality.satisfaction.category.0", "en-US", "产品质量_us", "满意度调查类别.产品质量"),
+            // dict.logistics.quality.satisfaction.category.0
+            ("dict.logistics.quality.satisfaction.category.0", "ja-JP", "产品质量_jp", "满意度调查类别.产品质量"),
+            // dict.logistics.quality.satisfaction.category.0
+            ("dict.logistics.quality.satisfaction.category.0", "zh-CN", "产品质量", "满意度调查类别.产品质量"),
+            // dict.logistics.quality.satisfaction.category.0
+            ("dict.logistics.quality.satisfaction.category.0", "zh-HK", "产品质量_hk", "满意度调查类别.产品质量"),
+
+            // dict.logistics.quality.satisfaction.category.1
+            ("dict.logistics.quality.satisfaction.category.1", "en-US", "交付服务_us", "满意度调查类别.交付服务"),
+            // dict.logistics.quality.satisfaction.category.1
+            ("dict.logistics.quality.satisfaction.category.1", "ja-JP", "交付服务_jp", "满意度调查类别.交付服务"),
+            // dict.logistics.quality.satisfaction.category.1
+            ("dict.logistics.quality.satisfaction.category.1", "zh-CN", "交付服务", "满意度调查类别.交付服务"),
+            // dict.logistics.quality.satisfaction.category.1
+            ("dict.logistics.quality.satisfaction.category.1", "zh-HK", "交付服务_hk", "满意度调查类别.交付服务"),
+
+            // dict.logistics.quality.satisfaction.category.2
+            ("dict.logistics.quality.satisfaction.category.2", "en-US", "售后服务_us", "满意度调查类别.售后服务"),
+            // dict.logistics.quality.satisfaction.category.2
+            ("dict.logistics.quality.satisfaction.category.2", "ja-JP", "售后服务_jp", "满意度调查类别.售后服务"),
+            // dict.logistics.quality.satisfaction.category.2
+            ("dict.logistics.quality.satisfaction.category.2", "zh-CN", "售后服务", "满意度调查类别.售后服务"),
+            // dict.logistics.quality.satisfaction.category.2
+            ("dict.logistics.quality.satisfaction.category.2", "zh-HK", "售后服务_hk", "满意度调查类别.售后服务"),
+
+            // dict.logistics.quality.satisfaction.category.3
+            ("dict.logistics.quality.satisfaction.category.3", "en-US", "技术支持_us", "满意度调查类别.技术支持"),
+            // dict.logistics.quality.satisfaction.category.3
+            ("dict.logistics.quality.satisfaction.category.3", "ja-JP", "技术支持_jp", "满意度调查类别.技术支持"),
+            // dict.logistics.quality.satisfaction.category.3
+            ("dict.logistics.quality.satisfaction.category.3", "zh-CN", "技术支持", "满意度调查类别.技术支持"),
+            // dict.logistics.quality.satisfaction.category.3
+            ("dict.logistics.quality.satisfaction.category.3", "zh-HK", "技术支持_hk", "满意度调查类别.技术支持"),
+
+            // dict.logistics.quality.satisfaction.category.4
+            ("dict.logistics.quality.satisfaction.category.4", "en-US", "价格_us", "满意度调查类别.价格"),
+            // dict.logistics.quality.satisfaction.category.4
+            ("dict.logistics.quality.satisfaction.category.4", "ja-JP", "价格_jp", "满意度调查类别.价格"),
+            // dict.logistics.quality.satisfaction.category.4
+            ("dict.logistics.quality.satisfaction.category.4", "zh-CN", "价格", "满意度调查类别.价格"),
+            // dict.logistics.quality.satisfaction.category.4
+            ("dict.logistics.quality.satisfaction.category.4", "zh-HK", "价格_hk", "满意度调查类别.价格"),
+
+            // dict.logistics.quality.satisfaction.category.5
+            ("dict.logistics.quality.satisfaction.category.5", "en-US", "其他_us", "满意度调查类别.其他"),
+            // dict.logistics.quality.satisfaction.category.5
+            ("dict.logistics.quality.satisfaction.category.5", "ja-JP", "其他_jp", "满意度调查类别.其他"),
+            // dict.logistics.quality.satisfaction.category.5
+            ("dict.logistics.quality.satisfaction.category.5", "zh-CN", "其他", "满意度调查类别.其他"),
+            // dict.logistics.quality.satisfaction.category.5
+            ("dict.logistics.quality.satisfaction.category.5", "zh-HK", "其他_hk", "满意度调查类别.其他"),
+
+            // dict.logistics.quality.evaluation.category.0
+            ("dict.logistics.quality.evaluation.category.0", "en-US", "质量管理_us", "供应商评价类别.质量管理"),
+            // dict.logistics.quality.evaluation.category.0
+            ("dict.logistics.quality.evaluation.category.0", "ja-JP", "质量管理_jp", "供应商评价类别.质量管理"),
+            // dict.logistics.quality.evaluation.category.0
+            ("dict.logistics.quality.evaluation.category.0", "zh-CN", "质量管理", "供应商评价类别.质量管理"),
+            // dict.logistics.quality.evaluation.category.0
+            ("dict.logistics.quality.evaluation.category.0", "zh-HK", "质量管理_hk", "供应商评价类别.质量管理"),
+
+            // dict.logistics.quality.evaluation.category.1
+            ("dict.logistics.quality.evaluation.category.1", "en-US", "交付能力_us", "供应商评价类别.交付能力"),
+            // dict.logistics.quality.evaluation.category.1
+            ("dict.logistics.quality.evaluation.category.1", "ja-JP", "交付能力_jp", "供应商评价类别.交付能力"),
+            // dict.logistics.quality.evaluation.category.1
+            ("dict.logistics.quality.evaluation.category.1", "zh-CN", "交付能力", "供应商评价类别.交付能力"),
+            // dict.logistics.quality.evaluation.category.1
+            ("dict.logistics.quality.evaluation.category.1", "zh-HK", "交付能力_hk", "供应商评价类别.交付能力"),
+
+            // dict.logistics.quality.evaluation.category.2
+            ("dict.logistics.quality.evaluation.category.2", "en-US", "价格水平_us", "供应商评价类别.价格水平"),
+            // dict.logistics.quality.evaluation.category.2
+            ("dict.logistics.quality.evaluation.category.2", "ja-JP", "价格水平_jp", "供应商评价类别.价格水平"),
+            // dict.logistics.quality.evaluation.category.2
+            ("dict.logistics.quality.evaluation.category.2", "zh-CN", "价格水平", "供应商评价类别.价格水平"),
+            // dict.logistics.quality.evaluation.category.2
+            ("dict.logistics.quality.evaluation.category.2", "zh-HK", "价格水平_hk", "供应商评价类别.价格水平"),
+
+            // dict.logistics.quality.evaluation.category.3
+            ("dict.logistics.quality.evaluation.category.3", "en-US", "服务水平_us", "供应商评价类别.服务水平"),
+            // dict.logistics.quality.evaluation.category.3
+            ("dict.logistics.quality.evaluation.category.3", "ja-JP", "服务水平_jp", "供应商评价类别.服务水平"),
+            // dict.logistics.quality.evaluation.category.3
+            ("dict.logistics.quality.evaluation.category.3", "zh-CN", "服务水平", "供应商评价类别.服务水平"),
+            // dict.logistics.quality.evaluation.category.3
+            ("dict.logistics.quality.evaluation.category.3", "zh-HK", "服务水平_hk", "供应商评价类别.服务水平"),
+
+            // dict.logistics.quality.evaluation.category.4
+            ("dict.logistics.quality.evaluation.category.4", "en-US", "技术能力_us", "供应商评价类别.技术能力"),
+            // dict.logistics.quality.evaluation.category.4
+            ("dict.logistics.quality.evaluation.category.4", "ja-JP", "技术能力_jp", "供应商评价类别.技术能力"),
+            // dict.logistics.quality.evaluation.category.4
+            ("dict.logistics.quality.evaluation.category.4", "zh-CN", "技术能力", "供应商评价类别.技术能力"),
+            // dict.logistics.quality.evaluation.category.4
+            ("dict.logistics.quality.evaluation.category.4", "zh-HK", "技术能力_hk", "供应商评价类别.技术能力"),
+
+            // dict.logistics.quality.evaluation.category.5
+            ("dict.logistics.quality.evaluation.category.5", "en-US", "管理体系_us", "供应商评价类别.管理体系"),
+            // dict.logistics.quality.evaluation.category.5
+            ("dict.logistics.quality.evaluation.category.5", "ja-JP", "管理体系_jp", "供应商评价类别.管理体系"),
+            // dict.logistics.quality.evaluation.category.5
+            ("dict.logistics.quality.evaluation.category.5", "zh-CN", "管理体系", "供应商评价类别.管理体系"),
+            // dict.logistics.quality.evaluation.category.5
+            ("dict.logistics.quality.evaluation.category.5", "zh-HK", "管理体系_hk", "供应商评价类别.管理体系"),
+
+            // dict.logistics.quality.evaluation.category.6
+            ("dict.logistics.quality.evaluation.category.6", "en-US", "其他_us", "供应商评价类别.其他"),
+            // dict.logistics.quality.evaluation.category.6
+            ("dict.logistics.quality.evaluation.category.6", "ja-JP", "其他_jp", "供应商评价类别.其他"),
+            // dict.logistics.quality.evaluation.category.6
+            ("dict.logistics.quality.evaluation.category.6", "zh-CN", "其他", "供应商评价类别.其他"),
+            // dict.logistics.quality.evaluation.category.6
+            ("dict.logistics.quality.evaluation.category.6", "zh-HK", "其他_hk", "供应商评价类别.其他"),
+
+            // dict.logistics.quality.supplier.rating.0
+            ("dict.logistics.quality.supplier.rating.0", "en-US", "D级-不合格_us", "供应商评级.D级"),
+            // dict.logistics.quality.supplier.rating.0
+            ("dict.logistics.quality.supplier.rating.0", "ja-JP", "D级-不合格_jp", "供应商评级.D级"),
+            // dict.logistics.quality.supplier.rating.0
+            ("dict.logistics.quality.supplier.rating.0", "zh-CN", "D级-不合格", "供应商评级.D级"),
+            // dict.logistics.quality.supplier.rating.0
+            ("dict.logistics.quality.supplier.rating.0", "zh-HK", "D级-不合格_hk", "供应商评级.D级"),
+
+            // dict.logistics.quality.supplier.rating.1
+            ("dict.logistics.quality.supplier.rating.1", "en-US", "C级-合格_us", "供应商评级.C级"),
+            // dict.logistics.quality.supplier.rating.1
+            ("dict.logistics.quality.supplier.rating.1", "ja-JP", "C级-合格_jp", "供应商评级.C级"),
+            // dict.logistics.quality.supplier.rating.1
+            ("dict.logistics.quality.supplier.rating.1", "zh-CN", "C级-合格", "供应商评级.C级"),
+            // dict.logistics.quality.supplier.rating.1
+            ("dict.logistics.quality.supplier.rating.1", "zh-HK", "C级-合格_hk", "供应商评级.C级"),
+
+            // dict.logistics.quality.supplier.rating.2
+            ("dict.logistics.quality.supplier.rating.2", "en-US", "B级-良好_us", "供应商评级.B级"),
+            // dict.logistics.quality.supplier.rating.2
+            ("dict.logistics.quality.supplier.rating.2", "ja-JP", "B级-良好_jp", "供应商评级.B级"),
+            // dict.logistics.quality.supplier.rating.2
+            ("dict.logistics.quality.supplier.rating.2", "zh-CN", "B级-良好", "供应商评级.B级"),
+            // dict.logistics.quality.supplier.rating.2
+            ("dict.logistics.quality.supplier.rating.2", "zh-HK", "B级-良好_hk", "供应商评级.B级"),
+
+            // dict.logistics.quality.supplier.rating.3
+            ("dict.logistics.quality.supplier.rating.3", "en-US", "A级-优秀_us", "供应商评级.A级"),
+            // dict.logistics.quality.supplier.rating.3
+            ("dict.logistics.quality.supplier.rating.3", "ja-JP", "A级-优秀_jp", "供应商评级.A级"),
+            // dict.logistics.quality.supplier.rating.3
+            ("dict.logistics.quality.supplier.rating.3", "zh-CN", "A级-优秀", "供应商评级.A级"),
+            // dict.logistics.quality.supplier.rating.3
+            ("dict.logistics.quality.supplier.rating.3", "zh-HK", "A级-优秀_hk", "供应商评级.A级"),
+
+            // dict.logistics.quality.evaluation.conclusion.0
+            ("dict.logistics.quality.evaluation.conclusion.0", "en-US", "继续合作_us", "供应商考核结论.继续合作"),
+            // dict.logistics.quality.evaluation.conclusion.0
+            ("dict.logistics.quality.evaluation.conclusion.0", "ja-JP", "继续合作_jp", "供应商考核结论.继续合作"),
+            // dict.logistics.quality.evaluation.conclusion.0
+            ("dict.logistics.quality.evaluation.conclusion.0", "zh-CN", "继续合作", "供应商考核结论.继续合作"),
+            // dict.logistics.quality.evaluation.conclusion.0
+            ("dict.logistics.quality.evaluation.conclusion.0", "zh-HK", "继续合作_hk", "供应商考核结论.继续合作"),
+
+            // dict.logistics.quality.evaluation.conclusion.1
+            ("dict.logistics.quality.evaluation.conclusion.1", "en-US", "限期整改_us", "供应商考核结论.限期整改"),
+            // dict.logistics.quality.evaluation.conclusion.1
+            ("dict.logistics.quality.evaluation.conclusion.1", "ja-JP", "限期整改_jp", "供应商考核结论.限期整改"),
+            // dict.logistics.quality.evaluation.conclusion.1
+            ("dict.logistics.quality.evaluation.conclusion.1", "zh-CN", "限期整改", "供应商考核结论.限期整改"),
+            // dict.logistics.quality.evaluation.conclusion.1
+            ("dict.logistics.quality.evaluation.conclusion.1", "zh-HK", "限期整改_hk", "供应商考核结论.限期整改"),
+
+            // dict.logistics.quality.evaluation.conclusion.2
+            ("dict.logistics.quality.evaluation.conclusion.2", "en-US", "减少订单_us", "供应商考核结论.减少订单"),
+            // dict.logistics.quality.evaluation.conclusion.2
+            ("dict.logistics.quality.evaluation.conclusion.2", "ja-JP", "减少订单_jp", "供应商考核结论.减少订单"),
+            // dict.logistics.quality.evaluation.conclusion.2
+            ("dict.logistics.quality.evaluation.conclusion.2", "zh-CN", "减少订单", "供应商考核结论.减少订单"),
+            // dict.logistics.quality.evaluation.conclusion.2
+            ("dict.logistics.quality.evaluation.conclusion.2", "zh-HK", "减少订单_hk", "供应商考核结论.减少订单"),
+
+            // dict.logistics.quality.evaluation.conclusion.3
+            ("dict.logistics.quality.evaluation.conclusion.3", "en-US", "暂停合作_us", "供应商考核结论.暂停合作"),
+            // dict.logistics.quality.evaluation.conclusion.3
+            ("dict.logistics.quality.evaluation.conclusion.3", "ja-JP", "暂停合作_jp", "供应商考核结论.暂停合作"),
+            // dict.logistics.quality.evaluation.conclusion.3
+            ("dict.logistics.quality.evaluation.conclusion.3", "zh-CN", "暂停合作", "供应商考核结论.暂停合作"),
+            // dict.logistics.quality.evaluation.conclusion.3
+            ("dict.logistics.quality.evaluation.conclusion.3", "zh-HK", "暂停合作_hk", "供应商考核结论.暂停合作"),
+
+            // dict.logistics.quality.evaluation.conclusion.4
+            ("dict.logistics.quality.evaluation.conclusion.4", "en-US", "取消资格_us", "供应商考核结论.取消资格"),
+            // dict.logistics.quality.evaluation.conclusion.4
+            ("dict.logistics.quality.evaluation.conclusion.4", "ja-JP", "取消资格_jp", "供应商考核结论.取消资格"),
+            // dict.logistics.quality.evaluation.conclusion.4
+            ("dict.logistics.quality.evaluation.conclusion.4", "zh-CN", "取消资格", "供应商考核结论.取消资格"),
+            // dict.logistics.quality.evaluation.conclusion.4
+            ("dict.logistics.quality.evaluation.conclusion.4", "zh-HK", "取消资格_hk", "供应商考核结论.取消资格"),
+
+            // dict.logistics.quality.evaluation.status.0
+            ("dict.logistics.quality.evaluation.status.0", "en-US", "草稿_us", "供应商评价状态.草稿"),
+            // dict.logistics.quality.evaluation.status.0
+            ("dict.logistics.quality.evaluation.status.0", "ja-JP", "草稿_jp", "供应商评价状态.草稿"),
+            // dict.logistics.quality.evaluation.status.0
+            ("dict.logistics.quality.evaluation.status.0", "zh-CN", "草稿", "供应商评价状态.草稿"),
+            // dict.logistics.quality.evaluation.status.0
+            ("dict.logistics.quality.evaluation.status.0", "zh-HK", "草稿_hk", "供应商评价状态.草稿"),
+
+            // dict.logistics.quality.evaluation.status.1
+            ("dict.logistics.quality.evaluation.status.1", "en-US", "评价中_us", "供应商评价状态.评价中"),
+            // dict.logistics.quality.evaluation.status.1
+            ("dict.logistics.quality.evaluation.status.1", "ja-JP", "评价中_jp", "供应商评价状态.评价中"),
+            // dict.logistics.quality.evaluation.status.1
+            ("dict.logistics.quality.evaluation.status.1", "zh-CN", "评价中", "供应商评价状态.评价中"),
+            // dict.logistics.quality.evaluation.status.1
+            ("dict.logistics.quality.evaluation.status.1", "zh-HK", "评价中_hk", "供应商评价状态.评价中"),
+
+            // dict.logistics.quality.evaluation.status.2
+            ("dict.logistics.quality.evaluation.status.2", "en-US", "已完成_us", "供应商评价状态.已完成"),
+            // dict.logistics.quality.evaluation.status.2
+            ("dict.logistics.quality.evaluation.status.2", "ja-JP", "已完成_jp", "供应商评价状态.已完成"),
+            // dict.logistics.quality.evaluation.status.2
+            ("dict.logistics.quality.evaluation.status.2", "zh-CN", "已完成", "供应商评价状态.已完成"),
+            // dict.logistics.quality.evaluation.status.2
+            ("dict.logistics.quality.evaluation.status.2", "zh-HK", "已完成_hk", "供应商评价状态.已完成"),
+
+            // dict.logistics.quality.evaluation.status.3
+            ("dict.logistics.quality.evaluation.status.3", "en-US", "已归档_us", "供应商评价状态.已归档"),
+            // dict.logistics.quality.evaluation.status.3
+            ("dict.logistics.quality.evaluation.status.3", "ja-JP", "已归档_jp", "供应商评价状态.已归档"),
+            // dict.logistics.quality.evaluation.status.3
+            ("dict.logistics.quality.evaluation.status.3", "zh-CN", "已归档", "供应商评价状态.已归档"),
+            // dict.logistics.quality.evaluation.status.3
+            ("dict.logistics.quality.evaluation.status.3", "zh-HK", "已归档_hk", "供应商评价状态.已归档"),
+
+            // dict.logistics.quality.rectification.status.0
+            ("dict.logistics.quality.rectification.status.0", "en-US", "无需整改_us", "整改跟进状态.无需整改"),
+            // dict.logistics.quality.rectification.status.0
+            ("dict.logistics.quality.rectification.status.0", "ja-JP", "无需整改_jp", "整改跟进状态.无需整改"),
+            // dict.logistics.quality.rectification.status.0
+            ("dict.logistics.quality.rectification.status.0", "zh-CN", "无需整改", "整改跟进状态.无需整改"),
+            // dict.logistics.quality.rectification.status.0
+            ("dict.logistics.quality.rectification.status.0", "zh-HK", "无需整改_hk", "整改跟进状态.无需整改"),
+
+            // dict.logistics.quality.rectification.status.1
+            ("dict.logistics.quality.rectification.status.1", "en-US", "待整改_us", "整改跟进状态.待整改"),
+            // dict.logistics.quality.rectification.status.1
+            ("dict.logistics.quality.rectification.status.1", "ja-JP", "待整改_jp", "整改跟进状态.待整改"),
+            // dict.logistics.quality.rectification.status.1
+            ("dict.logistics.quality.rectification.status.1", "zh-CN", "待整改", "整改跟进状态.待整改"),
+            // dict.logistics.quality.rectification.status.1
+            ("dict.logistics.quality.rectification.status.1", "zh-HK", "待整改_hk", "整改跟进状态.待整改"),
+
+            // dict.logistics.quality.rectification.status.2
+            ("dict.logistics.quality.rectification.status.2", "en-US", "整改中_us", "整改跟进状态.整改中"),
+            // dict.logistics.quality.rectification.status.2
+            ("dict.logistics.quality.rectification.status.2", "ja-JP", "整改中_jp", "整改跟进状态.整改中"),
+            // dict.logistics.quality.rectification.status.2
+            ("dict.logistics.quality.rectification.status.2", "zh-CN", "整改中", "整改跟进状态.整改中"),
+            // dict.logistics.quality.rectification.status.2
+            ("dict.logistics.quality.rectification.status.2", "zh-HK", "整改中_hk", "整改跟进状态.整改中"),
+
+            // dict.logistics.quality.rectification.status.3
+            ("dict.logistics.quality.rectification.status.3", "en-US", "已完成_us", "整改跟进状态.已完成"),
+            // dict.logistics.quality.rectification.status.3
+            ("dict.logistics.quality.rectification.status.3", "ja-JP", "已完成_jp", "整改跟进状态.已完成"),
+            // dict.logistics.quality.rectification.status.3
+            ("dict.logistics.quality.rectification.status.3", "zh-CN", "已完成", "整改跟进状态.已完成"),
+            // dict.logistics.quality.rectification.status.3
+            ("dict.logistics.quality.rectification.status.3", "zh-HK", "已完成_hk", "整改跟进状态.已完成"),
+
+            // dict.logistics.quality.rectification.status.4
+            ("dict.logistics.quality.rectification.status.4", "en-US", "未通过_us", "整改跟进状态.未通过"),
+            // dict.logistics.quality.rectification.status.4
+            ("dict.logistics.quality.rectification.status.4", "ja-JP", "未通过_jp", "整改跟进状态.未通过"),
+            // dict.logistics.quality.rectification.status.4
+            ("dict.logistics.quality.rectification.status.4", "zh-CN", "未通过", "整改跟进状态.未通过"),
+            // dict.logistics.quality.rectification.status.4
+            ("dict.logistics.quality.rectification.status.4", "zh-HK", "未通过_hk", "整改跟进状态.未通过"),
+
+            // dict.sys.quartz.task.type.assembly
+            ("dict.sys.quartz.task.type.assembly", "en-US", "程序集_us", "Quartz任务类型.程序集"),
+            // dict.sys.quartz.task.type.assembly
+            ("dict.sys.quartz.task.type.assembly", "ja-JP", "程序集_jp", "Quartz任务类型.程序集"),
+            // dict.sys.quartz.task.type.assembly
+            ("dict.sys.quartz.task.type.assembly", "zh-CN", "程序集", "Quartz任务类型.程序集"),
+            // dict.sys.quartz.task.type.assembly
+            ("dict.sys.quartz.task.type.assembly", "zh-HK", "程序集_hk", "Quartz任务类型.程序集"),
+
+            // dict.sys.quartz.task.type.http
+            ("dict.sys.quartz.task.type.http", "en-US", "网络请求_us", "Quartz任务类型.网络请求"),
+            // dict.sys.quartz.task.type.http
+            ("dict.sys.quartz.task.type.http", "ja-JP", "网络请求_jp", "Quartz任务类型.网络请求"),
+            // dict.sys.quartz.task.type.http
+            ("dict.sys.quartz.task.type.http", "zh-CN", "网络请求", "Quartz任务类型.网络请求"),
+            // dict.sys.quartz.task.type.http
+            ("dict.sys.quartz.task.type.http", "zh-HK", "网络请求_hk", "Quartz任务类型.网络请求"),
+
+            // dict.sys.quartz.task.type.sql
+            ("dict.sys.quartz.task.type.sql", "en-US", "SQL语句_us", "Quartz任务类型.SQL语句"),
+            // dict.sys.quartz.task.type.sql
+            ("dict.sys.quartz.task.type.sql", "ja-JP", "SQL语句_jp", "Quartz任务类型.SQL语句"),
+            // dict.sys.quartz.task.type.sql
+            ("dict.sys.quartz.task.type.sql", "zh-CN", "SQL语句", "Quartz任务类型.SQL语句"),
+            // dict.sys.quartz.task.type.sql
+            ("dict.sys.quartz.task.type.sql", "zh-HK", "SQL语句_hk", "Quartz任务类型.SQL语句"),
+
+            // dict.sys.quartz.job.group.default
+            ("dict.sys.quartz.job.group.default", "en-US", "默认_us", "Quartz任务分组.默认"),
+            // dict.sys.quartz.job.group.default
+            ("dict.sys.quartz.job.group.default", "ja-JP", "默认_jp", "Quartz任务分组.默认"),
+            // dict.sys.quartz.job.group.default
+            ("dict.sys.quartz.job.group.default", "zh-CN", "默认", "Quartz任务分组.默认"),
+            // dict.sys.quartz.job.group.default
+            ("dict.sys.quartz.job.group.default", "zh-HK", "默认_hk", "Quartz任务分组.默认"),
+
+            // dict.sys.quartz.job.group.system
+            ("dict.sys.quartz.job.group.system", "en-US", "系统_us", "Quartz任务分组.系统"),
+            // dict.sys.quartz.job.group.system
+            ("dict.sys.quartz.job.group.system", "ja-JP", "系统_jp", "Quartz任务分组.系统"),
+            // dict.sys.quartz.job.group.system
+            ("dict.sys.quartz.job.group.system", "zh-CN", "系统", "Quartz任务分组.系统"),
+            // dict.sys.quartz.job.group.system
+            ("dict.sys.quartz.job.group.system", "zh-HK", "系统_hk", "Quartz任务分组.系统"),
+
+            // dict.sys.quartz.job.group.business
+            ("dict.sys.quartz.job.group.business", "en-US", "业务_us", "Quartz任务分组.业务"),
+            // dict.sys.quartz.job.group.business
+            ("dict.sys.quartz.job.group.business", "ja-JP", "业务_jp", "Quartz任务分组.业务"),
+            // dict.sys.quartz.job.group.business
+            ("dict.sys.quartz.job.group.business", "zh-CN", "业务", "Quartz任务分组.业务"),
+            // dict.sys.quartz.job.group.business
+            ("dict.sys.quartz.job.group.business", "zh-HK", "业务_hk", "Quartz任务分组.业务"),
+
+            // dict.sys.quartz.job.group.report
+            ("dict.sys.quartz.job.group.report", "en-US", "报表_us", "Quartz任务分组.报表"),
+            // dict.sys.quartz.job.group.report
+            ("dict.sys.quartz.job.group.report", "ja-JP", "报表_jp", "Quartz任务分组.报表"),
+            // dict.sys.quartz.job.group.report
+            ("dict.sys.quartz.job.group.report", "zh-CN", "报表", "Quartz任务分组.报表"),
+            // dict.sys.quartz.job.group.report
+            ("dict.sys.quartz.job.group.report", "zh-HK", "报表_hk", "Quartz任务分组.报表"),
+
+            // dict.sys.quartz.trigger.type.0
+            ("dict.sys.quartz.trigger.type.0", "en-US", "Simple间隔_us", "Quartz触发器类型.Simple间隔"),
+            // dict.sys.quartz.trigger.type.0
+            ("dict.sys.quartz.trigger.type.0", "ja-JP", "Simple间隔_jp", "Quartz触发器类型.Simple间隔"),
+            // dict.sys.quartz.trigger.type.0
+            ("dict.sys.quartz.trigger.type.0", "zh-CN", "Simple间隔", "Quartz触发器类型.Simple间隔"),
+            // dict.sys.quartz.trigger.type.0
+            ("dict.sys.quartz.trigger.type.0", "zh-HK", "Simple间隔_hk", "Quartz触发器类型.Simple间隔"),
+
+            // dict.sys.quartz.trigger.type.1
+            ("dict.sys.quartz.trigger.type.1", "en-US", "Cron表达式_us", "Quartz触发器类型.Cron表达式"),
+            // dict.sys.quartz.trigger.type.1
+            ("dict.sys.quartz.trigger.type.1", "ja-JP", "Cron表达式_jp", "Quartz触发器类型.Cron表达式"),
+            // dict.sys.quartz.trigger.type.1
+            ("dict.sys.quartz.trigger.type.1", "zh-CN", "Cron表达式", "Quartz触发器类型.Cron表达式"),
+            // dict.sys.quartz.trigger.type.1
+            ("dict.sys.quartz.trigger.type.1", "zh-HK", "Cron表达式_hk", "Quartz触发器类型.Cron表达式"),
+
+            // dict.sys.quartz.misfire.policy.0
+            ("dict.sys.quartz.misfire.policy.0", "en-US", "默认_us", "Quartz Misfire策略.默认"),
+            // dict.sys.quartz.misfire.policy.0
+            ("dict.sys.quartz.misfire.policy.0", "ja-JP", "默认_jp", "Quartz Misfire策略.默认"),
+            // dict.sys.quartz.misfire.policy.0
+            ("dict.sys.quartz.misfire.policy.0", "zh-CN", "默认", "Quartz Misfire策略.默认"),
+            // dict.sys.quartz.misfire.policy.0
+            ("dict.sys.quartz.misfire.policy.0", "zh-HK", "默认_hk", "Quartz Misfire策略.默认"),
+
+            // dict.sys.quartz.misfire.policy.1
+            ("dict.sys.quartz.misfire.policy.1", "en-US", "忽略_us", "Quartz Misfire策略.忽略"),
+            // dict.sys.quartz.misfire.policy.1
+            ("dict.sys.quartz.misfire.policy.1", "ja-JP", "忽略_jp", "Quartz Misfire策略.忽略"),
+            // dict.sys.quartz.misfire.policy.1
+            ("dict.sys.quartz.misfire.policy.1", "zh-CN", "忽略", "Quartz Misfire策略.忽略"),
+            // dict.sys.quartz.misfire.policy.1
+            ("dict.sys.quartz.misfire.policy.1", "zh-HK", "忽略_hk", "Quartz Misfire策略.忽略"),
+
+            // dict.sys.quartz.misfire.policy.2
+            ("dict.sys.quartz.misfire.policy.2", "en-US", "立即触发_us", "Quartz Misfire策略.立即触发"),
+            // dict.sys.quartz.misfire.policy.2
+            ("dict.sys.quartz.misfire.policy.2", "ja-JP", "立即触发_jp", "Quartz Misfire策略.立即触发"),
+            // dict.sys.quartz.misfire.policy.2
+            ("dict.sys.quartz.misfire.policy.2", "zh-CN", "立即触发", "Quartz Misfire策略.立即触发"),
+            // dict.sys.quartz.misfire.policy.2
+            ("dict.sys.quartz.misfire.policy.2", "zh-HK", "立即触发_hk", "Quartz Misfire策略.立即触发"),
+
+            // dict.sys.quartz.misfire.policy.3
+            ("dict.sys.quartz.misfire.policy.3", "en-US", "不触发_us", "Quartz Misfire策略.不触发"),
+            // dict.sys.quartz.misfire.policy.3
+            ("dict.sys.quartz.misfire.policy.3", "ja-JP", "不触发_jp", "Quartz Misfire策略.不触发"),
+            // dict.sys.quartz.misfire.policy.3
+            ("dict.sys.quartz.misfire.policy.3", "zh-CN", "不触发", "Quartz Misfire策略.不触发"),
+            // dict.sys.quartz.misfire.policy.3
+            ("dict.sys.quartz.misfire.policy.3", "zh-HK", "不触发_hk", "Quartz Misfire策略.不触发"),
+
+            // dict.sys.quartz.task.status.0
+            ("dict.sys.quartz.task.status.0", "en-US", "正常_us", "Quartz任务状态.正常"),
+            // dict.sys.quartz.task.status.0
+            ("dict.sys.quartz.task.status.0", "ja-JP", "正常_jp", "Quartz任务状态.正常"),
+            // dict.sys.quartz.task.status.0
+            ("dict.sys.quartz.task.status.0", "zh-CN", "正常", "Quartz任务状态.正常"),
+            // dict.sys.quartz.task.status.0
+            ("dict.sys.quartz.task.status.0", "zh-HK", "正常_hk", "Quartz任务状态.正常"),
+
+            // dict.sys.quartz.task.status.1
+            ("dict.sys.quartz.task.status.1", "en-US", "暂停_us", "Quartz任务状态.暂停"),
+            // dict.sys.quartz.task.status.1
+            ("dict.sys.quartz.task.status.1", "ja-JP", "暂停_jp", "Quartz任务状态.暂停"),
+            // dict.sys.quartz.task.status.1
+            ("dict.sys.quartz.task.status.1", "zh-CN", "暂停", "Quartz任务状态.暂停"),
+            // dict.sys.quartz.task.status.1
+            ("dict.sys.quartz.task.status.1", "zh-HK", "暂停_hk", "Quartz任务状态.暂停"),
         };
     }
 

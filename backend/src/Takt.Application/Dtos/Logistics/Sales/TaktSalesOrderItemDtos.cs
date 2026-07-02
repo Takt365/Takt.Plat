@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Sales
 // 文件名称：TaktSalesOrderItemDtos.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-07-01
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SalesOrderItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSalesOrderItem 生成，请按需审阅）
 // 
@@ -36,13 +36,13 @@ public class TaktSalesOrderItemDto : TaktCompanyDtoBase
     public long SalesOrderItemId { get; set; }
 
     /// <summary>
-    /// 销售订单ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 销售订单（关联 TaktSalesOrder.Id，选项 TaktSalesOrders/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SalesOrderId { get; set; }
 
     /// <summary>
-    /// 销售订单名称（填充字段）
+    /// 销售订单（关联 TaktSalesOrder.Id，选项 TaktSalesOrders/options）
     /// </summary>
     public string? SalesOrderName { get; set; }
 
@@ -57,7 +57,7 @@ public class TaktSalesOrderItemDto : TaktCompanyDtoBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 物料编码
+    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
 
@@ -72,7 +72,7 @@ public class TaktSalesOrderItemDto : TaktCompanyDtoBase
     public string? MaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售单位
+    /// 销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string SalesUnit { get; set; } = string.Empty;
 
@@ -85,6 +85,11 @@ public class TaktSalesOrderItemDto : TaktCompanyDtoBase
     /// 已发货数量（基本单位数量）
     /// </summary>
     public decimal ShippedQuantity { get; set; }
+
+    /// <summary>
+    /// 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+    /// </summary>
+    public int SalesPerUnit { get; set; } = 0;
 
     /// <summary>
     /// 单价（精确到分，存储为整数，单位为分）
@@ -102,7 +107,7 @@ public class TaktSalesOrderItemDto : TaktCompanyDtoBase
     public decimal DiscountAmount { get; set; }
 
     /// <summary>
-    /// 税费率（0-100，表示税费百分比）
+    /// 税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）
     /// </summary>
     public decimal TaxRate { get; set; }
 
@@ -117,7 +122,7 @@ public class TaktSalesOrderItemDto : TaktCompanyDtoBase
     public decimal SubtotalAmount { get; set; }
 
     /// <summary>
-    /// 行交货状态（0=未交货，1=部分交货，2=全部交货）
+    /// 行交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）
     /// </summary>
     public int DeliveryStatus { get; set; } = 0;
 
@@ -150,7 +155,7 @@ public class TaktSalesOrderItemQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售订单ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 销售订单（关联 TaktSalesOrder.Id，选项 TaktSalesOrders/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SalesOrderId { get; set; }
@@ -166,7 +171,7 @@ public class TaktSalesOrderItemQueryDto : TaktPagedQuery
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 物料编码
+    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
@@ -181,7 +186,7 @@ public class TaktSalesOrderItemQueryDto : TaktPagedQuery
     public string? MaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售单位
+    /// 销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? SalesUnit { get; set; } = string.Empty;
 
@@ -194,6 +199,11 @@ public class TaktSalesOrderItemQueryDto : TaktPagedQuery
     /// 已发货数量（基本单位数量）
     /// </summary>
     public decimal? ShippedQuantity { get; set; }
+
+    /// <summary>
+    /// 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+    /// </summary>
+    public int? SalesPerUnit { get; set; }
 
     /// <summary>
     /// 单价（精确到分，存储为整数，单位为分）
@@ -211,7 +221,7 @@ public class TaktSalesOrderItemQueryDto : TaktPagedQuery
     public decimal? DiscountAmount { get; set; }
 
     /// <summary>
-    /// 税费率（0-100，表示税费百分比）
+    /// 税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）
     /// </summary>
     public decimal? TaxRate { get; set; }
 
@@ -226,7 +236,7 @@ public class TaktSalesOrderItemQueryDto : TaktPagedQuery
     public decimal? SubtotalAmount { get; set; }
 
     /// <summary>
-    /// 行交货状态（0=未交货，1=部分交货，2=全部交货）
+    /// 行交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）
     /// </summary>
     public int? DeliveryStatus { get; set; }
 
@@ -271,12 +281,12 @@ public class TaktSalesOrderItemCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售订单ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 销售订单（关联 TaktSalesOrder.Id，选项 TaktSalesOrders/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SalesOrderId { get; set; }
@@ -293,9 +303,9 @@ public class TaktSalesOrderItemCreateDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 物料编码
+    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
     /// </summary>
-    [Required(ErrorMessage = "物料编码不能为空")]
+    [Required(ErrorMessage = "物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）不能为空")]
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -310,9 +320,9 @@ public class TaktSalesOrderItemCreateDto
     public string? MaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售单位
+    /// 销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
     /// </summary>
-    [Required(ErrorMessage = "销售单位不能为空")]
+    [Required(ErrorMessage = "销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）不能为空")]
     public string SalesUnit { get; set; } = string.Empty;
 
     /// <summary>
@@ -324,6 +334,11 @@ public class TaktSalesOrderItemCreateDto
     /// 已发货数量（基本单位数量）
     /// </summary>
     public decimal ShippedQuantity { get; set; }
+
+    /// <summary>
+    /// 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+    /// </summary>
+    public int SalesPerUnit { get; set; } = 0;
 
     /// <summary>
     /// 单价（精确到分，存储为整数，单位为分）
@@ -341,7 +356,7 @@ public class TaktSalesOrderItemCreateDto
     public decimal DiscountAmount { get; set; }
 
     /// <summary>
-    /// 税费率（0-100，表示税费百分比）
+    /// 税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）
     /// </summary>
     public decimal TaxRate { get; set; }
 
@@ -356,7 +371,7 @@ public class TaktSalesOrderItemCreateDto
     public decimal SubtotalAmount { get; set; }
 
     /// <summary>
-    /// 行交货状态（0=未交货，1=部分交货，2=全部交货）
+    /// 行交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）
     /// </summary>
     public int DeliveryStatus { get; set; } = 0;
 
@@ -410,9 +425,9 @@ public class TaktSalesOrderItemStatusDto
     public long SalesOrderItemId { get; set; }
 
     /// <summary>
-    /// 行交货状态（0=未交货，1=部分交货，2=全部交货）
+    /// 行交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）
     /// </summary>
-    [Required(ErrorMessage = "行交货状态（0=未交货，1=部分交货，2=全部交货）不能为空")]
+    [Required(ErrorMessage = "行交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）不能为空")]
     public int DeliveryStatus { get; set; } = 0;
 }
 
@@ -436,7 +451,7 @@ public class TaktSalesOrderItemTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售订单ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 销售订单（关联 TaktSalesOrder.Id，选项 TaktSalesOrders/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SalesOrderId { get; set; }
@@ -452,7 +467,7 @@ public class TaktSalesOrderItemTemplateDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 物料编码
+    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
@@ -467,12 +482,57 @@ public class TaktSalesOrderItemTemplateDto
     public string? MaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售单位
+    /// 销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? SalesUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行交货状态（0=未交货，1=部分交货，2=全部交货）
+    /// 订购数量（基本单位数量）
+    /// </summary>
+    public decimal? OrderQuantity { get; set; }
+
+    /// <summary>
+    /// 已发货数量（基本单位数量）
+    /// </summary>
+    public decimal? ShippedQuantity { get; set; }
+
+    /// <summary>
+    /// 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+    /// </summary>
+    public int? SalesPerUnit { get; set; }
+
+    /// <summary>
+    /// 单价（精确到分，存储为整数，单位为分）
+    /// </summary>
+    public decimal? UnitPrice { get; set; }
+
+    /// <summary>
+    /// 折扣率（0-100，表示折扣百分比）
+    /// </summary>
+    public decimal? DiscountRate { get; set; }
+
+    /// <summary>
+    /// 折扣金额（精确到分，存储为整数，单位为分）
+    /// </summary>
+    public decimal? DiscountAmount { get; set; }
+
+    /// <summary>
+    /// 税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）
+    /// </summary>
+    public decimal? TaxRate { get; set; }
+
+    /// <summary>
+    /// 税费（精确到分，存储为整数，单位为分）
+    /// </summary>
+    public decimal? TaxAmount { get; set; }
+
+    /// <summary>
+    /// 小计金额（精确到分，存储为整数，单位为分）
+    /// </summary>
+    public decimal? SubtotalAmount { get; set; }
+
+    /// <summary>
+    /// 行交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）
     /// </summary>
     public int? DeliveryStatus { get; set; }
 
@@ -504,12 +564,12 @@ public class TaktSalesOrderItemImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售订单ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 销售订单（关联 TaktSalesOrder.Id，选项 TaktSalesOrders/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SalesOrderId { get; set; }
@@ -525,7 +585,7 @@ public class TaktSalesOrderItemImportDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 物料编码
+    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
@@ -540,12 +600,57 @@ public class TaktSalesOrderItemImportDto
     public string? MaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售单位
+    /// 销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? SalesUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行交货状态（0=未交货，1=部分交货，2=全部交货）
+    /// 订购数量（基本单位数量）
+    /// </summary>
+    public decimal? OrderQuantity { get; set; }
+
+    /// <summary>
+    /// 已发货数量（基本单位数量）
+    /// </summary>
+    public decimal? ShippedQuantity { get; set; }
+
+    /// <summary>
+    /// 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+    /// </summary>
+    public int? SalesPerUnit { get; set; }
+
+    /// <summary>
+    /// 单价（精确到分，存储为整数，单位为分）
+    /// </summary>
+    public decimal? UnitPrice { get; set; }
+
+    /// <summary>
+    /// 折扣率（0-100，表示折扣百分比）
+    /// </summary>
+    public decimal? DiscountRate { get; set; }
+
+    /// <summary>
+    /// 折扣金额（精确到分，存储为整数，单位为分）
+    /// </summary>
+    public decimal? DiscountAmount { get; set; }
+
+    /// <summary>
+    /// 税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）
+    /// </summary>
+    public decimal? TaxRate { get; set; }
+
+    /// <summary>
+    /// 税费（精确到分，存储为整数，单位为分）
+    /// </summary>
+    public decimal? TaxAmount { get; set; }
+
+    /// <summary>
+    /// 小计金额（精确到分，存储为整数，单位为分）
+    /// </summary>
+    public decimal? SubtotalAmount { get; set; }
+
+    /// <summary>
+    /// 行交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）
     /// </summary>
     public int? DeliveryStatus { get; set; }
 
@@ -583,7 +688,7 @@ public class TaktSalesOrderItemExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售订单ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 销售订单（关联 TaktSalesOrder.Id，选项 TaktSalesOrders/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SalesOrderId { get; set; }
@@ -599,7 +704,7 @@ public class TaktSalesOrderItemExportDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 物料编码
+    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
 
@@ -614,7 +719,7 @@ public class TaktSalesOrderItemExportDto
     public string? MaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售单位
+    /// 销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string SalesUnit { get; set; } = string.Empty;
 
@@ -627,6 +732,11 @@ public class TaktSalesOrderItemExportDto
     /// 已发货数量（基本单位数量）
     /// </summary>
     public decimal ShippedQuantity { get; set; }
+
+    /// <summary>
+    /// 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+    /// </summary>
+    public int SalesPerUnit { get; set; } = 0;
 
     /// <summary>
     /// 单价（精确到分，存储为整数，单位为分）
@@ -644,7 +754,7 @@ public class TaktSalesOrderItemExportDto
     public decimal DiscountAmount { get; set; }
 
     /// <summary>
-    /// 税费率（0-100，表示税费百分比）
+    /// 税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）
     /// </summary>
     public decimal TaxRate { get; set; }
 
@@ -659,7 +769,7 @@ public class TaktSalesOrderItemExportDto
     public decimal SubtotalAmount { get; set; }
 
     /// <summary>
-    /// 行交货状态（0=未交货，1=部分交货，2=全部交货）
+    /// 行交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）
     /// </summary>
     public int DeliveryStatus { get; set; } = 0;
 

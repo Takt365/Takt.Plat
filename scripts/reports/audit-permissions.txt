@@ -35,7 +35,7 @@ ChangeLog: 主实体前缀 + :change:log
   [ConfigurableOrderBy] 期望 statistics:report:configurable:order:by:list，实际 statistics:report:configurableorderby:list | Takt.WebApi/Controllers/Statistics/Report/TaktConfigurableOrderBiesController.cs
   [ConfigurableSelection] 期望 statistics:report:configurable:selection:list，实际 statistics:report:configurableselection:list | Takt.WebApi/Controllers/Statistics/Report/TaktConfigurableSelectionsController.cs
   [ConfigurableSource] 期望 statistics:report:configurable:source:list，实际 statistics:report:configurablesource:list | Takt.WebApi/Controllers/Statistics/Report/TaktConfigurableSourcesController.cs
-  [Culture] 期望 foundation:culture:list，实际 foundation:i18n:list | Takt.WebApi/Controllers/Foundation/TaktCulturesController.cs
+  [Culture] 期望 foundation:i18n:list，实际 foundation:i18n:list | Takt.WebApi/Controllers/Foundation/TaktCulturesController.cs
   [CustomerComplaintHandling] 期望 logistics:quality:complaint:customer:handling:list，实际 logistics:quality:complaint:customer:complaint:handling:list | Takt.WebApi/Controllers/Logistics/Quality/Complaint/TaktCustomerComplaintHandlingsController.cs
   [CustomerComplaintItem] 期望 logistics:quality:complaint:customer:item:list，实际 logistics:quality:complaint:customercomplaint:list | Takt.WebApi/Controllers/Logistics/Quality/Complaint/TaktCustomerComplaintItemsController.cs
   [CustomerSatisfactionSurveyItem] 期望 logistics:quality:complaint:customer:satisfaction:survey:item:list，实际 logistics:quality:complaint:customersatisfactionsurvey:list | Takt.WebApi/Controllers/Logistics/Quality/Complaint/TaktCustomerSatisfactionSurveyItemsController.cs
@@ -45,22 +45,22 @@ ChangeLog: 主实体前缀 + :change:log
   [Document] 期望 routine:document:center:list，实际 routine:document:center:document:list | Takt.WebApi/Controllers/Routine/DocumentCenter/TaktDocumentsController.cs
   [DocumentChangeLog] 期望 routine:document:center:change:log:list，实际 routine:document:center:document:change:log:list | Takt.WebApi/Controllers/Routine/DocumentCenter/TaktDocumentChangeLogsController.cs
   [DocumentVersion] 期望 routine:document:center:version:list，实际 routine:documentcenter:documentversion:list | Takt.WebApi/Controllers/Routine/DocumentCenter/TaktDocumentVersionsController.cs
-  [Ec] 期望 logistics:manufacturing:engineering:change:ec:list，实际 logistics:manufacturing:engineeringchange:ec:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcsController.cs
-  [EcAttachment] 期望 logistics:manufacturing:engineering:change:ec:attachment:list，实际 logistics:manufacturing:engineeringchange:ec:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcAttachmentsController.cs
-  [EcBatch] 期望 logistics:manufacturing:engineering:change:ec:batch:list，实际 logistics:manufacturing:engineeringchange:batch:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcBatchesController.cs
-  [EcBukan] 期望 logistics:manufacturing:engineering:change:ec:bukan:list，实际 logistics:manufacturing:engineeringchange:bukan:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcBukansController.cs
-  [EcDept] 期望 logistics:manufacturing:engineering:change:ec:dept:list，实际 logistics:manufacturing:engineeringchange:ec:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcDeptsController.cs
-  [EcDetail] 期望 logistics:manufacturing:engineering:change:ec:detail:list，实际 logistics:manufacturing:engineeringchange:ec:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcDetailsController.cs
-  [EcGijutsu] 期望 logistics:manufacturing:engineering:change:ec:gijutsu:list，实际 logistics:manufacturing:engineeringchange:gijutsu:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcGijutsusController.cs
-  [EcHinkan] 期望 logistics:manufacturing:engineering:change:ec:hinkan:list，实际 logistics:manufacturing:engineeringchange:hinkan:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcHinkansController.cs
-  [EcKakunin] 期望 logistics:manufacturing:engineering:change:ec:kakunin:list，实际 logistics:manufacturing:engineeringchange:kakunin:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcKakuninsController.cs
-  [EcKanban] 期望 logistics:manufacturing:engineering:change:ec:kanban:list，实际 logistics:manufacturing:engineeringchange:kanban:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcKanbansController.cs
-  [EcKoubai] 期望 logistics:manufacturing:engineering:change:ec:koubai:list，实际 logistics:manufacturing:engineeringchange:koubai:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcKoubaisController.cs
-  [EcLegacyProduct] 期望 logistics:manufacturing:engineering:change:ec:legacy:product:list，实际 logistics:manufacturing:engineeringchange:legacyproduct:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcLegacyProductsController.cs
-  [EcSeikan] 期望 logistics:manufacturing:engineering:change:ec:seikan:list，实际 logistics:manufacturing:engineeringchange:seikan:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcSeikansController.cs
-  [EcSeizouikka] 期望 logistics:manufacturing:engineering:change:ec:seizouikka:list，实际 logistics:manufacturing:engineeringchange:seizouikka:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcSeizouikkasController.cs
-  [EcSeizounika] 期望 logistics:manufacturing:engineering:change:ec:seizounika:list，实际 logistics:manufacturing:engineeringchange:seizounika:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcSeizounikasController.cs
-  [EcUkeken] 期望 logistics:manufacturing:engineering:change:ec:ukeken:list，实际 logistics:manufacturing:engineeringchange:ukeken:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcUkekensController.cs
+  [Ec] 期望 logistics:manufacturing:engineering:change:ec:list，实际 logistics:manufacturing:engineering:change:ec:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcsController.cs
+  [EcAttachment] 期望 logistics:manufacturing:engineering:change:ec:attachment:list，实际 logistics:manufacturing:engineering:change:ec:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcAttachmentsController.cs
+  [EcBatch] 期望 logistics:manufacturing:engineering:change:ec:batch:list，实际 logistics:manufacturing:engineering:change:batch:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcBatchesController.cs
+  [EcBukan] 期望 logistics:manufacturing:engineering:change:ec:bukan:list，实际 logistics:manufacturing:engineering:change:bukan:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcBukansController.cs
+  [EcDept] 期望 logistics:manufacturing:engineering:change:ec:dept:list，实际 logistics:manufacturing:engineering:change:ec:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcDeptsController.cs
+  [EcDetail] 期望 logistics:manufacturing:engineering:change:ec:detail:list，实际 logistics:manufacturing:engineering:change:ec:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcDetailsController.cs
+  [EcGijutsu] 期望 logistics:manufacturing:engineering:change:ec:gijutsu:list，实际 logistics:manufacturing:engineering:change:gijutsu:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcGijutsusController.cs
+  [EcHinkan] 期望 logistics:manufacturing:engineering:change:ec:hinkan:list，实际 logistics:manufacturing:engineering:change:hinkan:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcHinkansController.cs
+  [EcKakunin] 期望 logistics:manufacturing:engineering:change:ec:kakunin:list，实际 logistics:manufacturing:engineering:change:kakunin:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcKakuninsController.cs
+  [EcKanban] 期望 logistics:manufacturing:engineering:change:ec:kanban:list，实际 logistics:manufacturing:engineering:change:kanban:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcKanbansController.cs
+  [EcKoubai] 期望 logistics:manufacturing:engineering:change:ec:koubai:list，实际 logistics:manufacturing:engineering:change:koubai:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcKoubaisController.cs
+  [EcLegacyProduct] 期望 logistics:manufacturing:engineering:change:ec:legacy:product:list，实际 logistics:manufacturing:engineering:change:legacyproduct:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcLegacyProductsController.cs
+  [EcSeikan] 期望 logistics:manufacturing:engineering:change:ec:seikan:list，实际 logistics:manufacturing:engineering:change:seikan:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcSeikansController.cs
+  [EcSeizouikka] 期望 logistics:manufacturing:engineering:change:ec:seizouikka:list，实际 logistics:manufacturing:engineering:change:seizouikka:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcSeizouikkasController.cs
+  [EcSeizounika] 期望 logistics:manufacturing:engineering:change:ec:seizounika:list，实际 logistics:manufacturing:engineering:change:seizounika:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcSeizounikasController.cs
+  [EcUkeken] 期望 logistics:manufacturing:engineering:change:ec:ukeken:list，实际 logistics:manufacturing:engineering:change:ukeken:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcUkekensController.cs
   [EmployeeAttachment] 期望 human:resource:personnel:employee:attachment:list，实际 human:resource:personnel:employeeattachment:list | Takt.WebApi/Controllers/HumanResource/Personnel/TaktEmployeeAttachmentsController.cs
   [EmployeeDelegation] 期望 human:resource:personnel:employee:delegation:list，实际 human:resource:personnel:employeedelegation:list | Takt.WebApi/Controllers/HumanResource/Personnel/TaktEmployeeDelegationsController.cs
   [EmployeeEducation] 期望 human:resource:personnel:employee:education:list，实际 human:resource:personnel:employeeeducation:list | Takt.WebApi/Controllers/HumanResource/Personnel/TaktEmployeeEducationsController.cs
@@ -94,7 +94,7 @@ ChangeLog: 主实体前缀 + :change:log
   [MaintenanceWorkOrderMaterial] 期望 logistics:maintenance:work:order:material:list，实际 logistics:maintenance:equipment:list | Takt.WebApi/Controllers/Logistics/Maintenance/TaktMaintenanceWorkOrderMaterialsController.cs
   [Manufacturer] 期望 logistics:materials:manufacturer:list，实际 logistics:materials:manufacturer:material:list | Takt.WebApi/Controllers/Logistics/Materials/TaktManufacturersController.cs
   [ManufacturerMaterial] 期望 logistics:materials:manufacturer:material:list，实际 logistics:materials:manufacturermaterial:list | Takt.WebApi/Controllers/Logistics/Materials/TaktManufacturerMaterialsController.cs
-  [MaterialTransactionItem] 期望 logistics:materials:material:transaction:item:list，实际 logistics:materials:materialtransaction:list | Takt.WebApi/Controllers/Logistics/Materials/TaktMaterialTransactionItemsController.cs
+  [MaterialTransactionItem] 期望 logistics:materials:material:document:item:list，实际 logistics:materials:materialdocument:list | Takt.WebApi/Controllers/Logistics/Materials/TaktMaterialDocumentItemsController.cs
   [News] 期望 routine:news:center:list，实际 (none):list | Takt.WebApi/Controllers/Routine/NewsCenter/TaktNewsesController.cs
   [NewsAttachment] 期望 routine:news:center:attachment:list，实际 routine:newscenter:newsattachment:list | Takt.WebApi/Controllers/Routine/NewsCenter/TaktNewsAttachmentsController.cs
   [NewsComment] 期望 routine:news:center:comment:list，实际 routine:newscenter:newscomment:list | Takt.WebApi/Controllers/Routine/NewsCenter/TaktNewsCommentsController.cs
@@ -230,11 +230,11 @@ ChangeLog: 主实体前缀 + :change:log
   [logistics/manufacturing/defect/pcba-repair-detail] 视图工具栏前缀 logistics:manufacturing:defect:pcbarepair ≠ 期望 logistics:manufacturing:defect:pcba:repair:detail | frontend/src/views/logistics/manufacturing/defect/pcba-repair-detail/index.vue
   [logistics/manufacturing/defect/pcba-repair-detail/components] 视图工具栏前缀 logistics:manufacturing:defect:pcbarepair ≠ 期望 logistics:manufacturing:defect:pcba:repair:detail | frontend/src/views/logistics/manufacturing/defect/pcba-repair-detail/components/pcba-repair-detail-panel.vue
   [logistics/manufacturing/defect/pcba-repair/components] 视图工具栏前缀 logistics:manufacturing:defect:pcbarepair ≠ 期望 logistics:manufacturing:defect:pcba:repair:detail | frontend/src/views/logistics/manufacturing/defect/pcba-repair/components/pcba-repair-detail-panel.vue
-  [logistics/manufacturing/engineering-change/ec] 视图工具栏前缀 logistics:manufacturing:engineeringchange:ec ≠ 期望 logistics:manufacturing:engineering:change:ec | frontend/src/views/logistics/manufacturing/engineering-change/ec/index.vue
-  [logistics/manufacturing/engineering-change/ec-attachment] 视图工具栏前缀 logistics:manufacturing:engineeringchange:ec ≠ 期望 logistics:manufacturing:engineering:change:ec:attachment | frontend/src/views/logistics/manufacturing/engineering-change/ec-attachment/index.vue
-  [logistics/manufacturing/engineering-change/ec-attachment/components] 视图工具栏前缀 logistics:manufacturing:engineeringchange:ec ≠ 期望 logistics:manufacturing:engineering:change:ec | frontend/src/views/logistics/manufacturing/engineering-change/ec-attachment/components/ec-attachment-panel.vue
-  [logistics/manufacturing/engineering-change/ec-detail] 视图工具栏前缀 logistics:manufacturing:engineeringchange:ec ≠ 期望 logistics:manufacturing:engineering:change:ec:detail | frontend/src/views/logistics/manufacturing/engineering-change/ec-detail/index.vue
-  [logistics/manufacturing/engineering-change/ec-detail/components] 视图工具栏前缀 logistics:manufacturing:engineeringchange:ec ≠ 期望 logistics:manufacturing:engineering:change:ec | frontend/src/views/logistics/manufacturing/engineering-change/ec-detail/components/ec-detail-panel.vue
+  [logistics/manufacturing/engineering-change/ec] 视图工具栏前缀 logistics:manufacturing:engineering:change:ec ≠ 期望 logistics:manufacturing:engineering:change:ec | frontend/src/views/logistics/manufacturing/engineering-change/ec/index.vue
+  [logistics/manufacturing/engineering-change/ec-attachment] 视图工具栏前缀 logistics:manufacturing:engineering:change:ec ≠ 期望 logistics:manufacturing:engineering:change:ec:attachment | frontend/src/views/logistics/manufacturing/engineering-change/ec-attachment/index.vue
+  [logistics/manufacturing/engineering-change/ec-attachment/components] 视图工具栏前缀 logistics:manufacturing:engineering:change:ec ≠ 期望 logistics:manufacturing:engineering:change:ec | frontend/src/views/logistics/manufacturing/engineering-change/ec-attachment/components/ec-attachment-panel.vue
+  [logistics/manufacturing/engineering-change/ec-detail] 视图工具栏前缀 logistics:manufacturing:engineering:change:ec ≠ 期望 logistics:manufacturing:engineering:change:ec:detail | frontend/src/views/logistics/manufacturing/engineering-change/ec-detail/index.vue
+  [logistics/manufacturing/engineering-change/ec-detail/components] 视图工具栏前缀 logistics:manufacturing:engineering:change:ec ≠ 期望 logistics:manufacturing:engineering:change:ec | frontend/src/views/logistics/manufacturing/engineering-change/ec-detail/components/ec-detail-panel.vue
   [logistics/manufacturing/output/assy-output-detail] 视图工具栏前缀 logistics:manufacturing:output:assyoutput ≠ 期望 logistics:manufacturing:output:assy:detail | frontend/src/views/logistics/manufacturing/output/assy-output-detail/index.vue
   [logistics/manufacturing/output/assy-output-detail/components] 视图工具栏前缀 logistics:manufacturing:output:assyoutput ≠ 期望 logistics:manufacturing:output:assy:detail | frontend/src/views/logistics/manufacturing/output/assy-output-detail/components/assy-output-detail-panel.vue
   [logistics/manufacturing/output/assy-output/components] 视图工具栏前缀 logistics:manufacturing:output:assyoutput ≠ 期望 logistics:manufacturing:output:assy:detail | frontend/src/views/logistics/manufacturing/output/assy-output/components/assy-output-detail-panel.vue
@@ -271,9 +271,9 @@ ChangeLog: 主实体前缀 + :change:log
   [logistics/manufacturing/sop/step-media] 视图工具栏前缀 logistics:manufacturing:sop:doc ≠ 期望 logistics:manufacturing:sop:step | frontend/src/views/logistics/manufacturing/sop/step-media/index.vue
   [logistics/manufacturing/sop/step-media/components] 视图工具栏前缀 logistics:manufacturing:sop:doc ≠ 期望 logistics:manufacturing:sop:step | frontend/src/views/logistics/manufacturing/sop/step-media/components/step-media-panel.vue
   [logistics/materials/manufacturer] 视图工具栏前缀 logistics:materials:manufacturer:material ≠ 期望 logistics:materials:manufacturer | frontend/src/views/logistics/materials/manufacturer/index.vue
-  [logistics/materials/material-transaction-item] 视图工具栏前缀 logistics:materials:materialtransaction ≠ 期望 logistics:materials:material:transaction:item | frontend/src/views/logistics/materials/material-transaction-item/index.vue
-  [logistics/materials/material-transaction-item/components] 视图工具栏前缀 logistics:materials:materialtransaction ≠ 期望 logistics:materials:material:transaction:item | frontend/src/views/logistics/materials/material-transaction-item/components/material-transaction-item-panel.vue
-  [logistics/materials/material-transaction/components] 视图工具栏前缀 logistics:materials:materialtransaction ≠ 期望 logistics:materials:material:transaction:item | frontend/src/views/logistics/materials/material-transaction/components/material-transaction-item-panel.vue
+  [logistics/materials/material-document-item] 视图工具栏前缀 logistics:materials:materialdocument ≠ 期望 logistics:materials:material:document:item | frontend/src/views/logistics/materials/material-document-item/index.vue
+  [logistics/materials/material-document-item/components] 视图工具栏前缀 logistics:materials:materialdocument ≠ 期望 logistics:materials:material:document:item | frontend/src/views/logistics/materials/material-document-item/components/material-document-item-panel.vue
+  [logistics/materials/material-document/components] 视图工具栏前缀 logistics:materials:materialdocument ≠ 期望 logistics:materials:material:document:item | frontend/src/views/logistics/materials/material-document/components/material-document-item-panel.vue
   [logistics/materials/purchasing/vendor] 视图工具栏前缀 logistics:materials:vendor ≠ 控制器 logistics:procurement:vendor | frontend/src/views/logistics/materials/purchasing/vendor/index.vue
   [logistics/procurement/purchase-order] 视图工具栏前缀 logistics:procurement:purchaseorder ≠ 期望 logistics:procurement:purchase:order:item | frontend/src/views/logistics/procurement/purchase-order/index.vue
   [logistics/procurement/purchase-order-change-log/components] 视图工具栏前缀 logistics:procurement:purchaseorder ≠ 期望 logistics:procurement:purchase:order:item | frontend/src/views/logistics/procurement/purchase-order-change-log/components/purchase-order-change-log-panel.vue
@@ -336,7 +336,7 @@ ChangeLog: 主实体前缀 + :change:log
   [ConfigurableOrderBy] 缺少 statistics:report:configurable:order:by:list（仍使用 statistics:report:configurableorderby:list）
   [ConfigurableSelection] 缺少 statistics:report:configurable:selection:list（仍使用 statistics:report:configurableselection:list）
   [ConfigurableSource] 缺少 statistics:report:configurable:source:list（仍使用 statistics:report:configurablesource:list）
-  [Culture] 缺少 foundation:culture:list（仍使用 foundation:i18n:list）
+  [Culture] 缺少 foundation:i18n:list（仍使用 foundation:i18n:list）
   [CustomerComplaintHandling] 缺少 logistics:quality:complaint:customer:handling:list（仍使用 logistics:quality:complaint:customer:complaint:handling:list）
   [CustomerComplaintItem] 缺少 logistics:quality:complaint:customer:item:list（仍使用 logistics:quality:complaint:customercomplaint:list）
   [CustomerSatisfactionSurveyItem] 缺少 logistics:quality:complaint:customer:satisfaction:survey:item:list（仍使用 logistics:quality:complaint:customersatisfactionsurvey:list）
@@ -345,22 +345,22 @@ ChangeLog: 主实体前缀 + :change:log
   [Document] 缺少 routine:document:center:list（仍使用 routine:document:center:document:list）
   [DocumentChangeLog] 缺少 routine:document:center:change:log:list（仍使用 routine:document:center:document:change:log:list）
   [DocumentVersion] 缺少 routine:document:center:version:list（仍使用 routine:documentcenter:documentversion:list）
-  [Ec] 缺少 logistics:manufacturing:engineering:change:ec:list（仍使用 logistics:manufacturing:engineeringchange:ec:list）
-  [EcAttachment] 缺少 logistics:manufacturing:engineering:change:ec:attachment:list（仍使用 logistics:manufacturing:engineeringchange:ec:list）
-  [EcBatch] 缺少 logistics:manufacturing:engineering:change:ec:batch:list（仍使用 logistics:manufacturing:engineeringchange:batch:list）
-  [EcBukan] 缺少 logistics:manufacturing:engineering:change:ec:bukan:list（仍使用 logistics:manufacturing:engineeringchange:bukan:list）
-  [EcDept] 缺少 logistics:manufacturing:engineering:change:ec:dept:list（仍使用 logistics:manufacturing:engineeringchange:ec:list）
-  [EcDetail] 缺少 logistics:manufacturing:engineering:change:ec:detail:list（仍使用 logistics:manufacturing:engineeringchange:ec:list）
-  [EcGijutsu] 缺少 logistics:manufacturing:engineering:change:ec:gijutsu:list（仍使用 logistics:manufacturing:engineeringchange:gijutsu:list）
-  [EcHinkan] 缺少 logistics:manufacturing:engineering:change:ec:hinkan:list（仍使用 logistics:manufacturing:engineeringchange:hinkan:list）
-  [EcKakunin] 缺少 logistics:manufacturing:engineering:change:ec:kakunin:list（仍使用 logistics:manufacturing:engineeringchange:kakunin:list）
-  [EcKanban] 缺少 logistics:manufacturing:engineering:change:ec:kanban:list（仍使用 logistics:manufacturing:engineeringchange:kanban:list）
-  [EcKoubai] 缺少 logistics:manufacturing:engineering:change:ec:koubai:list（仍使用 logistics:manufacturing:engineeringchange:koubai:list）
-  [EcLegacyProduct] 缺少 logistics:manufacturing:engineering:change:ec:legacy:product:list（仍使用 logistics:manufacturing:engineeringchange:legacyproduct:list）
-  [EcSeikan] 缺少 logistics:manufacturing:engineering:change:ec:seikan:list（仍使用 logistics:manufacturing:engineeringchange:seikan:list）
-  [EcSeizouikka] 缺少 logistics:manufacturing:engineering:change:ec:seizouikka:list（仍使用 logistics:manufacturing:engineeringchange:seizouikka:list）
-  [EcSeizounika] 缺少 logistics:manufacturing:engineering:change:ec:seizounika:list（仍使用 logistics:manufacturing:engineeringchange:seizounika:list）
-  [EcUkeken] 缺少 logistics:manufacturing:engineering:change:ec:ukeken:list（仍使用 logistics:manufacturing:engineeringchange:ukeken:list）
+  [Ec] 缺少 logistics:manufacturing:engineering:change:ec:list（仍使用 logistics:manufacturing:engineering:change:ec:list）
+  [EcAttachment] 缺少 logistics:manufacturing:engineering:change:ec:attachment:list（仍使用 logistics:manufacturing:engineering:change:ec:list）
+  [EcBatch] 缺少 logistics:manufacturing:engineering:change:ec:batch:list（仍使用 logistics:manufacturing:engineering:change:batch:list）
+  [EcBukan] 缺少 logistics:manufacturing:engineering:change:ec:bukan:list（仍使用 logistics:manufacturing:engineering:change:bukan:list）
+  [EcDept] 缺少 logistics:manufacturing:engineering:change:ec:dept:list（仍使用 logistics:manufacturing:engineering:change:ec:list）
+  [EcDetail] 缺少 logistics:manufacturing:engineering:change:ec:detail:list（仍使用 logistics:manufacturing:engineering:change:ec:list）
+  [EcGijutsu] 缺少 logistics:manufacturing:engineering:change:ec:gijutsu:list（仍使用 logistics:manufacturing:engineering:change:gijutsu:list）
+  [EcHinkan] 缺少 logistics:manufacturing:engineering:change:ec:hinkan:list（仍使用 logistics:manufacturing:engineering:change:hinkan:list）
+  [EcKakunin] 缺少 logistics:manufacturing:engineering:change:ec:kakunin:list（仍使用 logistics:manufacturing:engineering:change:kakunin:list）
+  [EcKanban] 缺少 logistics:manufacturing:engineering:change:ec:kanban:list（仍使用 logistics:manufacturing:engineering:change:kanban:list）
+  [EcKoubai] 缺少 logistics:manufacturing:engineering:change:ec:koubai:list（仍使用 logistics:manufacturing:engineering:change:koubai:list）
+  [EcLegacyProduct] 缺少 logistics:manufacturing:engineering:change:ec:legacy:product:list（仍使用 logistics:manufacturing:engineering:change:legacyproduct:list）
+  [EcSeikan] 缺少 logistics:manufacturing:engineering:change:ec:seikan:list（仍使用 logistics:manufacturing:engineering:change:seikan:list）
+  [EcSeizouikka] 缺少 logistics:manufacturing:engineering:change:ec:seizouikka:list（仍使用 logistics:manufacturing:engineering:change:seizouikka:list）
+  [EcSeizounika] 缺少 logistics:manufacturing:engineering:change:ec:seizounika:list（仍使用 logistics:manufacturing:engineering:change:seizounika:list）
+  [EcUkeken] 缺少 logistics:manufacturing:engineering:change:ec:ukeken:list（仍使用 logistics:manufacturing:engineering:change:ukeken:list）
   [EmployeeAttachment] 缺少 human:resource:personnel:employee:attachment:list（仍使用 human:resource:personnel:employeeattachment:list）
   [EmployeeDelegation] 缺少 human:resource:personnel:employee:delegation:list（仍使用 human:resource:personnel:employeedelegation:list）
   [EmployeeEducation] 缺少 human:resource:personnel:employee:education:list（仍使用 human:resource:personnel:employeeeducation:list）

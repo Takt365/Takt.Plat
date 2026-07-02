@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Attendance
 // 文件名称：TaktShiftScheduleDtos.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ShiftSchedule 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktShiftSchedule 生成，请按需审阅）
 // 
@@ -36,12 +36,12 @@ public class TaktShiftScheduleDto : TaktCompanyDtoBase
     public long ShiftScheduleId { get; set; }
 
     /// <summary>
-    /// 排班类别（0=部门 1=人员）
+    /// 排班类别（字典 hr_schedule_type；0=部门 1=人员）
     /// </summary>
     public int ScheduleType { get; set; } = 0;
 
     /// <summary>
-    /// 部门 ID（ScheduleType=0 时必填）
+    /// 部门（关联 TaktDept.Id，选项 TaktDepts/tree-options；ScheduleType=0 时必填）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
@@ -52,7 +52,7 @@ public class TaktShiftScheduleDto : TaktCompanyDtoBase
     public string? DeptName { get; set; }
 
     /// <summary>
-    /// 员工 ID（ScheduleType=1 时必填）
+    /// 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options；ScheduleType=1 时必填）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
@@ -68,7 +68,7 @@ public class TaktShiftScheduleDto : TaktCompanyDtoBase
     public DateTime ScheduleDate { get; set; }
 
     /// <summary>
-    /// 班次 ID（TaktWorkShift）
+    /// 班次（关联 TaktWorkShift.Id，选项 TaktWorkShifts/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ShiftId { get; set; }
@@ -79,9 +79,9 @@ public class TaktShiftScheduleDto : TaktCompanyDtoBase
     public string? ShiftName { get; set; }
 
     /// <summary>
-    /// 关联工厂
+    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string RelatedPlant { get; set; } = string.Empty;
 
 }
 
@@ -106,18 +106,18 @@ public class TaktShiftScheduleQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排班类别（0=部门 1=人员）
+    /// 排班类别（字典 hr_schedule_type；0=部门 1=人员）
     /// </summary>
     public int? ScheduleType { get; set; }
 
     /// <summary>
-    /// 部门 ID（ScheduleType=0 时必填）
+    /// 部门（关联 TaktDept.Id，选项 TaktDepts/tree-options；ScheduleType=0 时必填）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
 
     /// <summary>
-    /// 员工 ID（ScheduleType=1 时必填）
+    /// 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options；ScheduleType=1 时必填）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
@@ -133,13 +133,13 @@ public class TaktShiftScheduleQueryDto : TaktPagedQuery
     public DateTime? ScheduleDateEnd { get; set; }
 
     /// <summary>
-    /// 班次 ID（TaktWorkShift）
+    /// 班次（关联 TaktWorkShift.Id，选项 TaktWorkShifts/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ShiftId { get; set; }
 
     /// <summary>
-    /// 关联工厂
+    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
     public string? RelatedPlant { get; set; } = string.Empty;
 
@@ -184,23 +184,23 @@ public class TaktShiftScheduleCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排班类别（0=部门 1=人员）
+    /// 排班类别（字典 hr_schedule_type；0=部门 1=人员）
     /// </summary>
     public int ScheduleType { get; set; } = 0;
 
     /// <summary>
-    /// 部门 ID（ScheduleType=0 时必填）
+    /// 部门（关联 TaktDept.Id，选项 TaktDepts/tree-options；ScheduleType=0 时必填）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
 
     /// <summary>
-    /// 员工 ID（ScheduleType=1 时必填）
+    /// 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options；ScheduleType=1 时必填）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
@@ -211,15 +211,16 @@ public class TaktShiftScheduleCreateDto
     public DateTime ScheduleDate { get; set; }
 
     /// <summary>
-    /// 班次 ID（TaktWorkShift）
+    /// 班次（关联 TaktWorkShift.Id，选项 TaktWorkShifts/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ShiftId { get; set; }
 
     /// <summary>
-    /// 关联工厂
+    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    [Required(ErrorMessage = "关联工厂不能为空")]
+    public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON
@@ -273,30 +274,35 @@ public class TaktShiftScheduleTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排班类别（0=部门 1=人员）
+    /// 排班类别（字典 hr_schedule_type；0=部门 1=人员）
     /// </summary>
     public int? ScheduleType { get; set; }
 
     /// <summary>
-    /// 部门 ID（ScheduleType=0 时必填）
+    /// 部门（关联 TaktDept.Id，选项 TaktDepts/tree-options；ScheduleType=0 时必填）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
 
     /// <summary>
-    /// 员工 ID（ScheduleType=1 时必填）
+    /// 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options；ScheduleType=1 时必填）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
 
     /// <summary>
-    /// 班次 ID（TaktWorkShift）
+    /// 排班日期
+    /// </summary>
+    public DateTime? ScheduleDate { get; set; }
+
+    /// <summary>
+    /// 班次（关联 TaktWorkShift.Id，选项 TaktWorkShifts/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ShiftId { get; set; }
 
     /// <summary>
-    /// 关联工厂
+    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
     public string? RelatedPlant { get; set; } = string.Empty;
 
@@ -328,35 +334,40 @@ public class TaktShiftScheduleImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排班类别（0=部门 1=人员）
+    /// 排班类别（字典 hr_schedule_type；0=部门 1=人员）
     /// </summary>
     public int? ScheduleType { get; set; }
 
     /// <summary>
-    /// 部门 ID（ScheduleType=0 时必填）
+    /// 部门（关联 TaktDept.Id，选项 TaktDepts/tree-options；ScheduleType=0 时必填）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
 
     /// <summary>
-    /// 员工 ID（ScheduleType=1 时必填）
+    /// 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options；ScheduleType=1 时必填）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
 
     /// <summary>
-    /// 班次 ID（TaktWorkShift）
+    /// 排班日期
+    /// </summary>
+    public DateTime? ScheduleDate { get; set; }
+
+    /// <summary>
+    /// 班次（关联 TaktWorkShift.Id，选项 TaktWorkShifts/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ShiftId { get; set; }
 
     /// <summary>
-    /// 关联工厂
+    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
     public string? RelatedPlant { get; set; } = string.Empty;
 
@@ -394,18 +405,18 @@ public class TaktShiftScheduleExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排班类别（0=部门 1=人员）
+    /// 排班类别（字典 hr_schedule_type；0=部门 1=人员）
     /// </summary>
     public int ScheduleType { get; set; } = 0;
 
     /// <summary>
-    /// 部门 ID（ScheduleType=0 时必填）
+    /// 部门（关联 TaktDept.Id，选项 TaktDepts/tree-options；ScheduleType=0 时必填）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
 
     /// <summary>
-    /// 员工 ID（ScheduleType=1 时必填）
+    /// 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options；ScheduleType=1 时必填）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
@@ -416,15 +427,15 @@ public class TaktShiftScheduleExportDto
     public DateTime ScheduleDate { get; set; }
 
     /// <summary>
-    /// 班次 ID（TaktWorkShift）
+    /// 班次（关联 TaktWorkShift.Id，选项 TaktWorkShifts/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ShiftId { get; set; }
 
     /// <summary>
-    /// 关联工厂
+    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON

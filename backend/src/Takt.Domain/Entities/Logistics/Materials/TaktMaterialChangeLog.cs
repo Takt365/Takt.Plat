@@ -25,14 +25,14 @@ namespace Takt.Domain.Entities.Logistics.Materials;
 public class TaktMaterialChangeLog : TaktTenantEntityBase
 {
     /// <summary>
-    /// 全局物料ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 全局物料 ID（关联 TaktMaterial.Id，选项 TaktMaterials/options）
     /// </summary>
     [SugarColumn(ColumnName = "material_id", ColumnDescription = "全局物料ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long MaterialId { get; set; }
 
     /// <summary>
-    /// 物料编码
+    /// 物料编码（关联 TaktMaterial.MaterialCode，冗余；选项 TaktMaterials/options）
     /// </summary>
     [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string MaterialCode { get; set; } = string.Empty;
@@ -51,7 +51,7 @@ public class TaktMaterialChangeLog : TaktTenantEntityBase
     public DateTime ChangeTime { get; set; } = DateTime.Now;
 
     /// <summary>
-    /// 变更人（人员代码）
+    /// 变更人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
     /// </summary>
     [SugarColumn(ColumnName = "change_by", ColumnDescription = "变更人", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? ChangeBy { get; set; }

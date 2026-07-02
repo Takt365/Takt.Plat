@@ -14,6 +14,7 @@ import { notification } from 'ant-design-vue';
 import type { NotificationPlacement } from 'ant-design-vue';
 import type { VNode } from 'vue';
 import { translateLocaleMessage as translate } from '@/utils/takt-i18n-message';
+import { formatPrivateMessageNotificationContent } from '@/utils/takt-message-display';
 import type { NotificationType } from '@/types/event';
 import {
   HEADER_ONLINE_AUTO_READ_MS,
@@ -218,21 +219,19 @@ export function showNewMessage(
  */
 export function showPrivateMessageNotify(options: {
   sender: string;
+  senderNickname?: string;
   content: string;
-  title?: string;
   messageId?: string;
   sendTime?: string;
 }): void {
-  const sender = options.sender.trim() || '?';
-  const body = options.content.trim();
-  const messageTitle = options.title?.trim();
-  const description = messageTitle && body
-    ? `${messageTitle}\n${body}`
-    : (messageTitle || body);
   notify({
     type: 'info',
     message: translate('common.page.signalr.new.message'),
-    description: description ? `${sender}: ${description}` : sender,
+    description: formatPrivateMessageNotificationContent(
+      options.senderNickname,
+      options.sender,
+      options.content,
+    ),
     placement: DEFAULT_PLACEMENT,
     duration: 5,
     center: {

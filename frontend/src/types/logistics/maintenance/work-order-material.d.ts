@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/maintenance
 // 文件名称：work-order-material.d.ts
-// 创建时间：2026-06-20
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/maintenance 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -258,7 +258,7 @@ export interface MaintenanceWorkOrderMaterialCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -431,9 +431,29 @@ export interface MaintenanceWorkOrderMaterialTemplate {
   materialName?: string;
 
   /**
+   * 需求数量
+   */
+  requiredQuantity?: number;
+
+  /**
+   * 已领数量
+   */
+  issuedQuantity?: number;
+
+  /**
    * 单位
    */
   materialUnit?: string;
+
+  /**
+   * 单价
+   */
+  unitPrice?: number;
+
+  /**
+   * 金额
+   */
+  amount?: number;
 
   /**
    * 仓库编码
@@ -449,6 +469,11 @@ export interface MaintenanceWorkOrderMaterialTemplate {
    * 领料状态（0=待领料，1=部分领料，2=已领料）
    */
   issueStatus?: number;
+
+  /**
+   * 领料时间
+   */
+  issueTime?: string;
 
   /**
    * 扩展字段JSON
@@ -480,7 +505,7 @@ export interface MaintenanceWorkOrderMaterialImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -515,9 +540,29 @@ export interface MaintenanceWorkOrderMaterialImport {
   materialName?: string;
 
   /**
+   * 需求数量
+   */
+  requiredQuantity?: number;
+
+  /**
+   * 已领数量
+   */
+  issuedQuantity?: number;
+
+  /**
    * 单位
    */
   materialUnit?: string;
+
+  /**
+   * 单价
+   */
+  unitPrice?: number;
+
+  /**
+   * 金额
+   */
+  amount?: number;
 
   /**
    * 仓库编码
@@ -533,6 +578,11 @@ export interface MaintenanceWorkOrderMaterialImport {
    * 领料状态（0=待领料，1=部分领料，2=已领料）
    */
   issueStatus?: number;
+
+  /**
+   * 领料时间
+   */
+  issueTime?: string;
 
   /**
    * 扩展字段JSON

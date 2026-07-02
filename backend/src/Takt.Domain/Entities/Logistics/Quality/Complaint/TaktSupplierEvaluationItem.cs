@@ -27,7 +27,7 @@ namespace Takt.Domain.Entities.Logistics.Quality.Complaint;
 public class TaktSupplierEvaluationItem : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 评价表ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 评价表 ID（关联 TaktSupplierEvaluation.Id，选项 TaktSupplierEvaluations/options）
     /// </summary>
     [SugarColumn(ColumnName = "evaluation_id", ColumnDescription = "评价表ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -46,7 +46,7 @@ public class TaktSupplierEvaluationItem : TaktCompanyEntityBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 评价类别类型（0=质量管理，1=交付能力，2=价格水平，3=服务水平，4=技术能力，5=管理体系，6=其他）
+    /// 评价类别类型（字典 logistics_quality_evaluation_category）
     /// </summary>
     [SugarColumn(ColumnName = "category_type", ColumnDescription = "评价类别", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int CategoryType { get; set; } = 0;
@@ -82,7 +82,7 @@ public class TaktSupplierEvaluationItem : TaktCompanyEntityBase
     public int? Score { get; set; }
 
     /// <summary>
-    /// 评级（0=D级-不合格，1=C级-合格，2=B级-良好，3=A级-优秀）
+    /// 评级（字典 logistics_quality_supplier_rating）
     /// </summary>
     [SugarColumn(ColumnName = "rating_level", ColumnDescription = "评级", ColumnDataType = "int", IsNullable = true)]
     public int? RatingLevel { get; set; }
@@ -118,7 +118,7 @@ public class TaktSupplierEvaluationItem : TaktCompanyEntityBase
     public DateTime? RectificationDeadline { get; set; }
 
     /// <summary>
-    /// 整改状态（0=无需整改，1=待整改，2=整改中，3=已完成，4=未通过）
+    /// 整改状态（字典 logistics_quality_rectification_status）
     /// </summary>
     [SugarColumn(ColumnName = "rectification_status", ColumnDescription = "整改状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int RectificationStatus { get; set; } = 0;

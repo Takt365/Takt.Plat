@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Benefits
 // 文件名称：TaktEmpBenefitPlanDtos.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：EmpBenefitPlan 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktEmpBenefitPlan 生成，请按需审阅）
 // 
@@ -55,7 +55,7 @@ public class TaktEmpBenefitPlanDto : TaktCompanyDtoBase
     /// <summary>
     /// 福利项目 名称（填充字段）
     /// </summary>
-    public string? ItemName { get; set; }
+    public string? BenefitItemName { get; set; }
 
     /// <summary>
     /// 方案编码
@@ -73,14 +73,14 @@ public class TaktEmpBenefitPlanDto : TaktCompanyDtoBase
     public DateTime? ExpiryDate { get; set; }
 
     /// <summary>
+    /// 关联工厂
+    /// </summary>
+    public string RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
     /// 状态（字典 hr_emp_benefit_plan_status）
     /// </summary>
     public int EmpBenefitStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
 
 }
 
@@ -147,14 +147,14 @@ public class TaktEmpBenefitPlanQueryDto : TaktPagedQuery
     public DateTime? ExpiryDateEnd { get; set; }
 
     /// <summary>
-    /// 状态（字典 hr_emp_benefit_plan_status）
-    /// </summary>
-    public int? EmpBenefitStatus { get; set; }
-
-    /// <summary>
     /// 关联工厂
     /// </summary>
     public string? RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 状态（字典 hr_emp_benefit_plan_status）
+    /// </summary>
+    public int? EmpBenefitStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -197,7 +197,7 @@ public class TaktEmpBenefitPlanCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -236,14 +236,15 @@ public class TaktEmpBenefitPlanCreateDto
     public DateTime? ExpiryDate { get; set; }
 
     /// <summary>
+    /// 关联工厂
+    /// </summary>
+    [Required(ErrorMessage = "关联工厂不能为空")]
+    public string RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
     /// 状态（字典 hr_emp_benefit_plan_status）
     /// </summary>
     public int EmpBenefitStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON
@@ -343,14 +344,24 @@ public class TaktEmpBenefitPlanTemplateDto
     public string? PlanCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 hr_emp_benefit_plan_status）
+    /// 参保/参与日期
     /// </summary>
-    public int? EmpBenefitStatus { get; set; }
+    public DateTime? EnrollmentDate { get; set; }
+
+    /// <summary>
+    /// 失效日期
+    /// </summary>
+    public DateTime? ExpiryDate { get; set; }
 
     /// <summary>
     /// 关联工厂
     /// </summary>
     public string? RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 状态（字典 hr_emp_benefit_plan_status）
+    /// </summary>
+    public int? EmpBenefitStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -380,7 +391,7 @@ public class TaktEmpBenefitPlanImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -407,14 +418,24 @@ public class TaktEmpBenefitPlanImportDto
     public string? PlanCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 hr_emp_benefit_plan_status）
+    /// 参保/参与日期
     /// </summary>
-    public int? EmpBenefitStatus { get; set; }
+    public DateTime? EnrollmentDate { get; set; }
+
+    /// <summary>
+    /// 失效日期
+    /// </summary>
+    public DateTime? ExpiryDate { get; set; }
 
     /// <summary>
     /// 关联工厂
     /// </summary>
     public string? RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 状态（字典 hr_emp_benefit_plan_status）
+    /// </summary>
+    public int? EmpBenefitStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -482,14 +503,14 @@ public class TaktEmpBenefitPlanExportDto
     public DateTime? ExpiryDate { get; set; }
 
     /// <summary>
+    /// 关联工厂
+    /// </summary>
+    public string RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
     /// 状态（字典 hr_emp_benefit_plan_status）
     /// </summary>
     public int EmpBenefitStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON

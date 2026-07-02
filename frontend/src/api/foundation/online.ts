@@ -22,6 +22,7 @@ import type {
   OnlineForceKickBatch,
   OnlinePushStatisticsRequest,
   OnlineQuery,
+  OnlineDashboardStatistics,
   OnlineStatistics,
   OnlineStatus,
 } from '@/types/foundation/online';
@@ -119,12 +120,33 @@ export function getOnlineOptions(): Promise<TaktSelectOption[]> {
 // ========================================
 
 /**
+ * 在线统计查询参数
+ */
+export interface OnlineStatisticsQuery {
+  /** 用户名（可选；为空取当前用户） */
+  userName?: string;
+}
+
+/**
  * 获取在线用户统计
+ * @param {OnlineStatisticsQuery} [queryDto] 查询参数
  * @returns {Promise<OnlineStatistics>} 统计结果
  */
-export function getOnlineStatistics(): Promise<OnlineStatistics> {
+export function getOnlineStatistics(queryDto?: OnlineStatisticsQuery): Promise<OnlineStatistics> {
   return request<OnlineStatistics>({
     url: `${ONLINE_API_BASE}/statistics`,
+    method: 'get',
+    params: queryDto,
+  });
+}
+
+/**
+ * 获取在线看板统计（公司维度：在线人数、当日总访问量、当前会话）
+ * @returns {Promise<OnlineDashboardStatistics>} 看板统计结果
+ */
+export function getOnlineDashboardStatistics(): Promise<OnlineDashboardStatistics> {
+  return request<OnlineDashboardStatistics>({
+    url: `${ONLINE_API_BASE}/statistics/dashboard`,
     method: 'get',
   });
 }

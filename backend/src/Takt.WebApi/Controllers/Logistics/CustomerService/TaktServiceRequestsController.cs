@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.CustomerService
 // 文件名称：TaktServiceRequestsController.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：服务请求控制器
 // 
@@ -49,6 +49,26 @@ public class TaktServiceRequestsController : TaktControllerBase
         {
             var result = await _serviceRequestService.GetServiceRequestListAsync(queryDto);
             return Success(result.Data, result.Total, result.PageIndex, result.PageSize, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 获取服务请求统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>服务请求统计</returns>
+    [TaktPermission("logistics:service:request:list", "服务请求统计")]
+    [HttpGet("request-stat")]
+    public async Task<IActionResult> GetServiceRequestStatAsync([FromQuery] TaktServiceRequestStatQueryDto queryDto)
+    {
+        try
+        {
+            var result = await _serviceRequestService.GetServiceRequestStatAsync(queryDto);
+            return Success(result, "查询成功");
         }
         catch (Exception ex)
         {

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Training
 // 文件名称：TaktTrainingPlanDtos.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TrainingPlan 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktTrainingPlan 生成，请按需审阅）
 // 
@@ -88,17 +88,17 @@ public class TaktTrainingPlanDto : TaktApprovalDtoBase
     /// <summary>
     /// 计划说明
     /// </summary>
-    public string Description { get; set; } = string.Empty;
+    public string TrainingPlanDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 关联工厂
+    /// </summary>
+    public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 业务状态（1=启用 0=禁用）
     /// </summary>
     public int TrainingPlanStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
 
 }
 
@@ -185,12 +185,7 @@ public class TaktTrainingPlanQueryDto : TaktPagedQuery
     /// <summary>
     /// 计划说明
     /// </summary>
-    public string? Description { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 业务状态（1=启用 0=禁用）
-    /// </summary>
-    public int? TrainingPlanStatus { get; set; }
+    public string? TrainingPlanDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 关联工厂
@@ -198,7 +193,12 @@ public class TaktTrainingPlanQueryDto : TaktPagedQuery
     public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
-    /// 审批状态（TaktApprovalStatus）
+    /// 业务状态（1=启用 0=禁用）
+    /// </summary>
+    public int? TrainingPlanStatus { get; set; }
+
+    /// <summary>
+    /// 审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）
     /// </summary>
     public TaktApprovalStatus? ApprovalStatus { get; set; }
 
@@ -281,7 +281,7 @@ public class TaktTrainingPlanCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -344,17 +344,18 @@ public class TaktTrainingPlanCreateDto
     /// 计划说明
     /// </summary>
     [Required(ErrorMessage = "计划说明不能为空")]
-    public string Description { get; set; } = string.Empty;
+    public string TrainingPlanDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 关联工厂
+    /// </summary>
+    [Required(ErrorMessage = "关联工厂不能为空")]
+    public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 业务状态（1=启用 0=禁用）
     /// </summary>
     public int TrainingPlanStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON
@@ -457,6 +458,16 @@ public class TaktTrainingPlanTemplateDto
     public string? ApplicableDepartment { get; set; } = string.Empty;
 
     /// <summary>
+    /// 计划开始日期
+    /// </summary>
+    public DateTime? StartDate { get; set; }
+
+    /// <summary>
+    /// 计划结束日期
+    /// </summary>
+    public DateTime? EndDate { get; set; }
+
+    /// <summary>
     /// 培训目标
     /// </summary>
     public string? TrainingObjectives { get; set; } = string.Empty;
@@ -467,19 +478,24 @@ public class TaktTrainingPlanTemplateDto
     public int? PlannedHeadcount { get; set; }
 
     /// <summary>
-    /// 计划说明
+    /// 培训预算（元）
     /// </summary>
-    public string? Description { get; set; } = string.Empty;
+    public decimal? TrainingBudget { get; set; }
 
     /// <summary>
-    /// 业务状态（1=启用 0=禁用）
+    /// 计划说明
     /// </summary>
-    public int? TrainingPlanStatus { get; set; }
+    public string? TrainingPlanDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 关联工厂
     /// </summary>
     public string? RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 业务状态（1=启用 0=禁用）
+    /// </summary>
+    public int? TrainingPlanStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -509,7 +525,7 @@ public class TaktTrainingPlanImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -539,6 +555,16 @@ public class TaktTrainingPlanImportDto
     public string? ApplicableDepartment { get; set; } = string.Empty;
 
     /// <summary>
+    /// 计划开始日期
+    /// </summary>
+    public DateTime? StartDate { get; set; }
+
+    /// <summary>
+    /// 计划结束日期
+    /// </summary>
+    public DateTime? EndDate { get; set; }
+
+    /// <summary>
     /// 培训目标
     /// </summary>
     public string? TrainingObjectives { get; set; } = string.Empty;
@@ -549,19 +575,24 @@ public class TaktTrainingPlanImportDto
     public int? PlannedHeadcount { get; set; }
 
     /// <summary>
-    /// 计划说明
+    /// 培训预算（元）
     /// </summary>
-    public string? Description { get; set; } = string.Empty;
+    public decimal? TrainingBudget { get; set; }
 
     /// <summary>
-    /// 业务状态（1=启用 0=禁用）
+    /// 计划说明
     /// </summary>
-    public int? TrainingPlanStatus { get; set; }
+    public string? TrainingPlanDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 关联工厂
     /// </summary>
     public string? RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 业务状态（1=启用 0=禁用）
+    /// </summary>
+    public int? TrainingPlanStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -644,17 +675,17 @@ public class TaktTrainingPlanExportDto
     /// <summary>
     /// 计划说明
     /// </summary>
-    public string Description { get; set; } = string.Empty;
+    public string TrainingPlanDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 关联工厂
+    /// </summary>
+    public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 业务状态（1=启用 0=禁用）
     /// </summary>
     public int TrainingPlanStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON

@@ -135,7 +135,7 @@
           v-model:value="advancedQueryForm.workCenterCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.workcenter.code') })"
           show-count
-          :maxlength="40"
+          :maxlength="8"
           allow-clear
         />
       </a-form-item>
@@ -146,7 +146,7 @@
           v-model:value="advancedQueryForm.workCenterName"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.workcenter.name') })"
           show-count
-          :maxlength="200"
+          :maxlength="40"
           allow-clear
         />
       </a-form-item>
@@ -157,7 +157,7 @@
           v-model:value="advancedQueryForm.workshopCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.workcenter.workshopcode') })"
           show-count
-          :maxlength="40"
+          :maxlength="8"
           allow-clear
         />
       </a-form-item>
@@ -601,7 +601,7 @@ const rowSelection = computed(() => ({
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
-    } else if (getWorkCenterId(selectedRow.value) === getWorkCenterId(record)) {
+    } else if (selectedRow.value && getWorkCenterId(selectedRow.value) === getWorkCenterId(record)) {
       selectedRow.value = null
       syncMasterSelection(null)
     }

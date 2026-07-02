@@ -1,8 +1,8 @@
-﻿// ========================================
+// ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Compensation
 // 文件名称：TaktSalaryFormulaDtos.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SalaryFormula 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSalaryFormula 生成，请按需审阅）
 // 
@@ -72,11 +72,6 @@ public class TaktSalaryFormulaDto : TaktCompanyDtoBase
     public int FormulaStep { get; set; } = 0;
 
     /// <summary>
-    /// 执行顺序（同一 set_code 内从小到大；应发=1 … 实发=5）
-    /// </summary>
-    public int SortOrder { get; set; } = 0;
-
-    /// <summary>
     /// 结果写入字段（与 TaktPayslip 列名一致，如 gross_amount、net_amount）
     /// </summary>
     public string TargetField { get; set; } = string.Empty;
@@ -102,14 +97,19 @@ public class TaktSalaryFormulaDto : TaktCompanyDtoBase
     public DateTime? ExpiryDate { get; set; }
 
     /// <summary>
+    /// 关联工厂
+    /// </summary>
+    public string RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 执行顺序（同一 set_code 内从小到大；应发=1 … 实发=5）
+    /// </summary>
+    public int SortOrder { get; set; } = 0;
+
+    /// <summary>
     /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int FormulaStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
 
 }
 
@@ -165,11 +165,6 @@ public class TaktSalaryFormulaQueryDto : TaktPagedQuery
     public int? FormulaStep { get; set; }
 
     /// <summary>
-    /// 执行顺序（同一 set_code 内从小到大；应发=1 … 实发=5）
-    /// </summary>
-    public int? SortOrder { get; set; }
-
-    /// <summary>
     /// 结果写入字段（与 TaktPayslip 列名一致，如 gross_amount、net_amount）
     /// </summary>
     public string? TargetField { get; set; } = string.Empty;
@@ -205,14 +200,19 @@ public class TaktSalaryFormulaQueryDto : TaktPagedQuery
     public DateTime? ExpiryDateEnd { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
-    /// </summary>
-    public int? FormulaStatus { get; set; }
-
-    /// <summary>
     /// 关联工厂
     /// </summary>
     public string? RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 执行顺序（同一 set_code 内从小到大；应发=1 … 实发=5）
+    /// </summary>
+    public int? SortOrder { get; set; }
+
+    /// <summary>
+    /// 状态（字典 sys_normal_disable_status）
+    /// </summary>
+    public int? FormulaStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -255,7 +255,7 @@ public class TaktSalaryFormulaCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -295,11 +295,6 @@ public class TaktSalaryFormulaCreateDto
     public int FormulaStep { get; set; } = 0;
 
     /// <summary>
-    /// 执行顺序（同一 set_code 内从小到大；应发=1 … 实发=5）
-    /// </summary>
-    public int SortOrder { get; set; } = 0;
-
-    /// <summary>
     /// 结果写入字段（与 TaktPayslip 列名一致，如 gross_amount、net_amount）
     /// </summary>
     [Required(ErrorMessage = "结果写入字段（与 TaktPayslip 列名一致，如 gross_amount、net_amount）不能为空")]
@@ -327,14 +322,15 @@ public class TaktSalaryFormulaCreateDto
     public DateTime? ExpiryDate { get; set; }
 
     /// <summary>
+    /// 关联工厂
+    /// </summary>
+    [Required(ErrorMessage = "关联工厂不能为空")]
+    public string RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
     /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int FormulaStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON
@@ -467,11 +463,6 @@ public class TaktSalaryFormulaTemplateDto
     public int? FormulaStep { get; set; }
 
     /// <summary>
-    /// 执行顺序（同一 set_code 内从小到大；应发=1 … 实发=5）
-    /// </summary>
-    public int? SortOrder { get; set; }
-
-    /// <summary>
     /// 结果写入字段（与 TaktPayslip 列名一致，如 gross_amount、net_amount）
     /// </summary>
     public string? TargetField { get; set; } = string.Empty;
@@ -487,14 +478,24 @@ public class TaktSalaryFormulaTemplateDto
     public string? StepDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 方案生效日期（同 set_code 各行应一致）
     /// </summary>
-    public int? FormulaStatus { get; set; }
+    public DateTime? EffectiveDate { get; set; }
+
+    /// <summary>
+    /// 方案失效日期
+    /// </summary>
+    public DateTime? ExpiryDate { get; set; }
 
     /// <summary>
     /// 关联工厂
     /// </summary>
     public string? RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 状态（字典 sys_normal_disable_status）
+    /// </summary>
+    public int? FormulaStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -524,7 +525,7 @@ public class TaktSalaryFormulaImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -560,11 +561,6 @@ public class TaktSalaryFormulaImportDto
     public int? FormulaStep { get; set; }
 
     /// <summary>
-    /// 执行顺序（同一 set_code 内从小到大；应发=1 … 实发=5）
-    /// </summary>
-    public int? SortOrder { get; set; }
-
-    /// <summary>
     /// 结果写入字段（与 TaktPayslip 列名一致，如 gross_amount、net_amount）
     /// </summary>
     public string? TargetField { get; set; } = string.Empty;
@@ -580,14 +576,24 @@ public class TaktSalaryFormulaImportDto
     public string? StepDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable_status）
+    /// 方案生效日期（同 set_code 各行应一致）
     /// </summary>
-    public int? FormulaStatus { get; set; }
+    public DateTime? EffectiveDate { get; set; }
+
+    /// <summary>
+    /// 方案失效日期
+    /// </summary>
+    public DateTime? ExpiryDate { get; set; }
 
     /// <summary>
     /// 关联工厂
     /// </summary>
     public string? RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 状态（字典 sys_normal_disable_status）
+    /// </summary>
+    public int? FormulaStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -654,11 +660,6 @@ public class TaktSalaryFormulaExportDto
     public int FormulaStep { get; set; } = 0;
 
     /// <summary>
-    /// 执行顺序（同一 set_code 内从小到大；应发=1 … 实发=5）
-    /// </summary>
-    public int SortOrder { get; set; } = 0;
-
-    /// <summary>
     /// 结果写入字段（与 TaktPayslip 列名一致，如 gross_amount、net_amount）
     /// </summary>
     public string TargetField { get; set; } = string.Empty;
@@ -684,14 +685,19 @@ public class TaktSalaryFormulaExportDto
     public DateTime? ExpiryDate { get; set; }
 
     /// <summary>
+    /// 关联工厂
+    /// </summary>
+    public string RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 执行顺序（同一 set_code 内从小到大；应发=1 … 实发=5）
+    /// </summary>
+    public int SortOrder { get; set; } = 0;
+
+    /// <summary>
     /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int FormulaStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON

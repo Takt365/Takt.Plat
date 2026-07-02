@@ -1,0 +1,34 @@
+{
+  "scannedEntities": 284,
+  "checked": 1,
+  "alignedCount": 0,
+  "entityMissingRows": [
+    {
+      "entity": "User",
+      "templateMissing": [
+        "IsBuiltIn",
+        "PasswordExpireDays"
+      ],
+      "importMissing": [
+        "IsBuiltIn",
+        "PasswordExpireDays"
+      ]
+    }
+  ],
+  "createMisalignedRows": [],
+  "importTemplateDiffRows": [
+    {
+      "entity": "User",
+      "importOnly": [
+        "EmployeeCode"
+      ],
+      "templateOnly": []
+    }
+  ],
+  "missingDtoFiles": [
+    {
+      "entity": "TicketReply",
+      "path": "G:\\AppDevelop\\VS2026\\Takt.Plat\\backend\\src\\Takt.Application\\Dtos\\Routine\\HelpDesk\\TaktTicketReplyDtos.cs"
+    }
+  ]
+}

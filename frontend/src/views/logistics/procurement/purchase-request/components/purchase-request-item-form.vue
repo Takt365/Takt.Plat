@@ -26,7 +26,111 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.purchaserequestitem.linenumber')"
+                name="lineNumber"
+              >
+                <a-input-number
+                  v-model:value="formState.lineNumber"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaserequestitem.linenumber') })"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.purchaserequestitem.allocationcategory')"
+                name="allocationCategory"
+              >
+                <TaktSelect
+                  v-model:value="formState.allocationCategory"
+                  dict-type="logistics_allocation_category"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.purchaserequestitem.allocationcategory') })"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.purchaserequestitem.materialcode')"
+                name="materialCode"
+              >
+                <a-input
+                  v-model:value="formState.materialCode"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaserequestitem.materialcode') })"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                  :disabled="!!formData?.purchaseRequestItemId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.purchaserequestitem.materialname')"
+                name="materialName"
+              >
+                <a-input
+                  v-model:value="formState.materialName"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaserequestitem.materialname') })"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.purchaserequestitem.materialspecification')"
+                name="materialSpecification"
+              >
+                <a-input
+                  v-model:value="formState.materialSpecification"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaserequestitem.materialspecification') })"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.purchaserequestitem.requestunit')"
+                name="requestUnit"
+              >
+                <a-input
+                  v-model:value="formState.requestUnit"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaserequestitem.requestunit') })"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.purchaserequestitem.requestquantity')"
+                name="requestQuantity"
+              >
+                <a-input-number
+                  v-model:value="formState.requestQuantity"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaserequestitem.requestquantity') })"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.purchaserequestitem.convertedquantity')"
+                name="convertedQuantity"
+              >
+                <a-input-number
+                  v-model:value="formState.convertedQuantity"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaserequestitem.convertedquantity') })"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
           </a-row>
         </div>
       </a-tab-pane>
@@ -39,10 +143,12 @@
  * Takt采购申请实体子表 purchaseRequestItem 维护表单 · 由 generate-vue-master-detail-from-api.cjs 生成
  * @module views/logistics/procurement/purchase-request/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import type { PurchaseRequestItemCreate } from '@/types/logistics/procurement/purchase-request-item'
+import TaktSelect from '@/components/business/takt-select/index.vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -51,7 +157,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = []
+const formFields = ["lineNumber","allocationCategory","materialCode","materialName","materialSpecification","requestUnit","requestQuantity","convertedQuantity"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -78,6 +184,13 @@ function applyFormDefaults(target: Record<string, unknown>) {
   void target
 }
 
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载全量字典 */
+onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
+})
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 purchaseRequestItemId 才视为编辑） */
 watch(
@@ -103,7 +216,73 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-
+  lineNumber: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaserequestitem.linenumber') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaserequestitem.linenumber') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  allocationCategory: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.select', { field: t('entity.purchaserequestitem.allocationcategory') }),
+      trigger: 'change'
+    }
+  ],
+  materialCode: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.required', { field: t('entity.purchaserequestitem.materialcode') }),
+      trigger: 'blur'
+    }
+  ],
+  materialName: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.required', { field: t('entity.purchaserequestitem.materialname') }),
+      trigger: 'blur'
+    }
+  ],
+  requestUnit: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.required', { field: t('entity.purchaserequestitem.requestunit') }),
+      trigger: 'blur'
+    }
+  ],
+  requestQuantity: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaserequestitem.requestquantity') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaserequestitem.requestquantity') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  convertedQuantity: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaserequestitem.convertedquantity') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaserequestitem.convertedquantity') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -115,6 +294,18 @@ async function validate() {
 /** 映射为 Create/Update DTO（含主表外键 purchaseRequestId） */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
+  if ('lineNumber' in payload) {
+    const rawlineNumber = payload.lineNumber
+    payload.lineNumber = typeof rawlineNumber === 'number' ? rawlineNumber : Number(rawlineNumber)
+  }
+  if ('requestQuantity' in payload) {
+    const rawrequestQuantity = payload.requestQuantity
+    payload.requestQuantity = typeof rawrequestQuantity === 'number' ? rawrequestQuantity : Number(rawrequestQuantity)
+  }
+  if ('convertedQuantity' in payload) {
+    const rawconvertedQuantity = payload.convertedQuantity
+    payload.convertedQuantity = typeof rawconvertedQuantity === 'number' ? rawconvertedQuantity : Number(rawconvertedQuantity)
+  }
   if ('sortOrder' in payload) delete payload.sortOrder
   payload.purchaseRequestId = props.masterId
   return payload

@@ -27,6 +27,7 @@ const {
 const {
   shouldExcludeDtoSourceBase,
   shouldExcludeController,
+  assertNotManualDtoEntityCli,
 } = require('./generate-entity-exclusions.cjs');
 
 // ========================================
@@ -1704,11 +1705,12 @@ function printUsage() {
 用法: node scripts/generate-from-backend.cjs [参数]
 
 参数:
-  --<实体名前缀>     生成指定实体（如: --User, --Holiday, --CostCenter）
-                     匹配: Takt{实体}Dtos.cs、Takt{实体复数}Controller.cs（如 TaktHolidaysController）
+  --<实体名前缀>     生成指定实体（如: --User, --Calendar, --CostCenter）
+                     匹配: Takt{实体}Dtos.cs、Takt{实体复数}Controller.cs（如 TaktCalendarsController）
 
 说明:
   - 已禁用 --all；每次必须指定一个实体
+  - 跳过 types：Holiday（TaktHolidayThemeDto 手工 DTO，须手工维护 holiday.d.ts）
 
 输出策略:
   - 目标 .d.ts / .ts 不存在则创建，已存在则覆盖更新（与 generate-script-common.cjs 一致）
@@ -1736,6 +1738,7 @@ function printUsage() {
  */
 function parseArgs() {
   const options = parseSingleEntityGenerateArgs(printUsage);
+  assertNotManualDtoEntityCli(options.entityPrefix);
   return {
     command: options.entityPrefix,
     generateTypes: true,

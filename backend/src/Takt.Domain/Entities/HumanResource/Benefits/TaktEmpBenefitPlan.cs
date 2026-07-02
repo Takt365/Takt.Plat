@@ -24,7 +24,7 @@ namespace Takt.Domain.Entities.HumanResource.Benefits;
 public class TaktEmpBenefitPlan : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 员工 ID
+    /// 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [SugarColumn(ColumnName = "employee_id", ColumnDescription = "员工ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -35,7 +35,7 @@ public class TaktEmpBenefitPlan : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "employee_name", ColumnDescription = "员工姓名", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string EmployeeName { get; set; } = string.Empty;
     /// <summary>
-    /// 福利项目 ID
+    /// 福利项目（关联 TaktBenefitItem.Id，选项 TaktBenefitItems/options）
     /// </summary>
     [SugarColumn(ColumnName = "benefit_item_id", ColumnDescription = "福利项目ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -56,13 +56,13 @@ public class TaktEmpBenefitPlan : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "expiry_date", ColumnDescription = "失效日期", ColumnDataType = "date", IsNullable = true)]
     public DateTime? ExpiryDate { get; set; }
     /// <summary>
-    /// 状态（字典 hr_emp_benefit_plan_status）
+    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// </summary>
+    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
+    public string RelatedPlant { get; set; } = string.Empty;
+    /// <summary>
+    /// 状态（字典 hr_emp_benefit_plan_status；0=待生效 1=生效中 2=已失效）
     /// </summary>
     [SugarColumn(ColumnName = "emp_benefit_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int EmpBenefitStatus { get; set; } = 1;
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = true)]
-    public string? RelatedPlant { get; set; }
 }

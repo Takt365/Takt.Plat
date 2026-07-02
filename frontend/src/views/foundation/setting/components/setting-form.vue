@@ -37,7 +37,7 @@
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
                   show-count
                   :maxlength="20"
-                  readonly
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -51,7 +51,7 @@
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
                   show-count
                   :maxlength="20"
-                  readonly
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -65,7 +65,7 @@
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
                   show-count
                   :maxlength="20"
-                  readonly
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -114,10 +114,10 @@
             <a-col :span="24">
               <a-form-item
                 :label="t('entity.setting.description')"
-                name="description"
+                name="settingDescription"
               >
                 <a-textarea
-                  v-model:value="formState.description"
+                  v-model:value="formState.settingDescription"
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.setting.description') })"
                   :rows="2"
                 />
@@ -128,10 +128,10 @@
                 :label="t('entity.setting.group')"
                 name="settingGroup"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.settingGroup"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.setting.group') })"
-                  style="width: 100%"
+                  dict-type="sys_resource_type"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.setting.group') })"
                 />
               </a-form-item>
             </a-col>
@@ -140,10 +140,10 @@
                 :label="t('entity.setting.valuetype')"
                 name="valueType"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.valueType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.setting.valuetype') })"
-                  style="width: 100%"
+                  dict-type="gen_display_type"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.setting.valuetype') })"
                 />
               </a-form-item>
             </a-col>
@@ -169,6 +169,18 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="t('entity.setting.status')"
+                name="settingStatus"
+              >
+                <TaktSelect
+                  v-model:value="formState.settingStatus"
+                  dict-type="sys_normal_disable_status"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.setting.status') })"
+                />
+              </a-form-item>
+            </a-col>
             <a-col :span="24">
               <a-form-item
                 :label="t('entity.setting.isreadonly')"
@@ -285,7 +297,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","settingKey","settingValue","settingName","description","settingGroup","valueType","isBuiltIn","isReadonly","isEncrypted","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","settingKey","settingValue","settingName","settingDescription","settingGroup","valueType","isBuiltIn","isReadonly","isEncrypted","settingStatus","extField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -306,6 +318,9 @@ const formRef = ref()
 const formState = reactive<Record<string, any>>({})
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  settingGroup: 'frontend',
+  valueType: 'input',
+  settingStatus: 1,
   isBuiltIn: 0
 }
 
@@ -374,29 +389,13 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     }
   ],
   settingGroup: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.setting.group') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.setting.group') }))
-      }
-      return Promise.resolve()
-    },
+    required: true,
+    message: t('common.page.form.placeholder.select', { field: t('entity.setting.group') }),
     trigger: 'change'
   }],
   valueType: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.setting.valuetype') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.setting.valuetype') }))
-      }
-      return Promise.resolve()
-    },
+    required: true,
+    message: t('common.page.form.placeholder.select', { field: t('entity.setting.valuetype') }),
     trigger: 'change'
   }],
   isBuiltIn: [{
@@ -438,6 +437,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
+  settingStatus: [{
+    required: true,
+    message: t('common.page.form.placeholder.select', { field: t('entity.setting.status') }),
+    trigger: 'change'
+  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -449,14 +453,6 @@ async function validate() {
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
-  if ('settingGroup' in payload) {
-    const rawsettingGroup = payload.settingGroup
-    payload.settingGroup = typeof rawsettingGroup === 'number' ? rawsettingGroup : Number(rawsettingGroup)
-  }
-  if ('valueType' in payload) {
-    const rawvalueType = payload.valueType
-    payload.valueType = typeof rawvalueType === 'number' ? rawvalueType : Number(rawvalueType)
-  }
   if ('isBuiltIn' in payload) {
     const rawisBuiltIn = payload.isBuiltIn
     payload.isBuiltIn = typeof rawisBuiltIn === 'number' ? rawisBuiltIn : Number(rawisBuiltIn)
@@ -469,7 +465,11 @@ function getValues(): Record<string, any> {
     const rawisEncrypted = payload.isEncrypted
     payload.isEncrypted = typeof rawisEncrypted === 'number' ? rawisEncrypted : Number(rawisEncrypted)
   }
-  delete payload.sortOrder
+  if ('settingStatus' in payload) {
+    const rawSettingStatus = payload.settingStatus
+    payload.settingStatus = typeof rawSettingStatus === 'number' ? rawSettingStatus : Number(rawSettingStatus)
+  }
+  if ('sortOrder' in payload) delete payload.sortOrder
   return payload
 }
 
@@ -480,6 +480,7 @@ function resetFields() {
     Object.assign(formState, props.formData)
   }
   applyFormDefaults(formState)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.settingId)
 
   activeTab.value = 'tab-0'
   formRef.value?.clearValidate()

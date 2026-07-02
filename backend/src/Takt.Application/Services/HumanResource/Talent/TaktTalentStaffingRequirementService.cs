@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Talent
 // 文件名称：TaktTalentStaffingRequirementService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：用人需求应用服务实现
 // 
@@ -14,7 +14,6 @@ using System.Linq.Expressions;
 using Mapster;
 using SqlSugar;
 using Takt.Application.Dtos.HumanResource.Talent;
-using Takt.Domain.Entities.HumanResource.Personnel;
 using Takt.Domain.Entities.HumanResource.Talent;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
@@ -22,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Services.HumanResource.Talent;
 
@@ -33,25 +31,19 @@ public class TaktTalentStaffingRequirementService : TaktServiceBase, ITaktTalent
 {
     private readonly ITaktApprovalRepository<TaktTalentStaffingRequirement> _talentStaffingRequirementRepository;
     private readonly ITaktCompanyRepository<TaktTalentJobPosting> _talentJobPostingRepository;
-    private readonly ITaktApprovalRepository<TaktTalentOffer> _talentOfferRepository;
-    private readonly ITaktCompanyRepository<TaktEmployeeOnboarding> _employeeOnboardingRepository;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="talentStaffingRequirementRepository">用人需求仓储</param>
-    /// <param name="talentJobPostingRepository">职位发布仓储</param>
-    /// <param name="talentOfferRepository">录用信息仓储</param>
-    /// <param name="employeeOnboardingRepository">入职待办仓储</param>
+    /// <param name="talentJobPostingRepository">TalentJobPosting仓储</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktTalentStaffingRequirementService(
         ITaktApprovalRepository<TaktTalentStaffingRequirement> talentStaffingRequirementRepository,
         ITaktCompanyRepository<TaktTalentJobPosting> talentJobPostingRepository,
-        ITaktApprovalRepository<TaktTalentOffer> talentOfferRepository,
-        ITaktCompanyRepository<TaktEmployeeOnboarding> employeeOnboardingRepository,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
@@ -59,8 +51,6 @@ public class TaktTalentStaffingRequirementService : TaktServiceBase, ITaktTalent
     {
         _talentStaffingRequirementRepository = talentStaffingRequirementRepository;
         _talentJobPostingRepository = talentJobPostingRepository;
-        _talentOfferRepository = talentOfferRepository;
-        _employeeOnboardingRepository = employeeOnboardingRepository;
         _uniqueValidator = uniqueValidator;
     }
 
@@ -96,6 +86,7 @@ public class TaktTalentStaffingRequirementService : TaktServiceBase, ITaktTalent
             return null;
         }
         var dto = entity.Adapt<TaktTalentStaffingRequirementDto>();
+        await FillTalentStaffingRequirementDetailsAsync(dto, entity);
         return dto;    }
 
     /// <summary>
@@ -132,6 +123,7 @@ public class TaktTalentStaffingRequirementService : TaktServiceBase, ITaktTalent
             throw new TaktBusinessException("用人需求的ReqNo已存在");
         }
         entity = await _talentStaffingRequirementRepository.CreateAsync(entity);
+                await SaveTalentStaffingRequirementChildrenAsync(entity, dto);
         return await GetTalentStaffingRequirementByIdAsync(entity.Id) ?? entity.Adapt<TaktTalentStaffingRequirementDto>();
     }
 
@@ -158,6 +150,7 @@ public class TaktTalentStaffingRequirementService : TaktServiceBase, ITaktTalent
             throw new TaktBusinessException("用人需求的ReqNo已存在");
         }
         await _talentStaffingRequirementRepository.UpdateAsync(entity);
+                await SaveTalentStaffingRequirementChildrenAsync(entity, dto);
         return await GetTalentStaffingRequirementByIdAsync(id) ?? throw new TaktBusinessException("用人需求不存在");
     }
 
@@ -173,7 +166,7 @@ public class TaktTalentStaffingRequirementService : TaktServiceBase, ITaktTalent
         {
             throw new TaktBusinessException("用人需求不存在或已删除");
         }
-        await DeleteTalentStaffingRequirementChildrenAsync(entity.Id);
+        await _talentJobPostingRepository.DeleteAsync(x => x.StaffingRequirementId == entity.Id);
         var deleted = await _talentStaffingRequirementRepository.DeleteAsync(id);
         if (!deleted)
         {
@@ -284,29 +277,71 @@ public class TaktTalentStaffingRequirementService : TaktServiceBase, ITaktTalent
             fileName ?? "用人需求导出.xlsx");
     }
 
+    // ========================================
+    // 主子表级联（OneToMany）
+    // ========================================
+
     /// <summary>
-    /// 删除用人需求关联职位发布、录用及入职待办
+    /// 填充用人需求详情（加载 OneToMany 子表：职位发布）
     /// </summary>
-    /// <param name="staffingRequirementId">用人需求ID</param>
+    /// <param name="dto">响应 DTO</param>
+    /// <param name="entity">主表实体</param>
     /// <returns>任务</returns>
-    private async Task DeleteTalentStaffingRequirementChildrenAsync(long staffingRequirementId)
+    private async Task FillTalentStaffingRequirementDetailsAsync(TaktTalentStaffingRequirementDto dto, TaktTalentStaffingRequirement entity)
     {
-        var postings = await _talentJobPostingRepository.GetListAsync(x => x.StaffingRequirementId == staffingRequirementId);
-        var postingIds = postings.Select(x => x.Id).ToList();
-        if (postingIds.Count == 0)
+        if (dto == null)
         {
             return;
         }
-        var offers = await _talentOfferRepository.GetListAsync(x => postingIds.Contains(x.JobPostingId));
-        var offerIds = offers.Select(x => x.Id).ToList();
-        if (offerIds.Count > 0)
-        {
-            await _employeeOnboardingRepository.DeleteAsync(x => offerIds.Contains(x.OfferId));
-            await _talentOfferRepository.DeleteAsync(x => postingIds.Contains(x.JobPostingId));
-        }
-        await _talentJobPostingRepository.DeleteAsync(x => x.StaffingRequirementId == staffingRequirementId);
+        // 职位发布 → dto.TalentJobPostings
+        var talentjobpostings = await _talentJobPostingRepository.GetListAsync(x => x.StaffingRequirementId == entity.Id);
+        dto.TalentJobPostings = talentjobpostings.Adapt<List<TaktTalentJobPostingDto>>();
     }
 
+    /// <summary>
+    /// 保存用人需求子表级联（职位发布；Create/Update 后按主表 Id 先删后插）
+    /// </summary>
+    /// <param name="entity">主表实体</param>
+    /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
+    /// <returns>任务</returns>
+    private async Task SaveTalentStaffingRequirementChildrenAsync(TaktTalentStaffingRequirement entity, TaktTalentStaffingRequirementCreateDto dto)
+    {
+        // 职位发布（TalentJobPostings）
+        if (dto.TalentJobPostings is not { Count: > 0 })
+        {
+            await _talentJobPostingRepository.DeleteAsync(x => x.StaffingRequirementId == entity.Id);
+        }
+        else
+        {
+            var talentjobpostings = dto.TalentJobPostings.Adapt<List<TaktTalentJobPosting>>();
+            foreach (var child in talentjobpostings)
+            {
+                child.StaffingRequirementId = entity.Id;
+            }
+                        var seenKeys = new HashSet<string>(StringComparer.Ordinal);
+                        for (var i = 0; i < talentjobpostings.Count; i++)
+                        {
+                            var key = $"{talentjobpostings[i].CompanyCode}|{talentjobpostings[i].PostingCode}";
+                            if (!seenKeys.Add(key))
+                            {
+                                throw new TaktBusinessException($"职位发布第{i + 1}项与本次提交的其他项重复（CompanyCode、PostingCode）");
+                            }
+                        }
+            await _talentJobPostingRepository.DeleteAsync(x => x.StaffingRequirementId == entity.Id);
+            foreach (var child in talentjobpostings)
+            {
+            var isUnique_ix_talent_job_posting_code_unique = await _uniqueValidator.IsUniqueAsync(
+                _talentJobPostingRepository,
+                x => x.CompanyCode == child.CompanyCode
+                    && x.PostingCode == child.PostingCode);
+            if (!isUnique_ix_talent_job_posting_code_unique)
+            {
+                throw new TaktBusinessException("职位发布的CompanyCode、PostingCode已存在");
+            }
+            }
+            await _talentJobPostingRepository.CreateRangeAsync(talentjobpostings);
+        }
+    }
     // ========================================
     // 查询表达式
     // ========================================

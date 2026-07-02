@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="routine:help:desk:ticket:change:log:create"
-      update-permission="routine:help:desk:ticket:change:log:update"
-      delete-permission="routine:help:desk:ticket:change:log:delete"
-      import-permission="routine:help:desk:ticket:change:log:import"
-      export-permission="routine:help:desk:ticket:change:log:export"
+      create-permission="routine:help:desk:ticket:create"
+      update-permission="routine:help:desk:ticket:update"
+      delete-permission="routine:help:desk:ticket:delete"
+      import-permission="routine:help:desk:ticket:import"
+      export-permission="routine:help:desk:ticket:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -167,11 +167,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('attachmentsJson')">
-      <a-form-item :label="t('entity.ticket.attachmentsjson')">
+      <div v-show="isFieldVisible('attachments')">
+      <a-form-item :label="t('entity.ticket.attachments')">
         <a-input
-          v-model:value="advancedQueryForm.attachmentsJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.attachmentsjson') })"
+          v-model:value="advancedQueryForm.attachments"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.attachments') })"
           show-count
           :maxlength="20"
           allow-clear
@@ -180,10 +180,11 @@
       </div>
       <div v-show="isFieldVisible('ticketStatus')">
       <a-form-item :label="t('entity.ticket.status')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.ticketStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.status') })"
-          style="width: 100%"
+          dict-type="sys_ticket_status"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ticket.status') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -193,6 +194,26 @@
           v-model:value="advancedQueryForm.priority"
           dict-type="sys_priority_level_category"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ticket.priority') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('urgency')">
+      <a-form-item :label="t('entity.ticket.urgency')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.urgency"
+          dict-type="sys_urgency_level_category"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ticket.urgency') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('impact')">
+      <a-form-item :label="t('entity.ticket.impact')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.impact"
+          dict-type="sys_impact_level_category"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ticket.impact') })"
           allow-clear
         />
       </a-form-item>
@@ -391,13 +412,24 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('flowInstanceId')">
-      <a-form-item :label="t('entity.ticket.flowinstanceid')">
+      <div v-show="isFieldVisible('itAssetId')">
+      <a-form-item :label="t('entity.ticket.itassetid')">
         <a-input
-          v-model:value="advancedQueryForm.flowInstanceId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.flowinstanceid') })"
+          v-model:value="advancedQueryForm.itAssetId"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.itassetid') })"
           show-count
           :maxlength="20"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('assetCode')">
+      <a-form-item :label="t('entity.ticket.assetcode')">
+        <a-input
+          v-model:value="advancedQueryForm.assetCode"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.assetcode') })"
+          show-count
+          :maxlength="40"
           allow-clear
         />
       </a-form-item>
@@ -441,7 +473,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -452,18 +484,36 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('ExtField')">
-      <a-form-item :label="t('entity.ticket.extfield')">
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
         <a-textarea
-          v-model:value="advancedQueryForm.ExtField"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.ticket.extfield') })"
-          :rows="2"
-          allow-clear
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -537,7 +587,7 @@ import type { Ticket, TicketQuery } from '@/types/routine/help-desk/ticket'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -585,9 +635,11 @@ const advancedQueryForm = ref({
   ticketNo: '',
   title: '',
   content: '',
-  attachmentsJson: '',
+  attachments: '',
   ticketStatus: undefined as number | undefined,
   priority: undefined as number | undefined,
+  urgency: undefined as number | undefined,
+  impact: undefined as number | undefined,
   categoryCode: '',
   ticketSource: undefined as number | undefined,
   submitterId: '',
@@ -606,13 +658,14 @@ const advancedQueryForm = ref({
   resolutionDueByEnd: '',
   closedAtStart: '',
   closedAtEnd: '',
-  flowInstanceId: '',
+  itAssetId: '',
+  assetCode: '',
   applicantDeptId: '',
   applicantDeptName: '',
   applicantBy: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
@@ -620,9 +673,11 @@ const queryFieldsMeta = computed(() => [
   { key: 'ticketNo', label: t('entity.ticket.no') },
   { key: 'title', label: t('entity.ticket.title') },
   { key: 'content', label: t('entity.ticket.content') },
-  { key: 'attachmentsJson', label: t('entity.ticket.attachmentsjson') },
+  { key: 'attachments', label: t('entity.ticket.attachments') },
   { key: 'ticketStatus', label: t('entity.ticket.status') },
   { key: 'priority', label: t('entity.ticket.priority') },
+  { key: 'urgency', label: t('entity.ticket.urgency') },
+  { key: 'impact', label: t('entity.ticket.impact') },
   { key: 'categoryCode', label: t('entity.ticket.categorycode') },
   { key: 'ticketSource', label: t('entity.ticket.source') },
   { key: 'submitterId', label: t('entity.ticket.submitterid') },
@@ -641,13 +696,14 @@ const queryFieldsMeta = computed(() => [
   { key: 'resolutionDueByEnd', label: t('entity.ticket.resolutionduebyend') },
   { key: 'closedAtStart', label: t('entity.ticket.closedatstart') },
   { key: 'closedAtEnd', label: t('entity.ticket.closedatend') },
-  { key: 'flowInstanceId', label: t('entity.ticket.flowinstanceid') },
+  { key: 'itAssetId', label: t('entity.ticket.itassetid') },
+  { key: 'assetCode', label: t('entity.ticket.assetcode') },
   { key: 'applicantDeptId', label: t('entity.ticket.applicantdeptid') },
   { key: 'applicantDeptName', label: t('entity.ticket.applicantdeptname') },
   { key: 'applicantBy', label: t('entity.ticket.applicantby') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'ExtField', label: t('entity.ticket.extfield') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -696,12 +752,18 @@ function buildListQuery(overrides?: Partial<TicketQuery>): TicketQuery {
   assignTrimmed('ticketNo', form.ticketNo)
   assignTrimmed('title', form.title)
   assignTrimmed('content', form.content)
-  assignTrimmed('attachmentsJson', form.attachmentsJson)
+  assignTrimmed('attachments', form.attachments)
   if (form.ticketStatus !== undefined && form.ticketStatus !== null) {
     query.ticketStatus = form.ticketStatus
   }
   if (form.priority !== undefined && form.priority !== null) {
     query.priority = form.priority
+  }
+  if (form.urgency !== undefined && form.urgency !== null) {
+    query.urgency = form.urgency
+  }
+  if (form.impact !== undefined && form.impact !== null) {
+    query.impact = form.impact
   }
   assignTrimmed('categoryCode', form.categoryCode)
   if (form.ticketSource !== undefined && form.ticketSource !== null) {
@@ -723,13 +785,14 @@ function buildListQuery(overrides?: Partial<TicketQuery>): TicketQuery {
   assignTrimmed('resolutionDueByEnd', form.resolutionDueByEnd)
   assignTrimmed('closedAtStart', form.closedAtStart)
   assignTrimmed('closedAtEnd', form.closedAtEnd)
-  assignTrimmed('flowInstanceId', form.flowInstanceId)
+  assignTrimmed('itAssetId', form.itAssetId)
+  assignTrimmed('assetCode', form.assetCode)
   assignTrimmed('applicantDeptId', form.applicantDeptId)
   assignTrimmed('applicantDeptName', form.applicantDeptName)
   assignTrimmed('applicantBy', form.applicantBy)
   assignTrimmed('createdAtStart', form.createdAtStart)
   assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('ExtField', form.ExtField)
+  assignTrimmed('extField', form.extField)
   assignTrimmed('remark', form.remark)
   return query
 }
@@ -831,13 +894,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getTicketField(record, 'content') ?? ''
   },
   {
-    title: t('entity.ticket.attachmentsjson'),
-    dataIndex: 'attachmentsJson',
-    key: 'attachmentsJson',
+    title: t('entity.ticket.attachments'),
+    dataIndex: 'attachments',
+    key: 'attachments',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTicketField(record, 'attachmentsJson') ?? ''
+    customRender: ({ record }: { record: any }) => getTicketField(record, 'attachments') ?? ''
   },
   {
     title: t('entity.ticket.status'),
@@ -879,15 +942,6 @@ const columns = computed<TableColumnsType>(() => [
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getTicketField(record, 'categoryCode') ?? ''
-  },
-  {
-    title: t('entity.ticket.assetcode'),
-    dataIndex: 'assetCode',
-    key: 'assetCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTicketField(record, 'assetCode') ?? ''
   },
   {
     title: t('entity.ticket.source'),
@@ -998,13 +1052,22 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getTicketField(record, 'closedAt') ?? ''
   },
   {
-    title: t('entity.ticket.flowinstanceid'),
-    dataIndex: 'flowInstanceId',
-    key: 'flowInstanceId',
+    title: t('entity.ticket.itassetid'),
+    dataIndex: 'itAssetId',
+    key: 'itAssetId',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTicketField(record, 'flowInstanceId') ?? ''
+    customRender: ({ record }: { record: any }) => getTicketField(record, 'itAssetId') ?? ''
+  },
+  {
+    title: t('entity.ticket.assetcode'),
+    dataIndex: 'assetCode',
+    key: 'assetCode',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getTicketField(record, 'assetCode') ?? ''
   },
   {
     title: t('entity.ticket.applicantdeptid'),
@@ -1042,15 +1105,6 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getTicketField(record, 'childTickets') ?? ''
   },
-  {
-    title: t('entity.ticket.replies'),
-    dataIndex: 'replies',
-    key: 'replies',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTicketField(record, 'replies') ?? ''
-  },
   CreateActionColumn({
     actions: [
       {
@@ -1058,7 +1112,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'routine:help:desk:ticket:change:log:update',
+        permission: 'routine:help:desk:ticket:update',
         onClick: (record: Ticket) => handleEdit(record)
       },
       {
@@ -1066,7 +1120,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'routine:help:desk:ticket:change:log:delete',
+        permission: 'routine:help:desk:ticket:delete',
         onClick: (record: Ticket) => handleDeleteOne(record)
       }
     ]
@@ -1100,7 +1154,7 @@ const rowSelection = computed(() => ({
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
-    } else if (getTicketId(selectedRow.value) === getTicketId(record)) {
+    } else if (selectedRow.value && getTicketId(selectedRow.value) === getTicketId(record)) {
       selectedRow.value = null
       syncMasterSelection(null)
     }
@@ -1144,9 +1198,11 @@ function handleReset() {
   ticketNo: '',
   title: '',
   content: '',
-  attachmentsJson: '',
+  attachments: '',
   ticketStatus: undefined as number | undefined,
   priority: undefined as number | undefined,
+  urgency: undefined as number | undefined,
+  impact: undefined as number | undefined,
   categoryCode: '',
   ticketSource: undefined as number | undefined,
   submitterId: '',
@@ -1165,13 +1221,14 @@ function handleReset() {
   resolutionDueByEnd: '',
   closedAtStart: '',
   closedAtEnd: '',
-  flowInstanceId: '',
+  itAssetId: '',
+  assetCode: '',
   applicantDeptId: '',
   applicantDeptName: '',
   applicantBy: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
   currentPage.value = getTaktDefaultPageIndex()
@@ -1363,9 +1420,11 @@ function handleAdvancedQueryReset() {
   ticketNo: '',
   title: '',
   content: '',
-  attachmentsJson: '',
+  attachments: '',
   ticketStatus: undefined as number | undefined,
   priority: undefined as number | undefined,
+  urgency: undefined as number | undefined,
+  impact: undefined as number | undefined,
   categoryCode: '',
   ticketSource: undefined as number | undefined,
   submitterId: '',
@@ -1384,13 +1443,14 @@ function handleAdvancedQueryReset() {
   resolutionDueByEnd: '',
   closedAtStart: '',
   closedAtEnd: '',
-  flowInstanceId: '',
+  itAssetId: '',
+  assetCode: '',
   applicantDeptId: '',
   applicantDeptName: '',
   applicantBy: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
 }

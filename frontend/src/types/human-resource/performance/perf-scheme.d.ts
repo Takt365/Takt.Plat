@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/human-resource/performance
 // 文件名称：perf-scheme.d.ts
-// 创建时间：2026-06-12
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/performance 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -221,7 +221,7 @@ export interface PerfSchemeQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -248,7 +248,7 @@ export interface PerfSchemeCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -318,11 +318,6 @@ export interface PerfSchemeCreate {
   standardWeight: number;
 
   /**
-   * 排序号
-   */
-  sortOrder: number;
-
-  /**
    * 状态（0=启用 1=停用）
    */
   schemeMetricStatus: number;
@@ -335,7 +330,7 @@ export interface PerfSchemeCreate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -440,6 +435,16 @@ export interface PerfSchemeTemplate {
   scoringStandard?: string;
 
   /**
+   * 自评权重（%）
+   */
+  selfEvaluationWeight?: number;
+
+  /**
+   * 主管评分权重（%）
+   */
+  supervisorWeight?: number;
+
+  /**
    * 指标编码
    */
   metricCode?: string;
@@ -465,9 +470,9 @@ export interface PerfSchemeTemplate {
   scoringCriteria?: string;
 
   /**
-   * 排序号
+   * 标准权重（%）
    */
-  sortOrder?: number;
+  standardWeight?: number;
 
   /**
    * 状态（0=启用 1=停用）
@@ -475,9 +480,14 @@ export interface PerfSchemeTemplate {
   schemeMetricStatus?: number;
 
   /**
+   * 关联工厂
+   */
+  relatedPlant?: string;
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -504,7 +514,7 @@ export interface PerfSchemeImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -534,6 +544,16 @@ export interface PerfSchemeImport {
   scoringStandard?: string;
 
   /**
+   * 自评权重（%）
+   */
+  selfEvaluationWeight?: number;
+
+  /**
+   * 主管评分权重（%）
+   */
+  supervisorWeight?: number;
+
+  /**
    * 指标编码
    */
   metricCode?: string;
@@ -559,9 +579,9 @@ export interface PerfSchemeImport {
   scoringCriteria?: string;
 
   /**
-   * 排序号
+   * 标准权重（%）
    */
-  sortOrder?: number;
+  standardWeight?: number;
 
   /**
    * 状态（0=启用 1=停用）
@@ -569,9 +589,14 @@ export interface PerfSchemeImport {
   schemeMetricStatus?: number;
 
   /**
+   * 关联工厂
+   */
+  relatedPlant?: string;
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -680,7 +705,7 @@ export interface PerfSchemeExport {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注

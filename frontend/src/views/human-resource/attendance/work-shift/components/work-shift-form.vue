@@ -103,12 +103,11 @@
                 :label="t('entity.workshift.starttime')"
                 name="startTime"
               >
-                <a-input
+                <a-date-picker
                   v-model:value="formState.startTime"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.workshift.starttime') })"
-                  show-count
-                  :maxlength="8"
-                  allow-clear
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.workshift.starttime') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
@@ -117,12 +116,11 @@
                 :label="t('entity.workshift.endtime')"
                 name="endTime"
               >
-                <a-input
+                <a-date-picker
                   v-model:value="formState.endTime"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.workshift.endtime') })"
-                  show-count
-                  :maxlength="8"
-                  allow-clear
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.workshift.endtime') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
@@ -331,15 +329,15 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   startTime: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.workshift.starttime') }),
-      trigger: 'blur'
+      message: t('common.page.form.placeholder.select', { field: t('entity.workshift.starttime') }),
+      trigger: 'change'
     }
   ],
   endTime: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.workshift.endtime') }),
-      trigger: 'blur'
+      message: t('common.page.form.placeholder.select', { field: t('entity.workshift.endtime') }),
+      trigger: 'change'
     }
   ],
   crossMidnight: [{

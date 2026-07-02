@@ -27,5 +27,20 @@ export default {
         hint: "ダイアログ内の明細/変更履歴タブはヘッダと一括保存できます。下部パネルで明細を個別に編集できます。",
       },
     },
+    explosion: {
+      title: "多階層 BOM 展開一覧",
+      quantity: "必要数量",
+      maxLevel: "最大階層",
+      includeLevelZero: "親行を含む",
+      summary: "BOM {bomCode} · 親 {parentMaterialCode} {parentMaterialName} · 数量 {quantity}",
+      column: {
+        level: "階層",
+        immediateParent: "直接親",
+        cumulativeQuantity: "累計必要量",
+        hasChildBom: "下位 BOM あり",
+        isCircular: "循環参照",
+      },
+      action: "展開一覧",
+    },
   },
 };

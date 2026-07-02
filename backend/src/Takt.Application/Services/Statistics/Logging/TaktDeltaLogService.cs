@@ -17,6 +17,7 @@ using Takt.Application.Dtos.Statistics.Logging;
 using Takt.Domain.Entities.Statistics.Logging;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
+using Takt.Shared.Constants;
 using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
@@ -63,8 +64,13 @@ public class TaktDeltaLogService : TaktServiceBase, ITaktDeltaLogService
             queryDto.PageIndex,
             queryDto.PageSize,
             predicate);
+        var dtos = data.Adapt<List<TaktDeltaLogDto>>();
+        foreach (var dto in dtos)
+        {
+            EnrichDeltaLogDto(dto);
+        }
         return TaktPagedResult<TaktDeltaLogDto>.Create(
-            data.Adapt<List<TaktDeltaLogDto>>(),
+            dtos,
             total,
             queryDto.PageIndex,
             queryDto.PageSize);
@@ -82,7 +88,9 @@ public class TaktDeltaLogService : TaktServiceBase, ITaktDeltaLogService
         {
             return null;
         }
-        return entity.Adapt<TaktDeltaLogDto>();
+        var dto = entity.Adapt<TaktDeltaLogDto>();
+        EnrichDeltaLogDto(dto);
+        return dto;
     }
 
     /// <summary>
@@ -111,6 +119,7 @@ public class TaktDeltaLogService : TaktServiceBase, ITaktDeltaLogService
     public async Task<TaktDeltaLogDto> CreateDeltaLogAsync(TaktDeltaLogCreateDto dto)
     {
         var entity = dto.Adapt<TaktDeltaLog>();
+        ApplyClientUserAgentProfile(entity);
         entity = await _deltaLogRepository.CreateAsync(entity);
         return await GetDeltaLogByIdAsync(entity.Id) ?? entity.Adapt<TaktDeltaLogDto>();
     }
@@ -129,6 +138,7 @@ public class TaktDeltaLogService : TaktServiceBase, ITaktDeltaLogService
             throw new TaktBusinessException("差异日志不存在");
         }
         dto.Adapt(entity);
+        ApplyClientUserAgentProfile(entity);
         await _deltaLogRepository.UpdateAsync(entity);
         return await GetDeltaLogByIdAsync(id) ?? throw new TaktBusinessException("差异日志不存在");
     }
@@ -208,7 +218,7 @@ public class TaktDeltaLogService : TaktServiceBase, ITaktDeltaLogService
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
                 (x.UserName != null && x.UserName.Contains(keywords))
-                || SqlFunc.ToString(x.OperType).Contains(keywords)
+                || x.OperType.Contains(keywords)
                 || (x.TableName != null && x.TableName.Contains(keywords))
                 || SqlFunc.ToString(x.PrimaryKeyId).Contains(keywords)
                 || (x.BeforeData != null && x.BeforeData.Contains(keywords))
@@ -230,9 +240,10 @@ public class TaktDeltaLogService : TaktServiceBase, ITaktDeltaLogService
             exp = exp.And(x => x.UserName != null && x.UserName.Contains(queryDto.UserName));
         }
 
-        if (queryDto?.OperType.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.OperType))
         {
-            exp = exp.And(x => x.OperType == queryDto.OperType);
+            var operType = queryDto.OperType.Trim();
+            exp = exp.And(x => x.OperType == operType);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.TableName))
@@ -311,5 +322,32 @@ public class TaktDeltaLogService : TaktServiceBase, ITaktDeltaLogService
         }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 列表/详情展示时根据 User-Agent 回填 Browser/Os/DeviceType
+    /// </summary>
+    /// <param name="dto">差异日志 DTO</param>
+    private static void EnrichDeltaLogDto(TaktDeltaLogDto dto)
+    {
+        dto.OperLocation = TaktHttpAuditHelper.ResolveLocationFromIp(dto.OperIp, dto.OperLocation);
+        (dto.Browser, dto.Os, dto.DeviceType) = TaktUserAgentHelper.FillMissingFromUserAgent(
+            dto.UserAgent,
+            dto.Browser ?? TaktConstants.BrowserType.Unknown,
+            dto.Os ?? TaktConstants.OperatingSystem.Unknown,
+            dto.DeviceType ?? TaktConstants.DeviceType.Unknown);
+    }
+
+    /// <summary>
+    /// 根据 User-Agent 回填 Browser/Os/DeviceType（显式 unknown 时解析）
+    /// </summary>
+    /// <param name="entity">差异日志实体</param>
+    private static void ApplyClientUserAgentProfile(TaktDeltaLog entity)
+    {
+        (entity.Browser, entity.Os, entity.DeviceType) = TaktUserAgentHelper.FillMissingFromUserAgent(
+            entity.UserAgent,
+            entity.Browser,
+            entity.Os,
+            entity.DeviceType);
     }
 }

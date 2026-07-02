@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Manufacturing.Bom
 // 文件名称：TaktBillOfMaterialSubstitutesController.cs
-// 创建时间：2026-06-16
+// 创建时间：2026-06-27
 // 创建人：Takt365(Cursor AI)
 // 功能描述：BOM替代料控制器
 // 
@@ -41,7 +41,7 @@ public class TaktBillOfMaterialSubstitutesController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:manufacturing:bom:billofmaterial:list", "BOM替代料列表")]
+    [TaktPermission("logistics:manufacturing:bom:bill:of:material:list", "BOM替代料列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetBillOfMaterialSubstituteListAsync([FromQuery] TaktBillOfMaterialSubstituteQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktBillOfMaterialSubstitutesController : TaktControllerBase
     /// </summary>
     /// <param name="id">BOM替代料ID</param>
     /// <returns>BOM替代料DTO</returns>
-    [TaktPermission("logistics:manufacturing:bom:billofmaterial:query", "BOM替代料详情")]
+    [TaktPermission("logistics:manufacturing:bom:bill:of:material:query", "BOM替代料详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetBillOfMaterialSubstituteByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktBillOfMaterialSubstitutesController : TaktControllerBase
     /// 获取BOM替代料选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:manufacturing:bom:billofmaterial:query", "BOM替代料选项")]
+    [TaktPermission("logistics:manufacturing:bom:bill:of:material:query", "BOM替代料选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetBillOfMaterialSubstituteOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktBillOfMaterialSubstitutesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>BOM替代料DTO</returns>
-    [TaktPermission("logistics:manufacturing:bom:billofmaterial:create", "创建BOM替代料")]
+    [TaktPermission("logistics:manufacturing:bom:bill:of:material:create", "创建BOM替代料")]
     [HttpPost]
     public async Task<IActionResult> CreateBillOfMaterialSubstituteAsync([FromBody] TaktBillOfMaterialSubstituteCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktBillOfMaterialSubstitutesController : TaktControllerBase
     /// <param name="id">BOM替代料ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>BOM替代料DTO</returns>
-    [TaktPermission("logistics:manufacturing:bom:billofmaterial:update", "更新BOM替代料")]
+    [TaktPermission("logistics:manufacturing:bom:bill:of:material:update", "更新BOM替代料")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateBillOfMaterialSubstituteAsync(long id, [FromBody] TaktBillOfMaterialSubstituteUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktBillOfMaterialSubstitutesController : TaktControllerBase
     /// </summary>
     /// <param name="id">BOM替代料ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:bom:billofmaterial:delete", "删除BOM替代料")]
+    [TaktPermission("logistics:manufacturing:bom:bill:of:material:delete", "删除BOM替代料")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteBillOfMaterialSubstituteByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktBillOfMaterialSubstitutesController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:bom:billofmaterial:delete", "批量删除BOM替代料")]
+    [TaktPermission("logistics:manufacturing:bom:bill:of:material:delete", "批量删除BOM替代料")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteBillOfMaterialSubstituteBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktBillOfMaterialSubstitutesController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:bom:billofmaterial:import", "获取BOM替代料导入模板")]
+    [TaktPermission("logistics:manufacturing:bom:bill:of:material:import", "获取BOM替代料导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetBillOfMaterialSubstituteTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -204,7 +204,7 @@ public class TaktBillOfMaterialSubstitutesController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:manufacturing:bom:billofmaterial:import", "导入BOM替代料")]
+    [TaktPermission("logistics:manufacturing:bom:bill:of:material:import", "导入BOM替代料")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportBillOfMaterialSubstituteAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -234,7 +234,7 @@ public class TaktBillOfMaterialSubstitutesController : TaktControllerBase
     /// 导出BOM替代料
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:bom:billofmaterial:export", "导出BOM替代料")]
+    [TaktPermission("logistics:manufacturing:bom:bill:of:material:export", "导出BOM替代料")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportBillOfMaterialSubstituteAsync([FromQuery] TaktBillOfMaterialSubstituteQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

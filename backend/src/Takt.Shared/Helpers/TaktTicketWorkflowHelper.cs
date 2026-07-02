@@ -29,7 +29,7 @@ public static class TaktTicketWorkflowHelper
     /// </summary>
     /// <param name="status">库内状态值</param>
     /// <returns>合法状态 int</returns>
-    public static int NormalizeLegacyStatus(int status) => TaktTicketStatusConstants.NormalizeHelpDeskStatus(status);
+    public static int NormalizeLegacyStatus(int status) => TaktTicketConstants.NormalizeHelpDeskStatus(status);
 
     /// <summary>
     /// 导入/迁移旧版 4 态（0→Open，1→InProgress，2→Resolved，3→Closed）
@@ -40,10 +40,10 @@ public static class TaktTicketWorkflowHelper
     {
         return legacyStatus switch
         {
-            0 => TaktTicketStatusConstants.New,
-            1 => TaktTicketStatusConstants.InProgress,
-            2 => TaktTicketStatusConstants.Completed,
-            3 => TaktTicketStatusConstants.Closed,
+            0 => TaktTicketConstants.New,
+            1 => TaktTicketConstants.InProgress,
+            2 => TaktTicketConstants.Completed,
+            3 => TaktTicketConstants.Closed,
             _ => NormalizeLegacyStatus(legacyStatus),
         };
     }
@@ -64,17 +64,17 @@ public static class TaktTicketWorkflowHelper
         }
         return (current, target) switch
         {
-            (TaktTicketStatusConstants.New, TaktTicketStatusConstants.Assigned) => true,
-            (TaktTicketStatusConstants.New, TaktTicketStatusConstants.InProgress) => true,
-            (TaktTicketStatusConstants.Reopened, TaktTicketStatusConstants.Assigned) => true,
-            (TaktTicketStatusConstants.Reopened, TaktTicketStatusConstants.InProgress) => true,
-            (TaktTicketStatusConstants.Assigned, TaktTicketStatusConstants.InProgress) => true,
-            (TaktTicketStatusConstants.InProgress, TaktTicketStatusConstants.PendingConfirm) => true,
-            (TaktTicketStatusConstants.InProgress, TaktTicketStatusConstants.Completed) => true,
-            (TaktTicketStatusConstants.PendingConfirm, TaktTicketStatusConstants.InProgress) => true,
-            (TaktTicketStatusConstants.Completed, TaktTicketStatusConstants.Closed) => true,
-            (TaktTicketStatusConstants.Completed, TaktTicketStatusConstants.Reopened) => true,
-            (TaktTicketStatusConstants.Closed, TaktTicketStatusConstants.Reopened) => true,
+            (TaktTicketConstants.New, TaktTicketConstants.Assigned) => true,
+            (TaktTicketConstants.New, TaktTicketConstants.InProgress) => true,
+            (TaktTicketConstants.Reopened, TaktTicketConstants.Assigned) => true,
+            (TaktTicketConstants.Reopened, TaktTicketConstants.InProgress) => true,
+            (TaktTicketConstants.Assigned, TaktTicketConstants.InProgress) => true,
+            (TaktTicketConstants.InProgress, TaktTicketConstants.PendingConfirm) => true,
+            (TaktTicketConstants.InProgress, TaktTicketConstants.Completed) => true,
+            (TaktTicketConstants.PendingConfirm, TaktTicketConstants.InProgress) => true,
+            (TaktTicketConstants.Completed, TaktTicketConstants.Closed) => true,
+            (TaktTicketConstants.Completed, TaktTicketConstants.Reopened) => true,
+            (TaktTicketConstants.Closed, TaktTicketConstants.Reopened) => true,
             _ => false,
         };
     }
@@ -87,7 +87,7 @@ public static class TaktTicketWorkflowHelper
     public static bool CanPickOrAssign(int status)
     {
         status = NormalizeLegacyStatus(status);
-        return status is TaktTicketStatusConstants.New or TaktTicketStatusConstants.Reopened;
+        return status is TaktTicketConstants.New or TaktTicketConstants.Reopened;
     }
 
     /// <summary>
@@ -97,7 +97,7 @@ public static class TaktTicketWorkflowHelper
     /// <returns>是否可开始</returns>
     public static bool CanStartProgress(int status)
     {
-        return NormalizeLegacyStatus(status) == TaktTicketStatusConstants.Assigned;
+        return NormalizeLegacyStatus(status) == TaktTicketConstants.Assigned;
     }
 
     /// <summary>
@@ -107,7 +107,7 @@ public static class TaktTicketWorkflowHelper
     /// <returns>是否可等待用户</returns>
     public static bool CanWaitForRequester(int status)
     {
-        return NormalizeLegacyStatus(status) == TaktTicketStatusConstants.InProgress;
+        return NormalizeLegacyStatus(status) == TaktTicketConstants.InProgress;
     }
 
     /// <summary>
@@ -117,7 +117,7 @@ public static class TaktTicketWorkflowHelper
     /// <returns>是否可解决</returns>
     public static bool CanResolve(int status)
     {
-        return NormalizeLegacyStatus(status) == TaktTicketStatusConstants.InProgress;
+        return NormalizeLegacyStatus(status) == TaktTicketConstants.InProgress;
     }
 
     /// <summary>
@@ -127,7 +127,7 @@ public static class TaktTicketWorkflowHelper
     /// <returns>是否可确认关闭</returns>
     public static bool CanConfirmClose(int status)
     {
-        return NormalizeLegacyStatus(status) == TaktTicketStatusConstants.Completed;
+        return NormalizeLegacyStatus(status) == TaktTicketConstants.Completed;
     }
 
     /// <summary>
@@ -138,7 +138,7 @@ public static class TaktTicketWorkflowHelper
     public static bool CanReopen(int status)
     {
         status = NormalizeLegacyStatus(status);
-        return status is TaktTicketStatusConstants.Completed or TaktTicketStatusConstants.Closed;
+        return status is TaktTicketConstants.Completed or TaktTicketConstants.Closed;
     }
 
     /// <summary>
@@ -149,6 +149,6 @@ public static class TaktTicketWorkflowHelper
     /// <returns>是否自动回到处理中</returns>
     public static bool ShouldResumeAfterReply(int status, int authorType)
     {
-        return NormalizeLegacyStatus(status) == TaktTicketStatusConstants.PendingConfirm && authorType == 1;
+        return NormalizeLegacyStatus(status) == TaktTicketConstants.PendingConfirm && authorType == 1;
     }
 }

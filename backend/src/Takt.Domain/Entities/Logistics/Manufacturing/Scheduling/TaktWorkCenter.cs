@@ -25,7 +25,7 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Scheduling;
 public class TaktWorkCenter : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
@@ -49,7 +49,7 @@ public class TaktWorkCenter : TaktCompanyEntityBase
     public string? WorkshopCode { get; set; }
 
     /// <summary>
-    /// 默认班次 ID（关联 HR TaktWorkShift；APS 产能结合 TaktCalendar.RelatedPlant 与当日班次计算）
+    /// 默认班次 ID（关联 TaktWorkShift.Id，选项 TaktWorkShifts/options）
     /// </summary>
     [SugarColumn(ColumnName = "default_shift_id", ColumnDescription = "默认班次ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]

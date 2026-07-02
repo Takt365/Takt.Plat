@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/routine/announcement
 // 文件名称：announcement.d.ts
-// 创建时间：2026-06-21
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：routine/announcement 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,9 +29,14 @@ export interface Announcement extends ApprovalDtoBase {
   announcementId: string;
 
   /**
+   * 公告编码（租户+公司内唯一）
+   */
+  announcementCode: string;
+
+  /**
    * 公告标题
    */
-  title: string;
+  announcementTitle: string;
 
   /**
    * 公告类型（字典 sys_announcement_category）
@@ -64,12 +69,12 @@ export interface Announcement extends ApprovalDtoBase {
   publishTime?: string;
 
   /**
-   * 是否定时发布（1=是，0=否）
+   * 定时发布（1=是，0=否）
    */
   isScheduled: number;
 
   /**
-   * 是否置顶（1=是，0=否）
+   * 置顶（1=是，0=否）
    */
   isTop: number;
 
@@ -129,9 +134,14 @@ export interface AnnouncementQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
+   * 公告编码（租户+公司内唯一）
+   */
+  announcementCode?: string;
+
+  /**
    * 公告标题
    */
-  title?: string;
+  announcementTitle?: string;
 
   /**
    * 公告类型（字典 sys_announcement_category）
@@ -169,12 +179,12 @@ export interface AnnouncementQuery extends TaktPagedQuery {
   publishTimeEnd?: string;
 
   /**
-   * 是否定时发布（1=是，0=否）
+   * 定时发布（1=是，0=否）
    */
   isScheduled?: number;
 
   /**
-   * 是否置顶（1=是，0=否）
+   * 置顶（1=是，0=否）
    */
   isTop?: number;
 
@@ -219,7 +229,7 @@ export interface AnnouncementQuery extends TaktPagedQuery {
   announcementStatus?: number;
 
   /**
-   * 审批状态（TaktApprovalStatus）
+   * 审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）
    */
   approvalStatus?: number;
 
@@ -298,14 +308,24 @@ export interface AnnouncementCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
   /**
+   * 公告编码（租户+公司内唯一）；留空时须指定 numberingRuleCode 自动取号
+   */
+  announcementCode?: string;
+
+  /**
+   * 编号规则编码（创建自动取号用，对应 TaktNumbering.RuleCode；不落库）
+   */
+  numberingRuleCode?: string;
+
+  /**
    * 公告标题
    */
-  title: string;
+  announcementTitle: string;
 
   /**
    * 公告类型（字典 sys_announcement_category）
@@ -338,12 +358,12 @@ export interface AnnouncementCreate {
   publishTime?: string;
 
   /**
-   * 是否定时发布（1=是，0=否）
+   * 定时发布（1=是，0=否）
    */
   isScheduled: number;
 
   /**
-   * 是否置顶（1=是，0=否）
+   * 置顶（1=是，0=否）
    */
   isTop: number;
 
@@ -446,9 +466,14 @@ export interface AnnouncementTemplate {
   companyCode?: string;
 
   /**
+   * 公告编码（租户+公司内唯一）
+   */
+  announcementCode?: string;
+
+  /**
    * 公告标题
    */
-  title?: string;
+  announcementTitle?: string;
 
   /**
    * 公告类型（字典 sys_announcement_category）
@@ -476,12 +501,17 @@ export interface AnnouncementTemplate {
   attachments?: string;
 
   /**
-   * 是否定时发布（1=是，0=否）
+   * 发布时间（定时发布时使用）
+   */
+  publishTime?: string;
+
+  /**
+   * 定时发布（1=是，0=否）
    */
   isScheduled?: number;
 
   /**
-   * 是否置顶（1=是，0=否）
+   * 置顶（1=是，0=否）
    */
   isTop?: number;
 
@@ -489,6 +519,11 @@ export interface AnnouncementTemplate {
    * 置顶优先级（数字越大越靠前）
    */
   topPriority?: number;
+
+  /**
+   * 过期时间（过期后自动隐藏）
+   */
+  expireTime?: string;
 
   /**
    * 查看次数
@@ -504,6 +539,16 @@ export interface AnnouncementTemplate {
    * 目标部门编码（多个用逗号分隔，当 target_scope=department 时使用）
    */
   targetDepartments?: string;
+
+  /**
+   * 目标用户 ID（多个用逗号分隔，当 target_scope=custom 时使用）
+   */
+  targetUsers?: string;
+
+  /**
+   * 状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）
+   */
+  announcementStatus?: number;
 
   /**
    * 扩展字段JSON
@@ -535,14 +580,24 @@ export interface AnnouncementImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
   /**
+   * 公告编码（租户+公司内唯一）；留空时须指定 numberingRuleCode
+   */
+  announcementCode?: string;
+
+  /**
+   * 编号规则编码（导入自动取号用，对应 TaktNumbering.RuleCode；不落库）
+   */
+  numberingRuleCode?: string;
+
+  /**
    * 公告标题
    */
-  title?: string;
+  announcementTitle?: string;
 
   /**
    * 公告类型（字典 sys_announcement_category）
@@ -570,12 +625,17 @@ export interface AnnouncementImport {
   attachments?: string;
 
   /**
-   * 是否定时发布（1=是，0=否）
+   * 发布时间（定时发布时使用）
+   */
+  publishTime?: string;
+
+  /**
+   * 定时发布（1=是，0=否）
    */
   isScheduled?: number;
 
   /**
-   * 是否置顶（1=是，0=否）
+   * 置顶（1=是，0=否）
    */
   isTop?: number;
 
@@ -583,6 +643,11 @@ export interface AnnouncementImport {
    * 置顶优先级（数字越大越靠前）
    */
   topPriority?: number;
+
+  /**
+   * 过期时间（过期后自动隐藏）
+   */
+  expireTime?: string;
 
   /**
    * 查看次数
@@ -598,6 +663,16 @@ export interface AnnouncementImport {
    * 目标部门编码（多个用逗号分隔，当 target_scope=department 时使用）
    */
   targetDepartments?: string;
+
+  /**
+   * 目标用户 ID（多个用逗号分隔，当 target_scope=custom 时使用）
+   */
+  targetUsers?: string;
+
+  /**
+   * 状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）
+   */
+  announcementStatus?: number;
 
   /**
    * 扩展字段JSON
@@ -624,9 +699,14 @@ export interface AnnouncementExport {
   announcementId: string;
 
   /**
+   * 公告编码（租户+公司内唯一）
+   */
+  announcementCode: string;
+
+  /**
    * 公告标题
    */
-  title: string;
+  announcementTitle: string;
 
   /**
    * 公告类型（字典 sys_announcement_category）
@@ -659,12 +739,12 @@ export interface AnnouncementExport {
   publishTime?: string;
 
   /**
-   * 是否定时发布（1=是，0=否）
+   * 定时发布（1=是，0=否）
    */
   isScheduled: number;
 
   /**
-   * 是否置顶（1=是，0=否）
+   * 置顶（1=是，0=否）
    */
   isTop: number;
 

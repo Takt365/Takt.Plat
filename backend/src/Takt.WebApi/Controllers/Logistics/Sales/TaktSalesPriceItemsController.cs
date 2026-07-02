@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Sales
 // 文件名称：TaktSalesPriceItemsController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-07-01
 // 创建人：Takt365(Cursor AI)
 // 功能描述：销售价格明细控制器
 // 
@@ -41,7 +41,7 @@ public class TaktSalesPriceItemsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:sales:salespriceitem:list", "销售价格明细列表")]
+    [TaktPermission("logistics:sales:price:list", "销售价格明细列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetSalesPriceItemListAsync([FromQuery] TaktSalesPriceItemQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktSalesPriceItemsController : TaktControllerBase
     /// </summary>
     /// <param name="id">销售价格明细ID</param>
     /// <returns>销售价格明细DTO</returns>
-    [TaktPermission("logistics:sales:salespriceitem:query", "销售价格明细详情")]
+    [TaktPermission("logistics:sales:price:query", "销售价格明细详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetSalesPriceItemByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktSalesPriceItemsController : TaktControllerBase
     /// 获取销售价格明细选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:sales:salespriceitem:query", "销售价格明细选项")]
+    [TaktPermission("logistics:sales:price:query", "销售价格明细选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetSalesPriceItemOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktSalesPriceItemsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>销售价格明细DTO</returns>
-    [TaktPermission("logistics:sales:salespriceitem:create", "创建销售价格明细")]
+    [TaktPermission("logistics:sales:price:create", "创建销售价格明细")]
     [HttpPost]
     public async Task<IActionResult> CreateSalesPriceItemAsync([FromBody] TaktSalesPriceItemCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktSalesPriceItemsController : TaktControllerBase
     /// <param name="id">销售价格明细ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>销售价格明细DTO</returns>
-    [TaktPermission("logistics:sales:salespriceitem:update", "更新销售价格明细")]
+    [TaktPermission("logistics:sales:price:update", "更新销售价格明细")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateSalesPriceItemAsync(long id, [FromBody] TaktSalesPriceItemUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktSalesPriceItemsController : TaktControllerBase
     /// </summary>
     /// <param name="id">销售价格明细ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:sales:salespriceitem:delete", "删除销售价格明细")]
+    [TaktPermission("logistics:sales:price:delete", "删除销售价格明细")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteSalesPriceItemByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktSalesPriceItemsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:sales:salespriceitem:delete", "批量删除销售价格明细")]
+    [TaktPermission("logistics:sales:price:delete", "批量删除销售价格明细")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteSalesPriceItemBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktSalesPriceItemsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:sales:salespriceitem:import", "获取销售价格明细导入模板")]
+    [TaktPermission("logistics:sales:price:import", "获取销售价格明细导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetSalesPriceItemTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -204,7 +204,7 @@ public class TaktSalesPriceItemsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:sales:salespriceitem:import", "导入销售价格明细")]
+    [TaktPermission("logistics:sales:price:import", "导入销售价格明细")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportSalesPriceItemAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -234,7 +234,7 @@ public class TaktSalesPriceItemsController : TaktControllerBase
     /// 导出销售价格明细
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:sales:salespriceitem:export", "导出销售价格明细")]
+    [TaktPermission("logistics:sales:price:export", "导出销售价格明细")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportSalesPriceItemAsync([FromQuery] TaktSalesPriceItemQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

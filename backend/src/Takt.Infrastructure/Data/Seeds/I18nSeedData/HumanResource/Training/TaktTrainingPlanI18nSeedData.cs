@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Training
 // 文件名称：TaktTrainingPlanI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktTrainingPlan 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -118,13 +118,13 @@ public class TaktTrainingPlanI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.trainingplan.planyear", "zh-HK", "计划年度_hk", "计划年度"),
 
             // entity.trainingplan.plantype
-            new TranslationSeedItem("entity.trainingplan.plantype", "en-US", "计划类型_us", "计划类型（年度/季度/月度/专项）"),
+            new TranslationSeedItem("entity.trainingplan.plantype", "en-US", "计划类型_us", "计划类型（字典 hr_training_plan_type；列存 DictValue：YEAR/QUARTER/MONTH/SPECIAL）"),
             // entity.trainingplan.plantype
-            new TranslationSeedItem("entity.trainingplan.plantype", "ja-JP", "计划类型_jp", "计划类型（年度/季度/月度/专项）"),
+            new TranslationSeedItem("entity.trainingplan.plantype", "ja-JP", "计划类型_jp", "计划类型（字典 hr_training_plan_type；列存 DictValue：YEAR/QUARTER/MONTH/SPECIAL）"),
             // entity.trainingplan.plantype
-            new TranslationSeedItem("entity.trainingplan.plantype", "zh-CN", "计划类型", "计划类型（年度/季度/月度/专项）"),
+            new TranslationSeedItem("entity.trainingplan.plantype", "zh-CN", "计划类型", "计划类型（字典 hr_training_plan_type；列存 DictValue：YEAR/QUARTER/MONTH/SPECIAL）"),
             // entity.trainingplan.plantype
-            new TranslationSeedItem("entity.trainingplan.plantype", "zh-HK", "计划类型_hk", "计划类型（年度/季度/月度/专项）"),
+            new TranslationSeedItem("entity.trainingplan.plantype", "zh-HK", "计划类型_hk", "计划类型（字典 hr_training_plan_type；列存 DictValue：YEAR/QUARTER/MONTH/SPECIAL）"),
 
             // entity.trainingplan.applicabledepartment
             new TranslationSeedItem("entity.trainingplan.applicabledepartment", "en-US", "适用部门_us", "适用部门"),
@@ -189,23 +189,23 @@ public class TaktTrainingPlanI18nSeedData : ITaktSeedDataCoordinator
             // entity.trainingplan.description
             new TranslationSeedItem("entity.trainingplan.description", "zh-HK", "计划说明_hk", "计划说明"),
 
-            // entity.trainingplan.status
-            new TranslationSeedItem("entity.trainingplan.status", "en-US", "业务状态_us", "业务状态（1=启用 0=禁用）"),
-            // entity.trainingplan.status
-            new TranslationSeedItem("entity.trainingplan.status", "ja-JP", "业务状态_jp", "业务状态（1=启用 0=禁用）"),
-            // entity.trainingplan.status
-            new TranslationSeedItem("entity.trainingplan.status", "zh-CN", "业务状态", "业务状态（1=启用 0=禁用）"),
-            // entity.trainingplan.status
-            new TranslationSeedItem("entity.trainingplan.status", "zh-HK", "业务状态_hk", "业务状态（1=启用 0=禁用）"),
+            // entity.trainingplan.relatedplant
+            new TranslationSeedItem("entity.trainingplan.relatedplant", "en-US", "关联工厂_us", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            // entity.trainingplan.relatedplant
+            new TranslationSeedItem("entity.trainingplan.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            // entity.trainingplan.relatedplant
+            new TranslationSeedItem("entity.trainingplan.relatedplant", "zh-CN", "关联工厂", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            // entity.trainingplan.relatedplant
+            new TranslationSeedItem("entity.trainingplan.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
 
-            // entity.trainingplan.relatedplant
-            new TranslationSeedItem("entity.trainingplan.relatedplant", "en-US", "关联工厂_us", "关联工厂"),
-            // entity.trainingplan.relatedplant
-            new TranslationSeedItem("entity.trainingplan.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂"),
-            // entity.trainingplan.relatedplant
-            new TranslationSeedItem("entity.trainingplan.relatedplant", "zh-CN", "关联工厂", "关联工厂"),
-            // entity.trainingplan.relatedplant
-            new TranslationSeedItem("entity.trainingplan.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂"),
+            // entity.trainingplan.status
+            new TranslationSeedItem("entity.trainingplan.status", "en-US", "业务状态_us", "计划业务状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
+            // entity.trainingplan.status
+            new TranslationSeedItem("entity.trainingplan.status", "ja-JP", "业务状态_jp", "计划业务状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
+            // entity.trainingplan.status
+            new TranslationSeedItem("entity.trainingplan.status", "zh-CN", "业务状态", "计划业务状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
+            // entity.trainingplan.status
+            new TranslationSeedItem("entity.trainingplan.status", "zh-HK", "业务状态_hk", "计划业务状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
         };
     }
 

@@ -24,7 +24,7 @@ import type {
   FileUploadMeta,
   FileUploadPolicy,
   FileUploadResult,
-} from '@/types/foundation/file-upload';
+} from '@/types/foundation/file';
 import { generateFileIdentifier } from '@/utils/upload';
 
 /** 默认最大并发分片数（前端传输辅助参数） */
@@ -350,23 +350,24 @@ export class TaktFileChunkUploader {
     if (chunk.uploaded || chunk.uploading || this.paused || this.cancelled) {
       return;
     }
-    const chunkNumber = chunk.index + 1;
-    const checkResult = await checkFileChunk({
-      identifier: this.identifier,
-      chunkNumber,
-      chunkSize: String(chunk.blob.size),
-      totalSize: String(this.file.size),
-      totalChunks: policy.totalChunks,
-      fileName: this.file.name,
-    });
-    if (checkResult.exists) {
-      chunk.uploaded = true;
-      this.emitProgress(this.calcPercent());
-      return;
-    }
+    /** 须在首个 await 前占用，避免并发 worker 重复上传同一分片 */
     chunk.uploading = true;
-    chunk.abortController = new AbortController();
+    const chunkNumber = chunk.index + 1;
     try {
+      const checkResult = await checkFileChunk({
+        identifier: this.identifier,
+        chunkNumber,
+        chunkSize: String(chunk.blob.size),
+        totalSize: String(this.file.size),
+        totalChunks: policy.totalChunks,
+        fileName: this.file.name,
+      });
+      if (checkResult.exists) {
+        chunk.uploaded = true;
+        this.emitProgress(this.calcPercent());
+        return;
+      }
+      chunk.abortController = new AbortController();
       const chunkFile = new File([chunk.blob], this.file.name, { type: this.file.type });
       await uploadFileChunk(chunkFile, {
         identifier: this.identifier,

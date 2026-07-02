@@ -8,7 +8,7 @@
 <!-- ======================================== -->
 
 <template>
-  <div class="statistics-logging-oper-log">
+  <div class="p-4">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -59,7 +59,14 @@
       @change="handleTableChange"
       @resize-column="handleResizeColumn"
     >
-
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'operType'">
+          <TaktConstTag
+            category="operType"
+            :value="getOperLogField(record, 'operType')"
+          />
+        </template>
+      </template>
     </TaktSingleTable>
 
     <!-- 分页组件 -->
@@ -117,10 +124,11 @@
       </div>
       <div v-show="isFieldVisible('operType')">
       <a-form-item :label="t('entity.operlog.opertype')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.operType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operlog.opertype') })"
-          style="width: 100%"
+          :options="operTypeOptions"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.operlog.opertype') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -296,6 +304,7 @@
 </template>
 
 <script setup lang="ts">
+import { operTypeOptions } from '@/constants/takt-constants'
 import { getTaktDefaultPageIndex, getTaktDefaultPageSize, ensureTaktPaginationConfigAsync } from '@/utils/takt-paged'
 /**
  * 操作日志实体管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
@@ -347,7 +356,7 @@ const advancedQueryVisible = ref(false)
 const advancedQueryForm = ref({
   userName: '',
   operModule: '',
-  operType: undefined as number | undefined,
+  operType: undefined as string | undefined,
   operMethod: '',
   requestMethod: '',
   operUrl: '',
@@ -457,8 +466,8 @@ function buildListQuery(overrides?: Partial<OperLogQuery>): OperLogQuery {
   assignTrimmed('createdAtEnd', form.createdAtEnd)
   assignTrimmed('ExtField', form.ExtField)
   assignTrimmed('remark', form.remark)
-  if (form.operType !== undefined && form.operType !== null) {
-    query.operType = form.operType
+  if (form.operType?.trim()) {
+    query.operType = form.operType.trim()
   }
   if (form.operStatus !== undefined && form.operStatus !== null) {
     query.operStatus = form.operStatus
@@ -517,7 +526,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getOperLogField(record, 'operType') ?? ''
   },
   {
     title: t('entity.operlog.opermethod'),
@@ -746,7 +754,7 @@ function handleReset() {
   advancedQueryForm.value = {
   userName: '',
   operModule: '',
-  operType: undefined as number | undefined,
+  operType: undefined as string | undefined,
   operMethod: '',
   requestMethod: '',
   operUrl: '',
@@ -852,7 +860,7 @@ function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
   userName: '',
   operModule: '',
-  operType: undefined as number | undefined,
+  operType: undefined as string | undefined,
   operMethod: '',
   requestMethod: '',
   operUrl: '',
@@ -908,12 +916,3 @@ function handlePaginationSizeChange(_current: number, size: number) {
   loadData()
 }
 </script>
-
-<style scoped lang="css">
-.statistics-logging-oper-log {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-</style>

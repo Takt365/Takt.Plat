@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/quality/operation
 // 文件名称：inspection-standard.d.ts
-// 创建时间：2026-06-21
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/operation 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface InspectionStandard extends CompanyDtoBase {
   inspectionStandardId: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -44,7 +44,7 @@ export interface InspectionStandard extends CompanyDtoBase {
   standardName: string;
 
   /**
-   * 检验类型（0=IQC来料检验，1=IPQC过程检验，2=FQC最终检验）
+   * 检验类型（字典 logistics_quality_inspection_type）
    */
   inspectionType: number;
 
@@ -59,7 +59,7 @@ export interface InspectionStandard extends CompanyDtoBase {
   materialCategoryName: string;
 
   /**
-   * 抽样方案编码
+   * 抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）
    */
   samplingSchemeCode?: string;
 
@@ -69,19 +69,14 @@ export interface InspectionStandard extends CompanyDtoBase {
   samplingSchemeName?: string;
 
   /**
-   * 是否启用（0=否，1=是）
-   */
-  isEnabled: number;
-
-  /**
-   * 检验标准状态（0=草稿，1=已发布，2=已停用）
-   */
-  standardStatus: number;
-
-  /**
    * 检验标准描述
    */
   standardDescription?: string;
+
+  /**
+   * 检验标准状态（字典 logistics_quality_standard_status）
+   */
+  standardStatus: number;
 
   /**
    * 检验标准明细列表（主子表关系） （子表：TaktInspectionStandardItem）
@@ -109,7 +104,7 @@ export interface InspectionStandardQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -124,7 +119,7 @@ export interface InspectionStandardQuery extends TaktPagedQuery {
   standardName?: string;
 
   /**
-   * 检验类型（0=IQC来料检验，1=IPQC过程检验，2=FQC最终检验）
+   * 检验类型（字典 logistics_quality_inspection_type）
    */
   inspectionType?: number;
 
@@ -139,7 +134,7 @@ export interface InspectionStandardQuery extends TaktPagedQuery {
   materialCategoryName?: string;
 
   /**
-   * 抽样方案编码
+   * 抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）
    */
   samplingSchemeCode?: string;
 
@@ -149,19 +144,14 @@ export interface InspectionStandardQuery extends TaktPagedQuery {
   samplingSchemeName?: string;
 
   /**
-   * 是否启用（0=否，1=是）
-   */
-  isEnabled?: number;
-
-  /**
-   * 检验标准状态（0=草稿，1=已发布，2=已停用）
-   */
-  standardStatus?: number;
-
-  /**
    * 检验标准描述
    */
   standardDescription?: string;
+
+  /**
+   * 检验标准状态（字典 logistics_quality_standard_status）
+   */
+  standardStatus?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -203,12 +193,12 @@ export interface InspectionStandardCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -223,7 +213,7 @@ export interface InspectionStandardCreate {
   standardName: string;
 
   /**
-   * 检验类型（0=IQC来料检验，1=IPQC过程检验，2=FQC最终检验）
+   * 检验类型（字典 logistics_quality_inspection_type）
    */
   inspectionType: number;
 
@@ -238,7 +228,7 @@ export interface InspectionStandardCreate {
   materialCategoryName: string;
 
   /**
-   * 抽样方案编码
+   * 抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）
    */
   samplingSchemeCode?: string;
 
@@ -248,19 +238,14 @@ export interface InspectionStandardCreate {
   samplingSchemeName?: string;
 
   /**
-   * 是否启用（0=否，1=是）
-   */
-  isEnabled: number;
-
-  /**
-   * 检验标准状态（0=草稿，1=已发布，2=已停用）
-   */
-  standardStatus: number;
-
-  /**
    * 检验标准描述
    */
   standardDescription?: string;
+
+  /**
+   * 检验标准状态（字典 logistics_quality_standard_status）
+   */
+  standardStatus: number;
 
   /**
    * 检验标准明细列表（主子表关系）（子表，级联保存）
@@ -307,7 +292,7 @@ export interface InspectionStandardStatus {
   inspectionStandardId: string;
 
   /**
-   * 检验标准状态（0=草稿，1=已发布，2=已停用）
+   * 检验标准状态（字典 logistics_quality_standard_status）
    */
   standardStatus: number;
 
@@ -331,7 +316,7 @@ export interface InspectionStandardTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -346,7 +331,7 @@ export interface InspectionStandardTemplate {
   standardName?: string;
 
   /**
-   * 检验类型（0=IQC来料检验，1=IPQC过程检验，2=FQC最终检验）
+   * 检验类型（字典 logistics_quality_inspection_type）
    */
   inspectionType?: number;
 
@@ -361,7 +346,7 @@ export interface InspectionStandardTemplate {
   materialCategoryName?: string;
 
   /**
-   * 抽样方案编码
+   * 抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）
    */
   samplingSchemeCode?: string;
 
@@ -371,19 +356,19 @@ export interface InspectionStandardTemplate {
   samplingSchemeName?: string;
 
   /**
-   * 是否启用（0=否，1=是）
+   * 检验标准描述
    */
-  isEnabled?: number;
+  standardDescription?: string;
 
   /**
-   * 检验标准状态（0=草稿，1=已发布，2=已停用）
+   * 检验标准状态（字典 logistics_quality_standard_status）
    */
   standardStatus?: number;
 
   /**
-   * 检验标准描述
+   * 检验标准明细列表（主子表关系）（子表，级联保存）
    */
-  standardDescription?: string;
+  items?: InspectionStandardItemCreate[];
 
   /**
    * 扩展字段JSON
@@ -415,12 +400,12 @@ export interface InspectionStandardImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -435,7 +420,7 @@ export interface InspectionStandardImport {
   standardName?: string;
 
   /**
-   * 检验类型（0=IQC来料检验，1=IPQC过程检验，2=FQC最终检验）
+   * 检验类型（字典 logistics_quality_inspection_type）
    */
   inspectionType?: number;
 
@@ -450,7 +435,7 @@ export interface InspectionStandardImport {
   materialCategoryName?: string;
 
   /**
-   * 抽样方案编码
+   * 抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）
    */
   samplingSchemeCode?: string;
 
@@ -460,19 +445,19 @@ export interface InspectionStandardImport {
   samplingSchemeName?: string;
 
   /**
-   * 是否启用（0=否，1=是）
+   * 检验标准描述
    */
-  isEnabled?: number;
+  standardDescription?: string;
 
   /**
-   * 检验标准状态（0=草稿，1=已发布，2=已停用）
+   * 检验标准状态（字典 logistics_quality_standard_status）
    */
   standardStatus?: number;
 
   /**
-   * 检验标准描述
+   * 检验标准明细列表（主子表关系）（子表，级联保存）
    */
-  standardDescription?: string;
+  items?: InspectionStandardItemCreate[];
 
   /**
    * 扩展字段JSON
@@ -504,7 +489,7 @@ export interface InspectionStandardExport {
   companyCode: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -519,7 +504,7 @@ export interface InspectionStandardExport {
   standardName: string;
 
   /**
-   * 检验类型（0=IQC来料检验，1=IPQC过程检验，2=FQC最终检验）
+   * 检验类型（字典 logistics_quality_inspection_type）
    */
   inspectionType: number;
 
@@ -534,7 +519,7 @@ export interface InspectionStandardExport {
   materialCategoryName: string;
 
   /**
-   * 抽样方案编码
+   * 抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）
    */
   samplingSchemeCode?: string;
 
@@ -544,19 +529,14 @@ export interface InspectionStandardExport {
   samplingSchemeName?: string;
 
   /**
-   * 是否启用（0=否，1=是）
-   */
-  isEnabled: number;
-
-  /**
-   * 检验标准状态（0=草稿，1=已发布，2=已停用）
-   */
-  standardStatus: number;
-
-  /**
    * 检验标准描述
    */
   standardDescription?: string;
+
+  /**
+   * 检验标准状态（字典 logistics_quality_standard_status）
+   */
+  standardStatus: number;
 
   /**
    * 扩展字段JSON

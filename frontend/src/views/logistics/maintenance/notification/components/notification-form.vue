@@ -205,12 +205,11 @@
                 :label="t('entity.maintenancenotification.discoveredat')"
                 name="discoveredAt"
               >
-                <a-input
+                <a-date-picker
                   v-model:value="formState.discoveredAt"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenancenotification.discoveredat') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenancenotification.discoveredat') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
@@ -277,7 +276,7 @@
                   v-model:value="formState.costCenterCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenancenotification.costcentercode') })"
                   show-count
-                  :maxlength="50"
+                  :maxlength="4"
                   allow-clear
                   :disabled="!!formData?.maintenanceNotificationId"
                 />
@@ -581,8 +580,8 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   discoveredAt: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.maintenancenotification.discoveredat') }),
-      trigger: 'blur'
+      message: t('common.page.form.placeholder.select', { field: t('entity.maintenancenotification.discoveredat') }),
+      trigger: 'change'
     }
   ],
 }))

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/procurement
 // 文件名称：purchase-group.d.ts
-// 创建时间：2026-06-21
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/procurement 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,12 @@ export interface PurchaseGroup extends CompanyDtoBase {
   purchaseGroupId: string;
 
   /**
-   * 采购组编码（租户+公司内唯一；与 TaktMaterialPlant.PurchaseGroup、TaktPurchaseOrder.PurchaseGroup 对齐）
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   */
+  plantCode: string;
+
+  /**
+   * 采购组编码（3）
    */
   purchaseGroupCode: string;
 
@@ -44,12 +49,12 @@ export interface PurchaseGroup extends CompanyDtoBase {
   purchaseGroupDescription?: string;
 
   /**
-   * 采购组负责人用户ID（可选；关联采购员）
+   * 采购组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）
    */
   responsibleUserId?: string;
 
   /**
-   * 采购组负责人用户名称（填充字段）
+   * 采购组负责人用户 名称（填充字段）
    */
   responsibleUserName?: string;
 
@@ -64,12 +69,7 @@ export interface PurchaseGroup extends CompanyDtoBase {
   contactEmail?: string;
 
   /**
-   * 采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
-   */
-  purchaseGroupStatus: number;
-
-  /**
-   * 是否内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+   * 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
    */
   isBuiltIn: number;
 
@@ -77,6 +77,11 @@ export interface PurchaseGroup extends CompanyDtoBase {
    * 排序号（越小越靠前）
    */
   sortOrder: number;
+
+  /**
+   * 采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   */
+  purchaseGroupStatus: number;
 
 }
 
@@ -99,7 +104,12 @@ export interface PurchaseGroupQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 采购组编码（租户+公司内唯一；与 TaktMaterialPlant.PurchaseGroup、TaktPurchaseOrder.PurchaseGroup 对齐）
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   */
+  plantCode?: string;
+
+  /**
+   * 采购组编码（3）
    */
   purchaseGroupCode?: string;
 
@@ -114,7 +124,7 @@ export interface PurchaseGroupQuery extends TaktPagedQuery {
   purchaseGroupDescription?: string;
 
   /**
-   * 采购组负责人用户ID（可选；关联采购员）
+   * 采购组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）
    */
   responsibleUserId?: string;
 
@@ -129,12 +139,7 @@ export interface PurchaseGroupQuery extends TaktPagedQuery {
   contactEmail?: string;
 
   /**
-   * 采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
-   */
-  purchaseGroupStatus?: number;
-
-  /**
-   * 是否内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+   * 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
    */
   isBuiltIn?: number;
 
@@ -142,6 +147,11 @@ export interface PurchaseGroupQuery extends TaktPagedQuery {
    * 排序号（越小越靠前）
    */
   sortOrder?: number;
+
+  /**
+   * 采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   */
+  purchaseGroupStatus?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -183,12 +193,17 @@ export interface PurchaseGroupCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
   /**
-   * 采购组编码（租户+公司内唯一；与 TaktMaterialPlant.PurchaseGroup、TaktPurchaseOrder.PurchaseGroup 对齐）
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   */
+  plantCode: string;
+
+  /**
+   * 采购组编码（3）
    */
   purchaseGroupCode: string;
 
@@ -203,7 +218,7 @@ export interface PurchaseGroupCreate {
   purchaseGroupDescription?: string;
 
   /**
-   * 采购组负责人用户ID（可选；关联采购员）
+   * 采购组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）
    */
   responsibleUserId?: string;
 
@@ -218,14 +233,14 @@ export interface PurchaseGroupCreate {
   contactEmail?: string;
 
   /**
+   * 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+   */
+  isBuiltIn: number;
+
+  /**
    * 采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   purchaseGroupStatus: number;
-
-  /**
-   * 是否内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
-   */
-  isBuiltIn: number;
 
   /**
    * 扩展字段JSON
@@ -310,7 +325,12 @@ export interface PurchaseGroupTemplate {
   companyCode?: string;
 
   /**
-   * 采购组编码（租户+公司内唯一；与 TaktMaterialPlant.PurchaseGroup、TaktPurchaseOrder.PurchaseGroup 对齐）
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   */
+  plantCode?: string;
+
+  /**
+   * 采购组编码（3）
    */
   purchaseGroupCode?: string;
 
@@ -325,7 +345,7 @@ export interface PurchaseGroupTemplate {
   purchaseGroupDescription?: string;
 
   /**
-   * 采购组负责人用户ID（可选；关联采购员）
+   * 采购组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）
    */
   responsibleUserId?: string;
 
@@ -340,14 +360,14 @@ export interface PurchaseGroupTemplate {
   contactEmail?: string;
 
   /**
+   * 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+   */
+  isBuiltIn?: number;
+
+  /**
    * 采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   purchaseGroupStatus?: number;
-
-  /**
-   * 是否内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
-   */
-  isBuiltIn?: number;
 
   /**
    * 扩展字段JSON
@@ -379,12 +399,17 @@ export interface PurchaseGroupImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
   /**
-   * 采购组编码（租户+公司内唯一；与 TaktMaterialPlant.PurchaseGroup、TaktPurchaseOrder.PurchaseGroup 对齐）
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   */
+  plantCode?: string;
+
+  /**
+   * 采购组编码（3）
    */
   purchaseGroupCode?: string;
 
@@ -399,7 +424,7 @@ export interface PurchaseGroupImport {
   purchaseGroupDescription?: string;
 
   /**
-   * 采购组负责人用户ID（可选；关联采购员）
+   * 采购组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）
    */
   responsibleUserId?: string;
 
@@ -414,14 +439,14 @@ export interface PurchaseGroupImport {
   contactEmail?: string;
 
   /**
+   * 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+   */
+  isBuiltIn?: number;
+
+  /**
    * 采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   purchaseGroupStatus?: number;
-
-  /**
-   * 是否内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
-   */
-  isBuiltIn?: number;
 
   /**
    * 扩展字段JSON
@@ -453,7 +478,12 @@ export interface PurchaseGroupExport {
   companyCode: string;
 
   /**
-   * 采购组编码（租户+公司内唯一；与 TaktMaterialPlant.PurchaseGroup、TaktPurchaseOrder.PurchaseGroup 对齐）
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   */
+  plantCode: string;
+
+  /**
+   * 采购组编码（3）
    */
   purchaseGroupCode: string;
 
@@ -468,7 +498,7 @@ export interface PurchaseGroupExport {
   purchaseGroupDescription?: string;
 
   /**
-   * 采购组负责人用户ID（可选；关联采购员）
+   * 采购组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）
    */
   responsibleUserId?: string;
 
@@ -483,12 +513,7 @@ export interface PurchaseGroupExport {
   contactEmail?: string;
 
   /**
-   * 采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
-   */
-  purchaseGroupStatus: number;
-
-  /**
-   * 是否内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+   * 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
    */
   isBuiltIn: number;
 
@@ -496,6 +521,11 @@ export interface PurchaseGroupExport {
    * 排序号（越小越靠前）
    */
   sortOrder: number;
+
+  /**
+   * 采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   */
+  purchaseGroupStatus: number;
 
   /**
    * 扩展字段JSON

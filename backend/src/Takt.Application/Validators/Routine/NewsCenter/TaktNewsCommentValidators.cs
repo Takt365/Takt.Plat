@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Routine.NewsCenter
 // 文件名称：TaktNewsCommentValidators.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：NewsComment 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktNewsComment 生成，请按需审阅）
 // 
@@ -44,12 +44,8 @@ public class TaktNewsCommentCreateValidator : AbstractValidator<TaktNewsCommentC
         RuleFor(x => x.UserName)
             .NotEmpty().WithMessage("评论人姓名不能为空")
             .MaximumLength(20).WithMessage("评论人姓名长度不能超过20个字符");
-        RuleFor(x => x.UserAvatar)
-            .MaximumLength(500).WithMessage("评论人头像 URL长度不能超过500个字符");
         RuleFor(x => x.ReplyToUserId)
             .GreaterThanOrEqualTo(0).WithMessage("被回复人 ID不能为负数");
-        RuleFor(x => x.ReplyToUserName)
-            .MaximumLength(20).WithMessage("被回复人姓名长度不能超过20个字符");
         RuleFor(x => x.CommentContent)
             .NotEmpty().WithMessage("评论内容不能为空")
             .MaximumLength(2000).WithMessage("评论内容长度不能超过2000个字符");
@@ -76,6 +72,30 @@ public class TaktNewsCommentUpdateValidator : AbstractValidator<TaktNewsCommentU
     {
         RuleFor(x => x.NewsCommentId)
             .GreaterThan(0).WithMessage("NewsCommentID无效");
+        RuleFor(x => x.TenantCode)
+            .NotEmpty().WithMessage("租户编码不能为空")
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.CompanyCode)
+            .NotEmpty().WithMessage("公司代码不能为空")
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.NewsId)
+            .GreaterThanOrEqualTo(0).WithMessage("新闻 ID不能为负数");
+        RuleFor(x => x.ParentId)
+            .GreaterThanOrEqualTo(0).WithMessage("父评论 ID不能为负数");
+        RuleFor(x => x.UserId)
+            .GreaterThanOrEqualTo(0).WithMessage("评论人 ID不能为负数");
+        RuleFor(x => x.UserName)
+            .NotEmpty().WithMessage("评论人姓名不能为空")
+            .MaximumLength(20).WithMessage("评论人姓名长度不能超过20个字符");
+        RuleFor(x => x.ReplyToUserId)
+            .GreaterThanOrEqualTo(0).WithMessage("被回复人 ID不能为负数");
+        RuleFor(x => x.CommentContent)
+            .NotEmpty().WithMessage("评论内容不能为空")
+            .MaximumLength(2000).WithMessage("评论内容长度不能超过2000个字符");
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
     }
 }
 
@@ -106,12 +126,8 @@ public class TaktNewsCommentImportValidator : AbstractValidator<TaktNewsCommentI
         RuleFor(x => x.UserName)
             .NotEmpty().WithMessage("评论人姓名不能为空")
             .MaximumLength(20).WithMessage("评论人姓名长度不能超过20个字符");
-        RuleFor(x => x.UserAvatar)
-            .MaximumLength(500).WithMessage("评论人头像 URL长度不能超过500个字符").When(x => !string.IsNullOrWhiteSpace(x.UserAvatar));
         RuleFor(x => x.ReplyToUserId)
             .GreaterThanOrEqualTo(0).WithMessage("被回复人 ID不能为负数");
-        RuleFor(x => x.ReplyToUserName)
-            .MaximumLength(20).WithMessage("被回复人姓名长度不能超过20个字符").When(x => !string.IsNullOrWhiteSpace(x.ReplyToUserName));
         RuleFor(x => x.CommentContent)
             .NotEmpty().WithMessage("评论内容不能为空")
             .MaximumLength(2000).WithMessage("评论内容长度不能超过2000个字符");

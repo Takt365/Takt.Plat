@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopStepMediaDtos.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SopStepMedia 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSopStepMedia 生成，请按需审阅）
 // 
@@ -36,7 +36,7 @@ public class TaktSopStepMediaDto : TaktCompanyDtoBase
     public long SopStepMediaId { get; set; }
 
     /// <summary>
-    /// 工步 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long StepId { get; set; }
@@ -47,7 +47,7 @@ public class TaktSopStepMediaDto : TaktCompanyDtoBase
     public string? StepName { get; set; }
 
     /// <summary>
-    /// 媒体类型（1=图片JPG/PNG，2=视频MP4，3=PDF，4=3D轻量化；字典 logistics_sop_media_type）
+    /// 媒体类型（字典 logistics_sop_media_type；1=图片JPG/PNG，2=视频MP4，3=PDF，4=3D轻量化）
     /// </summary>
     public int MediaType { get; set; } = 0;
 
@@ -95,13 +95,13 @@ public class TaktSopStepMediaQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工步 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? StepId { get; set; }
 
     /// <summary>
-    /// 媒体类型（1=图片JPG/PNG，2=视频MP4，3=PDF，4=3D轻量化；字典 logistics_sop_media_type）
+    /// 媒体类型（字典 logistics_sop_media_type；1=图片JPG/PNG，2=视频MP4，3=PDF，4=3D轻量化）
     /// </summary>
     public int? MediaType { get; set; }
 
@@ -161,18 +161,18 @@ public class TaktSopStepMediaCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工步 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long StepId { get; set; }
 
     /// <summary>
-    /// 媒体类型（1=图片JPG/PNG，2=视频MP4，3=PDF，4=3D轻量化；字典 logistics_sop_media_type）
+    /// 媒体类型（字典 logistics_sop_media_type；1=图片JPG/PNG，2=视频MP4，3=PDF，4=3D轻量化）
     /// </summary>
     public int MediaType { get; set; } = 0;
 
@@ -263,13 +263,13 @@ public class TaktSopStepMediaTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工步 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? StepId { get; set; }
 
     /// <summary>
-    /// 媒体类型（1=图片JPG/PNG，2=视频MP4，3=PDF，4=3D轻量化；字典 logistics_sop_media_type）
+    /// 媒体类型（字典 logistics_sop_media_type；1=图片JPG/PNG，2=视频MP4，3=PDF，4=3D轻量化）
     /// </summary>
     public int? MediaType { get; set; }
 
@@ -311,18 +311,18 @@ public class TaktSopStepMediaImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工步 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? StepId { get; set; }
 
     /// <summary>
-    /// 媒体类型（1=图片JPG/PNG，2=视频MP4，3=PDF，4=3D轻量化；字典 logistics_sop_media_type）
+    /// 媒体类型（字典 logistics_sop_media_type；1=图片JPG/PNG，2=视频MP4，3=PDF，4=3D轻量化）
     /// </summary>
     public int? MediaType { get; set; }
 
@@ -370,13 +370,13 @@ public class TaktSopStepMediaExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工步 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long StepId { get; set; }
 
     /// <summary>
-    /// 媒体类型（1=图片JPG/PNG，2=视频MP4，3=PDF，4=3D轻量化；字典 logistics_sop_media_type）
+    /// 媒体类型（字典 logistics_sop_media_type；1=图片JPG/PNG，2=视频MP4，3=PDF，4=3D轻量化）
     /// </summary>
     public int MediaType { get; set; } = 0;
 

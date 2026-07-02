@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.CustomerService
 // 文件名称：TaktServiceOrderDtos.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ServiceOrder 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktServiceOrder 生成，请按需审阅）
 // 
@@ -104,11 +104,6 @@ public class TaktServiceOrderDto : TaktCompanyDtoBase
     public int OrderType { get; set; } = 0;
 
     /// <summary>
-    /// 订单状态（0=草稿，1=已确认，2=执行中，3=已完成，4=已结算，5=已取消）
-    /// </summary>
-    public int OrderStatus { get; set; } = 0;
-
-    /// <summary>
     /// 订单总金额
     /// </summary>
     public decimal TotalAmount { get; set; }
@@ -162,6 +157,23 @@ public class TaktServiceOrderDto : TaktCompanyDtoBase
     /// 排序号（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
+
+    /// <summary>
+    /// 订单状态（0=草稿，1=已确认，2=执行中，3=已完成，4=已结算，5=已取消）
+    /// </summary>
+    public int OrderStatus { get; set; } = 0;
+
+    /// <summary>
+    /// 关联服务合同
+    /// （主表：TaktServiceContract）
+    /// </summary>
+    public TaktServiceContractDto? ServiceContract { get; set; }
+
+    /// <summary>
+    /// 关联服务请求
+    /// （主表：TaktServiceRequest）
+    /// </summary>
+    public TaktServiceRequestDto? ServiceRequest { get; set; }
 
     /// <summary>
     /// 服务工单列表（外键在子表 TaktServiceTicket.ServiceOrderId）
@@ -255,11 +267,6 @@ public class TaktServiceOrderQueryDto : TaktPagedQuery
     public int? OrderType { get; set; }
 
     /// <summary>
-    /// 订单状态（0=草稿，1=已确认，2=执行中，3=已完成，4=已结算，5=已取消）
-    /// </summary>
-    public int? OrderStatus { get; set; }
-
-    /// <summary>
     /// 订单总金额
     /// </summary>
     public decimal? TotalAmount { get; set; }
@@ -335,6 +342,11 @@ public class TaktServiceOrderQueryDto : TaktPagedQuery
     public int? SortOrder { get; set; }
 
     /// <summary>
+    /// 订单状态（0=草稿，1=已确认，2=执行中，3=已完成，4=已结算，5=已取消）
+    /// </summary>
+    public int? OrderStatus { get; set; }
+
+    /// <summary>
     /// 创建时间（范围查询-开始）
     /// </summary>
     public DateTime? CreatedAtStart { get; set; }
@@ -375,7 +387,7 @@ public class TaktServiceOrderCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -442,11 +454,6 @@ public class TaktServiceOrderCreateDto
     public int OrderType { get; set; } = 0;
 
     /// <summary>
-    /// 订单状态（0=草稿，1=已确认，2=执行中，3=已完成，4=已结算，5=已取消）
-    /// </summary>
-    public int OrderStatus { get; set; } = 0;
-
-    /// <summary>
     /// 订单总金额
     /// </summary>
     public decimal TotalAmount { get; set; }
@@ -496,6 +503,11 @@ public class TaktServiceOrderCreateDto
     /// 服务负责人（人员代码）
     /// </summary>
     public string? ServiceBy { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 订单状态（0=草稿，1=已确认，2=执行中，3=已完成，4=已结算，5=已取消）
+    /// </summary>
+    public int OrderStatus { get; set; } = 0;
 
     /// <summary>
     /// 服务工单列表（外键在子表 TaktServiceTicket.ServiceOrderId）（子表，级联保存）
@@ -650,9 +662,64 @@ public class TaktServiceOrderTemplateDto
     public string? ServiceRequestCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 订单日期
+    /// </summary>
+    public DateTime? OrderDate { get; set; }
+
+    /// <summary>
     /// 订单类型（0=现场服务，1=远程支持，2=备件更换，3=安装调试，4=其他）
     /// </summary>
     public int? OrderType { get; set; }
+
+    /// <summary>
+    /// 订单总金额
+    /// </summary>
+    public decimal? TotalAmount { get; set; }
+
+    /// <summary>
+    /// 折扣金额
+    /// </summary>
+    public decimal? DiscountAmount { get; set; }
+
+    /// <summary>
+    /// 税费
+    /// </summary>
+    public decimal? TaxAmount { get; set; }
+
+    /// <summary>
+    /// 订单实付金额
+    /// </summary>
+    public decimal? ActualAmount { get; set; }
+
+    /// <summary>
+    /// 结算币种代码
+    /// </summary>
+    public string? CurrencyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 计划开始日期
+    /// </summary>
+    public DateTime? PlannedStartDate { get; set; }
+
+    /// <summary>
+    /// 计划结束日期
+    /// </summary>
+    public DateTime? PlannedEndDate { get; set; }
+
+    /// <summary>
+    /// 实际开始日期
+    /// </summary>
+    public DateTime? ActualStartDate { get; set; }
+
+    /// <summary>
+    /// 实际结束日期
+    /// </summary>
+    public DateTime? ActualEndDate { get; set; }
+
+    /// <summary>
+    /// 服务负责人（人员代码）
+    /// </summary>
+    public string? ServiceBy { get; set; } = string.Empty;
 
     /// <summary>
     /// 订单状态（0=草稿，1=已确认，2=执行中，3=已完成，4=已结算，5=已取消）
@@ -660,9 +727,9 @@ public class TaktServiceOrderTemplateDto
     public int? OrderStatus { get; set; }
 
     /// <summary>
-    /// 结算币种代码
+    /// 服务工单列表（外键在子表 TaktServiceTicket.ServiceOrderId）（子表，级联保存）
     /// </summary>
-    public string? CurrencyCode { get; set; } = string.Empty;
+    public List<TaktServiceTicketCreateDto>? Tickets { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -692,7 +759,7 @@ public class TaktServiceOrderImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -745,9 +812,64 @@ public class TaktServiceOrderImportDto
     public string? ServiceRequestCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 订单日期
+    /// </summary>
+    public DateTime? OrderDate { get; set; }
+
+    /// <summary>
     /// 订单类型（0=现场服务，1=远程支持，2=备件更换，3=安装调试，4=其他）
     /// </summary>
     public int? OrderType { get; set; }
+
+    /// <summary>
+    /// 订单总金额
+    /// </summary>
+    public decimal? TotalAmount { get; set; }
+
+    /// <summary>
+    /// 折扣金额
+    /// </summary>
+    public decimal? DiscountAmount { get; set; }
+
+    /// <summary>
+    /// 税费
+    /// </summary>
+    public decimal? TaxAmount { get; set; }
+
+    /// <summary>
+    /// 订单实付金额
+    /// </summary>
+    public decimal? ActualAmount { get; set; }
+
+    /// <summary>
+    /// 结算币种代码
+    /// </summary>
+    public string? CurrencyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 计划开始日期
+    /// </summary>
+    public DateTime? PlannedStartDate { get; set; }
+
+    /// <summary>
+    /// 计划结束日期
+    /// </summary>
+    public DateTime? PlannedEndDate { get; set; }
+
+    /// <summary>
+    /// 实际开始日期
+    /// </summary>
+    public DateTime? ActualStartDate { get; set; }
+
+    /// <summary>
+    /// 实际结束日期
+    /// </summary>
+    public DateTime? ActualEndDate { get; set; }
+
+    /// <summary>
+    /// 服务负责人（人员代码）
+    /// </summary>
+    public string? ServiceBy { get; set; } = string.Empty;
 
     /// <summary>
     /// 订单状态（0=草稿，1=已确认，2=执行中，3=已完成，4=已结算，5=已取消）
@@ -755,9 +877,9 @@ public class TaktServiceOrderImportDto
     public int? OrderStatus { get; set; }
 
     /// <summary>
-    /// 结算币种代码
+    /// 服务工单列表（外键在子表 TaktServiceTicket.ServiceOrderId）（子表，级联保存）
     /// </summary>
-    public string? CurrencyCode { get; set; } = string.Empty;
+    public List<TaktServiceTicketCreateDto>? Tickets { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -851,11 +973,6 @@ public class TaktServiceOrderExportDto
     public int OrderType { get; set; } = 0;
 
     /// <summary>
-    /// 订单状态（0=草稿，1=已确认，2=执行中，3=已完成，4=已结算，5=已取消）
-    /// </summary>
-    public int OrderStatus { get; set; } = 0;
-
-    /// <summary>
     /// 订单总金额
     /// </summary>
     public decimal TotalAmount { get; set; }
@@ -909,6 +1026,11 @@ public class TaktServiceOrderExportDto
     /// 排序号（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
+
+    /// <summary>
+    /// 订单状态（0=草稿，1=已确认，2=执行中，3=已完成，4=已结算，5=已取消）
+    /// </summary>
+    public int OrderStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

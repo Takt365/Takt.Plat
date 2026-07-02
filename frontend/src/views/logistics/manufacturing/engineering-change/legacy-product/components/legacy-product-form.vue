@@ -10,10 +10,10 @@
 <template>
   <a-form ref="formRef" :model="formState" layout="horizontal" label-align="right" :label-col="{ span: 6 }" :wrapper-col="{ span: 16 }">
     <a-row :gutter="24">
-      <a-col :span="12"><a-form-item :label="t('entity.ec.ecno')"><a-input v-model:value="formState.ecNo" disabled /></a-form-item></a-col>
+      <a-col :span="12"><a-form-item :label="t('entity.ec.no')"><a-input v-model:value="formState.ecNo" disabled /></a-form-item></a-col>
       <a-col :span="12"><a-form-item :label="t('entity.ecdetail.ecolditem')"><a-input v-model:value="formState.ecOldItem" disabled /></a-form-item></a-col>
       <a-col :span="12"><a-form-item :label="t('entity.ecdept.oldproducthandling')"><a-input v-model:value="formState.oldProductHandling" /></a-form-item></a-col>
-      <a-col :span="12"><a-form-item :label="t('entity.ecdetail.isendofline')"><TaktSelect v-model:value="formState.isEndOfLine" dict-type="sys_yes_no" /></a-form-item></a-col>
+      <a-col :span="12"><a-form-item :label="t('entity.ecdetail.isendofline')"><TaktSelect v-model:value="formState.isEndOfLine" dict-type="logistics_material_eol_status" allow-clear /></a-form-item></a-col>
       <a-col :span="24"><a-form-item :label="t('entity.ec.remark')" :label-col="{ span: 3 }" :wrapper-col="{ span: 20 }"><a-textarea v-model:value="formState.remark" :rows="3" /></a-form-item></a-col>
     </a-row>
   </a-form>
@@ -28,7 +28,7 @@ const { t } = useI18n();
 const formRef = ref();
 const formState = reactive<EcLegacyProductUpdate & { ecNo?: string; ecOldItem?: string }>({
   ecDetailId: '',
-  isEndOfLine: 0,
+  isEndOfLine: '',
   oldProductHandling: '',
 });
 
@@ -39,7 +39,7 @@ watch(() => props.formData, (val) => {
     ecNo: val.ecNo,
     ecOldItem: val.ecOldItem ?? '',
     oldProductHandling: val.oldProductHandling ?? '',
-    isEndOfLine: val.isEndOfLine ?? 0,
+    isEndOfLine: val.isEndOfLine ?? '',
     remark: val.remark ?? '',
   });
 }, { immediate: true });

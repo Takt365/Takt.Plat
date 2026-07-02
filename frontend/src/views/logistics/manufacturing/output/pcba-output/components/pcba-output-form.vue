@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/output/pcba-output/components -->
 <!-- 文件名称：pcba-output-form.vue -->
-<!-- 功能描述：PCBA日报实体维护弹窗内嵌表单（上主下从级联保存）。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：PCBA日报实体 达成率维护弹窗内嵌表单（上主下从级联保存）。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -89,12 +89,10 @@
                 :label="t('entity.pcbaoutput.prodcategory')"
                 name="prodCategory"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.prodCategory"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaoutput.prodcategory') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  dict-type="logistics_prod_category"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbaoutput.prodcategory') })"
                 />
               </a-form-item>
             </a-col>
@@ -113,12 +111,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.pcbaoutput.prodline')"
-                name="prodLine"
+                :label="t('entity.pcbaoutput.prodteam')"
+                name="prodTeam"
               >
                 <a-input
-                  v-model:value="formState.prodLine"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaoutput.prodline') })"
+                  v-model:value="formState.prodTeam"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaoutput.prodteam') })"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -130,10 +128,10 @@
                 :label="t('entity.pcbaoutput.shiftno')"
                 name="shiftNo"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.shiftNo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaoutput.shiftno') })"
-                  style="width: 100%"
+                  dict-type="logistics_shift_category"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbaoutput.shiftno') })"
                 />
               </a-form-item>
             </a-col>
@@ -316,14 +314,16 @@
 
 <script setup lang="ts">
 /**
- * PCBA日报实体维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
+ * PCBA日报实体 达成率维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/manufacturing/output/pcba-output/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import type { PcbaOutputCreate } from '@/types/logistics/manufacturing/output/pcba-output'
+import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -356,7 +356,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","prodCategory","prodDate","prodLine","shiftNo","prodOrderCode","modelCode","batchNo","materialCode","prodOrderQty","stdMinutes","stdShorts","stdCapacity","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","prodCategory","prodDate","prodTeam","shiftNo","prodOrderCode","modelCode","batchNo","materialCode","prodOrderQty","stdMinutes","stdShorts","stdCapacity","extField","remark"]
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
 
@@ -473,6 +473,13 @@ function applyFormDefaults(target: Record<string, unknown>) {
   void target
 }
 
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载全量字典 */
+onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
+})
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 pcbaOutputId 才视为编辑） */
 watch(
@@ -522,8 +529,8 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   prodCategory: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.pcbaoutput.prodcategory') }),
-      trigger: 'blur'
+      message: t('common.page.form.placeholder.select', { field: t('entity.pcbaoutput.prodcategory') }),
+      trigger: 'change'
     }
   ],
   prodDate: [
@@ -533,10 +540,10 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'change'
     }
   ],
-  prodLine: [
+  prodTeam: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.pcbaoutput.prodline') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.pcbaoutput.prodteam') }),
       trigger: 'blur'
     }
   ],

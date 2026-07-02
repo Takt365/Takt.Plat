@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Routine.HelpDesk
 // 文件名称：TaktItAssetDtos.cs
-// 创建时间：2026-06-10
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ItAsset 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktItAsset 生成，请按需审阅）
 // 
@@ -14,7 +14,6 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Dtos.Routine.HelpDesk;
 
@@ -44,7 +43,7 @@ public class TaktItAssetDto : TaktCompanyDtoBase
     /// <summary>
     /// 保修类型（见 TaktWarrantyType）
     /// </summary>
-    public int WarrantyType { get; set; }
+    public int WarrantyType { get; set; } = 0;
 
     /// <summary>
     /// 保修开始日期
@@ -101,12 +100,6 @@ public class TaktItAssetDto : TaktCompanyDtoBase
     /// （子表：TaktItAssetChangeLog）
     /// </summary>
     public List<TaktItAssetChangeLogDto>? ChangeLogs { get; set; }
-
-    /// <summary>
-    /// 关联工单列表（一对多；外键：本表 Id = 工单 TaktTicket.ItAssetId）
-    /// （子表：TaktTicket）
-    /// </summary>
-    public List<TaktTicketDto>? Tickets { get; set; }
 
 }
 
@@ -256,7 +249,7 @@ public class TaktItAssetCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -269,7 +262,7 @@ public class TaktItAssetCreateDto
     /// <summary>
     /// 保修类型（见 TaktWarrantyType）
     /// </summary>
-    public int WarrantyType { get; set; }
+    public int WarrantyType { get; set; } = 0;
 
     /// <summary>
     /// 保修开始日期
@@ -325,11 +318,6 @@ public class TaktItAssetCreateDto
     /// IT 设备保修变更日志列表（子表，级联保存）
     /// </summary>
     public List<TaktItAssetChangeLogCreateDto>? ChangeLogs { get; set; }
-
-    /// <summary>
-    /// 关联工单列表（一对多；外键：本表 Id = 工单 TaktTicket.ItAssetId）（子表，级联保存）
-    /// </summary>
-    public List<TaktTicketCreateDto>? Tickets { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -393,6 +381,16 @@ public class TaktItAssetTemplateDto
     public int? WarrantyType { get; set; }
 
     /// <summary>
+    /// 保修开始日期
+    /// </summary>
+    public DateTime? WarrantyStartDate { get; set; }
+
+    /// <summary>
+    /// 保修到期日
+    /// </summary>
+    public DateTime? WarrantyExpiryDate { get; set; }
+
+    /// <summary>
     /// 保修服务商/厂商
     /// </summary>
     public string? WarrantyProvider { get; set; } = string.Empty;
@@ -413,9 +411,29 @@ public class TaktItAssetTemplateDto
     public string? ServiceEmail { get; set; } = string.Empty;
 
     /// <summary>
+    /// 维保到期日
+    /// </summary>
+    public DateTime? MaintenanceExpiryDate { get; set; }
+
+    /// <summary>
+    /// 上次维保日期
+    /// </summary>
+    public DateTime? LastMaintenanceDate { get; set; }
+
+    /// <summary>
+    /// 下次维保日期
+    /// </summary>
+    public DateTime? NextMaintenanceDate { get; set; }
+
+    /// <summary>
     /// 保修/维保说明
     /// </summary>
     public string? WarrantyRemark { get; set; } = string.Empty;
+
+    /// <summary>
+    /// IT 设备保修变更日志列表（子表，级联保存）
+    /// </summary>
+    public List<TaktItAssetChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -445,7 +463,7 @@ public class TaktItAssetImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -458,6 +476,16 @@ public class TaktItAssetImportDto
     /// 保修类型（见 TaktWarrantyType）
     /// </summary>
     public int? WarrantyType { get; set; }
+
+    /// <summary>
+    /// 保修开始日期
+    /// </summary>
+    public DateTime? WarrantyStartDate { get; set; }
+
+    /// <summary>
+    /// 保修到期日
+    /// </summary>
+    public DateTime? WarrantyExpiryDate { get; set; }
 
     /// <summary>
     /// 保修服务商/厂商
@@ -480,9 +508,29 @@ public class TaktItAssetImportDto
     public string? ServiceEmail { get; set; } = string.Empty;
 
     /// <summary>
+    /// 维保到期日
+    /// </summary>
+    public DateTime? MaintenanceExpiryDate { get; set; }
+
+    /// <summary>
+    /// 上次维保日期
+    /// </summary>
+    public DateTime? LastMaintenanceDate { get; set; }
+
+    /// <summary>
+    /// 下次维保日期
+    /// </summary>
+    public DateTime? NextMaintenanceDate { get; set; }
+
+    /// <summary>
     /// 保修/维保说明
     /// </summary>
     public string? WarrantyRemark { get; set; } = string.Empty;
+
+    /// <summary>
+    /// IT 设备保修变更日志列表（子表，级联保存）
+    /// </summary>
+    public List<TaktItAssetChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -525,7 +573,7 @@ public class TaktItAssetExportDto
     /// <summary>
     /// 保修类型（见 TaktWarrantyType）
     /// </summary>
-    public int WarrantyType { get; set; }
+    public int WarrantyType { get; set; } = 0;
 
     /// <summary>
     /// 保修开始日期

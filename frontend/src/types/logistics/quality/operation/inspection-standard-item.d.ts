@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/quality/operation
 // 文件名称：inspection-standard-item.d.ts
-// 创建时间：2026-06-21
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/operation 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,12 +29,12 @@ export interface InspectionStandardItem extends CompanyDtoBase {
   inspectionStandardItemId: string;
 
   /**
-   * 检验标准ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 检验标准 ID（关联 TaktInspectionStandard.Id，选项 TaktInspectionStandards/options）
    */
   inspectionStandardId: string;
 
   /**
-   * 检验标准名称（填充字段）
+   * 检验标准 名称（填充字段）
    */
   inspectionStandardName?: string;
 
@@ -54,17 +54,17 @@ export interface InspectionStandardItem extends CompanyDtoBase {
   itemName: string;
 
   /**
-   * 检验项目类型（0=外观，1=尺寸，2=性能，3=材质，4=功能，5=颜色，6=结构）
+   * 检验项目类型（字典 logistics_quality_inspection_item_type）
    */
   itemType: number;
 
   /**
-   * 缺点等级（CR=严重，MA=主要，MI=次要）
+   * 缺点等级（字典 logistics_quality_defect_severity_code；CR/MA/MI）
    */
   defectLevel: string;
 
   /**
-   * 检验方式（1=计数，2=计量）
+   * 检验方式（字典 logistics_quality_inspection_mode）
    */
   inspectionMode: number;
 
@@ -84,7 +84,7 @@ export interface InspectionStandardItem extends CompanyDtoBase {
   lowerLimit: string;
 
   /**
-   * 检验工具
+   * 检验工具（手输名称）
    */
   inspectionTool: string;
 
@@ -104,7 +104,7 @@ export interface InspectionStandardItem extends CompanyDtoBase {
   rejectionCriteria: string;
 
   /**
-   * 是否合格判定项目（0=否，1=是）
+   * 是否合格判定项目（字典 sys_yes_no_type）
    */
   isQualifiedBasis: number;
 
@@ -134,7 +134,7 @@ export interface InspectionStandardItemQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 检验标准ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 检验标准 ID（关联 TaktInspectionStandard.Id，选项 TaktInspectionStandards/options）
    */
   inspectionStandardId?: string;
 
@@ -154,17 +154,17 @@ export interface InspectionStandardItemQuery extends TaktPagedQuery {
   itemName?: string;
 
   /**
-   * 检验项目类型（0=外观，1=尺寸，2=性能，3=材质，4=功能，5=颜色，6=结构）
+   * 检验项目类型（字典 logistics_quality_inspection_item_type）
    */
   itemType?: number;
 
   /**
-   * 缺点等级（CR=严重，MA=主要，MI=次要）
+   * 缺点等级（字典 logistics_quality_defect_severity_code；CR/MA/MI）
    */
   defectLevel?: string;
 
   /**
-   * 检验方式（1=计数，2=计量）
+   * 检验方式（字典 logistics_quality_inspection_mode）
    */
   inspectionMode?: number;
 
@@ -184,7 +184,7 @@ export interface InspectionStandardItemQuery extends TaktPagedQuery {
   lowerLimit?: string;
 
   /**
-   * 检验工具
+   * 检验工具（手输名称）
    */
   inspectionTool?: string;
 
@@ -204,7 +204,7 @@ export interface InspectionStandardItemQuery extends TaktPagedQuery {
   rejectionCriteria?: string;
 
   /**
-   * 是否合格判定项目（0=否，1=是）
+   * 是否合格判定项目（字典 sys_yes_no_type）
    */
   isQualifiedBasis?: number;
 
@@ -248,12 +248,12 @@ export interface InspectionStandardItemCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
   /**
-   * 检验标准ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 检验标准 ID（关联 TaktInspectionStandard.Id，选项 TaktInspectionStandards/options）
    */
   inspectionStandardId: string;
 
@@ -273,17 +273,17 @@ export interface InspectionStandardItemCreate {
   itemName: string;
 
   /**
-   * 检验项目类型（0=外观，1=尺寸，2=性能，3=材质，4=功能，5=颜色，6=结构）
+   * 检验项目类型（字典 logistics_quality_inspection_item_type）
    */
   itemType: number;
 
   /**
-   * 缺点等级（CR=严重，MA=主要，MI=次要）
+   * 缺点等级（字典 logistics_quality_defect_severity_code；CR/MA/MI）
    */
   defectLevel: string;
 
   /**
-   * 检验方式（1=计数，2=计量）
+   * 检验方式（字典 logistics_quality_inspection_mode）
    */
   inspectionMode: number;
 
@@ -303,7 +303,7 @@ export interface InspectionStandardItemCreate {
   lowerLimit: string;
 
   /**
-   * 检验工具
+   * 检验工具（手输名称）
    */
   inspectionTool: string;
 
@@ -323,7 +323,7 @@ export interface InspectionStandardItemCreate {
   rejectionCriteria: string;
 
   /**
-   * 是否合格判定项目（0=否，1=是）
+   * 是否合格判定项目（字典 sys_yes_no_type）
    */
   isQualifiedBasis: number;
 
@@ -372,7 +372,7 @@ export interface InspectionStandardItemTemplate {
   companyCode?: string;
 
   /**
-   * 检验标准ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 检验标准 ID（关联 TaktInspectionStandard.Id，选项 TaktInspectionStandards/options）
    */
   inspectionStandardId?: string;
 
@@ -392,17 +392,17 @@ export interface InspectionStandardItemTemplate {
   itemName?: string;
 
   /**
-   * 检验项目类型（0=外观，1=尺寸，2=性能，3=材质，4=功能，5=颜色，6=结构）
+   * 检验项目类型（字典 logistics_quality_inspection_item_type）
    */
   itemType?: number;
 
   /**
-   * 缺点等级（CR=严重，MA=主要，MI=次要）
+   * 缺点等级（字典 logistics_quality_defect_severity_code；CR/MA/MI）
    */
   defectLevel?: string;
 
   /**
-   * 检验方式（1=计数，2=计量）
+   * 检验方式（字典 logistics_quality_inspection_mode）
    */
   inspectionMode?: number;
 
@@ -422,7 +422,7 @@ export interface InspectionStandardItemTemplate {
   lowerLimit?: string;
 
   /**
-   * 检验工具
+   * 检验工具（手输名称）
    */
   inspectionTool?: string;
 
@@ -430,6 +430,21 @@ export interface InspectionStandardItemTemplate {
    * 检验方法说明
    */
   inspectionMethodDescription?: string;
+
+  /**
+   * 接收标准（AC值）
+   */
+  acceptanceCriteria?: string;
+
+  /**
+   * 拒收标准（RE值）
+   */
+  rejectionCriteria?: string;
+
+  /**
+   * 是否合格判定项目（字典 sys_yes_no_type）
+   */
+  isQualifiedBasis?: number;
 
   /**
    * 扩展字段JSON
@@ -461,12 +476,12 @@ export interface InspectionStandardItemImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
   /**
-   * 检验标准ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 检验标准 ID（关联 TaktInspectionStandard.Id，选项 TaktInspectionStandards/options）
    */
   inspectionStandardId?: string;
 
@@ -486,17 +501,17 @@ export interface InspectionStandardItemImport {
   itemName?: string;
 
   /**
-   * 检验项目类型（0=外观，1=尺寸，2=性能，3=材质，4=功能，5=颜色，6=结构）
+   * 检验项目类型（字典 logistics_quality_inspection_item_type）
    */
   itemType?: number;
 
   /**
-   * 缺点等级（CR=严重，MA=主要，MI=次要）
+   * 缺点等级（字典 logistics_quality_defect_severity_code；CR/MA/MI）
    */
   defectLevel?: string;
 
   /**
-   * 检验方式（1=计数，2=计量）
+   * 检验方式（字典 logistics_quality_inspection_mode）
    */
   inspectionMode?: number;
 
@@ -516,7 +531,7 @@ export interface InspectionStandardItemImport {
   lowerLimit?: string;
 
   /**
-   * 检验工具
+   * 检验工具（手输名称）
    */
   inspectionTool?: string;
 
@@ -524,6 +539,21 @@ export interface InspectionStandardItemImport {
    * 检验方法说明
    */
   inspectionMethodDescription?: string;
+
+  /**
+   * 接收标准（AC值）
+   */
+  acceptanceCriteria?: string;
+
+  /**
+   * 拒收标准（RE值）
+   */
+  rejectionCriteria?: string;
+
+  /**
+   * 是否合格判定项目（字典 sys_yes_no_type）
+   */
+  isQualifiedBasis?: number;
 
   /**
    * 扩展字段JSON
@@ -555,7 +585,7 @@ export interface InspectionStandardItemExport {
   companyCode: string;
 
   /**
-   * 检验标准ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 检验标准 ID（关联 TaktInspectionStandard.Id，选项 TaktInspectionStandards/options）
    */
   inspectionStandardId: string;
 
@@ -575,17 +605,17 @@ export interface InspectionStandardItemExport {
   itemName: string;
 
   /**
-   * 检验项目类型（0=外观，1=尺寸，2=性能，3=材质，4=功能，5=颜色，6=结构）
+   * 检验项目类型（字典 logistics_quality_inspection_item_type）
    */
   itemType: number;
 
   /**
-   * 缺点等级（CR=严重，MA=主要，MI=次要）
+   * 缺点等级（字典 logistics_quality_defect_severity_code；CR/MA/MI）
    */
   defectLevel: string;
 
   /**
-   * 检验方式（1=计数，2=计量）
+   * 检验方式（字典 logistics_quality_inspection_mode）
    */
   inspectionMode: number;
 
@@ -605,7 +635,7 @@ export interface InspectionStandardItemExport {
   lowerLimit: string;
 
   /**
-   * 检验工具
+   * 检验工具（手输名称）
    */
   inspectionTool: string;
 
@@ -625,7 +655,7 @@ export interface InspectionStandardItemExport {
   rejectionCriteria: string;
 
   /**
-   * 是否合格判定项目（0=否，1=是）
+   * 是否合格判定项目（字典 sys_yes_no_type）
    */
   isQualifiedBasis: number;
 

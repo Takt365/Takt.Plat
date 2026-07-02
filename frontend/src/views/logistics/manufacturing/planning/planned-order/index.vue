@@ -188,7 +188,7 @@
           v-model:value="advancedQueryForm.unitOfMeasure"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.plannedorder.unitofmeasure') })"
           show-count
-          :maxlength="40"
+          :maxlength="5"
           allow-clear
         />
       </a-form-item>
@@ -685,7 +685,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: PlannedOrder, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getPlannedOrderId(selectedRow.value) === getPlannedOrderId(record)) {
+    } else if (selectedRow.value && getPlannedOrderId(selectedRow.value) === getPlannedOrderId(record)) {
       selectedRow.value = null
     }
   },

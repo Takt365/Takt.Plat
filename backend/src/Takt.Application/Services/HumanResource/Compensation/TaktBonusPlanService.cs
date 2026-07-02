@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Compensation
 // 文件名称：TaktBonusPlanService.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：奖金方案应用服务实现
 // 
@@ -305,7 +305,7 @@ public class TaktBonusPlanService : TaktServiceBase, ITaktBonusPlanService
                 || SqlFunc.ToString(x.SalaryFormulaId).Contains(keywords)
                 || SqlFunc.ToString(x.DefaultAmount).Contains(keywords)
                 || SqlFunc.ToString(x.PlanStatus).Contains(keywords)
-                || (x.Description != null && x.Description.Contains(keywords))
+                || (x.BonusPlanDescription != null && x.BonusPlanDescription.Contains(keywords))
                 || (x.RelatedPlant != null && x.RelatedPlant.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
@@ -349,9 +349,9 @@ public class TaktBonusPlanService : TaktServiceBase, ITaktBonusPlanService
             exp = exp.And(x => x.PlanStatus == queryDto.PlanStatus);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Description))
+        if (!string.IsNullOrEmpty(queryDto?.BonusPlanDescription))
         {
-            exp = exp.And(x => x.Description != null && x.Description.Contains(queryDto.Description));
+            exp = exp.And(x => x.BonusPlanDescription != null && x.BonusPlanDescription.Contains(queryDto.BonusPlanDescription));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.RelatedPlant))

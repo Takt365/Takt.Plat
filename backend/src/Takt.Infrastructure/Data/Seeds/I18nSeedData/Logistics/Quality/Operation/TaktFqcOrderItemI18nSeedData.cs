@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Operation
 // 文件名称：TaktFqcOrderItemI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktFqcOrderItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktFqcOrderItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.fqcorderitem._self", "zh-HK", "FQC出货检验单明细信息_hk", "实体名称"),
 
             // entity.fqcorderitem.fqcorderid
-            new TranslationSeedItem("entity.fqcorderitem.fqcorderid", "en-US", "FQC检验单ID_us", "FQC检验单ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.fqcorderitem.fqcorderid", "en-US", "FQC检验单ID_us", "FQC检验单 ID（关联 TaktFqcOrder.Id，选项 TaktFqcOrders/options）"),
             // entity.fqcorderitem.fqcorderid
-            new TranslationSeedItem("entity.fqcorderitem.fqcorderid", "ja-JP", "FQC检验单ID_jp", "FQC检验单ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.fqcorderitem.fqcorderid", "ja-JP", "FQC检验单ID_jp", "FQC检验单 ID（关联 TaktFqcOrder.Id，选项 TaktFqcOrders/options）"),
             // entity.fqcorderitem.fqcorderid
-            new TranslationSeedItem("entity.fqcorderitem.fqcorderid", "zh-CN", "FQC检验单ID", "FQC检验单ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.fqcorderitem.fqcorderid", "zh-CN", "FQC检验单ID", "FQC检验单 ID（关联 TaktFqcOrder.Id，选项 TaktFqcOrders/options）"),
             // entity.fqcorderitem.fqcorderid
-            new TranslationSeedItem("entity.fqcorderitem.fqcorderid", "zh-HK", "FQC检验单ID_hk", "FQC检验单ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.fqcorderitem.fqcorderid", "zh-HK", "FQC检验单ID_hk", "FQC检验单 ID（关联 TaktFqcOrder.Id，选项 TaktFqcOrders/options）"),
 
             // entity.fqcorderitem.fqcordercode
             new TranslationSeedItem("entity.fqcorderitem.fqcordercode", "en-US", "FQC检验单编码_us", "FQC检验单编码（冗余字段，便于查询）"),
@@ -118,13 +118,13 @@ public class TaktFqcOrderItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.fqcorderitem.linenumber", "zh-HK", "行号_hk", "行号（项号/序号，固定步长=10）"),
 
             // entity.fqcorderitem.materialcode
-            new TranslationSeedItem("entity.fqcorderitem.materialcode", "en-US", "物料编码_us", "物料编码"),
+            new TranslationSeedItem("entity.fqcorderitem.materialcode", "en-US", "物料编码_us", "物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）"),
             // entity.fqcorderitem.materialcode
-            new TranslationSeedItem("entity.fqcorderitem.materialcode", "ja-JP", "物料编码_jp", "物料编码"),
+            new TranslationSeedItem("entity.fqcorderitem.materialcode", "ja-JP", "物料编码_jp", "物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）"),
             // entity.fqcorderitem.materialcode
-            new TranslationSeedItem("entity.fqcorderitem.materialcode", "zh-CN", "物料编码", "物料编码"),
+            new TranslationSeedItem("entity.fqcorderitem.materialcode", "zh-CN", "物料编码", "物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）"),
             // entity.fqcorderitem.materialcode
-            new TranslationSeedItem("entity.fqcorderitem.materialcode", "zh-HK", "物料编码_hk", "物料编码"),
+            new TranslationSeedItem("entity.fqcorderitem.materialcode", "zh-HK", "物料编码_hk", "物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）"),
 
             // entity.fqcorderitem.materialname
             new TranslationSeedItem("entity.fqcorderitem.materialname", "en-US", "物料名称_us", "物料名称"),
@@ -154,31 +154,31 @@ public class TaktFqcOrderItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.fqcorderitem.warehousequantity", "zh-HK", "入库数量_hk", "入库数量"),
 
             // entity.fqcorderitem.standardcode
-            new TranslationSeedItem("entity.fqcorderitem.standardcode", "en-US", "检验标准编码_us", "检验标准编码"),
+            new TranslationSeedItem("entity.fqcorderitem.standardcode", "en-US", "检验标准编码_us", "检验标准编码（选项 TaktInspectionStandards/options，DictValue=StandardCode）"),
             // entity.fqcorderitem.standardcode
-            new TranslationSeedItem("entity.fqcorderitem.standardcode", "ja-JP", "检验标准编码_jp", "检验标准编码"),
+            new TranslationSeedItem("entity.fqcorderitem.standardcode", "ja-JP", "检验标准编码_jp", "检验标准编码（选项 TaktInspectionStandards/options，DictValue=StandardCode）"),
             // entity.fqcorderitem.standardcode
-            new TranslationSeedItem("entity.fqcorderitem.standardcode", "zh-CN", "检验标准编码", "检验标准编码"),
+            new TranslationSeedItem("entity.fqcorderitem.standardcode", "zh-CN", "检验标准编码", "检验标准编码（选项 TaktInspectionStandards/options，DictValue=StandardCode）"),
             // entity.fqcorderitem.standardcode
-            new TranslationSeedItem("entity.fqcorderitem.standardcode", "zh-HK", "检验标准编码_hk", "检验标准编码"),
+            new TranslationSeedItem("entity.fqcorderitem.standardcode", "zh-HK", "检验标准编码_hk", "检验标准编码（选项 TaktInspectionStandards/options，DictValue=StandardCode）"),
 
             // entity.fqcorderitem.samplingschemecode
-            new TranslationSeedItem("entity.fqcorderitem.samplingschemecode", "en-US", "抽样方案编码_us", "抽样方案编码"),
+            new TranslationSeedItem("entity.fqcorderitem.samplingschemecode", "en-US", "抽样方案编码_us", "抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）"),
             // entity.fqcorderitem.samplingschemecode
-            new TranslationSeedItem("entity.fqcorderitem.samplingschemecode", "ja-JP", "抽样方案编码_jp", "抽样方案编码"),
+            new TranslationSeedItem("entity.fqcorderitem.samplingschemecode", "ja-JP", "抽样方案编码_jp", "抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）"),
             // entity.fqcorderitem.samplingschemecode
-            new TranslationSeedItem("entity.fqcorderitem.samplingschemecode", "zh-CN", "抽样方案编码", "抽样方案编码"),
+            new TranslationSeedItem("entity.fqcorderitem.samplingschemecode", "zh-CN", "抽样方案编码", "抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）"),
             // entity.fqcorderitem.samplingschemecode
-            new TranslationSeedItem("entity.fqcorderitem.samplingschemecode", "zh-HK", "抽样方案编码_hk", "抽样方案编码"),
+            new TranslationSeedItem("entity.fqcorderitem.samplingschemecode", "zh-HK", "抽样方案编码_hk", "抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）"),
 
             // entity.fqcorderitem.inspectionmethod
-            new TranslationSeedItem("entity.fqcorderitem.inspectionmethod", "en-US", "检验方式_us", "检验方式（0=免检，1=减量，2=正常，3=加严，4=全检）"),
+            new TranslationSeedItem("entity.fqcorderitem.inspectionmethod", "en-US", "检验方式_us", "检验方式（字典 logistics_quality_inspection_method）"),
             // entity.fqcorderitem.inspectionmethod
-            new TranslationSeedItem("entity.fqcorderitem.inspectionmethod", "ja-JP", "检验方式_jp", "检验方式（0=免检，1=减量，2=正常，3=加严，4=全检）"),
+            new TranslationSeedItem("entity.fqcorderitem.inspectionmethod", "ja-JP", "检验方式_jp", "检验方式（字典 logistics_quality_inspection_method）"),
             // entity.fqcorderitem.inspectionmethod
-            new TranslationSeedItem("entity.fqcorderitem.inspectionmethod", "zh-CN", "检验方式", "检验方式（0=免检，1=减量，2=正常，3=加严，4=全检）"),
+            new TranslationSeedItem("entity.fqcorderitem.inspectionmethod", "zh-CN", "检验方式", "检验方式（字典 logistics_quality_inspection_method）"),
             // entity.fqcorderitem.inspectionmethod
-            new TranslationSeedItem("entity.fqcorderitem.inspectionmethod", "zh-HK", "检验方式_hk", "检验方式（0=免检，1=减量，2=正常，3=加严，4=全检）"),
+            new TranslationSeedItem("entity.fqcorderitem.inspectionmethod", "zh-HK", "检验方式_hk", "检验方式（字典 logistics_quality_inspection_method）"),
 
             // entity.fqcorderitem.samplequantity
             new TranslationSeedItem("entity.fqcorderitem.samplequantity", "en-US", "抽样数量_us", "抽样数量"),
@@ -216,15 +216,6 @@ public class TaktFqcOrderItemI18nSeedData : ITaktSeedDataCoordinator
             // entity.fqcorderitem.inspectionreturnquantity
             new TranslationSeedItem("entity.fqcorderitem.inspectionreturnquantity", "zh-HK", "验退数量_hk", "验退数量"),
 
-            // entity.fqcorderitem.judgestatus
-            new TranslationSeedItem("entity.fqcorderitem.judgestatus", "en-US", "判定状态_us", "判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）"),
-            // entity.fqcorderitem.judgestatus
-            new TranslationSeedItem("entity.fqcorderitem.judgestatus", "ja-JP", "判定状态_jp", "判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）"),
-            // entity.fqcorderitem.judgestatus
-            new TranslationSeedItem("entity.fqcorderitem.judgestatus", "zh-CN", "判定状态", "判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）"),
-            // entity.fqcorderitem.judgestatus
-            new TranslationSeedItem("entity.fqcorderitem.judgestatus", "zh-HK", "判定状态_hk", "判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）"),
-
             // entity.fqcorderitem.sampleserialno
             new TranslationSeedItem("entity.fqcorderitem.sampleserialno", "en-US", "抽检序列号_us", "抽检序列号"),
             // entity.fqcorderitem.sampleserialno
@@ -244,13 +235,13 @@ public class TaktFqcOrderItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.fqcorderitem.inspectiondescription", "zh-HK", "检验说明_hk", "检验说明"),
 
             // entity.fqcorderitem.inspectorby
-            new TranslationSeedItem("entity.fqcorderitem.inspectorby", "en-US", "检验员_us", "检验员（人员代码）"),
+            new TranslationSeedItem("entity.fqcorderitem.inspectorby", "en-US", "检验员_us", "检验员（选项 TaktEmployees/options，DictValue=EmployeeCode）"),
             // entity.fqcorderitem.inspectorby
-            new TranslationSeedItem("entity.fqcorderitem.inspectorby", "ja-JP", "检验员_jp", "检验员（人员代码）"),
+            new TranslationSeedItem("entity.fqcorderitem.inspectorby", "ja-JP", "检验员_jp", "检验员（选项 TaktEmployees/options，DictValue=EmployeeCode）"),
             // entity.fqcorderitem.inspectorby
-            new TranslationSeedItem("entity.fqcorderitem.inspectorby", "zh-CN", "检验员", "检验员（人员代码）"),
+            new TranslationSeedItem("entity.fqcorderitem.inspectorby", "zh-CN", "检验员", "检验员（选项 TaktEmployees/options，DictValue=EmployeeCode）"),
             // entity.fqcorderitem.inspectorby
-            new TranslationSeedItem("entity.fqcorderitem.inspectorby", "zh-HK", "检验员_hk", "检验员（人员代码）"),
+            new TranslationSeedItem("entity.fqcorderitem.inspectorby", "zh-HK", "检验员_hk", "检验员（选项 TaktEmployees/options，DictValue=EmployeeCode）"),
 
             // entity.fqcorderitem.inspectiondate
             new TranslationSeedItem("entity.fqcorderitem.inspectiondate", "en-US", "检验日期_us", "检验日期"),
@@ -260,6 +251,15 @@ public class TaktFqcOrderItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.fqcorderitem.inspectiondate", "zh-CN", "检验日期", "检验日期"),
             // entity.fqcorderitem.inspectiondate
             new TranslationSeedItem("entity.fqcorderitem.inspectiondate", "zh-HK", "检验日期_hk", "检验日期"),
+
+            // entity.fqcorderitem.judgestatus
+            new TranslationSeedItem("entity.fqcorderitem.judgestatus", "en-US", "判定状态_us", "判定状态（字典 logistics_quality_judge_status）"),
+            // entity.fqcorderitem.judgestatus
+            new TranslationSeedItem("entity.fqcorderitem.judgestatus", "ja-JP", "判定状态_jp", "判定状态（字典 logistics_quality_judge_status）"),
+            // entity.fqcorderitem.judgestatus
+            new TranslationSeedItem("entity.fqcorderitem.judgestatus", "zh-CN", "判定状态", "判定状态（字典 logistics_quality_judge_status）"),
+            // entity.fqcorderitem.judgestatus
+            new TranslationSeedItem("entity.fqcorderitem.judgestatus", "zh-HK", "判定状态_hk", "判定状态（字典 logistics_quality_judge_status）"),
 
             // entity.fqcorderitem.order
             new TranslationSeedItem("entity.fqcorderitem.order", "en-US", "FQC检验单_us", "FQC检验单（主表）"),

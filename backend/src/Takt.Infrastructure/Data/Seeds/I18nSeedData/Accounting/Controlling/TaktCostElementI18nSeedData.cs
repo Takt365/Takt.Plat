@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Controlling
 // 文件名称：TaktCostElementI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktCostElement 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktCostElementI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.costelement._self", "zh-HK", "成本要素信息_hk", "实体名称"),
 
             // entity.costelement.code
-            new TranslationSeedItem("entity.costelement.code", "en-US", "成本要素编码_us", "成本要素编码"),
+            new TranslationSeedItem("entity.costelement.code", "en-US", "成本要素编码_us", "成本要素编码（4位，租户+公司内唯一）"),
             // entity.costelement.code
-            new TranslationSeedItem("entity.costelement.code", "ja-JP", "成本要素编码_jp", "成本要素编码"),
+            new TranslationSeedItem("entity.costelement.code", "ja-JP", "成本要素编码_jp", "成本要素编码（4位，租户+公司内唯一）"),
             // entity.costelement.code
-            new TranslationSeedItem("entity.costelement.code", "zh-CN", "成本要素编码", "成本要素编码"),
+            new TranslationSeedItem("entity.costelement.code", "zh-CN", "成本要素编码", "成本要素编码（4位，租户+公司内唯一）"),
             // entity.costelement.code
-            new TranslationSeedItem("entity.costelement.code", "zh-HK", "成本要素编码_hk", "成本要素编码"),
+            new TranslationSeedItem("entity.costelement.code", "zh-HK", "成本要素编码_hk", "成本要素编码（4位，租户+公司内唯一）"),
 
             // entity.costelement.name
             new TranslationSeedItem("entity.costelement.name", "en-US", "成本要素名称_us", "成本要素名称"),
@@ -109,22 +109,22 @@ public class TaktCostElementI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.costelement.name", "zh-HK", "成本要素名称_hk", "成本要素名称"),
 
             // entity.costelement.type
-            new TranslationSeedItem("entity.costelement.type", "en-US", "成本要素类型_us", "成本要素类型（0=初级，1=次级）"),
+            new TranslationSeedItem("entity.costelement.type", "en-US", "成本要素类型_us", "成本要素类型（字典 accounting_cost_element_type；0=初级，1=次级；由 KATYP 推导）"),
             // entity.costelement.type
-            new TranslationSeedItem("entity.costelement.type", "ja-JP", "成本要素类型_jp", "成本要素类型（0=初级，1=次级）"),
+            new TranslationSeedItem("entity.costelement.type", "ja-JP", "成本要素类型_jp", "成本要素类型（字典 accounting_cost_element_type；0=初级，1=次级；由 KATYP 推导）"),
             // entity.costelement.type
-            new TranslationSeedItem("entity.costelement.type", "zh-CN", "成本要素类型", "成本要素类型（0=初级，1=次级）"),
+            new TranslationSeedItem("entity.costelement.type", "zh-CN", "成本要素类型", "成本要素类型（字典 accounting_cost_element_type；0=初级，1=次级；由 KATYP 推导）"),
             // entity.costelement.type
-            new TranslationSeedItem("entity.costelement.type", "zh-HK", "成本要素类型_hk", "成本要素类型（0=初级，1=次级）"),
+            new TranslationSeedItem("entity.costelement.type", "zh-HK", "成本要素类型_hk", "成本要素类型（字典 accounting_cost_element_type；0=初级，1=次级；由 KATYP 推导）"),
 
             // entity.costelement.category
-            new TranslationSeedItem("entity.costelement.category", "en-US", "成本要素类别_us", "成本要素类别（0=人工，1=材料，2=制造费用，3=其他）"),
+            new TranslationSeedItem("entity.costelement.category", "en-US", "成本要素类别_us", "成本要素类别（字典 accounting_cost_element_category；SAP CSKB-KATYP，整型存 1/3/4/11…）"),
             // entity.costelement.category
-            new TranslationSeedItem("entity.costelement.category", "ja-JP", "成本要素类别_jp", "成本要素类别（0=人工，1=材料，2=制造费用，3=其他）"),
+            new TranslationSeedItem("entity.costelement.category", "ja-JP", "成本要素类别_jp", "成本要素类别（字典 accounting_cost_element_category；SAP CSKB-KATYP，整型存 1/3/4/11…）"),
             // entity.costelement.category
-            new TranslationSeedItem("entity.costelement.category", "zh-CN", "成本要素类别", "成本要素类别（0=人工，1=材料，2=制造费用，3=其他）"),
+            new TranslationSeedItem("entity.costelement.category", "zh-CN", "成本要素类别", "成本要素类别（字典 accounting_cost_element_category；SAP CSKB-KATYP，整型存 1/3/4/11…）"),
             // entity.costelement.category
-            new TranslationSeedItem("entity.costelement.category", "zh-HK", "成本要素类别_hk", "成本要素类别（0=人工，1=材料，2=制造费用，3=其他）"),
+            new TranslationSeedItem("entity.costelement.category", "zh-HK", "成本要素类别_hk", "成本要素类别（字典 accounting_cost_element_category；SAP CSKB-KATYP，整型存 1/3/4/11…）"),
 
             // entity.costelement.parentid
             new TranslationSeedItem("entity.costelement.parentid", "en-US", "父级ID_us", "父级 ID"),
@@ -144,15 +144,6 @@ public class TaktCostElementI18nSeedData : ITaktSeedDataCoordinator
             // entity.costelement.level
             new TranslationSeedItem("entity.costelement.level", "zh-HK", "成本要素层级_hk", "成本要素层级"),
 
-            // entity.costelement.status
-            new TranslationSeedItem("entity.costelement.status", "en-US", "成本要素状态_us", "成本要素状态（1=启用，0=禁用）"),
-            // entity.costelement.status
-            new TranslationSeedItem("entity.costelement.status", "ja-JP", "成本要素状态_jp", "成本要素状态（1=启用，0=禁用）"),
-            // entity.costelement.status
-            new TranslationSeedItem("entity.costelement.status", "zh-CN", "成本要素状态", "成本要素状态（1=启用，0=禁用）"),
-            // entity.costelement.status
-            new TranslationSeedItem("entity.costelement.status", "zh-HK", "成本要素状态_hk", "成本要素状态（1=启用，0=禁用）"),
-
             // entity.costelement.validfrom
             new TranslationSeedItem("entity.costelement.validfrom", "en-US", "生效日期_us", "生效日期"),
             // entity.costelement.validfrom
@@ -171,6 +162,15 @@ public class TaktCostElementI18nSeedData : ITaktSeedDataCoordinator
             // entity.costelement.validto
             new TranslationSeedItem("entity.costelement.validto", "zh-HK", "失效日期_hk", "失效日期"),
 
+            // entity.costelement.relatedplant
+            new TranslationSeedItem("entity.costelement.relatedplant", "en-US", "关联工厂_us", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            // entity.costelement.relatedplant
+            new TranslationSeedItem("entity.costelement.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            // entity.costelement.relatedplant
+            new TranslationSeedItem("entity.costelement.relatedplant", "zh-CN", "关联工厂", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            // entity.costelement.relatedplant
+            new TranslationSeedItem("entity.costelement.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+
             // entity.costelement.sortorder
             new TranslationSeedItem("entity.costelement.sortorder", "en-US", "排序号_us", "排序号"),
             // entity.costelement.sortorder
@@ -179,6 +179,15 @@ public class TaktCostElementI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.costelement.sortorder", "zh-CN", "排序号", "排序号"),
             // entity.costelement.sortorder
             new TranslationSeedItem("entity.costelement.sortorder", "zh-HK", "排序号_hk", "排序号"),
+
+            // entity.costelement.status
+            new TranslationSeedItem("entity.costelement.status", "en-US", "成本要素状态_us", "成本要素状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            // entity.costelement.status
+            new TranslationSeedItem("entity.costelement.status", "ja-JP", "成本要素状态_jp", "成本要素状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            // entity.costelement.status
+            new TranslationSeedItem("entity.costelement.status", "zh-CN", "成本要素状态", "成本要素状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            // entity.costelement.status
+            new TranslationSeedItem("entity.costelement.status", "zh-HK", "成本要素状态_hk", "成本要素状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
 
             // entity.costelement.changelogs
             new TranslationSeedItem("entity.costelement.changelogs", "en-US", "成本要素变更记录列表_us", "成本要素变更记录列表（外键在子表 TaktCostElementChangeLog.CostElementId）"),

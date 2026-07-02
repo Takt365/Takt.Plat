@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Materials
 // 文件名称：TaktManufacturerMaterialsController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-27
 // 创建人：Takt365(Cursor AI)
 // 功能描述：制造商物料明细控制器
 // 
@@ -41,7 +41,7 @@ public class TaktManufacturerMaterialsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:materials:manufacturermaterial:list", "制造商物料明细列表")]
+    [TaktPermission("logistics:materials:manufacturer:list", "制造商物料明细列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetManufacturerMaterialListAsync([FromQuery] TaktManufacturerMaterialQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktManufacturerMaterialsController : TaktControllerBase
     /// </summary>
     /// <param name="id">制造商物料明细ID</param>
     /// <returns>制造商物料明细DTO</returns>
-    [TaktPermission("logistics:materials:manufacturermaterial:query", "制造商物料明细详情")]
+    [TaktPermission("logistics:materials:manufacturer:query", "制造商物料明细详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetManufacturerMaterialByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktManufacturerMaterialsController : TaktControllerBase
     /// 获取制造商物料明细选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:materials:manufacturermaterial:query", "制造商物料明细选项")]
+    [TaktPermission("logistics:materials:manufacturer:query", "制造商物料明细选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetManufacturerMaterialOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktManufacturerMaterialsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>制造商物料明细DTO</returns>
-    [TaktPermission("logistics:materials:manufacturermaterial:create", "创建制造商物料明细")]
+    [TaktPermission("logistics:materials:manufacturer:create", "创建制造商物料明细")]
     [HttpPost]
     public async Task<IActionResult> CreateManufacturerMaterialAsync([FromBody] TaktManufacturerMaterialCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktManufacturerMaterialsController : TaktControllerBase
     /// <param name="id">制造商物料明细ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>制造商物料明细DTO</returns>
-    [TaktPermission("logistics:materials:manufacturermaterial:update", "更新制造商物料明细")]
+    [TaktPermission("logistics:materials:manufacturer:update", "更新制造商物料明细")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateManufacturerMaterialAsync(long id, [FromBody] TaktManufacturerMaterialUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktManufacturerMaterialsController : TaktControllerBase
     /// </summary>
     /// <param name="id">制造商物料明细ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:materials:manufacturermaterial:delete", "删除制造商物料明细")]
+    [TaktPermission("logistics:materials:manufacturer:delete", "删除制造商物料明细")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteManufacturerMaterialByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktManufacturerMaterialsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:materials:manufacturermaterial:delete", "批量删除制造商物料明细")]
+    [TaktPermission("logistics:materials:manufacturer:delete", "批量删除制造商物料明细")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteManufacturerMaterialBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktManufacturerMaterialsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:materials:manufacturermaterial:import", "获取制造商物料明细导入模板")]
+    [TaktPermission("logistics:materials:manufacturer:import", "获取制造商物料明细导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetManufacturerMaterialTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -204,7 +204,7 @@ public class TaktManufacturerMaterialsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:materials:manufacturermaterial:import", "导入制造商物料明细")]
+    [TaktPermission("logistics:materials:manufacturer:import", "导入制造商物料明细")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportManufacturerMaterialAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -234,7 +234,7 @@ public class TaktManufacturerMaterialsController : TaktControllerBase
     /// 导出制造商物料明细
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:materials:manufacturermaterial:export", "导出制造商物料明细")]
+    [TaktPermission("logistics:materials:manufacturer:export", "导出制造商物料明细")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportManufacturerMaterialAsync([FromQuery] TaktManufacturerMaterialQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

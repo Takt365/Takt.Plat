@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Accounting.Financial
 // 文件名称：TaktAccountTitleChangeLogDtos.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：AccountTitleChangeLog 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktAccountTitleChangeLog 生成，请按需审阅）
 // 
@@ -49,7 +49,7 @@ public class TaktAccountTitleChangeLogDto : TaktCompanyDtoBase
     /// <summary>
     /// 科目编码（冗余）
     /// </summary>
-    public string TitleCode { get; set; } = string.Empty;
+    public string AccountTitleCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 变更字段列表 JSON
@@ -108,7 +108,7 @@ public class TaktAccountTitleChangeLogQueryDto : TaktPagedQuery
     /// <summary>
     /// 科目编码（冗余）
     /// </summary>
-    public string? TitleCode { get; set; } = string.Empty;
+    public string? AccountTitleCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 变更字段列表 JSON
@@ -176,7 +176,7 @@ public class TaktAccountTitleChangeLogCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -190,7 +190,7 @@ public class TaktAccountTitleChangeLogCreateDto
     /// 科目编码（冗余）
     /// </summary>
     [Required(ErrorMessage = "科目编码（冗余）不能为空")]
-    public string TitleCode { get; set; } = string.Empty;
+    public string AccountTitleCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 变更字段列表 JSON
@@ -274,7 +274,7 @@ public class TaktAccountTitleChangeLogExportDto
     /// <summary>
     /// 科目编码（冗余）
     /// </summary>
-    public string TitleCode { get; set; } = string.Empty;
+    public string AccountTitleCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 变更字段列表 JSON

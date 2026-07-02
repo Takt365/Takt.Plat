@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/human-resource/organization
 // 文件名称：dept.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/organization 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -17,7 +17,6 @@ import type {
 } from '@/types/common';
 import type {
   Dept,
-  DeptBuiltIn,
   DeptCreate,
   DeptSort,
   DeptStatus,
@@ -131,25 +130,12 @@ export function deleteDeptBatch(ids: string[]): Promise<void> {
 
 /**
  * 更新部门状态
- * @param {DeptStatus} dto 状态 DTO（TaktCommonStatus 枚举）
+ * @param {DeptStatus} dto 状态 DTO
  * @returns {Promise<Dept>} 部门DTO
  */
 export function updateDeptStatus(dto: DeptStatus): Promise<Dept> {
   return request<Dept>({
     url: `${DEPT_API_BASE}/status`,
-    method: 'put',
-    data: dto,
-  });
-}
-
-/**
- * 更新部门是否内置
- * @param {DeptBuiltIn} dto 是否内置 DTO
- * @returns {Promise<Dept>} 部门DTO
- */
-export function updateDeptBuiltIn(dto: DeptBuiltIn): Promise<Dept> {
-  return request<Dept>({
-    url: `${DEPT_API_BASE}/built-in`,
     method: 'put',
     data: dto,
   });

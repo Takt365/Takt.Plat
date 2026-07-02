@@ -23,7 +23,7 @@ namespace Takt.Domain.Entities.Logistics.Procurement;
 public class TaktPurchaseOrderChangeLog : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 采购订单ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 采购订单 ID（关联 TaktPurchaseOrder.Id，选项 TaktPurchaseOrders/options）
     /// </summary>
     [SugarColumn(ColumnName = "purchase_order_id", ColumnDescription = "采购订单ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]

@@ -2,13 +2,13 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/foundation/quartz-task -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：Quartz 定时任务实体管理页面，含查询、增删改，由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成 -->
+<!-- 功能描述：Quartz 定时任务实体管理页面，含查询、增删改，由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
 
 <template>
-  <div class="foundation-quartz-task">
+  <div class="p-4">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -20,17 +20,17 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="foundation:quartztask:create"
-      update-permission="foundation:quartztask:update"
-      delete-permission="foundation:quartztask:delete"
-      import-permission="foundation:quartztask:import"
-      export-permission="foundation:quartztask:export"
+      create-permission="foundation:quartz:task:create"
+      update-permission="foundation:quartz:task:update"
+      delete-permission="foundation:quartz:task:delete"
+      import-permission="foundation:quartz:task:import"
+      export-permission="foundation:quartz:task:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
       :show-import="true"
       :show-export="true"
-      :show-expand="true"
+      :show-expand="false"
       :show-advanced-query="true"
       :show-column-setting="true"
       :show-fullscreen="true"
@@ -53,11 +53,9 @@
     />
 
     <!-- 表格 -->
-    <div class="foundation-quartz-task-table-wrap">
-      <TaktSingleTable
-        :scroll="tableScroll"
-        :columns="columns"
+    <TaktSingleTable
       entity-scope="company"
+      :columns="columns"
       :visible-column-keys="visibleColumnKeys"
       :id-column-key="'quartzTaskId'"
       table-mode="single"
@@ -68,32 +66,52 @@
       :row-selection="rowSelection"
       :custom-row="onClickRow"
 
-      :expanded-row-keys="expandedRowKeys"
-      @expand="handleExpand"
       @change="handleTableChange"
       @resize-column="handleResizeColumn"
     >
-      <!-- 展开行渲染 -->
-      <template #expandedRowRender="{ record }">
-        <div class="p-4">
-          <div class="mb-2 text-sm font-medium">{{ t('entity.quartzLog._self') }}</div>
-          <a-table
-            v-if="hasQuartzLogRows(record)"
-            :columns="quartzLogExpandColumns"
-            :data-source="getQuartzLogRows(record)"
-            :row-key="(row: QuartzLog, index?: number) => row?.quartzLogId || String(index ?? 0)"
-            :pagination="false"
-            size="small"
-            bordered
-            class="mb-4"
+      <!-- 字典/开关列渲染 -->
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'jobGroup'">
+          <TaktDictTag
+            :value="getQuartzTaskField(record, 'jobGroup')"
+            dict-type="sys_quartz_job_group"
           />
-          <a-empty v-else class="mb-4" />
-        </div>
+        </template>
+        <template v-else-if="column.key === 'taskType'">
+          <TaktDictTag
+            :value="getQuartzTaskField(record, 'taskType')"
+            dict-type="sys_quartz_task_type"
+          />
+        </template>
+        <template v-else-if="column.key === 'triggerType'">
+          <TaktDictTag
+            :value="getQuartzTaskField(record, 'triggerType')"
+            dict-type="sys_quartz_trigger_type"
+          />
+        </template>
+        <template v-else-if="column.key === 'concurrent'">
+          <TaktDictTag
+            :value="getQuartzTaskField(record, 'concurrent')"
+            dict-type="sys_yes_no_type"
+          />
+        </template>
+        <template v-else-if="column.key === 'misfirePolicy'">
+          <TaktDictTag
+            :value="getQuartzTaskField(record, 'misfirePolicy')"
+            dict-type="sys_quartz_misfire_policy"
+          />
+        </template>
+        <template v-else-if="column.key === 'taskStatus'">
+          <TaktDictTag
+            :value="getQuartzTaskField(record, 'taskStatus')"
+            dict-type="sys_quartz_task_status"
+          />
+        </template>
       </template>
-    </TaktSingleTable>
-    </div>
 
-    <!-- 分页组件 -->
+    </TaktSingleTable>
+
+    <!-- 分页（服务端分页，外置 TaktPagination） -->
     <TaktPagination
       v-model:current="currentPage"
       v-model:page-size="pageSize"
@@ -113,6 +131,7 @@
       @cancel="handleFormCancel"
     >
       <QuartzTaskForm
+        :key="formData?.quartzTaskId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -130,227 +149,265 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('taskCode')">
-      <a-form-item :label="t('entity.quartzTask.taskcode')">
+      <a-form-item :label="t('entity.quartztask.taskcode')">
         <a-input
           v-model:value="advancedQueryForm.taskCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzTask.taskcode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartztask.taskcode') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('taskName')">
-      <a-form-item :label="t('entity.quartzTask.taskname')">
+      <a-form-item :label="t('entity.quartztask.taskname')">
         <a-input
           v-model:value="advancedQueryForm.taskName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzTask.taskname') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartztask.taskname') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('jobName')">
-      <a-form-item :label="t('entity.quartzTask.jobname')">
+      <a-form-item :label="t('entity.quartztask.jobname')">
         <a-input
           v-model:value="advancedQueryForm.jobName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzTask.jobname') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartztask.jobname') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('jobGroup')">
-      <a-form-item :label="t('entity.quartzTask.jobgroup')">
-        <a-input
+      <a-form-item :label="t('entity.quartztask.jobgroup')">
+        <TaktSelect
           v-model:value="advancedQueryForm.jobGroup"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzTask.jobgroup') })"
+          dict-type="sys_quartz_job_group"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.quartztask.jobgroup') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('taskType')">
-      <a-form-item :label="t('entity.quartzTask.tasktype')">
-        <a-input-number
+      <a-form-item :label="t('entity.quartztask.tasktype')">
+        <TaktSelect
           v-model:value="advancedQueryForm.taskType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzTask.tasktype') })"
-          style="width: 100%"
+          dict-type="sys_quartz_task_type"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.quartztask.tasktype') })"
+          allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('assemblyName')">
-      <a-form-item :label="t('entity.quartzTask.assemblyname')">
+      <a-form-item :label="t('entity.quartztask.assemblyname')">
         <a-input
           v-model:value="advancedQueryForm.assemblyName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzTask.assemblyname') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartztask.assemblyname') })"
+          show-count
+          :maxlength="255"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('className')">
-      <a-form-item :label="t('entity.quartzTask.classname')">
+      <a-form-item :label="t('entity.quartztask.classname')">
         <a-input
           v-model:value="advancedQueryForm.className"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzTask.classname') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartztask.classname') })"
+          show-count
+          :maxlength="255"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('apiUrl')">
-      <a-form-item :label="t('entity.quartzTask.apiurl')">
+      <a-form-item :label="t('entity.quartztask.apiurl')">
         <a-input
           v-model:value="advancedQueryForm.apiUrl"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzTask.apiurl') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartztask.apiurl') })"
+          show-count
+          :maxlength="255"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('requestMethod')">
-      <a-form-item :label="t('entity.quartzTask.requestmethod')">
+      <a-form-item :label="t('entity.quartztask.requestmethod')">
         <a-input
           v-model:value="advancedQueryForm.requestMethod"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzTask.requestmethod') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartztask.requestmethod') })"
+          show-count
+          :maxlength="10"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('sqlScript')">
-      <a-form-item :label="t('entity.quartzTask.sqlscript')">
+      <a-form-item :label="t('entity.quartztask.sqlscript')">
         <a-input
           v-model:value="advancedQueryForm.sqlScript"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzTask.sqlscript') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartztask.sqlscript') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('triggerType')">
-      <a-form-item :label="t('entity.quartzTask.triggertype')">
-        <a-input-number
+      <a-form-item :label="t('entity.quartztask.triggertype')">
+        <TaktSelect
           v-model:value="advancedQueryForm.triggerType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzTask.triggertype') })"
-          style="width: 100%"
+          dict-type="sys_quartz_trigger_type"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.quartztask.triggertype') })"
+          allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('cronExpression')">
-      <a-form-item :label="t('entity.quartzTask.cronexpression')">
+      <a-form-item :label="t('entity.quartztask.cronexpression')">
         <a-input
           v-model:value="advancedQueryForm.cronExpression"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzTask.cronexpression') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartztask.cronexpression') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('intervalSeconds')">
-      <a-form-item :label="t('entity.quartzTask.intervalseconds')">
+      <a-form-item :label="t('entity.quartztask.intervalseconds')">
         <a-input-number
           v-model:value="advancedQueryForm.intervalSeconds"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzTask.intervalseconds') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartztask.intervalseconds') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('executeParams')">
-      <a-form-item :label="t('entity.quartzTask.executeparams')">
+      <a-form-item :label="t('entity.quartztask.executeparams')">
         <a-input
           v-model:value="advancedQueryForm.executeParams"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzTask.executeparams') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartztask.executeparams') })"
+          show-count
+          :maxlength="1000"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('taskStatus')">
-      <a-form-item :label="t('entity.quartzTask.taskstatus')">
-        <a-input-number
-          v-model:value="advancedQueryForm.taskStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzTask.taskstatus') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
       <div v-show="isFieldVisible('concurrent')">
-      <a-form-item :label="t('entity.quartzTask.concurrent')">
-        <a-input-number
+      <a-form-item :label="t('entity.quartztask.concurrent')">
+        <TaktSelect
           v-model:value="advancedQueryForm.concurrent"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzTask.concurrent') })"
-          style="width: 100%"
+          dict-type="sys_yes_no_type"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.quartztask.concurrent') })"
+          allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('misfirePolicy')">
-      <a-form-item :label="t('entity.quartzTask.misfirepolicy')">
-        <a-input-number
+      <a-form-item :label="t('entity.quartztask.misfirepolicy')">
+        <TaktSelect
           v-model:value="advancedQueryForm.misfirePolicy"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzTask.misfirepolicy') })"
-          style="width: 100%"
+          dict-type="sys_quartz_misfire_policy"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.quartztask.misfirepolicy') })"
+          allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('firstRunAtStart')">
-      <a-form-item :label="t('entity.quartzTask.firstrunatstart')">
+      <a-form-item :label="t('entity.quartztask.firstrunatstart')">
         <a-input
           v-model:value="advancedQueryForm.firstRunAtStart"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzTask.firstrunatstart') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartztask.firstrunatstart') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('firstRunAtEnd')">
-      <a-form-item :label="t('entity.quartzTask.firstrunatend')">
+      <a-form-item :label="t('entity.quartztask.firstrunatend')">
         <a-input
           v-model:value="advancedQueryForm.firstRunAtEnd"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzTask.firstrunatend') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartztask.firstrunatend') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('executeCount')">
-      <a-form-item :label="t('entity.quartzTask.executecount')">
+      <a-form-item :label="t('entity.quartztask.executecount')">
         <a-input-number
           v-model:value="advancedQueryForm.executeCount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzTask.executecount') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartztask.executecount') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('lastRunAtStart')">
-      <a-form-item :label="t('entity.quartzTask.lastrunatstart')">
+      <a-form-item :label="t('entity.quartztask.lastrunatstart')">
         <a-input
           v-model:value="advancedQueryForm.lastRunAtStart"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzTask.lastrunatstart') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartztask.lastrunatstart') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('lastRunAtEnd')">
-      <a-form-item :label="t('entity.quartzTask.lastrunatend')">
+      <a-form-item :label="t('entity.quartztask.lastrunatend')">
         <a-input
           v-model:value="advancedQueryForm.lastRunAtEnd"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzTask.lastrunatend') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartztask.lastrunatend') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('nextRunAtStart')">
-      <a-form-item :label="t('entity.quartzTask.nextrunatstart')">
+      <a-form-item :label="t('entity.quartztask.nextrunatstart')">
         <a-input
           v-model:value="advancedQueryForm.nextRunAtStart"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzTask.nextrunatstart') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartztask.nextrunatstart') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('nextRunAtEnd')">
-      <a-form-item :label="t('entity.quartzTask.nextrunatend')">
+      <a-form-item :label="t('entity.quartztask.nextrunatend')">
         <a-input
           v-model:value="advancedQueryForm.nextRunAtEnd"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzTask.nextrunatend') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartztask.nextrunatend') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('description')">
-      <a-form-item :label="t('entity.quartzTask.description')">
+      <div v-show="isFieldVisible('taskDescription')">
+      <a-form-item :label="t('entity.quartztask.taskdescription')">
         <a-textarea
-          v-model:value="advancedQueryForm.description"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.quartzTask.description') })"
+          v-model:value="advancedQueryForm.taskDescription"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.quartztask.taskdescription') })"
           :rows="2"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('taskStatus')">
+      <a-form-item :label="t('entity.quartztask.taskstatus')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.taskStatus"
+          dict-type="sys_quartz_task_status"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.quartztask.taskstatus') })"
           allow-clear
         />
       </a-form-item>
@@ -361,7 +418,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -372,17 +429,36 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('ExtField')">
-      <a-form-item :label="t('common.page.entity.ExtField')">
-        <a-input
-          v-model:value="advancedQueryForm.ExtField"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
-          allow-clear
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
+        <a-textarea
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -391,8 +467,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -402,14 +480,15 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.quartzTask._self') })"
+      :title="t('common.dialog.title.import', { entity: t('entity.quartztask._self') })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.quartzTask._self"
+        v-if="importVisible"
+        entity-i18n-key="entity.quartztask._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -436,9 +515,8 @@
 </template>
 
 <script setup lang="ts">
-import { getTaktDefaultPageIndex, getTaktDefaultPageSize, ensureTaktPaginationConfigAsync } from '@/utils/takt-paged'
 /**
- * Quartz 定时任务实体管理页 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
+ * Quartz 定时任务实体管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/foundation/quartz-task
  */
 import { ref, computed, onMounted } from 'vue'
@@ -446,14 +524,15 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import QuartzTaskForm from './components/quartz-task-form.vue'
-import { getQuartzTaskList, getQuartzTaskById, createQuartzTask, updateQuartzTask, deleteQuartzTaskById, deleteQuartzTaskBatch, getQuartzTaskTemplate, importQuartzTask, exportQuartzTask } from '@/api/foundation/quartz-task'
-import type { QuartzLog } from '@/types/foundation/quartz-log'
-import type { QuartzTask, QuartzTaskQuery, QuartzTaskCreate, QuartzTaskUpdate } from '@/types/foundation/quartz-task'
+import { getQuartzTaskList, getQuartzTaskById, createQuartzTask, updateQuartzTask, deleteQuartzTaskById, deleteQuartzTaskBatch, getQuartzTaskTemplate, importQuartzTask, exportQuartzTask, updateQuartzTaskStatus } from '@/api/foundation/quartz-task'
+import type { QuartzTask, QuartzTaskQuery } from '@/types/foundation/quartz-task'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { useQuartzSignalRRefresh } from '@/composables/use-quartz-signalr-refresh'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -461,7 +540,7 @@ const { t } = useI18n()
 const excelNames = taktExcelEntityNames('TaktQuartzTask')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.quartzTask._self') })
+  () => t('common.page.form.placeholder.search', { keyword: t('entity.quartztask._self') })
 )
 
 /** 快捷查询关键字 */
@@ -476,8 +555,6 @@ const currentPage = ref(getTaktDefaultPageIndex())
 const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
-/** 表格 scroll.y（服务端分页固定视口高度） */
-const tableScroll = { y: 'calc(100vh - 300px)' } as const
 /** 工具栏单选时当前行 */
 const selectedRow = ref<QuartzTask | null>(null)
 /** 表格多选行 */
@@ -490,11 +567,13 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<QuartzTask>>({})
+const formData = ref<Partial<QuartzTask> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
@@ -502,7 +581,7 @@ const advancedQueryForm = ref({
   taskName: '',
   jobName: '',
   jobGroup: '',
-  taskType: undefined as number | undefined,
+  taskType: '',
   assemblyName: '',
   className: '',
   apiUrl: '',
@@ -512,7 +591,6 @@ const advancedQueryForm = ref({
   cronExpression: '',
   intervalSeconds: undefined as number | undefined,
   executeParams: '',
-  taskStatus: undefined as number | undefined,
   concurrent: undefined as number | undefined,
   misfirePolicy: undefined as number | undefined,
   firstRunAtStart: '',
@@ -522,42 +600,43 @@ const advancedQueryForm = ref({
   lastRunAtEnd: '',
   nextRunAtStart: '',
   nextRunAtEnd: '',
-  description: '',
+  taskDescription: '',
+  taskStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'taskCode', label: t('entity.quartzTask.taskcode') },
-  { key: 'taskName', label: t('entity.quartzTask.taskname') },
-  { key: 'jobName', label: t('entity.quartzTask.jobname') },
-  { key: 'jobGroup', label: t('entity.quartzTask.jobgroup') },
-  { key: 'taskType', label: t('entity.quartzTask.tasktype') },
-  { key: 'assemblyName', label: t('entity.quartzTask.assemblyname') },
-  { key: 'className', label: t('entity.quartzTask.classname') },
-  { key: 'apiUrl', label: t('entity.quartzTask.apiurl') },
-  { key: 'requestMethod', label: t('entity.quartzTask.requestmethod') },
-  { key: 'sqlScript', label: t('entity.quartzTask.sqlscript') },
-  { key: 'triggerType', label: t('entity.quartzTask.triggertype') },
-  { key: 'cronExpression', label: t('entity.quartzTask.cronexpression') },
-  { key: 'intervalSeconds', label: t('entity.quartzTask.intervalseconds') },
-  { key: 'executeParams', label: t('entity.quartzTask.executeparams') },
-  { key: 'taskStatus', label: t('entity.quartzTask.taskstatus') },
-  { key: 'concurrent', label: t('entity.quartzTask.concurrent') },
-  { key: 'misfirePolicy', label: t('entity.quartzTask.misfirepolicy') },
-  { key: 'firstRunAtStart', label: t('entity.quartzTask.firstrunatstart') },
-  { key: 'firstRunAtEnd', label: t('entity.quartzTask.firstrunatend') },
-  { key: 'executeCount', label: t('entity.quartzTask.executecount') },
-  { key: 'lastRunAtStart', label: t('entity.quartzTask.lastrunatstart') },
-  { key: 'lastRunAtEnd', label: t('entity.quartzTask.lastrunatend') },
-  { key: 'nextRunAtStart', label: t('entity.quartzTask.nextrunatstart') },
-  { key: 'nextRunAtEnd', label: t('entity.quartzTask.nextrunatend') },
-  { key: 'description', label: t('entity.quartzTask.description') },
+  { key: 'taskCode', label: t('entity.quartztask.taskcode') },
+  { key: 'taskName', label: t('entity.quartztask.taskname') },
+  { key: 'jobName', label: t('entity.quartztask.jobname') },
+  { key: 'jobGroup', label: t('entity.quartztask.jobgroup') },
+  { key: 'taskType', label: t('entity.quartztask.tasktype') },
+  { key: 'assemblyName', label: t('entity.quartztask.assemblyname') },
+  { key: 'className', label: t('entity.quartztask.classname') },
+  { key: 'apiUrl', label: t('entity.quartztask.apiurl') },
+  { key: 'requestMethod', label: t('entity.quartztask.requestmethod') },
+  { key: 'sqlScript', label: t('entity.quartztask.sqlscript') },
+  { key: 'triggerType', label: t('entity.quartztask.triggertype') },
+  { key: 'cronExpression', label: t('entity.quartztask.cronexpression') },
+  { key: 'intervalSeconds', label: t('entity.quartztask.intervalseconds') },
+  { key: 'executeParams', label: t('entity.quartztask.executeparams') },
+  { key: 'concurrent', label: t('entity.quartztask.concurrent') },
+  { key: 'misfirePolicy', label: t('entity.quartztask.misfirepolicy') },
+  { key: 'firstRunAtStart', label: t('entity.quartztask.firstrunatstart') },
+  { key: 'firstRunAtEnd', label: t('entity.quartztask.firstrunatend') },
+  { key: 'executeCount', label: t('entity.quartztask.executecount') },
+  { key: 'lastRunAtStart', label: t('entity.quartztask.lastrunatstart') },
+  { key: 'lastRunAtEnd', label: t('entity.quartztask.lastrunatend') },
+  { key: 'nextRunAtStart', label: t('entity.quartztask.nextrunatstart') },
+  { key: 'nextRunAtEnd', label: t('entity.quartztask.nextrunatend') },
+  { key: 'taskDescription', label: t('entity.quartztask.taskdescription') },
+  { key: 'taskStatus', label: t('entity.quartztask.taskstatus') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'ExtField', label: t('common.page.entity.ExtField') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -575,75 +654,87 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
-/** 主子表展开行 keys（手风琴，仅一行展开） */
-const expandedRowKeys = ref<string[]>([])
+/** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
+const dictDataStore = useDictDataStore()
 
-/** 页面挂载后加载分页列表 */
+
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {QuartzTaskQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<QuartzTaskQuery>): QuartzTaskQuery {
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: QuartzTaskQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: keyof QuartzTaskQuery, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v as never
+    }
+  }
+  assignTrimmed('taskCode', form.taskCode)
+  assignTrimmed('taskName', form.taskName)
+  assignTrimmed('jobName', form.jobName)
+  assignTrimmed('jobGroup', form.jobGroup)
+  assignTrimmed('taskType', form.taskType)
+  assignTrimmed('assemblyName', form.assemblyName)
+  assignTrimmed('className', form.className)
+  assignTrimmed('apiUrl', form.apiUrl)
+  assignTrimmed('requestMethod', form.requestMethod)
+  assignTrimmed('sqlScript', form.sqlScript)
+  if (form.triggerType !== undefined && form.triggerType !== null) {
+    query.triggerType = form.triggerType
+  }
+  assignTrimmed('cronExpression', form.cronExpression)
+  if (form.intervalSeconds !== undefined && form.intervalSeconds !== null) {
+    query.intervalSeconds = form.intervalSeconds
+  }
+  assignTrimmed('executeParams', form.executeParams)
+  if (form.concurrent !== undefined && form.concurrent !== null) {
+    query.concurrent = form.concurrent
+  }
+  if (form.misfirePolicy !== undefined && form.misfirePolicy !== null) {
+    query.misfirePolicy = form.misfirePolicy
+  }
+  assignTrimmed('firstRunAtStart', form.firstRunAtStart)
+  assignTrimmed('firstRunAtEnd', form.firstRunAtEnd)
+  if (form.executeCount !== undefined && form.executeCount !== null) {
+    query.executeCount = form.executeCount
+  }
+  assignTrimmed('lastRunAtStart', form.lastRunAtStart)
+  assignTrimmed('lastRunAtEnd', form.lastRunAtEnd)
+  assignTrimmed('nextRunAtStart', form.nextRunAtStart)
+  assignTrimmed('nextRunAtEnd', form.nextRunAtEnd)
+  assignTrimmed('taskDescription', form.taskDescription)
+  if (form.taskStatus !== undefined && form.taskStatus !== null) {
+    query.taskStatus = form.taskStatus
+  }
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('extField', form.extField)
+  assignTrimmed('remark', form.remark)
+  return query
+}
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
+  void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
 
-/** 展开行预览：quartzLog 列 */
-const quartzLogExpandColumns = computed(() => [
-
-])
-
-/** 读取主表行上的 quartzLog 子表缓存 */
-function getQuartzLogRows(record: QuartzTask): QuartzLog[] {
-  return (record as any)?.quartzLogs ?? []
-}
-
-/** 主表行是否已加载 quartzLog 子表 */
-function hasQuartzLogRows(record: QuartzTask): boolean {
-  return getQuartzLogRows(record).length > 0
-}
 
 
-/** 加载主表详情并回填当前页 dataSource */
-async function loadQuartzTaskDetail(record: QuartzTask): Promise<QuartzTask | null> {
-  const id = getQuartzTaskId(record)
-  if (!id) {
-    return null
-  }
-  try {
-    const detail = await getQuartzTaskById(id)
-    const index = dataSource.value.findIndex((row) => getQuartzTaskId(row) === id)
-    if (index !== -1) {
-      dataSource.value[index] = { ...dataSource.value[index], ...detail } as QuartzTask
-    }
-    return detail
-  } catch (error: any) {
-    message.error(error?.message || t('common.feedback.load.data.failed'))
-    return null
-  }
-}
-/** 通过主表详情接口加载 quartzLog 子表 */
-async function loadQuartzLogForQuartzTask(record: QuartzTask): Promise<QuartzLog[]> {
-  const detail = await loadQuartzTaskDetail(record)
-  return detail?.quartzLogs ?? []
-}
 
-/** 展开前确保各子表已懒加载 */
-async function ensureQuartzTaskChildrenLoaded(record: QuartzTask) {
-  if (!hasQuartzLogRows(record)) {
-    await loadQuartzLogForQuartzTask(record)
-  }
-}
 
-/** 主表展开行：手风琴懒加载子表 */
-async function handleExpand(expanded: boolean, record: QuartzTask) {
-  const key = getQuartzTaskId(record)
-  if (!expanded || !key) {
-    expandedRowKeys.value = []
-    return
-  }
-  if (expandedRowKeys.value.length > 0 && expandedRowKeys.value[0] !== key) {
-    expandedRowKeys.value = []
-  }
-  await ensureQuartzTaskChildrenLoaded(record)
-  expandedRowKeys.value = [key]
-}
+
 
 /** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
@@ -658,7 +749,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getQuartzTaskField(record, 'quartzTaskId') ?? ''
   },
   {
-    title: t('entity.quartzTask.taskcode'),
+    title: t('entity.quartztask.taskcode'),
     dataIndex: 'taskCode',
     key: 'taskCode',
     width: 120,
@@ -667,7 +758,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getQuartzTaskField(record, 'taskCode') ?? ''
   },
   {
-    title: t('entity.quartzTask.taskname'),
+    title: t('entity.quartztask.taskname'),
     dataIndex: 'taskName',
     key: 'taskName',
     width: 120,
@@ -676,7 +767,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getQuartzTaskField(record, 'taskName') ?? ''
   },
   {
-    title: t('entity.quartzTask.jobname'),
+    title: t('entity.quartztask.jobname'),
     dataIndex: 'jobName',
     key: 'jobName',
     width: 120,
@@ -685,25 +776,23 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getQuartzTaskField(record, 'jobName') ?? ''
   },
   {
-    title: t('entity.quartzTask.jobgroup'),
+    title: t('entity.quartztask.jobgroup'),
     dataIndex: 'jobGroup',
     key: 'jobGroup',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getQuartzTaskField(record, 'jobGroup') ?? ''
   },
   {
-    title: t('entity.quartzTask.tasktype'),
+    title: t('entity.quartztask.tasktype'),
     dataIndex: 'taskType',
     key: 'taskType',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getQuartzTaskField(record, 'taskType') ?? ''
   },
   {
-    title: t('entity.quartzTask.assemblyname'),
+    title: t('entity.quartztask.assemblyname'),
     dataIndex: 'assemblyName',
     key: 'assemblyName',
     width: 120,
@@ -712,7 +801,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getQuartzTaskField(record, 'assemblyName') ?? ''
   },
   {
-    title: t('entity.quartzTask.classname'),
+    title: t('entity.quartztask.classname'),
     dataIndex: 'className',
     key: 'className',
     width: 120,
@@ -721,7 +810,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getQuartzTaskField(record, 'className') ?? ''
   },
   {
-    title: t('entity.quartzTask.apiurl'),
+    title: t('entity.quartztask.apiurl'),
     dataIndex: 'apiUrl',
     key: 'apiUrl',
     width: 120,
@@ -730,7 +819,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getQuartzTaskField(record, 'apiUrl') ?? ''
   },
   {
-    title: t('entity.quartzTask.requestmethod'),
+    title: t('entity.quartztask.requestmethod'),
     dataIndex: 'requestMethod',
     key: 'requestMethod',
     width: 120,
@@ -739,7 +828,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getQuartzTaskField(record, 'requestMethod') ?? ''
   },
   {
-    title: t('entity.quartzTask.sqlscript'),
+    title: t('entity.quartztask.sqlscript'),
     dataIndex: 'sqlScript',
     key: 'sqlScript',
     width: 120,
@@ -748,16 +837,15 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getQuartzTaskField(record, 'sqlScript') ?? ''
   },
   {
-    title: t('entity.quartzTask.triggertype'),
+    title: t('entity.quartztask.triggertype'),
     dataIndex: 'triggerType',
     key: 'triggerType',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getQuartzTaskField(record, 'triggerType') ?? ''
   },
   {
-    title: t('entity.quartzTask.cronexpression'),
+    title: t('entity.quartztask.cronexpression'),
     dataIndex: 'cronExpression',
     key: 'cronExpression',
     width: 120,
@@ -766,7 +854,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getQuartzTaskField(record, 'cronExpression') ?? ''
   },
   {
-    title: t('entity.quartzTask.intervalseconds'),
+    title: t('entity.quartztask.intervalseconds'),
     dataIndex: 'intervalSeconds',
     key: 'intervalSeconds',
     width: 120,
@@ -775,7 +863,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getQuartzTaskField(record, 'intervalSeconds') ?? ''
   },
   {
-    title: t('entity.quartzTask.executeparams'),
+    title: t('entity.quartztask.executeparams'),
     dataIndex: 'executeParams',
     key: 'executeParams',
     width: 120,
@@ -784,34 +872,23 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getQuartzTaskField(record, 'executeParams') ?? ''
   },
   {
-    title: t('entity.quartzTask.taskstatus'),
-    dataIndex: 'taskStatus',
-    key: 'taskStatus',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getQuartzTaskField(record, 'taskStatus') ?? ''
-  },
-  {
-    title: t('entity.quartzTask.concurrent'),
+    title: t('entity.quartztask.concurrent'),
     dataIndex: 'concurrent',
     key: 'concurrent',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getQuartzTaskField(record, 'concurrent') ?? ''
   },
   {
-    title: t('entity.quartzTask.misfirepolicy'),
+    title: t('entity.quartztask.misfirepolicy'),
     dataIndex: 'misfirePolicy',
     key: 'misfirePolicy',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getQuartzTaskField(record, 'misfirePolicy') ?? ''
   },
   {
-    title: t('entity.quartzTask.firstrunat'),
+    title: t('entity.quartztask.firstrunat'),
     dataIndex: 'firstRunAt',
     key: 'firstRunAt',
     width: 120,
@@ -820,7 +897,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getQuartzTaskField(record, 'firstRunAt') ?? ''
   },
   {
-    title: t('entity.quartzTask.executecount'),
+    title: t('entity.quartztask.executecount'),
     dataIndex: 'executeCount',
     key: 'executeCount',
     width: 120,
@@ -829,7 +906,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getQuartzTaskField(record, 'executeCount') ?? ''
   },
   {
-    title: t('entity.quartzTask.lastrunat'),
+    title: t('entity.quartztask.lastrunat'),
     dataIndex: 'lastRunAt',
     key: 'lastRunAt',
     width: 120,
@@ -838,7 +915,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getQuartzTaskField(record, 'lastRunAt') ?? ''
   },
   {
-    title: t('entity.quartzTask.nextrunat'),
+    title: t('entity.quartztask.nextrunat'),
     dataIndex: 'nextRunAt',
     key: 'nextRunAt',
     width: 120,
@@ -847,13 +924,21 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getQuartzTaskField(record, 'nextRunAt') ?? ''
   },
   {
-    title: t('entity.quartzTask.description'),
-    dataIndex: 'description',
-    key: 'description',
+    title: t('entity.quartztask.taskdescription'),
+    dataIndex: 'taskDescription',
+    key: 'taskDescription',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getQuartzTaskField(record, 'description') ?? ''
+    customRender: ({ record }: { record: any }) => getQuartzTaskField(record, 'taskDescription') ?? ''
+  },
+  {
+    title: t('entity.quartztask.taskstatus'),
+    dataIndex: 'taskStatus',
+    key: 'taskStatus',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
   },
   CreateActionColumn({
     actions: [
@@ -862,7 +947,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'foundation:quartztask:update',
+        permission: 'foundation:quartz:task:update',
         onClick: (record: QuartzTask) => handleEdit(record)
       },
       {
@@ -870,7 +955,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'foundation:quartztask:delete',
+        permission: 'foundation:quartz:task:delete',
         onClick: (record: QuartzTask) => handleDeleteOne(record)
       }
     ]
@@ -886,6 +971,7 @@ const getQuartzTaskId = (record: any): string => record?.[entityIdName] ?? ''
  */
 const getQuartzTaskField = (record: any, field: string): any => record?.[field]
 
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -897,7 +983,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: QuartzTask, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getQuartzTaskId(selectedRow.value) === getQuartzTaskId(record)) {
+    } else if (selectedRow.value && getQuartzTaskId(selectedRow.value) === getQuartzTaskId(record)) {
       selectedRow.value = null
     }
   },
@@ -928,16 +1014,7 @@ const onClickRow = (record: QuartzTask) => ({
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: QuartzTaskQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getQuartzTaskList(params)
+    const res = await getQuartzTaskList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
@@ -953,18 +1030,6 @@ async function loadData() {
 /** 租户/公司切换时由 bootstrap 发出 table:refresh，自动重载列表 */
 useTableRefresh(loadData)
 
-/** SignalR：任务定义变更 / 执行完成时刷新列表与展开行日志 */
-useQuartzSignalRRefresh(loadData, async (event) => {
-  const expandedKey = expandedRowKeys.value[0]
-  if (!expandedKey || expandedKey !== event.quartzTaskId) {
-    return
-  }
-  const record = dataSource.value.find((row) => getQuartzTaskId(row) === expandedKey)
-  if (record) {
-    await loadQuartzLogForQuartzTask(record)
-  }
-})
-
 /** 快捷查询 */
 function handleSearch() {
   currentPage.value = getTaktDefaultPageIndex()
@@ -979,7 +1044,7 @@ function handleReset() {
   taskName: '',
   jobName: '',
   jobGroup: '',
-  taskType: undefined as number | undefined,
+  taskType: '',
   assemblyName: '',
   className: '',
   apiUrl: '',
@@ -989,7 +1054,6 @@ function handleReset() {
   cronExpression: '',
   intervalSeconds: undefined as number | undefined,
   executeParams: '',
-  taskStatus: undefined as number | undefined,
   concurrent: undefined as number | undefined,
   misfirePolicy: undefined as number | undefined,
   firstRunAtStart: '',
@@ -999,10 +1063,11 @@ function handleReset() {
   lastRunAtEnd: '',
   nextRunAtStart: '',
   nextRunAtEnd: '',
-  description: '',
+  taskDescription: '',
+  taskStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
   currentPage.value = getTaktDefaultPageIndex()
@@ -1011,29 +1076,24 @@ function handleReset() {
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.quartzTask._self') })
-  formData.value = {}
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.quartztask._self') })
+  formData.value = null
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
-/** 打开编辑弹窗（主子表：先拉详情含子表） */
-async function handleEdit(record: QuartzTask) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.quartzTask._self') })
-  formLoading.value = true
-  try {
-    const detail = await loadQuartzTaskDetail(record)
-    formData.value = detail ? { ...detail } : { ...record }
-    formVisible.value = true
-  } finally {
-    formLoading.value = false
-  }
+/** 打开编辑弹窗 */
+function handleEdit(record: QuartzTask) {
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.quartztask._self') })
+  formData.value = { ...record }
+  formVisible.value = true
 }
 
 /** 工具栏编辑：打开当前单选行 */
 function handleUpdate() {
   if (selectedRow.value) {
-    void handleEdit(selectedRow.value)
+    handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.quartzTask._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.quartztask._self') }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -1051,12 +1111,14 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateQuartzTask(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.quartzTask._self') }))
+      message.success(t('common.feedback.updated', { target: t('entity.quartztask._self') }))
     } else {
       await createQuartzTask(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.quartzTask._self') }))
+      message.success(t('common.feedback.created', { target: t('entity.quartztask._self') }))
     }
     formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
     loadData()
   } finally {
     formLoading.value = false
@@ -1066,6 +1128,8 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开导入对话框 */
 function handleImport() {
@@ -1078,15 +1142,18 @@ async function handleDownloadTemplate(sheetName?: string, fileName?: string): Pr
   return (res as any)?.data ?? res
 }
 
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importQuartzTask(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importQuartzTask(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
+  }
 }
 
 /** 关闭导入对话框 */
@@ -1097,16 +1164,11 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: QuartzTaskQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportQuartzTask(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportQuartzTask(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -1125,10 +1187,10 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.quartzTask._self') }))
+    message.success(t('common.feedback.export.success', { target: t('entity.quartztask._self') }))
   } catch (error: any) {
     logger.error('[QuartzTask] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.quartzTask._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.quartztask._self') }))
   } finally {
     loading.value = false
   }
@@ -1137,12 +1199,12 @@ async function handleExport() {
 async function handleDeleteOne(record: QuartzTask) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.quartzTask._self'), name: t('common.tip.this.target', { target: t('entity.quartzTask._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: t('entity.quartztask._self'), name: t('common.tip.this.target', { target: t('entity.quartztask._self') }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteQuartzTaskById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.quartzTask._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.quartztask._self') }))
       loadData()
     }
   })
@@ -1150,18 +1212,18 @@ async function handleDeleteOne(record: QuartzTask) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.quartzTask._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.quartztask._self') }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.quartzTask._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: t('entity.quartztask._self'), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteQuartzTaskBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.quartzTask._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.quartztask._self') }))
       loadData()
     }
   })
@@ -1184,7 +1246,7 @@ function handleAdvancedQueryReset() {
   taskName: '',
   jobName: '',
   jobGroup: '',
-  taskType: undefined as number | undefined,
+  taskType: '',
   assemblyName: '',
   className: '',
   apiUrl: '',
@@ -1194,7 +1256,6 @@ function handleAdvancedQueryReset() {
   cronExpression: '',
   intervalSeconds: undefined as number | undefined,
   executeParams: '',
-  taskStatus: undefined as number | undefined,
   concurrent: undefined as number | undefined,
   misfirePolicy: undefined as number | undefined,
   firstRunAtStart: '',
@@ -1204,10 +1265,11 @@ function handleAdvancedQueryReset() {
   lastRunAtEnd: '',
   nextRunAtStart: '',
   nextRunAtEnd: '',
-  description: '',
+  taskDescription: '',
+  taskStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
 }
@@ -1242,24 +1304,11 @@ function handlePaginationChange(page: number, size: number) {
   pageSize.value = size
   loadData()
 }
-/** 分页每页条数变更（重置到默认页码） */
+
+/** 分页每页条数变更（重置到第 1 页） */
 function handlePaginationSizeChange(_current: number, size: number) {
   currentPage.value = getTaktDefaultPageIndex()
   pageSize.value = size
   loadData()
 }
 </script>
-
-<style scoped lang="css">
-.foundation-quartz-task {
-  padding: 0 4px 0 0;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-  height: 100%;
-}
-.foundation-quartz-task-table-wrap {
-  flex: 1;
-  min-height: 0;
-}
-</style>

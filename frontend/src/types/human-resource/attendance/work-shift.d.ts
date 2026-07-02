@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/human-resource/attendance
 // 文件名称：work-shift.d.ts
-// 创建时间：2026-06-20
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/attendance 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -49,7 +49,7 @@ export interface WorkShift extends CompanyDtoBase {
   endTime: string;
 
   /**
-   * 是否跨自然日（0=否 1=是）
+   * 是否跨自然日（字典 sys_yes_no_type；0=否 1=是）
    */
   crossMidnight: number;
 
@@ -59,7 +59,7 @@ export interface WorkShift extends CompanyDtoBase {
   sortOrder: number;
 
   /**
-   * 关联工厂
+   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
   relatedPlant?: string;
 
@@ -104,7 +104,7 @@ export interface WorkShiftQuery extends TaktPagedQuery {
   endTime?: string;
 
   /**
-   * 是否跨自然日（0=否 1=是）
+   * 是否跨自然日（字典 sys_yes_no_type；0=否 1=是）
    */
   crossMidnight?: number;
 
@@ -114,7 +114,7 @@ export interface WorkShiftQuery extends TaktPagedQuery {
   sortOrder?: number;
 
   /**
-   * 关联工厂
+   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
   relatedPlant?: string;
 
@@ -158,7 +158,7 @@ export interface WorkShiftCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -183,12 +183,12 @@ export interface WorkShiftCreate {
   endTime: string;
 
   /**
-   * 是否跨自然日（0=否 1=是）
+   * 是否跨自然日（字典 sys_yes_no_type；0=否 1=是）
    */
   crossMidnight: number;
 
   /**
-   * 关联工厂
+   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
   relatedPlant?: string;
 
@@ -276,12 +276,12 @@ export interface WorkShiftTemplate {
   endTime?: string;
 
   /**
-   * 是否跨自然日（0=否 1=是）
+   * 是否跨自然日（字典 sys_yes_no_type；0=否 1=是）
    */
   crossMidnight?: number;
 
   /**
-   * 关联工厂
+   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
   relatedPlant?: string;
 
@@ -315,7 +315,7 @@ export interface WorkShiftImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -340,12 +340,12 @@ export interface WorkShiftImport {
   endTime?: string;
 
   /**
-   * 是否跨自然日（0=否 1=是）
+   * 是否跨自然日（字典 sys_yes_no_type；0=否 1=是）
    */
   crossMidnight?: number;
 
   /**
-   * 关联工厂
+   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
   relatedPlant?: string;
 
@@ -399,7 +399,7 @@ export interface WorkShiftExport {
   endTime: string;
 
   /**
-   * 是否跨自然日（0=否 1=是）
+   * 是否跨自然日（字典 sys_yes_no_type；0=否 1=是）
    */
   crossMidnight: number;
 
@@ -409,7 +409,7 @@ export interface WorkShiftExport {
   sortOrder: number;
 
   /**
-   * 关联工厂
+   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
   relatedPlant?: string;
 

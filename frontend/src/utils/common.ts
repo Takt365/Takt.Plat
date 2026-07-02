@@ -98,6 +98,16 @@ export enum TaktDataScope {
   Custom = 5,
 }
 
+/**
+ * 已读状态（与后端 TaktReadStatus 一致；消息、新闻、邮件等通用）
+ */
+export enum TaktReadStatus {
+  /** 未读 */
+  Unread = 0,
+  /** 已读 */
+  Read = 1,
+}
+
 /** 菜单启用状态（与后端 TaktCommonStatus.Enabled = 1 一致） */
 export const TAKT_MENU_STATUS_ENABLED = 1;
 
@@ -148,9 +158,6 @@ export const TAKT_THEME_COLOR_STORAGE_KEY = 'takt.theme.color.preset';
 
 /** 登录表单位置 localStorage 键 */
 export const TAKT_LOGIN_LAYOUT_STORAGE_KEY = 'takt.login.layout.position';
-
-/** 前端支持的语言编码（与后端 TaktCultureSeedData.CultureCode 一致） */
-export const TAKT_SUPPORTED_LOCALES = ['en-US', 'ja-JP', 'zh-HK', 'zh-CN'] as const;
 
 /** 租户流水位数（与 Database:TenantCodes 一致） */
 export const TAKT_TENANT_CODE_LENGTH = 3;

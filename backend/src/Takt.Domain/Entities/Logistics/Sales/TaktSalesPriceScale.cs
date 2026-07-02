@@ -26,7 +26,7 @@ namespace Takt.Domain.Entities.Logistics.Sales;
 public class TaktSalesPriceScale : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 价格明细ID（关联销售价格明细表，序列化为string以避免Javascript精度问题）
+    /// 价格明细 ID（关联 TaktSalesPriceItem.Id，选项 TaktSalesPriceItems/options）
     /// </summary>
     [SugarColumn(ColumnName = "item_id", ColumnDescription = "价格明细ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -47,20 +47,24 @@ public class TaktSalesPriceScale : TaktCompanyEntityBase
     /// <summary>
     /// 起始数量（基本单位数量，包含此数量）
     /// </summary>
-    [SugarColumn(ColumnName = "start_quantity", ColumnDescription = "起始数量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 4, IsNullable = false, DefaultValue = "0")]
+    [SugarColumn(ColumnName = "start_quantity", ColumnDescription = "起始数量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "0")]
     public decimal StartQuantity { get; set; } = 0;
 
     /// <summary>
     /// 结束数量（基本单位数量，包含此数量，0表示无上限）
     /// </summary>
-    [SugarColumn(ColumnName = "end_quantity", ColumnDescription = "结束数量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 4, IsNullable = false, DefaultValue = "0")]
+    [SugarColumn(ColumnName = "end_quantity", ColumnDescription = "结束数量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "0")]
     public decimal EndQuantity { get; set; } = 0;
 
     /// <summary>
     /// 阶梯价格（精确到分，存储为整数，单位为分）
     /// </summary>
-    [SugarColumn(ColumnName = "scale_price", ColumnDescription = "阶梯价格", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
+    [SugarColumn(ColumnName = "scale_price", ColumnDescription = "阶梯价格", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "0")]
     public decimal ScalePrice { get; set; } = 0;
+
+    // ========================================
+    // 导航属性区域
+    // ========================================
 
     /// <summary>
     /// 销售价格明细（主表）

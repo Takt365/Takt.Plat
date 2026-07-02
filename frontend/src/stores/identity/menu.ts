@@ -11,7 +11,7 @@
 // ========================================
 
 import { defineStore } from 'pinia';
-import { ref, computed, h } from 'vue';
+import { ref, computed, h, type Component } from 'vue';
 import type { MenuProps } from 'ant-design-vue';
 import i18n from '@/locales';
 import type { MenuTree } from '@/types/identity/menu';
@@ -41,6 +41,14 @@ const remixIconRevision = ref(0);
 
 /** 菜单图标预加载单飞 Promise */
 let menuIconPreloadPromise: Promise<void> | null = null;
+
+/** 叶子菜单项（快捷入口、顶栏搜索等） */
+export interface LeafMenuItem {
+  path: string;
+  title: string;
+  menuCode: string;
+  icon?: Component;
+}
 
 /**
  * 获取菜单展示文案
@@ -180,8 +188,12 @@ export const useMenuStore = defineStore('menu', () => {
   /**
    * 扁平化叶子菜单（routePath 可用于快捷入口）
    */
-  const leafMenus = computed(() => {
-    const result: { path: string; title: string; menuCode: string }[] = [];
+  const leafMenus = computed((): LeafMenuItem[] => {
+    void i18n.global.locale.value;
+    void remixIconRevision.value;
+    void translationStore.dynamicRevision;
+
+    const result: LeafMenuItem[] = [];
 
     const walk = (menus: MenuTree[]): void => {
       menus.filter(isNavigableMenu).forEach((menu) => {
@@ -190,6 +202,7 @@ export const useMenuStore = defineStore('menu', () => {
             path: menu.routePath.startsWith('/') ? menu.routePath : `/${menu.routePath}`,
             title: getMenuLabel(menu),
             menuCode: menu.menuCode,
+            icon: getRemixIconComponent(menu.icon),
           });
         }
 

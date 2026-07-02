@@ -28,12 +28,12 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salespricechangelog.changefields')"
+                :label="pi.label('changeFields')"
                 name="changeFields"
               >
                 <a-input
                   v-model:value="formState.changeFields"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salespricechangelog.changefields') })"
+                  :placeholder="pi.ph('changeFields')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -42,12 +42,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salespricechangelog.changetime')"
+                :label="pi.label('changeTime')"
                 name="changeTime"
               >
                 <a-date-picker
                   v-model:value="formState.changeTime"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salespricechangelog.changetime') })"
+                  :placeholder="pi.ph('changeTime')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
@@ -55,12 +55,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salespricechangelog.changeby')"
+                :label="pi.label('changeBy')"
                 name="changeBy"
               >
                 <a-input
                   v-model:value="formState.changeBy"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salespricechangelog.changeby') })"
+                  :placeholder="pi.ph('changeBy')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -69,12 +69,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salespricechangelog.changereason')"
+                :label="pi.label('changeReason')"
                 name="changeReason"
               >
                 <a-input
                   v-model:value="formState.changeReason"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salespricechangelog.changereason') })"
+                  :placeholder="pi.ph('changeReason')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -83,24 +83,38 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.salespricechangelog.extfield')"
-                name="ExtField"
+                name="extField"
+                class="takt-form-item-ext-field"
               >
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t('common.page.entity.extfieldhint')"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ pi.label('extField') }}</span>
+                  </span>
+                </template>
                 <a-textarea
-                  v-model:value="formState.ExtField"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.salespricechangelog.extfield') })"
-                  :rows="2"
+                  v-model:value="formState.extField"
+                  :placeholder="t('common.page.form.placeholder.extfield')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.remark')"
+                :label="pi.label('remark')"
                 name="remark"
               >
                 <a-textarea
                   v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+                  :placeholder="pi.ph('remark')"
                   :rows="4"
                   show-count
                   :maxlength="400"
@@ -123,7 +137,13 @@
 import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useSalesPriceChangeLogI18n } from '../composables/use-price-change-log-i18n'
+
+/** 实体字段 i18n */
+const pi = useSalesPriceChangeLogI18n()
+
 import type { SalesPriceChangeLogCreate } from '@/types/logistics/sales/price-change-log'
+import { RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -132,7 +152,8 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["changeFields","changeTime","changeBy","changeReason","ExtField","remark"]
+const formFields = ["changeFields","changeTime","changeBy","changeReason","extField","remark"]
+
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -187,7 +208,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   changeTime: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.salespricechangelog.changetime') }),
+      message: pi.ph('changeTime'),
       trigger: 'change'
     }
   ],

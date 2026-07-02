@@ -29,12 +29,12 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.tenantcode')"
+                :label="pi.label('tenantCode')"
                 name="tenantCode"
               >
                 <a-input
                   v-model:value="formState.tenantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
+                  :placeholder="pi.ph('tenantCode')"
                   show-count
                   :maxlength="20"
                   disabled
@@ -43,12 +43,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.companycode')"
+                :label="pi.label('companyCode')"
                 name="companyCode"
               >
                 <a-input
                   v-model:value="formState.companyCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
+                  :placeholder="pi.ph('companyCode')"
                   show-count
                   :maxlength="20"
                   disabled
@@ -57,12 +57,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.companydefaultculture')"
+                :label="pi.label('companyDefaultCulture')"
                 name="companyDefaultCulture"
               >
                 <a-input
                   v-model:value="formState.companyDefaultCulture"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
+                  :placeholder="pi.ph('companyDefaultCulture')"
                   show-count
                   :maxlength="20"
                   disabled
@@ -71,27 +71,25 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesprice.plantcode')"
+                :label="pi.label('plantCode')"
                 name="plantCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.plantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesprice.plantcode') })"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('plantCode')"
                   :disabled="!!formData?.salesPriceId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesprice.code')"
+                :label="pi.label('salesPriceCode')"
                 name="salesPriceCode"
               >
                 <a-input
                   v-model:value="formState.salesPriceCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesprice.code') })"
+                  :placeholder="pi.ph('salesPriceCode')"
                   show-count
                   :maxlength="50"
                   allow-clear
@@ -101,39 +99,37 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesprice.customercode')"
+                :label="pi.label('customerCode')"
                 name="customerCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.customerCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesprice.customercode') })"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
+                  api-url="TaktCustomers/options"
+                  :placeholder="pi.ph('customerCode')"
                   :disabled="!!formData?.salesPriceId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesprice.pricetype')"
+                :label="pi.label('priceType')"
                 name="priceType"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.priceType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesprice.pricetype') })"
-                  style="width: 100%"
+                  dict-type="logistics_sales_price_type"
+                  :placeholder="pi.ph('priceType')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesprice.effectivestartdate')"
+                :label="pi.label('effectiveStartDate')"
                 name="effectiveStartDate"
               >
                 <a-date-picker
                   v-model:value="formState.effectiveStartDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesprice.effectivestartdate') })"
+                  :placeholder="pi.ph('effectiveStartDate')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
@@ -141,12 +137,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesprice.effectiveenddate')"
+                :label="pi.label('effectiveEndDate')"
                 name="effectiveEndDate"
               >
                 <a-date-picker
                   v-model:value="formState.effectiveEndDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesprice.effectiveenddate') })"
+                  :placeholder="pi.ph('effectiveEndDate')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
@@ -154,13 +150,13 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesprice.pricestatus')"
+                :label="pi.label('priceStatus')"
                 name="priceStatus"
               >
                 <TaktSelect
                   v-model:value="formState.priceStatus"
                   dict-type="sys_normal_disable_status"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesprice.pricestatus') })"
+                  :placeholder="pi.ph('priceStatus')"
                 />
               </a-form-item>
             </a-col>
@@ -176,24 +172,38 @@
           <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.salesprice.extfield')"
-                name="ExtField"
+                name="extField"
+                class="takt-form-item-ext-field"
               >
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t('common.page.entity.extfieldhint')"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ pi.label('extField') }}</span>
+                  </span>
+                </template>
                 <a-textarea
-                  v-model:value="formState.ExtField"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.salesprice.extfield') })"
-                  :rows="2"
+                  v-model:value="formState.extField"
+                  :placeholder="t('common.page.form.placeholder.extfield')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.remark')"
+                :label="pi.label('remark')"
                 name="remark"
               >
                 <a-textarea
                   v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+                  :placeholder="pi.ph('remark')"
                   :rows="4"
                   show-count
                   :maxlength="400"
@@ -210,8 +220,8 @@
       ref="salesPriceChangeLogTableRef"
       v-model="childSalesPriceChangeLogRows"
       :columns="salesPriceChangeLogFormColumns"
-      :title="t('entity.salespricechangelog._self')"
-      :add-button-entity="t('entity.salespricechangelog._self')"
+      :title="salesPriceChangeLogPi.self()"
+      :add-button-entity="salesPriceChangeLogPi.self()"
       id-field="salesPriceChangeLogId"
       :default-row="createDefaultSalesPriceChangeLogRow"
       :disabled="loading"
@@ -228,8 +238,14 @@
 import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useSalesPriceI18n } from '../composables/use-price-i18n'
+
+/** 实体字段 i18n */
+const pi = useSalesPriceI18n()
+
 import type { SalesPriceCreate } from '@/types/logistics/sales/price'
 import TaktSelect from '@/components/business/takt-select/index.vue'
+import { RiQuestionLine } from '@remixicon/vue'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
@@ -263,9 +279,13 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","salesPriceCode","customerCode","priceType","effectiveStartDate","effectiveEndDate","priceStatus","ExtField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","salesPriceCode","customerCode","priceType","effectiveStartDate","effectiveEndDate","priceStatus","extField","remark"]
+
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+import { useSalesPriceChangeLogI18n } from '../composables/use-price-change-log-i18n'
+
+const salesPriceChangeLogPi = useSalesPriceChangeLogI18n()
 
 const childSalesPriceChangeLogRows = ref<Record<string, unknown>[]>([])
 const salesPriceChangeLogTableRef = ref<{
@@ -278,43 +298,43 @@ const salesPriceChangeLogTableRef = ref<{
 const salesPriceChangeLogFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
     key: 'changeFields',
-    title: t('entity.salespricechangelog.changefields'),
+    title: salesPriceChangeLogPi.label('changeFields'),
     editor: 'input',
-    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.salespricechangelog.changefields') }),
+    width: 140, allowClear: true, placeholder: salesPriceChangeLogPi.ph('changeFields'),
   },
   {
     key: 'changeTime',
-    title: t('entity.salespricechangelog.changetime'),
+    title: salesPriceChangeLogPi.label('changeTime'),
     editor: 'datePicker',
     valueFormat: 'YYYY-MM-DD HH:mm:ss', showTime: true,
     width: 140,
   },
   {
     key: 'changeBy',
-    title: t('entity.salespricechangelog.changeby'),
+    title: salesPriceChangeLogPi.label('changeBy'),
     editor: 'input',
-    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.salespricechangelog.changeby') }),
+    width: 140, allowClear: true, placeholder: salesPriceChangeLogPi.ph('changeBy'),
   },
   {
     key: 'changeReason',
-    title: t('entity.salespricechangelog.changereason'),
+    title: salesPriceChangeLogPi.label('changeReason'),
     editor: 'input',
-    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.salespricechangelog.changereason') }),
+    width: 140, allowClear: true, placeholder: salesPriceChangeLogPi.ph('changeReason'),
   },
   {
-    key: 'ExtField',
-    title: t('entity.salespricechangelog.extfield'),
+    key: 'extField',
+    title: salesPriceChangeLogPi.label('extField'),
     editor: 'textarea',
-    rows: 1,
-    placeholder: t('common.page.form.placeholder.optional', { field: t('entity.salespricechangelog.extfield') }),
+    rows: 2,
+    placeholder: t('common.page.form.placeholder.extfield'),
     width: 140,
   },
   {
     key: 'remark',
-    title: t('common.page.entity.remark'),
+    title: salesPriceChangeLogPi.label('remark'),
     editor: 'textarea',
     rows: 2,
-    placeholder: t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') }),
+    placeholder: salesPriceChangeLogPi.ph('remark'),
     width: 140,
   },
 ])
@@ -330,7 +350,7 @@ function createDefaultSalesPriceChangeLogRow(): Record<string, unknown> {
     changeTime: '',
     changeBy: '',
     changeReason: '',
-    ExtField: '',
+    extField: '',
     remark: '',
   }
 }
@@ -368,6 +388,7 @@ const formRef = ref()
 const formState = reactive<Record<string, any>>({})
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  priceType: "PR00",
   priceStatus: 1
 }
 
@@ -422,41 +443,42 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
+  plantCode: [
+    {
+      required: true,
+      message: pi.ph('plantCode'),
+      trigger: 'change'
+    }
+  ],
   salesPriceCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.salesprice.code') }),
+      message: pi.ph('salesPriceCode'),
       trigger: 'blur'
     }
   ],
-  priceType: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salesprice.pricetype') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salesprice.pricetype') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
+  priceType: [
+    {
+      required: true,
+      message: pi.ph('priceType'),
+      trigger: 'change'
+    }
+  ],
   effectiveStartDate: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.salesprice.effectivestartdate') }),
+      message: pi.ph('effectiveStartDate'),
       trigger: 'change'
     }
   ],
   priceStatus: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salesprice.pricestatus') }))
+        return Promise.reject(pi.ph('priceStatus'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salesprice.pricestatus') }))
+        return Promise.reject(pi.ph('priceStatus'))
       }
       return Promise.resolve()
     },
@@ -474,10 +496,6 @@ async function validate() {
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
   const payload = buildSubmitPayload() as Record<string, unknown>
-  if ('priceType' in payload) {
-    const rawpriceType = payload.priceType
-    payload.priceType = typeof rawpriceType === 'number' ? rawpriceType : Number(rawpriceType)
-  }
   if ('priceStatus' in payload) {
     const rawpriceStatus = payload.priceStatus
     payload.priceStatus = typeof rawpriceStatus === 'number' ? rawpriceStatus : Number(rawpriceStatus)

@@ -13,6 +13,9 @@
 import { defineStore } from 'pinia';
 import { ref, computed, watch } from 'vue';
 import { usePreferredDark } from '@vueuse/core';
+import type { AppSetting } from '@/types/setting';
+import { readSettingFromStorage } from '@/setting';
+import { useSettingStore } from '@/stores/common/setting';
 import { EventBus } from '@/utils/event-bus';
 import { TAKT_THEME_STORAGE_KEY } from '@/utils/common';
 import {
@@ -22,12 +25,25 @@ import {
   type TaktThemeMode,
 } from '@/utils/theme';
 
+/** setThemeMode 选项 */
+export interface TaktSetThemeModeOptions {
+  /** 是否为用户主动切换（false 时仅同步状态，不锁定系统默认） */
+  userInitiated?: boolean;
+  /** 为 true 时不广播 theme:change（applySettings 同步用） */
+  silent?: boolean;
+}
+
 /**
  * 主题状态管理
  */
 export const useThemeStore = defineStore('theme', () => {
-  /** 用户选择的主题模式（含 system） */
-  const mode = ref<TaktThemeMode>(readStoredThemeMode());
+  const initialSetting = readSettingFromStorage();
+  /** 未手动选外观时用 defaultSetting.theme；已选手动时用 TAKT_THEME / app-setting */
+  const mode = ref<TaktThemeMode>(
+    initialSetting.appearanceUserOverride
+      ? readStoredThemeMode()
+      : initialSetting.theme,
+  );
   /** 系统是否偏好深色（跟随 OS） */
   const prefersDark = usePreferredDark();
 
@@ -35,40 +51,58 @@ export const useThemeStore = defineStore('theme', () => {
    * 实际生效的主题（light / dark）
    */
   const resolvedTheme = computed<TaktResolvedTheme>(() => {
-    // system 模式跟随 OS 深色偏好
     if (mode.value === 'system') {
       return prefersDark.value ? 'dark' : 'light';
     }
-
     return mode.value;
   });
 
-  // 解析后的主题变化时同步 DOM data-theme 与 CSS 变量
   watch(
     resolvedTheme,
     (resolved) => {
       applyThemeDom(resolved);
     },
-    { immediate: true }
+    { immediate: true },
   );
 
   /**
    * 设置主题模式
    * @param {TaktThemeMode} next 目标模式
+   * @param {TaktSetThemeModeOptions} options 是否用户主动切换
    * @returns {void}
    */
-  function setThemeMode(next: TaktThemeMode): void {
-    // 相同模式不重复持久化与广播
+  function setThemeMode(next: TaktThemeMode, options?: TaktSetThemeModeOptions): void {
+    const userInitiated = options?.userInitiated !== false;
+    const silent = options?.silent === true;
+    const settingStore = useSettingStore();
+
     if (mode.value === next) {
+      if (userInitiated && !settingStore.setting.appearanceUserOverride) {
+        settingStore.patchSetting({ appearanceUserOverride: true });
+      }
       return;
     }
 
-    // 更新 Store 模式
     mode.value = next;
-    // 写入 localStorage
     localStorage.setItem(TAKT_THEME_STORAGE_KEY, next);
-    // 广播已解析主题（非 system 字面量），供 bootstrap 等同步
-    EventBus.emit('theme:change', { theme: resolvedTheme.value });
+
+    if (userInitiated) {
+      const patch: Partial<AppSetting> = {
+        appearanceUserOverride: true,
+      };
+      if (next === 'light' || next === 'dark') {
+        patch.theme = next;
+      }
+      settingStore.patchSetting(patch);
+    } else if (next === 'light' || next === 'dark') {
+      if (settingStore.setting.appearanceUserOverride && settingStore.setting.theme !== next) {
+        settingStore.patchSetting({ theme: next });
+      }
+    }
+
+    if (!silent) {
+      EventBus.emit('theme:change', { theme: resolvedTheme.value });
+    }
   }
 
   /**
@@ -76,7 +110,6 @@ export const useThemeStore = defineStore('theme', () => {
    * @returns {void}
    */
   function toggleThemeMode(): void {
-    // 按当前生效主题取反
     setThemeMode(resolvedTheme.value === 'dark' ? 'light' : 'dark');
   }
 

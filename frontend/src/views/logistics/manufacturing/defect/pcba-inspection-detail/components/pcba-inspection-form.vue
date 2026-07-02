@@ -74,13 +74,11 @@
                 :label="t('entity.pcbainspection.plantcode')"
                 name="plantCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.plantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbainspection.plantcode') })"
-                  show-count
-                  :maxlength="4"
-                  allow-clear
-                  :disabled="!!formData?.pcbaInspectionId"
+                  api-url="TaktPlants/options"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbainspection.plantcode') })"
+                  :disabled="!!formData?.pcbaInspectionId || loading"
                 />
               </a-form-item>
             </a-col>
@@ -89,12 +87,12 @@
                 :label="t('entity.pcbainspection.prodcategory')"
                 name="prodCategory"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.prodCategory"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbainspection.prodcategory') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  dict-type="logistics_prod_category"
+                  :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbainspection.prodcategory') })"
+                  :disabled="loading"
                 />
               </a-form-item>
             </a-col>
@@ -116,13 +114,13 @@
                 :label="t('entity.pcbainspection.prodordercode')"
                 name="prodOrderCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.prodOrderCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbainspection.prodordercode') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                  :disabled="!!formData?.pcbaInspectionId"
+                  :options="productionOrderOptions"
+                  :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbainspection.prodordercode') })"
+                  :disabled="loading || !formState.plantCode || !!formData?.pcbaInspectionId"
+                  @change="handleProductionOrderSelectChange"
                 />
               </a-form-item>
             </a-col>
@@ -135,6 +133,7 @@
                   v-model:value="formState.prodOrderQty"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbainspection.prodorderqty') })"
                   style="width: 100%"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -148,8 +147,7 @@
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbainspection.modelcode') })"
                   show-count
                   :maxlength="20"
-                  allow-clear
-                  :disabled="!!formData?.pcbaInspectionId"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -187,20 +185,7 @@
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbainspection.materialcode') })"
                   show-count
                   :maxlength="20"
-                  allow-clear
-                  :disabled="!!formData?.pcbaInspectionId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.pcbainspection.status')"
-                name="status"
-              >
-                <a-input-number
-                  v-model:value="formState.status"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbainspection.status') })"
-                  style="width: 100%"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -260,7 +245,47 @@
       :default-row="createDefaultPcbaInspectionDetailRow"
       :disabled="loading"
       section-border
-    />
+    >
+      <template #cell-pcbaBoardType="{ record }">
+        <TaktSelect
+          v-model:value="record.pcbaBoardType"
+          dict-type="logistics_pcba_panel_category"
+          :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbainspectiondetail.pcbaboardtype') })"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-visualInspectionLine="{ record }">
+        <TaktSelect
+          v-model:value="record.visualInspectionLine"
+          dict-type="logistics_visual_inspection_line_category"
+          :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbainspectiondetail.visualinspectionline') })"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-aoiLine="{ record }">
+        <TaktSelect
+          v-model:value="record.aoiLine"
+          dict-type="logistics_aoi_inspection_line_category"
+          :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbainspectiondetail.aoiline') })"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-shiftNo="{ record }">
+        <TaktSelect
+          v-model:value="record.shiftNo"
+          dict-type="logistics_shift_category"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbainspectiondetail.shiftno') })"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+    </TaktEditableTable>
   </a-form>
 </template>
 
@@ -269,21 +294,93 @@
  * PCBA检查日报实体维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/manufacturing/defect/pcba-inspection-detail/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
-import type { PcbaInspectionCreate } from '@/types/logistics/manufacturing/defect/pcba-inspection'
+import type { PcbaInspectionCreate } from '@/types/logistics/manufacturing/defect/pcba-inspection-detail'
+import type { TaktSelectOption } from '@/types/common'
+import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
+import { getProductionOrderOptions } from '@/api/logistics/manufacturing/output/production-order'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
+
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热） */
+const dictDataStore = useDictDataStore()
+/** 生产工单下拉选项（GetProductionOrderOptionsAsync，按工厂加载） */
+const productionOrderOptions = ref<TaktSelectOption[]>([])
+
+/**
+ * 加载生产工单选项（按工厂过滤）
+ * @param plantCode 工厂代码
+ */
+async function loadProductionOrderOptions(plantCode?: string) {
+  productionOrderOptions.value = plantCode
+    ? await getProductionOrderOptions(plantCode)
+    : []
+}
+
+/**
+ * 从工单选项标签解析物料编码（DictLabel = ProdOrderCode + MaterialCode）
+ * @param dictLabel 选项标签
+ * @param prodOrderCode 生产工单号
+ * @returns 物料编码
+ */
+function parseMaterialCodeFromProductionOrderLabel(dictLabel: string, prodOrderCode: string): string {
+  if (!dictLabel || !prodOrderCode) {
+    return ''
+  }
+  if (dictLabel === prodOrderCode) {
+    return ''
+  }
+  if (dictLabel.startsWith(prodOrderCode)) {
+    return dictLabel.slice(prodOrderCode.length)
+  }
+  return ''
+}
+
+/**
+ * 生产工单下拉变更：回填物料、订单数量
+ * @param _value 选中工单号
+ * @param option 选中项
+ */
+function handleProductionOrderSelectChange(
+  _value: string | number | (string | number)[] | undefined,
+  option: Record<string, unknown> | Record<string, unknown>[] | null
+) {
+  const selected = Array.isArray(option) ? option[0] : option
+  if (!selected) {
+    formState.materialCode = undefined
+    formState.prodOrderQty = undefined
+    formState.modelCode = undefined
+    return
+  }
+  const prodOrderCode = String(formState.prodOrderCode ?? selected.dictValue ?? '')
+  const materialCode = parseMaterialCodeFromProductionOrderLabel(String(selected.dictLabel ?? ''), prodOrderCode)
+  if (materialCode) {
+    formState.materialCode = materialCode
+  }
+  if (selected.extValue !== undefined && selected.extValue !== null && selected.extValue !== '') {
+    formState.prodOrderQty = Number(selected.extValue)
+  }
+}
 
 /** Pinia：租户/公司上下文 */
 const tenantStore = useTenantStore()
 /** Pinia：用户上下文 */
 const userStore = useUserStore()
+
+/** 表单挂载时预加载字典与生产工单选项 */
+onMounted(async () => {
+  void dictDataStore.loadAllDictDataAsync()
+  if (formState.plantCode) {
+    await loadProductionOrderOptions(String(formState.plantCode))
+  }
+})
 
 /**
  * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
@@ -306,7 +403,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","prodCategory","prodDate","prodOrderCode","prodOrderQty","modelCode","batchNo","materialCode","status","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","prodCategory","prodDate","prodOrderCode","prodOrderQty","modelCode","batchNo","materialCode","extField","remark"]
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
 
@@ -334,20 +431,17 @@ const pcbaInspectionDetailFormColumns = computed<TaktEditableTableColumn[]>(() =
   {
     key: 'pcbaBoardType',
     title: t('entity.pcbainspectiondetail.pcbaboardtype'),
-    editor: 'input',
-    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.pcbainspectiondetail.pcbaboardtype') }),
+    width: 140,
   },
   {
     key: 'visualInspectionLine',
     title: t('entity.pcbainspectiondetail.visualinspectionline'),
-    editor: 'input',
-    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.pcbainspectiondetail.visualinspectionline') }),
+    width: 140,
   },
   {
     key: 'aoiLine',
     title: t('entity.pcbainspectiondetail.aoiline'),
-    editor: 'input',
-    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.pcbainspectiondetail.aoiline') }),
+    width: 140,
   },
   {
     key: 'bSideAssemblyDate',
@@ -366,7 +460,6 @@ const pcbaInspectionDetailFormColumns = computed<TaktEditableTableColumn[]>(() =
   {
     key: 'shiftNo',
     title: t('entity.pcbainspectiondetail.shiftno'),
-    editor: 'inputNumber',
     width: 140,
   },
 ])
@@ -385,22 +478,7 @@ function createDefaultPcbaInspectionDetailRow(): Record<string, unknown> {
     aoiLine: '',
     bSideAssemblyDate: '',
     tSideAssemblyDate: '',
-    shiftNo: 0,
-  }
-}
-
-/** 组装 Create/Update 载荷（主表 + 子表数组） */
-function buildSubmitPayload() {
-  const masterId = props.formData?.pcbaInspectionId ?? ''
-  return {
-    ...formState,
-    pcbaInspectionDetails: pcbaInspectionDetailTableRef.value?.getRows?.() ?? childPcbaInspectionDetailRows.value.map((rest) => ({
-      ...rest,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      pcbaInspectionId: masterId,
-    })),
+    shiftNo: 1,
   }
 }
 
@@ -420,11 +498,29 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
-/** 表单字段默认值（无字典默认项） */
+/** 表单字段默认值（字典 IsDefault=1） */
+const FORM_FIELD_DEFAULTS: Record<string, string | number> = {}
+
+/** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
 function applyFormDefaults(target: Record<string, unknown>) {
-  void target
+  Object.assign(target, FORM_FIELD_DEFAULTS)
 }
 
+
+/** 组装 Create/Update 载荷（主表 + 子表数组） */
+function buildSubmitPayload() {
+  const masterId = props.formData?.pcbaInspectionId ?? ''
+  return {
+    ...formState,
+    pcbaInspectionDetails: pcbaInspectionDetailTableRef.value?.getRows?.() ?? childPcbaInspectionDetailRows.value.map((rest) => ({
+      ...rest,
+      tenantCode: tenantStore.tenantCode,
+      companyCode: tenantStore.companyCode,
+      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+      pcbaInspectionId: masterId,
+    })),
+  }
+}
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 pcbaInspectionId 才视为编辑） */
 watch(
@@ -437,6 +533,9 @@ watch(
       applyScopeDefaults(next)
       Object.assign(formState, next)
     syncChildRowsFromFormData(val)
+      if (formState.plantCode) {
+        void loadProductionOrderOptions(String(formState.plantCode))
+      }
       formRef.value?.clearValidate()
     } else {
       Object.keys(formState).forEach((k) => delete formState[k])
@@ -445,6 +544,7 @@ watch(
       }
       applyFormDefaults(formState)
       applyScopeDefaults(formState as Record<string, unknown>, true)
+      productionOrderOptions.value = []
       formRef.value?.clearValidate()
     }
   },
@@ -462,22 +562,54 @@ watch(
   },
 )
 
+/** 工厂变更时，重载工单选项并清理无效工单 */
+watch(
+  () => formState.plantCode,
+  async (plantCode, prevPlantCode) => {
+    if (props.formData?.pcbaInspectionId) {
+      if (plantCode) {
+        await loadProductionOrderOptions(String(plantCode))
+      }
+      return
+    }
+    if (!plantCode) {
+      formState.prodOrderCode = undefined
+      formState.materialCode = undefined
+      formState.prodOrderQty = undefined
+      formState.modelCode = undefined
+      productionOrderOptions.value = []
+      return
+    }
+    if (prevPlantCode && prevPlantCode !== plantCode) {
+      formState.prodOrderCode = undefined
+      formState.materialCode = undefined
+      formState.prodOrderQty = undefined
+      formState.modelCode = undefined
+    }
+    await loadProductionOrderOptions(String(plantCode))
+  },
+)
+
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  plantCode: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.pcbainspection.plantcode') }),
-      trigger: 'blur'
-    }
-  ],
-  prodCategory: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.pcbainspection.prodcategory') }),
-      trigger: 'blur'
-    }
-  ],
+  plantCode: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.pcbainspection.plantcode') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  prodCategory: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.pcbainspection.prodcategory') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
   prodDate: [
     {
       required: true,
@@ -485,13 +617,15 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'change'
     }
   ],
-  prodOrderCode: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.pcbainspection.prodordercode') }),
-      trigger: 'blur'
-    }
-  ],
+  prodOrderCode: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.pcbainspection.prodordercode') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
   prodOrderQty: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
@@ -519,19 +653,6 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
-  status: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.pcbainspection.status') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.pcbainspection.status') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -547,10 +668,6 @@ function getValues(): Record<string, any> {
   if ('prodOrderQty' in payload) {
     const rawprodOrderQty = payload.prodOrderQty
     payload.prodOrderQty = typeof rawprodOrderQty === 'number' ? rawprodOrderQty : Number(rawprodOrderQty)
-  }
-  if ('status' in payload) {
-    const rawstatus = payload.status
-    payload.status = typeof rawstatus === 'number' ? rawstatus : Number(rawstatus)
   }
   if ('sortOrder' in payload) delete payload.sortOrder
   return payload

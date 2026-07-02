@@ -29,7 +29,7 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
     private const int StatusEnabled = 1;
     private const int IsBuiltInYes = 1;
     private const string SegmentsWithDepartment =
-        "segments:CompanyCode,DepartmentCode,PrefixCode,DateSequence";
+        "segments:CompanyCode,DeptCode,PrefixCode,DateSequence";
     private const string SegmentsCompanyLevel =
         "segments:CompanyCode,PrefixCode,DateSequence";
     private const string SegmentsCompanyNoDate =
@@ -240,7 +240,7 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
                 "yyyy",
                 "year",
                 SegmentsCompanyLevel,
-                "内置：TaktSalesInvoice.SalesInvoiceCode"),
+                "内置：TaktSalesInvoice.AccountingDocumentCode"),
             new NumberingSeedTemplate(
                 "LG-SLS-ORD",
                 "销售订单编码",
@@ -371,7 +371,7 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
                 RuleCode = template.RuleCode,
                 RuleName = template.RuleName,
                 DocumentType = template.DocumentType,
-                DepartmentCode = template.DepartmentCode,
+                DeptCode = template.DeptCode,
                 PrefixCode = template.PrefixCode,
                 DateFormat = template.DateFormat,
                 SequenceLength = template.SequenceLength,
@@ -379,9 +379,9 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
                 SuffixCode = template.SuffixCode,
                 ResetPeriod = template.ResetPeriod,
                 Separator = template.Separator,
-                Description = template.SegmentsDescription,
+                NumberingDescription = template.SegmentsDescription,
                 IsBuiltIn = IsBuiltInYes,
-                Status = StatusEnabled,
+                NumberingStatus = StatusEnabled,
                 Remark = template.Remark,
             };
             ApplyDateFormatResetPeriodAlignment(entity);
@@ -393,7 +393,7 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
         }
         entity.RuleName = template.RuleName;
         entity.DocumentType = template.DocumentType;
-        entity.DepartmentCode = template.DepartmentCode;
+        entity.DeptCode = template.DeptCode;
         entity.PrefixCode = template.PrefixCode;
         entity.DateFormat = template.DateFormat;
         entity.SequenceLength = template.SequenceLength;
@@ -401,9 +401,9 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
         entity.SuffixCode = template.SuffixCode;
         entity.ResetPeriod = template.ResetPeriod;
         entity.Separator = template.Separator;
-        entity.Description = template.SegmentsDescription;
+        entity.NumberingDescription = template.SegmentsDescription;
         entity.IsBuiltIn = IsBuiltInYes;
-        entity.Status = StatusEnabled;
+        entity.NumberingStatus = StatusEnabled;
         entity.Remark = template.Remark;
         ApplyDateFormatResetPeriodAlignment(entity);
         var sequenceForExample = entity.CurrentSequence <= 0
@@ -430,7 +430,7 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
     }
 
     /// <summary>
-    /// 按 DateFormat 强制对齐 ResetPeriod（与 TaktNumberingService.NormalizeNumberingRule 一致）
+    /// 按 DateFormat 强制对齐 ResetPeriod（与 TaktNumberingHelper.NormalizeNumberingModel 一致）
     /// </summary>
     /// <param name="entity">编号规则</param>
     private static void ApplyDateFormatResetPeriodAlignment(TaktNumbering entity)
@@ -458,7 +458,7 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
     {
         var length = rule.SequenceLength <= 0 ? 6 : rule.SequenceLength;
         var separator = string.IsNullOrWhiteSpace(rule.Separator) ? DefaultSeparator : rule.Separator.Trim();
-        var effectiveDescription = ResolveEffectiveSegmentDescription(rule.Description);
+        var effectiveDescription = ResolveEffectiveSegmentDescription(rule.NumberingDescription);
         var parts = new List<string>();
         foreach (var segmentKey in ParseSegmentKeys(effectiveDescription))
         {
@@ -489,7 +489,7 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
         return TryParseSegmentKeysFromDescription(segmentsDescription) ?? new[]
         {
             nameof(TaktNumbering.CompanyCode),
-            nameof(TaktNumbering.DepartmentCode),
+            nameof(TaktNumbering.DeptCode),
             nameof(TaktNumbering.PrefixCode),
             "DateSequence",
         };
@@ -515,12 +515,13 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
         {
             return text;
         }
-        var hasDepartment = body.Contains("DepartmentCode", StringComparison.OrdinalIgnoreCase);
+        var hasDepartment = body.Contains("DeptCode", StringComparison.OrdinalIgnoreCase)
+            || body.Contains("DepartmentCode", StringComparison.OrdinalIgnoreCase);
         var hasDate = body.Contains("DateFormat", StringComparison.OrdinalIgnoreCase)
             || body.Contains("DateSequence", StringComparison.OrdinalIgnoreCase);
         if (hasDepartment)
         {
-            return hasDate ? SegmentsWithDepartment : "segments:CompanyCode,DepartmentCode,PrefixCode,Sequence";
+            return hasDate ? SegmentsWithDepartment : "segments:CompanyCode,DeptCode,PrefixCode,Sequence";
         }
         return hasDate ? SegmentsCompanyLevel : SegmentsCompanyNoDate;
     }
@@ -560,9 +561,10 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
         {
             return string.IsNullOrWhiteSpace(rule.CompanyCode) ? null : rule.CompanyCode.Trim();
         }
-        if (segmentKey.Equals(nameof(TaktNumbering.DepartmentCode), StringComparison.OrdinalIgnoreCase))
+        if (segmentKey.Equals(nameof(TaktNumbering.DeptCode), StringComparison.OrdinalIgnoreCase)
+            || segmentKey.Equals("DepartmentCode", StringComparison.OrdinalIgnoreCase))
         {
-            return string.IsNullOrWhiteSpace(rule.DepartmentCode) ? null : rule.DepartmentCode.Trim();
+            return string.IsNullOrWhiteSpace(rule.DeptCode) ? null : rule.DeptCode.Trim();
         }
         if (segmentKey.Equals(nameof(TaktNumbering.DocumentType), StringComparison.OrdinalIgnoreCase))
         {
@@ -623,8 +625,8 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
     /// </summary>
     /// <param name="RuleCode">规则编码</param>
     /// <param name="RuleName">规则名称</param>
-    /// <param name="DocumentType">业务领域（如 Routine、Accounting、Logistics）</param>
-    /// <param name="DepartmentCode">ISO 单字母编码（与 TaktIsoCodeSeedData.IsoCode 一致）</param>
+    /// <param name="DocumentType">单据类型（关联 TaktMenu.Id，选项 TaktMenus/tree-options）</param>
+    /// <param name="DeptCode">部门编码（关联 TaktIsoCode.IsoCode，选项 TaktIsoCodes/options）</param>
     /// <param name="PrefixCode">前缀编码</param>
     /// <param name="DateFormat">日期格式</param>
     /// <param name="ResetPeriod">重置周期</param>
@@ -638,7 +640,7 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
         string RuleCode,
         string RuleName,
         string DocumentType,
-        string DepartmentCode,
+        string DeptCode,
         string PrefixCode,
         string DateFormat,
         string ResetPeriod,

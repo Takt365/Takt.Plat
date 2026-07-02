@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Routine.ConferenceCenter
 // 文件名称：TaktConferenceDtos.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Conference 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktConference 生成，请按需审阅）
 // 
@@ -43,17 +43,12 @@ public class TaktConferenceDto : TaktApprovalDtoBase
     /// <summary>
     /// 会议标题
     /// </summary>
-    public string Title { get; set; } = string.Empty;
+    public string ConferenceTitle { get; set; } = string.Empty;
 
     /// <summary>
     /// 会议类型
     /// </summary>
     public int ConferenceType { get; set; } = 0;
-
-    /// <summary>
-    /// 会议状态
-    /// </summary>
-    public int ConferenceStatus { get; set; } = 0;
 
     /// <summary>
     /// 开始时间
@@ -83,17 +78,17 @@ public class TaktConferenceDto : TaktApprovalDtoBase
     /// <summary>
     /// 会议内容（会议纪要正文，富文本 HTML）
     /// </summary>
-    public string? Content { get; set; } = string.Empty;
+    public string? ConferenceContent { get; set; } = string.Empty;
 
     /// <summary>
     /// 会议纪要摘要（用于列表展示）
     /// </summary>
-    public string? Summary { get; set; } = string.Empty;
+    public string? ConferenceSummary { get; set; } = string.Empty;
 
     /// <summary>
     /// 标签（逗号分隔或 JSON 数组存储）
     /// </summary>
-    public string? Tags { get; set; } = string.Empty;
+    public string? ConferenceTags { get; set; } = string.Empty;
 
     /// <summary>
     /// 组织人 ID
@@ -139,6 +134,11 @@ public class TaktConferenceDto : TaktApprovalDtoBase
     public string? ConferenceRoomName { get; set; } = string.Empty;
 
     /// <summary>
+    /// 会议状态
+    /// </summary>
+    public int ConferenceStatus { get; set; } = 0;
+
+    /// <summary>
     /// 参与人列表（主子表关系）
     /// （子表：TaktConferenceParticipant）
     /// </summary>
@@ -174,17 +174,12 @@ public class TaktConferenceQueryDto : TaktPagedQuery
     /// <summary>
     /// 会议标题
     /// </summary>
-    public string? Title { get; set; } = string.Empty;
+    public string? ConferenceTitle { get; set; } = string.Empty;
 
     /// <summary>
     /// 会议类型
     /// </summary>
     public int? ConferenceType { get; set; }
-
-    /// <summary>
-    /// 会议状态
-    /// </summary>
-    public int? ConferenceStatus { get; set; }
 
     /// <summary>
     /// 开始时间（范围查询-开始）
@@ -224,17 +219,17 @@ public class TaktConferenceQueryDto : TaktPagedQuery
     /// <summary>
     /// 会议内容（会议纪要正文，富文本 HTML）
     /// </summary>
-    public string? Content { get; set; } = string.Empty;
+    public string? ConferenceContent { get; set; } = string.Empty;
 
     /// <summary>
     /// 会议纪要摘要（用于列表展示）
     /// </summary>
-    public string? Summary { get; set; } = string.Empty;
+    public string? ConferenceSummary { get; set; } = string.Empty;
 
     /// <summary>
     /// 标签（逗号分隔或 JSON 数组存储）
     /// </summary>
-    public string? Tags { get; set; } = string.Empty;
+    public string? ConferenceTags { get; set; } = string.Empty;
 
     /// <summary>
     /// 组织人 ID
@@ -280,7 +275,12 @@ public class TaktConferenceQueryDto : TaktPagedQuery
     public string? ConferenceRoomName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 审批状态（TaktApprovalStatus）
+    /// 会议状态
+    /// </summary>
+    public int? ConferenceStatus { get; set; }
+
+    /// <summary>
+    /// 审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）
     /// </summary>
     public TaktApprovalStatus? ApprovalStatus { get; set; }
 
@@ -363,7 +363,7 @@ public class TaktConferenceCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -377,17 +377,12 @@ public class TaktConferenceCreateDto
     /// 会议标题
     /// </summary>
     [Required(ErrorMessage = "会议标题不能为空")]
-    public string Title { get; set; } = string.Empty;
+    public string ConferenceTitle { get; set; } = string.Empty;
 
     /// <summary>
     /// 会议类型
     /// </summary>
     public int ConferenceType { get; set; } = 0;
-
-    /// <summary>
-    /// 会议状态
-    /// </summary>
-    public int ConferenceStatus { get; set; } = 0;
 
     /// <summary>
     /// 开始时间
@@ -417,17 +412,17 @@ public class TaktConferenceCreateDto
     /// <summary>
     /// 会议内容（会议纪要正文，富文本 HTML）
     /// </summary>
-    public string? Content { get; set; } = string.Empty;
+    public string? ConferenceContent { get; set; } = string.Empty;
 
     /// <summary>
     /// 会议纪要摘要（用于列表展示）
     /// </summary>
-    public string? Summary { get; set; } = string.Empty;
+    public string? ConferenceSummary { get; set; } = string.Empty;
 
     /// <summary>
     /// 标签（逗号分隔或 JSON 数组存储）
     /// </summary>
-    public string? Tags { get; set; } = string.Empty;
+    public string? ConferenceTags { get; set; } = string.Empty;
 
     /// <summary>
     /// 组织人 ID
@@ -472,6 +467,11 @@ public class TaktConferenceCreateDto
     /// 会议室名称（冗余快照）
     /// </summary>
     public string? ConferenceRoomName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会议状态
+    /// </summary>
+    public int ConferenceStatus { get; set; } = 0;
 
     /// <summary>
     /// 参与人列表（主子表关系）（子表，级联保存）
@@ -561,7 +561,7 @@ public class TaktConferenceTemplateDto
     /// <summary>
     /// 会议标题
     /// </summary>
-    public string? Title { get; set; } = string.Empty;
+    public string? ConferenceTitle { get; set; } = string.Empty;
 
     /// <summary>
     /// 会议类型
@@ -569,9 +569,14 @@ public class TaktConferenceTemplateDto
     public int? ConferenceType { get; set; }
 
     /// <summary>
-    /// 会议状态
+    /// 开始时间
     /// </summary>
-    public int? ConferenceStatus { get; set; }
+    public DateTime? StartTime { get; set; }
+
+    /// <summary>
+    /// 结束时间
+    /// </summary>
+    public DateTime? EndTime { get; set; }
 
     /// <summary>
     /// 会议地点（线下会议室名称或地址）
@@ -591,17 +596,17 @@ public class TaktConferenceTemplateDto
     /// <summary>
     /// 会议内容（会议纪要正文，富文本 HTML）
     /// </summary>
-    public string? Content { get; set; } = string.Empty;
+    public string? ConferenceContent { get; set; } = string.Empty;
 
     /// <summary>
     /// 会议纪要摘要（用于列表展示）
     /// </summary>
-    public string? Summary { get; set; } = string.Empty;
+    public string? ConferenceSummary { get; set; } = string.Empty;
 
     /// <summary>
     /// 标签（逗号分隔或 JSON 数组存储）
     /// </summary>
-    public string? Tags { get; set; } = string.Empty;
+    public string? ConferenceTags { get; set; } = string.Empty;
 
     /// <summary>
     /// 组织人 ID
@@ -613,6 +618,48 @@ public class TaktConferenceTemplateDto
     /// 组织人姓名
     /// </summary>
     public string? OrganizerName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 主办部门 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? DeptId { get; set; }
+
+    /// <summary>
+    /// 主办部门名称
+    /// </summary>
+    public string? DeptName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 最大参会人数（0 表示不限）
+    /// </summary>
+    public int? MaxParticipants { get; set; }
+
+    /// <summary>
+    /// 提前提醒分钟数（0 表示不提醒）
+    /// </summary>
+    public int? ReminderMinutes { get; set; }
+
+    /// <summary>
+    /// 会议室 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ConferenceRoomId { get; set; }
+
+    /// <summary>
+    /// 会议室名称（冗余快照）
+    /// </summary>
+    public string? ConferenceRoomName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会议状态
+    /// </summary>
+    public int? ConferenceStatus { get; set; }
+
+    /// <summary>
+    /// 参与人列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktConferenceParticipantCreateDto>? Participants { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -642,7 +689,7 @@ public class TaktConferenceImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -654,7 +701,7 @@ public class TaktConferenceImportDto
     /// <summary>
     /// 会议标题
     /// </summary>
-    public string? Title { get; set; } = string.Empty;
+    public string? ConferenceTitle { get; set; } = string.Empty;
 
     /// <summary>
     /// 会议类型
@@ -662,9 +709,14 @@ public class TaktConferenceImportDto
     public int? ConferenceType { get; set; }
 
     /// <summary>
-    /// 会议状态
+    /// 开始时间
     /// </summary>
-    public int? ConferenceStatus { get; set; }
+    public DateTime? StartTime { get; set; }
+
+    /// <summary>
+    /// 结束时间
+    /// </summary>
+    public DateTime? EndTime { get; set; }
 
     /// <summary>
     /// 会议地点（线下会议室名称或地址）
@@ -684,17 +736,17 @@ public class TaktConferenceImportDto
     /// <summary>
     /// 会议内容（会议纪要正文，富文本 HTML）
     /// </summary>
-    public string? Content { get; set; } = string.Empty;
+    public string? ConferenceContent { get; set; } = string.Empty;
 
     /// <summary>
     /// 会议纪要摘要（用于列表展示）
     /// </summary>
-    public string? Summary { get; set; } = string.Empty;
+    public string? ConferenceSummary { get; set; } = string.Empty;
 
     /// <summary>
     /// 标签（逗号分隔或 JSON 数组存储）
     /// </summary>
-    public string? Tags { get; set; } = string.Empty;
+    public string? ConferenceTags { get; set; } = string.Empty;
 
     /// <summary>
     /// 组织人 ID
@@ -706,6 +758,48 @@ public class TaktConferenceImportDto
     /// 组织人姓名
     /// </summary>
     public string? OrganizerName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 主办部门 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? DeptId { get; set; }
+
+    /// <summary>
+    /// 主办部门名称
+    /// </summary>
+    public string? DeptName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 最大参会人数（0 表示不限）
+    /// </summary>
+    public int? MaxParticipants { get; set; }
+
+    /// <summary>
+    /// 提前提醒分钟数（0 表示不提醒）
+    /// </summary>
+    public int? ReminderMinutes { get; set; }
+
+    /// <summary>
+    /// 会议室 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ConferenceRoomId { get; set; }
+
+    /// <summary>
+    /// 会议室名称（冗余快照）
+    /// </summary>
+    public string? ConferenceRoomName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会议状态
+    /// </summary>
+    public int? ConferenceStatus { get; set; }
+
+    /// <summary>
+    /// 参与人列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktConferenceParticipantCreateDto>? Participants { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -743,17 +837,12 @@ public class TaktConferenceExportDto
     /// <summary>
     /// 会议标题
     /// </summary>
-    public string Title { get; set; } = string.Empty;
+    public string ConferenceTitle { get; set; } = string.Empty;
 
     /// <summary>
     /// 会议类型
     /// </summary>
     public int ConferenceType { get; set; } = 0;
-
-    /// <summary>
-    /// 会议状态
-    /// </summary>
-    public int ConferenceStatus { get; set; } = 0;
 
     /// <summary>
     /// 开始时间
@@ -783,17 +872,17 @@ public class TaktConferenceExportDto
     /// <summary>
     /// 会议内容（会议纪要正文，富文本 HTML）
     /// </summary>
-    public string? Content { get; set; } = string.Empty;
+    public string? ConferenceContent { get; set; } = string.Empty;
 
     /// <summary>
     /// 会议纪要摘要（用于列表展示）
     /// </summary>
-    public string? Summary { get; set; } = string.Empty;
+    public string? ConferenceSummary { get; set; } = string.Empty;
 
     /// <summary>
     /// 标签（逗号分隔或 JSON 数组存储）
     /// </summary>
-    public string? Tags { get; set; } = string.Empty;
+    public string? ConferenceTags { get; set; } = string.Empty;
 
     /// <summary>
     /// 组织人 ID
@@ -837,6 +926,11 @@ public class TaktConferenceExportDto
     /// 会议室名称（冗余快照）
     /// </summary>
     public string? ConferenceRoomName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会议状态
+    /// </summary>
+    public int ConferenceStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

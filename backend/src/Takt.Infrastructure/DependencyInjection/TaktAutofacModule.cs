@@ -118,6 +118,12 @@ public class TaktAutofacModule : Autofac.Module
             .As<ITaktStatQueryExecutor>()
             .InstancePerLifetimeScope();
 
+        builder.RegisterType<Takt.Application.Services.Logistics.Manufacturing.EngineeringChange.TaktEcExecDeptAccess>()
+            .InstancePerLifetimeScope();
+
+        builder.RegisterType<Takt.Application.Services.Logistics.Manufacturing.EngineeringChange.TaktEcExecPersistence>()
+            .InstancePerLifetimeScope();
+
         builder.RegisterType<TaktLineNumberGenerator>()
             .As<ITaktLineNumberGenerator>()
             .SingleInstance();
@@ -125,6 +131,10 @@ public class TaktAutofacModule : Autofac.Module
         builder.RegisterType<TaktSortOrderGenerator>()
             .As<ITaktSortOrderGenerator>()
             .SingleInstance();
+
+        builder.RegisterType<TaktNumberingGenerator>()
+            .As<ITaktNumberingGenerator>()
+            .InstancePerLifetimeScope();
 
         builder.RegisterType<Takt.Infrastructure.Services.TaktFileUploadEngine>()
             .As<Takt.Domain.Interfaces.ITaktFileUploadEngine>()
@@ -306,6 +316,10 @@ public class TaktAutofacModule : Autofac.Module
             .As<Takt.Domain.Interfaces.ITaktLoginLogTenantWriter>()
             .InstancePerLifetimeScope();
 
+        builder.RegisterType<Takt.Infrastructure.Services.TaktVisitLogTenantWriter>()
+            .As<Takt.Domain.Interfaces.ITaktVisitLogTenantWriter>()
+            .InstancePerLifetimeScope();
+
         TaktLogger.Information("[Autofac] 自动注册服务完成");
     }
 
@@ -408,17 +422,6 @@ public class TaktAutofacModule : Autofac.Module
         {
             return null;
         }
-        var fromHeader = httpContext.Request.Headers[tenantOptions.TenantHeaderName].FirstOrDefault();
-        if (!string.IsNullOrWhiteSpace(fromHeader))
-        {
-            return fromHeader.Trim();
-        }
-        var fromClaim = httpContext.User?.FindFirst("tenant_code")?.Value;
-        if (!string.IsNullOrWhiteSpace(fromClaim))
-        {
-            return fromClaim.Trim();
-        }
-        var fromQuery = httpContext.Request.Query["tenantCode"].FirstOrDefault();
-        return string.IsNullOrWhiteSpace(fromQuery) ? null : fromQuery.Trim();
+        return TaktUserContext.TryResolveTenantCode(httpContext, tenantOptions.TenantHeaderName);
     }
 }

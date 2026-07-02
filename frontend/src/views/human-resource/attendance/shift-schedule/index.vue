@@ -188,7 +188,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -199,7 +199,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -361,8 +361,8 @@ const queryFieldsMeta = computed(() => [
   { key: 'scheduleType', label: t('entity.shiftschedule.scheduletype') },
   { key: 'deptId', label: t('entity.shiftschedule.deptid') },
   { key: 'employeeId', label: t('entity.shiftschedule.employeeid') },
-  { key: 'scheduleDateStart', label: t('entity.shiftschedule.scheduledatestart') },
-  { key: 'scheduleDateEnd', label: t('entity.shiftschedule.scheduledateend') },
+  { key: 'scheduleDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.shiftschedule.scheduledate')) },
+  { key: 'scheduleDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.shiftschedule.scheduledate')) },
   { key: 'shiftId', label: t('entity.shiftschedule.shiftid') },
   { key: 'relatedPlant', label: t('entity.shiftschedule.relatedplant') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
@@ -545,7 +545,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: ShiftSchedule, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getShiftScheduleId(selectedRow.value) === getShiftScheduleId(record)) {
+    } else if (selectedRow.value && getShiftScheduleId(selectedRow.value) === getShiftScheduleId(record)) {
       selectedRow.value = null
     }
   },

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Operation
 // 文件名称：TaktInspectionStandardDtos.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：InspectionStandard 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktInspectionStandard 生成，请按需审阅）
 // 
@@ -36,7 +36,7 @@ public class TaktInspectionStandardDto : TaktCompanyDtoBase
     public long InspectionStandardId { get; set; }
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -51,7 +51,7 @@ public class TaktInspectionStandardDto : TaktCompanyDtoBase
     public string StandardName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检验类型（0=IQC来料检验，1=IPQC过程检验，2=FQC最终检验）
+    /// 检验类型（字典 logistics_quality_inspection_type）
     /// </summary>
     public int InspectionType { get; set; } = 0;
 
@@ -66,7 +66,7 @@ public class TaktInspectionStandardDto : TaktCompanyDtoBase
     public string MaterialCategoryName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 抽样方案编码
+    /// 抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）
     /// </summary>
     public string? SamplingSchemeCode { get; set; } = string.Empty;
 
@@ -76,19 +76,14 @@ public class TaktInspectionStandardDto : TaktCompanyDtoBase
     public string? SamplingSchemeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否启用（0=否，1=是）
-    /// </summary>
-    public int IsEnabled { get; set; } = 0;
-
-    /// <summary>
-    /// 检验标准状态（0=草稿，1=已发布，2=已停用）
-    /// </summary>
-    public int StandardStatus { get; set; } = 0;
-
-    /// <summary>
     /// 检验标准描述
     /// </summary>
     public string? StandardDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 检验标准状态（字典 logistics_quality_standard_status）
+    /// </summary>
+    public int StandardStatus { get; set; } = 0;
 
     /// <summary>
     /// 检验标准明细列表（主子表关系）
@@ -119,7 +114,7 @@ public class TaktInspectionStandardQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -134,7 +129,7 @@ public class TaktInspectionStandardQueryDto : TaktPagedQuery
     public string? StandardName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检验类型（0=IQC来料检验，1=IPQC过程检验，2=FQC最终检验）
+    /// 检验类型（字典 logistics_quality_inspection_type）
     /// </summary>
     public int? InspectionType { get; set; }
 
@@ -149,7 +144,7 @@ public class TaktInspectionStandardQueryDto : TaktPagedQuery
     public string? MaterialCategoryName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 抽样方案编码
+    /// 抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）
     /// </summary>
     public string? SamplingSchemeCode { get; set; } = string.Empty;
 
@@ -159,19 +154,14 @@ public class TaktInspectionStandardQueryDto : TaktPagedQuery
     public string? SamplingSchemeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否启用（0=否，1=是）
-    /// </summary>
-    public int? IsEnabled { get; set; }
-
-    /// <summary>
-    /// 检验标准状态（0=草稿，1=已发布，2=已停用）
-    /// </summary>
-    public int? StandardStatus { get; set; }
-
-    /// <summary>
     /// 检验标准描述
     /// </summary>
     public string? StandardDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 检验标准状态（字典 logistics_quality_standard_status）
+    /// </summary>
+    public int? StandardStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -214,14 +204,14 @@ public class TaktInspectionStandardCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码不能为空")]
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -237,7 +227,7 @@ public class TaktInspectionStandardCreateDto
     public string StandardName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检验类型（0=IQC来料检验，1=IPQC过程检验，2=FQC最终检验）
+    /// 检验类型（字典 logistics_quality_inspection_type）
     /// </summary>
     public int InspectionType { get; set; } = 0;
 
@@ -254,7 +244,7 @@ public class TaktInspectionStandardCreateDto
     public string MaterialCategoryName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 抽样方案编码
+    /// 抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）
     /// </summary>
     public string? SamplingSchemeCode { get; set; } = string.Empty;
 
@@ -264,19 +254,14 @@ public class TaktInspectionStandardCreateDto
     public string? SamplingSchemeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否启用（0=否，1=是）
-    /// </summary>
-    public int IsEnabled { get; set; } = 0;
-
-    /// <summary>
-    /// 检验标准状态（0=草稿，1=已发布，2=已停用）
-    /// </summary>
-    public int StandardStatus { get; set; } = 0;
-
-    /// <summary>
     /// 检验标准描述
     /// </summary>
     public string? StandardDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 检验标准状态（字典 logistics_quality_standard_status）
+    /// </summary>
+    public int StandardStatus { get; set; } = 0;
 
     /// <summary>
     /// 检验标准明细列表（主子表关系）（子表，级联保存）
@@ -333,9 +318,9 @@ public class TaktInspectionStandardStatusDto
     public long InspectionStandardId { get; set; }
 
     /// <summary>
-    /// 检验标准状态（0=草稿，1=已发布，2=已停用）
+    /// 检验标准状态（字典 logistics_quality_standard_status）
     /// </summary>
-    [Required(ErrorMessage = "检验标准状态（0=草稿，1=已发布，2=已停用）不能为空")]
+    [Required(ErrorMessage = "检验标准状态（字典 logistics_quality_standard_status）不能为空")]
     public int StandardStatus { get; set; } = 0;
 }
 
@@ -359,7 +344,7 @@ public class TaktInspectionStandardTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -374,7 +359,7 @@ public class TaktInspectionStandardTemplateDto
     public string? StandardName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检验类型（0=IQC来料检验，1=IPQC过程检验，2=FQC最终检验）
+    /// 检验类型（字典 logistics_quality_inspection_type）
     /// </summary>
     public int? InspectionType { get; set; }
 
@@ -389,7 +374,7 @@ public class TaktInspectionStandardTemplateDto
     public string? MaterialCategoryName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 抽样方案编码
+    /// 抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）
     /// </summary>
     public string? SamplingSchemeCode { get; set; } = string.Empty;
 
@@ -399,19 +384,19 @@ public class TaktInspectionStandardTemplateDto
     public string? SamplingSchemeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否启用（0=否，1=是）
+    /// 检验标准描述
     /// </summary>
-    public int? IsEnabled { get; set; }
+    public string? StandardDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检验标准状态（0=草稿，1=已发布，2=已停用）
+    /// 检验标准状态（字典 logistics_quality_standard_status）
     /// </summary>
     public int? StandardStatus { get; set; }
 
     /// <summary>
-    /// 检验标准描述
+    /// 检验标准明细列表（主子表关系）（子表，级联保存）
     /// </summary>
-    public string? StandardDescription { get; set; } = string.Empty;
+    public List<TaktInspectionStandardItemCreateDto>? Items { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -441,12 +426,12 @@ public class TaktInspectionStandardImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -461,7 +446,7 @@ public class TaktInspectionStandardImportDto
     public string? StandardName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检验类型（0=IQC来料检验，1=IPQC过程检验，2=FQC最终检验）
+    /// 检验类型（字典 logistics_quality_inspection_type）
     /// </summary>
     public int? InspectionType { get; set; }
 
@@ -476,7 +461,7 @@ public class TaktInspectionStandardImportDto
     public string? MaterialCategoryName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 抽样方案编码
+    /// 抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）
     /// </summary>
     public string? SamplingSchemeCode { get; set; } = string.Empty;
 
@@ -486,19 +471,19 @@ public class TaktInspectionStandardImportDto
     public string? SamplingSchemeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否启用（0=否，1=是）
+    /// 检验标准描述
     /// </summary>
-    public int? IsEnabled { get; set; }
+    public string? StandardDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检验标准状态（0=草稿，1=已发布，2=已停用）
+    /// 检验标准状态（字典 logistics_quality_standard_status）
     /// </summary>
     public int? StandardStatus { get; set; }
 
     /// <summary>
-    /// 检验标准描述
+    /// 检验标准明细列表（主子表关系）（子表，级联保存）
     /// </summary>
-    public string? StandardDescription { get; set; } = string.Empty;
+    public List<TaktInspectionStandardItemCreateDto>? Items { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -534,7 +519,7 @@ public class TaktInspectionStandardExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -549,7 +534,7 @@ public class TaktInspectionStandardExportDto
     public string StandardName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检验类型（0=IQC来料检验，1=IPQC过程检验，2=FQC最终检验）
+    /// 检验类型（字典 logistics_quality_inspection_type）
     /// </summary>
     public int InspectionType { get; set; } = 0;
 
@@ -564,7 +549,7 @@ public class TaktInspectionStandardExportDto
     public string MaterialCategoryName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 抽样方案编码
+    /// 抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）
     /// </summary>
     public string? SamplingSchemeCode { get; set; } = string.Empty;
 
@@ -574,19 +559,14 @@ public class TaktInspectionStandardExportDto
     public string? SamplingSchemeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否启用（0=否，1=是）
-    /// </summary>
-    public int IsEnabled { get; set; } = 0;
-
-    /// <summary>
-    /// 检验标准状态（0=草稿，1=已发布，2=已停用）
-    /// </summary>
-    public int StandardStatus { get; set; } = 0;
-
-    /// <summary>
     /// 检验标准描述
     /// </summary>
     public string? StandardDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 检验标准状态（字典 logistics_quality_standard_status）
+    /// </summary>
+    public int StandardStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

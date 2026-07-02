@@ -25,48 +25,41 @@ namespace Takt.Domain.Entities.Identity;
 [SugarIndex("ix_role_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
 [SugarIndex("ix_role_code_unique", nameof(TenantCode), OrderByType.Asc, nameof(RoleCode), OrderByType.Asc, true)]
 public class TaktRole : TaktTenantEntityBase
-{
-    /// <summary>
+{    /// <summary>
     /// 角色编码（唯一索引：租户内唯一，见 ix_role_code_unique）
     /// </summary>
     [SugarColumn(ColumnName = "role_code", ColumnDescription = "角色编码", ColumnDataType = "varchar", Length = 50, IsNullable = false)]
     public string RoleCode { get; set; } = string.Empty;
-
     /// <summary>
     /// 角色名称
     /// </summary>
     [SugarColumn(ColumnName = "role_name", ColumnDescription = "角色名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
     public string RoleName { get; set; } = string.Empty;
-
     /// <summary>
     /// 数据权限范围（字典 sys_data_scope_type：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）
     /// </summary>
     [SugarColumn(ColumnName = "data_scope", ColumnDescription = "数据权限范围", ColumnDataType = "int", IsNullable = false, DefaultValue = "4")]
     public int DataScope { get; set; } = 4;
-
+    /// <summary>
+    /// 内置（字典 sys_yes_no_type；种子角色为内置，不允许删除）
+    /// </summary>
+    [SugarColumn(ColumnName = "is_built_in", ColumnDescription = "内置", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int IsBuiltIn { get; set; } = 0;
+    /// <summary>
+    /// 角色描述
+    /// </summary>
+    [SugarColumn(ColumnName = "role_description", ColumnDescription = "角色描述", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
+    public string? RoleDescription { get; set; }
     /// <summary>
     /// 排序号
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; } = 0;
-
-    /// <summary>
-    /// 是否内置（字典 sys_yes_no_type；种子角色为内置，不允许删除）
-    /// </summary>
-    [SugarColumn(ColumnName = "is_built_in", ColumnDescription = "是否内置", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int IsBuiltIn { get; set; } = 0;
-
     /// <summary>
     /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     [SugarColumn(ColumnName = "role_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int RoleStatus { get; set; } = 1;
-
-    /// <summary>
-    /// 角色描述
-    /// </summary>
-    [SugarColumn(ColumnName = "description", ColumnDescription = "角色描述", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
-    public string? Description { get; set; }
 
     // ========================================
     // 导航属性区域

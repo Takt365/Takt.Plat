@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Sales
 // 文件名称：TaktSalesPriceItemI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSalesPriceItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktSalesPriceItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salespriceitem._self", "zh-HK", "Takt销售价格明细信息_hk", "实体名称"),
 
             // entity.salespriceitem.salespriceid
-            new TranslationSeedItem("entity.salespriceitem.salespriceid", "en-US", "销售价格ID_us", "销售价格ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.salespriceitem.salespriceid", "en-US", "销售价格ID_us", "销售价格（关联 TaktSalesPrice.Id，选项 TaktSalesPrices/options）"),
             // entity.salespriceitem.salespriceid
-            new TranslationSeedItem("entity.salespriceitem.salespriceid", "ja-JP", "销售价格ID_jp", "销售价格ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.salespriceitem.salespriceid", "ja-JP", "销售价格ID_jp", "销售价格（关联 TaktSalesPrice.Id，选项 TaktSalesPrices/options）"),
             // entity.salespriceitem.salespriceid
-            new TranslationSeedItem("entity.salespriceitem.salespriceid", "zh-CN", "销售价格ID", "销售价格ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.salespriceitem.salespriceid", "zh-CN", "销售价格ID", "销售价格（关联 TaktSalesPrice.Id，选项 TaktSalesPrices/options）"),
             // entity.salespriceitem.salespriceid
-            new TranslationSeedItem("entity.salespriceitem.salespriceid", "zh-HK", "销售价格ID_hk", "销售价格ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.salespriceitem.salespriceid", "zh-HK", "销售价格ID_hk", "销售价格（关联 TaktSalesPrice.Id，选项 TaktSalesPrices/options）"),
 
             // entity.salespriceitem.salespricecode
             new TranslationSeedItem("entity.salespriceitem.salespricecode", "en-US", "销售价格编码_us", "销售价格编码（冗余字段，便于查询）"),
@@ -118,49 +118,58 @@ public class TaktSalesPriceItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salespriceitem.linenumber", "zh-HK", "行号_hk", "行号（项号/序号，固定步长=10）"),
 
             // entity.salespriceitem.materialcode
-            new TranslationSeedItem("entity.salespriceitem.materialcode", "en-US", "物料编码_us", "物料编码"),
+            new TranslationSeedItem("entity.salespriceitem.materialcode", "en-US", "物料编码_us", "物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）"),
             // entity.salespriceitem.materialcode
-            new TranslationSeedItem("entity.salespriceitem.materialcode", "ja-JP", "物料编码_jp", "物料编码"),
+            new TranslationSeedItem("entity.salespriceitem.materialcode", "ja-JP", "物料编码_jp", "物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）"),
             // entity.salespriceitem.materialcode
-            new TranslationSeedItem("entity.salespriceitem.materialcode", "zh-CN", "物料编码", "物料编码"),
+            new TranslationSeedItem("entity.salespriceitem.materialcode", "zh-CN", "物料编码", "物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）"),
             // entity.salespriceitem.materialcode
-            new TranslationSeedItem("entity.salespriceitem.materialcode", "zh-HK", "物料编码_hk", "物料编码"),
+            new TranslationSeedItem("entity.salespriceitem.materialcode", "zh-HK", "物料编码_hk", "物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）"),
 
             // entity.salespriceitem.salesunit
-            new TranslationSeedItem("entity.salespriceitem.salesunit", "en-US", "销售单位_us", "销售单位"),
+            new TranslationSeedItem("entity.salespriceitem.salesunit", "en-US", "销售单位_us", "销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）"),
             // entity.salespriceitem.salesunit
-            new TranslationSeedItem("entity.salespriceitem.salesunit", "ja-JP", "销售单位_jp", "销售单位"),
+            new TranslationSeedItem("entity.salespriceitem.salesunit", "ja-JP", "销售单位_jp", "销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）"),
             // entity.salespriceitem.salesunit
-            new TranslationSeedItem("entity.salespriceitem.salesunit", "zh-CN", "销售单位", "销售单位"),
+            new TranslationSeedItem("entity.salespriceitem.salesunit", "zh-CN", "销售单位", "销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）"),
             // entity.salespriceitem.salesunit
-            new TranslationSeedItem("entity.salespriceitem.salesunit", "zh-HK", "销售单位_hk", "销售单位"),
+            new TranslationSeedItem("entity.salespriceitem.salesunit", "zh-HK", "销售单位_hk", "销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）"),
+
+            // entity.salespriceitem.salesperunit
+            new TranslationSeedItem("entity.salespriceitem.salesperunit", "en-US", "价格单位_us", "价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）"),
+            // entity.salespriceitem.salesperunit
+            new TranslationSeedItem("entity.salespriceitem.salesperunit", "ja-JP", "价格单位_jp", "价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）"),
+            // entity.salespriceitem.salesperunit
+            new TranslationSeedItem("entity.salespriceitem.salesperunit", "zh-CN", "价格单位", "价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）"),
+            // entity.salespriceitem.salesperunit
+            new TranslationSeedItem("entity.salespriceitem.salesperunit", "zh-HK", "价格单位_hk", "价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）"),
 
             // entity.salespriceitem.salesprice
-            new TranslationSeedItem("entity.salespriceitem.salesprice", "en-US", "销售价格_us", "销售价格（精确到分，存储为整数，单位为分）"),
+            new TranslationSeedItem("entity.salespriceitem.salesprice", "en-US", "销售价格_us", "销售价格（decimal(18,5)）"),
             // entity.salespriceitem.salesprice
-            new TranslationSeedItem("entity.salespriceitem.salesprice", "ja-JP", "销售价格_jp", "销售价格（精确到分，存储为整数，单位为分）"),
+            new TranslationSeedItem("entity.salespriceitem.salesprice", "ja-JP", "销售价格_jp", "销售价格（decimal(18,5)）"),
             // entity.salespriceitem.salesprice
-            new TranslationSeedItem("entity.salespriceitem.salesprice", "zh-CN", "销售价格", "销售价格（精确到分，存储为整数，单位为分）"),
+            new TranslationSeedItem("entity.salespriceitem.salesprice", "zh-CN", "销售价格", "销售价格（decimal(18,5)）"),
             // entity.salespriceitem.salesprice
-            new TranslationSeedItem("entity.salespriceitem.salesprice", "zh-HK", "销售价格_hk", "销售价格（精确到分，存储为整数，单位为分）"),
+            new TranslationSeedItem("entity.salespriceitem.salesprice", "zh-HK", "销售价格_hk", "销售价格（decimal(18,5)）"),
 
             // entity.salespriceitem.minorderquantity
-            new TranslationSeedItem("entity.salespriceitem.minorderquantity", "en-US", "最小订购量_us", "最小订购量（基本单位数量）"),
+            new TranslationSeedItem("entity.salespriceitem.minorderquantity", "en-US", "最小订购量_us", "最小订购量（基本单位数量，整数）"),
             // entity.salespriceitem.minorderquantity
-            new TranslationSeedItem("entity.salespriceitem.minorderquantity", "ja-JP", "最小订购量_jp", "最小订购量（基本单位数量）"),
+            new TranslationSeedItem("entity.salespriceitem.minorderquantity", "ja-JP", "最小订购量_jp", "最小订购量（基本单位数量，整数）"),
             // entity.salespriceitem.minorderquantity
-            new TranslationSeedItem("entity.salespriceitem.minorderquantity", "zh-CN", "最小订购量", "最小订购量（基本单位数量）"),
+            new TranslationSeedItem("entity.salespriceitem.minorderquantity", "zh-CN", "最小订购量", "最小订购量（基本单位数量，整数）"),
             // entity.salespriceitem.minorderquantity
-            new TranslationSeedItem("entity.salespriceitem.minorderquantity", "zh-HK", "最小订购量_hk", "最小订购量（基本单位数量）"),
+            new TranslationSeedItem("entity.salespriceitem.minorderquantity", "zh-HK", "最小订购量_hk", "最小订购量（基本单位数量，整数）"),
 
             // entity.salespriceitem.maxorderquantity
-            new TranslationSeedItem("entity.salespriceitem.maxorderquantity", "en-US", "最大订购量_us", "最大订购量（基本单位数量，0表示无限制）"),
+            new TranslationSeedItem("entity.salespriceitem.maxorderquantity", "en-US", "最大订购量_us", "最大订购量（基本单位数量，0表示无限制，整数）"),
             // entity.salespriceitem.maxorderquantity
-            new TranslationSeedItem("entity.salespriceitem.maxorderquantity", "ja-JP", "最大订购量_jp", "最大订购量（基本单位数量，0表示无限制）"),
+            new TranslationSeedItem("entity.salespriceitem.maxorderquantity", "ja-JP", "最大订购量_jp", "最大订购量（基本单位数量，0表示无限制，整数）"),
             // entity.salespriceitem.maxorderquantity
-            new TranslationSeedItem("entity.salespriceitem.maxorderquantity", "zh-CN", "最大订购量", "最大订购量（基本单位数量，0表示无限制）"),
+            new TranslationSeedItem("entity.salespriceitem.maxorderquantity", "zh-CN", "最大订购量", "最大订购量（基本单位数量，0表示无限制，整数）"),
             // entity.salespriceitem.maxorderquantity
-            new TranslationSeedItem("entity.salespriceitem.maxorderquantity", "zh-HK", "最大订购量_hk", "最大订购量（基本单位数量，0表示无限制）"),
+            new TranslationSeedItem("entity.salespriceitem.maxorderquantity", "zh-HK", "最大订购量_hk", "最大订购量（基本单位数量，0表示无限制，整数）"),
 
             // entity.salespriceitem.scales
             new TranslationSeedItem("entity.salespriceitem.scales", "en-US", "价格阶梯列表_us", "价格阶梯列表（主子表关系，一个物料价格可以有多个阶梯）"),

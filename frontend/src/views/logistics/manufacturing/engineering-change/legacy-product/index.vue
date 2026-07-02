@@ -16,8 +16,8 @@
       :show-delete="false"
       :show-import="false"
       :show-export="true"
-      update-permission="logistics:manufacturing:engineeringchange:legacyproduct:update"
-      export-permission="logistics:manufacturing:engineeringchange:legacyproduct:export"
+      update-permission="logistics:manufacturing:engineering:change:legacy:product:update"
+      export-permission="logistics:manufacturing:engineering:change:legacy:product:export"
       :update-disabled="updateDisabled"
       :update-loading="loading"
       :refresh-loading="loading"
@@ -41,7 +41,7 @@
       @resize-column="handleResizeColumn"
     />
     <TaktPagination v-model:current="currentPage" v-model:page-size="pageSize" :total="total" @change="handlePaginationChange" />
-    <TaktModal v-model:open="formVisible" :title="t('common.page.button.update')" width="900px" :confirm-loading="formLoading" @ok="handleFormSubmit">
+    <TaktModal v-model:open="formVisible" :title="t('common.dialog.title.edit', { entity: t('menu.logistics.manufacturing.engineering.change.legacy.product') })" width="900px" :confirm-loading="formLoading" @ok="handleFormSubmit">
       <LegacyProductForm ref="formRef" :form-data="formData" :loading="formLoading" />
     </TaktModal>
   </div>
@@ -84,7 +84,7 @@ const formData = ref<EcLegacyProduct | null>(null);
 const formRef = ref<InstanceType<typeof LegacyProductForm> | null>(null);
 /** 列定义 */
 const columns = ref([
-  { title: t('entity.ec.ecno'), dataIndex: 'ecNo', key: 'ecNo', width: 120 }, { title: t('entity.ecdetail.ecmodel'), dataIndex: 'ecModel', key: 'ecModel', width: 140 }, { title: t('entity.ecdetail.ecolditem'), dataIndex: 'ecOldItem', key: 'ecOldItem', width: 140 }, { title: t('entity.ecdetail.ecnewitem'), dataIndex: 'ecNewItem', key: 'ecNewItem', width: 140 }
+  { title: t('entity.ec.no'), dataIndex: 'ecNo', key: 'ecNo', width: 120 }, { title: t('entity.ecdetail.ecmodel'), dataIndex: 'ecModel', key: 'ecModel', width: 140 }, { title: t('entity.ecdetail.ecolditem'), dataIndex: 'ecOldItem', key: 'ecOldItem', width: 140 }, { title: t('entity.ecdetail.ecnewitem'), dataIndex: 'ecNewItem', key: 'ecNewItem', width: 140 }
 ]);
 /** 可见列 keys */
 const visibleColumnKeys = ref(columns.value.map(c => String(c.key)));
@@ -138,7 +138,7 @@ async function handleFormSubmit() {
   formLoading.value = true;
   try {
     await updateEcLegacyProduct(String(formData.value.ecDetailId), dto);
-    message.success(t('common.page.message.updateSuccess'));
+    message.success(t('common.feedback.updated', { target: t('menu.logistics.manufacturing.engineering.change.legacy.product') }));
     formVisible.value = false;
     await loadData();
   } finally {
@@ -153,7 +153,7 @@ async function handleExport() {
     const url = window.URL.createObjectURL(blob as Blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = '旧品管制.xlsx';
+    link.download = `${t('menu.logistics.manufacturing.engineering.change.legacy.product')}.xlsx`;
     link.style.display = 'none';
     document.body.appendChild(link);
     link.click();

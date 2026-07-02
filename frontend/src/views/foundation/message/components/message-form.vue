@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/foundation/message/components -->
 <!-- 文件名称：message-form.vue -->
-<!-- 功能描述：在线消息新增表单；两步提交：① createMessage 落库 ② sendMessageById SignalR 推送；defineExpose validate/getValues/resetFields/submitCreateAndPushAsync -->
+<!-- 功能描述：在线消息新增表单；标题自动拼接（{messageType}-{messageGroup}:{内容前40字}）；两步提交：① createMessage 落库 ② sendMessageById SignalR 推送；defineExpose validate/getValues/resetFields/submitCreateAndPushAsync -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -16,45 +16,6 @@
     label-align="right"
   >
     <a-row :gutter="24">
-      <a-col :span="8">
-        <a-form-item
-          :label="t('common.page.entity.tenantcode')"
-          name="tenantCode"
-        >
-          <a-input
-            v-model:value="formState.tenantCode"
-            :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-            size="small"
-            disabled
-          />
-        </a-form-item>
-      </a-col>
-      <a-col :span="8">
-        <a-form-item
-          :label="t('common.page.entity.companycode')"
-          name="companyCode"
-        >
-          <a-input
-            v-model:value="formState.companyCode"
-            :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-            size="small"
-            disabled
-          />
-        </a-form-item>
-      </a-col>
-      <a-col :span="8">
-        <a-form-item
-          :label="t('common.page.entity.companydefaultculture')"
-          name="companyDefaultCulture"
-        >
-          <a-input
-            v-model:value="formState.companyDefaultCulture"
-            :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-            size="small"
-            disabled
-          />
-        </a-form-item>
-      </a-col>
       <a-col :span="12">
         <a-form-item
           :label="t('entity.message.fromusername')"
@@ -86,7 +47,7 @@
         :span="24"
       >
         <a-form-item
-          :label="t('entity.message.tousernames')"
+          :label="t('entity.message.tousername')"
           name="recipientMode"
         >
           <a-radio-group
@@ -159,32 +120,6 @@
       </a-col>
       <a-col :span="12">
         <a-form-item
-          :label="t('entity.message.iscc')"
-          name="isCc"
-        >
-          <TaktSelect
-            v-model:value="formState.isCc"
-            dict-type="sys_yes_no_type"
-            size="small"
-            disabled
-          />
-        </a-form-item>
-      </a-col>
-      <a-col :span="24">
-        <a-form-item
-          :label="t('entity.message.title')"
-          name="messageTitle"
-        >
-          <a-input
-            v-model:value="formState.messageTitle"
-            :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.message.title') })"
-            size="small"
-            allow-clear
-          />
-        </a-form-item>
-      </a-col>
-      <a-col :span="12">
-        <a-form-item
           :label="t('entity.message.type')"
           name="messageType"
         >
@@ -192,6 +127,19 @@
             v-model:value="formState.messageType"
             dict-type="sys_message_type"
             :placeholder="t('common.page.form.placeholder.select', { field: t('entity.message.type') })"
+            size="small"
+          />
+        </a-form-item>
+      </a-col>
+      <a-col :span="12">
+        <a-form-item
+          :label="t('entity.message.group')"
+          name="messageGroup"
+        >
+          <TaktSelect
+            v-model:value="formState.messageGroup"
+            dict-type="sys_message_group_category"
+            :placeholder="t('common.page.form.placeholder.select', { field: t('entity.message.group') })"
             size="small"
           />
         </a-form-item>
@@ -231,19 +179,6 @@
           </div>
         </a-form-item>
       </a-col>
-      <a-col :span="12">
-        <a-form-item
-          :label="t('entity.message.group')"
-          name="messageGroup"
-        >
-          <TaktSelect
-            v-model:value="formState.messageGroup"
-            dict-type="sys_message_group_category"
-            :placeholder="t('common.page.form.placeholder.select', { field: t('entity.message.group') })"
-            size="small"
-          />
-        </a-form-item>
-      </a-col>
       <a-col :span="24">
         <a-form-item
           :label="t('entity.message.content')"
@@ -272,11 +207,11 @@ import { message } from 'ant-design-vue'
 import type { UploadFile, UploadProps } from 'ant-design-vue'
 import { PlusOutlined } from '@ant-design/icons-vue'
 import type { Rule } from 'ant-design-vue/es/form'
-import type { Message, MessageCreate, MessageBatchCreate, MessageAttachmentItem } from '@/types/foundation/message'
+import type { Message, MessageCreate } from '@/types/foundation/message'
+import type { MessageBatchCreate, MessageAttachmentItem } from '@/types/foundation/message'
 import { createAndSendMessages } from '@/api/foundation/message'
 import { getFileById } from '@/api/foundation/file'
 import TaktSelect from '@/components/business/takt-select/index.vue'
-import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 import { usePermissionStore } from '@/stores/identity/permission'
 import { uploadTaktFileSmart } from '@/utils/takt-file-chunk-upload'
@@ -302,80 +237,28 @@ interface MessageRecipientItem {
   userName: string
 }
 
-/** sys_message_type 字典「文本」对应 dictValue（种子 TaktDictDataSeedData） */
-const DEFAULT_MESSAGE_TYPE = 'text'
-/** sys_message_group_category 字典「协同」对应 dictValue */
-const DEFAULT_MESSAGE_GROUP = 'collaboration'
-
 /** 列表模式最多可选接收者数 */
 const MAX_RECIPIENT_LIST_SIZE = 5
+
+/** 自动标题：消息内容截取最大字符数 */
+const MESSAGE_TITLE_CONTENT_MAX = 40
+
+/** 自动标题：落库字段上限（与 TaktMessage.MessageTitle 对齐） */
+const MESSAGE_TITLE_MAX_LENGTH = 200
 
 /** 超级管理员 UserType（与 TaktUserType.SuperAdmin 对齐） */
 const SUPER_ADMIN_USER_TYPE = 2
 
-/** 字典 dictValue → 后端 TaktMessageType 枚举（与 sys_message_type 一致） */
-const MESSAGE_TYPE_DICT_TO_API: Record<string, number> = {
-  text: 1,
-  image: 2,
-  file: 3,
-  takt365: 4,
-  video: 5,
-  voice: 6,
-}
-
-/** 需要上传附件的消息类型 dictValue（非文本、非系统消息） */
-const MESSAGE_TYPE_NEEDS_FILE = new Set(['image', 'file', 'video', 'voice'])
-
-/** API 数值 → 字典 dictValue */
-const MESSAGE_TYPE_API_TO_DICT: Record<number, string> = {
-  1: 'text',
-  2: 'image',
-  3: 'file',
-  4: 'takt365',
-  5: 'video',
-  6: 'voice',
-}
-
-/** 字典 dictValue → 后端 TaktMessageGroup 枚举（与 sys_message_group_category 一致） */
-const MESSAGE_GROUP_DICT_TO_API: Record<string, number> = {
-  collaboration: 1,
-  officialdoc: 2,
-  document: 3,
-  announcement: 4,
-  other: 5,
-  message: 6,
-  reminder: 7,
-}
-
 /** i18n 翻译函数 */
 const { t } = useI18n()
-/** Pinia：租户/公司上下文 */
-const tenantStore = useTenantStore()
 /** Pinia：用户上下文 */
 const userStore = useUserStore()
 /** Pinia：按钮权限（第二步 SignalR 发送） */
 const permissionStore = usePermissionStore()
-/** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ['tenantCode', 'companyCode', 'companyDefaultCulture', 'fromUserName', 'fromUserId', 'toUserName', 'recipientMode', 'toUserIds', 'toUserId', 'isCc', 'messageTitle', 'messageContent', 'messageType', 'messageGroup', 'attachments']
+/** CreateDto 字段名列表（与 formState 键对齐；messageTitle 由提交时自动生成） */
+const formFields = ['fromUserName', 'fromUserId', 'toUserName', 'recipientMode', 'toUserIds', 'toUserId', 'isCc', 'messageContent', 'messageType', 'messageGroup', 'attachments']
 /** TaktYesNo：是 */
 const DEFAULT_IS_CC = 1
-
-/**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言（表单只读）
- * @param target 表单数据
- * @param force 为 true 时强制覆盖（新增态或公司切换）
- */
-function applyScopeDefaults(target: Record<string, unknown>, force = false) {
-  if (formFields.includes('tenantCode') && (force || !target.tenantCode)) {
-    target.tenantCode = tenantStore.tenantCode
-  }
-  if (formFields.includes('companyCode') && (force || !target.companyCode)) {
-    target.companyCode = tenantStore.companyCode
-  }
-  if (formFields.includes('companyDefaultCulture') && (force || !target.companyDefaultCulture)) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
-  }
-}
 
 /**
  * 新增态：发送者默认为当前登录用户（只读展示）
@@ -410,59 +293,12 @@ function applyCreateDefaults(target: Record<string, unknown>) {
     target.toUserIds = []
   }
   if (target.messageType === undefined || target.messageType === null || target.messageType === '') {
-    target.messageType = DEFAULT_MESSAGE_TYPE
+    target.messageType = 'system'
   }
   if (target.messageGroup === undefined || target.messageGroup === null || target.messageGroup === '') {
-    target.messageGroup = DEFAULT_MESSAGE_GROUP
+    target.messageGroup = 'message'
   }
-  if (target.isCc === undefined || target.isCc === null || target.isCc === '') {
-    target.isCc = DEFAULT_IS_CC
-  }
-}
-
-/**
- * 表单 messageType 转为 API 数值枚举
- * @param value 字典值或数值
- * @returns {number} TaktMessageType
- */
-function resolveMessageTypeForApi(value: unknown): number {
-  if (typeof value === 'number' && !Number.isNaN(value)) {
-    return value
-  }
-  if (typeof value === 'string' && value in MESSAGE_TYPE_DICT_TO_API) {
-    return MESSAGE_TYPE_DICT_TO_API[value]
-  }
-  const parsed = Number(value)
-  return Number.isFinite(parsed) ? parsed : MESSAGE_TYPE_DICT_TO_API[DEFAULT_MESSAGE_TYPE]
-}
-
-/**
- * 表单 messageGroup 转为 API 数值枚举
- * @param value 字典值或数值
- * @returns {number} TaktMessageGroup
- */
-/**
- * 表单 messageType 规范为字典 dictValue
- * @param value 字典值或 API 数值
- * @returns {string} sys_message_type dictValue
- */
-function resolveMessageTypeDictValue(value: unknown): string {
-  if (typeof value === 'string' && value.trim() !== '') {
-    return value.trim()
-  }
-  const apiValue = resolveMessageTypeForApi(value)
-  return MESSAGE_TYPE_API_TO_DICT[apiValue] ?? DEFAULT_MESSAGE_TYPE
-}
-
-function resolveMessageGroupForApi(value: unknown): number {
-  if (typeof value === 'number' && !Number.isNaN(value)) {
-    return value
-  }
-  if (typeof value === 'string' && value in MESSAGE_GROUP_DICT_TO_API) {
-    return MESSAGE_GROUP_DICT_TO_API[value]
-  }
-  const parsed = Number(value)
-  return Number.isFinite(parsed) ? parsed : MESSAGE_GROUP_DICT_TO_API[DEFAULT_MESSAGE_GROUP]
+  target.isCc = DEFAULT_IS_CC
 }
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -495,43 +331,25 @@ const uploadedFileLabel = ref('')
 const uploadFileList = ref<UploadFile[]>([])
 
 /** 当前消息类型 dictValue */
-const messageTypeDictValue = computed(() => resolveMessageTypeDictValue(formState.messageType))
+/** 当前消息类型（sys_message_type DictValue，来自 TaktSelect） */
+const messageTypeDictValue = computed(() => String(formState.messageType ?? ''))
 
-/** 是否需上传附件（图片/文件/视频/语音） */
-const needsFileUpload = computed(() => MESSAGE_TYPE_NEEDS_FILE.has(messageTypeDictValue.value))
+/** 多媒体类型须上传附件 */
+const needsFileUpload = computed(() => messageTypeDictValue.value === 'multimedia')
 
-/** 上传 accept */
+/** 上传 accept（多媒体：图片/音视频/通用文件） */
 const uploadAccept = computed(() => {
-  switch (messageTypeDictValue.value) {
-    case 'image':
-      return 'image/*'
-    case 'video':
-      return 'video/*'
-    case 'voice':
-      return 'audio/*'
-    default:
-      return undefined
+  if (messageTypeDictValue.value === 'multimedia') {
+    return 'image/*,video/*,audio/*'
   }
+  return undefined
 })
 
-/** 图片用卡片样式，其余用文本列表 */
-const uploadListType = computed<UploadProps['listType']>(() => (
-  messageTypeDictValue.value === 'image' ? 'picture-card' : 'text'
-))
+/** 多媒体用文本列表样式上传 */
+const uploadListType = computed<UploadProps['listType']>(() => 'text')
 
 /** 上传区提示文案 */
-const uploadHintText = computed(() => {
-  switch (messageTypeDictValue.value) {
-    case 'image':
-      return t('foundation.message.page.upload.image.hint')
-    case 'video':
-      return t('foundation.message.page.upload.video.hint')
-    case 'voice':
-      return t('foundation.message.page.upload.voice.hint')
-    default:
-      return t('foundation.message.page.upload.file.hint')
-  }
-})
+const uploadHintText = computed(() => t('foundation.message.page.upload.multimedia.hint'))
 
 /** 消息内容占位：附件类型可为选填说明 */
 const messageContentPlaceholder = computed(() => {
@@ -550,9 +368,8 @@ watch(
   (val) => {
     const next = val ? { ...val } : {}
     Object.keys(formState).forEach((k) => delete formState[k])
-    applyScopeDefaults(next)
-    const isCreate = !props.formData?.messageId
-    if (isCreate) {
+    const isCreateMode = !props.formData?.messageId
+    if (isCreateMode) {
       applyCreateDefaults(next)
     }
     Object.assign(formState, next)
@@ -564,8 +381,8 @@ watch(
 
 /** 切换为文本/系统消息时清空附件 */
 watch(messageTypeDictValue, (next, prev) => {
-  const nextNeeds = MESSAGE_TYPE_NEEDS_FILE.has(next)
-  const prevNeeds = prev != null && MESSAGE_TYPE_NEEDS_FILE.has(prev)
+  const nextNeeds = next === 'multimedia'
+  const prevNeeds = prev != null && prev === 'multimedia'
   if (prevNeeds && !nextNeeds) {
     clearUploadedFile()
   }
@@ -573,16 +390,6 @@ watch(messageTypeDictValue, (next, prev) => {
     clearUploadedFile()
   }
 })
-
-/** 公司/租户切换时，新增态表单同步隔离字段 */
-watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
-  () => {
-    if (isCreate.value) {
-      applyScopeDefaults(formState, true)
-    }
-  },
-)
 
 /** 用户资料就绪后，新增态同步发送者 */
 watch(
@@ -733,7 +540,7 @@ function syncUploadFileListFromState() {
     uid: '-1',
     name: uploadedFileLabel.value || first.fileOriginalName || first.fileName || url.split('/').pop() || 'file',
     status: 'done',
-    url: messageTypeDictValue.value === 'image' ? url : undefined,
+    url: undefined,
   }]
 }
 
@@ -763,16 +570,18 @@ async function handleBeforeFileUpload(file: globalThis.File): Promise<boolean> {
       const detail = await getFileById(result.fileId)
       accessUrl = detail.accessUrl?.trim() ?? ''
     }
-    if (!accessUrl) {
+    const fileId = result.fileId?.trim() ?? ''
+    const fileName = result.fileName?.trim() ?? ''
+    if (!accessUrl || !fileId || !fileName) {
       message.error(t('foundation.message.page.upload.failed'))
       return false
     }
     const item: MessageAttachmentItem = {
-      fileId: result.fileId,
-      fileName: result.fileName,
+      fileId,
+      fileName,
       fileOriginalName: result.fileOriginalName,
       accessUrl,
-      fileSize: result.fileSize,
+      fileSize: result.fileSize != null ? String(result.fileSize) : undefined,
       fileType: result.fileType,
       fileExtension: result.fileExtension,
       sortOrder: 1,
@@ -875,35 +684,34 @@ function getMessageBody(): Omit<MessageBatchCreate, 'sendToAll' | 'toUserIds'> {
   const fromUserId = formState.fromUserId != null && String(formState.fromUserId).trim() !== ''
     ? String(formState.fromUserId).trim()
     : undefined
-  const attachments = formState.attachments != null && String(formState.attachments).trim() !== ''
+  const messageAttachments = formState.attachments != null && String(formState.attachments).trim() !== ''
     ? String(formState.attachments).trim()
     : undefined
   return {
     fromUserName: formState.fromUserName,
     fromUserId,
-    messageTitle: formState.messageTitle,
+    messageTitle: buildAutoMessageTitle(),
     messageContent: formState.messageContent ?? '',
-    attachments,
-    messageType: resolveMessageTypeForApi(formState.messageType),
-    messageGroup: resolveMessageGroupForApi(formState.messageGroup),
-    isCc: resolveYesNoForApi(formState.isCc),
+    messageAttachments,
+    messageType: String(formState.messageType ?? 'system'),
+    messageGroup: String(formState.messageGroup ?? 'message'),
+    isCc: DEFAULT_IS_CC,
   }
 }
 
 /**
- * 表单是否抄送转为 API 数值（TaktYesNo）
- * @param value 字典值或数值
- * @returns {number} 0=否，1=是
+ * 自动生成消息标题：{messageType DictValue}-{messageGroup DictValue}:{消息内容前 40 字符}
+ * @returns {string} 落库标题（最长 200 字符）
  */
-function resolveYesNoForApi(value: unknown): number {
-  if (value === 1 || value === '1' || value === true) {
-    return 1
+function buildAutoMessageTitle(): string {
+  const messageType = String(formState.messageType ?? 'system').trim() || 'system'
+  const messageGroup = String(formState.messageGroup ?? 'message').trim() || 'message'
+  const contentPrefix = String(formState.messageContent ?? '').trim().slice(0, MESSAGE_TITLE_CONTENT_MAX)
+  const title = `${messageType}-${messageGroup}:${contentPrefix}`
+  if (title.length <= MESSAGE_TITLE_MAX_LENGTH) {
+    return title
   }
-  if (value === 0 || value === '0' || value === false) {
-    return 0
-  }
-  const parsed = Number(value)
-  return parsed === 0 ? 0 : DEFAULT_IS_CC
+  return title.slice(0, MESSAGE_TITLE_MAX_LENGTH)
 }
 
 /** 映射为 Create DTO（字典值转后端枚举；不含表单只读隔离字段） */

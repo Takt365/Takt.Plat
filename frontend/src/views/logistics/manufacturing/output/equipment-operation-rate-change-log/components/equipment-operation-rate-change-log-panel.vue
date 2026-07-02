@@ -19,11 +19,11 @@
       @reset="handleQueryReset"
     />
     <TaktToolsBar
-      create-permission="logistics:manufacturing:output:equipmentoperationrate:create"
-      update-permission="logistics:manufacturing:output:equipmentoperationrate:update"
-      delete-permission="logistics:manufacturing:output:equipmentoperationrate:delete"
+      create-permission="logistics:manufacturing:output:equipment:operation:rate:create"
+      update-permission="logistics:manufacturing:output:equipment:operation:rate:update"
+      delete-permission="logistics:manufacturing:output:equipment:operation:rate:delete"
 
-      export-permission="logistics:manufacturing:output:equipmentoperationrate:export"
+      export-permission="logistics:manufacturing:output:equipment:operation:rate:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -133,8 +133,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.changeTimeStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.equipmentoperationratechangelog.changetimestart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -144,8 +143,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.changeTimeEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.equipmentoperationratechangelog.changetimeend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -178,7 +176,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -189,7 +187,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -471,7 +469,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:manufacturing:output:equipmentoperationrate:update',
+        permission: 'logistics:manufacturing:output:equipment:operation:rate:update',
         onClick: (record: EquipmentOperationRateChangeLog) => void handleEdit(record),
       },
       {
@@ -479,7 +477,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:manufacturing:output:equipmentoperationrate:delete',
+        permission: 'logistics:manufacturing:output:equipment:operation:rate:delete',
         onClick: (record: EquipmentOperationRateChangeLog) => void handleDeleteOne(record),
       },
     ],
@@ -496,7 +494,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: EquipmentOperationRateChangeLog, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getEquipmentOperationRateChangeLogId(selectedRow.value) === getEquipmentOperationRateChangeLogId(record)) {
+    } else if (selectedRow.value && getEquipmentOperationRateChangeLogId(selectedRow.value) === getEquipmentOperationRateChangeLogId(record)) {
       selectedRow.value = null
     }
   },

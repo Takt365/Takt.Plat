@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Operation
 // 文件名称：TaktIqcOrderItemService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-30
 // 创建人：Takt365(Cursor AI)
 // 功能描述：进货检验单明细应用服务实现
 // 
@@ -101,7 +101,7 @@ public class TaktIqcOrderItemService : TaktServiceBase, ITaktIqcOrderItemService
     {
         EnsureThreeLayerContext();
         var list = await _iqcOrderItemRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.JudgeStatus == 1,
             x => x.MaterialName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
@@ -432,10 +432,10 @@ public class TaktIqcOrderItemService : TaktServiceBase, ITaktIqcOrderItemService
                 || SqlFunc.ToString(x.QualifiedQuantity).Contains(keywords)
                 || SqlFunc.ToString(x.UnqualifiedQuantity).Contains(keywords)
                 || SqlFunc.ToString(x.InspectionReturnQuantity).Contains(keywords)
-                || SqlFunc.ToString(x.JudgeStatus).Contains(keywords)
                 || (x.SampleSerialNo != null && x.SampleSerialNo.Contains(keywords))
                 || (x.InspectionDescription != null && x.InspectionDescription.Contains(keywords))
                 || (x.InspectorBy != null && x.InspectorBy.Contains(keywords))
+                || SqlFunc.ToString(x.JudgeStatus).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.InspectionDate).Contains(keywords)
@@ -513,11 +513,6 @@ public class TaktIqcOrderItemService : TaktServiceBase, ITaktIqcOrderItemService
             exp = exp.And(x => x.InspectionReturnQuantity == queryDto.InspectionReturnQuantity);
         }
 
-        if (queryDto?.JudgeStatus.HasValue == true)
-        {
-            exp = exp.And(x => x.JudgeStatus == queryDto.JudgeStatus);
-        }
-
         if (!string.IsNullOrEmpty(queryDto?.SampleSerialNo))
         {
             exp = exp.And(x => x.SampleSerialNo != null && x.SampleSerialNo.Contains(queryDto.SampleSerialNo));
@@ -531,6 +526,11 @@ public class TaktIqcOrderItemService : TaktServiceBase, ITaktIqcOrderItemService
         if (!string.IsNullOrEmpty(queryDto?.InspectorBy))
         {
             exp = exp.And(x => x.InspectorBy != null && x.InspectorBy.Contains(queryDto.InspectorBy));
+        }
+
+        if (queryDto?.JudgeStatus.HasValue == true)
+        {
+            exp = exp.And(x => x.JudgeStatus == queryDto.JudgeStatus);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

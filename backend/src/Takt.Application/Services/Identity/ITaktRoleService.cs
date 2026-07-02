@@ -78,9 +78,9 @@ public interface ITaktRoleService
     Task<TaktRoleDto> UpdateRoleStatusAsync(TaktRoleStatusDto dto);
 
     /// <summary>
-    /// 更新角色是否内置
+    /// 更新角色内置
     /// </summary>
-    /// <param name="dto">是否内置 DTO</param>
+    /// <param name="dto">内置 DTO</param>
     /// <returns>DTO</returns>
     Task<TaktRoleDto> UpdateRoleBuiltInAsync(TaktRoleBuiltInDto dto);
 

@@ -344,7 +344,7 @@
                   v-model:value="formState.currencyCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.vendor.currencycode') })"
                   show-count
-                  :maxlength="10"
+                  :maxlength="3"
                   allow-clear
                   :disabled="!!formData?.vendorId"
                 />
@@ -357,7 +357,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.paymentTerms"
-                  dict-type="logistics_payment_terms_param"
+                  dict-type="accounting_payment_terms_param"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.vendor.paymentterms') })"
                 />
               </a-form-item>

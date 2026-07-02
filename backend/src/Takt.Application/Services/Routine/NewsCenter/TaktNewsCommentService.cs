@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Routine.NewsCenter
 // 文件名称：TaktNewsCommentService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：新闻中心评论应用服务实现
 // 
@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Services.Routine.NewsCenter;
 
@@ -91,13 +90,13 @@ public class TaktNewsCommentService : TaktServiceBase, ITaktNewsCommentService
         return dto;    }
 
     /// <summary>
-    /// 获取新闻评论树形选项列表
+    /// 获取新闻中心评论树形选项列表
     /// </summary>
     /// <returns>树形选项</returns>
     public async Task<List<TaktTreeSelectOption>> GetNewsCommentTreeOptionsAsync()
     {
         EnsureThreeLayerContext();
-        var list = await _newsCommentRepository.GetListAsync(x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode);
+        var list = await _newsCommentRepository.GetListAsync(x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.CommentStatus == 1);
         return BuildNewsCommentTreeOptions(list, 0);
     }
 
@@ -137,7 +136,7 @@ public class TaktNewsCommentService : TaktServiceBase, ITaktNewsCommentService
         var list = await _newsCommentRepository.GetListAsync(x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode);
         var filtered = includeDisabled
             ? list
-            : list.Where(x => x.CommentStatus == 0).ToList();
+            : list.Where(x => x.CommentStatus == 1).ToList();
         return BuildNewsCommentTree(filtered, parentId);
     }
 
@@ -414,10 +413,9 @@ public class TaktNewsCommentService : TaktServiceBase, ITaktNewsCommentService
                 || SqlFunc.ToString(x.ReplyToUserId).Contains(keywords)
                 || (x.ReplyToUserName != null && x.ReplyToUserName.Contains(keywords))
                 || (x.CommentContent != null && x.CommentContent.Contains(keywords))
-                || SqlFunc.ToString(x.LikeCount).Contains(keywords)
+                || SqlFunc.ToString(x.NewsCommentLikeCount).Contains(keywords)
                 || SqlFunc.ToString(x.ReplyCount).Contains(keywords)
                 || SqlFunc.ToString(x.CommentLevel).Contains(keywords)
-                || SqlFunc.ToString(x.FlowInstanceId).Contains(keywords)
                 || SqlFunc.ToString(x.CommentStatus).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
@@ -466,9 +464,9 @@ public class TaktNewsCommentService : TaktServiceBase, ITaktNewsCommentService
             exp = exp.And(x => x.CommentContent != null && x.CommentContent.Contains(queryDto.CommentContent));
         }
 
-        if (queryDto?.LikeCount.HasValue == true)
+        if (queryDto?.NewsCommentLikeCount.HasValue == true)
         {
-            exp = exp.And(x => x.LikeCount == queryDto.LikeCount);
+            exp = exp.And(x => x.NewsCommentLikeCount == queryDto.NewsCommentLikeCount);
         }
 
         if (queryDto?.ReplyCount.HasValue == true)
@@ -479,11 +477,6 @@ public class TaktNewsCommentService : TaktServiceBase, ITaktNewsCommentService
         if (queryDto?.CommentLevel.HasValue == true)
         {
             exp = exp.And(x => x.CommentLevel == queryDto.CommentLevel);
-        }
-
-        if (queryDto?.FlowInstanceId.HasValue == true)
-        {
-            exp = exp.And(x => x.FlowInstanceId == queryDto.FlowInstanceId);
         }
 
         if (queryDto?.CommentStatus.HasValue == true)

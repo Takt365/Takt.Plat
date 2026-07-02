@@ -36,7 +36,7 @@ export interface DeltaLog extends CompanyDtoBase {
   /**
    * 操作类型（INSERT、UPDATE、DELETE）
    */
-  operType: number;
+  operType: string;
 
   /**
    * 数据库表名（SugarTable 物理表名）
@@ -56,32 +56,52 @@ export interface DeltaLog extends CompanyDtoBase {
   /**
    * 修改前数据 JSON（旧值快照）
    */
-  beforeData?: string;
+  beforeData: string;
 
   /**
    * 修改后数据 JSON（新值快照）
    */
-  afterData?: string;
+  afterData: string;
 
   /**
    * 差异内容 JSON（变更字段及旧/新值明细）
    */
-  diffData?: string;
+  diffData: string;
 
   /**
-   * 执行的 SQL 语句（AOP 捕获，可选）
+   * 执行的 SQL 语句（AOP 捕获）
    */
-  sqlStatement?: string;
+  sqlStatement: string;
 
   /**
    * 操作 IP
    */
-  operIp?: string;
+  operIp: string;
 
   /**
    * 操作地点（由 OperIp 解析，如：中国-广东省-深圳市）
    */
-  operLocation?: string;
+  operLocation: string;
+
+  /**
+   * 用户代理（User-Agent）
+   */
+  userAgent: string;
+
+  /**
+   * 浏览器（TaktConstants.BrowserType）
+   */
+  browser: string;
+
+  /**
+   * 操作系统（TaktConstants.OperatingSystem）
+   */
+  os: string;
+
+  /**
+   * 登录设备（TaktConstants.DeviceType）
+   */
+  deviceType: string;
 
   /**
    * 操作时间（数据变更发生时刻）
@@ -121,7 +141,7 @@ export interface DeltaLogQuery extends TaktPagedQuery {
   /**
    * 操作类型（INSERT、UPDATE、DELETE）
    */
-  operType?: number;
+  operType?: string;
 
   /**
    * 数据库表名（SugarTable 物理表名）
@@ -218,7 +238,7 @@ export interface DeltaLogCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -230,7 +250,7 @@ export interface DeltaLogCreate {
   /**
    * 操作类型（INSERT、UPDATE、DELETE）
    */
-  operType: number;
+  operType: string;
 
   /**
    * 数据库表名（SugarTable 物理表名）
@@ -245,32 +265,52 @@ export interface DeltaLogCreate {
   /**
    * 修改前数据 JSON（旧值快照）
    */
-  beforeData?: string;
+  beforeData: string;
 
   /**
    * 修改后数据 JSON（新值快照）
    */
-  afterData?: string;
+  afterData: string;
 
   /**
    * 差异内容 JSON（变更字段及旧/新值明细）
    */
-  diffData?: string;
+  diffData: string;
 
   /**
-   * 执行的 SQL 语句（AOP 捕获，可选）
+   * 执行的 SQL 语句（AOP 捕获）
    */
-  sqlStatement?: string;
+  sqlStatement: string;
 
   /**
    * 操作 IP
    */
-  operIp?: string;
+  operIp: string;
 
   /**
    * 操作地点（由 OperIp 解析，如：中国-广东省-深圳市）
    */
-  operLocation?: string;
+  operLocation: string;
+
+  /**
+   * 用户代理（User-Agent）
+   */
+  userAgent: string;
+
+  /**
+   * 浏览器（TaktConstants.BrowserType）
+   */
+  browser: string;
+
+  /**
+   * 操作系统（TaktConstants.OperatingSystem）
+   */
+  os: string;
+
+  /**
+   * 登录设备（TaktConstants.DeviceType）
+   */
+  deviceType: string;
 
   /**
    * 操作时间（数据变更发生时刻）
@@ -334,7 +374,7 @@ export interface DeltaLogExport {
   /**
    * 操作类型（INSERT、UPDATE、DELETE）
    */
-  operType: number;
+  operType: string;
 
   /**
    * 数据库表名（SugarTable 物理表名）
@@ -349,32 +389,52 @@ export interface DeltaLogExport {
   /**
    * 修改前数据 JSON（旧值快照）
    */
-  beforeData?: string;
+  beforeData: string;
 
   /**
    * 修改后数据 JSON（新值快照）
    */
-  afterData?: string;
+  afterData: string;
 
   /**
    * 差异内容 JSON（变更字段及旧/新值明细）
    */
-  diffData?: string;
+  diffData: string;
 
   /**
-   * 执行的 SQL 语句（AOP 捕获，可选）
+   * 执行的 SQL 语句（AOP 捕获）
    */
-  sqlStatement?: string;
+  sqlStatement: string;
 
   /**
    * 操作 IP
    */
-  operIp?: string;
+  operIp: string;
 
   /**
    * 操作地点（由 OperIp 解析，如：中国-广东省-深圳市）
    */
-  operLocation?: string;
+  operLocation: string;
+
+  /**
+   * 用户代理（User-Agent）
+   */
+  userAgent: string;
+
+  /**
+   * 浏览器（TaktConstants.BrowserType）
+   */
+  browser: string;
+
+  /**
+   * 操作系统（TaktConstants.OperatingSystem）
+   */
+  os: string;
+
+  /**
+   * 登录设备（TaktConstants.DeviceType）
+   */
+  deviceType: string;
 
   /**
    * 操作时间（数据变更发生时刻）

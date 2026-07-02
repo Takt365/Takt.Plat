@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Output
 // 文件名称：TaktPersonnelOperationRateService.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：人员稼动率应用服务实现
 // 
@@ -30,23 +30,27 @@ namespace Takt.Application.Services.Logistics.Manufacturing.Output;
 public class TaktPersonnelOperationRateService : TaktServiceBase, ITaktPersonnelOperationRateService
 {
     private readonly ITaktCompanyRepository<TaktPersonnelOperationRate> _personnelOperationRateRepository;
+    private readonly ITaktCompanyRepository<TaktPersonnelOperationRateChangeLog> _personnelOperationRateChangeLogRepository;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="personnelOperationRateRepository">人员稼动率仓储</param>
+    /// <param name="personnelOperationRateChangeLogRepository">PersonnelOperationRateChangeLog仓储</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktPersonnelOperationRateService(
         ITaktCompanyRepository<TaktPersonnelOperationRate> personnelOperationRateRepository,
+        ITaktCompanyRepository<TaktPersonnelOperationRateChangeLog> personnelOperationRateChangeLogRepository,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
         _personnelOperationRateRepository = personnelOperationRateRepository;
+        _personnelOperationRateChangeLogRepository = personnelOperationRateChangeLogRepository;
         _uniqueValidator = uniqueValidator;
     }
 
@@ -81,8 +85,9 @@ public class TaktPersonnelOperationRateService : TaktServiceBase, ITaktPersonnel
         {
             return null;
         }
-        return entity.Adapt<TaktPersonnelOperationRateDto>();
-    }
+        var dto = entity.Adapt<TaktPersonnelOperationRateDto>();
+        await FillPersonnelOperationRateDetailsAsync(dto, entity);
+        return dto;    }
 
     /// <summary>
     /// 获取人员稼动率选项列表
@@ -92,13 +97,13 @@ public class TaktPersonnelOperationRateService : TaktServiceBase, ITaktPersonnel
     {
         EnsureThreeLayerContext();
         var list = await _personnelOperationRateRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.Status == 1,
-            x => x.ProductionLineName ?? string.Empty,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.PersonnelOperationRateStatus == 0,
+            x => x.ProdTeamName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
             DictValue = e.Id,
-            DictLabel = e.ProductionLineName ?? e.Id.ToString(),
+            DictLabel = e.ProdTeamName ?? e.Id.ToString(),
         }).ToList();
     }
 
@@ -113,15 +118,16 @@ public class TaktPersonnelOperationRateService : TaktServiceBase, ITaktPersonnel
         var isUnique_ix_takt_logistics_manufacturing_output_personnel_operation_rate_por_unique = await _uniqueValidator.IsUniqueAsync(
             _personnelOperationRateRepository,
             x => x.PlantCode == entity.PlantCode
-                && x.ProductionLine == entity.ProductionLine
+                && x.ProdTeam == entity.ProdTeam
                 && x.TimeCategory == entity.TimeCategory
                 && x.StartDate == entity.StartDate
                 && x.ShiftNo == entity.ShiftNo);
         if (!isUnique_ix_takt_logistics_manufacturing_output_personnel_operation_rate_por_unique)
         {
-            throw new TaktBusinessException("人员稼动率的PlantCode、ProductionLine、TimeCategory、StartDate、ShiftNo已存在");
+            throw new TaktBusinessException("人员稼动率的PlantCode、生产班组、TimeCategory、StartDate、ShiftNo已存在");
         }
         entity = await _personnelOperationRateRepository.CreateAsync(entity);
+                await SavePersonnelOperationRateChildrenAsync(entity, dto);
         return await GetPersonnelOperationRateByIdAsync(entity.Id) ?? entity.Adapt<TaktPersonnelOperationRateDto>();
     }
 
@@ -142,16 +148,17 @@ public class TaktPersonnelOperationRateService : TaktServiceBase, ITaktPersonnel
         var isUnique_ix_takt_logistics_manufacturing_output_personnel_operation_rate_por_unique = await _uniqueValidator.IsUniqueAsync(
             _personnelOperationRateRepository,
             x => x.PlantCode == entity.PlantCode
-                && x.ProductionLine == entity.ProductionLine
+                && x.ProdTeam == entity.ProdTeam
                 && x.TimeCategory == entity.TimeCategory
                 && x.StartDate == entity.StartDate
                 && x.ShiftNo == entity.ShiftNo,
             id);
         if (!isUnique_ix_takt_logistics_manufacturing_output_personnel_operation_rate_por_unique)
         {
-            throw new TaktBusinessException("人员稼动率的PlantCode、ProductionLine、TimeCategory、StartDate、ShiftNo已存在");
+            throw new TaktBusinessException("人员稼动率的PlantCode、生产班组、TimeCategory、StartDate、ShiftNo已存在");
         }
         await _personnelOperationRateRepository.UpdateAsync(entity);
+                await SavePersonnelOperationRateChildrenAsync(entity, dto);
         return await GetPersonnelOperationRateByIdAsync(id) ?? throw new TaktBusinessException("人员稼动率不存在");
     }
 
@@ -162,6 +169,12 @@ public class TaktPersonnelOperationRateService : TaktServiceBase, ITaktPersonnel
     /// <returns>任务</returns>
     public async Task DeletePersonnelOperationRateByIdAsync(long id)
     {
+        var entity = await _personnelOperationRateRepository.GetByIdAsync(id);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("人员稼动率不存在或已删除");
+        }
+        await _personnelOperationRateChangeLogRepository.DeleteAsync(x => x.PersonnelOperationRateId == entity.Id);
         var deleted = await _personnelOperationRateRepository.DeleteAsync(id);
         if (!deleted)
         {
@@ -199,7 +212,7 @@ public class TaktPersonnelOperationRateService : TaktServiceBase, ITaktPersonnel
         {
             throw new TaktBusinessException("人员稼动率不存在");
         }
-        entity.Status = dto.Status;
+        entity.PersonnelOperationRateStatus = dto.PersonnelOperationRateStatus;
         await _personnelOperationRateRepository.UpdateAsync(entity);
         return await GetPersonnelOperationRateByIdAsync(dto.PersonnelOperationRateId) ?? throw new TaktBusinessException("人员稼动率不存在");
     }
@@ -240,21 +253,21 @@ public class TaktPersonnelOperationRateService : TaktServiceBase, ITaktPersonnel
             try
             {
                 var entity = rows[i].Adapt<TaktPersonnelOperationRate>();
-                var importKey = $"{entity.PlantCode}|{entity.ProductionLine}|{entity.TimeCategory}|{entity.StartDate}|{entity.ShiftNo}";
+                var importKey = $"{entity.PlantCode}|{entity.ProdTeam}|{entity.TimeCategory}|{entity.StartDate}|{entity.ShiftNo}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、ProductionLine、TimeCategory、StartDate、ShiftNo）");
+                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、生产班组、TimeCategory、StartDate、ShiftNo）");
                 }
                 var isUnique_ix_takt_logistics_manufacturing_output_personnel_operation_rate_por_unique = await _uniqueValidator.IsUniqueAsync(
                     _personnelOperationRateRepository,
                     x => x.PlantCode == entity.PlantCode
-                        && x.ProductionLine == entity.ProductionLine
+                        && x.ProdTeam == entity.ProdTeam
                         && x.TimeCategory == entity.TimeCategory
                         && x.StartDate == entity.StartDate
                         && x.ShiftNo == entity.ShiftNo);
                 if (!isUnique_ix_takt_logistics_manufacturing_output_personnel_operation_rate_por_unique)
                 {
-                    throw new TaktBusinessException("人员稼动率的PlantCode、ProductionLine、TimeCategory、StartDate、ShiftNo已存在");
+                    throw new TaktBusinessException("人员稼动率的PlantCode、生产班组、TimeCategory、StartDate、ShiftNo已存在");
                 }
                 await _personnelOperationRateRepository.CreateAsync(entity);
                 success += 1;
@@ -294,6 +307,54 @@ public class TaktPersonnelOperationRateService : TaktServiceBase, ITaktPersonnel
     }
 
     // ========================================
+    // 主子表级联（OneToMany）
+    // ========================================
+
+    /// <summary>
+    /// 填充人员稼动率详情（加载 OneToMany 子表：人员稼动率变更记录）
+    /// </summary>
+    /// <param name="dto">响应 DTO</param>
+    /// <param name="entity">主表实体</param>
+    /// <returns>任务</returns>
+    private async Task FillPersonnelOperationRateDetailsAsync(TaktPersonnelOperationRateDto dto, TaktPersonnelOperationRate entity)
+    {
+        if (dto == null)
+        {
+            return;
+        }
+        // 人员稼动率变更记录 → dto.ChangeLogs
+        var changelogs = await _personnelOperationRateChangeLogRepository.GetListAsync(x => x.PersonnelOperationRateId == entity.Id);
+        dto.ChangeLogs = changelogs.Adapt<List<TaktPersonnelOperationRateChangeLogDto>>();
+    }
+
+    /// <summary>
+    /// 保存人员稼动率子表级联（人员稼动率变更记录；Create/Update 后按主表 Id 先删后插）
+    /// </summary>
+    /// <param name="entity">主表实体</param>
+    /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
+    /// <returns>任务</returns>
+    private async Task SavePersonnelOperationRateChildrenAsync(TaktPersonnelOperationRate entity, TaktPersonnelOperationRateCreateDto dto)
+    {
+        // 人员稼动率变更记录（ChangeLogs）
+        if (dto.ChangeLogs is not { Count: > 0 })
+        {
+            await _personnelOperationRateChangeLogRepository.DeleteAsync(x => x.PersonnelOperationRateId == entity.Id);
+        }
+        else
+        {
+            var changelogs = dto.ChangeLogs.Adapt<List<TaktPersonnelOperationRateChangeLog>>();
+            foreach (var child in changelogs)
+            {
+                child.PersonnelOperationRateId = entity.Id;
+            }
+            await _personnelOperationRateChangeLogRepository.DeleteAsync(x => x.PersonnelOperationRateId == entity.Id);
+            foreach (var child in changelogs)
+            {
+            }
+            await _personnelOperationRateChangeLogRepository.CreateRangeAsync(changelogs);
+        }
+    }
+    // ========================================
     // 查询表达式
     // ========================================
 
@@ -314,8 +375,8 @@ public class TaktPersonnelOperationRateService : TaktServiceBase, ITaktPersonnel
                 || SqlFunc.ToString(x.TimeCategory).Contains(keywords)
                 || SqlFunc.ToString(x.WeekNumber).Contains(keywords)
                 || SqlFunc.ToString(x.MonthNumber).Contains(keywords)
-                || (x.ProductionLine != null && x.ProductionLine.Contains(keywords))
-                || (x.ProductionLineName != null && x.ProductionLineName.Contains(keywords))
+                || (x.ProdTeam != null && x.ProdTeam.Contains(keywords))
+                || (x.ProdTeamName != null && x.ProdTeamName.Contains(keywords))
                 || SqlFunc.ToString(x.ShiftNo).Contains(keywords)
                 || SqlFunc.ToString(x.PlannedDirectPersonnelCount).Contains(keywords)
                 || SqlFunc.ToString(x.ActualDirectPersonnelCount).Contains(keywords)
@@ -337,7 +398,7 @@ public class TaktPersonnelOperationRateService : TaktServiceBase, ITaktPersonnel
                 || SqlFunc.ToString(x.OvertimeHours).Contains(keywords)
                 || (x.TeamLeader != null && x.TeamLeader.Contains(keywords))
                 || (x.Supervisor != null && x.Supervisor.Contains(keywords))
-                || SqlFunc.ToString(x.Status).Contains(keywords)
+                || SqlFunc.ToString(x.PersonnelOperationRateStatus).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.StartDate).Contains(keywords)
@@ -366,14 +427,14 @@ public class TaktPersonnelOperationRateService : TaktServiceBase, ITaktPersonnel
             exp = exp.And(x => x.MonthNumber == queryDto.MonthNumber);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ProductionLine))
+        if (!string.IsNullOrEmpty(queryDto?.ProdTeam))
         {
-            exp = exp.And(x => x.ProductionLine != null && x.ProductionLine.Contains(queryDto.ProductionLine));
+            exp = exp.And(x => x.ProdTeam != null && x.ProdTeam.Contains(queryDto.ProdTeam));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ProductionLineName))
+        if (!string.IsNullOrEmpty(queryDto?.ProdTeamName))
         {
-            exp = exp.And(x => x.ProductionLineName != null && x.ProductionLineName.Contains(queryDto.ProductionLineName));
+            exp = exp.And(x => x.ProdTeamName != null && x.ProdTeamName.Contains(queryDto.ProdTeamName));
         }
 
         if (queryDto?.ShiftNo.HasValue == true)
@@ -481,9 +542,9 @@ public class TaktPersonnelOperationRateService : TaktServiceBase, ITaktPersonnel
             exp = exp.And(x => x.Supervisor != null && x.Supervisor.Contains(queryDto.Supervisor));
         }
 
-        if (queryDto?.Status.HasValue == true)
+        if (queryDto?.PersonnelOperationRateStatus.HasValue == true)
         {
-            exp = exp.And(x => x.Status == queryDto.Status);
+            exp = exp.And(x => x.PersonnelOperationRateStatus == queryDto.PersonnelOperationRateStatus);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

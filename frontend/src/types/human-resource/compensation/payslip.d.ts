@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/human-resource/compensation
 // 文件名称：payslip.d.ts
-// 创建时间：2026-06-12
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/compensation 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -246,7 +246,7 @@ export interface PayslipQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -273,7 +273,7 @@ export interface PayslipCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -370,7 +370,7 @@ export interface PayslipCreate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -446,6 +446,61 @@ export interface PayslipTemplate {
   payPeriod?: string;
 
   /**
+   * 基本工资（元）
+   */
+  baseSalary?: number;
+
+  /**
+   * 岗位工资（元）
+   */
+  positionSalary?: number;
+
+  /**
+   * 绩效/奖金（元）
+   */
+  bonusAmount?: number;
+
+  /**
+   * 加班费（元）
+   */
+  overtimePay?: number;
+
+  /**
+   * 津贴合计（元）
+   */
+  allowanceTotal?: number;
+
+  /**
+   * 应发合计（元）
+   */
+  grossAmount?: number;
+
+  /**
+   * 社保扣款（元）
+   */
+  socialSecurityDeduction?: number;
+
+  /**
+   * 公积金扣款（元）
+   */
+  housingFundDeduction?: number;
+
+  /**
+   * 个税扣款（元）
+   */
+  taxDeduction?: number;
+
+  /**
+   * 其他扣款（元）
+   */
+  otherDeduction?: number;
+
+  /**
+   * 实发金额（元）
+   */
+  netAmount?: number;
+
+  /**
    * 关联计算公式方案编码（核算时按 TaktSalaryFormula.set_code 加载步骤并执行）
    */
   formulaSetCode?: string;
@@ -456,6 +511,11 @@ export interface PayslipTemplate {
   issueStatus?: number;
 
   /**
+   * 发放日期
+   */
+  issueDate?: string;
+
+  /**
    * 关联工厂
    */
   relatedPlant?: string;
@@ -463,7 +523,7 @@ export interface PayslipTemplate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -490,7 +550,7 @@ export interface PayslipImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -510,6 +570,61 @@ export interface PayslipImport {
   payPeriod?: string;
 
   /**
+   * 基本工资（元）
+   */
+  baseSalary?: number;
+
+  /**
+   * 岗位工资（元）
+   */
+  positionSalary?: number;
+
+  /**
+   * 绩效/奖金（元）
+   */
+  bonusAmount?: number;
+
+  /**
+   * 加班费（元）
+   */
+  overtimePay?: number;
+
+  /**
+   * 津贴合计（元）
+   */
+  allowanceTotal?: number;
+
+  /**
+   * 应发合计（元）
+   */
+  grossAmount?: number;
+
+  /**
+   * 社保扣款（元）
+   */
+  socialSecurityDeduction?: number;
+
+  /**
+   * 公积金扣款（元）
+   */
+  housingFundDeduction?: number;
+
+  /**
+   * 个税扣款（元）
+   */
+  taxDeduction?: number;
+
+  /**
+   * 其他扣款（元）
+   */
+  otherDeduction?: number;
+
+  /**
+   * 实发金额（元）
+   */
+  netAmount?: number;
+
+  /**
    * 关联计算公式方案编码（核算时按 TaktSalaryFormula.set_code 加载步骤并执行）
    */
   formulaSetCode?: string;
@@ -520,6 +635,11 @@ export interface PayslipImport {
   issueStatus?: number;
 
   /**
+   * 发放日期
+   */
+  issueDate?: string;
+
+  /**
    * 关联工厂
    */
   relatedPlant?: string;
@@ -527,7 +647,7 @@ export interface PayslipImport {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -646,7 +766,7 @@ export interface PayslipExport {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注

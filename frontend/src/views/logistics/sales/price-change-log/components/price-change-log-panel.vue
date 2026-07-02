@@ -9,7 +9,7 @@
 <template>
   <div class="price-change-log-panel flex h-full min-h-0 flex-col overflow-hidden">
     <div class="mb-2 text-sm font-medium text-text">
-      {{ t('entity.salespricechangelog._self') }}
+      {{ pi.self() }}
     </div>
     <TaktQueryBar
       v-model="queryKeyword"
@@ -73,7 +73,7 @@
         v-model:page-size="pageSize"
         :total="total"
         scroll-layout="masterDetailLr"
-        table-mode="single"
+        table-mode="masterDetailDetail"
         :show-row-selection="true"
         @change="handleTableChange"
         @pagination-change="handleMasterDetailPaginationChange"
@@ -107,10 +107,10 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('changeFields')">
-      <a-form-item :label="t('entity.salespricechangelog.changefields')">
+      <a-form-item :label="pi.queryLabel('changeFields')">
         <a-input
           v-model:value="advancedQueryForm.changeFields"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salespricechangelog.changefields') })"
+          :placeholder="pi.queryPh('changeFields', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -118,32 +118,30 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('changeTimeStart')">
-      <a-form-item :label="t('entity.salespricechangelog.changetimestart')">
+      <a-form-item :label="pi.queryLabel('changeTimeStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.changeTimeStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salespricechangelog.changetimestart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          :placeholder="pi.queryPh('changeTimeStart', 'select')"
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('changeTimeEnd')">
-      <a-form-item :label="t('entity.salespricechangelog.changetimeend')">
+      <a-form-item :label="pi.queryLabel('changeTimeEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.changeTimeEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salespricechangelog.changetimeend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          :placeholder="pi.queryPh('changeTimeEnd', 'select')"
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('changeBy')">
-      <a-form-item :label="t('entity.salespricechangelog.changeby')">
+      <a-form-item :label="pi.queryLabel('changeBy')">
         <a-input
           v-model:value="advancedQueryForm.changeBy"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salespricechangelog.changeby') })"
+          :placeholder="pi.queryPh('changeBy', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -151,10 +149,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('changeReason')">
-      <a-form-item :label="t('entity.salespricechangelog.changereason')">
+      <a-form-item :label="pi.queryLabel('changeReason')">
         <a-input
           v-model:value="advancedQueryForm.changeReason"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salespricechangelog.changereason') })"
+          :placeholder="pi.queryPh('changeReason', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -162,42 +160,60 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="t('common.page.entity.createdatstart')">
+      <a-form-item :label="pi.queryLabel('createdAtStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          :placeholder="pi.queryPh('createdAtStart', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="t('common.page.entity.createdatend')">
+      <a-form-item :label="pi.queryLabel('createdAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          :placeholder="pi.queryPh('createdAtEnd', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('ExtField')">
-      <a-form-item :label="t('entity.salespricechangelog.extfield')">
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ pi.queryLabel('extField') }}</span>
+          </span>
+        </template>
         <a-textarea
-          v-model:value="advancedQueryForm.ExtField"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.salespricechangelog.extfield') })"
-          :rows="2"
-          allow-clear
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="t('common.page.entity.remark')">
+      <a-form-item :label="pi.queryLabel('remark')">
         <a-textarea
           v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+          :placeholder="pi.queryPh('remark', 'optional')"
             :rows="4"
             show-count
             :maxlength="400"
@@ -214,7 +230,7 @@
       id-column-key="salesPriceChangeLogId"
       action-column-key="action"
       entity-scope="company"
-      table-mode="single"
+      table-mode="masterDetailDetail"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -234,7 +250,7 @@ import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-pa
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 import SalesPriceChangeLogForm from './price-change-log-form.vue'
 import { useSalesPriceMasterContext } from '../composables/use-price-master-context'
 import {
@@ -248,6 +264,17 @@ import {
 } from '@/api/logistics/sales/price-change-log'
 import type { SalesPriceChangeLog, SalesPriceChangeLogQuery } from '@/types/logistics/sales/price-change-log'
 
+import {
+  useSalesPriceChangeLogI18n,
+  SALESPRICECHANGELOG_LIST_FIELDS,
+  SALESPRICECHANGELOG_QUERY_STRING_FIELDS,
+  SALESPRICECHANGELOG_QUERY_FIELDS,
+  SALESPRICECHANGELOG_SELF_I18N_KEY,
+} from '../composables/use-price-change-log-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = useSalesPriceChangeLogI18n()
+
 const { t } = useI18n()
 const { selectedMasterRow } = useSalesPriceMasterContext()
 
@@ -255,7 +282,7 @@ const { selectedMasterRow } = useSalesPriceMasterContext()
 const excelNames = taktExcelEntityNames('TaktSalesPriceChangeLog')
 /** 快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.salespricechangelog._self') }),
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() }),
 )
 
 const loading = ref(false)
@@ -274,39 +301,27 @@ const formLoading = ref(false)
 const formRef = ref()
 
 const advancedQueryVisible = ref(false)
-const advancedQueryForm = ref({
-  changeFields: '',
-  changeTimeStart: '',
-  changeTimeEnd: '',
-  changeBy: '',
-  changeReason: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  ExtField: '',
-  remark: '',
-})
+/**
+ * 创建空的高级查询表单
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(SALESPRICECHANGELOG_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof SALESPRICECHANGELOG_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  return {
+    ...form,
+
+  }
+}
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 const visibleQueryFieldKeys = ref<string[]>([])
 
 /** 高级查询字段元数据 */
-const queryFieldsMeta = computed(() => [
-  { key: 'changeFields', label: t('entity.salespricechangelog.changefields') },
-  { key: 'changeTimeStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.salespricechangelog.changetime')) },
-  { key: 'changeTimeEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.salespricechangelog.changetime')) },
-  { key: 'changeBy', label: t('entity.salespricechangelog.changeby') },
-  { key: 'changeReason', label: t('entity.salespricechangelog.changereason') },
-  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
-  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'ExtField', label: t('entity.salespricechangelog.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
-
-/**
- * 高级查询字段标签
- * @param key 字段 key
- */
-function fieldLabel(key: string): string {
-  return queryFieldsMeta.value.find((f) => f.key === key)?.label ?? key
-}
+const queryFieldsMeta = computed(() =>
+  SALESPRICECHANGELOG_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 
 function handleAdvancedQuery() {
   advancedQueryVisible.value = true
@@ -319,19 +334,10 @@ function handleAdvancedQuerySubmit() {
 }
 
 function handleAdvancedQueryReset() {
-  advancedQueryForm.value = {
-  changeFields: '',
-  changeTimeStart: '',
-  changeTimeEnd: '',
-  changeBy: '',
-  changeReason: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  ExtField: '',
-  remark: '',
-  }
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
 }
 const columnSettingVisible = ref(false)
+/** 表格当前可见列 key（空数组时按 tableMode=masterDetailDetail 默认 id+4 业务列） */
 const visibleColumnKeys = ref<string[]>([])
 
 function handleColumnSetting() {
@@ -347,8 +353,11 @@ function handleColumnSettingReset() {
 }
 
 const entityIdName = 'salesPriceChangeLogId'
-const hasMasterSelection = computed(() => !!selectedMasterRow.value?.salesPriceId)
-const masterSalesPriceId = computed(() => selectedMasterRow.value?.salesPriceId ?? '')
+const masterSalesPriceId = computed((): string => {
+  const id = (selectedMasterRow.value as Record<string, unknown> | null)?.['salesPriceId']
+  return id != null ? String(id) : ''
+})
+const hasMasterSelection = computed(() => masterSalesPriceId.value !== '')
 const updateDisabled = computed(() => !hasMasterSelection.value || selectedRows.value.length !== 1)
 const deleteDisabled = computed(() => !hasMasterSelection.value || selectedRows.value.length === 0)
 
@@ -373,7 +382,17 @@ const columns = computed<TableColumnsType>(() => [
       String(getSalesPriceChangeLogField(record, 'salesPriceChangeLogId') ?? ''),
   },
   {
-    title: t('entity.salespricechangelog.changefields'),
+    title: pi.label('salesPriceName'),
+    dataIndex: 'salesPriceName',
+    key: 'salesPriceName',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: SalesPriceChangeLog }) =>
+      String(getSalesPriceChangeLogField(record, 'salesPriceName') ?? ''),
+  },
+  {
+    title: pi.label('changeFields'),
     dataIndex: 'changeFields',
     key: 'changeFields',
     width: 120,
@@ -383,7 +402,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getSalesPriceChangeLogField(record, 'changeFields') ?? ''),
   },
   {
-    title: t('entity.salespricechangelog.changetime'),
+    title: pi.label('changeTime'),
     dataIndex: 'changeTime',
     key: 'changeTime',
     width: 120,
@@ -393,7 +412,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getSalesPriceChangeLogField(record, 'changeTime') ?? ''),
   },
   {
-    title: t('entity.salespricechangelog.changeby'),
+    title: pi.label('changeBy'),
     dataIndex: 'changeBy',
     key: 'changeBy',
     width: 120,
@@ -403,7 +422,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getSalesPriceChangeLogField(record, 'changeBy') ?? ''),
   },
   {
-    title: t('entity.salespricechangelog.changereason'),
+    title: pi.label('changeReason'),
     dataIndex: 'changeReason',
     key: 'changeReason',
     width: 120,
@@ -411,6 +430,16 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
     customRender: ({ record }: { record: SalesPriceChangeLog }) =>
       String(getSalesPriceChangeLogField(record, 'changeReason') ?? ''),
+  },
+  {
+    title: pi.label('salesPrice'),
+    dataIndex: 'salesPrice',
+    key: 'salesPrice',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: SalesPriceChangeLog }) =>
+      String(getSalesPriceChangeLogField(record, 'salesPrice') ?? ''),
   },
   CreateActionColumn({
     actions: [
@@ -444,7 +473,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: SalesPriceChangeLog, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getSalesPriceChangeLogId(selectedRow.value) === getSalesPriceChangeLogId(record)) {
+    } else if (selectedRow.value && getSalesPriceChangeLogId(selectedRow.value) === getSalesPriceChangeLogId(record)) {
       selectedRow.value = null
     }
   },
@@ -494,15 +523,9 @@ function buildListQuery(overrides?: Partial<SalesPriceChangeLogQuery>): SalesPri
       query[key] = v as never
     }
   }
-  assignTrimmed('changeFields', form.changeFields)
-  assignTrimmed('changeTimeStart', form.changeTimeStart)
-  assignTrimmed('changeTimeEnd', form.changeTimeEnd)
-  assignTrimmed('changeBy', form.changeBy)
-  assignTrimmed('changeReason', form.changeReason)
-  assignTrimmed('createdAtStart', form.createdAtStart)
-  assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('ExtField', form.ExtField)
-  assignTrimmed('remark', form.remark)
+  for (const key of SALESPRICECHANGELOG_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
+  }
   return query
 }
 
@@ -559,13 +582,13 @@ function handleCreate() {
     message.warning(t('common.status.empty'))
     return
   }
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.salespricechangelog._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = {}
   formVisible.value = true
 }
 
 async function handleEdit(record: SalesPriceChangeLog) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.salespricechangelog._self') })
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
   formLoading.value = true
   try {
     const detail = await getSalesPriceChangeLogById(getSalesPriceChangeLogId(record))
@@ -582,7 +605,7 @@ function handleUpdate() {
   } else {
     message.warning(t('common.tip.select.to.action', {
       action: t('common.page.button.edit'),
-      entity: t('entity.salespricechangelog._self'),
+      entity: pi.self(),
     }))
   }
 }
@@ -601,10 +624,10 @@ async function handleFormSubmit() {
     const id = formData.value?.salesPriceChangeLogId
     if (id) {
       await updateSalesPriceChangeLog(id, payload)
-      message.success(t('common.feedback.updated', { target: t('entity.salespricechangelog._self') }))
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
       await createSalesPriceChangeLog(payload)
-      message.success(t('common.feedback.created', { target: t('entity.salespricechangelog._self') }))
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     await loadData()
@@ -621,14 +644,14 @@ async function handleDeleteOne(record: SalesPriceChangeLog) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
     content: t('common.tip.confirm.delete.entity', {
-      entity: t('entity.salespricechangelog._self'),
-      name: t('common.tip.this.target', { target: t('entity.salespricechangelog._self') }),
+      entity: pi.self(),
+      name: t('common.tip.this.target', { target: pi.self() }),
     }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteSalesPriceChangeLogById(getSalesPriceChangeLogId(record))
-      message.success(t('common.feedback.deleted', { target: t('entity.salespricechangelog._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       await loadData()
     },
   })
@@ -638,14 +661,14 @@ async function handleDelete() {
   if (!hasMasterSelection.value || selectedRows.value.length === 0) {
     message.warning(t('common.tip.select.to.action', {
       action: t('common.page.button.delete'),
-      entity: t('entity.salespricechangelog._self'),
+      entity: pi.self(),
     }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
     content: t('common.tip.confirm.delete.count', {
-      entity: t('entity.salespricechangelog._self'),
+      entity: pi.self(),
       count: selectedRows.value.length,
     }),
     okText: t('common.page.button.delete'),
@@ -653,7 +676,7 @@ async function handleDelete() {
     onOk: async () => {
       const ids = selectedRows.value.map((r) => getSalesPriceChangeLogId(r)).filter(Boolean)
       await deleteSalesPriceChangeLogBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.salespricechangelog._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       await loadData()
     },
   })
@@ -693,10 +716,10 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.salespricechangelog._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: unknown) {
     const err = error as { message?: string }
-    message.error(err?.message || t('common.feedback.export.failed', { target: t('entity.salespricechangelog._self') }))
+    message.error(err?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }

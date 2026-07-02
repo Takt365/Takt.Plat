@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Accounting.Financial
 // 文件名称：TaktAssetChangeLogDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：AssetChangeLog 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktAssetChangeLog 生成，请按需审阅）
 // 
@@ -36,7 +36,7 @@ public class TaktAssetChangeLogDto : TaktCompanyDtoBase
     public long AssetChangeLogId { get; set; }
 
     /// <summary>
-    /// 资产 ID
+    /// 资产 ID（主子表关系，序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long AssetId { get; set; }
@@ -71,6 +71,12 @@ public class TaktAssetChangeLogDto : TaktCompanyDtoBase
     /// </summary>
     public string? ChangeReason { get; set; } = string.Empty;
 
+    /// <summary>
+    /// 资产主表
+    /// （主表：TaktAsset）
+    /// </summary>
+    public TaktAssetDto? Asset { get; set; }
+
 }
 
 // ========================================
@@ -94,7 +100,7 @@ public class TaktAssetChangeLogQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资产 ID
+    /// 资产 ID（主子表关系，序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? AssetId { get; set; }
@@ -170,12 +176,12 @@ public class TaktAssetChangeLogCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资产 ID
+    /// 资产 ID（主子表关系，序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long AssetId { get; set; }
@@ -260,7 +266,7 @@ public class TaktAssetChangeLogExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资产 ID
+    /// 资产 ID（主子表关系，序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long AssetId { get; set; }

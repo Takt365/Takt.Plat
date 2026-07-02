@@ -473,13 +473,27 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.document.extfield')"
-                name="ExtField"
+                name="extField"
+                class="takt-form-item-ext-field"
               >
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t('common.page.entity.extfieldhint')"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ t('common.page.entity.extfield') }}</span>
+                  </span>
+                </template>
                 <a-textarea
-                  v-model:value="formState.ExtField"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.document.extfield') })"
-                  :rows="2"
+                  v-model:value="formState.extField"
+                  :placeholder="t('common.page.form.placeholder.extfield')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -526,6 +540,7 @@ import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import type { DocumentCreate } from '@/types/routine/document-center/document'
+import { RiQuestionLine } from '@remixicon/vue'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -558,7 +573,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","documentCode","title","documentCategory","documentStatus","confidentialLevel","version","content","summary","tags","fileId","fileName","filePath","fileSize","fileType","fileExtension","effectiveTime","expireTime","publishTime","publisherId","publisherName","deptId","deptName","isTop","viewCount","downloadCount","targetScope","targetDepartments","targetUsers","ExtField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","documentCode","title","documentCategory","documentStatus","confidentialLevel","version","content","summary","tags","fileId","fileName","filePath","fileSize","fileType","fileExtension","effectiveTime","expireTime","publishTime","publisherId","publisherName","deptId","deptName","isTop","viewCount","downloadCount","targetScope","targetDepartments","targetUsers","extField","remark"]
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
 

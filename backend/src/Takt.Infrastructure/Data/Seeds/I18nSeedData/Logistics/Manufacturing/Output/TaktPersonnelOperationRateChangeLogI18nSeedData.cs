@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Output
 // 文件名称：TaktPersonnelOperationRateChangeLogI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPersonnelOperationRateChangeLog 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -99,14 +99,14 @@ public class TaktPersonnelOperationRateChangeLogI18nSeedData : ITaktSeedDataCoor
             // entity.personneloperationratechangelog.personneloperationrateid
             new TranslationSeedItem("entity.personneloperationratechangelog.personneloperationrateid", "zh-HK", "人员稼动率ID_hk", "人员稼动率ID（主子表关系，序列化为string以避免Javascript精度问题）"),
 
-            // entity.personneloperationratechangelog.productionline
-            new TranslationSeedItem("entity.personneloperationratechangelog.productionline", "en-US", "生产线_us", "生产线（冗余）"),
-            // entity.personneloperationratechangelog.productionline
-            new TranslationSeedItem("entity.personneloperationratechangelog.productionline", "ja-JP", "生产线_jp", "生产线（冗余）"),
-            // entity.personneloperationratechangelog.productionline
-            new TranslationSeedItem("entity.personneloperationratechangelog.productionline", "zh-CN", "生产线", "生产线（冗余）"),
-            // entity.personneloperationratechangelog.productionline
-            new TranslationSeedItem("entity.personneloperationratechangelog.productionline", "zh-HK", "生产线_hk", "生产线（冗余）"),
+            // entity.personneloperationratechangelog.prodteam
+            new TranslationSeedItem("entity.personneloperationratechangelog.prodteam", "en-US", "生产班组_us", "生产班组（冗余）"),
+            // entity.personneloperationratechangelog.prodteam
+            new TranslationSeedItem("entity.personneloperationratechangelog.prodteam", "ja-JP", "生产班组_jp", "生产班组（冗余）"),
+            // entity.personneloperationratechangelog.prodteam
+            new TranslationSeedItem("entity.personneloperationratechangelog.prodteam", "zh-CN", "生产班组", "生产班组（冗余）"),
+            // entity.personneloperationratechangelog.prodteam
+            new TranslationSeedItem("entity.personneloperationratechangelog.prodteam", "zh-HK", "生产班组_hk", "生产班组（冗余）"),
 
             // entity.personneloperationratechangelog.changefields
             new TranslationSeedItem("entity.personneloperationratechangelog.changefields", "en-US", "变更字段列表_us", "变更字段列表（JSON数组格式，记录同一时间点修改的所有字段及其旧值、新值）"),

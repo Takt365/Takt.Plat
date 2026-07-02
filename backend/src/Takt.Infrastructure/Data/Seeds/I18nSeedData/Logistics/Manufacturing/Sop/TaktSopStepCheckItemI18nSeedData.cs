@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopStepCheckItemI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSopStepCheckItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktSopStepCheckItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.sopstepcheckitem._self", "zh-HK", "SOP 工步检验项目信息_hk", "实体名称"),
 
             // entity.sopstepcheckitem.stepid
-            new TranslationSeedItem("entity.sopstepcheckitem.stepid", "en-US", "工步ID_us", "工步 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.sopstepcheckitem.stepid", "en-US", "工步ID_us", "工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）"),
             // entity.sopstepcheckitem.stepid
-            new TranslationSeedItem("entity.sopstepcheckitem.stepid", "ja-JP", "工步ID_jp", "工步 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.sopstepcheckitem.stepid", "ja-JP", "工步ID_jp", "工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）"),
             // entity.sopstepcheckitem.stepid
-            new TranslationSeedItem("entity.sopstepcheckitem.stepid", "zh-CN", "工步ID", "工步 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.sopstepcheckitem.stepid", "zh-CN", "工步ID", "工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）"),
             // entity.sopstepcheckitem.stepid
-            new TranslationSeedItem("entity.sopstepcheckitem.stepid", "zh-HK", "工步ID_hk", "工步 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.sopstepcheckitem.stepid", "zh-HK", "工步ID_hk", "工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）"),
 
             // entity.sopstepcheckitem.checkitemname
             new TranslationSeedItem("entity.sopstepcheckitem.checkitemname", "en-US", "检验项目名称_us", "检验项目名称"),
@@ -127,13 +127,13 @@ public class TaktSopStepCheckItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.sopstepcheckitem.checkstandard", "zh-HK", "检验标准_hk", "检验标准"),
 
             // entity.sopstepcheckitem.isrequired
-            new TranslationSeedItem("entity.sopstepcheckitem.isrequired", "en-US", "是否必检_us", "是否必检（字典 sys_yes_no_type，0=否，1=是）"),
+            new TranslationSeedItem("entity.sopstepcheckitem.isrequired", "en-US", "是否必检_us", "是否必检（字典 sys_yes_no_type；0=否，1=是）"),
             // entity.sopstepcheckitem.isrequired
-            new TranslationSeedItem("entity.sopstepcheckitem.isrequired", "ja-JP", "是否必检_jp", "是否必检（字典 sys_yes_no_type，0=否，1=是）"),
+            new TranslationSeedItem("entity.sopstepcheckitem.isrequired", "ja-JP", "是否必检_jp", "是否必检（字典 sys_yes_no_type；0=否，1=是）"),
             // entity.sopstepcheckitem.isrequired
-            new TranslationSeedItem("entity.sopstepcheckitem.isrequired", "zh-CN", "是否必检", "是否必检（字典 sys_yes_no_type，0=否，1=是）"),
+            new TranslationSeedItem("entity.sopstepcheckitem.isrequired", "zh-CN", "是否必检", "是否必检（字典 sys_yes_no_type；0=否，1=是）"),
             // entity.sopstepcheckitem.isrequired
-            new TranslationSeedItem("entity.sopstepcheckitem.isrequired", "zh-HK", "是否必检_hk", "是否必检（字典 sys_yes_no_type，0=否，1=是）"),
+            new TranslationSeedItem("entity.sopstepcheckitem.isrequired", "zh-HK", "是否必检_hk", "是否必检（字典 sys_yes_no_type；0=否，1=是）"),
 
             // entity.sopstepcheckitem.sortorder
             new TranslationSeedItem("entity.sopstepcheckitem.sortorder", "en-US", "排序号_us", "排序号"),

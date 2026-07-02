@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Manufacturing.Scheduling
 // 文件名称：TaktApsScheduleItemValidators.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ApsScheduleItem 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktApsScheduleItem 生成，请按需审阅）
 // 
@@ -40,6 +40,12 @@ public class TaktApsScheduleItemCreateValidator : AbstractValidator<TaktApsSched
         RuleFor(x => x.ApsScheduleCode)
             .NotEmpty().WithMessage("APS排程编码不能为空")
             .MaximumLength(50).WithMessage("APS排程编码长度不能超过50个字符");
+        RuleFor(x => x.ApsOrderId)
+            .GreaterThanOrEqualTo(0).WithMessage("APS 订单 ID不能为负数");
+        RuleFor(x => x.ApsOperationId)
+            .GreaterThanOrEqualTo(0).WithMessage("APS 工序排程 ID不能为负数");
+        RuleFor(x => x.RoutingItemId)
+            .GreaterThanOrEqualTo(0).WithMessage("工艺路线工序 ID不能为负数");
         RuleFor(x => x.WorkOrderCode)
             .NotEmpty().WithMessage("生产工单编码不能为空")
             .MaximumLength(50).WithMessage("生产工单编码长度不能超过50个字符");
@@ -49,10 +55,6 @@ public class TaktApsScheduleItemCreateValidator : AbstractValidator<TaktApsSched
         RuleFor(x => x.ProductName)
             .NotEmpty().WithMessage("产品名称不能为空")
             .MaximumLength(200).WithMessage("产品名称长度不能超过200个字符");
-        RuleFor(x => x.WorkCenterCode)
-            .MaximumLength(50).WithMessage("工作中心编码长度不能超过50个字符");
-        RuleFor(x => x.WorkCenterName)
-            .MaximumLength(200).WithMessage("工作中心名称长度不能超过200个字符");
         RuleFor(x => x.ProcessCode)
             .NotEmpty().WithMessage("工序编码不能为空")
             .MaximumLength(50).WithMessage("工序编码长度不能超过50个字符");
@@ -82,6 +84,42 @@ public class TaktApsScheduleItemUpdateValidator : AbstractValidator<TaktApsSched
     {
         RuleFor(x => x.ApsScheduleItemId)
             .GreaterThan(0).WithMessage("ApsScheduleItemID无效");
+        RuleFor(x => x.TenantCode)
+            .NotEmpty().WithMessage("租户编码不能为空")
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.CompanyCode)
+            .NotEmpty().WithMessage("公司代码不能为空")
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.ApsScheduleId)
+            .GreaterThanOrEqualTo(0).WithMessage("APS排程ID不能为负数");
+        RuleFor(x => x.ApsScheduleCode)
+            .NotEmpty().WithMessage("APS排程编码不能为空")
+            .MaximumLength(50).WithMessage("APS排程编码长度不能超过50个字符");
+        RuleFor(x => x.ApsOrderId)
+            .GreaterThanOrEqualTo(0).WithMessage("APS 订单 ID不能为负数");
+        RuleFor(x => x.ApsOperationId)
+            .GreaterThanOrEqualTo(0).WithMessage("APS 工序排程 ID不能为负数");
+        RuleFor(x => x.RoutingItemId)
+            .GreaterThanOrEqualTo(0).WithMessage("工艺路线工序 ID不能为负数");
+        RuleFor(x => x.WorkOrderCode)
+            .NotEmpty().WithMessage("生产工单编码不能为空")
+            .MaximumLength(50).WithMessage("生产工单编码长度不能超过50个字符");
+        RuleFor(x => x.ProductCode)
+            .NotEmpty().WithMessage("产品编码不能为空")
+            .MaximumLength(50).WithMessage("产品编码长度不能超过50个字符");
+        RuleFor(x => x.ProductName)
+            .NotEmpty().WithMessage("产品名称不能为空")
+            .MaximumLength(200).WithMessage("产品名称长度不能超过200个字符");
+        RuleFor(x => x.ProcessCode)
+            .NotEmpty().WithMessage("工序编码不能为空")
+            .MaximumLength(50).WithMessage("工序编码长度不能超过50个字符");
+        RuleFor(x => x.ProcessName)
+            .NotEmpty().WithMessage("工序名称不能为空")
+            .MaximumLength(200).WithMessage("工序名称长度不能超过200个字符");
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
     }
 }
 
@@ -108,6 +146,12 @@ public class TaktApsScheduleItemImportValidator : AbstractValidator<TaktApsSched
         RuleFor(x => x.ApsScheduleCode)
             .NotEmpty().WithMessage("APS排程编码不能为空")
             .MaximumLength(50).WithMessage("APS排程编码长度不能超过50个字符");
+        RuleFor(x => x.ApsOrderId)
+            .GreaterThanOrEqualTo(0).WithMessage("APS 订单 ID不能为负数");
+        RuleFor(x => x.ApsOperationId)
+            .GreaterThanOrEqualTo(0).WithMessage("APS 工序排程 ID不能为负数");
+        RuleFor(x => x.RoutingItemId)
+            .GreaterThanOrEqualTo(0).WithMessage("工艺路线工序 ID不能为负数");
         RuleFor(x => x.WorkOrderCode)
             .NotEmpty().WithMessage("生产工单编码不能为空")
             .MaximumLength(50).WithMessage("生产工单编码长度不能超过50个字符");
@@ -117,10 +161,6 @@ public class TaktApsScheduleItemImportValidator : AbstractValidator<TaktApsSched
         RuleFor(x => x.ProductName)
             .NotEmpty().WithMessage("产品名称不能为空")
             .MaximumLength(200).WithMessage("产品名称长度不能超过200个字符");
-        RuleFor(x => x.WorkCenterCode)
-            .MaximumLength(50).WithMessage("工作中心编码长度不能超过50个字符").When(x => !string.IsNullOrWhiteSpace(x.WorkCenterCode));
-        RuleFor(x => x.WorkCenterName)
-            .MaximumLength(200).WithMessage("工作中心名称长度不能超过200个字符").When(x => !string.IsNullOrWhiteSpace(x.WorkCenterName));
         RuleFor(x => x.ProcessCode)
             .NotEmpty().WithMessage("工序编码不能为空")
             .MaximumLength(50).WithMessage("工序编码长度不能超过50个字符");

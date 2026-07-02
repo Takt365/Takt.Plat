@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.HumanResource.Organization
 // 文件名称：TaktPostValidators.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Post 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktPost 生成，请按需审阅）
 // 
@@ -42,7 +42,7 @@ public class TaktPostCreateValidator : AbstractValidator<TaktPostCreateDto>
             .NotEmpty().WithMessage("岗位名称不能为空")
             .MaximumLength(100).WithMessage("岗位名称长度不能超过100个字符");
         RuleFor(x => x.DeptId)
-            .GreaterThanOrEqualTo(0).WithMessage("所属部门ID不能为负数");
+            .GreaterThanOrEqualTo(0).WithMessage("所属部门不能为负数");
         RuleFor(x => x.PostCategory)
             .NotEmpty().WithMessage("岗位类别不能为空")
             .MaximumLength(40).WithMessage("岗位类别长度不能超过40个字符");
@@ -55,10 +55,6 @@ public class TaktPostCreateValidator : AbstractValidator<TaktPostCreateDto>
         RuleFor(x => x.Requirements)
             .NotEmpty().WithMessage("任职要求不能为空")
             .MaximumLength(2000).WithMessage("任职要求长度不能超过2000个字符");
-        RuleFor(x => x.SortOrder)
-            .GreaterThanOrEqualTo(0).WithMessage("排序号不能为负数");
-        RuleFor(x => x.Description)
-            .MaximumLength(500).WithMessage("岗位描述长度不能超过500个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -82,6 +78,36 @@ public class TaktPostUpdateValidator : AbstractValidator<TaktPostUpdateDto>
     {
         RuleFor(x => x.PostId)
             .GreaterThan(0).WithMessage("PostID无效");
+        RuleFor(x => x.TenantCode)
+            .NotEmpty().WithMessage("租户编码不能为空")
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.CompanyCode)
+            .NotEmpty().WithMessage("公司代码不能为空")
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.PostCode)
+            .NotEmpty().WithMessage("岗位编码不能为空")
+            .MaximumLength(50).WithMessage("岗位编码长度不能超过50个字符");
+        RuleFor(x => x.PostName)
+            .NotEmpty().WithMessage("岗位名称不能为空")
+            .MaximumLength(100).WithMessage("岗位名称长度不能超过100个字符");
+        RuleFor(x => x.DeptId)
+            .GreaterThanOrEqualTo(0).WithMessage("所属部门不能为负数");
+        RuleFor(x => x.PostCategory)
+            .NotEmpty().WithMessage("岗位类别不能为空")
+            .MaximumLength(40).WithMessage("岗位类别长度不能超过40个字符");
+        RuleFor(x => x.PostLevel)
+            .NotEmpty().WithMessage("岗位职级不能为空")
+            .MaximumLength(40).WithMessage("岗位职级长度不能超过40个字符");
+        RuleFor(x => x.Responsibilities)
+            .NotEmpty().WithMessage("岗位职责不能为空")
+            .MaximumLength(2000).WithMessage("岗位职责长度不能超过2000个字符");
+        RuleFor(x => x.Requirements)
+            .NotEmpty().WithMessage("任职要求不能为空")
+            .MaximumLength(2000).WithMessage("任职要求长度不能超过2000个字符");
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
     }
 }
 
@@ -110,7 +136,7 @@ public class TaktPostImportValidator : AbstractValidator<TaktPostImportDto>
             .NotEmpty().WithMessage("岗位名称不能为空")
             .MaximumLength(100).WithMessage("岗位名称长度不能超过100个字符");
         RuleFor(x => x.DeptId)
-            .GreaterThanOrEqualTo(0).WithMessage("所属部门ID不能为负数");
+            .GreaterThanOrEqualTo(0).WithMessage("所属部门不能为负数");
         RuleFor(x => x.PostCategory)
             .NotEmpty().WithMessage("岗位类别不能为空")
             .MaximumLength(40).WithMessage("岗位类别长度不能超过40个字符");

@@ -8,7 +8,7 @@
 <!-- ======================================== -->
 
 <template>
-  <div class="human-resource-personnel-employee-experience">
+  <div class="p-4">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="human:resource:personnel:employeeexperience:create"
-      update-permission="human:resource:personnel:employeeexperience:update"
-      delete-permission="human:resource:personnel:employeeexperience:delete"
-      import-permission="human:resource:personnel:employeeexperience:import"
-      export-permission="human:resource:personnel:employeeexperience:export"
+      create-permission="human:resource:personnel:employee:experience:create"
+      update-permission="human:resource:personnel:employee:experience:update"
+      delete-permission="human:resource:personnel:employee:experience:delete"
+      import-permission="human:resource:personnel:employee:experience:import"
+      export-permission="human:resource:personnel:employee:experience:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -54,8 +54,8 @@
 
     <!-- 表格 -->
     <TaktSingleTable
-      :columns="columns"
       entity-scope="company"
+      :columns="columns"
       :visible-column-keys="visibleColumnKeys"
       :id-column-key="'employeeExperienceId'"
       table-mode="single"
@@ -72,7 +72,7 @@
 
     </TaktSingleTable>
 
-    <!-- 分页组件 -->
+    <!-- 分页（服务端分页，外置 TaktPagination） -->
     <TaktPagination
       v-model:current="currentPage"
       v-model:page-size="pageSize"
@@ -92,6 +92,7 @@
       @cancel="handleFormCancel"
     >
       <EmployeeExperienceForm
+        :key="formData?.employeeExperienceId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -109,96 +110,106 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('employeeId')">
-      <a-form-item :label="t('entity.employeeExperience.employeeid')">
+      <a-form-item :label="t('entity.employeeexperience.employeeid')">
         <a-input
           v-model:value="advancedQueryForm.employeeId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeExperience.employeeid') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeexperience.employeeid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('companyName')">
-      <a-form-item :label="t('entity.employeeExperience.companyname')">
+      <a-form-item :label="t('entity.employeeexperience.companyname')">
         <a-input
           v-model:value="advancedQueryForm.companyName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeExperience.companyname') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeexperience.companyname') })"
+          show-count
+          :maxlength="200"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('positionName')">
-      <a-form-item :label="t('entity.employeeExperience.positionname')">
+      <a-form-item :label="t('entity.employeeexperience.positionname')">
         <a-input
           v-model:value="advancedQueryForm.positionName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeExperience.positionname') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeexperience.positionname') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('jobContent')">
-      <a-form-item :label="t('entity.employeeExperience.jobcontent')">
+      <a-form-item :label="t('entity.employeeexperience.jobcontent')">
         <a-textarea
           v-model:value="advancedQueryForm.jobContent"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.employeeExperience.jobcontent') })"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.employeeexperience.jobcontent') })"
           :rows="2"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('startDateStart')">
-      <a-form-item :label="t('entity.employeeExperience.startdatestart')">
+      <a-form-item :label="t('entity.employeeexperience.startdatestart')">
         <a-date-picker
           v-model:value="advancedQueryForm.startDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeExperience.startdatestart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeexperience.startdatestart') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('startDateEnd')">
-      <a-form-item :label="t('entity.employeeExperience.startdateend')">
+      <a-form-item :label="t('entity.employeeexperience.startdateend')">
         <a-date-picker
           v-model:value="advancedQueryForm.startDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeExperience.startdateend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeexperience.startdateend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('endDateStart')">
-      <a-form-item :label="t('entity.employeeExperience.enddatestart')">
+      <a-form-item :label="t('entity.employeeexperience.enddatestart')">
         <a-date-picker
           v-model:value="advancedQueryForm.endDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeExperience.enddatestart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeexperience.enddatestart') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('endDateEnd')">
-      <a-form-item :label="t('entity.employeeExperience.enddateend')">
+      <a-form-item :label="t('entity.employeeexperience.enddateend')">
         <a-date-picker
           v-model:value="advancedQueryForm.endDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeExperience.enddateend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeexperience.enddateend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('witnessName')">
-      <a-form-item :label="t('entity.employeeExperience.witnessname')">
+      <a-form-item :label="t('entity.employeeexperience.witnessname')">
         <a-input
           v-model:value="advancedQueryForm.witnessName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeExperience.witnessname') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeexperience.witnessname') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('witnessPhone')">
-      <a-form-item :label="t('entity.employeeExperience.witnessphone')">
+      <a-form-item :label="t('entity.employeeexperience.witnessphone')">
         <a-input
           v-model:value="advancedQueryForm.witnessPhone"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeExperience.witnessphone') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeexperience.witnessphone') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -209,7 +220,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -220,17 +231,36 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('ExtField')">
-      <a-form-item :label="t('common.page.entity.ExtField')">
-        <a-input
-          v-model:value="advancedQueryForm.ExtField"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
-          allow-clear
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
+        <a-textarea
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -239,8 +269,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -250,14 +282,14 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.employeeExperience._self') })"
+      :title="t('common.dialog.title.import', { entity: t('entity.employeeexperience._self') })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.employeeExperience._self"
+        entity-i18n-key="entity.employeeexperience._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -284,7 +316,6 @@
 </template>
 
 <script setup lang="ts">
-import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 /**
  * 员工外部工作经历管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/human-resource/personnel/employee-experience
@@ -294,12 +325,13 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import EmployeeExperienceForm from './components/employee-experience-form.vue'
 import { getEmployeeExperienceList, getEmployeeExperienceById, createEmployeeExperience, updateEmployeeExperience, deleteEmployeeExperienceById, deleteEmployeeExperienceBatch, getEmployeeExperienceTemplate, importEmployeeExperience, exportEmployeeExperience } from '@/api/human-resource/personnel/employee-experience'
-import type { EmployeeExperience, EmployeeExperienceQuery, EmployeeExperienceCreate, EmployeeExperienceUpdate } from '@/types/human-resource/personnel/employee-experience'
+import type { EmployeeExperience, EmployeeExperienceQuery } from '@/types/human-resource/personnel/employee-experience'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -307,7 +339,7 @@ const { t } = useI18n()
 const excelNames = taktExcelEntityNames('TaktEmployeeExperience')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.employeeExperience._self') })
+  () => t('common.page.form.placeholder.search', { keyword: t('entity.employeeexperience._self') })
 )
 
 /** 快捷查询关键字 */
@@ -334,11 +366,13 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<EmployeeExperience>>({})
+const formData = ref<Partial<EmployeeExperience> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
@@ -354,24 +388,24 @@ const advancedQueryForm = ref({
   witnessPhone: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'employeeId', label: t('entity.employeeExperience.employeeid') },
-  { key: 'companyName', label: t('entity.employeeExperience.companyname') },
-  { key: 'positionName', label: t('entity.employeeExperience.positionname') },
-  { key: 'jobContent', label: t('entity.employeeExperience.jobcontent') },
-  { key: 'startDateStart', label: t('entity.employeeExperience.startdatestart') },
-  { key: 'startDateEnd', label: t('entity.employeeExperience.startdateend') },
-  { key: 'endDateStart', label: t('entity.employeeExperience.enddatestart') },
-  { key: 'endDateEnd', label: t('entity.employeeExperience.enddateend') },
-  { key: 'witnessName', label: t('entity.employeeExperience.witnessname') },
-  { key: 'witnessPhone', label: t('entity.employeeExperience.witnessphone') },
+  { key: 'employeeId', label: t('entity.employeeexperience.employeeid') },
+  { key: 'companyName', label: t('entity.employeeexperience.companyname') },
+  { key: 'positionName', label: t('entity.employeeexperience.positionname') },
+  { key: 'jobContent', label: t('entity.employeeexperience.jobcontent') },
+  { key: 'startDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.employeeexperience.startdate')) },
+  { key: 'startDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.employeeexperience.startdate')) },
+  { key: 'endDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.employeeexperience.enddate')) },
+  { key: 'endDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.employeeexperience.enddate')) },
+  { key: 'witnessName', label: t('entity.employeeexperience.witnessname') },
+  { key: 'witnessPhone', label: t('entity.employeeexperience.witnessphone') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'ExtField', label: t('common.page.entity.ExtField') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -390,10 +424,51 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
 
-/** 页面挂载后加载分页列表 */
-onMounted(() => {
+
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {EmployeeExperienceQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<EmployeeExperienceQuery>): EmployeeExperienceQuery {
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: EmployeeExperienceQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: keyof EmployeeExperienceQuery, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v as never
+    }
+  }
+  assignTrimmed('employeeId', form.employeeId)
+  assignTrimmed('companyName', form.companyName)
+  assignTrimmed('positionName', form.positionName)
+  assignTrimmed('jobContent', form.jobContent)
+  assignTrimmed('startDateStart', form.startDateStart)
+  assignTrimmed('startDateEnd', form.startDateEnd)
+  assignTrimmed('endDateStart', form.endDateStart)
+  assignTrimmed('endDateEnd', form.endDateEnd)
+  assignTrimmed('witnessName', form.witnessName)
+  assignTrimmed('witnessPhone', form.witnessPhone)
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('extField', form.extField)
+  assignTrimmed('remark', form.remark)
+  return query
+}
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
   loadData()
 })
+
 
 
 
@@ -413,7 +488,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeExperienceField(record, 'employeeExperienceId') ?? ''
   },
   {
-    title: t('entity.employeeExperience.employeeid'),
+    title: t('entity.employeeexperience.employeeid'),
     dataIndex: 'employeeId',
     key: 'employeeId',
     width: 120,
@@ -422,16 +497,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeExperienceField(record, 'employeeId') ?? ''
   },
   {
-    title: t('entity.employeeExperience.employeename'),
-    dataIndex: 'employeeName',
-    key: 'employeeName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmployeeExperienceField(record, 'employeeName') ?? ''
-  },
-  {
-    title: t('entity.employeeExperience.companyname'),
+    title: t('entity.employeeexperience.companyname'),
     dataIndex: 'companyName',
     key: 'companyName',
     width: 120,
@@ -440,7 +506,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeExperienceField(record, 'companyName') ?? ''
   },
   {
-    title: t('entity.employeeExperience.positionname'),
+    title: t('entity.employeeexperience.positionname'),
     dataIndex: 'positionName',
     key: 'positionName',
     width: 120,
@@ -449,7 +515,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeExperienceField(record, 'positionName') ?? ''
   },
   {
-    title: t('entity.employeeExperience.jobcontent'),
+    title: t('entity.employeeexperience.jobcontent'),
     dataIndex: 'jobContent',
     key: 'jobContent',
     width: 120,
@@ -458,7 +524,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeExperienceField(record, 'jobContent') ?? ''
   },
   {
-    title: t('entity.employeeExperience.startdate'),
+    title: t('entity.employeeexperience.startdate'),
     dataIndex: 'startDate',
     key: 'startDate',
     width: 120,
@@ -467,7 +533,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeExperienceField(record, 'startDate') ?? ''
   },
   {
-    title: t('entity.employeeExperience.enddate'),
+    title: t('entity.employeeexperience.enddate'),
     dataIndex: 'endDate',
     key: 'endDate',
     width: 120,
@@ -476,7 +542,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeExperienceField(record, 'endDate') ?? ''
   },
   {
-    title: t('entity.employeeExperience.witnessname'),
+    title: t('entity.employeeexperience.witnessname'),
     dataIndex: 'witnessName',
     key: 'witnessName',
     width: 120,
@@ -485,7 +551,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeExperienceField(record, 'witnessName') ?? ''
   },
   {
-    title: t('entity.employeeExperience.witnessphone'),
+    title: t('entity.employeeexperience.witnessphone'),
     dataIndex: 'witnessPhone',
     key: 'witnessPhone',
     width: 120,
@@ -500,7 +566,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'human:resource:personnel:employeeexperience:update',
+        permission: 'human:resource:personnel:employee:experience:update',
         onClick: (record: EmployeeExperience) => handleEdit(record)
       },
       {
@@ -508,7 +574,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'human:resource:personnel:employeeexperience:delete',
+        permission: 'human:resource:personnel:employee:experience:delete',
         onClick: (record: EmployeeExperience) => handleDeleteOne(record)
       }
     ]
@@ -524,6 +590,7 @@ const getEmployeeExperienceId = (record: any): string => record?.[entityIdName] 
  */
 const getEmployeeExperienceField = (record: any, field: string): any => record?.[field]
 
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -535,7 +602,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: EmployeeExperience, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getEmployeeExperienceId(selectedRow.value) === getEmployeeExperienceId(record)) {
+    } else if (selectedRow.value && getEmployeeExperienceId(selectedRow.value) === getEmployeeExperienceId(record)) {
       selectedRow.value = null
     }
   },
@@ -566,16 +633,7 @@ const onClickRow = (record: EmployeeExperience) => ({
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: EmployeeExperienceQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getEmployeeExperienceList(params)
+    const res = await getEmployeeExperienceList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
@@ -593,7 +651,7 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -613,22 +671,23 @@ function handleReset() {
   witnessPhone: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.employeeExperience._self') })
-  formData.value = {}
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.employeeexperience._self') })
+  formData.value = null
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗 */
 function handleEdit(record: EmployeeExperience) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.employeeExperience._self') })
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.employeeexperience._self') })
   formData.value = { ...record }
   formVisible.value = true
 }
@@ -638,7 +697,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.employeeExperience._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.employeeexperience._self') }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -656,12 +715,14 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateEmployeeExperience(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.employeeExperience._self') }))
+      message.success(t('common.feedback.updated', { target: t('entity.employeeexperience._self') }))
     } else {
       await createEmployeeExperience(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.employeeExperience._self') }))
+      message.success(t('common.feedback.created', { target: t('entity.employeeexperience._self') }))
     }
     formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
     loadData()
   } finally {
     formLoading.value = false
@@ -671,6 +732,8 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开导入对话框 */
 function handleImport() {
@@ -702,16 +765,11 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: EmployeeExperienceQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportEmployeeExperience(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportEmployeeExperience(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -730,10 +788,10 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.employeeExperience._self') }))
+    message.success(t('common.feedback.export.success', { target: t('entity.employeeexperience._self') }))
   } catch (error: any) {
     logger.error('[EmployeeExperience] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.employeeExperience._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.employeeexperience._self') }))
   } finally {
     loading.value = false
   }
@@ -742,12 +800,12 @@ async function handleExport() {
 async function handleDeleteOne(record: EmployeeExperience) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.employeeExperience._self'), name: t('common.tip.this.target', { target: t('entity.employeeExperience._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: t('entity.employeeexperience._self'), name: t('common.tip.this.target', { target: t('entity.employeeexperience._self') }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteEmployeeExperienceById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.employeeExperience._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.employeeexperience._self') }))
       loadData()
     }
   })
@@ -755,18 +813,18 @@ async function handleDeleteOne(record: EmployeeExperience) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.employeeExperience._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.employeeexperience._self') }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.employeeExperience._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: t('entity.employeeexperience._self'), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteEmployeeExperienceBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.employeeExperience._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.employeeexperience._self') }))
       loadData()
     }
   })
@@ -779,7 +837,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -797,7 +855,7 @@ function handleAdvancedQueryReset() {
   witnessPhone: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
 }
@@ -827,23 +885,16 @@ function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
 /** 分页页码变更 */
-function handlePaginationChange(page: number) {
+function handlePaginationChange(page: number, size: number) {
   currentPage.value = page
+  pageSize.value = size
   loadData()
 }
-/** 分页每页条数变更 */
+
+/** 分页每页条数变更（重置到第 1 页） */
 function handlePaginationSizeChange(_current: number, size: number) {
+  currentPage.value = getTaktDefaultPageIndex()
   pageSize.value = size
-  currentPage.value = 1
   loadData()
 }
 </script>
-
-<style scoped lang="css">
-.human-resource-personnel-employee-experience {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-</style>

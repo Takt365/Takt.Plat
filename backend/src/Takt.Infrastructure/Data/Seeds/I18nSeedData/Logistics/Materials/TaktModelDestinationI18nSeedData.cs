@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Materials
 // 文件名称：TaktModelDestinationI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktModelDestination 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktModelDestinationI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.modeldestination._self", "zh-HK", "Takt型号目的地信息_hk", "实体名称"),
 
             // entity.modeldestination.materialcode
-            new TranslationSeedItem("entity.modeldestination.materialcode", "en-US", "物料编码_us", "物料编码"),
+            new TranslationSeedItem("entity.modeldestination.materialcode", "en-US", "物料编码_us", "物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）"),
             // entity.modeldestination.materialcode
-            new TranslationSeedItem("entity.modeldestination.materialcode", "ja-JP", "物料编码_jp", "物料编码"),
+            new TranslationSeedItem("entity.modeldestination.materialcode", "ja-JP", "物料编码_jp", "物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）"),
             // entity.modeldestination.materialcode
-            new TranslationSeedItem("entity.modeldestination.materialcode", "zh-CN", "物料编码", "物料编码"),
+            new TranslationSeedItem("entity.modeldestination.materialcode", "zh-CN", "物料编码", "物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）"),
             // entity.modeldestination.materialcode
-            new TranslationSeedItem("entity.modeldestination.materialcode", "zh-HK", "物料编码_hk", "物料编码"),
+            new TranslationSeedItem("entity.modeldestination.materialcode", "zh-HK", "物料编码_hk", "物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）"),
 
             // entity.modeldestination.materialname
             new TranslationSeedItem("entity.modeldestination.materialname", "en-US", "物料名称_us", "物料名称"),
@@ -109,40 +109,40 @@ public class TaktModelDestinationI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.modeldestination.materialname", "zh-HK", "物料名称_hk", "物料名称"),
 
             // entity.modeldestination.modelcode
-            new TranslationSeedItem("entity.modeldestination.modelcode", "en-US", "机种编码_us", "机种编码"),
+            new TranslationSeedItem("entity.modeldestination.modelcode", "en-US", "机种编码_us", "机种编码（40）"),
             // entity.modeldestination.modelcode
-            new TranslationSeedItem("entity.modeldestination.modelcode", "ja-JP", "机种编码_jp", "机种编码"),
+            new TranslationSeedItem("entity.modeldestination.modelcode", "ja-JP", "机种编码_jp", "机种编码（40）"),
             // entity.modeldestination.modelcode
-            new TranslationSeedItem("entity.modeldestination.modelcode", "zh-CN", "机种编码", "机种编码"),
+            new TranslationSeedItem("entity.modeldestination.modelcode", "zh-CN", "机种编码", "机种编码（40）"),
             // entity.modeldestination.modelcode
-            new TranslationSeedItem("entity.modeldestination.modelcode", "zh-HK", "机种编码_hk", "机种编码"),
+            new TranslationSeedItem("entity.modeldestination.modelcode", "zh-HK", "机种编码_hk", "机种编码（40）"),
 
             // entity.modeldestination.modelname
-            new TranslationSeedItem("entity.modeldestination.modelname", "en-US", "机种名称_us", "机种名称"),
+            new TranslationSeedItem("entity.modeldestination.modelname", "en-US", "机种名称_us", "机种名称（80）"),
             // entity.modeldestination.modelname
-            new TranslationSeedItem("entity.modeldestination.modelname", "ja-JP", "机种名称_jp", "机种名称"),
+            new TranslationSeedItem("entity.modeldestination.modelname", "ja-JP", "机种名称_jp", "机种名称（80）"),
             // entity.modeldestination.modelname
-            new TranslationSeedItem("entity.modeldestination.modelname", "zh-CN", "机种名称", "机种名称"),
+            new TranslationSeedItem("entity.modeldestination.modelname", "zh-CN", "机种名称", "机种名称（80）"),
             // entity.modeldestination.modelname
-            new TranslationSeedItem("entity.modeldestination.modelname", "zh-HK", "机种名称_hk", "机种名称"),
+            new TranslationSeedItem("entity.modeldestination.modelname", "zh-HK", "机种名称_hk", "机种名称（80）"),
 
             // entity.modeldestination.destinationcode
-            new TranslationSeedItem("entity.modeldestination.destinationcode", "en-US", "仕向地编码_us", "仕向地编码"),
+            new TranslationSeedItem("entity.modeldestination.destinationcode", "en-US", "仕向地编码_us", "仕向地编码（40）"),
             // entity.modeldestination.destinationcode
-            new TranslationSeedItem("entity.modeldestination.destinationcode", "ja-JP", "仕向地编码_jp", "仕向地编码"),
+            new TranslationSeedItem("entity.modeldestination.destinationcode", "ja-JP", "仕向地编码_jp", "仕向地编码（40）"),
             // entity.modeldestination.destinationcode
-            new TranslationSeedItem("entity.modeldestination.destinationcode", "zh-CN", "仕向地编码", "仕向地编码"),
+            new TranslationSeedItem("entity.modeldestination.destinationcode", "zh-CN", "仕向地编码", "仕向地编码（40）"),
             // entity.modeldestination.destinationcode
-            new TranslationSeedItem("entity.modeldestination.destinationcode", "zh-HK", "仕向地编码_hk", "仕向地编码"),
+            new TranslationSeedItem("entity.modeldestination.destinationcode", "zh-HK", "仕向地编码_hk", "仕向地编码（40）"),
 
             // entity.modeldestination.destinationname
-            new TranslationSeedItem("entity.modeldestination.destinationname", "en-US", "仕向地名称_us", "仕向地名称"),
+            new TranslationSeedItem("entity.modeldestination.destinationname", "en-US", "仕向地名称_us", "仕向地名称（80）"),
             // entity.modeldestination.destinationname
-            new TranslationSeedItem("entity.modeldestination.destinationname", "ja-JP", "仕向地名称_jp", "仕向地名称"),
+            new TranslationSeedItem("entity.modeldestination.destinationname", "ja-JP", "仕向地名称_jp", "仕向地名称（80）"),
             // entity.modeldestination.destinationname
-            new TranslationSeedItem("entity.modeldestination.destinationname", "zh-CN", "仕向地名称", "仕向地名称"),
+            new TranslationSeedItem("entity.modeldestination.destinationname", "zh-CN", "仕向地名称", "仕向地名称（80）"),
             // entity.modeldestination.destinationname
-            new TranslationSeedItem("entity.modeldestination.destinationname", "zh-HK", "仕向地名称_hk", "仕向地名称"),
+            new TranslationSeedItem("entity.modeldestination.destinationname", "zh-HK", "仕向地名称_hk", "仕向地名称（80）"),
 
             // entity.modeldestination.sortorder
             new TranslationSeedItem("entity.modeldestination.sortorder", "en-US", "排序号_us", "排序号（越小越靠前）"),

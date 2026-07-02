@@ -8,7 +8,7 @@
 <!-- ======================================== -->
 
 <template>
-  <div class="routine-help-desk-self-service">
+  <div class="p-4">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="routine:helpdesk:selfservice:create"
-      update-permission="routine:helpdesk:selfservice:update"
-      delete-permission="routine:helpdesk:selfservice:delete"
-      import-permission="routine:helpdesk:selfservice:import"
-      export-permission="routine:helpdesk:selfservice:export"
+      create-permission="routine:help:desk:self:service:create"
+      update-permission="routine:help:desk:self:service:update"
+      delete-permission="routine:help:desk:self:service:delete"
+      import-permission="routine:help:desk:self:service:import"
+      export-permission="routine:help:desk:self:service:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -54,8 +54,8 @@
 
     <!-- 表格 -->
     <TaktSingleTable
-      :columns="columns"
       entity-scope="company"
+      :columns="columns"
       :visible-column-keys="visibleColumnKeys"
       :id-column-key="'selfServiceId'"
       table-mode="single"
@@ -69,19 +69,20 @@
       @change="handleTableChange"
       @resize-column="handleResizeColumn"
     >
-      <!-- 字典列渲染 -->
+      <!-- 字典/开关列渲染 -->
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'selfServiceStatus'">
-          <TaktDictTag
-            :value="getSelfServiceField(record, 'selfServiceStatus')"
-            dict-type="sys_normal_disable_status"
+          <a-switch
+            :checked="getSelfServiceField(record, 'selfServiceStatus') === 1"
+            :checked-children="t('common.page.button.enable')" :un-checked-children="t('common.page.button.disable')"
+            @change="(checked: unknown) => handleSelfServiceStatusChange(record, Boolean(checked))"
           />
         </template>
       </template>
 
     </TaktSingleTable>
 
-    <!-- 分页组件 -->
+    <!-- 分页（服务端分页，外置 TaktPagination） -->
     <TaktPagination
       v-model:current="currentPage"
       v-model:page-size="pageSize"
@@ -101,6 +102,7 @@
       @cancel="handleFormCancel"
     >
       <SelfServiceForm
+        :key="formData?.selfServiceId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -118,67 +120,64 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('serviceName')">
-      <a-form-item :label="t('entity.selfService.servicename')">
+      <a-form-item :label="t('entity.selfservice.servicename')">
         <a-input
           v-model:value="advancedQueryForm.serviceName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.selfService.servicename') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.selfservice.servicename') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('serviceType')">
-      <a-form-item :label="t('entity.selfService.servicetype')">
+      <a-form-item :label="t('entity.selfservice.servicetype')">
         <a-input-number
           v-model:value="advancedQueryForm.serviceType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.selfService.servicetype') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.selfservice.servicetype') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('description')">
-      <a-form-item :label="t('entity.selfService.description')">
+      <a-form-item :label="t('entity.selfservice.description')">
         <a-textarea
           v-model:value="advancedQueryForm.description"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.selfService.description') })"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.selfservice.description') })"
           :rows="2"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('linkOrCode')">
-      <a-form-item :label="t('entity.selfService.linkorcode')">
+      <a-form-item :label="t('entity.selfservice.linkorcode')">
         <a-input
           v-model:value="advancedQueryForm.linkOrCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.selfService.linkorcode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.selfservice.linkorcode') })"
+          show-count
+          :maxlength="500"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('iconUrl')">
-      <a-form-item :label="t('entity.selfService.iconurl')">
+      <a-form-item :label="t('entity.selfservice.iconurl')">
         <a-input
           v-model:value="advancedQueryForm.iconUrl"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.selfService.iconurl') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.selfservice.iconurl') })"
+          show-count
+          :maxlength="500"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('selfServiceStatus')">
-      <a-form-item :label="t('entity.selfService.status')">
+      <a-form-item :label="t('entity.selfservice.status')">
         <TaktSelect
           v-model:value="advancedQueryForm.selfServiceStatus"
           dict-type="sys_normal_disable_status"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.selfService.status') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.selfservice.status') })"
           allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('sortOrder')">
-      <a-form-item :label="t('entity.selfService.sortorder')">
-        <a-input-number
-          v-model:value="advancedQueryForm.sortOrder"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.selfService.sortorder') })"
-          style="width: 100%"
         />
       </a-form-item>
       </div>
@@ -188,7 +187,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -199,17 +198,36 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('ExtField')">
-      <a-form-item :label="t('common.page.entity.ExtField')">
-        <a-input
-          v-model:value="advancedQueryForm.ExtField"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
-          allow-clear
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
+        <a-textarea
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -218,8 +236,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -229,14 +249,14 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.selfService._self') })"
+      :title="t('common.dialog.title.import', { entity: t('entity.selfservice._self') })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.selfService._self"
+        entity-i18n-key="entity.selfservice._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -263,7 +283,6 @@
 </template>
 
 <script setup lang="ts">
-import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 /**
  * 服务台自助服务项实体管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/routine/help-desk/self-service
@@ -273,12 +292,14 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import SelfServiceForm from './components/self-service-form.vue'
-import { getSelfServiceList, getSelfServiceById, createSelfService, updateSelfService, deleteSelfServiceById, deleteSelfServiceBatch, getSelfServiceTemplate, importSelfService, exportSelfService } from '@/api/routine/help-desk/self-service'
-import type { SelfService, SelfServiceQuery, SelfServiceCreate, SelfServiceUpdate } from '@/types/routine/help-desk/self-service'
+import { getSelfServiceList, getSelfServiceById, createSelfService, updateSelfService, deleteSelfServiceById, deleteSelfServiceBatch, getSelfServiceTemplate, importSelfService, exportSelfService, updateSelfServiceStatus } from '@/api/routine/help-desk/self-service'
+import type { SelfService, SelfServiceQuery } from '@/types/routine/help-desk/self-service'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -286,7 +307,7 @@ const { t } = useI18n()
 const excelNames = taktExcelEntityNames('TaktSelfService')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.selfService._self') })
+  () => t('common.page.form.placeholder.search', { keyword: t('entity.selfservice._self') })
 )
 
 /** 快捷查询关键字 */
@@ -313,11 +334,13 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<SelfService>>({})
+const formData = ref<Partial<SelfService> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
@@ -327,24 +350,22 @@ const advancedQueryForm = ref({
   linkOrCode: '',
   iconUrl: '',
   selfServiceStatus: undefined as number | undefined,
-  sortOrder: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'serviceName', label: t('entity.selfService.servicename') },
-  { key: 'serviceType', label: t('entity.selfService.servicetype') },
-  { key: 'description', label: t('entity.selfService.description') },
-  { key: 'linkOrCode', label: t('entity.selfService.linkorcode') },
-  { key: 'iconUrl', label: t('entity.selfService.iconurl') },
-  { key: 'selfServiceStatus', label: t('entity.selfService.status') },
-  { key: 'sortOrder', label: t('entity.selfService.sortorder') },
+  { key: 'serviceName', label: t('entity.selfservice.servicename') },
+  { key: 'serviceType', label: t('entity.selfservice.servicetype') },
+  { key: 'description', label: t('entity.selfservice.description') },
+  { key: 'linkOrCode', label: t('entity.selfservice.linkorcode') },
+  { key: 'iconUrl', label: t('entity.selfservice.iconurl') },
+  { key: 'selfServiceStatus', label: t('entity.selfservice.status') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'ExtField', label: t('common.page.entity.ExtField') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -362,11 +383,55 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
+/** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
+const dictDataStore = useDictDataStore()
 
-/** 页面挂载后加载分页列表 */
-onMounted(() => {
+
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {SelfServiceQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<SelfServiceQuery>): SelfServiceQuery {
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: SelfServiceQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: keyof SelfServiceQuery, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v as never
+    }
+  }
+  assignTrimmed('serviceName', form.serviceName)
+  if (form.serviceType !== undefined && form.serviceType !== null) {
+    query.serviceType = form.serviceType
+  }
+  assignTrimmed('description', form.description)
+  assignTrimmed('linkOrCode', form.linkOrCode)
+  assignTrimmed('iconUrl', form.iconUrl)
+  if (form.selfServiceStatus !== undefined && form.selfServiceStatus !== null) {
+    query.selfServiceStatus = form.selfServiceStatus
+  }
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('extField', form.extField)
+  assignTrimmed('remark', form.remark)
+  return query
+}
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
+  void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
+
 
 
 
@@ -386,7 +451,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSelfServiceField(record, 'selfServiceId') ?? ''
   },
   {
-    title: t('entity.selfService.servicename'),
+    title: t('entity.selfservice.servicename'),
     dataIndex: 'serviceName',
     key: 'serviceName',
     width: 120,
@@ -395,7 +460,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSelfServiceField(record, 'serviceName') ?? ''
   },
   {
-    title: t('entity.selfService.servicetype'),
+    title: t('entity.selfservice.servicetype'),
     dataIndex: 'serviceType',
     key: 'serviceType',
     width: 120,
@@ -404,7 +469,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSelfServiceField(record, 'serviceType') ?? ''
   },
   {
-    title: t('entity.selfService.description'),
+    title: t('entity.selfservice.description'),
     dataIndex: 'description',
     key: 'description',
     width: 120,
@@ -413,7 +478,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSelfServiceField(record, 'description') ?? ''
   },
   {
-    title: t('entity.selfService.linkorcode'),
+    title: t('entity.selfservice.linkorcode'),
     dataIndex: 'linkOrCode',
     key: 'linkOrCode',
     width: 120,
@@ -422,7 +487,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSelfServiceField(record, 'linkOrCode') ?? ''
   },
   {
-    title: t('entity.selfService.iconurl'),
+    title: t('entity.selfservice.iconurl'),
     dataIndex: 'iconUrl',
     key: 'iconUrl',
     width: 120,
@@ -431,7 +496,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSelfServiceField(record, 'iconUrl') ?? ''
   },
   {
-    title: t('entity.selfService.status'),
+    title: t('entity.selfservice.status'),
     dataIndex: 'selfServiceStatus',
     key: 'selfServiceStatus',
     width: 120,
@@ -445,7 +510,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'routine:helpdesk:selfservice:update',
+        permission: 'routine:help:desk:self:service:update',
         onClick: (record: SelfService) => handleEdit(record)
       },
       {
@@ -453,7 +518,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'routine:helpdesk:selfservice:delete',
+        permission: 'routine:help:desk:self:service:delete',
         onClick: (record: SelfService) => handleDeleteOne(record)
       }
     ]
@@ -469,6 +534,7 @@ const getSelfServiceId = (record: any): string => record?.[entityIdName] ?? ''
  */
 const getSelfServiceField = (record: any, field: string): any => record?.[field]
 
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -480,7 +546,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: SelfService, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getSelfServiceId(selectedRow.value) === getSelfServiceId(record)) {
+    } else if (selectedRow.value && getSelfServiceId(selectedRow.value) === getSelfServiceId(record)) {
       selectedRow.value = null
     }
   },
@@ -511,16 +577,7 @@ const onClickRow = (record: SelfService) => ({
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: SelfServiceQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getSelfServiceList(params)
+    const res = await getSelfServiceList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
@@ -538,7 +595,7 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -552,25 +609,25 @@ function handleReset() {
   linkOrCode: '',
   iconUrl: '',
   selfServiceStatus: undefined as number | undefined,
-  sortOrder: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.selfService._self') })
-  formData.value = {}
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.selfservice._self') })
+  formData.value = null
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗 */
 function handleEdit(record: SelfService) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.selfService._self') })
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.selfservice._self') })
   formData.value = { ...record }
   formVisible.value = true
 }
@@ -580,7 +637,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.selfService._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.selfservice._self') }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -598,12 +655,14 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateSelfService(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.selfService._self') }))
+      message.success(t('common.feedback.updated', { target: t('entity.selfservice._self') }))
     } else {
       await createSelfService(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.selfService._self') }))
+      message.success(t('common.feedback.created', { target: t('entity.selfservice._self') }))
     }
     formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
     loadData()
   } finally {
     formLoading.value = false
@@ -613,6 +672,8 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开导入对话框 */
 function handleImport() {
@@ -644,16 +705,11 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: SelfServiceQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportSelfService(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportSelfService(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -672,10 +728,10 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.selfService._self') }))
+    message.success(t('common.feedback.export.success', { target: t('entity.selfservice._self') }))
   } catch (error: any) {
     logger.error('[SelfService] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.selfService._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.selfservice._self') }))
   } finally {
     loading.value = false
   }
@@ -684,12 +740,12 @@ async function handleExport() {
 async function handleDeleteOne(record: SelfService) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.selfService._self'), name: t('common.tip.this.target', { target: t('entity.selfService._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: t('entity.selfservice._self'), name: t('common.tip.this.target', { target: t('entity.selfservice._self') }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteSelfServiceById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.selfService._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.selfservice._self') }))
       loadData()
     }
   })
@@ -697,21 +753,45 @@ async function handleDeleteOne(record: SelfService) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.selfService._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.selfservice._self') }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.selfService._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: t('entity.selfservice._self'), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteSelfServiceBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.selfService._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.selfservice._self') }))
       loadData()
     }
   })
+}
+/**
+ * 行内状态切换
+ * @param record 当前行
+ * @param checked 是否启用
+ */
+async function handleSelfServiceStatusChange(record: SelfService, checked: boolean) {
+  const newVal = checked ? 1 : 0
+  const oldVal = getSelfServiceField(record, 'selfServiceStatus')
+  const id = getSelfServiceId(record)
+  const row = dataSource.value.find((item) => getSelfServiceId(item) === id)
+  if (row) {
+    row.selfServiceStatus = newVal
+  }
+  try {
+    await updateSelfServiceStatus({ selfServiceId: id, selfServiceStatus: newVal })
+    message.success(t('common.feedback.updated'))
+    
+  } catch (error: unknown) {
+    if (row) {
+      row.selfServiceStatus = oldVal
+    }
+    message.error(t('common.feedback.failed'))
+  }
 }
 /** 打开高级查询抽屉 */
 function handleAdvancedQuery() {
@@ -721,7 +801,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -733,10 +813,9 @@ function handleAdvancedQueryReset() {
   linkOrCode: '',
   iconUrl: '',
   selfServiceStatus: undefined as number | undefined,
-  sortOrder: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
 }
@@ -766,23 +845,16 @@ function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
 /** 分页页码变更 */
-function handlePaginationChange(page: number) {
+function handlePaginationChange(page: number, size: number) {
   currentPage.value = page
+  pageSize.value = size
   loadData()
 }
-/** 分页每页条数变更 */
+
+/** 分页每页条数变更（重置到第 1 页） */
 function handlePaginationSizeChange(_current: number, size: number) {
+  currentPage.value = getTaktDefaultPageIndex()
   pageSize.value = size
-  currentPage.value = 1
   loadData()
 }
 </script>
-
-<style scoped lang="css">
-.routine-help-desk-self-service {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-</style>

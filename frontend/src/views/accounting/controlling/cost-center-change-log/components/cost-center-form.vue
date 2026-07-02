@@ -29,12 +29,12 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.tenantcode')"
+                :label="pi.label('tenantCode')"
                 name="tenantCode"
               >
                 <a-input
                   v-model:value="formState.tenantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
+                  :placeholder="pi.ph('tenantCode')"
                   show-count
                   :maxlength="20"
                   disabled
@@ -43,12 +43,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.companycode')"
+                :label="pi.label('companyCode')"
                 name="companyCode"
               >
                 <a-input
                   v-model:value="formState.companyCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
+                  :placeholder="pi.ph('companyCode')"
                   show-count
                   :maxlength="20"
                   disabled
@@ -57,12 +57,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.companydefaultculture')"
+                :label="pi.label('companyDefaultCulture')"
                 name="companyDefaultCulture"
               >
                 <a-input
                   v-model:value="formState.companyDefaultCulture"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
+                  :placeholder="pi.ph('companyDefaultCulture')"
                   show-count
                   :maxlength="20"
                   disabled
@@ -71,14 +71,14 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.costcenter.code')"
+                :label="pi.label('costCenterCode')"
                 name="costCenterCode"
               >
                 <a-input
                   v-model:value="formState.costCenterCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.costcenter.code') })"
+                  :placeholder="pi.ph('costCenterCode')"
                   show-count
-                  :maxlength="50"
+                  :maxlength="4"
                   allow-clear
                   :disabled="!!formData?.costCenterId"
                 />
@@ -86,12 +86,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.costcenter.name')"
+                :label="pi.label('costCenterName')"
                 name="costCenterName"
               >
                 <a-input
                   v-model:value="formState.costCenterName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.costcenter.name') })"
+                  :placeholder="pi.ph('costCenterName')"
                   show-count
                   :maxlength="100"
                   allow-clear
@@ -100,12 +100,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.costcenter.parentid')"
+                :label="pi.label('parentId')"
                 name="parentId"
               >
                 <a-input
                   v-model:value="formState.parentId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.costcenter.parentid') })"
+                  :placeholder="pi.ph('parentId')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -114,24 +114,24 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.costcenter.type')"
+                :label="pi.label('costCenterType')"
                 name="costCenterType"
               >
                 <a-input-number
                   v-model:value="formState.costCenterType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.costcenter.type') })"
+                  :placeholder="pi.ph('costCenterType')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.costcenter.managerid')"
+                :label="pi.label('managerId')"
                 name="managerId"
               >
                 <a-input
                   v-model:value="formState.managerId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.costcenter.managerid') })"
+                  :placeholder="pi.ph('managerId')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -140,12 +140,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.costcenter.managername')"
+                :label="pi.label('managerName')"
                 name="managerName"
               >
                 <a-input
                   v-model:value="formState.managerName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.costcenter.managername') })"
+                  :placeholder="pi.ph('managerName')"
                   show-count
                   :maxlength="50"
                   allow-clear
@@ -154,12 +154,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.costcenter.deptid')"
+                :label="pi.label('deptId')"
                 name="deptId"
               >
                 <a-input
                   v-model:value="formState.deptId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.costcenter.deptid') })"
+                  :placeholder="pi.ph('deptId')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -178,12 +178,12 @@
           <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.costcenter.deptname')"
+                :label="pi.label('deptName')"
                 name="deptName"
               >
                 <a-input
                   v-model:value="formState.deptName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.costcenter.deptname') })"
+                  :placeholder="pi.ph('deptName')"
                   show-count
                   :maxlength="100"
                   allow-clear
@@ -192,65 +192,63 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.costcenter.level')"
+                :label="pi.label('costCenterLevel')"
                 name="costCenterLevel"
               >
                 <a-input-number
                   v-model:value="formState.costCenterLevel"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.costcenter.level') })"
+                  :placeholder="pi.ph('costCenterLevel')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.costcenter.relatedplant')"
-                name="relatedPlant"
+                :label="pi.label('validFrom')"
+                name="validFrom"
               >
-                <a-input
-                  v-model:value="formState.relatedPlant"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.costcenter.relatedplant') })"
-                  show-count
-                  :maxlength="4"
-                  allow-clear
+                <a-date-picker
+                  v-model:value="formState.validFrom"
+                  :placeholder="pi.ph('validFrom')"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.costcenter.status')"
+                :label="pi.label('validTo')"
+                name="validTo"
+              >
+                <a-date-picker
+                  v-model:value="formState.validTo"
+                  :placeholder="pi.ph('validTo')"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('relatedPlant')"
+                name="relatedPlant"
+              >
+                <TaktSelect
+                  v-model:value="formState.relatedPlant"
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('relatedPlant')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('costCenterStatus')"
                 name="costCenterStatus"
               >
                 <TaktSelect
                   v-model:value="formState.costCenterStatus"
                   dict-type="sys_normal_disable_status"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.costcenter.status') })"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.costcenter.validfrom')"
-                name="validFrom"
-              >
-                <a-date-picker
-                  v-model:value="formState.validFrom"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.costcenter.validfrom') })"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.costcenter.validto')"
-                name="validTo"
-              >
-                <a-date-picker
-                  v-model:value="formState.validTo"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.costcenter.validto') })"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
+                  :placeholder="pi.ph('costCenterStatus')"
                 />
               </a-form-item>
             </a-col>
@@ -267,7 +265,7 @@
                     >
                       <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
                     </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
+                    <span>{{ pi.label('extField') }}</span>
                   </span>
                 </template>
                 <a-textarea
@@ -282,12 +280,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.remark')"
+                :label="pi.label('remark')"
                 name="remark"
               >
                 <a-textarea
                   v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+                  :placeholder="pi.ph('remark')"
                   :rows="4"
                   show-count
                   :maxlength="400"
@@ -304,8 +302,8 @@
       ref="costCenterChangeLogTableRef"
       v-model="childCostCenterChangeLogRows"
       :columns="costCenterChangeLogFormColumns"
-      :title="t('entity.costcenterchangelog._self')"
-      :add-button-entity="t('entity.costcenterchangelog._self')"
+      :title="costCenterChangeLogPi.self()"
+      :add-button-entity="costCenterChangeLogPi.self()"
       id-field="costCenterChangeLogId"
       :default-row="createDefaultCostCenterChangeLogRow"
       :disabled="loading"
@@ -322,6 +320,11 @@
 import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useCostCenterI18n } from '../composables/use-cost-center-i18n'
+
+/** 实体字段 i18n */
+const pi = useCostCenterI18n()
+
 import type { CostCenterCreate } from '@/types/accounting/controlling/cost-center'
 import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
@@ -358,9 +361,13 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","costCenterCode","costCenterName","parentId","costCenterType","managerId","managerName","deptId","deptName","costCenterLevel","relatedPlant","costCenterStatus","validFrom","validTo","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","costCenterCode","costCenterName","parentId","costCenterType","managerId","managerName","deptId","deptName","costCenterLevel","validFrom","validTo","relatedPlant","costCenterStatus","extField","remark"]
+
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+import { useCostCenterChangeLogI18n } from '../composables/use-cost-center-change-log-i18n'
+
+const costCenterChangeLogPi = useCostCenterChangeLogI18n()
 
 const childCostCenterChangeLogRows = ref<Record<string, unknown>[]>([])
 const costCenterChangeLogTableRef = ref<{
@@ -373,43 +380,43 @@ const costCenterChangeLogTableRef = ref<{
 const costCenterChangeLogFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
     key: 'changeFields',
-    title: t('entity.costcenterchangelog.changefields'),
+    title: costCenterChangeLogPi.label('changeFields'),
     editor: 'input',
-    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.costcenterchangelog.changefields') }),
+    width: 140, allowClear: true, placeholder: costCenterChangeLogPi.ph('changeFields'),
   },
   {
     key: 'changeTime',
-    title: t('entity.costcenterchangelog.changetime'),
+    title: costCenterChangeLogPi.label('changeTime'),
     editor: 'datePicker',
     valueFormat: 'YYYY-MM-DD HH:mm:ss', showTime: true,
     width: 140,
   },
   {
     key: 'changeBy',
-    title: t('entity.costcenterchangelog.changeby'),
+    title: costCenterChangeLogPi.label('changeBy'),
     editor: 'input',
-    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.costcenterchangelog.changeby') }),
+    width: 140, allowClear: true, placeholder: costCenterChangeLogPi.ph('changeBy'),
   },
   {
     key: 'changeReason',
-    title: t('entity.costcenterchangelog.changereason'),
+    title: costCenterChangeLogPi.label('changeReason'),
     editor: 'input',
-    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.costcenterchangelog.changereason') }),
+    width: 140, allowClear: true, placeholder: costCenterChangeLogPi.ph('changeReason'),
   },
   {
     key: 'extField',
-    title: t('common.page.entity.extfield'),
+    title: costCenterChangeLogPi.label('extField'),
     editor: 'textarea',
     rows: 2,
-    placeholder: t('common.page.form.placeholder.optional', { field: t('common.page.entity.extfield') }),
+    placeholder: t('common.page.form.placeholder.extfield'),
     width: 140,
   },
   {
     key: 'remark',
-    title: t('common.page.entity.remark'),
+    title: costCenterChangeLogPi.label('remark'),
     editor: 'textarea',
     rows: 2,
-    placeholder: t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') }),
+    placeholder: costCenterChangeLogPi.ph('remark'),
     width: 140,
   },
 ])
@@ -520,32 +527,32 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   costCenterCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.costcenter.code') }),
+      message: pi.ph('costCenterCode'),
       trigger: 'blur'
     }
   ],
   costCenterName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.costcenter.name') }),
+      message: pi.ph('costCenterName'),
       trigger: 'blur'
     }
   ],
   parentId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.costcenter.parentid') }),
+      message: pi.ph('parentId'),
       trigger: 'blur'
     }
   ],
   costCenterType: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.costcenter.type') }))
+        return Promise.reject(pi.ph('costCenterType'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.costcenter.type') }))
+        return Promise.reject(pi.ph('costCenterType'))
       }
       return Promise.resolve()
     },
@@ -554,24 +561,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   costCenterLevel: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.costcenter.level') }))
+        return Promise.reject(pi.ph('costCenterLevel'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.costcenter.level') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  costCenterStatus: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.costcenter.status') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.costcenter.status') }))
+        return Promise.reject(pi.ph('costCenterLevel'))
       }
       return Promise.resolve()
     },
@@ -580,17 +574,37 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   validFrom: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.costcenter.validfrom') }),
+      message: pi.ph('validFrom'),
       trigger: 'change'
     }
   ],
   validTo: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.costcenter.validto') }),
+      message: pi.ph('validTo'),
       trigger: 'change'
     }
   ],
+  relatedPlant: [
+    {
+      required: true,
+      message: pi.ph('relatedPlant'),
+      trigger: 'change'
+    }
+  ],
+  costCenterStatus: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('costCenterStatus'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('costCenterStatus'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */

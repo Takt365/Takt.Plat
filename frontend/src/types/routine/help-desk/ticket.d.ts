@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/routine/help-desk
 // 文件名称：ticket.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：routine/help-desk 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -36,17 +36,17 @@ export interface Ticket extends CompanyDtoBase {
   /**
    * 工单标题
    */
-  title: string;
+  ticketTitle: string;
 
   /**
    * 工单内容描述
    */
-  content?: string;
+  ticketContent?: string;
 
   /**
    * 附件列表 JSON。格式：[{ "FileId": 0, "FileName": "", "FilePath": "", "FileSize": 0, "FileType": "", "FileExtension": "", "SortOrder": 0 }]
    */
-  attachmentsJson?: string;
+  attachments?: string;
 
   /**
    * 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）
@@ -72,16 +72,6 @@ export interface Ticket extends CompanyDtoBase {
    * 分类编码（如 incident/request 等）
    */
   categoryCode?: string;
-
-  /**
-   * 资产号码（关联 TaktAsset.AssetCode）
-   */
-  assetCode?: string;
-
-  /**
-   * 资产名称（填充字段，来自 TaktAsset）
-   */
-  assetName?: string;
 
   /**
    * 工单来源（0=门户网站，1=邮件，2=电话，3=API接入）
@@ -154,14 +144,19 @@ export interface Ticket extends CompanyDtoBase {
   closedAt?: string;
 
   /**
-   * 流程实例ID（关联工作流；流程侧 BusinessType=Ticket、BusinessKey=本表 Id）
+   * 关联 IT 设备保修扩展 ID
    */
-  flowInstanceId?: string;
+  itAssetId?: string;
 
   /**
-   * 流程实例名称（填充字段）
+   * 关联 IT 设备保修扩展 名称（填充字段）
    */
-  flowInstanceName?: string;
+  itAssetName?: string;
+
+  /**
+   * 资产号码（冗余；与 TaktItAsset.AssetCode 一致）
+   */
+  assetCode?: string;
 
   /**
    * 申请部门ID
@@ -187,11 +182,6 @@ export interface Ticket extends CompanyDtoBase {
    * 工单变更日志列表（主子表关系） （子表：TaktTicketChangeLog）
    */
   changeLogs?: TicketChangeLog[];
-
-  /**
-   * 工单回复列表（会话）
-   */
-  replies?: TicketReply[];
 
 }
 
@@ -221,20 +211,20 @@ export interface TicketQuery extends TaktPagedQuery {
   /**
    * 工单标题
    */
-  title?: string;
+  ticketTitle?: string;
 
   /**
    * 工单内容描述
    */
-  content?: string;
+  ticketContent?: string;
 
   /**
    * 附件列表 JSON。格式：[{ "FileId": 0, "FileName": "", "FilePath": "", "FileSize": 0, "FileType": "", "FileExtension": "", "SortOrder": 0 }]
    */
-  attachmentsJson?: string;
+  attachments?: string;
 
   /**
-   * 工单状态（0=待处理，1=处理中，2=已解决，3=已关闭）
+   * 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）
    */
   ticketStatus?: number;
 
@@ -242,6 +232,16 @@ export interface TicketQuery extends TaktPagedQuery {
    * 优先级（字典 sys_priority_level_category）
    */
   priority?: number;
+
+  /**
+   * 紧急度（字典 sys_urgency_level_category）
+   */
+  urgency?: number;
+
+  /**
+   * 影响范围（字典 sys_impact_level_category）
+   */
+  impact?: number;
 
   /**
    * 分类编码（如 incident/request 等）
@@ -334,9 +334,14 @@ export interface TicketQuery extends TaktPagedQuery {
   closedAtEnd?: string;
 
   /**
-   * 流程实例ID（关联工作流；流程侧 BusinessType=Ticket、BusinessKey=本表 Id）
+   * 关联 IT 设备保修扩展 ID
    */
-  flowInstanceId?: string;
+  itAssetId?: string;
+
+  /**
+   * 资产号码（冗余；与 TaktItAsset.AssetCode 一致）
+   */
+  assetCode?: string;
 
   /**
    * 申请部门ID
@@ -366,7 +371,7 @@ export interface TicketQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -393,7 +398,7 @@ export interface TicketCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -405,17 +410,17 @@ export interface TicketCreate {
   /**
    * 工单标题
    */
-  title: string;
+  ticketTitle: string;
 
   /**
    * 工单内容描述
    */
-  content?: string;
+  ticketContent?: string;
 
   /**
    * 附件列表 JSON。格式：[{ "FileId": 0, "FileName": "", "FilePath": "", "FileSize": 0, "FileType": "", "FileExtension": "", "SortOrder": 0 }]
    */
-  attachmentsJson?: string;
+  attachments?: string;
 
   /**
    * 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）
@@ -503,9 +508,14 @@ export interface TicketCreate {
   closedAt?: string;
 
   /**
-   * 流程实例ID（关联工作流；流程侧 BusinessType=Ticket、BusinessKey=本表 Id）
+   * 关联 IT 设备保修扩展 ID
    */
-  flowInstanceId?: string;
+  itAssetId?: string;
+
+  /**
+   * 资产号码（冗余；与 TaktItAsset.AssetCode 一致）
+   */
+  assetCode?: string;
 
   /**
    * 申请部门ID
@@ -535,7 +545,7 @@ export interface TicketCreate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -603,20 +613,20 @@ export interface TicketTemplate {
   /**
    * 工单标题
    */
-  title?: string;
+  ticketTitle?: string;
 
   /**
    * 工单内容描述
    */
-  content?: string;
+  ticketContent?: string;
 
   /**
    * 附件列表 JSON。格式：[{ "FileId": 0, "FileName": "", "FilePath": "", "FileSize": 0, "FileType": "", "FileExtension": "", "SortOrder": 0 }]
    */
-  attachmentsJson?: string;
+  attachments?: string;
 
   /**
-   * 工单状态（0=待处理，1=处理中，2=已解决，3=已关闭）
+   * 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）
    */
   ticketStatus?: number;
 
@@ -624,6 +634,16 @@ export interface TicketTemplate {
    * 优先级（字典 sys_priority_level_category）
    */
   priority?: number;
+
+  /**
+   * 紧急度（字典 sys_urgency_level_category）
+   */
+  urgency?: number;
+
+  /**
+   * 影响范围（字典 sys_impact_level_category）
+   */
+  impact?: number;
 
   /**
    * 分类编码（如 incident/request 等）
@@ -656,9 +676,79 @@ export interface TicketTemplate {
   assigneeName?: string;
 
   /**
+   * 关联知识ID（可选，序列化为string以避免Javascript精度问题）
+   */
+  knowledgeId?: string;
+
+  /**
+   * 父工单ID（为空表示顶级工单；非空表示该工单为子工单，序列化为string以避免Javascript精度问题）
+   */
+  parentTicketId?: string;
+
+  /**
+   * 首次响应时间（支持人员首次回复用户的时间，SLA/OLA 时间追踪）
+   */
+  firstResponseAt?: string;
+
+  /**
+   * 首次响应期限（根据 SLA 计算出的首次响应截止时间）
+   */
+  firstResponseDueBy?: string;
+
+  /**
+   * 解决时间（问题被标记为已解决的时间）
+   */
+  resolvedAt?: string;
+
+  /**
+   * 解决期限（根据 SLA 计算出的解决截止时间）
+   */
+  resolutionDueBy?: string;
+
+  /**
+   * 关闭时间（工单最终关闭的时间）
+   */
+  closedAt?: string;
+
+  /**
+   * 关联 IT 设备保修扩展 ID
+   */
+  itAssetId?: string;
+
+  /**
+   * 资产号码（冗余；与 TaktItAsset.AssetCode 一致）
+   */
+  assetCode?: string;
+
+  /**
+   * 申请部门ID
+   */
+  applicantDeptId?: string;
+
+  /**
+   * 申请部门名称
+   */
+  applicantDeptName?: string;
+
+  /**
+   * 申请人（实际申请人；代理人代提时填被代理人）
+   */
+  applicantBy?: string;
+
+  /**
+   * 子工单列表（父工单时有效；外键：本表 Id = 子工单 ParentTicketId）（子表，级联保存）
+   */
+  childTickets?: TicketCreate[];
+
+  /**
+   * 工单变更日志列表（主子表关系）（子表，级联保存）
+   */
+  changeLogs?: TicketChangeLogCreate[];
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -685,7 +775,7 @@ export interface TicketImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -697,20 +787,20 @@ export interface TicketImport {
   /**
    * 工单标题
    */
-  title?: string;
+  ticketTitle?: string;
 
   /**
    * 工单内容描述
    */
-  content?: string;
+  ticketContent?: string;
 
   /**
    * 附件列表 JSON。格式：[{ "FileId": 0, "FileName": "", "FilePath": "", "FileSize": 0, "FileType": "", "FileExtension": "", "SortOrder": 0 }]
    */
-  attachmentsJson?: string;
+  attachments?: string;
 
   /**
-   * 工单状态（0=待处理，1=处理中，2=已解决，3=已关闭）
+   * 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）
    */
   ticketStatus?: number;
 
@@ -718,6 +808,16 @@ export interface TicketImport {
    * 优先级（字典 sys_priority_level_category）
    */
   priority?: number;
+
+  /**
+   * 紧急度（字典 sys_urgency_level_category）
+   */
+  urgency?: number;
+
+  /**
+   * 影响范围（字典 sys_impact_level_category）
+   */
+  impact?: number;
 
   /**
    * 分类编码（如 incident/request 等）
@@ -750,9 +850,79 @@ export interface TicketImport {
   assigneeName?: string;
 
   /**
+   * 关联知识ID（可选，序列化为string以避免Javascript精度问题）
+   */
+  knowledgeId?: string;
+
+  /**
+   * 父工单ID（为空表示顶级工单；非空表示该工单为子工单，序列化为string以避免Javascript精度问题）
+   */
+  parentTicketId?: string;
+
+  /**
+   * 首次响应时间（支持人员首次回复用户的时间，SLA/OLA 时间追踪）
+   */
+  firstResponseAt?: string;
+
+  /**
+   * 首次响应期限（根据 SLA 计算出的首次响应截止时间）
+   */
+  firstResponseDueBy?: string;
+
+  /**
+   * 解决时间（问题被标记为已解决的时间）
+   */
+  resolvedAt?: string;
+
+  /**
+   * 解决期限（根据 SLA 计算出的解决截止时间）
+   */
+  resolutionDueBy?: string;
+
+  /**
+   * 关闭时间（工单最终关闭的时间）
+   */
+  closedAt?: string;
+
+  /**
+   * 关联 IT 设备保修扩展 ID
+   */
+  itAssetId?: string;
+
+  /**
+   * 资产号码（冗余；与 TaktItAsset.AssetCode 一致）
+   */
+  assetCode?: string;
+
+  /**
+   * 申请部门ID
+   */
+  applicantDeptId?: string;
+
+  /**
+   * 申请部门名称
+   */
+  applicantDeptName?: string;
+
+  /**
+   * 申请人（实际申请人；代理人代提时填被代理人）
+   */
+  applicantBy?: string;
+
+  /**
+   * 子工单列表（父工单时有效；外键：本表 Id = 子工单 ParentTicketId）（子表，级联保存）
+   */
+  childTickets?: TicketCreate[];
+
+  /**
+   * 工单变更日志列表（主子表关系）（子表，级联保存）
+   */
+  changeLogs?: TicketChangeLogCreate[];
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -786,17 +956,17 @@ export interface TicketExport {
   /**
    * 工单标题
    */
-  title: string;
+  ticketTitle: string;
 
   /**
    * 工单内容描述
    */
-  content?: string;
+  ticketContent?: string;
 
   /**
    * 附件列表 JSON。格式：[{ "FileId": 0, "FileName": "", "FilePath": "", "FileSize": 0, "FileType": "", "FileExtension": "", "SortOrder": 0 }]
    */
-  attachmentsJson?: string;
+  attachments?: string;
 
   /**
    * 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）
@@ -884,9 +1054,14 @@ export interface TicketExport {
   closedAt?: string;
 
   /**
-   * 流程实例ID（关联工作流；流程侧 BusinessType=Ticket、BusinessKey=本表 Id）
+   * 关联 IT 设备保修扩展 ID
    */
-  flowInstanceId?: string;
+  itAssetId?: string;
+
+  /**
+   * 资产号码（冗余；与 TaktItAsset.AssetCode 一致）
+   */
+  assetCode?: string;
 
   /**
    * 申请部门ID
@@ -906,7 +1081,7 @@ export interface TicketExport {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -918,78 +1093,5 @@ export interface TicketExport {
    */
   createdAt: string;
 
-}
-
-/** 门户提交工单 */
-export interface TicketSubmit {
-  title: string;
-  content?: string;
-  attachmentsJson?: string;
-  urgency?: number;
-  impact?: number;
-  categoryCode?: string;
-  assetCode?: string;
-  knowledgeId?: string;
-  remark?: string;
-}
-
-/** 我的资产汇总（工单 AssetCode 聚合） */
-export interface TicketMyAsset {
-  assetCode: string;
-  assetName?: string;
-  ticketCount: number;
-  lastTicketAt?: string;
-}
-
-/** 渠道建单 */
-export interface TicketCreateFromChannel extends TicketSubmit {
-  ticketSource?: number;
-  externalMessageId?: string;
-  submitterId?: string;
-  submitterName?: string;
-}
-
-/** 指派/领取 */
-export interface TicketAssign {
-  ticketId: string;
-  assigneeId?: string;
-  assigneeName?: string;
-  startImmediately?: boolean;
-  remark?: string;
-}
-
-/** 工作流动作 */
-export interface TicketWorkflowAction {
-  ticketId: string;
-  remark?: string;
-}
-
-/** 工单回复 */
-export interface TicketReply {
-  ticketReplyId: string;
-  ticketId: string;
-  authorType: number;
-  authorId: string;
-  authorName?: string;
-  content: string;
-  attachmentsJson?: string;
-  isInternal: boolean;
-  createdAt?: string;
-}
-
-/** 创建回复 */
-export interface TicketReplyCreate {
-  ticketId: string;
-  content: string;
-  attachmentsJson?: string;
-  isInternal?: boolean;
-}
-
-/** 回复查询 */
-export interface TicketReplyQuery {
-  ticketId: string;
-  pageIndex?: number;
-  pageSize?: number;
-  includeInternal?: boolean;
 }
 

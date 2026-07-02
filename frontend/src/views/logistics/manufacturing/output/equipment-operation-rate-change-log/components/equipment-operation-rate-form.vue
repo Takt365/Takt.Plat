@@ -199,12 +199,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.equipmentoperationrate.productionline')"
-                name="productionLine"
+                :label="t('entity.equipmentoperationrate.prodteam')"
+                name="prodTeam"
               >
                 <a-input
-                  v-model:value="formState.productionLine"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentoperationrate.productionline') })"
+                  v-model:value="formState.prodTeam"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentoperationrate.prodteam') })"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -369,18 +369,6 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.equipmentoperationrate.equipmentstatus')"
-                name="equipmentStatus"
-              >
-                <a-input-number
-                  v-model:value="formState.equipmentStatus"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentoperationrate.equipmentstatus') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
                 :label="t('entity.equipmentoperationrate.equipmentoperator')"
                 name="equipmentOperator"
               >
@@ -424,10 +412,10 @@
             <a-col :span="12">
               <a-form-item
                 :label="t('entity.equipmentoperationrate.status')"
-                name="status"
+                name="equipmentOperationRateStatus"
               >
                 <a-input-number
-                  v-model:value="formState.status"
+                  v-model:value="formState.equipmentOperationRateStatus"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentoperationrate.status') })"
                   style="width: 100%"
                 />
@@ -545,7 +533,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","timeCategory","startDate","endDate","weekNumber","monthNumber","equipmentCode","equipmentName","equipmentType","productionLine","shiftNo","plannedRuntime","actualRuntime","downtime","equipmentOperationRate","plannedOutput","actualOutput","qualifiedQuantity","defectiveQuantity","yieldRate","downtimeReasonType","downtimeReason","equipmentStatus","equipmentOperator","equipmentMaintainer","teamLeader","status","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","timeCategory","startDate","endDate","weekNumber","monthNumber","equipmentCode","equipmentName","equipmentType","prodTeam","shiftNo","plannedRuntime","actualRuntime","downtime","equipmentOperationRate","plannedOutput","actualOutput","qualifiedQuantity","defectiveQuantity","yieldRate","downtimeReasonType","downtimeReason","equipmentOperator","equipmentMaintainer","teamLeader","equipmentOperationRateStatus","extField","remark"]
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
 
@@ -890,20 +878,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
-  equipmentStatus: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.equipmentoperationrate.equipmentstatus') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.equipmentoperationrate.equipmentstatus') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  status: [{
+  equipmentOperationRateStatus: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
         return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.equipmentoperationrate.status') }))
@@ -988,13 +963,9 @@ function getValues(): Record<string, any> {
     const rawdowntimeReasonType = payload.downtimeReasonType
     payload.downtimeReasonType = typeof rawdowntimeReasonType === 'number' ? rawdowntimeReasonType : Number(rawdowntimeReasonType)
   }
-  if ('equipmentStatus' in payload) {
-    const rawequipmentStatus = payload.equipmentStatus
-    payload.equipmentStatus = typeof rawequipmentStatus === 'number' ? rawequipmentStatus : Number(rawequipmentStatus)
-  }
-  if ('status' in payload) {
-    const rawstatus = payload.status
-    payload.status = typeof rawstatus === 'number' ? rawstatus : Number(rawstatus)
+  if ('equipmentOperationRateStatus' in payload) {
+    const rawEquipmentOperationRateStatus = payload.equipmentOperationRateStatus
+    payload.equipmentOperationRateStatus = typeof rawEquipmentOperationRateStatus === 'number' ? rawEquipmentOperationRateStatus : Number(rawEquipmentOperationRateStatus)
   }
   if ('sortOrder' in payload) delete payload.sortOrder
   return payload

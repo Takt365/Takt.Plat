@@ -205,7 +205,7 @@
           v-model:value="advancedQueryForm.costCurrency"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityincident.costcurrency') })"
           show-count
-          :maxlength="10"
+          :maxlength="3"
           allow-clear
         />
       </a-form-item>

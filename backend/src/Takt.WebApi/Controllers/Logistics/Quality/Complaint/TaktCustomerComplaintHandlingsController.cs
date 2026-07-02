@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Quality.Complaint
 // 文件名称：TaktCustomerComplaintHandlingsController.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：客诉处理记录控制器
 // 
@@ -41,7 +41,7 @@ public class TaktCustomerComplaintHandlingsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:quality:complaint:customer:complaint:handling:list", "客诉处理记录列表")]
+    [TaktPermission("logistics:quality:complaint:customer:handling:list", "客诉处理记录列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetCustomerComplaintHandlingListAsync([FromQuery] TaktCustomerComplaintHandlingQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktCustomerComplaintHandlingsController : TaktControllerBase
     /// </summary>
     /// <param name="id">客诉处理记录ID</param>
     /// <returns>客诉处理记录DTO</returns>
-    [TaktPermission("logistics:quality:complaint:customer:complaint:handling:query", "客诉处理记录详情")]
+    [TaktPermission("logistics:quality:complaint:customer:handling:query", "客诉处理记录详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetCustomerComplaintHandlingByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktCustomerComplaintHandlingsController : TaktControllerBase
     /// 获取客诉处理记录选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:quality:complaint:customer:complaint:handling:query", "客诉处理记录选项")]
+    [TaktPermission("logistics:quality:complaint:customer:handling:query", "客诉处理记录选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetCustomerComplaintHandlingOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktCustomerComplaintHandlingsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>客诉处理记录DTO</returns>
-    [TaktPermission("logistics:quality:complaint:customer:complaint:handling:create", "创建客诉处理记录")]
+    [TaktPermission("logistics:quality:complaint:customer:handling:create", "创建客诉处理记录")]
     [HttpPost]
     public async Task<IActionResult> CreateCustomerComplaintHandlingAsync([FromBody] TaktCustomerComplaintHandlingCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktCustomerComplaintHandlingsController : TaktControllerBase
     /// <param name="id">客诉处理记录ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>客诉处理记录DTO</returns>
-    [TaktPermission("logistics:quality:complaint:customer:complaint:handling:update", "更新客诉处理记录")]
+    [TaktPermission("logistics:quality:complaint:customer:handling:update", "更新客诉处理记录")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateCustomerComplaintHandlingAsync(long id, [FromBody] TaktCustomerComplaintHandlingUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktCustomerComplaintHandlingsController : TaktControllerBase
     /// </summary>
     /// <param name="id">客诉处理记录ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:quality:complaint:customer:complaint:handling:delete", "删除客诉处理记录")]
+    [TaktPermission("logistics:quality:complaint:customer:handling:delete", "删除客诉处理记录")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteCustomerComplaintHandlingByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktCustomerComplaintHandlingsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:quality:complaint:customer:complaint:handling:delete", "批量删除客诉处理记录")]
+    [TaktPermission("logistics:quality:complaint:customer:handling:delete", "批量删除客诉处理记录")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteCustomerComplaintHandlingBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktCustomerComplaintHandlingsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO</param>
     /// <returns>客诉处理记录DTO</returns>
-    [TaktPermission("logistics:quality:complaint:customer:complaint:handling:update", "更新客诉处理记录状态")]
+    [TaktPermission("logistics:quality:complaint:customer:handling:update", "更新客诉处理记录状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateCustomerComplaintHandlingStatusAsync([FromBody] TaktCustomerComplaintHandlingStatusDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktCustomerComplaintHandlingsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:quality:complaint:customer:complaint:handling:import", "获取客诉处理记录导入模板")]
+    [TaktPermission("logistics:quality:complaint:customer:handling:import", "获取客诉处理记录导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetCustomerComplaintHandlingTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +224,7 @@ public class TaktCustomerComplaintHandlingsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:quality:complaint:customer:complaint:handling:import", "导入客诉处理记录")]
+    [TaktPermission("logistics:quality:complaint:customer:handling:import", "导入客诉处理记录")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportCustomerComplaintHandlingAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +254,7 @@ public class TaktCustomerComplaintHandlingsController : TaktControllerBase
     /// 导出客诉处理记录
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:quality:complaint:customer:complaint:handling:export", "导出客诉处理记录")]
+    [TaktPermission("logistics:quality:complaint:customer:handling:export", "导出客诉处理记录")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportCustomerComplaintHandlingAsync([FromQuery] TaktCustomerComplaintHandlingQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/quality/cost
 // 文件名称：incident.d.ts
-// 创建时间：2026-06-21
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/cost 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface QualityIncident extends CompanyDtoBase {
   qualityIncidentId: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -99,7 +99,7 @@ export interface QualityIncidentQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -188,12 +188,12 @@ export interface QualityIncidentCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -287,7 +287,7 @@ export interface QualityIncidentTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -295,6 +295,16 @@ export interface QualityIncidentTemplate {
    * 品质事故编码(唯一,如:QI-2026-0001)
    */
   qualityIncidentCode?: string;
+
+  /**
+   * 事故日期
+   */
+  incidentDate?: string;
+
+  /**
+   * 间接人员费率(元/分钟)
+   */
+  indirectManpowerCostPerMinute?: number;
 
   /**
    * 机种/产品型号
@@ -307,9 +317,24 @@ export interface QualityIncidentTemplate {
   incidentReason?: string;
 
   /**
+   * 废弃总数(自动计算 = 各子表废弃数量合计)
+   */
+  totalScrapQuantity?: number;
+
+  /**
+   * 总废弃费用(元,自动计算 = 各子表费用合计)
+   */
+  totalScrapCost?: number;
+
+  /**
    * 成本币种(CNY/USD/JPY等)
    */
   costCurrency?: string;
+
+  /**
+   * 事故明细列表（子表，级联保存）
+   */
+  incidentItems?: QualityIncidentItemCreate[];
 
   /**
    * 扩展字段JSON
@@ -341,12 +366,12 @@ export interface QualityIncidentImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -354,6 +379,16 @@ export interface QualityIncidentImport {
    * 品质事故编码(唯一,如:QI-2026-0001)
    */
   qualityIncidentCode?: string;
+
+  /**
+   * 事故日期
+   */
+  incidentDate?: string;
+
+  /**
+   * 间接人员费率(元/分钟)
+   */
+  indirectManpowerCostPerMinute?: number;
 
   /**
    * 机种/产品型号
@@ -366,9 +401,24 @@ export interface QualityIncidentImport {
   incidentReason?: string;
 
   /**
+   * 废弃总数(自动计算 = 各子表废弃数量合计)
+   */
+  totalScrapQuantity?: number;
+
+  /**
+   * 总废弃费用(元,自动计算 = 各子表费用合计)
+   */
+  totalScrapCost?: number;
+
+  /**
    * 成本币种(CNY/USD/JPY等)
    */
   costCurrency?: string;
+
+  /**
+   * 事故明细列表（子表，级联保存）
+   */
+  incidentItems?: QualityIncidentItemCreate[];
 
   /**
    * 扩展字段JSON
@@ -400,7 +450,7 @@ export interface QualityIncidentExport {
   companyCode: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 

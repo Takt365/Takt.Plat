@@ -125,8 +125,8 @@ export function updateDictTypeStatus(dto: DictTypeStatus): Promise<DictType> {
 }
 
 /**
- * 更新字典类型是否内置
- * @param {DictTypeBuiltIn} dto 是否内置 DTO
+ * 更新字典类型内置
+ * @param {DictTypeBuiltIn} dto 内置 DTO
  * @returns {Promise<DictType>} 字典类型DTO
  */
 export function updateDictTypeBuiltIn(dto: DictTypeBuiltIn): Promise<DictType> {

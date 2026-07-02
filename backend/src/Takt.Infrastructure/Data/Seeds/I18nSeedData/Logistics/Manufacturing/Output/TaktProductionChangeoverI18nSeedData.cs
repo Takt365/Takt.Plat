@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Output
 // 文件名称：TaktProductionChangeoverI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktProductionChangeover 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,40 +91,40 @@ public class TaktProductionChangeoverI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.productionchangeover._self", "zh-HK", "生产切换记录信息_hk", "实体名称"),
 
             // entity.productionchangeover.plantcode
-            new TranslationSeedItem("entity.productionchangeover.plantcode", "en-US", "生产工厂_us", "生产工厂"),
+            new TranslationSeedItem("entity.productionchangeover.plantcode", "en-US", "生产工厂_us", "生产工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
             // entity.productionchangeover.plantcode
-            new TranslationSeedItem("entity.productionchangeover.plantcode", "ja-JP", "生产工厂_jp", "生产工厂"),
+            new TranslationSeedItem("entity.productionchangeover.plantcode", "ja-JP", "生产工厂_jp", "生产工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
             // entity.productionchangeover.plantcode
-            new TranslationSeedItem("entity.productionchangeover.plantcode", "zh-CN", "生产工厂", "生产工厂"),
+            new TranslationSeedItem("entity.productionchangeover.plantcode", "zh-CN", "生产工厂", "生产工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
             // entity.productionchangeover.plantcode
-            new TranslationSeedItem("entity.productionchangeover.plantcode", "zh-HK", "生产工厂_hk", "生产工厂"),
+            new TranslationSeedItem("entity.productionchangeover.plantcode", "zh-HK", "生产工厂_hk", "生产工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
 
-            // entity.productionchangeover.productioncategory
-            new TranslationSeedItem("entity.productionchangeover.productioncategory", "en-US", "生产类别_us", "生产类别"),
-            // entity.productionchangeover.productioncategory
-            new TranslationSeedItem("entity.productionchangeover.productioncategory", "ja-JP", "生产类别_jp", "生产类别"),
-            // entity.productionchangeover.productioncategory
-            new TranslationSeedItem("entity.productionchangeover.productioncategory", "zh-CN", "生产类别", "生产类别"),
-            // entity.productionchangeover.productioncategory
-            new TranslationSeedItem("entity.productionchangeover.productioncategory", "zh-HK", "生产类别_hk", "生产类别"),
+            // entity.productionchangeover.prodcategory
+            new TranslationSeedItem("entity.productionchangeover.prodcategory", "en-US", "生产类别_us", "生产类别（字典 logistics_prod_category，存 DictValue）"),
+            // entity.productionchangeover.prodcategory
+            new TranslationSeedItem("entity.productionchangeover.prodcategory", "ja-JP", "生产类别_jp", "生产类别（字典 logistics_prod_category，存 DictValue）"),
+            // entity.productionchangeover.prodcategory
+            new TranslationSeedItem("entity.productionchangeover.prodcategory", "zh-CN", "生产类别", "生产类别（字典 logistics_prod_category，存 DictValue）"),
+            // entity.productionchangeover.prodcategory
+            new TranslationSeedItem("entity.productionchangeover.prodcategory", "zh-HK", "生产类别_hk", "生产类别（字典 logistics_prod_category，存 DictValue）"),
 
-            // entity.productionchangeover.productiondate
-            new TranslationSeedItem("entity.productionchangeover.productiondate", "en-US", "生产日期_us", "生产日期"),
-            // entity.productionchangeover.productiondate
-            new TranslationSeedItem("entity.productionchangeover.productiondate", "ja-JP", "生产日期_jp", "生产日期"),
-            // entity.productionchangeover.productiondate
-            new TranslationSeedItem("entity.productionchangeover.productiondate", "zh-CN", "生产日期", "生产日期"),
-            // entity.productionchangeover.productiondate
-            new TranslationSeedItem("entity.productionchangeover.productiondate", "zh-HK", "生产日期_hk", "生产日期"),
+            // entity.productionchangeover.proddate
+            new TranslationSeedItem("entity.productionchangeover.proddate", "en-US", "生产日期_us", "生产日期"),
+            // entity.productionchangeover.proddate
+            new TranslationSeedItem("entity.productionchangeover.proddate", "ja-JP", "生产日期_jp", "生产日期"),
+            // entity.productionchangeover.proddate
+            new TranslationSeedItem("entity.productionchangeover.proddate", "zh-CN", "生产日期", "生产日期"),
+            // entity.productionchangeover.proddate
+            new TranslationSeedItem("entity.productionchangeover.proddate", "zh-HK", "生产日期_hk", "生产日期"),
 
-            // entity.productionchangeover.productionline
-            new TranslationSeedItem("entity.productionchangeover.productionline", "en-US", "生产线_us", "生产线"),
-            // entity.productionchangeover.productionline
-            new TranslationSeedItem("entity.productionchangeover.productionline", "ja-JP", "生产线_jp", "生产线"),
-            // entity.productionchangeover.productionline
-            new TranslationSeedItem("entity.productionchangeover.productionline", "zh-CN", "生产线", "生产线"),
-            // entity.productionchangeover.productionline
-            new TranslationSeedItem("entity.productionchangeover.productionline", "zh-HK", "生产线_hk", "生产线"),
+            // entity.productionchangeover.prodteam
+            new TranslationSeedItem("entity.productionchangeover.prodteam", "en-US", "生产班组_us", "生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）"),
+            // entity.productionchangeover.prodteam
+            new TranslationSeedItem("entity.productionchangeover.prodteam", "ja-JP", "生产班组_jp", "生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）"),
+            // entity.productionchangeover.prodteam
+            new TranslationSeedItem("entity.productionchangeover.prodteam", "zh-CN", "生产班组", "生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）"),
+            // entity.productionchangeover.prodteam
+            new TranslationSeedItem("entity.productionchangeover.prodteam", "zh-HK", "生产班组_hk", "生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）"),
 
             // entity.productionchangeover.readsoptime
             new TranslationSeedItem("entity.productionchangeover.readsoptime", "en-US", "读取SOP时间_us", "读取SOP时间"),

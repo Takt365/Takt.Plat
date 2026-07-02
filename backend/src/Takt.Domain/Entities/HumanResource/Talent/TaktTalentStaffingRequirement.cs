@@ -18,7 +18,7 @@ using Takt.Domain.Entities.HumanResource.Personnel;
 namespace Takt.Domain.Entities.HumanResource.Talent;
 
 /// <summary>
-/// 用人需求（审批单；状态见 <see cref="TaktApprovalEntityBase.ApprovalStatus"/>）
+/// 用人需求（审批单；审批态见基类 ApprovalStatus，字典 sys_approval_status）
 /// </summary>
 [SugarTable("takt_human_resource_talent_staffing_requirement", "用人需求表")]
 [SugarIndex("ix_talent_staffing_requirement_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
@@ -28,85 +28,72 @@ namespace Takt.Domain.Entities.HumanResource.Talent;
 public class TaktTalentStaffingRequirement : TaktApprovalEntityBase
 {
     /// <summary>
-    /// 需求单号（ReqNo，租户+公司内唯一；自动生成，如 PR-2026-00123）
+    /// 需求单号（租户+公司内唯一；自动生成，如 PR-2026-00123）
     /// </summary>
     [SugarColumn(ColumnName = "req_no", ColumnDescription = "需求单号", ColumnDataType = "varchar", Length = 30, IsNullable = false)]
     public string ReqNo { get; set; } = string.Empty;
-
     /// <summary>
-    /// 申请部门ID（DeptID，FK→TaktDept）
+    /// 申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     [SugarColumn(ColumnName = "dept_id", ColumnDescription = "申请部门ID", ColumnDataType = "bigint", IsNullable = false)]
     public long DeptId { get; set; }
-
     /// <summary>
-    /// 申请岗位ID（PositionID，FK→TaktPost）
+    /// 申请岗位（关联 TaktPost.Id，选项 TaktPosts/options）
     /// </summary>
     [SugarColumn(ColumnName = "post_id", ColumnDescription = "申请岗位ID", ColumnDataType = "bigint", IsNullable = false)]
     public long PostId { get; set; }
-
     /// <summary>
-    /// 职级（JobGrade/Rank，如专员/主任/工程师）
+    /// 职级（可参照字典 sys_post_level_category；列存业务码，如 P3/M2）
     /// </summary>
     [SugarColumn(ColumnName = "job_grade", ColumnDescription = "职级", ColumnDataType = "varchar", Length = 50, IsNullable = true)]
     public string? JobGrade { get; set; }
-
     /// <summary>
-    /// 需求人数（RequestQty，默认 1）
+    /// 需求人数（默认 1）
     /// </summary>
     [SugarColumn(ColumnName = "request_qty", ColumnDescription = "需求人数", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int RequestQty { get; set; } = 1;
-
     /// <summary>
-    /// 编制类型（HeadcountType：正式/派遣/实习生/临时）
+    /// 编制类型（字典 hr_talent_headcount_type；列存 DictValue：formal/dispatch/intern/temp）
     /// </summary>
     [SugarColumn(ColumnName = "headcount_type", ColumnDescription = "编制类型", ColumnDataType = "varchar", Length = 20, IsNullable = false, DefaultValue = "formal")]
     public string HeadcountType { get; set; } = "formal";
-
     /// <summary>
-    /// 需求原因（ReasonCode：新增编制/离职补充/业务扩大/替岗）
+    /// 需求原因（字典 hr_talent_staffing_reason_code；列存 DictValue：new_headcount/replacement/expansion/substitute）
     /// </summary>
     [SugarColumn(ColumnName = "reason_code", ColumnDescription = "需求原因", ColumnDataType = "varchar", Length = 30, IsNullable = false)]
     public string ReasonCode { get; set; } = string.Empty;
-
     /// <summary>
-    /// 替补员工ID（ReplaceEmpID，离职补充时填原员工，FK→TaktEmployee，可空）
+    /// 替补员工（关联 TaktEmployee.Id，选项 TaktEmployees/options；离职补充时填原员工，可空）
     /// </summary>
     [SugarColumn(ColumnName = "replace_employee_id", ColumnDescription = "替补员工ID", ColumnDataType = "bigint", IsNullable = true)]
     public long? ReplaceEmployeeId { get; set; }
-
     /// <summary>
-    /// 期望入职日（ExpectedOnboardDate）
+    /// 期望入职日
     /// </summary>
     [SugarColumn(ColumnName = "expected_onboard_date", ColumnDescription = "期望入职日", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? ExpectedOnboardDate { get; set; }
-
     /// <summary>
-    /// 合同类型（ContractType：固定期/无固定/实习协议）
+    /// 合同类型（字典 hr_talent_staffing_contract_type；列存 DictValue：fixed/indefinite/intern_agreement）
     /// </summary>
     [SugarColumn(ColumnName = "contract_type", ColumnDescription = "合同类型", ColumnDataType = "varchar", Length = 20, IsNullable = true)]
     public string? ContractType { get; set; }
-
     /// <summary>
-    /// 工作地点（WorkLocation，如工厂/分公司）
+    /// 工作地点（如工厂/分公司）
     /// </summary>
     [SugarColumn(ColumnName = "work_location", ColumnDescription = "工作地点", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
     public string? WorkLocation { get; set; }
-
     /// <summary>
-    /// 岗位职责（JobDesc）
+    /// 岗位职责
     /// </summary>
     [SugarColumn(ColumnName = "job_desc", ColumnDescription = "岗位职责", ColumnDataType = "nvarchar", Length = 4000, IsNullable = true)]
     public string? JobDesc { get; set; }
-
     /// <summary>
-    /// 任职要求（Qualification，学历/经验/技能）
+    /// 任职要求（学历/经验/技能）
     /// </summary>
     [SugarColumn(ColumnName = "qualification", ColumnDescription = "任职要求", ColumnDataType = "nvarchar", Length = 4000, IsNullable = true)]
     public string? Qualification { get; set; }
-
     /// <summary>
-    /// 预算年度（BudgetYear，用于 headcount 控制）
+    /// 预算年度（用于 headcount 控制）
     /// </summary>
     [SugarColumn(ColumnName = "budget_year", ColumnDescription = "预算年度", ColumnDataType = "char", Length = 4, IsNullable = true)]
     public string? BudgetYear { get; set; }

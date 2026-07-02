@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Quality.Operation
 // 文件名称：TaktIqcDefectHandlingValidators.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：IqcDefectHandling 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktIqcDefectHandling 生成，请按需审阅）
 // 
@@ -39,7 +39,7 @@ public class TaktIqcDefectHandlingCreateValidator : AbstractValidator<TaktIqcDef
             .NotEmpty().WithMessage("IQC不良处理编码不能为空")
             .MaximumLength(50).WithMessage("IQC不良处理编码长度不能超过50个字符");
         RuleFor(x => x.IqcOrderItemId)
-            .GreaterThanOrEqualTo(0).WithMessage("IQC检验单明细ID不能为负数");
+            .GreaterThanOrEqualTo(0).WithMessage("IQC检验单明细 ID不能为负数");
         RuleFor(x => x.IqcOrderCode)
             .NotEmpty().WithMessage("IQC检验单编码不能为空")
             .MaximumLength(50).WithMessage("IQC检验单编码长度不能超过50个字符");
@@ -49,18 +49,6 @@ public class TaktIqcDefectHandlingCreateValidator : AbstractValidator<TaktIqcDef
         RuleFor(x => x.DefectDescription)
             .NotEmpty().WithMessage("不良现象描述不能为空")
             .MaximumLength(500).WithMessage("不良现象描述长度不能超过500个字符");
-        RuleFor(x => x.HandlingDescription)
-            .MaximumLength(1000).WithMessage("处理说明长度不能超过1000个字符");
-        RuleFor(x => x.ResponsibleDept)
-            .MaximumLength(100).WithMessage("责任部门长度不能超过100个字符");
-        RuleFor(x => x.ResponsibleBy)
-            .MaximumLength(50).WithMessage("责任人长度不能超过50个字符");
-        RuleFor(x => x.HandlerBy)
-            .MaximumLength(50).WithMessage("处理人长度不能超过50个字符");
-        RuleFor(x => x.CorrectiveAction)
-            .MaximumLength(1000).WithMessage("预防措施/纠正措施长度不能超过1000个字符");
-        RuleFor(x => x.DefectImages)
-            .MaximumLength(2000).WithMessage("不良图片长度不能超过2000个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -84,6 +72,30 @@ public class TaktIqcDefectHandlingUpdateValidator : AbstractValidator<TaktIqcDef
     {
         RuleFor(x => x.IqcDefectHandlingId)
             .GreaterThan(0).WithMessage("IqcDefectHandlingID无效");
+        RuleFor(x => x.TenantCode)
+            .NotEmpty().WithMessage("租户编码不能为空")
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.CompanyCode)
+            .NotEmpty().WithMessage("公司代码不能为空")
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.IqcDefectHandlingCode)
+            .NotEmpty().WithMessage("IQC不良处理编码不能为空")
+            .MaximumLength(50).WithMessage("IQC不良处理编码长度不能超过50个字符");
+        RuleFor(x => x.IqcOrderItemId)
+            .GreaterThanOrEqualTo(0).WithMessage("IQC检验单明细 ID不能为负数");
+        RuleFor(x => x.IqcOrderCode)
+            .NotEmpty().WithMessage("IQC检验单编码不能为空")
+            .MaximumLength(50).WithMessage("IQC检验单编码长度不能超过50个字符");
+        RuleFor(x => x.DefectCode)
+            .NotEmpty().WithMessage("不良现象编码不能为空")
+            .MaximumLength(50).WithMessage("不良现象编码长度不能超过50个字符");
+        RuleFor(x => x.DefectDescription)
+            .NotEmpty().WithMessage("不良现象描述不能为空")
+            .MaximumLength(500).WithMessage("不良现象描述长度不能超过500个字符");
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
     }
 }
 
@@ -109,7 +121,7 @@ public class TaktIqcDefectHandlingImportValidator : AbstractValidator<TaktIqcDef
             .NotEmpty().WithMessage("IQC不良处理编码不能为空")
             .MaximumLength(50).WithMessage("IQC不良处理编码长度不能超过50个字符");
         RuleFor(x => x.IqcOrderItemId)
-            .GreaterThanOrEqualTo(0).WithMessage("IQC检验单明细ID不能为负数");
+            .GreaterThanOrEqualTo(0).WithMessage("IQC检验单明细 ID不能为负数");
         RuleFor(x => x.IqcOrderCode)
             .NotEmpty().WithMessage("IQC检验单编码不能为空")
             .MaximumLength(50).WithMessage("IQC检验单编码长度不能超过50个字符");
@@ -119,12 +131,6 @@ public class TaktIqcDefectHandlingImportValidator : AbstractValidator<TaktIqcDef
         RuleFor(x => x.DefectDescription)
             .NotEmpty().WithMessage("不良现象描述不能为空")
             .MaximumLength(500).WithMessage("不良现象描述长度不能超过500个字符");
-        RuleFor(x => x.HandlingDescription)
-            .MaximumLength(1000).WithMessage("处理说明长度不能超过1000个字符").When(x => !string.IsNullOrWhiteSpace(x.HandlingDescription));
-        RuleFor(x => x.ResponsibleDept)
-            .MaximumLength(100).WithMessage("责任部门长度不能超过100个字符").When(x => !string.IsNullOrWhiteSpace(x.ResponsibleDept));
-        RuleFor(x => x.ResponsibleBy)
-            .MaximumLength(50).WithMessage("责任人长度不能超过50个字符").When(x => !string.IsNullOrWhiteSpace(x.ResponsibleBy));
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

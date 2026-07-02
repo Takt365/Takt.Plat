@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Code.Generator
 // 文件名称：TaktGenTableColumnValidators.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：GenTableColumn 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktGenTableColumn 生成，请按需审阅）
 // 
@@ -37,11 +37,9 @@ public class TaktGenTableColumnCreateValidator : AbstractValidator<TaktGenTableC
         RuleFor(x => x.DatabaseColumnName)
             .NotEmpty().WithMessage("数据库列名称不能为空")
             .MaximumLength(200).WithMessage("数据库列名称长度不能超过200个字符");
-        RuleFor(x => x.ColumnComment)
-            .MaximumLength(500).WithMessage("列描述长度不能超过500个字符");
         RuleFor(x => x.DatabaseDataType)
-            .NotEmpty().WithMessage("数据库数据类型不能为空")
-            .MaximumLength(100).WithMessage("数据库数据类型长度不能超过100个字符");
+            .NotEmpty().WithMessage("数据类型不能为空")
+            .MaximumLength(100).WithMessage("数据类型长度不能超过100个字符");
         RuleFor(x => x.CsharpDataType)
             .NotEmpty().WithMessage("C#类型不能为空")
             .MaximumLength(100).WithMessage("C#类型长度不能超过100个字符");
@@ -54,8 +52,6 @@ public class TaktGenTableColumnCreateValidator : AbstractValidator<TaktGenTableC
         RuleFor(x => x.HtmlType)
             .NotEmpty().WithMessage("显示类型不能为空")
             .MaximumLength(50).WithMessage("显示类型长度不能超过50个字符");
-        RuleFor(x => x.DictType)
-            .MaximumLength(100).WithMessage("字典类型长度不能超过100个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -79,6 +75,33 @@ public class TaktGenTableColumnUpdateValidator : AbstractValidator<TaktGenTableC
     {
         RuleFor(x => x.GenTableColumnId)
             .GreaterThan(0).WithMessage("GenTableColumnID无效");
+        RuleFor(x => x.TenantCode)
+            .NotEmpty().WithMessage("租户编码不能为空")
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.GenTableId)
+            .GreaterThanOrEqualTo(0).WithMessage("生成表ID不能为负数");
+        RuleFor(x => x.DatabaseColumnName)
+            .NotEmpty().WithMessage("数据库列名称不能为空")
+            .MaximumLength(200).WithMessage("数据库列名称长度不能超过200个字符");
+        RuleFor(x => x.DatabaseDataType)
+            .NotEmpty().WithMessage("数据类型不能为空")
+            .MaximumLength(100).WithMessage("数据类型长度不能超过100个字符");
+        RuleFor(x => x.CsharpDataType)
+            .NotEmpty().WithMessage("C#类型不能为空")
+            .MaximumLength(100).WithMessage("C#类型长度不能超过100个字符");
+        RuleFor(x => x.CsharpColumnName)
+            .NotEmpty().WithMessage("C#列名不能为空")
+            .MaximumLength(100).WithMessage("C#列名长度不能超过100个字符");
+        RuleFor(x => x.QueryType)
+            .NotEmpty().WithMessage("查询方式不能为空")
+            .MaximumLength(20).WithMessage("查询方式长度不能超过20个字符");
+        RuleFor(x => x.HtmlType)
+            .NotEmpty().WithMessage("显示类型不能为空")
+            .MaximumLength(50).WithMessage("显示类型长度不能超过50个字符");
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
     }
 }
 
@@ -103,11 +126,9 @@ public class TaktGenTableColumnImportValidator : AbstractValidator<TaktGenTableC
         RuleFor(x => x.DatabaseColumnName)
             .NotEmpty().WithMessage("数据库列名称不能为空")
             .MaximumLength(200).WithMessage("数据库列名称长度不能超过200个字符");
-        RuleFor(x => x.ColumnComment)
-            .MaximumLength(500).WithMessage("列描述长度不能超过500个字符").When(x => !string.IsNullOrWhiteSpace(x.ColumnComment));
         RuleFor(x => x.DatabaseDataType)
-            .NotEmpty().WithMessage("数据库数据类型不能为空")
-            .MaximumLength(100).WithMessage("数据库数据类型长度不能超过100个字符");
+            .NotEmpty().WithMessage("数据类型不能为空")
+            .MaximumLength(100).WithMessage("数据类型长度不能超过100个字符");
         RuleFor(x => x.CsharpDataType)
             .NotEmpty().WithMessage("C#类型不能为空")
             .MaximumLength(100).WithMessage("C#类型长度不能超过100个字符");

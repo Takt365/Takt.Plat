@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Routine.NewsCenter
 // 文件名称：TaktNewsCommentLikesController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-27
 // 创建人：Takt365(Cursor AI)
 // 功能描述：新闻中心评论点赞记录控制器
 // 
@@ -41,7 +41,7 @@ public class TaktNewsCommentLikesController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("routine:newscenter:newscommentlike:list", "新闻中心评论点赞记录列表")]
+    [TaktPermission("routine:news:center:comment:list", "新闻中心评论点赞记录列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetNewsCommentLikeListAsync([FromQuery] TaktNewsCommentLikeQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktNewsCommentLikesController : TaktControllerBase
     /// </summary>
     /// <param name="id">新闻中心评论点赞记录ID</param>
     /// <returns>新闻中心评论点赞记录DTO</returns>
-    [TaktPermission("routine:newscenter:newscommentlike:query", "新闻中心评论点赞记录详情")]
+    [TaktPermission("routine:news:center:comment:query", "新闻中心评论点赞记录详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetNewsCommentLikeByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktNewsCommentLikesController : TaktControllerBase
     /// 获取新闻评论点赞记录选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("routine:newscenter:newscommentlike:query", "新闻中心评论点赞记录选项")]
+    [TaktPermission("routine:news:center:comment:query", "新闻中心评论点赞记录选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetNewsCommentLikeOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktNewsCommentLikesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>新闻中心评论点赞记录DTO</returns>
-    [TaktPermission("routine:newscenter:newscommentlike:create", "创建新闻中心评论点赞记录")]
+    [TaktPermission("routine:news:center:comment:create", "创建新闻中心评论点赞记录")]
     [HttpPost]
     public async Task<IActionResult> CreateNewsCommentLikeAsync([FromBody] TaktNewsCommentLikeCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktNewsCommentLikesController : TaktControllerBase
     /// <param name="id">新闻中心评论点赞记录ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>新闻中心评论点赞记录DTO</returns>
-    [TaktPermission("routine:newscenter:newscommentlike:update", "更新新闻中心评论点赞记录")]
+    [TaktPermission("routine:news:center:comment:update", "更新新闻中心评论点赞记录")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateNewsCommentLikeAsync(long id, [FromBody] TaktNewsCommentLikeUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktNewsCommentLikesController : TaktControllerBase
     /// </summary>
     /// <param name="id">新闻中心评论点赞记录ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("routine:newscenter:newscommentlike:delete", "删除新闻中心评论点赞记录")]
+    [TaktPermission("routine:news:center:comment:delete", "删除新闻中心评论点赞记录")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteNewsCommentLikeByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktNewsCommentLikesController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("routine:newscenter:newscommentlike:delete", "批量删除新闻中心评论点赞记录")]
+    [TaktPermission("routine:news:center:comment:delete", "批量删除新闻中心评论点赞记录")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteNewsCommentLikeBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktNewsCommentLikesController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("routine:newscenter:newscommentlike:import", "获取新闻中心评论点赞记录导入模板")]
+    [TaktPermission("routine:news:center:comment:import", "获取新闻中心评论点赞记录导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetNewsCommentLikeTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -204,7 +204,7 @@ public class TaktNewsCommentLikesController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("routine:newscenter:newscommentlike:import", "导入新闻中心评论点赞记录")]
+    [TaktPermission("routine:news:center:comment:import", "导入新闻中心评论点赞记录")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportNewsCommentLikeAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -234,7 +234,7 @@ public class TaktNewsCommentLikesController : TaktControllerBase
     /// 导出新闻中心评论点赞记录
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("routine:newscenter:newscommentlike:export", "导出新闻中心评论点赞记录")]
+    [TaktPermission("routine:news:center:comment:export", "导出新闻中心评论点赞记录")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportNewsCommentLikeAsync([FromQuery] TaktNewsCommentLikeQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

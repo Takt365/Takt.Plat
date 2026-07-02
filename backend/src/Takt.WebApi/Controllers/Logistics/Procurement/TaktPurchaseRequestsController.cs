@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Procurement
 // 文件名称：TaktPurchaseRequestsController.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-24
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购申请控制器
 // 
@@ -13,6 +13,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Takt.Application.Dtos.Logistics.Procurement;
 using Takt.Application.Services.Logistics.Procurement;
+using Takt.Application.Services.Logistics.Procurement.Chain;
 using Takt.Shared.Constants;
 
 namespace Takt.WebApi.Controllers.Logistics.Procurement;
@@ -26,14 +27,19 @@ namespace Takt.WebApi.Controllers.Logistics.Procurement;
 public class TaktPurchaseRequestsController : TaktControllerBase
 {
     private readonly ITaktPurchaseRequestService _purchaseRequestService;
+    private readonly ITaktProcurementChainOrchestrator _procurementChainOrchestrator;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="purchaseRequestService">采购申请服务</param>
-    public TaktPurchaseRequestsController(ITaktPurchaseRequestService purchaseRequestService)
+    /// <param name="procurementChainOrchestrator">采购全链路编排</param>
+    public TaktPurchaseRequestsController(
+        ITaktPurchaseRequestService purchaseRequestService,
+        ITaktProcurementChainOrchestrator procurementChainOrchestrator)
     {
         _purchaseRequestService = purchaseRequestService;
+        _procurementChainOrchestrator = procurementChainOrchestrator;
     }
 
     /// <summary>
@@ -243,6 +249,47 @@ public class TaktPurchaseRequestsController : TaktControllerBase
                 FailCount = fail,
                 Errors = errors
             }, $"导入完成：成功{success}条，失败{fail}条");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 提交采购申请会签审批
+    /// </summary>
+    /// <param name="id">采购申请主键</param>
+    /// <returns>操作结果</returns>
+    [TaktPermission("logistics:procurement:purchase:request:update", "提交采购申请会签")]
+    [HttpPost("{id}/submit-countersign")]
+    public async Task<IActionResult> SubmitPurchaseRequestCountersignAsync(long id)
+    {
+        try
+        {
+            await _procurementChainOrchestrator.SubmitPurchaseRequestForCountersignAsync(id);
+            return Success<object?>(null, "提交成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 方案一：PR 会签通过后 PO 生成决策
+    /// </summary>
+    /// <param name="id">采购申请主键</param>
+    /// <param name="generatePo">true=生成 PO；false=暂不生成 PO 直接报销</param>
+    /// <returns>操作结果</returns>
+    [TaktPermission("logistics:procurement:purchase:request:update", "采购申请PO决策")]
+    [HttpPost("{id}/po-decision")]
+    public async Task<IActionResult> ApplyPurchaseRequestPoDecisionAsync(long id, [FromQuery] bool generatePo)
+    {
+        try
+        {
+            await _procurementChainOrchestrator.ApplyPurchaseRequestPoDecisionAsync(id, generatePo);
+            return Success<object?>(null, "操作成功");
         }
         catch (Exception ex)
         {

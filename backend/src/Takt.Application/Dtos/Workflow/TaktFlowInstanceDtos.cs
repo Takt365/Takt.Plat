@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Workflow
 // 文件名称：TaktFlowInstanceDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：FlowInstance 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktFlowInstance 生成，请按需审阅）
 // 
@@ -42,7 +42,7 @@ public class TaktFlowInstanceDto : TaktCompanyDtoBase
     public string InstanceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 流程定义 ID（TaktFlowScheme 主键）
+    /// 流程定义 ID（TaktFlowScheme Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ProcessDefinitionId { get; set; }
@@ -70,22 +70,17 @@ public class TaktFlowInstanceDto : TaktCompanyDtoBase
     /// <summary>
     /// 申请标题
     /// </summary>
-    public string ProcessTitle { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 实例状态
-    /// </summary>
-    public TaktFlowInstanceStatus InstanceStatus { get; set; }
+    public string? ProcessTitle { get; set; } = string.Empty;
 
     /// <summary>
     /// 当前节点 ID（设计器 nodeId）
     /// </summary>
-    public string CurrentActivityId { get; set; } = string.Empty;
+    public string? CurrentActivityId { get; set; } = string.Empty;
 
     /// <summary>
     /// 当前节点名称
     /// </summary>
-    public string CurrentActivityName { get; set; } = string.Empty;
+    public string? CurrentActivityName { get; set; } = string.Empty;
 
     /// <summary>
     /// 发起人 ID
@@ -96,12 +91,12 @@ public class TaktFlowInstanceDto : TaktCompanyDtoBase
     /// <summary>
     /// 发起人姓名
     /// </summary>
-    public string StartUserName { get; set; } = string.Empty;
+    public string? StartUserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 开始时间
     /// </summary>
-    public DateTime StartTime { get; set; }
+    public DateTime? StartTime { get; set; }
 
     /// <summary>
     /// 结束时间
@@ -117,12 +112,12 @@ public class TaktFlowInstanceDto : TaktCompanyDtoBase
     /// <summary>
     /// 业务主键（关联业务单据 Id 等）
     /// </summary>
-    public string BusinessKey { get; set; } = string.Empty;
+    public string? BusinessKey { get; set; } = string.Empty;
 
     /// <summary>
     /// 业务类型（由业务模块约定，用于回写）
     /// </summary>
-    public string BusinessType { get; set; } = string.Empty;
+    public string? BusinessType { get; set; } = string.Empty;
 
     /// <summary>
     /// 父流程实例 ID（子流程场景）
@@ -141,15 +136,15 @@ public class TaktFlowInstanceDto : TaktCompanyDtoBase
     public string? DeleteReason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 表单数据 JSON（前端 frmData；细粒度字段可同步至 TaktFlowVariable 变量表）
+    /// 表单数据 JSON（前端 frmData；细粒度字段可同步至 TaktFlowVariable）
     /// </summary>
-    public string FrmData { get; set; } = string.Empty;
+    public string? FrmData { get; set; } = string.Empty;
 
     /// <summary>
     /// 关联表单 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long FormId { get; set; }
+    public long? FormId { get; set; }
 
     /// <summary>
     /// 关联表单 名称（填充字段）
@@ -159,12 +154,17 @@ public class TaktFlowInstanceDto : TaktCompanyDtoBase
     /// <summary>
     /// 关联表单编码
     /// </summary>
-    public string FormCode { get; set; } = string.Empty;
+    public string? FormCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 流程设计快照（启动时复制，避免定义变更影响在途实例）
     /// </summary>
-    public string ProcessContentSnapshot { get; set; } = string.Empty;
+    public string? ProcessContentSnapshot { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 实例状态
+    /// </summary>
+    public TaktFlowInstanceStatus InstanceStatus { get; set; }
 
     /// <summary>
     /// 流程定义
@@ -224,7 +224,7 @@ public class TaktFlowInstanceQueryDto : TaktPagedQuery
     public string? InstanceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 流程定义 ID（TaktFlowScheme 主键）
+    /// 流程定义 ID（TaktFlowScheme Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ProcessDefinitionId { get; set; }
@@ -247,22 +247,17 @@ public class TaktFlowInstanceQueryDto : TaktPagedQuery
     /// <summary>
     /// 申请标题
     /// </summary>
-    public string ProcessTitle { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 实例状态
-    /// </summary>
-    public TaktFlowInstanceStatus? InstanceStatus { get; set; }
+    public string? ProcessTitle { get; set; } = string.Empty;
 
     /// <summary>
     /// 当前节点 ID（设计器 nodeId）
     /// </summary>
-    public string CurrentActivityId { get; set; } = string.Empty;
+    public string? CurrentActivityId { get; set; } = string.Empty;
 
     /// <summary>
     /// 当前节点名称
     /// </summary>
-    public string CurrentActivityName { get; set; } = string.Empty;
+    public string? CurrentActivityName { get; set; } = string.Empty;
 
     /// <summary>
     /// 发起人 ID
@@ -273,7 +268,7 @@ public class TaktFlowInstanceQueryDto : TaktPagedQuery
     /// <summary>
     /// 发起人姓名
     /// </summary>
-    public string StartUserName { get; set; } = string.Empty;
+    public string? StartUserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 开始时间（范围查询-开始）
@@ -304,12 +299,12 @@ public class TaktFlowInstanceQueryDto : TaktPagedQuery
     /// <summary>
     /// 业务主键（关联业务单据 Id 等）
     /// </summary>
-    public string BusinessKey { get; set; } = string.Empty;
+    public string? BusinessKey { get; set; } = string.Empty;
 
     /// <summary>
     /// 业务类型（由业务模块约定，用于回写）
     /// </summary>
-    public string BusinessType { get; set; } = string.Empty;
+    public string? BusinessType { get; set; } = string.Empty;
 
     /// <summary>
     /// 父流程实例 ID（子流程场景）
@@ -323,25 +318,30 @@ public class TaktFlowInstanceQueryDto : TaktPagedQuery
     public string? DeleteReason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 表单数据 JSON（前端 frmData；细粒度字段可同步至 TaktFlowVariable 变量表）
+    /// 表单数据 JSON（前端 frmData；细粒度字段可同步至 TaktFlowVariable）
     /// </summary>
-    public string FrmData { get; set; } = string.Empty;
+    public string? FrmData { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联表单 ID（筛选条件，可选）
+    /// 关联表单 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? FormId { get; set; }
 
     /// <summary>
-    /// 关联表单编码（筛选条件，可选）
+    /// 关联表单编码
     /// </summary>
-    public string? FormCode { get; set; }
+    public string? FormCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 流程设计快照（启动时复制，避免定义变更影响在途实例）
     /// </summary>
-    public string ProcessContentSnapshot { get; set; } = string.Empty;
+    public string? ProcessContentSnapshot { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 实例状态
+    /// </summary>
+    public TaktFlowInstanceStatus? InstanceStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -384,7 +384,7 @@ public class TaktFlowInstanceCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -395,7 +395,7 @@ public class TaktFlowInstanceCreateDto
     public string InstanceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 流程定义 ID（TaktFlowScheme 主键）
+    /// 流程定义 ID（TaktFlowScheme Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ProcessDefinitionId { get; set; }
@@ -420,22 +420,17 @@ public class TaktFlowInstanceCreateDto
     /// <summary>
     /// 申请标题
     /// </summary>
-    public string ProcessTitle { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 实例状态
-    /// </summary>
-    public TaktFlowInstanceStatus InstanceStatus { get; set; }
+    public string? ProcessTitle { get; set; } = string.Empty;
 
     /// <summary>
     /// 当前节点 ID（设计器 nodeId）
     /// </summary>
-    public string CurrentActivityId { get; set; } = string.Empty;
+    public string? CurrentActivityId { get; set; } = string.Empty;
 
     /// <summary>
     /// 当前节点名称
     /// </summary>
-    public string CurrentActivityName { get; set; } = string.Empty;
+    public string? CurrentActivityName { get; set; } = string.Empty;
 
     /// <summary>
     /// 发起人 ID
@@ -446,12 +441,12 @@ public class TaktFlowInstanceCreateDto
     /// <summary>
     /// 发起人姓名
     /// </summary>
-    public string StartUserName { get; set; } = string.Empty;
+    public string? StartUserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 开始时间
     /// </summary>
-    public DateTime StartTime { get; set; }
+    public DateTime? StartTime { get; set; }
 
     /// <summary>
     /// 结束时间
@@ -467,12 +462,12 @@ public class TaktFlowInstanceCreateDto
     /// <summary>
     /// 业务主键（关联业务单据 Id 等）
     /// </summary>
-    public string BusinessKey { get; set; } = string.Empty;
+    public string? BusinessKey { get; set; } = string.Empty;
 
     /// <summary>
     /// 业务类型（由业务模块约定，用于回写）
     /// </summary>
-    public string BusinessType { get; set; } = string.Empty;
+    public string? BusinessType { get; set; } = string.Empty;
 
     /// <summary>
     /// 父流程实例 ID（子流程场景）
@@ -486,25 +481,30 @@ public class TaktFlowInstanceCreateDto
     public string? DeleteReason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 表单数据 JSON（前端 frmData；细粒度字段可同步至 TaktFlowVariable 变量表）
+    /// 表单数据 JSON（前端 frmData；细粒度字段可同步至 TaktFlowVariable）
     /// </summary>
-    public string FrmData { get; set; } = string.Empty;
+    public string? FrmData { get; set; } = string.Empty;
 
     /// <summary>
     /// 关联表单 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long FormId { get; set; }
+    public long? FormId { get; set; }
 
     /// <summary>
     /// 关联表单编码
     /// </summary>
-    public string FormCode { get; set; } = string.Empty;
+    public string? FormCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 流程设计快照（启动时复制，避免定义变更影响在途实例）
     /// </summary>
-    public string ProcessContentSnapshot { get; set; } = string.Empty;
+    public string? ProcessContentSnapshot { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 实例状态
+    /// </summary>
+    public TaktFlowInstanceStatus InstanceStatus { get; set; }
 
     /// <summary>
     /// 待办任务（子表，级联保存）
@@ -607,7 +607,7 @@ public class TaktFlowInstanceTemplateDto
     public string? InstanceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 流程定义 ID（TaktFlowScheme 主键）
+    /// 流程定义 ID（TaktFlowScheme Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ProcessDefinitionId { get; set; }
@@ -630,22 +630,17 @@ public class TaktFlowInstanceTemplateDto
     /// <summary>
     /// 申请标题
     /// </summary>
-    public string ProcessTitle { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 实例状态
-    /// </summary>
-    public TaktFlowInstanceStatus? InstanceStatus { get; set; }
+    public string? ProcessTitle { get; set; } = string.Empty;
 
     /// <summary>
     /// 当前节点 ID（设计器 nodeId）
     /// </summary>
-    public string CurrentActivityId { get; set; } = string.Empty;
+    public string? CurrentActivityId { get; set; } = string.Empty;
 
     /// <summary>
     /// 当前节点名称
     /// </summary>
-    public string CurrentActivityName { get; set; } = string.Empty;
+    public string? CurrentActivityName { get; set; } = string.Empty;
 
     /// <summary>
     /// 发起人 ID
@@ -656,13 +651,90 @@ public class TaktFlowInstanceTemplateDto
     /// <summary>
     /// 发起人姓名
     /// </summary>
-    public string StartUserName { get; set; } = string.Empty;
+    public string? StartUserName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 开始时间
+    /// </summary>
+    public DateTime? StartTime { get; set; }
+
+    /// <summary>
+    /// 结束时间
+    /// </summary>
+    public DateTime? EndTime { get; set; }
 
     /// <summary>
     /// 历时毫秒
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DurationMs { get; set; }
+
+    /// <summary>
+    /// 业务主键（关联业务单据 Id 等）
+    /// </summary>
+    public string? BusinessKey { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 业务类型（由业务模块约定，用于回写）
+    /// </summary>
+    public string? BusinessType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 父流程实例 ID（子流程场景）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? SuperInstanceId { get; set; }
+
+    /// <summary>
+    /// 终止原因
+    /// </summary>
+    public string? DeleteReason { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 表单数据 JSON（前端 frmData；细粒度字段可同步至 TaktFlowVariable）
+    /// </summary>
+    public string? FrmData { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 关联表单 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? FormId { get; set; }
+
+    /// <summary>
+    /// 关联表单编码
+    /// </summary>
+    public string? FormCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 流程设计快照（启动时复制，避免定义变更影响在途实例）
+    /// </summary>
+    public string? ProcessContentSnapshot { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 实例状态
+    /// </summary>
+    public TaktFlowInstanceStatus? InstanceStatus { get; set; }
+
+    /// <summary>
+    /// 待办任务（子表，级联保存）
+    /// </summary>
+    public List<TaktFlowTaskCreateDto>? Tasks { get; set; }
+
+    /// <summary>
+    /// 流转历史（子表，级联保存）
+    /// </summary>
+    public List<TaktFlowTransitionCreateDto>? HistoricActivities { get; set; }
+
+    /// <summary>
+    /// 流程变量（子表，级联保存）
+    /// </summary>
+    public List<TaktFlowVariableCreateDto>? Variables { get; set; }
+
+    /// <summary>
+    /// 加签记录（子表，级联保存）
+    /// </summary>
+    public List<TaktFlowAddSignCreateDto>? AddSigns { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -692,7 +764,7 @@ public class TaktFlowInstanceImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -702,7 +774,7 @@ public class TaktFlowInstanceImportDto
     public string? InstanceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 流程定义 ID（TaktFlowScheme 主键）
+    /// 流程定义 ID（TaktFlowScheme Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ProcessDefinitionId { get; set; }
@@ -725,22 +797,17 @@ public class TaktFlowInstanceImportDto
     /// <summary>
     /// 申请标题
     /// </summary>
-    public string ProcessTitle { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 实例状态
-    /// </summary>
-    public TaktFlowInstanceStatus? InstanceStatus { get; set; }
+    public string? ProcessTitle { get; set; } = string.Empty;
 
     /// <summary>
     /// 当前节点 ID（设计器 nodeId）
     /// </summary>
-    public string CurrentActivityId { get; set; } = string.Empty;
+    public string? CurrentActivityId { get; set; } = string.Empty;
 
     /// <summary>
     /// 当前节点名称
     /// </summary>
-    public string CurrentActivityName { get; set; } = string.Empty;
+    public string? CurrentActivityName { get; set; } = string.Empty;
 
     /// <summary>
     /// 发起人 ID
@@ -751,13 +818,90 @@ public class TaktFlowInstanceImportDto
     /// <summary>
     /// 发起人姓名
     /// </summary>
-    public string StartUserName { get; set; } = string.Empty;
+    public string? StartUserName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 开始时间
+    /// </summary>
+    public DateTime? StartTime { get; set; }
+
+    /// <summary>
+    /// 结束时间
+    /// </summary>
+    public DateTime? EndTime { get; set; }
 
     /// <summary>
     /// 历时毫秒
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DurationMs { get; set; }
+
+    /// <summary>
+    /// 业务主键（关联业务单据 Id 等）
+    /// </summary>
+    public string? BusinessKey { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 业务类型（由业务模块约定，用于回写）
+    /// </summary>
+    public string? BusinessType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 父流程实例 ID（子流程场景）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? SuperInstanceId { get; set; }
+
+    /// <summary>
+    /// 终止原因
+    /// </summary>
+    public string? DeleteReason { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 表单数据 JSON（前端 frmData；细粒度字段可同步至 TaktFlowVariable）
+    /// </summary>
+    public string? FrmData { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 关联表单 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? FormId { get; set; }
+
+    /// <summary>
+    /// 关联表单编码
+    /// </summary>
+    public string? FormCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 流程设计快照（启动时复制，避免定义变更影响在途实例）
+    /// </summary>
+    public string? ProcessContentSnapshot { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 实例状态
+    /// </summary>
+    public TaktFlowInstanceStatus? InstanceStatus { get; set; }
+
+    /// <summary>
+    /// 待办任务（子表，级联保存）
+    /// </summary>
+    public List<TaktFlowTaskCreateDto>? Tasks { get; set; }
+
+    /// <summary>
+    /// 流转历史（子表，级联保存）
+    /// </summary>
+    public List<TaktFlowTransitionCreateDto>? HistoricActivities { get; set; }
+
+    /// <summary>
+    /// 流程变量（子表，级联保存）
+    /// </summary>
+    public List<TaktFlowVariableCreateDto>? Variables { get; set; }
+
+    /// <summary>
+    /// 加签记录（子表，级联保存）
+    /// </summary>
+    public List<TaktFlowAddSignCreateDto>? AddSigns { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -798,7 +942,7 @@ public class TaktFlowInstanceExportDto
     public string InstanceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 流程定义 ID（TaktFlowScheme 主键）
+    /// 流程定义 ID（TaktFlowScheme Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ProcessDefinitionId { get; set; }
@@ -821,22 +965,17 @@ public class TaktFlowInstanceExportDto
     /// <summary>
     /// 申请标题
     /// </summary>
-    public string ProcessTitle { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 实例状态
-    /// </summary>
-    public TaktFlowInstanceStatus InstanceStatus { get; set; }
+    public string? ProcessTitle { get; set; } = string.Empty;
 
     /// <summary>
     /// 当前节点 ID（设计器 nodeId）
     /// </summary>
-    public string CurrentActivityId { get; set; } = string.Empty;
+    public string? CurrentActivityId { get; set; } = string.Empty;
 
     /// <summary>
     /// 当前节点名称
     /// </summary>
-    public string CurrentActivityName { get; set; } = string.Empty;
+    public string? CurrentActivityName { get; set; } = string.Empty;
 
     /// <summary>
     /// 发起人 ID
@@ -847,12 +986,12 @@ public class TaktFlowInstanceExportDto
     /// <summary>
     /// 发起人姓名
     /// </summary>
-    public string StartUserName { get; set; } = string.Empty;
+    public string? StartUserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 开始时间
     /// </summary>
-    public DateTime StartTime { get; set; }
+    public DateTime? StartTime { get; set; }
 
     /// <summary>
     /// 结束时间
@@ -868,12 +1007,12 @@ public class TaktFlowInstanceExportDto
     /// <summary>
     /// 业务主键（关联业务单据 Id 等）
     /// </summary>
-    public string BusinessKey { get; set; } = string.Empty;
+    public string? BusinessKey { get; set; } = string.Empty;
 
     /// <summary>
     /// 业务类型（由业务模块约定，用于回写）
     /// </summary>
-    public string BusinessType { get; set; } = string.Empty;
+    public string? BusinessType { get; set; } = string.Empty;
 
     /// <summary>
     /// 父流程实例 ID（子流程场景）
@@ -887,25 +1026,30 @@ public class TaktFlowInstanceExportDto
     public string? DeleteReason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 表单数据 JSON（前端 frmData；细粒度字段可同步至 TaktFlowVariable 变量表）
+    /// 表单数据 JSON（前端 frmData；细粒度字段可同步至 TaktFlowVariable）
     /// </summary>
-    public string FrmData { get; set; } = string.Empty;
+    public string? FrmData { get; set; } = string.Empty;
 
     /// <summary>
     /// 关联表单 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long FormId { get; set; }
+    public long? FormId { get; set; }
 
     /// <summary>
     /// 关联表单编码
     /// </summary>
-    public string FormCode { get; set; } = string.Empty;
+    public string? FormCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 流程设计快照（启动时复制，避免定义变更影响在途实例）
     /// </summary>
-    public string ProcessContentSnapshot { get; set; } = string.Empty;
+    public string? ProcessContentSnapshot { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 实例状态
+    /// </summary>
+    public TaktFlowInstanceStatus InstanceStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON

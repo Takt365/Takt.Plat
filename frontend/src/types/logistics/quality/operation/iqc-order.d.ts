@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/quality/operation
 // 文件名称：iqc-order.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/operation 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,12 +29,12 @@ export interface IqcOrder extends CompanyDtoBase {
   iqcOrderId: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
   /**
-   * 来源单号（采购订单编码）
+   * 来源单号（选项 TaktPurchaseOrders/options，DictValue=PurchaseOrderCode）
    */
   sourceCode: string;
 
@@ -49,7 +49,7 @@ export interface IqcOrder extends CompanyDtoBase {
   iqcOrderCode: string;
 
   /**
-   * 供应商编码
+   * 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
    */
   supplierCode: string;
 
@@ -79,11 +79,6 @@ export interface IqcOrder extends CompanyDtoBase {
   totalInspectionReturnQuantity: number;
 
   /**
-   * 判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）
-   */
-  judgeStatus: number;
-
-  /**
    * 判定人（人员代码）
    */
   judgeBy?: string;
@@ -97,6 +92,11 @@ export interface IqcOrder extends CompanyDtoBase {
    * 判定说明
    */
   judgeDescription?: string;
+
+  /**
+   * 判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）
+   */
+  judgeStatus: number;
 
   /**
    * IQC检验单明细列表（主子表关系） （子表：TaktIqcOrderItem）
@@ -129,12 +129,12 @@ export interface IqcOrderQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
   /**
-   * 来源单号（采购订单编码）
+   * 来源单号（选项 TaktPurchaseOrders/options，DictValue=PurchaseOrderCode）
    */
   sourceCode?: string;
 
@@ -154,7 +154,7 @@ export interface IqcOrderQuery extends TaktPagedQuery {
   iqcOrderCode?: string;
 
   /**
-   * 供应商编码
+   * 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
    */
   supplierCode?: string;
 
@@ -184,11 +184,6 @@ export interface IqcOrderQuery extends TaktPagedQuery {
   totalInspectionReturnQuantity?: number;
 
   /**
-   * 判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）
-   */
-  judgeStatus?: number;
-
-  /**
    * 判定人（人员代码）
    */
   judgeBy?: string;
@@ -209,6 +204,11 @@ export interface IqcOrderQuery extends TaktPagedQuery {
   judgeDescription?: string;
 
   /**
+   * 判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）
+   */
+  judgeStatus?: number;
+
+  /**
    * 创建时间（范围查询-开始）
    */
   createdAtStart?: string;
@@ -221,7 +221,7 @@ export interface IqcOrderQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -248,17 +248,17 @@ export interface IqcOrderCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
   /**
-   * 来源单号（采购订单编码）
+   * 来源单号（选项 TaktPurchaseOrders/options，DictValue=PurchaseOrderCode）
    */
   sourceCode: string;
 
@@ -273,7 +273,7 @@ export interface IqcOrderCreate {
   iqcOrderCode: string;
 
   /**
-   * 供应商编码
+   * 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
    */
   supplierCode: string;
 
@@ -303,11 +303,6 @@ export interface IqcOrderCreate {
   totalInspectionReturnQuantity: number;
 
   /**
-   * 判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）
-   */
-  judgeStatus: number;
-
-  /**
    * 判定人（人员代码）
    */
   judgeBy?: string;
@@ -323,6 +318,11 @@ export interface IqcOrderCreate {
   judgeDescription?: string;
 
   /**
+   * 判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）
+   */
+  judgeStatus: number;
+
+  /**
    * IQC检验单明细列表（主子表关系）（子表，级联保存）
    */
   items?: IqcOrderItemCreate[];
@@ -335,7 +335,7 @@ export interface IqcOrderCreate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -396,14 +396,19 @@ export interface IqcOrderTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
   /**
-   * 来源单号（采购订单编码）
+   * 来源单号（选项 TaktPurchaseOrders/options，DictValue=PurchaseOrderCode）
    */
   sourceCode?: string;
+
+  /**
+   * 检验日期
+   */
+  inspectionDate?: string;
 
   /**
    * IQC检验单编码（唯一索引，根据来源单号自动生成）
@@ -411,9 +416,14 @@ export interface IqcOrderTemplate {
   iqcOrderCode?: string;
 
   /**
-   * 供应商编码
+   * 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
    */
   supplierCode?: string;
+
+  /**
+   * 进货总数
+   */
+  totalPurchaseQuantity?: number;
 
   /**
    * 总抽样数量（自动计算 = 各明细抽样数量合计）
@@ -431,9 +441,9 @@ export interface IqcOrderTemplate {
   totalUnqualifiedQuantity?: number;
 
   /**
-   * 判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）
+   * 总验退数量（自动计算 = 各明细验退数量合计）
    */
-  judgeStatus?: number;
+  totalInspectionReturnQuantity?: number;
 
   /**
    * 判定人（人员代码）
@@ -441,14 +451,34 @@ export interface IqcOrderTemplate {
   judgeBy?: string;
 
   /**
+   * 判定日期
+   */
+  judgeDate?: string;
+
+  /**
    * 判定说明
    */
   judgeDescription?: string;
 
   /**
+   * 判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）
+   */
+  judgeStatus?: number;
+
+  /**
+   * IQC检验单明细列表（主子表关系）（子表，级联保存）
+   */
+  items?: IqcOrderItemCreate[];
+
+  /**
+   * 变更日志列表（主子表关系）（子表，级联保存）
+   */
+  changeLogs?: IqcOrderChangeLogCreate[];
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -475,19 +505,24 @@ export interface IqcOrderImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
   /**
-   * 来源单号（采购订单编码）
+   * 来源单号（选项 TaktPurchaseOrders/options，DictValue=PurchaseOrderCode）
    */
   sourceCode?: string;
+
+  /**
+   * 检验日期
+   */
+  inspectionDate?: string;
 
   /**
    * IQC检验单编码（唯一索引，根据来源单号自动生成）
@@ -495,9 +530,14 @@ export interface IqcOrderImport {
   iqcOrderCode?: string;
 
   /**
-   * 供应商编码
+   * 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
    */
   supplierCode?: string;
+
+  /**
+   * 进货总数
+   */
+  totalPurchaseQuantity?: number;
 
   /**
    * 总抽样数量（自动计算 = 各明细抽样数量合计）
@@ -515,9 +555,9 @@ export interface IqcOrderImport {
   totalUnqualifiedQuantity?: number;
 
   /**
-   * 判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）
+   * 总验退数量（自动计算 = 各明细验退数量合计）
    */
-  judgeStatus?: number;
+  totalInspectionReturnQuantity?: number;
 
   /**
    * 判定人（人员代码）
@@ -525,14 +565,34 @@ export interface IqcOrderImport {
   judgeBy?: string;
 
   /**
+   * 判定日期
+   */
+  judgeDate?: string;
+
+  /**
    * 判定说明
    */
   judgeDescription?: string;
 
   /**
+   * 判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）
+   */
+  judgeStatus?: number;
+
+  /**
+   * IQC检验单明细列表（主子表关系）（子表，级联保存）
+   */
+  items?: IqcOrderItemCreate[];
+
+  /**
+   * 变更日志列表（主子表关系）（子表，级联保存）
+   */
+  changeLogs?: IqcOrderChangeLogCreate[];
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -559,12 +619,12 @@ export interface IqcOrderExport {
   companyCode: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
   /**
-   * 来源单号（采购订单编码）
+   * 来源单号（选项 TaktPurchaseOrders/options，DictValue=PurchaseOrderCode）
    */
   sourceCode: string;
 
@@ -579,7 +639,7 @@ export interface IqcOrderExport {
   iqcOrderCode: string;
 
   /**
-   * 供应商编码
+   * 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
    */
   supplierCode: string;
 
@@ -609,11 +669,6 @@ export interface IqcOrderExport {
   totalInspectionReturnQuantity: number;
 
   /**
-   * 判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）
-   */
-  judgeStatus: number;
-
-  /**
    * 判定人（人员代码）
    */
   judgeBy?: string;
@@ -629,9 +684,14 @@ export interface IqcOrderExport {
   judgeDescription?: string;
 
   /**
+   * 判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）
+   */
+  judgeStatus: number;
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注

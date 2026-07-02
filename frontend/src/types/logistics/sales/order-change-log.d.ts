@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/sales
 // 文件名称：order-change-log.d.ts
-// 创建时间：2026-06-20
+// 创建时间：2026-07-01
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,12 +29,12 @@ export interface SalesOrderChangeLog extends CompanyDtoBase {
   salesOrderChangeLogId: string;
 
   /**
-   * 销售订单ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 销售订单（关联 TaktSalesOrder.Id，选项 TaktSalesOrders/options）
    */
   salesOrderId: string;
 
   /**
-   * 销售订单名称（填充字段）
+   * 销售订单（关联 TaktSalesOrder.Id，选项 TaktSalesOrders/options）
    */
   salesOrderName?: string;
 
@@ -89,7 +89,7 @@ export interface SalesOrderChangeLogQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 销售订单ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 销售订单（关联 TaktSalesOrder.Id，选项 TaktSalesOrders/options）
    */
   salesOrderId?: string;
 
@@ -163,12 +163,12 @@ export interface SalesOrderChangeLogCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
   /**
-   * 销售订单ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 销售订单（关联 TaktSalesOrder.Id，选项 TaktSalesOrders/options）
    */
   salesOrderId: string;
 
@@ -242,7 +242,7 @@ export interface SalesOrderChangeLogExport {
   companyCode: string;
 
   /**
-   * 销售订单ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 销售订单（关联 TaktSalesOrder.Id，选项 TaktSalesOrders/options）
    */
   salesOrderId: string;
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Statistics.Report
 // 文件名称：TaktConfigurableFieldValidators.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ConfigurableField 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktConfigurableField 生成，请按需审阅）
 // 
@@ -46,8 +46,6 @@ public class TaktConfigurableFieldCreateValidator : AbstractValidator<TaktConfig
         RuleFor(x => x.DisplayName)
             .NotEmpty().WithMessage("显示名称不能为空")
             .MaximumLength(100).WithMessage("显示名称长度不能超过100个字符");
-        RuleFor(x => x.OutputAlias)
-            .MaximumLength(128).WithMessage("输出别名长度不能超过128个字符");
         RuleFor(x => x.SortOrder)
             .GreaterThanOrEqualTo(0).WithMessage("排序号不能为负数");
         RuleFor(x => x.ExtField)
@@ -73,6 +71,29 @@ public class TaktConfigurableFieldUpdateValidator : AbstractValidator<TaktConfig
     {
         RuleFor(x => x.ConfigurableFieldId)
             .GreaterThan(0).WithMessage("ConfigurableFieldID无效");
+        RuleFor(x => x.TenantCode)
+            .NotEmpty().WithMessage("租户编码不能为空")
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.CompanyCode)
+            .NotEmpty().WithMessage("公司代码不能为空")
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.ConfigurableId)
+            .GreaterThanOrEqualTo(0).WithMessage("关联报表主表 ID不能为负数");
+        RuleFor(x => x.SourceAlias)
+            .NotEmpty().WithMessage("数据源别名不能为空")
+            .MaximumLength(10).WithMessage("数据源别名长度不能超过10个字符");
+        RuleFor(x => x.ColumnName)
+            .NotEmpty().WithMessage("列名不能为空")
+            .MaximumLength(128).WithMessage("列名长度不能超过128个字符");
+        RuleFor(x => x.DisplayName)
+            .NotEmpty().WithMessage("显示名称不能为空")
+            .MaximumLength(100).WithMessage("显示名称长度不能超过100个字符");
+        RuleFor(x => x.SortOrder)
+            .GreaterThanOrEqualTo(0).WithMessage("排序号不能为负数");
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
     }
 }
 
@@ -105,8 +126,6 @@ public class TaktConfigurableFieldImportValidator : AbstractValidator<TaktConfig
         RuleFor(x => x.DisplayName)
             .NotEmpty().WithMessage("显示名称不能为空")
             .MaximumLength(100).WithMessage("显示名称长度不能超过100个字符");
-        RuleFor(x => x.OutputAlias)
-            .MaximumLength(128).WithMessage("输出别名长度不能超过128个字符").When(x => !string.IsNullOrWhiteSpace(x.OutputAlias));
         RuleFor(x => x.SortOrder)
             .GreaterThanOrEqualTo(0).WithMessage("排序号不能为负数");
         RuleFor(x => x.ExtField)

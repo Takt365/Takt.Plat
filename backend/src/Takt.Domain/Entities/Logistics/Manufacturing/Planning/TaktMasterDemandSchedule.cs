@@ -25,7 +25,7 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Planning;
 public class TaktMasterDemandSchedule : TaktApprovalEntityBase
 {
     /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
@@ -55,7 +55,7 @@ public class TaktMasterDemandSchedule : TaktApprovalEntityBase
     public int BucketType { get; set; } = 1;
 
     /// <summary>
-    /// 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用，2=锁定）
     /// </summary>
     [SugarColumn(ColumnName = "schedule_status", ColumnDescription = "计划状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int ScheduleStatus { get; set; } = 1;

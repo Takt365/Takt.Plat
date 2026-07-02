@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Scheduling
 // 文件名称：TaktApsOperationI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktApsOperation 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -118,13 +118,13 @@ public class TaktApsOperationI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.apsoperation.linenumber", "zh-HK", "行号_hk", "行号（工序序号）"),
 
             // entity.apsoperation.routingitemid
-            new TranslationSeedItem("entity.apsoperation.routingitemid", "en-US", "工艺路线工序ID_us", "工艺路线工序 ID（关联 TaktRoutingItem）"),
+            new TranslationSeedItem("entity.apsoperation.routingitemid", "en-US", "工艺路线工序ID_us", "工艺路线工序 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）"),
             // entity.apsoperation.routingitemid
-            new TranslationSeedItem("entity.apsoperation.routingitemid", "ja-JP", "工艺路线工序ID_jp", "工艺路线工序 ID（关联 TaktRoutingItem）"),
+            new TranslationSeedItem("entity.apsoperation.routingitemid", "ja-JP", "工艺路线工序ID_jp", "工艺路线工序 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）"),
             // entity.apsoperation.routingitemid
-            new TranslationSeedItem("entity.apsoperation.routingitemid", "zh-CN", "工艺路线工序ID", "工艺路线工序 ID（关联 TaktRoutingItem）"),
+            new TranslationSeedItem("entity.apsoperation.routingitemid", "zh-CN", "工艺路线工序ID", "工艺路线工序 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）"),
             // entity.apsoperation.routingitemid
-            new TranslationSeedItem("entity.apsoperation.routingitemid", "zh-HK", "工艺路线工序ID_hk", "工艺路线工序 ID（关联 TaktRoutingItem）"),
+            new TranslationSeedItem("entity.apsoperation.routingitemid", "zh-HK", "工艺路线工序ID_hk", "工艺路线工序 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）"),
 
             // entity.apsoperation.processcode
             new TranslationSeedItem("entity.apsoperation.processcode", "en-US", "工序编码_us", "工序编码"),
@@ -145,22 +145,22 @@ public class TaktApsOperationI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.apsoperation.processname", "zh-HK", "工序名称_hk", "工序名称"),
 
             // entity.apsoperation.workcentercode
-            new TranslationSeedItem("entity.apsoperation.workcentercode", "en-US", "工作中心编码_us", "工作中心编码"),
+            new TranslationSeedItem("entity.apsoperation.workcentercode", "en-US", "工作中心编码_us", "工作中心编码（关联 TaktWorkCenter.WorkCenterCode，选项 TaktWorkCenters/options，DictValue=WorkCenterCode）"),
             // entity.apsoperation.workcentercode
-            new TranslationSeedItem("entity.apsoperation.workcentercode", "ja-JP", "工作中心编码_jp", "工作中心编码"),
+            new TranslationSeedItem("entity.apsoperation.workcentercode", "ja-JP", "工作中心编码_jp", "工作中心编码（关联 TaktWorkCenter.WorkCenterCode，选项 TaktWorkCenters/options，DictValue=WorkCenterCode）"),
             // entity.apsoperation.workcentercode
-            new TranslationSeedItem("entity.apsoperation.workcentercode", "zh-CN", "工作中心编码", "工作中心编码"),
+            new TranslationSeedItem("entity.apsoperation.workcentercode", "zh-CN", "工作中心编码", "工作中心编码（关联 TaktWorkCenter.WorkCenterCode，选项 TaktWorkCenters/options，DictValue=WorkCenterCode）"),
             // entity.apsoperation.workcentercode
-            new TranslationSeedItem("entity.apsoperation.workcentercode", "zh-HK", "工作中心编码_hk", "工作中心编码"),
+            new TranslationSeedItem("entity.apsoperation.workcentercode", "zh-HK", "工作中心编码_hk", "工作中心编码（关联 TaktWorkCenter.WorkCenterCode，选项 TaktWorkCenters/options，DictValue=WorkCenterCode）"),
 
             // entity.apsoperation.workcenterresourceid
-            new TranslationSeedItem("entity.apsoperation.workcenterresourceid", "en-US", "工作中心资源ID_us", "工作中心资源 ID（可选）"),
+            new TranslationSeedItem("entity.apsoperation.workcenterresourceid", "en-US", "工作中心资源ID_us", "工作中心资源 ID（关联 TaktWorkCenterResource.Id，选项 TaktWorkCenterResources/options）"),
             // entity.apsoperation.workcenterresourceid
-            new TranslationSeedItem("entity.apsoperation.workcenterresourceid", "ja-JP", "工作中心资源ID_jp", "工作中心资源 ID（可选）"),
+            new TranslationSeedItem("entity.apsoperation.workcenterresourceid", "ja-JP", "工作中心资源ID_jp", "工作中心资源 ID（关联 TaktWorkCenterResource.Id，选项 TaktWorkCenterResources/options）"),
             // entity.apsoperation.workcenterresourceid
-            new TranslationSeedItem("entity.apsoperation.workcenterresourceid", "zh-CN", "工作中心资源ID", "工作中心资源 ID（可选）"),
+            new TranslationSeedItem("entity.apsoperation.workcenterresourceid", "zh-CN", "工作中心资源ID", "工作中心资源 ID（关联 TaktWorkCenterResource.Id，选项 TaktWorkCenterResources/options）"),
             // entity.apsoperation.workcenterresourceid
-            new TranslationSeedItem("entity.apsoperation.workcenterresourceid", "zh-HK", "工作中心资源ID_hk", "工作中心资源 ID（可选）"),
+            new TranslationSeedItem("entity.apsoperation.workcenterresourceid", "zh-HK", "工作中心资源ID_hk", "工作中心资源 ID（关联 TaktWorkCenterResource.Id，选项 TaktWorkCenterResources/options）"),
 
             // entity.apsoperation.plannedstarttime
             new TranslationSeedItem("entity.apsoperation.plannedstarttime", "en-US", "计划开始时间_us", "计划开始时间"),

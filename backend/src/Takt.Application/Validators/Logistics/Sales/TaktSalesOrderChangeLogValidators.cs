@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Sales
 // 文件名称：TaktSalesOrderChangeLogValidators.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SalesOrderChangeLog 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktSalesOrderChangeLog 生成，请按需审阅）
 // 
@@ -36,16 +36,10 @@ public class TaktSalesOrderChangeLogCreateValidator : AbstractValidator<TaktSale
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.SalesOrderId)
-            .GreaterThanOrEqualTo(0).WithMessage("销售订单ID不能为负数");
+            .GreaterThanOrEqualTo(0).WithMessage("销售订单不能为负数");
         RuleFor(x => x.OrderCode)
             .NotEmpty().WithMessage("订单编码不能为空")
             .MaximumLength(50).WithMessage("订单编码长度不能超过50个字符");
-        RuleFor(x => x.ChangeFields)
-            .MaximumLength(4000).WithMessage("变更字段列表长度不能超过4000个字符");
-        RuleFor(x => x.ChangeBy)
-            .MaximumLength(50).WithMessage("变更人长度不能超过50个字符");
-        RuleFor(x => x.ChangeReason)
-            .MaximumLength(500).WithMessage("变更原因长度不能超过500个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -69,5 +63,20 @@ public class TaktSalesOrderChangeLogUpdateValidator : AbstractValidator<TaktSale
     {
         RuleFor(x => x.SalesOrderChangeLogId)
             .GreaterThan(0).WithMessage("SalesOrderChangeLogID无效");
+        RuleFor(x => x.TenantCode)
+            .NotEmpty().WithMessage("租户编码不能为空")
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.CompanyCode)
+            .NotEmpty().WithMessage("公司代码不能为空")
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.SalesOrderId)
+            .GreaterThanOrEqualTo(0).WithMessage("销售订单不能为负数");
+        RuleFor(x => x.OrderCode)
+            .NotEmpty().WithMessage("订单编码不能为空")
+            .MaximumLength(50).WithMessage("订单编码长度不能超过50个字符");
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
     }
 }

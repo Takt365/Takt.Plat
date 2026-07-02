@@ -100,7 +100,7 @@ public class TaktIsoCodeSeedData : ITaktSeedDataCoordinator
         var isoCode = await repository.FirstAsync(x =>
             x.TenantCode == tenantCode
             && x.IsoCodeCategory == seed.IsoCodeCategory
-            && x.Description == description);
+            && x.IsoCodeDescription == description);
 
         isoCode ??= await repository.FirstAsync(x =>
             x.TenantCode == tenantCode
@@ -118,7 +118,7 @@ public class TaktIsoCodeSeedData : ITaktSeedDataCoordinator
             isoCode = await repository.FirstAsync(x =>
                 x.TenantCode == tenantCode
                 && x.IsoCodeCategory == seed.IsoCodeCategory
-                && x.Description == relatedDescription);
+                && x.IsoCodeDescription == relatedDescription);
         }
 
         if (isoCode == null)
@@ -146,9 +146,9 @@ public class TaktIsoCodeSeedData : ITaktSeedDataCoordinator
         isoCode.IsoCode = seed.IsoCode;
         isoCode.IsoName = seed.IsoName;
         isoCode.SortOrder = seed.SortOrder;
-        isoCode.Description = description;
+        isoCode.IsoCodeDescription = description;
         isoCode.IsBuiltIn = 1;
-        isoCode.Status = 1;
+        isoCode.IsoCodeStatus = 1;
     }
 
     /// <summary>

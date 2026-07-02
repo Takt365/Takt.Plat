@@ -554,19 +554,19 @@ public class TaktGenWorkflowService : ITaktGenWorkflowService
         {
             var trimmed = targetBasePath.Trim();
             if (trimmed != "/")
-                return Path.GetFullPath(trimmed);
+                return ResolveGenPathDirectory(trimmed);
         }
         if (tableEntity.GenMethod == 2)
             return TaktFileHelper.GetSolutionRootPath(_genEngineOptions.ContentRootPath);
         if (tableEntity.GenMethod == 1
             && !string.IsNullOrWhiteSpace(tableEntity.GenPath)
             && tableEntity.GenPath.Trim() != "/")
-            return Path.GetFullPath(tableEntity.GenPath.Trim());
+            return ResolveGenPathDirectory(tableEntity.GenPath.Trim());
         return null;
     }
 
     /// <summary>
-    /// 解析代码落盘根路径：GenMethod=2 仓库根；GenMethod=1 取请求或表 GenPath。
+    /// 解析代码落盘根路径：GenMethod=2 仓库根；GenMethod=1 取请求或表 GenPath（字典 gen_path_type 的 DictValue）。
     /// </summary>
     private string ResolveGenerationBasePath(TaktGenTable table, string? genPathOverride, int genMethod)
     {
@@ -576,10 +576,24 @@ public class TaktGenWorkflowService : ITaktGenWorkflowService
         if (genMethod == 1)
         {
             if (string.IsNullOrWhiteSpace(genPath) || genPath.Trim() == "/")
-                throw new TaktBusinessException("自定义路径不能为空，请填写有效的目录。");
-            return Path.GetFullPath(genPath.Trim());
+                throw new TaktBusinessException("自定义路径不能为空，请选择有效的生成路径。");
+            return ResolveGenPathDirectory(genPath.Trim());
         }
         throw new TaktBusinessException($"不支持的生成方式 GenMethod={genMethod}。");
+    }
+
+    /// <summary>
+    /// 将 GenPath 字典值或目录路径解析为绝对路径；solution 令牌解析为 Solution 根目录。
+    /// </summary>
+    /// <param name="genPath">字典 gen_path_type 的 DictValue 或相对/绝对目录</param>
+    /// <returns>绝对路径</returns>
+    private string ResolveGenPathDirectory(string genPath)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(genPath);
+        var trimmed = genPath.Trim();
+        if (trimmed.Equals("solution", StringComparison.OrdinalIgnoreCase))
+            return TaktFileHelper.GetSolutionRootPath(_genEngineOptions.ContentRootPath);
+        return Path.GetFullPath(trimmed);
     }
 
     /// <summary>

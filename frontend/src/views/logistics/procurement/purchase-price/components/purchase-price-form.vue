@@ -116,6 +116,35 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
+                :label="t('entity.purchaseprice.purchaseinquiryid')"
+                name="purchaseInquiryId"
+              >
+                <a-input
+                  v-model:value="formState.purchaseInquiryId"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseprice.purchaseinquiryid') })"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.purchaseprice.purchaseinquirycode')"
+                name="purchaseInquiryCode"
+              >
+                <a-input
+                  v-model:value="formState.purchaseInquiryCode"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseprice.purchaseinquirycode') })"
+                  show-count
+                  :maxlength="40"
+                  allow-clear
+                  :disabled="!!formData?.purchasePriceId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
                 :label="t('entity.purchaseprice.pricetype')"
                 name="priceType"
               >
@@ -139,7 +168,17 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.purchaseprice.effectiveenddate')"
                 name="effectiveEndDate"
@@ -152,7 +191,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.purchaseprice.pricestatus')"
                 name="priceStatus"
@@ -164,16 +203,6 @@
                 />
               </a-form-item>
             </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
                 name="extField"
@@ -278,7 +307,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","purchasePriceCode","supplierCode","priceType","effectiveStartDate","effectiveEndDate","priceStatus","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","purchasePriceCode","supplierCode","purchaseInquiryId","purchaseInquiryCode","priceType","effectiveStartDate","effectiveEndDate","priceStatus","extField","remark"]
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
 
@@ -291,7 +320,54 @@ const purchasePriceItemTableRef = ref<{
 
 /** 子表 purchasePriceItem 可编辑列 */
 const purchasePriceItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
-,
+  {
+    key: 'lineNumber',
+    title: t('entity.purchasepriceitem.linenumber'),
+    editor: 'inputNumber',
+    width: 140, summary: 'sum',
+  },
+  {
+    key: 'materialCode',
+    title: t('entity.purchasepriceitem.materialcode'),
+    editor: 'input',
+    width: 140,
+  },
+  {
+    key: 'materialName',
+    title: t('entity.purchasepriceitem.materialname'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.purchasepriceitem.materialname') }),
+  },
+  {
+    key: 'materialSpecification',
+    title: t('entity.purchasepriceitem.materialspecification'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.purchasepriceitem.materialspecification') }),
+  },
+  {
+    key: 'purchaseUnit',
+    title: t('entity.purchasepriceitem.purchaseunit'),
+    editor: 'input',
+    width: 140,
+  },
+  {
+    key: 'purchasePrice',
+    title: t('entity.purchasepriceitem.purchaseprice'),
+    editor: 'inputNumber',
+    width: 140,
+  },
+  {
+    key: 'minPurchaseQuantity',
+    title: t('entity.purchasepriceitem.minpurchasequantity'),
+    editor: 'inputNumber',
+    width: 140,
+  },
+  {
+    key: 'maxPurchaseQuantity',
+    title: t('entity.purchasepriceitem.maxpurchasequantity'),
+    editor: 'inputNumber',
+    width: 140,
+  },
 ])
 
 /** 编辑态从 formData 同步各子表行 */
@@ -301,7 +377,14 @@ function syncChildRowsFromFormData(val: Partial<PurchasePriceCreate & { purchase
 
 function createDefaultPurchasePriceItemRow(): Record<string, unknown> {
   return {
-
+    lineNumber: (childPurchasePriceItemRows.value.length + 1) * 10,
+    materialCode: '',
+    materialName: '',
+    materialSpecification: '',
+    purchaseUnit: '',
+    purchasePrice: 0,
+    minPurchaseQuantity: 0,
+    maxPurchaseQuantity: 0,
   }
 }
 

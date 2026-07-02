@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/human-resource/performance
 // 文件名称：perf-analysis.d.ts
-// 创建时间：2026-06-12
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/performance 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -219,7 +219,7 @@ export interface PerfAnalysisQuery extends TaktPagedQuery {
   relatedPlant?: string;
 
   /**
-   * 审批状态（TaktApprovalStatus）
+   * 审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）
    */
   approvalStatus?: number;
 
@@ -271,7 +271,7 @@ export interface PerfAnalysisQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -298,7 +298,7 @@ export interface PerfAnalysisCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -380,7 +380,7 @@ export interface PerfAnalysisCreate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -481,6 +481,21 @@ export interface PerfAnalysisTemplate {
   improvementActions?: string;
 
   /**
+   * 计划制定日期
+   */
+  planDate?: string;
+
+  /**
+   * 目标完成日期
+   */
+  targetCompletionDate?: string;
+
+  /**
+   * 进度百分比（%）
+   */
+  progressPercentage?: number;
+
+  /**
    * 改进结果说明
    */
   resultDescription?: string;
@@ -503,7 +518,7 @@ export interface PerfAnalysisTemplate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -530,7 +545,7 @@ export interface PerfAnalysisImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -575,6 +590,21 @@ export interface PerfAnalysisImport {
   improvementActions?: string;
 
   /**
+   * 计划制定日期
+   */
+  planDate?: string;
+
+  /**
+   * 目标完成日期
+   */
+  targetCompletionDate?: string;
+
+  /**
+   * 进度百分比（%）
+   */
+  progressPercentage?: number;
+
+  /**
    * 改进结果说明
    */
   resultDescription?: string;
@@ -597,7 +627,7 @@ export interface PerfAnalysisImport {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -696,7 +726,7 @@ export interface PerfAnalysisExport {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注

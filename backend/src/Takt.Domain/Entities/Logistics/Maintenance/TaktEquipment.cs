@@ -43,9 +43,9 @@ public class TaktEquipment : TaktCompanyEntityBase
     public string EquipmentName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设备类型（0=生产设备，1=检测设备，2=辅助设备，3=办公设备，4=其他设备）
+    /// 登录设备（0=生产设备，1=检测设备，2=辅助设备，3=办公设备，4=其他设备）
     /// </summary>
-    [SugarColumn(ColumnName = "equipment_type", ColumnDescription = "设备类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    [SugarColumn(ColumnName = "equipment_type", ColumnDescription = "登录设备", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int EquipmentType { get; set; } = 0;
 
     /// <summary>

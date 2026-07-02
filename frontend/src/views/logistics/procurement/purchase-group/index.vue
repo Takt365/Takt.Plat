@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="logistics:procurement:purchasegroup:create"
-      update-permission="logistics:procurement:purchasegroup:update"
-      delete-permission="logistics:procurement:purchasegroup:delete"
-      import-permission="logistics:procurement:purchasegroup:import"
-      export-permission="logistics:procurement:purchasegroup:export"
+      create-permission="logistics:procurement:purchase:group:create"
+      update-permission="logistics:procurement:purchase:group:update"
+      delete-permission="logistics:procurement:purchase:group:delete"
+      import-permission="logistics:procurement:purchase:group:import"
+      export-permission="logistics:procurement:purchase:group:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -131,7 +131,7 @@
           v-model:value="advancedQueryForm.purchaseGroupCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchasegroup.code') })"
           show-count
-          :maxlength="50"
+          :maxlength="3"
           allow-clear
         />
       </a-form-item>
@@ -216,7 +216,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -227,7 +227,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -562,7 +562,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:procurement:purchasegroup:update',
+        permission: 'logistics:procurement:purchase:group:update',
         onClick: (record: PurchaseGroup) => handleEdit(record)
       },
       {
@@ -570,7 +570,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:procurement:purchasegroup:delete',
+        permission: 'logistics:procurement:purchase:group:delete',
         onClick: (record: PurchaseGroup) => handleDeleteOne(record)
       }
     ]
@@ -598,7 +598,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: PurchaseGroup, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getPurchaseGroupId(selectedRow.value) === getPurchaseGroupId(record)) {
+    } else if (selectedRow.value && getPurchaseGroupId(selectedRow.value) === getPurchaseGroupId(record)) {
       selectedRow.value = null
     }
   },

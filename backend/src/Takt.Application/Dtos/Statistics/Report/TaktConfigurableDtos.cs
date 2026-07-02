@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Statistics.Report
 // 文件名称：TaktConfigurableDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Configurable 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktConfigurable 生成，请按需审阅）
 // 
@@ -14,7 +14,6 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Dtos.Statistics.Report;
 
@@ -47,9 +46,9 @@ public class TaktConfigurableDto : TaktCompanyDtoBase
     public string ReportName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 报表业务域（财务/人力/后勤等）
+    /// 报表业务域（TaktModule 整型，与一级目录菜单 MenuCode 映射；展示名取自菜单 i18n）
     /// </summary>
-    public int ReportDomain { get; set; }
+    public int ReportDomain { get; set; } = 0;
 
     /// <summary>
     /// 报表子分类（与菜单末级路由段对齐，如 management、controlling、material）
@@ -59,7 +58,7 @@ public class TaktConfigurableDto : TaktCompanyDtoBase
     /// <summary>
     /// 是否去重行（SELECT DISTINCT）
     /// </summary>
-    public int DistinctRows { get; set; }
+    public int DistinctRows { get; set; } = 0;
 
     /// <summary>
     /// 单次导出最大行数（Excel 上限，防止 OOM）
@@ -77,6 +76,11 @@ public class TaktConfigurableDto : TaktCompanyDtoBase
     public int IsPublic { get; set; } = 0;
 
     /// <summary>
+    /// 报表描述
+    /// </summary>
+    public string? ConfigurableDescription { get; set; } = string.Empty;
+
+    /// <summary>
     /// 排序号
     /// </summary>
     public int SortOrder { get; set; } = 0;
@@ -84,12 +88,7 @@ public class TaktConfigurableDto : TaktCompanyDtoBase
     /// <summary>
     /// 报表状态（0=禁用 1=启用）
     /// </summary>
-    public int ReportStatus { get; set; }
-
-    /// <summary>
-    /// 报表描述
-    /// </summary>
-    public string? Description { get; set; } = string.Empty;
+    public int ReportStatus { get; set; } = 0;
 
     /// <summary>
     /// 数据源表列表（FROM）
@@ -160,7 +159,7 @@ public class TaktConfigurableQueryDto : TaktPagedQuery
     public string? ReportName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 报表业务域（财务/人力/后勤等）
+    /// 报表业务域（TaktModule 整型，与一级目录菜单 MenuCode 映射；展示名取自菜单 i18n）
     /// </summary>
     public int? ReportDomain { get; set; }
 
@@ -190,6 +189,11 @@ public class TaktConfigurableQueryDto : TaktPagedQuery
     public int? IsPublic { get; set; }
 
     /// <summary>
+    /// 报表描述
+    /// </summary>
+    public string? ConfigurableDescription { get; set; } = string.Empty;
+
+    /// <summary>
     /// 排序号
     /// </summary>
     public int? SortOrder { get; set; }
@@ -198,11 +202,6 @@ public class TaktConfigurableQueryDto : TaktPagedQuery
     /// 报表状态（0=禁用 1=启用）
     /// </summary>
     public int? ReportStatus { get; set; }
-
-    /// <summary>
-    /// 报表描述
-    /// </summary>
-    public string? Description { get; set; } = string.Empty;
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -245,7 +244,7 @@ public class TaktConfigurableCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -262,9 +261,9 @@ public class TaktConfigurableCreateDto
     public string ReportName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 报表业务域（财务/人力/后勤等）
+    /// 报表业务域（TaktModule 整型，与一级目录菜单 MenuCode 映射；展示名取自菜单 i18n）
     /// </summary>
-    public int ReportDomain { get; set; }
+    public int ReportDomain { get; set; } = 0;
 
     /// <summary>
     /// 报表子分类（与菜单末级路由段对齐，如 management、controlling、material）
@@ -274,7 +273,7 @@ public class TaktConfigurableCreateDto
     /// <summary>
     /// 是否去重行（SELECT DISTINCT）
     /// </summary>
-    public int DistinctRows { get; set; }
+    public int DistinctRows { get; set; } = 0;
 
     /// <summary>
     /// 单次导出最大行数（Excel 上限，防止 OOM）
@@ -292,19 +291,14 @@ public class TaktConfigurableCreateDto
     public int IsPublic { get; set; } = 0;
 
     /// <summary>
-    /// 排序号
+    /// 报表描述
     /// </summary>
-    public int SortOrder { get; set; } = 0;
+    public string? ConfigurableDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 报表状态（0=禁用 1=启用）
     /// </summary>
-    public int ReportStatus { get; set; }
-
-    /// <summary>
-    /// 报表描述
-    /// </summary>
-    public string? Description { get; set; } = string.Empty;
+    public int ReportStatus { get; set; } = 0;
 
     /// <summary>
     /// 数据源表列表（FROM）（子表，级联保存）
@@ -389,7 +383,7 @@ public class TaktConfigurableStatusDto
     /// 报表状态（0=禁用 1=启用）
     /// </summary>
     [Required(ErrorMessage = "报表状态（0=禁用 1=启用）不能为空")]
-    public int ReportStatus { get; set; }
+    public int ReportStatus { get; set; } = 0;
 }
 
 // ========================================
@@ -446,7 +440,7 @@ public class TaktConfigurableTemplateDto
     public string? ReportName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 报表业务域（财务/人力/后勤等）
+    /// 报表业务域（TaktModule 整型，与一级目录菜单 MenuCode 映射；展示名取自菜单 i18n）
     /// </summary>
     public int? ReportDomain { get; set; }
 
@@ -476,9 +470,9 @@ public class TaktConfigurableTemplateDto
     public int? IsPublic { get; set; }
 
     /// <summary>
-    /// 排序号
+    /// 报表描述
     /// </summary>
-    public int? SortOrder { get; set; }
+    public string? ConfigurableDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 报表状态（0=禁用 1=启用）
@@ -486,9 +480,34 @@ public class TaktConfigurableTemplateDto
     public int? ReportStatus { get; set; }
 
     /// <summary>
-    /// 报表描述
+    /// 数据源表列表（FROM）（子表，级联保存）
     /// </summary>
-    public string? Description { get; set; } = string.Empty;
+    public List<TaktConfigurableSourceCreateDto>? Sources { get; set; }
+
+    /// <summary>
+    /// 多表关联列表（JOIN）（子表，级联保存）
+    /// </summary>
+    public List<TaktConfigurableJoinCreateDto>? Joins { get; set; }
+
+    /// <summary>
+    /// 输出字段列表（SELECT）（子表，级联保存）
+    /// </summary>
+    public List<TaktConfigurableFieldCreateDto>? Fields { get; set; }
+
+    /// <summary>
+    /// 筛选条件列表（SQVI WHERE）（子表，级联保存）
+    /// </summary>
+    public List<TaktConfigurableSelectionCreateDto>? Selections { get; set; }
+
+    /// <summary>
+    /// 分组字段列表（GROUP BY）（子表，级联保存）
+    /// </summary>
+    public List<TaktConfigurableGroupByCreateDto>? GroupBys { get; set; }
+
+    /// <summary>
+    /// 排序字段列表（ORDER BY）（子表，级联保存）
+    /// </summary>
+    public List<TaktConfigurableOrderByCreateDto>? OrderBys { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -518,7 +537,7 @@ public class TaktConfigurableImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -533,7 +552,7 @@ public class TaktConfigurableImportDto
     public string? ReportName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 报表业务域（财务/人力/后勤等）
+    /// 报表业务域（TaktModule 整型，与一级目录菜单 MenuCode 映射；展示名取自菜单 i18n）
     /// </summary>
     public int? ReportDomain { get; set; }
 
@@ -563,9 +582,9 @@ public class TaktConfigurableImportDto
     public int? IsPublic { get; set; }
 
     /// <summary>
-    /// 排序号
+    /// 报表描述
     /// </summary>
-    public int? SortOrder { get; set; }
+    public string? ConfigurableDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 报表状态（0=禁用 1=启用）
@@ -573,9 +592,34 @@ public class TaktConfigurableImportDto
     public int? ReportStatus { get; set; }
 
     /// <summary>
-    /// 报表描述
+    /// 数据源表列表（FROM）（子表，级联保存）
     /// </summary>
-    public string? Description { get; set; } = string.Empty;
+    public List<TaktConfigurableSourceCreateDto>? Sources { get; set; }
+
+    /// <summary>
+    /// 多表关联列表（JOIN）（子表，级联保存）
+    /// </summary>
+    public List<TaktConfigurableJoinCreateDto>? Joins { get; set; }
+
+    /// <summary>
+    /// 输出字段列表（SELECT）（子表，级联保存）
+    /// </summary>
+    public List<TaktConfigurableFieldCreateDto>? Fields { get; set; }
+
+    /// <summary>
+    /// 筛选条件列表（SQVI WHERE）（子表，级联保存）
+    /// </summary>
+    public List<TaktConfigurableSelectionCreateDto>? Selections { get; set; }
+
+    /// <summary>
+    /// 分组字段列表（GROUP BY）（子表，级联保存）
+    /// </summary>
+    public List<TaktConfigurableGroupByCreateDto>? GroupBys { get; set; }
+
+    /// <summary>
+    /// 排序字段列表（ORDER BY）（子表，级联保存）
+    /// </summary>
+    public List<TaktConfigurableOrderByCreateDto>? OrderBys { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -621,9 +665,9 @@ public class TaktConfigurableExportDto
     public string ReportName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 报表业务域（财务/人力/后勤等）
+    /// 报表业务域（TaktModule 整型，与一级目录菜单 MenuCode 映射；展示名取自菜单 i18n）
     /// </summary>
-    public int ReportDomain { get; set; }
+    public int ReportDomain { get; set; } = 0;
 
     /// <summary>
     /// 报表子分类（与菜单末级路由段对齐，如 management、controlling、material）
@@ -633,7 +677,7 @@ public class TaktConfigurableExportDto
     /// <summary>
     /// 是否去重行（SELECT DISTINCT）
     /// </summary>
-    public int DistinctRows { get; set; }
+    public int DistinctRows { get; set; } = 0;
 
     /// <summary>
     /// 单次导出最大行数（Excel 上限，防止 OOM）
@@ -651,6 +695,11 @@ public class TaktConfigurableExportDto
     public int IsPublic { get; set; } = 0;
 
     /// <summary>
+    /// 报表描述
+    /// </summary>
+    public string? ConfigurableDescription { get; set; } = string.Empty;
+
+    /// <summary>
     /// 排序号
     /// </summary>
     public int SortOrder { get; set; } = 0;
@@ -658,12 +707,7 @@ public class TaktConfigurableExportDto
     /// <summary>
     /// 报表状态（0=禁用 1=启用）
     /// </summary>
-    public int ReportStatus { get; set; }
-
-    /// <summary>
-    /// 报表描述
-    /// </summary>
-    public string? Description { get; set; } = string.Empty;
+    public int ReportStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

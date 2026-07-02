@@ -34,84 +34,71 @@ public class TaktMessage : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "from_user_name", ColumnDescription = "发送者用户名", ColumnDataType = "varchar", Length = 20, IsNullable = false)]
     public string FromUserName { get; set; } = string.Empty;
-
     /// <summary>
     /// 发送者用户 ID
     /// </summary>
-    [SugarColumn(ColumnName = "from_user_id", ColumnDescription = "发送者用户ID", ColumnDataType = "bigint", IsNullable = true)]
+    [SugarColumn(ColumnName = "from_user_id", ColumnDescription = "发送者用户ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FromUserId { get; set; }
-
+    public long FromUserId { get; set; }
     /// <summary>
     /// 接收者用户名
     /// </summary>
     [SugarColumn(ColumnName = "to_user_name", ColumnDescription = "接收者用户名", ColumnDataType = "varchar", Length = 20, IsNullable = false)]
     public string ToUserName { get; set; } = string.Empty;
-
     /// <summary>
     /// 接收者用户 ID
     /// </summary>
-    [SugarColumn(ColumnName = "to_user_id", ColumnDescription = "接收者用户ID", ColumnDataType = "bigint", IsNullable = true)]
+    [SugarColumn(ColumnName = "to_user_id", ColumnDescription = "接收者用户ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ToUserId { get; set; }
-
+    public long ToUserId { get; set; }
     /// <summary>
     /// 消息标题
     /// </summary>
-    [SugarColumn(ColumnName = "message_title", ColumnDescription = "消息标题", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
-    public string? MessageTitle { get; set; }
-
+    [SugarColumn(ColumnName = "message_title", ColumnDescription = "消息标题", ColumnDataType = "nvarchar", Length = 200, IsNullable = false)]
+    public string MessageTitle { get; set; } = string.Empty;
     /// <summary>
     /// 消息内容
     /// </summary>
     [SugarColumn(ColumnName = "message_content", ColumnDescription = "消息内容", ColumnDataType = "ntext", IsNullable = false)]
     public string MessageContent { get; set; } = string.Empty;
-
     /// <summary>
-    /// 消息类型（1=系统消息 2=用户消息 3=通知消息）
+    /// 消息类型（字典 sys_message_type 的 DictValue，如 text、system、multimedia）
     /// </summary>
-    [SugarColumn(ColumnName = "message_type", ColumnDescription = "消息类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "2")]
-    public int MessageType { get; set; } = 2;
-
+    [SugarColumn(ColumnName = "message_type", ColumnDescription = "消息类型", ColumnDataType = "varchar", Length = 40, IsNullable = false, DefaultValue = "system")]
+    public string MessageType { get; set; } = "system";
     /// <summary>
-    /// 消息分组（可选）
+    /// 消息分组（字典 sys_message_group_category 的 DictValue，如 collaboration、message、reminder）
     /// </summary>
-    [SugarColumn(ColumnName = "message_group", ColumnDescription = "消息分组", ColumnDataType = "int", IsNullable = true)]
-    public int? MessageGroup { get; set; }
-
-    /// <summary>
-    /// 读取状态（0=未读 1=已读）
-    /// </summary>
-    [SugarColumn(ColumnName = "read_status", ColumnDescription = "读取状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int ReadStatus { get; set; } = 0;
-
+    [SugarColumn(ColumnName = "message_group", ColumnDescription = "消息分组", ColumnDataType = "varchar", Length = 40, IsNullable = false, DefaultValue = "message")]
+    public string MessageGroup { get; set; } = "message";
     /// <summary>
     /// 读取时间
     /// </summary>
     [SugarColumn(ColumnName = "read_time", ColumnDescription = "读取时间", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? ReadTime { get; set; }
-
     /// <summary>
     /// 发送时间
     /// </summary>
     [SugarColumn(ColumnName = "send_time", ColumnDescription = "发送时间", ColumnDataType = "datetime", IsNullable = false)]
     public DateTime SendTime { get; set; } = DateTime.Now;
-
     /// <summary>
-    /// 是否抄送自审计（0=否，1=是）
+    /// 抄送（0=否，1=是）
     /// </summary>
-    [SugarColumn(ColumnName = "is_cc", ColumnDescription = "是否抄送自审计", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    [SugarColumn(ColumnName = "is_cc", ColumnDescription = "抄送", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsCc { get; set; } = 0;
-
     /// <summary>
     /// 附件路径（JSON 或逗号分隔）
     /// </summary>
-    [SugarColumn(ColumnName = "attachments", ColumnDescription = "附件", ColumnDataType = "nvarchar", Length = 2000, IsNullable = true)]
-    public string? Attachments { get; set; }
-
+    [SugarColumn(ColumnName = "message_attachments", ColumnDescription = "附件", ColumnDataType = "nvarchar", Length = 2000, IsNullable = true)]
+    public string? MessageAttachments { get; set; }
     /// <summary>
     /// 消息扩展数据（JSON）
     /// </summary>
     [SugarColumn(ColumnName = "message_ext_data", ColumnDescription = "消息扩展数据", ColumnDataType = "nvarchar", Length = 4000, IsNullable = true)]
     public string? MessageExtData { get; set; }
+    /// <summary>
+    /// 读取状态（0=未读 1=已读）
+    /// </summary>
+    [SugarColumn(ColumnName = "read_status", ColumnDescription = "读取状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int ReadStatus { get; set; } = 0;
 }

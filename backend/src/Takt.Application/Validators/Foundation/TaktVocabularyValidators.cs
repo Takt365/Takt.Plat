@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Foundation
 // 文件名称：TaktVocabularyValidators.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Vocabulary 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktVocabulary 生成，请按需审阅）
 // 
@@ -36,6 +36,7 @@ public class TaktVocabularyCreateValidator : AbstractValidator<TaktVocabularyCre
             .NotEmpty().WithMessage("敏感词文本不能为空")
             .MaximumLength(100).WithMessage("敏感词文本长度不能超过100个字符");
         RuleFor(x => x.ReplaceText)
+            .NotEmpty().WithMessage("替换文本不能为空")
             .MaximumLength(100).WithMessage("替换文本长度不能超过100个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
@@ -60,6 +61,19 @@ public class TaktVocabularyUpdateValidator : AbstractValidator<TaktVocabularyUpd
     {
         RuleFor(x => x.VocabularyId)
             .GreaterThan(0).WithMessage("VocabularyID无效");
+        RuleFor(x => x.TenantCode)
+            .NotEmpty().WithMessage("租户编码不能为空")
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.WordText)
+            .NotEmpty().WithMessage("敏感词文本不能为空")
+            .MaximumLength(100).WithMessage("敏感词文本长度不能超过100个字符");
+        RuleFor(x => x.ReplaceText)
+            .NotEmpty().WithMessage("替换文本不能为空")
+            .MaximumLength(100).WithMessage("替换文本长度不能超过100个字符");
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
     }
 }
 
@@ -83,7 +97,8 @@ public class TaktVocabularyImportValidator : AbstractValidator<TaktVocabularyImp
             .NotEmpty().WithMessage("敏感词文本不能为空")
             .MaximumLength(100).WithMessage("敏感词文本长度不能超过100个字符");
         RuleFor(x => x.ReplaceText)
-            .MaximumLength(100).WithMessage("替换文本长度不能超过100个字符").When(x => !string.IsNullOrWhiteSpace(x.ReplaceText));
+            .NotEmpty().WithMessage("替换文本不能为空")
+            .MaximumLength(100).WithMessage("替换文本长度不能超过100个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

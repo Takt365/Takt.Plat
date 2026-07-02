@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="logistics:manufacturing:scheduling:aps:order:create"
-      update-permission="logistics:manufacturing:scheduling:aps:order:update"
-      delete-permission="logistics:manufacturing:scheduling:aps:order:delete"
-      import-permission="logistics:manufacturing:scheduling:aps:order:import"
-      export-permission="logistics:manufacturing:scheduling:aps:order:export"
+      create-permission="logistics:manufacturing:scheduling:aps:schedule:create"
+      update-permission="logistics:manufacturing:scheduling:aps:schedule:update"
+      delete-permission="logistics:manufacturing:scheduling:aps:schedule:delete"
+      import-permission="logistics:manufacturing:scheduling:aps:schedule:import"
+      export-permission="logistics:manufacturing:scheduling:aps:schedule:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -65,6 +65,8 @@
       :master-row-selection="rowSelection"
       master-id-column-key="apsOrderId"
       :master-visible-column-keys="visibleColumnKeys"
+      master-table-mode="masterDetailMaster"
+      master-scroll-layout="masterDetailLr"
       :master-total="total"
       master-entity-scope="company"
       @master-change="handleTableChange"
@@ -74,7 +76,13 @@
     >
       <!-- 字典/开关列渲染 -->
       <template #bodyCell="{ column, record }">
-        <template v-if="column.key === 'orderStatus'">
+        <template v-if="column.key === 'unitOfMeasure'">
+          <TaktDictTag
+            :value="getApsOrderField(record, 'unitOfMeasure')"
+            dict-type="logistics_unit_of_measure_code"
+          />
+        </template>
+        <template v-else-if="column.key === 'orderStatus'">
           <TaktDictTag
             :value="getApsOrderField(record, 'orderStatus')"
             dict-type="aps_order_status"
@@ -183,11 +191,10 @@
       </div>
       <div v-show="isFieldVisible('unitOfMeasure')">
       <a-form-item :label="t('entity.apsorder.unitofmeasure')">
-        <a-input
+        <TaktSelect
           v-model:value="advancedQueryForm.unitOfMeasure"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsorder.unitofmeasure') })"
-          show-count
-          :maxlength="40"
+          dict-type="logistics_unit_of_measure_code"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.apsorder.unitofmeasure') })"
           allow-clear
         />
       </a-form-item>
@@ -339,6 +346,7 @@
       @cancel="handleImportCancel"
     >
       <TaktImportFile
+        v-if="importVisible"
         entity-i18n-key="entity.apsorder._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
@@ -358,7 +366,7 @@
       :id-column-key="'apsOrderId'"
       :action-column-key="'action'"
       entity-scope="company"
-      table-mode="single"
+      table-mode="masterDetailMaster"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -384,6 +392,7 @@ import type { ApsOrder, ApsOrderQuery } from '@/types/logistics/manufacturing/sc
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
@@ -667,7 +676,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getApsOrderField(record, 'unitOfMeasure') ?? ''
   },
   {
     title: t('entity.apsorder.routingcode'),
@@ -720,7 +728,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:manufacturing:scheduling:aps:order:update',
+        permission: 'logistics:manufacturing:scheduling:aps:schedule:update',
         onClick: (record: ApsOrder) => handleEdit(record)
       },
       {
@@ -728,7 +736,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:manufacturing:scheduling:aps:order:delete',
+        permission: 'logistics:manufacturing:scheduling:aps:schedule:delete',
         onClick: (record: ApsOrder) => handleDeleteOne(record)
       }
     ]
@@ -762,7 +770,7 @@ const rowSelection = computed(() => ({
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
-    } else if (getApsOrderId(selectedRow.value) === getApsOrderId(record)) {
+    } else if (selectedRow.value && getApsOrderId(selectedRow.value) === getApsOrderId(record)) {
       selectedRow.value = null
       syncMasterSelection(null)
     }
@@ -903,15 +911,22 @@ async function handleDownloadTemplate(sheetName?: string, fileName?: string): Pr
   return (res as any)?.data ?? res
 }
 
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importApsOrder(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importApsOrder(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
+
+      if (selectedMasterKey.value) {
+    apsOperationPanelRef.value?.reload?.()
+      }
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
+  }
 }
 
 /** 关闭导入对话框 */

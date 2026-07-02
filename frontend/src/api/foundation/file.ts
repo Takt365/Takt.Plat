@@ -17,12 +17,6 @@ import type {
 } from '@/types/common';
 import type {
   File as TaktFile,
-  FileCreate,
-  FilePublic,
-  FileStatus,
-  FileUpdate
-} from '@/types/foundation/file';
-import type {
   FileChunkCancel,
   FileChunkCheck,
   FileChunkCheckResult,
@@ -30,10 +24,14 @@ import type {
   FileChunkListResult,
   FileChunkMerge,
   FileChunkUpload,
+  FileCreate,
+  FilePublic,
+  FileStatus,
+  FileUpdate,
   FileUploadMeta,
   FileUploadPolicy,
   FileUploadResult,
-} from '@/types/foundation/file-upload';
+} from '@/types/foundation/file';
 
 /**
  * API 路径前缀（相对 request baseURL，对应后端 [controller]）

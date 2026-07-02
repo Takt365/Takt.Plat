@@ -59,7 +59,7 @@ export interface Tenant extends TenantDtoBase {
   contactEmail: string;
 
   /**
-   * 是否内置（1=是，0=否） 种子租户（000/500/100）为内置，不允许删除
+   * 内置（1=是，0=否） 种子租户（000/500/100）为内置，不允许删除
    */
   isBuiltIn: number;
 
@@ -129,7 +129,7 @@ export interface TenantQuery extends TaktPagedQuery {
   contactEmail?: string;
 
   /**
-   * 是否内置（1=是，0=否） 种子租户（000/500/100）为内置，不允许删除
+   * 内置（1=是，0=否） 种子租户（000/500/100）为内置，不允许删除
    */
   isBuiltIn?: number;
 
@@ -203,7 +203,7 @@ export interface TenantCreate {
   contactEmail: string;
 
   /**
-   * 是否内置（1=是，0=否） 种子租户（000/500/100）为内置，不允许删除
+   * 内置（1=是，0=否） 种子租户（000/500/100）为内置，不允许删除
    */
   isBuiltIn: number;
 
@@ -296,7 +296,7 @@ export interface TenantTemplate {
   contactEmail?: string;
 
   /**
-   * 是否内置（1=是，0=否） 种子租户（000/500/100）为内置，不允许删除
+   * 内置（1=是，0=否） 种子租户（000/500/100）为内置，不允许删除
    */
   isBuiltIn?: number;
 
@@ -350,7 +350,7 @@ export interface TenantImport {
   contactEmail?: string;
 
   /**
-   * 是否内置（1=是，0=否） 种子租户（000/500/100）为内置，不允许删除
+   * 内置（1=是，0=否） 种子租户（000/500/100）为内置，不允许删除
    */
   isBuiltIn?: number;
 
@@ -414,7 +414,7 @@ export interface TenantExport {
   contactEmail: string;
 
   /**
-   * 是否内置（1=是，0=否） 种子租户（000/500/100）为内置，不允许删除
+   * 内置（1=是，0=否） 种子租户（000/500/100）为内置，不允许删除
    */
   isBuiltIn: number;
 

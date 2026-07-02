@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Materials
 // 文件名称：TaktMaterialChangeLogDtos.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：MaterialChangeLog 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktMaterialChangeLog 生成，请按需审阅）
 // 
@@ -36,18 +36,18 @@ public class TaktMaterialChangeLogDto : TaktTenantDtoBase
     public long MaterialChangeLogId { get; set; }
 
     /// <summary>
-    /// 全局物料ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 全局物料 ID（关联 TaktMaterial.Id，选项 TaktMaterials/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long MaterialId { get; set; }
 
     /// <summary>
-    /// 全局物料名称（填充字段）
+    /// 全局物料 名称（填充字段）
     /// </summary>
     public string? MaterialName { get; set; }
 
     /// <summary>
-    /// 物料编码
+    /// 物料编码（关联 TaktMaterial.MaterialCode，冗余；选项 TaktMaterials/options）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
 
@@ -62,7 +62,7 @@ public class TaktMaterialChangeLogDto : TaktTenantDtoBase
     public DateTime ChangeTime { get; set; }
 
     /// <summary>
-    /// 变更人（人员代码）
+    /// 变更人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
     /// </summary>
     public string? ChangeBy { get; set; } = string.Empty;
 
@@ -95,13 +95,13 @@ public class TaktMaterialChangeLogQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 全局物料ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 全局物料 ID（关联 TaktMaterial.Id，选项 TaktMaterials/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? MaterialId { get; set; }
 
     /// <summary>
-    /// 物料编码
+    /// 物料编码（关联 TaktMaterial.MaterialCode，冗余；选项 TaktMaterials/options）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
@@ -121,7 +121,7 @@ public class TaktMaterialChangeLogQueryDto : TaktPagedQuery
     public DateTime? ChangeTimeEnd { get; set; }
 
     /// <summary>
-    /// 变更人（人员代码）
+    /// 变更人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
     /// </summary>
     public string? ChangeBy { get; set; } = string.Empty;
 
@@ -166,15 +166,15 @@ public class TaktMaterialChangeLogCreateDto
     public string TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 全局物料ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 全局物料 ID（关联 TaktMaterial.Id，选项 TaktMaterials/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long MaterialId { get; set; }
 
     /// <summary>
-    /// 物料编码
+    /// 物料编码（关联 TaktMaterial.MaterialCode，冗余；选项 TaktMaterials/options）
     /// </summary>
-    [Required(ErrorMessage = "物料编码不能为空")]
+    [Required(ErrorMessage = "物料编码（关联 TaktMaterial.MaterialCode，冗余；选项 TaktMaterials/options）不能为空")]
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -188,7 +188,7 @@ public class TaktMaterialChangeLogCreateDto
     public DateTime ChangeTime { get; set; }
 
     /// <summary>
-    /// 变更人（人员代码）
+    /// 变更人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
     /// </summary>
     public string? ChangeBy { get; set; } = string.Empty;
 
@@ -246,13 +246,13 @@ public class TaktMaterialChangeLogExportDto
     public long MaterialChangeLogId { get; set; }
 
     /// <summary>
-    /// 全局物料ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 全局物料 ID（关联 TaktMaterial.Id，选项 TaktMaterials/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long MaterialId { get; set; }
 
     /// <summary>
-    /// 物料编码
+    /// 物料编码（关联 TaktMaterial.MaterialCode，冗余；选项 TaktMaterials/options）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
 
@@ -267,7 +267,7 @@ public class TaktMaterialChangeLogExportDto
     public DateTime ChangeTime { get; set; }
 
     /// <summary>
-    /// 变更人（人员代码）
+    /// 变更人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
     /// </summary>
     public string? ChangeBy { get; set; } = string.Empty;
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/human-resource/personnel
 // 文件名称：employee-attachment.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/personnel 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -18,7 +18,6 @@ import type {
 import type {
   EmployeeAttachment,
   EmployeeAttachmentCreate,
-  EmployeeAttachmentSort,
   EmployeeAttachmentUpdate
 } from '@/types/human-resource/personnel/employee-attachment';
 
@@ -106,19 +105,6 @@ export function deleteEmployeeAttachmentBatch(ids: string[]): Promise<void> {
     url: `${EMPLOYEE_ATTACHMENT_API_BASE}/batch`,
     method: 'delete',
     data: ids,
-  });
-}
-
-/**
- * 更新员工附件排序
- * @param {EmployeeAttachmentSort} dto 排序DTO
- * @returns {Promise<EmployeeAttachment>} 员工附件DTO
- */
-export function updateEmployeeAttachmentSort(dto: EmployeeAttachmentSort): Promise<EmployeeAttachment> {
-  return request<EmployeeAttachment>({
-    url: `${EMPLOYEE_ATTACHMENT_API_BASE}/sort`,
-    method: 'put',
-    data: dto,
   });
 }
 

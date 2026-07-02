@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Routine.DocumentCenter
 // 文件名称：TaktDocumentsController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：文管中心控制器
 // 
@@ -41,7 +41,7 @@ public class TaktDocumentsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("routine:document:center:document:list", "文管中心列表")]
+    [TaktPermission("routine:document:center:list", "文管中心列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetDocumentListAsync([FromQuery] TaktDocumentQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktDocumentsController : TaktControllerBase
     /// </summary>
     /// <param name="id">文管中心ID</param>
     /// <returns>文管中心DTO</returns>
-    [TaktPermission("routine:document:center:document:query", "文管中心详情")]
+    [TaktPermission("routine:document:center:query", "文管中心详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetDocumentByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktDocumentsController : TaktControllerBase
     /// 获取文管中心主选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("routine:document:center:document:query", "文管中心选项")]
+    [TaktPermission("routine:document:center:query", "文管中心选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetDocumentOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktDocumentsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>文管中心DTO</returns>
-    [TaktPermission("routine:document:center:document:create", "创建文管中心")]
+    [TaktPermission("routine:document:center:create", "创建文管中心")]
     [HttpPost]
     public async Task<IActionResult> CreateDocumentAsync([FromBody] TaktDocumentCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktDocumentsController : TaktControllerBase
     /// <param name="id">文管中心ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>文管中心DTO</returns>
-    [TaktPermission("routine:document:center:document:update", "更新文管中心")]
+    [TaktPermission("routine:document:center:update", "更新文管中心")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateDocumentAsync(long id, [FromBody] TaktDocumentUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktDocumentsController : TaktControllerBase
     /// </summary>
     /// <param name="id">文管中心ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("routine:document:center:document:delete", "删除文管中心")]
+    [TaktPermission("routine:document:center:delete", "删除文管中心")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteDocumentByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktDocumentsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("routine:document:center:document:delete", "批量删除文管中心")]
+    [TaktPermission("routine:document:center:delete", "批量删除文管中心")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteDocumentBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -183,9 +183,9 @@ public class TaktDocumentsController : TaktControllerBase
     /// <summary>
     /// 更新文管中心状态
     /// </summary>
-    /// <param name="dto">状态 DTO（TaktDocumentStatus 枚举）</param>
+    /// <param name="dto">状态 DTO</param>
     /// <returns>文管中心DTO</returns>
-    [TaktPermission("routine:document:center:document:update", "更新文管中心状态")]
+    [TaktPermission("routine:document:center:update", "更新文管中心状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateDocumentStatusAsync([FromBody] TaktDocumentStatusDto dto)
     {
@@ -205,7 +205,7 @@ public class TaktDocumentsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">排序DTO</param>
     /// <returns>文管中心DTO</returns>
-    [TaktPermission("routine:document:center:document:update", "更新文管中心排序")]
+    [TaktPermission("routine:document:center:update", "更新文管中心排序")]
     [HttpPut("sort")]
     public async Task<IActionResult> UpdateDocumentSortAsync([FromBody] TaktDocumentSortDto dto)
     {
@@ -224,7 +224,7 @@ public class TaktDocumentsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("routine:document:center:document:import", "获取文管中心导入模板")]
+    [TaktPermission("routine:document:center:import", "获取文管中心导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetDocumentTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -244,7 +244,7 @@ public class TaktDocumentsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("routine:document:center:document:import", "导入文管中心")]
+    [TaktPermission("routine:document:center:import", "导入文管中心")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportDocumentAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -274,7 +274,7 @@ public class TaktDocumentsController : TaktControllerBase
     /// 导出文管中心
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("routine:document:center:document:export", "导出文管中心")]
+    [TaktPermission("routine:document:center:export", "导出文管中心")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportDocumentAsync([FromQuery] TaktDocumentQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

@@ -240,11 +240,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('proofAttachmentsJson')">
-      <a-form-item :label="t('entity.leave.proofattachmentsjson')">
+      <div v-show="isFieldVisible('Attachments')">
+      <a-form-item :label="t('entity.leave.Attachments')">
         <a-input
-          v-model:value="advancedQueryForm.proofAttachmentsJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.leave.proofattachmentsjson') })"
+          v-model:value="advancedQueryForm.Attachments"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.leave.Attachments') })"
           show-count
           :maxlength="20"
           allow-clear
@@ -307,10 +307,11 @@
       </div>
       <div v-show="isFieldVisible('approvalStatus')">
       <a-form-item :label="t('entity.leave.approvalstatus')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.approvalStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.leave.approvalstatus') })"
-          style="width: 100%"
+          dict-type="sys_approval_status"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.leave.approvalstatus') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -395,7 +396,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -406,7 +407,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -563,7 +564,7 @@ const advancedQueryForm = ref({
   endDateEnd: '',
   reason: '',
   relatedPlant: '',
-  proofAttachmentsJson: '',
+  Attachments: '',
   handlingBy: '',
   handlingAtStart: '',
   handlingAtEnd: '',
@@ -589,13 +590,13 @@ const queryFieldsMeta = computed(() => [
   { key: 'deptId', label: t('entity.leave.deptid') },
   { key: 'deptName', label: t('entity.leave.deptname') },
   { key: 'leaveType', label: t('entity.leave.type') },
-  { key: 'startDateStart', label: t('entity.leave.startdatestart') },
-  { key: 'startDateEnd', label: t('entity.leave.startdateend') },
-  { key: 'endDateStart', label: t('entity.leave.enddatestart') },
-  { key: 'endDateEnd', label: t('entity.leave.enddateend') },
+  { key: 'startDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.leave.startdate')) },
+  { key: 'startDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.leave.startdate')) },
+  { key: 'endDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.leave.enddate')) },
+  { key: 'endDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.leave.enddate')) },
   { key: 'reason', label: t('entity.leave.reason') },
   { key: 'relatedPlant', label: t('entity.leave.relatedplant') },
-  { key: 'proofAttachmentsJson', label: t('entity.leave.proofattachmentsjson') },
+  { key: 'Attachments', label: t('entity.leave.Attachments') },
   { key: 'handlingBy', label: t('entity.leave.handlingby') },
   { key: 'handlingAtStart', label: t('entity.leave.handlingatstart') },
   { key: 'handlingAtEnd', label: t('entity.leave.handlingatend') },
@@ -666,7 +667,7 @@ function buildListQuery(overrides?: Partial<LeaveQuery>): LeaveQuery {
   assignTrimmed('endDateEnd', form.endDateEnd)
   assignTrimmed('reason', form.reason)
   assignTrimmed('relatedPlant', form.relatedPlant)
-  assignTrimmed('proofAttachmentsJson', form.proofAttachmentsJson)
+  assignTrimmed('Attachments', form.Attachments)
   assignTrimmed('handlingBy', form.handlingBy)
   assignTrimmed('handlingAtStart', form.handlingAtStart)
   assignTrimmed('handlingAtEnd', form.handlingAtEnd)
@@ -796,13 +797,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getLeaveField(record, 'relatedPlant') ?? ''
   },
   {
-    title: t('entity.leave.proofattachmentsjson'),
-    dataIndex: 'proofAttachmentsJson',
-    key: 'proofAttachmentsJson',
+    title: t('entity.leave.Attachments'),
+    dataIndex: 'Attachments',
+    key: 'Attachments',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getLeaveField(record, 'proofAttachmentsJson') ?? ''
+    customRender: ({ record }: { record: any }) => getLeaveField(record, 'Attachments') ?? ''
   },
   {
     title: t('entity.leave.handlingby'),
@@ -882,7 +883,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: Leave, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getLeaveId(selectedRow.value) === getLeaveId(record)) {
+    } else if (selectedRow.value && getLeaveId(selectedRow.value) === getLeaveId(record)) {
       selectedRow.value = null
     }
   },
@@ -950,7 +951,7 @@ function handleReset() {
   endDateEnd: '',
   reason: '',
   relatedPlant: '',
-  proofAttachmentsJson: '',
+  Attachments: '',
   handlingBy: '',
   handlingAtStart: '',
   handlingAtEnd: '',
@@ -1149,7 +1150,7 @@ function handleAdvancedQueryReset() {
   endDateEnd: '',
   reason: '',
   relatedPlant: '',
-  proofAttachmentsJson: '',
+  Attachments: '',
   handlingBy: '',
   handlingAtStart: '',
   handlingAtEnd: '',

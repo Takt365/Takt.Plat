@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/quality/complaint
 // 文件名称：customer-complaint-item.d.ts
-// 创建时间：2026-06-21
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/complaint 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -288,7 +288,7 @@ export interface CustomerComplaintItemCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -496,6 +496,11 @@ export interface CustomerComplaintItemTemplate {
   defectQuantity?: number;
 
   /**
+   * 不良率（%）
+   */
+  defectRate?: number;
+
+  /**
    * 原因分析
    */
   causeAnalysis?: string;
@@ -504,6 +509,31 @@ export interface CustomerComplaintItemTemplate {
    * 改善对策
    */
   improvementAction?: string;
+
+  /**
+   * 改善责任人
+   */
+  improvementResponsible?: string;
+
+  /**
+   * 计划完成日期
+   */
+  plannedCompletionDate?: string;
+
+  /**
+   * 实际完成日期
+   */
+  actualCompletionDate?: string;
+
+  /**
+   * 改善状态（0=待改善，1=改善中，2=已完成，3=已验证）
+   */
+  improvementStatus?: number;
+
+  /**
+   * 附件路径（多个附件用逗号分隔）
+   */
+  attachmentPaths?: string;
 
   /**
    * 扩展字段JSON
@@ -535,7 +565,7 @@ export interface CustomerComplaintItemImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -590,6 +620,11 @@ export interface CustomerComplaintItemImport {
   defectQuantity?: number;
 
   /**
+   * 不良率（%）
+   */
+  defectRate?: number;
+
+  /**
    * 原因分析
    */
   causeAnalysis?: string;
@@ -598,6 +633,31 @@ export interface CustomerComplaintItemImport {
    * 改善对策
    */
   improvementAction?: string;
+
+  /**
+   * 改善责任人
+   */
+  improvementResponsible?: string;
+
+  /**
+   * 计划完成日期
+   */
+  plannedCompletionDate?: string;
+
+  /**
+   * 实际完成日期
+   */
+  actualCompletionDate?: string;
+
+  /**
+   * 改善状态（0=待改善，1=改善中，2=已完成，3=已验证）
+   */
+  improvementStatus?: number;
+
+  /**
+   * 附件路径（多个附件用逗号分隔）
+   */
+  attachmentPaths?: string;
 
   /**
    * 扩展字段JSON

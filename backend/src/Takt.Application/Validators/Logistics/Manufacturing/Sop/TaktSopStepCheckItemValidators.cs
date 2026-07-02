@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopStepCheckItemValidators.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SopStepCheckItem 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktSopStepCheckItem 生成，请按需审阅）
 // 
@@ -40,10 +40,6 @@ public class TaktSopStepCheckItemCreateValidator : AbstractValidator<TaktSopStep
         RuleFor(x => x.CheckItemName)
             .NotEmpty().WithMessage("检验项目名称不能为空")
             .MaximumLength(200).WithMessage("检验项目名称长度不能超过200个字符");
-        RuleFor(x => x.CheckMethod)
-            .MaximumLength(200).WithMessage("检验方法长度不能超过200个字符");
-        RuleFor(x => x.CheckStandard)
-            .MaximumLength(500).WithMessage("检验标准长度不能超过500个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -67,6 +63,21 @@ public class TaktSopStepCheckItemUpdateValidator : AbstractValidator<TaktSopStep
     {
         RuleFor(x => x.SopStepCheckItemId)
             .GreaterThan(0).WithMessage("SopStepCheckItemID无效");
+        RuleFor(x => x.TenantCode)
+            .NotEmpty().WithMessage("租户编码不能为空")
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.CompanyCode)
+            .NotEmpty().WithMessage("公司代码不能为空")
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.StepId)
+            .GreaterThanOrEqualTo(0).WithMessage("工步 ID不能为负数");
+        RuleFor(x => x.CheckItemName)
+            .NotEmpty().WithMessage("检验项目名称不能为空")
+            .MaximumLength(200).WithMessage("检验项目名称长度不能超过200个字符");
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
     }
 }
 
@@ -93,10 +104,6 @@ public class TaktSopStepCheckItemImportValidator : AbstractValidator<TaktSopStep
         RuleFor(x => x.CheckItemName)
             .NotEmpty().WithMessage("检验项目名称不能为空")
             .MaximumLength(200).WithMessage("检验项目名称长度不能超过200个字符");
-        RuleFor(x => x.CheckMethod)
-            .MaximumLength(200).WithMessage("检验方法长度不能超过200个字符").When(x => !string.IsNullOrWhiteSpace(x.CheckMethod));
-        RuleFor(x => x.CheckStandard)
-            .MaximumLength(500).WithMessage("检验标准长度不能超过500个字符").When(x => !string.IsNullOrWhiteSpace(x.CheckStandard));
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

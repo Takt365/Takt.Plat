@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/sop/exec/components -->
 <!-- 文件名称：exec-form.vue -->
-<!-- 功能描述：SOP 工位执行追溯实体维护弹窗内嵌表单。由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：SOP 工位执行追溯实体维护弹窗内嵌表单（上主下从级联保存）。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -10,7 +10,7 @@
 <template>
   <a-form
     ref="formRef"
-    class="takt-generated-form"
+    class="takt-generated-form exec-form flex flex-col min-h-0"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -249,12 +249,11 @@
                 :label="t('entity.sopexec.startedat')"
                 name="startedAt"
               >
-                <a-input
+                <a-date-picker
                   v-model:value="formState.startedAt"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopexec.startedat') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopexec.startedat') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
@@ -263,12 +262,11 @@
                 :label="t('entity.sopexec.endedat')"
                 name="endedAt"
               >
-                <a-input
+                <a-date-picker
                   v-model:value="formState.endedAt"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopexec.endedat') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopexec.endedat') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
@@ -365,12 +363,24 @@
         </div>
       </a-tab-pane>
     </a-tabs>
+    <!-- 下：子表 steps -->
+    <TaktEditableTable
+      ref="sopExecStepTableRef"
+      v-model="childSopExecStepRows"
+      :columns="sopExecStepFormColumns"
+      :title="t('entity.sopexecstep._self')"
+      :add-button-entity="t('entity.sopexecstep._self')"
+      id-field="sopExecStepId"
+      :default-row="createDefaultSopExecStepRow"
+      :disabled="loading"
+      section-border
+    />
   </a-form>
 </template>
 
 <script setup lang="ts">
 /**
- * SOP 工位执行追溯实体维护表单 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
+ * SOP 工位执行追溯实体维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/manufacturing/sop/exec/components
  */
 import { reactive, watch, computed, ref, onMounted } from 'vue'
@@ -414,6 +424,102 @@ const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
 const formFields = ["tenantCode","companyCode","companyDefaultCulture","productionOrderId","workOrderNo","serialNumber","materialCode","routingItemId","processSegmentType","workstationId","employeeId","sopId","revisionId","revision","contentLang","startedAt","endedAt","selfCheckResult","execStatus","currentStepId","extField","remark"]
 
+import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+
+const childSopExecStepRows = ref<Record<string, unknown>[]>([])
+const sopExecStepTableRef = ref<{
+  getRows: () => Record<string, unknown>[]
+  validate: () => Promise<unknown>
+  resetRows: () => void
+} | null>(null)
+
+/** 子表 sopExecStep 可编辑列 */
+const sopExecStepFormColumns = computed<TaktEditableTableColumn[]>(() => [
+  {
+    key: 'execId',
+    title: t('entity.sopexecstep.execid'),
+    editor: 'input',
+    width: 140,
+  },
+  {
+    key: 'stepId',
+    title: t('entity.sopexecstep.stepid'),
+    editor: 'input',
+    width: 140,
+  },
+  {
+    key: 'stepNo',
+    title: t('entity.sopexecstep.stepno'),
+    editor: 'inputNumber',
+    width: 140,
+  },
+  {
+    key: 'startedAt',
+    title: t('entity.sopexecstep.startedat'),
+    editor: 'datePicker',
+    valueFormat: 'YYYY-MM-DD',
+    width: 140,
+  },
+  {
+    key: 'endedAt',
+    title: t('entity.sopexecstep.endedat'),
+    editor: 'datePicker',
+    valueFormat: 'YYYY-MM-DD',
+    width: 140,
+  },
+  {
+    key: 'stepResult',
+    title: t('entity.sopexecstep.stepresult'),
+    editor: 'inputNumber',
+    width: 140,
+  },
+  {
+    key: 'confirmedBy',
+    title: t('entity.sopexecstep.confirmedby'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.sopexecstep.confirmedby') }),
+  },
+  {
+    key: 'confirmedAt',
+    title: t('entity.sopexecstep.confirmedat'),
+    editor: 'datePicker',
+    valueFormat: 'YYYY-MM-DD',
+    width: 140,
+  },
+])
+
+/** 编辑态从 formData 同步各子表行 */
+function syncChildRowsFromFormData(val: Partial<SopExecCreate & { sopExecId?: string }> | null | undefined) {
+  childSopExecStepRows.value = ((val as any)?.steps ?? []) as Record<string, unknown>[]
+}
+
+function createDefaultSopExecStepRow(): Record<string, unknown> {
+  return {
+    execId: '',
+    stepId: '',
+    stepNo: 0,
+    startedAt: '',
+    endedAt: '',
+    stepResult: 0,
+    confirmedBy: '',
+    confirmedAt: '',
+  }
+}
+
+/** 组装 Create/Update 载荷（主表 + 子表数组） */
+function buildSubmitPayload() {
+  const masterId = props.formData?.sopExecId ?? ''
+  return {
+    ...formState,
+    steps: sopExecStepTableRef.value?.getRows?.() ?? childSopExecStepRows.value.map((rest) => ({
+      ...rest,
+      tenantCode: tenantStore.tenantCode,
+      companyCode: tenantStore.companyCode,
+      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+      sopExecId: masterId,
+    })),
+  }
+}
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -458,9 +564,10 @@ watch(
     if (val?.sopExecId) {
       const next = { ...val } as Record<string, unknown>
       Object.keys(formState).forEach((k) => delete formState[k])
-
+    delete (next as any).steps
       applyScopeDefaults(next)
       Object.assign(formState, next)
+    syncChildRowsFromFormData(val)
       formRef.value?.clearValidate()
     } else {
       Object.keys(formState).forEach((k) => delete formState[k])
@@ -567,8 +674,8 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   startedAt: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.sopexec.startedat') }),
-      trigger: 'blur'
+      message: t('common.page.form.placeholder.select', { field: t('entity.sopexec.startedat') }),
+      trigger: 'change'
     }
   ],
   execStatus: [{
@@ -589,12 +696,13 @@ const rules = computed<Record<string, Rule[]>>(() => ({
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
 async function validate() {
   await formRef.value?.validate()
+  await sopExecStepTableRef.value?.validate?.()
   return formState
 }
 
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
-  const payload = { ...formState }
+  const payload = buildSubmitPayload() as Record<string, unknown>
   if ('processSegmentType' in payload) {
     const rawprocessSegmentType = payload.processSegmentType
     payload.processSegmentType = typeof rawprocessSegmentType === 'number' ? rawprocessSegmentType : Number(rawprocessSegmentType)
@@ -619,7 +727,8 @@ function resetFields() {
   }
   applyFormDefaults(formState)
   applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.sopExecId)
-
+  childSopExecStepRows.value = []
+  sopExecStepTableRef.value?.resetRows?.()
   activeTab.value = 'tab-0'
   formRef.value?.clearValidate()
 }

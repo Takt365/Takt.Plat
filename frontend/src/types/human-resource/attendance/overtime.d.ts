@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/human-resource/attendance
 // 文件名称：overtime.d.ts
-// 创建时间：2026-06-20
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/attendance 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface Overtime extends ApprovalDtoBase {
   overtimeId: string;
 
   /**
-   * 部门 ID
+   * 部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
    */
   deptId: string;
 
@@ -69,7 +69,7 @@ export interface Overtime extends ApprovalDtoBase {
   totalActualHours: number;
 
   /**
-   * 加班类型（字典 hr_overtime_type）
+   * 加班类型（字典 hr_overtime_type；0=工作日加班 1=休息日加班 2=法定节假日加班）
    */
   overtimeType: number;
 
@@ -79,12 +79,12 @@ export interface Overtime extends ApprovalDtoBase {
   reason?: string;
 
   /**
-   * 关联工厂
+   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
   relatedPlant?: string;
 
   /**
-   * 经办人（关联 TaktEmployee）
+   * 经办人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   handlingBy: string;
 
@@ -99,7 +99,7 @@ export interface Overtime extends ApprovalDtoBase {
   handlingComment?: string;
 
   /**
-   * 加班状态（字典 sys_approval_status）
+   * 加班状态（字典 sys_approval_status；0=待审批 1=审批中 2=已通过 3=已驳回 4=已撤回 5=已终止）
    */
   overtimeStatus: number;
 
@@ -129,7 +129,7 @@ export interface OvertimeQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 部门 ID
+   * 部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
    */
   deptId?: string;
 
@@ -184,7 +184,7 @@ export interface OvertimeQuery extends TaktPagedQuery {
   totalActualHours?: number;
 
   /**
-   * 加班类型（字典 hr_overtime_type）
+   * 加班类型（字典 hr_overtime_type；0=工作日加班 1=休息日加班 2=法定节假日加班）
    */
   overtimeType?: number;
 
@@ -194,12 +194,12 @@ export interface OvertimeQuery extends TaktPagedQuery {
   reason?: string;
 
   /**
-   * 关联工厂
+   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
   relatedPlant?: string;
 
   /**
-   * 经办人（关联 TaktEmployee）
+   * 经办人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   handlingBy?: string;
 
@@ -219,12 +219,12 @@ export interface OvertimeQuery extends TaktPagedQuery {
   handlingComment?: string;
 
   /**
-   * 加班状态（字典 sys_approval_status）
+   * 加班状态（字典 sys_approval_status；0=待审批 1=审批中 2=已通过 3=已驳回 4=已撤回 5=已终止）
    */
   overtimeStatus?: number;
 
   /**
-   * 审批状态（TaktApprovalStatus）
+   * 审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）
    */
   approvalStatus?: number;
 
@@ -303,12 +303,12 @@ export interface OvertimeCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
   /**
-   * 部门 ID
+   * 部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
    */
   deptId: string;
 
@@ -348,7 +348,7 @@ export interface OvertimeCreate {
   totalActualHours: number;
 
   /**
-   * 加班类型（字典 hr_overtime_type）
+   * 加班类型（字典 hr_overtime_type；0=工作日加班 1=休息日加班 2=法定节假日加班）
    */
   overtimeType: number;
 
@@ -358,12 +358,12 @@ export interface OvertimeCreate {
   reason?: string;
 
   /**
-   * 关联工厂
+   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
   relatedPlant?: string;
 
   /**
-   * 经办人（关联 TaktEmployee）
+   * 经办人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   handlingBy: string;
 
@@ -378,7 +378,7 @@ export interface OvertimeCreate {
   handlingComment?: string;
 
   /**
-   * 加班状态（字典 sys_approval_status）
+   * 加班状态（字典 sys_approval_status；0=待审批 1=审批中 2=已通过 3=已驳回 4=已撤回 5=已终止）
    */
   overtimeStatus: number;
 
@@ -427,7 +427,7 @@ export interface OvertimeStatus {
   overtimeId: string;
 
   /**
-   * 加班状态（字典 sys_approval_status）
+   * 加班状态（字典 sys_approval_status；0=待审批 1=审批中 2=已通过 3=已驳回 4=已撤回 5=已终止）
    */
   overtimeStatus: number;
 
@@ -451,7 +451,7 @@ export interface OvertimeTemplate {
   companyCode?: string;
 
   /**
-   * 部门 ID
+   * 部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
    */
   deptId?: string;
 
@@ -461,12 +461,37 @@ export interface OvertimeTemplate {
   deptName?: string;
 
   /**
+   * 加班归属日期
+   */
+  overtimeDate?: string;
+
+  /**
+   * 计划加班开始时间
+   */
+  plannedStartTime?: string;
+
+  /**
+   * 计划加班结束时间
+   */
+  plannedEndTime?: string;
+
+  /**
    * 加班总人数
    */
   totalEmployees?: number;
 
   /**
-   * 加班类型（字典 hr_overtime_type）
+   * 计划加班总小时数
+   */
+  totalPlannedHours?: number;
+
+  /**
+   * 实际加班总小时数
+   */
+  totalActualHours?: number;
+
+  /**
+   * 加班类型（字典 hr_overtime_type；0=工作日加班 1=休息日加班 2=法定节假日加班）
    */
   overtimeType?: number;
 
@@ -476,14 +501,19 @@ export interface OvertimeTemplate {
   reason?: string;
 
   /**
-   * 关联工厂
+   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
   relatedPlant?: string;
 
   /**
-   * 经办人（关联 TaktEmployee）
+   * 经办人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   handlingBy?: string;
+
+  /**
+   * 经办时间
+   */
+  handlingAt?: string;
 
   /**
    * 经办备注
@@ -491,9 +521,14 @@ export interface OvertimeTemplate {
   handlingComment?: string;
 
   /**
-   * 加班状态（字典 sys_approval_status）
+   * 加班状态（字典 sys_approval_status；0=待审批 1=审批中 2=已通过 3=已驳回 4=已撤回 5=已终止）
    */
   overtimeStatus?: number;
+
+  /**
+   * 加班明细列表（子表，级联保存）
+   */
+  items?: OvertimeItemCreate[];
 
   /**
    * 扩展字段JSON
@@ -525,12 +560,12 @@ export interface OvertimeImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
   /**
-   * 部门 ID
+   * 部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
    */
   deptId?: string;
 
@@ -540,12 +575,37 @@ export interface OvertimeImport {
   deptName?: string;
 
   /**
+   * 加班归属日期
+   */
+  overtimeDate?: string;
+
+  /**
+   * 计划加班开始时间
+   */
+  plannedStartTime?: string;
+
+  /**
+   * 计划加班结束时间
+   */
+  plannedEndTime?: string;
+
+  /**
    * 加班总人数
    */
   totalEmployees?: number;
 
   /**
-   * 加班类型（字典 hr_overtime_type）
+   * 计划加班总小时数
+   */
+  totalPlannedHours?: number;
+
+  /**
+   * 实际加班总小时数
+   */
+  totalActualHours?: number;
+
+  /**
+   * 加班类型（字典 hr_overtime_type；0=工作日加班 1=休息日加班 2=法定节假日加班）
    */
   overtimeType?: number;
 
@@ -555,14 +615,19 @@ export interface OvertimeImport {
   reason?: string;
 
   /**
-   * 关联工厂
+   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
   relatedPlant?: string;
 
   /**
-   * 经办人（关联 TaktEmployee）
+   * 经办人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   handlingBy?: string;
+
+  /**
+   * 经办时间
+   */
+  handlingAt?: string;
 
   /**
    * 经办备注
@@ -570,9 +635,14 @@ export interface OvertimeImport {
   handlingComment?: string;
 
   /**
-   * 加班状态（字典 sys_approval_status）
+   * 加班状态（字典 sys_approval_status；0=待审批 1=审批中 2=已通过 3=已驳回 4=已撤回 5=已终止）
    */
   overtimeStatus?: number;
+
+  /**
+   * 加班明细列表（子表，级联保存）
+   */
+  items?: OvertimeItemCreate[];
 
   /**
    * 扩展字段JSON
@@ -599,7 +669,7 @@ export interface OvertimeExport {
   overtimeId: string;
 
   /**
-   * 部门 ID
+   * 部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
    */
   deptId: string;
 
@@ -639,7 +709,7 @@ export interface OvertimeExport {
   totalActualHours: number;
 
   /**
-   * 加班类型（字典 hr_overtime_type）
+   * 加班类型（字典 hr_overtime_type；0=工作日加班 1=休息日加班 2=法定节假日加班）
    */
   overtimeType: number;
 
@@ -649,12 +719,12 @@ export interface OvertimeExport {
   reason?: string;
 
   /**
-   * 关联工厂
+   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
   relatedPlant?: string;
 
   /**
-   * 经办人（关联 TaktEmployee）
+   * 经办人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   handlingBy: string;
 
@@ -669,7 +739,7 @@ export interface OvertimeExport {
   handlingComment?: string;
 
   /**
-   * 加班状态（字典 sys_approval_status）
+   * 加班状态（字典 sys_approval_status；0=待审批 1=审批中 2=已通过 3=已驳回 4=已撤回 5=已终止）
    */
   overtimeStatus: number;
 

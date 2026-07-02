@@ -198,7 +198,7 @@ locales/dashboard/workspace/zh-CN.ts
 |------|----------------|------|----------|
 | **字典项**（存在 `DictTypeCode`） | `int`；注释字典码 | `TaktSelect` / `TaktDictTag` + `dict-type` | `TaktDictValueConstants` |
 | **引擎/运行时态**（流程实例、任务、流转动作等） | DTO 用 `int`；服务/引擎内可用专用枚举 | 静态 i18n 或约定键 | 枚举或常量比较后 **Adapt/映射为 int 写实体** |
-| **固定操作**（启用/停用、是否内置等） | `int` 与 `sys_yes_no` / `sys_normal_disable` 对齐 | 开关或字典展示 | `TaktDictValueConstants` |
+| **固定操作**（启用/停用、内置等） | `int` 与 `sys_yes_no` / `sys_normal_disable` 对齐 | 开关或字典展示 | `TaktDictValueConstants` |
 | **基础设施**（日志级别、菜单类型等，非实体列） | 服务/DTO 按需；**实体列仍为 int** | 一般不提交 | `Takt.Shared.Enums` 或常量 |
 
 ```text

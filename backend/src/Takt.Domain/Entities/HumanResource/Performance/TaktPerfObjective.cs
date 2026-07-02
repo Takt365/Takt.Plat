@@ -15,7 +15,7 @@ using Takt.Domain.Entities;
 namespace Takt.Domain.Entities.HumanResource.Performance;
 
 /// <summary>
-/// 员工绩效目标
+/// 员工绩效目标（审批态见基类 ApprovalStatus，字典 sys_approval_status）
 /// </summary>
 [SugarTable("takt_human_resource_perf_objective", "绩效目标表")]
 [SugarIndex("ix_perf_objective_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
@@ -24,7 +24,7 @@ namespace Takt.Domain.Entities.HumanResource.Performance;
 public class TaktPerfObjective : TaktApprovalEntityBase
 {
     /// <summary>
-    /// 员工 ID
+    /// 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [SugarColumn(ColumnName = "employee_id", ColumnDescription = "员工ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -35,7 +35,7 @@ public class TaktPerfObjective : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "employee_name", ColumnDescription = "员工姓名", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string EmployeeName { get; set; } = string.Empty;
     /// <summary>
-    /// 方案指标 ID
+    /// 方案指标（关联 TaktPerfScheme.Id，选项 TaktPerfSchemes/options）
     /// </summary>
     [SugarColumn(ColumnName = "scheme_metric_id", ColumnDescription = "方案指标ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -86,13 +86,13 @@ public class TaktPerfObjective : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "achievement_notes", ColumnDescription = "目标达成说明", ColumnDataType = "nvarchar", Length = 1000, IsNullable = false)]
     public string AchievementNotes { get; set; } = string.Empty;
     /// <summary>
-    /// 业务状态（0=待确认 1=进行中 2=已完成）
+    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// </summary>
+    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
+    public string RelatedPlant { get; set; } = string.Empty;
+    /// <summary>
+    /// 业务状态（字典 hr_perf_objective_status；0=待确认 1=进行中 2=已完成）
     /// </summary>
     [SugarColumn(ColumnName = "objective_status", ColumnDescription = "业务状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int ObjectiveStatus { get; set; }
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = true)]
-    public string? RelatedPlant { get; set; }
 }

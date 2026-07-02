@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/sales
 // 文件名称：price-scale.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-07-01
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,12 +29,12 @@ export interface SalesPriceScale extends CompanyDtoBase {
   salesPriceScaleId: string;
 
   /**
-   * 价格明细ID（关联销售价格明细表，序列化为string以避免Javascript精度问题）
+   * 价格明细 ID（关联 TaktSalesPriceItem.Id，选项 TaktSalesPriceItems/options）
    */
   itemId: string;
 
   /**
-   * 价格明细名称（填充字段）
+   * 价格明细 名称（填充字段）
    */
   itemName?: string;
 
@@ -89,7 +89,7 @@ export interface SalesPriceScaleQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 价格明细ID（关联销售价格明细表，序列化为string以避免Javascript精度问题）
+   * 价格明细 ID（关联 TaktSalesPriceItem.Id，选项 TaktSalesPriceItems/options）
    */
   itemId?: string;
 
@@ -131,7 +131,7 @@ export interface SalesPriceScaleQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -158,12 +158,12 @@ export interface SalesPriceScaleCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
   /**
-   * 价格明细ID（关联销售价格明细表，序列化为string以避免Javascript精度问题）
+   * 价格明细 ID（关联 TaktSalesPriceItem.Id，选项 TaktSalesPriceItems/options）
    */
   itemId: string;
 
@@ -195,7 +195,7 @@ export interface SalesPriceScaleCreate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -237,7 +237,7 @@ export interface SalesPriceScaleTemplate {
   companyCode?: string;
 
   /**
-   * 价格明细ID（关联销售价格明细表，序列化为string以避免Javascript精度问题）
+   * 价格明细 ID（关联 TaktSalesPriceItem.Id，选项 TaktSalesPriceItems/options）
    */
   itemId?: string;
 
@@ -252,9 +252,24 @@ export interface SalesPriceScaleTemplate {
   lineNumber?: number;
 
   /**
+   * 起始数量（基本单位数量，包含此数量）
+   */
+  startQuantity?: number;
+
+  /**
+   * 结束数量（基本单位数量，包含此数量，0表示无上限）
+   */
+  endQuantity?: number;
+
+  /**
+   * 阶梯价格（精确到分，存储为整数，单位为分）
+   */
+  scalePrice?: number;
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -281,12 +296,12 @@ export interface SalesPriceScaleImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
   /**
-   * 价格明细ID（关联销售价格明细表，序列化为string以避免Javascript精度问题）
+   * 价格明细 ID（关联 TaktSalesPriceItem.Id，选项 TaktSalesPriceItems/options）
    */
   itemId?: string;
 
@@ -301,9 +316,24 @@ export interface SalesPriceScaleImport {
   lineNumber?: number;
 
   /**
+   * 起始数量（基本单位数量，包含此数量）
+   */
+  startQuantity?: number;
+
+  /**
+   * 结束数量（基本单位数量，包含此数量，0表示无上限）
+   */
+  endQuantity?: number;
+
+  /**
+   * 阶梯价格（精确到分，存储为整数，单位为分）
+   */
+  scalePrice?: number;
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -330,7 +360,7 @@ export interface SalesPriceScaleExport {
   companyCode: string;
 
   /**
-   * 价格明细ID（关联销售价格明细表，序列化为string以避免Javascript精度问题）
+   * 价格明细 ID（关联 TaktSalesPriceItem.Id，选项 TaktSalesPriceItems/options）
    */
   itemId: string;
 
@@ -362,7 +392,7 @@ export interface SalesPriceScaleExport {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注

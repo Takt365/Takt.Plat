@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/human-resource/performance
 // 文件名称：perf-cycle.d.ts
-// 创建时间：2026-06-12
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/performance 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -96,7 +96,7 @@ export interface PerfCycle extends CompanyDtoBase {
   /**
    * 周期说明
    */
-  description: string;
+  perfCycleDescription: string;
 
   /**
    * 状态（0=待启动 1=目标设定中 2=进行中 3=评审中 4=已完成 5=已归档）
@@ -231,7 +231,7 @@ export interface PerfCycleQuery extends TaktPagedQuery {
   /**
    * 周期说明
    */
-  description?: string;
+  perfCycleDescription?: string;
 
   /**
    * 状态（0=待启动 1=目标设定中 2=进行中 3=评审中 4=已完成 5=已归档）
@@ -256,7 +256,7 @@ export interface PerfCycleQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -283,7 +283,7 @@ export interface PerfCycleCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -355,7 +355,7 @@ export interface PerfCycleCreate {
   /**
    * 周期说明
    */
-  description: string;
+  perfCycleDescription: string;
 
   /**
    * 状态（0=待启动 1=目标设定中 2=进行中 3=评审中 4=已完成 5=已归档）
@@ -370,7 +370,7 @@ export interface PerfCycleCreate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -456,6 +456,41 @@ export interface PerfCycleTemplate {
   cycleSequence?: number;
 
   /**
+   * 开始日期
+   */
+  startDate?: string;
+
+  /**
+   * 结束日期
+   */
+  endDate?: string;
+
+  /**
+   * 目标设定截止日期
+   */
+  goalSettingDueDate?: string;
+
+  /**
+   * 自评截止日期
+   */
+  selfEvaluationDueDate?: string;
+
+  /**
+   * 主管评审截止日期
+   */
+  supervisorReviewDueDate?: string;
+
+  /**
+   * 面谈截止日期
+   */
+  interviewDueDate?: string;
+
+  /**
+   * 结果确认截止日期
+   */
+  resultConfirmationDueDate?: string;
+
+  /**
    * 适用部门
    */
   applicableDepartment?: string;
@@ -463,7 +498,7 @@ export interface PerfCycleTemplate {
   /**
    * 周期说明
    */
-  description?: string;
+  perfCycleDescription?: string;
 
   /**
    * 状态（0=待启动 1=目标设定中 2=进行中 3=评审中 4=已完成 5=已归档）
@@ -478,7 +513,7 @@ export interface PerfCycleTemplate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -505,7 +540,7 @@ export interface PerfCycleImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -535,6 +570,41 @@ export interface PerfCycleImport {
   cycleSequence?: number;
 
   /**
+   * 开始日期
+   */
+  startDate?: string;
+
+  /**
+   * 结束日期
+   */
+  endDate?: string;
+
+  /**
+   * 目标设定截止日期
+   */
+  goalSettingDueDate?: string;
+
+  /**
+   * 自评截止日期
+   */
+  selfEvaluationDueDate?: string;
+
+  /**
+   * 主管评审截止日期
+   */
+  supervisorReviewDueDate?: string;
+
+  /**
+   * 面谈截止日期
+   */
+  interviewDueDate?: string;
+
+  /**
+   * 结果确认截止日期
+   */
+  resultConfirmationDueDate?: string;
+
+  /**
    * 适用部门
    */
   applicableDepartment?: string;
@@ -542,7 +612,7 @@ export interface PerfCycleImport {
   /**
    * 周期说明
    */
-  description?: string;
+  perfCycleDescription?: string;
 
   /**
    * 状态（0=待启动 1=目标设定中 2=进行中 3=评审中 4=已完成 5=已归档）
@@ -557,7 +627,7 @@ export interface PerfCycleImport {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -651,7 +721,7 @@ export interface PerfCycleExport {
   /**
    * 周期说明
    */
-  description: string;
+  perfCycleDescription: string;
 
   /**
    * 状态（0=待启动 1=目标设定中 2=进行中 3=评审中 4=已完成 5=已归档）
@@ -666,7 +736,7 @@ export interface PerfCycleExport {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注

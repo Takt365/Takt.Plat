@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Procurement
 // 文件名称：TaktPurchaseRequestDtos.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchaseRequest 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPurchaseRequest 生成，请按需审阅）
 // 
@@ -44,6 +44,22 @@ public class TaktPurchaseRequestDto : TaktApprovalDtoBase
     /// 采购申请编码（唯一索引）
     /// </summary>
     public string PurchaseRequestCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 来源会签单 ID（采购链路自动生成时写入）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? CountersignId { get; set; }
+
+    /// <summary>
+    /// 来源会签单 名称（填充字段）
+    /// </summary>
+    public string? CountersignName { get; set; }
+
+    /// <summary>
+    /// 来源会签编号（冗余）
+    /// </summary>
+    public string? CountersignCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 申请日期
@@ -92,19 +108,19 @@ public class TaktPurchaseRequestDto : TaktApprovalDtoBase
     public decimal ConvertedAmount { get; set; }
 
     /// <summary>
+    /// 申请原因
+    /// </summary>
+    public string? RequestReason { get; set; } = string.Empty;
+
+    /// <summary>
     /// 申请状态（1=启用，0=禁用）
     /// </summary>
     public int RequestStatus { get; set; } = 0;
 
     /// <summary>
-    /// 转订单状态（0=未转订单，1=部分转订单，2=全部转订单）
+    /// 转订单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
     /// </summary>
     public int ConvertedStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 申请原因
-    /// </summary>
-    public string? RequestReason { get; set; } = string.Empty;
 
     /// <summary>
     /// 采购申请明细列表（主子表关系，一个申请可以有多个明细）
@@ -149,6 +165,17 @@ public class TaktPurchaseRequestQueryDto : TaktPagedQuery
     /// 采购申请编码（唯一索引）
     /// </summary>
     public string? PurchaseRequestCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 来源会签单 ID（采购链路自动生成时写入）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? CountersignId { get; set; }
+
+    /// <summary>
+    /// 来源会签编号（冗余）
+    /// </summary>
+    public string? CountersignCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 申请日期（范围查询-开始）
@@ -202,22 +229,22 @@ public class TaktPurchaseRequestQueryDto : TaktPagedQuery
     public decimal? ConvertedAmount { get; set; }
 
     /// <summary>
-    /// 申请状态（1=启用，0=禁用）
-    /// </summary>
-    public int? RequestStatus { get; set; }
-
-    /// <summary>
-    /// 转订单状态（0=未转订单，1=部分转订单，2=全部转订单）
-    /// </summary>
-    public int? ConvertedStatus { get; set; }
-
-    /// <summary>
     /// 申请原因
     /// </summary>
     public string? RequestReason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 审批状态（TaktApprovalStatus）
+    /// 申请状态（1=启用，0=禁用）
+    /// </summary>
+    public int? RequestStatus { get; set; }
+
+    /// <summary>
+    /// 转订单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
+    /// </summary>
+    public int? ConvertedStatus { get; set; }
+
+    /// <summary>
+    /// 审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）
     /// </summary>
     public TaktApprovalStatus? ApprovalStatus { get; set; }
 
@@ -300,7 +327,7 @@ public class TaktPurchaseRequestCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -315,6 +342,17 @@ public class TaktPurchaseRequestCreateDto
     /// </summary>
     [Required(ErrorMessage = "采购申请编码（唯一索引）不能为空")]
     public string PurchaseRequestCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 来源会签单 ID（采购链路自动生成时写入）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? CountersignId { get; set; }
+
+    /// <summary>
+    /// 来源会签编号（冗余）
+    /// </summary>
+    public string? CountersignCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 申请日期
@@ -359,19 +397,19 @@ public class TaktPurchaseRequestCreateDto
     public decimal ConvertedAmount { get; set; }
 
     /// <summary>
+    /// 申请原因
+    /// </summary>
+    public string? RequestReason { get; set; } = string.Empty;
+
+    /// <summary>
     /// 申请状态（1=启用，0=禁用）
     /// </summary>
     public int RequestStatus { get; set; } = 0;
 
     /// <summary>
-    /// 转订单状态（0=未转订单，1=部分转订单，2=全部转订单）
+    /// 转订单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
     /// </summary>
     public int ConvertedStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 申请原因
-    /// </summary>
-    public string? RequestReason { get; set; } = string.Empty;
 
     /// <summary>
     /// 采购申请明细列表（主子表关系，一个申请可以有多个明细）（子表，级联保存）
@@ -469,6 +507,27 @@ public class TaktPurchaseRequestTemplateDto
     public string? PurchaseRequestCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 来源会签单 ID（采购链路自动生成时写入）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? CountersignId { get; set; }
+
+    /// <summary>
+    /// 来源会签编号（冗余）
+    /// </summary>
+    public string? CountersignCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 申请日期
+    /// </summary>
+    public DateTime? RequestDate { get; set; }
+
+    /// <summary>
+    /// 要求到货日期
+    /// </summary>
+    public DateTime? RequiredArrivalDate { get; set; }
+
+    /// <summary>
     /// 申请人员工ID（关联 TaktEmployee，序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -480,19 +539,49 @@ public class TaktPurchaseRequestTemplateDto
     public string? RequestBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 申请状态（1=启用，0=禁用）
+    /// 申请总数量（基本单位数量）
     /// </summary>
-    public int? RequestStatus { get; set; }
+    public decimal? TotalQuantity { get; set; }
 
     /// <summary>
-    /// 转订单状态（0=未转订单，1=部分转订单，2=全部转订单）
+    /// 申请总金额（精确到分，存储为整数，单位为分）
     /// </summary>
-    public int? ConvertedStatus { get; set; }
+    public decimal? TotalAmount { get; set; }
+
+    /// <summary>
+    /// 已转订单数量（基本单位数量）
+    /// </summary>
+    public decimal? ConvertedQuantity { get; set; }
+
+    /// <summary>
+    /// 已转订单金额（精确到分，存储为整数，单位为分）
+    /// </summary>
+    public decimal? ConvertedAmount { get; set; }
 
     /// <summary>
     /// 申请原因
     /// </summary>
     public string? RequestReason { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 申请状态（1=启用，0=禁用）
+    /// </summary>
+    public int? RequestStatus { get; set; }
+
+    /// <summary>
+    /// 转订单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
+    /// </summary>
+    public int? ConvertedStatus { get; set; }
+
+    /// <summary>
+    /// 采购申请明细列表（主子表关系，一个申请可以有多个明细）（子表，级联保存）
+    /// </summary>
+    public List<TaktPurchaseRequestItemCreateDto>? Items { get; set; }
+
+    /// <summary>
+    /// 采购申请变更记录列表（外键在子表 TaktPurchaseRequestChangeLog.RequestId）（子表，级联保存）
+    /// </summary>
+    public List<TaktPurchaseRequestChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -522,7 +611,7 @@ public class TaktPurchaseRequestImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -537,6 +626,27 @@ public class TaktPurchaseRequestImportDto
     public string? PurchaseRequestCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 来源会签单 ID（采购链路自动生成时写入）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? CountersignId { get; set; }
+
+    /// <summary>
+    /// 来源会签编号（冗余）
+    /// </summary>
+    public string? CountersignCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 申请日期
+    /// </summary>
+    public DateTime? RequestDate { get; set; }
+
+    /// <summary>
+    /// 要求到货日期
+    /// </summary>
+    public DateTime? RequiredArrivalDate { get; set; }
+
+    /// <summary>
     /// 申请人员工ID（关联 TaktEmployee，序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -548,19 +658,49 @@ public class TaktPurchaseRequestImportDto
     public string? RequestBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 申请状态（1=启用，0=禁用）
+    /// 申请总数量（基本单位数量）
     /// </summary>
-    public int? RequestStatus { get; set; }
+    public decimal? TotalQuantity { get; set; }
 
     /// <summary>
-    /// 转订单状态（0=未转订单，1=部分转订单，2=全部转订单）
+    /// 申请总金额（精确到分，存储为整数，单位为分）
     /// </summary>
-    public int? ConvertedStatus { get; set; }
+    public decimal? TotalAmount { get; set; }
+
+    /// <summary>
+    /// 已转订单数量（基本单位数量）
+    /// </summary>
+    public decimal? ConvertedQuantity { get; set; }
+
+    /// <summary>
+    /// 已转订单金额（精确到分，存储为整数，单位为分）
+    /// </summary>
+    public decimal? ConvertedAmount { get; set; }
 
     /// <summary>
     /// 申请原因
     /// </summary>
     public string? RequestReason { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 申请状态（1=启用，0=禁用）
+    /// </summary>
+    public int? RequestStatus { get; set; }
+
+    /// <summary>
+    /// 转订单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
+    /// </summary>
+    public int? ConvertedStatus { get; set; }
+
+    /// <summary>
+    /// 采购申请明细列表（主子表关系，一个申请可以有多个明细）（子表，级联保存）
+    /// </summary>
+    public List<TaktPurchaseRequestItemCreateDto>? Items { get; set; }
+
+    /// <summary>
+    /// 采购申请变更记录列表（外键在子表 TaktPurchaseRequestChangeLog.RequestId）（子表，级联保存）
+    /// </summary>
+    public List<TaktPurchaseRequestChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -599,6 +739,17 @@ public class TaktPurchaseRequestExportDto
     /// 采购申请编码（唯一索引）
     /// </summary>
     public string PurchaseRequestCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 来源会签单 ID（采购链路自动生成时写入）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? CountersignId { get; set; }
+
+    /// <summary>
+    /// 来源会签编号（冗余）
+    /// </summary>
+    public string? CountersignCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 申请日期
@@ -642,19 +793,19 @@ public class TaktPurchaseRequestExportDto
     public decimal ConvertedAmount { get; set; }
 
     /// <summary>
+    /// 申请原因
+    /// </summary>
+    public string? RequestReason { get; set; } = string.Empty;
+
+    /// <summary>
     /// 申请状态（1=启用，0=禁用）
     /// </summary>
     public int RequestStatus { get; set; } = 0;
 
     /// <summary>
-    /// 转订单状态（0=未转订单，1=部分转订单，2=全部转订单）
+    /// 转订单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
     /// </summary>
     public int ConvertedStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 申请原因
-    /// </summary>
-    public string? RequestReason { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON

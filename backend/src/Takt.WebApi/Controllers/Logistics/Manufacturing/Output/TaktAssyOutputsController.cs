@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Manufacturing.Output
 // 文件名称：TaktAssyOutputsController.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-30
 // 创建人：Takt365(Cursor AI)
 // 功能描述：组立日报控制器
 // 
@@ -49,6 +49,26 @@ public class TaktAssyOutputsController : TaktControllerBase
         {
             var result = await _assyOutputService.GetAssyOutputListAsync(queryDto);
             return Success(result.Data, result.Total, result.PageIndex, result.PageSize, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 获取组立生产统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>生产统计</returns>
+    [TaktPermission("logistics:manufacturing:output:assy:list", "组立生产统计")]
+    [HttpGet("production-stat")]
+    public async Task<IActionResult> GetAssyOutputProductionStatAsync([FromQuery] TaktOutputProductionStatQueryDto queryDto)
+    {
+        try
+        {
+            var result = await _assyOutputService.GetAssyOutputProductionStatAsync(queryDto);
+            return Success(result, "查询成功");
         }
         catch (Exception ex)
         {
@@ -173,26 +193,6 @@ public class TaktAssyOutputsController : TaktControllerBase
         {
             await _assyOutputService.DeleteAssyOutputBatchAsync(ids);
             return Success("删除成功");
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
-    }
-
-    /// <summary>
-    /// 更新组立日报状态
-    /// </summary>
-    /// <param name="dto">状态 DTO</param>
-    /// <returns>组立日报DTO</returns>
-    [TaktPermission("logistics:manufacturing:output:assy:update", "更新组立日报状态")]
-    [HttpPut("status")]
-    public async Task<IActionResult> UpdateAssyOutputStatusAsync([FromBody] TaktAssyOutputStatusDto dto)
-    {
-        try
-        {
-            var result = await _assyOutputService.UpdateAssyOutputStatusAsync(dto);
-            return Success(result, "更新成功");
         }
         catch (Exception ex)
         {

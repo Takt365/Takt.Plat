@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Talent
 // 文件名称：TaktTalentOfferI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktTalentOffer 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktTalentOfferI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.talentoffer._self", "zh-HK", "录用信息_hk", "实体名称"),
 
             // entity.talentoffer.jobpostingid
-            new TranslationSeedItem("entity.talentoffer.jobpostingid", "en-US", "职位发布ID_us", "职位发布ID（用人需求→职位发布→录用）"),
+            new TranslationSeedItem("entity.talentoffer.jobpostingid", "en-US", "职位发布ID_us", "职位发布（关联 TaktTalentJobPosting.Id，选项 TaktTalentJobPostings/options）"),
             // entity.talentoffer.jobpostingid
-            new TranslationSeedItem("entity.talentoffer.jobpostingid", "ja-JP", "职位发布ID_jp", "职位发布ID（用人需求→职位发布→录用）"),
+            new TranslationSeedItem("entity.talentoffer.jobpostingid", "ja-JP", "职位发布ID_jp", "职位发布（关联 TaktTalentJobPosting.Id，选项 TaktTalentJobPostings/options）"),
             // entity.talentoffer.jobpostingid
-            new TranslationSeedItem("entity.talentoffer.jobpostingid", "zh-CN", "职位发布ID", "职位发布ID（用人需求→职位发布→录用）"),
+            new TranslationSeedItem("entity.talentoffer.jobpostingid", "zh-CN", "职位发布ID", "职位发布（关联 TaktTalentJobPosting.Id，选项 TaktTalentJobPostings/options）"),
             // entity.talentoffer.jobpostingid
-            new TranslationSeedItem("entity.talentoffer.jobpostingid", "zh-HK", "职位发布ID_hk", "职位发布ID（用人需求→职位发布→录用）"),
+            new TranslationSeedItem("entity.talentoffer.jobpostingid", "zh-HK", "职位发布ID_hk", "职位发布（关联 TaktTalentJobPosting.Id，选项 TaktTalentJobPostings/options）"),
 
             // entity.talentoffer.offerno
             new TranslationSeedItem("entity.talentoffer.offerno", "en-US", "录用编号_us", "录用编号（租户+公司内业务编号）"),
@@ -109,31 +109,31 @@ public class TaktTalentOfferI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.talentoffer.offerno", "zh-HK", "录用编号_hk", "录用编号（租户+公司内业务编号）"),
 
             // entity.talentoffer.hiredate
-            new TranslationSeedItem("entity.talentoffer.hiredate", "en-US", "录用日期_us", "录用日期（HireDate：确认录用/发 offer）"),
+            new TranslationSeedItem("entity.talentoffer.hiredate", "en-US", "录用日期_us", "录用日期（确认录用/发 offer）"),
             // entity.talentoffer.hiredate
-            new TranslationSeedItem("entity.talentoffer.hiredate", "ja-JP", "录用日期_jp", "录用日期（HireDate：确认录用/发 offer）"),
+            new TranslationSeedItem("entity.talentoffer.hiredate", "ja-JP", "录用日期_jp", "录用日期（确认录用/发 offer）"),
             // entity.talentoffer.hiredate
-            new TranslationSeedItem("entity.talentoffer.hiredate", "zh-CN", "录用日期", "录用日期（HireDate：确认录用/发 offer）"),
+            new TranslationSeedItem("entity.talentoffer.hiredate", "zh-CN", "录用日期", "录用日期（确认录用/发 offer）"),
             // entity.talentoffer.hiredate
-            new TranslationSeedItem("entity.talentoffer.hiredate", "zh-HK", "录用日期_hk", "录用日期（HireDate：确认录用/发 offer）"),
+            new TranslationSeedItem("entity.talentoffer.hiredate", "zh-HK", "录用日期_hk", "录用日期（确认录用/发 offer）"),
 
             // entity.talentoffer.employeeid
-            new TranslationSeedItem("entity.talentoffer.employeeid", "en-US", "关联员工ID_us", "关联员工ID（录用通过并建档后回填，可空）"),
+            new TranslationSeedItem("entity.talentoffer.employeeid", "en-US", "关联员工ID_us", "关联员工（关联 TaktEmployee.Id，选项 TaktEmployees/options；录用通过并建档后回填，可空）"),
             // entity.talentoffer.employeeid
-            new TranslationSeedItem("entity.talentoffer.employeeid", "ja-JP", "关联员工ID_jp", "关联员工ID（录用通过并建档后回填，可空）"),
+            new TranslationSeedItem("entity.talentoffer.employeeid", "ja-JP", "关联员工ID_jp", "关联员工（关联 TaktEmployee.Id，选项 TaktEmployees/options；录用通过并建档后回填，可空）"),
             // entity.talentoffer.employeeid
-            new TranslationSeedItem("entity.talentoffer.employeeid", "zh-CN", "关联员工ID", "关联员工ID（录用通过并建档后回填，可空）"),
+            new TranslationSeedItem("entity.talentoffer.employeeid", "zh-CN", "关联员工ID", "关联员工（关联 TaktEmployee.Id，选项 TaktEmployees/options；录用通过并建档后回填，可空）"),
             // entity.talentoffer.employeeid
-            new TranslationSeedItem("entity.talentoffer.employeeid", "zh-HK", "关联员工ID_hk", "关联员工ID（录用通过并建档后回填，可空）"),
+            new TranslationSeedItem("entity.talentoffer.employeeid", "zh-HK", "关联员工ID_hk", "关联员工（关联 TaktEmployee.Id，选项 TaktEmployees/options；录用通过并建档后回填，可空）"),
 
             // entity.talentoffer.deptid
-            new TranslationSeedItem("entity.talentoffer.deptid", "en-US", "拟录用部门ID_us", "拟录用部门ID"),
+            new TranslationSeedItem("entity.talentoffer.deptid", "en-US", "拟录用部门ID_us", "拟录用部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
             // entity.talentoffer.deptid
-            new TranslationSeedItem("entity.talentoffer.deptid", "ja-JP", "拟录用部门ID_jp", "拟录用部门ID"),
+            new TranslationSeedItem("entity.talentoffer.deptid", "ja-JP", "拟录用部门ID_jp", "拟录用部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
             // entity.talentoffer.deptid
-            new TranslationSeedItem("entity.talentoffer.deptid", "zh-CN", "拟录用部门ID", "拟录用部门ID"),
+            new TranslationSeedItem("entity.talentoffer.deptid", "zh-CN", "拟录用部门ID", "拟录用部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
             // entity.talentoffer.deptid
-            new TranslationSeedItem("entity.talentoffer.deptid", "zh-HK", "拟录用部门ID_hk", "拟录用部门ID"),
+            new TranslationSeedItem("entity.talentoffer.deptid", "zh-HK", "拟录用部门ID_hk", "拟录用部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
 
             // entity.talentoffer.deptname
             new TranslationSeedItem("entity.talentoffer.deptname", "en-US", "拟录用部门名称_us", "拟录用部门名称"),
@@ -145,13 +145,13 @@ public class TaktTalentOfferI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.talentoffer.deptname", "zh-HK", "拟录用部门名称_hk", "拟录用部门名称"),
 
             // entity.talentoffer.postid
-            new TranslationSeedItem("entity.talentoffer.postid", "en-US", "拟录用岗位ID_us", "拟录用岗位ID"),
+            new TranslationSeedItem("entity.talentoffer.postid", "en-US", "拟录用岗位ID_us", "拟录用岗位（关联 TaktPost.Id，选项 TaktPosts/options，可空）"),
             // entity.talentoffer.postid
-            new TranslationSeedItem("entity.talentoffer.postid", "ja-JP", "拟录用岗位ID_jp", "拟录用岗位ID"),
+            new TranslationSeedItem("entity.talentoffer.postid", "ja-JP", "拟录用岗位ID_jp", "拟录用岗位（关联 TaktPost.Id，选项 TaktPosts/options，可空）"),
             // entity.talentoffer.postid
-            new TranslationSeedItem("entity.talentoffer.postid", "zh-CN", "拟录用岗位ID", "拟录用岗位ID"),
+            new TranslationSeedItem("entity.talentoffer.postid", "zh-CN", "拟录用岗位ID", "拟录用岗位（关联 TaktPost.Id，选项 TaktPosts/options，可空）"),
             // entity.talentoffer.postid
-            new TranslationSeedItem("entity.talentoffer.postid", "zh-HK", "拟录用岗位ID_hk", "拟录用岗位ID"),
+            new TranslationSeedItem("entity.talentoffer.postid", "zh-HK", "拟录用岗位ID_hk", "拟录用岗位（关联 TaktPost.Id，选项 TaktPosts/options，可空）"),
 
             // entity.talentoffer.postname
             new TranslationSeedItem("entity.talentoffer.postname", "en-US", "拟录用岗位名称_us", "拟录用岗位名称"),

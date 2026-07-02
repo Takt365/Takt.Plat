@@ -25,7 +25,7 @@ namespace Takt.Domain.Entities.Routine.HelpDesk;
 public class TaktTicketEvaluation : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工单 ID
+    /// 工单 ID（关联 TaktTicket.Id，选项 TaktTickets/options）
     /// </summary>
     [SugarColumn(ColumnName = "ticket_id", ColumnDescription = "工单ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -44,7 +44,7 @@ public class TaktTicketEvaluation : TaktCompanyEntityBase
     public string? Comment { get; set; }
 
     /// <summary>
-    /// 评价人 ID
+    /// 评价人 ID（关联 TaktUser.Id，选项 TaktUsers/options）
     /// </summary>
     [SugarColumn(ColumnName = "evaluator_id", ColumnDescription = "评价人ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]

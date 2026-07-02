@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/quality/cost
 // 文件名称：issue.d.ts
-// 创建时间：2026-06-21
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/cost 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface QualityIssue extends CompanyDtoBase {
   qualityIssueId: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -119,7 +119,7 @@ export interface QualityIssueQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -218,12 +218,12 @@ export interface QualityIssueCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -337,7 +337,7 @@ export interface QualityIssueTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -345,6 +345,11 @@ export interface QualityIssueTemplate {
    * 品质问题编码（唯一，如：QF-2026-0001）
    */
   qualityIssueCode?: string;
+
+  /**
+   * 问题日期
+   */
+  issueDate?: string;
 
   /**
    * 机种/产品型号
@@ -377,9 +382,29 @@ export interface QualityIssueTemplate {
   totalTimeMinutes?: number;
 
   /**
+   * 总费用(元,自动计算 = 各子表费用合计)
+   */
+  totalCost?: number;
+
+  /**
    * 成本币种（CNY/USD/JPY等）
    */
   costCurrency?: string;
+
+  /**
+   * 会议/调查/试验费用明细列表（子表，级联保存）
+   */
+  meetingItems?: QualityIssueMeetingCreate[];
+
+  /**
+   * 组装不良改修应对明细列表（子表，级联保存）
+   */
+  assyReworkItems?: QualityIssueAssyReworkCreate[];
+
+  /**
+   * PCBA不良改修应对明细列表（子表，级联保存）
+   */
+  pcbaReworkItems?: QualityIssuePcbaReworkCreate[];
 
   /**
    * 扩展字段JSON
@@ -411,12 +436,12 @@ export interface QualityIssueImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -424,6 +449,11 @@ export interface QualityIssueImport {
    * 品质问题编码（唯一，如：QF-2026-0001）
    */
   qualityIssueCode?: string;
+
+  /**
+   * 问题日期
+   */
+  issueDate?: string;
 
   /**
    * 机种/产品型号
@@ -456,9 +486,29 @@ export interface QualityIssueImport {
   totalTimeMinutes?: number;
 
   /**
+   * 总费用(元,自动计算 = 各子表费用合计)
+   */
+  totalCost?: number;
+
+  /**
    * 成本币种（CNY/USD/JPY等）
    */
   costCurrency?: string;
+
+  /**
+   * 会议/调查/试验费用明细列表（子表，级联保存）
+   */
+  meetingItems?: QualityIssueMeetingCreate[];
+
+  /**
+   * 组装不良改修应对明细列表（子表，级联保存）
+   */
+  assyReworkItems?: QualityIssueAssyReworkCreate[];
+
+  /**
+   * PCBA不良改修应对明细列表（子表，级联保存）
+   */
+  pcbaReworkItems?: QualityIssuePcbaReworkCreate[];
 
   /**
    * 扩展字段JSON
@@ -490,7 +540,7 @@ export interface QualityIssueExport {
   companyCode: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 

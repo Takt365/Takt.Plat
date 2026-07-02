@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Defect
 // 文件名称：TaktAssyDefectService.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-30
 // 创建人：Takt365(Cursor AI)
 // 功能描述：组立不良日报应用服务实现
 // 
@@ -101,7 +101,7 @@ public class TaktAssyDefectService : TaktServiceBase, ITaktAssyDefectService
     {
         EnsureThreeLayerContext();
         var list = await _assyDefectRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.Status == 1,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
             x => x.PlantCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
@@ -124,12 +124,12 @@ public class TaktAssyDefectService : TaktServiceBase, ITaktAssyDefectService
             x => x.PlantCode == entity.PlantCode
                 && x.ProdCategory == entity.ProdCategory
                 && x.ProdDate == entity.ProdDate
-                && x.ProdLine == entity.ProdLine
+                && x.ProdTeam == entity.ProdTeam
                 && x.ShiftNo == entity.ShiftNo
                 && x.ProdOrderCode == entity.ProdOrderCode);
         if (!isUnique_ix_takt_logistics_manufacturing_defect_assy_unique)
         {
-            throw new TaktBusinessException("组立不良日报的PlantCode、ProdCategory、ProdDate、ProdLine、ShiftNo、ProdOrderCode已存在");
+            throw new TaktBusinessException("组立不良日报的PlantCode、ProdCategory、ProdDate、ProdTeam、ShiftNo、ProdOrderCode已存在");
         }
         entity = await _assyDefectRepository.CreateAsync(entity);
                 await SaveAssyDefectChildrenAsync(entity, dto);
@@ -155,13 +155,13 @@ public class TaktAssyDefectService : TaktServiceBase, ITaktAssyDefectService
             x => x.PlantCode == entity.PlantCode
                 && x.ProdCategory == entity.ProdCategory
                 && x.ProdDate == entity.ProdDate
-                && x.ProdLine == entity.ProdLine
+                && x.ProdTeam == entity.ProdTeam
                 && x.ShiftNo == entity.ShiftNo
                 && x.ProdOrderCode == entity.ProdOrderCode,
             id);
         if (!isUnique_ix_takt_logistics_manufacturing_defect_assy_unique)
         {
-            throw new TaktBusinessException("组立不良日报的PlantCode、ProdCategory、ProdDate、ProdLine、ShiftNo、ProdOrderCode已存在");
+            throw new TaktBusinessException("组立不良日报的PlantCode、ProdCategory、ProdDate、ProdTeam、ShiftNo、ProdOrderCode已存在");
         }
         await _assyDefectRepository.UpdateAsync(entity);
                 await SaveAssyDefectChildrenAsync(entity, dto);
@@ -207,23 +207,6 @@ public class TaktAssyDefectService : TaktServiceBase, ITaktAssyDefectService
     }
 
     /// <summary>
-    /// 更新组立不良日报状态
-    /// </summary>
-    /// <param name="dto">状态DTO</param>
-    /// <returns>DTO</returns>
-    public async Task<TaktAssyDefectDto> UpdateAssyDefectStatusAsync(TaktAssyDefectStatusDto dto)
-    {
-        var entity = await _assyDefectRepository.GetByIdAsync(dto.AssyDefectId);
-        if (entity == null)
-        {
-            throw new TaktBusinessException("组立不良日报不存在");
-        }
-        entity.Status = dto.Status;
-        await _assyDefectRepository.UpdateAsync(entity);
-        return await GetAssyDefectByIdAsync(dto.AssyDefectId) ?? throw new TaktBusinessException("组立不良日报不存在");
-    }
-
-    /// <summary>
     /// 获取导入模板
     /// </summary>
     /// <param name="sheetName">工作表名称</param>
@@ -259,22 +242,22 @@ public class TaktAssyDefectService : TaktServiceBase, ITaktAssyDefectService
             try
             {
                 var entity = rows[i].Adapt<TaktAssyDefect>();
-                var importKey = $"{entity.PlantCode}|{entity.ProdCategory}|{entity.ProdDate}|{entity.ProdLine}|{entity.ShiftNo}|{entity.ProdOrderCode}";
+                var importKey = $"{entity.PlantCode}|{entity.ProdCategory}|{entity.ProdDate}|{entity.ProdTeam}|{entity.ShiftNo}|{entity.ProdOrderCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、ProdCategory、ProdDate、ProdLine、ShiftNo、ProdOrderCode）");
+                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、ProdCategory、ProdDate、ProdTeam、ShiftNo、ProdOrderCode）");
                 }
                 var isUnique_ix_takt_logistics_manufacturing_defect_assy_unique = await _uniqueValidator.IsUniqueAsync(
                     _assyDefectRepository,
                     x => x.PlantCode == entity.PlantCode
                         && x.ProdCategory == entity.ProdCategory
                         && x.ProdDate == entity.ProdDate
-                        && x.ProdLine == entity.ProdLine
+                        && x.ProdTeam == entity.ProdTeam
                         && x.ShiftNo == entity.ShiftNo
                         && x.ProdOrderCode == entity.ProdOrderCode);
                 if (!isUnique_ix_takt_logistics_manufacturing_defect_assy_unique)
                 {
-                    throw new TaktBusinessException("组立不良日报的PlantCode、ProdCategory、ProdDate、ProdLine、ShiftNo、ProdOrderCode已存在");
+                    throw new TaktBusinessException("组立不良日报的PlantCode、ProdCategory、ProdDate、ProdTeam、ShiftNo、ProdOrderCode已存在");
                 }
                 await _assyDefectRepository.CreateAsync(entity);
                 success += 1;
@@ -396,6 +379,43 @@ public class TaktAssyDefectService : TaktServiceBase, ITaktAssyDefectService
             await _assyDefectDetailRepository.CreateRangeAsync(assydefectdetails);
         }
     }
+
+    /// <summary>
+    /// 获取组立不良统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>不良统计</returns>
+    public async Task<TaktAssyDefectStatDto> GetAssyDefectStatAsync(TaktDefectStatQueryDto queryDto)
+    {
+        EnsureThreeLayerContext();
+        var (start, end, statMonth) = TaktStatMonthRangeHelper.ResolveMonthRange(
+            queryDto.ProdDateStart,
+            queryDto.ProdDateEnd);
+        var tenantCode = CurrentTenantCode;
+        var companyCode = CurrentCompanyCode;
+        Expression<Func<TaktAssyDefect, bool>> mainPredicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.ProdDate >= start
+            && x.ProdDate <= end;
+        var monthBaseQty = await _assyDefectRepository.SumAsync(x => x.ProdActualQty, mainPredicate);
+        var monthGoodQty = await _assyDefectRepository.SumAsync(x => x.GoodQuantity, mainPredicate);
+        var monthDefectQty = monthBaseQty - monthGoodQty;
+        if (monthDefectQty < 0)
+        {
+            monthDefectQty = 0;
+        }
+        return new TaktAssyDefectStatDto
+        {
+            StatMonth = statMonth,
+            MonthBaseQty = monthBaseQty,
+            MonthGoodQty = monthGoodQty,
+            MonthDefectQty = monthDefectQty,
+            MonthDefectRatePercent = TaktDefectStatHelper.CalculateDefectRatePercent(monthDefectQty, monthBaseQty),
+            MonthYieldRatePercent = TaktDefectStatHelper.CalculateYieldRatePercent(monthGoodQty, monthBaseQty),
+        };
+    }
+
     // ========================================
     // 查询表达式
     // ========================================
@@ -415,7 +435,7 @@ public class TaktAssyDefectService : TaktServiceBase, ITaktAssyDefectService
             exp = exp.And(x =>
                 (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.ProdCategory != null && x.ProdCategory.Contains(keywords))
-                || (x.ProdLine != null && x.ProdLine.Contains(keywords))
+                || (x.ProdTeam != null && x.ProdTeam.Contains(keywords))
                 || SqlFunc.ToString(x.ShiftNo).Contains(keywords)
                 || (x.ProdOrderCode != null && x.ProdOrderCode.Contains(keywords))
                 || SqlFunc.ToString(x.ProdOrderQty).Contains(keywords)
@@ -424,7 +444,6 @@ public class TaktAssyDefectService : TaktServiceBase, ITaktAssyDefectService
                 || (x.MaterialCode != null && x.MaterialCode.Contains(keywords))
                 || SqlFunc.ToString(x.ProdActualQty).Contains(keywords)
                 || SqlFunc.ToString(x.GoodQuantity).Contains(keywords)
-                || SqlFunc.ToString(x.Status).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.ProdDate).Contains(keywords)
@@ -442,9 +461,9 @@ public class TaktAssyDefectService : TaktServiceBase, ITaktAssyDefectService
             exp = exp.And(x => x.ProdCategory != null && x.ProdCategory.Contains(queryDto.ProdCategory));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ProdLine))
+        if (!string.IsNullOrEmpty(queryDto?.ProdTeam))
         {
-            exp = exp.And(x => x.ProdLine != null && x.ProdLine.Contains(queryDto.ProdLine));
+            exp = exp.And(x => x.ProdTeam != null && x.ProdTeam.Contains(queryDto.ProdTeam));
         }
 
         if (queryDto?.ShiftNo.HasValue == true)
@@ -485,11 +504,6 @@ public class TaktAssyDefectService : TaktServiceBase, ITaktAssyDefectService
         if (queryDto?.GoodQuantity.HasValue == true)
         {
             exp = exp.And(x => x.GoodQuantity == queryDto.GoodQuantity);
-        }
-
-        if (queryDto?.Status.HasValue == true)
-        {
-            exp = exp.And(x => x.Status == queryDto.Status);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

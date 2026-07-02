@@ -44,14 +44,14 @@ public class TaktVocabulary : TaktTenantEntityBase
     public int FilterLevel { get; set; } = 1;
 
     /// <summary>
-    /// 替换文本（为空时使用 * 替换）
+    /// 替换文本（默认 *）
     /// </summary>
-    [SugarColumn(ColumnName = "replace_text", ColumnDescription = "替换文本", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
-    public string? ReplaceText { get; set; }
+    [SugarColumn(ColumnName = "replace_text", ColumnDescription = "替换文本", ColumnDataType = "nvarchar", Length = 100, IsNullable = false, DefaultValue = "*")]
+    public string ReplaceText { get; set; } = "*";
 
     /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
     /// </summary>
-    [SugarColumn(ColumnName = "status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public int Status { get; set; } = 1;
+    [SugarColumn(ColumnName = "vocabulary_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
+    public int VocabularyStatus { get; set; } = 1;
 }

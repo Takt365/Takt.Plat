@@ -1,6 +1,6 @@
 <!-- ======================================== -->
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
-<!-- 命名空间：@/views/logistics/manufacturing/defect/assy-defect-detail/components -->
+<!-- 命名空间：@/views/logistics/manufacturing/defect/assy-defect/components -->
 <!-- 文件名称：assy-defect-detail-panel.vue -->
 <!-- 功能描述：组立不良日报实体主表实体右侧明细 assyDefectDetail 独立 CRUD（按主表选中 assyDefectId 分页） -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
@@ -19,11 +19,11 @@
       @reset="handleQueryReset"
     />
     <TaktToolsBar
-      create-permission="logistics:manufacturing:defect:assydefect:create"
-      update-permission="logistics:manufacturing:defect:assydefect:update"
-      delete-permission="logistics:manufacturing:defect:assydefect:delete"
-      import-permission="logistics:manufacturing:defect:assydefect:import"
-      export-permission="logistics:manufacturing:defect:assydefect:export"
+      create-permission="logistics:manufacturing:defect:assy:create"
+      update-permission="logistics:manufacturing:defect:assy:update"
+      delete-permission="logistics:manufacturing:defect:assy:delete"
+      import-permission="logistics:manufacturing:defect:assy:import"
+      export-permission="logistics:manufacturing:defect:assy:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -100,7 +100,7 @@
       v-model:open="advancedQueryVisible"
       v-model:visible-field-keys="visibleQueryFieldKeys"
       :fields="queryFieldsMeta"
-      storage-key="takt-query-fields-logistics-manufacturing-defect-assy-defect-detail-assy-defect-detail"
+      storage-key="takt-query-fields-logistics-manufacturing-defect-assy-defect-assy-defect-detail"
       :form-model="advancedQueryForm"
       @submit="handleAdvancedQuerySubmit"
       @reset="handleAdvancedQueryReset"
@@ -128,11 +128,11 @@
       </div>
       <div v-show="isFieldVisible('defectCategory')">
       <a-form-item :label="t('entity.assydefectdetail.defectcategory')">
-        <a-input
+        <TaktSelect
           v-model:value="advancedQueryForm.defectCategory"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefectdetail.defectcategory') })"
-          show-count
-          :maxlength="20"
+          dict-type="logistics_defect_category"
+          :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.assydefectdetail.defectcategory') })"
           allow-clear
         />
       </a-form-item>
@@ -201,11 +201,11 @@
       </div>
       <div v-show="isFieldVisible('defectLocation')">
       <a-form-item :label="t('entity.assydefectdetail.defectlocation')">
-        <a-input
+        <TaktSelect
           v-model:value="advancedQueryForm.defectLocation"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefectdetail.defectlocation') })"
-          show-count
-          :maxlength="20"
+          dict-type="logistics_pcb_location_category"
+          :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.assydefectdetail.defectlocation') })"
           allow-clear
         />
       </a-form-item>
@@ -223,11 +223,10 @@
       </div>
       <div v-show="isFieldVisible('repairOperator')">
       <a-form-item :label="t('entity.assydefectdetail.repairoperator')">
-        <a-input
+        <TaktSelect
           v-model:value="advancedQueryForm.repairOperator"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefectdetail.repairoperator') })"
-          show-count
-          :maxlength="20"
+          api-url="TaktEmployees/options"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.assydefectdetail.repairoperator') })"
           allow-clear
         />
       </a-form-item>
@@ -238,7 +237,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -249,7 +248,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -333,12 +332,14 @@
 <script setup lang="ts">
 /**
  * 组立不良日报实体子表 assyDefectDetail 右栏面板
- * @module views/logistics/manufacturing/defect/assy-defect-detail/components
+ * @module views/logistics/manufacturing/defect/assy-defect/components
  */
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted, h } from 'vue'
 import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
+import TaktDictTag from '@/components/common/takt-dict-tag/index.vue'
+import { getEmployeeOptions } from '@/api/human-resource/personnel/employee'
 import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
@@ -361,6 +362,35 @@ import type { AssyDefectDetail, AssyDefectDetailQuery } from '@/types/logistics/
 
 const { t } = useI18n()
 const { selectedMasterRow } = useAssyDefectMasterContext()
+
+/** 员工选项 Map（列表列展示修理员姓名） */
+const employeeOptionMap = ref(new Map<string, string>())
+
+/**
+ * 解析修理员显示名
+ * @param value 员工 Id（string）
+ * @returns 显示文本
+ */
+function resolveEmployeeLabel(value: unknown): string {
+  if (value == null || value === '') {
+    return ''
+  }
+  return employeeOptionMap.value.get(String(value)) ?? String(value)
+}
+
+/** 预加载员工选项（列表列展示） */
+async function loadEmployeeOptions() {
+  try {
+    const employees = await getEmployeeOptions()
+    const map = new Map<string, string>()
+    employees.forEach((item) => {
+      map.set(String(item.dictValue ?? ''), String(item.dictLabel ?? ''))
+    })
+    employeeOptionMap.value = map
+  } catch {
+    employeeOptionMap.value = new Map()
+  }
+}
 
 /** Excel 导入/导出默认 sheet 名与文件名前缀 */
 const excelNames = taktExcelEntityNames('TaktAssyDefectDetail')
@@ -532,8 +562,10 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: AssyDefectDetail }) =>
-      String(getAssyDefectDetailField(record, 'defectCategory') ?? ''),
+    customRender: ({ record }: { record: AssyDefectDetail }) => h(TaktDictTag, {
+      dictType: 'logistics_defect_category',
+      value: getAssyDefectDetailField(record, 'defectCategory'),
+    })
   },
   {
     title: t('entity.assydefectdetail.defectqty'),
@@ -585,6 +617,16 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: AssyDefectDetail }) =>
       String(getAssyDefectDetailField(record, 'testStep') ?? ''),
   },
+  {
+    title: t('entity.assydefectdetail.repairoperator'),
+    dataIndex: 'repairOperator',
+    key: 'repairOperator',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: AssyDefectDetail }) =>
+      resolveEmployeeLabel(getAssyDefectDetailField(record, 'repairOperator')),
+  },
   CreateActionColumn({
     actions: [
       {
@@ -592,7 +634,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:manufacturing:defect:assydefect:update',
+        permission: 'logistics:manufacturing:defect:assy:update',
         onClick: (record: AssyDefectDetail) => void handleEdit(record),
       },
       {
@@ -600,7 +642,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:manufacturing:defect:assydefect:delete',
+        permission: 'logistics:manufacturing:defect:assy:delete',
         onClick: (record: AssyDefectDetail) => void handleDeleteOne(record),
       },
     ],
@@ -617,7 +659,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: AssyDefectDetail, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getAssyDefectDetailId(selectedRow.value) === getAssyDefectDetailId(record)) {
+    } else if (selectedRow.value && getAssyDefectDetailId(selectedRow.value) === getAssyDefectDetailId(record)) {
       selectedRow.value = null
     }
   },
@@ -728,6 +770,10 @@ watch(masterAssyDefectId, () => {
 
 /** 租户/公司切换时刷新子表 */
 useTableRefresh(loadData)
+
+onMounted(() => {
+  void loadEmployeeOptions()
+})
 
 function handleSearch() {
   currentPage.value = getTaktDefaultPageIndex()

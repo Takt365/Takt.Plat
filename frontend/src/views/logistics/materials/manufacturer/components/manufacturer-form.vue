@@ -117,10 +117,10 @@
                 :label="t('entity.manufacturer.type')"
                 name="manufacturerType"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.manufacturerType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.type') })"
-                  style="width: 100%"
+                  dict-type="logistics_manufacturer_type"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.manufacturer.type') })"
                 />
               </a-form-item>
             </a-col>
@@ -129,12 +129,10 @@
                 :label="t('entity.manufacturer.industrysector')"
                 name="industrySector"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.industrySector"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.industrysector') })"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
+                  dict-type="logistics_industry_sector"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.manufacturer.industrysector') })"
                 />
               </a-form-item>
             </a-col>
@@ -337,10 +335,10 @@
                 :label="t('entity.manufacturer.qualitycertification')"
                 name="qualityCertification"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.qualityCertification"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.qualitycertification') })"
-                  style="width: 100%"
+                  dict-type="logistics_quality_certification"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.manufacturer.qualitycertification') })"
                 />
               </a-form-item>
             </a-col>
@@ -352,18 +350,6 @@
                 <a-input-number
                   v-model:value="formState.evaluationScore"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.evaluationscore') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.manufacturer.isqualified')"
-                name="isQualified"
-              >
-                <a-input-number
-                  v-model:value="formState.isQualified"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.isqualified') })"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -484,7 +470,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","manufacturerCode","manufacturerName","manufacturerShortName","manufacturerType","industrySector","manufacturerTaxNumber","registrationCountry","registrationAddress1","registrationAddress2","registrationAddress3","manufacturerPhone","manufacturerFax","manufacturerEmail","manufacturerWebsite","contactPerson","contactPhone","contactEmail","manufacturerLevel","qualityCertification","evaluationScore","isQualified","manufacturerStatus","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","manufacturerCode","manufacturerName","manufacturerShortName","manufacturerType","industrySector","manufacturerTaxNumber","registrationCountry","registrationAddress1","registrationAddress2","registrationAddress3","manufacturerPhone","manufacturerFax","manufacturerEmail","manufacturerWebsite","contactPerson","contactPhone","contactEmail","manufacturerLevel","qualityCertification","evaluationScore","manufacturerStatus","extField","remark"]
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
 
@@ -502,12 +488,6 @@ const manufacturerMaterialFormColumns = computed<TaktEditableTableColumn[]>(() =
     title: t('entity.manufacturermaterial.linenumber'),
     editor: 'inputNumber',
     width: 140, summary: 'sum',
-  },
-  {
-    key: 'materialType',
-    title: t('entity.manufacturermaterial.materialtype'),
-    editor: 'inputNumber',
-    width: 140,
   },
   {
     key: 'manufacturerMaterialCode',
@@ -534,11 +514,11 @@ const manufacturerMaterialFormColumns = computed<TaktEditableTableColumn[]>(() =
     width: 140,
   },
   {
-    key: 'ExtField',
-    title: t('entity.manufacturermaterial.extfield'),
+    key: 'extField',
+    title: t('common.page.entity.extfield'),
     editor: 'textarea',
-    rows: 1,
-    placeholder: t('common.page.form.placeholder.optional', { field: t('entity.manufacturermaterial.extfield') }),
+    rows: 2,
+    placeholder: t('common.page.form.placeholder.optional', { field: t('common.page.entity.extfield') }),
     width: 140,
   },
   {
@@ -559,12 +539,11 @@ function syncChildRowsFromFormData(val: Partial<ManufacturerCreate & { manufactu
 function createDefaultManufacturerMaterialRow(): Record<string, unknown> {
   return {
     lineNumber: (childManufacturerMaterialRows.value.length + 1) * 10,
-    materialType: 0,
     manufacturerMaterialCode: '',
     manufacturerMaterialName: '',
     manufacturerMaterialSpecification: '',
     materialCode: '',
-    ExtField: '',
+    extField: '',
     remark: '',
   }
 }
@@ -722,19 +701,6 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
-  isQualified: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.manufacturer.isqualified') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.manufacturer.isqualified') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
   manufacturerStatus: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
@@ -775,10 +741,6 @@ function getValues(): Record<string, any> {
   if ('evaluationScore' in payload) {
     const rawevaluationScore = payload.evaluationScore
     payload.evaluationScore = typeof rawevaluationScore === 'number' ? rawevaluationScore : Number(rawevaluationScore)
-  }
-  if ('isQualified' in payload) {
-    const rawisQualified = payload.isQualified
-    payload.isQualified = typeof rawisQualified === 'number' ? rawisQualified : Number(rawisQualified)
   }
   if ('manufacturerStatus' in payload) {
     const rawmanufacturerStatus = payload.manufacturerStatus

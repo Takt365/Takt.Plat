@@ -8,7 +8,7 @@
 <!-- ======================================== -->
 
 <template>
-  <div class="foundation-vocabulary">
+  <div class="p-4">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -53,11 +53,9 @@
     />
 
     <!-- 表格 -->
-    <div class="foundation-vocabulary-table-wrap">
-      <TaktSingleTable
-        :scroll="tableScroll"
-        :columns="columns"
+    <TaktSingleTable
       entity-scope="tenant"
+      :columns="columns"
       :visible-column-keys="visibleColumnKeys"
       :id-column-key="'vocabularyId'"
       table-mode="single"
@@ -71,9 +69,16 @@
       @change="handleTableChange"
       @resize-column="handleResizeColumn"
     >
-      <!-- 字典列渲染 -->
+      <!-- 字典/开关列渲染 -->
       <template #bodyCell="{ column, record }">
-        <template v-if="column.key === 'wordCategory'">
+        <template v-if="column.key === 'status'">
+          <a-switch
+            :checked="getVocabularyField(record, 'status') === 1"
+            :checked-children="t('common.page.button.enable')" :un-checked-children="t('common.page.button.disable')"
+            @change="(checked: unknown) => handleStatusChange(record, Boolean(checked))"
+          />
+        </template>
+        <template v-else-if="column.key === 'wordCategory'">
           <TaktDictTag
             :value="getVocabularyField(record, 'wordCategory')"
             dict-type="sys_word_category"
@@ -85,18 +90,11 @@
             dict-type="sys_word_filter_level_category"
           />
         </template>
-        <template v-else-if="column.key === 'status'">
-          <TaktDictTag
-            :value="getVocabularyField(record, 'status')"
-            dict-type="sys_normal_disable_status"
-          />
-        </template>
       </template>
 
     </TaktSingleTable>
-    </div>
 
-    <!-- 分页组件 -->
+    <!-- 分页（服务端分页，外置 TaktPagination） -->
     <TaktPagination
       v-model:current="currentPage"
       v-model:page-size="pageSize"
@@ -116,6 +114,7 @@
       @cancel="handleFormCancel"
     >
       <VocabularyForm
+        :key="formData?.vocabularyId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -137,6 +136,8 @@
         <a-input
           v-model:value="advancedQueryForm.wordText"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.vocabulary.wordtext') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
@@ -166,6 +167,8 @@
         <a-input
           v-model:value="advancedQueryForm.replaceText"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.vocabulary.replacetext') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
@@ -186,7 +189,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -197,17 +200,36 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('ExtField')">
-      <a-form-item :label="t('common.page.entity.ExtField')">
-        <a-input
-          v-model:value="advancedQueryForm.ExtField"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
-          allow-clear
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
+        <a-textarea
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -216,8 +238,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -261,7 +285,6 @@
 </template>
 
 <script setup lang="ts">
-import { getTaktDefaultPageIndex, getTaktDefaultPageSize, ensureTaktPaginationConfigAsync } from '@/utils/takt-paged'
 /**
  * 敏感词实体管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/foundation/vocabulary
@@ -271,12 +294,14 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import VocabularyForm from './components/vocabulary-form.vue'
-import { getVocabularyList, getVocabularyById, createVocabulary, updateVocabulary, deleteVocabularyById, deleteVocabularyBatch, getVocabularyTemplate, importVocabulary, exportVocabulary } from '@/api/foundation/vocabulary'
-import type { Vocabulary, VocabularyQuery, VocabularyCreate, VocabularyUpdate } from '@/types/foundation/vocabulary'
+import { getVocabularyList, getVocabularyById, createVocabulary, updateVocabulary, deleteVocabularyById, deleteVocabularyBatch, getVocabularyTemplate, importVocabulary, exportVocabulary, updateVocabularyStatus } from '@/api/foundation/vocabulary'
+import type { Vocabulary, VocabularyQuery } from '@/types/foundation/vocabulary'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -299,8 +324,6 @@ const currentPage = ref(getTaktDefaultPageIndex())
 const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
-/** 表格 scroll.y（服务端分页固定视口高度） */
-const tableScroll = { y: 'calc(100vh - 300px)' } as const
 /** 工具栏单选时当前行 */
 const selectedRow = ref<Vocabulary | null>(null)
 /** 表格多选行 */
@@ -313,11 +336,13 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<Vocabulary>>({})
+const formData = ref<Partial<Vocabulary> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
@@ -328,7 +353,7 @@ const advancedQueryForm = ref({
   status: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
@@ -340,7 +365,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'status', label: t('entity.vocabulary.status') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'ExtField', label: t('common.page.entity.ExtField') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -358,12 +383,56 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
+/** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
+const dictDataStore = useDictDataStore()
 
-/** 页面挂载后加载分页列表 */
+
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {VocabularyQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<VocabularyQuery>): VocabularyQuery {
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: VocabularyQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: keyof VocabularyQuery, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v as never
+    }
+  }
+  assignTrimmed('wordText', form.wordText)
+  if (form.wordCategory !== undefined && form.wordCategory !== null) {
+    query.wordCategory = form.wordCategory
+  }
+  if (form.filterLevel !== undefined && form.filterLevel !== null) {
+    query.filterLevel = form.filterLevel
+  }
+  assignTrimmed('replaceText', form.replaceText)
+  if (form.status !== undefined && form.status !== null) {
+    query.status = form.status
+  }
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('extField', form.extField)
+  assignTrimmed('remark', form.remark)
+  return query
+}
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
+  void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
+
 
 
 
@@ -455,6 +524,7 @@ const getVocabularyId = (record: any): string => record?.[entityIdName] ?? ''
  */
 const getVocabularyField = (record: any, field: string): any => record?.[field]
 
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -466,7 +536,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: Vocabulary, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getVocabularyId(selectedRow.value) === getVocabularyId(record)) {
+    } else if (selectedRow.value && getVocabularyId(selectedRow.value) === getVocabularyId(record)) {
       selectedRow.value = null
     }
   },
@@ -497,16 +567,7 @@ const onClickRow = (record: Vocabulary) => ({
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: VocabularyQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getVocabularyList(params)
+    const res = await getVocabularyList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
@@ -539,7 +600,7 @@ function handleReset() {
   status: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
   currentPage.value = getTaktDefaultPageIndex()
@@ -549,8 +610,9 @@ function handleReset() {
 /** 打开新增弹窗 */
 function handleCreate() {
   formTitle.value = t('common.dialog.title.create', { entity: t('entity.vocabulary._self') })
-  formData.value = {}
+  formData.value = null
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗 */
 function handleEdit(record: Vocabulary) {
@@ -588,6 +650,8 @@ async function handleFormSubmit() {
       message.success(t('common.feedback.created', { target: t('entity.vocabulary._self') }))
     }
     formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
     loadData()
   } finally {
     formLoading.value = false
@@ -597,6 +661,8 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开导入对话框 */
 function handleImport() {
@@ -628,16 +694,11 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: VocabularyQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportVocabulary(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportVocabulary(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -697,6 +758,30 @@ async function handleDelete() {
     }
   })
 }
+/**
+ * 行内状态切换
+ * @param record 当前行
+ * @param checked 是否启用
+ */
+async function handleStatusChange(record: Vocabulary, checked: boolean) {
+  const newVal = checked ? 1 : 0
+  const oldVal = getVocabularyField(record, 'status')
+  const id = getVocabularyId(record)
+  const row = dataSource.value.find((item) => getVocabularyId(item) === id)
+  if (row) {
+    row.status = newVal
+  }
+  try {
+    await updateVocabularyStatus({ vocabularyId: id, status: newVal })
+    message.success(t('common.feedback.updated'))
+    
+  } catch (error: unknown) {
+    if (row) {
+      row.status = oldVal
+    }
+    message.error(t('common.feedback.failed'))
+  }
+}
 /** 打开高级查询抽屉 */
 function handleAdvancedQuery() {
   advancedQueryVisible.value = true
@@ -718,7 +803,7 @@ function handleAdvancedQueryReset() {
   status: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
 }
@@ -753,24 +838,11 @@ function handlePaginationChange(page: number, size: number) {
   pageSize.value = size
   loadData()
 }
-/** 分页每页条数变更（重置到默认页码） */
+
+/** 分页每页条数变更（重置到第 1 页） */
 function handlePaginationSizeChange(_current: number, size: number) {
   currentPage.value = getTaktDefaultPageIndex()
   pageSize.value = size
   loadData()
 }
 </script>
-
-<style scoped lang="css">
-.foundation-vocabulary {
-  padding: 0 4px 0 0;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-  height: 100%;
-}
-.foundation-vocabulary-table-wrap {
-  flex: 1;
-  min-height: 0;
-}
-</style>

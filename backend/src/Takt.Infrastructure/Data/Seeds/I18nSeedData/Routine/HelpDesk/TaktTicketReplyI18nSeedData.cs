@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.HelpDesk
 // 文件名称：TaktTicketReplyI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktTicketReply 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,31 +91,31 @@ public class TaktTicketReplyI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ticketreply._self", "zh-HK", "工单回复信息_hk", "实体名称"),
 
             // entity.ticketreply.ticketid
-            new TranslationSeedItem("entity.ticketreply.ticketid", "en-US", "工单ID_us", "工单 ID"),
+            new TranslationSeedItem("entity.ticketreply.ticketid", "en-US", "工单ID_us", "工单 ID（关联 TaktTicket.Id，选项 TaktTickets/options）"),
             // entity.ticketreply.ticketid
-            new TranslationSeedItem("entity.ticketreply.ticketid", "ja-JP", "工单ID_jp", "工单 ID"),
+            new TranslationSeedItem("entity.ticketreply.ticketid", "ja-JP", "工单ID_jp", "工单 ID（关联 TaktTicket.Id，选项 TaktTickets/options）"),
             // entity.ticketreply.ticketid
-            new TranslationSeedItem("entity.ticketreply.ticketid", "zh-CN", "工单ID", "工单 ID"),
+            new TranslationSeedItem("entity.ticketreply.ticketid", "zh-CN", "工单ID", "工单 ID（关联 TaktTicket.Id，选项 TaktTickets/options）"),
             // entity.ticketreply.ticketid
-            new TranslationSeedItem("entity.ticketreply.ticketid", "zh-HK", "工单ID_hk", "工单 ID"),
+            new TranslationSeedItem("entity.ticketreply.ticketid", "zh-HK", "工单ID_hk", "工单 ID（关联 TaktTicket.Id，选项 TaktTickets/options）"),
 
             // entity.ticketreply.authortype
-            new TranslationSeedItem("entity.ticketreply.authortype", "en-US", "作者类型_us", "作者类型（0=客服，1=用户，2=系统）"),
+            new TranslationSeedItem("entity.ticketreply.authortype", "en-US", "作者类型_us", "作者类型（字典 routine_ticket_reply_author_type；0=客服 1=用户 2=系统）"),
             // entity.ticketreply.authortype
-            new TranslationSeedItem("entity.ticketreply.authortype", "ja-JP", "作者类型_jp", "作者类型（0=客服，1=用户，2=系统）"),
+            new TranslationSeedItem("entity.ticketreply.authortype", "ja-JP", "作者类型_jp", "作者类型（字典 routine_ticket_reply_author_type；0=客服 1=用户 2=系统）"),
             // entity.ticketreply.authortype
-            new TranslationSeedItem("entity.ticketreply.authortype", "zh-CN", "作者类型", "作者类型（0=客服，1=用户，2=系统）"),
+            new TranslationSeedItem("entity.ticketreply.authortype", "zh-CN", "作者类型", "作者类型（字典 routine_ticket_reply_author_type；0=客服 1=用户 2=系统）"),
             // entity.ticketreply.authortype
-            new TranslationSeedItem("entity.ticketreply.authortype", "zh-HK", "作者类型_hk", "作者类型（0=客服，1=用户，2=系统）"),
+            new TranslationSeedItem("entity.ticketreply.authortype", "zh-HK", "作者类型_hk", "作者类型（字典 routine_ticket_reply_author_type；0=客服 1=用户 2=系统）"),
 
             // entity.ticketreply.authorid
-            new TranslationSeedItem("entity.ticketreply.authorid", "en-US", "作者用户ID_us", "作者用户 ID"),
+            new TranslationSeedItem("entity.ticketreply.authorid", "en-US", "作者用户ID_us", "作者 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
             // entity.ticketreply.authorid
-            new TranslationSeedItem("entity.ticketreply.authorid", "ja-JP", "作者用户ID_jp", "作者用户 ID"),
+            new TranslationSeedItem("entity.ticketreply.authorid", "ja-JP", "作者用户ID_jp", "作者 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
             // entity.ticketreply.authorid
-            new TranslationSeedItem("entity.ticketreply.authorid", "zh-CN", "作者用户ID", "作者用户 ID"),
+            new TranslationSeedItem("entity.ticketreply.authorid", "zh-CN", "作者用户ID", "作者 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
             // entity.ticketreply.authorid
-            new TranslationSeedItem("entity.ticketreply.authorid", "zh-HK", "作者用户ID_hk", "作者用户 ID"),
+            new TranslationSeedItem("entity.ticketreply.authorid", "zh-HK", "作者用户ID_hk", "作者 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
 
             // entity.ticketreply.authorname
             new TranslationSeedItem("entity.ticketreply.authorname", "en-US", "作者姓名_us", "作者姓名"),
@@ -135,23 +135,23 @@ public class TaktTicketReplyI18nSeedData : ITaktSeedDataCoordinator
             // entity.ticketreply.content
             new TranslationSeedItem("entity.ticketreply.content", "zh-HK", "回复内容_hk", "回复内容"),
 
-            // entity.ticketreply.attachmentsjson
-            new TranslationSeedItem("entity.ticketreply.attachmentsjson", "en-US", "附件列表JSON_us", "附件列表 JSON"),
-            // entity.ticketreply.attachmentsjson
-            new TranslationSeedItem("entity.ticketreply.attachmentsjson", "ja-JP", "附件列表JSON_jp", "附件列表 JSON"),
-            // entity.ticketreply.attachmentsjson
-            new TranslationSeedItem("entity.ticketreply.attachmentsjson", "zh-CN", "附件列表JSON", "附件列表 JSON"),
-            // entity.ticketreply.attachmentsjson
-            new TranslationSeedItem("entity.ticketreply.attachmentsjson", "zh-HK", "附件列表JSON_hk", "附件列表 JSON"),
+            // entity.ticketreply.attachments
+            new TranslationSeedItem("entity.ticketreply.attachments", "en-US", "附件JSON_us", "附件 （JSON列表形式，由TaktFile 统一上传到服务器）"),
+            // entity.ticketreply.attachments
+            new TranslationSeedItem("entity.ticketreply.attachments", "ja-JP", "附件JSON_jp", "附件 （JSON列表形式，由TaktFile 统一上传到服务器）"),
+            // entity.ticketreply.attachments
+            new TranslationSeedItem("entity.ticketreply.attachments", "zh-CN", "附件JSON", "附件 （JSON列表形式，由TaktFile 统一上传到服务器）"),
+            // entity.ticketreply.attachments
+            new TranslationSeedItem("entity.ticketreply.attachments", "zh-HK", "附件JSON_hk", "附件 （JSON列表形式，由TaktFile 统一上传到服务器）"),
 
             // entity.ticketreply.isinternal
-            new TranslationSeedItem("entity.ticketreply.isinternal", "en-US", "是否内部备注_us", "是否内部备注（仅客服可见）"),
+            new TranslationSeedItem("entity.ticketreply.isinternal", "en-US", "是否内部备注_us", "是否内部备注（字典 sys_yes_no_type；1=是 0=否，仅客服可见）"),
             // entity.ticketreply.isinternal
-            new TranslationSeedItem("entity.ticketreply.isinternal", "ja-JP", "是否内部备注_jp", "是否内部备注（仅客服可见）"),
+            new TranslationSeedItem("entity.ticketreply.isinternal", "ja-JP", "是否内部备注_jp", "是否内部备注（字典 sys_yes_no_type；1=是 0=否，仅客服可见）"),
             // entity.ticketreply.isinternal
-            new TranslationSeedItem("entity.ticketreply.isinternal", "zh-CN", "是否内部备注", "是否内部备注（仅客服可见）"),
+            new TranslationSeedItem("entity.ticketreply.isinternal", "zh-CN", "是否内部备注", "是否内部备注（字典 sys_yes_no_type；1=是 0=否，仅客服可见）"),
             // entity.ticketreply.isinternal
-            new TranslationSeedItem("entity.ticketreply.isinternal", "zh-HK", "是否内部备注_hk", "是否内部备注（仅客服可见）"),
+            new TranslationSeedItem("entity.ticketreply.isinternal", "zh-HK", "是否内部备注_hk", "是否内部备注（字典 sys_yes_no_type；1=是 0=否，仅客服可见）"),
 
             // entity.ticketreply.ticket
             new TranslationSeedItem("entity.ticketreply.ticket", "en-US", "工单_us", "工单（主表）"),

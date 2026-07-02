@@ -1,4 +1,4 @@
-﻿<!-- ======================================== -->
+<!-- ======================================== -->
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/human-resource/compensation/salary-formula -->
 <!-- 文件名称：index.vue -->
@@ -8,7 +8,7 @@
 <!-- ======================================== -->
 
 <template>
-  <div class="human-resource-compensation-salary-formula">
+  <div class="p-4">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="human:resource:performance:analysis:create"
-      update-permission="human:resource:performance:analysis:update"
-      delete-permission="human:resource:performance:analysis:delete"
-      import-permission="human:resource:performance:analysis:import"
-      export-permission="human:resource:performance:analysis:export"
+      create-permission="human:resource:compensation:salary:formula:create"
+      update-permission="human:resource:compensation:salary:formula:update"
+      delete-permission="human:resource:compensation:salary:formula:delete"
+      import-permission="human:resource:compensation:salary:formula:import"
+      export-permission="human:resource:compensation:salary:formula:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -54,8 +54,8 @@
 
     <!-- 表格 -->
     <TaktSingleTable
-      :columns="columns"
       entity-scope="company"
+      :columns="columns"
       :visible-column-keys="visibleColumnKeys"
       :id-column-key="'salaryFormulaId'"
       table-mode="single"
@@ -69,25 +69,26 @@
       @change="handleTableChange"
       @resize-column="handleResizeColumn"
     >
-      <!-- 字典列渲染 -->
+      <!-- 字典/开关列渲染 -->
       <template #bodyCell="{ column, record }">
-        <template v-if="column.key === 'formulaStep'">
+        <template v-if="column.key === 'formulaStatus'">
+          <a-switch
+            :checked="getSalaryFormulaField(record, 'formulaStatus') === 1"
+            :checked-children="t('common.page.button.enable')" :un-checked-children="t('common.page.button.disable')"
+            @change="(checked: unknown) => handleFormulaStatusChange(record, Boolean(checked))"
+          />
+        </template>
+        <template v-else-if="column.key === 'formulaStep'">
           <TaktDictTag
             :value="getSalaryFormulaField(record, 'formulaStep')"
             dict-type="hr_salary_formula_step_type"
-          />
-        </template>
-        <template v-else-if="column.key === 'formulaStatus'">
-          <TaktDictTag
-            :value="getSalaryFormulaField(record, 'formulaStatus')"
-            dict-type="sys_normal_disable_status"
           />
         </template>
       </template>
 
     </TaktSingleTable>
 
-    <!-- 分页组件 -->
+    <!-- 分页（服务端分页，外置 TaktPagination） -->
     <TaktPagination
       v-model:current="currentPage"
       v-model:page-size="pageSize"
@@ -107,6 +108,7 @@
       @cancel="handleFormCancel"
     >
       <SalaryFormulaForm
+        :key="formData?.salaryFormulaId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -128,6 +130,8 @@
         <a-input
           v-model:value="advancedQueryForm.setCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salaryformula.setcode') })"
+          show-count
+          :maxlength="40"
           allow-clear
         />
       </a-form-item>
@@ -137,15 +141,19 @@
         <a-input
           v-model:value="advancedQueryForm.setName"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salaryformula.setname') })"
+          show-count
+          :maxlength="80"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('PayrollId')">
-      <a-form-item :label="t('entity.salaryformula.PayrollId')">
+      <div v-show="isFieldVisible('payrollId')">
+      <a-form-item :label="t('entity.salaryformula.payrollid')">
         <a-input
-          v-model:value="advancedQueryForm.PayrollId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salaryformula.PayrollId') })"
+          v-model:value="advancedQueryForm.payrollId"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salaryformula.payrollid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -155,6 +163,8 @@
         <a-input
           v-model:value="advancedQueryForm.formulaCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salaryformula.formulacode') })"
+          show-count
+          :maxlength="40"
           allow-clear
         />
       </a-form-item>
@@ -164,6 +174,8 @@
         <a-input
           v-model:value="advancedQueryForm.formulaName"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salaryformula.formulaname') })"
+          show-count
+          :maxlength="80"
           allow-clear
         />
       </a-form-item>
@@ -178,20 +190,13 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('sortOrder')">
-      <a-form-item :label="t('entity.salaryformula.sortorder')">
-        <a-input-number
-          v-model:value="advancedQueryForm.sortOrder"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salaryformula.sortorder') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
       <div v-show="isFieldVisible('targetField')">
       <a-form-item :label="t('entity.salaryformula.targetfield')">
         <a-input
           v-model:value="advancedQueryForm.targetField"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salaryformula.targetfield') })"
+          show-count
+          :maxlength="64"
           allow-clear
         />
       </a-form-item>
@@ -201,6 +206,8 @@
         <a-input
           v-model:value="advancedQueryForm.formulaExpression"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salaryformula.formulaexpression') })"
+          show-count
+          :maxlength="1000"
           allow-clear
         />
       </a-form-item>
@@ -270,6 +277,8 @@
         <a-input
           v-model:value="advancedQueryForm.relatedPlant"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salaryformula.relatedplant') })"
+          show-count
+          :maxlength="4"
           allow-clear
         />
       </a-form-item>
@@ -280,7 +289,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -291,17 +300,36 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('ExtField')">
-      <a-form-item :label="t('common.page.entity.ExtField')">
-        <a-input
-          v-model:value="advancedQueryForm.ExtField"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
-          allow-clear
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
+        <a-textarea
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -310,8 +338,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -355,7 +385,6 @@
 </template>
 
 <script setup lang="ts">
-import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 /**
  * 薪资计算公式管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/human-resource/compensation/salary-formula
@@ -365,12 +394,14 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import SalaryFormulaForm from './components/salary-formula-form.vue'
-import { getSalaryFormulaList, getSalaryFormulaById, createSalaryFormula, updateSalaryFormula, deleteSalaryFormulaById, deleteSalaryFormulaBatch, getSalaryFormulaTemplate, importSalaryFormula, exportSalaryFormula } from '@/api/human-resource/compensation/salary-formula'
-import type { SalaryFormula, SalaryFormulaQuery, SalaryFormulaCreate, SalaryFormulaUpdate } from '@/types/human-resource/compensation/salary-formula'
+import { getSalaryFormulaList, getSalaryFormulaById, createSalaryFormula, updateSalaryFormula, deleteSalaryFormulaById, deleteSalaryFormulaBatch, getSalaryFormulaTemplate, importSalaryFormula, exportSalaryFormula, updateSalaryFormulaStatus } from '@/api/human-resource/compensation/salary-formula'
+import type { SalaryFormula, SalaryFormulaQuery } from '@/types/human-resource/compensation/salary-formula'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -405,21 +436,22 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<SalaryFormula>>({})
+const formData = ref<Partial<SalaryFormula> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
   setCode: '',
   setName: '',
-  PayrollId: '',
+  payrollId: '',
   formulaCode: '',
   formulaName: '',
   formulaStep: undefined as number | undefined,
-  sortOrder: undefined as number | undefined,
   targetField: '',
   formulaExpression: '',
   stepDescription: '',
@@ -431,30 +463,29 @@ const advancedQueryForm = ref({
   relatedPlant: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
   { key: 'setCode', label: t('entity.salaryformula.setcode') },
   { key: 'setName', label: t('entity.salaryformula.setname') },
-  { key: 'PayrollId', label: t('entity.salaryformula.PayrollId') },
+  { key: 'payrollId', label: t('entity.salaryformula.payrollid') },
   { key: 'formulaCode', label: t('entity.salaryformula.formulacode') },
   { key: 'formulaName', label: t('entity.salaryformula.formulaname') },
   { key: 'formulaStep', label: t('entity.salaryformula.formulastep') },
-  { key: 'sortOrder', label: t('entity.salaryformula.sortorder') },
   { key: 'targetField', label: t('entity.salaryformula.targetfield') },
   { key: 'formulaExpression', label: t('entity.salaryformula.formulaexpression') },
   { key: 'stepDescription', label: t('entity.salaryformula.stepdescription') },
-  { key: 'effectiveDateStart', label: t('entity.salaryformula.effectivedatestart') },
-  { key: 'effectiveDateEnd', label: t('entity.salaryformula.effectivedateend') },
-  { key: 'expiryDateStart', label: t('entity.salaryformula.expirydatestart') },
-  { key: 'expiryDateEnd', label: t('entity.salaryformula.expirydateend') },
+  { key: 'effectiveDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.salaryformula.effectivedate')) },
+  { key: 'effectiveDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.salaryformula.effectivedate')) },
+  { key: 'expiryDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.salaryformula.expirydate')) },
+  { key: 'expiryDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.salaryformula.expirydate')) },
   { key: 'formulaStatus', label: t('entity.salaryformula.formulastatus') },
   { key: 'relatedPlant', label: t('entity.salaryformula.relatedplant') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'ExtField', label: t('common.page.entity.ExtField') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -472,11 +503,64 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
+/** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
+const dictDataStore = useDictDataStore()
 
-/** 页面挂载后加载分页列表 */
-onMounted(() => {
+
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {SalaryFormulaQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<SalaryFormulaQuery>): SalaryFormulaQuery {
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: SalaryFormulaQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: keyof SalaryFormulaQuery, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v as never
+    }
+  }
+  assignTrimmed('setCode', form.setCode)
+  assignTrimmed('setName', form.setName)
+  assignTrimmed('payrollId', form.payrollId)
+  assignTrimmed('formulaCode', form.formulaCode)
+  assignTrimmed('formulaName', form.formulaName)
+  if (form.formulaStep !== undefined && form.formulaStep !== null) {
+    query.formulaStep = form.formulaStep
+  }
+  assignTrimmed('targetField', form.targetField)
+  assignTrimmed('formulaExpression', form.formulaExpression)
+  assignTrimmed('stepDescription', form.stepDescription)
+  assignTrimmed('effectiveDateStart', form.effectiveDateStart)
+  assignTrimmed('effectiveDateEnd', form.effectiveDateEnd)
+  assignTrimmed('expiryDateStart', form.expiryDateStart)
+  assignTrimmed('expiryDateEnd', form.expiryDateEnd)
+  if (form.formulaStatus !== undefined && form.formulaStatus !== null) {
+    query.formulaStatus = form.formulaStatus
+  }
+  assignTrimmed('relatedPlant', form.relatedPlant)
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('extField', form.extField)
+  assignTrimmed('remark', form.remark)
+  return query
+}
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
+  void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
+
 
 
 
@@ -514,13 +598,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalaryFormulaField(record, 'setName') ?? ''
   },
   {
-    title: t('entity.salaryformula.PayrollId'),
-    dataIndex: 'PayrollId',
-    key: 'PayrollId',
+    title: t('entity.salaryformula.payrollid'),
+    dataIndex: 'payrollId',
+    key: 'payrollId',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSalaryFormulaField(record, 'PayrollId') ?? ''
+    customRender: ({ record }: { record: any }) => getSalaryFormulaField(record, 'payrollId') ?? ''
   },
   {
     title: t('entity.salaryformula.formulacode'),
@@ -617,7 +701,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'human:resource:performance:analysis:update',
+        permission: 'human:resource:compensation:salary:formula:update',
         onClick: (record: SalaryFormula) => handleEdit(record)
       },
       {
@@ -625,7 +709,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'human:resource:performance:analysis:delete',
+        permission: 'human:resource:compensation:salary:formula:delete',
         onClick: (record: SalaryFormula) => handleDeleteOne(record)
       }
     ]
@@ -641,6 +725,7 @@ const getSalaryFormulaId = (record: any): string => record?.[entityIdName] ?? ''
  */
 const getSalaryFormulaField = (record: any, field: string): any => record?.[field]
 
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -652,7 +737,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: SalaryFormula, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getSalaryFormulaId(selectedRow.value) === getSalaryFormulaId(record)) {
+    } else if (selectedRow.value && getSalaryFormulaId(selectedRow.value) === getSalaryFormulaId(record)) {
       selectedRow.value = null
     }
   },
@@ -683,16 +768,7 @@ const onClickRow = (record: SalaryFormula) => ({
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: SalaryFormulaQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getSalaryFormulaList(params)
+    const res = await getSalaryFormulaList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
@@ -710,7 +786,7 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -720,11 +796,10 @@ function handleReset() {
   advancedQueryForm.value = {
   setCode: '',
   setName: '',
-  PayrollId: '',
+  payrollId: '',
   formulaCode: '',
   formulaName: '',
   formulaStep: undefined as number | undefined,
-  sortOrder: undefined as number | undefined,
   targetField: '',
   formulaExpression: '',
   stepDescription: '',
@@ -736,18 +811,19 @@ function handleReset() {
   relatedPlant: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
   formTitle.value = t('common.dialog.title.create', { entity: t('entity.salaryformula._self') })
-  formData.value = {}
+  formData.value = null
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗 */
 function handleEdit(record: SalaryFormula) {
@@ -785,6 +861,8 @@ async function handleFormSubmit() {
       message.success(t('common.feedback.created', { target: t('entity.salaryformula._self') }))
     }
     formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
     loadData()
   } finally {
     formLoading.value = false
@@ -794,6 +872,8 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开导入对话框 */
 function handleImport() {
@@ -825,16 +905,11 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: SalaryFormulaQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportSalaryFormula(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportSalaryFormula(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -894,6 +969,30 @@ async function handleDelete() {
     }
   })
 }
+/**
+ * 行内状态切换
+ * @param record 当前行
+ * @param checked 是否启用
+ */
+async function handleFormulaStatusChange(record: SalaryFormula, checked: boolean) {
+  const newVal = checked ? 1 : 0
+  const oldVal = getSalaryFormulaField(record, 'formulaStatus')
+  const id = getSalaryFormulaId(record)
+  const row = dataSource.value.find((item) => getSalaryFormulaId(item) === id)
+  if (row) {
+    row.formulaStatus = newVal
+  }
+  try {
+    await updateSalaryFormulaStatus({ salaryFormulaId: id, formulaStatus: newVal })
+    message.success(t('common.feedback.updated'))
+    
+  } catch (error: unknown) {
+    if (row) {
+      row.formulaStatus = oldVal
+    }
+    message.error(t('common.feedback.failed'))
+  }
+}
 /** 打开高级查询抽屉 */
 function handleAdvancedQuery() {
   advancedQueryVisible.value = true
@@ -902,7 +1001,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -910,11 +1009,10 @@ function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
   setCode: '',
   setName: '',
-  PayrollId: '',
+  payrollId: '',
   formulaCode: '',
   formulaName: '',
   formulaStep: undefined as number | undefined,
-  sortOrder: undefined as number | undefined,
   targetField: '',
   formulaExpression: '',
   stepDescription: '',
@@ -926,7 +1024,7 @@ function handleAdvancedQueryReset() {
   relatedPlant: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
 }
@@ -956,23 +1054,16 @@ function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
 /** 分页页码变更 */
-function handlePaginationChange(page: number) {
+function handlePaginationChange(page: number, size: number) {
   currentPage.value = page
+  pageSize.value = size
   loadData()
 }
-/** 分页每页条数变更 */
+
+/** 分页每页条数变更（重置到第 1 页） */
 function handlePaginationSizeChange(_current: number, size: number) {
+  currentPage.value = getTaktDefaultPageIndex()
   pageSize.value = size
-  currentPage.value = 1
   loadData()
 }
 </script>
-
-<style scoped lang="css">
-.human-resource-compensation-salary-formula {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-</style>

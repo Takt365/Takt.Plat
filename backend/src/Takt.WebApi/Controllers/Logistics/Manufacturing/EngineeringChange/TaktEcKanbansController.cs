@@ -25,12 +25,17 @@ namespace Takt.WebApi.Controllers.Logistics.Manufacturing.EngineeringChange;
 public class TaktEcKanbansController : TaktControllerBase
 {
     private readonly ITaktEcKanbanService _service;
+    private readonly ITaktEcDeptMatrixService _deptMatrixService;
 
     /// <summary>构造函数</summary>
-    public TaktEcKanbansController(ITaktEcKanbanService service) => _service = service;
+    public TaktEcKanbansController(ITaktEcKanbanService service, ITaktEcDeptMatrixService deptMatrixService)
+    {
+        _service = service;
+        _deptMatrixService = deptMatrixService;
+    }
 
     /// <summary>获取设变看板列表（分页）</summary>
-    [TaktPermission("logistics:manufacturing:engineeringchange:kanban:list", "设变看板列表")]
+    [TaktPermission("logistics:manufacturing:engineering:change:kanban:list", "设变看板列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetEcKanbanListAsync([FromQuery] TaktEcKanbanQueryDto queryDto)
     {
@@ -39,7 +44,7 @@ public class TaktEcKanbansController : TaktControllerBase
     }
 
     /// <summary>获取设变看板详情</summary>
-    [TaktPermission("logistics:manufacturing:engineeringchange:kanban:query", "设变看板详情")]
+    [TaktPermission("logistics:manufacturing:engineering:change:kanban:query", "设变看板详情")]
     [HttpGet("{ecId}")]
     public async Task<IActionResult> GetEcKanbanByEcIdAsync(long ecId)
     {
@@ -49,11 +54,24 @@ public class TaktEcKanbansController : TaktControllerBase
 
 
     /// <summary>导出设变看板</summary>
-    [TaktPermission("logistics:manufacturing:engineeringchange:kanban:export", "导出设变看板")]
+    [TaktPermission("logistics:manufacturing:engineering:change:kanban:export", "导出设变看板")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportEcKanbanAsync([FromQuery] TaktEcKanbanQueryDto? query)
     {
         try { var (fileName, fileContent) = await _service.ExportEcKanbanAsync(query); return File(fileContent, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName); }
+        catch (Exception ex) { return HandleException(ex); }
+    }
+
+    /// <summary>统计部门执行行数（8 张部门表；看板/数据看板用）</summary>
+    [TaktPermission("logistics:manufacturing:engineering:change:kanban:list", "设变部门执行行统计")]
+    [HttpGet("dept-execution-count")]
+    public async Task<IActionResult> CountDeptExecutionRowsAsync([FromQuery] int? isImplemented)
+    {
+        try
+        {
+            var count = await _deptMatrixService.CountDeptExecutionRowsAsync(isImplemented);
+            return Success(new { count }, "查询成功");
+        }
         catch (Exception ex) { return HandleException(ex); }
     }
 }

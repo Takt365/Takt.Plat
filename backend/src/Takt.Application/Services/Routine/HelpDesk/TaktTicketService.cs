@@ -13,9 +13,7 @@
 using System.Linq.Expressions;
 using Mapster;
 using SqlSugar;
-using Takt.Application.Dtos.Foundation;
 using Takt.Application.Dtos.Routine.HelpDesk;
-using Takt.Application.Services.Foundation;
 using Takt.Domain.Entities.Routine.HelpDesk;
 using Takt.Domain.Entities.Accounting.Financial;
 using Takt.Domain.Interfaces;
@@ -39,12 +37,22 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
     private readonly ITaktCompanyRepository<TaktTicketCategoryAssign> _categoryAssignRepository;
     private readonly ITaktCompanyRepository<TaktAsset> _assetRepository;
     private readonly ITaktCompanyRepository<TaktItAsset> _itAssetRepository;
+    private readonly ITaktNumberingGenerator _numberingGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
-    private readonly ITaktNumberingService? _numberingService;
 
     /// <summary>
     /// 构造函数
     /// </summary>
+    /// <param name="ticketRepository">工单仓储</param>
+    /// <param name="ticketChangeLogRepository">工单变更日志仓储</param>
+    /// <param name="ticketReplyRepository">工单回复仓储</param>
+    /// <param name="categoryAssignRepository">工单分类默认处理人仓储</param>
+    /// <param name="assetRepository">财务资产仓储</param>
+    /// <param name="itAssetRepository">IT 设备保修扩展仓储</param>
+    /// <param name="numberingGenerator">业务编号生成器</param>
+    /// <param name="uniqueValidator">唯一性验证器</param>
+    /// <param name="userContext">用户上下文</param>
+    /// <param name="localizationService">本地化服务</param>
     public TaktTicketService(
         ITaktCompanyRepository<TaktTicket> ticketRepository,
         ITaktCompanyRepository<TaktTicketChangeLog> ticketChangeLogRepository,
@@ -52,8 +60,8 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
         ITaktCompanyRepository<TaktTicketCategoryAssign> categoryAssignRepository,
         ITaktCompanyRepository<TaktAsset> assetRepository,
         ITaktCompanyRepository<TaktItAsset> itAssetRepository,
+        ITaktNumberingGenerator numberingGenerator,
         ITaktUniqueValidator uniqueValidator,
-        ITaktNumberingService? numberingService = null,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
@@ -64,11 +72,15 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
         _categoryAssignRepository = categoryAssignRepository;
         _assetRepository = assetRepository;
         _itAssetRepository = itAssetRepository;
+        _numberingGenerator = numberingGenerator;
         _uniqueValidator = uniqueValidator;
-        _numberingService = numberingService;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 获取工单列表（分页）
+    /// </summary>
+    /// <param name="queryDto">查询DTO</param>
+    /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktTicketDto>> GetTicketListAsync(TaktTicketQueryDto queryDto)
     {
         var predicate = QueryExpression(queryDto);
@@ -83,7 +95,49 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
             queryDto.PageSize);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 获取当前用户提交的工单列表（分页）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>分页结果</returns>
+    public async Task<TaktPagedResult<TaktTicketDto>> GetMyTicketListAsync(TaktTicketQueryDto queryDto)
+    {
+        EnsureThreeLayerContext();
+        if (!CurrentUserId.HasValue || CurrentUserId.Value <= 0)
+        {
+            ThrowBusinessException("无法确定当前用户");
+        }
+        queryDto.SubmitterId = CurrentUserId.Value;
+        return await GetTicketListAsync(queryDto);
+    }
+
+    /// <summary>
+    /// 获取当前用户提交的工单详情
+    /// </summary>
+    /// <param name="id">工单 ID</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktTicketDto?> GetMyTicketByIdAsync(long id)
+    {
+        EnsureThreeLayerContext();
+        if (!CurrentUserId.HasValue || CurrentUserId.Value <= 0)
+        {
+            ThrowBusinessException("无法确定当前用户");
+        }
+        var entity = await GetTicketEntityAsync(id);
+        if (entity == null || entity.SubmitterId != CurrentUserId.Value)
+        {
+            return null;
+        }
+        var dto = entity.Adapt<TaktTicketDto>();
+        await FillTicketDetailsAsync(dto, entity);
+        return dto;
+    }
+
+    /// <summary>
+    /// 获取当前用户工单关联的资产汇总（按 AssetCode 聚合）
+    /// </summary>
+    /// <param name="queryDto">分页查询</param>
+    /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktTicketMyAssetDto>> GetMyAssetListAsync(TaktTicketMyAssetQueryDto queryDto)
     {
         EnsureThreeLayerContext();
@@ -142,7 +196,11 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
         return TaktPagedResult<TaktTicketMyAssetDto>.Create(page, total, queryDto.PageIndex, queryDto.PageSize);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 根据ID获取工单
+    /// </summary>
+    /// <param name="id">工单ID</param>
+    /// <returns>DTO</returns>
     public async Task<TaktTicketDto?> GetTicketByIdAsync(long id)
     {
         var entity = await GetTicketEntityAsync(id);
@@ -155,7 +213,10 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
         return dto;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 获取工单选项列表
+    /// </summary>
+    /// <returns>下拉选项</returns>
     public async Task<List<TaktSelectOption>> GetTicketOptionsAsync()
     {
         EnsureThreeLayerContext();
@@ -170,13 +231,17 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
         }).ToList();
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 创建工单
+    /// </summary>
+    /// <param name="dto">创建DTO</param>
+    /// <returns>DTO</returns>
     public async Task<TaktTicketDto> CreateTicketAsync(TaktTicketCreateDto dto)
     {
         EnsureThreeLayerContext();
         var entity = dto.Adapt<TaktTicket>();
         await ApplyItAssetLinkAsync(entity, dto.ItAssetId, dto.AssetCode);
-        entity.TicketStatus = (int)0;
+        entity.TicketStatus = TaktTicketConstants.New;
         entity.ResolvedAt = null;
         entity.ClosedAt = null;
         if (string.IsNullOrWhiteSpace(entity.TicketNo))
@@ -199,7 +264,11 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
         return await GetTicketByIdAsync(entity.Id) ?? entity.Adapt<TaktTicketDto>();
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 门户用户提交工单
+    /// </summary>
+    /// <param name="dto">提交 DTO</param>
+    /// <returns>DTO</returns>
     public async Task<TaktTicketDto> SubmitTicketAsync(TaktTicketSubmitDto dto)
     {
         EnsureThreeLayerContext();
@@ -220,7 +289,11 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
         return await CreateTicketAsync(createDto);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 邮件/API 渠道建单
+    /// </summary>
+    /// <param name="dto">渠道建单 DTO</param>
+    /// <returns>DTO</returns>
     public async Task<TaktTicketDto> CreateTicketFromChannelAsync(TaktTicketCreateFromChannelDto dto)
     {
         EnsureThreeLayerContext();
@@ -256,7 +329,12 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
         return await CreateTicketAsync(createDto);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 更新工单
+    /// </summary>
+    /// <param name="id">工单ID</param>
+    /// <param name="dto">更新DTO</param>
+    /// <returns>DTO</returns>
     public async Task<TaktTicketDto> UpdateTicketAsync(long id, TaktTicketUpdateDto dto)
     {
         var entity = await GetTicketEntityOrThrowAsync(id);
@@ -273,7 +351,11 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
         return await GetTicketByIdAsync(id) ?? throw new TaktBusinessException("工单不存在");
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 删除工单
+    /// </summary>
+    /// <param name="id">工单ID</param>
+    /// <returns>任务</returns>
     public async Task DeleteTicketByIdAsync(long id)
     {
         var entity = await GetTicketEntityOrThrowAsync(id);
@@ -286,7 +368,11 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 批量删除工单
+    /// </summary>
+    /// <param name="ids">ID列表</param>
+    /// <returns>任务</returns>
     public async Task DeleteTicketBatchAsync(IEnumerable<long> ids)
     {
         var idList = ids?.Distinct().ToList() ?? new List<long>();
@@ -300,7 +386,11 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 更新工单状态（受状态机约束）
+    /// </summary>
+    /// <param name="dto">状态DTO</param>
+    /// <returns>DTO</returns>
     public async Task<TaktTicketDto> UpdateTicketStatusAsync(TaktTicketStatusDto dto)
     {
         var entity = await GetTicketEntityOrThrowAsync(id: dto.TicketId);
@@ -310,7 +400,11 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
         return await GetTicketByIdAsync(dto.TicketId) ?? throw new TaktBusinessException("工单不存在");
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 指派或领取工单
+    /// </summary>
+    /// <param name="dto">指派 DTO</param>
+    /// <returns>DTO</returns>
     public async Task<TaktTicketDto> AssignTicketAsync(TaktTicketAssignDto dto)
     {
         var entity = await GetTicketEntityOrThrowAsync(dto.TicketId);
@@ -327,13 +421,17 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
         entity.AssigneeId = assigneeId;
         entity.AssigneeName = dto.AssigneeName ?? CurrentUserName;
         var target = dto.StartImmediately
-            ? 2
-            : 1;
+            ? TaktTicketConstants.InProgress
+            : TaktTicketConstants.Assigned;
         await TransitionTicketStatusAsync(entity, current, target, "指派/领取工单", dto.Remark, 5);
         return await GetTicketByIdAsync(entity.Id) ?? throw new TaktBusinessException("工单不存在");
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 开始处理（已指派 → 处理中）
+    /// </summary>
+    /// <param name="dto">动作 DTO</param>
+    /// <returns>DTO</returns>
     public async Task<TaktTicketDto> StartTicketProgressAsync(TaktTicketWorkflowActionDto dto)
     {
         var entity = await GetTicketEntityOrThrowAsync(dto.TicketId);
@@ -343,11 +441,15 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
         {
             ThrowBusinessExceptionLocalized(TaktValidationI18nKeys.TicketStatusTransitionInvalid);
         }
-        await TransitionTicketStatusAsync(entity, current, 2, "开始处理", dto.Remark);
+        await TransitionTicketStatusAsync(entity, current, TaktTicketConstants.InProgress, "开始处理", dto.Remark);
         return await GetTicketByIdAsync(entity.Id) ?? throw new TaktBusinessException("工单不存在");
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 请求用户补充信息（处理中 → 等待用户回复）
+    /// </summary>
+    /// <param name="dto">动作 DTO</param>
+    /// <returns>DTO</returns>
     public async Task<TaktTicketDto> WaitForRequesterAsync(TaktTicketWorkflowActionDto dto)
     {
         var entity = await GetTicketEntityOrThrowAsync(dto.TicketId);
@@ -357,11 +459,15 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
         {
             ThrowBusinessExceptionLocalized(TaktValidationI18nKeys.TicketStatusTransitionInvalid);
         }
-        await TransitionTicketStatusAsync(entity, current, 3, "等待用户回复", dto.Remark);
+        await TransitionTicketStatusAsync(entity, current, TaktTicketConstants.PendingConfirm, "等待用户回复", dto.Remark);
         return await GetTicketByIdAsync(entity.Id) ?? throw new TaktBusinessException("工单不存在");
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 标记已解决（处理中 → 已解决）
+    /// </summary>
+    /// <param name="dto">动作 DTO</param>
+    /// <returns>DTO</returns>
     public async Task<TaktTicketDto> ResolveTicketAsync(TaktTicketWorkflowActionDto dto)
     {
         var entity = await GetTicketEntityOrThrowAsync(dto.TicketId);
@@ -372,11 +478,15 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
             ThrowBusinessExceptionLocalized(TaktValidationI18nKeys.TicketStatusTransitionInvalid);
         }
         entity.ResolvedAt = DateTime.Now;
-        await TransitionTicketStatusAsync(entity, current, 4, "标记已解决", dto.Remark);
+        await TransitionTicketStatusAsync(entity, current, TaktTicketConstants.Completed, "标记已解决", dto.Remark);
         return await GetTicketByIdAsync(entity.Id) ?? throw new TaktBusinessException("工单不存在");
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 用户确认关闭（已解决 → 已关闭）
+    /// </summary>
+    /// <param name="dto">动作 DTO</param>
+    /// <returns>DTO</returns>
     public async Task<TaktTicketDto> ConfirmCloseTicketAsync(TaktTicketWorkflowActionDto dto)
     {
         var entity = await GetTicketEntityOrThrowAsync(dto.TicketId);
@@ -387,11 +497,15 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
             ThrowBusinessExceptionLocalized(TaktValidationI18nKeys.TicketStatusTransitionInvalid);
         }
         entity.ClosedAt = DateTime.Now;
-        await TransitionTicketStatusAsync(entity, current, 5, "用户确认关闭", dto.Remark);
+        await TransitionTicketStatusAsync(entity, current, TaktTicketConstants.Closed, "用户确认关闭", dto.Remark);
         return await GetTicketByIdAsync(entity.Id) ?? throw new TaktBusinessException("工单不存在");
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 重新打开工单
+    /// </summary>
+    /// <param name="dto">动作 DTO</param>
+    /// <returns>DTO</returns>
     public async Task<TaktTicketDto> ReopenTicketAsync(TaktTicketWorkflowActionDto dto)
     {
         var entity = await GetTicketEntityOrThrowAsync(dto.TicketId);
@@ -400,33 +514,38 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
         {
             ThrowBusinessExceptionLocalized(TaktValidationI18nKeys.TicketStatusTransitionInvalid);
         }
-        if (current == 4)
+        if (current == TaktTicketConstants.Completed)
         {
             EnsureSubmitter(entity);
         }
         entity.ResolvedAt = null;
         entity.ClosedAt = null;
-        await TransitionTicketStatusAsync(entity, current, TaktTicketStatusConstants.Reopened, "重新打开", dto.Remark);
+        await TransitionTicketStatusAsync(entity, current, TaktTicketConstants.Reopened, "重新打开", dto.Remark);
         return await GetTicketByIdAsync(entity.Id) ?? throw new TaktBusinessException("工单不存在");
     }
 
-    /// <inheritdoc />
-    public async Task<TaktTicketReplyDto> ReplyTicketAsync(TaktTicketReplyCreateDto dto)
+    /// <summary>
+    /// 添加工单回复（用户/客服）
+    /// </summary>
+    /// <param name="dto">回复 DTO</param>
+    /// <returns>回复 DTO</returns>
+    public async Task<TaktTicketReplyDto> ReplyTicketAsync(TaktTicketSessionReplyCreateDto dto)
     {
         EnsureThreeLayerContext();
-        if (string.IsNullOrWhiteSpace(dto.Content))
+        if (string.IsNullOrWhiteSpace(dto.TicketContent))
         {
             ThrowBusinessException("回复内容不能为空");
         }
         var entity = await GetTicketEntityOrThrowAsync(dto.TicketId);
         var status = GetNormalizedStatus(entity);
-        if (status == 5)
+        if (status == TaktTicketConstants.Closed)
         {
             ThrowBusinessExceptionLocalized(TaktValidationI18nKeys.TicketClosedReadonly);
         }
         var isSubmitter = CurrentUserId.HasValue && entity.SubmitterId == CurrentUserId.Value;
         var isAssignee = entity.AssigneeId.HasValue && CurrentUserId.HasValue && entity.AssigneeId == CurrentUserId.Value;
-        if (dto.IsInternal)
+        var isInternal = dto.IsInternal == 1;
+        if (isInternal)
         {
             if (!isAssignee)
             {
@@ -438,7 +557,7 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
             ThrowBusinessException("仅提交人或处理人可回复");
         }
         var authorType = isSubmitter && !isAssignee ? 1 : 0;
-        if (dto.IsInternal)
+        if (isInternal)
         {
             authorType = 0;
         }
@@ -448,9 +567,9 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
             AuthorType = authorType,
             AuthorId = CurrentUserId ?? 0,
             AuthorName = CurrentUserName,
-            Content = dto.Content.Trim(),
-            AttachmentsJson = dto.AttachmentsJson,
-            IsInternal = dto.IsInternal ? 1 : 0,
+            TicketReplyContent = dto.TicketContent.Trim(),
+            Attachments = dto.Attachments,
+            IsInternal = isInternal ? 1 : 0,
         };
         reply = await _ticketReplyRepository.CreateAsync(reply);
         if (authorType == 0 && !entity.FirstResponseAt.HasValue)
@@ -463,28 +582,39 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
             await TransitionTicketStatusAsync(
                 entity,
                 status,
-                2,
+                TaktTicketConstants.InProgress,
                 "用户回复，继续处理",
                 null);
         }
-        await AppendChangeLogAsync(entity, 4, "工单回复", dto.Content);
-        var replyDto = reply.Adapt<TaktTicketReplyDto>();
-        replyDto.IsInternal = reply.IsInternal == 1;
-        return replyDto;
+        await AppendChangeLogAsync(entity, 4, "工单回复", dto.TicketContent);
+        return reply.Adapt<TaktTicketReplyDto>();
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 获取工单回复列表（分页）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktTicketReplyDto>> GetTicketReplyListAsync(TaktTicketReplyQueryDto queryDto)
     {
         EnsureThreeLayerContext();
+        if (!queryDto.TicketId.HasValue || queryDto.TicketId.Value <= 0)
+        {
+            ThrowBusinessException("工单ID无效");
+        }
+        var ticketEntity = await GetTicketEntityOrThrowAsync(queryDto.TicketId.Value);
+        EnsureTicketParticipant(ticketEntity);
+        queryDto.PageIndex = TaktPagedClamp.NormalizePageIndex(queryDto.PageIndex);
+        queryDto.PageSize = TaktPagedClamp.NormalizePageSize(queryDto.PageSize);
+        var ticketId = queryDto.TicketId.Value;
         Expression<Func<TaktTicketReply, bool>> predicate = x =>
-            x.TicketId == queryDto.TicketId
+            x.TicketId == ticketId
             && x.TenantCode == CurrentTenantCode
             && x.CompanyCode == CurrentCompanyCode;
         if (!queryDto.IncludeInternal)
         {
             predicate = x =>
-                x.TicketId == queryDto.TicketId
+                x.TicketId == ticketId
                 && x.TenantCode == CurrentTenantCode
                 && x.CompanyCode == CurrentCompanyCode
                 && x.IsInternal == 0;
@@ -502,7 +632,12 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
             queryDto.PageSize);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 获取导入模板
+    /// </summary>
+    /// <param name="sheetName">工作表名称</param>
+    /// <param name="fileName">文件名</param>
+    /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] content)> GetTicketTemplateAsync(string? sheetName = null, string? fileName = null)
     {
         return await TaktExcelHelper.GenerateTemplateAsync<TaktTicketTemplateDto>(
@@ -510,7 +645,12 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
             fileName ?? "工单导入模板.xlsx");
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 导入工单
+    /// </summary>
+    /// <param name="fileStream">Excel 文件流</param>
+    /// <param name="sheetName">工作表名称</param>
+    /// <returns>导入结果</returns>
     public async Task<(int success, int fail, List<string> errors)> ImportTicketAsync(Stream fileStream, string? sheetName = null)
     {
         var errors = new List<string>();
@@ -548,7 +688,13 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
         return (success, fail, errors);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 导出工单
+    /// </summary>
+    /// <param name="query">查询条件</param>
+    /// <param name="sheetName">工作表名称</param>
+    /// <param name="fileName">文件名</param>
+    /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportTicketAsync(TaktTicketQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktTicketQueryDto());
@@ -574,6 +720,8 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
     /// <summary>
     /// 获取工单实体（租户/公司隔离）
     /// </summary>
+    /// <param name="id">工单ID</param>
+    /// <returns>工单实体；不存在或越权时返回 null</returns>
     private async Task<TaktTicket?> GetTicketEntityAsync(long id)
     {
         var entity = await _ticketRepository.GetByIdAsync(id);
@@ -587,6 +735,8 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
     /// <summary>
     /// 获取工单或抛错
     /// </summary>
+    /// <param name="id">工单ID</param>
+    /// <returns>工单实体</returns>
     private async Task<TaktTicket> GetTicketEntityOrThrowAsync(long id)
     {
         var entity = await GetTicketEntityAsync(id);
@@ -600,6 +750,8 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
     /// <summary>
     /// 读取并规范化状态
     /// </summary>
+    /// <param name="entity">工单实体</param>
+    /// <returns>规范化后的状态值</returns>
     private static int GetNormalizedStatus(TaktTicket entity)
     {
         return TaktTicketWorkflowHelper.NormalizeLegacyStatus(entity.TicketStatus);
@@ -608,6 +760,13 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
     /// <summary>
     /// 执行状态流转并写库
     /// </summary>
+    /// <param name="entity">工单实体</param>
+    /// <param name="current">当前状态</param>
+    /// <param name="target">目标状态</param>
+    /// <param name="summary">变更摘要</param>
+    /// <param name="reason">变更原因</param>
+    /// <param name="changeType">变更类型</param>
+    /// <returns>任务</returns>
     private async Task TransitionTicketStatusAsync(
         TaktTicket entity,
         int current,
@@ -633,6 +792,12 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
     /// <summary>
     /// 追加变更日志
     /// </summary>
+    /// <param name="entity">工单实体</param>
+    /// <param name="changeType">变更类型</param>
+    /// <param name="summary">变更摘要</param>
+    /// <param name="reason">变更原因</param>
+    /// <param name="changeFields">变更字段 JSON</param>
+    /// <returns>任务</returns>
     private async Task AppendChangeLogAsync(
         TaktTicket entity,
         int changeType,
@@ -655,6 +820,8 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
     /// <summary>
     /// 按分类默认处理人自动指派
     /// </summary>
+    /// <param name="entity">工单实体</param>
+    /// <returns>任务</returns>
     private async Task TryAutoAssignAsync(TaktTicket entity)
     {
         if (string.IsNullOrWhiteSpace(entity.CategoryCode))
@@ -672,7 +839,7 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
         }
         entity.AssigneeId = assign.AssigneeId;
         entity.AssigneeName = assign.AssigneeName;
-        entity.TicketStatus = (int)1;
+        entity.TicketStatus = TaktTicketConstants.Assigned;
         await _ticketRepository.UpdateAsync(entity);
         await AppendChangeLogAsync(
             entity,
@@ -684,32 +851,42 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
     /// <summary>
     /// 生成工单编号
     /// </summary>
+    /// <returns>工单编号</returns>
     private async Task<string> GenerateTicketNoAsync()
     {
-        if (_numberingService != null)
+        EnsureThreeLayerContext();
+        try
         {
-            try
+            var outcome = await _numberingGenerator.TryGenerateNextAsync(
+                TaktTicketWorkflowHelper.TicketNumberRuleCode);
+            if (outcome == null || string.IsNullOrWhiteSpace(outcome.BusinessCode))
             {
-                var result = await _numberingService.GenerateNumberingAsync(new TaktNumberingGenerateRequestDto
-                {
-                    RuleCode = TaktTicketWorkflowHelper.TicketNumberRuleCode,
-                });
-                if (!string.IsNullOrWhiteSpace(result.BusinessCode))
-                {
-                    return result.BusinessCode;
-                }
+                return BuildFallbackTicketNo();
             }
-            catch (Exception ex)
-            {
-                LogWarning($"编号规则 {TaktTicketWorkflowHelper.TicketNumberRuleCode} 不可用: {ex.Message}");
-            }
+            return outcome.BusinessCode;
         }
+        catch (Exception ex)
+        {
+            LogWarning($"编号规则 {TaktTicketWorkflowHelper.TicketNumberRuleCode} 不可用: {ex.Message}");
+            return BuildFallbackTicketNo();
+        }
+    }
+
+    /// <summary>
+    /// 编号规则不可用时的兜底工单号
+    /// </summary>
+    /// <returns>兜底工单编号</returns>
+    private static string BuildFallbackTicketNo()
+    {
         return $"TK{DateTime.Now:yyyyMMddHHmmss}{Random.Shared.Next(1000, 9999)}";
     }
 
     /// <summary>
     /// 校验工单编号唯一
     /// </summary>
+    /// <param name="ticketNo">工单编号</param>
+    /// <param name="excludeId">排除的工单ID</param>
+    /// <returns>任务</returns>
     private async Task EnsureTicketNoUniqueAsync(string ticketNo, long? excludeId = null)
     {
         var isUnique = await _uniqueValidator.IsUniqueAsync(
@@ -725,17 +902,37 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
     /// <summary>
     /// 已关闭工单不可编辑
     /// </summary>
+    /// <param name="entity">工单实体</param>
     private void EnsureTicketEditable(TaktTicket entity)
     {
-        if (GetNormalizedStatus(entity) == 5)
+        if (GetNormalizedStatus(entity) == TaktTicketConstants.Closed)
         {
             ThrowBusinessExceptionLocalized(TaktValidationI18nKeys.TicketClosedReadonly);
         }
     }
 
     /// <summary>
+    /// 校验当前用户为提交人或处理人
+    /// </summary>
+    /// <param name="entity">工单实体</param>
+    private void EnsureTicketParticipant(TaktTicket entity)
+    {
+        if (!CurrentUserId.HasValue)
+        {
+            ThrowBusinessException("无法确定当前用户");
+        }
+        var isSubmitter = entity.SubmitterId == CurrentUserId.Value;
+        var isAssignee = entity.AssigneeId.HasValue && entity.AssigneeId == CurrentUserId.Value;
+        if (!isSubmitter && !isAssignee)
+        {
+            ThrowBusinessException("仅提交人或处理人可访问");
+        }
+    }
+
+    /// <summary>
     /// 校验当前用户为提交人
     /// </summary>
+    /// <param name="entity">工单实体</param>
     private void EnsureSubmitter(TaktTicket entity)
     {
         if (!CurrentUserId.HasValue || entity.SubmitterId != CurrentUserId.Value)
@@ -747,6 +944,7 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
     /// <summary>
     /// 校验当前用户为处理人（客服）
     /// </summary>
+    /// <param name="entity">工单实体</param>
     private void EnsureAssigneeOrAgent(TaktTicket entity)
     {
         if (!entity.AssigneeId.HasValue || !CurrentUserId.HasValue || entity.AssigneeId != CurrentUserId.Value)
@@ -762,6 +960,9 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
     /// <summary>
     /// 填充工单详情
     /// </summary>
+    /// <param name="dto">工单 DTO</param>
+    /// <param name="entity">工单实体</param>
+    /// <returns>任务</returns>
     private async Task FillTicketDetailsAsync(TaktTicketDto dto, TaktTicket entity)
     {
         if (dto == null)
@@ -784,6 +985,7 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
     /// <param name="entity">工单实体</param>
     /// <param name="itAssetId">IT 设备保修扩展 ID</param>
     /// <param name="assetCode">资产号码</param>
+    /// <returns>任务</returns>
     private async Task ApplyItAssetLinkAsync(TaktTicket entity, long? itAssetId, string? assetCode)
     {
         EnsureThreeLayerContext();
@@ -826,6 +1028,7 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
     /// 校验财务固定资产是否存在
     /// </summary>
     /// <param name="assetCode">资产号码</param>
+    /// <returns>任务</returns>
     private async Task EnsureFinancialAssetExistsAsync(string assetCode)
     {
         var assets = await _assetRepository.GetListAsync(
@@ -842,6 +1045,7 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
     /// 填充工单 DTO 的资产名称
     /// </summary>
     /// <param name="dto">工单 DTO</param>
+    /// <returns>任务</returns>
     private async Task FillAssetNameAsync(TaktTicketDto dto)
     {
         if (dto == null || string.IsNullOrWhiteSpace(dto.AssetCode))
@@ -860,6 +1064,9 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
     /// <summary>
     /// 保存工单子表级联
     /// </summary>
+    /// <param name="entity">工单实体</param>
+    /// <param name="dto">创建 DTO</param>
+    /// <returns>任务</returns>
     private async Task SaveTicketChildrenAsync(TaktTicket entity, TaktTicketCreateDto dto)
     {
         if (dto.ChangeLogs is not { Count: > 0 })
@@ -875,12 +1082,56 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
         await _ticketChangeLogRepository.CreateRangeAsync(changelogs);
     }
 
+    /// <summary>
+    /// 获取服务台工单统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>服务台工单统计</returns>
+    public async Task<TaktHelpDeskTicketStatDto> GetHelpDeskTicketStatAsync(TaktHelpDeskTicketStatQueryDto queryDto)
+    {
+        EnsureThreeLayerContext();
+        var (start, end, statMonth) = TaktStatMonthRangeHelper.ResolveMonthRange(
+            queryDto.CreatedAtStart,
+            queryDto.CreatedAtEnd);
+        var tenantCode = CurrentTenantCode;
+        var companyCode = CurrentCompanyCode;
+        Expression<Func<TaktTicket, bool>> predicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.CreatedAt >= start
+            && x.CreatedAt <= end;
+        var monthTicketCount = await _ticketRepository.CountAsync(predicate);
+        Expression<Func<TaktTicket, bool>> openPredicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.CreatedAt >= start
+            && x.CreatedAt <= end
+            && x.TicketStatus >= 0
+            && x.TicketStatus <= 3;
+        var monthOpenTicketCount = await _ticketRepository.CountAsync(openPredicate);
+        Expression<Func<TaktTicket, bool>> closedPredicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.CreatedAt >= start
+            && x.CreatedAt <= end
+            && x.TicketStatus >= 4
+            && x.TicketStatus <= 5;
+        var monthClosedTicketCount = await _ticketRepository.CountAsync(closedPredicate);
+        return new TaktHelpDeskTicketStatDto
+        {
+            StatMonth = statMonth,
+            MonthTicketCount = monthTicketCount,
+            MonthOpenTicketCount = monthOpenTicketCount,
+            MonthClosedTicketCount = monthClosedTicketCount,
+        };
+    }
+
     // ========================================
     // 查询表达式
     // ========================================
 
     /// <summary>
-    /// 依据 ITSM 矩阵写入紧急度、影响范围并自动计算优先级（忽略客户端传入的 Priority）。
+    /// 依据 ITSM 矩阵写入紧急度、影响范围并自动计算优先级（忽略客户端传入的 Priority）
     /// </summary>
     /// <param name="entity">工单实体</param>
     /// <param name="urgency">紧急度</param>
@@ -895,6 +1146,8 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
     /// <summary>
     /// 构建工单查询表达式
     /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>查询表达式</returns>
     private static Expression<Func<TaktTicket, bool>> QueryExpression(TaktTicketQueryDto? queryDto)
     {
         var exp = Expressionable.Create<TaktTicket>();
@@ -903,8 +1156,8 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
                 (x.TicketNo != null && x.TicketNo.Contains(keywords))
-                || (x.Title != null && x.Title.Contains(keywords))
-                || (x.Content != null && x.Content.Contains(keywords))
+                || (x.TicketTitle != null && x.TicketTitle.Contains(keywords))
+                || (x.TicketContent != null && x.TicketContent.Contains(keywords))
                 || (x.SubmitterName != null && x.SubmitterName.Contains(keywords))
                 || (x.AssigneeName != null && x.AssigneeName.Contains(keywords))
                 || (x.AssetCode != null && x.AssetCode.Contains(keywords)));
@@ -921,9 +1174,9 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
         {
             exp = exp.And(x => x.TicketNo != null && x.TicketNo.Contains(queryDto.TicketNo));
         }
-        if (!string.IsNullOrEmpty(queryDto?.Title))
+        if (!string.IsNullOrEmpty(queryDto?.TicketTitle))
         {
-            exp = exp.And(x => x.Title != null && x.Title.Contains(queryDto.Title));
+            exp = exp.And(x => x.TicketTitle != null && x.TicketTitle.Contains(queryDto.TicketTitle));
         }
         if (queryDto?.TicketStatus.HasValue == true)
         {

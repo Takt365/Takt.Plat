@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Sales
 // 文件名称：TaktSalesInvoiceItemService.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-07-01
 // 创建人：Takt365(Cursor AI)
 // 功能描述：销售发票明细应用服务实现
 // 
@@ -132,7 +132,7 @@ public class TaktSalesInvoiceItemService : TaktServiceBase, ITaktSalesInvoiceIte
             var maxLine = await _salesInvoiceItemRepository.GetMaxIntAsync(
                 x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.SalesInvoiceId == entity.SalesInvoiceId,
                 x => x.LineNumber);
-            var businessCode = !string.IsNullOrWhiteSpace(entity.SalesInvoiceCode) ? entity.SalesInvoiceCode : entity.SalesInvoiceId.ToString();
+            var businessCode = entity.SalesInvoiceId.ToString();
             entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
         }
         entity = await _salesInvoiceItemRepository.CreateAsync(entity);
@@ -255,7 +255,7 @@ public class TaktSalesInvoiceItemService : TaktServiceBase, ITaktSalesInvoiceIte
                     var maxLine = await _salesInvoiceItemRepository.GetMaxIntAsync(
                         x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.SalesInvoiceId == entity.SalesInvoiceId,
                         x => x.LineNumber);
-                    var businessCode = !string.IsNullOrWhiteSpace(entity.SalesInvoiceCode) ? entity.SalesInvoiceCode : entity.SalesInvoiceId.ToString();
+                    var businessCode = entity.SalesInvoiceId.ToString();
                     entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
                 }
                 await _salesInvoiceItemRepository.CreateAsync(entity);
@@ -336,21 +336,25 @@ public class TaktSalesInvoiceItemService : TaktServiceBase, ITaktSalesInvoiceIte
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
                 SqlFunc.ToString(x.SalesInvoiceId).Contains(keywords)
-                || (x.SalesInvoiceCode != null && x.SalesInvoiceCode.Contains(keywords))
+                || (x.AccountingDocumentCode != null && x.AccountingDocumentCode.Contains(keywords))
                 || SqlFunc.ToString(x.LineNumber).Contains(keywords)
+                || (x.Currency != null && x.Currency.Contains(keywords))
+                || (x.ModelName != null && x.ModelName.Contains(keywords))
                 || (x.MaterialCode != null && x.MaterialCode.Contains(keywords))
+                || (x.MaterialType != null && x.MaterialType.Contains(keywords))
                 || (x.MaterialName != null && x.MaterialName.Contains(keywords))
-                || (x.MaterialSpecification != null && x.MaterialSpecification.Contains(keywords))
-                || (x.SalesUnit != null && x.SalesUnit.Contains(keywords))
-                || SqlFunc.ToString(x.InvoiceQuantity).Contains(keywords)
-                || SqlFunc.ToString(x.UnitPrice).Contains(keywords)
-                || SqlFunc.ToString(x.DiscountRate).Contains(keywords)
-                || SqlFunc.ToString(x.DiscountAmount).Contains(keywords)
-                || SqlFunc.ToString(x.TaxRate).Contains(keywords)
-                || SqlFunc.ToString(x.TaxAmount).Contains(keywords)
-                || SqlFunc.ToString(x.SubtotalAmount).Contains(keywords)
+                || (x.ProfitCenterCode != null && x.ProfitCenterCode.Contains(keywords))
+                || (x.AccountTitle != null && x.AccountTitle.Contains(keywords))
+                || SqlFunc.ToString(x.Quantity).Contains(keywords)
+                || (x.Unit != null && x.Unit.Contains(keywords))
+                || SqlFunc.ToString(x.LocalCurrencyAmount).Contains(keywords)
+                || SqlFunc.ToString(x.TransactionCurrencyAmount).Contains(keywords)
+                || (x.DocumentType != null && x.DocumentType.Contains(keywords))
+                || (x.ReferenceDocumentCode != null && x.ReferenceDocumentCode.Contains(keywords))
+                || SqlFunc.ToString(x.ReferenceDocumentItem).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
+                || SqlFunc.ToString(x.PostingDate).Contains(keywords)
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
@@ -360,9 +364,9 @@ public class TaktSalesInvoiceItemService : TaktServiceBase, ITaktSalesInvoiceIte
             exp = exp.And(x => x.SalesInvoiceId == queryDto.SalesInvoiceId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SalesInvoiceCode))
+        if (!string.IsNullOrEmpty(queryDto?.AccountingDocumentCode))
         {
-            exp = exp.And(x => x.SalesInvoiceCode != null && x.SalesInvoiceCode.Contains(queryDto.SalesInvoiceCode));
+            exp = exp.And(x => x.AccountingDocumentCode != null && x.AccountingDocumentCode.Contains(queryDto.AccountingDocumentCode));
         }
 
         if (queryDto?.LineNumber.HasValue == true)
@@ -370,9 +374,24 @@ public class TaktSalesInvoiceItemService : TaktServiceBase, ITaktSalesInvoiceIte
             exp = exp.And(x => x.LineNumber == queryDto.LineNumber);
         }
 
+        if (!string.IsNullOrEmpty(queryDto?.Currency))
+        {
+            exp = exp.And(x => x.Currency != null && x.Currency.Contains(queryDto.Currency));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.ModelName))
+        {
+            exp = exp.And(x => x.ModelName != null && x.ModelName.Contains(queryDto.ModelName));
+        }
+
         if (!string.IsNullOrEmpty(queryDto?.MaterialCode))
         {
             exp = exp.And(x => x.MaterialCode != null && x.MaterialCode.Contains(queryDto.MaterialCode));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.MaterialType))
+        {
+            exp = exp.And(x => x.MaterialType != null && x.MaterialType.Contains(queryDto.MaterialType));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.MaterialName))
@@ -380,49 +399,49 @@ public class TaktSalesInvoiceItemService : TaktServiceBase, ITaktSalesInvoiceIte
             exp = exp.And(x => x.MaterialName != null && x.MaterialName.Contains(queryDto.MaterialName));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaterialSpecification))
+        if (!string.IsNullOrEmpty(queryDto?.ProfitCenterCode))
         {
-            exp = exp.And(x => x.MaterialSpecification != null && x.MaterialSpecification.Contains(queryDto.MaterialSpecification));
+            exp = exp.And(x => x.ProfitCenterCode != null && x.ProfitCenterCode.Contains(queryDto.ProfitCenterCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SalesUnit))
+        if (!string.IsNullOrEmpty(queryDto?.AccountTitle))
         {
-            exp = exp.And(x => x.SalesUnit != null && x.SalesUnit.Contains(queryDto.SalesUnit));
+            exp = exp.And(x => x.AccountTitle != null && x.AccountTitle.Contains(queryDto.AccountTitle));
         }
 
-        if (queryDto?.InvoiceQuantity.HasValue == true)
+        if (queryDto?.Quantity.HasValue == true)
         {
-            exp = exp.And(x => x.InvoiceQuantity == queryDto.InvoiceQuantity);
+            exp = exp.And(x => x.Quantity == queryDto.Quantity);
         }
 
-        if (queryDto?.UnitPrice.HasValue == true)
+        if (!string.IsNullOrEmpty(queryDto?.Unit))
         {
-            exp = exp.And(x => x.UnitPrice == queryDto.UnitPrice);
+            exp = exp.And(x => x.Unit != null && x.Unit.Contains(queryDto.Unit));
         }
 
-        if (queryDto?.DiscountRate.HasValue == true)
+        if (queryDto?.LocalCurrencyAmount.HasValue == true)
         {
-            exp = exp.And(x => x.DiscountRate == queryDto.DiscountRate);
+            exp = exp.And(x => x.LocalCurrencyAmount == queryDto.LocalCurrencyAmount);
         }
 
-        if (queryDto?.DiscountAmount.HasValue == true)
+        if (queryDto?.TransactionCurrencyAmount.HasValue == true)
         {
-            exp = exp.And(x => x.DiscountAmount == queryDto.DiscountAmount);
+            exp = exp.And(x => x.TransactionCurrencyAmount == queryDto.TransactionCurrencyAmount);
         }
 
-        if (queryDto?.TaxRate.HasValue == true)
+        if (!string.IsNullOrEmpty(queryDto?.DocumentType))
         {
-            exp = exp.And(x => x.TaxRate == queryDto.TaxRate);
+            exp = exp.And(x => x.DocumentType != null && x.DocumentType.Contains(queryDto.DocumentType));
         }
 
-        if (queryDto?.TaxAmount.HasValue == true)
+        if (!string.IsNullOrEmpty(queryDto?.ReferenceDocumentCode))
         {
-            exp = exp.And(x => x.TaxAmount == queryDto.TaxAmount);
+            exp = exp.And(x => x.ReferenceDocumentCode != null && x.ReferenceDocumentCode.Contains(queryDto.ReferenceDocumentCode));
         }
 
-        if (queryDto?.SubtotalAmount.HasValue == true)
+        if (queryDto?.ReferenceDocumentItem.HasValue == true)
         {
-            exp = exp.And(x => x.SubtotalAmount == queryDto.SubtotalAmount);
+            exp = exp.And(x => x.ReferenceDocumentItem == queryDto.ReferenceDocumentItem);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))
@@ -433,6 +452,16 @@ public class TaktSalesInvoiceItemService : TaktServiceBase, ITaktSalesInvoiceIte
         if (!string.IsNullOrEmpty(queryDto?.Remark))
         {
             exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+        }
+
+        if (queryDto?.PostingDateStart.HasValue == true)
+        {
+            exp = exp.And(x => x.PostingDate >= queryDto.PostingDateStart);
+        }
+
+        if (queryDto?.PostingDateEnd.HasValue == true)
+        {
+            exp = exp.And(x => x.PostingDate <= queryDto.PostingDateEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)

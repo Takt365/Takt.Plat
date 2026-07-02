@@ -15,7 +15,7 @@ using Takt.Domain.Entities;
 namespace Takt.Domain.Entities.HumanResource.Attendance;
 
 /// <summary>
-/// 工厂日历（公司级；RelatedPlant 为空表示公司通用，有值表示工厂专属）
+/// 工厂日历（公司级；按 RelatedPlant 区分工厂维度）
 /// </summary>
 [SugarTable("takt_human_resource_attendance_calendar", "工厂日历表")]
 [SugarIndex("ix_calendar_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
@@ -31,25 +31,25 @@ public class TaktCalendar : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "calendar_date", ColumnDescription = "日历日期", ColumnDataType = "date", IsNullable = false)]
     public DateTime CalendarDate { get; set; }
     /// <summary>
-    /// 是否工作日（0=非工作日 1=工作日 2=调休工作日等）
+    /// 是否工作日（字典 hr_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
     /// </summary>
     [SugarColumn(ColumnName = "is_working_day", ColumnDescription = "是否工作日", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsWorkingDay { get; set; }
     /// <summary>
-    /// 关联假日 ID（<see cref="TaktHoliday"/>）
+    /// 关联假日（关联 TaktHoliday.Id，选项 TaktHolidays/options）
     /// </summary>
     [SugarColumn(ColumnName = "holiday_id", ColumnDescription = "关联假日ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? HolidayId { get; set; }
     /// <summary>
-    /// 关联班次 ID（<see cref="TaktWorkShift"/>）
+    /// 关联班次（关联 TaktWorkShift.Id，选项 TaktWorkShifts/options）
     /// </summary>
     [SugarColumn(ColumnName = "shift_id", ColumnDescription = "关联班次ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ShiftId { get; set; }
     /// <summary>
-    /// 关联工厂（为空表示公司级通用日历）
+    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
-    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = true)]
-    public string? RelatedPlant { get; set; }
+    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
+    public string RelatedPlant { get; set; } = string.Empty;
 }

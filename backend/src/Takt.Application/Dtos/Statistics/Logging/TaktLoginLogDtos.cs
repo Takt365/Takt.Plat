@@ -14,6 +14,7 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
+using Takt.Shared.Constants;
 using Takt.Shared.Enums;
 
 namespace Takt.Application.Dtos.Statistics.Logging;
@@ -44,52 +45,47 @@ public class TaktLoginLogDto : TaktCompanyDtoBase
     /// <summary>
     /// 登录方式
     /// </summary>
-    public TaktLoginType? LoginType { get; set; }
+    public string LoginType { get; set; } = TaktConstants.LoginType.Unknown;
 
     /// <summary>
-    /// 浏览器类型
+    /// 浏览器（TaktConstants.BrowserType）
     /// </summary>
-    public TaktBrowserType? Browser { get; set; }
+    public string Browser { get; set; } = "unknown";
 
     /// <summary>
-    /// 操作系统
+    /// 操作系统（TaktConstants.OperatingSystem）
     /// </summary>
-    public TaktOperatingSystem? Os { get; set; }
+    public string Os { get; set; } = "unknown";
 
     /// <summary>
-    /// 用户代理字符串（User-Agent）
+    /// 用户代理（User-Agent）
     /// </summary>
-    public string? UserAgent { get; set; } = string.Empty;
+    public string UserAgent { get; set; } = string.Empty;
 
     /// <summary>
     /// 登录结果
     /// </summary>
-    public TaktLoginResult LoginResult { get; set; }
+    public string LoginResult { get; set; } = string.Empty;
 
     /// <summary>
     /// 登录结果消息
     /// </summary>
-    public string? LoginMessage { get; set; } = string.Empty;
+    public string LoginMessage { get; set; } = string.Empty;
 
     /// <summary>
     /// 登录IP地址
     /// </summary>
-    public string? LoginIp { get; set; } = string.Empty;
+    public string LoginIp { get; set; } = string.Empty;
 
     /// <summary>
     /// 登录地点（IP解析，如：中国-广东省-深圳市）
     /// </summary>
-    public string? LoginLocation { get; set; } = string.Empty;
+    public string LoginLocation { get; set; } = string.Empty;
 
     /// <summary>
     /// 登出时间
     /// </summary>
     public DateTime? LogoutAt { get; set; }
-
-    /// <summary>
-    /// 会话时长（秒，从登录到登出的时长）
-    /// </summary>
-    public int? SessionDuration { get; set; }
 
 }
 
@@ -121,27 +117,27 @@ public class TaktLoginLogQueryDto : TaktPagedQuery
     /// <summary>
     /// 登录方式
     /// </summary>
-    public TaktLoginType? LoginType { get; set; }
+    public string? LoginType { get; set; }
 
     /// <summary>
-    /// 浏览器类型
+    /// 浏览器（TaktConstants.BrowserType）
     /// </summary>
-    public TaktBrowserType? Browser { get; set; }
+    public string? Browser { get; set; }
 
     /// <summary>
-    /// 操作系统
+    /// 操作系统（TaktConstants.OperatingSystem）
     /// </summary>
-    public TaktOperatingSystem? Os { get; set; }
+    public string? Os { get; set; }
 
     /// <summary>
-    /// 用户代理字符串（User-Agent）
+    /// 用户代理（User-Agent）
     /// </summary>
     public string? UserAgent { get; set; } = string.Empty;
 
     /// <summary>
     /// 登录结果
     /// </summary>
-    public TaktLoginResult? LoginResult { get; set; }
+    public string? LoginResult { get; set; }
 
     /// <summary>
     /// 登录结果消息
@@ -167,11 +163,6 @@ public class TaktLoginLogQueryDto : TaktPagedQuery
     /// 登出时间（范围查询-结束）
     /// </summary>
     public DateTime? LogoutAtEnd { get; set; }
-
-    /// <summary>
-    /// 会话时长（秒，从登录到登出的时长）
-    /// </summary>
-    public int? SessionDuration { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -214,7 +205,7 @@ public class TaktLoginLogCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -227,42 +218,42 @@ public class TaktLoginLogCreateDto
     /// <summary>
     /// 登录方式
     /// </summary>
-    public TaktLoginType? LoginType { get; set; }
+    public string LoginType { get; set; } = TaktConstants.LoginType.Unknown;
 
     /// <summary>
-    /// 浏览器类型
+    /// 浏览器（TaktConstants.BrowserType）
     /// </summary>
-    public TaktBrowserType? Browser { get; set; }
+    public string Browser { get; set; } = "unknown";
 
     /// <summary>
-    /// 操作系统
+    /// 操作系统（TaktConstants.OperatingSystem）
     /// </summary>
-    public TaktOperatingSystem? Os { get; set; }
+    public string Os { get; set; } = "unknown";
 
     /// <summary>
-    /// 用户代理字符串（User-Agent）
+    /// 用户代理（User-Agent）
     /// </summary>
-    public string? UserAgent { get; set; } = string.Empty;
+    public string UserAgent { get; set; } = string.Empty;
 
     /// <summary>
     /// 登录结果
     /// </summary>
-    public TaktLoginResult LoginResult { get; set; }
+    public string LoginResult { get; set; } = string.Empty;
 
     /// <summary>
     /// 登录结果消息
     /// </summary>
-    public string? LoginMessage { get; set; } = string.Empty;
+    public string LoginMessage { get; set; } = string.Empty;
 
     /// <summary>
     /// 登录IP地址
     /// </summary>
-    public string? LoginIp { get; set; } = string.Empty;
+    public string LoginIp { get; set; } = string.Empty;
 
     /// <summary>
     /// 登录地点（IP解析，如：中国-广东省-深圳市）
     /// </summary>
-    public string? LoginLocation { get; set; } = string.Empty;
+    public string LoginLocation { get; set; } = string.Empty;
 
     /// <summary>
     /// 登出时间
@@ -330,52 +321,47 @@ public class TaktLoginLogExportDto
     /// <summary>
     /// 登录方式
     /// </summary>
-    public TaktLoginType? LoginType { get; set; }
+    public string LoginType { get; set; } = TaktConstants.LoginType.Unknown;
 
     /// <summary>
-    /// 浏览器类型
+    /// 浏览器（TaktConstants.BrowserType）
     /// </summary>
-    public TaktBrowserType? Browser { get; set; }
+    public string Browser { get; set; } = "unknown";
 
     /// <summary>
-    /// 操作系统
+    /// 操作系统（TaktConstants.OperatingSystem）
     /// </summary>
-    public TaktOperatingSystem? Os { get; set; }
+    public string Os { get; set; } = "unknown";
 
     /// <summary>
-    /// 用户代理字符串（User-Agent）
+    /// 用户代理（User-Agent）
     /// </summary>
-    public string? UserAgent { get; set; } = string.Empty;
+    public string UserAgent { get; set; } = string.Empty;
 
     /// <summary>
     /// 登录结果
     /// </summary>
-    public TaktLoginResult LoginResult { get; set; }
+    public string LoginResult { get; set; } = string.Empty;
 
     /// <summary>
     /// 登录结果消息
     /// </summary>
-    public string? LoginMessage { get; set; } = string.Empty;
+    public string LoginMessage { get; set; } = string.Empty;
 
     /// <summary>
     /// 登录IP地址
     /// </summary>
-    public string? LoginIp { get; set; } = string.Empty;
+    public string LoginIp { get; set; } = string.Empty;
 
     /// <summary>
     /// 登录地点（IP解析，如：中国-广东省-深圳市）
     /// </summary>
-    public string? LoginLocation { get; set; } = string.Empty;
+    public string LoginLocation { get; set; } = string.Empty;
 
     /// <summary>
     /// 登出时间
     /// </summary>
     public DateTime? LogoutAt { get; set; }
-
-    /// <summary>
-    /// 会话时长（秒，从登录到登出的时长）
-    /// </summary>
-    public int? SessionDuration { get; set; }
 
     /// <summary>
     /// 扩展字段JSON

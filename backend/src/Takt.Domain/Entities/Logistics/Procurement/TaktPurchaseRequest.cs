@@ -11,7 +11,6 @@
 // ========================================
 
 using SqlSugar;
-using Takt.Shared.Enums;
 using Takt.Domain.Entities;
 
 namespace Takt.Domain.Entities.Logistics.Procurement;
@@ -30,9 +29,9 @@ namespace Takt.Domain.Entities.Logistics.Procurement;
 public class TaktPurchaseRequest : TaktApprovalEntityBase
 {
     /// <summary>
-    /// 工厂代码（不可空）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -40,73 +39,94 @@ public class TaktPurchaseRequest : TaktApprovalEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "purchase_request_code", ColumnDescription = "采购申请编码", ColumnDataType = "nvarchar", Length = 10, IsNullable = false)]
     public string PurchaseRequestCode { get; set; } = string.Empty;
-
+    /// <summary>
+    /// 来源采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
+    /// </summary>
+    [SugarColumn(ColumnName = "purchase_inquiry_id", ColumnDescription = "来源采购询价ID", ColumnDataType = "bigint", IsNullable = true)]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? PurchaseInquiryId { get; set; }
+    /// <summary>
+    /// 来源采购询价编码（冗余）
+    /// </summary>
+    [SugarColumn(ColumnName = "purchase_inquiry_code", ColumnDescription = "来源采购询价编码", ColumnDataType = "varchar", Length = 40, IsNullable = true)]
+    public string? PurchaseInquiryCode { get; set; }
+    /// <summary>
+    /// 采购链路方案（字典 logistics_procurement_chain_scheme；1=方案一，2=方案二）
+    /// </summary>
+    [SugarColumn(ColumnName = "chain_scheme", ColumnDescription = "采购链路方案", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
+    public int ChainScheme { get; set; } = 1;
+    /// <summary>
+    /// PO 生成决策（方案一：null=待决策，1=生成 PO，0=暂不生成 PO）
+    /// </summary>
+    [SugarColumn(ColumnName = "po_decision", ColumnDescription = "PO生成决策", ColumnDataType = "int", IsNullable = true)]
+    public int? PoDecision { get; set; }
+    /// <summary>
+    /// PR 会签单 ID（关联 TaktCountersign.Id，选项 TaktCountersigns/options）
+    /// </summary>
+    [SugarColumn(ColumnName = "countersign_id", ColumnDescription = "PR会签单ID", ColumnDataType = "bigint", IsNullable = true)]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? CountersignId { get; set; }
+    /// <summary>
+    /// PR 会签编号（冗余）
+    /// </summary>
+    [SugarColumn(ColumnName = "countersign_code", ColumnDescription = "PR会签编号", ColumnDataType = "varchar", Length = 50, IsNullable = true)]
+    public string? CountersignCode { get; set; }
     /// <summary>
     /// 申请日期
     /// </summary>
     [SugarColumn(ColumnName = "request_date", ColumnDescription = "申请日期", ColumnDataType = "datetime", IsNullable = false)]
     public DateTime RequestDate { get; set; } = DateTime.Now;
-
     /// <summary>
     /// 要求到货日期
     /// </summary>
     [SugarColumn(ColumnName = "required_arrival_date", ColumnDescription = "要求到货日期", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? RequiredArrivalDate { get; set; }
-
     /// <summary>
-    /// 申请人员工ID（关联 TaktEmployee，序列化为 string 以避免 Javascript 精度问题）
+    /// 申请人员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [SugarColumn(ColumnName = "request_id", ColumnDescription = "申请人员工ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RequestId { get; set; }
-
     /// <summary>
     /// 申请人（人员代码）
     /// </summary>
     [SugarColumn(ColumnName = "request_by", ColumnDescription = "申请人", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string RequestBy { get; set; } = string.Empty;
-
     /// <summary>
     /// 申请总数量（基本单位数量）
     /// </summary>
     [SugarColumn(ColumnName = "total_quantity", ColumnDescription = "申请总数量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 4, IsNullable = false, DefaultValue = "0")]
     public decimal TotalQuantity { get; set; } = 0;
-
     /// <summary>
     /// 申请总金额（精确到分，存储为整数，单位为分）
     /// </summary>
     [SugarColumn(ColumnName = "total_amount", ColumnDescription = "申请总金额", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
     public decimal TotalAmount { get; set; } = 0;
-
     /// <summary>
     /// 已转订单数量（基本单位数量）
     /// </summary>
     [SugarColumn(ColumnName = "converted_quantity", ColumnDescription = "已转订单数量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 4, IsNullable = false, DefaultValue = "0")]
     public decimal ConvertedQuantity { get; set; } = 0;
-
     /// <summary>
     /// 已转订单金额（精确到分，存储为整数，单位为分）
     /// </summary>
     [SugarColumn(ColumnName = "converted_amount", ColumnDescription = "已转订单金额", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
     public decimal ConvertedAmount { get; set; } = 0;
-
-    /// <summary>
-    /// 申请状态（1=启用，0=禁用）
-    /// </summary>
-    [SugarColumn(ColumnName = "request_status", ColumnDescription = "申请状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public int RequestStatus { get; set; } = 1;
-
-    /// <summary>
-    /// 转订单状态（0=未转订单，1=部分转订单，2=全部转订单）
-    /// </summary>
-    [SugarColumn(ColumnName = "converted_status", ColumnDescription = "转订单状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int ConvertedStatus { get; set; } = 0;
-
     /// <summary>
     /// 申请原因
     /// </summary>
     [SugarColumn(ColumnName = "request_reason", ColumnDescription = "申请原因", ColumnDataType = "nvarchar", Length = 1000, IsNullable = true)]
     public string? RequestReason { get; set; }
+    /// <summary>
+    /// 申请状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）
+    /// </summary>
+    [SugarColumn(ColumnName = "request_status", ColumnDescription = "申请状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
+    public int RequestStatus { get; set; } = 1;
+    /// <summary>
+    /// 转订单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
+    /// </summary>
+    [SugarColumn(ColumnName = "converted_status", ColumnDescription = "转订单状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int ConvertedStatus { get; set; } = 0;
 
     /// <summary>
     /// 采购申请明细列表（主子表关系，一个申请可以有多个明细）
@@ -115,7 +135,7 @@ public class TaktPurchaseRequest : TaktApprovalEntityBase
     public List<TaktPurchaseRequestItem>? Items { get; set; }
 
     /// <summary>
-    /// 采购申请变更记录列表（外键在子表 <see cref="TaktPurchaseRequestChangeLog.RequestId"/>）
+    /// 采购申请变更记录列表（外键在子表 TaktPurchaseRequestChangeLog.PurchaseRequestId）
     /// </summary>
     [Navigate(NavigateType.OneToMany, nameof(TaktPurchaseRequestChangeLog.PurchaseRequestId))]
     public List<TaktPurchaseRequestChangeLog>? ChangeLogs { get; set; }

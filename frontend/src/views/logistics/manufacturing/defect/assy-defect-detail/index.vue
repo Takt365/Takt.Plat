@@ -110,22 +110,21 @@
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('plantCode')">
       <a-form-item :label="t('entity.assydefect.plantcode')">
-        <a-input
+        <TaktSelect
           v-model:value="advancedQueryForm.plantCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefect.plantcode') })"
-          show-count
-          :maxlength="4"
+          api-url="TaktPlants/options"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.assydefect.plantcode') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('prodCategory')">
       <a-form-item :label="t('entity.assydefect.prodcategory')">
-        <a-input
+        <TaktSelect
           v-model:value="advancedQueryForm.prodCategory"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefect.prodcategory') })"
-          show-count
-          :maxlength="20"
+          dict-type="logistics_prod_category"
+          :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.assydefect.prodcategory') })"
           allow-clear
         />
       </a-form-item>
@@ -150,11 +149,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('prodLine')">
-      <a-form-item :label="t('entity.assydefect.prodline')">
+      <div v-show="isFieldVisible('prodTeam')">
+      <a-form-item :label="t('entity.assydefect.prodteam')">
         <a-input
-          v-model:value="advancedQueryForm.prodLine"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefect.prodline') })"
+          v-model:value="advancedQueryForm.prodTeam"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefect.prodteam') })"
           show-count
           :maxlength="20"
           allow-clear
@@ -163,10 +162,11 @@
       </div>
       <div v-show="isFieldVisible('shiftNo')">
       <a-form-item :label="t('entity.assydefect.shiftno')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.shiftNo"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefect.shiftno') })"
-          style="width: 100%"
+          dict-type="logistics_shift_category"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.assydefect.shiftno') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -237,15 +237,6 @@
         <a-input-number
           v-model:value="advancedQueryForm.goodQuantity"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefect.goodquantity') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('status')">
-      <a-form-item :label="t('entity.assydefect.status')">
-        <a-input-number
-          v-model:value="advancedQueryForm.status"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefect.status') })"
           style="width: 100%"
         />
       </a-form-item>
@@ -356,16 +347,17 @@
  * 组立不良日报实体管理页 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/manufacturing/defect/assy-defect-detail
  */
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, h } from 'vue'
 import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
+import TaktDictTag from '@/components/common/takt-dict-tag/index.vue'
 import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import AssyDefectForm from './components/assy-defect-form.vue'
 import AssyDefectDetailPanel from './components/assy-defect-detail-panel.vue'
 import { provideAssyDefectMasterContext } from './composables/use-assy-defect-master-context'
-import { getAssyDefectList, getAssyDefectById, createAssyDefect, updateAssyDefect, deleteAssyDefectById, deleteAssyDefectBatch, getAssyDefectTemplate, importAssyDefect, exportAssyDefect, updateAssyDefectStatus } from '@/api/logistics/manufacturing/defect/assy-defect'
+import { getAssyDefectList, getAssyDefectById, createAssyDefect, updateAssyDefect, deleteAssyDefectById, deleteAssyDefectBatch, getAssyDefectTemplate, importAssyDefect, exportAssyDefect } from '@/api/logistics/manufacturing/defect/assy-defect'
 import type { AssyDefect, AssyDefectQuery } from '@/types/logistics/manufacturing/defect/assy-defect'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
@@ -418,7 +410,7 @@ const advancedQueryForm = ref({
   prodCategory: '',
   prodDateStart: '',
   prodDateEnd: '',
-  prodLine: '',
+  prodTeam: '',
   shiftNo: undefined as number | undefined,
   prodOrderCode: '',
   prodOrderQty: undefined as number | undefined,
@@ -427,7 +419,6 @@ const advancedQueryForm = ref({
   materialCode: '',
   prodActualQty: undefined as number | undefined,
   goodQuantity: undefined as number | undefined,
-  status: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -439,7 +430,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'prodCategory', label: t('entity.assydefect.prodcategory') },
   { key: 'prodDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.assydefect.proddate')) },
   { key: 'prodDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.assydefect.proddate')) },
-  { key: 'prodLine', label: t('entity.assydefect.prodline') },
+  { key: 'prodTeam', label: t('entity.assydefect.prodteam') },
   { key: 'shiftNo', label: t('entity.assydefect.shiftno') },
   { key: 'prodOrderCode', label: t('entity.assydefect.prodordercode') },
   { key: 'prodOrderQty', label: t('entity.assydefect.prodorderqty') },
@@ -448,7 +439,6 @@ const queryFieldsMeta = computed(() => [
   { key: 'materialCode', label: t('entity.assydefect.materialcode') },
   { key: 'prodActualQty', label: t('entity.assydefect.prodactualqty') },
   { key: 'goodQuantity', label: t('entity.assydefect.goodquantity') },
-  { key: 'status', label: t('entity.assydefect.status') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extField', label: t('common.page.entity.extfield') },
@@ -499,9 +489,9 @@ function buildListQuery(overrides?: Partial<AssyDefectQuery>): AssyDefectQuery {
   assignTrimmed('prodCategory', form.prodCategory)
   assignTrimmed('prodDateStart', form.prodDateStart)
   assignTrimmed('prodDateEnd', form.prodDateEnd)
-  assignTrimmed('prodLine', form.prodLine)
-  if (form.shiftNo !== undefined && form.shiftNo !== null) {
-    query.shiftNo = form.shiftNo
+  assignTrimmed('prodTeam', form.prodTeam)
+  if (form.shiftNo !== undefined && form.shiftNo !== null && form.shiftNo !== '') {
+    query.shiftNo = typeof form.shiftNo === 'number' ? form.shiftNo : Number(form.shiftNo)
   }
   assignTrimmed('prodOrderCode', form.prodOrderCode)
   if (form.prodOrderQty !== undefined && form.prodOrderQty !== null) {
@@ -515,9 +505,6 @@ function buildListQuery(overrides?: Partial<AssyDefectQuery>): AssyDefectQuery {
   }
   if (form.goodQuantity !== undefined && form.goodQuantity !== null) {
     query.goodQuantity = form.goodQuantity
-  }
-  if (form.status !== undefined && form.status !== null) {
-    query.status = form.status
   }
   assignTrimmed('createdAtStart', form.createdAtStart)
   assignTrimmed('createdAtEnd', form.createdAtEnd)
@@ -610,7 +597,10 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getAssyDefectField(record, 'prodCategory') ?? ''
+    customRender: ({ record }: { record: any }) => h(TaktDictTag, {
+      dictType: 'logistics_prod_category',
+      value: getAssyDefectField(record, 'prodCategory'),
+    })
   },
   {
     title: t('entity.assydefect.proddate'),
@@ -622,13 +612,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getAssyDefectField(record, 'prodDate') ?? ''
   },
   {
-    title: t('entity.assydefect.prodline'),
-    dataIndex: 'prodLine',
-    key: 'prodLine',
+    title: t('entity.assydefect.prodteam'),
+    dataIndex: 'prodTeam',
+    key: 'prodTeam',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getAssyDefectField(record, 'prodLine') ?? ''
+    customRender: ({ record }: { record: any }) => getAssyDefectField(record, 'prodTeam') ?? ''
   },
   {
     title: t('entity.assydefect.shiftno'),
@@ -637,7 +627,10 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getAssyDefectField(record, 'shiftNo') ?? ''
+    customRender: ({ record }: { record: any }) => h(TaktDictTag, {
+      dictType: 'logistics_shift_category',
+      value: getAssyDefectField(record, 'shiftNo'),
+    })
   },
   {
     title: t('entity.assydefect.prodordercode'),
@@ -701,15 +694,6 @@ const columns = computed<TableColumnsType>(() => [
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getAssyDefectField(record, 'goodQuantity') ?? ''
-  },
-  {
-    title: t('entity.assydefect.status'),
-    dataIndex: 'status',
-    key: 'status',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getAssyDefectField(record, 'status') ?? ''
   },
   CreateActionColumn({
     actions: [
@@ -805,7 +789,7 @@ function handleReset() {
   prodCategory: '',
   prodDateStart: '',
   prodDateEnd: '',
-  prodLine: '',
+  prodTeam: '',
   shiftNo: undefined as number | undefined,
   prodOrderCode: '',
   prodOrderQty: undefined as number | undefined,
@@ -814,7 +798,6 @@ function handleReset() {
   materialCode: '',
   prodActualQty: undefined as number | undefined,
   goodQuantity: undefined as number | undefined,
-  status: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -1010,7 +993,7 @@ function handleAdvancedQueryReset() {
   prodCategory: '',
   prodDateStart: '',
   prodDateEnd: '',
-  prodLine: '',
+  prodTeam: '',
   shiftNo: undefined as number | undefined,
   prodOrderCode: '',
   prodOrderQty: undefined as number | undefined,
@@ -1019,7 +1002,6 @@ function handleAdvancedQueryReset() {
   materialCode: '',
   prodActualQty: undefined as number | undefined,
   goodQuantity: undefined as number | undefined,
-  status: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',

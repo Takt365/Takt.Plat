@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Output
 // 文件名称：TaktPcbaOutputDetailDtos.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PcbaOutputDetail 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPcbaOutputDetail 生成，请按需审阅）
 // 
@@ -62,17 +62,17 @@ public class TaktPcbaOutputDetailDto : TaktCompanyDtoBase
     public string TimePeriod { get; set; } = string.Empty;
 
     /// <summary>
-    /// 班组
+    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     public int ShiftNo { get; set; } = 0;
 
     /// <summary>
-    /// 板别（PCB板别）
+    /// PCB板别（字典 logistics_pcba_panel_category，存 DictValue）
     /// </summary>
     public string PcbBoardType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 面板别
+    /// 面板别（字典 logistics_pcba_side_category，存 DictValue：b= B面 t= T面）
     /// </summary>
     public string PanelSide { get; set; } = string.Empty;
 
@@ -92,7 +92,7 @@ public class TaktPcbaOutputDetailDto : TaktCompanyDtoBase
     public decimal TotalCompletedQty { get; set; }
 
     /// <summary>
-    /// 完成状态（0=未完成 1=部分完成 2=已完成）
+    /// 完成状态（字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成）
     /// </summary>
     public int CompletedStatus { get; set; } = 0;
 
@@ -137,7 +137,7 @@ public class TaktPcbaOutputDetailDto : TaktCompanyDtoBase
     public decimal TotalMinutes { get; set; }
 
     /// <summary>
-    /// 未达成原因
+    /// 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
     /// </summary>
     public string? UnachievedReason { get; set; } = string.Empty;
 
@@ -196,17 +196,17 @@ public class TaktPcbaOutputDetailQueryDto : TaktPagedQuery
     public string? TimePeriod { get; set; } = string.Empty;
 
     /// <summary>
-    /// 班组
+    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     public int? ShiftNo { get; set; }
 
     /// <summary>
-    /// 板别（PCB板别）
+    /// PCB板别（字典 logistics_pcba_panel_category，存 DictValue）
     /// </summary>
     public string? PcbBoardType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 面板别
+    /// 面板别（字典 logistics_pcba_side_category，存 DictValue：b= B面 t= T面）
     /// </summary>
     public string? PanelSide { get; set; } = string.Empty;
 
@@ -226,7 +226,7 @@ public class TaktPcbaOutputDetailQueryDto : TaktPagedQuery
     public decimal? TotalCompletedQty { get; set; }
 
     /// <summary>
-    /// 完成状态（0=未完成 1=部分完成 2=已完成）
+    /// 完成状态（字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成）
     /// </summary>
     public int? CompletedStatus { get; set; }
 
@@ -271,7 +271,7 @@ public class TaktPcbaOutputDetailQueryDto : TaktPagedQuery
     public decimal? TotalMinutes { get; set; }
 
     /// <summary>
-    /// 未达成原因
+    /// 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
     /// </summary>
     public string? UnachievedReason { get; set; } = string.Empty;
 
@@ -321,7 +321,7 @@ public class TaktPcbaOutputDetailCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -349,20 +349,20 @@ public class TaktPcbaOutputDetailCreateDto
     public string TimePeriod { get; set; } = string.Empty;
 
     /// <summary>
-    /// 班组
+    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     public int ShiftNo { get; set; } = 0;
 
     /// <summary>
-    /// 板别（PCB板别）
+    /// PCB板别（字典 logistics_pcba_panel_category，存 DictValue）
     /// </summary>
-    [Required(ErrorMessage = "板别（PCB板别）不能为空")]
+    [Required(ErrorMessage = "PCB板别（字典 logistics_pcba_panel_category，存 DictValue）不能为空")]
     public string PcbBoardType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 面板别
+    /// 面板别（字典 logistics_pcba_side_category，存 DictValue：b= B面 t= T面）
     /// </summary>
-    [Required(ErrorMessage = "面板别不能为空")]
+    [Required(ErrorMessage = "面板别（字典 logistics_pcba_side_category，存 DictValue：b= B面 t= T面）不能为空")]
     public string PanelSide { get; set; } = string.Empty;
 
     /// <summary>
@@ -381,7 +381,7 @@ public class TaktPcbaOutputDetailCreateDto
     public decimal TotalCompletedQty { get; set; }
 
     /// <summary>
-    /// 完成状态（0=未完成 1=部分完成 2=已完成）
+    /// 完成状态（字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成）
     /// </summary>
     public int CompletedStatus { get; set; } = 0;
 
@@ -427,7 +427,7 @@ public class TaktPcbaOutputDetailCreateDto
     public decimal TotalMinutes { get; set; }
 
     /// <summary>
-    /// 未达成原因
+    /// 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
     /// </summary>
     public string? UnachievedReason { get; set; } = string.Empty;
 
@@ -486,9 +486,9 @@ public class TaktPcbaOutputDetailStatusDto
     public long PcbaOutputDetailId { get; set; }
 
     /// <summary>
-    /// 完成状态（0=未完成 1=部分完成 2=已完成）
+    /// 完成状态（字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成）
     /// </summary>
-    [Required(ErrorMessage = "完成状态（0=未完成 1=部分完成 2=已完成）不能为空")]
+    [Required(ErrorMessage = "完成状态（字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成）不能为空")]
     public int CompletedStatus { get; set; } = 0;
 }
 
@@ -533,22 +533,37 @@ public class TaktPcbaOutputDetailTemplateDto
     public string? TimePeriod { get; set; } = string.Empty;
 
     /// <summary>
-    /// 班组
+    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     public int? ShiftNo { get; set; }
 
     /// <summary>
-    /// 板别（PCB板别）
+    /// PCB板别（字典 logistics_pcba_panel_category，存 DictValue）
     /// </summary>
     public string? PcbBoardType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 面板别
+    /// 面板别（字典 logistics_pcba_side_category，存 DictValue：b= B面 t= T面）
     /// </summary>
     public string? PanelSide { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成状态（0=未完成 1=部分完成 2=已完成）
+    /// 批次数量
+    /// </summary>
+    public decimal? BatchQty { get; set; }
+
+    /// <summary>
+    /// 当日完成数
+    /// </summary>
+    public decimal? DailyCompletedQty { get; set; }
+
+    /// <summary>
+    /// 累计完成数
+    /// </summary>
+    public decimal? TotalCompletedQty { get; set; }
+
+    /// <summary>
+    /// 完成状态（字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成）
     /// </summary>
     public int? CompletedStatus { get; set; }
 
@@ -563,14 +578,44 @@ public class TaktPcbaOutputDetailTemplateDto
     public int? DefectCount { get; set; }
 
     /// <summary>
+    /// 投入工数(分钟)
+    /// </summary>
+    public decimal? InputMinutes { get; set; }
+
+    /// <summary>
+    /// 修工数(分钟)
+    /// </summary>
+    public decimal? RepairMinutes { get; set; }
+
+    /// <summary>
     /// 切换次数
     /// </summary>
     public int? SwitchCount { get; set; }
 
     /// <summary>
-    /// 未达成原因
+    /// 切换时间(分钟)
+    /// </summary>
+    public decimal? SwitchTime { get; set; }
+
+    /// <summary>
+    /// 切停机时间(分钟)
+    /// </summary>
+    public decimal? StopTime { get; set; }
+
+    /// <summary>
+    /// 总工数(分钟)
+    /// </summary>
+    public decimal? TotalMinutes { get; set; }
+
+    /// <summary>
+    /// 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
     /// </summary>
     public string? UnachievedReason { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 未达成说明
+    /// </summary>
+    public string? UnachievedDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON
@@ -600,7 +645,7 @@ public class TaktPcbaOutputDetailImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -626,22 +671,37 @@ public class TaktPcbaOutputDetailImportDto
     public string? TimePeriod { get; set; } = string.Empty;
 
     /// <summary>
-    /// 班组
+    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     public int? ShiftNo { get; set; }
 
     /// <summary>
-    /// 板别（PCB板别）
+    /// PCB板别（字典 logistics_pcba_panel_category，存 DictValue）
     /// </summary>
     public string? PcbBoardType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 面板别
+    /// 面板别（字典 logistics_pcba_side_category，存 DictValue：b= B面 t= T面）
     /// </summary>
     public string? PanelSide { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成状态（0=未完成 1=部分完成 2=已完成）
+    /// 批次数量
+    /// </summary>
+    public decimal? BatchQty { get; set; }
+
+    /// <summary>
+    /// 当日完成数
+    /// </summary>
+    public decimal? DailyCompletedQty { get; set; }
+
+    /// <summary>
+    /// 累计完成数
+    /// </summary>
+    public decimal? TotalCompletedQty { get; set; }
+
+    /// <summary>
+    /// 完成状态（字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成）
     /// </summary>
     public int? CompletedStatus { get; set; }
 
@@ -656,14 +716,44 @@ public class TaktPcbaOutputDetailImportDto
     public int? DefectCount { get; set; }
 
     /// <summary>
+    /// 投入工数(分钟)
+    /// </summary>
+    public decimal? InputMinutes { get; set; }
+
+    /// <summary>
+    /// 修工数(分钟)
+    /// </summary>
+    public decimal? RepairMinutes { get; set; }
+
+    /// <summary>
     /// 切换次数
     /// </summary>
     public int? SwitchCount { get; set; }
 
     /// <summary>
-    /// 未达成原因
+    /// 切换时间(分钟)
+    /// </summary>
+    public decimal? SwitchTime { get; set; }
+
+    /// <summary>
+    /// 切停机时间(分钟)
+    /// </summary>
+    public decimal? StopTime { get; set; }
+
+    /// <summary>
+    /// 总工数(分钟)
+    /// </summary>
+    public decimal? TotalMinutes { get; set; }
+
+    /// <summary>
+    /// 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
     /// </summary>
     public string? UnachievedReason { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 未达成说明
+    /// </summary>
+    public string? UnachievedDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON
@@ -720,17 +810,17 @@ public class TaktPcbaOutputDetailExportDto
     public string TimePeriod { get; set; } = string.Empty;
 
     /// <summary>
-    /// 班组
+    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     public int ShiftNo { get; set; } = 0;
 
     /// <summary>
-    /// 板别（PCB板别）
+    /// PCB板别（字典 logistics_pcba_panel_category，存 DictValue）
     /// </summary>
     public string PcbBoardType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 面板别
+    /// 面板别（字典 logistics_pcba_side_category，存 DictValue：b= B面 t= T面）
     /// </summary>
     public string PanelSide { get; set; } = string.Empty;
 
@@ -750,7 +840,7 @@ public class TaktPcbaOutputDetailExportDto
     public decimal TotalCompletedQty { get; set; }
 
     /// <summary>
-    /// 完成状态（0=未完成 1=部分完成 2=已完成）
+    /// 完成状态（字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成）
     /// </summary>
     public int CompletedStatus { get; set; } = 0;
 
@@ -795,7 +885,7 @@ public class TaktPcbaOutputDetailExportDto
     public decimal TotalMinutes { get; set; }
 
     /// <summary>
-    /// 未达成原因
+    /// 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
     /// </summary>
     public string? UnachievedReason { get; set; } = string.Empty;
 

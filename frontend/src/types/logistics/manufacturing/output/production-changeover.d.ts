@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/output
 // 文件名称：production-changeover.d.ts
-// 创建时间：2026-06-20
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/output 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -36,17 +36,17 @@ export interface ProductionChangeover extends CompanyDtoBase {
   /**
    * 生产类别
    */
-  productionCategory?: string;
+  prodCategory?: string;
 
   /**
    * 生产日期
    */
-  productionDate: string;
+  prodDate: string;
 
   /**
-   * 生产线
+   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode；最大 20 字符）
    */
-  productionLine?: string;
+  prodTeam?: string;
 
   /**
    * 读取SOP时间
@@ -106,22 +106,22 @@ export interface ProductionChangeoverQuery extends TaktPagedQuery {
   /**
    * 生产类别
    */
-  productionCategory?: string;
+  prodCategory?: string;
 
   /**
    * 生产日期（范围查询-开始）
    */
-  productionDateStart?: string;
+  prodDateStart?: string;
 
   /**
    * 生产日期（范围查询-结束）
    */
-  productionDateEnd?: string;
+  prodDateEnd?: string;
 
   /**
-   * 生产线
+   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode；最大 20 字符）
    */
-  productionLine?: string;
+  prodTeam?: string;
 
   /**
    * 读取SOP时间
@@ -193,7 +193,7 @@ export interface ProductionChangeoverCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -205,17 +205,17 @@ export interface ProductionChangeoverCreate {
   /**
    * 生产类别
    */
-  productionCategory?: string;
+  prodCategory?: string;
 
   /**
    * 生产日期
    */
-  productionDate: string;
+  prodDate: string;
 
   /**
-   * 生产线
+   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode；最大 20 字符）
    */
-  productionLine?: string;
+  prodTeam?: string;
 
   /**
    * 读取SOP时间
@@ -299,12 +299,22 @@ export interface ProductionChangeoverTemplate {
   /**
    * 生产类别
    */
-  productionCategory?: string;
+  prodCategory?: string;
 
   /**
-   * 生产线
+   * 生产日期
    */
-  productionLine?: string;
+  prodDate?: string;
+
+  /**
+   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode；最大 20 字符）
+   */
+  prodTeam?: string;
+
+  /**
+   * 读取SOP时间
+   */
+  readSopTime?: number;
 
   /**
    * 人数
@@ -312,9 +322,24 @@ export interface ProductionChangeoverTemplate {
   personCount?: number;
 
   /**
+   * SOP总时间
+   */
+  totalSopTime?: number;
+
+  /**
    * 切换次数
    */
   changeoverCount?: number;
+
+  /**
+   * 切换时间（单次）
+   */
+  changeoverTime?: number;
+
+  /**
+   * 切换总时间
+   */
+  totalChangeoverTime?: number;
 
   /**
    * 扩展字段JSON
@@ -346,7 +371,7 @@ export interface ProductionChangeoverImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -358,12 +383,22 @@ export interface ProductionChangeoverImport {
   /**
    * 生产类别
    */
-  productionCategory?: string;
+  prodCategory?: string;
 
   /**
-   * 生产线
+   * 生产日期
    */
-  productionLine?: string;
+  prodDate?: string;
+
+  /**
+   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode；最大 20 字符）
+   */
+  prodTeam?: string;
+
+  /**
+   * 读取SOP时间
+   */
+  readSopTime?: number;
 
   /**
    * 人数
@@ -371,9 +406,24 @@ export interface ProductionChangeoverImport {
   personCount?: number;
 
   /**
+   * SOP总时间
+   */
+  totalSopTime?: number;
+
+  /**
    * 切换次数
    */
   changeoverCount?: number;
+
+  /**
+   * 切换时间（单次）
+   */
+  changeoverTime?: number;
+
+  /**
+   * 切换总时间
+   */
+  totalChangeoverTime?: number;
 
   /**
    * 扩展字段JSON
@@ -412,17 +462,17 @@ export interface ProductionChangeoverExport {
   /**
    * 生产类别
    */
-  productionCategory?: string;
+  prodCategory?: string;
 
   /**
    * 生产日期
    */
-  productionDate: string;
+  prodDate: string;
 
   /**
-   * 生产线
+   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode；最大 20 字符）
    */
-  productionLine?: string;
+  prodTeam?: string;
 
   /**
    * 读取SOP时间

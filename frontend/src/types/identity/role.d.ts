@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/identity
 // 文件名称：role.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：identity 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -39,7 +39,7 @@ export interface Role extends TenantDtoBase {
   roleName: string;
 
   /**
-   * 数据权限范围（1=全部，2=本公司，3=本部门，4=仅本人，5=自定义）
+   * 数据权限范围（字典 sys_data_scope_type：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）
    */
   dataScope: number;
 
@@ -49,19 +49,19 @@ export interface Role extends TenantDtoBase {
   sortOrder: number;
 
   /**
-   * 是否内置（1=是，0=否） 种子角色为内置，不允许删除
+   * 内置（字典 sys_yes_no_type；种子角色为内置，不允许删除）
    */
   isBuiltIn: number;
 
   /**
-   * 状态（1=启用，0=禁用）
+   * 状态（字典 sys_normal_disable_status）
    */
   roleStatus: number;
 
   /**
    * 角色描述
    */
-  description?: string;
+  roleDescription?: string;
 
   /**
    * 角色菜单权限关联（RBAC，表 takt_identity_role_menu） （子表：TaktRoleMenu）
@@ -109,7 +109,7 @@ export interface RoleQuery extends TaktPagedQuery {
   roleName?: string;
 
   /**
-   * 数据权限范围（1=全部，2=本公司，3=本部门，4=仅本人，5=自定义）
+   * 数据权限范围（字典 sys_data_scope_type：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）
    */
   dataScope?: number;
 
@@ -119,19 +119,19 @@ export interface RoleQuery extends TaktPagedQuery {
   sortOrder?: number;
 
   /**
-   * 是否内置（1=是，0=否） 种子角色为内置，不允许删除
+   * 内置（字典 sys_yes_no_type；种子角色为内置，不允许删除）
    */
   isBuiltIn?: number;
 
   /**
-   * 状态（1=启用，0=禁用）
+   * 状态（字典 sys_normal_disable_status）
    */
   roleStatus?: number;
 
   /**
    * 角色描述
    */
-  description?: string;
+  roleDescription?: string;
 
   /**
    * 创建时间（范围查询-开始）
@@ -146,7 +146,7 @@ export interface RoleQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -178,29 +178,24 @@ export interface RoleCreate {
   roleName: string;
 
   /**
-   * 数据权限范围（1=全部，2=本公司，3=本部门，4=仅本人，5=自定义）
+   * 数据权限范围（字典 sys_data_scope_type：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）
    */
   dataScope: number;
 
   /**
-   * 排序号
-   */
-  sortOrder: number;
-
-  /**
-   * 是否内置（1=是，0=否） 种子角色为内置，不允许删除
+   * 内置（字典 sys_yes_no_type；种子角色为内置，不允许删除）
    */
   isBuiltIn: number;
 
   /**
-   * 状态（1=启用，0=禁用）
+   * 状态（字典 sys_normal_disable_status）
    */
   roleStatus: number;
 
   /**
    * 角色描述
    */
-  description?: string;
+  roleDescription?: string;
 
   /**
    * 角色菜单权限关联（RBAC 全量覆盖，分配走 ITaktRbacService）
@@ -220,7 +215,7 @@ export interface RoleCreate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -257,28 +252,9 @@ export interface RoleStatus {
   roleId: string;
 
   /**
-   * 状态（1=启用，0=禁用）
+   * 状态（字典 sys_normal_disable_status）
    */
   roleStatus: number;
-
-}
-
-
-/**
- * Role 是否内置更新 DTO
- * 对应前端 RoleBuiltIn
- * @description 对应后端 TaktRoleBuiltInDto
- */
-export interface RoleBuiltIn {
-  /**
-   * RoleID
-   */
-  roleId: string;
-
-  /**
-   * 是否内置（字典 sys_yes_no_type；1=是，0=否）
-   */
-  isBuiltIn: number;
 
 }
 
@@ -324,34 +300,44 @@ export interface RoleTemplate {
   roleName?: string;
 
   /**
-   * 数据权限范围（1=全部，2=本公司，3=本部门，4=仅本人，5=自定义）
+   * 数据权限范围（字典 sys_data_scope_type：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）
    */
   dataScope?: number;
 
   /**
-   * 排序号
-   */
-  sortOrder?: number;
-
-  /**
-   * 是否内置（1=是，0=否） 种子角色为内置，不允许删除
+   * 内置（字典 sys_yes_no_type；种子角色为内置，不允许删除）
    */
   isBuiltIn?: number;
 
   /**
-   * 状态（1=启用，0=禁用）
+   * 状态（字典 sys_normal_disable_status）
    */
   roleStatus?: number;
 
   /**
    * 角色描述
    */
-  description?: string;
+  roleDescription?: string;
+
+  /**
+   * 角色菜单权限关联（RBAC 全量覆盖，分配走 ITaktRbacService）
+   */
+  roleMenuIds?: any;
+
+  /**
+   * 角色可访问公司关联（RBAC 全量覆盖，分配走 ITaktRbacService）
+   */
+  roleCompanyCodes?: any;
+
+  /**
+   * 自定义数据权限关联部门（RBAC 全量覆盖，分配走 ITaktRbacService）
+   */
+  roleDeptIds?: any;
 
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -383,34 +369,44 @@ export interface RoleImport {
   roleName?: string;
 
   /**
-   * 数据权限范围（1=全部，2=本公司，3=本部门，4=仅本人，5=自定义）
+   * 数据权限范围（字典 sys_data_scope_type：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）
    */
   dataScope?: number;
 
   /**
-   * 排序号
-   */
-  sortOrder?: number;
-
-  /**
-   * 是否内置（1=是，0=否） 种子角色为内置，不允许删除
+   * 内置（字典 sys_yes_no_type；种子角色为内置，不允许删除）
    */
   isBuiltIn?: number;
 
   /**
-   * 状态（1=启用，0=禁用）
+   * 状态（字典 sys_normal_disable_status）
    */
   roleStatus?: number;
 
   /**
    * 角色描述
    */
-  description?: string;
+  roleDescription?: string;
+
+  /**
+   * 角色菜单权限关联（RBAC 全量覆盖，分配走 ITaktRbacService）
+   */
+  roleMenuIds?: any;
+
+  /**
+   * 角色可访问公司关联（RBAC 全量覆盖，分配走 ITaktRbacService）
+   */
+  roleCompanyCodes?: any;
+
+  /**
+   * 自定义数据权限关联部门（RBAC 全量覆盖，分配走 ITaktRbacService）
+   */
+  roleDeptIds?: any;
 
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -442,7 +438,7 @@ export interface RoleExport {
   roleName: string;
 
   /**
-   * 数据权限范围（1=全部，2=本公司，3=本部门，4=仅本人，5=自定义）
+   * 数据权限范围（字典 sys_data_scope_type：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）
    */
   dataScope: number;
 
@@ -452,24 +448,24 @@ export interface RoleExport {
   sortOrder: number;
 
   /**
-   * 是否内置（1=是，0=否） 种子角色为内置，不允许删除
+   * 内置（字典 sys_yes_no_type；种子角色为内置，不允许删除）
    */
   isBuiltIn: number;
 
   /**
-   * 状态（1=启用，0=禁用）
+   * 状态（字典 sys_normal_disable_status）
    */
   roleStatus: number;
 
   /**
    * 角色描述
    */
-  description?: string;
+  roleDescription?: string;
 
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注

@@ -29,7 +29,7 @@ namespace Takt.Domain.Entities.HumanResource.Attendance;
 public class TaktOvertime : TaktApprovalEntityBase
 {
     /// <summary>
-    /// 部门 ID
+    /// 部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     [SugarColumn(ColumnName = "dept_id", ColumnDescription = "部门ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -70,7 +70,7 @@ public class TaktOvertime : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "total_actual_hours", ColumnDescription = "实际总小时数", ColumnDataType = "decimal", Length = 10, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
     public decimal TotalActualHours { get; set; }
     /// <summary>
-    /// 加班类型（字典 hr_overtime_type）
+    /// 加班类型（字典 hr_overtime_type；0=工作日加班 1=休息日加班 2=法定节假日加班）
     /// </summary>
     [SugarColumn(ColumnName = "overtime_type", ColumnDescription = "加班类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int OvertimeType { get; set; }
@@ -80,12 +80,7 @@ public class TaktOvertime : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "reason", ColumnDescription = "加班原因", ColumnDataType = "nvarchar", Length = 1000, IsNullable = true)]
     public string? Reason { get; set; }
     /// <summary>
-    /// 关联工厂
-    /// </summary>
-    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = true)]
-    public string? RelatedPlant { get; set; }
-    /// <summary>
-    /// 经办人（关联 TaktEmployee）
+    /// 经办人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [SugarColumn(ColumnName = "handling_by", ColumnDescription = "经办人", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -101,10 +96,16 @@ public class TaktOvertime : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "handling_comment", ColumnDescription = "经办备注", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
     public string? HandlingComment { get; set; }
     /// <summary>
-    /// 加班状态（字典 sys_approval_status）
+    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// </summary>
+    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
+    public string RelatedPlant { get; set; } = string.Empty;
+    /// <summary>
+    /// 加班状态（字典 sys_approval_status；0=待审批 1=审批中 2=已通过 3=已驳回 4=已撤回 5=已终止）
     /// </summary>
     [SugarColumn(ColumnName = "overtime_status", ColumnDescription = "加班状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int OvertimeStatus { get; set; }
+
     // ========================================
     // 导航属性区域
     // ========================================

@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/human-resource/organization/dept/components -->
 <!-- 文件名称：dept-form.vue -->
-<!-- 功能描述：部门实体树表弹窗内嵌表单。defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：部门实体 代表组织架构中的部门树表维护表单（ParentId + TaktTreeSelect），由 generate-vue-tree-from-api.cjs 自动生成.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -16,245 +16,322 @@
     layout="horizontal"
     label-align="right"
   >
-    <a-row :gutter="24">
-      <a-col :span="24">
-        <a-form-item
-          :label="t('common.page.entity.tenantcode')"
-          name="tenantCode"
-        >
-          <a-input
-            v-model:value="formState.tenantCode"
-            :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-            show-count
-            :maxlength="20"
-            disabled
-          />
-        </a-form-item>
-      </a-col>
-      <a-col :span="24">
-        <a-form-item
-          :label="t('common.page.entity.companycode')"
-          name="companyCode"
-        >
-          <a-input
-            v-model:value="formState.companyCode"
-            :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-            show-count
-            :maxlength="20"
-            disabled
-          />
-        </a-form-item>
-      </a-col>
-      <a-col :span="24">
-        <a-form-item
-          :label="t('common.page.entity.companydefaultculture')"
-          name="companyDefaultCulture"
-        >
-          <a-input
-            v-model:value="formState.companyDefaultCulture"
-            :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-            show-count
-            :maxlength="20"
-            disabled
-          />
-        </a-form-item>
-      </a-col>
-      <a-col :span="24">
-        <a-form-item
-          :label="t('entity.dept.name')"
-          name="deptName"
-        >
-          <a-input
-            v-model:value="formState.deptName"
-            :placeholder="t('common.page.form.placeholder.required', { field: t('entity.dept.name') })"
-            show-count
-            :maxlength="100"
-            allow-clear
-          />
-        </a-form-item>
-      </a-col>
-      <a-col :span="24">
-        <a-form-item
-          :label="t('entity.dept.code')"
-          name="deptCode"
-        >
-          <a-input
-            v-model:value="formState.deptCode"
-            :placeholder="t('common.page.form.placeholder.required', { field: t('entity.dept.code') })"
-            show-count
-            :maxlength="50"
-            allow-clear
-            :disabled="!!formData?.deptId"
-          />
-        </a-form-item>
-      </a-col>
-      <a-col :span="24">
-        <a-form-item
-          :label="t('entity.dept.parentid')"
-          name="parentId"
-        >
-          <TaktTreeSelect
-            v-model:value="formState.parentId"
-            api-url="TaktDepts/tree-options"
-            :placeholder="t('common.page.form.placeholder.select', { field: t('entity.dept.parentid') })"
-            allow-clear
-            :field-names="{ label: 'dictLabel', value: 'dictValue' }"
-          />
-        </a-form-item>
-      </a-col>
-      <a-col :span="24">
-        <a-form-item
-          :label="t('entity.dept.headuserid')"
-          name="headUserId"
-        >
-          <TaktSelect
-            v-model:value="formState.headUserId"
-            api-url="TaktUsers/options"
-            :placeholder="t('common.page.form.placeholder.select', { field: t('entity.dept.headuserid') })"
-            show-search
-            :field-names="{ label: 'dictLabel', value: 'dictValue' }"
-          />
-        </a-form-item>
-      </a-col>
-      <a-col :span="24">
-        <a-form-item
-          :label="t('entity.dept.costcentercode')"
-          name="costCenterCode"
-        >
-          <TaktSelect
-            v-model:value="formState.costCenterCode"
-            api-url="TaktCostCenters/options"
-            allow-clear
-            :placeholder="t('common.page.form.placeholder.select', { field: t('entity.dept.costcentercode') })"
-            show-search
-            :field-names="{ label: 'dictLabel', value: 'dictValue' }"
-          />
-        </a-form-item>
-      </a-col>
-      <a-col :span="24">
-        <a-form-item
-          :label="t('entity.dept.costcategory')"
-          name="costCategory"
-        >
-          <a-select
-            v-model:value="formState.costCategory"
-            :placeholder="t('common.page.form.placeholder.select', { field: t('entity.dept.costcategory') })"
-            :options="costCategoryOptions"
-            allow-clear
-          />
-        </a-form-item>
-      </a-col>
-      <a-col :span="24">
-        <a-form-item
-          :label="t('entity.dept.sortorder')"
-          name="sortOrder"
-        >
-          <a-input-number
-            v-model:value="formState.sortOrder"
-            :placeholder="t('common.page.form.placeholder.ordernumhint')"
-            :min="0"
-            style="width: 100%"
-          />
-        </a-form-item>
-      </a-col>
-      <a-col :span="24">
-        <a-form-item
-          :label="t('entity.dept.phone')"
-          name="phone"
-        >
-          <a-input
-            v-model:value="formState.phone"
-            :placeholder="t('common.page.form.placeholder.required', { field: t('entity.dept.phone') })"
-            show-count
-            :maxlength="20"
-            allow-clear
-          />
-        </a-form-item>
-      </a-col>
-      <a-col :span="24">
-        <a-form-item
-          :label="t('entity.dept.email')"
-          name="email"
-        >
-          <a-input
-            v-model:value="formState.email"
-            :placeholder="t('common.page.form.placeholder.required', { field: t('entity.dept.email') })"
-            show-count
-            :maxlength="100"
-            allow-clear
-          />
-        </a-form-item>
-      </a-col>
-      <a-col :span="24">
-        <a-form-item
-          :label="t('entity.dept.location')"
-          name="location"
-        >
-          <a-input
-            v-model:value="formState.location"
-            :placeholder="t('common.page.form.placeholder.required', { field: t('entity.dept.location') })"
-            show-count
-            :maxlength="200"
-            allow-clear
-          />
-        </a-form-item>
-      </a-col>
-      <a-col :span="24">
-        <a-form-item
-          :label="t('entity.dept.description')"
-          name="description"
-        >
-          <a-textarea
-            v-model:value="formState.description"
-            :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.dept.description') })"
-            :rows="2"
-            show-count
-            :maxlength="500"
-            allow-clear
-          />
-        </a-form-item>
-      </a-col>
-      <a-col :span="24">
-        <a-form-item
-          :label="t('entity.dept.status')"
-          name="deptStatus"
-        >
-          <TaktSelect
-            v-model:value="formState.deptStatus"
-            dict-type="sys_normal_disable_status"
-            :placeholder="t('common.page.form.placeholder.select', { field: t('entity.dept.status') })"
-          />
-        </a-form-item>
-      </a-col>
-      <a-col :span="24">
-        <a-form-item
-          :label="t('common.page.entity.remark')"
-          name="remark"
-        >
-          <a-textarea
-            v-model:value="formState.remark"
-            :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-            :rows="4"
-            show-count
-            :maxlength="400"
-            allow-clear
-          />
-        </a-form-item>
-      </a-col>
-    </a-row>
+    <a-tabs
+      v-model:active-key="activeTab"
+      class="dept-form-tabs"
+    >
+      <a-tab-pane
+        key="tab-0"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
+        force-render
+      >
+        <div :class="formContentClass">
+
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="t('entity.dept.parentid')"
+                name="parentId"
+              >
+                <TaktTreeSelect
+                  v-model:value="formState.parentId"
+                  api-url="TaktDepts/tree-options"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.dept.parentid') })"
+                  allow-clear
+                  :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+          <a-row :gutter="24">
+            <a-col :span="12">
+              <a-form-item
+                :label="t('common.page.entity.tenantcode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('common.page.entity.companycode')"
+                name="companyCode"
+              >
+                <a-input
+                  v-model:value="formState.companyCode"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('common.page.entity.companydefaultculture')"
+                name="companyDefaultCulture"
+              >
+                <a-input
+                  v-model:value="formState.companyDefaultCulture"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.dept.code')"
+                name="deptCode"
+              >
+                <a-input
+                  v-model:value="formState.deptCode"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.dept.code') })"
+                  show-count
+                  :maxlength="50"
+                  allow-clear
+                  :disabled="!!formData?.deptId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.dept.name')"
+                name="deptName"
+              >
+                <a-input
+                  v-model:value="formState.deptName"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.dept.name') })"
+                  show-count
+                  :maxlength="100"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.dept.costcentercode')"
+                name="costCenterCode"
+              >
+                <a-input
+                  v-model:value="formState.costCenterCode"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.dept.costcentercode') })"
+                  show-count
+                  :maxlength="4"
+                  allow-clear
+                  :disabled="!!formData?.deptId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.dept.costcategory')"
+                name="costCategory"
+              >
+                <a-input-number
+                  v-model:value="formState.costCategory"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.dept.costcategory') })"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.dept.headuserid')"
+                name="headUserId"
+              >
+                <a-input
+                  v-model:value="formState.headUserId"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.dept.headuserid') })"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.dept.phone')"
+                name="phone"
+              >
+                <a-input
+                  v-model:value="formState.phone"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.dept.phone') })"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.dept.email')"
+                name="email"
+              >
+                <a-input
+                  v-model:value="formState.email"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.dept.email') })"
+                  show-count
+                  :maxlength="100"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="t('entity.dept.location')"
+                name="location"
+              >
+                <a-input
+                  v-model:value="formState.location"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.dept.location') })"
+                  show-count
+                  :maxlength="200"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="t('entity.dept.status')"
+                name="deptStatus"
+              >
+                <TaktSelect
+                  v-model:value="formState.deptStatus"
+                  dict-type="sys_normal_disable_status"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.dept.status') })"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="t('entity.dept.isbuiltin')"
+                name="isBuiltIn"
+              >
+                <TaktSelect
+                  v-model:value="formState.isBuiltIn"
+                  dict-type="sys_yes_no_type"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.dept.isbuiltin') })"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="t('entity.dept.description')"
+                name="description"
+              >
+                <a-textarea
+                  v-model:value="formState.description"
+                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.dept.description') })"
+                  :rows="2"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="t('entity.dept.roleids')"
+                name="roleIds"
+              >
+                <a-input
+                  v-model:value="formState.roleIds"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.dept.roleids') })"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="t('entity.dept.employeeids')"
+                name="employeeIds"
+              >
+                <a-input
+                  v-model:value="formState.employeeIds"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.dept.employeeids') })"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                name="extField"
+                class="takt-form-item-ext-field"
+              >
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t('common.page.entity.extfieldhint')"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ t('common.page.entity.extfield') }}</span>
+                  </span>
+                </template>
+                <a-textarea
+                  v-model:value="formState.extField"
+                  :placeholder="t('common.page.form.placeholder.extfield')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="t('common.page.entity.remark')"
+                name="remark"
+              >
+                <a-textarea
+                  v-model:value="formState.remark"
+                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+    </a-tabs>
   </a-form>
 </template>
 
 <script setup lang="ts">
 /**
- * 部门树表弹窗内嵌表单
+ * 部门实体 代表组织架构中的部门维护表单 · 由 generate-vue-tree-from-api.cjs 根据 types/api 生成
  * @module views/human-resource/organization/dept/components
  */
 import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
+import TaktTreeSelect from '@/components/business/takt-tree-select/index.vue'
 import type { Rule } from 'ant-design-vue/es/form'
 import type { DeptCreate } from '@/types/human-resource/organization/dept'
 import TaktSelect from '@/components/business/takt-select/index.vue'
+import { RiQuestionLine } from '@remixicon/vue'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
@@ -283,36 +360,17 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
     target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
   }
 }
-
+/** 表单内容区高度 class（字段多时 tab-10 行） */
+const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
+/** 当前激活的 Tab key */
+const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = [
-  'tenantCode',
-  'companyCode',
-  'companyDefaultCulture',
-  'deptName',
-  'deptCode',
-  'parentId',
-  'headUserId',
-  'costCenterCode',
-  'costCategory',
-  'sortOrder',
-  'phone',
-  'email',
-  'location',
-  'description',
-  'deptStatus',
-  'remark',
-]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","deptCode","deptName","costCenterCode","costCategory","headUserId","phone","email","location","deptStatus","isBuiltIn","description","roleIds","employeeIds","extField","remark"]
 
-/** 费用类别（与实体 TaktDept.CostCategory 一致：1=直接，2=间接） */
-const costCategoryOptions = computed(() => [
-  { label: t('entity.dept.costcategory') + ' (1)', value: 1 },
-  { label: t('entity.dept.costcategory') + ' (2)', value: 2 },
-])
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
-  formData?: Partial<DeptCreate & { deptId?: string; isBuiltIn?: number }> | null
+  formData?: Partial<DeptCreate & { deptId?: string }> | null
   /** 父级提交 loading，禁用表单项 */
   loading?: boolean
 }
@@ -325,19 +383,23 @@ const props = withDefaults(defineProps<Props>(), {
 /** a-form 实例 ref */
 const formRef = ref()
 /** 表单双向绑定模型 */
-const formState = reactive<Record<string, any>>({})
-
-/** 表单字段默认值（与 TaktDept 实体 DefaultValue 对齐） */
+const formState = reactive<Record<string, any>>({ parentId: '0' })
+/** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
-  parentId: '0',
-  costCategory: 2,
-  sortOrder: 0,
   deptStatus: 1,
+  isBuiltIn: 0
 }
 
+
+/** 树表 parentId：空值归一为根节点 0（string，与后端 ParentId=0 一致） */
+function normalizeTreeParentId(target: Record<string, unknown>) {
+  const raw = target.parentId
+  target.parentId = raw === '' || raw === undefined || raw === null ? '0' : String(raw)
+}
 /** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
 function applyFormDefaults(target: Record<string, unknown>) {
   Object.assign(target, FORM_FIELD_DEFAULTS)
+  normalizeTreeParentId(target)
 }
 
 /** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
@@ -354,24 +416,16 @@ watch(
   (val) => {
     if (val?.deptId) {
       const next = { ...val } as Record<string, unknown>
-      if (next.parentId != null && next.parentId !== '') {
-        next.parentId = String(next.parentId)
-      }
-      if (next.headUserId != null && next.headUserId !== '') {
-        next.headUserId = String(next.headUserId)
-      }
       Object.keys(formState).forEach((k) => delete formState[k])
+
       applyScopeDefaults(next)
       Object.assign(formState, next)
+      normalizeTreeParentId(formState)
       formRef.value?.clearValidate()
     } else {
       Object.keys(formState).forEach((k) => delete formState[k])
       if (val && typeof val === 'object' && Object.keys(val).length > 0) {
-        const next = { ...val } as Record<string, unknown>
-        if (next.parentId != null && next.parentId !== '') {
-          next.parentId = String(next.parentId)
-        }
-        Object.assign(formState, next)
+        Object.assign(formState, val)
       }
       applyFormDefaults(formState)
       applyScopeDefaults(formState as Record<string, unknown>, true)
@@ -394,33 +448,33 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  deptName: [
+  parentId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.dept.name') }),
-      trigger: 'blur',
-    },
+      message: t('common.page.form.placeholder.select', { field: t('entity.dept.parentid') }),
+      trigger: 'change'
+    }
   ],
   deptCode: [
     {
       required: true,
       message: t('common.page.form.placeholder.required', { field: t('entity.dept.code') }),
-      trigger: 'blur',
-    },
+      trigger: 'blur'
+    }
+  ],
+  deptName: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.required', { field: t('entity.dept.name') }),
+      trigger: 'blur'
+    }
   ],
   costCenterCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.dept.costcentercode') }),
-      trigger: 'change',
-    },
-  ],
-  headUserId: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.dept.headuserid') }),
-      trigger: 'change',
-    },
+      message: t('common.page.form.placeholder.required', { field: t('entity.dept.costcentercode') }),
+      trigger: 'blur'
+    }
   ],
   costCategory: [{
     validator: async (_rule, value) => {
@@ -433,35 +487,35 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       }
       return Promise.resolve()
     },
-    trigger: 'change',
+    trigger: 'change'
   }],
+  headUserId: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.required', { field: t('entity.dept.headuserid') }),
+      trigger: 'blur'
+    }
+  ],
   phone: [
     {
       required: true,
       message: t('common.page.form.placeholder.required', { field: t('entity.dept.phone') }),
-      trigger: 'blur',
-    },
+      trigger: 'blur'
+    }
   ],
   email: [
     {
       required: true,
       message: t('common.page.form.placeholder.required', { field: t('entity.dept.email') }),
-      trigger: 'blur',
-    },
+      trigger: 'blur'
+    }
   ],
   location: [
     {
       required: true,
       message: t('common.page.form.placeholder.required', { field: t('entity.dept.location') }),
-      trigger: 'blur',
-    },
-  ],
-  description: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.dept.description') }),
-      trigger: 'blur',
-    },
+      trigger: 'blur'
+    }
   ],
   deptStatus: [{
     validator: async (_rule, value) => {
@@ -474,8 +528,28 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       }
       return Promise.resolve()
     },
-    trigger: 'change',
+    trigger: 'change'
   }],
+  isBuiltIn: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.dept.isbuiltin') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.dept.isbuiltin') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  description: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.required', { field: t('entity.dept.description') }),
+      trigger: 'blur'
+    }
+  ],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -485,38 +559,29 @@ async function validate() {
 }
 
 /** 映射为 Create/Update DTO */
-function getValues(): DeptCreate {
+function getValues(): Record<string, any> {
   const payload = { ...formState }
-  const parentRaw = payload.parentId
-  const parentId = parentRaw === '' || parentRaw === undefined || parentRaw === null ? '0' : String(parentRaw)
   if ('costCategory' in payload) {
-    const raw = payload.costCategory
-    payload.costCategory = typeof raw === 'number' ? raw : Number(raw)
+    const rawcostCategory = payload.costCategory
+    payload.costCategory = typeof rawcostCategory === 'number' ? rawcostCategory : Number(rawcostCategory)
   }
   if ('deptStatus' in payload) {
-    const raw = payload.deptStatus
-    payload.deptStatus = typeof raw === 'number' ? raw : Number(raw)
+    const rawdeptStatus = payload.deptStatus
+    payload.deptStatus = typeof rawdeptStatus === 'number' ? rawdeptStatus : Number(rawdeptStatus)
   }
-  if ('sortOrder' in payload) {
-    const raw = payload.sortOrder
-    payload.sortOrder = typeof raw === 'number' ? raw : Number(raw)
+  if ('isBuiltIn' in payload) {
+    const rawisBuiltIn = payload.isBuiltIn
+    payload.isBuiltIn = typeof rawisBuiltIn === 'number' ? rawisBuiltIn : Number(rawisBuiltIn)
   }
-  if (payload.headUserId != null && payload.headUserId !== '') {
-    payload.headUserId = String(payload.headUserId)
-  } else {
-    payload.headUserId = ''
-  }
+  const parentRaw = payload.parentId
+  const parentId = parentRaw === '' || parentRaw === undefined || parentRaw === null ? '0' : String(parentRaw)
   payload.parentId = parentId
-  payload.costCenterCode = String(payload.costCenterCode ?? '').trim()
-  payload.isBuiltIn = props.formData?.isBuiltIn ?? 0
-  if (typeof payload.remark === 'string') {
-    const trimmed = payload.remark.trim()
-    payload.remark = trimmed.length > 0 ? trimmed : undefined
-  }
-  return payload as DeptCreate
+  if ('sortOrder' in payload) delete payload.sortOrder
+  return payload
 }
 
-/** 重置表单（弹窗未 destroy 时父级 nextTick 也会调用） */
+/** 重置表单与子表行 */
+/** 重置表单与子表行（弹窗未 destroy 时父级 nextTick 也会调用） */
 function resetFields() {
   Object.keys(formState).forEach((k) => delete formState[k])
   if (props.formData && typeof props.formData === 'object') {
@@ -524,8 +589,20 @@ function resetFields() {
   }
   applyFormDefaults(formState)
   applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.deptId)
+
+  activeTab.value = 'tab-0'
   formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })
 </script>
+
+<style scoped lang="css">
+:deep(.ant-tabs-content-holder) {
+  min-height: 50vh;
+}
+
+:deep(.ant-tabs-tabpane) {
+  min-height: 50vh;
+}
+</style>

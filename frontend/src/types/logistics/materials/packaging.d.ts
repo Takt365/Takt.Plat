@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/materials
 // 文件名称：packaging.d.ts
-// 创建时间：2026-06-20
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/materials 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -328,7 +328,7 @@ export interface PackagingCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -571,6 +571,61 @@ export interface PackagingTemplate {
   tariffRateType?: string;
 
   /**
+   * 毛重（包含包装物的总重量，单位：千克）
+   */
+  grossWeight?: number;
+
+  /**
+   * 净重（不含包装物的净重量，单位：千克）
+   */
+  netWeight?: number;
+
+  /**
+   * 重量单位（如：KG、G、T等）
+   */
+  weightUnit?: string;
+
+  /**
+   * 业务量/容积（一个包装单位的体积，单位：立方米）
+   */
+  businessVolume?: number;
+
+  /**
+   * 体积单位（如：M3、L、ML等）
+   */
+  volumeUnit?: string;
+
+  /**
+   * 大小/量纲（尺寸量纲或大小规格）
+   */
+  sizeDimension?: string;
+
+  /**
+   * 包装类型（如：箱、托盘、袋、桶等，VERP=销售包装）
+   */
+  packagingType?: string;
+
+  /**
+   * 包装单位（CAR=卡通箱；其他如：个、件等）
+   */
+  packingUnit?: string;
+
+  /**
+   * 每包装数量（一个包装包含的基本单位数量）
+   */
+  quantityPerPacking?: number;
+
+  /**
+   * 包装规格
+   */
+  packagingSpec?: string;
+
+  /**
+   * 包装描述
+   */
+  packagingDescription?: string;
+
+  /**
    * 扩展字段JSON
    */
   extField?: string;
@@ -600,7 +655,7 @@ export interface PackagingImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -663,6 +718,61 @@ export interface PackagingImport {
    * 税率/协定税率标识（记录适用的关税税率类型，便于成本核算）
    */
   tariffRateType?: string;
+
+  /**
+   * 毛重（包含包装物的总重量，单位：千克）
+   */
+  grossWeight?: number;
+
+  /**
+   * 净重（不含包装物的净重量，单位：千克）
+   */
+  netWeight?: number;
+
+  /**
+   * 重量单位（如：KG、G、T等）
+   */
+  weightUnit?: string;
+
+  /**
+   * 业务量/容积（一个包装单位的体积，单位：立方米）
+   */
+  businessVolume?: number;
+
+  /**
+   * 体积单位（如：M3、L、ML等）
+   */
+  volumeUnit?: string;
+
+  /**
+   * 大小/量纲（尺寸量纲或大小规格）
+   */
+  sizeDimension?: string;
+
+  /**
+   * 包装类型（如：箱、托盘、袋、桶等，VERP=销售包装）
+   */
+  packagingType?: string;
+
+  /**
+   * 包装单位（CAR=卡通箱；其他如：个、件等）
+   */
+  packingUnit?: string;
+
+  /**
+   * 每包装数量（一个包装包含的基本单位数量）
+   */
+  quantityPerPacking?: number;
+
+  /**
+   * 包装规格
+   */
+  packagingSpec?: string;
+
+  /**
+   * 包装描述
+   */
+  packagingDescription?: string;
 
   /**
    * 扩展字段JSON

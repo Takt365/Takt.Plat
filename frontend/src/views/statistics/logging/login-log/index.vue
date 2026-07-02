@@ -8,7 +8,7 @@
 <!-- ======================================== -->
 
 <template>
-  <div class="statistics-logging-login-log">
+  <div class="p-4">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -59,7 +59,32 @@
       @change="handleTableChange"
       @resize-column="handleResizeColumn"
     >
-
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'browser'">
+          <TaktConstTag
+            category="browserType"
+            :value="getLoginLogField(record, 'browser')"
+          />
+        </template>
+        <template v-else-if="column.key === 'os'">
+          <TaktConstTag
+            category="operatingSystem"
+            :value="getLoginLogField(record, 'os')"
+          />
+        </template>
+        <template v-else-if="column.key === 'loginType'">
+          <TaktConstTag
+            category="loginType"
+            :value="getLoginLogField(record, 'loginType')"
+          />
+        </template>
+        <template v-else-if="column.key === 'loginResult'">
+          <TaktConstTag
+            category="loginResult"
+            :value="getLoginLogField(record, 'loginResult')"
+          />
+        </template>
+      </template>
     </TaktSingleTable>
 
     <!-- 分页组件 -->
@@ -108,28 +133,31 @@
       </div>
       <div v-show="isFieldVisible('loginType')">
       <a-form-item :label="t('entity.loginlog.logintype')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.loginType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginlog.logintype') })"
-          style="width: 100%"
+          :options="loginTypeOptions"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.loginlog.logintype') })"
+          allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('browser')">
       <a-form-item :label="t('entity.loginlog.browser')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.browser"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginlog.browser') })"
-          style="width: 100%"
+          :options="browserTypeOptions"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.loginlog.browser') })"
+          allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('os')">
       <a-form-item :label="t('entity.loginlog.os')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.os"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginlog.os') })"
-          style="width: 100%"
+          :options="operatingSystemOptions"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.loginlog.os') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -144,10 +172,11 @@
       </div>
       <div v-show="isFieldVisible('loginResult')">
       <a-form-item :label="t('entity.loginlog.loginresult')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.loginResult"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginlog.loginresult') })"
-          style="width: 100%"
+          :options="loginResultOptions"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.loginlog.loginresult') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -193,15 +222,6 @@
           v-model:value="advancedQueryForm.logoutAtEnd"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginlog.logoutatend') })"
           allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('sessionDuration')">
-      <a-form-item :label="t('entity.loginlog.sessionduration')">
-        <a-input-number
-          v-model:value="advancedQueryForm.sessionDuration"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginlog.sessionduration') })"
-          style="width: 100%"
         />
       </a-form-item>
       </div>
@@ -265,6 +285,12 @@
 </template>
 
 <script setup lang="ts">
+import {
+  browserTypeOptions,
+  loginResultOptions,
+  loginTypeOptions,
+  operatingSystemOptions,
+} from '@/constants/takt-constants'
 import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 /**
  * 登录日志实体管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
@@ -315,17 +341,16 @@ const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
   username: '',
-  loginType: undefined as number | undefined,
-  browser: undefined as number | undefined,
-  os: undefined as number | undefined,
+  loginType: undefined as string | undefined,
+  browser: undefined as string | undefined,
+  os: undefined as string | undefined,
   userAgent: '',
-  loginResult: undefined as number | undefined,
+  loginResult: undefined as string | undefined,
   loginMessage: '',
   loginIp: '',
   loginLocation: '',
   logoutAtStart: '',
   logoutAtEnd: '',
-  sessionDuration: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   ExtField: '',
@@ -344,7 +369,6 @@ const queryFieldsMeta = computed(() => [
   { key: 'loginLocation', label: t('entity.loginlog.loginlocation') },
   { key: 'logoutAtStart', label: t('entity.loginlog.logoutatstart') },
   { key: 'logoutAtEnd', label: t('entity.loginlog.logoutatend') },
-  { key: 'sessionDuration', label: t('entity.loginlog.sessionduration') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'ExtField', label: t('common.page.entity.ExtField') },
@@ -366,7 +390,6 @@ const detailVisible = ref(false)
 const detailLoading = ref(false)
 /** 详情数据 */
 const detailData = ref<LoginLog | null>(null)
-
 
 /** 页面挂载后加载分页列表 */
 onMounted(() => {
@@ -406,7 +429,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getLoginLogField(record, 'loginType') ?? ''
   },
   {
     title: t('entity.loginlog.browser'),
@@ -415,7 +437,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getLoginLogField(record, 'browser') ?? ''
   },
   {
     title: t('entity.loginlog.os'),
@@ -424,7 +445,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getLoginLogField(record, 'os') ?? ''
   },
   {
     title: t('entity.loginlog.useragent'),
@@ -442,7 +462,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getLoginLogField(record, 'loginResult') ?? ''
   },
   {
     title: t('entity.loginlog.loginmessage'),
@@ -452,6 +471,15 @@ const columns = computed<TableColumnsType>(() => [
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getLoginLogField(record, 'loginMessage') ?? ''
+  },
+  {
+    title: t('common.page.entity.remark'),
+    dataIndex: 'remark',
+    key: 'remark',
+    width: 180,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getLoginLogField(record, 'remark') ?? ''
   },
   {
     title: t('entity.loginlog.loginip'),
@@ -479,15 +507,6 @@ const columns = computed<TableColumnsType>(() => [
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getLoginLogField(record, 'logoutAt') ?? ''
-  },
-  {
-    title: t('entity.loginlog.sessionduration'),
-    dataIndex: 'sessionDuration',
-    key: 'sessionDuration',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getLoginLogField(record, 'sessionDuration') ?? ''
   },
   CreateActionColumn({
     width: 148,
@@ -625,17 +644,16 @@ function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
   username: '',
-  loginType: undefined as number | undefined,
-  browser: undefined as number | undefined,
-  os: undefined as number | undefined,
+  loginType: undefined as string | undefined,
+  browser: undefined as string | undefined,
+  os: undefined as string | undefined,
   userAgent: '',
-  loginResult: undefined as number | undefined,
+  loginResult: undefined as string | undefined,
   loginMessage: '',
   loginIp: '',
   loginLocation: '',
   logoutAtStart: '',
   logoutAtEnd: '',
-  sessionDuration: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   ExtField: '',
@@ -733,17 +751,16 @@ function handleAdvancedQuerySubmit() {
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
   username: '',
-  loginType: undefined as number | undefined,
-  browser: undefined as number | undefined,
-  os: undefined as number | undefined,
+  loginType: undefined as string | undefined,
+  browser: undefined as string | undefined,
+  os: undefined as string | undefined,
   userAgent: '',
-  loginResult: undefined as number | undefined,
+  loginResult: undefined as string | undefined,
   loginMessage: '',
   loginIp: '',
   loginLocation: '',
   logoutAtStart: '',
   logoutAtEnd: '',
-  sessionDuration: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   ExtField: '',
@@ -787,12 +804,3 @@ function handlePaginationSizeChange(_current: number, size: number) {
   loadData()
 }
 </script>
-
-<style scoped lang="css">
-.statistics-logging-login-log {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-</style>

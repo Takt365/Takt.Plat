@@ -448,12 +448,11 @@
                 :label="t('entity.serviceticket.acceptedat')"
                 name="acceptedAt"
               >
-                <a-input
+                <a-date-picker
                   v-model:value="formState.acceptedAt"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceticket.acceptedat') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serviceticket.acceptedat') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>

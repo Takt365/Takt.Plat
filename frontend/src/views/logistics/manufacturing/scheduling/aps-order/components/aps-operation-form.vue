@@ -26,7 +26,116 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.apsoperation.linenumber')"
+                name="lineNumber"
+              >
+                <a-input-number
+                  v-model:value="formState.lineNumber"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsoperation.linenumber') })"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.apsoperation.routingitemid')"
+                name="routingItemId"
+              >
+                <a-input
+                  v-model:value="formState.routingItemId"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsoperation.routingitemid') })"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.apsoperation.processcode')"
+                name="processCode"
+              >
+                <a-input
+                  v-model:value="formState.processCode"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsoperation.processcode') })"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                  :disabled="!!formData?.apsOperationId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.apsoperation.processname')"
+                name="processName"
+              >
+                <a-input
+                  v-model:value="formState.processName"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsoperation.processname') })"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.apsoperation.workcentercode')"
+                name="workCenterCode"
+              >
+                <a-input
+                  v-model:value="formState.workCenterCode"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsoperation.workcentercode') })"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                  :disabled="!!formData?.apsOperationId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.apsoperation.workcenterresourceid')"
+                name="workCenterResourceId"
+              >
+                <a-input
+                  v-model:value="formState.workCenterResourceId"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsoperation.workcenterresourceid') })"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.apsoperation.plannedstarttime')"
+                name="plannedStartTime"
+              >
+                <a-date-picker
+                  v-model:value="formState.plannedStartTime"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.apsoperation.plannedstarttime') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.apsoperation.plannedendtime')"
+                name="plannedEndTime"
+              >
+                <a-date-picker
+                  v-model:value="formState.plannedEndTime"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.apsoperation.plannedendtime') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
           </a-row>
         </div>
       </a-tab-pane>
@@ -51,7 +160,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = []
+const formFields = ["lineNumber","routingItemId","processCode","processName","workCenterCode","workCenterResourceId","plannedStartTime","plannedEndTime"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -103,7 +212,26 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-
+  lineNumber: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.apsoperation.linenumber') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.apsoperation.linenumber') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  processCode: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.required', { field: t('entity.apsoperation.processcode') }),
+      trigger: 'blur'
+    }
+  ],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -115,6 +243,10 @@ async function validate() {
 /** 映射为 Create/Update DTO（含主表外键 apsOrderId） */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
+  if ('lineNumber' in payload) {
+    const rawlineNumber = payload.lineNumber
+    payload.lineNumber = typeof rawlineNumber === 'number' ? rawlineNumber : Number(rawlineNumber)
+  }
   if ('sortOrder' in payload) delete payload.sortOrder
   payload.apsOrderId = props.masterId
   return payload

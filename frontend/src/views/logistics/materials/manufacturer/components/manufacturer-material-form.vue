@@ -40,18 +40,6 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.manufacturermaterial.materialtype')"
-                name="materialType"
-              >
-                <a-input-number
-                  v-model:value="formState.materialType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturermaterial.materialtype') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
                 :label="t('entity.manufacturermaterial.code')"
                 name="manufacturerMaterialCode"
               >
@@ -110,13 +98,27 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.manufacturermaterial.extfield')"
-                name="ExtField"
+                name="extField"
+                class="takt-form-item-ext-field"
               >
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t('common.page.entity.extfieldhint')"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ t('common.page.entity.extfield') }}</span>
+                  </span>
+                </template>
                 <a-textarea
-                  v-model:value="formState.ExtField"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.manufacturermaterial.extfield') })"
-                  :rows="2"
+                  v-model:value="formState.extField"
+                  :placeholder="t('common.page.form.placeholder.extfield')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -151,6 +153,7 @@ import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import type { ManufacturerMaterialCreate } from '@/types/logistics/materials/manufacturer-material'
+import { RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -159,7 +162,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["lineNumber","materialType","manufacturerMaterialCode","manufacturerMaterialName","manufacturerMaterialSpecification","materialCode","ExtField","remark"]
+const formFields = ["lineNumber","manufacturerMaterialCode","manufacturerMaterialName","manufacturerMaterialSpecification","materialCode","extField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -224,19 +227,6 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
-  materialType: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.manufacturermaterial.materialtype') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.manufacturermaterial.materialtype') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
   manufacturerMaterialCode: [
     {
       required: true,
@@ -272,10 +262,6 @@ function getValues(): Record<string, any> {
   if ('lineNumber' in payload) {
     const rawlineNumber = payload.lineNumber
     payload.lineNumber = typeof rawlineNumber === 'number' ? rawlineNumber : Number(rawlineNumber)
-  }
-  if ('materialType' in payload) {
-    const rawmaterialType = payload.materialType
-    payload.materialType = typeof rawmaterialType === 'number' ? rawmaterialType : Number(rawmaterialType)
   }
   if ('sortOrder' in payload) delete payload.sortOrder
   payload.manufacturerId = props.masterId

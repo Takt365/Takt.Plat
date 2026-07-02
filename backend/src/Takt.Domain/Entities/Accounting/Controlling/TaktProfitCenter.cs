@@ -11,7 +11,6 @@
 // ========================================
 
 using SqlSugar;
-using Takt.Shared.Enums;
 using Takt.Domain.Entities;
 
 namespace Takt.Domain.Entities.Accounting.Controlling;
@@ -25,11 +24,10 @@ namespace Takt.Domain.Entities.Accounting.Controlling;
 [SugarIndex("ix_profit_center_code_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProfitCenterCode), OrderByType.Asc, true)]
 [SugarIndex("ix_profit_center_parent", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ParentId), OrderByType.Asc, false)]
 public class TaktProfitCenter : TaktCompanyEntityBase
-{
-    /// <summary>
-    /// 利润中心编码
+{    /// <summary>
+    /// 利润中心编码（4位，租户+公司内唯一）
     /// </summary>
-    [SugarColumn(ColumnName = "profit_center_code", ColumnDescription = "利润中心编码", ColumnDataType = "varchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "profit_center_code", ColumnDescription = "利润中心编码", ColumnDataType = "varchar", Length = 4, IsNullable = false)]
     public string ProfitCenterCode { get; set; } = string.Empty;
     /// <summary>
     /// 利润中心名称
@@ -67,16 +65,6 @@ public class TaktProfitCenter : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "profit_center_level", ColumnDescription = "利润中心层级", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int ProfitCenterLevel { get; set; } = 1;
     /// <summary>
-    /// 关联工厂
-    /// </summary>
-    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "varchar", Length = 4, IsNullable = true)]
-    public string? RelatedPlant { get; set; }
-    /// <summary>
-    /// 利润中心状态（1=启用，0=禁用）
-    /// </summary>
-    [SugarColumn(ColumnName = "profit_center_status", ColumnDescription = "利润中心状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public int ProfitCenterStatus { get; set; } = 1;
-    /// <summary>
     /// 生效日期
     /// </summary>
     [SugarColumn(ColumnName = "valid_from", ColumnDescription = "生效日期", ColumnDataType = "datetime", IsNullable = false)]
@@ -87,10 +75,20 @@ public class TaktProfitCenter : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "valid_to", ColumnDescription = "失效日期", ColumnDataType = "datetime", IsNullable = false)]
     public DateTime ValidTo { get; set; } = new DateTime(9999, 12, 31, 23, 59, 59);
     /// <summary>
+    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// </summary>
+    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "varchar", Length = 4, IsNullable = false)]
+    public string RelatedPlant { get; set; } = string.Empty;
+    /// <summary>
     /// 排序号
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; }
+    /// <summary>
+    /// 利润中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// </summary>
+    [SugarColumn(ColumnName = "profit_center_status", ColumnDescription = "利润中心状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
+    public int ProfitCenterStatus { get; set; } = 1;
 
     /// <summary>
     /// 利润中心变更记录列表（外键在子表 TaktProfitCenterChangeLog.ProfitCenterId）

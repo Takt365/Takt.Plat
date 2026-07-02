@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Quality.Operation
 // 文件名称：TaktSamplingSchemeValidators.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SamplingScheme 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktSamplingScheme 生成，请按需审阅）
 // 
@@ -44,10 +44,6 @@ public class TaktSamplingSchemeCreateValidator : AbstractValidator<TaktSamplingS
         RuleFor(x => x.SamplingSchemeName)
             .NotEmpty().WithMessage("抽样方案名称不能为空")
             .MaximumLength(200).WithMessage("抽样方案名称长度不能超过200个字符");
-        RuleFor(x => x.TransferRuleConfig)
-            .MaximumLength(2000).WithMessage("转移规则配置长度不能超过2000个字符");
-        RuleFor(x => x.SchemeDescription)
-            .MaximumLength(1000).WithMessage("抽样方案描述长度不能超过1000个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -71,6 +67,25 @@ public class TaktSamplingSchemeUpdateValidator : AbstractValidator<TaktSamplingS
     {
         RuleFor(x => x.SamplingSchemeId)
             .GreaterThan(0).WithMessage("SamplingSchemeID无效");
+        RuleFor(x => x.TenantCode)
+            .NotEmpty().WithMessage("租户编码不能为空")
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.CompanyCode)
+            .NotEmpty().WithMessage("公司代码不能为空")
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.PlantCode)
+            .NotEmpty().WithMessage("工厂代码不能为空")
+            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
+        RuleFor(x => x.SamplingSchemeCode)
+            .NotEmpty().WithMessage("抽样方案编码不能为空")
+            .MaximumLength(50).WithMessage("抽样方案编码长度不能超过50个字符");
+        RuleFor(x => x.SamplingSchemeName)
+            .NotEmpty().WithMessage("抽样方案名称不能为空")
+            .MaximumLength(200).WithMessage("抽样方案名称长度不能超过200个字符");
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
     }
 }
 

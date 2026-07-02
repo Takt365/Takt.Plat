@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/output
 // 文件名称：production-team.d.ts
-// 创建时间：2026-06-20
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/output 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -39,44 +39,29 @@ export interface ProductionTeam extends CompanyDtoBase {
   teamCode: string;
 
   /**
-   * 班组名称（显示名称，如：SMT一班、手插二班等）
+   * 班组名称（显示名称，如：SMT一班、手插二班等；最大 20 字符）
    */
   teamName: string;
 
   /**
-   * 班组分类编码（M=组立，P=PCBA，S=SMT，Q=质检，O=其他）
+   * 班组分类（字典 logistics_team_category）
    */
-  teamCategory?: string;
+  teamCategory: string;
 
   /**
-   * 班组分类名称（如：组立、PCBA、SMT、质检等）
+   * 班组长
    */
-  teamCategoryName?: string;
+  teamLeader?: string;
 
   /**
-   * 生产线代码（如：SMT1、ASSY1 等，与 TeamCode 区分，TeamCode 可包含班组信息）
+   * 班次（字典 logistics_shift_category）
    */
-  productionLine?: string;
-
-  /**
-   * 班组长员工Id
-   */
-  teamLeaderId?: string;
-
-  /**
-   * 班组长姓名
-   */
-  teamLeaderName?: string;
-
-  /**
-   * 班次（1=早班，2=中班，3=晚班）
-   */
-  shiftNo?: number;
+  shiftNo: number;
 
   /**
    * 启用状态（1=启用，0=禁用）
    */
-  status: number;
+  productionTeamStatus: number;
 
 }
 
@@ -109,44 +94,29 @@ export interface ProductionTeamQuery extends TaktPagedQuery {
   teamCode?: string;
 
   /**
-   * 班组名称（显示名称，如：SMT一班、手插二班等）
+   * 班组名称（显示名称，如：SMT一班、手插二班等；最大 20 字符）
    */
   teamName?: string;
 
   /**
-   * 班组分类编码（M=组立，P=PCBA，S=SMT，Q=质检，O=其他）
+   * 班组分类（字典 logistics_team_category）
    */
   teamCategory?: string;
 
   /**
-   * 班组分类名称（如：组立、PCBA、SMT、质检等）
+   * 班组长
    */
-  teamCategoryName?: string;
+  teamLeader?: string;
 
   /**
-   * 生产线代码（如：SMT1、ASSY1 等，与 TeamCode 区分，TeamCode 可包含班组信息）
-   */
-  productionLine?: string;
-
-  /**
-   * 班组长员工Id
-   */
-  teamLeaderId?: string;
-
-  /**
-   * 班组长姓名
-   */
-  teamLeaderName?: string;
-
-  /**
-   * 班次（1=早班，2=中班，3=晚班）
+   * 班次（字典 logistics_shift_category）
    */
   shiftNo?: number;
 
   /**
    * 启用状态（1=启用，0=禁用）
    */
-  status?: number;
+  productionTeamStatus?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -188,7 +158,7 @@ export interface ProductionTeamCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -203,44 +173,29 @@ export interface ProductionTeamCreate {
   teamCode: string;
 
   /**
-   * 班组名称（显示名称，如：SMT一班、手插二班等）
+   * 班组名称（显示名称，如：SMT一班、手插二班等；最大 20 字符）
    */
   teamName: string;
 
   /**
-   * 班组分类编码（M=组立，P=PCBA，S=SMT，Q=质检，O=其他）
+   * 班组分类（字典 logistics_team_category）
    */
-  teamCategory?: string;
+  teamCategory: string;
 
   /**
-   * 班组分类名称（如：组立、PCBA、SMT、质检等）
+   * 班组长
    */
-  teamCategoryName?: string;
+  teamLeader?: string;
 
   /**
-   * 生产线代码（如：SMT1、ASSY1 等，与 TeamCode 区分，TeamCode 可包含班组信息）
+   * 班次（字典 logistics_shift_category）
    */
-  productionLine?: string;
-
-  /**
-   * 班组长员工Id
-   */
-  teamLeaderId?: string;
-
-  /**
-   * 班组长姓名
-   */
-  teamLeaderName?: string;
-
-  /**
-   * 班次（1=早班，2=中班，3=晚班）
-   */
-  shiftNo?: number;
+  shiftNo: number;
 
   /**
    * 启用状态（1=启用，0=禁用）
    */
-  status: number;
+  productionTeamStatus: number;
 
   /**
    * 扩展字段JSON
@@ -284,7 +239,7 @@ export interface ProductionTeamStatus {
   /**
    * 启用状态（1=启用，0=禁用）
    */
-  status: number;
+  productionTeamStatus: number;
 
 }
 
@@ -316,44 +271,29 @@ export interface ProductionTeamTemplate {
   teamCode?: string;
 
   /**
-   * 班组名称（显示名称，如：SMT一班、手插二班等）
+   * 班组名称（显示名称，如：SMT一班、手插二班等；最大 20 字符）
    */
   teamName?: string;
 
   /**
-   * 班组分类编码（M=组立，P=PCBA，S=SMT，Q=质检，O=其他）
+   * 班组分类（字典 logistics_team_category）
    */
   teamCategory?: string;
 
   /**
-   * 班组分类名称（如：组立、PCBA、SMT、质检等）
+   * 班组长
    */
-  teamCategoryName?: string;
+  teamLeader?: string;
 
   /**
-   * 生产线代码（如：SMT1、ASSY1 等，与 TeamCode 区分，TeamCode 可包含班组信息）
-   */
-  productionLine?: string;
-
-  /**
-   * 班组长员工Id
-   */
-  teamLeaderId?: string;
-
-  /**
-   * 班组长姓名
-   */
-  teamLeaderName?: string;
-
-  /**
-   * 班次（1=早班，2=中班，3=晚班）
+   * 班次（字典 logistics_shift_category）
    */
   shiftNo?: number;
 
   /**
    * 启用状态（1=启用，0=禁用）
    */
-  status?: number;
+  productionTeamStatus?: number;
 
   /**
    * 扩展字段JSON
@@ -385,7 +325,7 @@ export interface ProductionTeamImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -400,44 +340,29 @@ export interface ProductionTeamImport {
   teamCode?: string;
 
   /**
-   * 班组名称（显示名称，如：SMT一班、手插二班等）
+   * 班组名称（显示名称，如：SMT一班、手插二班等；最大 20 字符）
    */
   teamName?: string;
 
   /**
-   * 班组分类编码（M=组立，P=PCBA，S=SMT，Q=质检，O=其他）
+   * 班组分类（字典 logistics_team_category）
    */
   teamCategory?: string;
 
   /**
-   * 班组分类名称（如：组立、PCBA、SMT、质检等）
+   * 班组长
    */
-  teamCategoryName?: string;
+  teamLeader?: string;
 
   /**
-   * 生产线代码（如：SMT1、ASSY1 等，与 TeamCode 区分，TeamCode 可包含班组信息）
-   */
-  productionLine?: string;
-
-  /**
-   * 班组长员工Id
-   */
-  teamLeaderId?: string;
-
-  /**
-   * 班组长姓名
-   */
-  teamLeaderName?: string;
-
-  /**
-   * 班次（1=早班，2=中班，3=晚班）
+   * 班次（字典 logistics_shift_category）
    */
   shiftNo?: number;
 
   /**
    * 启用状态（1=启用，0=禁用）
    */
-  status?: number;
+  productionTeamStatus?: number;
 
   /**
    * 扩展字段JSON
@@ -479,44 +404,29 @@ export interface ProductionTeamExport {
   teamCode: string;
 
   /**
-   * 班组名称（显示名称，如：SMT一班、手插二班等）
+   * 班组名称（显示名称，如：SMT一班、手插二班等；最大 20 字符）
    */
   teamName: string;
 
   /**
-   * 班组分类编码（M=组立，P=PCBA，S=SMT，Q=质检，O=其他）
+   * 班组分类（字典 logistics_team_category）
    */
-  teamCategory?: string;
+  teamCategory: string;
 
   /**
-   * 班组分类名称（如：组立、PCBA、SMT、质检等）
+   * 班组长
    */
-  teamCategoryName?: string;
+  teamLeader?: string;
 
   /**
-   * 生产线代码（如：SMT1、ASSY1 等，与 TeamCode 区分，TeamCode 可包含班组信息）
+   * 班次（字典 logistics_shift_category）
    */
-  productionLine?: string;
-
-  /**
-   * 班组长员工Id
-   */
-  teamLeaderId?: string;
-
-  /**
-   * 班组长姓名
-   */
-  teamLeaderName?: string;
-
-  /**
-   * 班次（1=早班，2=中班，3=晚班）
-   */
-  shiftNo?: number;
+  shiftNo: number;
 
   /**
    * 启用状态（1=启用，0=禁用）
    */
-  status: number;
+  productionTeamStatus: number;
 
   /**
    * 扩展字段JSON
@@ -534,4 +444,3 @@ export interface ProductionTeamExport {
   createdAt: string;
 
 }
-

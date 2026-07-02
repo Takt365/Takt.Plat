@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Training
 // 文件名称：TaktTrainingCourseDtos.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TrainingCourse 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktTrainingCourse 生成，请按需审阅）
 // 
@@ -91,6 +91,11 @@ public class TaktTrainingCourseDto : TaktCompanyDtoBase
     public decimal PassingScore { get; set; }
 
     /// <summary>
+    /// 关联工厂
+    /// </summary>
+    public string RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
     /// 排序号
     /// </summary>
     public int SortOrder { get; set; } = 0;
@@ -99,11 +104,6 @@ public class TaktTrainingCourseDto : TaktCompanyDtoBase
     /// 状态（1=启用 0=禁用）
     /// </summary>
     public int TrainingCourseStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
 
 }
 
@@ -183,6 +183,11 @@ public class TaktTrainingCourseQueryDto : TaktPagedQuery
     public decimal? PassingScore { get; set; }
 
     /// <summary>
+    /// 关联工厂
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
     /// 排序号
     /// </summary>
     public int? SortOrder { get; set; }
@@ -191,11 +196,6 @@ public class TaktTrainingCourseQueryDto : TaktPagedQuery
     /// 状态（1=启用 0=禁用）
     /// </summary>
     public int? TrainingCourseStatus { get; set; }
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -238,7 +238,7 @@ public class TaktTrainingCourseCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -307,19 +307,15 @@ public class TaktTrainingCourseCreateDto
     public decimal PassingScore { get; set; }
 
     /// <summary>
-    /// 排序号
+    /// 关联工厂
     /// </summary>
-    public int SortOrder { get; set; } = 0;
+    [Required(ErrorMessage = "关联工厂不能为空")]
+    public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（1=启用 0=禁用）
     /// </summary>
     public int TrainingCourseStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON
@@ -451,6 +447,11 @@ public class TaktTrainingCourseTemplateDto
     public string? CourseObjectives { get; set; } = string.Empty;
 
     /// <summary>
+    /// 培训时长（小时）
+    /// </summary>
+    public decimal? TrainingHours { get; set; }
+
+    /// <summary>
     /// 主讲讲师
     /// </summary>
     public string? MainInstructor { get; set; } = string.Empty;
@@ -466,19 +467,19 @@ public class TaktTrainingCourseTemplateDto
     public string? AssessmentMethod { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号
+    /// 及格分数线
     /// </summary>
-    public int? SortOrder { get; set; }
-
-    /// <summary>
-    /// 状态（1=启用 0=禁用）
-    /// </summary>
-    public int? TrainingCourseStatus { get; set; }
+    public decimal? PassingScore { get; set; }
 
     /// <summary>
     /// 关联工厂
     /// </summary>
     public string? RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 状态（1=启用 0=禁用）
+    /// </summary>
+    public int? TrainingCourseStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -508,7 +509,7 @@ public class TaktTrainingCourseImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -543,6 +544,11 @@ public class TaktTrainingCourseImportDto
     public string? CourseObjectives { get; set; } = string.Empty;
 
     /// <summary>
+    /// 培训时长（小时）
+    /// </summary>
+    public decimal? TrainingHours { get; set; }
+
+    /// <summary>
     /// 主讲讲师
     /// </summary>
     public string? MainInstructor { get; set; } = string.Empty;
@@ -558,19 +564,19 @@ public class TaktTrainingCourseImportDto
     public string? AssessmentMethod { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号
+    /// 及格分数线
     /// </summary>
-    public int? SortOrder { get; set; }
-
-    /// <summary>
-    /// 状态（1=启用 0=禁用）
-    /// </summary>
-    public int? TrainingCourseStatus { get; set; }
+    public decimal? PassingScore { get; set; }
 
     /// <summary>
     /// 关联工厂
     /// </summary>
     public string? RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 状态（1=启用 0=禁用）
+    /// </summary>
+    public int? TrainingCourseStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -661,6 +667,11 @@ public class TaktTrainingCourseExportDto
     public decimal PassingScore { get; set; }
 
     /// <summary>
+    /// 关联工厂
+    /// </summary>
+    public string RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
     /// 排序号
     /// </summary>
     public int SortOrder { get; set; } = 0;
@@ -669,11 +680,6 @@ public class TaktTrainingCourseExportDto
     /// 状态（1=启用 0=禁用）
     /// </summary>
     public int TrainingCourseStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON

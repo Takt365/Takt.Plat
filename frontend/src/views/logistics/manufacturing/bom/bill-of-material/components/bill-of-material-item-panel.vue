@@ -19,11 +19,11 @@
       @reset="handleQueryReset"
     />
     <TaktToolsBar
-      create-permission="logistics:manufacturing:bom:billofmaterial:create"
-      update-permission="logistics:manufacturing:bom:billofmaterial:update"
-      delete-permission="logistics:manufacturing:bom:billofmaterial:delete"
-      import-permission="logistics:manufacturing:bom:billofmaterial:import"
-      export-permission="logistics:manufacturing:bom:billofmaterial:export"
+      create-permission="logistics:manufacturing:bom:bill:of:material:create"
+      update-permission="logistics:manufacturing:bom:bill:of:material:update"
+      delete-permission="logistics:manufacturing:bom:bill:of:material:delete"
+      import-permission="logistics:manufacturing:bom:bill:of:material:import"
+      export-permission="logistics:manufacturing:bom:bill:of:material:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -261,7 +261,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -272,18 +272,36 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('ExtField')">
-      <a-form-item :label="t('entity.billofmaterialitem.extfield')">
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
         <a-textarea
-          v-model:value="advancedQueryForm.ExtField"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.billofmaterialitem.extfield') })"
-          :rows="2"
-          allow-clear
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -348,7 +366,7 @@ import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-pa
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 import BillOfMaterialItemForm from './bill-of-material-item-form.vue'
 import { useBillOfMaterialMasterContext } from '../composables/use-bill-of-material-master-context'
 import {
@@ -408,7 +426,7 @@ const advancedQueryForm = ref({
   isPhantom: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
 })
 const visibleQueryFieldKeys = ref<string[]>([])
@@ -432,7 +450,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'isPhantom', label: t('entity.billofmaterialitem.isphantom') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'ExtField', label: t('entity.billofmaterialitem.extfield') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 
@@ -473,7 +491,7 @@ function handleAdvancedQueryReset() {
   isPhantom: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
 }
@@ -606,7 +624,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:manufacturing:bom:billofmaterial:update',
+        permission: 'logistics:manufacturing:bom:bill:of:material:update',
         onClick: (record: BillOfMaterialItem) => void handleEdit(record),
       },
       {
@@ -614,7 +632,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:manufacturing:bom:billofmaterial:delete',
+        permission: 'logistics:manufacturing:bom:bill:of:material:delete',
         onClick: (record: BillOfMaterialItem) => void handleDeleteOne(record),
       },
     ],
@@ -631,7 +649,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: BillOfMaterialItem, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getBillOfMaterialItemId(selectedRow.value) === getBillOfMaterialItemId(record)) {
+    } else if (selectedRow.value && getBillOfMaterialItemId(selectedRow.value) === getBillOfMaterialItemId(record)) {
       selectedRow.value = null
     }
   },
@@ -714,7 +732,7 @@ function buildListQuery(overrides?: Partial<BillOfMaterialItemQuery>): BillOfMat
   }
   assignTrimmed('createdAtStart', form.createdAtStart)
   assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('ExtField', form.ExtField)
+  assignTrimmed('extField', form.extField)
   assignTrimmed('remark', form.remark)
   return query
 }

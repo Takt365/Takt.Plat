@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Cost
 // 文件名称：TaktQualityAssuranceDtos.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：QualityAssurance 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktQualityAssurance 生成，请按需审阅）
 // 
@@ -36,7 +36,7 @@ public class TaktQualityAssuranceDto : TaktCompanyDtoBase
     public long QualityAssuranceId { get; set; }
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -140,7 +140,7 @@ public class TaktQualityAssuranceQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -220,14 +220,14 @@ public class TaktQualityAssuranceCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码不能为空")]
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -355,7 +355,7 @@ public class TaktQualityAssuranceTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -385,9 +385,49 @@ public class TaktQualityAssuranceTemplateDto
     public string? Recorder { get; set; } = string.Empty;
 
     /// <summary>
+    /// 质量总成本(元,自动计算 = 各子表费用合计)
+    /// </summary>
+    public decimal? TotalQualityCost { get; set; }
+
+    /// <summary>
     /// 成本币种(CNY/USD/JPY等)
     /// </summary>
     public string? CostCurrency { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 来料检验费用明细列表（子表，级联保存）
+    /// </summary>
+    public List<TaktQualityAssuranceIncomingCreateDto>? IncomingItems { get; set; }
+
+    /// <summary>
+    /// 初期/定期检定费用明细列表（子表，级联保存）
+    /// </summary>
+    public List<TaktQualityAssuranceFirstArticleCreateDto>? FirstArticleItems { get; set; }
+
+    /// <summary>
+    /// 设备校正费用明细列表（子表，级联保存）
+    /// </summary>
+    public List<TaktQualityAssuranceCalibrationCreateDto>? CalibrationItems { get; set; }
+
+    /// <summary>
+    /// 其他通常业务费用明细列表（子表，级联保存）
+    /// </summary>
+    public List<TaktQualityAssuranceOtherCreateDto>? OtherItems { get; set; }
+
+    /// <summary>
+    /// 出货检验费用明细列表（子表，级联保存）
+    /// </summary>
+    public List<TaktQualityAssuranceOutgoingCreateDto>? OutgoingItems { get; set; }
+
+    /// <summary>
+    /// 信赖性评价/ORT费用明细列表（子表，级联保存）
+    /// </summary>
+    public List<TaktQualityAssuranceReliabilityCreateDto>? ReliabilityItems { get; set; }
+
+    /// <summary>
+    /// 顾客品质要求对应费用明细列表（子表，级联保存）
+    /// </summary>
+    public List<TaktQualityAssuranceCustomerResponseCreateDto>? CustomerResponseItems { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -417,12 +457,12 @@ public class TaktQualityAssuranceImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -452,9 +492,49 @@ public class TaktQualityAssuranceImportDto
     public string? Recorder { get; set; } = string.Empty;
 
     /// <summary>
+    /// 质量总成本(元,自动计算 = 各子表费用合计)
+    /// </summary>
+    public decimal? TotalQualityCost { get; set; }
+
+    /// <summary>
     /// 成本币种(CNY/USD/JPY等)
     /// </summary>
     public string? CostCurrency { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 来料检验费用明细列表（子表，级联保存）
+    /// </summary>
+    public List<TaktQualityAssuranceIncomingCreateDto>? IncomingItems { get; set; }
+
+    /// <summary>
+    /// 初期/定期检定费用明细列表（子表，级联保存）
+    /// </summary>
+    public List<TaktQualityAssuranceFirstArticleCreateDto>? FirstArticleItems { get; set; }
+
+    /// <summary>
+    /// 设备校正费用明细列表（子表，级联保存）
+    /// </summary>
+    public List<TaktQualityAssuranceCalibrationCreateDto>? CalibrationItems { get; set; }
+
+    /// <summary>
+    /// 其他通常业务费用明细列表（子表，级联保存）
+    /// </summary>
+    public List<TaktQualityAssuranceOtherCreateDto>? OtherItems { get; set; }
+
+    /// <summary>
+    /// 出货检验费用明细列表（子表，级联保存）
+    /// </summary>
+    public List<TaktQualityAssuranceOutgoingCreateDto>? OutgoingItems { get; set; }
+
+    /// <summary>
+    /// 信赖性评价/ORT费用明细列表（子表，级联保存）
+    /// </summary>
+    public List<TaktQualityAssuranceReliabilityCreateDto>? ReliabilityItems { get; set; }
+
+    /// <summary>
+    /// 顾客品质要求对应费用明细列表（子表，级联保存）
+    /// </summary>
+    public List<TaktQualityAssuranceCustomerResponseCreateDto>? CustomerResponseItems { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -490,7 +570,7 @@ public class TaktQualityAssuranceExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 

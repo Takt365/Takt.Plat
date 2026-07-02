@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Compensation
 // 文件名称：TaktPayslipI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPayslip 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktPayslipI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.payslip._self", "zh-HK", "员工工资条信息_hk", "实体名称"),
 
             // entity.payslip.employeeid
-            new TranslationSeedItem("entity.payslip.employeeid", "en-US", "员工ID_us", "员工 ID"),
+            new TranslationSeedItem("entity.payslip.employeeid", "en-US", "员工ID_us", "员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
             // entity.payslip.employeeid
-            new TranslationSeedItem("entity.payslip.employeeid", "ja-JP", "员工ID_jp", "员工 ID"),
+            new TranslationSeedItem("entity.payslip.employeeid", "ja-JP", "员工ID_jp", "员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
             // entity.payslip.employeeid
-            new TranslationSeedItem("entity.payslip.employeeid", "zh-CN", "员工ID", "员工 ID"),
+            new TranslationSeedItem("entity.payslip.employeeid", "zh-CN", "员工ID", "员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
             // entity.payslip.employeeid
-            new TranslationSeedItem("entity.payslip.employeeid", "zh-HK", "员工ID_hk", "员工 ID"),
+            new TranslationSeedItem("entity.payslip.employeeid", "zh-HK", "员工ID_hk", "员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
 
             // entity.payslip.employeename
             new TranslationSeedItem("entity.payslip.employeename", "en-US", "员工姓名_us", "员工姓名"),
@@ -217,22 +217,13 @@ public class TaktPayslipI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.payslip.netamount", "zh-HK", "实发金额_hk", "实发金额（元）"),
 
             // entity.payslip.formulasetcode
-            new TranslationSeedItem("entity.payslip.formulasetcode", "en-US", "公式方案编码_us", "关联计算公式方案编码（核算时按 TaktSalaryFormula.set_code 加载步骤并执行）"),
+            new TranslationSeedItem("entity.payslip.formulasetcode", "en-US", "公式方案编码_us", "公式方案编码（关联 TaktSalaryFormula.SetCode，核算时按同编码多行步骤顺序执行）"),
             // entity.payslip.formulasetcode
-            new TranslationSeedItem("entity.payslip.formulasetcode", "ja-JP", "公式方案编码_jp", "关联计算公式方案编码（核算时按 TaktSalaryFormula.set_code 加载步骤并执行）"),
+            new TranslationSeedItem("entity.payslip.formulasetcode", "ja-JP", "公式方案编码_jp", "公式方案编码（关联 TaktSalaryFormula.SetCode，核算时按同编码多行步骤顺序执行）"),
             // entity.payslip.formulasetcode
-            new TranslationSeedItem("entity.payslip.formulasetcode", "zh-CN", "公式方案编码", "关联计算公式方案编码（核算时按 TaktSalaryFormula.set_code 加载步骤并执行）"),
+            new TranslationSeedItem("entity.payslip.formulasetcode", "zh-CN", "公式方案编码", "公式方案编码（关联 TaktSalaryFormula.SetCode，核算时按同编码多行步骤顺序执行）"),
             // entity.payslip.formulasetcode
-            new TranslationSeedItem("entity.payslip.formulasetcode", "zh-HK", "公式方案编码_hk", "关联计算公式方案编码（核算时按 TaktSalaryFormula.set_code 加载步骤并执行）"),
-
-            // entity.payslip.issuestatus
-            new TranslationSeedItem("entity.payslip.issuestatus", "en-US", "发放状态_us", "发放状态（字典 hr_payslip_issue_status：0=待发放 1=已发放 2=已确认）"),
-            // entity.payslip.issuestatus
-            new TranslationSeedItem("entity.payslip.issuestatus", "ja-JP", "发放状态_jp", "发放状态（字典 hr_payslip_issue_status：0=待发放 1=已发放 2=已确认）"),
-            // entity.payslip.issuestatus
-            new TranslationSeedItem("entity.payslip.issuestatus", "zh-CN", "发放状态", "发放状态（字典 hr_payslip_issue_status：0=待发放 1=已发放 2=已确认）"),
-            // entity.payslip.issuestatus
-            new TranslationSeedItem("entity.payslip.issuestatus", "zh-HK", "发放状态_hk", "发放状态（字典 hr_payslip_issue_status：0=待发放 1=已发放 2=已确认）"),
+            new TranslationSeedItem("entity.payslip.formulasetcode", "zh-HK", "公式方案编码_hk", "公式方案编码（关联 TaktSalaryFormula.SetCode，核算时按同编码多行步骤顺序执行）"),
 
             // entity.payslip.issuedate
             new TranslationSeedItem("entity.payslip.issuedate", "en-US", "发放日期_us", "发放日期"),
@@ -244,13 +235,22 @@ public class TaktPayslipI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.payslip.issuedate", "zh-HK", "发放日期_hk", "发放日期"),
 
             // entity.payslip.relatedplant
-            new TranslationSeedItem("entity.payslip.relatedplant", "en-US", "关联工厂_us", "关联工厂"),
+            new TranslationSeedItem("entity.payslip.relatedplant", "en-US", "关联工厂_us", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
             // entity.payslip.relatedplant
-            new TranslationSeedItem("entity.payslip.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂"),
+            new TranslationSeedItem("entity.payslip.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
             // entity.payslip.relatedplant
-            new TranslationSeedItem("entity.payslip.relatedplant", "zh-CN", "关联工厂", "关联工厂"),
+            new TranslationSeedItem("entity.payslip.relatedplant", "zh-CN", "关联工厂", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
             // entity.payslip.relatedplant
-            new TranslationSeedItem("entity.payslip.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂"),
+            new TranslationSeedItem("entity.payslip.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+
+            // entity.payslip.issuestatus
+            new TranslationSeedItem("entity.payslip.issuestatus", "en-US", "发放状态_us", "发放状态（字典 hr_payslip_issue_status；0=待发放 1=已发放 2=已确认）"),
+            // entity.payslip.issuestatus
+            new TranslationSeedItem("entity.payslip.issuestatus", "ja-JP", "发放状态_jp", "发放状态（字典 hr_payslip_issue_status；0=待发放 1=已发放 2=已确认）"),
+            // entity.payslip.issuestatus
+            new TranslationSeedItem("entity.payslip.issuestatus", "zh-CN", "发放状态", "发放状态（字典 hr_payslip_issue_status；0=待发放 1=已发放 2=已确认）"),
+            // entity.payslip.issuestatus
+            new TranslationSeedItem("entity.payslip.issuestatus", "zh-HK", "发放状态_hk", "发放状态（字典 hr_payslip_issue_status；0=待发放 1=已发放 2=已确认）"),
         };
     }
 

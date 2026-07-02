@@ -45,7 +45,7 @@ public class TaktRoutingItemArgument : TaktCompanyEntityBase
     public string ParamName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 单位
+    /// 单位（字典 logistics_unit_of_measure_code）
     /// </summary>
     [SugarColumn(ColumnName = "param_unit", ColumnDescription = "单位", ColumnDataType = "nvarchar", Length = 20, IsNullable = true)]
     public string? ParamUnit { get; set; }

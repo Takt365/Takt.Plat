@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/sales/order/components -->
 <!-- 文件名称：order-item-form.vue -->
-<!-- 功能描述：Takt采购订单实体子表 purchaseOrderItem 独立 CRUD 弹窗表单；defineExpose validate/getValues/resetFields。由 generate-vue-master-detail-from-api.cjs 生成，风格与主表 *-form 一致 -->
+<!-- 功能描述：Takt销售订单实体子表 salesOrderItem 独立 CRUD 弹窗表单；defineExpose validate/getValues/resetFields。由 generate-vue-master-detail-from-api.cjs 生成，风格与主表 *-form 一致 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- ======================================== -->
 
@@ -28,66 +28,37 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.purchaseorderitem.linenumber')"
+                :label="pi.label('lineNumber')"
                 name="lineNumber"
               >
                 <a-input-number
                   v-model:value="formState.lineNumber"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorderitem.linenumber') })"
+                  :placeholder="pi.ph('lineNumber')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.purchaseorderitem.requestcode')"
-                name="requestCode"
-              >
-                <a-input
-                  v-model:value="formState.requestCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorderitem.requestcode') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                  :disabled="!!formData?.purchaseOrderItemId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.purchaseorderitem.requestlinenumber')"
-                name="requestLineNumber"
-              >
-                <a-input-number
-                  v-model:value="formState.requestLineNumber"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorderitem.requestlinenumber') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.purchaseorderitem.materialcode')"
+                :label="pi.label('materialCode')"
                 name="materialCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.materialCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorderitem.materialcode') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                  :disabled="!!formData?.purchaseOrderItemId"
+                  api-url="TaktMaterials/options"
+                  :placeholder="pi.ph('materialCode')"
+                  :disabled="!!formData?.salesOrderItemId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.purchaseorderitem.materialname')"
+                :label="pi.label('materialName')"
                 name="materialName"
               >
                 <a-input
                   v-model:value="formState.materialName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorderitem.materialname') })"
+                  :placeholder="pi.ph('materialName')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -96,12 +67,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.purchaseorderitem.materialspecification')"
+                :label="pi.label('materialSpecification')"
                 name="materialSpecification"
               >
                 <a-input
                   v-model:value="formState.materialSpecification"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorderitem.materialspecification') })"
+                  :placeholder="pi.ph('materialSpecification')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -110,27 +81,49 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.purchaseorderitem.purchaseunit')"
-                name="purchaseUnit"
+                :label="pi.label('salesUnit')"
+                name="salesUnit"
               >
-                <a-input
-                  v-model:value="formState.purchaseUnit"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorderitem.purchaseunit') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                <TaktSelect
+                  v-model:value="formState.salesUnit"
+                  dict-type="logistics_unit_of_measure_code"
+                  :placeholder="pi.ph('salesUnit')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.purchaseorderitem.orderquantity')"
+                :label="pi.label('orderQuantity')"
                 name="orderQuantity"
               >
                 <a-input-number
                   v-model:value="formState.orderQuantity"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorderitem.orderquantity') })"
+                  :placeholder="pi.ph('orderQuantity')"
                   style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('shippedQuantity')"
+                name="shippedQuantity"
+              >
+                <a-input-number
+                  v-model:value="formState.shippedQuantity"
+                  :placeholder="pi.ph('shippedQuantity')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('salesPerUnit')"
+                name="salesPerUnit"
+              >
+                <TaktSelect
+                  v-model:value="formState.salesPerUnit"
+                  dict-type="logistics_price_unit_param"
+                  :placeholder="pi.ph('salesPerUnit')"
                 />
               </a-form-item>
             </a-col>
@@ -143,13 +136,20 @@
 
 <script setup lang="ts">
 /**
- * Takt采购订单实体子表 purchaseOrderItem 维护表单 · 由 generate-vue-master-detail-from-api.cjs 生成
+ * Takt销售订单实体子表 salesOrderItem 维护表单 · 由 generate-vue-master-detail-from-api.cjs 生成
  * @module views/logistics/sales/order/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
-import type { PurchaseOrderItemCreate } from '@/types/logistics/procurement/order-item'
+import { useSalesOrderItemI18n } from '../composables/use-order-item-i18n'
+
+/** 实体字段 i18n */
+const pi = useSalesOrderItemI18n()
+
+import type { SalesOrderItemCreate } from '@/types/logistics/sales/order-item'
+import TaktSelect from '@/components/business/takt-select/index.vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -158,12 +158,13 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["lineNumber","requestCode","requestLineNumber","materialCode","materialName","materialSpecification","purchaseUnit","orderQuantity"]
+const formFields = ["lineNumber","materialCode","materialName","materialSpecification","salesUnit","orderQuantity","shippedQuantity","salesPerUnit"]
+
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
-  formData?: Partial<PurchaseOrderItemCreate & { purchaseOrderItemId?: string }> | null
+  formData?: Partial<SalesOrderItemCreate & { salesOrderItemId?: string }> | null
   /** 父级提交 loading，禁用表单项 */
   loading?: boolean
   /** 主表选中行 Id（Create/Update 提交时写入外键） */
@@ -180,17 +181,29 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
-/** 表单字段默认值（无字典默认项） */
-function applyFormDefaults(target: Record<string, unknown>) {
-  void target
+/** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
+const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  salesPerUnit: 1000
 }
 
+/** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  Object.assign(target, FORM_FIELD_DEFAULTS)
+}
 
-/** 编辑态灌入 formData；新增态恢复默认值（须含 purchaseOrderItemId 才视为编辑） */
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载全量字典 */
+onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
+})
+
+/** 编辑态灌入 formData；新增态恢复默认值（须含 salesOrderItemId 才视为编辑） */
 watch(
   () => props.formData,
   (val) => {
-    if (val?.purchaseOrderItemId) {
+    if (val?.salesOrderItemId) {
       const next = { ...val } as Record<string, unknown>
       Object.keys(formState).forEach((k) => delete formState[k])
 
@@ -213,11 +226,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   lineNumber: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorderitem.linenumber') }))
+        return Promise.reject(pi.ph('lineNumber'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorderitem.linenumber') }))
+        return Promise.reject(pi.ph('lineNumber'))
       }
       return Promise.resolve()
     },
@@ -226,32 +239,58 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   materialCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.purchaseorderitem.materialcode') }),
-      trigger: 'blur'
+      message: pi.ph('materialCode'),
+      trigger: 'change'
     }
   ],
   materialName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.purchaseorderitem.materialname') }),
+      message: pi.ph('materialName'),
       trigger: 'blur'
     }
   ],
-  purchaseUnit: [
+  salesUnit: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.purchaseorderitem.purchaseunit') }),
-      trigger: 'blur'
+      message: pi.ph('salesUnit'),
+      trigger: 'change'
     }
   ],
   orderQuantity: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorderitem.orderquantity') }))
+        return Promise.reject(pi.ph('orderQuantity'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorderitem.orderquantity') }))
+        return Promise.reject(pi.ph('orderQuantity'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  shippedQuantity: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('shippedQuantity'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('shippedQuantity'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  salesPerUnit: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('salesPerUnit'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('salesPerUnit'))
       }
       return Promise.resolve()
     },
@@ -265,23 +304,27 @@ async function validate() {
   return formState
 }
 
-/** 映射为 Create/Update DTO（含主表外键 purchaseOrderId） */
+/** 映射为 Create/Update DTO（含主表外键 salesOrderId） */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
   if ('lineNumber' in payload) {
     const rawlineNumber = payload.lineNumber
     payload.lineNumber = typeof rawlineNumber === 'number' ? rawlineNumber : Number(rawlineNumber)
   }
-  if ('requestLineNumber' in payload) {
-    const rawrequestLineNumber = payload.requestLineNumber
-    payload.requestLineNumber = typeof rawrequestLineNumber === 'number' ? rawrequestLineNumber : Number(rawrequestLineNumber)
-  }
   if ('orderQuantity' in payload) {
     const raworderQuantity = payload.orderQuantity
     payload.orderQuantity = typeof raworderQuantity === 'number' ? raworderQuantity : Number(raworderQuantity)
   }
+  if ('shippedQuantity' in payload) {
+    const rawshippedQuantity = payload.shippedQuantity
+    payload.shippedQuantity = typeof rawshippedQuantity === 'number' ? rawshippedQuantity : Number(rawshippedQuantity)
+  }
+  if ('salesPerUnit' in payload) {
+    const rawsalesPerUnit = payload.salesPerUnit
+    payload.salesPerUnit = typeof rawsalesPerUnit === 'number' ? rawsalesPerUnit : Number(rawsalesPerUnit)
+  }
   if ('sortOrder' in payload) delete payload.sortOrder
-  payload.purchaseOrderId = props.masterId
+  payload.salesOrderId = props.masterId
   return payload
 }
 

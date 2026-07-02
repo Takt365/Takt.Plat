@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Planning
 // 文件名称：TaktProductionPlanService.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：生产计划应用服务实现
 // 
@@ -409,6 +409,8 @@ public class TaktProductionPlanService : TaktServiceBase, ITaktProductionPlanSer
                 || (x.ProductionPlanCode != null && x.ProductionPlanCode.Contains(keywords))
                 || SqlFunc.ToString(x.SalesPlanId).Contains(keywords)
                 || (x.SalesPlanCode != null && x.SalesPlanCode.Contains(keywords))
+                || SqlFunc.ToString(x.MasterProductionScheduleId).Contains(keywords)
+                || (x.MpsCode != null && x.MpsCode.Contains(keywords))
                 || SqlFunc.ToString(x.PlannerId).Contains(keywords)
                 || (x.PlanBy != null && x.PlanBy.Contains(keywords))
                 || SqlFunc.ToString(x.TotalQuantity).Contains(keywords)
@@ -445,6 +447,16 @@ public class TaktProductionPlanService : TaktServiceBase, ITaktProductionPlanSer
         if (!string.IsNullOrEmpty(queryDto?.SalesPlanCode))
         {
             exp = exp.And(x => x.SalesPlanCode != null && x.SalesPlanCode.Contains(queryDto.SalesPlanCode));
+        }
+
+        if (queryDto?.MasterProductionScheduleId.HasValue == true)
+        {
+            exp = exp.And(x => x.MasterProductionScheduleId == queryDto.MasterProductionScheduleId);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.MpsCode))
+        {
+            exp = exp.And(x => x.MpsCode != null && x.MpsCode.Contains(queryDto.MpsCode));
         }
 
         if (queryDto?.PlannerId.HasValue == true)

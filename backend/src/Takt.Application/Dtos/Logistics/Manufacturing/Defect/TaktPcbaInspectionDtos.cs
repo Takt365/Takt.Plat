@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Defect
 // 文件名称：TaktPcbaInspectionDtos.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PcbaInspection 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPcbaInspection 生成，请按需审阅）
 // 
@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.Logistics.Manufacturing.Defect;
 // ========================================
 
 /// <summary>
-/// PCBA检查日报实体
+/// PCBA检查日报实体 不良率(%) = 明细不良数量合计 ÷ 明细检查数量合计 × 100%；直行率(%) = (检查数量 - 不良数量) ÷ 检查数量 × 100%。
 /// 对应前端 TaktPcbaInspectionDto
 /// 继承 TaktCompanyDtoBase
 /// </summary>
@@ -36,12 +36,12 @@ public class TaktPcbaInspectionDto : TaktCompanyDtoBase
     public long PcbaInspectionId { get; set; }
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别 RD: 研发 EVT: 工程验证测试 DVT: 设计验证测试 EPP: 工程试产 PP: 试产 FPP: 正式生产 MP: 大规模生产 RPR: 维修生产 RWR: 返工生产
+    /// 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
     /// </summary>
     public string ProdCategory { get; set; } = string.Empty;
 
@@ -51,7 +51,7 @@ public class TaktPcbaInspectionDto : TaktCompanyDtoBase
     public DateTime ProdDate { get; set; }
 
     /// <summary>
-    /// 生产工单号
+    /// 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
     /// </summary>
     public string ProdOrderCode { get; set; } = string.Empty;
 
@@ -74,11 +74,6 @@ public class TaktPcbaInspectionDto : TaktCompanyDtoBase
     /// 物料编码
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 状态(0=正常 1=停用)
-    /// </summary>
-    public int Status { get; set; } = 0;
 
     /// <summary>
     /// PCBA检查明细列表
@@ -109,12 +104,12 @@ public class TaktPcbaInspectionQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别 RD: 研发 EVT: 工程验证测试 DVT: 设计验证测试 EPP: 工程试产 PP: 试产 FPP: 正式生产 MP: 大规模生产 RPR: 维修生产 RWR: 返工生产
+    /// 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
     /// </summary>
     public string? ProdCategory { get; set; } = string.Empty;
 
@@ -129,7 +124,7 @@ public class TaktPcbaInspectionQueryDto : TaktPagedQuery
     public DateTime? ProdDateEnd { get; set; }
 
     /// <summary>
-    /// 生产工单号
+    /// 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
     /// </summary>
     public string? ProdOrderCode { get; set; } = string.Empty;
 
@@ -152,11 +147,6 @@ public class TaktPcbaInspectionQueryDto : TaktPagedQuery
     /// 物料编码
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 状态(0=正常 1=停用)
-    /// </summary>
-    public int? Status { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -199,20 +189,20 @@ public class TaktPcbaInspectionCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码不能为空")]
+    [Required(ErrorMessage = "工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别 RD: 研发 EVT: 工程验证测试 DVT: 设计验证测试 EPP: 工程试产 PP: 试产 FPP: 正式生产 MP: 大规模生产 RPR: 维修生产 RWR: 返工生产
+    /// 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
     /// </summary>
-    [Required(ErrorMessage = "生产类别 RD: 研发 EVT: 工程验证测试 DVT: 设计验证测试 EPP: 工程试产 PP: 试产 FPP: 正式生产 MP: 大规模生产 RPR: 维修生产 RWR: 返工生产不能为空")]
+    [Required(ErrorMessage = "生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）不能为空")]
     public string ProdCategory { get; set; } = string.Empty;
 
     /// <summary>
@@ -221,9 +211,9 @@ public class TaktPcbaInspectionCreateDto
     public DateTime ProdDate { get; set; }
 
     /// <summary>
-    /// 生产工单号
+    /// 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
     /// </summary>
-    [Required(ErrorMessage = "生产工单号不能为空")]
+    [Required(ErrorMessage = "生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）不能为空")]
     public string ProdOrderCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -247,11 +237,6 @@ public class TaktPcbaInspectionCreateDto
     /// </summary>
     [Required(ErrorMessage = "物料编码不能为空")]
     public string MaterialCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 状态(0=正常 1=停用)
-    /// </summary>
-    public int Status { get; set; } = 0;
 
     /// <summary>
     /// PCBA检查明细列表（子表，级联保存）
@@ -291,30 +276,6 @@ public class TaktPcbaInspectionUpdateDto : TaktPcbaInspectionCreateDto
 }
 
 // ========================================
-// PcbaInspection 状态 DTO
-// ========================================
-
-/// <summary>
-/// PcbaInspection 状态更新 DTO
-/// </summary>
-public class TaktPcbaInspectionStatusDto
-{
-    /// <summary>
-    /// PcbaInspectionID
-    /// </summary>
-    [Required(ErrorMessage = "ID不能为空")]
-    [AdaptMember("Id")]
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long PcbaInspectionId { get; set; }
-
-    /// <summary>
-    /// 状态(0=正常 1=停用)
-    /// </summary>
-    [Required(ErrorMessage = "状态(0=正常 1=停用)不能为空")]
-    public int Status { get; set; } = 0;
-}
-
-// ========================================
 // 导入 DTO
 // ========================================
 
@@ -334,19 +295,29 @@ public class TaktPcbaInspectionTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别 RD: 研发 EVT: 工程验证测试 DVT: 设计验证测试 EPP: 工程试产 PP: 试产 FPP: 正式生产 MP: 大规模生产 RPR: 维修生产 RWR: 返工生产
+    /// 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
     /// </summary>
     public string? ProdCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产工单号
+    /// 生产日期
+    /// </summary>
+    public DateTime? ProdDate { get; set; }
+
+    /// <summary>
+    /// 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
     /// </summary>
     public string? ProdOrderCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 订单数量
+    /// </summary>
+    public decimal? ProdOrderQty { get; set; }
 
     /// <summary>
     /// 机种
@@ -364,9 +335,9 @@ public class TaktPcbaInspectionTemplateDto
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态(0=正常 1=停用)
+    /// PCBA检查明细列表（子表，级联保存）
     /// </summary>
-    public int? Status { get; set; }
+    public List<TaktPcbaInspectionDetailCreateDto>? PcbaInspectionDetails { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -396,24 +367,34 @@ public class TaktPcbaInspectionImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别 RD: 研发 EVT: 工程验证测试 DVT: 设计验证测试 EPP: 工程试产 PP: 试产 FPP: 正式生产 MP: 大规模生产 RPR: 维修生产 RWR: 返工生产
+    /// 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
     /// </summary>
     public string? ProdCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产工单号
+    /// 生产日期
+    /// </summary>
+    public DateTime? ProdDate { get; set; }
+
+    /// <summary>
+    /// 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
     /// </summary>
     public string? ProdOrderCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 订单数量
+    /// </summary>
+    public decimal? ProdOrderQty { get; set; }
 
     /// <summary>
     /// 机种
@@ -431,9 +412,9 @@ public class TaktPcbaInspectionImportDto
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态(0=正常 1=停用)
+    /// PCBA检查明细列表（子表，级联保存）
     /// </summary>
-    public int? Status { get; set; }
+    public List<TaktPcbaInspectionDetailCreateDto>? PcbaInspectionDetails { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -469,12 +450,12 @@ public class TaktPcbaInspectionExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别 RD: 研发 EVT: 工程验证测试 DVT: 设计验证测试 EPP: 工程试产 PP: 试产 FPP: 正式生产 MP: 大规模生产 RPR: 维修生产 RWR: 返工生产
+    /// 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
     /// </summary>
     public string ProdCategory { get; set; } = string.Empty;
 
@@ -484,7 +465,7 @@ public class TaktPcbaInspectionExportDto
     public DateTime ProdDate { get; set; }
 
     /// <summary>
-    /// 生产工单号
+    /// 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
     /// </summary>
     public string ProdOrderCode { get; set; } = string.Empty;
 
@@ -507,11 +488,6 @@ public class TaktPcbaInspectionExportDto
     /// 物料编码
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 状态(0=正常 1=停用)
-    /// </summary>
-    public int Status { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

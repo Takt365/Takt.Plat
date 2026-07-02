@@ -472,7 +472,7 @@ function resolveDataIndex(key: string): string {
 }
 
 /**
- * 是否只读列
+ * 只读列
  * @param key 列 key
  * @returns {boolean} 只读
  */

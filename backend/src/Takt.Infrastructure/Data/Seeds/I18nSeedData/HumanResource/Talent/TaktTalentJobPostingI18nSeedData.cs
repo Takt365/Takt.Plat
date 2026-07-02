@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Talent
 // 文件名称：TaktTalentJobPostingI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktTalentJobPosting 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktTalentJobPostingI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.talentjobposting._self", "zh-HK", "职位发布信息_hk", "实体名称"),
 
             // entity.talentjobposting.staffingrequirementid
-            new TranslationSeedItem("entity.talentjobposting.staffingrequirementid", "en-US", "用人需求ID_us", "用人需求ID"),
+            new TranslationSeedItem("entity.talentjobposting.staffingrequirementid", "en-US", "用人需求ID_us", "用人需求（关联 TaktTalentStaffingRequirement.Id，选项 TaktTalentStaffingRequirements/options）"),
             // entity.talentjobposting.staffingrequirementid
-            new TranslationSeedItem("entity.talentjobposting.staffingrequirementid", "ja-JP", "用人需求ID_jp", "用人需求ID"),
+            new TranslationSeedItem("entity.talentjobposting.staffingrequirementid", "ja-JP", "用人需求ID_jp", "用人需求（关联 TaktTalentStaffingRequirement.Id，选项 TaktTalentStaffingRequirements/options）"),
             // entity.talentjobposting.staffingrequirementid
-            new TranslationSeedItem("entity.talentjobposting.staffingrequirementid", "zh-CN", "用人需求ID", "用人需求ID"),
+            new TranslationSeedItem("entity.talentjobposting.staffingrequirementid", "zh-CN", "用人需求ID", "用人需求（关联 TaktTalentStaffingRequirement.Id，选项 TaktTalentStaffingRequirements/options）"),
             // entity.talentjobposting.staffingrequirementid
-            new TranslationSeedItem("entity.talentjobposting.staffingrequirementid", "zh-HK", "用人需求ID_hk", "用人需求ID"),
+            new TranslationSeedItem("entity.talentjobposting.staffingrequirementid", "zh-HK", "用人需求ID_hk", "用人需求（关联 TaktTalentStaffingRequirement.Id，选项 TaktTalentStaffingRequirements/options）"),
 
             // entity.talentjobposting.postingcode
             new TranslationSeedItem("entity.talentjobposting.postingcode", "en-US", "发布编号_us", "发布编号（租户+公司内唯一）"),
@@ -116,15 +116,6 @@ public class TaktTalentJobPostingI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.talentjobposting.title", "zh-CN", "职位标题", "职位标题"),
             // entity.talentjobposting.title
             new TranslationSeedItem("entity.talentjobposting.title", "zh-HK", "职位标题_hk", "职位标题"),
-
-            // entity.talentjobposting.postingstatus
-            new TranslationSeedItem("entity.talentjobposting.postingstatus", "en-US", "发布状态_us", "发布状态（0=草稿，1=招聘中，2=已暂停，3=已关闭）"),
-            // entity.talentjobposting.postingstatus
-            new TranslationSeedItem("entity.talentjobposting.postingstatus", "ja-JP", "发布状态_jp", "发布状态（0=草稿，1=招聘中，2=已暂停，3=已关闭）"),
-            // entity.talentjobposting.postingstatus
-            new TranslationSeedItem("entity.talentjobposting.postingstatus", "zh-CN", "发布状态", "发布状态（0=草稿，1=招聘中，2=已暂停，3=已关闭）"),
-            // entity.talentjobposting.postingstatus
-            new TranslationSeedItem("entity.talentjobposting.postingstatus", "zh-HK", "发布状态_hk", "发布状态（0=草稿，1=招聘中，2=已暂停，3=已关闭）"),
 
             // entity.talentjobposting.publishdate
             new TranslationSeedItem("entity.talentjobposting.publishdate", "en-US", "职位发布日期_us", "职位发布日期"),
@@ -154,13 +145,13 @@ public class TaktTalentJobPostingI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.talentjobposting.closedate", "zh-HK", "招聘关闭日期_hk", "招聘关闭日期"),
 
             // entity.talentjobposting.publishchannel
-            new TranslationSeedItem("entity.talentjobposting.publishchannel", "en-US", "发布渠道_us", "发布渠道（0=官网，1=招聘网站，2=内推，3=校园，9=其他）"),
+            new TranslationSeedItem("entity.talentjobposting.publishchannel", "en-US", "发布渠道_us", "发布渠道（字典 hr_talent_publish_channel_type；0=官网 1=招聘网站 2=内推 3=校园 9=其他）"),
             // entity.talentjobposting.publishchannel
-            new TranslationSeedItem("entity.talentjobposting.publishchannel", "ja-JP", "发布渠道_jp", "发布渠道（0=官网，1=招聘网站，2=内推，3=校园，9=其他）"),
+            new TranslationSeedItem("entity.talentjobposting.publishchannel", "ja-JP", "发布渠道_jp", "发布渠道（字典 hr_talent_publish_channel_type；0=官网 1=招聘网站 2=内推 3=校园 9=其他）"),
             // entity.talentjobposting.publishchannel
-            new TranslationSeedItem("entity.talentjobposting.publishchannel", "zh-CN", "发布渠道", "发布渠道（0=官网，1=招聘网站，2=内推，3=校园，9=其他）"),
+            new TranslationSeedItem("entity.talentjobposting.publishchannel", "zh-CN", "发布渠道", "发布渠道（字典 hr_talent_publish_channel_type；0=官网 1=招聘网站 2=内推 3=校园 9=其他）"),
             // entity.talentjobposting.publishchannel
-            new TranslationSeedItem("entity.talentjobposting.publishchannel", "zh-HK", "发布渠道_hk", "发布渠道（0=官网，1=招聘网站，2=内推，3=校园，9=其他）"),
+            new TranslationSeedItem("entity.talentjobposting.publishchannel", "zh-HK", "发布渠道_hk", "发布渠道（字典 hr_talent_publish_channel_type；0=官网 1=招聘网站 2=内推 3=校园 9=其他）"),
 
             // entity.talentjobposting.reason
             new TranslationSeedItem("entity.talentjobposting.reason", "en-US", "发布说明_us", "发布说明"),
@@ -170,6 +161,15 @@ public class TaktTalentJobPostingI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.talentjobposting.reason", "zh-CN", "发布说明", "发布说明"),
             // entity.talentjobposting.reason
             new TranslationSeedItem("entity.talentjobposting.reason", "zh-HK", "发布说明_hk", "发布说明"),
+
+            // entity.talentjobposting.postingstatus
+            new TranslationSeedItem("entity.talentjobposting.postingstatus", "en-US", "发布状态_us", "发布状态（字典 hr_talent_job_posting_status；0=草稿 1=招聘中 2=已暂停 3=已关闭）"),
+            // entity.talentjobposting.postingstatus
+            new TranslationSeedItem("entity.talentjobposting.postingstatus", "ja-JP", "发布状态_jp", "发布状态（字典 hr_talent_job_posting_status；0=草稿 1=招聘中 2=已暂停 3=已关闭）"),
+            // entity.talentjobposting.postingstatus
+            new TranslationSeedItem("entity.talentjobposting.postingstatus", "zh-CN", "发布状态", "发布状态（字典 hr_talent_job_posting_status；0=草稿 1=招聘中 2=已暂停 3=已关闭）"),
+            // entity.talentjobposting.postingstatus
+            new TranslationSeedItem("entity.talentjobposting.postingstatus", "zh-HK", "发布状态_hk", "发布状态（字典 hr_talent_job_posting_status；0=草稿 1=招聘中 2=已暂停 3=已关闭）"),
 
             // entity.talentjobposting.staffingrequirement
             new TranslationSeedItem("entity.talentjobposting.staffingrequirement", "en-US", "用人需求_us", "用人需求"),

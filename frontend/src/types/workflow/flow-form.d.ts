@@ -69,7 +69,7 @@ export interface FlowForm extends CompanyDtoBase {
   isDatasource: number;
 
   /**
-   * 关联数据库名
+   * 关联库名
    */
   relatedDataBaseName?: string;
 
@@ -79,7 +79,7 @@ export interface FlowForm extends CompanyDtoBase {
   relatedTableName?: string;
 
   /**
-   * 关联字段映射 JSON
+   * 关联映射 JSON
    */
   relatedFormField?: string;
 
@@ -154,7 +154,7 @@ export interface FlowFormQuery extends TaktPagedQuery {
   isDatasource?: number;
 
   /**
-   * 关联数据库名
+   * 关联库名
    */
   relatedDataBaseName?: string;
 
@@ -164,7 +164,7 @@ export interface FlowFormQuery extends TaktPagedQuery {
   relatedTableName?: string;
 
   /**
-   * 关联字段映射 JSON
+   * 关联映射 JSON
    */
   relatedFormField?: string;
 
@@ -218,7 +218,7 @@ export interface FlowFormCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -263,7 +263,7 @@ export interface FlowFormCreate {
   isDatasource: number;
 
   /**
-   * 关联数据库名
+   * 关联库名
    */
   relatedDataBaseName?: string;
 
@@ -273,7 +273,7 @@ export interface FlowFormCreate {
   relatedTableName?: string;
 
   /**
-   * 关联字段映射 JSON
+   * 关联映射 JSON
    */
   relatedFormField?: string;
 
@@ -410,7 +410,7 @@ export interface FlowFormTemplate {
   isDatasource?: number;
 
   /**
-   * 关联数据库名
+   * 关联库名
    */
   relatedDataBaseName?: string;
 
@@ -420,7 +420,7 @@ export interface FlowFormTemplate {
   relatedTableName?: string;
 
   /**
-   * 关联字段映射 JSON
+   * 关联映射 JSON
    */
   relatedFormField?: string;
 
@@ -459,7 +459,7 @@ export interface FlowFormImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -504,7 +504,7 @@ export interface FlowFormImport {
   isDatasource?: number;
 
   /**
-   * 关联数据库名
+   * 关联库名
    */
   relatedDataBaseName?: string;
 
@@ -514,7 +514,7 @@ export interface FlowFormImport {
   relatedTableName?: string;
 
   /**
-   * 关联字段映射 JSON
+   * 关联映射 JSON
    */
   relatedFormField?: string;
 
@@ -593,7 +593,7 @@ export interface FlowFormExport {
   isDatasource: number;
 
   /**
-   * 关联数据库名
+   * 关联库名
    */
   relatedDataBaseName?: string;
 
@@ -603,7 +603,7 @@ export interface FlowFormExport {
   relatedTableName?: string;
 
   /**
-   * 关联字段映射 JSON
+   * 关联映射 JSON
    */
   relatedFormField?: string;
 

@@ -380,7 +380,7 @@
           v-model:value="advancedQueryForm.costCenterCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.costcentercode') })"
           show-count
-          :maxlength="20"
+          :maxlength="4"
           allow-clear
         />
       </a-form-item>
@@ -402,7 +402,7 @@
           v-model:value="advancedQueryForm.costElementCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.costelementcode') })"
           show-count
-          :maxlength="20"
+          :maxlength="4"
           allow-clear
         />
       </a-form-item>
@@ -610,10 +610,11 @@
       </div>
       <div v-show="isFieldVisible('approvalStatus')">
       <a-form-item :label="t('entity.maintenanceworkorder.approvalstatus')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.approvalStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.approvalstatus') })"
-          style="width: 100%"
+          dict-type="sys_approval_status"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.approvalstatus') })"
+          allow-clear
         />
       </a-form-item>
       </div>

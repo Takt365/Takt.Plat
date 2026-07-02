@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.HumanResource.Organization
 // 文件名称：TaktPostsController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：岗位控制器
 // 
@@ -183,7 +183,7 @@ public class TaktPostsController : TaktControllerBase
     /// <summary>
     /// 更新岗位状态
     /// </summary>
-    /// <param name="dto">状态 DTO（TaktCommonStatus 枚举）</param>
+    /// <param name="dto">状态 DTO</param>
     /// <returns>岗位DTO</returns>
     [TaktPermission("human:resource:organization:post:update", "更新岗位状态")]
     [HttpPut("status")]
@@ -192,26 +192,6 @@ public class TaktPostsController : TaktControllerBase
         try
         {
             var result = await _postService.UpdatePostStatusAsync(dto);
-            return Success(result, "更新成功");
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
-    }
-
-    /// <summary>
-    /// 更新岗位是否内置
-    /// </summary>
-    /// <param name="dto">是否内置 DTO</param>
-    /// <returns>岗位DTO</returns>
-    [TaktPermission("human:resource:organization:post:update", "更新岗位是否内置")]
-    [HttpPut("built-in")]
-    public async Task<IActionResult> UpdatePostBuiltInAsync([FromBody] TaktPostBuiltInDto dto)
-    {
-        try
-        {
-            var result = await _postService.UpdatePostBuiltInAsync(dto);
             return Success(result, "更新成功");
         }
         catch (Exception ex)

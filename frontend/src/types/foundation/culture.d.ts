@@ -29,7 +29,7 @@ export interface Culture extends TenantDtoBase {
   cultureId: string;
 
   /**
-   * 区域文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）
+   * 文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）
    */
   cultureCode: string;
 
@@ -54,7 +54,7 @@ export interface Culture extends TenantDtoBase {
   sortOrder: number;
 
   /**
-   * 是否默认语言（1=是，0=否）
+   * 默认语言（字典 sys_yes_no_type；1=是 0=否）
    */
   isDefault: number;
 
@@ -84,7 +84,7 @@ export interface CultureQuery extends TaktPagedQuery {
   tenantCode?: string;
 
   /**
-   * 区域文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）
+   * 文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）
    */
   cultureCode?: string;
 
@@ -109,7 +109,7 @@ export interface CultureQuery extends TaktPagedQuery {
   sortOrder?: number;
 
   /**
-   * 是否默认语言（1=是，0=否）
+   * 默认语言（字典 sys_yes_no_type；1=是 0=否）
    */
   isDefault?: number;
 
@@ -153,7 +153,7 @@ export interface CultureCreate {
   tenantCode: string;
 
   /**
-   * 区域文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）
+   * 文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）
    */
   cultureCode: string;
 
@@ -178,7 +178,7 @@ export interface CultureCreate {
   sortOrder: number;
 
   /**
-   * 是否默认语言（1=是，0=否）
+   * 默认语言（字典 sys_yes_no_type；1=是 0=否）
    */
   isDefault: number;
 
@@ -270,7 +270,7 @@ export interface CultureTemplate {
   tenantCode?: string;
 
   /**
-   * 区域文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）
+   * 文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）
    */
   cultureCode?: string;
 
@@ -295,7 +295,7 @@ export interface CultureTemplate {
   sortOrder?: number;
 
   /**
-   * 是否默认语言（1=是，0=否）
+   * 默认语言（字典 sys_yes_no_type；1=是 0=否）
    */
   isDefault?: number;
 
@@ -329,7 +329,7 @@ export interface CultureImport {
   tenantCode?: string;
 
   /**
-   * 区域文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）
+   * 文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）
    */
   cultureCode?: string;
 
@@ -354,7 +354,7 @@ export interface CultureImport {
   sortOrder?: number;
 
   /**
-   * 是否默认语言（1=是，0=否）
+   * 默认语言（字典 sys_yes_no_type；1=是 0=否）
    */
   isDefault?: number;
 
@@ -388,7 +388,7 @@ export interface CultureExport {
   cultureId: string;
 
   /**
-   * 区域文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）
+   * 文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）
    */
   cultureCode: string;
 
@@ -413,7 +413,7 @@ export interface CultureExport {
   sortOrder: number;
 
   /**
-   * 是否默认语言（1=是，0=否）
+   * 默认语言（字典 sys_yes_no_type；1=是 0=否）
    */
   isDefault: number;
 

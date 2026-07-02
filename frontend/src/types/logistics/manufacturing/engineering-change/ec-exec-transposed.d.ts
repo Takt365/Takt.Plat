@@ -1,0 +1,92 @@
+// ========================================
+// 项目名称：节拍工厂·Takt Plat
+// 命名空间：frontend/src/types/logistics/manufacturing/engineering-change
+// 文件名称：ec-exec-transposed.d.ts
+// 创建时间：2026-06-29
+// 创建人：Takt365(Cursor AI)
+// 功能描述：设变部门/批次转置列表类型（TaktEcBukans/transposed、TaktEcBatches/transposed）
+//
+// 版权信息：Copyright (c) 2026 Takt  All rights reserved.
+// 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
+// ========================================
+
+import type { TaktPagedQuery, TaktPagedResult } from '@/types/common';
+
+/** 设变部门转置单元格 */
+export interface EcExecTransposedCell {
+  deptCode: string;
+  isImplemented: number;
+  completedDate?: string;
+  displayText?: string | null;
+}
+
+/** 设变部门转置行 */
+export interface EcExecTransposed {
+  ecDetailId: string;
+  ecId: string;
+  lineNumber: number;
+  ecIssueDate: string;
+  ecLeader: string;
+  ecNo: string;
+  ecModel: string;
+  ecNewItem?: string | null;
+  deptCells: Record<string, EcExecTransposedCell>;
+}
+
+/** 设变部门转置查询 */
+export interface EcExecTransposedQuery extends TaktPagedQuery {
+  ecNo?: string;
+  ecModel?: string;
+  ecNewItem?: string;
+  ecLeader?: string;
+  ecIssueDateStart?: string;
+  ecIssueDateEnd?: string;
+  deptCode?: string;
+  isImplemented?: number;
+}
+
+/** 设变部门转置分页结果 */
+export interface EcExecTransposedResult {
+  paged: TaktPagedResult<EcExecTransposed>;
+  deptCodeOrder: string[];
+}
+
+/** 设变批次转置阶段单元格 */
+export interface EcExecBatchTransposedStage {
+  stageCode: string;
+  stageDate?: string | null;
+  batchNo?: string | null;
+  dateDisplayText?: string | null;
+}
+
+/** 设变批次转置行 */
+export interface EcExecBatchTransposed {
+  ecDetailId: string;
+  ecId: string;
+  lineNumber: number;
+  ecNo: string;
+  technicalLiaisonNo?: string | null;
+  pNo?: string | null;
+  tcjLiaisonNo?: string | null;
+  ecIssueDate: string;
+  ecModel: string;
+  ecNewItem?: string | null;
+  ecEntryDate: string;
+  stageCells: Record<string, EcExecBatchTransposedStage>;
+}
+
+/** 设变批次转置查询 */
+export interface EcExecBatchTransposedQuery extends TaktPagedQuery {
+  ecNo?: string;
+  ecModel?: string;
+  ecNewItem?: string;
+  ecIssueDateStart?: string;
+  ecIssueDateEnd?: string;
+  batchNo?: string;
+}
+
+/** 设变批次转置分页结果 */
+export interface EcExecBatchTransposedResult {
+  paged: TaktPagedResult<EcExecBatchTransposed>;
+  stageCodeOrder: string[];
+}

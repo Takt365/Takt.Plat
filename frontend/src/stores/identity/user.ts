@@ -18,11 +18,8 @@ import { useTenantStore } from '@/stores/identity/tenant';
 import type { MenuTree } from '@/types/identity/menu';
 import { hasPermissionCode } from '@/utils/permission';
 import { normalizeUserInfoProfile } from '@/utils/takt-user-profile-normalize';
-import { getHolidayTheme } from '@/api/human-resource/attendance/holiday';
 import { useLocaleStore } from '@/stores/foundation/locale';
 import type { HolidayTheme } from '@/types/human-resource/attendance/holiday';
-import { resolveThemeColorPreset } from '@/utils/theme';
-import { useThemeColorStore } from '@/stores/common/theme-color';
 import {
   TAKT_ACCESS_TOKEN_STORAGE_KEY,
   TAKT_REFRESH_TOKEN_STORAGE_KEY,
@@ -34,6 +31,20 @@ let profileLoadPromise: Promise<void> | null = null;
 
 /** 登录预览（假日主题/默认语言）请求序号，丢弃过期响应 */
 let loginPreviewSyncSeq = 0;
+
+/**
+ * 按需加载假日主题 API（避免 main 入口静态拉取 attendance/holiday 模块树）
+ * @param tenantCode 租户编码
+ * @param companyCode 公司编码
+ * @returns {Promise<HolidayTheme>} 假日主题 DTO
+ */
+async function fetchHolidayThemeAsync(
+  tenantCode: string,
+  companyCode: string,
+): Promise<HolidayTheme> {
+  const { getHolidayTheme } = await import('@/api/human-resource/attendance/holiday');
+  return getHolidayTheme(tenantCode, companyCode);
+}
 
 /**
  * 构建登录预览上下文键（租户 + 用户名）
@@ -161,6 +172,7 @@ export const useUserStore = defineStore('user', () => {
       tenantStore.clearOAuthTenantCode();
       await tenantStore.refreshBusinessContextAsync().catch(() => undefined);
       await loadHolidayThemeForCurrentSession().catch(() => undefined);
+      await useLocaleStore().loadCultureOptionsAsync({ force: true }).catch(() => undefined);
       const userCulture = profile.defaultCulture?.trim();
       if (userCulture) {
         useLocaleStore().applyUserProfileLocale(userCulture);
@@ -227,21 +239,16 @@ export const useUserStore = defineStore('user', () => {
   }
 
   /**
-   * 写入假日 DTO，并在存在合法 holidayTheme 时同步主题色预设
+   * 写入假日 DTO（主题色由 theme-color Store 按优先级解析，不在此覆盖用户选择）
    * @param holidayDto 假日主题 DTO；无匹配记录时可为空对象或 null
    */
   function applyHolidayThemeSideEffects(holidayDto: HolidayTheme | null): void {
     holidayFromToken.value = holidayDto;
-    const themeKey = holidayDto?.holidayTheme?.trim();
-    const resolvedPreset = resolveThemeColorPreset(themeKey);
-    if (resolvedPreset) {
-      useThemeColorStore().setColorPreset(resolvedPreset);
-    }
   }
 
   /**
    * 登录页预览：租户已校验后，按「租户+用户名」解析默认公司与用户 DefaultCulture，再按「租户+公司」拉取当日假日。
-   * 界面语言由 {@link useLocaleStore.applyLoginUserLocale} 写入；用户手动切换后不会被覆盖。
+   * 界面语言由 {@link useLocaleStore.applyLoginUserLocale} 写入（浏览器与默认不一致时优先浏览器，须在租户语言列表内）；用户手动切换后不会被覆盖。
    * @param tenantCode 已校验的租户编码
    * @param username 登录用户名
    * @param previewKey 预览上下文键（租户+用户名）
@@ -274,7 +281,7 @@ export const useUserStore = defineStore('user', () => {
     let holidayDto: HolidayTheme | null = null;
     const companyCode = localeDto.companyCode?.trim();
     if (localeDto.defaultCompanyFound && companyCode) {
-      holidayDto = await getHolidayTheme(trimmedTenant, companyCode);
+      holidayDto = await fetchHolidayThemeAsync(trimmedTenant, companyCode);
       if (!isPreviewContextValid(seq, trimmedTenant, trimmedUser, expectedKey)) {
         return null;
       }
@@ -310,7 +317,7 @@ export const useUserStore = defineStore('user', () => {
     }
 
     try {
-      const holidayDto = await getHolidayTheme(trimmedTenant, trimmedCompany);
+      const holidayDto = await fetchHolidayThemeAsync(trimmedTenant, trimmedCompany);
       applyHolidayThemeSideEffects(holidayDto);
     } catch {
       // 假日提示非阻断

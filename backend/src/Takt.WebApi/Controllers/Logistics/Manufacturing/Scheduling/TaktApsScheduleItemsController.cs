@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Manufacturing.Scheduling
 // 文件名称：TaktApsScheduleItemsController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-30
 // 创建人：Takt365(Cursor AI)
 // 功能描述：APS排程明细控制器
 // 
@@ -41,7 +41,7 @@ public class TaktApsScheduleItemsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:manufacturing:scheduling:apsscheduleitem:list", "APS排程明细列表")]
+    [TaktPermission("logistics:manufacturing:scheduling:aps:schedule:list", "APS排程明细列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetApsScheduleItemListAsync([FromQuery] TaktApsScheduleItemQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktApsScheduleItemsController : TaktControllerBase
     /// </summary>
     /// <param name="id">APS排程明细ID</param>
     /// <returns>APS排程明细DTO</returns>
-    [TaktPermission("logistics:manufacturing:scheduling:apsscheduleitem:query", "APS排程明细详情")]
+    [TaktPermission("logistics:manufacturing:scheduling:aps:schedule:query", "APS排程明细详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetApsScheduleItemByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktApsScheduleItemsController : TaktControllerBase
     /// 获取APS排程明细选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:manufacturing:scheduling:apsscheduleitem:query", "APS排程明细选项")]
+    [TaktPermission("logistics:manufacturing:scheduling:aps:schedule:query", "APS排程明细选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetApsScheduleItemOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktApsScheduleItemsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>APS排程明细DTO</returns>
-    [TaktPermission("logistics:manufacturing:scheduling:apsscheduleitem:create", "创建APS排程明细")]
+    [TaktPermission("logistics:manufacturing:scheduling:aps:schedule:create", "创建APS排程明细")]
     [HttpPost]
     public async Task<IActionResult> CreateApsScheduleItemAsync([FromBody] TaktApsScheduleItemCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktApsScheduleItemsController : TaktControllerBase
     /// <param name="id">APS排程明细ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>APS排程明细DTO</returns>
-    [TaktPermission("logistics:manufacturing:scheduling:apsscheduleitem:update", "更新APS排程明细")]
+    [TaktPermission("logistics:manufacturing:scheduling:aps:schedule:update", "更新APS排程明细")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateApsScheduleItemAsync(long id, [FromBody] TaktApsScheduleItemUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktApsScheduleItemsController : TaktControllerBase
     /// </summary>
     /// <param name="id">APS排程明细ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:scheduling:apsscheduleitem:delete", "删除APS排程明细")]
+    [TaktPermission("logistics:manufacturing:scheduling:aps:schedule:delete", "删除APS排程明细")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteApsScheduleItemByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktApsScheduleItemsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:scheduling:apsscheduleitem:delete", "批量删除APS排程明细")]
+    [TaktPermission("logistics:manufacturing:scheduling:aps:schedule:delete", "批量删除APS排程明细")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteApsScheduleItemBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktApsScheduleItemsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO</param>
     /// <returns>APS排程明细DTO</returns>
-    [TaktPermission("logistics:manufacturing:scheduling:apsscheduleitem:update", "更新APS排程明细状态")]
+    [TaktPermission("logistics:manufacturing:scheduling:aps:schedule:update", "更新APS排程明细状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateApsScheduleItemStatusAsync([FromBody] TaktApsScheduleItemStatusDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktApsScheduleItemsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:scheduling:apsscheduleitem:import", "获取APS排程明细导入模板")]
+    [TaktPermission("logistics:manufacturing:scheduling:aps:schedule:import", "获取APS排程明细导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetApsScheduleItemTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +224,7 @@ public class TaktApsScheduleItemsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:manufacturing:scheduling:apsscheduleitem:import", "导入APS排程明细")]
+    [TaktPermission("logistics:manufacturing:scheduling:aps:schedule:import", "导入APS排程明细")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportApsScheduleItemAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +254,7 @@ public class TaktApsScheduleItemsController : TaktControllerBase
     /// 导出APS排程明细
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:scheduling:apsscheduleitem:export", "导出APS排程明细")]
+    [TaktPermission("logistics:manufacturing:scheduling:aps:schedule:export", "导出APS排程明细")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportApsScheduleItemAsync([FromQuery] TaktApsScheduleItemQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

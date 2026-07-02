@@ -22,31 +22,37 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Sop;
 [SugarTable("takt_logistics_manufacturing_sop_call", "SOP安灯呼叫表")]
 [SugarIndex("ix_sop_call_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_sop_call_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_sop_call_workstation", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(WorkstationId), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_sop_call_workstation", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(WorkstationId), OrderByType.Asc, false)]
 public class TaktSopCall : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工位 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// </summary>
+    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
     /// </summary>
     [SugarColumn(ColumnName = "workstation_id", ColumnDescription = "工位ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long WorkstationId { get; set; }
 
     /// <summary>
-    /// 执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 执行追溯 ID（关联 TaktSopExec.Id，选项 TaktSopExecs/options）
     /// </summary>
     [SugarColumn(ColumnName = "exec_id", ColumnDescription = "执行追溯ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ExecId { get; set; }
 
     /// <summary>
-    /// 呼叫类型（1=班长，2=维修，3=品质；字典 logistics_sop_andon_type）
+    /// 呼叫类型（字典 logistics_sop_andon_type；1=班长，2=维修，3=品质）
     /// </summary>
     [SugarColumn(ColumnName = "call_type", ColumnDescription = "呼叫类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int CallType { get; set; } = 1;
 
     /// <summary>
-    /// 呼叫人 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 呼叫人 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [SugarColumn(ColumnName = "caller_id", ColumnDescription = "呼叫人ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -59,7 +65,7 @@ public class TaktSopCall : TaktCompanyEntityBase
     public DateTime CalledAt { get; set; } = DateTime.Now;
 
     /// <summary>
-    /// 响应人 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 响应人 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [SugarColumn(ColumnName = "responded_by", ColumnDescription = "响应人ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -78,7 +84,7 @@ public class TaktSopCall : TaktCompanyEntityBase
     public int? ResponseSeconds { get; set; }
 
     /// <summary>
-    /// 呼叫状态（1=待响应，2=已响应，3=已关闭；字典 logistics_sop_andon_status）
+    /// 呼叫状态（字典 logistics_sop_andon_status；1=待响应，2=已响应，3=已关闭）
     /// </summary>
     [SugarColumn(ColumnName = "call_status", ColumnDescription = "呼叫状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int CallStatus { get; set; } = 1;

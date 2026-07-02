@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Workflow
 // 文件名称：TaktFlowFormI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktFlowForm 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -127,22 +127,22 @@ public class TaktFlowFormI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.flowform.formtype", "zh-HK", "表单类型_hk", "表单类型（字典 sys_form_type）"),
 
             // entity.flowform.formconfig
-            new TranslationSeedItem("entity.flowform.formconfig", "en-US", "表单配置JSON_us", "表单设计 JSON"),
+            new TranslationSeedItem("entity.flowform.formconfig", "en-US", "表单配置_us", "表单设计 JSON"),
             // entity.flowform.formconfig
-            new TranslationSeedItem("entity.flowform.formconfig", "ja-JP", "表单配置JSON_jp", "表单设计 JSON"),
+            new TranslationSeedItem("entity.flowform.formconfig", "ja-JP", "表单配置_jp", "表单设计 JSON"),
             // entity.flowform.formconfig
-            new TranslationSeedItem("entity.flowform.formconfig", "zh-CN", "表单配置JSON", "表单设计 JSON"),
+            new TranslationSeedItem("entity.flowform.formconfig", "zh-CN", "表单配置", "表单设计 JSON"),
             // entity.flowform.formconfig
-            new TranslationSeedItem("entity.flowform.formconfig", "zh-HK", "表单配置JSON_hk", "表单设计 JSON"),
+            new TranslationSeedItem("entity.flowform.formconfig", "zh-HK", "表单配置_hk", "表单设计 JSON"),
 
             // entity.flowform.formtemplate
-            new TranslationSeedItem("entity.flowform.formtemplate", "en-US", "表单模板JSON_us", "表单模板 JSON"),
+            new TranslationSeedItem("entity.flowform.formtemplate", "en-US", "表单模板_us", "表单模板 JSON"),
             // entity.flowform.formtemplate
-            new TranslationSeedItem("entity.flowform.formtemplate", "ja-JP", "表单模板JSON_jp", "表单模板 JSON"),
+            new TranslationSeedItem("entity.flowform.formtemplate", "ja-JP", "表单模板_jp", "表单模板 JSON"),
             // entity.flowform.formtemplate
-            new TranslationSeedItem("entity.flowform.formtemplate", "zh-CN", "表单模板JSON", "表单模板 JSON"),
+            new TranslationSeedItem("entity.flowform.formtemplate", "zh-CN", "表单模板", "表单模板 JSON"),
             // entity.flowform.formtemplate
-            new TranslationSeedItem("entity.flowform.formtemplate", "zh-HK", "表单模板JSON_hk", "表单模板 JSON"),
+            new TranslationSeedItem("entity.flowform.formtemplate", "zh-HK", "表单模板_hk", "表单模板 JSON"),
 
             // entity.flowform.formversion
             new TranslationSeedItem("entity.flowform.formversion", "en-US", "表单版本_us", "表单版本标签"),
@@ -154,22 +154,22 @@ public class TaktFlowFormI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.flowform.formversion", "zh-HK", "表单版本_hk", "表单版本标签"),
 
             // entity.flowform.isdatasource
-            new TranslationSeedItem("entity.flowform.isdatasource", "en-US", "是否数据源表单_us", "是否绑定数据源"),
+            new TranslationSeedItem("entity.flowform.isdatasource", "en-US", "数据源表单_us", "是否绑定数据源"),
             // entity.flowform.isdatasource
-            new TranslationSeedItem("entity.flowform.isdatasource", "ja-JP", "是否数据源表单_jp", "是否绑定数据源"),
+            new TranslationSeedItem("entity.flowform.isdatasource", "ja-JP", "数据源表单_jp", "是否绑定数据源"),
             // entity.flowform.isdatasource
-            new TranslationSeedItem("entity.flowform.isdatasource", "zh-CN", "是否数据源表单", "是否绑定数据源"),
+            new TranslationSeedItem("entity.flowform.isdatasource", "zh-CN", "数据源表单", "是否绑定数据源"),
             // entity.flowform.isdatasource
-            new TranslationSeedItem("entity.flowform.isdatasource", "zh-HK", "是否数据源表单_hk", "是否绑定数据源"),
+            new TranslationSeedItem("entity.flowform.isdatasource", "zh-HK", "数据源表单_hk", "是否绑定数据源"),
 
             // entity.flowform.relateddatabasename
-            new TranslationSeedItem("entity.flowform.relateddatabasename", "en-US", "关联数据库名_us", "关联数据库名"),
+            new TranslationSeedItem("entity.flowform.relateddatabasename", "en-US", "关联库名_us", "关联库名"),
             // entity.flowform.relateddatabasename
-            new TranslationSeedItem("entity.flowform.relateddatabasename", "ja-JP", "关联数据库名_jp", "关联数据库名"),
+            new TranslationSeedItem("entity.flowform.relateddatabasename", "ja-JP", "关联库名_jp", "关联库名"),
             // entity.flowform.relateddatabasename
-            new TranslationSeedItem("entity.flowform.relateddatabasename", "zh-CN", "关联数据库名", "关联数据库名"),
+            new TranslationSeedItem("entity.flowform.relateddatabasename", "zh-CN", "关联库名", "关联库名"),
             // entity.flowform.relateddatabasename
-            new TranslationSeedItem("entity.flowform.relateddatabasename", "zh-HK", "关联数据库名_hk", "关联数据库名"),
+            new TranslationSeedItem("entity.flowform.relateddatabasename", "zh-HK", "关联库名_hk", "关联库名"),
 
             // entity.flowform.relatedtablename
             new TranslationSeedItem("entity.flowform.relatedtablename", "en-US", "关联表名_us", "关联表名"),
@@ -181,13 +181,13 @@ public class TaktFlowFormI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.flowform.relatedtablename", "zh-HK", "关联表名_hk", "关联表名"),
 
             // entity.flowform.relatedformfield
-            new TranslationSeedItem("entity.flowform.relatedformfield", "en-US", "关联字段映射_us", "关联字段映射 JSON"),
+            new TranslationSeedItem("entity.flowform.relatedformfield", "en-US", "关联映射_us", "关联映射 JSON"),
             // entity.flowform.relatedformfield
-            new TranslationSeedItem("entity.flowform.relatedformfield", "ja-JP", "关联字段映射_jp", "关联字段映射 JSON"),
+            new TranslationSeedItem("entity.flowform.relatedformfield", "ja-JP", "关联映射_jp", "关联映射 JSON"),
             // entity.flowform.relatedformfield
-            new TranslationSeedItem("entity.flowform.relatedformfield", "zh-CN", "关联字段映射", "关联字段映射 JSON"),
+            new TranslationSeedItem("entity.flowform.relatedformfield", "zh-CN", "关联映射", "关联映射 JSON"),
             // entity.flowform.relatedformfield
-            new TranslationSeedItem("entity.flowform.relatedformfield", "zh-HK", "关联字段映射_hk", "关联字段映射 JSON"),
+            new TranslationSeedItem("entity.flowform.relatedformfield", "zh-HK", "关联映射_hk", "关联映射 JSON"),
 
             // entity.flowform.sortorder
             new TranslationSeedItem("entity.flowform.sortorder", "en-US", "排序号_us", "排序号"),

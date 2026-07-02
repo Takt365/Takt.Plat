@@ -28,39 +28,37 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesquotationitem.linenumber')"
+                :label="pi.label('lineNumber')"
                 name="lineNumber"
               >
                 <a-input-number
                   v-model:value="formState.lineNumber"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesquotationitem.linenumber') })"
+                  :placeholder="pi.ph('lineNumber')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesquotationitem.materialcode')"
+                :label="pi.label('materialCode')"
                 name="materialCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.materialCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesquotationitem.materialcode') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  api-url="TaktMaterials/options"
+                  :placeholder="pi.ph('materialCode')"
                   :disabled="!!formData?.salesQuotationItemId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesquotationitem.materialname')"
+                :label="pi.label('materialName')"
                 name="materialName"
               >
                 <a-input
                   v-model:value="formState.materialName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesquotationitem.materialname') })"
+                  :placeholder="pi.ph('materialName')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -69,12 +67,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesquotationitem.materialspecification')"
+                :label="pi.label('materialSpecification')"
                 name="materialSpecification"
               >
                 <a-input
                   v-model:value="formState.materialSpecification"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesquotationitem.materialspecification') })"
+                  :placeholder="pi.ph('materialSpecification')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -83,50 +81,48 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesquotationitem.salesunit')"
+                :label="pi.label('salesUnit')"
                 name="salesUnit"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.salesUnit"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesquotationitem.salesunit') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  dict-type="logistics_unit_of_measure_code"
+                  :placeholder="pi.ph('salesUnit')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesquotationitem.quotationquantity')"
+                :label="pi.label('quotationQuantity')"
                 name="quotationQuantity"
               >
                 <a-input-number
                   v-model:value="formState.quotationQuantity"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesquotationitem.quotationquantity') })"
+                  :placeholder="pi.ph('quotationQuantity')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesquotationitem.unitprice')"
+                :label="pi.label('salesPerUnit')"
+                name="salesPerUnit"
+              >
+                <TaktSelect
+                  v-model:value="formState.salesPerUnit"
+                  dict-type="logistics_price_unit_param"
+                  :placeholder="pi.ph('salesPerUnit')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('unitPrice')"
                 name="unitPrice"
               >
                 <a-input-number
                   v-model:value="formState.unitPrice"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesquotationitem.unitprice') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.salesquotationitem.discountrate')"
-                name="discountRate"
-              >
-                <a-input-number
-                  v-model:value="formState.discountRate"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesquotationitem.discountrate') })"
+                  :placeholder="pi.ph('unitPrice')"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -143,10 +139,17 @@
  * Takt销售报价实体子表 salesQuotationItem 维护表单 · 由 generate-vue-master-detail-from-api.cjs 生成
  * @module views/logistics/sales/quotation/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useSalesQuotationItemI18n } from '../composables/use-quotation-item-i18n'
+
+/** 实体字段 i18n */
+const pi = useSalesQuotationItemI18n()
+
 import type { SalesQuotationItemCreate } from '@/types/logistics/sales/quotation-item'
+import TaktSelect from '@/components/business/takt-select/index.vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -155,7 +158,8 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["lineNumber","materialCode","materialName","materialSpecification","salesUnit","quotationQuantity","unitPrice","discountRate"]
+const formFields = ["lineNumber","materialCode","materialName","materialSpecification","salesUnit","quotationQuantity","salesPerUnit","unitPrice"]
+
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -177,11 +181,23 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
-/** 表单字段默认值（无字典默认项） */
-function applyFormDefaults(target: Record<string, unknown>) {
-  void target
+/** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
+const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  salesPerUnit: 1000
 }
 
+/** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  Object.assign(target, FORM_FIELD_DEFAULTS)
+}
+
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载全量字典 */
+onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
+})
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 salesQuotationItemId 才视为编辑） */
 watch(
@@ -210,11 +226,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   lineNumber: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salesquotationitem.linenumber') }))
+        return Promise.reject(pi.ph('lineNumber'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salesquotationitem.linenumber') }))
+        return Promise.reject(pi.ph('lineNumber'))
       }
       return Promise.resolve()
     },
@@ -223,32 +239,45 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   materialCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.salesquotationitem.materialcode') }),
-      trigger: 'blur'
+      message: pi.ph('materialCode'),
+      trigger: 'change'
     }
   ],
   materialName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.salesquotationitem.materialname') }),
+      message: pi.ph('materialName'),
       trigger: 'blur'
     }
   ],
   salesUnit: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.salesquotationitem.salesunit') }),
-      trigger: 'blur'
+      message: pi.ph('salesUnit'),
+      trigger: 'change'
     }
   ],
   quotationQuantity: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salesquotationitem.quotationquantity') }))
+        return Promise.reject(pi.ph('quotationQuantity'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salesquotationitem.quotationquantity') }))
+        return Promise.reject(pi.ph('quotationQuantity'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  salesPerUnit: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('salesPerUnit'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('salesPerUnit'))
       }
       return Promise.resolve()
     },
@@ -257,24 +286,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   unitPrice: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salesquotationitem.unitprice') }))
+        return Promise.reject(pi.ph('unitPrice'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salesquotationitem.unitprice') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  discountRate: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salesquotationitem.discountrate') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salesquotationitem.discountrate') }))
+        return Promise.reject(pi.ph('unitPrice'))
       }
       return Promise.resolve()
     },
@@ -299,13 +315,13 @@ function getValues(): Record<string, any> {
     const rawquotationQuantity = payload.quotationQuantity
     payload.quotationQuantity = typeof rawquotationQuantity === 'number' ? rawquotationQuantity : Number(rawquotationQuantity)
   }
+  if ('salesPerUnit' in payload) {
+    const rawsalesPerUnit = payload.salesPerUnit
+    payload.salesPerUnit = typeof rawsalesPerUnit === 'number' ? rawsalesPerUnit : Number(rawsalesPerUnit)
+  }
   if ('unitPrice' in payload) {
     const rawunitPrice = payload.unitPrice
     payload.unitPrice = typeof rawunitPrice === 'number' ? rawunitPrice : Number(rawunitPrice)
-  }
-  if ('discountRate' in payload) {
-    const rawdiscountRate = payload.discountRate
-    payload.discountRate = typeof rawdiscountRate === 'number' ? rawdiscountRate : Number(rawdiscountRate)
   }
   if ('sortOrder' in payload) delete payload.sortOrder
   payload.salesQuotationId = props.masterId

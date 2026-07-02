@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Personnel
 // 文件名称：TaktEmployeeOnboardingDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：EmployeeOnboarding 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktEmployeeOnboarding 生成，请按需审阅）
 // 
@@ -14,7 +14,6 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
-using Takt.Application.Dtos.HumanResource.Talent;
 
 namespace Takt.Application.Dtos.HumanResource.Personnel;
 
@@ -51,11 +50,6 @@ public class TaktEmployeeOnboardingDto : TaktCompanyDtoBase
     /// 待办单号（租户+公司内业务编号）
     /// </summary>
     public string TodoNo { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 待办状态（0=待办理，1=办理中，2=已完成，3=已取消）
-    /// </summary>
-    public int TodoStatus { get; set; } = 0;
 
     /// <summary>
     /// 计划上岗日期（JoinedDate 计划值）
@@ -98,6 +92,11 @@ public class TaktEmployeeOnboardingDto : TaktCompanyDtoBase
     /// 待办说明
     /// </summary>
     public string? Reason { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 待办状态（0=待办理，1=办理中，2=已完成，3=已取消）
+    /// </summary>
+    public int TodoStatus { get; set; } = 0;
 
     /// <summary>
     /// 录用信息
@@ -145,11 +144,6 @@ public class TaktEmployeeOnboardingQueryDto : TaktPagedQuery
     public string? TodoNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 待办状态（0=待办理，1=办理中，2=已完成，3=已取消）
-    /// </summary>
-    public int? TodoStatus { get; set; }
-
-    /// <summary>
     /// 计划上岗日期（JoinedDate 计划值）（范围查询-开始）
     /// </summary>
     public DateTime? PlannedJoinedDateStart { get; set; }
@@ -185,6 +179,11 @@ public class TaktEmployeeOnboardingQueryDto : TaktPagedQuery
     /// 待办说明
     /// </summary>
     public string? Reason { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 待办状态（0=待办理，1=办理中，2=已完成，3=已取消）
+    /// </summary>
+    public int? TodoStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -227,7 +226,7 @@ public class TaktEmployeeOnboardingCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -242,11 +241,6 @@ public class TaktEmployeeOnboardingCreateDto
     /// </summary>
     [Required(ErrorMessage = "待办单号（租户+公司内业务编号）不能为空")]
     public string TodoNo { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 待办状态（0=待办理，1=办理中，2=已完成，3=已取消）
-    /// </summary>
-    public int TodoStatus { get; set; } = 0;
 
     /// <summary>
     /// 计划上岗日期（JoinedDate 计划值）
@@ -280,6 +274,11 @@ public class TaktEmployeeOnboardingCreateDto
     /// 待办说明
     /// </summary>
     public string? Reason { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 待办状态（0=待办理，1=办理中，2=已完成，3=已取消）
+    /// </summary>
+    public int TodoStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -368,9 +367,9 @@ public class TaktEmployeeOnboardingTemplateDto
     public string? TodoNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 待办状态（0=待办理，1=办理中，2=已完成，3=已取消）
+    /// 计划上岗日期（JoinedDate 计划值）
     /// </summary>
-    public int? TodoStatus { get; set; }
+    public DateTime? PlannedJoinedDate { get; set; }
 
     /// <summary>
     /// 候选人姓名（快照）
@@ -398,6 +397,11 @@ public class TaktEmployeeOnboardingTemplateDto
     /// 待办说明
     /// </summary>
     public string? Reason { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 待办状态（0=待办理，1=办理中，2=已完成，3=已取消）
+    /// </summary>
+    public int? TodoStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -427,7 +431,7 @@ public class TaktEmployeeOnboardingImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -443,9 +447,9 @@ public class TaktEmployeeOnboardingImportDto
     public string? TodoNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 待办状态（0=待办理，1=办理中，2=已完成，3=已取消）
+    /// 计划上岗日期（JoinedDate 计划值）
     /// </summary>
-    public int? TodoStatus { get; set; }
+    public DateTime? PlannedJoinedDate { get; set; }
 
     /// <summary>
     /// 候选人姓名（快照）
@@ -473,6 +477,11 @@ public class TaktEmployeeOnboardingImportDto
     /// 待办说明
     /// </summary>
     public string? Reason { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 待办状态（0=待办理，1=办理中，2=已完成，3=已取消）
+    /// </summary>
+    public int? TodoStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -519,11 +528,6 @@ public class TaktEmployeeOnboardingExportDto
     public string TodoNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 待办状态（0=待办理，1=办理中，2=已完成，3=已取消）
-    /// </summary>
-    public int TodoStatus { get; set; } = 0;
-
-    /// <summary>
     /// 计划上岗日期（JoinedDate 计划值）
     /// </summary>
     public DateTime PlannedJoinedDate { get; set; }
@@ -554,6 +558,11 @@ public class TaktEmployeeOnboardingExportDto
     /// 待办说明
     /// </summary>
     public string? Reason { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 待办状态（0=待办理，1=办理中，2=已完成，3=已取消）
+    /// </summary>
+    public int TodoStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

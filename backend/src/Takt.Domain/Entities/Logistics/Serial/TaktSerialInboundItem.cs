@@ -5,7 +5,7 @@
 // 创建时间：2026-05-11
 // 创建人：Takt365(Cursor AI)
 // 功能描述：序列号入库明细实体，记录每个序列号的入库信息
-// 
+//
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
@@ -22,38 +22,39 @@ namespace Takt.Domain.Entities.Logistics.Serial;
 [SugarIndex("ix_serial_inbound_item_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_serial_inbound_item_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_serial_inbound_item_inbound_serial_no_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(InboundSerialNo), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_serial_inbound_item_inbound_id", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(InboundId), OrderByType.Asc, false)]
 public class TaktSerialInboundItem : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 入库ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 入库主表 ID（关联 TaktSerialInbound.Id，选项 TaktSerialInbounds/options）
     /// </summary>
     [SugarColumn(ColumnName = "inbound_id", ColumnDescription = "入库ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long InboundId { get; set; }
-
     /// <summary>
     /// 入库单号（冗余字段，便于查询）
     /// </summary>
     [SugarColumn(ColumnName = "inbound_no", ColumnDescription = "入库单号", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string InboundNo { get; set; } = string.Empty;
-
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
     /// </summary>
     [SugarColumn(ColumnName = "line_number", ColumnDescription = "行号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int LineNumber { get; set; } = 0;
-
     /// <summary>
-    /// 入库序列号（唯一索引）
+    /// 入库序列号（租户+公司内唯一）
     /// </summary>
     [SugarColumn(ColumnName = "inbound_serial_no", ColumnDescription = "入库序列号", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
     public string InboundSerialNo { get; set; } = string.Empty;
-
     /// <summary>
     /// 入库时间
     /// </summary>
     [SugarColumn(ColumnName = "inbound_time", ColumnDescription = "入库时间", ColumnDataType = "datetime", IsNullable = false, DefaultValue = "GETDATE()")]
     public DateTime InboundTime { get; set; } = DateTime.Now;
+
+    // ========================================
+    // 导航属性区域
+    // ========================================
 
     /// <summary>
     /// 入库主表

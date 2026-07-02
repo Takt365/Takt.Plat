@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Cost
 // 文件名称：TaktQualityAssuranceIncomingDtos.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：QualityAssuranceIncoming 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktQualityAssuranceIncoming 生成，请按需审阅）
 // 
@@ -36,13 +36,13 @@ public class TaktQualityAssuranceIncomingDto : TaktCompanyDtoBase
     public long QualityAssuranceIncomingId { get; set; }
 
     /// <summary>
-    /// 品质业务主表ID(主子表关系,序列化为string以避免Javascript精度问题)
+    /// 品质业务主表 ID（关联 TaktQualityAssurance.Id，选项 TaktQualityAssurances/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long QualityAssuranceId { get; set; }
 
     /// <summary>
-    /// 品质业务主表名称（填充字段）
+    /// 品质业务主表 名称（填充字段）
     /// </summary>
     public string? QualityAssuranceName { get; set; }
 
@@ -115,7 +115,7 @@ public class TaktQualityAssuranceIncomingQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 品质业务主表ID(主子表关系,序列化为string以避免Javascript精度问题)
+    /// 品质业务主表 ID（关联 TaktQualityAssurance.Id，选项 TaktQualityAssurances/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? QualityAssuranceId { get; set; }
@@ -201,12 +201,12 @@ public class TaktQualityAssuranceIncomingCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 品质业务主表ID(主子表关系,序列化为string以避免Javascript精度问题)
+    /// 品质业务主表 ID（关联 TaktQualityAssurance.Id，选项 TaktQualityAssurances/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long QualityAssuranceId { get; set; }
@@ -304,7 +304,7 @@ public class TaktQualityAssuranceIncomingTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 品质业务主表ID(主子表关系,序列化为string以避免Javascript精度问题)
+    /// 品质业务主表 ID（关联 TaktQualityAssurance.Id，选项 TaktQualityAssurances/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? QualityAssuranceId { get; set; }
@@ -320,9 +320,29 @@ public class TaktQualityAssuranceIncomingTemplateDto
     public int? LineNumber { get; set; }
 
     /// <summary>
+    /// 直接人员费率(元/分钟)
+    /// </summary>
+    public decimal? DirectManpowerCostPerMinute { get; set; }
+
+    /// <summary>
+    /// 来料检验业务费用(元)
+    /// </summary>
+    public decimal? IncomingInspectionCost { get; set; }
+
+    /// <summary>
     /// 检查时间(分钟)
     /// </summary>
     public int? InspectionTimeMinutes { get; set; }
+
+    /// <summary>
+    /// 交通费、旅费(元)
+    /// </summary>
+    public decimal? TravelCost { get; set; }
+
+    /// <summary>
+    /// 检查其他费用(元)
+    /// </summary>
+    public decimal? OtherExpenses { get; set; }
 
     /// <summary>
     /// 来料检验备注
@@ -357,12 +377,12 @@ public class TaktQualityAssuranceIncomingImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 品质业务主表ID(主子表关系,序列化为string以避免Javascript精度问题)
+    /// 品质业务主表 ID（关联 TaktQualityAssurance.Id，选项 TaktQualityAssurances/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? QualityAssuranceId { get; set; }
@@ -378,9 +398,29 @@ public class TaktQualityAssuranceIncomingImportDto
     public int? LineNumber { get; set; }
 
     /// <summary>
+    /// 直接人员费率(元/分钟)
+    /// </summary>
+    public decimal? DirectManpowerCostPerMinute { get; set; }
+
+    /// <summary>
+    /// 来料检验业务费用(元)
+    /// </summary>
+    public decimal? IncomingInspectionCost { get; set; }
+
+    /// <summary>
     /// 检查时间(分钟)
     /// </summary>
     public int? InspectionTimeMinutes { get; set; }
+
+    /// <summary>
+    /// 交通费、旅费(元)
+    /// </summary>
+    public decimal? TravelCost { get; set; }
+
+    /// <summary>
+    /// 检查其他费用(元)
+    /// </summary>
+    public decimal? OtherExpenses { get; set; }
 
     /// <summary>
     /// 来料检验备注
@@ -421,7 +461,7 @@ public class TaktQualityAssuranceIncomingExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 品质业务主表ID(主子表关系,序列化为string以避免Javascript精度问题)
+    /// 品质业务主表 ID（关联 TaktQualityAssurance.Id，选项 TaktQualityAssurances/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long QualityAssuranceId { get; set; }

@@ -8,7 +8,7 @@
 <!-- ======================================== -->
 
 <template>
-  <div class="human-resource-performance-perf-analysis">
+  <div class="p-4">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="human:resource:talent:offer:create"
-      update-permission="human:resource:talent:offer:update"
-      delete-permission="human:resource:talent:offer:delete"
-      import-permission="human:resource:talent:offer:import"
-      export-permission="human:resource:talent:offer:export"
+      create-permission="human:resource:performance:perf:analysis:create"
+      update-permission="human:resource:performance:perf:analysis:update"
+      delete-permission="human:resource:performance:perf:analysis:delete"
+      import-permission="human:resource:performance:perf:analysis:import"
+      export-permission="human:resource:performance:perf:analysis:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -54,8 +54,8 @@
 
     <!-- 表格 -->
     <TaktSingleTable
-      :columns="columns"
       entity-scope="approval"
+      :columns="columns"
       :visible-column-keys="visibleColumnKeys"
       :id-column-key="'perfAnalysisId'"
       table-mode="single"
@@ -72,7 +72,7 @@
 
     </TaktSingleTable>
 
-    <!-- 分页组件 -->
+    <!-- 分页（服务端分页，外置 TaktPagination） -->
     <TaktPagination
       v-model:current="currentPage"
       v-model:page-size="pageSize"
@@ -92,6 +92,7 @@
       @cancel="handleFormCancel"
     >
       <PerfAnalysisForm
+        :key="formData?.perfAnalysisId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -113,6 +114,8 @@
         <a-input
           v-model:value="advancedQueryForm.employeeId"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.perfanalysis.employeeid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -122,6 +125,8 @@
         <a-input
           v-model:value="advancedQueryForm.employeeName"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.perfanalysis.employeename') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
@@ -131,6 +136,8 @@
         <a-input
           v-model:value="advancedQueryForm.assessmentId"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.perfanalysis.assessmentid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -140,6 +147,8 @@
         <a-input
           v-model:value="advancedQueryForm.planTitle"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.perfanalysis.plantitle') })"
+          show-count
+          :maxlength="200"
           allow-clear
         />
       </a-form-item>
@@ -149,6 +158,8 @@
         <a-input
           v-model:value="advancedQueryForm.improvementArea"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.perfanalysis.improvementarea') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
@@ -158,6 +169,8 @@
         <a-input
           v-model:value="advancedQueryForm.currentSituation"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.perfanalysis.currentsituation') })"
+          show-count
+          :maxlength="1000"
           allow-clear
         />
       </a-form-item>
@@ -167,6 +180,8 @@
         <a-input
           v-model:value="advancedQueryForm.improvementGoal"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.perfanalysis.improvementgoal') })"
+          show-count
+          :maxlength="500"
           allow-clear
         />
       </a-form-item>
@@ -176,6 +191,8 @@
         <a-input
           v-model:value="advancedQueryForm.improvementActions"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.perfanalysis.improvementactions') })"
+          show-count
+          :maxlength="1000"
           allow-clear
         />
       </a-form-item>
@@ -244,6 +261,8 @@
         <a-input
           v-model:value="advancedQueryForm.mentorId"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.perfanalysis.mentorid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -262,16 +281,19 @@
         <a-input
           v-model:value="advancedQueryForm.relatedPlant"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.perfanalysis.relatedplant') })"
+          show-count
+          :maxlength="4"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('approvalStatus')">
       <a-form-item :label="t('entity.perfanalysis.approvalstatus')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.approvalStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.perfanalysis.approvalstatus') })"
-          style="width: 100%"
+          dict-type="sys_approval_status"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.perfanalysis.approvalstatus') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -280,6 +302,8 @@
         <a-input
           v-model:value="advancedQueryForm.initiatorId"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.perfanalysis.initiatorid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -289,6 +313,8 @@
         <a-input
           v-model:value="advancedQueryForm.initiatedAtStart"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.perfanalysis.initiatedatstart') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -308,6 +334,8 @@
         <a-input
           v-model:value="advancedQueryForm.approvedBy"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.perfanalysis.approvedby') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -317,6 +345,8 @@
         <a-input
           v-model:value="advancedQueryForm.approvedAtStart"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.perfanalysis.approvedatstart') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -336,6 +366,8 @@
         <a-input
           v-model:value="advancedQueryForm.flowInstanceId"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.perfanalysis.flowinstanceid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -346,7 +378,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -357,17 +389,36 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('ExtField')">
-      <a-form-item :label="t('common.page.entity.ExtField')">
-        <a-input
-          v-model:value="advancedQueryForm.ExtField"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
-          allow-clear
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
+        <a-textarea
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -376,8 +427,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -421,7 +474,6 @@
 </template>
 
 <script setup lang="ts">
-import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 /**
  * 分析改进管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/human-resource/performance/perf-analysis
@@ -431,12 +483,13 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import PerfAnalysisForm from './components/perf-analysis-form.vue'
-import { getPerfAnalysisList, getPerfAnalysisById, createPerfAnalysis, updatePerfAnalysis, deletePerfAnalysisById, deletePerfAnalysisBatch, getPerfAnalysisTemplate, importPerfAnalysis, exportPerfAnalysis } from '@/api/human-resource/performance/perf-analysis'
-import type { PerfAnalysis, PerfAnalysisQuery, PerfAnalysisCreate, PerfAnalysisUpdate } from '@/types/human-resource/performance/perf-analysis'
+import { getPerfAnalysisList, getPerfAnalysisById, createPerfAnalysis, updatePerfAnalysis, deletePerfAnalysisById, deletePerfAnalysisBatch, getPerfAnalysisTemplate, importPerfAnalysis, exportPerfAnalysis, updatePerfAnalysisStatus } from '@/api/human-resource/performance/perf-analysis'
+import type { PerfAnalysis, PerfAnalysisQuery } from '@/types/human-resource/performance/perf-analysis'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -471,11 +524,13 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<PerfAnalysis>>({})
+const formData = ref<Partial<PerfAnalysis> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
@@ -506,7 +561,7 @@ const advancedQueryForm = ref({
   flowInstanceId: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
@@ -519,10 +574,10 @@ const queryFieldsMeta = computed(() => [
   { key: 'currentSituation', label: t('entity.perfanalysis.currentsituation') },
   { key: 'improvementGoal', label: t('entity.perfanalysis.improvementgoal') },
   { key: 'improvementActions', label: t('entity.perfanalysis.improvementactions') },
-  { key: 'planDateStart', label: t('entity.perfanalysis.plandatestart') },
-  { key: 'planDateEnd', label: t('entity.perfanalysis.plandateend') },
-  { key: 'targetCompletionDateStart', label: t('entity.perfanalysis.targetcompletiondatestart') },
-  { key: 'targetCompletionDateEnd', label: t('entity.perfanalysis.targetcompletiondateend') },
+  { key: 'planDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.perfanalysis.plandate')) },
+  { key: 'planDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.perfanalysis.plandate')) },
+  { key: 'targetCompletionDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.perfanalysis.targetcompletiondate')) },
+  { key: 'targetCompletionDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.perfanalysis.targetcompletiondate')) },
   { key: 'progressPercentage', label: t('entity.perfanalysis.progresspercentage') },
   { key: 'resultDescription', label: t('entity.perfanalysis.resultdescription') },
   { key: 'mentorId', label: t('entity.perfanalysis.mentorid') },
@@ -538,7 +593,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'flowInstanceId', label: t('entity.perfanalysis.flowinstanceid') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'ExtField', label: t('common.page.entity.ExtField') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -557,10 +612,72 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
 
-/** 页面挂载后加载分页列表 */
-onMounted(() => {
+
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {PerfAnalysisQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<PerfAnalysisQuery>): PerfAnalysisQuery {
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: PerfAnalysisQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: keyof PerfAnalysisQuery, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v as never
+    }
+  }
+  assignTrimmed('employeeId', form.employeeId)
+  assignTrimmed('employeeName', form.employeeName)
+  assignTrimmed('assessmentId', form.assessmentId)
+  assignTrimmed('planTitle', form.planTitle)
+  assignTrimmed('improvementArea', form.improvementArea)
+  assignTrimmed('currentSituation', form.currentSituation)
+  assignTrimmed('improvementGoal', form.improvementGoal)
+  assignTrimmed('improvementActions', form.improvementActions)
+  assignTrimmed('planDateStart', form.planDateStart)
+  assignTrimmed('planDateEnd', form.planDateEnd)
+  assignTrimmed('targetCompletionDateStart', form.targetCompletionDateStart)
+  assignTrimmed('targetCompletionDateEnd', form.targetCompletionDateEnd)
+  if (form.progressPercentage !== undefined && form.progressPercentage !== null) {
+    query.progressPercentage = form.progressPercentage
+  }
+  assignTrimmed('resultDescription', form.resultDescription)
+  assignTrimmed('mentorId', form.mentorId)
+  if (form.improvementStatus !== undefined && form.improvementStatus !== null) {
+    query.improvementStatus = form.improvementStatus
+  }
+  assignTrimmed('relatedPlant', form.relatedPlant)
+  if (form.approvalStatus !== undefined && form.approvalStatus !== null) {
+    query.approvalStatus = form.approvalStatus
+  }
+  assignTrimmed('initiatorId', form.initiatorId)
+  assignTrimmed('initiatedAtStart', form.initiatedAtStart)
+  assignTrimmed('initiatedAtEnd', form.initiatedAtEnd)
+  assignTrimmed('approvedBy', form.approvedBy)
+  assignTrimmed('approvedAtStart', form.approvedAtStart)
+  assignTrimmed('approvedAtEnd', form.approvedAtEnd)
+  assignTrimmed('flowInstanceId', form.flowInstanceId)
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('extField', form.extField)
+  assignTrimmed('remark', form.remark)
+  return query
+}
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
   loadData()
 })
+
 
 
 
@@ -721,7 +838,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'human:resource:talent:offer:update',
+        permission: 'human:resource:performance:perf:analysis:update',
         onClick: (record: PerfAnalysis) => handleEdit(record)
       },
       {
@@ -729,7 +846,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'human:resource:talent:offer:delete',
+        permission: 'human:resource:performance:perf:analysis:delete',
         onClick: (record: PerfAnalysis) => handleDeleteOne(record)
       }
     ]
@@ -745,6 +862,7 @@ const getPerfAnalysisId = (record: any): string => record?.[entityIdName] ?? ''
  */
 const getPerfAnalysisField = (record: any, field: string): any => record?.[field]
 
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -756,7 +874,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: PerfAnalysis, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getPerfAnalysisId(selectedRow.value) === getPerfAnalysisId(record)) {
+    } else if (selectedRow.value && getPerfAnalysisId(selectedRow.value) === getPerfAnalysisId(record)) {
       selectedRow.value = null
     }
   },
@@ -787,16 +905,7 @@ const onClickRow = (record: PerfAnalysis) => ({
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: PerfAnalysisQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getPerfAnalysisList(params)
+    const res = await getPerfAnalysisList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
@@ -814,7 +923,7 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -849,18 +958,19 @@ function handleReset() {
   flowInstanceId: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
   formTitle.value = t('common.dialog.title.create', { entity: t('entity.perfanalysis._self') })
-  formData.value = {}
+  formData.value = null
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗 */
 function handleEdit(record: PerfAnalysis) {
@@ -898,6 +1008,8 @@ async function handleFormSubmit() {
       message.success(t('common.feedback.created', { target: t('entity.perfanalysis._self') }))
     }
     formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
     loadData()
   } finally {
     formLoading.value = false
@@ -907,6 +1019,8 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开导入对话框 */
 function handleImport() {
@@ -938,16 +1052,11 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: PerfAnalysisQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportPerfAnalysis(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportPerfAnalysis(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -1015,7 +1124,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -1048,7 +1157,7 @@ function handleAdvancedQueryReset() {
   flowInstanceId: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
 }
@@ -1078,23 +1187,16 @@ function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
 /** 分页页码变更 */
-function handlePaginationChange(page: number) {
+function handlePaginationChange(page: number, size: number) {
   currentPage.value = page
+  pageSize.value = size
   loadData()
 }
-/** 分页每页条数变更 */
+
+/** 分页每页条数变更（重置到第 1 页） */
 function handlePaginationSizeChange(_current: number, size: number) {
+  currentPage.value = getTaktDefaultPageIndex()
   pageSize.value = size
-  currentPage.value = 1
   loadData()
 }
 </script>
-
-<style scoped lang="css">
-.human-resource-performance-perf-analysis {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-</style>

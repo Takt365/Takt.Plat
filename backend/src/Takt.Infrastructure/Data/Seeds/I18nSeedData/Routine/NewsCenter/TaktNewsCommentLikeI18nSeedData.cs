@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.NewsCenter
 // 文件名称：TaktNewsCommentLikeI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktNewsCommentLike 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,22 +91,22 @@ public class TaktNewsCommentLikeI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.newscommentlike._self", "zh-HK", "新闻中心评论点赞记录信息_hk", "实体名称"),
 
             // entity.newscommentlike.commentid
-            new TranslationSeedItem("entity.newscommentlike.commentid", "en-US", "评论ID_us", "评论 ID"),
+            new TranslationSeedItem("entity.newscommentlike.commentid", "en-US", "评论ID_us", "评论 ID（关联 TaktNewsComment.Id，选项 TaktNewsComments/options）"),
             // entity.newscommentlike.commentid
-            new TranslationSeedItem("entity.newscommentlike.commentid", "ja-JP", "评论ID_jp", "评论 ID"),
+            new TranslationSeedItem("entity.newscommentlike.commentid", "ja-JP", "评论ID_jp", "评论 ID（关联 TaktNewsComment.Id，选项 TaktNewsComments/options）"),
             // entity.newscommentlike.commentid
-            new TranslationSeedItem("entity.newscommentlike.commentid", "zh-CN", "评论ID", "评论 ID"),
+            new TranslationSeedItem("entity.newscommentlike.commentid", "zh-CN", "评论ID", "评论 ID（关联 TaktNewsComment.Id，选项 TaktNewsComments/options）"),
             // entity.newscommentlike.commentid
-            new TranslationSeedItem("entity.newscommentlike.commentid", "zh-HK", "评论ID_hk", "评论 ID"),
+            new TranslationSeedItem("entity.newscommentlike.commentid", "zh-HK", "评论ID_hk", "评论 ID（关联 TaktNewsComment.Id，选项 TaktNewsComments/options）"),
 
             // entity.newscommentlike.userid
-            new TranslationSeedItem("entity.newscommentlike.userid", "en-US", "用户ID_us", "用户 ID"),
+            new TranslationSeedItem("entity.newscommentlike.userid", "en-US", "用户ID_us", "用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
             // entity.newscommentlike.userid
-            new TranslationSeedItem("entity.newscommentlike.userid", "ja-JP", "用户ID_jp", "用户 ID"),
+            new TranslationSeedItem("entity.newscommentlike.userid", "ja-JP", "用户ID_jp", "用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
             // entity.newscommentlike.userid
-            new TranslationSeedItem("entity.newscommentlike.userid", "zh-CN", "用户ID", "用户 ID"),
+            new TranslationSeedItem("entity.newscommentlike.userid", "zh-CN", "用户ID", "用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
             // entity.newscommentlike.userid
-            new TranslationSeedItem("entity.newscommentlike.userid", "zh-HK", "用户ID_hk", "用户 ID"),
+            new TranslationSeedItem("entity.newscommentlike.userid", "zh-HK", "用户ID_hk", "用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
 
             // entity.newscommentlike.username
             new TranslationSeedItem("entity.newscommentlike.username", "en-US", "用户姓名_us", "用户姓名"),

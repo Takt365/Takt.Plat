@@ -123,7 +123,7 @@
           v-model:value="advancedQueryForm.warehouseCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.storagelocation.warehousecode') })"
           show-count
-          :maxlength="50"
+          :maxlength="4"
           allow-clear
         />
       </a-form-item>
@@ -134,7 +134,7 @@
           v-model:value="advancedQueryForm.locationCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.storagelocation.locationcode') })"
           show-count
-          :maxlength="20"
+          :maxlength="40"
           allow-clear
         />
       </a-form-item>
@@ -185,7 +185,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -196,7 +196,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -507,6 +507,16 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: StorageLocation }) =>
       String(getStorageLocationField(record, 'isBuiltIn') ?? ''),
   },
+  {
+    title: t('entity.storagelocation.warehouse'),
+    dataIndex: 'warehouse',
+    key: 'warehouse',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: StorageLocation }) =>
+      String(getStorageLocationField(record, 'warehouse') ?? ''),
+  },
   CreateActionColumn({
     actions: [
       {
@@ -539,7 +549,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: StorageLocation, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getStorageLocationId(selectedRow.value) === getStorageLocationId(record)) {
+    } else if (selectedRow.value && getStorageLocationId(selectedRow.value) === getStorageLocationId(record)) {
       selectedRow.value = null
     }
   },

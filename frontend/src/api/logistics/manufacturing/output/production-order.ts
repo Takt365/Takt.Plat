@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/manufacturing/output
 // 文件名称：production-order.ts
-// 创建时间：2026-06-20
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/output 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -128,12 +128,14 @@ export function updateProductionOrderStatus(dto: ProductionOrderStatus): Promise
 
 /**
  * 获取生产工单选项列表
+ * @param {string} [plantCode] 工厂代码（可选，按工厂过滤）
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getProductionOrderOptions(): Promise<TaktSelectOption[]> {
+export function getProductionOrderOptions(plantCode?: string): Promise<TaktSelectOption[]> {
   return request<TaktSelectOption[]>({
     url: `${PRODUCTION_ORDER_API_BASE}/options`,
     method: 'get',
+    params: plantCode ? { plantCode } : undefined,
   });
 }
 

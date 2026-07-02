@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/bom
 // 文件名称：routing.d.ts
-// 创建时间：2026-06-15
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/bom 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -179,7 +179,7 @@ export interface RoutingQuery extends TaktPagedQuery {
   routingDescription?: string;
 
   /**
-   * 审批状态（TaktApprovalStatus）
+   * 审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）
    */
   approvalStatus?: number;
 
@@ -258,7 +258,7 @@ export interface RoutingCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -431,9 +431,29 @@ export interface RoutingTemplate {
   routingStatus?: number;
 
   /**
+   * 生效日期
+   */
+  effectiveDate?: string;
+
+  /**
+   * 失效日期
+   */
+  expiryDate?: string;
+
+  /**
    * 工艺路线说明
    */
   routingDescription?: string;
+
+  /**
+   * 工艺路线明细列表（主子表关系）（子表，级联保存）
+   */
+  items?: RoutingItemCreate[];
+
+  /**
+   * 变更日志列表（主子表关系）（子表，级联保存）
+   */
+  changeLogs?: RoutingChangeLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -465,7 +485,7 @@ export interface RoutingImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -510,9 +530,29 @@ export interface RoutingImport {
   routingStatus?: number;
 
   /**
+   * 生效日期
+   */
+  effectiveDate?: string;
+
+  /**
+   * 失效日期
+   */
+  expiryDate?: string;
+
+  /**
    * 工艺路线说明
    */
   routingDescription?: string;
+
+  /**
+   * 工艺路线明细列表（主子表关系）（子表，级联保存）
+   */
+  items?: RoutingItemCreate[];
+
+  /**
+   * 变更日志列表（主子表关系）（子表，级联保存）
+   */
+  changeLogs?: RoutingChangeLogCreate[];
 
   /**
    * 扩展字段JSON

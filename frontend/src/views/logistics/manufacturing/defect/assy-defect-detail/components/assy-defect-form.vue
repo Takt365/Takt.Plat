@@ -1,6 +1,6 @@
 <!-- ======================================== -->
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
-<!-- 命名空间：@/views/logistics/manufacturing/defect/assy-defect-detail/components -->
+<!-- 命名空间：@/views/logistics/manufacturing/defect/assy-defect/components -->
 <!-- 文件名称：assy-defect-form.vue -->
 <!-- 功能描述：组立不良日报实体维护弹窗内嵌表单（上主下从级联保存）。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
@@ -74,13 +74,11 @@
                 :label="t('entity.assydefect.plantcode')"
                 name="plantCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.plantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefect.plantcode') })"
-                  show-count
-                  :maxlength="4"
-                  allow-clear
-                  :disabled="!!formData?.assyDefectId"
+                  api-url="TaktPlants/options"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.assydefect.plantcode') })"
+                  :disabled="!!formData?.assyDefectId || loading"
                 />
               </a-form-item>
             </a-col>
@@ -89,12 +87,12 @@
                 :label="t('entity.assydefect.prodcategory')"
                 name="prodCategory"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.prodCategory"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefect.prodcategory') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  dict-type="logistics_prod_category"
+                  :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.assydefect.prodcategory') })"
+                  :disabled="loading"
                 />
               </a-form-item>
             </a-col>
@@ -113,15 +111,15 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.assydefect.prodline')"
-                name="prodLine"
+                :label="t('entity.assydefect.prodteam')"
+                name="prodTeam"
               >
-                <a-input
-                  v-model:value="formState.prodLine"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefect.prodline') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                <TaktSelect
+                  v-model:value="formState.prodTeam"
+                  :options="filteredProductionTeamOptions"
+                  :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.assydefect.prodteam') })"
+                  :disabled="loading || !formState.plantCode"
                 />
               </a-form-item>
             </a-col>
@@ -130,10 +128,11 @@
                 :label="t('entity.assydefect.shiftno')"
                 name="shiftNo"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.shiftNo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefect.shiftno') })"
-                  style="width: 100%"
+                  dict-type="logistics_shift_category"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.assydefect.shiftno') })"
+                  :disabled="loading"
                 />
               </a-form-item>
             </a-col>
@@ -142,13 +141,13 @@
                 :label="t('entity.assydefect.prodordercode')"
                 name="prodOrderCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.prodOrderCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefect.prodordercode') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                  :disabled="!!formData?.assyDefectId"
+                  :options="productionOrderOptions"
+                  :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.assydefect.prodordercode') })"
+                  :disabled="loading || !formState.plantCode || !!formData?.assyDefectId"
+                  @change="handleProductionOrderSelectChange"
                 />
               </a-form-item>
             </a-col>
@@ -161,6 +160,7 @@
                   v-model:value="formState.prodOrderQty"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefect.prodorderqty') })"
                   style="width: 100%"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -184,8 +184,7 @@
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefect.modelcode') })"
                   show-count
                   :maxlength="20"
-                  allow-clear
-                  :disabled="!!formData?.assyDefectId"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -213,8 +212,7 @@
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefect.materialcode') })"
                   show-count
                   :maxlength="20"
-                  allow-clear
-                  :disabled="!!formData?.assyDefectId"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -247,10 +245,11 @@
                 :label="t('entity.assydefect.status')"
                 name="status"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.status"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefect.status') })"
-                  style="width: 100%"
+                  dict-type="logistics_prod_status"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.assydefect.status') })"
+                  :disabled="loading"
                 />
               </a-form-item>
             </a-col>
@@ -310,30 +309,140 @@
       :default-row="createDefaultAssyDefectDetailRow"
       :disabled="loading"
       section-border
-    />
+    >
+      <template #cell-defectCategory="{ record }">
+        <TaktSelect
+          v-model:value="record.defectCategory"
+          dict-type="logistics_defect_category"
+          :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.assydefectdetail.defectcategory') })"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-repairOperator="{ record }">
+        <TaktSelect
+          v-model:value="record.repairOperator"
+          api-url="TaktEmployees/options"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.assydefectdetail.repairoperator') })"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+    </TaktEditableTable>
   </a-form>
 </template>
 
 <script setup lang="ts">
 /**
  * 组立不良日报实体维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
- * @module views/logistics/manufacturing/defect/assy-defect-detail/components
+ * @module views/logistics/manufacturing/defect/assy-defect/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import type { AssyDefectCreate } from '@/types/logistics/manufacturing/defect/assy-defect'
+import type { TaktSelectOption } from '@/types/common'
+import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
+import { getProductionTeamOptions } from '@/api/logistics/manufacturing/output/production-team'
+import { getProductionOrderOptions } from '@/api/logistics/manufacturing/output/production-order'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
+
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热） */
+const dictDataStore = useDictDataStore()
+/** 生产班组下拉全量选项（GetProductionTeamOptionsAsync） */
+const productionTeamOptions = ref<TaktSelectOption[]>([])
+/** 生产工单下拉选项（GetProductionOrderOptionsAsync，按工厂加载） */
+const productionOrderOptions = ref<TaktSelectOption[]>([])
+/** 按当前工厂过滤的生产线（班组编码）选项 */
+const filteredProductionTeamOptions = computed(() => {
+  const plantCode = formState.plantCode
+  if (!plantCode) {
+    return []
+  }
+  return productionTeamOptions.value.filter((item) => String(item.extValue ?? '') === String(plantCode))
+})
+
+/**
+ * 加载生产班组选项
+ */
+async function loadProductionTeamOptions() {
+  productionTeamOptions.value = await getProductionTeamOptions()
+}
+
+/**
+ * 加载生产工单选项（按工厂过滤）
+ * @param plantCode 工厂代码
+ */
+async function loadProductionOrderOptions(plantCode?: string) {
+  productionOrderOptions.value = plantCode
+    ? await getProductionOrderOptions(plantCode)
+    : []
+}
+
+/**
+ * 从工单选项标签解析物料编码（DictLabel = ProdOrderCode + MaterialCode）
+ * @param dictLabel 选项标签
+ * @param prodOrderCode 生产工单号
+ * @returns 物料编码
+ */
+function parseMaterialCodeFromProductionOrderLabel(dictLabel: string, prodOrderCode: string): string {
+  if (!dictLabel || !prodOrderCode) {
+    return ''
+  }
+  if (dictLabel === prodOrderCode) {
+    return ''
+  }
+  if (dictLabel.startsWith(prodOrderCode)) {
+    return dictLabel.slice(prodOrderCode.length)
+  }
+  return ''
+}
+
+/**
+ * 生产工单下拉变更：回填物料、订单数量
+ * @param _value 选中工单号
+ * @param option 选中项
+ */
+function handleProductionOrderSelectChange(
+  _value: string | number | (string | number)[] | undefined,
+  option: Record<string, unknown> | Record<string, unknown>[] | null
+) {
+  const selected = Array.isArray(option) ? option[0] : option
+  if (!selected) {
+    formState.materialCode = undefined
+    formState.prodOrderQty = undefined
+    return
+  }
+  const prodOrderCode = String(formState.prodOrderCode ?? selected.dictValue ?? '')
+  const materialCode = parseMaterialCodeFromProductionOrderLabel(String(selected.dictLabel ?? ''), prodOrderCode)
+  if (materialCode) {
+    formState.materialCode = materialCode
+  }
+  if (selected.extValue !== undefined && selected.extValue !== null && selected.extValue !== '') {
+    formState.prodOrderQty = Number(selected.extValue)
+  }
+}
 
 /** Pinia：租户/公司上下文 */
 const tenantStore = useTenantStore()
 /** Pinia：用户上下文 */
 const userStore = useUserStore()
+
+/** 表单挂载时预加载字典与生产班组选项 */
+onMounted(async () => {
+  void dictDataStore.loadAllDictDataAsync()
+  await loadProductionTeamOptions()
+  if (formState.plantCode) {
+    await loadProductionOrderOptions(String(formState.plantCode))
+  }
+})
 
 /**
  * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
@@ -356,7 +465,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","prodCategory","prodDate","prodLine","shiftNo","prodOrderCode","prodOrderQty","modelCode","batchNo","materialCode","prodActualQty","goodQuantity","status","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","prodCategory","prodDate","prodTeam","shiftNo","prodOrderCode","prodOrderQty","modelCode","batchNo","materialCode","prodActualQty","goodQuantity","status","extField","remark"]
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
 
@@ -384,8 +493,7 @@ const assyDefectDetailFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
     key: 'defectCategory',
     title: t('entity.assydefectdetail.defectcategory'),
-    editor: 'input',
-    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.assydefectdetail.defectcategory') }),
+    width: 140,
   },
   {
     key: 'defectQty',
@@ -417,6 +525,11 @@ const assyDefectDetailFormColumns = computed<TaktEditableTableColumn[]>(() => [
     editor: 'input',
     width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.assydefectdetail.teststep') }),
   },
+  {
+    key: 'repairOperator',
+    title: t('entity.assydefectdetail.repairoperator'),
+    width: 140,
+  },
 ])
 
 /** 编辑态从 formData 同步各子表行 */
@@ -434,6 +547,7 @@ function createDefaultAssyDefectDetailRow(): Record<string, unknown> {
     randomCardNo: '',
     occurrenceEngineering: '',
     testStep: '',
+    repairOperator: '',
   }
 }
 
@@ -468,9 +582,15 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
-/** 表单字段默认值（无字典默认项） */
+/** 表单字段默认值（字典 IsDefault=1） */
+const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  shiftNo: 1,
+  status: 1,
+}
+
+/** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
 function applyFormDefaults(target: Record<string, unknown>) {
-  void target
+  Object.assign(target, FORM_FIELD_DEFAULTS)
 }
 
 
@@ -485,6 +605,9 @@ watch(
       applyScopeDefaults(next)
       Object.assign(formState, next)
     syncChildRowsFromFormData(val)
+      if (formState.plantCode) {
+        void loadProductionOrderOptions(String(formState.plantCode))
+      }
       formRef.value?.clearValidate()
     } else {
       Object.keys(formState).forEach((k) => delete formState[k])
@@ -493,6 +616,7 @@ watch(
       }
       applyFormDefaults(formState)
       applyScopeDefaults(formState as Record<string, unknown>, true)
+      productionOrderOptions.value = []
       formRef.value?.clearValidate()
     }
   },
@@ -510,22 +634,61 @@ watch(
   },
 )
 
+/** 工厂变更时，重载工单选项并清理无效生产线/工单 */
+watch(
+  () => formState.plantCode,
+  async (plantCode, prevPlantCode) => {
+    if (props.formData?.assyDefectId) {
+      if (plantCode) {
+        await loadProductionOrderOptions(String(plantCode))
+      }
+      return
+    }
+    if (!plantCode) {
+      formState.prodTeam = undefined
+      formState.prodOrderCode = undefined
+      formState.materialCode = undefined
+      formState.prodOrderQty = undefined
+      productionOrderOptions.value = []
+      return
+    }
+    if (prevPlantCode && prevPlantCode !== plantCode) {
+      if (formState.prodTeam) {
+        const lineStillValid = filteredProductionTeamOptions.value.some(
+          (item) => String(item.dictValue ?? '') === String(formState.prodTeam)
+        )
+        if (!lineStillValid) {
+          formState.prodTeam = undefined
+        }
+      }
+      formState.prodOrderCode = undefined
+      formState.materialCode = undefined
+      formState.prodOrderQty = undefined
+    }
+    await loadProductionOrderOptions(String(plantCode))
+  },
+)
+
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  plantCode: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.assydefect.plantcode') }),
-      trigger: 'blur'
-    }
-  ],
-  prodCategory: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.assydefect.prodcategory') }),
-      trigger: 'blur'
-    }
-  ],
+  plantCode: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.assydefect.plantcode') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  prodCategory: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.assydefect.prodcategory') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
   prodDate: [
     {
       required: true,
@@ -533,13 +696,15 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'change'
     }
   ],
-  prodLine: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.assydefect.prodline') }),
-      trigger: 'blur'
-    }
-  ],
+  prodTeam: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.assydefect.prodteam') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
   shiftNo: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
@@ -553,13 +718,15 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
-  prodOrderCode: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.assydefect.prodordercode') }),
-      trigger: 'blur'
-    }
-  ],
+  prodOrderCode: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.assydefect.prodordercode') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
   prodOrderQty: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {

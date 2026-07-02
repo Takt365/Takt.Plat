@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Routine.HelpDesk
 // 文件名称：TaktKnowledgeDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Knowledge 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktKnowledge 生成，请按需审阅）
 // 
@@ -38,17 +38,17 @@ public class TaktKnowledgeDto : TaktCompanyDtoBase
     /// <summary>
     /// 知识标题
     /// </summary>
-    public string Title { get; set; } = string.Empty;
+    public string KnowledgeTitle { get; set; } = string.Empty;
 
     /// <summary>
     /// 知识内容（富文本/HTML）
     /// </summary>
-    public string? Content { get; set; } = string.Empty;
+    public string? KnowledgeContent { get; set; } = string.Empty;
 
     /// <summary>
     /// 知识摘要（简短描述，列表/搜索展示）
     /// </summary>
-    public string? Summary { get; set; } = string.Empty;
+    public string? KnowledgeSummary { get; set; } = string.Empty;
 
     /// <summary>
     /// 分类编码（如 faq/guide 等）
@@ -58,22 +58,12 @@ public class TaktKnowledgeDto : TaktCompanyDtoBase
     /// <summary>
     /// 标签（逗号分隔或 JSON 数组存储）
     /// </summary>
-    public string? Tags { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 知识状态（0=草稿，1=已发布，2=已下架）
-    /// </summary>
-    public int KnowledgeStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 排序号（越小越靠前）
-    /// </summary>
-    public int SortOrder { get; set; } = 0;
+    public string? KnowledgeTags { get; set; } = string.Empty;
 
     /// <summary>
     /// 浏览次数
     /// </summary>
-    public int ViewCount { get; set; } = 0;
+    public int KnowledgeViewCount { get; set; } = 0;
 
     /// <summary>
     /// 有用评价数
@@ -88,7 +78,7 @@ public class TaktKnowledgeDto : TaktCompanyDtoBase
     /// <summary>
     /// 是否已发布（0=否，1=是）
     /// </summary>
-    public int IsPublished { get; set; } = 0;
+    public int KnowledgeIsPublished { get; set; } = 0;
 
     /// <summary>
     /// 版本号
@@ -104,6 +94,21 @@ public class TaktKnowledgeDto : TaktCompanyDtoBase
     /// 最后修订时间
     /// </summary>
     public DateTime? RevisedAt { get; set; }
+
+    /// <summary>
+    /// 排序号（越小越靠前）
+    /// </summary>
+    public int SortOrder { get; set; } = 0;
+
+    /// <summary>
+    /// 知识状态（0=草稿，1=已发布，2=已下架）
+    /// </summary>
+    public int KnowledgeStatus { get; set; } = 0;
+
+    /// <summary>
+    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// </summary>
+    public string? Attachments { get; set; } = string.Empty;
 
     /// <summary>
     /// 知识库变更日志列表
@@ -136,17 +141,17 @@ public class TaktKnowledgeQueryDto : TaktPagedQuery
     /// <summary>
     /// 知识标题
     /// </summary>
-    public string? Title { get; set; } = string.Empty;
+    public string? KnowledgeTitle { get; set; } = string.Empty;
 
     /// <summary>
     /// 知识内容（富文本/HTML）
     /// </summary>
-    public string? Content { get; set; } = string.Empty;
+    public string? KnowledgeContent { get; set; } = string.Empty;
 
     /// <summary>
     /// 知识摘要（简短描述，列表/搜索展示）
     /// </summary>
-    public string? Summary { get; set; } = string.Empty;
+    public string? KnowledgeSummary { get; set; } = string.Empty;
 
     /// <summary>
     /// 分类编码（如 faq/guide 等）
@@ -156,22 +161,12 @@ public class TaktKnowledgeQueryDto : TaktPagedQuery
     /// <summary>
     /// 标签（逗号分隔或 JSON 数组存储）
     /// </summary>
-    public string? Tags { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 知识状态（0=草稿，1=已发布，2=已下架）
-    /// </summary>
-    public int? KnowledgeStatus { get; set; }
-
-    /// <summary>
-    /// 排序号（越小越靠前）
-    /// </summary>
-    public int? SortOrder { get; set; }
+    public string? KnowledgeTags { get; set; } = string.Empty;
 
     /// <summary>
     /// 浏览次数
     /// </summary>
-    public int? ViewCount { get; set; }
+    public int? KnowledgeViewCount { get; set; }
 
     /// <summary>
     /// 有用评价数
@@ -186,7 +181,7 @@ public class TaktKnowledgeQueryDto : TaktPagedQuery
     /// <summary>
     /// 是否已发布（0=否，1=是）
     /// </summary>
-    public int? IsPublished { get; set; }
+    public int? KnowledgeIsPublished { get; set; }
 
     /// <summary>
     /// 版本号
@@ -212,6 +207,21 @@ public class TaktKnowledgeQueryDto : TaktPagedQuery
     /// 最后修订时间（范围查询-结束）
     /// </summary>
     public DateTime? RevisedAtEnd { get; set; }
+
+    /// <summary>
+    /// 排序号（越小越靠前）
+    /// </summary>
+    public int? SortOrder { get; set; }
+
+    /// <summary>
+    /// 知识状态（0=草稿，1=已发布，2=已下架）
+    /// </summary>
+    public int? KnowledgeStatus { get; set; }
+
+    /// <summary>
+    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// </summary>
+    public string? Attachments { get; set; } = string.Empty;
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -254,7 +264,7 @@ public class TaktKnowledgeCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -262,17 +272,17 @@ public class TaktKnowledgeCreateDto
     /// 知识标题
     /// </summary>
     [Required(ErrorMessage = "知识标题不能为空")]
-    public string Title { get; set; } = string.Empty;
+    public string KnowledgeTitle { get; set; } = string.Empty;
 
     /// <summary>
     /// 知识内容（富文本/HTML）
     /// </summary>
-    public string? Content { get; set; } = string.Empty;
+    public string? KnowledgeContent { get; set; } = string.Empty;
 
     /// <summary>
     /// 知识摘要（简短描述，列表/搜索展示）
     /// </summary>
-    public string? Summary { get; set; } = string.Empty;
+    public string? KnowledgeSummary { get; set; } = string.Empty;
 
     /// <summary>
     /// 分类编码（如 faq/guide 等）
@@ -282,22 +292,12 @@ public class TaktKnowledgeCreateDto
     /// <summary>
     /// 标签（逗号分隔或 JSON 数组存储）
     /// </summary>
-    public string? Tags { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 知识状态（0=草稿，1=已发布，2=已下架）
-    /// </summary>
-    public int KnowledgeStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 排序号（越小越靠前）
-    /// </summary>
-    public int SortOrder { get; set; } = 0;
+    public string? KnowledgeTags { get; set; } = string.Empty;
 
     /// <summary>
     /// 浏览次数
     /// </summary>
-    public int ViewCount { get; set; } = 0;
+    public int KnowledgeViewCount { get; set; } = 0;
 
     /// <summary>
     /// 有用评价数
@@ -312,7 +312,7 @@ public class TaktKnowledgeCreateDto
     /// <summary>
     /// 是否已发布（0=否，1=是）
     /// </summary>
-    public int IsPublished { get; set; } = 0;
+    public int KnowledgeIsPublished { get; set; } = 0;
 
     /// <summary>
     /// 版本号
@@ -328,6 +328,16 @@ public class TaktKnowledgeCreateDto
     /// 最后修订时间
     /// </summary>
     public DateTime? RevisedAt { get; set; }
+
+    /// <summary>
+    /// 知识状态（0=草稿，1=已发布，2=已下架）
+    /// </summary>
+    public int KnowledgeStatus { get; set; } = 0;
+
+    /// <summary>
+    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// </summary>
+    public string? Attachments { get; set; } = string.Empty;
 
     /// <summary>
     /// 知识库变更日志列表（子表，级联保存）
@@ -436,17 +446,17 @@ public class TaktKnowledgeTemplateDto
     /// <summary>
     /// 知识标题
     /// </summary>
-    public string? Title { get; set; } = string.Empty;
+    public string? KnowledgeTitle { get; set; } = string.Empty;
 
     /// <summary>
     /// 知识内容（富文本/HTML）
     /// </summary>
-    public string? Content { get; set; } = string.Empty;
+    public string? KnowledgeContent { get; set; } = string.Empty;
 
     /// <summary>
     /// 知识摘要（简短描述，列表/搜索展示）
     /// </summary>
-    public string? Summary { get; set; } = string.Empty;
+    public string? KnowledgeSummary { get; set; } = string.Empty;
 
     /// <summary>
     /// 分类编码（如 faq/guide 等）
@@ -456,22 +466,12 @@ public class TaktKnowledgeTemplateDto
     /// <summary>
     /// 标签（逗号分隔或 JSON 数组存储）
     /// </summary>
-    public string? Tags { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 知识状态（0=草稿，1=已发布，2=已下架）
-    /// </summary>
-    public int? KnowledgeStatus { get; set; }
-
-    /// <summary>
-    /// 排序号（越小越靠前）
-    /// </summary>
-    public int? SortOrder { get; set; }
+    public string? KnowledgeTags { get; set; } = string.Empty;
 
     /// <summary>
     /// 浏览次数
     /// </summary>
-    public int? ViewCount { get; set; }
+    public int? KnowledgeViewCount { get; set; }
 
     /// <summary>
     /// 有用评价数
@@ -486,12 +486,37 @@ public class TaktKnowledgeTemplateDto
     /// <summary>
     /// 是否已发布（0=否，1=是）
     /// </summary>
-    public int? IsPublished { get; set; }
+    public int? KnowledgeIsPublished { get; set; }
 
     /// <summary>
     /// 版本号
     /// </summary>
     public int? Version { get; set; }
+
+    /// <summary>
+    /// 发布时间
+    /// </summary>
+    public DateTime? PublishedAt { get; set; }
+
+    /// <summary>
+    /// 最后修订时间
+    /// </summary>
+    public DateTime? RevisedAt { get; set; }
+
+    /// <summary>
+    /// 知识状态（0=草稿，1=已发布，2=已下架）
+    /// </summary>
+    public int? KnowledgeStatus { get; set; }
+
+    /// <summary>
+    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// </summary>
+    public string? Attachments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 知识库变更日志列表（子表，级联保存）
+    /// </summary>
+    public List<TaktKnowledgeChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -521,24 +546,24 @@ public class TaktKnowledgeImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
     /// 知识标题
     /// </summary>
-    public string? Title { get; set; } = string.Empty;
+    public string? KnowledgeTitle { get; set; } = string.Empty;
 
     /// <summary>
     /// 知识内容（富文本/HTML）
     /// </summary>
-    public string? Content { get; set; } = string.Empty;
+    public string? KnowledgeContent { get; set; } = string.Empty;
 
     /// <summary>
     /// 知识摘要（简短描述，列表/搜索展示）
     /// </summary>
-    public string? Summary { get; set; } = string.Empty;
+    public string? KnowledgeSummary { get; set; } = string.Empty;
 
     /// <summary>
     /// 分类编码（如 faq/guide 等）
@@ -548,22 +573,12 @@ public class TaktKnowledgeImportDto
     /// <summary>
     /// 标签（逗号分隔或 JSON 数组存储）
     /// </summary>
-    public string? Tags { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 知识状态（0=草稿，1=已发布，2=已下架）
-    /// </summary>
-    public int? KnowledgeStatus { get; set; }
-
-    /// <summary>
-    /// 排序号（越小越靠前）
-    /// </summary>
-    public int? SortOrder { get; set; }
+    public string? KnowledgeTags { get; set; } = string.Empty;
 
     /// <summary>
     /// 浏览次数
     /// </summary>
-    public int? ViewCount { get; set; }
+    public int? KnowledgeViewCount { get; set; }
 
     /// <summary>
     /// 有用评价数
@@ -578,12 +593,37 @@ public class TaktKnowledgeImportDto
     /// <summary>
     /// 是否已发布（0=否，1=是）
     /// </summary>
-    public int? IsPublished { get; set; }
+    public int? KnowledgeIsPublished { get; set; }
 
     /// <summary>
     /// 版本号
     /// </summary>
     public int? Version { get; set; }
+
+    /// <summary>
+    /// 发布时间
+    /// </summary>
+    public DateTime? PublishedAt { get; set; }
+
+    /// <summary>
+    /// 最后修订时间
+    /// </summary>
+    public DateTime? RevisedAt { get; set; }
+
+    /// <summary>
+    /// 知识状态（0=草稿，1=已发布，2=已下架）
+    /// </summary>
+    public int? KnowledgeStatus { get; set; }
+
+    /// <summary>
+    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// </summary>
+    public string? Attachments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 知识库变更日志列表（子表，级联保存）
+    /// </summary>
+    public List<TaktKnowledgeChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -621,17 +661,17 @@ public class TaktKnowledgeExportDto
     /// <summary>
     /// 知识标题
     /// </summary>
-    public string Title { get; set; } = string.Empty;
+    public string KnowledgeTitle { get; set; } = string.Empty;
 
     /// <summary>
     /// 知识内容（富文本/HTML）
     /// </summary>
-    public string? Content { get; set; } = string.Empty;
+    public string? KnowledgeContent { get; set; } = string.Empty;
 
     /// <summary>
     /// 知识摘要（简短描述，列表/搜索展示）
     /// </summary>
-    public string? Summary { get; set; } = string.Empty;
+    public string? KnowledgeSummary { get; set; } = string.Empty;
 
     /// <summary>
     /// 分类编码（如 faq/guide 等）
@@ -641,22 +681,12 @@ public class TaktKnowledgeExportDto
     /// <summary>
     /// 标签（逗号分隔或 JSON 数组存储）
     /// </summary>
-    public string? Tags { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 知识状态（0=草稿，1=已发布，2=已下架）
-    /// </summary>
-    public int KnowledgeStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 排序号（越小越靠前）
-    /// </summary>
-    public int SortOrder { get; set; } = 0;
+    public string? KnowledgeTags { get; set; } = string.Empty;
 
     /// <summary>
     /// 浏览次数
     /// </summary>
-    public int ViewCount { get; set; } = 0;
+    public int KnowledgeViewCount { get; set; } = 0;
 
     /// <summary>
     /// 有用评价数
@@ -671,7 +701,7 @@ public class TaktKnowledgeExportDto
     /// <summary>
     /// 是否已发布（0=否，1=是）
     /// </summary>
-    public int IsPublished { get; set; } = 0;
+    public int KnowledgeIsPublished { get; set; } = 0;
 
     /// <summary>
     /// 版本号
@@ -687,6 +717,21 @@ public class TaktKnowledgeExportDto
     /// 最后修订时间
     /// </summary>
     public DateTime? RevisedAt { get; set; }
+
+    /// <summary>
+    /// 排序号（越小越靠前）
+    /// </summary>
+    public int SortOrder { get; set; } = 0;
+
+    /// <summary>
+    /// 知识状态（0=草稿，1=已发布，2=已下架）
+    /// </summary>
+    public int KnowledgeStatus { get; set; } = 0;
+
+    /// <summary>
+    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// </summary>
+    public string? Attachments { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON

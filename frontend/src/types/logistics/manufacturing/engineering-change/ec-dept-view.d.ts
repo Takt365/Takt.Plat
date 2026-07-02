@@ -18,7 +18,6 @@ export interface EcDeptView extends CompanyDtoBase {
   ecNo: string;
   lineNumber: number;
   ecModel: string;
-  ecChange?: string;
   ecOldItem?: string;
   ecNewItem?: string;
   ecOldText?: string;
@@ -26,6 +25,10 @@ export interface EcDeptView extends CompanyDtoBase {
   deptCode: string;
   isImplemented: number;
   content?: string;
+  /** 录入日期（技术） */
+  entryDate?: string;
+  /** 担当（EcLeader） */
+  ecLeader?: string;
   scheduledProductionDate?: string;
   scheduledBatch?: string;
   poRemainder?: string;
@@ -43,8 +46,12 @@ export interface EcDeptView extends CompanyDtoBase {
   outboundOrderNo?: string;
   productionTeam?: string;
   implementationDate?: string;
+  /** 实施批次（制一） */
+  implementationBatch?: string;
   inspectionBatch?: string;
   samplingNo?: string;
+  /** 确认日期（制技） */
+  confirmationDate?: string;
   isSopUpdated: number;
 }
 
@@ -60,6 +67,10 @@ export interface EcDeptViewUpdate {
   ecDetailId: string;
   isImplemented: number;
   content?: string;
+  /** 录入日期（技术） */
+  entryDate?: string;
+  /** 担当（EcLeader） */
+  ecLeader?: string;
   scheduledProductionDate?: string;
   scheduledBatch?: string;
   poRemainder?: string;
@@ -77,8 +88,12 @@ export interface EcDeptViewUpdate {
   outboundOrderNo?: string;
   productionTeam?: string;
   implementationDate?: string;
+  /** 实施批次（制一） */
+  implementationBatch?: string;
   inspectionBatch?: string;
   samplingNo?: string;
+  /** 确认日期（制技） */
+  confirmationDate?: string;
   isSopUpdated: number;
   remark?: string;
 }

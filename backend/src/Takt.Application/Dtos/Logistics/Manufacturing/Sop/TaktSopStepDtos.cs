@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopStepDtos.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SopStep 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSopStep 生成，请按需审阅）
 // 
@@ -36,7 +36,7 @@ public class TaktSopStepDto : TaktCompanyDtoBase
     public long SopStepId { get; set; }
 
     /// <summary>
-    /// 正文 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 正文 ID（关联 TaktSopContent.Id，选项 TaktSopContents/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ContentId { get; set; }
@@ -67,7 +67,7 @@ public class TaktSopStepDto : TaktCompanyDtoBase
     public string? SafetyAlert { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否安全弹窗（字典 sys_yes_no_type，0=否，1=是）
+    /// 弹窗（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int SafetyPopupRequired { get; set; } = 0;
 
@@ -112,7 +112,7 @@ public class TaktSopStepQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 正文 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 正文 ID（关联 TaktSopContent.Id，选项 TaktSopContents/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ContentId { get; set; }
@@ -138,7 +138,7 @@ public class TaktSopStepQueryDto : TaktPagedQuery
     public string? SafetyAlert { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否安全弹窗（字典 sys_yes_no_type，0=否，1=是）
+    /// 弹窗（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int? SafetyPopupRequired { get; set; }
 
@@ -183,12 +183,12 @@ public class TaktSopStepCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 正文 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 正文 ID（关联 TaktSopContent.Id，选项 TaktSopContents/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ContentId { get; set; }
@@ -215,7 +215,7 @@ public class TaktSopStepCreateDto
     public string? SafetyAlert { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否安全弹窗（字典 sys_yes_no_type，0=否，1=是）
+    /// 弹窗（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int SafetyPopupRequired { get; set; } = 0;
 
@@ -281,7 +281,7 @@ public class TaktSopStepTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 正文 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 正文 ID（关联 TaktSopContent.Id，选项 TaktSopContents/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ContentId { get; set; }
@@ -307,9 +307,19 @@ public class TaktSopStepTemplateDto
     public string? SafetyAlert { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否安全弹窗（字典 sys_yes_no_type，0=否，1=是）
+    /// 弹窗（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int? SafetyPopupRequired { get; set; }
+
+    /// <summary>
+    /// 多媒体（子表，级联保存）
+    /// </summary>
+    public List<TaktSopStepMediaCreateDto>? MediaList { get; set; }
+
+    /// <summary>
+    /// 检验项目（子表，级联保存）
+    /// </summary>
+    public List<TaktSopStepCheckItemCreateDto>? CheckItems { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -339,12 +349,12 @@ public class TaktSopStepImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 正文 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 正文 ID（关联 TaktSopContent.Id，选项 TaktSopContents/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ContentId { get; set; }
@@ -370,9 +380,19 @@ public class TaktSopStepImportDto
     public string? SafetyAlert { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否安全弹窗（字典 sys_yes_no_type，0=否，1=是）
+    /// 弹窗（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int? SafetyPopupRequired { get; set; }
+
+    /// <summary>
+    /// 多媒体（子表，级联保存）
+    /// </summary>
+    public List<TaktSopStepMediaCreateDto>? MediaList { get; set; }
+
+    /// <summary>
+    /// 检验项目（子表，级联保存）
+    /// </summary>
+    public List<TaktSopStepCheckItemCreateDto>? CheckItems { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -408,7 +428,7 @@ public class TaktSopStepExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 正文 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 正文 ID（关联 TaktSopContent.Id，选项 TaktSopContents/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ContentId { get; set; }
@@ -434,7 +454,7 @@ public class TaktSopStepExportDto
     public string? SafetyAlert { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否安全弹窗（字典 sys_yes_no_type，0=否，1=是）
+    /// 弹窗（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int SafetyPopupRequired { get; set; } = 0;
 

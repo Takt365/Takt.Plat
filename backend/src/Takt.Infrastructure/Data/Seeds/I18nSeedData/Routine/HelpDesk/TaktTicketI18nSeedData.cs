@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.HelpDesk
 // 文件名称：TaktTicketI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktTicket 实体字段国际化种子（已对齐前端 locales：src/locales/routine/help-desk/ticket）
 // 
@@ -84,11 +84,11 @@ public class TaktTicketI18nSeedData : ITaktSeedDataCoordinator
             // entity.ticket._self
             new TranslationSeedItem("entity.ticket._self", "en-US", "Ticket Information_us", "实体名称"),
             // entity.ticket._self
-            new TranslationSeedItem("entity.ticket._self", "ja-JP", "Takt工单信息_jp", "实体名称"),
+            new TranslationSeedItem("entity.ticket._self", "ja-JP", "服务台工单信息_jp", "实体名称"),
             // entity.ticket._self
-            new TranslationSeedItem("entity.ticket._self", "zh-CN", "Takt工单信息", "实体名称"),
+            new TranslationSeedItem("entity.ticket._self", "zh-CN", "服务台工单信息", "实体名称"),
             // entity.ticket._self
-            new TranslationSeedItem("entity.ticket._self", "zh-HK", "Takt工单信息_hk", "实体名称"),
+            new TranslationSeedItem("entity.ticket._self", "zh-HK", "服务台工单信息_hk", "实体名称"),
 
             // entity.ticket.no
             new TranslationSeedItem("entity.ticket.no", "en-US", "工单编号_us", "工单编号（唯一）"),
@@ -117,77 +117,68 @@ public class TaktTicketI18nSeedData : ITaktSeedDataCoordinator
             // entity.ticket.content
             new TranslationSeedItem("entity.ticket.content", "zh-HK", "工单内容_hk", "工单内容描述"),
 
-            // entity.ticket.attachmentsjson
-            new TranslationSeedItem("entity.ticket.attachmentsjson", "en-US", "附件列表JSON_us", "附件列表 JSON。格式：[{ \"FileId\": 0, \"FileName\": \"\", \"FilePath\": \"\", \"FileSize\": 0, \"FileType\": \"\", \"FileExtension\": \"\", \"SortOrder\": 0 }]"),
-            // entity.ticket.attachmentsjson
-            new TranslationSeedItem("entity.ticket.attachmentsjson", "ja-JP", "附件列表JSON_jp", "附件列表 JSON。格式：[{ \"FileId\": 0, \"FileName\": \"\", \"FilePath\": \"\", \"FileSize\": 0, \"FileType\": \"\", \"FileExtension\": \"\", \"SortOrder\": 0 }]"),
-            // entity.ticket.attachmentsjson
-            new TranslationSeedItem("entity.ticket.attachmentsjson", "zh-CN", "附件列表JSON", "附件列表 JSON。格式：[{ \"FileId\": 0, \"FileName\": \"\", \"FilePath\": \"\", \"FileSize\": 0, \"FileType\": \"\", \"FileExtension\": \"\", \"SortOrder\": 0 }]"),
-            // entity.ticket.attachmentsjson
-            new TranslationSeedItem("entity.ticket.attachmentsjson", "zh-HK", "附件列表JSON_hk", "附件列表 JSON。格式：[{ \"FileId\": 0, \"FileName\": \"\", \"FilePath\": \"\", \"FileSize\": 0, \"FileType\": \"\", \"FileExtension\": \"\", \"SortOrder\": 0 }]"),
-
-            // entity.ticket.status
-            new TranslationSeedItem("entity.ticket.status", "en-US", "工单状态_us", "工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）"),
-            // entity.ticket.status
-            new TranslationSeedItem("entity.ticket.status", "ja-JP", "工单状态_jp", "工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）"),
-            // entity.ticket.status
-            new TranslationSeedItem("entity.ticket.status", "zh-CN", "工单状态", "工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）"),
-            // entity.ticket.status
-            new TranslationSeedItem("entity.ticket.status", "zh-HK", "工单状态_hk", "工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）"),
+            // entity.ticket.attachments
+            new TranslationSeedItem("entity.ticket.attachments", "en-US", "附件列表JSON_us", "附件（JSON 列表形式，由 TaktFile 统一上传到服务器）"),
+            // entity.ticket.attachments
+            new TranslationSeedItem("entity.ticket.attachments", "ja-JP", "附件列表JSON_jp", "附件（JSON 列表形式，由 TaktFile 统一上传到服务器）"),
+            // entity.ticket.attachments
+            new TranslationSeedItem("entity.ticket.attachments", "zh-CN", "附件列表JSON", "附件（JSON 列表形式，由 TaktFile 统一上传到服务器）"),
+            // entity.ticket.attachments
+            new TranslationSeedItem("entity.ticket.attachments", "zh-HK", "附件列表JSON_hk", "附件（JSON 列表形式，由 TaktFile 统一上传到服务器）"),
 
             // entity.ticket.priority
-            new TranslationSeedItem("entity.ticket.priority", "en-US", "优先级_us", "优先级（字典 sys_priority_level_category）"),
+            new TranslationSeedItem("entity.ticket.priority", "en-US", "优先级_us", "优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）"),
             // entity.ticket.priority
-            new TranslationSeedItem("entity.ticket.priority", "ja-JP", "优先级_jp", "优先级（字典 sys_priority_level_category）"),
+            new TranslationSeedItem("entity.ticket.priority", "ja-JP", "优先级_jp", "优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）"),
             // entity.ticket.priority
-            new TranslationSeedItem("entity.ticket.priority", "zh-CN", "优先级", "优先级（字典 sys_priority_level_category）"),
+            new TranslationSeedItem("entity.ticket.priority", "zh-CN", "优先级", "优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）"),
             // entity.ticket.priority
-            new TranslationSeedItem("entity.ticket.priority", "zh-HK", "优先级_hk", "优先级（字典 sys_priority_level_category）"),
+            new TranslationSeedItem("entity.ticket.priority", "zh-HK", "优先级_hk", "优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）"),
 
             // entity.ticket.urgency
-            new TranslationSeedItem("entity.ticket.urgency", "en-US", "紧急度_us", "紧急度（字典 sys_urgency_level_category）"),
+            new TranslationSeedItem("entity.ticket.urgency", "en-US", "紧急度_us", "紧急度（字典 sys_urgency_level_category；1=高 2=中 3=低）"),
             // entity.ticket.urgency
-            new TranslationSeedItem("entity.ticket.urgency", "ja-JP", "紧急度_jp", "紧急度（字典 sys_urgency_level_category）"),
+            new TranslationSeedItem("entity.ticket.urgency", "ja-JP", "紧急度_jp", "紧急度（字典 sys_urgency_level_category；1=高 2=中 3=低）"),
             // entity.ticket.urgency
-            new TranslationSeedItem("entity.ticket.urgency", "zh-CN", "紧急度", "紧急度（字典 sys_urgency_level_category）"),
+            new TranslationSeedItem("entity.ticket.urgency", "zh-CN", "紧急度", "紧急度（字典 sys_urgency_level_category；1=高 2=中 3=低）"),
             // entity.ticket.urgency
-            new TranslationSeedItem("entity.ticket.urgency", "zh-HK", "紧急度_hk", "紧急度（字典 sys_urgency_level_category）"),
+            new TranslationSeedItem("entity.ticket.urgency", "zh-HK", "紧急度_hk", "紧急度（字典 sys_urgency_level_category；1=高 2=中 3=低）"),
 
             // entity.ticket.impact
-            new TranslationSeedItem("entity.ticket.impact", "en-US", "影响范围_us", "影响范围（字典 sys_impact_level_category）"),
+            new TranslationSeedItem("entity.ticket.impact", "en-US", "影响范围_us", "影响范围（字典 sys_impact_level_category；1=高 2=中 3=低）"),
             // entity.ticket.impact
-            new TranslationSeedItem("entity.ticket.impact", "ja-JP", "影响范围_jp", "影响范围（字典 sys_impact_level_category）"),
+            new TranslationSeedItem("entity.ticket.impact", "ja-JP", "影响范围_jp", "影响范围（字典 sys_impact_level_category；1=高 2=中 3=低）"),
             // entity.ticket.impact
-            new TranslationSeedItem("entity.ticket.impact", "zh-CN", "影响范围", "影响范围（字典 sys_impact_level_category）"),
+            new TranslationSeedItem("entity.ticket.impact", "zh-CN", "影响范围", "影响范围（字典 sys_impact_level_category；1=高 2=中 3=低）"),
             // entity.ticket.impact
-            new TranslationSeedItem("entity.ticket.impact", "zh-HK", "影响范围_hk", "影响范围（字典 sys_impact_level_category）"),
+            new TranslationSeedItem("entity.ticket.impact", "zh-HK", "影响范围_hk", "影响范围（字典 sys_impact_level_category；1=高 2=中 3=低）"),
 
             // entity.ticket.categorycode
-            new TranslationSeedItem("entity.ticket.categorycode", "en-US", "分类编码_us", "分类编码（如 incident/request 等）"),
+            new TranslationSeedItem("entity.ticket.categorycode", "en-US", "分类编码_us", "分类编码（如 incident/request 等，与 TaktTicketCategoryAssign.CategoryCode 对应）"),
             // entity.ticket.categorycode
-            new TranslationSeedItem("entity.ticket.categorycode", "ja-JP", "分类编码_jp", "分类编码（如 incident/request 等）"),
+            new TranslationSeedItem("entity.ticket.categorycode", "ja-JP", "分类编码_jp", "分类编码（如 incident/request 等，与 TaktTicketCategoryAssign.CategoryCode 对应）"),
             // entity.ticket.categorycode
-            new TranslationSeedItem("entity.ticket.categorycode", "zh-CN", "分类编码", "分类编码（如 incident/request 等）"),
+            new TranslationSeedItem("entity.ticket.categorycode", "zh-CN", "分类编码", "分类编码（如 incident/request 等，与 TaktTicketCategoryAssign.CategoryCode 对应）"),
             // entity.ticket.categorycode
-            new TranslationSeedItem("entity.ticket.categorycode", "zh-HK", "分类编码_hk", "分类编码（如 incident/request 等）"),
+            new TranslationSeedItem("entity.ticket.categorycode", "zh-HK", "分类编码_hk", "分类编码（如 incident/request 等，与 TaktTicketCategoryAssign.CategoryCode 对应）"),
 
             // entity.ticket.source
-            new TranslationSeedItem("entity.ticket.source", "en-US", "工单来源_us", "工单来源（0=门户网站，1=邮件，2=电话，3=API接入）"),
+            new TranslationSeedItem("entity.ticket.source", "en-US", "工单来源_us", "工单来源（字典 routine_ticket_source_type；0=门户 1=邮件 2=电话 3=API）"),
             // entity.ticket.source
-            new TranslationSeedItem("entity.ticket.source", "ja-JP", "工单来源_jp", "工单来源（0=门户网站，1=邮件，2=电话，3=API接入）"),
+            new TranslationSeedItem("entity.ticket.source", "ja-JP", "工单来源_jp", "工单来源（字典 routine_ticket_source_type；0=门户 1=邮件 2=电话 3=API）"),
             // entity.ticket.source
-            new TranslationSeedItem("entity.ticket.source", "zh-CN", "工单来源", "工单来源（0=门户网站，1=邮件，2=电话，3=API接入）"),
+            new TranslationSeedItem("entity.ticket.source", "zh-CN", "工单来源", "工单来源（字典 routine_ticket_source_type；0=门户 1=邮件 2=电话 3=API）"),
             // entity.ticket.source
-            new TranslationSeedItem("entity.ticket.source", "zh-HK", "工单来源_hk", "工单来源（0=门户网站，1=邮件，2=电话，3=API接入）"),
+            new TranslationSeedItem("entity.ticket.source", "zh-HK", "工单来源_hk", "工单来源（字典 routine_ticket_source_type；0=门户 1=邮件 2=电话 3=API）"),
 
             // entity.ticket.submitterid
-            new TranslationSeedItem("entity.ticket.submitterid", "en-US", "提交人ID_us", "提交人ID（序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.ticket.submitterid", "en-US", "提交人ID_us", "提交人 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
             // entity.ticket.submitterid
-            new TranslationSeedItem("entity.ticket.submitterid", "ja-JP", "提交人ID_jp", "提交人ID（序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.ticket.submitterid", "ja-JP", "提交人ID_jp", "提交人 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
             // entity.ticket.submitterid
-            new TranslationSeedItem("entity.ticket.submitterid", "zh-CN", "提交人ID", "提交人ID（序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.ticket.submitterid", "zh-CN", "提交人ID", "提交人 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
             // entity.ticket.submitterid
-            new TranslationSeedItem("entity.ticket.submitterid", "zh-HK", "提交人ID_hk", "提交人ID（序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.ticket.submitterid", "zh-HK", "提交人ID_hk", "提交人 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
 
             // entity.ticket.submittername
             new TranslationSeedItem("entity.ticket.submittername", "en-US", "提交人姓名_us", "提交人姓名"),
@@ -199,13 +190,13 @@ public class TaktTicketI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ticket.submittername", "zh-HK", "提交人姓名_hk", "提交人姓名"),
 
             // entity.ticket.assigneeid
-            new TranslationSeedItem("entity.ticket.assigneeid", "en-US", "处理人ID_us", "处理人ID（序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.ticket.assigneeid", "en-US", "处理人ID_us", "处理人 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
             // entity.ticket.assigneeid
-            new TranslationSeedItem("entity.ticket.assigneeid", "ja-JP", "处理人ID_jp", "处理人ID（序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.ticket.assigneeid", "ja-JP", "处理人ID_jp", "处理人 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
             // entity.ticket.assigneeid
-            new TranslationSeedItem("entity.ticket.assigneeid", "zh-CN", "处理人ID", "处理人ID（序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.ticket.assigneeid", "zh-CN", "处理人ID", "处理人 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
             // entity.ticket.assigneeid
-            new TranslationSeedItem("entity.ticket.assigneeid", "zh-HK", "处理人ID_hk", "处理人ID（序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.ticket.assigneeid", "zh-HK", "处理人ID_hk", "处理人 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
 
             // entity.ticket.assigneename
             new TranslationSeedItem("entity.ticket.assigneename", "en-US", "处理人姓名_us", "处理人姓名"),
@@ -217,22 +208,22 @@ public class TaktTicketI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ticket.assigneename", "zh-HK", "处理人姓名_hk", "处理人姓名"),
 
             // entity.ticket.knowledgeid
-            new TranslationSeedItem("entity.ticket.knowledgeid", "en-US", "关联知识ID_us", "关联知识ID（可选，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.ticket.knowledgeid", "en-US", "关联知识ID_us", "关联知识 ID（关联 TaktKnowledge.Id，选项 TaktKnowledges/options）"),
             // entity.ticket.knowledgeid
-            new TranslationSeedItem("entity.ticket.knowledgeid", "ja-JP", "关联知识ID_jp", "关联知识ID（可选，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.ticket.knowledgeid", "ja-JP", "关联知识ID_jp", "关联知识 ID（关联 TaktKnowledge.Id，选项 TaktKnowledges/options）"),
             // entity.ticket.knowledgeid
-            new TranslationSeedItem("entity.ticket.knowledgeid", "zh-CN", "关联知识ID", "关联知识ID（可选，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.ticket.knowledgeid", "zh-CN", "关联知识ID", "关联知识 ID（关联 TaktKnowledge.Id，选项 TaktKnowledges/options）"),
             // entity.ticket.knowledgeid
-            new TranslationSeedItem("entity.ticket.knowledgeid", "zh-HK", "关联知识ID_hk", "关联知识ID（可选，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.ticket.knowledgeid", "zh-HK", "关联知识ID_hk", "关联知识 ID（关联 TaktKnowledge.Id，选项 TaktKnowledges/options）"),
 
             // entity.ticket.parentticketid
-            new TranslationSeedItem("entity.ticket.parentticketid", "en-US", "父工单ID_us", "父工单ID（为空表示顶级工单；非空表示该工单为子工单，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.ticket.parentticketid", "en-US", "父工单ID_us", "父工单 ID（关联 TaktTicket.Id，选项 TaktTickets/options；为空表示顶级工单）"),
             // entity.ticket.parentticketid
-            new TranslationSeedItem("entity.ticket.parentticketid", "ja-JP", "父工单ID_jp", "父工单ID（为空表示顶级工单；非空表示该工单为子工单，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.ticket.parentticketid", "ja-JP", "父工单ID_jp", "父工单 ID（关联 TaktTicket.Id，选项 TaktTickets/options；为空表示顶级工单）"),
             // entity.ticket.parentticketid
-            new TranslationSeedItem("entity.ticket.parentticketid", "zh-CN", "父工单ID", "父工单ID（为空表示顶级工单；非空表示该工单为子工单，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.ticket.parentticketid", "zh-CN", "父工单ID", "父工单 ID（关联 TaktTicket.Id，选项 TaktTickets/options；为空表示顶级工单）"),
             // entity.ticket.parentticketid
-            new TranslationSeedItem("entity.ticket.parentticketid", "zh-HK", "父工单ID_hk", "父工单ID（为空表示顶级工单；非空表示该工单为子工单，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.ticket.parentticketid", "zh-HK", "父工单ID_hk", "父工单 ID（关联 TaktTicket.Id，选项 TaktTickets/options；为空表示顶级工单）"),
 
             // entity.ticket.firstresponseat
             new TranslationSeedItem("entity.ticket.firstresponseat", "en-US", "首次响应时间_us", "首次响应时间（支持人员首次回复用户的时间，SLA/OLA 时间追踪）"),
@@ -280,13 +271,13 @@ public class TaktTicketI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ticket.closedat", "zh-HK", "关闭时间_hk", "关闭时间（工单最终关闭的时间）"),
 
             // entity.ticket.itassetid
-            new TranslationSeedItem("entity.ticket.itassetid", "en-US", "IT设备ID_us", "关联 IT 设备保修扩展 ID"),
+            new TranslationSeedItem("entity.ticket.itassetid", "en-US", "IT设备ID_us", "IT 设备保修扩展 ID（关联 TaktItAsset.Id，选项 TaktItAssets/options）"),
             // entity.ticket.itassetid
-            new TranslationSeedItem("entity.ticket.itassetid", "ja-JP", "IT设备ID_jp", "关联 IT 设备保修扩展 ID"),
+            new TranslationSeedItem("entity.ticket.itassetid", "ja-JP", "IT设备ID_jp", "IT 设备保修扩展 ID（关联 TaktItAsset.Id，选项 TaktItAssets/options）"),
             // entity.ticket.itassetid
-            new TranslationSeedItem("entity.ticket.itassetid", "zh-CN", "IT设备ID", "关联 IT 设备保修扩展 ID"),
+            new TranslationSeedItem("entity.ticket.itassetid", "zh-CN", "IT设备ID", "IT 设备保修扩展 ID（关联 TaktItAsset.Id，选项 TaktItAssets/options）"),
             // entity.ticket.itassetid
-            new TranslationSeedItem("entity.ticket.itassetid", "zh-HK", "IT设备ID_hk", "关联 IT 设备保修扩展 ID"),
+            new TranslationSeedItem("entity.ticket.itassetid", "zh-HK", "IT设备ID_hk", "IT 设备保修扩展 ID（关联 TaktItAsset.Id，选项 TaktItAssets/options）"),
 
             // entity.ticket.assetcode
             new TranslationSeedItem("entity.ticket.assetcode", "en-US", "资产号码_us", "资产号码（冗余；与 TaktItAsset.AssetCode 一致）"),
@@ -298,22 +289,22 @@ public class TaktTicketI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ticket.assetcode", "zh-HK", "资产号码_hk", "资产号码（冗余；与 TaktItAsset.AssetCode 一致）"),
 
             // entity.ticket.flowinstanceid
-            new TranslationSeedItem("entity.ticket.flowinstanceid", "en-US", "流程实例ID_us", "流程实例ID（关联工作流；流程侧 BusinessType=Ticket、BusinessKey=本表 Id）"),
+            new TranslationSeedItem("entity.ticket.flowinstanceid", "en-US", "流程实例ID_us", "流程实例 ID（关联 TaktFlowInstance.Id；流程侧 BusinessType=Ticket、BusinessKey=本表 Id）"),
             // entity.ticket.flowinstanceid
-            new TranslationSeedItem("entity.ticket.flowinstanceid", "ja-JP", "流程实例ID_jp", "流程实例ID（关联工作流；流程侧 BusinessType=Ticket、BusinessKey=本表 Id）"),
+            new TranslationSeedItem("entity.ticket.flowinstanceid", "ja-JP", "流程实例ID_jp", "流程实例 ID（关联 TaktFlowInstance.Id；流程侧 BusinessType=Ticket、BusinessKey=本表 Id）"),
             // entity.ticket.flowinstanceid
-            new TranslationSeedItem("entity.ticket.flowinstanceid", "zh-CN", "流程实例ID", "流程实例ID（关联工作流；流程侧 BusinessType=Ticket、BusinessKey=本表 Id）"),
+            new TranslationSeedItem("entity.ticket.flowinstanceid", "zh-CN", "流程实例ID", "流程实例 ID（关联 TaktFlowInstance.Id；流程侧 BusinessType=Ticket、BusinessKey=本表 Id）"),
             // entity.ticket.flowinstanceid
-            new TranslationSeedItem("entity.ticket.flowinstanceid", "zh-HK", "流程实例ID_hk", "流程实例ID（关联工作流；流程侧 BusinessType=Ticket、BusinessKey=本表 Id）"),
+            new TranslationSeedItem("entity.ticket.flowinstanceid", "zh-HK", "流程实例ID_hk", "流程实例 ID（关联 TaktFlowInstance.Id；流程侧 BusinessType=Ticket、BusinessKey=本表 Id）"),
 
             // entity.ticket.applicantdeptid
-            new TranslationSeedItem("entity.ticket.applicantdeptid", "en-US", "申请部门ID_us", "申请部门ID"),
+            new TranslationSeedItem("entity.ticket.applicantdeptid", "en-US", "申请部门ID_us", "申请部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
             // entity.ticket.applicantdeptid
-            new TranslationSeedItem("entity.ticket.applicantdeptid", "ja-JP", "申请部门ID_jp", "申请部门ID"),
+            new TranslationSeedItem("entity.ticket.applicantdeptid", "ja-JP", "申请部门ID_jp", "申请部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
             // entity.ticket.applicantdeptid
-            new TranslationSeedItem("entity.ticket.applicantdeptid", "zh-CN", "申请部门ID", "申请部门ID"),
+            new TranslationSeedItem("entity.ticket.applicantdeptid", "zh-CN", "申请部门ID", "申请部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
             // entity.ticket.applicantdeptid
-            new TranslationSeedItem("entity.ticket.applicantdeptid", "zh-HK", "申请部门ID_hk", "申请部门ID"),
+            new TranslationSeedItem("entity.ticket.applicantdeptid", "zh-HK", "申请部门ID_hk", "申请部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
 
             // entity.ticket.applicantdeptname
             new TranslationSeedItem("entity.ticket.applicantdeptname", "en-US", "申请部门名称_us", "申请部门名称"),
@@ -325,13 +316,22 @@ public class TaktTicketI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ticket.applicantdeptname", "zh-HK", "申请部门名称_hk", "申请部门名称"),
 
             // entity.ticket.applicantby
-            new TranslationSeedItem("entity.ticket.applicantby", "en-US", "申请人_us", "申请人（实际申请人；代理人代提时填被代理人）"),
+            new TranslationSeedItem("entity.ticket.applicantby", "en-US", "申请人_us", "申请人 ID（关联 TaktUser.Id，选项 TaktUsers/options；代理人代提时填被代理人）"),
             // entity.ticket.applicantby
-            new TranslationSeedItem("entity.ticket.applicantby", "ja-JP", "申请人_jp", "申请人（实际申请人；代理人代提时填被代理人）"),
+            new TranslationSeedItem("entity.ticket.applicantby", "ja-JP", "申请人_jp", "申请人 ID（关联 TaktUser.Id，选项 TaktUsers/options；代理人代提时填被代理人）"),
             // entity.ticket.applicantby
-            new TranslationSeedItem("entity.ticket.applicantby", "zh-CN", "申请人", "申请人（实际申请人；代理人代提时填被代理人）"),
+            new TranslationSeedItem("entity.ticket.applicantby", "zh-CN", "申请人", "申请人 ID（关联 TaktUser.Id，选项 TaktUsers/options；代理人代提时填被代理人）"),
             // entity.ticket.applicantby
-            new TranslationSeedItem("entity.ticket.applicantby", "zh-HK", "申请人_hk", "申请人（实际申请人；代理人代提时填被代理人）"),
+            new TranslationSeedItem("entity.ticket.applicantby", "zh-HK", "申请人_hk", "申请人 ID（关联 TaktUser.Id，选项 TaktUsers/options；代理人代提时填被代理人）"),
+
+            // entity.ticket.status
+            new TranslationSeedItem("entity.ticket.status", "en-US", "工单状态_us", "工单状态（字典 sys_ticket_status；0=新建 1=已分配 2=处理中 3=待确认 4=已完成 5=已关闭 6=已取消 7=重新打开）"),
+            // entity.ticket.status
+            new TranslationSeedItem("entity.ticket.status", "ja-JP", "工单状态_jp", "工单状态（字典 sys_ticket_status；0=新建 1=已分配 2=处理中 3=待确认 4=已完成 5=已关闭 6=已取消 7=重新打开）"),
+            // entity.ticket.status
+            new TranslationSeedItem("entity.ticket.status", "zh-CN", "工单状态", "工单状态（字典 sys_ticket_status；0=新建 1=已分配 2=处理中 3=待确认 4=已完成 5=已关闭 6=已取消 7=重新打开）"),
+            // entity.ticket.status
+            new TranslationSeedItem("entity.ticket.status", "zh-HK", "工单状态_hk", "工单状态（字典 sys_ticket_status；0=新建 1=已分配 2=处理中 3=待确认 4=已完成 5=已关闭 6=已取消 7=重新打开）"),
 
             // entity.ticket.childtickets
             new TranslationSeedItem("entity.ticket.childtickets", "en-US", "子工单列表_us", "子工单列表（父工单时有效；外键：本表 Id = 子工单 ParentTicketId）"),

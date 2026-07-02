@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/quality/cost
 // 文件名称：incident-item.d.ts
-// 创建时间：2026-06-21
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/cost 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -248,7 +248,7 @@ export interface QualityIncidentItemCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -397,9 +397,49 @@ export interface QualityIncidentItemTemplate {
   materialName?: string;
 
   /**
+   * 废弃费用(元)
+   */
+  scrapCost?: number;
+
+  /**
+   * 废弃数量
+   */
+  scrapSize?: number;
+
+  /**
+   * 零件单价(元)
+   */
+  partPrice?: number;
+
+  /**
+   * 废弃处理费用(元)
+   */
+  scrapReasonCost?: number;
+
+  /**
+   * 运费(元)
+   */
+  freightCharges?: number;
+
+  /**
+   * 其他费用(元)
+   */
+  otherExpenses?: number;
+
+  /**
    * 处理作业时间(分钟)
    */
   reasonWorkTimeMinutes?: number;
+
+  /**
+   * 关税(元)
+   */
+  tax?: number;
+
+  /**
+   * 处理发生其他费用(元)
+   */
+  reasonOtherExpenses?: number;
 
   /**
    * 废弃备注
@@ -436,7 +476,7 @@ export interface QualityIncidentItemImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -466,9 +506,49 @@ export interface QualityIncidentItemImport {
   materialName?: string;
 
   /**
+   * 废弃费用(元)
+   */
+  scrapCost?: number;
+
+  /**
+   * 废弃数量
+   */
+  scrapSize?: number;
+
+  /**
+   * 零件单价(元)
+   */
+  partPrice?: number;
+
+  /**
+   * 废弃处理费用(元)
+   */
+  scrapReasonCost?: number;
+
+  /**
+   * 运费(元)
+   */
+  freightCharges?: number;
+
+  /**
+   * 其他费用(元)
+   */
+  otherExpenses?: number;
+
+  /**
    * 处理作业时间(分钟)
    */
   reasonWorkTimeMinutes?: number;
+
+  /**
+   * 关税(元)
+   */
+  tax?: number;
+
+  /**
+   * 处理发生其他费用(元)
+   */
+  reasonOtherExpenses?: number;
 
   /**
    * 废弃备注

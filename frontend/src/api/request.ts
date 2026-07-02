@@ -27,8 +27,14 @@ import { createLogger } from '@/utils/logger';
 import { resolveHttpErrorMessage } from '@/utils/takt-http-error-message';
 import { translateLocaleMessage } from '@/utils/takt-i18n-message';
 import { EventBus, emitNotification } from '@/utils/event-bus';
+import {
+  attachApiPerformanceStart,
+  observeApiPerformanceError,
+  observeApiPerformanceResponse,
+} from '@/utils/takt-api-performance-tracker';
 import { ensureValidAccessToken, refreshOAuthTokens } from '@/utils/oauth';
 import { isLogoutInProgress } from '@/bootstrap/takt-logout-flow';
+import { buildTaktClientProfileHeaders } from '@/utils/takt-client-profile';
 
 const requestLogger = createLogger('request');
 
@@ -39,6 +45,10 @@ declare module 'axios' {
     _retryAuth?: boolean;
     /** 跳过请求前主动刷新（登录等接口） */
     skipTokenRefresh?: boolean;
+    /** 请求开始 performance.now()（API 性能监控） */
+    _taktPerfStartMs?: number;
+    /** 跳过 API 性能监控 */
+    skipApiPerformanceTrack?: boolean;
   }
 }
 
@@ -178,6 +188,15 @@ function emitSessionExpired(message?: string): void {
  */
 function isSkipLoginAuthError(config?: InternalAxiosRequestConfig): boolean {
   return Boolean(config?.skipLoginAuthError);
+}
+
+/**
+ * 是否为 Cookie 会话注销（登出进行中仍须放行，否则服务端无法回填 LogoutAt / 关闭 Online）
+ * @param config Axios 请求配置
+ */
+function isSignOutSessionRequest(config?: InternalAxiosRequestConfig): boolean {
+  const url = config?.url ?? '';
+  return url.includes('session/signout');
 }
 
 /**
@@ -408,7 +427,7 @@ const axiosInstance: AxiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   async (config: InternalAxiosRequestConfig) => {
-    if (isLogoutInProgress()) {
+    if (isLogoutInProgress() && !isSignOutSessionRequest(config)) {
       return Promise.reject(new Error('logout in progress'));
     }
 
@@ -435,13 +454,23 @@ axiosInstance.interceptors.request.use(
 
     config.headers['Accept-Language'] = resolveRequestLocale();
 
+    const clientProfileHeaders = buildTaktClientProfileHeaders();
+    for (const [key, value] of Object.entries(clientProfileHeaders)) {
+      config.headers[key] = value;
+    }
+
     if (config.data instanceof FormData) {
       delete config.headers['Content-Type'];
     }
 
-    return config;
+    return attachApiPerformanceStart(config);
   },
   (error: unknown) => Promise.reject(error)
+);
+
+axiosInstance.interceptors.response.use(
+  (response: AxiosResponse) => observeApiPerformanceResponse(response),
+  (error: unknown) => observeApiPerformanceError(error)
 );
 
 axiosInstance.interceptors.response.use(

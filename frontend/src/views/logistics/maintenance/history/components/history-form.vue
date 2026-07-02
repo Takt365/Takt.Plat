@@ -412,12 +412,11 @@
                 :label="t('entity.maintenancehistory.acceptedat')"
                 name="acceptedAt"
               >
-                <a-input
+                <a-date-picker
                   v-model:value="formState.acceptedAt"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenancehistory.acceptedat') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenancehistory.acceptedat') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
@@ -426,12 +425,11 @@
                 :label="t('entity.maintenancehistory.archivedat')"
                 name="archivedAt"
               >
-                <a-input
+                <a-date-picker
                   v-model:value="formState.archivedAt"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenancehistory.archivedat') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenancehistory.archivedat') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
@@ -722,8 +720,8 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   archivedAt: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.maintenancehistory.archivedat') }),
-      trigger: 'blur'
+      message: t('common.page.form.placeholder.select', { field: t('entity.maintenancehistory.archivedat') }),
+      trigger: 'change'
     }
   ],
 }))

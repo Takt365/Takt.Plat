@@ -32,7 +32,7 @@ public class TaktEcSeizouikkasController : TaktControllerBase
     public TaktEcSeizouikkasController(ITaktEcSeizouikkaService service) => _service = service;
 
     /// <summary>获取制造一课列表（分页）</summary>
-    [TaktPermission("logistics:manufacturing:engineeringchange:seizouikka:list", "制造一课列表")]
+    [TaktPermission("logistics:manufacturing:engineering:change:seizouikka:list", "制造一课列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetEcSeizouikkaListAsync([FromQuery] TaktEcDeptViewQueryDto queryDto)
     {
@@ -41,7 +41,7 @@ public class TaktEcSeizouikkasController : TaktControllerBase
     }
 
     /// <summary>根据设变明细 ID 获取制造一课行</summary>
-    [TaktPermission("logistics:manufacturing:engineeringchange:seizouikka:query", "制造一课详情")]
+    [TaktPermission("logistics:manufacturing:engineering:change:seizouikka:query", "制造一课详情")]
     [HttpGet("detail/{ecDetailId}")]
     public async Task<IActionResult> GetEcSeizouikkaByEcDetailIdAsync(long ecDetailId)
     {
@@ -50,7 +50,7 @@ public class TaktEcSeizouikkasController : TaktControllerBase
     }
 
     /// <summary>更新制造一课</summary>
-    [TaktPermission("logistics:manufacturing:engineeringchange:seizouikka:update", "更新制造一课")]
+    [TaktPermission("logistics:manufacturing:engineering:change:seizouikka:update", "更新制造一课")]
     [HttpPut("detail/{ecDetailId}")]
     public async Task<IActionResult> UpdateEcSeizouikkaAsync(long ecDetailId, [FromBody] TaktEcDeptViewUpdateDto dto)
     {
@@ -59,7 +59,7 @@ public class TaktEcSeizouikkasController : TaktControllerBase
     }
 
     /// <summary>导出制造一课</summary>
-    [TaktPermission("logistics:manufacturing:engineeringchange:seizouikka:export", "导出制造一课")]
+    [TaktPermission("logistics:manufacturing:engineering:change:seizouikka:export", "导出制造一课")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportEcSeizouikkaAsync([FromQuery] TaktEcDeptViewQueryDto? query)
     {

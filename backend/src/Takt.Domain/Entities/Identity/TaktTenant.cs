@@ -61,9 +61,9 @@ public class TaktTenant : TaktTenantEntityBase
     public string ContactEmail { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否内置（字典 sys_yes_no_type；种子租户 000/500/100 为内置，不允许删除）
+    /// 内置（字典 sys_yes_no_type；种子租户 000/500/100 为内置，不允许删除）
     /// </summary>
-    [SugarColumn(ColumnName = "is_built_in", ColumnDescription = "是否内置", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    [SugarColumn(ColumnName = "is_built_in", ColumnDescription = "内置", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>

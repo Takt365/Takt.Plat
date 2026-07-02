@@ -73,38 +73,44 @@
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'customerStatus'">
           <a-switch
-            :checked="getCustomerField(record, 'customerStatus') === 1"
+            :checked="getCustomerDictValue(record, 'customerStatus') === 1"
             :checked-children="t('common.page.button.enable')" :un-checked-children="t('common.page.button.disable')"
             @change="(checked: unknown) => handleCustomerStatusChange(record, Boolean(checked))"
           />
         </template>
         <template v-else-if="column.key === 'customerType'">
           <TaktDictTag
-            :value="getCustomerField(record, 'customerType')"
+            :value="getCustomerDictValue(record, 'customerType')"
             dict-type="logistics_customer_category"
+          />
+        </template>
+        <template v-else-if="column.key === 'taxRate'">
+          <TaktDictTag
+            :value="getCustomerDictValue(record, 'taxRate')"
+            dict-type="accounting_tax_rate_param"
           />
         </template>
         <template v-else-if="column.key === 'paymentTerms'">
           <TaktDictTag
-            :value="getCustomerField(record, 'paymentTerms')"
-            dict-type="logistics_payment_terms_param"
+            :value="getCustomerDictValue(record, 'paymentTerms')"
+            dict-type="accounting_payment_terms_param"
           />
         </template>
         <template v-else-if="column.key === 'creditLevel'">
           <TaktDictTag
-            :value="getCustomerField(record, 'creditLevel')"
+            :value="getCustomerDictValue(record, 'creditLevel')"
             dict-type="logistics_credit_rating_category"
           />
         </template>
         <template v-else-if="column.key === 'discountRate'">
           <TaktDictTag
-            :value="getCustomerField(record, 'discountRate')"
+            :value="getCustomerDictValue(record, 'discountRate')"
             dict-type="logistics_discount_rate_param"
           />
         </template>
         <template v-else-if="column.key === 'customerLevel'">
           <TaktDictTag
-            :value="getCustomerField(record, 'customerLevel')"
+            :value="getCustomerDictValue(record, 'customerLevel')"
             dict-type="logistics_customer_level_category"
           />
         </template>
@@ -150,21 +156,20 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="t('entity.customer.plantcode')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('plantCode')">
+        <TaktSelect
           v-model:value="advancedQueryForm.plantCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customer.plantcode') })"
-          show-count
-          :maxlength="4"
+          api-url="TaktPlants/options"
+          :placeholder="pi.queryPh('plantCode', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('customerCode')">
-      <a-form-item :label="t('entity.customer.code')">
+      <a-form-item :label="pi.queryLabel('customerCode')">
         <a-input
           v-model:value="advancedQueryForm.customerCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customer.code') })"
+          :placeholder="pi.queryPh('customerCode', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -172,10 +177,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('customerName')">
-      <a-form-item :label="t('entity.customer.name')">
+      <a-form-item :label="pi.queryLabel('customerName')">
         <a-input
           v-model:value="advancedQueryForm.customerName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customer.name') })"
+          :placeholder="pi.queryPh('customerName', 'required')"
           show-count
           :maxlength="80"
           allow-clear
@@ -183,10 +188,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('customerShortName')">
-      <a-form-item :label="t('entity.customer.shortname')">
+      <a-form-item :label="pi.queryLabel('customerShortName')">
         <a-input
           v-model:value="advancedQueryForm.customerShortName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customer.shortname') })"
+          :placeholder="pi.queryPh('customerShortName', 'required')"
           show-count
           :maxlength="40"
           allow-clear
@@ -194,20 +199,20 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('customerType')">
-      <a-form-item :label="t('entity.customer.type')">
+      <a-form-item :label="pi.queryLabel('customerType')">
         <TaktSelect
           v-model:value="advancedQueryForm.customerType"
           dict-type="logistics_customer_category"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.customer.type') })"
+          :placeholder="pi.queryPh('customerType', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('industrySector')">
-      <a-form-item :label="t('entity.customer.industrysector')">
+      <a-form-item :label="pi.queryLabel('industrySector')">
         <a-input
           v-model:value="advancedQueryForm.industrySector"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customer.industrysector') })"
+          :placeholder="pi.queryPh('industrySector', 'required')"
           show-count
           :maxlength="50"
           allow-clear
@@ -215,21 +220,31 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('customerTaxNumber')">
-      <a-form-item :label="t('entity.customer.taxnumber')">
+      <a-form-item :label="pi.queryLabel('customerTaxNumber')">
         <a-input
           v-model:value="advancedQueryForm.customerTaxNumber"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customer.taxnumber') })"
+          :placeholder="pi.queryPh('customerTaxNumber', 'required')"
           show-count
           :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
+      <div v-show="isFieldVisible('taxRate')">
+      <a-form-item :label="pi.queryLabel('taxRate')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.taxRate"
+          dict-type="accounting_tax_rate_param"
+          :placeholder="pi.queryPh('taxRate', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('registrationCountry')">
-      <a-form-item :label="t('entity.customer.registrationcountry')">
+      <a-form-item :label="pi.queryLabel('registrationCountry')">
         <a-input
           v-model:value="advancedQueryForm.registrationCountry"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customer.registrationcountry') })"
+          :placeholder="pi.queryPh('registrationCountry', 'required')"
           show-count
           :maxlength="2"
           allow-clear
@@ -237,40 +252,40 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('registrationAddress1')">
-      <a-form-item :label="t('entity.customer.registrationaddress1')">
+      <a-form-item :label="pi.queryLabel('registrationAddress1')">
         <a-textarea
           v-model:value="advancedQueryForm.registrationAddress1"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.customer.registrationaddress1') })"
+          :placeholder="pi.queryPh('registrationAddress1', 'optional')"
           :rows="2"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('registrationAddress2')">
-      <a-form-item :label="t('entity.customer.registrationaddress2')">
+      <a-form-item :label="pi.queryLabel('registrationAddress2')">
         <a-textarea
           v-model:value="advancedQueryForm.registrationAddress2"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.customer.registrationaddress2') })"
+          :placeholder="pi.queryPh('registrationAddress2', 'optional')"
           :rows="2"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('registrationAddress3')">
-      <a-form-item :label="t('entity.customer.registrationaddress3')">
+      <a-form-item :label="pi.queryLabel('registrationAddress3')">
         <a-textarea
           v-model:value="advancedQueryForm.registrationAddress3"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.customer.registrationaddress3') })"
+          :placeholder="pi.queryPh('registrationAddress3', 'optional')"
           :rows="2"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('customerPhone')">
-      <a-form-item :label="t('entity.customer.phone')">
+      <a-form-item :label="pi.queryLabel('customerPhone')">
         <a-input
           v-model:value="advancedQueryForm.customerPhone"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customer.phone') })"
+          :placeholder="pi.queryPh('customerPhone', 'required')"
           show-count
           :maxlength="50"
           allow-clear
@@ -278,10 +293,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('customerFax')">
-      <a-form-item :label="t('entity.customer.fax')">
+      <a-form-item :label="pi.queryLabel('customerFax')">
         <a-input
           v-model:value="advancedQueryForm.customerFax"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customer.fax') })"
+          :placeholder="pi.queryPh('customerFax', 'required')"
           show-count
           :maxlength="50"
           allow-clear
@@ -289,10 +304,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('customerEmail')">
-      <a-form-item :label="t('entity.customer.email')">
+      <a-form-item :label="pi.queryLabel('customerEmail')">
         <a-input
           v-model:value="advancedQueryForm.customerEmail"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customer.email') })"
+          :placeholder="pi.queryPh('customerEmail', 'required')"
           show-count
           :maxlength="100"
           allow-clear
@@ -300,10 +315,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('customerWebsite')">
-      <a-form-item :label="t('entity.customer.website')">
+      <a-form-item :label="pi.queryLabel('customerWebsite')">
         <a-input
           v-model:value="advancedQueryForm.customerWebsite"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customer.website') })"
+          :placeholder="pi.queryPh('customerWebsite', 'required')"
           show-count
           :maxlength="200"
           allow-clear
@@ -311,10 +326,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('contactPerson')">
-      <a-form-item :label="t('entity.customer.contactperson')">
+      <a-form-item :label="pi.queryLabel('contactPerson')">
         <a-input
           v-model:value="advancedQueryForm.contactPerson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customer.contactperson') })"
+          :placeholder="pi.queryPh('contactPerson', 'required')"
           show-count
           :maxlength="50"
           allow-clear
@@ -322,10 +337,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('contactPhone')">
-      <a-form-item :label="t('entity.customer.contactphone')">
+      <a-form-item :label="pi.queryLabel('contactPhone')">
         <a-input
           v-model:value="advancedQueryForm.contactPhone"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customer.contactphone') })"
+          :placeholder="pi.queryPh('contactPhone', 'required')"
           show-count
           :maxlength="50"
           allow-clear
@@ -333,10 +348,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('contactEmail')">
-      <a-form-item :label="t('entity.customer.contactemail')">
+      <a-form-item :label="pi.queryLabel('contactEmail')">
         <a-input
           v-model:value="advancedQueryForm.contactEmail"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customer.contactemail') })"
+          :placeholder="pi.queryPh('contactEmail', 'required')"
           show-count
           :maxlength="100"
           allow-clear
@@ -344,122 +359,112 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('currencyCode')">
-      <a-form-item :label="t('entity.customer.currencycode')">
+      <a-form-item :label="pi.queryLabel('currencyCode')">
         <a-input
           v-model:value="advancedQueryForm.currencyCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customer.currencycode') })"
+          :placeholder="pi.queryPh('currencyCode', 'required')"
           show-count
-          :maxlength="10"
+          :maxlength="3"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('paymentTerms')">
-      <a-form-item :label="t('entity.customer.paymentterms')">
+      <a-form-item :label="pi.queryLabel('paymentTerms')">
         <TaktSelect
           v-model:value="advancedQueryForm.paymentTerms"
-          dict-type="logistics_payment_terms_param"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.customer.paymentterms') })"
+          dict-type="accounting_payment_terms_param"
+          :placeholder="pi.queryPh('paymentTerms', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('creditLevel')">
-      <a-form-item :label="t('entity.customer.creditlevel')">
+      <a-form-item :label="pi.queryLabel('creditLevel')">
         <TaktSelect
           v-model:value="advancedQueryForm.creditLevel"
           dict-type="logistics_credit_rating_category"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.customer.creditlevel') })"
+          :placeholder="pi.queryPh('creditLevel', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('creditAmount')">
-      <a-form-item :label="t('entity.customer.creditamount')">
+      <a-form-item :label="pi.queryLabel('creditAmount')">
         <a-input-number
           v-model:value="advancedQueryForm.creditAmount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customer.creditamount') })"
+          :placeholder="pi.queryPh('creditAmount', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('discountRate')">
-      <a-form-item :label="t('entity.customer.discountrate')">
+      <a-form-item :label="pi.queryLabel('discountRate')">
         <TaktSelect
           v-model:value="advancedQueryForm.discountRate"
           dict-type="logistics_discount_rate_param"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.customer.discountrate') })"
+          :placeholder="pi.queryPh('discountRate', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('salesBy')">
-      <a-form-item :label="t('entity.customer.salesby')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('salesBy')">
+        <TaktSelect
           v-model:value="advancedQueryForm.salesBy"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customer.salesby') })"
-          show-count
-          :maxlength="50"
+          api-url="TaktEmployees/options"
+          :placeholder="pi.queryPh('salesBy', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('customerLevel')">
-      <a-form-item :label="t('entity.customer.level')">
+      <a-form-item :label="pi.queryLabel('customerLevel')">
         <TaktSelect
           v-model:value="advancedQueryForm.customerLevel"
           dict-type="logistics_customer_level_category"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.customer.level') })"
+          :placeholder="pi.queryPh('customerLevel', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('evaluationScore')">
-      <a-form-item :label="t('entity.customer.evaluationscore')">
+      <a-form-item :label="pi.queryLabel('evaluationScore')">
         <a-input-number
           v-model:value="advancedQueryForm.evaluationScore"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customer.evaluationscore') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('isQualified')">
-      <a-form-item :label="t('entity.customer.isqualified')">
-        <a-input-number
-          v-model:value="advancedQueryForm.isQualified"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customer.isqualified') })"
+          :placeholder="pi.queryPh('evaluationScore', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('customerStatus')">
-      <a-form-item :label="t('entity.customer.status')">
+      <a-form-item :label="pi.queryLabel('customerStatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.customerStatus"
           dict-type="sys_normal_disable_status"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.customer.status') })"
+          :placeholder="pi.queryPh('customerStatus', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="t('common.page.entity.createdatstart')">
+      <a-form-item :label="pi.queryLabel('createdAtStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          :placeholder="pi.queryPh('createdAtStart', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="t('common.page.entity.createdatend')">
+      <a-form-item :label="pi.queryLabel('createdAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          :placeholder="pi.queryPh('createdAtEnd', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -479,7 +484,7 @@
             >
               <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
             </a-tooltip>
-            <span>{{ t('common.page.entity.extfield') }}</span>
+            <span>{{ pi.queryLabel('extField') }}</span>
           </span>
         </template>
         <a-textarea
@@ -493,10 +498,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="t('common.page.entity.remark')">
+      <a-form-item :label="pi.queryLabel('remark')">
         <a-textarea
           v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+          :placeholder="pi.queryPh('remark', 'optional')"
             :rows="4"
             show-count
             :maxlength="400"
@@ -510,14 +515,15 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.customer._self') })"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.customer._self"
+        v-if="importVisible"
+        :entity-i18n-key="CUSTOMER_SELF_I18N_KEY"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -560,15 +566,28 @@ import type { Customer, CustomerQuery } from '@/types/logistics/sales/customer'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
+import {
+  useCustomerI18n,
+  CUSTOMER_LIST_FIELDS,
+  CUSTOMER_QUERY_STRING_FIELDS,
+  CUSTOMER_QUERY_FIELDS,
+  CUSTOMER_SELF_I18N_KEY,
+} from './composables/use-customer-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = useCustomerI18n()
+/** 表格行类型（TaktSingleTable slot record 与 dataSource 行兼容） */
+type CustomerRowRecord = Customer | Record<string, unknown>
 /** i18n 翻译函数 */
 const { t } = useI18n()
 /** Excel 导入/导出默认 sheet 名与文件名前缀 */
 const excelNames = taktExcelEntityNames('TaktCustomer')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.customer._self') })
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() })
 )
 
 /** 快捷查询关键字 */
@@ -584,9 +603,9 @@ const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
-const selectedRow = ref<Customer | null>(null)
+const selectedRow = ref<CustomerRowRecord | null>(null)
 /** 表格多选行 */
-const selectedRows = ref<Customer[]>([])
+const selectedRows = ref<CustomerRowRecord[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 
@@ -603,76 +622,33 @@ const formRef = ref()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
+/**
+ * 创建空的高级查询表单
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(CUSTOMER_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof CUSTOMER_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  return {
+    ...form,
+    customerType: undefined as number | undefined,
+    taxRate: undefined as number | undefined,
+    creditLevel: undefined as number | undefined,
+    creditAmount: undefined as number | undefined,
+    discountRate: undefined as number | undefined,
+    customerLevel: undefined as number | undefined,
+    evaluationScore: undefined as number | undefined,
+    customerStatus: undefined as number | undefined,
+  }
+}
 /** 高级查询表单模型 */
-const advancedQueryForm = ref({
-  plantCode: '',
-  customerCode: '',
-  customerName: '',
-  customerShortName: '',
-  customerType: undefined as number | undefined,
-  industrySector: '',
-  customerTaxNumber: '',
-  registrationCountry: '',
-  registrationAddress1: '',
-  registrationAddress2: '',
-  registrationAddress3: '',
-  customerPhone: '',
-  customerFax: '',
-  customerEmail: '',
-  customerWebsite: '',
-  contactPerson: '',
-  contactPhone: '',
-  contactEmail: '',
-  currencyCode: '',
-  paymentTerms: undefined as number | undefined,
-  creditLevel: undefined as number | undefined,
-  creditAmount: undefined as number | undefined,
-  discountRate: undefined as number | undefined,
-  salesBy: '',
-  customerLevel: undefined as number | undefined,
-  evaluationScore: undefined as number | undefined,
-  isQualified: undefined as number | undefined,
-  customerStatus: undefined as number | undefined,
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-})
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 /** 高级查询字段元数据（列显隐配置） */
-const queryFieldsMeta = computed(() => [
-  { key: 'plantCode', label: t('entity.customer.plantcode') },
-  { key: 'customerCode', label: t('entity.customer.code') },
-  { key: 'customerName', label: t('entity.customer.name') },
-  { key: 'customerShortName', label: t('entity.customer.shortname') },
-  { key: 'customerType', label: t('entity.customer.type') },
-  { key: 'industrySector', label: t('entity.customer.industrysector') },
-  { key: 'customerTaxNumber', label: t('entity.customer.taxnumber') },
-  { key: 'registrationCountry', label: t('entity.customer.registrationcountry') },
-  { key: 'registrationAddress1', label: t('entity.customer.registrationaddress1') },
-  { key: 'registrationAddress2', label: t('entity.customer.registrationaddress2') },
-  { key: 'registrationAddress3', label: t('entity.customer.registrationaddress3') },
-  { key: 'customerPhone', label: t('entity.customer.phone') },
-  { key: 'customerFax', label: t('entity.customer.fax') },
-  { key: 'customerEmail', label: t('entity.customer.email') },
-  { key: 'customerWebsite', label: t('entity.customer.website') },
-  { key: 'contactPerson', label: t('entity.customer.contactperson') },
-  { key: 'contactPhone', label: t('entity.customer.contactphone') },
-  { key: 'contactEmail', label: t('entity.customer.contactemail') },
-  { key: 'currencyCode', label: t('entity.customer.currencycode') },
-  { key: 'paymentTerms', label: t('entity.customer.paymentterms') },
-  { key: 'creditLevel', label: t('entity.customer.creditlevel') },
-  { key: 'creditAmount', label: t('entity.customer.creditamount') },
-  { key: 'discountRate', label: t('entity.customer.discountrate') },
-  { key: 'salesBy', label: t('entity.customer.salesby') },
-  { key: 'customerLevel', label: t('entity.customer.level') },
-  { key: 'evaluationScore', label: t('entity.customer.evaluationscore') },
-  { key: 'isQualified', label: t('entity.customer.isqualified') },
-  { key: 'customerStatus', label: t('entity.customer.status') },
-  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
-  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+const queryFieldsMeta = computed(() =>
+  CUSTOMER_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -714,29 +690,14 @@ function buildListQuery(overrides?: Partial<CustomerQuery>): CustomerQuery {
       query[key] = v as never
     }
   }
-  assignTrimmed('plantCode', form.plantCode)
-  assignTrimmed('customerCode', form.customerCode)
-  assignTrimmed('customerName', form.customerName)
-  assignTrimmed('customerShortName', form.customerShortName)
+  for (const key of CUSTOMER_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
+  }
   if (form.customerType !== undefined && form.customerType !== null) {
     query.customerType = form.customerType
   }
-  assignTrimmed('industrySector', form.industrySector)
-  assignTrimmed('customerTaxNumber', form.customerTaxNumber)
-  assignTrimmed('registrationCountry', form.registrationCountry)
-  assignTrimmed('registrationAddress1', form.registrationAddress1)
-  assignTrimmed('registrationAddress2', form.registrationAddress2)
-  assignTrimmed('registrationAddress3', form.registrationAddress3)
-  assignTrimmed('customerPhone', form.customerPhone)
-  assignTrimmed('customerFax', form.customerFax)
-  assignTrimmed('customerEmail', form.customerEmail)
-  assignTrimmed('customerWebsite', form.customerWebsite)
-  assignTrimmed('contactPerson', form.contactPerson)
-  assignTrimmed('contactPhone', form.contactPhone)
-  assignTrimmed('contactEmail', form.contactEmail)
-  assignTrimmed('currencyCode', form.currencyCode)
-  if (form.paymentTerms !== undefined && form.paymentTerms !== null) {
-    query.paymentTerms = form.paymentTerms
+  if (form.taxRate !== undefined && form.taxRate !== null) {
+    query.taxRate = form.taxRate
   }
   if (form.creditLevel !== undefined && form.creditLevel !== null) {
     query.creditLevel = form.creditLevel
@@ -747,23 +708,15 @@ function buildListQuery(overrides?: Partial<CustomerQuery>): CustomerQuery {
   if (form.discountRate !== undefined && form.discountRate !== null) {
     query.discountRate = form.discountRate
   }
-  assignTrimmed('salesBy', form.salesBy)
   if (form.customerLevel !== undefined && form.customerLevel !== null) {
     query.customerLevel = form.customerLevel
   }
   if (form.evaluationScore !== undefined && form.evaluationScore !== null) {
     query.evaluationScore = form.evaluationScore
   }
-  if (form.isQualified !== undefined && form.isQualified !== null) {
-    query.isQualified = form.isQualified
-  }
   if (form.customerStatus !== undefined && form.customerStatus !== null) {
     query.customerStatus = form.customerStatus
   }
-  assignTrimmed('createdAtStart', form.createdAtStart)
-  assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('extField', form.extField)
-  assignTrimmed('remark', form.remark)
   return query
 }
 /** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
@@ -774,269 +727,32 @@ onMounted(async () => {
 })
 
 
-
-
-
-
+/**
+ * 构建列表标准文本列
+ * @param key 列 key / dataIndex
+ * @param title 列标题
+ * @param options 宽度与固定列
+ */
+function buildCustomerListColumn(
+  key: string,
+  title: string,
+  options?: { width?: number; fixed?: 'left' },
+) {
+  return {
+    title,
+    dataIndex: key,
+    key,
+    width: options?.width ?? 120,
+    resizable: true,
+    ellipsis: true,
+    ...(options?.fixed ? { fixed: options.fixed } : {}),
+  }
+}
 
 /** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
-  {
-    title: t('common.page.entity.id'),
-    dataIndex: 'customerId',
-    key: 'customerId',
-    width: 80,
-    resizable: true,
-    ellipsis: true,
-    fixed: 'left',
-    customRender: ({ record }: { record: any }) => getCustomerField(record, 'customerId') ?? ''
-  },
-  {
-    title: t('entity.customer.plantcode'),
-    dataIndex: 'plantCode',
-    key: 'plantCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerField(record, 'plantCode') ?? ''
-  },
-  {
-    title: t('entity.customer.code'),
-    dataIndex: 'customerCode',
-    key: 'customerCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerField(record, 'customerCode') ?? ''
-  },
-  {
-    title: t('entity.customer.name'),
-    dataIndex: 'customerName',
-    key: 'customerName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerField(record, 'customerName') ?? ''
-  },
-  {
-    title: t('entity.customer.shortname'),
-    dataIndex: 'customerShortName',
-    key: 'customerShortName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerField(record, 'customerShortName') ?? ''
-  },
-  {
-    title: t('entity.customer.type'),
-    dataIndex: 'customerType',
-    key: 'customerType',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: t('entity.customer.industrysector'),
-    dataIndex: 'industrySector',
-    key: 'industrySector',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerField(record, 'industrySector') ?? ''
-  },
-  {
-    title: t('entity.customer.taxnumber'),
-    dataIndex: 'customerTaxNumber',
-    key: 'customerTaxNumber',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerField(record, 'customerTaxNumber') ?? ''
-  },
-  {
-    title: t('entity.customer.registrationcountry'),
-    dataIndex: 'registrationCountry',
-    key: 'registrationCountry',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerField(record, 'registrationCountry') ?? ''
-  },
-  {
-    title: t('entity.customer.registrationaddress1'),
-    dataIndex: 'registrationAddress1',
-    key: 'registrationAddress1',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerField(record, 'registrationAddress1') ?? ''
-  },
-  {
-    title: t('entity.customer.registrationaddress2'),
-    dataIndex: 'registrationAddress2',
-    key: 'registrationAddress2',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerField(record, 'registrationAddress2') ?? ''
-  },
-  {
-    title: t('entity.customer.registrationaddress3'),
-    dataIndex: 'registrationAddress3',
-    key: 'registrationAddress3',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerField(record, 'registrationAddress3') ?? ''
-  },
-  {
-    title: t('entity.customer.phone'),
-    dataIndex: 'customerPhone',
-    key: 'customerPhone',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerField(record, 'customerPhone') ?? ''
-  },
-  {
-    title: t('entity.customer.fax'),
-    dataIndex: 'customerFax',
-    key: 'customerFax',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerField(record, 'customerFax') ?? ''
-  },
-  {
-    title: t('entity.customer.email'),
-    dataIndex: 'customerEmail',
-    key: 'customerEmail',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerField(record, 'customerEmail') ?? ''
-  },
-  {
-    title: t('entity.customer.website'),
-    dataIndex: 'customerWebsite',
-    key: 'customerWebsite',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerField(record, 'customerWebsite') ?? ''
-  },
-  {
-    title: t('entity.customer.contactperson'),
-    dataIndex: 'contactPerson',
-    key: 'contactPerson',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerField(record, 'contactPerson') ?? ''
-  },
-  {
-    title: t('entity.customer.contactphone'),
-    dataIndex: 'contactPhone',
-    key: 'contactPhone',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerField(record, 'contactPhone') ?? ''
-  },
-  {
-    title: t('entity.customer.contactemail'),
-    dataIndex: 'contactEmail',
-    key: 'contactEmail',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerField(record, 'contactEmail') ?? ''
-  },
-  {
-    title: t('entity.customer.currencycode'),
-    dataIndex: 'currencyCode',
-    key: 'currencyCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerField(record, 'currencyCode') ?? ''
-  },
-  {
-    title: t('entity.customer.paymentterms'),
-    dataIndex: 'paymentTerms',
-    key: 'paymentTerms',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: t('entity.customer.creditlevel'),
-    dataIndex: 'creditLevel',
-    key: 'creditLevel',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: t('entity.customer.creditamount'),
-    dataIndex: 'creditAmount',
-    key: 'creditAmount',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerField(record, 'creditAmount') ?? ''
-  },
-  {
-    title: t('entity.customer.discountrate'),
-    dataIndex: 'discountRate',
-    key: 'discountRate',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: t('entity.customer.salesby'),
-    dataIndex: 'salesBy',
-    key: 'salesBy',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerField(record, 'salesBy') ?? ''
-  },
-  {
-    title: t('entity.customer.level'),
-    dataIndex: 'customerLevel',
-    key: 'customerLevel',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: t('entity.customer.evaluationscore'),
-    dataIndex: 'evaluationScore',
-    key: 'evaluationScore',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerField(record, 'evaluationScore') ?? ''
-  },
-  {
-    title: t('entity.customer.isqualified'),
-    dataIndex: 'isQualified',
-    key: 'isQualified',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerField(record, 'isQualified') ?? ''
-  },
-  {
-    title: t('entity.customer.status'),
-    dataIndex: 'customerStatus',
-    key: 'customerStatus',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
+  buildCustomerListColumn('customerId', t('common.page.entity.id'), { width: 80, fixed: 'left' }),
+  ...CUSTOMER_LIST_FIELDS.map((key) => buildCustomerListColumn(key, pi.label(key))),
   CreateActionColumn({
     actions: [
       {
@@ -1045,7 +761,7 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiEditLine,
         permission: 'logistics:sales:customer:update',
-        onClick: (record: Customer) => handleEdit(record)
+        onClick: (record: CustomerRowRecord) => handleEdit(record)
       },
       {
         key: 'delete',
@@ -1053,44 +769,63 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiDeleteBinLine,
         permission: 'logistics:sales:customer:delete',
-        onClick: (record: Customer) => handleDeleteOne(record)
+        onClick: (record: CustomerRowRecord) => handleDeleteOne(record)
       }
     ]
   })
 ])
 
 /** 表格 row-key（优先实体主键字段） */
-const getCustomerId = (record: any): string => record?.[entityIdName] ?? ''
+const getCustomerId = (record: CustomerRowRecord): string => {
+  const id = (record as Record<string, unknown>)?.[entityIdName]
+  return id != null ? String(id) : ''
+}
 /**
- * 读取行字段值
+ * 供 TaktDictTag 等组件使用的标量字典值
  * @param record 行数据
  * @param field 字段名
  */
-const getCustomerField = (record: any, field: string): any => record?.[field]
+const getCustomerDictValue = (
+  record: CustomerRowRecord,
+  field: string,
+): string | number | undefined => {
+  const value = (record as Record<string, unknown>)?.[field]
+  if (value === null || value === undefined) return undefined
+  if (typeof value === 'string' || typeof value === 'number') return value
+  return String(value)
+}
+
+/** 将行字段/字典值转为有限 number */
+const toCustomerNumber = (value: string | number | undefined | null): number => {
+  if (typeof value === 'number' && Number.isFinite(value)) return value
+  const num = Number(value ?? 0)
+  return Number.isFinite(num) ? num : 0
+}
+
 
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: Customer[]) => {
+  onChange: (keys: (string | number)[], rows: CustomerRowRecord[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
   },
-  onSelect: (record: Customer, selected: boolean) => {
+  onSelect: (record: CustomerRowRecord, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getCustomerId(selectedRow.value) === getCustomerId(record)) {
+    } else if (selectedRow.value && getCustomerId(selectedRow.value) === getCustomerId(record)) {
       selectedRow.value = null
     }
   },
-  onSelectAll: (selected: boolean, selectedRowsData: Customer[]) => {
+  onSelectAll: (selected: boolean, selectedRowsData: CustomerRowRecord[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
   }
 }))
 
 /** 行点击切换选中（与 rowSelection 联动） */
-const onClickRow = (record: Customer) => ({
+const onClickRow = (record: CustomerRowRecord) => ({
   onClick: () => {
     const key = getCustomerId(record)
     const index = selectedRowKeys.value.indexOf(key)
@@ -1136,64 +871,43 @@ function handleSearch() {
 /** 重置查询条件并刷新列表 */
 function handleReset() {
   queryKeyword.value = ''
-  advancedQueryForm.value = {
-  plantCode: '',
-  customerCode: '',
-  customerName: '',
-  customerShortName: '',
-  customerType: undefined as number | undefined,
-  industrySector: '',
-  customerTaxNumber: '',
-  registrationCountry: '',
-  registrationAddress1: '',
-  registrationAddress2: '',
-  registrationAddress3: '',
-  customerPhone: '',
-  customerFax: '',
-  customerEmail: '',
-  customerWebsite: '',
-  contactPerson: '',
-  contactPhone: '',
-  contactEmail: '',
-  currencyCode: '',
-  paymentTerms: undefined as number | undefined,
-  creditLevel: undefined as number | undefined,
-  creditAmount: undefined as number | undefined,
-  discountRate: undefined as number | undefined,
-  salesBy: '',
-  customerLevel: undefined as number | undefined,
-  evaluationScore: undefined as number | undefined,
-  isQualified: undefined as number | undefined,
-  customerStatus: undefined as number | undefined,
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-  }
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
   currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.customer._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = null
   formVisible.value = true
   nextTick(() => formRef.value?.resetFields())
 }
-/** 打开编辑弹窗 */
-function handleEdit(record: Customer) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.customer._self') })
-  formData.value = { ...record }
-  formVisible.value = true
+/** 打开编辑弹窗（拉取详情，避免列表列裁剪字段） */
+async function handleEdit(record: CustomerRowRecord) {
+  const id = getCustomerId(record)
+  if (!id) {
+    return
+  }
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
+  formLoading.value = true
+  try {
+    const detail = await getCustomerById(id)
+    formData.value = detail ?? ({ ...record } as Partial<Customer>)
+    formVisible.value = true
+  } catch (error: unknown) {
+    message.error(t('common.feedback.load.data.failed'))
+  } finally {
+    formLoading.value = false
+  }
 }
 
 /** 工具栏编辑：打开当前单选行 */
 function handleUpdate() {
   if (selectedRow.value) {
-    handleEdit(selectedRow.value)
+    void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.customer._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -1211,10 +925,10 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateCustomer(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.customer._self') }))
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
       await createCustomer(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.customer._self') }))
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     formData.value = null
@@ -1242,15 +956,18 @@ async function handleDownloadTemplate(sheetName?: string, fileName?: string): Pr
   return (res as any)?.data ?? res
 }
 
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importCustomer(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importCustomer(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
+  }
 }
 
 /** 关闭导入对话框 */
@@ -1284,24 +1001,24 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.customer._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: any) {
     logger.error('[Customer] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.customer._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }
 }
 /** 删除单行 */
-async function handleDeleteOne(record: Customer) {
+async function handleDeleteOne(record: CustomerRowRecord) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.customer._self'), name: t('common.tip.this.target', { target: t('entity.customer._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteCustomerById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.customer._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       loadData()
     }
   })
@@ -1309,18 +1026,18 @@ async function handleDeleteOne(record: Customer) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.customer._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.customer._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteCustomerBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.customer._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       loadData()
     }
   })
@@ -1330,9 +1047,9 @@ async function handleDelete() {
  * @param record 当前行
  * @param checked 是否启用
  */
-async function handleCustomerStatusChange(record: Customer, checked: boolean) {
+async function handleCustomerStatusChange(record: CustomerRowRecord, checked: boolean) {
   const newVal = checked ? 1 : 0
-  const oldVal = getCustomerField(record, 'customerStatus')
+  const oldVal = toCustomerNumber(getCustomerDictValue(record, 'customerStatus'))
   const id = getCustomerId(record)
   const row = dataSource.value.find((item) => getCustomerId(item) === id)
   if (row) {
@@ -1362,40 +1079,7 @@ function handleAdvancedQuerySubmit() {
 }
 
 function handleAdvancedQueryReset() {
-  advancedQueryForm.value = {
-  plantCode: '',
-  customerCode: '',
-  customerName: '',
-  customerShortName: '',
-  customerType: undefined as number | undefined,
-  industrySector: '',
-  customerTaxNumber: '',
-  registrationCountry: '',
-  registrationAddress1: '',
-  registrationAddress2: '',
-  registrationAddress3: '',
-  customerPhone: '',
-  customerFax: '',
-  customerEmail: '',
-  customerWebsite: '',
-  contactPerson: '',
-  contactPhone: '',
-  contactEmail: '',
-  currencyCode: '',
-  paymentTerms: undefined as number | undefined,
-  creditLevel: undefined as number | undefined,
-  creditAmount: undefined as number | undefined,
-  discountRate: undefined as number | undefined,
-  salesBy: '',
-  customerLevel: undefined as number | undefined,
-  evaluationScore: undefined as number | undefined,
-  isQualified: undefined as number | undefined,
-  customerStatus: undefined as number | undefined,
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-  }
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
 }
 
 /** 打开列设置抽屉 */

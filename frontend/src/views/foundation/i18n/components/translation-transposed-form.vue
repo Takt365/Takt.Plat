@@ -46,9 +46,12 @@
         :label="t('entity.translation.resourcegroup')"
         name="resourceGroup"
       >
-        <a-input
+        <TaktTreeSelect
           v-model:value="formState.resourceGroup"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.translation.resourcegroup') })"
+          api-url="/api/TaktMenus/tree-options"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.translation.resourcegroup') })"
+          allow-clear
+          :field-names="{ label: 'dictLabel', value: 'dictValue' }"
           :disabled="props.loading"
         />
       </a-form-item>
@@ -134,7 +137,7 @@ const cultureListLoading = ref(false)
 const formState = reactive<TranslationTransposedFormData>({
   i18nKey: '',
   resourceType: 'frontend',
-  resourceGroup: 'page',
+  resourceGroup: '',
   remark: '',
   translations: {},
   translationIds: {},
@@ -147,7 +150,8 @@ const isEdit = computed(() => Boolean(props.formData && props.formData.length > 
 /** 校验规则 */
 const formRules = computed<Record<string, Rule[]>>(() => ({
   i18nKey: [{ required: true, message: t('common.page.form.placeholder.required', { field: t('entity.translation.i18nkey') }), trigger: 'blur' }],
-  resourceType: [{ required: true, message: t('common.page.form.placeholder.select', { field: t('entity.translation.resourcetype') }), trigger: 'change' }]
+  resourceType: [{ required: true, message: t('common.page.form.placeholder.select', { field: t('entity.translation.resourcetype') }), trigger: 'change' }],
+  resourceGroup: [{ required: true, message: t('common.page.form.placeholder.select', { field: t('entity.translation.resourcegroup') }), trigger: 'change' }]
 }))
 
 /**
@@ -166,9 +170,8 @@ function parseResourceType(value: unknown): string {
  * @returns {string} 资源分组
  */
 function parseResourceGroup(value: unknown): string {
-  if (value == null) return 'page'
-  const text = String(value).trim()
-  return text || 'page'
+  if (value == null) return ''
+  return String(value).trim()
 }
 
 /**
@@ -236,7 +239,7 @@ watch(
     } else {
       formState.i18nKey = ''
       formState.resourceType = 'frontend'
-      formState.resourceGroup = 'page'
+      formState.resourceGroup = ''
       formState.remark = ''
       formState.translations = {}
       formState.translationIds = {}

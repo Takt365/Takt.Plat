@@ -148,12 +148,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.personneloperationrate.productionline')"
-                name="productionLine"
+                :label="t('entity.personneloperationrate.prodteam')"
+                name="prodTeam"
               >
                 <a-input
-                  v-model:value="formState.productionLine"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationrate.productionline') })"
+                  v-model:value="formState.prodTeam"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationrate.prodteam') })"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -172,12 +172,12 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.personneloperationrate.productionlinename')"
-                name="productionLineName"
+                :label="t('entity.personneloperationrate.prodteamname')"
+                name="prodTeamName"
               >
                 <a-input
-                  v-model:value="formState.productionLineName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationrate.productionlinename') })"
+                  v-model:value="formState.prodTeamName"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationrate.prodteamname') })"
                   show-count
                   :maxlength="100"
                   allow-clear
@@ -576,7 +576,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","timeCategory","startDate","endDate","weekNumber","monthNumber","productionLine","productionLineName","shiftNo","plannedDirectPersonnelCount","actualDirectPersonnelCount","plannedIndirectPersonnelCount","actualIndirectPersonnelCount","plannedWorkTime","actualWorkTime","breakTime","idleTime","personnelOperationRate","plannedOutput","actualOutput","qualifiedQuantity","defectiveQuantity","yieldRate","workEfficiency","idleReasonType","idleReason","overtimeHours","teamLeader","supervisor","status","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","timeCategory","startDate","endDate","weekNumber","monthNumber","prodTeam","prodTeamName","shiftNo","plannedDirectPersonnelCount","actualDirectPersonnelCount","plannedIndirectPersonnelCount","actualIndirectPersonnelCount","plannedWorkTime","actualWorkTime","breakTime","idleTime","personnelOperationRate","plannedOutput","actualOutput","qualifiedQuantity","defectiveQuantity","yieldRate","workEfficiency","idleReasonType","idleReason","overtimeHours","teamLeader","supervisor","status","extField","remark"]
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
 
@@ -590,8 +590,8 @@ const personnelOperationRateChangeLogTableRef = ref<{
 /** 子表 personnelOperationRateChangeLog 可编辑列 */
 const personnelOperationRateChangeLogFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
-    key: 'productionLine',
-    title: t('entity.personneloperationratechangelog.productionline'),
+    key: 'prodTeam',
+    title: t('entity.personneloperationratechangelog.prodteam'),
     editor: 'input',
     width: 140,
   },
@@ -645,7 +645,7 @@ function syncChildRowsFromFormData(val: Partial<PersonnelOperationRateCreate & {
 
 function createDefaultPersonnelOperationRateChangeLogRow(): Record<string, unknown> {
   return {
-    productionLine: '',
+    prodTeam: '',
     changeFields: '',
     changeTime: '',
     changeBy: '',
@@ -764,10 +764,10 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'change'
     }
   ],
-  productionLine: [
+  prodTeam: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.personneloperationrate.productionline') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.personneloperationrate.prodteam') }),
       trigger: 'blur'
     }
   ],

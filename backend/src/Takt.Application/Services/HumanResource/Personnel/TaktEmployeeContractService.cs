@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Personnel
 // 文件名称：TaktEmployeeContractService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：员工劳动合同应用服务实现
 // 
@@ -92,7 +92,7 @@ public class TaktEmployeeContractService : TaktServiceBase, ITaktEmployeeContrac
     {
         EnsureThreeLayerContext();
         var list = await _employeeContractRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ContractStatus == 1,
             x => x.ContractNo ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption

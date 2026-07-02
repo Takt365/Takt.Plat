@@ -8,7 +8,7 @@
       <a-form-item :label="$t('components.navigation.page.systemsetting.thememode')">
         <a-radio-group
           v-model:value="setting.theme"
-          @change="handleChange"
+          @change="handleAppearanceChange"
         >
           <a-radio-button value="light">
             {{ $t('common.page.theme.light') }}
@@ -128,6 +128,7 @@
 import { RiCheckLine } from '@remixicon/vue'
 import type { AppSetting, ThemeColor } from '@/stores/common/setting'
 import { themeColorMap, themeColorI18nKeyMap, validateFontSize } from '@/stores/common/setting'
+import { TAKT_THEME_STORAGE_KEY } from '@/utils/common'
 
 const setting = inject<AppSetting>('setting')!
 
@@ -139,12 +140,21 @@ const handleChange = () => {
   emit('change')
 }
 
+/** 用户改明暗/主色时标记外观锁定，并通知父级保存 */
+const handleAppearanceChange = () => {
+  setting.appearanceUserOverride = true
+  if (setting.theme === 'light' || setting.theme === 'dark') {
+    localStorage.setItem(TAKT_THEME_STORAGE_KEY, setting.theme)
+  }
+  emit('change')
+}
+
 const customColorValue = computed({
   get: () => setting.themeColor.customColor || '#1890ff',
   set: (v) => {
     const val = (v && String(v).trim()) || '#1890ff'
     setting.themeColor.customColor = val
-    handleChange()
+    handleAppearanceChange()
   }
 })
 
@@ -155,7 +165,7 @@ const handleColorSelect = (color: ThemeColor) => {
   } else {
     setting.themeColor.customColor = customColorValue.value
   }
-  handleChange()
+  handleAppearanceChange()
 }
 
 const handleCustomColorPickerInput = (e: Event) => {

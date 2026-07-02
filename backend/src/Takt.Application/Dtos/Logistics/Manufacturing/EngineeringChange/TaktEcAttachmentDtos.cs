@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcAttachmentDtos.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：EcAttachment 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktEcAttachment 生成，请按需审阅）
 // 
@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.Logistics.Manufacturing.EngineeringChange;
 // ========================================
 
 /// <summary>
-/// 设变附件实体。文件类别：Liaison/EPP/FPP/ExternalLiaison/TCJ 等；文件编号为联络编号等。
+/// 设变附件实体（技术阶段一 ②，隶属 TaktEcGijutsu）。文件类别：Liaison/EPP/FPP/ExternalLiaison/TCJ 等；与主表、明细保存后由系统生成 TaktEcNotification。
 /// 对应前端 TaktEcAttachmentDto
 /// 继承 TaktCompanyDtoBase
 /// </summary>
@@ -78,9 +78,9 @@ public class TaktEcAttachmentDto : TaktCompanyDtoBase
 
     /// <summary>
     /// 设变主表（多对一）
-    /// （主表：TaktEc）
+    /// （主表：TaktEcGijutsu）
     /// </summary>
-    public TaktEcDto? Ec { get; set; }
+    public TaktEcGijutsuDto? EcGijutsu { get; set; }
 
 }
 
@@ -181,7 +181,7 @@ public class TaktEcAttachmentCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -341,7 +341,7 @@ public class TaktEcAttachmentImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 

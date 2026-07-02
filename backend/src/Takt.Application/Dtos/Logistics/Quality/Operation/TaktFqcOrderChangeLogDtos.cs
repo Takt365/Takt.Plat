@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Operation
 // 文件名称：TaktFqcOrderChangeLogDtos.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：FqcOrderChangeLog 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktFqcOrderChangeLog 生成，请按需审阅）
 // 
@@ -36,13 +36,13 @@ public class TaktFqcOrderChangeLogDto : TaktCompanyDtoBase
     public long FqcOrderChangeLogId { get; set; }
 
     /// <summary>
-    /// FQC检验单ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// FQC检验单 ID（关联 TaktFqcOrder.Id，选项 TaktFqcOrders/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long FqcOrderId { get; set; }
 
     /// <summary>
-    /// FQC检验单名称（填充字段）
+    /// FQC检验单 名称（填充字段）
     /// </summary>
     public string? FqcOrderName { get; set; }
 
@@ -100,7 +100,7 @@ public class TaktFqcOrderChangeLogQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// FQC检验单ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// FQC检验单 ID（关联 TaktFqcOrder.Id，选项 TaktFqcOrders/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? FqcOrderId { get; set; }
@@ -176,12 +176,12 @@ public class TaktFqcOrderChangeLogCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// FQC检验单ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// FQC检验单 ID（关联 TaktFqcOrder.Id，选项 TaktFqcOrders/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long FqcOrderId { get; set; }
@@ -265,7 +265,7 @@ public class TaktFqcOrderChangeLogExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// FQC检验单ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// FQC检验单 ID（关联 TaktFqcOrder.Id，选项 TaktFqcOrders/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long FqcOrderId { get; set; }

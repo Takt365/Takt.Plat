@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/planning
 // 文件名称：sales-plan-item.d.ts
-// 创建时间：2026-06-16
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/planning 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -238,7 +238,7 @@ export interface SalesPlanItemCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -402,6 +402,31 @@ export interface SalesPlanItemTemplate {
   planUnit?: string;
 
   /**
+   * 计划数量（基本单位数量）
+   */
+  planQuantity?: number;
+
+  /**
+   * 计划交货日期
+   */
+  plannedDeliveryDate?: string;
+
+  /**
+   * 已转生产/销售数量（基本单位数量）
+   */
+  convertedQuantity?: number;
+
+  /**
+   * 预计单价
+   */
+  estimatedUnitPrice?: number;
+
+  /**
+   * 预计金额
+   */
+  estimatedAmount?: number;
+
+  /**
    * 扩展字段JSON
    */
   extField?: string;
@@ -431,7 +456,7 @@ export interface SalesPlanItemImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -479,6 +504,31 @@ export interface SalesPlanItemImport {
    * 计划单位
    */
   planUnit?: string;
+
+  /**
+   * 计划数量（基本单位数量）
+   */
+  planQuantity?: number;
+
+  /**
+   * 计划交货日期
+   */
+  plannedDeliveryDate?: string;
+
+  /**
+   * 已转生产/销售数量（基本单位数量）
+   */
+  convertedQuantity?: number;
+
+  /**
+   * 预计单价
+   */
+  estimatedUnitPrice?: number;
+
+  /**
+   * 预计金额
+   */
+  estimatedAmount?: number;
 
   /**
    * 扩展字段JSON

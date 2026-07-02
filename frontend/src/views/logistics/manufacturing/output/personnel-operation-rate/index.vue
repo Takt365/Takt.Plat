@@ -187,22 +187,22 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('productionLine')">
-      <a-form-item :label="t('entity.personneloperationrate.productionline')">
+      <div v-show="isFieldVisible('prodTeam')">
+      <a-form-item :label="t('entity.personneloperationrate.prodteam')">
         <a-input
-          v-model:value="advancedQueryForm.productionLine"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationrate.productionline') })"
+          v-model:value="advancedQueryForm.prodTeam"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationrate.prodteam') })"
           show-count
           :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('productionLineName')">
-      <a-form-item :label="t('entity.personneloperationrate.productionlinename')">
+      <div v-show="isFieldVisible('prodTeamName')">
+      <a-form-item :label="t('entity.personneloperationrate.prodteamname')">
         <a-input
-          v-model:value="advancedQueryForm.productionLineName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationrate.productionlinename') })"
+          v-model:value="advancedQueryForm.prodTeamName"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationrate.prodteamname') })"
           show-count
           :maxlength="100"
           allow-clear
@@ -404,10 +404,10 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('status')">
+      <div v-show="isFieldVisible('personnelOperationRateStatus')">
       <a-form-item :label="t('entity.personneloperationrate.status')">
         <a-input-number
-          v-model:value="advancedQueryForm.status"
+          v-model:value="advancedQueryForm.personnelOperationRateStatus"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationrate.status') })"
           style="width: 100%"
         />
@@ -419,7 +419,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -430,7 +430,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -583,8 +583,8 @@ const advancedQueryForm = ref({
   endDateEnd: '',
   weekNumber: undefined as number | undefined,
   monthNumber: undefined as number | undefined,
-  productionLine: '',
-  productionLineName: '',
+  prodTeam: '',
+  prodTeamName: '',
   shiftNo: undefined as number | undefined,
   plannedDirectPersonnelCount: undefined as number | undefined,
   actualDirectPersonnelCount: undefined as number | undefined,
@@ -606,7 +606,7 @@ const advancedQueryForm = ref({
   overtimeHours: undefined as number | undefined,
   teamLeader: '',
   supervisor: '',
-  status: undefined as number | undefined,
+  personnelOperationRateStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -622,8 +622,8 @@ const queryFieldsMeta = computed(() => [
   { key: 'endDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.personneloperationrate.enddate')) },
   { key: 'weekNumber', label: t('entity.personneloperationrate.weeknumber') },
   { key: 'monthNumber', label: t('entity.personneloperationrate.monthnumber') },
-  { key: 'productionLine', label: t('entity.personneloperationrate.productionline') },
-  { key: 'productionLineName', label: t('entity.personneloperationrate.productionlinename') },
+  { key: 'prodTeam', label: t('entity.personneloperationrate.prodteam') },
+  { key: 'prodTeamName', label: t('entity.personneloperationrate.prodteamname') },
   { key: 'shiftNo', label: t('entity.personneloperationrate.shiftno') },
   { key: 'plannedDirectPersonnelCount', label: t('entity.personneloperationrate.planneddirectpersonnelcount') },
   { key: 'actualDirectPersonnelCount', label: t('entity.personneloperationrate.actualdirectpersonnelcount') },
@@ -645,7 +645,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'overtimeHours', label: t('entity.personneloperationrate.overtimehours') },
   { key: 'teamLeader', label: t('entity.personneloperationrate.teamleader') },
   { key: 'supervisor', label: t('entity.personneloperationrate.supervisor') },
-  { key: 'status', label: t('entity.personneloperationrate.status') },
+  { key: 'personnelOperationRateStatus', label: t('entity.personneloperationrate.status') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extField', label: t('common.page.entity.extfield') },
@@ -704,8 +704,8 @@ function buildListQuery(overrides?: Partial<PersonnelOperationRateQuery>): Perso
   if (form.monthNumber !== undefined && form.monthNumber !== null) {
     query.monthNumber = form.monthNumber
   }
-  assignTrimmed('productionLine', form.productionLine)
-  assignTrimmed('productionLineName', form.productionLineName)
+  assignTrimmed('prodTeam', form.prodTeam)
+  assignTrimmed('prodTeamName', form.prodTeamName)
   if (form.shiftNo !== undefined && form.shiftNo !== null) {
     query.shiftNo = form.shiftNo
   }
@@ -763,8 +763,8 @@ function buildListQuery(overrides?: Partial<PersonnelOperationRateQuery>): Perso
   }
   assignTrimmed('teamLeader', form.teamLeader)
   assignTrimmed('supervisor', form.supervisor)
-  if (form.status !== undefined && form.status !== null) {
-    query.status = form.status
+  if (form.personnelOperationRateStatus !== undefined && form.personnelOperationRateStatus !== null) {
+    query.personnelOperationRateStatus = form.personnelOperationRateStatus
   }
   assignTrimmed('createdAtStart', form.createdAtStart)
   assignTrimmed('createdAtEnd', form.createdAtEnd)
@@ -851,22 +851,22 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPersonnelOperationRateField(record, 'monthNumber') ?? ''
   },
   {
-    title: t('entity.personneloperationrate.productionline'),
-    dataIndex: 'productionLine',
-    key: 'productionLine',
+    title: t('entity.personneloperationrate.prodteam'),
+    dataIndex: 'prodTeam',
+    key: 'prodTeam',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPersonnelOperationRateField(record, 'productionLine') ?? ''
+    customRender: ({ record }: { record: any }) => getPersonnelOperationRateField(record, 'prodTeam') ?? ''
   },
   {
-    title: t('entity.personneloperationrate.productionlinename'),
-    dataIndex: 'productionLineName',
-    key: 'productionLineName',
+    title: t('entity.personneloperationrate.prodteamname'),
+    dataIndex: 'prodTeamName',
+    key: 'prodTeamName',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPersonnelOperationRateField(record, 'productionLineName') ?? ''
+    customRender: ({ record }: { record: any }) => getPersonnelOperationRateField(record, 'prodTeamName') ?? ''
   },
   {
     title: t('entity.personneloperationrate.shiftno'),
@@ -1059,12 +1059,12 @@ const columns = computed<TableColumnsType>(() => [
   },
   {
     title: t('entity.personneloperationrate.status'),
-    dataIndex: 'status',
-    key: 'status',
+    dataIndex: 'personnelOperationRateStatus',
+    key: 'personnelOperationRateStatus',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPersonnelOperationRateField(record, 'status') ?? ''
+    customRender: ({ record }: { record: any }) => getPersonnelOperationRateField(record, 'personnelOperationRateStatus') ?? ''
   },
   CreateActionColumn({
     actions: [
@@ -1109,7 +1109,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: PersonnelOperationRate, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getPersonnelOperationRateId(selectedRow.value) === getPersonnelOperationRateId(record)) {
+    } else if (selectedRow.value && getPersonnelOperationRateId(selectedRow.value) === getPersonnelOperationRateId(record)) {
       selectedRow.value = null
     }
   },
@@ -1174,8 +1174,8 @@ function handleReset() {
   endDateEnd: '',
   weekNumber: undefined as number | undefined,
   monthNumber: undefined as number | undefined,
-  productionLine: '',
-  productionLineName: '',
+  prodTeam: '',
+  prodTeamName: '',
   shiftNo: undefined as number | undefined,
   plannedDirectPersonnelCount: undefined as number | undefined,
   actualDirectPersonnelCount: undefined as number | undefined,
@@ -1197,7 +1197,7 @@ function handleReset() {
   overtimeHours: undefined as number | undefined,
   teamLeader: '',
   supervisor: '',
-  status: undefined as number | undefined,
+  personnelOperationRateStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -1380,8 +1380,8 @@ function handleAdvancedQueryReset() {
   endDateEnd: '',
   weekNumber: undefined as number | undefined,
   monthNumber: undefined as number | undefined,
-  productionLine: '',
-  productionLineName: '',
+  prodTeam: '',
+  prodTeamName: '',
   shiftNo: undefined as number | undefined,
   plannedDirectPersonnelCount: undefined as number | undefined,
   actualDirectPersonnelCount: undefined as number | undefined,
@@ -1403,7 +1403,7 @@ function handleAdvancedQueryReset() {
   overtimeHours: undefined as number | undefined,
   teamLeader: '',
   supervisor: '',
-  status: undefined as number | undefined,
+  personnelOperationRateStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',

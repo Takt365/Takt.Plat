@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/materials
 // 文件名称：material-plant.d.ts
-// 创建时间：2026-06-20
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/materials 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,12 +29,12 @@ export interface MaterialPlant extends CompanyDtoBase {
   materialPlantId: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
   /**
-   * 物料编码（唯一索引）
+   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
    */
   materialCode: string;
 
@@ -54,77 +54,67 @@ export interface MaterialPlant extends CompanyDtoBase {
   materialDescription?: string;
 
   /**
-   * 行业领域
+   * 行业领域（字典 logistics_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
    */
-  industrySector?: string;
+  industrySector: string;
 
   /**
-   * 品目阶层
+   * 物料层级
    */
   materialHierarchy?: string;
 
   /**
-   * 品目组代码（关联 TaktMaterialGroup.MaterialGroupCode）
+   * 物料组（关联 TaktMaterialGroup.MaterialGroupCode，选项 TaktMaterialGroups/options，DictValue=MaterialGroupCode）
    */
-  materialGroupCode?: string;
+  materialGroup: string;
 
   /**
-   * 物料类型（0=原材料，1=半成品，2=成品，3=辅料，4=包装材料，5=其他）
+   * 物料类型（字典 logistics_material_type，DictValue=ROH/HALB 等；默认 ROH）
    */
-  materialType: number;
+  materialType: string;
 
   /**
-   * 物料型号
-   */
-  materialModel?: string;
-
-  /**
-   * 物料品牌
-   */
-  materialBrand?: string;
-
-  /**
-   * 基本单位（主单位）
+   * 基本单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   baseUnit: string;
 
   /**
-   * 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
+   * 采购组（关联 TaktPurchaseGroup.PurchaseGroupCode，选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
    */
-  purchaseGroup?: string;
+  purchaseGroup: string;
 
   /**
-   * 采购类型（0=内部采购，1=外部采购，2=委外加工，3=其他）
+   * 采购类型（字典 logistics_procurement_type；E=自制生产，F=外部采购，X=两种采购类型；默认 F）
    */
-  purchaseType: number;
+  purchaseType: string;
 
   /**
-   * 特殊采购（0=标准采购，1=寄售，2=库存转移，3=其他）
+   * 特殊采购（字典 logistics_special_procurement_type；0=无，10=寄售，30=外协加工，50=虚设品号；默认 0）
    */
   specialProcurement: number;
 
   /**
-   * 是否散装（0=否，1=是）
+   * 是否散装（字典 logistics_bulk_material_type；0=否，1=是）
    */
   isBulk: number;
 
   /**
-   * 最小起订量（基本单位数量）
+   * 最小起订量（基本单位数量，整数）
    */
   minOrderQuantity: number;
 
   /**
-   * 舍入值（基本单位数量，用于数量舍入）
+   * 舍入值（基本单位数量，整数）
    */
   roundingValue: number;
 
   /**
-   * 计划交货时间（天数）
+   * 计划交货时间（天数，整数）
    */
   plannedDeliveryTimeDays: number;
 
   /**
-   * 自制生产天数（内部生产所需天数）
+   * 自制生产天数（支持 1 位小数，如 0.5、2.5）
    */
   inHouseProductionDays: number;
 
@@ -134,119 +124,89 @@ export interface MaterialPlant extends CompanyDtoBase {
   manufacturer?: string;
 
   /**
-   * 制造商零件编号
+   * 制造商物料编码（关联 TaktManufacturerMaterial.ManufacturerMaterialCode，选项 TaktManufacturerMaterials/options）
    */
-  manufacturerPartNumber?: string;
+  manufacturerMaterialCode?: string;
 
   /**
-   * 币种代码
+   * 币种（字典 accounting_currency_code，DictValue=CNY/USD 等）
    */
-  currencyCode: string;
+  currency: string;
 
   /**
-   * 价格控制（0=标准价格，1=移动平均价格，2=其他）
+   * 价格控制（字典 logistics_price_control_type；S=标准价格，V=移动平均价格/周期单价；默认 V）
    */
-  priceControl: number;
+  priceControl: string;
 
   /**
-   * 价格单位（价格对应的单位数量，如：1表示每1个，10表示每10个）
+   * 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
    */
   priceUnit: number;
 
   /**
-   * 评估类别代码
+   * 评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）
    */
-  valuationCategory?: string;
+  valuation: string;
 
   /**
-   * 差异码
+   * 移动价格（4 位小数）
+   */
+  movingPrice: number;
+
+  /**
+   * 差异码（6）
    */
   differenceCode?: string;
 
   /**
-   * 利润中心
+   * 利润中心（关联 TaktProfitCenter.ProfitCenterCode，选项 TaktProfitCenters/options，DictValue=ProfitCenterCode）
    */
-  profitCenter?: string;
+  profitCenter: string;
 
   /**
-   * 最新采购价（精确到分，存储为整数，单位为分）
-   */
-  latestPurchasePrice: number;
-
-  /**
-   * 销售价格（精确到分，存储为整数，单位为分）
-   */
-  salesPrice: number;
-
-  /**
-   * 安全库存（基本单位数量）
-   */
-  safetyStock: number;
-
-  /**
-   * 最大库存（基本单位数量）
-   */
-  maxStock: number;
-
-  /**
-   * 最小库存（基本单位数量）
-   */
-  minStock: number;
-
-  /**
-   * 当前库存（基本单位数量）
+   * 当前库存（基本单位数量，4 位小数）
    */
   currentStock: number;
 
   /**
-   * 生产地点
+   * 生产仓储（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）
    */
-  productionLocation?: string;
+  productionLocation: string;
 
   /**
-   * 采购地点
+   * 采购仓储（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）
    */
-  purchasingLocation?: string;
+  purchasingLocation: string;
 
   /**
-   * 是否检验（0=否，1=是）
+   * 库位（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options，DictValue=LocationCode）
    */
-  inspectionRequired: number;
+  storageLocation: string;
 
   /**
-   * 是否批次管理（0=否，1=是）
+   * 检验（字典 sys_yes_no_type；0=否，1=是）
+   */
+  isInspection: number;
+
+  /**
+   * 批次标识（字典 sys_yes_no_type；0=否，1=是）
    */
   isBatch: number;
 
   /**
-   * 是否保质期管理（0=否，1=是）
+   * 停产状态（字典 logistics_material_eol_status，DictValue=01/Z0 等；默认 Z0=计划物料）
    */
-  isExpiry: number;
+  isEndOfLife: string;
 
   /**
-   * 保质期天数（如果启用保质期管理）
-   */
-  expiryDays: number;
-
-  /**
-   * 物料状态（1=启用，0=禁用）
+   * 物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
    */
   materialStatus: number;
 
   /**
-   * 物料属性（JSON格式，存储物料自定义属性）
+   * 工厂物料变更记录列表（外键在子表 TaktMaterialPlantChangeLog.MaterialPlantId） （子表：TaktMaterialPlantChangeLog）
    */
-  materialAttributes?: string;
-
-  /**
-   * 停产状态（EOL，End Of Life）（01=采购/仓库已锁定，02=任务清单/BOM已锁定，Z0=计划物料，ZM=当前库存需确认，ZP=制造中止，ZQ=生产结束（产品），ZW=PC MRP对象外，ZX=PC 中介专用品，ZY=PC 断开连接(MRP对象外)，ZZ=PC 有替代物料）
-   */
-  isEndOfLife?: string;
-
-  /**
-   * 停产日期
-   */
-  endOfLifeDate?: string;
+  changeLogs?: MaterialPlantChangeLog[];
 
 }
 
@@ -269,12 +229,12 @@ export interface MaterialPlantQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
   /**
-   * 物料编码（唯一索引）
+   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
    */
   materialCode?: string;
 
@@ -294,77 +254,67 @@ export interface MaterialPlantQuery extends TaktPagedQuery {
   materialDescription?: string;
 
   /**
-   * 行业领域
+   * 行业领域（字典 logistics_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
    */
   industrySector?: string;
 
   /**
-   * 品目阶层
+   * 物料层级
    */
   materialHierarchy?: string;
 
   /**
-   * 品目组代码（关联 TaktMaterialGroup.MaterialGroupCode）
+   * 物料组（关联 TaktMaterialGroup.MaterialGroupCode，选项 TaktMaterialGroups/options，DictValue=MaterialGroupCode）
    */
-  materialGroupCode?: string;
+  materialGroup?: string;
 
   /**
-   * 物料类型（0=原材料，1=半成品，2=成品，3=辅料，4=包装材料，5=其他）
+   * 物料类型（字典 logistics_material_type，DictValue=ROH/HALB 等；默认 ROH）
    */
-  materialType?: number;
+  materialType?: string;
 
   /**
-   * 物料型号
-   */
-  materialModel?: string;
-
-  /**
-   * 物料品牌
-   */
-  materialBrand?: string;
-
-  /**
-   * 基本单位（主单位）
+   * 基本单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   baseUnit?: string;
 
   /**
-   * 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
+   * 采购组（关联 TaktPurchaseGroup.PurchaseGroupCode，选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
    */
   purchaseGroup?: string;
 
   /**
-   * 采购类型（0=内部采购，1=外部采购，2=委外加工，3=其他）
+   * 采购类型（字典 logistics_procurement_type；E=自制生产，F=外部采购，X=两种采购类型；默认 F）
    */
-  purchaseType?: number;
+  purchaseType?: string;
 
   /**
-   * 特殊采购（0=标准采购，1=寄售，2=库存转移，3=其他）
+   * 特殊采购（字典 logistics_special_procurement_type；0=无，10=寄售，30=外协加工，50=虚设品号；默认 0）
    */
   specialProcurement?: number;
 
   /**
-   * 是否散装（0=否，1=是）
+   * 是否散装（字典 logistics_bulk_material_type；0=否，1=是）
    */
   isBulk?: number;
 
   /**
-   * 最小起订量（基本单位数量）
+   * 最小起订量（基本单位数量，整数）
    */
   minOrderQuantity?: number;
 
   /**
-   * 舍入值（基本单位数量，用于数量舍入）
+   * 舍入值（基本单位数量，整数）
    */
   roundingValue?: number;
 
   /**
-   * 计划交货时间（天数）
+   * 计划交货时间（天数，整数）
    */
   plannedDeliveryTimeDays?: number;
 
   /**
-   * 自制生产天数（内部生产所需天数）
+   * 自制生产天数（支持 1 位小数，如 0.5、2.5）
    */
   inHouseProductionDays?: number;
 
@@ -374,124 +324,84 @@ export interface MaterialPlantQuery extends TaktPagedQuery {
   manufacturer?: string;
 
   /**
-   * 制造商零件编号
+   * 制造商物料编码（关联 TaktManufacturerMaterial.ManufacturerMaterialCode，选项 TaktManufacturerMaterials/options）
    */
-  manufacturerPartNumber?: string;
+  manufacturerMaterialCode?: string;
 
   /**
-   * 币种代码
+   * 币种（字典 accounting_currency_code，DictValue=CNY/USD 等）
    */
-  currencyCode?: string;
+  currency?: string;
 
   /**
-   * 价格控制（0=标准价格，1=移动平均价格，2=其他）
+   * 价格控制（字典 logistics_price_control_type；S=标准价格，V=移动平均价格/周期单价；默认 V）
    */
-  priceControl?: number;
+  priceControl?: string;
 
   /**
-   * 价格单位（价格对应的单位数量，如：1表示每1个，10表示每10个）
+   * 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
    */
   priceUnit?: number;
 
   /**
-   * 评估类别代码
+   * 评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）
    */
-  valuationCategory?: string;
+  valuation?: string;
 
   /**
-   * 差异码
+   * 移动价格（4 位小数）
+   */
+  movingPrice?: number;
+
+  /**
+   * 差异码（6）
    */
   differenceCode?: string;
 
   /**
-   * 利润中心
+   * 利润中心（关联 TaktProfitCenter.ProfitCenterCode，选项 TaktProfitCenters/options，DictValue=ProfitCenterCode）
    */
   profitCenter?: string;
 
   /**
-   * 最新采购价（精确到分，存储为整数，单位为分）
-   */
-  latestPurchasePrice?: number;
-
-  /**
-   * 销售价格（精确到分，存储为整数，单位为分）
-   */
-  salesPrice?: number;
-
-  /**
-   * 安全库存（基本单位数量）
-   */
-  safetyStock?: number;
-
-  /**
-   * 最大库存（基本单位数量）
-   */
-  maxStock?: number;
-
-  /**
-   * 最小库存（基本单位数量）
-   */
-  minStock?: number;
-
-  /**
-   * 当前库存（基本单位数量）
+   * 当前库存（基本单位数量，4 位小数）
    */
   currentStock?: number;
 
   /**
-   * 生产地点
+   * 生产仓储（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）
    */
   productionLocation?: string;
 
   /**
-   * 采购地点
+   * 采购仓储（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）
    */
   purchasingLocation?: string;
 
   /**
-   * 是否检验（0=否，1=是）
+   * 库位（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options，DictValue=LocationCode）
    */
-  inspectionRequired?: number;
+  storageLocation?: string;
 
   /**
-   * 是否批次管理（0=否，1=是）
+   * 检验（字典 sys_yes_no_type；0=否，1=是）
+   */
+  isInspection?: number;
+
+  /**
+   * 批次标识（字典 sys_yes_no_type；0=否，1=是）
    */
   isBatch?: number;
 
   /**
-   * 是否保质期管理（0=否，1=是）
-   */
-  isExpiry?: number;
-
-  /**
-   * 保质期天数（如果启用保质期管理）
-   */
-  expiryDays?: number;
-
-  /**
-   * 物料状态（1=启用，0=禁用）
-   */
-  materialStatus?: number;
-
-  /**
-   * 物料属性（JSON格式，存储物料自定义属性）
-   */
-  materialAttributes?: string;
-
-  /**
-   * 停产状态（EOL，End Of Life）（01=采购/仓库已锁定，02=任务清单/BOM已锁定，Z0=计划物料，ZM=当前库存需确认，ZP=制造中止，ZQ=生产结束（产品），ZW=PC MRP对象外，ZX=PC 中介专用品，ZY=PC 断开连接(MRP对象外)，ZZ=PC 有替代物料）
+   * 停产状态（字典 logistics_material_eol_status，DictValue=01/Z0 等；默认 Z0=计划物料）
    */
   isEndOfLife?: string;
 
   /**
-   * 停产日期（范围查询-开始）
+   * 物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
    */
-  endOfLifeDateStart?: string;
-
-  /**
-   * 停产日期（范围查询-结束）
-   */
-  endOfLifeDateEnd?: string;
+  materialStatus?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -533,17 +443,17 @@ export interface MaterialPlantCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
   /**
-   * 物料编码（唯一索引）
+   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
    */
   materialCode: string;
 
@@ -563,77 +473,67 @@ export interface MaterialPlantCreate {
   materialDescription?: string;
 
   /**
-   * 行业领域
+   * 行业领域（字典 logistics_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
    */
-  industrySector?: string;
+  industrySector: string;
 
   /**
-   * 品目阶层
+   * 物料层级
    */
   materialHierarchy?: string;
 
   /**
-   * 品目组代码（关联 TaktMaterialGroup.MaterialGroupCode）
+   * 物料组（关联 TaktMaterialGroup.MaterialGroupCode，选项 TaktMaterialGroups/options，DictValue=MaterialGroupCode）
    */
-  materialGroupCode?: string;
+  materialGroup: string;
 
   /**
-   * 物料类型（0=原材料，1=半成品，2=成品，3=辅料，4=包装材料，5=其他）
+   * 物料类型（字典 logistics_material_type，DictValue=ROH/HALB 等；默认 ROH）
    */
-  materialType: number;
+  materialType: string;
 
   /**
-   * 物料型号
-   */
-  materialModel?: string;
-
-  /**
-   * 物料品牌
-   */
-  materialBrand?: string;
-
-  /**
-   * 基本单位（主单位）
+   * 基本单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   baseUnit: string;
 
   /**
-   * 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
+   * 采购组（关联 TaktPurchaseGroup.PurchaseGroupCode，选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
    */
-  purchaseGroup?: string;
+  purchaseGroup: string;
 
   /**
-   * 采购类型（0=内部采购，1=外部采购，2=委外加工，3=其他）
+   * 采购类型（字典 logistics_procurement_type；E=自制生产，F=外部采购，X=两种采购类型；默认 F）
    */
-  purchaseType: number;
+  purchaseType: string;
 
   /**
-   * 特殊采购（0=标准采购，1=寄售，2=库存转移，3=其他）
+   * 特殊采购（字典 logistics_special_procurement_type；0=无，10=寄售，30=外协加工，50=虚设品号；默认 0）
    */
   specialProcurement: number;
 
   /**
-   * 是否散装（0=否，1=是）
+   * 是否散装（字典 logistics_bulk_material_type；0=否，1=是）
    */
   isBulk: number;
 
   /**
-   * 最小起订量（基本单位数量）
+   * 最小起订量（基本单位数量，整数）
    */
   minOrderQuantity: number;
 
   /**
-   * 舍入值（基本单位数量，用于数量舍入）
+   * 舍入值（基本单位数量，整数）
    */
   roundingValue: number;
 
   /**
-   * 计划交货时间（天数）
+   * 计划交货时间（天数，整数）
    */
   plannedDeliveryTimeDays: number;
 
   /**
-   * 自制生产天数（内部生产所需天数）
+   * 自制生产天数（支持 1 位小数，如 0.5、2.5）
    */
   inHouseProductionDays: number;
 
@@ -643,119 +543,89 @@ export interface MaterialPlantCreate {
   manufacturer?: string;
 
   /**
-   * 制造商零件编号
+   * 制造商物料编码（关联 TaktManufacturerMaterial.ManufacturerMaterialCode，选项 TaktManufacturerMaterials/options）
    */
-  manufacturerPartNumber?: string;
+  manufacturerMaterialCode?: string;
 
   /**
-   * 币种代码
+   * 币种（字典 accounting_currency_code，DictValue=CNY/USD 等）
    */
-  currencyCode: string;
+  currency: string;
 
   /**
-   * 价格控制（0=标准价格，1=移动平均价格，2=其他）
+   * 价格控制（字典 logistics_price_control_type；S=标准价格，V=移动平均价格/周期单价；默认 V）
    */
-  priceControl: number;
+  priceControl: string;
 
   /**
-   * 价格单位（价格对应的单位数量，如：1表示每1个，10表示每10个）
+   * 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
    */
   priceUnit: number;
 
   /**
-   * 评估类别代码
+   * 评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）
    */
-  valuationCategory?: string;
+  valuation: string;
 
   /**
-   * 差异码
+   * 移动价格（4 位小数）
+   */
+  movingPrice: number;
+
+  /**
+   * 差异码（6）
    */
   differenceCode?: string;
 
   /**
-   * 利润中心
+   * 利润中心（关联 TaktProfitCenter.ProfitCenterCode，选项 TaktProfitCenters/options，DictValue=ProfitCenterCode）
    */
-  profitCenter?: string;
+  profitCenter: string;
 
   /**
-   * 最新采购价（精确到分，存储为整数，单位为分）
-   */
-  latestPurchasePrice: number;
-
-  /**
-   * 销售价格（精确到分，存储为整数，单位为分）
-   */
-  salesPrice: number;
-
-  /**
-   * 安全库存（基本单位数量）
-   */
-  safetyStock: number;
-
-  /**
-   * 最大库存（基本单位数量）
-   */
-  maxStock: number;
-
-  /**
-   * 最小库存（基本单位数量）
-   */
-  minStock: number;
-
-  /**
-   * 当前库存（基本单位数量）
+   * 当前库存（基本单位数量，4 位小数）
    */
   currentStock: number;
 
   /**
-   * 生产地点
+   * 生产仓储（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）
    */
-  productionLocation?: string;
+  productionLocation: string;
 
   /**
-   * 采购地点
+   * 采购仓储（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）
    */
-  purchasingLocation?: string;
+  purchasingLocation: string;
 
   /**
-   * 是否检验（0=否，1=是）
+   * 库位（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options，DictValue=LocationCode）
    */
-  inspectionRequired: number;
+  storageLocation: string;
 
   /**
-   * 是否批次管理（0=否，1=是）
+   * 检验（字典 sys_yes_no_type；0=否，1=是）
+   */
+  isInspection: number;
+
+  /**
+   * 批次标识（字典 sys_yes_no_type；0=否，1=是）
    */
   isBatch: number;
 
   /**
-   * 是否保质期管理（0=否，1=是）
+   * 停产状态（字典 logistics_material_eol_status，DictValue=01/Z0 等；默认 Z0=计划物料）
    */
-  isExpiry: number;
+  isEndOfLife: string;
 
   /**
-   * 保质期天数（如果启用保质期管理）
-   */
-  expiryDays: number;
-
-  /**
-   * 物料状态（1=启用，0=禁用）
+   * 物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
    */
   materialStatus: number;
 
   /**
-   * 物料属性（JSON格式，存储物料自定义属性）
+   * 工厂物料变更记录列表（外键在子表 TaktMaterialPlantChangeLog.MaterialPlantId）（子表，级联保存）
    */
-  materialAttributes?: string;
-
-  /**
-   * 停产状态（EOL，End Of Life）（01=采购/仓库已锁定，02=任务清单/BOM已锁定，Z0=计划物料，ZM=当前库存需确认，ZP=制造中止，ZQ=生产结束（产品），ZW=PC MRP对象外，ZX=PC 中介专用品，ZY=PC 断开连接(MRP对象外)，ZZ=PC 有替代物料）
-   */
-  isEndOfLife?: string;
-
-  /**
-   * 停产日期
-   */
-  endOfLifeDate?: string;
+  changeLogs?: MaterialPlantChangeLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -797,7 +667,7 @@ export interface MaterialPlantStatus {
   materialPlantId: string;
 
   /**
-   * 物料状态（1=启用，0=禁用）
+   * 物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
    */
   materialStatus: number;
 
@@ -821,12 +691,12 @@ export interface MaterialPlantTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
   /**
-   * 物料编码（唯一索引）
+   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
    */
   materialCode?: string;
 
@@ -846,39 +716,159 @@ export interface MaterialPlantTemplate {
   materialDescription?: string;
 
   /**
-   * 行业领域
+   * 行业领域（字典 logistics_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
    */
   industrySector?: string;
 
   /**
-   * 品目阶层
+   * 物料层级
    */
   materialHierarchy?: string;
 
   /**
-   * 品目组代码（关联 TaktMaterialGroup.MaterialGroupCode）
+   * 物料组（关联 TaktMaterialGroup.MaterialGroupCode，选项 TaktMaterialGroups/options，DictValue=MaterialGroupCode）
    */
-  materialGroupCode?: string;
+  materialGroup?: string;
 
   /**
-   * 物料类型（0=原材料，1=半成品，2=成品，3=辅料，4=包装材料，5=其他）
+   * 物料类型（字典 logistics_material_type，DictValue=ROH/HALB 等；默认 ROH）
    */
-  materialType?: number;
+  materialType?: string;
 
   /**
-   * 物料型号
-   */
-  materialModel?: string;
-
-  /**
-   * 物料品牌
-   */
-  materialBrand?: string;
-
-  /**
-   * 基本单位（主单位）
+   * 基本单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   baseUnit?: string;
+
+  /**
+   * 采购组（关联 TaktPurchaseGroup.PurchaseGroupCode，选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
+   */
+  purchaseGroup?: string;
+
+  /**
+   * 采购类型（字典 logistics_procurement_type；E=自制生产，F=外部采购，X=两种采购类型；默认 F）
+   */
+  purchaseType?: string;
+
+  /**
+   * 特殊采购（字典 logistics_special_procurement_type；0=无，10=寄售，30=外协加工，50=虚设品号；默认 0）
+   */
+  specialProcurement?: number;
+
+  /**
+   * 是否散装（字典 logistics_bulk_material_type；0=否，1=是）
+   */
+  isBulk?: number;
+
+  /**
+   * 最小起订量（基本单位数量，整数）
+   */
+  minOrderQuantity?: number;
+
+  /**
+   * 舍入值（基本单位数量，整数）
+   */
+  roundingValue?: number;
+
+  /**
+   * 计划交货时间（天数，整数）
+   */
+  plannedDeliveryTimeDays?: number;
+
+  /**
+   * 自制生产天数（支持 1 位小数，如 0.5、2.5）
+   */
+  inHouseProductionDays?: number;
+
+  /**
+   * 制造商
+   */
+  manufacturer?: string;
+
+  /**
+   * 制造商物料编码（关联 TaktManufacturerMaterial.ManufacturerMaterialCode，选项 TaktManufacturerMaterials/options）
+   */
+  manufacturerMaterialCode?: string;
+
+  /**
+   * 币种（字典 accounting_currency_code，DictValue=CNY/USD 等）
+   */
+  currency?: string;
+
+  /**
+   * 价格控制（字典 logistics_price_control_type；S=标准价格，V=移动平均价格/周期单价；默认 V）
+   */
+  priceControl?: string;
+
+  /**
+   * 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+   */
+  priceUnit?: number;
+
+  /**
+   * 评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）
+   */
+  valuation?: string;
+
+  /**
+   * 移动价格（4 位小数）
+   */
+  movingPrice?: number;
+
+  /**
+   * 差异码（6）
+   */
+  differenceCode?: string;
+
+  /**
+   * 利润中心（关联 TaktProfitCenter.ProfitCenterCode，选项 TaktProfitCenters/options，DictValue=ProfitCenterCode）
+   */
+  profitCenter?: string;
+
+  /**
+   * 当前库存（基本单位数量，4 位小数）
+   */
+  currentStock?: number;
+
+  /**
+   * 生产仓储（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）
+   */
+  productionLocation?: string;
+
+  /**
+   * 采购仓储（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）
+   */
+  purchasingLocation?: string;
+
+  /**
+   * 库位（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options，DictValue=LocationCode）
+   */
+  storageLocation?: string;
+
+  /**
+   * 检验（字典 sys_yes_no_type；0=否，1=是）
+   */
+  isInspection?: number;
+
+  /**
+   * 批次标识（字典 sys_yes_no_type；0=否，1=是）
+   */
+  isBatch?: number;
+
+  /**
+   * 停产状态（字典 logistics_material_eol_status，DictValue=01/Z0 等；默认 Z0=计划物料）
+   */
+  isEndOfLife?: string;
+
+  /**
+   * 物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+   */
+  materialStatus?: number;
+
+  /**
+   * 工厂物料变更记录列表（外键在子表 TaktMaterialPlantChangeLog.MaterialPlantId）（子表，级联保存）
+   */
+  changeLogs?: MaterialPlantChangeLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -910,17 +900,17 @@ export interface MaterialPlantImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
   /**
-   * 物料编码（唯一索引）
+   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
    */
   materialCode?: string;
 
@@ -940,39 +930,159 @@ export interface MaterialPlantImport {
   materialDescription?: string;
 
   /**
-   * 行业领域
+   * 行业领域（字典 logistics_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
    */
   industrySector?: string;
 
   /**
-   * 品目阶层
+   * 物料层级
    */
   materialHierarchy?: string;
 
   /**
-   * 品目组代码（关联 TaktMaterialGroup.MaterialGroupCode）
+   * 物料组（关联 TaktMaterialGroup.MaterialGroupCode，选项 TaktMaterialGroups/options，DictValue=MaterialGroupCode）
    */
-  materialGroupCode?: string;
+  materialGroup?: string;
 
   /**
-   * 物料类型（0=原材料，1=半成品，2=成品，3=辅料，4=包装材料，5=其他）
+   * 物料类型（字典 logistics_material_type，DictValue=ROH/HALB 等；默认 ROH）
    */
-  materialType?: number;
+  materialType?: string;
 
   /**
-   * 物料型号
-   */
-  materialModel?: string;
-
-  /**
-   * 物料品牌
-   */
-  materialBrand?: string;
-
-  /**
-   * 基本单位（主单位）
+   * 基本单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   baseUnit?: string;
+
+  /**
+   * 采购组（关联 TaktPurchaseGroup.PurchaseGroupCode，选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
+   */
+  purchaseGroup?: string;
+
+  /**
+   * 采购类型（字典 logistics_procurement_type；E=自制生产，F=外部采购，X=两种采购类型；默认 F）
+   */
+  purchaseType?: string;
+
+  /**
+   * 特殊采购（字典 logistics_special_procurement_type；0=无，10=寄售，30=外协加工，50=虚设品号；默认 0）
+   */
+  specialProcurement?: number;
+
+  /**
+   * 是否散装（字典 logistics_bulk_material_type；0=否，1=是）
+   */
+  isBulk?: number;
+
+  /**
+   * 最小起订量（基本单位数量，整数）
+   */
+  minOrderQuantity?: number;
+
+  /**
+   * 舍入值（基本单位数量，整数）
+   */
+  roundingValue?: number;
+
+  /**
+   * 计划交货时间（天数，整数）
+   */
+  plannedDeliveryTimeDays?: number;
+
+  /**
+   * 自制生产天数（支持 1 位小数，如 0.5、2.5）
+   */
+  inHouseProductionDays?: number;
+
+  /**
+   * 制造商
+   */
+  manufacturer?: string;
+
+  /**
+   * 制造商物料编码（关联 TaktManufacturerMaterial.ManufacturerMaterialCode，选项 TaktManufacturerMaterials/options）
+   */
+  manufacturerMaterialCode?: string;
+
+  /**
+   * 币种（字典 accounting_currency_code，DictValue=CNY/USD 等）
+   */
+  currency?: string;
+
+  /**
+   * 价格控制（字典 logistics_price_control_type；S=标准价格，V=移动平均价格/周期单价；默认 V）
+   */
+  priceControl?: string;
+
+  /**
+   * 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+   */
+  priceUnit?: number;
+
+  /**
+   * 评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）
+   */
+  valuation?: string;
+
+  /**
+   * 移动价格（4 位小数）
+   */
+  movingPrice?: number;
+
+  /**
+   * 差异码（6）
+   */
+  differenceCode?: string;
+
+  /**
+   * 利润中心（关联 TaktProfitCenter.ProfitCenterCode，选项 TaktProfitCenters/options，DictValue=ProfitCenterCode）
+   */
+  profitCenter?: string;
+
+  /**
+   * 当前库存（基本单位数量，4 位小数）
+   */
+  currentStock?: number;
+
+  /**
+   * 生产仓储（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）
+   */
+  productionLocation?: string;
+
+  /**
+   * 采购仓储（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）
+   */
+  purchasingLocation?: string;
+
+  /**
+   * 库位（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options，DictValue=LocationCode）
+   */
+  storageLocation?: string;
+
+  /**
+   * 检验（字典 sys_yes_no_type；0=否，1=是）
+   */
+  isInspection?: number;
+
+  /**
+   * 批次标识（字典 sys_yes_no_type；0=否，1=是）
+   */
+  isBatch?: number;
+
+  /**
+   * 停产状态（字典 logistics_material_eol_status，DictValue=01/Z0 等；默认 Z0=计划物料）
+   */
+  isEndOfLife?: string;
+
+  /**
+   * 物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+   */
+  materialStatus?: number;
+
+  /**
+   * 工厂物料变更记录列表（外键在子表 TaktMaterialPlantChangeLog.MaterialPlantId）（子表，级联保存）
+   */
+  changeLogs?: MaterialPlantChangeLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -1004,12 +1114,12 @@ export interface MaterialPlantExport {
   companyCode: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
   /**
-   * 物料编码（唯一索引）
+   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
    */
   materialCode: string;
 
@@ -1029,77 +1139,67 @@ export interface MaterialPlantExport {
   materialDescription?: string;
 
   /**
-   * 行业领域
+   * 行业领域（字典 logistics_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
    */
-  industrySector?: string;
+  industrySector: string;
 
   /**
-   * 品目阶层
+   * 物料层级
    */
   materialHierarchy?: string;
 
   /**
-   * 品目组代码（关联 TaktMaterialGroup.MaterialGroupCode）
+   * 物料组（关联 TaktMaterialGroup.MaterialGroupCode，选项 TaktMaterialGroups/options，DictValue=MaterialGroupCode）
    */
-  materialGroupCode?: string;
+  materialGroup: string;
 
   /**
-   * 物料类型（0=原材料，1=半成品，2=成品，3=辅料，4=包装材料，5=其他）
+   * 物料类型（字典 logistics_material_type，DictValue=ROH/HALB 等；默认 ROH）
    */
-  materialType: number;
+  materialType: string;
 
   /**
-   * 物料型号
-   */
-  materialModel?: string;
-
-  /**
-   * 物料品牌
-   */
-  materialBrand?: string;
-
-  /**
-   * 基本单位（主单位）
+   * 基本单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   baseUnit: string;
 
   /**
-   * 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
+   * 采购组（关联 TaktPurchaseGroup.PurchaseGroupCode，选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
    */
-  purchaseGroup?: string;
+  purchaseGroup: string;
 
   /**
-   * 采购类型（0=内部采购，1=外部采购，2=委外加工，3=其他）
+   * 采购类型（字典 logistics_procurement_type；E=自制生产，F=外部采购，X=两种采购类型；默认 F）
    */
-  purchaseType: number;
+  purchaseType: string;
 
   /**
-   * 特殊采购（0=标准采购，1=寄售，2=库存转移，3=其他）
+   * 特殊采购（字典 logistics_special_procurement_type；0=无，10=寄售，30=外协加工，50=虚设品号；默认 0）
    */
   specialProcurement: number;
 
   /**
-   * 是否散装（0=否，1=是）
+   * 是否散装（字典 logistics_bulk_material_type；0=否，1=是）
    */
   isBulk: number;
 
   /**
-   * 最小起订量（基本单位数量）
+   * 最小起订量（基本单位数量，整数）
    */
   minOrderQuantity: number;
 
   /**
-   * 舍入值（基本单位数量，用于数量舍入）
+   * 舍入值（基本单位数量，整数）
    */
   roundingValue: number;
 
   /**
-   * 计划交货时间（天数）
+   * 计划交货时间（天数，整数）
    */
   plannedDeliveryTimeDays: number;
 
   /**
-   * 自制生产天数（内部生产所需天数）
+   * 自制生产天数（支持 1 位小数，如 0.5、2.5）
    */
   inHouseProductionDays: number;
 
@@ -1109,119 +1209,84 @@ export interface MaterialPlantExport {
   manufacturer?: string;
 
   /**
-   * 制造商零件编号
+   * 制造商物料编码（关联 TaktManufacturerMaterial.ManufacturerMaterialCode，选项 TaktManufacturerMaterials/options）
    */
-  manufacturerPartNumber?: string;
+  manufacturerMaterialCode?: string;
 
   /**
-   * 币种代码
+   * 币种（字典 accounting_currency_code，DictValue=CNY/USD 等）
    */
-  currencyCode: string;
+  currency: string;
 
   /**
-   * 价格控制（0=标准价格，1=移动平均价格，2=其他）
+   * 价格控制（字典 logistics_price_control_type；S=标准价格，V=移动平均价格/周期单价；默认 V）
    */
-  priceControl: number;
+  priceControl: string;
 
   /**
-   * 价格单位（价格对应的单位数量，如：1表示每1个，10表示每10个）
+   * 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
    */
   priceUnit: number;
 
   /**
-   * 评估类别代码
+   * 评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）
    */
-  valuationCategory?: string;
+  valuation: string;
 
   /**
-   * 差异码
+   * 移动价格（4 位小数）
+   */
+  movingPrice: number;
+
+  /**
+   * 差异码（6）
    */
   differenceCode?: string;
 
   /**
-   * 利润中心
+   * 利润中心（关联 TaktProfitCenter.ProfitCenterCode，选项 TaktProfitCenters/options，DictValue=ProfitCenterCode）
    */
-  profitCenter?: string;
+  profitCenter: string;
 
   /**
-   * 最新采购价（精确到分，存储为整数，单位为分）
-   */
-  latestPurchasePrice: number;
-
-  /**
-   * 销售价格（精确到分，存储为整数，单位为分）
-   */
-  salesPrice: number;
-
-  /**
-   * 安全库存（基本单位数量）
-   */
-  safetyStock: number;
-
-  /**
-   * 最大库存（基本单位数量）
-   */
-  maxStock: number;
-
-  /**
-   * 最小库存（基本单位数量）
-   */
-  minStock: number;
-
-  /**
-   * 当前库存（基本单位数量）
+   * 当前库存（基本单位数量，4 位小数）
    */
   currentStock: number;
 
   /**
-   * 生产地点
+   * 生产仓储（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）
    */
-  productionLocation?: string;
+  productionLocation: string;
 
   /**
-   * 采购地点
+   * 采购仓储（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）
    */
-  purchasingLocation?: string;
+  purchasingLocation: string;
 
   /**
-   * 是否检验（0=否，1=是）
+   * 库位（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options，DictValue=LocationCode）
    */
-  inspectionRequired: number;
+  storageLocation: string;
 
   /**
-   * 是否批次管理（0=否，1=是）
+   * 检验（字典 sys_yes_no_type；0=否，1=是）
+   */
+  isInspection: number;
+
+  /**
+   * 批次标识（字典 sys_yes_no_type；0=否，1=是）
    */
   isBatch: number;
 
   /**
-   * 是否保质期管理（0=否，1=是）
+   * 停产状态（字典 logistics_material_eol_status，DictValue=01/Z0 等；默认 Z0=计划物料）
    */
-  isExpiry: number;
+  isEndOfLife: string;
 
   /**
-   * 保质期天数（如果启用保质期管理）
-   */
-  expiryDays: number;
-
-  /**
-   * 物料状态（1=启用，0=禁用）
+   * 物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
    */
   materialStatus: number;
-
-  /**
-   * 物料属性（JSON格式，存储物料自定义属性）
-   */
-  materialAttributes?: string;
-
-  /**
-   * 停产状态（EOL，End Of Life）（01=采购/仓库已锁定，02=任务清单/BOM已锁定，Z0=计划物料，ZM=当前库存需确认，ZP=制造中止，ZQ=生产结束（产品），ZW=PC MRP对象外，ZX=PC 中介专用品，ZY=PC 断开连接(MRP对象外)，ZZ=PC 有替代物料）
-   */
-  isEndOfLife?: string;
-
-  /**
-   * 停产日期
-   */
-  endOfLifeDate?: string;
 
   /**
    * 扩展字段JSON

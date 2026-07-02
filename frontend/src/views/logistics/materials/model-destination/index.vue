@@ -137,7 +137,7 @@
           v-model:value="advancedQueryForm.modelCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.modeldestination.modelcode') })"
           show-count
-          :maxlength="50"
+          :maxlength="40"
           allow-clear
         />
       </a-form-item>
@@ -148,7 +148,7 @@
           v-model:value="advancedQueryForm.modelName"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.modeldestination.modelname') })"
           show-count
-          :maxlength="200"
+          :maxlength="80"
           allow-clear
         />
       </a-form-item>
@@ -159,7 +159,7 @@
           v-model:value="advancedQueryForm.destinationCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.modeldestination.destinationcode') })"
           show-count
-          :maxlength="50"
+          :maxlength="40"
           allow-clear
         />
       </a-form-item>
@@ -170,7 +170,7 @@
           v-model:value="advancedQueryForm.destinationName"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.modeldestination.destinationname') })"
           show-count
-          :maxlength="200"
+          :maxlength="80"
           allow-clear
         />
       </a-form-item>
@@ -181,7 +181,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -192,7 +192,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -533,7 +533,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: ModelDestination, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getModelDestinationId(selectedRow.value) === getModelDestinationId(record)) {
+    } else if (selectedRow.value && getModelDestinationId(selectedRow.value) === getModelDestinationId(record)) {
       selectedRow.value = null
     }
   },

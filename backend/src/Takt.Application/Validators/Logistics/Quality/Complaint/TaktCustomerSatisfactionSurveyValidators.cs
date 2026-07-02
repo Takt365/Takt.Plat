@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Quality.Complaint
 // 文件名称：TaktCustomerSatisfactionSurveyValidators.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：CustomerSatisfactionSurvey 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktCustomerSatisfactionSurvey 生成，请按需审阅）
 // 
@@ -39,27 +39,14 @@ public class TaktCustomerSatisfactionSurveyCreateValidator : AbstractValidator<T
             .NotEmpty().WithMessage("调查表编号不能为空")
             .MaximumLength(50).WithMessage("调查表编号长度不能超过50个字符");
         RuleFor(x => x.CustomerId)
-            .GreaterThanOrEqualTo(0).WithMessage("客户ID不能为负数");
+            .GreaterThanOrEqualTo(0).WithMessage("客户 ID不能为负数");
         RuleFor(x => x.CustomerName)
             .NotEmpty().WithMessage("客户名称不能为空")
             .MaximumLength(200).WithMessage("客户名称长度不能超过200个字符");
-        RuleFor(x => x.CustomerCode)
-            .MaximumLength(50).WithMessage("客户编码长度不能超过50个字符");
-        RuleFor(x => x.SurveyorBy)
-            .MaximumLength(50).WithMessage("调查人长度不能超过50个字符");
-        RuleFor(x => x.CustomerContact)
-            .MaximumLength(50).WithMessage("客户联系人长度不能超过50个字符");
-        RuleFor(x => x.CustomerPhone)
-            .MaximumLength(50).WithMessage("客户联系电话长度不能超过50个字符");
-        RuleFor(x => x.CustomerPraise)
-            .MaximumLength(2000).WithMessage("客户主要表扬长度不能超过2000个字符");
-        RuleFor(x => x.CustomerFeedback)
-            .MaximumLength(2000).WithMessage("客户主要意见/建议长度不能超过2000个字符");
-        RuleFor(x => x.ImprovementPlan)
-            .MaximumLength(2000).WithMessage("改进计划/措施长度不能超过2000个字符");
         RuleFor(x => x.RelatedComplaintId)
-            .GreaterThanOrEqualTo(0).WithMessage("关联客诉ID不能为负数");
+            .GreaterThanOrEqualTo(0).WithMessage("关联客诉 ID不能为负数");
         RuleFor(x => x.RelatedPlant)
+            .NotEmpty().WithMessage("关联工厂不能为空")
             .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
@@ -84,6 +71,29 @@ public class TaktCustomerSatisfactionSurveyUpdateValidator : AbstractValidator<T
     {
         RuleFor(x => x.CustomerSatisfactionSurveyId)
             .GreaterThan(0).WithMessage("CustomerSatisfactionSurveyID无效");
+        RuleFor(x => x.TenantCode)
+            .NotEmpty().WithMessage("租户编码不能为空")
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.CompanyCode)
+            .NotEmpty().WithMessage("公司代码不能为空")
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.CustomerSatisfactionSurveyCode)
+            .NotEmpty().WithMessage("调查表编号不能为空")
+            .MaximumLength(50).WithMessage("调查表编号长度不能超过50个字符");
+        RuleFor(x => x.CustomerId)
+            .GreaterThanOrEqualTo(0).WithMessage("客户 ID不能为负数");
+        RuleFor(x => x.CustomerName)
+            .NotEmpty().WithMessage("客户名称不能为空")
+            .MaximumLength(200).WithMessage("客户名称长度不能超过200个字符");
+        RuleFor(x => x.RelatedComplaintId)
+            .GreaterThanOrEqualTo(0).WithMessage("关联客诉 ID不能为负数");
+        RuleFor(x => x.RelatedPlant)
+            .NotEmpty().WithMessage("关联工厂不能为空")
+            .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符");
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
     }
 }
 
@@ -109,18 +119,15 @@ public class TaktCustomerSatisfactionSurveyImportValidator : AbstractValidator<T
             .NotEmpty().WithMessage("调查表编号不能为空")
             .MaximumLength(50).WithMessage("调查表编号长度不能超过50个字符");
         RuleFor(x => x.CustomerId)
-            .GreaterThanOrEqualTo(0).WithMessage("客户ID不能为负数");
+            .GreaterThanOrEqualTo(0).WithMessage("客户 ID不能为负数");
         RuleFor(x => x.CustomerName)
             .NotEmpty().WithMessage("客户名称不能为空")
             .MaximumLength(200).WithMessage("客户名称长度不能超过200个字符");
-        RuleFor(x => x.CustomerCode)
-            .MaximumLength(50).WithMessage("客户编码长度不能超过50个字符").When(x => !string.IsNullOrWhiteSpace(x.CustomerCode));
-        RuleFor(x => x.SurveyorBy)
-            .MaximumLength(50).WithMessage("调查人长度不能超过50个字符").When(x => !string.IsNullOrWhiteSpace(x.SurveyorBy));
-        RuleFor(x => x.CustomerContact)
-            .MaximumLength(50).WithMessage("客户联系人长度不能超过50个字符").When(x => !string.IsNullOrWhiteSpace(x.CustomerContact));
-        RuleFor(x => x.CustomerPhone)
-            .MaximumLength(50).WithMessage("客户联系电话长度不能超过50个字符").When(x => !string.IsNullOrWhiteSpace(x.CustomerPhone));
+        RuleFor(x => x.RelatedComplaintId)
+            .GreaterThanOrEqualTo(0).WithMessage("关联客诉 ID不能为负数");
+        RuleFor(x => x.RelatedPlant)
+            .NotEmpty().WithMessage("关联工厂不能为空")
+            .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

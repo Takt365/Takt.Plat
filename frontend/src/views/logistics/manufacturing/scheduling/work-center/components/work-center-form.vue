@@ -93,7 +93,7 @@
                   v-model:value="formState.workCenterCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.workcenter.code') })"
                   show-count
-                  :maxlength="40"
+                  :maxlength="8"
                   allow-clear
                   :disabled="!!formData?.workCenterId"
                 />
@@ -108,7 +108,7 @@
                   v-model:value="formState.workCenterName"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.workcenter.name') })"
                   show-count
-                  :maxlength="200"
+                  :maxlength="40"
                   allow-clear
                 />
               </a-form-item>
@@ -122,7 +122,7 @@
                   v-model:value="formState.workshopCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.workcenter.workshopcode') })"
                   show-count
-                  :maxlength="40"
+                  :maxlength="8"
                   allow-clear
                   :disabled="!!formData?.workCenterId"
                 />
@@ -281,7 +281,58 @@ const workCenterResourceTableRef = ref<{
 
 /** 子表 workCenterResource 可编辑列 */
 const workCenterResourceFormColumns = computed<TaktEditableTableColumn[]>(() => [
-,
+  {
+    key: 'resourceCode',
+    title: t('entity.workcenterresource.resourcecode'),
+    editor: 'input',
+    width: 140,
+  },
+  {
+    key: 'resourceName',
+    title: t('entity.workcenterresource.resourcename'),
+    editor: 'input',
+    width: 140,
+  },
+  {
+    key: 'resourceType',
+    title: t('entity.workcenterresource.resourcetype'),
+    editor: 'inputNumber',
+    width: 140,
+  },
+  {
+    key: 'parallelCapacity',
+    title: t('entity.workcenterresource.parallelcapacity'),
+    editor: 'inputNumber',
+    width: 140,
+  },
+  {
+    key: 'efficiencyRate',
+    title: t('entity.workcenterresource.efficiencyrate'),
+    editor: 'inputNumber',
+    width: 140,
+  },
+  {
+    key: 'resourceStatus',
+    title: t('entity.workcenterresource.resourcestatus'),
+    editor: 'inputNumber',
+    width: 140,
+  },
+  {
+    key: 'extField',
+    title: t('common.page.entity.extfield'),
+    editor: 'textarea',
+    rows: 2,
+    placeholder: t('common.page.form.placeholder.optional', { field: t('common.page.entity.extfield') }),
+    width: 140,
+  },
+  {
+    key: 'remark',
+    title: t('common.page.entity.remark'),
+    editor: 'textarea',
+    rows: 2,
+    placeholder: t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') }),
+    width: 140,
+  },
 ])
 
 /** 编辑态从 formData 同步各子表行 */
@@ -291,7 +342,14 @@ function syncChildRowsFromFormData(val: Partial<WorkCenterCreate & { workCenterI
 
 function createDefaultWorkCenterResourceRow(): Record<string, unknown> {
   return {
-
+    resourceCode: '',
+    resourceName: '',
+    resourceType: 0,
+    parallelCapacity: 0,
+    efficiencyRate: 0,
+    resourceStatus: 0,
+    extField: '',
+    remark: '',
   }
 }
 

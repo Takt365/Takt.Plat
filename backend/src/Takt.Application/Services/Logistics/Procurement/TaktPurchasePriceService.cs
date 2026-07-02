@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Procurement
 // 文件名称：TaktPurchasePriceService.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-24
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购价格应用服务实现
 // 
@@ -431,6 +431,137 @@ public class TaktPurchasePriceService : TaktServiceBase, ITaktPurchasePriceServi
             await _purchasePriceChangeLogRepository.CreateRangeAsync(changelogs);
         }
     }
+
+    /// <summary>
+    /// 获取采购价格月度波动分析（按物料编码、主表生效区间汇总每月进货价）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>月度波动结果</returns>
+    public async Task<TaktPurchasePriceTrendResultDto> GetPurchasePriceTrendAnalysisAsync(TaktPurchasePriceTrendQueryDto queryDto)
+    {
+        EnsureThreeLayerContext();
+        ArgumentException.ThrowIfNullOrWhiteSpace(queryDto.MaterialCode);
+        var materialCode = queryDto.MaterialCode.Trim();
+        var tenantCode = CurrentTenantCode;
+        var companyCode = CurrentCompanyCode;
+        var onlyEnabled = queryDto.OnlyEnabled != false;
+        var (rangeStart, rangeEnd) = TaktPriceTrendAnalysisHelper.ResolveTrendDateRange(
+            queryDto.DateStart,
+            queryDto.DateEnd);
+        Expression<Func<TaktPurchasePriceItem, bool>> itemPredicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.MaterialCode == materialCode;
+        var items = await _purchasePriceItemRepository.GetListAsync(itemPredicate);
+        var materialName = items.FirstOrDefault(x => !string.IsNullOrWhiteSpace(x.MaterialName))?.MaterialName;
+        if (items.Count == 0)
+        {
+            return BuildEmptyPurchasePriceTrendResult(materialCode, materialName, rangeStart, rangeEnd);
+        }
+        var headerIds = items.Select(x => x.PurchasePriceId).Distinct().ToList();
+        Expression<Func<TaktPurchasePrice, bool>> headerPredicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && headerIds.Contains(x.Id)
+            && x.EffectiveStartDate <= rangeEnd
+            && (x.EffectiveEndDate == null || x.EffectiveEndDate >= rangeStart);
+        var headers = await _purchasePriceRepository.GetListAsync(headerPredicate);
+        var headerMap = headers.ToDictionary(x => x.Id);
+        var entries = new List<TaktPriceTrendEntry>();
+        foreach (var item in items)
+        {
+            if (!headerMap.TryGetValue(item.PurchasePriceId, out var header))
+            {
+                continue;
+            }
+            if (onlyEnabled && header.PriceStatus != 1)
+            {
+                continue;
+            }
+            if (!string.IsNullOrWhiteSpace(queryDto.PlantCode)
+                && !string.Equals(header.PlantCode, queryDto.PlantCode.Trim(), StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+            if (!string.IsNullOrWhiteSpace(queryDto.SupplierCode)
+                && !string.Equals(header.SupplierCode, queryDto.SupplierCode.Trim(), StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+            if (queryDto.PriceType.HasValue && header.PriceType != queryDto.PriceType.Value)
+            {
+                continue;
+            }
+            entries.Add(new TaktPriceTrendEntry
+            {
+                EffectiveStartDate = header.EffectiveStartDate,
+                EffectiveEndDate = header.EffectiveEndDate,
+                RawPrice = item.PurchasePrice,
+                PerUnit = item.PurchasePerUnit,
+                Unit = item.PurchaseUnit,
+                ReferenceCode = header.SupplierCode,
+            });
+        }
+        var trendPoints = TaktPriceTrendAnalysisHelper.BuildMonthlyTrendPoints(entries, rangeStart, rangeEnd);
+        return new TaktPurchasePriceTrendResultDto
+        {
+            MaterialCode = materialCode,
+            MaterialName = materialName,
+            DateStart = rangeStart,
+            DateEnd = rangeEnd,
+            Points = trendPoints.Select(MapPurchasePriceTrendPoint).ToList(),
+        };
+    }
+
+    /// <summary>
+    /// 构建空采购价格趋势结果（无明细时仍返回完整月份轴）
+    /// </summary>
+    /// <param name="materialCode">物料编码</param>
+    /// <param name="materialName">物料名称</param>
+    /// <param name="rangeStart">开始日期</param>
+    /// <param name="rangeEnd">结束日期</param>
+    /// <returns>空波动结果</returns>
+    private static TaktPurchasePriceTrendResultDto BuildEmptyPurchasePriceTrendResult(
+        string materialCode,
+        string? materialName,
+        DateTime rangeStart,
+        DateTime rangeEnd)
+    {
+        var points = TaktPriceTrendAnalysisHelper.BuildMonthlyTrendPoints(
+            Array.Empty<TaktPriceTrendEntry>(),
+            rangeStart,
+            rangeEnd);
+        return new TaktPurchasePriceTrendResultDto
+        {
+            MaterialCode = materialCode,
+            MaterialName = materialName,
+            DateStart = rangeStart,
+            DateEnd = rangeEnd,
+            Points = points.Select(MapPurchasePriceTrendPoint).ToList(),
+        };
+    }
+
+    /// <summary>
+    /// 映射采购价格月度波动点
+    /// </summary>
+    /// <param name="point">趋势点</param>
+    /// <returns>DTO</returns>
+    private static TaktPurchasePriceTrendPointDto MapPurchasePriceTrendPoint(TaktPriceTrendMonthPoint point)
+    {
+        return new TaktPurchasePriceTrendPointDto
+        {
+            YearMonth = point.YearMonth,
+            HasPrice = point.HasPrice,
+            UnitPrice = point.UnitPrice,
+            RawPrice = point.RawPrice,
+            PerUnit = point.PerUnit,
+            Unit = point.Unit,
+            SupplierCode = point.ReferenceCode,
+            ChangePercent = point.ChangePercent,
+            SourceRecordCount = point.SourceRecordCount,
+        };
+    }
+
     // ========================================
     // 查询表达式
     // ========================================
@@ -451,6 +582,8 @@ public class TaktPurchasePriceService : TaktServiceBase, ITaktPurchasePriceServi
                 (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.PurchasePriceCode != null && x.PurchasePriceCode.Contains(keywords))
                 || (x.SupplierCode != null && x.SupplierCode.Contains(keywords))
+                || SqlFunc.ToString(x.PurchaseInquiryId).Contains(keywords)
+                || (x.PurchaseInquiryCode != null && x.PurchaseInquiryCode.Contains(keywords))
                 || SqlFunc.ToString(x.PriceType).Contains(keywords)
                 || SqlFunc.ToString(x.PriceStatus).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
@@ -474,6 +607,16 @@ public class TaktPurchasePriceService : TaktServiceBase, ITaktPurchasePriceServi
         if (!string.IsNullOrEmpty(queryDto?.SupplierCode))
         {
             exp = exp.And(x => x.SupplierCode != null && x.SupplierCode.Contains(queryDto.SupplierCode));
+        }
+
+        if (queryDto?.PurchaseInquiryId.HasValue == true)
+        {
+            exp = exp.And(x => x.PurchaseInquiryId == queryDto.PurchaseInquiryId);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.PurchaseInquiryCode))
+        {
+            exp = exp.And(x => x.PurchaseInquiryCode != null && x.PurchaseInquiryCode.Contains(queryDto.PurchaseInquiryCode));
         }
 
         if (queryDto?.PriceType.HasValue == true)

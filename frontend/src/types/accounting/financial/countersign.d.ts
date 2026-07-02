@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/accounting/financial
 // 文件名称：countersign.d.ts
-// 创建时间：2026-06-21
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：accounting/financial 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -34,6 +34,36 @@ export interface Countersign extends ApprovalDtoBase {
   countersignCode: string;
 
   /**
+   * 来源采购询价 ID（采购链路自动生成时写入）
+   */
+  purchaseInquiryId?: string;
+
+  /**
+   * 来源采购询价 名称（填充字段）
+   */
+  purchaseInquiryName?: string;
+
+  /**
+   * 来源采购询价编码（冗余）
+   */
+  purchaseInquiryCode?: string;
+
+  /**
+   * 会签业务类型（字典 logistics_countersign_business_type：inquiry/pr/expense/standalone）
+   */
+  businessType: string;
+
+  /**
+   * 会签业务键（如 inquiry:123、pr:456、expense:789）
+   */
+  businessKey?: string;
+
+  /**
+   * 会签步骤序号（询价=1，PR=2，报销=3）
+   */
+  stepNo: number;
+
+  /**
    * 会签部门 JSON
    */
   countersignDepts?: string;
@@ -54,22 +84,22 @@ export interface Countersign extends ApprovalDtoBase {
   executiveOffice?: string;
 
   /**
-   * 申请人（员工 ID）
+   * 申请人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   applicantBy: string;
 
   /**
-   * 申请部门
+   * 申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
    */
   applicationDept?: string;
 
   /**
-   * 经费负担部门
+   * 经费负担部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
    */
   costBearerDept?: string;
 
   /**
-   * 是否有预算
+   * 预算否（字典 sys_yes_no_type）
    */
   isBudget: number;
 
@@ -114,9 +144,14 @@ export interface Countersign extends ApprovalDtoBase {
   attachments?: string;
 
   /**
-   * 会签单业务状态（0=草稿，1=审批中，2=已承认，3=已驳回）
+   * 会签单状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）
    */
   countersignStatus: number;
+
+  /**
+   * 会签单明细列表（主子表关系） （子表：TaktCountersignDetail）
+   */
+  countersignDetails?: CountersignDetail[];
 
 }
 
@@ -144,6 +179,31 @@ export interface CountersignQuery extends TaktPagedQuery {
   countersignCode?: string;
 
   /**
+   * 来源采购询价 ID（采购链路自动生成时写入）
+   */
+  purchaseInquiryId?: string;
+
+  /**
+   * 来源采购询价编码（冗余）
+   */
+  purchaseInquiryCode?: string;
+
+  /**
+   * 会签业务类型（字典 logistics_countersign_business_type：inquiry/pr/expense/standalone）
+   */
+  businessType?: string;
+
+  /**
+   * 会签业务键（如 inquiry:123、pr:456、expense:789）
+   */
+  businessKey?: string;
+
+  /**
+   * 会签步骤序号（询价=1，PR=2，报销=3）
+   */
+  stepNo?: number;
+
+  /**
    * 会签部门 JSON
    */
   countersignDepts?: string;
@@ -164,22 +224,22 @@ export interface CountersignQuery extends TaktPagedQuery {
   executiveOffice?: string;
 
   /**
-   * 申请人（员工 ID）
+   * 申请人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   applicantBy?: string;
 
   /**
-   * 申请部门
+   * 申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
    */
   applicationDept?: string;
 
   /**
-   * 经费负担部门
+   * 经费负担部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
    */
   costBearerDept?: string;
 
   /**
-   * 是否有预算
+   * 预算否（字典 sys_yes_no_type）
    */
   isBudget?: number;
 
@@ -224,12 +284,12 @@ export interface CountersignQuery extends TaktPagedQuery {
   attachments?: string;
 
   /**
-   * 会签单业务状态（0=草稿，1=审批中，2=已承认，3=已驳回）
+   * 会签单状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）
    */
   countersignStatus?: number;
 
   /**
-   * 审批状态（TaktApprovalStatus）
+   * 审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）
    */
   approvalStatus?: number;
 
@@ -308,7 +368,7 @@ export interface CountersignCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -316,6 +376,31 @@ export interface CountersignCreate {
    * 会签编号
    */
   countersignCode: string;
+
+  /**
+   * 来源采购询价 ID（采购链路自动生成时写入）
+   */
+  purchaseInquiryId?: string;
+
+  /**
+   * 来源采购询价编码（冗余）
+   */
+  purchaseInquiryCode?: string;
+
+  /**
+   * 会签业务类型（字典 logistics_countersign_business_type：inquiry/pr/expense/standalone）
+   */
+  businessType: string;
+
+  /**
+   * 会签业务键（如 inquiry:123、pr:456、expense:789）
+   */
+  businessKey?: string;
+
+  /**
+   * 会签步骤序号（询价=1，PR=2，报销=3）
+   */
+  stepNo: number;
 
   /**
    * 会签部门 JSON
@@ -338,22 +423,22 @@ export interface CountersignCreate {
   executiveOffice?: string;
 
   /**
-   * 申请人（员工 ID）
+   * 申请人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   applicantBy: string;
 
   /**
-   * 申请部门
+   * 申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
    */
   applicationDept?: string;
 
   /**
-   * 经费负担部门
+   * 经费负担部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
    */
   costBearerDept?: string;
 
   /**
-   * 是否有预算
+   * 预算否（字典 sys_yes_no_type）
    */
   isBudget: number;
 
@@ -398,9 +483,14 @@ export interface CountersignCreate {
   attachments?: string;
 
   /**
-   * 会签单业务状态（0=草稿，1=审批中，2=已承认，3=已驳回）
+   * 会签单状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）
    */
   countersignStatus: number;
+
+  /**
+   * 会签单明细列表（主子表关系）（子表，级联保存）
+   */
+  countersignDetails?: CountersignDetailCreate[];
 
   /**
    * 扩展字段JSON
@@ -442,7 +532,7 @@ export interface CountersignStatus {
   countersignId: string;
 
   /**
-   * 会签单业务状态（0=草稿，1=审批中，2=已承认，3=已驳回）
+   * 会签单状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）
    */
   countersignStatus: number;
 
@@ -471,6 +561,31 @@ export interface CountersignTemplate {
   countersignCode?: string;
 
   /**
+   * 来源采购询价 ID（采购链路自动生成时写入）
+   */
+  purchaseInquiryId?: string;
+
+  /**
+   * 来源采购询价编码（冗余）
+   */
+  purchaseInquiryCode?: string;
+
+  /**
+   * 会签业务类型（字典 logistics_countersign_business_type：inquiry/pr/expense/standalone）
+   */
+  businessType?: string;
+
+  /**
+   * 会签业务键（如 inquiry:123、pr:456、expense:789）
+   */
+  businessKey?: string;
+
+  /**
+   * 会签步骤序号（询价=1，PR=2，报销=3）
+   */
+  stepNo?: number;
+
+  /**
    * 会签部门 JSON
    */
   countersignDepts?: string;
@@ -491,22 +606,22 @@ export interface CountersignTemplate {
   executiveOffice?: string;
 
   /**
-   * 申请人（员工 ID）
+   * 申请人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   applicantBy?: string;
 
   /**
-   * 申请部门
+   * 申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
    */
   applicationDept?: string;
 
   /**
-   * 经费负担部门
+   * 经费负担部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
    */
   costBearerDept?: string;
 
   /**
-   * 是否有预算
+   * 预算否（字典 sys_yes_no_type）
    */
   isBudget?: number;
 
@@ -514,6 +629,16 @@ export interface CountersignTemplate {
    * 预算项目
    */
   budgetItem?: string;
+
+  /**
+   * 预算金额
+   */
+  budgetAmount?: number;
+
+  /**
+   * 申请金额
+   */
+  applicationAmount?: number;
 
   /**
    * 标题
@@ -524,6 +649,31 @@ export interface CountersignTemplate {
    * 申请原因
    */
   applicationReason?: string;
+
+  /**
+   * 预算使用说明
+   */
+  budgetUsageDescription?: string;
+
+  /**
+   * 目标与预期效益
+   */
+  targetAndExpectedBenefit?: string;
+
+  /**
+   * 附件 JSON
+   */
+  attachments?: string;
+
+  /**
+   * 会签单状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）
+   */
+  countersignStatus?: number;
+
+  /**
+   * 会签单明细列表（主子表关系）（子表，级联保存）
+   */
+  countersignDetails?: CountersignDetailCreate[];
 
   /**
    * 扩展字段JSON
@@ -555,7 +705,7 @@ export interface CountersignImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -563,6 +713,31 @@ export interface CountersignImport {
    * 会签编号
    */
   countersignCode?: string;
+
+  /**
+   * 来源采购询价 ID（采购链路自动生成时写入）
+   */
+  purchaseInquiryId?: string;
+
+  /**
+   * 来源采购询价编码（冗余）
+   */
+  purchaseInquiryCode?: string;
+
+  /**
+   * 会签业务类型（字典 logistics_countersign_business_type：inquiry/pr/expense/standalone）
+   */
+  businessType?: string;
+
+  /**
+   * 会签业务键（如 inquiry:123、pr:456、expense:789）
+   */
+  businessKey?: string;
+
+  /**
+   * 会签步骤序号（询价=1，PR=2，报销=3）
+   */
+  stepNo?: number;
 
   /**
    * 会签部门 JSON
@@ -585,22 +760,22 @@ export interface CountersignImport {
   executiveOffice?: string;
 
   /**
-   * 申请人（员工 ID）
+   * 申请人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   applicantBy?: string;
 
   /**
-   * 申请部门
+   * 申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
    */
   applicationDept?: string;
 
   /**
-   * 经费负担部门
+   * 经费负担部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
    */
   costBearerDept?: string;
 
   /**
-   * 是否有预算
+   * 预算否（字典 sys_yes_no_type）
    */
   isBudget?: number;
 
@@ -608,6 +783,16 @@ export interface CountersignImport {
    * 预算项目
    */
   budgetItem?: string;
+
+  /**
+   * 预算金额
+   */
+  budgetAmount?: number;
+
+  /**
+   * 申请金额
+   */
+  applicationAmount?: number;
 
   /**
    * 标题
@@ -618,6 +803,31 @@ export interface CountersignImport {
    * 申请原因
    */
   applicationReason?: string;
+
+  /**
+   * 预算使用说明
+   */
+  budgetUsageDescription?: string;
+
+  /**
+   * 目标与预期效益
+   */
+  targetAndExpectedBenefit?: string;
+
+  /**
+   * 附件 JSON
+   */
+  attachments?: string;
+
+  /**
+   * 会签单状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）
+   */
+  countersignStatus?: number;
+
+  /**
+   * 会签单明细列表（主子表关系）（子表，级联保存）
+   */
+  countersignDetails?: CountersignDetailCreate[];
 
   /**
    * 扩展字段JSON
@@ -649,6 +859,31 @@ export interface CountersignExport {
   countersignCode: string;
 
   /**
+   * 来源采购询价 ID（采购链路自动生成时写入）
+   */
+  purchaseInquiryId?: string;
+
+  /**
+   * 来源采购询价编码（冗余）
+   */
+  purchaseInquiryCode?: string;
+
+  /**
+   * 会签业务类型（字典 logistics_countersign_business_type：inquiry/pr/expense/standalone）
+   */
+  businessType: string;
+
+  /**
+   * 会签业务键（如 inquiry:123、pr:456、expense:789）
+   */
+  businessKey?: string;
+
+  /**
+   * 会签步骤序号（询价=1，PR=2，报销=3）
+   */
+  stepNo: number;
+
+  /**
    * 会签部门 JSON
    */
   countersignDepts?: string;
@@ -669,22 +904,22 @@ export interface CountersignExport {
   executiveOffice?: string;
 
   /**
-   * 申请人（员工 ID）
+   * 申请人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   applicantBy: string;
 
   /**
-   * 申请部门
+   * 申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
    */
   applicationDept?: string;
 
   /**
-   * 经费负担部门
+   * 经费负担部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
    */
   costBearerDept?: string;
 
   /**
-   * 是否有预算
+   * 预算否（字典 sys_yes_no_type）
    */
   isBudget: number;
 
@@ -729,7 +964,7 @@ export interface CountersignExport {
   attachments?: string;
 
   /**
-   * 会签单业务状态（0=草稿，1=审批中，2=已承认，3=已驳回）
+   * 会签单状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）
    */
   countersignStatus: number;
 

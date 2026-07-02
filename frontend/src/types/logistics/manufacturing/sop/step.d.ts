@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/sop
 // 文件名称：step.d.ts
-// 创建时间：2026-06-20
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/sop 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface SopStep extends CompanyDtoBase {
   sopStepId: string;
 
   /**
-   * 正文 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 正文 ID（关联 TaktSopContent.Id，选项 TaktSopContents/options）
    */
   contentId: string;
 
@@ -59,7 +59,7 @@ export interface SopStep extends CompanyDtoBase {
   safetyAlert?: string;
 
   /**
-   * 是否安全弹窗（字典 sys_yes_no_type，0=否，1=是）
+   * 弹窗（字典 sys_yes_no_type；0=否，1=是）
    */
   safetyPopupRequired: number;
 
@@ -99,7 +99,7 @@ export interface SopStepQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 正文 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 正文 ID（关联 TaktSopContent.Id，选项 TaktSopContents/options）
    */
   contentId?: string;
 
@@ -124,7 +124,7 @@ export interface SopStepQuery extends TaktPagedQuery {
   safetyAlert?: string;
 
   /**
-   * 是否安全弹窗（字典 sys_yes_no_type，0=否，1=是）
+   * 弹窗（字典 sys_yes_no_type；0=否，1=是）
    */
   safetyPopupRequired?: number;
 
@@ -168,12 +168,12 @@ export interface SopStepCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
   /**
-   * 正文 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 正文 ID（关联 TaktSopContent.Id，选项 TaktSopContents/options）
    */
   contentId: string;
 
@@ -198,7 +198,7 @@ export interface SopStepCreate {
   safetyAlert?: string;
 
   /**
-   * 是否安全弹窗（字典 sys_yes_no_type，0=否，1=是）
+   * 弹窗（字典 sys_yes_no_type；0=否，1=是）
    */
   safetyPopupRequired: number;
 
@@ -257,7 +257,7 @@ export interface SopStepTemplate {
   companyCode?: string;
 
   /**
-   * 正文 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 正文 ID（关联 TaktSopContent.Id，选项 TaktSopContents/options）
    */
   contentId?: string;
 
@@ -282,9 +282,19 @@ export interface SopStepTemplate {
   safetyAlert?: string;
 
   /**
-   * 是否安全弹窗（字典 sys_yes_no_type，0=否，1=是）
+   * 弹窗（字典 sys_yes_no_type；0=否，1=是）
    */
   safetyPopupRequired?: number;
+
+  /**
+   * 多媒体（子表，级联保存）
+   */
+  mediaList?: SopStepMediaCreate[];
+
+  /**
+   * 检验项目（子表，级联保存）
+   */
+  checkItems?: SopStepCheckItemCreate[];
 
   /**
    * 扩展字段JSON
@@ -316,12 +326,12 @@ export interface SopStepImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
   /**
-   * 正文 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 正文 ID（关联 TaktSopContent.Id，选项 TaktSopContents/options）
    */
   contentId?: string;
 
@@ -346,9 +356,19 @@ export interface SopStepImport {
   safetyAlert?: string;
 
   /**
-   * 是否安全弹窗（字典 sys_yes_no_type，0=否，1=是）
+   * 弹窗（字典 sys_yes_no_type；0=否，1=是）
    */
   safetyPopupRequired?: number;
+
+  /**
+   * 多媒体（子表，级联保存）
+   */
+  mediaList?: SopStepMediaCreate[];
+
+  /**
+   * 检验项目（子表，级联保存）
+   */
+  checkItems?: SopStepCheckItemCreate[];
 
   /**
    * 扩展字段JSON
@@ -380,7 +400,7 @@ export interface SopStepExport {
   companyCode: string;
 
   /**
-   * 正文 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 正文 ID（关联 TaktSopContent.Id，选项 TaktSopContents/options）
    */
   contentId: string;
 
@@ -405,7 +425,7 @@ export interface SopStepExport {
   safetyAlert?: string;
 
   /**
-   * 是否安全弹窗（字典 sys_yes_no_type，0=否，1=是）
+   * 弹窗（字典 sys_yes_no_type；0=否，1=是）
    */
   safetyPopupRequired: number;
 

@@ -343,8 +343,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.scheduledStartTimeStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serviceticket.scheduledstarttimestart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -354,8 +353,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.scheduledStartTimeEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serviceticket.scheduledstarttimeend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -365,8 +363,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.scheduledEndTimeStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serviceticket.scheduledendtimestart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -376,8 +373,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.scheduledEndTimeEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serviceticket.scheduledendtimeend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -387,8 +383,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.actualStartTimeStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serviceticket.actualstarttimestart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -398,8 +393,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.actualStartTimeEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serviceticket.actualstarttimeend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -409,8 +403,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.actualEndTimeStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serviceticket.actualendtimestart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -420,8 +413,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.actualEndTimeEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serviceticket.actualendtimeend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -473,7 +465,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -484,7 +476,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -1129,7 +1121,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: ServiceTicket, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getServiceTicketId(selectedRow.value) === getServiceTicketId(record)) {
+    } else if (selectedRow.value && getServiceTicketId(selectedRow.value) === getServiceTicketId(record)) {
       selectedRow.value = null
     }
   },

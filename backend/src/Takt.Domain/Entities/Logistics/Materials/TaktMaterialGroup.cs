@@ -4,7 +4,7 @@
 // 文件名称：TaktMaterialGroup.cs
 // 创建时间：2026-06-15
 // 创建人：Takt365(Cursor AI)
-// 功能描述：Takt物料组主数据实体（material_group），定义品目组层级与组织归属（与 TaktMaterial.MaterialGroupCode 对齐）
+// 功能描述：Takt物料组主数据实体（material_group），定义物料组层级与组织归属（与 TaktMaterial.MaterialGroup 对齐）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -25,7 +25,7 @@ namespace Takt.Domain.Entities.Logistics.Materials;
 public class TaktMaterialGroup : TaktTenantEntityBase
 {
     /// <summary>
-    /// 物料组编码（group_code；租户内唯一；与物料 material_group_code 对齐）
+    /// 物料组编码（group_code；租户内唯一；与物料 material_group 对齐）
     /// </summary>
     [SugarColumn(ColumnName = "material_group_code", ColumnDescription = "物料组编码", ColumnDataType = "varchar", Length = 20, IsNullable = false)]
     public string MaterialGroupCode { get; set; } = string.Empty;

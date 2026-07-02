@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopEsdChecksController.cs
-// 创建时间：2026-06-15
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：SOP ESD检查控制器
 // 
@@ -41,7 +41,7 @@ public class TaktSopEsdChecksController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:manufacturing:sop:esdcheck:list", "SOP ESD检查列表")]
+    [TaktPermission("logistics:manufacturing:sop:esd:check:list", "SOP ESD检查列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetSopEsdCheckListAsync([FromQuery] TaktSopEsdCheckQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktSopEsdChecksController : TaktControllerBase
     /// </summary>
     /// <param name="id">SOP ESD检查ID</param>
     /// <returns>SOP ESD检查DTO</returns>
-    [TaktPermission("logistics:manufacturing:sop:esdcheck:query", "SOP ESD检查详情")]
+    [TaktPermission("logistics:manufacturing:sop:esd:check:query", "SOP ESD检查详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetSopEsdCheckByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktSopEsdChecksController : TaktControllerBase
     /// 获取SOP ESD检查选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:manufacturing:sop:esdcheck:query", "SOP ESD检查选项")]
+    [TaktPermission("logistics:manufacturing:sop:esd:check:query", "SOP ESD检查选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetSopEsdCheckOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktSopEsdChecksController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>SOP ESD检查DTO</returns>
-    [TaktPermission("logistics:manufacturing:sop:esdcheck:create", "创建SOP ESD检查")]
+    [TaktPermission("logistics:manufacturing:sop:esd:check:create", "创建SOP ESD检查")]
     [HttpPost]
     public async Task<IActionResult> CreateSopEsdCheckAsync([FromBody] TaktSopEsdCheckCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktSopEsdChecksController : TaktControllerBase
     /// <param name="id">SOP ESD检查ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>SOP ESD检查DTO</returns>
-    [TaktPermission("logistics:manufacturing:sop:esdcheck:update", "更新SOP ESD检查")]
+    [TaktPermission("logistics:manufacturing:sop:esd:check:update", "更新SOP ESD检查")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateSopEsdCheckAsync(long id, [FromBody] TaktSopEsdCheckUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktSopEsdChecksController : TaktControllerBase
     /// </summary>
     /// <param name="id">SOP ESD检查ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:sop:esdcheck:delete", "删除SOP ESD检查")]
+    [TaktPermission("logistics:manufacturing:sop:esd:check:delete", "删除SOP ESD检查")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteSopEsdCheckByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktSopEsdChecksController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:sop:esdcheck:delete", "批量删除SOP ESD检查")]
+    [TaktPermission("logistics:manufacturing:sop:esd:check:delete", "批量删除SOP ESD检查")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteSopEsdCheckBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktSopEsdChecksController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:sop:esdcheck:import", "获取SOP ESD检查导入模板")]
+    [TaktPermission("logistics:manufacturing:sop:esd:check:import", "获取SOP ESD检查导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetSopEsdCheckTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -204,7 +204,7 @@ public class TaktSopEsdChecksController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:manufacturing:sop:esdcheck:import", "导入SOP ESD检查")]
+    [TaktPermission("logistics:manufacturing:sop:esd:check:import", "导入SOP ESD检查")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportSopEsdCheckAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -234,7 +234,7 @@ public class TaktSopEsdChecksController : TaktControllerBase
     /// 导出SOP ESD检查
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:sop:esdcheck:export", "导出SOP ESD检查")]
+    [TaktPermission("logistics:manufacturing:sop:esd:check:export", "导出SOP ESD检查")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportSopEsdCheckAsync([FromQuery] TaktSopEsdCheckQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

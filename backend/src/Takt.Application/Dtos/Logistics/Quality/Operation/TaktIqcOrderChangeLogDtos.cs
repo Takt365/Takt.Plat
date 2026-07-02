@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Operation
 // 文件名称：TaktIqcOrderChangeLogDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：IqcOrderChangeLog 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktIqcOrderChangeLog 生成，请按需审阅）
 // 
@@ -36,13 +36,13 @@ public class TaktIqcOrderChangeLogDto : TaktCompanyDtoBase
     public long IqcOrderChangeLogId { get; set; }
 
     /// <summary>
-    /// IQC检验单ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// IQC检验单 ID（关联 TaktIqcOrder.Id，选项 TaktIqcOrders/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long IqcOrderId { get; set; }
 
     /// <summary>
-    /// IQC检验单名称（填充字段）
+    /// IQC检验单 名称（填充字段）
     /// </summary>
     public string? IqcOrderName { get; set; }
 
@@ -100,7 +100,7 @@ public class TaktIqcOrderChangeLogQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// IQC检验单ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// IQC检验单 ID（关联 TaktIqcOrder.Id，选项 TaktIqcOrders/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? IqcOrderId { get; set; }
@@ -176,12 +176,12 @@ public class TaktIqcOrderChangeLogCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// IQC检验单ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// IQC检验单 ID（关联 TaktIqcOrder.Id，选项 TaktIqcOrders/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long IqcOrderId { get; set; }
@@ -265,7 +265,7 @@ public class TaktIqcOrderChangeLogExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// IQC检验单ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// IQC检验单 ID（关联 TaktIqcOrder.Id，选项 TaktIqcOrders/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long IqcOrderId { get; set; }

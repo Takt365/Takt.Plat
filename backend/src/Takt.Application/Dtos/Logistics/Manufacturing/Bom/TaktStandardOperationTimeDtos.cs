@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Bom
 // 文件名称：TaktStandardOperationTimeDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：StandardOperationTime 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktStandardOperationTime 生成，请按需审阅）
 // 
@@ -36,17 +36,17 @@ public class TaktStandardOperationTimeDto : TaktApprovalDtoBase
     public long StandardOperationTimeId { get; set; }
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码
+    /// 物料编码（选项 TaktMaterials/options）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作中心
+    /// 工作中心（选项 TaktWorkCenters/options，按工厂 ExtValue 过滤）
     /// </summary>
     public string WorkCenter { get; set; } = string.Empty;
 
@@ -61,7 +61,7 @@ public class TaktStandardOperationTimeDto : TaktApprovalDtoBase
     public decimal StandardMinutes { get; set; }
 
     /// <summary>
-    /// 工时单位
+    /// 工时单位（字典 logistics_time_unit，默认 MIN）
     /// </summary>
     public string TimeUnit { get; set; } = string.Empty;
 
@@ -71,14 +71,14 @@ public class TaktStandardOperationTimeDto : TaktApprovalDtoBase
     public int StandardShorts { get; set; } = 0;
 
     /// <summary>
-    /// 点数单位
+    /// 点数单位（字典 logistics_points_unit，默认 SHORT）
     /// </summary>
     public string PointsUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 点数转分钟汇率（1 点数 = 多少分钟）
+    /// 点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045）
     /// </summary>
-    public decimal PointsToMinutesRate { get; set; }
+    public string PointsToMinutesRate { get; set; } = string.Empty;
 
     /// <summary>
     /// 转换后标准工时（分钟）
@@ -94,6 +94,12 @@ public class TaktStandardOperationTimeDto : TaktApprovalDtoBase
     /// 失效日期
     /// </summary>
     public DateTime? ExpiryDate { get; set; }
+
+    /// <summary>
+    /// 标准工序时间变更记录列表（外键在子表 TaktStandardOperationTimeChangeLog.StandardOperationTimeId）
+    /// （子表：TaktStandardOperationTimeChangeLog）
+    /// </summary>
+    public List<TaktStandardOperationTimeChangeLogDto>? ChangeLogs { get; set; }
 
 }
 
@@ -118,17 +124,17 @@ public class TaktStandardOperationTimeQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码
+    /// 物料编码（选项 TaktMaterials/options）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作中心
+    /// 工作中心（选项 TaktWorkCenters/options，按工厂 ExtValue 过滤）
     /// </summary>
     public string? WorkCenter { get; set; } = string.Empty;
 
@@ -143,7 +149,7 @@ public class TaktStandardOperationTimeQueryDto : TaktPagedQuery
     public decimal? StandardMinutes { get; set; }
 
     /// <summary>
-    /// 工时单位
+    /// 工时单位（字典 logistics_time_unit，默认 MIN）
     /// </summary>
     public string? TimeUnit { get; set; } = string.Empty;
 
@@ -153,14 +159,14 @@ public class TaktStandardOperationTimeQueryDto : TaktPagedQuery
     public int? StandardShorts { get; set; }
 
     /// <summary>
-    /// 点数单位
+    /// 点数单位（字典 logistics_points_unit，默认 SHORT）
     /// </summary>
     public string? PointsUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 点数转分钟汇率（1 点数 = 多少分钟）
+    /// 点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045）
     /// </summary>
-    public decimal? PointsToMinutesRate { get; set; }
+    public string? PointsToMinutesRate { get; set; } = string.Empty;
 
     /// <summary>
     /// 转换后标准工时（分钟）
@@ -188,9 +194,9 @@ public class TaktStandardOperationTimeQueryDto : TaktPagedQuery
     public DateTime? ExpiryDateEnd { get; set; }
 
     /// <summary>
-    /// 审批状态（TaktApprovalStatus）
+    /// 审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）
     /// </summary>
-    public int? ApprovalStatus { get; set; }
+    public TaktApprovalStatus? ApprovalStatus { get; set; }
 
     /// <summary>
     /// 发起人ID
@@ -223,6 +229,12 @@ public class TaktStandardOperationTimeQueryDto : TaktPagedQuery
     /// 最终审批时间（范围查询-结束）
     /// </summary>
     public DateTime? ApprovedAtEnd { get; set; }
+
+    /// <summary>
+    /// 流程实例 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? FlowInstanceId { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -265,26 +277,26 @@ public class TaktStandardOperationTimeCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码不能为空")]
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码
+    /// 物料编码（选项 TaktMaterials/options）
     /// </summary>
-    [Required(ErrorMessage = "物料编码不能为空")]
+    [Required(ErrorMessage = "物料编码（选项 TaktMaterials/options）不能为空")]
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作中心
+    /// 工作中心（选项 TaktWorkCenters/options，按工厂 ExtValue 过滤）
     /// </summary>
-    [Required(ErrorMessage = "工作中心不能为空")]
+    [Required(ErrorMessage = "工作中心（选项 TaktWorkCenters/options，按工厂 ExtValue 过滤）不能为空")]
     public string WorkCenter { get; set; } = string.Empty;
 
     /// <summary>
@@ -298,9 +310,9 @@ public class TaktStandardOperationTimeCreateDto
     public decimal StandardMinutes { get; set; }
 
     /// <summary>
-    /// 工时单位
+    /// 工时单位（字典 logistics_time_unit，默认 MIN）
     /// </summary>
-    [Required(ErrorMessage = "工时单位不能为空")]
+    [Required(ErrorMessage = "工时单位（字典 logistics_time_unit，默认 MIN）不能为空")]
     public string TimeUnit { get; set; } = string.Empty;
 
     /// <summary>
@@ -309,15 +321,16 @@ public class TaktStandardOperationTimeCreateDto
     public int StandardShorts { get; set; } = 0;
 
     /// <summary>
-    /// 点数单位
+    /// 点数单位（字典 logistics_points_unit，默认 SHORT）
     /// </summary>
-    [Required(ErrorMessage = "点数单位不能为空")]
+    [Required(ErrorMessage = "点数单位（字典 logistics_points_unit，默认 SHORT）不能为空")]
     public string PointsUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 点数转分钟汇率（1 点数 = 多少分钟）
+    /// 点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045）
     /// </summary>
-    public decimal PointsToMinutesRate { get; set; }
+    [Required(ErrorMessage = "点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045）不能为空")]
+    public string PointsToMinutesRate { get; set; } = string.Empty;
 
     /// <summary>
     /// 转换后标准工时（分钟）
@@ -333,6 +346,11 @@ public class TaktStandardOperationTimeCreateDto
     /// 失效日期
     /// </summary>
     public DateTime? ExpiryDate { get; set; }
+
+    /// <summary>
+    /// 标准工序时间变更记录列表（外键在子表 TaktStandardOperationTimeChangeLog.StandardOperationTimeId）（子表，级联保存）
+    /// </summary>
+    public List<TaktStandardOperationTimeChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -386,17 +404,17 @@ public class TaktStandardOperationTimeTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options）
     /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码
+    /// 物料编码（选项 TaktMaterials/options）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作中心
+    /// 工作中心（选项 TaktWorkCenters/options，按工厂 ExtValue 过滤）
     /// </summary>
     public string? WorkCenter { get; set; } = string.Empty;
 
@@ -406,7 +424,12 @@ public class TaktStandardOperationTimeTemplateDto
     public string? OperationDesc { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工时单位
+    /// 标准工时（分钟）
+    /// </summary>
+    public decimal? StandardMinutes { get; set; }
+
+    /// <summary>
+    /// 工时单位（字典 logistics_time_unit，默认 MIN）
     /// </summary>
     public string? TimeUnit { get; set; } = string.Empty;
 
@@ -416,9 +439,34 @@ public class TaktStandardOperationTimeTemplateDto
     public int? StandardShorts { get; set; }
 
     /// <summary>
-    /// 点数单位
+    /// 点数单位（字典 logistics_points_unit，默认 SHORT）
     /// </summary>
     public string? PointsUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045）
+    /// </summary>
+    public string? PointsToMinutesRate { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 转换后标准工时（分钟）
+    /// </summary>
+    public decimal? ConvertedMinutes { get; set; }
+
+    /// <summary>
+    /// 生效日期
+    /// </summary>
+    public DateTime? EffectiveDate { get; set; }
+
+    /// <summary>
+    /// 失效日期
+    /// </summary>
+    public DateTime? ExpiryDate { get; set; }
+
+    /// <summary>
+    /// 标准工序时间变更记录列表（外键在子表 TaktStandardOperationTimeChangeLog.StandardOperationTimeId）（子表，级联保存）
+    /// </summary>
+    public List<TaktStandardOperationTimeChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -448,22 +496,22 @@ public class TaktStandardOperationTimeImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options）
     /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码
+    /// 物料编码（选项 TaktMaterials/options）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作中心
+    /// 工作中心（选项 TaktWorkCenters/options，按工厂 ExtValue 过滤）
     /// </summary>
     public string? WorkCenter { get; set; } = string.Empty;
 
@@ -473,7 +521,12 @@ public class TaktStandardOperationTimeImportDto
     public string? OperationDesc { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工时单位
+    /// 标准工时（分钟）
+    /// </summary>
+    public decimal? StandardMinutes { get; set; }
+
+    /// <summary>
+    /// 工时单位（字典 logistics_time_unit，默认 MIN）
     /// </summary>
     public string? TimeUnit { get; set; } = string.Empty;
 
@@ -483,9 +536,34 @@ public class TaktStandardOperationTimeImportDto
     public int? StandardShorts { get; set; }
 
     /// <summary>
-    /// 点数单位
+    /// 点数单位（字典 logistics_points_unit，默认 SHORT）
     /// </summary>
     public string? PointsUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045）
+    /// </summary>
+    public string? PointsToMinutesRate { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 转换后标准工时（分钟）
+    /// </summary>
+    public decimal? ConvertedMinutes { get; set; }
+
+    /// <summary>
+    /// 生效日期
+    /// </summary>
+    public DateTime? EffectiveDate { get; set; }
+
+    /// <summary>
+    /// 失效日期
+    /// </summary>
+    public DateTime? ExpiryDate { get; set; }
+
+    /// <summary>
+    /// 标准工序时间变更记录列表（外键在子表 TaktStandardOperationTimeChangeLog.StandardOperationTimeId）（子表，级联保存）
+    /// </summary>
+    public List<TaktStandardOperationTimeChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -516,17 +594,17 @@ public class TaktStandardOperationTimeExportDto
     public long StandardOperationTimeId { get; set; }
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码
+    /// 物料编码（选项 TaktMaterials/options）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作中心
+    /// 工作中心（选项 TaktWorkCenters/options，按工厂 ExtValue 过滤）
     /// </summary>
     public string WorkCenter { get; set; } = string.Empty;
 
@@ -541,7 +619,7 @@ public class TaktStandardOperationTimeExportDto
     public decimal StandardMinutes { get; set; }
 
     /// <summary>
-    /// 工时单位
+    /// 工时单位（字典 logistics_time_unit，默认 MIN）
     /// </summary>
     public string TimeUnit { get; set; } = string.Empty;
 
@@ -551,14 +629,14 @@ public class TaktStandardOperationTimeExportDto
     public int StandardShorts { get; set; } = 0;
 
     /// <summary>
-    /// 点数单位
+    /// 点数单位（字典 logistics_points_unit，默认 SHORT）
     /// </summary>
     public string PointsUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 点数转分钟汇率（1 点数 = 多少分钟）
+    /// 点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045）
     /// </summary>
-    public decimal PointsToMinutesRate { get; set; }
+    public string PointsToMinutesRate { get; set; } = string.Empty;
 
     /// <summary>
     /// 转换后标准工时（分钟）

@@ -25,20 +25,20 @@ namespace Takt.Domain.Entities.Logistics.Materials;
 public class TaktMaterialPlantChangeLog : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂物料ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 工厂物料 ID（关联 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
     /// </summary>
     [SugarColumn(ColumnName = "material_plant_id", ColumnDescription = "工厂物料ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long MaterialPlantId { get; set; }
 
     /// <summary>
-    /// 物料编码
+    /// 物料编码（关联 TaktMaterial.MaterialCode，冗余；选项 TaktMaterials/options）
     /// </summary>
     [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
@@ -57,7 +57,7 @@ public class TaktMaterialPlantChangeLog : TaktCompanyEntityBase
     public DateTime ChangeTime { get; set; } = DateTime.Now;
 
     /// <summary>
-    /// 变更人（人员代码）
+    /// 变更人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
     /// </summary>
     [SugarColumn(ColumnName = "change_by", ColumnDescription = "变更人", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? ChangeBy { get; set; }

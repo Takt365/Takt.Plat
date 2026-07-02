@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Sales
 // 文件名称：TaktSalesInvoiceDtos.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-07-01
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SalesInvoice 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSalesInvoice 生成，请按需审阅）
 // 
@@ -36,22 +36,17 @@ public class TaktSalesInvoiceDto : TaktCompanyDtoBase
     public long SalesInvoiceId { get; set; }
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售发票编码（唯一索引）
+    /// 年度期间（yyyyMM）
     /// </summary>
-    public string SalesInvoiceCode { get; set; } = string.Empty;
+    public string YearMonth { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联销售订单编码
-    /// </summary>
-    public string? SalesOrderCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 客户编码
+    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
     /// </summary>
     public string CustomerCode { get; set; } = string.Empty;
 
@@ -61,39 +56,9 @@ public class TaktSalesInvoiceDto : TaktCompanyDtoBase
     public string CustomerName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 开票日期
+    /// 会计凭证编号（租户+公司+工厂内唯一）
     /// </summary>
-    public DateTime InvoiceDate { get; set; }
-
-    /// <summary>
-    /// 发票总金额
-    /// </summary>
-    public decimal TotalAmount { get; set; }
-
-    /// <summary>
-    /// 税费
-    /// </summary>
-    public decimal TaxAmount { get; set; }
-
-    /// <summary>
-    /// 发票实付金额
-    /// </summary>
-    public decimal ActualAmount { get; set; }
-
-    /// <summary>
-    /// 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
-    /// </summary>
-    public int InvoiceStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 收款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
-    /// </summary>
-    public int PaymentMethod { get; set; } = 0;
-
-    /// <summary>
-    /// 发票号码（税务系统票号）
-    /// </summary>
-    public string? TaxInvoiceNo { get; set; } = string.Empty;
+    public string AccountingDocumentCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 销售发票明细列表（主子表关系，一张发票可有多个明细行）
@@ -124,22 +89,17 @@ public class TaktSalesInvoiceQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售发票编码（唯一索引）
+    /// 年度期间（yyyyMM）
     /// </summary>
-    public string? SalesInvoiceCode { get; set; } = string.Empty;
+    public string? YearMonth { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联销售订单编码
-    /// </summary>
-    public string? SalesOrderCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 客户编码
+    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
     /// </summary>
     public string? CustomerCode { get; set; } = string.Empty;
 
@@ -149,44 +109,9 @@ public class TaktSalesInvoiceQueryDto : TaktPagedQuery
     public string? CustomerName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 开票日期（范围查询-开始）
+    /// 会计凭证编号（租户+公司+工厂内唯一）
     /// </summary>
-    public DateTime? InvoiceDateStart { get; set; }
-
-    /// <summary>
-    /// 开票日期（范围查询-结束）
-    /// </summary>
-    public DateTime? InvoiceDateEnd { get; set; }
-
-    /// <summary>
-    /// 发票总金额
-    /// </summary>
-    public decimal? TotalAmount { get; set; }
-
-    /// <summary>
-    /// 税费
-    /// </summary>
-    public decimal? TaxAmount { get; set; }
-
-    /// <summary>
-    /// 发票实付金额
-    /// </summary>
-    public decimal? ActualAmount { get; set; }
-
-    /// <summary>
-    /// 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
-    /// </summary>
-    public int? InvoiceStatus { get; set; }
-
-    /// <summary>
-    /// 收款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
-    /// </summary>
-    public int? PaymentMethod { get; set; }
-
-    /// <summary>
-    /// 发票号码（税务系统票号）
-    /// </summary>
-    public string? TaxInvoiceNo { get; set; } = string.Empty;
+    public string? AccountingDocumentCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -229,31 +154,26 @@ public class TaktSalesInvoiceCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码不能为空")]
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售发票编码（唯一索引）
+    /// 年度期间（yyyyMM）
     /// </summary>
-    [Required(ErrorMessage = "销售发票编码（唯一索引）不能为空")]
-    public string SalesInvoiceCode { get; set; } = string.Empty;
+    [Required(ErrorMessage = "年度期间（yyyyMM）不能为空")]
+    public string YearMonth { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联销售订单编码
+    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
     /// </summary>
-    public string? SalesOrderCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 客户编码
-    /// </summary>
-    [Required(ErrorMessage = "客户编码不能为空")]
+    [Required(ErrorMessage = "客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）不能为空")]
     public string CustomerCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -263,39 +183,10 @@ public class TaktSalesInvoiceCreateDto
     public string CustomerName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 开票日期
+    /// 会计凭证编号（租户+公司+工厂内唯一）
     /// </summary>
-    public DateTime InvoiceDate { get; set; }
-
-    /// <summary>
-    /// 发票总金额
-    /// </summary>
-    public decimal TotalAmount { get; set; }
-
-    /// <summary>
-    /// 税费
-    /// </summary>
-    public decimal TaxAmount { get; set; }
-
-    /// <summary>
-    /// 发票实付金额
-    /// </summary>
-    public decimal ActualAmount { get; set; }
-
-    /// <summary>
-    /// 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
-    /// </summary>
-    public int InvoiceStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 收款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
-    /// </summary>
-    public int PaymentMethod { get; set; } = 0;
-
-    /// <summary>
-    /// 发票号码（税务系统票号）
-    /// </summary>
-    public string? TaxInvoiceNo { get; set; } = string.Empty;
+    [Required(ErrorMessage = "会计凭证编号（租户+公司+工厂内唯一）不能为空")]
+    public string AccountingDocumentCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 销售发票明细列表（主子表关系，一张发票可有多个明细行）（子表，级联保存）
@@ -335,30 +226,6 @@ public class TaktSalesInvoiceUpdateDto : TaktSalesInvoiceCreateDto
 }
 
 // ========================================
-// SalesInvoice 状态 DTO
-// ========================================
-
-/// <summary>
-/// SalesInvoice 状态更新 DTO
-/// </summary>
-public class TaktSalesInvoiceStatusDto
-{
-    /// <summary>
-    /// SalesInvoiceID
-    /// </summary>
-    [Required(ErrorMessage = "ID不能为空")]
-    [AdaptMember("Id")]
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long SalesInvoiceId { get; set; }
-
-    /// <summary>
-    /// 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
-    /// </summary>
-    [Required(ErrorMessage = "发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）不能为空")]
-    public int InvoiceStatus { get; set; } = 0;
-}
-
-// ========================================
 // 导入 DTO
 // ========================================
 
@@ -378,22 +245,17 @@ public class TaktSalesInvoiceTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售发票编码（唯一索引）
+    /// 年度期间（yyyyMM）
     /// </summary>
-    public string? SalesInvoiceCode { get; set; } = string.Empty;
+    public string? YearMonth { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联销售订单编码
-    /// </summary>
-    public string? SalesOrderCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 客户编码
+    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
     /// </summary>
     public string? CustomerCode { get; set; } = string.Empty;
 
@@ -403,19 +265,14 @@ public class TaktSalesInvoiceTemplateDto
     public string? CustomerName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
+    /// 会计凭证编号（租户+公司+工厂内唯一）
     /// </summary>
-    public int? InvoiceStatus { get; set; }
+    public string? AccountingDocumentCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 收款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+    /// 销售发票明细列表（主子表关系，一张发票可有多个明细行）（子表，级联保存）
     /// </summary>
-    public int? PaymentMethod { get; set; }
-
-    /// <summary>
-    /// 发票号码（税务系统票号）
-    /// </summary>
-    public string? TaxInvoiceNo { get; set; } = string.Empty;
+    public List<TaktSalesInvoiceItemCreateDto>? Items { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -445,27 +302,22 @@ public class TaktSalesInvoiceImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售发票编码（唯一索引）
+    /// 年度期间（yyyyMM）
     /// </summary>
-    public string? SalesInvoiceCode { get; set; } = string.Empty;
+    public string? YearMonth { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联销售订单编码
-    /// </summary>
-    public string? SalesOrderCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 客户编码
+    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
     /// </summary>
     public string? CustomerCode { get; set; } = string.Empty;
 
@@ -475,19 +327,14 @@ public class TaktSalesInvoiceImportDto
     public string? CustomerName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
+    /// 会计凭证编号（租户+公司+工厂内唯一）
     /// </summary>
-    public int? InvoiceStatus { get; set; }
+    public string? AccountingDocumentCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 收款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+    /// 销售发票明细列表（主子表关系，一张发票可有多个明细行）（子表，级联保存）
     /// </summary>
-    public int? PaymentMethod { get; set; }
-
-    /// <summary>
-    /// 发票号码（税务系统票号）
-    /// </summary>
-    public string? TaxInvoiceNo { get; set; } = string.Empty;
+    public List<TaktSalesInvoiceItemCreateDto>? Items { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -523,22 +370,17 @@ public class TaktSalesInvoiceExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售发票编码（唯一索引）
+    /// 年度期间（yyyyMM）
     /// </summary>
-    public string SalesInvoiceCode { get; set; } = string.Empty;
+    public string YearMonth { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联销售订单编码
-    /// </summary>
-    public string? SalesOrderCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 客户编码
+    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
     /// </summary>
     public string CustomerCode { get; set; } = string.Empty;
 
@@ -548,39 +390,9 @@ public class TaktSalesInvoiceExportDto
     public string CustomerName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 开票日期
+    /// 会计凭证编号（租户+公司+工厂内唯一）
     /// </summary>
-    public DateTime InvoiceDate { get; set; }
-
-    /// <summary>
-    /// 发票总金额
-    /// </summary>
-    public decimal TotalAmount { get; set; }
-
-    /// <summary>
-    /// 税费
-    /// </summary>
-    public decimal TaxAmount { get; set; }
-
-    /// <summary>
-    /// 发票实付金额
-    /// </summary>
-    public decimal ActualAmount { get; set; }
-
-    /// <summary>
-    /// 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
-    /// </summary>
-    public int InvoiceStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 收款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
-    /// </summary>
-    public int PaymentMethod { get; set; } = 0;
-
-    /// <summary>
-    /// 发票号码（税务系统票号）
-    /// </summary>
-    public string? TaxInvoiceNo { get; set; } = string.Empty;
+    public string AccountingDocumentCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON

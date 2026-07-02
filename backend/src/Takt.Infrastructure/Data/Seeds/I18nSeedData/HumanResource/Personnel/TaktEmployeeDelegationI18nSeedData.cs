@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel
 // 文件名称：TaktEmployeeDelegationI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployeeDelegation 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,58 +91,58 @@ public class TaktEmployeeDelegationI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.employeedelegation._self", "zh-HK", "员工代理关系信息_hk", "实体名称"),
 
             // entity.employeedelegation.proxyemployeeid
-            new TranslationSeedItem("entity.employeedelegation.proxyemployeeid", "en-US", "代理人ID_us", "代理人ID（代替别人处理工作的人）"),
+            new TranslationSeedItem("entity.employeedelegation.proxyemployeeid", "en-US", "代理人ID_us", "代理人（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
             // entity.employeedelegation.proxyemployeeid
-            new TranslationSeedItem("entity.employeedelegation.proxyemployeeid", "ja-JP", "代理人ID_jp", "代理人ID（代替别人处理工作的人）"),
+            new TranslationSeedItem("entity.employeedelegation.proxyemployeeid", "ja-JP", "代理人ID_jp", "代理人（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
             // entity.employeedelegation.proxyemployeeid
-            new TranslationSeedItem("entity.employeedelegation.proxyemployeeid", "zh-CN", "代理人ID", "代理人ID（代替别人处理工作的人）"),
+            new TranslationSeedItem("entity.employeedelegation.proxyemployeeid", "zh-CN", "代理人ID", "代理人（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
             // entity.employeedelegation.proxyemployeeid
-            new TranslationSeedItem("entity.employeedelegation.proxyemployeeid", "zh-HK", "代理人ID_hk", "代理人ID（代替别人处理工作的人）"),
+            new TranslationSeedItem("entity.employeedelegation.proxyemployeeid", "zh-HK", "代理人ID_hk", "代理人（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
 
             // entity.employeedelegation.originalemployeeid
-            new TranslationSeedItem("entity.employeedelegation.originalemployeeid", "en-US", "被代理人ID_us", "被代理人ID（需要别人代替的人）"),
+            new TranslationSeedItem("entity.employeedelegation.originalemployeeid", "en-US", "被代理人ID_us", "被代理人（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
             // entity.employeedelegation.originalemployeeid
-            new TranslationSeedItem("entity.employeedelegation.originalemployeeid", "ja-JP", "被代理人ID_jp", "被代理人ID（需要别人代替的人）"),
+            new TranslationSeedItem("entity.employeedelegation.originalemployeeid", "ja-JP", "被代理人ID_jp", "被代理人（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
             // entity.employeedelegation.originalemployeeid
-            new TranslationSeedItem("entity.employeedelegation.originalemployeeid", "zh-CN", "被代理人ID", "被代理人ID（需要别人代替的人）"),
+            new TranslationSeedItem("entity.employeedelegation.originalemployeeid", "zh-CN", "被代理人ID", "被代理人（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
             // entity.employeedelegation.originalemployeeid
-            new TranslationSeedItem("entity.employeedelegation.originalemployeeid", "zh-HK", "被代理人ID_hk", "被代理人ID（需要别人代替的人）"),
+            new TranslationSeedItem("entity.employeedelegation.originalemployeeid", "zh-HK", "被代理人ID_hk", "被代理人（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
 
             // entity.employeedelegation.delegationtype
-            new TranslationSeedItem("entity.employeedelegation.delegationtype", "en-US", "代理类型_us", "代理类型 1 = 完全代理（代理人拥有被代理人的所有权限） 2 = 部分代理（仅代理特定部门/岗位的权限） 3 = 审批代理（仅代理审批流程）"),
+            new TranslationSeedItem("entity.employeedelegation.delegationtype", "en-US", "代理类型_us", "代理类型（字典 hr_employee_delegation_type；1=完全代理 2=部分代理 3=审批代理）"),
             // entity.employeedelegation.delegationtype
-            new TranslationSeedItem("entity.employeedelegation.delegationtype", "ja-JP", "代理类型_jp", "代理类型 1 = 完全代理（代理人拥有被代理人的所有权限） 2 = 部分代理（仅代理特定部门/岗位的权限） 3 = 审批代理（仅代理审批流程）"),
+            new TranslationSeedItem("entity.employeedelegation.delegationtype", "ja-JP", "代理类型_jp", "代理类型（字典 hr_employee_delegation_type；1=完全代理 2=部分代理 3=审批代理）"),
             // entity.employeedelegation.delegationtype
-            new TranslationSeedItem("entity.employeedelegation.delegationtype", "zh-CN", "代理类型", "代理类型 1 = 完全代理（代理人拥有被代理人的所有权限） 2 = 部分代理（仅代理特定部门/岗位的权限） 3 = 审批代理（仅代理审批流程）"),
+            new TranslationSeedItem("entity.employeedelegation.delegationtype", "zh-CN", "代理类型", "代理类型（字典 hr_employee_delegation_type；1=完全代理 2=部分代理 3=审批代理）"),
             // entity.employeedelegation.delegationtype
-            new TranslationSeedItem("entity.employeedelegation.delegationtype", "zh-HK", "代理类型_hk", "代理类型 1 = 完全代理（代理人拥有被代理人的所有权限） 2 = 部分代理（仅代理特定部门/岗位的权限） 3 = 审批代理（仅代理审批流程）"),
+            new TranslationSeedItem("entity.employeedelegation.delegationtype", "zh-HK", "代理类型_hk", "代理类型（字典 hr_employee_delegation_type；1=完全代理 2=部分代理 3=审批代理）"),
 
             // entity.employeedelegation.scopetype
-            new TranslationSeedItem("entity.employeedelegation.scopetype", "en-US", "代理范围类型_us", "代理范围类型 1 = 部门级别（代理被代理人在特定部门的所有权限） 2 = 岗位级别（代理被代理人在特定岗位的所有权限） 3 = 全局代理（代理被代理人的所有权限） 4 = 特定业务（仅代理特定业务流程）"),
+            new TranslationSeedItem("entity.employeedelegation.scopetype", "en-US", "代理范围类型_us", "代理范围类型（字典 hr_employee_delegation_scope_type；1=部门级别 2=岗位级别 3=全局代理 4=特定业务）"),
             // entity.employeedelegation.scopetype
-            new TranslationSeedItem("entity.employeedelegation.scopetype", "ja-JP", "代理范围类型_jp", "代理范围类型 1 = 部门级别（代理被代理人在特定部门的所有权限） 2 = 岗位级别（代理被代理人在特定岗位的所有权限） 3 = 全局代理（代理被代理人的所有权限） 4 = 特定业务（仅代理特定业务流程）"),
+            new TranslationSeedItem("entity.employeedelegation.scopetype", "ja-JP", "代理范围类型_jp", "代理范围类型（字典 hr_employee_delegation_scope_type；1=部门级别 2=岗位级别 3=全局代理 4=特定业务）"),
             // entity.employeedelegation.scopetype
-            new TranslationSeedItem("entity.employeedelegation.scopetype", "zh-CN", "代理范围类型", "代理范围类型 1 = 部门级别（代理被代理人在特定部门的所有权限） 2 = 岗位级别（代理被代理人在特定岗位的所有权限） 3 = 全局代理（代理被代理人的所有权限） 4 = 特定业务（仅代理特定业务流程）"),
+            new TranslationSeedItem("entity.employeedelegation.scopetype", "zh-CN", "代理范围类型", "代理范围类型（字典 hr_employee_delegation_scope_type；1=部门级别 2=岗位级别 3=全局代理 4=特定业务）"),
             // entity.employeedelegation.scopetype
-            new TranslationSeedItem("entity.employeedelegation.scopetype", "zh-HK", "代理范围类型_hk", "代理范围类型 1 = 部门级别（代理被代理人在特定部门的所有权限） 2 = 岗位级别（代理被代理人在特定岗位的所有权限） 3 = 全局代理（代理被代理人的所有权限） 4 = 特定业务（仅代理特定业务流程）"),
+            new TranslationSeedItem("entity.employeedelegation.scopetype", "zh-HK", "代理范围类型_hk", "代理范围类型（字典 hr_employee_delegation_scope_type；1=部门级别 2=岗位级别 3=全局代理 4=特定业务）"),
 
             // entity.employeedelegation.scopeid
-            new TranslationSeedItem("entity.employeedelegation.scopeid", "en-US", "代理范围ID_us", "代理范围ID 当 ScopeType=1 时，表示部门ID 当 ScopeType=2 时，表示岗位ID 当 ScopeType=4 时，表示业务ID（如：工作流定义ID）"),
+            new TranslationSeedItem("entity.employeedelegation.scopeid", "en-US", "代理范围ID_us", "代理范围 ID（ScopeType=1 时关联 TaktDept.Id/TaktDepts/tree-options；=2 时关联 TaktPost.Id/TaktPosts/options；=4 时为业务主键）"),
             // entity.employeedelegation.scopeid
-            new TranslationSeedItem("entity.employeedelegation.scopeid", "ja-JP", "代理范围ID_jp", "代理范围ID 当 ScopeType=1 时，表示部门ID 当 ScopeType=2 时，表示岗位ID 当 ScopeType=4 时，表示业务ID（如：工作流定义ID）"),
+            new TranslationSeedItem("entity.employeedelegation.scopeid", "ja-JP", "代理范围ID_jp", "代理范围 ID（ScopeType=1 时关联 TaktDept.Id/TaktDepts/tree-options；=2 时关联 TaktPost.Id/TaktPosts/options；=4 时为业务主键）"),
             // entity.employeedelegation.scopeid
-            new TranslationSeedItem("entity.employeedelegation.scopeid", "zh-CN", "代理范围ID", "代理范围ID 当 ScopeType=1 时，表示部门ID 当 ScopeType=2 时，表示岗位ID 当 ScopeType=4 时，表示业务ID（如：工作流定义ID）"),
+            new TranslationSeedItem("entity.employeedelegation.scopeid", "zh-CN", "代理范围ID", "代理范围 ID（ScopeType=1 时关联 TaktDept.Id/TaktDepts/tree-options；=2 时关联 TaktPost.Id/TaktPosts/options；=4 时为业务主键）"),
             // entity.employeedelegation.scopeid
-            new TranslationSeedItem("entity.employeedelegation.scopeid", "zh-HK", "代理范围ID_hk", "代理范围ID 当 ScopeType=1 时，表示部门ID 当 ScopeType=2 时，表示岗位ID 当 ScopeType=4 时，表示业务ID（如：工作流定义ID）"),
+            new TranslationSeedItem("entity.employeedelegation.scopeid", "zh-HK", "代理范围ID_hk", "代理范围 ID（ScopeType=1 时关联 TaktDept.Id/TaktDepts/tree-options；=2 时关联 TaktPost.Id/TaktPosts/options；=4 时为业务主键）"),
 
             // entity.employeedelegation.reason
-            new TranslationSeedItem("entity.employeedelegation.reason", "en-US", "代理原因_us", "代理原因 如：休假、出差、培训、岗位空缺、病假等"),
+            new TranslationSeedItem("entity.employeedelegation.reason", "en-US", "代理原因_us", "代理原因（如休假、出差、培训、岗位空缺、病假等）"),
             // entity.employeedelegation.reason
-            new TranslationSeedItem("entity.employeedelegation.reason", "ja-JP", "代理原因_jp", "代理原因 如：休假、出差、培训、岗位空缺、病假等"),
+            new TranslationSeedItem("entity.employeedelegation.reason", "ja-JP", "代理原因_jp", "代理原因（如休假、出差、培训、岗位空缺、病假等）"),
             // entity.employeedelegation.reason
-            new TranslationSeedItem("entity.employeedelegation.reason", "zh-CN", "代理原因", "代理原因 如：休假、出差、培训、岗位空缺、病假等"),
+            new TranslationSeedItem("entity.employeedelegation.reason", "zh-CN", "代理原因", "代理原因（如休假、出差、培训、岗位空缺、病假等）"),
             // entity.employeedelegation.reason
-            new TranslationSeedItem("entity.employeedelegation.reason", "zh-HK", "代理原因_hk", "代理原因 如：休假、出差、培训、岗位空缺、病假等"),
+            new TranslationSeedItem("entity.employeedelegation.reason", "zh-HK", "代理原因_hk", "代理原因（如休假、出差、培训、岗位空缺、病假等）"),
 
             // entity.employeedelegation.startdate
             new TranslationSeedItem("entity.employeedelegation.startdate", "en-US", "代理开始时间_us", "代理开始时间"),
@@ -154,13 +154,13 @@ public class TaktEmployeeDelegationI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.employeedelegation.startdate", "zh-HK", "代理开始时间_hk", "代理开始时间"),
 
             // entity.employeedelegation.enddate
-            new TranslationSeedItem("entity.employeedelegation.enddate", "en-US", "代理结束时间_us", "代理结束时间 null = 长期有效，直到手动删除"),
+            new TranslationSeedItem("entity.employeedelegation.enddate", "en-US", "代理结束时间_us", "代理结束时间（null=长期有效，直到手动删除）"),
             // entity.employeedelegation.enddate
-            new TranslationSeedItem("entity.employeedelegation.enddate", "ja-JP", "代理结束时间_jp", "代理结束时间 null = 长期有效，直到手动删除"),
+            new TranslationSeedItem("entity.employeedelegation.enddate", "ja-JP", "代理结束时间_jp", "代理结束时间（null=长期有效，直到手动删除）"),
             // entity.employeedelegation.enddate
-            new TranslationSeedItem("entity.employeedelegation.enddate", "zh-CN", "代理结束时间", "代理结束时间 null = 长期有效，直到手动删除"),
+            new TranslationSeedItem("entity.employeedelegation.enddate", "zh-CN", "代理结束时间", "代理结束时间（null=长期有效，直到手动删除）"),
             // entity.employeedelegation.enddate
-            new TranslationSeedItem("entity.employeedelegation.enddate", "zh-HK", "代理结束时间_hk", "代理结束时间 null = 长期有效，直到手动删除"),
+            new TranslationSeedItem("entity.employeedelegation.enddate", "zh-HK", "代理结束时间_hk", "代理结束时间（null=长期有效，直到手动删除）"),
         };
     }
 

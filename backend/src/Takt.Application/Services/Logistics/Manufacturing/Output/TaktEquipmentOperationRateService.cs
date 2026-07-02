@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Output
 // 文件名称：TaktEquipmentOperationRateService.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：机器稼动率应用服务实现
 // 
@@ -30,23 +30,27 @@ namespace Takt.Application.Services.Logistics.Manufacturing.Output;
 public class TaktEquipmentOperationRateService : TaktServiceBase, ITaktEquipmentOperationRateService
 {
     private readonly ITaktCompanyRepository<TaktEquipmentOperationRate> _equipmentOperationRateRepository;
+    private readonly ITaktCompanyRepository<TaktEquipmentOperationRateChangeLog> _equipmentOperationRateChangeLogRepository;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="equipmentOperationRateRepository">机器稼动率仓储</param>
+    /// <param name="equipmentOperationRateChangeLogRepository">EquipmentOperationRateChangeLog仓储</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktEquipmentOperationRateService(
         ITaktCompanyRepository<TaktEquipmentOperationRate> equipmentOperationRateRepository,
+        ITaktCompanyRepository<TaktEquipmentOperationRateChangeLog> equipmentOperationRateChangeLogRepository,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
         _equipmentOperationRateRepository = equipmentOperationRateRepository;
+        _equipmentOperationRateChangeLogRepository = equipmentOperationRateChangeLogRepository;
         _uniqueValidator = uniqueValidator;
     }
 
@@ -81,8 +85,9 @@ public class TaktEquipmentOperationRateService : TaktServiceBase, ITaktEquipment
         {
             return null;
         }
-        return entity.Adapt<TaktEquipmentOperationRateDto>();
-    }
+        var dto = entity.Adapt<TaktEquipmentOperationRateDto>();
+        await FillEquipmentOperationRateDetailsAsync(dto, entity);
+        return dto;    }
 
     /// <summary>
     /// 获取机器稼动率选项列表
@@ -92,7 +97,7 @@ public class TaktEquipmentOperationRateService : TaktServiceBase, ITaktEquipment
     {
         EnsureThreeLayerContext();
         var list = await _equipmentOperationRateRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.EquipmentStatus == 1,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.EquipmentOperationRateStatus == 0,
             x => x.EquipmentName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
@@ -122,6 +127,7 @@ public class TaktEquipmentOperationRateService : TaktServiceBase, ITaktEquipment
             throw new TaktBusinessException("机器稼动率的PlantCode、EquipmentCode、TimeCategory、StartDate、ShiftNo已存在");
         }
         entity = await _equipmentOperationRateRepository.CreateAsync(entity);
+                await SaveEquipmentOperationRateChildrenAsync(entity, dto);
         return await GetEquipmentOperationRateByIdAsync(entity.Id) ?? entity.Adapt<TaktEquipmentOperationRateDto>();
     }
 
@@ -152,6 +158,7 @@ public class TaktEquipmentOperationRateService : TaktServiceBase, ITaktEquipment
             throw new TaktBusinessException("机器稼动率的PlantCode、EquipmentCode、TimeCategory、StartDate、ShiftNo已存在");
         }
         await _equipmentOperationRateRepository.UpdateAsync(entity);
+                await SaveEquipmentOperationRateChildrenAsync(entity, dto);
         return await GetEquipmentOperationRateByIdAsync(id) ?? throw new TaktBusinessException("机器稼动率不存在");
     }
 
@@ -162,6 +169,12 @@ public class TaktEquipmentOperationRateService : TaktServiceBase, ITaktEquipment
     /// <returns>任务</returns>
     public async Task DeleteEquipmentOperationRateByIdAsync(long id)
     {
+        var entity = await _equipmentOperationRateRepository.GetByIdAsync(id);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("机器稼动率不存在或已删除");
+        }
+        await _equipmentOperationRateChangeLogRepository.DeleteAsync(x => x.EquipmentOperationRateId == entity.Id);
         var deleted = await _equipmentOperationRateRepository.DeleteAsync(id);
         if (!deleted)
         {
@@ -199,7 +212,7 @@ public class TaktEquipmentOperationRateService : TaktServiceBase, ITaktEquipment
         {
             throw new TaktBusinessException("机器稼动率不存在");
         }
-        entity.EquipmentStatus = dto.EquipmentStatus;
+        entity.EquipmentOperationRateStatus = dto.EquipmentOperationRateStatus;
         await _equipmentOperationRateRepository.UpdateAsync(entity);
         return await GetEquipmentOperationRateByIdAsync(dto.EquipmentOperationRateId) ?? throw new TaktBusinessException("机器稼动率不存在");
     }
@@ -294,6 +307,54 @@ public class TaktEquipmentOperationRateService : TaktServiceBase, ITaktEquipment
     }
 
     // ========================================
+    // 主子表级联（OneToMany）
+    // ========================================
+
+    /// <summary>
+    /// 填充机器稼动率详情（加载 OneToMany 子表：机器稼动率变更记录）
+    /// </summary>
+    /// <param name="dto">响应 DTO</param>
+    /// <param name="entity">主表实体</param>
+    /// <returns>任务</returns>
+    private async Task FillEquipmentOperationRateDetailsAsync(TaktEquipmentOperationRateDto dto, TaktEquipmentOperationRate entity)
+    {
+        if (dto == null)
+        {
+            return;
+        }
+        // 机器稼动率变更记录 → dto.ChangeLogs
+        var changelogs = await _equipmentOperationRateChangeLogRepository.GetListAsync(x => x.EquipmentOperationRateId == entity.Id);
+        dto.ChangeLogs = changelogs.Adapt<List<TaktEquipmentOperationRateChangeLogDto>>();
+    }
+
+    /// <summary>
+    /// 保存机器稼动率子表级联（机器稼动率变更记录；Create/Update 后按主表 Id 先删后插）
+    /// </summary>
+    /// <param name="entity">主表实体</param>
+    /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
+    /// <returns>任务</returns>
+    private async Task SaveEquipmentOperationRateChildrenAsync(TaktEquipmentOperationRate entity, TaktEquipmentOperationRateCreateDto dto)
+    {
+        // 机器稼动率变更记录（ChangeLogs）
+        if (dto.ChangeLogs is not { Count: > 0 })
+        {
+            await _equipmentOperationRateChangeLogRepository.DeleteAsync(x => x.EquipmentOperationRateId == entity.Id);
+        }
+        else
+        {
+            var changelogs = dto.ChangeLogs.Adapt<List<TaktEquipmentOperationRateChangeLog>>();
+            foreach (var child in changelogs)
+            {
+                child.EquipmentOperationRateId = entity.Id;
+            }
+            await _equipmentOperationRateChangeLogRepository.DeleteAsync(x => x.EquipmentOperationRateId == entity.Id);
+            foreach (var child in changelogs)
+            {
+            }
+            await _equipmentOperationRateChangeLogRepository.CreateRangeAsync(changelogs);
+        }
+    }
+    // ========================================
     // 查询表达式
     // ========================================
 
@@ -317,7 +378,7 @@ public class TaktEquipmentOperationRateService : TaktServiceBase, ITaktEquipment
                 || (x.EquipmentCode != null && x.EquipmentCode.Contains(keywords))
                 || (x.EquipmentName != null && x.EquipmentName.Contains(keywords))
                 || SqlFunc.ToString(x.EquipmentType).Contains(keywords)
-                || (x.ProductionLine != null && x.ProductionLine.Contains(keywords))
+                || (x.ProdTeam != null && x.ProdTeam.Contains(keywords))
                 || SqlFunc.ToString(x.ShiftNo).Contains(keywords)
                 || SqlFunc.ToString(x.PlannedRuntime).Contains(keywords)
                 || SqlFunc.ToString(x.ActualRuntime).Contains(keywords)
@@ -330,11 +391,10 @@ public class TaktEquipmentOperationRateService : TaktServiceBase, ITaktEquipment
                 || SqlFunc.ToString(x.YieldRate).Contains(keywords)
                 || SqlFunc.ToString(x.DowntimeReasonType).Contains(keywords)
                 || (x.DowntimeReason != null && x.DowntimeReason.Contains(keywords))
-                || SqlFunc.ToString(x.EquipmentStatus).Contains(keywords)
                 || (x.EquipmentOperator != null && x.EquipmentOperator.Contains(keywords))
                 || (x.EquipmentMaintainer != null && x.EquipmentMaintainer.Contains(keywords))
                 || (x.TeamLeader != null && x.TeamLeader.Contains(keywords))
-                || SqlFunc.ToString(x.Status).Contains(keywords)
+                || SqlFunc.ToString(x.EquipmentOperationRateStatus).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.StartDate).Contains(keywords)
@@ -378,9 +438,9 @@ public class TaktEquipmentOperationRateService : TaktServiceBase, ITaktEquipment
             exp = exp.And(x => x.EquipmentType == queryDto.EquipmentType);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ProductionLine))
+        if (!string.IsNullOrEmpty(queryDto?.ProdTeam))
         {
-            exp = exp.And(x => x.ProductionLine != null && x.ProductionLine.Contains(queryDto.ProductionLine));
+            exp = exp.And(x => x.ProdTeam != null && x.ProdTeam.Contains(queryDto.ProdTeam));
         }
 
         if (queryDto?.ShiftNo.HasValue == true)
@@ -443,11 +503,6 @@ public class TaktEquipmentOperationRateService : TaktServiceBase, ITaktEquipment
             exp = exp.And(x => x.DowntimeReason != null && x.DowntimeReason.Contains(queryDto.DowntimeReason));
         }
 
-        if (queryDto?.EquipmentStatus.HasValue == true)
-        {
-            exp = exp.And(x => x.EquipmentStatus == queryDto.EquipmentStatus);
-        }
-
         if (!string.IsNullOrEmpty(queryDto?.EquipmentOperator))
         {
             exp = exp.And(x => x.EquipmentOperator != null && x.EquipmentOperator.Contains(queryDto.EquipmentOperator));
@@ -463,9 +518,9 @@ public class TaktEquipmentOperationRateService : TaktServiceBase, ITaktEquipment
             exp = exp.And(x => x.TeamLeader != null && x.TeamLeader.Contains(queryDto.TeamLeader));
         }
 
-        if (queryDto?.Status.HasValue == true)
+        if (queryDto?.EquipmentOperationRateStatus.HasValue == true)
         {
-            exp = exp.And(x => x.Status == queryDto.Status);
+            exp = exp.And(x => x.EquipmentOperationRateStatus == queryDto.EquipmentOperationRateStatus);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

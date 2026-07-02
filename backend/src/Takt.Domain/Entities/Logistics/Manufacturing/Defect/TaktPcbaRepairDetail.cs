@@ -44,9 +44,9 @@ public class TaktPcbaRepairDetail : TaktCompanyEntityBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// PCBA板别
+    /// PCBA板别（字典 logistics_pcba_panel_category，存 DictValue）
     /// </summary>
-    [SugarColumn(ColumnName = "pcba_board_type", ColumnDescription = "PCBA板别", Length = 50, ColumnDataType = "nvarchar", IsNullable = true)]
+    [SugarColumn(ColumnName = "pcba_board_type", ColumnDescription = "PCBA板别", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? PcbaBoardType { get; set; }
 
     /// <summary>
@@ -56,10 +56,10 @@ public class TaktPcbaRepairDetail : TaktCompanyEntityBase
     public decimal ProdActualQty { get; set; } = 0;
 
     /// <summary>
-    /// 生产线
+    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
     /// </summary>
-    [SugarColumn(ColumnName = "prod_line", ColumnDescription = "生产线", Length = 50, ColumnDataType = "nvarchar", IsNullable = true)]
-    public string? ProdLine { get; set; }
+    [SugarColumn(ColumnName = "prod_team", ColumnDescription = "生产班组", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
+    public string? ProdTeam { get; set; }
 
     /// <summary>
     /// 卡号
@@ -74,9 +74,9 @@ public class TaktPcbaRepairDetail : TaktCompanyEntityBase
     public string? DefectSymptom { get; set; }
 
     /// <summary>
-    /// 检出工程
+    /// 检出工程（字典 logistics_defect_category，存 DictValue，与组立不良区分共用）
     /// </summary>
-    [SugarColumn(ColumnName = "defect_engineering", ColumnDescription = "检出工程", Length = 50, ColumnDataType = "nvarchar", IsNullable = true)]
+    [SugarColumn(ColumnName = "defect_engineering", ColumnDescription = "检出工程", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? DefectEngineering { get; set; }
 
     /// <summary>
@@ -92,21 +92,21 @@ public class TaktPcbaRepairDetail : TaktCompanyEntityBase
     public decimal DefectQty { get; set; } = 0;
 
     /// <summary>
-    /// 责任归属
+    /// 责任归属（字典 logistics_defect_responsibility_category，存 DictValue）
     /// </summary>
-    [SugarColumn(ColumnName = "defect_responsibility", ColumnDescription = "责任归属", Length = 50, ColumnDataType = "nvarchar", IsNullable = true)]
+    [SugarColumn(ColumnName = "defect_responsibility", ColumnDescription = "责任归属", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? DefectResponsibility { get; set; }
 
     /// <summary>
-    /// 不良性质
+    /// 不良性质（字典 logistics_defect_nature_category，存 DictValue）
     /// </summary>
-    [SugarColumn(ColumnName = "defect_nature", ColumnDescription = "不良性质", Length = 50, ColumnDataType = "nvarchar", IsNullable = true)]
+    [SugarColumn(ColumnName = "defect_nature", ColumnDescription = "不良性质", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? DefectNature { get; set; }
 
     /// <summary>
-    /// 修理员
+    /// 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
-    [SugarColumn(ColumnName = "repair_operator", ColumnDescription = "修理员", Length = 20, ColumnDataType = "nvarchar", IsNullable = true)]
+    [SugarColumn(ColumnName = "repair_operator", ColumnDescription = "修理员", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? RepairOperator { get; set; }
 
     /// <summary>

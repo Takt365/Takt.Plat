@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/quality/operation
 // 文件名称：iqc-order-change-log.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/operation 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,12 +29,12 @@ export interface IqcOrderChangeLog extends CompanyDtoBase {
   iqcOrderChangeLogId: string;
 
   /**
-   * IQC检验单ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * IQC检验单 ID（关联 TaktIqcOrder.Id，选项 TaktIqcOrders/options）
    */
   iqcOrderId: string;
 
   /**
-   * IQC检验单名称（填充字段）
+   * IQC检验单 名称（填充字段）
    */
   iqcOrderName?: string;
 
@@ -89,7 +89,7 @@ export interface IqcOrderChangeLogQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * IQC检验单ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * IQC检验单 ID（关联 TaktIqcOrder.Id，选项 TaktIqcOrders/options）
    */
   iqcOrderId?: string;
 
@@ -136,7 +136,7 @@ export interface IqcOrderChangeLogQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -163,12 +163,12 @@ export interface IqcOrderChangeLogCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
   /**
-   * IQC检验单ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * IQC检验单 ID（关联 TaktIqcOrder.Id，选项 TaktIqcOrders/options）
    */
   iqcOrderId: string;
 
@@ -200,7 +200,7 @@ export interface IqcOrderChangeLogCreate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -242,7 +242,7 @@ export interface IqcOrderChangeLogExport {
   companyCode: string;
 
   /**
-   * IQC检验单ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * IQC检验单 ID（关联 TaktIqcOrder.Id，选项 TaktIqcOrders/options）
    */
   iqcOrderId: string;
 
@@ -274,7 +274,7 @@ export interface IqcOrderChangeLogExport {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注

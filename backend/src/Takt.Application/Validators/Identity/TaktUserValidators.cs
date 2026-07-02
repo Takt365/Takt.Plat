@@ -2,9 +2,9 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Identity
 // 文件名称：TaktUserValidators.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
-// 功能描述：User 关联 DTO FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktUser 生成，请按需审阅）
+// 功能描述：User 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktUser 生成，请按需审阅）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -16,34 +16,113 @@ using Takt.Application.Dtos.Identity;
 namespace Takt.Application.Validators.Identity;
 
 // ========================================
-// User 关联 DTO 验证器
+// 创建User 验证器
 // ========================================
 
 /// <summary>
-/// 关联 User DTO 验证器
+/// 创建User DTO 验证器
 /// </summary>
-public class TaktUserDtoValidator : AbstractValidator<TaktUserDto>
+public class TaktUserCreateValidator : AbstractValidator<TaktCreateUserDto>
 {
     /// <summary>
-    /// 初始化 关联 User 校验规则
+    /// 初始化 创建User 校验规则
     /// </summary>
-    public TaktUserDtoValidator()
+    public TaktUserCreateValidator()
     {
+        RuleFor(x => x.TenantCode)
+            .NotEmpty().WithMessage("租户编码不能为空")
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
         RuleFor(x => x.Username)
             .NotEmpty().WithMessage("用户名不能为空")
             .MaximumLength(20).WithMessage("用户名长度不能超过20个字符");
         RuleFor(x => x.Nickname)
+            .NotEmpty().WithMessage("昵称不能为空")
             .MaximumLength(40).WithMessage("昵称长度不能超过40个字符");
         RuleFor(x => x.PasswordHash)
             .MaximumLength(255).WithMessage("密码哈希值长度不能超过255个字符");
         RuleFor(x => x.EmployeeId)
-            .GreaterThan(0).WithMessage("关联的员工ID无效");
+            .GreaterThanOrEqualTo(0).WithMessage("关联的员工ID不能为负数");
         RuleFor(x => x.DefaultCulture)
-            .NotEmpty().WithMessage("默认区域文化编码不能为空")
-            .MaximumLength(5).WithMessage("默认区域文化编码长度不能超过5个字符");
-        RuleFor(x => x.LastLoginIp)
-            .MaximumLength(50).WithMessage("最后登录IP长度不能超过50个字符");
-        RuleFor(x => x.EmployeeName)
-            .MaximumLength(200).WithMessage("EmployeeName长度不能超过200个字符").When(x => !string.IsNullOrWhiteSpace(x.EmployeeName));
+            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
+    }
+}
+
+// ========================================
+// 更新User 验证器
+// ========================================
+
+/// <summary>
+/// 更新User DTO 验证器
+/// </summary>
+public class TaktUserUpdateValidator : AbstractValidator<TaktUpdateUserDto>
+{
+    /// <summary>
+    /// 初始化 更新User 校验规则
+    /// </summary>
+    public TaktUserUpdateValidator()
+    {
+        RuleFor(x => x.UserId)
+            .GreaterThan(0).WithMessage("UserID无效");
+        RuleFor(x => x.TenantCode)
+            .NotEmpty().WithMessage("租户编码不能为空")
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.Username)
+            .NotEmpty().WithMessage("用户名不能为空")
+            .MaximumLength(20).WithMessage("用户名长度不能超过20个字符");
+        RuleFor(x => x.Nickname)
+            .NotEmpty().WithMessage("昵称不能为空")
+            .MaximumLength(40).WithMessage("昵称长度不能超过40个字符");
+        RuleFor(x => x.PasswordHash)
+            .MaximumLength(255).WithMessage("密码哈希值长度不能超过255个字符");
+        RuleFor(x => x.EmployeeId)
+            .GreaterThanOrEqualTo(0).WithMessage("关联的员工ID不能为负数");
+        RuleFor(x => x.DefaultCulture)
+            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
+    }
+}
+
+// ========================================
+// 导入User 验证器
+// ========================================
+
+/// <summary>
+/// 导入User DTO 验证器
+/// </summary>
+public class TaktUserImportValidator : AbstractValidator<TaktUserImportDto>
+{
+    /// <summary>
+    /// 初始化 导入User 校验规则
+    /// </summary>
+    public TaktUserImportValidator()
+    {
+        RuleFor(x => x.TenantCode)
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
+        RuleFor(x => x.Username)
+            .NotEmpty().WithMessage("用户名不能为空")
+            .MaximumLength(20).WithMessage("用户名长度不能超过20个字符");
+        RuleFor(x => x.Nickname)
+            .NotEmpty().WithMessage("昵称不能为空")
+            .MaximumLength(40).WithMessage("昵称长度不能超过40个字符");
+        RuleFor(x => x.PasswordHash)
+            .MaximumLength(255).WithMessage("密码哈希值长度不能超过255个字符").When(x => !string.IsNullOrWhiteSpace(x.PasswordHash));
+        RuleFor(x => x.EmployeeId)
+            .GreaterThanOrEqualTo(0).WithMessage("关联的员工ID不能为负数");
+        RuleFor(x => x.DefaultCulture)
+            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符").When(x => !string.IsNullOrWhiteSpace(x.Remark));
     }
 }

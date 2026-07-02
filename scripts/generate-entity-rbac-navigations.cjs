@@ -13,6 +13,7 @@
 const fs = require('fs');
 const path = require('path');
 const { writeGeneratedFile, logGeneratedFileWritePolicy, parseSingleEntityGenerateArgs } = require('./generate-script-common.cjs');
+const { assertNotManualDtoEntityCli } = require('./generate-entity-exclusions.cjs');
 const {
   NAVIGATION_REGION_MARKER,
   RBAC_PARENT_NAVIGATIONS,
@@ -215,7 +216,9 @@ function printUsage() {
 }
 
 function parseArgs() {
-  return parseSingleEntityGenerateArgs(printUsage);
+  const options = parseSingleEntityGenerateArgs(printUsage);
+  assertNotManualDtoEntityCli(options.entityPrefix);
+  return options;
 }
 
 if (require.main === module) {

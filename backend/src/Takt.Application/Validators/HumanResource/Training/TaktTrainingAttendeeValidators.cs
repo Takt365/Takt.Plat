@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.HumanResource.Training
 // 文件名称：TaktTrainingAttendeeValidators.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TrainingAttendee 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktTrainingAttendee 生成，请按需审阅）
 // 
@@ -36,12 +36,12 @@ public class TaktTrainingAttendeeCreateValidator : AbstractValidator<TaktTrainin
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.EmployeeId)
-            .GreaterThanOrEqualTo(0).WithMessage("员工 ID不能为负数");
+            .GreaterThanOrEqualTo(0).WithMessage("员工不能为负数");
         RuleFor(x => x.EmployeeName)
             .NotEmpty().WithMessage("员工姓名不能为空")
             .MaximumLength(40).WithMessage("员工姓名长度不能超过40个字符");
         RuleFor(x => x.TrainingCourseId)
-            .GreaterThanOrEqualTo(0).WithMessage("培训课程 ID不能为负数");
+            .GreaterThanOrEqualTo(0).WithMessage("培训课程不能为负数");
         RuleFor(x => x.CourseName)
             .NotEmpty().WithMessage("培训课程名称不能为空")
             .MaximumLength(40).WithMessage("培训课程名称长度不能超过40个字符");
@@ -58,6 +58,7 @@ public class TaktTrainingAttendeeCreateValidator : AbstractValidator<TaktTrainin
             .NotEmpty().WithMessage("培训评价不能为空")
             .MaximumLength(500).WithMessage("培训评价长度不能超过500个字符");
         RuleFor(x => x.RelatedPlant)
+            .NotEmpty().WithMessage("关联工厂不能为空")
             .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
@@ -82,6 +83,41 @@ public class TaktTrainingAttendeeUpdateValidator : AbstractValidator<TaktTrainin
     {
         RuleFor(x => x.TrainingAttendeeId)
             .GreaterThan(0).WithMessage("TrainingAttendeeID无效");
+        RuleFor(x => x.TenantCode)
+            .NotEmpty().WithMessage("租户编码不能为空")
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.CompanyCode)
+            .NotEmpty().WithMessage("公司代码不能为空")
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.EmployeeId)
+            .GreaterThanOrEqualTo(0).WithMessage("员工不能为负数");
+        RuleFor(x => x.EmployeeName)
+            .NotEmpty().WithMessage("员工姓名不能为空")
+            .MaximumLength(40).WithMessage("员工姓名长度不能超过40个字符");
+        RuleFor(x => x.TrainingCourseId)
+            .GreaterThanOrEqualTo(0).WithMessage("培训课程不能为负数");
+        RuleFor(x => x.CourseName)
+            .NotEmpty().WithMessage("培训课程名称不能为空")
+            .MaximumLength(40).WithMessage("培训课程名称长度不能超过40个字符");
+        RuleFor(x => x.TrainingType)
+            .NotEmpty().WithMessage("培训类型不能为空")
+            .MaximumLength(50).WithMessage("培训类型长度不能超过50个字符");
+        RuleFor(x => x.Instructor)
+            .NotEmpty().WithMessage("培训讲师不能为空")
+            .MaximumLength(50).WithMessage("培训讲师长度不能超过50个字符");
+        RuleFor(x => x.CertificateNo)
+            .NotEmpty().WithMessage("证书编号不能为空")
+            .MaximumLength(50).WithMessage("证书编号长度不能超过50个字符");
+        RuleFor(x => x.TrainingEvaluation)
+            .NotEmpty().WithMessage("培训评价不能为空")
+            .MaximumLength(500).WithMessage("培训评价长度不能超过500个字符");
+        RuleFor(x => x.RelatedPlant)
+            .NotEmpty().WithMessage("关联工厂不能为空")
+            .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符");
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
     }
 }
 
@@ -104,12 +140,12 @@ public class TaktTrainingAttendeeImportValidator : AbstractValidator<TaktTrainin
         RuleFor(x => x.CompanyCode)
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
         RuleFor(x => x.EmployeeId)
-            .GreaterThanOrEqualTo(0).WithMessage("员工 ID不能为负数");
+            .GreaterThanOrEqualTo(0).WithMessage("员工不能为负数");
         RuleFor(x => x.EmployeeName)
             .NotEmpty().WithMessage("员工姓名不能为空")
             .MaximumLength(40).WithMessage("员工姓名长度不能超过40个字符");
         RuleFor(x => x.TrainingCourseId)
-            .GreaterThanOrEqualTo(0).WithMessage("培训课程 ID不能为负数");
+            .GreaterThanOrEqualTo(0).WithMessage("培训课程不能为负数");
         RuleFor(x => x.CourseName)
             .NotEmpty().WithMessage("培训课程名称不能为空")
             .MaximumLength(40).WithMessage("培训课程名称长度不能超过40个字符");
@@ -126,7 +162,8 @@ public class TaktTrainingAttendeeImportValidator : AbstractValidator<TaktTrainin
             .NotEmpty().WithMessage("培训评价不能为空")
             .MaximumLength(500).WithMessage("培训评价长度不能超过500个字符");
         RuleFor(x => x.RelatedPlant)
-            .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.RelatedPlant));
+            .NotEmpty().WithMessage("关联工厂不能为空")
+            .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

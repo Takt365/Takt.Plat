@@ -8,7 +8,7 @@
 <!-- ======================================== -->
 
 <template>
-  <div class="human-resource-training-training-attendee">
+  <div class="p-4">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="statistics:logging:operlog:create"
-      update-permission="statistics:logging:operlog:update"
-      delete-permission="statistics:logging:operlog:delete"
-      import-permission="statistics:logging:operlog:import"
-      export-permission="statistics:logging:operlog:export"
+      create-permission="human:resource:training:attendee:create"
+      update-permission="human:resource:training:attendee:update"
+      delete-permission="human:resource:training:attendee:delete"
+      import-permission="human:resource:training:attendee:import"
+      export-permission="human:resource:training:attendee:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -54,8 +54,8 @@
 
     <!-- 表格 -->
     <TaktSingleTable
-      :columns="columns"
       entity-scope="company"
+      :columns="columns"
       :visible-column-keys="visibleColumnKeys"
       :id-column-key="'trainingAttendeeId'"
       table-mode="single"
@@ -72,7 +72,7 @@
 
     </TaktSingleTable>
 
-    <!-- 分页组件 -->
+    <!-- 分页（服务端分页，外置 TaktPagination） -->
     <TaktPagination
       v-model:current="currentPage"
       v-model:page-size="pageSize"
@@ -92,6 +92,7 @@
       @cancel="handleFormCancel"
     >
       <TrainingAttendeeForm
+        :key="formData?.trainingAttendeeId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -113,6 +114,8 @@
         <a-input
           v-model:value="advancedQueryForm.employeeId"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.trainingattendee.employeeid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -122,6 +125,8 @@
         <a-input
           v-model:value="advancedQueryForm.employeeName"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.trainingattendee.employeename') })"
+          show-count
+          :maxlength="40"
           allow-clear
         />
       </a-form-item>
@@ -131,6 +136,8 @@
         <a-input
           v-model:value="advancedQueryForm.trainingCourseId"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.trainingattendee.trainingcourseid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -140,6 +147,8 @@
         <a-input
           v-model:value="advancedQueryForm.courseName"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.trainingattendee.coursename') })"
+          show-count
+          :maxlength="40"
           allow-clear
         />
       </a-form-item>
@@ -149,6 +158,8 @@
         <a-input
           v-model:value="advancedQueryForm.trainingType"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.trainingattendee.trainingtype') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
@@ -158,6 +169,8 @@
         <a-input
           v-model:value="advancedQueryForm.instructor"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.trainingattendee.instructor') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
@@ -254,6 +267,8 @@
         <a-input
           v-model:value="advancedQueryForm.certificateNo"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.trainingattendee.certificateno') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
@@ -263,6 +278,8 @@
         <a-input
           v-model:value="advancedQueryForm.trainingEvaluation"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.trainingattendee.trainingevaluation') })"
+          show-count
+          :maxlength="500"
           allow-clear
         />
       </a-form-item>
@@ -281,6 +298,8 @@
         <a-input
           v-model:value="advancedQueryForm.relatedPlant"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.trainingattendee.relatedplant') })"
+          show-count
+          :maxlength="4"
           allow-clear
         />
       </a-form-item>
@@ -291,7 +310,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -302,17 +321,36 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('ExtField')">
-      <a-form-item :label="t('common.page.entity.ExtField')">
-        <a-input
-          v-model:value="advancedQueryForm.ExtField"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
-          allow-clear
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
+        <a-textarea
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -321,8 +359,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -366,7 +406,6 @@
 </template>
 
 <script setup lang="ts">
-import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 /**
  * 员工培训结果记录管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/human-resource/training/training-attendee
@@ -376,12 +415,13 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
-import TrainingAttendeeForm from './components/training-attendee-form.vue'
-import { getTrainingAttendeeList, getTrainingAttendeeById, createTrainingAttendee, updateTrainingAttendee, deleteTrainingAttendeeById, deleteTrainingAttendeeBatch, getTrainingAttendeeTemplate, importTrainingAttendee, exportTrainingAttendee } from '@/api/human-resource/training/training-attendee'
-import type { TrainingAttendee, TrainingAttendeeQuery, TrainingAttendeeCreate, TrainingAttendeeUpdate } from '@/types/human-resource/training/training-attendee'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
+import TrainingAttendeeForm from './components/attendee-form.vue'
+import { getTrainingAttendeeList, getTrainingAttendeeById, createTrainingAttendee, updateTrainingAttendee, deleteTrainingAttendeeById, deleteTrainingAttendeeBatch, getTrainingAttendeeTemplate, importTrainingAttendee, exportTrainingAttendee, updateTrainingAttendeeStatus } from '@/api/human-resource/training/attendee'
+import type { TrainingAttendee, TrainingAttendeeQuery } from '@/types/human-resource/training/attendee'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -416,11 +456,13 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<TrainingAttendee>>({})
+const formData = ref<Partial<TrainingAttendee> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
@@ -445,7 +487,7 @@ const advancedQueryForm = ref({
   relatedPlant: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
@@ -456,12 +498,12 @@ const queryFieldsMeta = computed(() => [
   { key: 'courseName', label: t('entity.trainingattendee.coursename') },
   { key: 'trainingType', label: t('entity.trainingattendee.trainingtype') },
   { key: 'instructor', label: t('entity.trainingattendee.instructor') },
-  { key: 'trainingStartDateStart', label: t('entity.trainingattendee.trainingstartdatestart') },
-  { key: 'trainingStartDateEnd', label: t('entity.trainingattendee.trainingstartdateend') },
-  { key: 'trainingEndDateStart', label: t('entity.trainingattendee.trainingenddatestart') },
-  { key: 'trainingEndDateEnd', label: t('entity.trainingattendee.trainingenddateend') },
-  { key: 'trainingDateStart', label: t('entity.trainingattendee.trainingdatestart') },
-  { key: 'trainingDateEnd', label: t('entity.trainingattendee.trainingdateend') },
+  { key: 'trainingStartDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.trainingattendee.trainingstartdate')) },
+  { key: 'trainingStartDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.trainingattendee.trainingstartdate')) },
+  { key: 'trainingEndDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.trainingattendee.trainingenddate')) },
+  { key: 'trainingEndDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.trainingattendee.trainingenddate')) },
+  { key: 'trainingDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.trainingattendee.trainingdate')) },
+  { key: 'trainingDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.trainingattendee.trainingdate')) },
   { key: 'trainingHours', label: t('entity.trainingattendee.traininghours') },
   { key: 'trainingScore', label: t('entity.trainingattendee.trainingscore') },
   { key: 'isPassed', label: t('entity.trainingattendee.ispassed') },
@@ -471,7 +513,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'relatedPlant', label: t('entity.trainingattendee.relatedplant') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'ExtField', label: t('common.page.entity.ExtField') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -490,10 +532,68 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
 
-/** 页面挂载后加载分页列表 */
-onMounted(() => {
+
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {TrainingAttendeeQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<TrainingAttendeeQuery>): TrainingAttendeeQuery {
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: TrainingAttendeeQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: keyof TrainingAttendeeQuery, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v as never
+    }
+  }
+  assignTrimmed('employeeId', form.employeeId)
+  assignTrimmed('employeeName', form.employeeName)
+  assignTrimmed('trainingCourseId', form.trainingCourseId)
+  assignTrimmed('courseName', form.courseName)
+  assignTrimmed('trainingType', form.trainingType)
+  assignTrimmed('instructor', form.instructor)
+  assignTrimmed('trainingStartDateStart', form.trainingStartDateStart)
+  assignTrimmed('trainingStartDateEnd', form.trainingStartDateEnd)
+  assignTrimmed('trainingEndDateStart', form.trainingEndDateStart)
+  assignTrimmed('trainingEndDateEnd', form.trainingEndDateEnd)
+  assignTrimmed('trainingDateStart', form.trainingDateStart)
+  assignTrimmed('trainingDateEnd', form.trainingDateEnd)
+  if (form.trainingHours !== undefined && form.trainingHours !== null) {
+    query.trainingHours = form.trainingHours
+  }
+  if (form.trainingScore !== undefined && form.trainingScore !== null) {
+    query.trainingScore = form.trainingScore
+  }
+  if (form.isPassed !== undefined && form.isPassed !== null) {
+    query.isPassed = form.isPassed
+  }
+  assignTrimmed('certificateNo', form.certificateNo)
+  assignTrimmed('trainingEvaluation', form.trainingEvaluation)
+  if (form.trainingResultStatus !== undefined && form.trainingResultStatus !== null) {
+    query.trainingResultStatus = form.trainingResultStatus
+  }
+  assignTrimmed('relatedPlant', form.relatedPlant)
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('extField', form.extField)
+  assignTrimmed('remark', form.remark)
+  return query
+}
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
   loadData()
 })
+
 
 
 
@@ -663,7 +763,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'statistics:logging:operlog:update',
+        permission: 'human:resource:training:attendee:update',
         onClick: (record: TrainingAttendee) => handleEdit(record)
       },
       {
@@ -671,7 +771,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'statistics:logging:operlog:delete',
+        permission: 'human:resource:training:attendee:delete',
         onClick: (record: TrainingAttendee) => handleDeleteOne(record)
       }
     ]
@@ -687,6 +787,7 @@ const getTrainingAttendeeId = (record: any): string => record?.[entityIdName] ??
  */
 const getTrainingAttendeeField = (record: any, field: string): any => record?.[field]
 
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -698,7 +799,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: TrainingAttendee, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getTrainingAttendeeId(selectedRow.value) === getTrainingAttendeeId(record)) {
+    } else if (selectedRow.value && getTrainingAttendeeId(selectedRow.value) === getTrainingAttendeeId(record)) {
       selectedRow.value = null
     }
   },
@@ -729,16 +830,7 @@ const onClickRow = (record: TrainingAttendee) => ({
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: TrainingAttendeeQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getTrainingAttendeeList(params)
+    const res = await getTrainingAttendeeList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
@@ -756,7 +848,7 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -785,18 +877,19 @@ function handleReset() {
   relatedPlant: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
   formTitle.value = t('common.dialog.title.create', { entity: t('entity.trainingattendee._self') })
-  formData.value = {}
+  formData.value = null
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗 */
 function handleEdit(record: TrainingAttendee) {
@@ -834,6 +927,8 @@ async function handleFormSubmit() {
       message.success(t('common.feedback.created', { target: t('entity.trainingattendee._self') }))
     }
     formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
     loadData()
   } finally {
     formLoading.value = false
@@ -843,6 +938,8 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开导入对话框 */
 function handleImport() {
@@ -874,16 +971,11 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: TrainingAttendeeQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportTrainingAttendee(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportTrainingAttendee(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -951,7 +1043,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -978,7 +1070,7 @@ function handleAdvancedQueryReset() {
   relatedPlant: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
 }
@@ -1008,23 +1100,16 @@ function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
 /** 分页页码变更 */
-function handlePaginationChange(page: number) {
+function handlePaginationChange(page: number, size: number) {
   currentPage.value = page
+  pageSize.value = size
   loadData()
 }
-/** 分页每页条数变更 */
+
+/** 分页每页条数变更（重置到第 1 页） */
 function handlePaginationSizeChange(_current: number, size: number) {
+  currentPage.value = getTaktDefaultPageIndex()
   pageSize.value = size
-  currentPage.value = 1
   loadData()
 }
 </script>
-
-<style scoped lang="css">
-.human-resource-training-training-attendee {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-</style>

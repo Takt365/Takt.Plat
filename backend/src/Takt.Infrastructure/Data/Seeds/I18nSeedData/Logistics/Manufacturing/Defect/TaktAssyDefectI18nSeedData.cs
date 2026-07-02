@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Defect
 // 文件名称：TaktAssyDefectI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktAssyDefect 实体字段国际化种子（已对齐前端 locales：src/locales/logistics/manufacturing/defect/assy-defect）
 // 
@@ -91,22 +91,22 @@ public class TaktAssyDefectI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.assydefect._self", "zh-HK", "组立不良日报信息_hk", "实体名称"),
 
             // entity.assydefect.plantcode
-            new TranslationSeedItem("entity.assydefect.plantcode", "en-US", "工厂代码_us", "工厂代码"),
+            new TranslationSeedItem("entity.assydefect.plantcode", "en-US", "工厂代码_us", "工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
             // entity.assydefect.plantcode
-            new TranslationSeedItem("entity.assydefect.plantcode", "ja-JP", "工厂代码_jp", "工厂代码"),
+            new TranslationSeedItem("entity.assydefect.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
             // entity.assydefect.plantcode
-            new TranslationSeedItem("entity.assydefect.plantcode", "zh-CN", "工厂代码", "工厂代码"),
+            new TranslationSeedItem("entity.assydefect.plantcode", "zh-CN", "工厂代码", "工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
             // entity.assydefect.plantcode
-            new TranslationSeedItem("entity.assydefect.plantcode", "zh-HK", "工厂代码_hk", "工厂代码"),
+            new TranslationSeedItem("entity.assydefect.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
 
             // entity.assydefect.prodcategory
-            new TranslationSeedItem("entity.assydefect.prodcategory", "en-US", "生产类别_us", "生产类别 RD: 研发 EVT: 工程验证测试 DVT: 设计验证测试 EPP: 工程试产 PP: 试产 FPP: 正式生产 MP: 大规模生产 RPR: 维修生产 RWR: 返工生产"),
+            new TranslationSeedItem("entity.assydefect.prodcategory", "en-US", "生产类别_us", "生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）"),
             // entity.assydefect.prodcategory
-            new TranslationSeedItem("entity.assydefect.prodcategory", "ja-JP", "生产类别_jp", "生产类别 RD: 研发 EVT: 工程验证测试 DVT: 设计验证测试 EPP: 工程试产 PP: 试产 FPP: 正式生产 MP: 大规模生产 RPR: 维修生产 RWR: 返工生产"),
+            new TranslationSeedItem("entity.assydefect.prodcategory", "ja-JP", "生产类别_jp", "生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）"),
             // entity.assydefect.prodcategory
-            new TranslationSeedItem("entity.assydefect.prodcategory", "zh-CN", "生产类别", "生产类别 RD: 研发 EVT: 工程验证测试 DVT: 设计验证测试 EPP: 工程试产 PP: 试产 FPP: 正式生产 MP: 大规模生产 RPR: 维修生产 RWR: 返工生产"),
+            new TranslationSeedItem("entity.assydefect.prodcategory", "zh-CN", "生产类别", "生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）"),
             // entity.assydefect.prodcategory
-            new TranslationSeedItem("entity.assydefect.prodcategory", "zh-HK", "生产类别_hk", "生产类别 RD: 研发 EVT: 工程验证测试 DVT: 设计验证测试 EPP: 工程试产 PP: 试产 FPP: 正式生产 MP: 大规模生产 RPR: 维修生产 RWR: 返工生产"),
+            new TranslationSeedItem("entity.assydefect.prodcategory", "zh-HK", "生产类别_hk", "生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）"),
 
             // entity.assydefect.proddate
             new TranslationSeedItem("entity.assydefect.proddate", "en-US", "生产日期_us", "生产日期"),
@@ -117,32 +117,32 @@ public class TaktAssyDefectI18nSeedData : ITaktSeedDataCoordinator
             // entity.assydefect.proddate
             new TranslationSeedItem("entity.assydefect.proddate", "zh-HK", "生产日期_hk", "生产日期"),
 
-            // entity.assydefect.prodline
-            new TranslationSeedItem("entity.assydefect.prodline", "en-US", "生产线_us", "生产线"),
-            // entity.assydefect.prodline
-            new TranslationSeedItem("entity.assydefect.prodline", "ja-JP", "生产线_jp", "生产线"),
-            // entity.assydefect.prodline
-            new TranslationSeedItem("entity.assydefect.prodline", "zh-CN", "生产线", "生产线"),
-            // entity.assydefect.prodline
-            new TranslationSeedItem("entity.assydefect.prodline", "zh-HK", "生产线_hk", "生产线"),
+            // entity.assydefect.prodteam
+            new TranslationSeedItem("entity.assydefect.prodteam", "en-US", "生产班组_us", "生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）"),
+            // entity.assydefect.prodteam
+            new TranslationSeedItem("entity.assydefect.prodteam", "ja-JP", "生产班组_jp", "生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）"),
+            // entity.assydefect.prodteam
+            new TranslationSeedItem("entity.assydefect.prodteam", "zh-CN", "生产班组", "生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）"),
+            // entity.assydefect.prodteam
+            new TranslationSeedItem("entity.assydefect.prodteam", "zh-HK", "生产班组_hk", "生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）"),
 
             // entity.assydefect.shiftno
-            new TranslationSeedItem("entity.assydefect.shiftno", "en-US", "班次_us", "班次(1=早班 2=中班 3=晚班)"),
+            new TranslationSeedItem("entity.assydefect.shiftno", "en-US", "班次_us", "班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
             // entity.assydefect.shiftno
-            new TranslationSeedItem("entity.assydefect.shiftno", "ja-JP", "班次_jp", "班次(1=早班 2=中班 3=晚班)"),
+            new TranslationSeedItem("entity.assydefect.shiftno", "ja-JP", "班次_jp", "班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
             // entity.assydefect.shiftno
-            new TranslationSeedItem("entity.assydefect.shiftno", "zh-CN", "班次", "班次(1=早班 2=中班 3=晚班)"),
+            new TranslationSeedItem("entity.assydefect.shiftno", "zh-CN", "班次", "班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
             // entity.assydefect.shiftno
-            new TranslationSeedItem("entity.assydefect.shiftno", "zh-HK", "班次_hk", "班次(1=早班 2=中班 3=晚班)"),
+            new TranslationSeedItem("entity.assydefect.shiftno", "zh-HK", "班次_hk", "班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
 
             // entity.assydefect.prodordercode
-            new TranslationSeedItem("entity.assydefect.prodordercode", "en-US", "生产订单号_us", "生产订单号"),
+            new TranslationSeedItem("entity.assydefect.prodordercode", "en-US", "生产工单号_us", "生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）"),
             // entity.assydefect.prodordercode
-            new TranslationSeedItem("entity.assydefect.prodordercode", "ja-JP", "生产订单号_jp", "生产订单号"),
+            new TranslationSeedItem("entity.assydefect.prodordercode", "ja-JP", "生产工单号_jp", "生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）"),
             // entity.assydefect.prodordercode
-            new TranslationSeedItem("entity.assydefect.prodordercode", "zh-CN", "生产订单号", "生产订单号"),
+            new TranslationSeedItem("entity.assydefect.prodordercode", "zh-CN", "生产工单号", "生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）"),
             // entity.assydefect.prodordercode
-            new TranslationSeedItem("entity.assydefect.prodordercode", "zh-HK", "生产订单号_hk", "生产订单号"),
+            new TranslationSeedItem("entity.assydefect.prodordercode", "zh-HK", "生产工单号_hk", "生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）"),
 
             // entity.assydefect.prodorderqty
             new TranslationSeedItem("entity.assydefect.prodorderqty", "en-US", "生产订单数量_us", "生产订单数量"),
@@ -197,15 +197,6 @@ public class TaktAssyDefectI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.assydefect.goodquantity", "zh-CN", "无不良数量", "无不良数量"),
             // entity.assydefect.goodquantity
             new TranslationSeedItem("entity.assydefect.goodquantity", "zh-HK", "无不良数量_hk", "无不良数量"),
-
-            // entity.assydefect.status
-            new TranslationSeedItem("entity.assydefect.status", "en-US", "状态_us", "状态(0=正常 1=停用)"),
-            // entity.assydefect.status
-            new TranslationSeedItem("entity.assydefect.status", "ja-JP", "状态_jp", "状态(0=正常 1=停用)"),
-            // entity.assydefect.status
-            new TranslationSeedItem("entity.assydefect.status", "zh-CN", "状态", "状态(0=正常 1=停用)"),
-            // entity.assydefect.status
-            new TranslationSeedItem("entity.assydefect.status", "zh-HK", "状态_hk", "状态(0=正常 1=停用)"),
 
             // entity.assydefect.details
             new TranslationSeedItem("entity.assydefect.details", "en-US", "组立不良明细列表_us", "组立不良明细列表"),

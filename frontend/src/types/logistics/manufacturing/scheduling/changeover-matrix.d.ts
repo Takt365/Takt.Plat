@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/scheduling
 // 文件名称：changeover-matrix.d.ts
-// 创建时间：2026-06-22
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/scheduling 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -148,7 +148,7 @@ export interface ChangeoverMatrixCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -266,6 +266,11 @@ export interface ChangeoverMatrixTemplate {
   toMaterialCode?: string;
 
   /**
+   * 换型时间（分钟）
+   */
+  changeoverMinutes?: number;
+
+  /**
    * 状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   matrixStatus?: number;
@@ -300,7 +305,7 @@ export interface ChangeoverMatrixImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -323,6 +328,11 @@ export interface ChangeoverMatrixImport {
    * 换型后物料编码
    */
   toMaterialCode?: string;
+
+  /**
+   * 换型时间（分钟）
+   */
+  changeoverMinutes?: number;
 
   /**
    * 状态（字典 sys_normal_disable；1=启用，0=禁用）

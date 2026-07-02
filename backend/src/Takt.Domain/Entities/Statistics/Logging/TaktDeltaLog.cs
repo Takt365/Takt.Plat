@@ -11,7 +11,7 @@
 // ========================================
 
 using SqlSugar;
-using Takt.Shared.Enums;
+using Takt.Shared.Constants;
 
 namespace Takt.Domain.Entities.Statistics.Logging;
 
@@ -36,16 +36,16 @@ namespace Takt.Domain.Entities.Statistics.Logging;
 public class TaktDeltaLog : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 用户名（登录账号）
+    /// 用户名（登录账号；无法解析时为 TaktConstants.AuditUserName.Unknown）
     /// </summary>
-    [SugarColumn(ColumnName = "user_name", ColumnDescription = "用户名", ColumnDataType = "varchar", Length = 20, IsNullable = false)]
-    public string UserName { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "user_name", ColumnDescription = "用户名", ColumnDataType = "varchar", Length = 20, IsNullable = false, DefaultValue = TaktConstants.AuditUserName.Unknown)]
+    public string UserName { get; set; } = TaktConstants.AuditUserName.Unknown;
 
     /// <summary>
-    /// 操作类型（INSERT、UPDATE、DELETE）
+    /// 操作类型（TaktConstants.OperType，如 create=新增、update=修改、delete=删除、query=查询）
     /// </summary>
-    [SugarColumn(ColumnName = "oper_type", ColumnDescription = "操作类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktDeltaOperType OperType { get; set; }
+    [SugarColumn(ColumnName = "oper_type", ColumnDescription = "操作类型", ColumnDataType = "varchar", Length = 40, IsNullable = false, DefaultValue = TaktConstants.OperType.Unknown)]
+    public string OperType { get; set; } = TaktConstants.OperType.Unknown;
 
     /// <summary>
     /// 数据库表名（SugarTable 物理表名）
@@ -61,40 +61,64 @@ public class TaktDeltaLog : TaktCompanyEntityBase
     public long? PrimaryKeyId { get; set; }
 
     /// <summary>
-    /// 修改前数据 JSON（旧值快照）
+    /// 修改前数据 JSON（旧值快照；无数据为空串）
     /// </summary>
-    [SugarColumn(ColumnName = "before_data", ColumnDescription = "修改前数据", ColumnDataType = "nvarchar", Length = -1, IsNullable = true)]
-    public string? BeforeData { get; set; }
+    [SugarColumn(ColumnName = "before_data", ColumnDescription = "修改前数据", ColumnDataType = "nvarchar", Length = -1, IsNullable = false)]
+    public string BeforeData { get; set; } = string.Empty;
 
     /// <summary>
-    /// 修改后数据 JSON（新值快照）
+    /// 修改后数据 JSON（新值快照；无数据为空串）
     /// </summary>
-    [SugarColumn(ColumnName = "after_data", ColumnDescription = "修改后数据", ColumnDataType = "nvarchar", Length = -1, IsNullable = true)]
-    public string? AfterData { get; set; }
+    [SugarColumn(ColumnName = "after_data", ColumnDescription = "修改后数据", ColumnDataType = "nvarchar", Length = -1, IsNullable = false)]
+    public string AfterData { get; set; } = string.Empty;
 
     /// <summary>
-    /// 差异内容 JSON（变更字段及旧/新值明细）
+    /// 差异内容 JSON（变更字段及旧/新值明细；无差异为空串）
     /// </summary>
-    [SugarColumn(ColumnName = "diff_data", ColumnDescription = "差异内容", ColumnDataType = "nvarchar", Length = -1, IsNullable = true)]
-    public string? DiffData { get; set; }
+    [SugarColumn(ColumnName = "diff_data", ColumnDescription = "差异内容", ColumnDataType = "nvarchar", Length = -1, IsNullable = false)]
+    public string DiffData { get; set; } = string.Empty;
 
     /// <summary>
-    /// 执行的 SQL 语句（AOP 捕获，可选）
+    /// 执行的 SQL 语句（AOP 捕获；无 SQL 为空串）
     /// </summary>
-    [SugarColumn(ColumnName = "sql_statement", ColumnDescription = "SQL语句", ColumnDataType = "nvarchar", Length = -1, IsNullable = true)]
-    public string? SqlStatement { get; set; }
+    [SugarColumn(ColumnName = "sql_statement", ColumnDescription = "SQL语句", ColumnDataType = "nvarchar", Length = -1, IsNullable = false)]
+    public string SqlStatement { get; set; } = string.Empty;
 
     /// <summary>
     /// 操作 IP
     /// </summary>
-    [SugarColumn(ColumnName = "oper_ip", ColumnDescription = "操作IP", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
-    public string? OperIp { get; set; }
+    [SugarColumn(ColumnName = "oper_ip", ColumnDescription = "操作IP", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    public string OperIp { get; set; } = string.Empty;
 
     /// <summary>
-    /// 操作地点（由 <see cref="OperIp"/> 解析，如：中国-广东省-深圳市）
+    /// 操作地点（由 OperIp 解析，如：中国-广东省-深圳市）
     /// </summary>
-    [SugarColumn(ColumnName = "oper_location", ColumnDescription = "操作地点", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
-    public string? OperLocation { get; set; }
+    [SugarColumn(ColumnName = "oper_location", ColumnDescription = "操作地点", ColumnDataType = "nvarchar", Length = 200, IsNullable = false)]
+    public string OperLocation { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 用户代理（User-Agent）
+    /// </summary>
+    [SugarColumn(ColumnName = "user_agent", ColumnDescription = "用户代理", ColumnDataType = "nvarchar", Length = 500, IsNullable = false)]
+    public string UserAgent { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 浏览器（TaktConstants.BrowserType，默认 unknown）
+    /// </summary>
+    [SugarColumn(ColumnName = "browser", ColumnDescription = "浏览器", ColumnDataType = "varchar", Length = 40, IsNullable = false, DefaultValue = TaktConstants.BrowserType.Unknown)]
+    public string Browser { get; set; } = TaktConstants.BrowserType.Unknown;
+
+    /// <summary>
+    /// 操作系统（TaktConstants.OperatingSystem，默认 unknown）
+    /// </summary>
+    [SugarColumn(ColumnName = "os", ColumnDescription = "操作系统", ColumnDataType = "varchar", Length = 40, IsNullable = false, DefaultValue = TaktConstants.OperatingSystem.Unknown)]
+    public string Os { get; set; } = TaktConstants.OperatingSystem.Unknown;
+
+    /// <summary>
+    /// 登录设备（TaktConstants.DeviceType，默认 unknown）
+    /// </summary>
+    [SugarColumn(ColumnName = "device_type", ColumnDescription = "登录设备", ColumnDataType = "varchar", Length = 40, IsNullable = false, DefaultValue = TaktConstants.DeviceType.Unknown)]
+    public string DeviceType { get; set; } = TaktConstants.DeviceType.Unknown;
 
     /// <summary>
     /// 操作时间（数据变更发生时刻）

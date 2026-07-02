@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Scheduling
 // 文件名称：TaktApsScheduleChangeLogDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ApsScheduleChangeLog 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktApsScheduleChangeLog 生成，请按需审阅）
 // 
@@ -62,7 +62,7 @@ public class TaktApsScheduleChangeLogDto : TaktCompanyDtoBase
     public string? ChangeReason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 变更人（人员代码）
+    /// 变更人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
     /// </summary>
     public string? ChangeBy { get; set; } = string.Empty;
 
@@ -121,7 +121,7 @@ public class TaktApsScheduleChangeLogQueryDto : TaktPagedQuery
     public string? ChangeReason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 变更人（人员代码）
+    /// 变更人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
     /// </summary>
     public string? ChangeBy { get; set; } = string.Empty;
 
@@ -176,7 +176,7 @@ public class TaktApsScheduleChangeLogCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -202,7 +202,7 @@ public class TaktApsScheduleChangeLogCreateDto
     public string? ChangeReason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 变更人（人员代码）
+    /// 变更人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
     /// </summary>
     public string? ChangeBy { get; set; } = string.Empty;
 
@@ -286,7 +286,7 @@ public class TaktApsScheduleChangeLogExportDto
     public string? ChangeReason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 变更人（人员代码）
+    /// 变更人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
     /// </summary>
     public string? ChangeBy { get; set; } = string.Empty;
 

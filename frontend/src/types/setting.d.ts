@@ -21,7 +21,7 @@ export type LayoutMode = 'side' | 'top' | 'mix' | 'content';
 export type ThemeMode = 'light' | 'dark';
 
 /**
- * 主题色预设键（与 setting.ts themeColorMap 一致）
+ * 主题色预设键（AppSetting 短键；色值权威源见 utils/theme.ts）
  */
 export type ThemeColor =
   | 'green'
@@ -85,6 +85,11 @@ export interface AppSetting {
    * 主题色
    */
   themeColor: ThemeColorConfig;
+
+  /**
+   * 用户是否手动改过主题明暗或主色；为 true 时假日主题色不覆盖
+   */
+  appearanceUserOverride?: boolean;
 
   /**
    * 圆角（px）

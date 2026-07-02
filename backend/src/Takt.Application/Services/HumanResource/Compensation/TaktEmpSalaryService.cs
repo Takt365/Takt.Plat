@@ -1,8 +1,8 @@
-﻿// ========================================
+// ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Compensation
 // 文件名称：TaktEmpSalaryService.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：员工薪酬应用服务实现
 // 
@@ -278,7 +278,7 @@ public class TaktEmpSalaryService : TaktServiceBase, ITaktEmpSalaryService
                 || SqlFunc.ToString(x.PositionSalary).Contains(keywords)
                 || SqlFunc.ToString(x.AllowanceTotal).Contains(keywords)
                 || SqlFunc.ToString(x.SalaryItemId).Contains(keywords)
-                || SqlFunc.ToString(x.ShareCount).Contains(keywords)
+                || SqlFunc.ToString(x.EmpSalaryShareCount).Contains(keywords)
                 || SqlFunc.ToString(x.EmpSalaryStatus).Contains(keywords)
                 || (x.RelatedPlant != null && x.RelatedPlant.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
@@ -328,9 +328,9 @@ public class TaktEmpSalaryService : TaktServiceBase, ITaktEmpSalaryService
             exp = exp.And(x => x.SalaryItemId == queryDto.SalaryItemId);
         }
 
-        if (queryDto?.ShareCount.HasValue == true)
+        if (queryDto?.EmpSalaryShareCount.HasValue == true)
         {
-            exp = exp.And(x => x.ShareCount == queryDto.ShareCount);
+            exp = exp.And(x => x.EmpSalaryShareCount == queryDto.EmpSalaryShareCount);
         }
 
         if (queryDto?.EmpSalaryStatus.HasValue == true)

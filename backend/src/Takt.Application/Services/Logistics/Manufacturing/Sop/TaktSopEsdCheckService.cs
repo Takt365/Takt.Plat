@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopEsdCheckService.cs
-// 创建时间：2026-06-15
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：SOP ESD检查应用服务实现
 // 
@@ -284,7 +284,8 @@ public class TaktSopEsdCheckService : TaktServiceBase, ITaktSopEsdCheckService
         {
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
-                SqlFunc.ToString(x.WorkstationId).Contains(keywords)
+                (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                || SqlFunc.ToString(x.WorkstationId).Contains(keywords)
                 || SqlFunc.ToString(x.ExecId).Contains(keywords)
                 || SqlFunc.ToString(x.EmployeeId).Contains(keywords)
                 || (x.DeviceCode != null && x.DeviceCode.Contains(keywords))
@@ -296,6 +297,11 @@ public class TaktSopEsdCheckService : TaktServiceBase, ITaktSopEsdCheckService
                 || SqlFunc.ToString(x.CheckedAt).Contains(keywords)
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
+        {
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
         }
 
         if (queryDto?.WorkstationId.HasValue == true)

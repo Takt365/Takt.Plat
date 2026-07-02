@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Operation
 // 文件名称：TaktIpqcOrderService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-30
 // 创建人：Takt365(Cursor AI)
 // 功能描述：制程检验单应用服务实现
 // 
@@ -105,7 +105,7 @@ public class TaktIpqcOrderService : TaktServiceBase, ITaktIpqcOrderService
     {
         EnsureThreeLayerContext();
         var list = await _ipqcOrderRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.JudgeStatus == 1,
             x => x.ProcessName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
@@ -410,6 +410,41 @@ public class TaktIpqcOrderService : TaktServiceBase, ITaktIpqcOrderService
             await _ipqcOrderChangeLogRepository.CreateRangeAsync(changelogs);
         }
     }
+
+    /// <summary>
+    /// 获取 IPQC 检验统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>IPQC 检验统计</returns>
+    public async Task<TaktIpqcOrderStatDto> GetIpqcOrderStatAsync(TaktQualityStatQueryDto queryDto)
+    {
+        EnsureThreeLayerContext();
+        var (start, end, statMonth) = TaktStatMonthRangeHelper.ResolveMonthRange(
+            queryDto.InspectionDateStart,
+            queryDto.InspectionDateEnd);
+        var tenantCode = CurrentTenantCode;
+        var companyCode = CurrentCompanyCode;
+        Expression<Func<TaktIpqcOrder, bool>> predicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.InspectionDate != null
+            && x.InspectionDate >= start
+            && x.InspectionDate <= end;
+        var monthOrderCount = await _ipqcOrderRepository.CountAsync(predicate);
+        var monthSampleQuantity = await _ipqcOrderRepository.SumAsync(x => x.TotalSampleQuantity, predicate);
+        var monthQualifiedQuantity = await _ipqcOrderRepository.SumAsync(x => x.TotalQualifiedQuantity, predicate);
+        var monthUnqualifiedQuantity = await _ipqcOrderRepository.SumAsync(x => x.TotalUnqualifiedQuantity, predicate);
+        return new TaktIpqcOrderStatDto
+        {
+            StatMonth = statMonth,
+            MonthOrderCount = monthOrderCount,
+            MonthSampleQuantity = monthSampleQuantity,
+            MonthQualifiedQuantity = monthQualifiedQuantity,
+            MonthUnqualifiedQuantity = monthUnqualifiedQuantity,
+            MonthPassRatePercent = TaktQualityStatHelper.CalculatePassRatePercent(monthQualifiedQuantity, monthSampleQuantity),
+        };
+    }
+
     // ========================================
     // 查询表达式
     // ========================================
@@ -437,9 +472,9 @@ public class TaktIpqcOrderService : TaktServiceBase, ITaktIpqcOrderService
                 || SqlFunc.ToString(x.TotalQualifiedQuantity).Contains(keywords)
                 || SqlFunc.ToString(x.TotalUnqualifiedQuantity).Contains(keywords)
                 || SqlFunc.ToString(x.TotalInspectionReturnQuantity).Contains(keywords)
-                || SqlFunc.ToString(x.JudgeStatus).Contains(keywords)
                 || (x.JudgeBy != null && x.JudgeBy.Contains(keywords))
                 || (x.JudgeDescription != null && x.JudgeDescription.Contains(keywords))
+                || SqlFunc.ToString(x.JudgeStatus).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.InspectionDate).Contains(keywords)
@@ -498,11 +533,6 @@ public class TaktIpqcOrderService : TaktServiceBase, ITaktIpqcOrderService
             exp = exp.And(x => x.TotalInspectionReturnQuantity == queryDto.TotalInspectionReturnQuantity);
         }
 
-        if (queryDto?.JudgeStatus.HasValue == true)
-        {
-            exp = exp.And(x => x.JudgeStatus == queryDto.JudgeStatus);
-        }
-
         if (!string.IsNullOrEmpty(queryDto?.JudgeBy))
         {
             exp = exp.And(x => x.JudgeBy != null && x.JudgeBy.Contains(queryDto.JudgeBy));
@@ -511,6 +541,11 @@ public class TaktIpqcOrderService : TaktServiceBase, ITaktIpqcOrderService
         if (!string.IsNullOrEmpty(queryDto?.JudgeDescription))
         {
             exp = exp.And(x => x.JudgeDescription != null && x.JudgeDescription.Contains(queryDto.JudgeDescription));
+        }
+
+        if (queryDto?.JudgeStatus.HasValue == true)
+        {
+            exp = exp.And(x => x.JudgeStatus == queryDto.JudgeStatus);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

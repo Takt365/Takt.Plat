@@ -4,7 +4,7 @@
 // 文件名称：TaktEcNotification.cs
 // 创建时间：2026-05-07
 // 创建人：Takt365(Qoder AI)
-// 功能描述：工程变更通知单（EC Notification），用于将设变（ECN）通知到相关部门和人员
+// 功能描述：工程变更通知单（技术阶段一 ④）；技术保存主表/附件/明细后由系统自动生成并派发，通知各部门进入执行阶段
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -17,7 +17,8 @@ using Takt.Domain.Entities;
 namespace Takt.Domain.Entities.Logistics.Manufacturing.EngineeringChange;
 
 /// <summary>
-/// 工程变更通知单实体（EC Notification）。FlowInstanceId 由业务在发起流程后写入；流程引擎通过 BusinessKey/BusinessType 与本模块对接。
+/// 工程变更通知单（技术阶段一 ④，隶属 TaktEcGijutsu）。技术完成 ①主表 ②附件 ③明细 保存后由 TaktEcGijutsuService 自动生成并派发；
+/// 各部门确认后在 TaktEcExec* 执行，技术通过看板/批次监控。FlowInstanceId 由通知审批流程写入（可选）。
 /// </summary>
 [SugarTable("takt_logistics_manufacturing_ec_notification", "工程变更通知单表")]
 [SugarIndex("ix_ec_notification_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
@@ -55,9 +56,9 @@ public class TaktEcNotification : TaktApprovalEntityBase
     public string EcNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设变主题（冗余字段）
+    /// 设变标题（冗余字段）
     /// </summary>
-    [SugarColumn(ColumnName = "ec_title", ColumnDescription = "设变主题", Length = 500, ColumnDataType = "nvarchar", IsNullable = true)]
+    [SugarColumn(ColumnName = "ec_title", ColumnDescription = "设变标题", Length = 500, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? EcTitle { get; set; }
 
     /// <summary>
@@ -107,5 +108,5 @@ public class TaktEcNotification : TaktApprovalEntityBase
     /// 关联的设变主表
     /// </summary>
     [Navigate(NavigateType.ManyToOne, nameof(EcId))]
-    public TaktEc? Ec { get; set; }
+    public TaktEcGijutsu? EcGijutsu { get; set; }
 }

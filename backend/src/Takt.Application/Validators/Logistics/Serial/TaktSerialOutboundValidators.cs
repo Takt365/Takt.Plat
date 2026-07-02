@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Serial
 // 文件名称：TaktSerialOutboundValidators.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SerialOutbound 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktSerialOutbound 生成，请按需审阅）
 // 
@@ -46,19 +46,16 @@ public class TaktSerialOutboundCreateValidator : AbstractValidator<TaktSerialOut
             .MaximumLength(50).WithMessage("出货发票号长度不能超过50个字符");
         RuleFor(x => x.Destination)
             .NotEmpty().WithMessage("仕向地不能为空")
-            .MaximumLength(200).WithMessage("仕向地长度不能超过200个字符");
+            .MaximumLength(40).WithMessage("仕向地长度不能超过40个字符");
         RuleFor(x => x.DestinationPort)
             .NotEmpty().WithMessage("目的地港不能为空")
-            .MaximumLength(200).WithMessage("目的地港长度不能超过200个字符");
+            .MaximumLength(40).WithMessage("目的地港长度不能超过40个字符");
         RuleFor(x => x.WarehouseCode)
             .NotEmpty().WithMessage("仓库编码不能为空")
             .MaximumLength(50).WithMessage("仓库编码长度不能超过50个字符");
         RuleFor(x => x.LocationCode)
             .NotEmpty().WithMessage("库位编码不能为空")
-            .MaximumLength(50).WithMessage("库位编码长度不能超过50个字符");
-        RuleFor(x => x.RelatedCompany)
-            .NotEmpty().WithMessage("关联公司不能为空")
-            .MaximumLength(4).WithMessage("关联公司长度不能超过4个字符");
+            .MaximumLength(40).WithMessage("库位编码长度不能超过40个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -82,6 +79,37 @@ public class TaktSerialOutboundUpdateValidator : AbstractValidator<TaktSerialOut
     {
         RuleFor(x => x.SerialOutboundId)
             .GreaterThan(0).WithMessage("SerialOutboundID无效");
+        RuleFor(x => x.TenantCode)
+            .NotEmpty().WithMessage("租户编码不能为空")
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.CompanyCode)
+            .NotEmpty().WithMessage("公司代码不能为空")
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.PlantCode)
+            .NotEmpty().WithMessage("工厂代码不能为空")
+            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
+        RuleFor(x => x.OutboundNo)
+            .NotEmpty().WithMessage("出库单号不能为空")
+            .MaximumLength(50).WithMessage("出库单号长度不能超过50个字符");
+        RuleFor(x => x.ShippingInvoiceNo)
+            .NotEmpty().WithMessage("出货发票号不能为空")
+            .MaximumLength(50).WithMessage("出货发票号长度不能超过50个字符");
+        RuleFor(x => x.Destination)
+            .NotEmpty().WithMessage("仕向地不能为空")
+            .MaximumLength(40).WithMessage("仕向地长度不能超过40个字符");
+        RuleFor(x => x.DestinationPort)
+            .NotEmpty().WithMessage("目的地港不能为空")
+            .MaximumLength(40).WithMessage("目的地港长度不能超过40个字符");
+        RuleFor(x => x.WarehouseCode)
+            .NotEmpty().WithMessage("仓库编码不能为空")
+            .MaximumLength(50).WithMessage("仓库编码长度不能超过50个字符");
+        RuleFor(x => x.LocationCode)
+            .NotEmpty().WithMessage("库位编码不能为空")
+            .MaximumLength(40).WithMessage("库位编码长度不能超过40个字符");
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
     }
 }
 
@@ -114,19 +142,16 @@ public class TaktSerialOutboundImportValidator : AbstractValidator<TaktSerialOut
             .MaximumLength(50).WithMessage("出货发票号长度不能超过50个字符");
         RuleFor(x => x.Destination)
             .NotEmpty().WithMessage("仕向地不能为空")
-            .MaximumLength(200).WithMessage("仕向地长度不能超过200个字符");
+            .MaximumLength(40).WithMessage("仕向地长度不能超过40个字符");
         RuleFor(x => x.DestinationPort)
             .NotEmpty().WithMessage("目的地港不能为空")
-            .MaximumLength(200).WithMessage("目的地港长度不能超过200个字符");
+            .MaximumLength(40).WithMessage("目的地港长度不能超过40个字符");
         RuleFor(x => x.WarehouseCode)
             .NotEmpty().WithMessage("仓库编码不能为空")
             .MaximumLength(50).WithMessage("仓库编码长度不能超过50个字符");
         RuleFor(x => x.LocationCode)
             .NotEmpty().WithMessage("库位编码不能为空")
-            .MaximumLength(50).WithMessage("库位编码长度不能超过50个字符");
-        RuleFor(x => x.RelatedCompany)
-            .NotEmpty().WithMessage("关联公司不能为空")
-            .MaximumLength(4).WithMessage("关联公司长度不能超过4个字符");
+            .MaximumLength(40).WithMessage("库位编码长度不能超过40个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

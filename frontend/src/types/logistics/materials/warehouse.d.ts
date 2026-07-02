@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/materials
 // 文件名称：warehouse.d.ts
-// 创建时间：2026-06-20
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/materials 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -69,7 +69,7 @@ export interface Warehouse extends CompanyDtoBase {
   managerUserCode?: string;
 
   /**
-   * 是否虚拟仓（is_virtual；字典 sys_yes_no_type；0=实体仓，1=虚拟仓）
+   * 虚拟仓（is_virtual；字典 sys_yes_no_type；0=实体仓，1=虚拟仓）
    */
   isVirtual: number;
 
@@ -84,7 +84,7 @@ export interface Warehouse extends CompanyDtoBase {
   warehouseStatus: number;
 
   /**
-   * 是否内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+   * 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
    */
   isBuiltIn: number;
 
@@ -159,7 +159,7 @@ export interface WarehouseQuery extends TaktPagedQuery {
   managerUserCode?: string;
 
   /**
-   * 是否虚拟仓（is_virtual；字典 sys_yes_no_type；0=实体仓，1=虚拟仓）
+   * 虚拟仓（is_virtual；字典 sys_yes_no_type；0=实体仓，1=虚拟仓）
    */
   isVirtual?: number;
 
@@ -174,7 +174,7 @@ export interface WarehouseQuery extends TaktPagedQuery {
   warehouseStatus?: number;
 
   /**
-   * 是否内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+   * 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
    */
   isBuiltIn?: number;
 
@@ -223,7 +223,7 @@ export interface WarehouseCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -268,7 +268,7 @@ export interface WarehouseCreate {
   managerUserCode?: string;
 
   /**
-   * 是否虚拟仓（is_virtual；字典 sys_yes_no_type；0=实体仓，1=虚拟仓）
+   * 虚拟仓（is_virtual；字典 sys_yes_no_type；0=实体仓，1=虚拟仓）
    */
   isVirtual: number;
 
@@ -283,7 +283,7 @@ export interface WarehouseCreate {
   warehouseStatus: number;
 
   /**
-   * 是否内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+   * 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
    */
   isBuiltIn: number;
 
@@ -415,7 +415,7 @@ export interface WarehouseTemplate {
   managerUserCode?: string;
 
   /**
-   * 是否虚拟仓（is_virtual；字典 sys_yes_no_type；0=实体仓，1=虚拟仓）
+   * 虚拟仓（is_virtual；字典 sys_yes_no_type；0=实体仓，1=虚拟仓）
    */
   isVirtual?: number;
 
@@ -430,9 +430,14 @@ export interface WarehouseTemplate {
   warehouseStatus?: number;
 
   /**
-   * 是否内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+   * 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
    */
   isBuiltIn?: number;
+
+  /**
+   * 库位列表（主子表关系）（子表，级联保存）
+   */
+  storageLocations?: StorageLocationCreate[];
 
   /**
    * 扩展字段JSON
@@ -464,7 +469,7 @@ export interface WarehouseImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -509,7 +514,7 @@ export interface WarehouseImport {
   managerUserCode?: string;
 
   /**
-   * 是否虚拟仓（is_virtual；字典 sys_yes_no_type；0=实体仓，1=虚拟仓）
+   * 虚拟仓（is_virtual；字典 sys_yes_no_type；0=实体仓，1=虚拟仓）
    */
   isVirtual?: number;
 
@@ -524,9 +529,14 @@ export interface WarehouseImport {
   warehouseStatus?: number;
 
   /**
-   * 是否内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+   * 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
    */
   isBuiltIn?: number;
+
+  /**
+   * 库位列表（主子表关系）（子表，级联保存）
+   */
+  storageLocations?: StorageLocationCreate[];
 
   /**
    * 扩展字段JSON
@@ -598,7 +608,7 @@ export interface WarehouseExport {
   managerUserCode?: string;
 
   /**
-   * 是否虚拟仓（is_virtual；字典 sys_yes_no_type；0=实体仓，1=虚拟仓）
+   * 虚拟仓（is_virtual；字典 sys_yes_no_type；0=实体仓，1=虚拟仓）
    */
   isVirtual: number;
 
@@ -613,7 +623,7 @@ export interface WarehouseExport {
   warehouseStatus: number;
 
   /**
-   * 是否内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+   * 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
    */
   isBuiltIn: number;
 

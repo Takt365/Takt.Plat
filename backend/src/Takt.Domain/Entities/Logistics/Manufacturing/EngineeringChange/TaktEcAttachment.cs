@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Domain.Entities.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcAttachment.cs
-// 功能描述：设变附件实体，一个设变可对应多条附件；类别：联络、EPP、FPP、外部联络、TCJ 等。
+// 功能描述：设变附件实体（技术阶段一 ②）；技术维护联络/EPP/FPP 等文档，与主表、明细一并保存后触发通知自动生成
 // ========================================
 
 using SqlSugar;
@@ -11,7 +11,7 @@ using Takt.Domain.Entities;
 namespace Takt.Domain.Entities.Logistics.Manufacturing.EngineeringChange;
 
 /// <summary>
-/// 设变附件实体。文件类别：Liaison/EPP/FPP/ExternalLiaison/TCJ 等；文件编号为联络编号等。
+/// 设变附件实体（技术阶段一 ②，隶属 TaktEcGijutsu）。文件类别：Liaison/EPP/FPP/ExternalLiaison/TCJ 等；与主表、明细保存后由系统生成 TaktEcNotification。
 /// </summary>
 [SugarTable("takt_logistics_manufacturing_ec_attachment", "设变附件表")]
 [SugarIndex("ix_ec_attachment_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
@@ -68,5 +68,5 @@ public class TaktEcAttachment : TaktCompanyEntityBase
     /// 设变主表（多对一）
     /// </summary>
     [Navigate(NavigateType.ManyToOne, nameof(EcId))]
-    public TaktEc? Ec { get; set; }
+    public TaktEcGijutsu? EcGijutsu { get; set; }
 }

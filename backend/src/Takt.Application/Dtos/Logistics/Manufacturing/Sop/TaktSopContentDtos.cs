@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopContentDtos.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SopContent 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSopContent 生成，请按需审阅）
 // 
@@ -36,7 +36,7 @@ public class TaktSopContentDto : TaktCompanyDtoBase
     public long SopContentId { get; set; }
 
     /// <summary>
-    /// 版本 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long RevisionId { get; set; }
@@ -47,7 +47,7 @@ public class TaktSopContentDto : TaktCompanyDtoBase
     public string? RevisionName { get; set; }
 
     /// <summary>
-    /// SOP 主档 ID（冗余，序列化为 string 以避免 Javascript 精度问题）
+    /// SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SopId { get; set; }
@@ -58,7 +58,7 @@ public class TaktSopContentDto : TaktCompanyDtoBase
     public string? SopName { get; set; }
 
     /// <summary>
-    /// 正文语言（zh-CN 简体 / en-US 英文 / ja-JP 日文 / zh-HK 香港繁体；与 TaktCulture.CultureCode 一致）
+    /// 正文语言（选项 TaktCultures/options，DictValue=CultureCode）
     /// </summary>
     public string ContentLang { get; set; } = string.Empty;
 
@@ -102,19 +102,19 @@ public class TaktSopContentQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 版本 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RevisionId { get; set; }
 
     /// <summary>
-    /// SOP 主档 ID（冗余，序列化为 string 以避免 Javascript 精度问题）
+    /// SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SopId { get; set; }
 
     /// <summary>
-    /// 正文语言（zh-CN 简体 / en-US 英文 / ja-JP 日文 / zh-HK 香港繁体；与 TaktCulture.CultureCode 一致）
+    /// 正文语言（选项 TaktCultures/options，DictValue=CultureCode）
     /// </summary>
     public string? ContentLang { get; set; } = string.Empty;
 
@@ -164,26 +164,26 @@ public class TaktSopContentCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 版本 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long RevisionId { get; set; }
 
     /// <summary>
-    /// SOP 主档 ID（冗余，序列化为 string 以避免 Javascript 精度问题）
+    /// SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SopId { get; set; }
 
     /// <summary>
-    /// 正文语言（zh-CN 简体 / en-US 英文 / ja-JP 日文 / zh-HK 香港繁体；与 TaktCulture.CultureCode 一致）
+    /// 正文语言（选项 TaktCultures/options，DictValue=CultureCode）
     /// </summary>
-    [Required(ErrorMessage = "正文语言（zh-CN 简体 / en-US 英文 / ja-JP 日文 / zh-HK 香港繁体；与 TaktCulture.CultureCode 一致）不能为空")]
+    [Required(ErrorMessage = "正文语言（选项 TaktCultures/options，DictValue=CultureCode）不能为空")]
     public string ContentLang { get; set; } = string.Empty;
 
     /// <summary>
@@ -248,19 +248,19 @@ public class TaktSopContentTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 版本 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RevisionId { get; set; }
 
     /// <summary>
-    /// SOP 主档 ID（冗余，序列化为 string 以避免 Javascript 精度问题）
+    /// SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SopId { get; set; }
 
     /// <summary>
-    /// 正文语言（zh-CN 简体 / en-US 英文 / ja-JP 日文 / zh-HK 香港繁体；与 TaktCulture.CultureCode 一致）
+    /// 正文语言（选项 TaktCultures/options，DictValue=CultureCode）
     /// </summary>
     public string? ContentLang { get; set; } = string.Empty;
 
@@ -268,6 +268,11 @@ public class TaktSopContentTemplateDto
     /// 正文标题
     /// </summary>
     public string? ContentTitle { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工步列表（子表，级联保存）
+    /// </summary>
+    public List<TaktSopStepCreateDto>? Steps { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -297,24 +302,24 @@ public class TaktSopContentImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 版本 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RevisionId { get; set; }
 
     /// <summary>
-    /// SOP 主档 ID（冗余，序列化为 string 以避免 Javascript 精度问题）
+    /// SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SopId { get; set; }
 
     /// <summary>
-    /// 正文语言（zh-CN 简体 / en-US 英文 / ja-JP 日文 / zh-HK 香港繁体；与 TaktCulture.CultureCode 一致）
+    /// 正文语言（选项 TaktCultures/options，DictValue=CultureCode）
     /// </summary>
     public string? ContentLang { get; set; } = string.Empty;
 
@@ -322,6 +327,11 @@ public class TaktSopContentImportDto
     /// 正文标题
     /// </summary>
     public string? ContentTitle { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工步列表（子表，级联保存）
+    /// </summary>
+    public List<TaktSopStepCreateDto>? Steps { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -357,19 +367,19 @@ public class TaktSopContentExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 版本 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long RevisionId { get; set; }
 
     /// <summary>
-    /// SOP 主档 ID（冗余，序列化为 string 以避免 Javascript 精度问题）
+    /// SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SopId { get; set; }
 
     /// <summary>
-    /// 正文语言（zh-CN 简体 / en-US 英文 / ja-JP 日文 / zh-HK 香港繁体；与 TaktCulture.CultureCode 一致）
+    /// 正文语言（选项 TaktCultures/options，DictValue=CultureCode）
     /// </summary>
     public string ContentLang { get; set; } = string.Empty;
 

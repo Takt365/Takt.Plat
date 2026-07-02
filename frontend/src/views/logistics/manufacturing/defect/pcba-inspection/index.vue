@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/defect/pcba-inspection -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：PCBA检查日报实体管理页面，含查询、增删改，由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成 -->
+<!-- 功能描述：PCBA检查日报实体 不良率管理页面，含查询、增删改，由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -65,6 +65,8 @@
       :master-row-selection="rowSelection"
       master-id-column-key="pcbaInspectionId"
       :master-visible-column-keys="visibleColumnKeys"
+      master-table-mode="masterDetailMaster"
+      master-scroll-layout="masterDetailLr"
       :master-total="total"
       master-entity-scope="company"
       @master-change="handleTableChange"
@@ -72,6 +74,15 @@
       @master-pagination-change="handleMasterPaginationChange"
       @master-select="handleMasterSelect"
     >
+      <!-- 字典/开关列渲染 -->
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'prodCategory'">
+          <TaktDictTag
+            :value="getPcbaInspectionField(record, 'prodCategory')"
+            dict-type="logistics_prod_category"
+          />
+        </template>
+      </template>
       <template #detail>
         <PcbaInspectionDetailPanel
           ref="pcbaInspectionDetailPanelRef"
@@ -121,11 +132,10 @@
       </div>
       <div v-show="isFieldVisible('prodCategory')">
       <a-form-item :label="t('entity.pcbainspection.prodcategory')">
-        <a-input
+        <TaktSelect
           v-model:value="advancedQueryForm.prodCategory"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbainspection.prodcategory') })"
-          show-count
-          :maxlength="20"
+          dict-type="logistics_prod_category"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbainspection.prodcategory') })"
           allow-clear
         />
       </a-form-item>
@@ -203,22 +213,13 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('status')">
-      <a-form-item :label="t('entity.pcbainspection.status')">
-        <a-input-number
-          v-model:value="advancedQueryForm.status"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbainspection.status') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
       <div v-show="isFieldVisible('createdAtStart')">
       <a-form-item :label="t('common.page.entity.createdatstart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -229,7 +230,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -287,6 +288,7 @@
       @cancel="handleImportCancel"
     >
       <TaktImportFile
+        v-if="importVisible"
         entity-i18n-key="entity.pcbainspection._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
@@ -306,7 +308,7 @@
       :id-column-key="'pcbaInspectionId'"
       :action-column-key="'action'"
       entity-scope="company"
-      table-mode="single"
+      table-mode="masterDetailMaster"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -315,7 +317,7 @@
 
 <script setup lang="ts">
 /**
- * PCBA检查日报实体管理页 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
+ * PCBA检查日报实体 不良率管理页 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/manufacturing/defect/pcba-inspection
  */
 import { ref, computed, onMounted } from 'vue'
@@ -327,10 +329,12 @@ import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaul
 import PcbaInspectionForm from './components/pcba-inspection-form.vue'
 import PcbaInspectionDetailPanel from './components/pcba-inspection-detail-panel.vue'
 import { providePcbaInspectionMasterContext } from './composables/use-pcba-inspection-master-context'
-import { getPcbaInspectionList, getPcbaInspectionById, createPcbaInspection, updatePcbaInspection, deletePcbaInspectionById, deletePcbaInspectionBatch, getPcbaInspectionTemplate, importPcbaInspection, exportPcbaInspection, updatePcbaInspectionStatus } from '@/api/logistics/manufacturing/defect/pcba-inspection'
+import { getPcbaInspectionList, getPcbaInspectionById, createPcbaInspection, updatePcbaInspection, deletePcbaInspectionById, deletePcbaInspectionBatch, getPcbaInspectionTemplate, importPcbaInspection, exportPcbaInspection } from '@/api/logistics/manufacturing/defect/pcba-inspection'
 import type { PcbaInspection, PcbaInspectionQuery } from '@/types/logistics/manufacturing/defect/pcba-inspection'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
@@ -385,7 +389,6 @@ const advancedQueryForm = ref({
   modelCode: '',
   batchNo: '',
   materialCode: '',
-  status: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -402,7 +405,6 @@ const queryFieldsMeta = computed(() => [
   { key: 'modelCode', label: t('entity.pcbainspection.modelcode') },
   { key: 'batchNo', label: t('entity.pcbainspection.batchno') },
   { key: 'materialCode', label: t('entity.pcbainspection.materialcode') },
-  { key: 'status', label: t('entity.pcbainspection.status') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extField', label: t('common.page.entity.extfield') },
@@ -423,6 +425,8 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
+/** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
+const dictDataStore = useDictDataStore()
 /** 主表选中行上下文（右侧明细面板读取） */
 const { selectedMasterRow } = providePcbaInspectionMasterContext()
 const pcbaInspectionDetailPanelRef = ref<InstanceType<typeof PcbaInspectionDetailPanel> | null>(null)
@@ -460,9 +464,6 @@ function buildListQuery(overrides?: Partial<PcbaInspectionQuery>): PcbaInspectio
   assignTrimmed('modelCode', form.modelCode)
   assignTrimmed('batchNo', form.batchNo)
   assignTrimmed('materialCode', form.materialCode)
-  if (form.status !== undefined && form.status !== null) {
-    query.status = form.status
-  }
   assignTrimmed('createdAtStart', form.createdAtStart)
   assignTrimmed('createdAtEnd', form.createdAtEnd)
   assignTrimmed('extField', form.extField)
@@ -472,6 +473,7 @@ function buildListQuery(overrides?: Partial<PcbaInspectionQuery>): PcbaInspectio
 /** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
+  void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
 
@@ -554,7 +556,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPcbaInspectionField(record, 'prodCategory') ?? ''
   },
   {
     title: t('entity.pcbainspection.proddate'),
@@ -610,15 +611,6 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getPcbaInspectionField(record, 'materialCode') ?? ''
   },
-  {
-    title: t('entity.pcbainspection.status'),
-    dataIndex: 'status',
-    key: 'status',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPcbaInspectionField(record, 'status') ?? ''
-  },
   CreateActionColumn({
     actions: [
       {
@@ -668,7 +660,7 @@ const rowSelection = computed(() => ({
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
-    } else if (getPcbaInspectionId(selectedRow.value) === getPcbaInspectionId(record)) {
+    } else if (selectedRow.value && getPcbaInspectionId(selectedRow.value) === getPcbaInspectionId(record)) {
       selectedRow.value = null
       syncMasterSelection(null)
     }
@@ -718,7 +710,6 @@ function handleReset() {
   modelCode: '',
   batchNo: '',
   materialCode: '',
-  status: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -805,15 +796,22 @@ async function handleDownloadTemplate(sheetName?: string, fileName?: string): Pr
   return (res as any)?.data ?? res
 }
 
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importPcbaInspection(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importPcbaInspection(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
+
+      if (selectedMasterKey.value) {
+    pcbaInspectionDetailPanelRef.value?.reload?.()
+      }
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
+  }
 }
 
 /** 关闭导入对话框 */
@@ -919,7 +917,6 @@ function handleAdvancedQueryReset() {
   modelCode: '',
   batchNo: '',
   materialCode: '',
-  status: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/sop
 // 文件名称：revision.d.ts
-// 创建时间：2026-06-20
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/sop 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface SopRevision extends CompanyDtoBase {
   sopRevisionId: string;
 
   /**
-   * SOP 文档头 ID（序列化为 string 以避免 Javascript 精度问题）
+   * SOP 文档头 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
    */
   sopId: string;
 
@@ -54,7 +54,7 @@ export interface SopRevision extends CompanyDtoBase {
   changeDesc?: string;
 
   /**
-   * 关联 ECN 主表 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 关联 ECN 主表 ID（关联 TaktEc.Id，选项 TaktEcs/options）
    */
   ecnId?: string;
 
@@ -64,22 +64,22 @@ export interface SopRevision extends CompanyDtoBase {
   ecnName?: string;
 
   /**
-   * 是否锁定（ECN 后旧版锁定；字典 sys_yes_no_type，0=否，1=是）
+   * 是否锁定（字典 sys_yes_no_type；0=否，1=是）
    */
   isLocked: number;
 
   /**
-   * 是否强制班组长确认（新版本弹窗；字典 sys_yes_no_type，0=否，1=是）
+   * 是否强制班组长确认（字典 sys_yes_no_type；0=否，1=是）
    */
   forceLeaderAck: number;
 
   /**
-   * 版本状态（字典 sys_lifecycle_status）
+   * 版本状态（字典 sys_lifecycle_status；1=编制中，2=审核中，3=已生效，4=已废止）
    */
   revisionStatus: number;
 
   /**
-   * 生效规则（1=立即生效，2=按工单生效；字典 logistics_sop_effective_rule）
+   * 生效规则（字典 logistics_sop_effective_rule；1=立即生效，2=按工单生效）
    */
   effectiveRule: number;
 
@@ -114,7 +114,7 @@ export interface SopRevisionQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * SOP 文档头 ID（序列化为 string 以避免 Javascript 精度问题）
+   * SOP 文档头 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
    */
   sopId?: string;
 
@@ -134,27 +134,27 @@ export interface SopRevisionQuery extends TaktPagedQuery {
   changeDesc?: string;
 
   /**
-   * 关联 ECN 主表 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 关联 ECN 主表 ID（关联 TaktEc.Id，选项 TaktEcs/options）
    */
   ecnId?: string;
 
   /**
-   * 是否锁定（ECN 后旧版锁定；字典 sys_yes_no_type，0=否，1=是）
+   * 是否锁定（字典 sys_yes_no_type；0=否，1=是）
    */
   isLocked?: number;
 
   /**
-   * 是否强制班组长确认（新版本弹窗；字典 sys_yes_no_type，0=否，1=是）
+   * 是否强制班组长确认（字典 sys_yes_no_type；0=否，1=是）
    */
   forceLeaderAck?: number;
 
   /**
-   * 版本状态（字典 sys_lifecycle_status）
+   * 版本状态（字典 sys_lifecycle_status；1=编制中，2=审核中，3=已生效，4=已废止）
    */
   revisionStatus?: number;
 
   /**
-   * 生效规则（1=立即生效，2=按工单生效；字典 logistics_sop_effective_rule）
+   * 生效规则（字典 logistics_sop_effective_rule；1=立即生效，2=按工单生效）
    */
   effectiveRule?: number;
 
@@ -198,12 +198,12 @@ export interface SopRevisionCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
   /**
-   * SOP 文档头 ID（序列化为 string 以避免 Javascript 精度问题）
+   * SOP 文档头 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
    */
   sopId: string;
 
@@ -223,27 +223,27 @@ export interface SopRevisionCreate {
   changeDesc?: string;
 
   /**
-   * 关联 ECN 主表 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 关联 ECN 主表 ID（关联 TaktEc.Id，选项 TaktEcs/options）
    */
   ecnId?: string;
 
   /**
-   * 是否锁定（ECN 后旧版锁定；字典 sys_yes_no_type，0=否，1=是）
+   * 是否锁定（字典 sys_yes_no_type；0=否，1=是）
    */
   isLocked: number;
 
   /**
-   * 是否强制班组长确认（新版本弹窗；字典 sys_yes_no_type，0=否，1=是）
+   * 是否强制班组长确认（字典 sys_yes_no_type；0=否，1=是）
    */
   forceLeaderAck: number;
 
   /**
-   * 版本状态（字典 sys_lifecycle_status）
+   * 版本状态（字典 sys_lifecycle_status；1=编制中，2=审核中，3=已生效，4=已废止）
    */
   revisionStatus: number;
 
   /**
-   * 生效规则（1=立即生效，2=按工单生效；字典 logistics_sop_effective_rule）
+   * 生效规则（字典 logistics_sop_effective_rule；1=立即生效，2=按工单生效）
    */
   effectiveRule: number;
 
@@ -292,7 +292,7 @@ export interface SopRevisionStatus {
   sopRevisionId: string;
 
   /**
-   * 版本状态（字典 sys_lifecycle_status）
+   * 版本状态（字典 sys_lifecycle_status；1=编制中，2=审核中，3=已生效，4=已废止）
    */
   revisionStatus: number;
 
@@ -316,7 +316,7 @@ export interface SopRevisionTemplate {
   companyCode?: string;
 
   /**
-   * SOP 文档头 ID（序列化为 string 以避免 Javascript 精度问题）
+   * SOP 文档头 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
    */
   sopId?: string;
 
@@ -336,29 +336,34 @@ export interface SopRevisionTemplate {
   changeDesc?: string;
 
   /**
-   * 关联 ECN 主表 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 关联 ECN 主表 ID（关联 TaktEc.Id，选项 TaktEcs/options）
    */
   ecnId?: string;
 
   /**
-   * 是否锁定（ECN 后旧版锁定；字典 sys_yes_no_type，0=否，1=是）
+   * 是否锁定（字典 sys_yes_no_type；0=否，1=是）
    */
   isLocked?: number;
 
   /**
-   * 是否强制班组长确认（新版本弹窗；字典 sys_yes_no_type，0=否，1=是）
+   * 是否强制班组长确认（字典 sys_yes_no_type；0=否，1=是）
    */
   forceLeaderAck?: number;
 
   /**
-   * 版本状态（字典 sys_lifecycle_status）
+   * 版本状态（字典 sys_lifecycle_status；1=编制中，2=审核中，3=已生效，4=已废止）
    */
   revisionStatus?: number;
 
   /**
-   * 生效规则（1=立即生效，2=按工单生效；字典 logistics_sop_effective_rule）
+   * 生效规则（字典 logistics_sop_effective_rule；1=立即生效，2=按工单生效）
    */
   effectiveRule?: number;
+
+  /**
+   * 多语言正文（子表，级联保存）
+   */
+  contents?: SopContentCreate[];
 
   /**
    * 扩展字段JSON
@@ -390,12 +395,12 @@ export interface SopRevisionImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
   /**
-   * SOP 文档头 ID（序列化为 string 以避免 Javascript 精度问题）
+   * SOP 文档头 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
    */
   sopId?: string;
 
@@ -415,29 +420,34 @@ export interface SopRevisionImport {
   changeDesc?: string;
 
   /**
-   * 关联 ECN 主表 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 关联 ECN 主表 ID（关联 TaktEc.Id，选项 TaktEcs/options）
    */
   ecnId?: string;
 
   /**
-   * 是否锁定（ECN 后旧版锁定；字典 sys_yes_no_type，0=否，1=是）
+   * 是否锁定（字典 sys_yes_no_type；0=否，1=是）
    */
   isLocked?: number;
 
   /**
-   * 是否强制班组长确认（新版本弹窗；字典 sys_yes_no_type，0=否，1=是）
+   * 是否强制班组长确认（字典 sys_yes_no_type；0=否，1=是）
    */
   forceLeaderAck?: number;
 
   /**
-   * 版本状态（字典 sys_lifecycle_status）
+   * 版本状态（字典 sys_lifecycle_status；1=编制中，2=审核中，3=已生效，4=已废止）
    */
   revisionStatus?: number;
 
   /**
-   * 生效规则（1=立即生效，2=按工单生效；字典 logistics_sop_effective_rule）
+   * 生效规则（字典 logistics_sop_effective_rule；1=立即生效，2=按工单生效）
    */
   effectiveRule?: number;
+
+  /**
+   * 多语言正文（子表，级联保存）
+   */
+  contents?: SopContentCreate[];
 
   /**
    * 扩展字段JSON
@@ -469,7 +479,7 @@ export interface SopRevisionExport {
   companyCode: string;
 
   /**
-   * SOP 文档头 ID（序列化为 string 以避免 Javascript 精度问题）
+   * SOP 文档头 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
    */
   sopId: string;
 
@@ -489,27 +499,27 @@ export interface SopRevisionExport {
   changeDesc?: string;
 
   /**
-   * 关联 ECN 主表 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 关联 ECN 主表 ID（关联 TaktEc.Id，选项 TaktEcs/options）
    */
   ecnId?: string;
 
   /**
-   * 是否锁定（ECN 后旧版锁定；字典 sys_yes_no_type，0=否，1=是）
+   * 是否锁定（字典 sys_yes_no_type；0=否，1=是）
    */
   isLocked: number;
 
   /**
-   * 是否强制班组长确认（新版本弹窗；字典 sys_yes_no_type，0=否，1=是）
+   * 是否强制班组长确认（字典 sys_yes_no_type；0=否，1=是）
    */
   forceLeaderAck: number;
 
   /**
-   * 版本状态（字典 sys_lifecycle_status）
+   * 版本状态（字典 sys_lifecycle_status；1=编制中，2=审核中，3=已生效，4=已废止）
    */
   revisionStatus: number;
 
   /**
-   * 生效规则（1=立即生效，2=按工单生效；字典 logistics_sop_effective_rule）
+   * 生效规则（字典 logistics_sop_effective_rule；1=立即生效，2=按工单生效）
    */
   effectiveRule: number;
 

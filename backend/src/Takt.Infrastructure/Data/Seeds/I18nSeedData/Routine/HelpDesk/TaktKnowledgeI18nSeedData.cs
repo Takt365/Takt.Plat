@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.HelpDesk
 // 文件名称：TaktKnowledgeI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktKnowledge 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -135,24 +135,6 @@ public class TaktKnowledgeI18nSeedData : ITaktSeedDataCoordinator
             // entity.knowledge.tags
             new TranslationSeedItem("entity.knowledge.tags", "zh-HK", "标签_hk", "标签（逗号分隔或 JSON 数组存储）"),
 
-            // entity.knowledge.status
-            new TranslationSeedItem("entity.knowledge.status", "en-US", "知识状态_us", "知识状态（0=草稿，1=已发布，2=已下架）"),
-            // entity.knowledge.status
-            new TranslationSeedItem("entity.knowledge.status", "ja-JP", "知识状态_jp", "知识状态（0=草稿，1=已发布，2=已下架）"),
-            // entity.knowledge.status
-            new TranslationSeedItem("entity.knowledge.status", "zh-CN", "知识状态", "知识状态（0=草稿，1=已发布，2=已下架）"),
-            // entity.knowledge.status
-            new TranslationSeedItem("entity.knowledge.status", "zh-HK", "知识状态_hk", "知识状态（0=草稿，1=已发布，2=已下架）"),
-
-            // entity.knowledge.sortorder
-            new TranslationSeedItem("entity.knowledge.sortorder", "en-US", "排序号_us", "排序号（越小越靠前）"),
-            // entity.knowledge.sortorder
-            new TranslationSeedItem("entity.knowledge.sortorder", "ja-JP", "排序号_jp", "排序号（越小越靠前）"),
-            // entity.knowledge.sortorder
-            new TranslationSeedItem("entity.knowledge.sortorder", "zh-CN", "排序号", "排序号（越小越靠前）"),
-            // entity.knowledge.sortorder
-            new TranslationSeedItem("entity.knowledge.sortorder", "zh-HK", "排序号_hk", "排序号（越小越靠前）"),
-
             // entity.knowledge.viewcount
             new TranslationSeedItem("entity.knowledge.viewcount", "en-US", "浏览次数_us", "浏览次数"),
             // entity.knowledge.viewcount
@@ -181,13 +163,13 @@ public class TaktKnowledgeI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.knowledge.unhelpfulcount", "zh-HK", "无帮助评价数_hk", "无帮助评价数"),
 
             // entity.knowledge.ispublished
-            new TranslationSeedItem("entity.knowledge.ispublished", "en-US", "是否已发布_us", "是否已发布（0=否，1=是）"),
+            new TranslationSeedItem("entity.knowledge.ispublished", "en-US", "是否已发布_us", "是否已发布（字典 sys_yes_no_type；1=是 0=否）"),
             // entity.knowledge.ispublished
-            new TranslationSeedItem("entity.knowledge.ispublished", "ja-JP", "是否已发布_jp", "是否已发布（0=否，1=是）"),
+            new TranslationSeedItem("entity.knowledge.ispublished", "ja-JP", "是否已发布_jp", "是否已发布（字典 sys_yes_no_type；1=是 0=否）"),
             // entity.knowledge.ispublished
-            new TranslationSeedItem("entity.knowledge.ispublished", "zh-CN", "是否已发布", "是否已发布（0=否，1=是）"),
+            new TranslationSeedItem("entity.knowledge.ispublished", "zh-CN", "是否已发布", "是否已发布（字典 sys_yes_no_type；1=是 0=否）"),
             // entity.knowledge.ispublished
-            new TranslationSeedItem("entity.knowledge.ispublished", "zh-HK", "是否已发布_hk", "是否已发布（0=否，1=是）"),
+            new TranslationSeedItem("entity.knowledge.ispublished", "zh-HK", "是否已发布_hk", "是否已发布（字典 sys_yes_no_type；1=是 0=否）"),
 
             // entity.knowledge.version
             new TranslationSeedItem("entity.knowledge.version", "en-US", "版本号_us", "版本号"),
@@ -215,6 +197,33 @@ public class TaktKnowledgeI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.knowledge.revisedat", "zh-CN", "最后修订时间", "最后修订时间"),
             // entity.knowledge.revisedat
             new TranslationSeedItem("entity.knowledge.revisedat", "zh-HK", "最后修订时间_hk", "最后修订时间"),
+
+            // entity.knowledge.sortorder
+            new TranslationSeedItem("entity.knowledge.sortorder", "en-US", "排序号_us", "排序号（越小越靠前）"),
+            // entity.knowledge.sortorder
+            new TranslationSeedItem("entity.knowledge.sortorder", "ja-JP", "排序号_jp", "排序号（越小越靠前）"),
+            // entity.knowledge.sortorder
+            new TranslationSeedItem("entity.knowledge.sortorder", "zh-CN", "排序号", "排序号（越小越靠前）"),
+            // entity.knowledge.sortorder
+            new TranslationSeedItem("entity.knowledge.sortorder", "zh-HK", "排序号_hk", "排序号（越小越靠前）"),
+
+            // entity.knowledge.status
+            new TranslationSeedItem("entity.knowledge.status", "en-US", "知识状态_us", "知识状态（字典 routine_knowledge_status；0=草稿 1=已发布 2=已下架）"),
+            // entity.knowledge.status
+            new TranslationSeedItem("entity.knowledge.status", "ja-JP", "知识状态_jp", "知识状态（字典 routine_knowledge_status；0=草稿 1=已发布 2=已下架）"),
+            // entity.knowledge.status
+            new TranslationSeedItem("entity.knowledge.status", "zh-CN", "知识状态", "知识状态（字典 routine_knowledge_status；0=草稿 1=已发布 2=已下架）"),
+            // entity.knowledge.status
+            new TranslationSeedItem("entity.knowledge.status", "zh-HK", "知识状态_hk", "知识状态（字典 routine_knowledge_status；0=草稿 1=已发布 2=已下架）"),
+
+            // entity.knowledge.attachments
+            new TranslationSeedItem("entity.knowledge.attachments", "en-US", "附件JSON_us", "附件（JSON 列表形式，由 TaktFile 统一上传到服务器）"),
+            // entity.knowledge.attachments
+            new TranslationSeedItem("entity.knowledge.attachments", "ja-JP", "附件JSON_jp", "附件（JSON 列表形式，由 TaktFile 统一上传到服务器）"),
+            // entity.knowledge.attachments
+            new TranslationSeedItem("entity.knowledge.attachments", "zh-CN", "附件JSON", "附件（JSON 列表形式，由 TaktFile 统一上传到服务器）"),
+            // entity.knowledge.attachments
+            new TranslationSeedItem("entity.knowledge.attachments", "zh-HK", "附件JSON_hk", "附件（JSON 列表形式，由 TaktFile 统一上传到服务器）"),
 
             // entity.knowledge.changelogs
             new TranslationSeedItem("entity.knowledge.changelogs", "en-US", "知识库变更日志列表_us", "知识库变更日志列表"),

@@ -19,7 +19,8 @@ import {
   shouldLogLevel,
   writeLogEntryToConsole,
 } from '@/utils/log-formatter';
-import { LogReporter } from '@/utils/log-reporter';
+import type { LogReporter } from '@/utils/log-reporter';
+import type { LogFileSink } from '@/utils/log-file-sink';
 import {
   createAppMeta,
   mergeRuntimeContext,
@@ -28,6 +29,9 @@ import {
   setRuntimeRouter,
 } from '@/utils/runtime-context';
 import type { Router } from 'vue-router';
+
+/** 开发环境默认本地落盘 URL（与 log-file-sink 一致，避免静态 import 该模块） */
+const TAKT_CLIENT_LOG_DEFAULT_FILE_URL = '/__takt/client-logs';
 
 /**
  * 读取默认日志配置
@@ -39,6 +43,8 @@ function createDefaultLoggerConfig(): LoggerConfig {
   return {
     minLevel: parseLogLevelFromEnv(env.VITE_LOG_MIN_LEVEL, isDev ? LogLevel.Debug : LogLevel.Info),
     enableConsole: parseEnvBoolean(env.VITE_LOG_ENABLE_CONSOLE, isDev),
+    enableFile: parseEnvBoolean(env.VITE_LOG_ENABLE_FILE, isDev),
+    fileUrl: env.VITE_LOG_FILE_URL?.trim() || (isDev ? TAKT_CLIENT_LOG_DEFAULT_FILE_URL : undefined),
     enableReport: parseEnvBoolean(env.VITE_LOG_ENABLE_REPORT, !isDev),
     reportUrl: env.VITE_LOG_REPORT_URL || undefined,
     batchSize: Number(env.VITE_LOG_BATCH_SIZE || 20),
@@ -49,18 +55,54 @@ function createDefaultLoggerConfig(): LoggerConfig {
 
 let loggerConfig: LoggerConfig | undefined;
 let logReporter: LogReporter | undefined;
+let logFileSink: LogFileSink | undefined;
+let loggerSinksInitPromise: Promise<void> | null = null;
 let globalHandlersRegistered = false;
 
 /**
- * 确保日志运行时（延迟到首次写入或 initLogger，避免模块顶层 import.meta.env 未注入）
+ * 异步加载日志落盘/上报 sink（避免 main 入口静态拉取 log-file-sink / event-reporter 链）
+ * @returns {Promise<void>}
  */
-function ensureLoggerRuntime(): { config: LoggerConfig; reporter: LogReporter } {
-  if (!loggerConfig || !logReporter) {
-    loggerConfig = createDefaultLoggerConfig();
-    logReporter = new LogReporter(loggerConfig);
+function ensureLoggerSinksAsync(): Promise<void> {
+  if (logReporter && logFileSink) {
+    return Promise.resolve();
   }
+  if (loggerSinksInitPromise) {
+    return loggerSinksInitPromise;
+  }
+  loggerSinksInitPromise = (async () => {
+    if (!loggerConfig) {
+      loggerConfig = createDefaultLoggerConfig();
+    }
+    const [{ LogReporter }, { LogFileSink }] = await Promise.all([
+      import('@/utils/log-reporter'),
+      import('@/utils/log-file-sink'),
+    ]);
+    if (!logReporter) {
+      logReporter = new LogReporter(loggerConfig);
+      logReporter.start();
+    } else {
+      logReporter.updateConfig(loggerConfig);
+    }
+    if (!logFileSink) {
+      logFileSink = new LogFileSink(loggerConfig);
+      logFileSink.start();
+    } else {
+      logFileSink.updateConfig(loggerConfig);
+    }
+  })();
+  return loggerSinksInitPromise;
+}
 
-  return { config: loggerConfig, reporter: logReporter };
+/**
+ * 确保日志运行时（控制台可立即写；落盘/上报 sink 异步就绪）
+ */
+function ensureLoggerRuntime(): { config: LoggerConfig } {
+  if (!loggerConfig) {
+    loggerConfig = createDefaultLoggerConfig();
+  }
+  void ensureLoggerSinksAsync();
+  return { config: loggerConfig };
 }
 
 /**
@@ -78,7 +120,7 @@ function writeLog(
   error?: unknown,
   tags?: string[]
 ): void {
-  const { config, reporter } = ensureLoggerRuntime();
+  const { config } = ensureLoggerRuntime();
 
   if (!shouldLogLevel(level, config.minLevel)) {
     return;
@@ -91,7 +133,15 @@ function writeLog(
     writeLogEntryToConsole(entry);
   }
 
-  reporter.enqueue(entry);
+  if (logFileSink && logReporter) {
+    logFileSink.enqueue(entry);
+    logReporter.enqueue(entry);
+  } else {
+    void ensureLoggerSinksAsync().then(() => {
+      logFileSink?.enqueue(entry);
+      logReporter?.enqueue(entry);
+    });
+  }
 }
 
 /** 全局默认日志器 */
@@ -110,10 +160,16 @@ export const logger: Logger = {
   },
   fatal(message, context, error) {
     writeLog(LogLevel.Fatal, message, context, error, ['fatal']);
-    void ensureLoggerRuntime().reporter.flush(false);
+    void ensureLoggerSinksAsync().then(() => {
+      void logFileSink?.flush(false);
+      void logReporter?.flush(false);
+    });
   },
   flush() {
-    void ensureLoggerRuntime().reporter.flush(false);
+    void ensureLoggerSinksAsync().then(() => {
+      void logFileSink?.flush(false);
+      void logReporter?.flush(false);
+    });
   },
 };
 
@@ -199,12 +255,7 @@ function registerGlobalErrorHandlers(app: App): void {
  */
 export function initLogger(app: App, override?: Partial<LoggerConfig>, router?: Router): Logger {
   loggerConfig = { ...createDefaultLoggerConfig(), ...override };
-  if (!logReporter) {
-    logReporter = new LogReporter(loggerConfig);
-  } else {
-    logReporter.updateConfig(loggerConfig);
-  }
-  logReporter.start();
+  void ensureLoggerSinksAsync();
   registerGlobalErrorHandlers(app);
 
   if (router) {
@@ -219,7 +270,12 @@ export function initLogger(app: App, override?: Partial<LoggerConfig>, router?: 
     });
   }
 
-  logger.info('日志系统已初始化', { module: 'logger', action: 'init' });
+  logger.info('日志系统已初始化', {
+    module: 'logger',
+    action: 'init',
+    enableFile: loggerConfig.enableFile,
+    fileUrl: loggerConfig.fileUrl,
+  });
   return logger;
 }
 

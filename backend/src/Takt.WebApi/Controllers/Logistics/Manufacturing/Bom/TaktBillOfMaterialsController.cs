@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Manufacturing.Bom
 // 文件名称：TaktBillOfMaterialsController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：物料清单控制器
 // 
@@ -68,6 +68,30 @@ public class TaktBillOfMaterialsController : TaktControllerBase
         try
         {
             var result = await _billOfMaterialService.GetBillOfMaterialByIdAsync(id);
+            if (result == null)
+            {
+                return NotFound("物料清单不存在");
+            }
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// BOM 多层递归展开清单
+    /// </summary>
+    /// <param name="queryDto">展开查询参数</param>
+    /// <returns>展开结果</returns>
+    [TaktPermission("logistics:manufacturing:bom:bill:of:material:query", "BOM多层展开")]
+    [HttpGet("explosion")]
+    public async Task<IActionResult> GetBillOfMaterialExplosionAsync([FromQuery] TaktBillOfMaterialExplosionQueryDto queryDto)
+    {
+        try
+        {
+            var result = await _billOfMaterialService.GetBillOfMaterialExplosionAsync(queryDto);
             if (result == null)
             {
                 return NotFound("物料清单不存在");

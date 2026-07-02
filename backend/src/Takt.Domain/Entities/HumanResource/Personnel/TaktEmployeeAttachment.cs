@@ -4,7 +4,7 @@
 // 文件名称：TaktEmployeeAttachment.cs
 // 创建时间：2026-06-03
 // 创建人：Takt365(Cursor AI)
-// 功能描述：员工档案附件实体（人事-附件管理）
+// 功能描述：员工档案附件实体；文件上传统一由 TaktFile 管理，本表仅保存业务附件名称与 AccessUrl 引用。
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -16,7 +16,7 @@ using Takt.Domain.Entities;
 namespace Takt.Domain.Entities.HumanResource.Personnel;
 
 /// <summary>
-/// 员工档案附件（主档子表，公司级非审批单）
+/// 员工档案附件（主档子表，公司级非审批单）；文件元数据见 TaktFile，本表仅存业务名称与访问地址引用。
 /// </summary>
 [SugarTable("takt_human_resource_personnel_employee_attachment", "员工附件表")]
 [SugarIndex("ix_employee_attachment_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
@@ -24,62 +24,24 @@ namespace Takt.Domain.Entities.HumanResource.Personnel;
 public class TaktEmployeeAttachment : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 员工ID
+    /// 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [SugarColumn(ColumnName = "employee_id", ColumnDescription = "员工ID", ColumnDataType = "bigint", IsNullable = false)]
+    [JsonConverter(typeof(ValueToStringConverter))]
     public long EmployeeId { get; set; }
-
     /// <summary>
-    /// 文件ID（关联文件服务）
+    /// 附件名称（业务称谓，如毕业证、就业证）
     /// </summary>
-    [SugarColumn(ColumnName = "file_id", ColumnDescription = "文件ID", ColumnDataType = "bigint", IsNullable = true)]
-    public long? FileId { get; set; }
-
+    [SugarColumn(ColumnName = "attachment_name", ColumnDescription = "附件名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
+    public string AttachmentName { get; set; } = string.Empty;
     /// <summary>
-    /// 文件编码
+    /// 访问地址（关联 TaktFile.AccessUrl）
     /// </summary>
-    [SugarColumn(ColumnName = "file_code", ColumnDescription = "文件编码", ColumnDataType = "varchar", Length = 50, IsNullable = true)]
-    public string? FileCode { get; set; }
-
+    [SugarColumn(ColumnName = "access_url", ColumnDescription = "访问地址", ColumnDataType = "nvarchar", Length = 1000, IsNullable = false, DefaultValue = "''")]
+    public string AccessUrl { get; set; } = string.Empty;
     /// <summary>
-    /// 文件名称
+    /// 员工主档（多对一）
     /// </summary>
-    [SugarColumn(ColumnName = "file_name", ColumnDescription = "文件名称", ColumnDataType = "nvarchar", Length = 255, IsNullable = false)]
-    public string FileName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 文件路径
-    /// </summary>
-    [SugarColumn(ColumnName = "file_path", ColumnDescription = "文件路径", ColumnDataType = "varchar", Length = 500, IsNullable = true)]
-    public string? FilePath { get; set; }
-
-    /// <summary>
-    /// 文件大小（字节）
-    /// </summary>
-    [SugarColumn(ColumnName = "file_size", ColumnDescription = "文件大小", ColumnDataType = "bigint", IsNullable = false, DefaultValue = "0")]
-    public long FileSize { get; set; }
-
-    /// <summary>
-    /// 文件类型/MIME
-    /// </summary>
-    [SugarColumn(ColumnName = "file_type", ColumnDescription = "文件类型", ColumnDataType = "varchar", Length = 100, IsNullable = true)]
-    public string? FileType { get; set; }
-
-    /// <summary>
-    /// 附件类型（0=身份证，1=学历证，2=合同，3=照片，4=离职证明，5=其他）
-    /// </summary>
-    [SugarColumn(ColumnName = "attachment_type", ColumnDescription = "附件类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "5")]
-    public int AttachmentType { get; set; }
-
-    /// <summary>
-    /// 附件说明
-    /// </summary>
-    [SugarColumn(ColumnName = "attachment_description", ColumnDescription = "附件说明", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
-    public string? AttachmentDescription { get; set; }
-
-    /// <summary>
-    /// 排序号
-    /// </summary>
-    [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int SortOrder { get; set; }
+    [Navigate(NavigateType.ManyToOne, nameof(EmployeeId))]
+    public TaktEmployee? Employee { get; set; }
 }

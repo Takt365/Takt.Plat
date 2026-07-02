@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Procurement
 // 文件名称：TaktPurchaseOrderItemValidators.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchaseOrderItem 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktPurchaseOrderItem 生成，请按需审阅）
 // 
@@ -36,20 +36,13 @@ public class TaktPurchaseOrderItemCreateValidator : AbstractValidator<TaktPurcha
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.PurchaseOrderId)
-            .GreaterThanOrEqualTo(0).WithMessage("采购订单ID不能为负数");
+            .GreaterThanOrEqualTo(0).WithMessage("采购订单 ID不能为负数");
         RuleFor(x => x.PurchaseOrderCode)
             .NotEmpty().WithMessage("采购订单编码不能为空")
             .MaximumLength(10).WithMessage("采购订单编码长度不能超过10个字符");
-        RuleFor(x => x.RequestCode)
-            .MaximumLength(50).WithMessage("来源请购编码长度不能超过50个字符");
-        RuleFor(x => x.MaterialCode)
-            .NotEmpty().WithMessage("物料编码不能为空")
-            .MaximumLength(20).WithMessage("物料编码长度不能超过20个字符");
         RuleFor(x => x.MaterialName)
             .NotEmpty().WithMessage("物料名称不能为空")
             .MaximumLength(40).WithMessage("物料名称长度不能超过40个字符");
-        RuleFor(x => x.MaterialSpecification)
-            .MaximumLength(80).WithMessage("物料规格长度不能超过80个字符");
         RuleFor(x => x.PurchaseUnit)
             .NotEmpty().WithMessage("采购单位不能为空")
             .MaximumLength(20).WithMessage("采购单位长度不能超过20个字符");
@@ -76,6 +69,27 @@ public class TaktPurchaseOrderItemUpdateValidator : AbstractValidator<TaktPurcha
     {
         RuleFor(x => x.PurchaseOrderItemId)
             .GreaterThan(0).WithMessage("PurchaseOrderItemID无效");
+        RuleFor(x => x.TenantCode)
+            .NotEmpty().WithMessage("租户编码不能为空")
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.CompanyCode)
+            .NotEmpty().WithMessage("公司代码不能为空")
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.PurchaseOrderId)
+            .GreaterThanOrEqualTo(0).WithMessage("采购订单 ID不能为负数");
+        RuleFor(x => x.PurchaseOrderCode)
+            .NotEmpty().WithMessage("采购订单编码不能为空")
+            .MaximumLength(10).WithMessage("采购订单编码长度不能超过10个字符");
+        RuleFor(x => x.MaterialName)
+            .NotEmpty().WithMessage("物料名称不能为空")
+            .MaximumLength(40).WithMessage("物料名称长度不能超过40个字符");
+        RuleFor(x => x.PurchaseUnit)
+            .NotEmpty().WithMessage("采购单位不能为空")
+            .MaximumLength(20).WithMessage("采购单位长度不能超过20个字符");
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
     }
 }
 
@@ -98,20 +112,13 @@ public class TaktPurchaseOrderItemImportValidator : AbstractValidator<TaktPurcha
         RuleFor(x => x.CompanyCode)
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
         RuleFor(x => x.PurchaseOrderId)
-            .GreaterThanOrEqualTo(0).WithMessage("采购订单ID不能为负数");
+            .GreaterThanOrEqualTo(0).WithMessage("采购订单 ID不能为负数");
         RuleFor(x => x.PurchaseOrderCode)
             .NotEmpty().WithMessage("采购订单编码不能为空")
             .MaximumLength(10).WithMessage("采购订单编码长度不能超过10个字符");
-        RuleFor(x => x.RequestCode)
-            .MaximumLength(50).WithMessage("来源请购编码长度不能超过50个字符").When(x => !string.IsNullOrWhiteSpace(x.RequestCode));
-        RuleFor(x => x.MaterialCode)
-            .NotEmpty().WithMessage("物料编码不能为空")
-            .MaximumLength(20).WithMessage("物料编码长度不能超过20个字符");
         RuleFor(x => x.MaterialName)
             .NotEmpty().WithMessage("物料名称不能为空")
             .MaximumLength(40).WithMessage("物料名称长度不能超过40个字符");
-        RuleFor(x => x.MaterialSpecification)
-            .MaximumLength(80).WithMessage("物料规格长度不能超过80个字符").When(x => !string.IsNullOrWhiteSpace(x.MaterialSpecification));
         RuleFor(x => x.PurchaseUnit)
             .NotEmpty().WithMessage("采购单位不能为空")
             .MaximumLength(20).WithMessage("采购单位长度不能超过20个字符");

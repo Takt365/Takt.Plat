@@ -26,82 +26,70 @@ namespace Takt.Domain.Entities.Logistics.Materials;
 public class TaktWarehouse : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码（4位字母数字组合，关联 TaktPlant.PlantCode）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false, DefaultValue = "C100")]
-    public string PlantCode { get; set; } = "C100";
-
+    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
+    public string PlantCode { get; set; } = string.Empty;
     /// <summary>
-    /// 仓库编码（租户+公司+工厂内唯一；序列号入出库等业务表存此编码）
+    /// 存货地点编码（4位，租户+公司+工厂内唯一；业务表冗余存此编码）
     /// </summary>
-    [SugarColumn(ColumnName = "warehouse_code", ColumnDescription = "仓库编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "warehouse_code", ColumnDescription = "存货地点编码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string WarehouseCode { get; set; } = string.Empty;
-
     /// <summary>
     /// 仓库名称
     /// </summary>
-    [SugarColumn(ColumnName = "warehouse_name", ColumnDescription = "仓库名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
+    [SugarColumn(ColumnName = "warehouse_name", ColumnDescription = "仓库名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = false)]
     public string WarehouseName { get; set; } = string.Empty;
-
     /// <summary>
     /// 仓库简称
     /// </summary>
-    [SugarColumn(ColumnName = "warehouse_short_name", ColumnDescription = "仓库简称", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
+    [SugarColumn(ColumnName = "warehouse_short_name", ColumnDescription = "仓库简称", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
     public string? WarehouseShortName { get; set; }
-
     /// <summary>
     /// 仓库地址（address）
     /// </summary>
     [SugarColumn(ColumnName = "address", ColumnDescription = "仓库地址", ColumnDataType = "varchar", Length = 255, IsNullable = true)]
     public string? Address { get; set; }
-
     /// <summary>
     /// 联系人（contact_person）
     /// </summary>
     [SugarColumn(ColumnName = "contact_person", ColumnDescription = "联系人", ColumnDataType = "varchar", Length = 50, IsNullable = true)]
     public string? ContactPerson { get; set; }
-
     /// <summary>
     /// 联系电话（contact_phone）
     /// </summary>
     [SugarColumn(ColumnName = "contact_phone", ColumnDescription = "联系电话", ColumnDataType = "varchar", Length = 30, IsNullable = true)]
     public string? ContactPhone { get; set; }
-
     /// <summary>
-    /// 仓库负责人用户编码（manager_user_code；关联用户业务编码）
+    /// 仓库负责人用户编码（关联 TaktUser.Username，选项 TaktUsers/options，DictValue=Username）
     /// </summary>
     [SugarColumn(ColumnName = "manager_user_code", ColumnDescription = "仓库负责人用户编码", ColumnDataType = "varchar", Length = 50, IsNullable = true)]
     public string? ManagerUserCode { get; set; }
-
     /// <summary>
-    /// 是否虚拟仓（is_virtual；字典 sys_yes_no_type；0=实体仓，1=虚拟仓）
+    /// 虚拟仓（is_virtual；字典 sys_yes_no_type；0=实体仓，1=虚拟仓）
     /// </summary>
-    [SugarColumn(ColumnName = "is_virtual", ColumnDescription = "是否虚拟仓", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    [SugarColumn(ColumnName = "is_virtual", ColumnDescription = "虚拟仓", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsVirtual { get; set; } = 0;
-
     /// <summary>
-    /// 仓库类型（0=原材料仓，1=半成品仓，2=成品仓，3=不良品仓，4=外协仓，5=其他）
+    /// 仓库类型（字典 logistics_warehouse_type；0=原材料仓，1=半成品仓，2=成品仓，3=不良品仓，4=外协仓，5=其他）
     /// </summary>
     [SugarColumn(ColumnName = "warehouse_type", ColumnDescription = "仓库类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "2")]
     public int WarehouseType { get; set; } = 2;
-
     /// <summary>
-    /// 仓库状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
     /// </summary>
-    [SugarColumn(ColumnName = "warehouse_status", ColumnDescription = "仓库状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public int WarehouseStatus { get; set; } = 1;
-
-    /// <summary>
-    /// 是否内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
-    /// </summary>
-    [SugarColumn(ColumnName = "is_built_in", ColumnDescription = "是否内置", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    [SugarColumn(ColumnName = "is_built_in", ColumnDescription = "内置", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsBuiltIn { get; set; } = 0;
-
     /// <summary>
     /// 排序号（越小越靠前）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; } = 0;
+    /// <summary>
+    /// 仓库状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// </summary>
+    [SugarColumn(ColumnName = "warehouse_status", ColumnDescription = "仓库状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
+    public int WarehouseStatus { get; set; } = 1;
 
     /// <summary>
     /// 库位列表（主子表关系）

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Manufacturing.Output
 // 文件名称：TaktAssyOutputDetailsController.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-30
 // 创建人：Takt365(Cursor AI)
 // 功能描述：组立日报明细控制器
 // 
@@ -41,7 +41,7 @@ public class TaktAssyOutputDetailsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:manufacturing:output:assyoutput:list", "组立日报明细列表")]
+    [TaktPermission("logistics:manufacturing:output:assy:list", "组立日报明细列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetAssyOutputDetailListAsync([FromQuery] TaktAssyOutputDetailQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktAssyOutputDetailsController : TaktControllerBase
     /// </summary>
     /// <param name="id">组立日报明细ID</param>
     /// <returns>组立日报明细DTO</returns>
-    [TaktPermission("logistics:manufacturing:output:assyoutput:query", "组立日报明细详情")]
+    [TaktPermission("logistics:manufacturing:output:assy:query", "组立日报明细详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetAssyOutputDetailByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktAssyOutputDetailsController : TaktControllerBase
     /// 获取组立日报明细选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:manufacturing:output:assyoutput:query", "组立日报明细选项")]
+    [TaktPermission("logistics:manufacturing:output:assy:query", "组立日报明细选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetAssyOutputDetailOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktAssyOutputDetailsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>组立日报明细DTO</returns>
-    [TaktPermission("logistics:manufacturing:output:assyoutput:create", "创建组立日报明细")]
+    [TaktPermission("logistics:manufacturing:output:assy:create", "创建组立日报明细")]
     [HttpPost]
     public async Task<IActionResult> CreateAssyOutputDetailAsync([FromBody] TaktAssyOutputDetailCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktAssyOutputDetailsController : TaktControllerBase
     /// <param name="id">组立日报明细ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>组立日报明细DTO</returns>
-    [TaktPermission("logistics:manufacturing:output:assyoutput:update", "更新组立日报明细")]
+    [TaktPermission("logistics:manufacturing:output:assy:update", "更新组立日报明细")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateAssyOutputDetailAsync(long id, [FromBody] TaktAssyOutputDetailUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktAssyOutputDetailsController : TaktControllerBase
     /// </summary>
     /// <param name="id">组立日报明细ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:output:assyoutput:delete", "删除组立日报明细")]
+    [TaktPermission("logistics:manufacturing:output:assy:delete", "删除组立日报明细")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAssyOutputDetailByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktAssyOutputDetailsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:output:assyoutput:delete", "批量删除组立日报明细")]
+    [TaktPermission("logistics:manufacturing:output:assy:delete", "批量删除组立日报明细")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteAssyOutputDetailBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktAssyOutputDetailsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:output:assyoutput:import", "获取组立日报明细导入模板")]
+    [TaktPermission("logistics:manufacturing:output:assy:import", "获取组立日报明细导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetAssyOutputDetailTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -204,7 +204,7 @@ public class TaktAssyOutputDetailsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:manufacturing:output:assyoutput:import", "导入组立日报明细")]
+    [TaktPermission("logistics:manufacturing:output:assy:import", "导入组立日报明细")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportAssyOutputDetailAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -234,7 +234,7 @@ public class TaktAssyOutputDetailsController : TaktControllerBase
     /// 导出组立日报明细
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:output:assyoutput:export", "导出组立日报明细")]
+    [TaktPermission("logistics:manufacturing:output:assy:export", "导出组立日报明细")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportAssyOutputDetailAsync([FromQuery] TaktAssyOutputDetailQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

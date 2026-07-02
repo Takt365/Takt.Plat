@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/planning
 // 文件名称：production-plan.d.ts
-// 创建时间：2026-06-20
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/planning 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -52,6 +52,21 @@ export interface ProductionPlan extends ApprovalDtoBase {
    * 来源销售计划编码（冗余字段，便于查询）
    */
   salesPlanCode?: string;
+
+  /**
+   * 来源 MPS 头表 ID（主生产计划，可选）
+   */
+  masterProductionScheduleId?: string;
+
+  /**
+   * 来源 MPS 头表 名称（填充字段）
+   */
+  masterProductionScheduleName?: string;
+
+  /**
+   * 来源 MPS 编码（冗余）
+   */
+  mpsCode?: string;
 
   /**
    * 计划编制日期
@@ -109,7 +124,7 @@ export interface ProductionPlan extends ApprovalDtoBase {
   planStatus: number;
 
   /**
-   * 转单状态（0=未转单，1=部分转单，2=全部转单）
+   * 转单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
    */
   convertedStatus: number;
 
@@ -162,6 +177,16 @@ export interface ProductionPlanQuery extends TaktPagedQuery {
    * 来源销售计划编码（冗余字段，便于查询）
    */
   salesPlanCode?: string;
+
+  /**
+   * 来源 MPS 头表 ID（主生产计划，可选）
+   */
+  masterProductionScheduleId?: string;
+
+  /**
+   * 来源 MPS 编码（冗余）
+   */
+  mpsCode?: string;
 
   /**
    * 计划编制日期（范围查询-开始）
@@ -229,7 +254,7 @@ export interface ProductionPlanQuery extends TaktPagedQuery {
   planStatus?: number;
 
   /**
-   * 转单状态（0=未转单，1=部分转单，2=全部转单）
+   * 转单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
    */
   convertedStatus?: number;
 
@@ -239,7 +264,7 @@ export interface ProductionPlanQuery extends TaktPagedQuery {
   planDescription?: string;
 
   /**
-   * 审批状态（TaktApprovalStatus）
+   * 审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）
    */
   approvalStatus?: number;
 
@@ -318,7 +343,7 @@ export interface ProductionPlanCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -341,6 +366,16 @@ export interface ProductionPlanCreate {
    * 来源销售计划编码（冗余字段，便于查询）
    */
   salesPlanCode?: string;
+
+  /**
+   * 来源 MPS 头表 ID（主生产计划，可选）
+   */
+  masterProductionScheduleId?: string;
+
+  /**
+   * 来源 MPS 编码（冗余）
+   */
+  mpsCode?: string;
 
   /**
    * 计划编制日期
@@ -393,7 +428,7 @@ export interface ProductionPlanCreate {
   planStatus: number;
 
   /**
-   * 转单状态（0=未转单，1=部分转单，2=全部转单）
+   * 转单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
    */
   convertedStatus: number;
 
@@ -491,6 +526,31 @@ export interface ProductionPlanTemplate {
   salesPlanCode?: string;
 
   /**
+   * 来源 MPS 头表 ID（主生产计划，可选）
+   */
+  masterProductionScheduleId?: string;
+
+  /**
+   * 来源 MPS 编码（冗余）
+   */
+  mpsCode?: string;
+
+  /**
+   * 计划编制日期
+   */
+  planDate?: string;
+
+  /**
+   * 计划周期开始日期
+   */
+  planPeriodStart?: string;
+
+  /**
+   * 计划周期结束日期
+   */
+  planPeriodEnd?: string;
+
+  /**
    * 计划人员工ID（关联 TaktEmployee，序列化为 string 以避免 Javascript 精度问题）
    */
   plannerId?: string;
@@ -501,12 +561,32 @@ export interface ProductionPlanTemplate {
   planBy?: string;
 
   /**
+   * 计划总数量（基本单位数量）
+   */
+  totalQuantity?: number;
+
+  /**
+   * 计划总金额
+   */
+  totalAmount?: number;
+
+  /**
+   * 已转工单/采购数量（基本单位数量）
+   */
+  convertedQuantity?: number;
+
+  /**
+   * 已转工单/采购金额
+   */
+  convertedAmount?: number;
+
+  /**
    * 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   planStatus?: number;
 
   /**
-   * 转单状态（0=未转单，1=部分转单，2=全部转单）
+   * 转单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
    */
   convertedStatus?: number;
 
@@ -514,6 +594,11 @@ export interface ProductionPlanTemplate {
    * 计划说明
    */
   planDescription?: string;
+
+  /**
+   * 生产计划明细列表（主子表关系）（子表，级联保存）
+   */
+  items?: ProductionPlanItemCreate[];
 
   /**
    * 扩展字段JSON
@@ -545,7 +630,7 @@ export interface ProductionPlanImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -570,6 +655,31 @@ export interface ProductionPlanImport {
   salesPlanCode?: string;
 
   /**
+   * 来源 MPS 头表 ID（主生产计划，可选）
+   */
+  masterProductionScheduleId?: string;
+
+  /**
+   * 来源 MPS 编码（冗余）
+   */
+  mpsCode?: string;
+
+  /**
+   * 计划编制日期
+   */
+  planDate?: string;
+
+  /**
+   * 计划周期开始日期
+   */
+  planPeriodStart?: string;
+
+  /**
+   * 计划周期结束日期
+   */
+  planPeriodEnd?: string;
+
+  /**
    * 计划人员工ID（关联 TaktEmployee，序列化为 string 以避免 Javascript 精度问题）
    */
   plannerId?: string;
@@ -580,12 +690,32 @@ export interface ProductionPlanImport {
   planBy?: string;
 
   /**
+   * 计划总数量（基本单位数量）
+   */
+  totalQuantity?: number;
+
+  /**
+   * 计划总金额
+   */
+  totalAmount?: number;
+
+  /**
+   * 已转工单/采购数量（基本单位数量）
+   */
+  convertedQuantity?: number;
+
+  /**
+   * 已转工单/采购金额
+   */
+  convertedAmount?: number;
+
+  /**
    * 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   planStatus?: number;
 
   /**
-   * 转单状态（0=未转单，1=部分转单，2=全部转单）
+   * 转单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
    */
   convertedStatus?: number;
 
@@ -593,6 +723,11 @@ export interface ProductionPlanImport {
    * 计划说明
    */
   planDescription?: string;
+
+  /**
+   * 生产计划明细列表（主子表关系）（子表，级联保存）
+   */
+  items?: ProductionPlanItemCreate[];
 
   /**
    * 扩展字段JSON
@@ -637,6 +772,16 @@ export interface ProductionPlanExport {
    * 来源销售计划编码（冗余字段，便于查询）
    */
   salesPlanCode?: string;
+
+  /**
+   * 来源 MPS 头表 ID（主生产计划，可选）
+   */
+  masterProductionScheduleId?: string;
+
+  /**
+   * 来源 MPS 编码（冗余）
+   */
+  mpsCode?: string;
 
   /**
    * 计划编制日期
@@ -689,7 +834,7 @@ export interface ProductionPlanExport {
   planStatus: number;
 
   /**
-   * 转单状态（0=未转单，1=部分转单，2=全部转单）
+   * 转单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
    */
   convertedStatus: number;
 

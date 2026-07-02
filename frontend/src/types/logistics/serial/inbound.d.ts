@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/serial
 // 文件名称：inbound.d.ts
-// 创建时间：2026-06-16
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/serial 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,12 +29,12 @@ export interface SerialInbound extends CompanyDtoBase {
   serialInboundId: string;
 
   /**
-   * 工厂代码(4位字母数字组合)
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
   /**
-   * 入库单号（组合唯一索引：PlantCode + InboundNo）
+   * 入库单号（租户+公司+工厂内唯一）
    */
   inboundNo: string;
 
@@ -44,17 +44,17 @@ export interface SerialInbound extends CompanyDtoBase {
   inboundDate: string;
 
   /**
-   * 入库类型(0=采购入库,1=生产入库,2=退货入库,3=调拨入库,4=序列号入库,5=其他)
+   * 入库类型（字典 logistics_inbound_type；0=采购入库 1=生产入库 2=退货入库 3=调拨入库 4=序列号入库 5=其他）
    */
   inboundType: number;
 
   /**
-   * 仓库编码
+   * 仓库编码（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options）
    */
   warehouseCode: string;
 
   /**
-   * 库位编码
+   * 库位编码（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options）
    */
   locationCode: string;
 
@@ -64,12 +64,7 @@ export interface SerialInbound extends CompanyDtoBase {
   totalQuantity: number;
 
   /**
-   * 关联公司
-   */
-  relatedCompany: string;
-
-  /**
-   * 序列号入库明细列表(主子表关系) （子表：TaktSerialInboundItem）
+   * 序列号入库明细列表（主子表关系） （子表：TaktSerialInboundItem）
    */
   items?: SerialInboundItem[];
 
@@ -94,12 +89,12 @@ export interface SerialInboundQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂代码(4位字母数字组合)
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
   /**
-   * 入库单号（组合唯一索引：PlantCode + InboundNo）
+   * 入库单号（租户+公司+工厂内唯一）
    */
   inboundNo?: string;
 
@@ -114,17 +109,17 @@ export interface SerialInboundQuery extends TaktPagedQuery {
   inboundDateEnd?: string;
 
   /**
-   * 入库类型(0=采购入库,1=生产入库,2=退货入库,3=调拨入库,4=序列号入库,5=其他)
+   * 入库类型（字典 logistics_inbound_type；0=采购入库 1=生产入库 2=退货入库 3=调拨入库 4=序列号入库 5=其他）
    */
   inboundType?: number;
 
   /**
-   * 仓库编码
+   * 仓库编码（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options）
    */
   warehouseCode?: string;
 
   /**
-   * 库位编码
+   * 库位编码（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options）
    */
   locationCode?: string;
 
@@ -132,11 +127,6 @@ export interface SerialInboundQuery extends TaktPagedQuery {
    * 总数量
    */
   totalQuantity?: number;
-
-  /**
-   * 关联公司
-   */
-  relatedCompany?: string;
 
   /**
    * 创建时间（范围查询-开始）
@@ -178,17 +168,17 @@ export interface SerialInboundCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
   /**
-   * 工厂代码(4位字母数字组合)
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
   /**
-   * 入库单号（组合唯一索引：PlantCode + InboundNo）
+   * 入库单号（租户+公司+工厂内唯一）
    */
   inboundNo: string;
 
@@ -198,17 +188,17 @@ export interface SerialInboundCreate {
   inboundDate: string;
 
   /**
-   * 入库类型(0=采购入库,1=生产入库,2=退货入库,3=调拨入库,4=序列号入库,5=其他)
+   * 入库类型（字典 logistics_inbound_type；0=采购入库 1=生产入库 2=退货入库 3=调拨入库 4=序列号入库 5=其他）
    */
   inboundType: number;
 
   /**
-   * 仓库编码
+   * 仓库编码（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options）
    */
   warehouseCode: string;
 
   /**
-   * 库位编码
+   * 库位编码（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options）
    */
   locationCode: string;
 
@@ -218,12 +208,7 @@ export interface SerialInboundCreate {
   totalQuantity: number;
 
   /**
-   * 关联公司
-   */
-  relatedCompany: string;
-
-  /**
-   * 序列号入库明细列表(主子表关系)（子表，级联保存）
+   * 序列号入库明细列表（主子表关系）（子表，级联保存）
    */
   items?: SerialInboundItemCreate[];
 
@@ -272,27 +257,32 @@ export interface SerialInboundTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码(4位字母数字组合)
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
   /**
-   * 入库单号（组合唯一索引：PlantCode + InboundNo）
+   * 入库单号（租户+公司+工厂内唯一）
    */
   inboundNo?: string;
 
   /**
-   * 入库类型(0=采购入库,1=生产入库,2=退货入库,3=调拨入库,4=序列号入库,5=其他)
+   * 入库日期
+   */
+  inboundDate?: string;
+
+  /**
+   * 入库类型（字典 logistics_inbound_type；0=采购入库 1=生产入库 2=退货入库 3=调拨入库 4=序列号入库 5=其他）
    */
   inboundType?: number;
 
   /**
-   * 仓库编码
+   * 仓库编码（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options）
    */
   warehouseCode?: string;
 
   /**
-   * 库位编码
+   * 库位编码（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options）
    */
   locationCode?: string;
 
@@ -302,9 +292,9 @@ export interface SerialInboundTemplate {
   totalQuantity?: number;
 
   /**
-   * 关联公司
+   * 序列号入库明细列表（主子表关系）（子表，级联保存）
    */
-  relatedCompany?: string;
+  items?: SerialInboundItemCreate[];
 
   /**
    * 扩展字段JSON
@@ -336,32 +326,37 @@ export interface SerialInboundImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
   /**
-   * 工厂代码(4位字母数字组合)
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
   /**
-   * 入库单号（组合唯一索引：PlantCode + InboundNo）
+   * 入库单号（租户+公司+工厂内唯一）
    */
   inboundNo?: string;
 
   /**
-   * 入库类型(0=采购入库,1=生产入库,2=退货入库,3=调拨入库,4=序列号入库,5=其他)
+   * 入库日期
+   */
+  inboundDate?: string;
+
+  /**
+   * 入库类型（字典 logistics_inbound_type；0=采购入库 1=生产入库 2=退货入库 3=调拨入库 4=序列号入库 5=其他）
    */
   inboundType?: number;
 
   /**
-   * 仓库编码
+   * 仓库编码（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options）
    */
   warehouseCode?: string;
 
   /**
-   * 库位编码
+   * 库位编码（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options）
    */
   locationCode?: string;
 
@@ -371,9 +366,9 @@ export interface SerialInboundImport {
   totalQuantity?: number;
 
   /**
-   * 关联公司
+   * 序列号入库明细列表（主子表关系）（子表，级联保存）
    */
-  relatedCompany?: string;
+  items?: SerialInboundItemCreate[];
 
   /**
    * 扩展字段JSON
@@ -405,12 +400,12 @@ export interface SerialInboundExport {
   companyCode: string;
 
   /**
-   * 工厂代码(4位字母数字组合)
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
   /**
-   * 入库单号（组合唯一索引：PlantCode + InboundNo）
+   * 入库单号（租户+公司+工厂内唯一）
    */
   inboundNo: string;
 
@@ -420,17 +415,17 @@ export interface SerialInboundExport {
   inboundDate: string;
 
   /**
-   * 入库类型(0=采购入库,1=生产入库,2=退货入库,3=调拨入库,4=序列号入库,5=其他)
+   * 入库类型（字典 logistics_inbound_type；0=采购入库 1=生产入库 2=退货入库 3=调拨入库 4=序列号入库 5=其他）
    */
   inboundType: number;
 
   /**
-   * 仓库编码
+   * 仓库编码（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options）
    */
   warehouseCode: string;
 
   /**
-   * 库位编码
+   * 库位编码（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options）
    */
   locationCode: string;
 
@@ -438,11 +433,6 @@ export interface SerialInboundExport {
    * 总数量
    */
   totalQuantity: number;
-
-  /**
-   * 关联公司
-   */
-  relatedCompany: string;
 
   /**
    * 扩展字段JSON

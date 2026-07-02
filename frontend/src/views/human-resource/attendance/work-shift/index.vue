@@ -133,23 +133,21 @@
       </div>
       <div v-show="isFieldVisible('startTime')">
       <a-form-item :label="t('entity.workshift.starttime')">
-        <a-input
+        <a-date-picker
           v-model:value="advancedQueryForm.startTime"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.workshift.starttime') })"
-          show-count
-          :maxlength="8"
-          allow-clear
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.workshift.starttime') })"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('endTime')">
       <a-form-item :label="t('entity.workshift.endtime')">
-        <a-input
+        <a-date-picker
           v-model:value="advancedQueryForm.endTime"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.workshift.endtime') })"
-          show-count
-          :maxlength="8"
-          allow-clear
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.workshift.endtime') })"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
         />
       </a-form-item>
       </div>
@@ -179,7 +177,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -190,7 +188,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -533,7 +531,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: WorkShift, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getWorkShiftId(selectedRow.value) === getWorkShiftId(record)) {
+    } else if (selectedRow.value && getWorkShiftId(selectedRow.value) === getWorkShiftId(record)) {
       selectedRow.value = null
     }
   },

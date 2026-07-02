@@ -5,6 +5,8 @@
 // 创建时间：2025-02-02
 // 创建人：Takt365(Cursor AI)
 // 功能描述：标准工资率实体（按工厂、年月维护人工与加班数据）
+// 计算公式：直接工资率 = (直接工资 + 直接加班总额) ÷ 销售额（销售额为 0 时取 0）
+// 计算公式：间接工资率 = (间接工资 + 间接加班总额) ÷ 销售额（DirectWageRate、IndirectWageRate 可人工维护或由本式录入）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -17,6 +19,7 @@ namespace Takt.Domain.Entities.Accounting.Controlling;
 
 /// <summary>
 /// 标准工资率实体
+/// 直接工资率 = (直接工资 + 直接加班总额) ÷ 销售额；间接工资率 = (间接工资 + 间接加班总额) ÷ 销售额。
 /// </summary>
 [SugarTable("takt_accounting_controlling_standard_wage_rate", "标准工资率表")]
 [SugarIndex("ix_standard_wage_rate_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
@@ -90,8 +93,8 @@ public class TaktStandardWageRate : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "indirect_wage_rate", ColumnDescription = "间接工资率", ColumnDataType = "decimal", Length = 18, DecimalDigits = 4, IsNullable = false, DefaultValue = "0")]
     public decimal IndirectWageRate { get; set; }
     /// <summary>
-    /// 关联工厂
+    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
-    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "varchar", Length = 4, IsNullable = true)]
-    public string? RelatedPlant { get; set; }
+    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "varchar", Length = 4, IsNullable = false)]
+    public string RelatedPlant { get; set; } = string.Empty;
 }

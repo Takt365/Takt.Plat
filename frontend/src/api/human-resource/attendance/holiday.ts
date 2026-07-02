@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/human-resource/attendance
 // 文件名称：holiday.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/attendance 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -18,8 +18,8 @@ import type {
 import type {
   Holiday,
   HolidayCreate,
-  HolidayTheme,
-  HolidayUpdate
+  HolidayUpdate,
+  HolidayTheme
 } from '@/types/human-resource/attendance/holiday';
 
 /**

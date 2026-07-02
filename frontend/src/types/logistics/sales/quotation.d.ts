@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/sales
 // 文件名称：quotation.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-07-01
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,9 +29,9 @@ export interface SalesQuotation extends CompanyDtoBase {
   salesQuotationId: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
-  plantCode?: string;
+  plantCode: string;
 
   /**
    * 销售报价编码（唯一索引）
@@ -39,7 +39,7 @@ export interface SalesQuotation extends CompanyDtoBase {
   salesQuotationCode: string;
 
   /**
-   * 客户编码
+   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
    */
   customerCode: string;
 
@@ -59,7 +59,7 @@ export interface SalesQuotation extends CompanyDtoBase {
   validUntilDate?: string;
 
   /**
-   * 销售员（人员代码）
+   * 销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）
    */
   salesBy?: string;
 
@@ -89,19 +89,24 @@ export interface SalesQuotation extends CompanyDtoBase {
   actualAmount: number;
 
   /**
-   * 报价状态（0=草稿，1=已发送，2=已接受，3=已拒绝，4=已过期，5=已作废）
-   */
-  quotationStatus: number;
-
-  /**
-   * 关联销售订单编码（报价转订单后回填）
+   * 关联销售订单编码（报价转订单后回填；选项 TaktSalesOrders/options，DictValue=SalesOrderCode）
    */
   salesOrderCode?: string;
+
+  /**
+   * 报价状态（字典 logistics_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）
+   */
+  quotationStatus: number;
 
   /**
    * 销售报价明细列表（主子表关系） （子表：TaktSalesQuotationItem）
    */
   items?: SalesQuotationItem[];
+
+  /**
+   * 销售报价变更记录列表（外键在子表 TaktSalesQuotationChangeLog.SalesQuotationId） （子表：TaktSalesQuotationChangeLog）
+   */
+  changeLogs?: SalesQuotationChangeLog[];
 
 }
 
@@ -124,7 +129,7 @@ export interface SalesQuotationQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -134,7 +139,7 @@ export interface SalesQuotationQuery extends TaktPagedQuery {
   salesQuotationCode?: string;
 
   /**
-   * 客户编码
+   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
    */
   customerCode?: string;
 
@@ -164,7 +169,7 @@ export interface SalesQuotationQuery extends TaktPagedQuery {
   validUntilDateEnd?: string;
 
   /**
-   * 销售员（人员代码）
+   * 销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）
    */
   salesBy?: string;
 
@@ -194,14 +199,14 @@ export interface SalesQuotationQuery extends TaktPagedQuery {
   actualAmount?: number;
 
   /**
-   * 报价状态（0=草稿，1=已发送，2=已接受，3=已拒绝，4=已过期，5=已作废）
-   */
-  quotationStatus?: number;
-
-  /**
-   * 关联销售订单编码（报价转订单后回填）
+   * 关联销售订单编码（报价转订单后回填；选项 TaktSalesOrders/options，DictValue=SalesOrderCode）
    */
   salesOrderCode?: string;
+
+  /**
+   * 报价状态（字典 logistics_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）
+   */
+  quotationStatus?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -216,7 +221,7 @@ export interface SalesQuotationQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -243,14 +248,14 @@ export interface SalesQuotationCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
-  plantCode?: string;
+  plantCode: string;
 
   /**
    * 销售报价编码（唯一索引）
@@ -258,7 +263,7 @@ export interface SalesQuotationCreate {
   salesQuotationCode: string;
 
   /**
-   * 客户编码
+   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
    */
   customerCode: string;
 
@@ -278,7 +283,7 @@ export interface SalesQuotationCreate {
   validUntilDate?: string;
 
   /**
-   * 销售员（人员代码）
+   * 销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）
    */
   salesBy?: string;
 
@@ -308,14 +313,14 @@ export interface SalesQuotationCreate {
   actualAmount: number;
 
   /**
-   * 报价状态（0=草稿，1=已发送，2=已接受，3=已拒绝，4=已过期，5=已作废）
-   */
-  quotationStatus: number;
-
-  /**
-   * 关联销售订单编码（报价转订单后回填）
+   * 关联销售订单编码（报价转订单后回填；选项 TaktSalesOrders/options，DictValue=SalesOrderCode）
    */
   salesOrderCode?: string;
+
+  /**
+   * 报价状态（字典 logistics_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）
+   */
+  quotationStatus: number;
 
   /**
    * 销售报价明细列表（主子表关系）（子表，级联保存）
@@ -323,9 +328,14 @@ export interface SalesQuotationCreate {
   items?: SalesQuotationItemCreate[];
 
   /**
+   * 销售报价变更记录列表（外键在子表 TaktSalesQuotationChangeLog.SalesQuotationId）（子表，级联保存）
+   */
+  changeLogs?: SalesQuotationChangeLogCreate[];
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -362,7 +372,7 @@ export interface SalesQuotationStatus {
   salesQuotationId: string;
 
   /**
-   * 报价状态（0=草稿，1=已发送，2=已接受，3=已拒绝，4=已过期，5=已作废）
+   * 报价状态（字典 logistics_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）
    */
   quotationStatus: number;
 
@@ -386,7 +396,7 @@ export interface SalesQuotationTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -396,7 +406,7 @@ export interface SalesQuotationTemplate {
   salesQuotationCode?: string;
 
   /**
-   * 客户编码
+   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
    */
   customerCode?: string;
 
@@ -406,24 +416,69 @@ export interface SalesQuotationTemplate {
   customerName?: string;
 
   /**
-   * 销售员（人员代码）
+   * 报价日期
+   */
+  quotationDate?: string;
+
+  /**
+   * 报价有效期至
+   */
+  validUntilDate?: string;
+
+  /**
+   * 销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）
    */
   salesBy?: string;
 
   /**
-   * 报价状态（0=草稿，1=已发送，2=已接受，3=已拒绝，4=已过期，5=已作废）
+   * 报价总数量（基本单位数量）
    */
-  quotationStatus?: number;
+  totalQuantity?: number;
 
   /**
-   * 关联销售订单编码（报价转订单后回填）
+   * 报价总金额
+   */
+  totalAmount?: number;
+
+  /**
+   * 折扣金额
+   */
+  discountAmount?: number;
+
+  /**
+   * 税费
+   */
+  taxAmount?: number;
+
+  /**
+   * 报价实付金额
+   */
+  actualAmount?: number;
+
+  /**
+   * 关联销售订单编码（报价转订单后回填；选项 TaktSalesOrders/options，DictValue=SalesOrderCode）
    */
   salesOrderCode?: string;
 
   /**
+   * 报价状态（字典 logistics_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）
+   */
+  quotationStatus?: number;
+
+  /**
+   * 销售报价明细列表（主子表关系）（子表，级联保存）
+   */
+  items?: SalesQuotationItemCreate[];
+
+  /**
+   * 销售报价变更记录列表（外键在子表 TaktSalesQuotationChangeLog.SalesQuotationId）（子表，级联保存）
+   */
+  changeLogs?: SalesQuotationChangeLogCreate[];
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -450,12 +505,12 @@ export interface SalesQuotationImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -465,7 +520,7 @@ export interface SalesQuotationImport {
   salesQuotationCode?: string;
 
   /**
-   * 客户编码
+   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
    */
   customerCode?: string;
 
@@ -475,24 +530,69 @@ export interface SalesQuotationImport {
   customerName?: string;
 
   /**
-   * 销售员（人员代码）
+   * 报价日期
+   */
+  quotationDate?: string;
+
+  /**
+   * 报价有效期至
+   */
+  validUntilDate?: string;
+
+  /**
+   * 销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）
    */
   salesBy?: string;
 
   /**
-   * 报价状态（0=草稿，1=已发送，2=已接受，3=已拒绝，4=已过期，5=已作废）
+   * 报价总数量（基本单位数量）
    */
-  quotationStatus?: number;
+  totalQuantity?: number;
 
   /**
-   * 关联销售订单编码（报价转订单后回填）
+   * 报价总金额
+   */
+  totalAmount?: number;
+
+  /**
+   * 折扣金额
+   */
+  discountAmount?: number;
+
+  /**
+   * 税费
+   */
+  taxAmount?: number;
+
+  /**
+   * 报价实付金额
+   */
+  actualAmount?: number;
+
+  /**
+   * 关联销售订单编码（报价转订单后回填；选项 TaktSalesOrders/options，DictValue=SalesOrderCode）
    */
   salesOrderCode?: string;
 
   /**
+   * 报价状态（字典 logistics_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）
+   */
+  quotationStatus?: number;
+
+  /**
+   * 销售报价明细列表（主子表关系）（子表，级联保存）
+   */
+  items?: SalesQuotationItemCreate[];
+
+  /**
+   * 销售报价变更记录列表（外键在子表 TaktSalesQuotationChangeLog.SalesQuotationId）（子表，级联保存）
+   */
+  changeLogs?: SalesQuotationChangeLogCreate[];
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -519,9 +619,9 @@ export interface SalesQuotationExport {
   companyCode: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
-  plantCode?: string;
+  plantCode: string;
 
   /**
    * 销售报价编码（唯一索引）
@@ -529,7 +629,7 @@ export interface SalesQuotationExport {
   salesQuotationCode: string;
 
   /**
-   * 客户编码
+   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
    */
   customerCode: string;
 
@@ -549,7 +649,7 @@ export interface SalesQuotationExport {
   validUntilDate?: string;
 
   /**
-   * 销售员（人员代码）
+   * 销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）
    */
   salesBy?: string;
 
@@ -579,19 +679,19 @@ export interface SalesQuotationExport {
   actualAmount: number;
 
   /**
-   * 报价状态（0=草稿，1=已发送，2=已接受，3=已拒绝，4=已过期，5=已作废）
-   */
-  quotationStatus: number;
-
-  /**
-   * 关联销售订单编码（报价转订单后回填）
+   * 关联销售订单编码（报价转订单后回填；选项 TaktSalesOrders/options，DictValue=SalesOrderCode）
    */
   salesOrderCode?: string;
 
   /**
+   * 报价状态（字典 logistics_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）
+   */
+  quotationStatus: number;
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注

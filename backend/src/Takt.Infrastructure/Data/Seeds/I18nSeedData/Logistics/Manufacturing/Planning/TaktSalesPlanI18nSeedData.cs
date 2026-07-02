@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Planning
 // 文件名称：TaktSalesPlanI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSalesPlan 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktSalesPlanI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salesplan._self", "zh-HK", "Takt销售计划信息_hk", "实体名称"),
 
             // entity.salesplan.plantcode
-            new TranslationSeedItem("entity.salesplan.plantcode", "en-US", "工厂代码_us", "工厂代码（关联 TaktPlant.PlantCode）"),
+            new TranslationSeedItem("entity.salesplan.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
             // entity.salesplan.plantcode
-            new TranslationSeedItem("entity.salesplan.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（关联 TaktPlant.PlantCode）"),
+            new TranslationSeedItem("entity.salesplan.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
             // entity.salesplan.plantcode
-            new TranslationSeedItem("entity.salesplan.plantcode", "zh-CN", "工厂代码", "工厂代码（关联 TaktPlant.PlantCode）"),
+            new TranslationSeedItem("entity.salesplan.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
             // entity.salesplan.plantcode
-            new TranslationSeedItem("entity.salesplan.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（关联 TaktPlant.PlantCode）"),
+            new TranslationSeedItem("entity.salesplan.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
 
             // entity.salesplan.code
             new TranslationSeedItem("entity.salesplan.code", "en-US", "销售计划编码_us", "销售计划编码（租户+公司+工厂内业务唯一）"),
@@ -136,13 +136,13 @@ public class TaktSalesPlanI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salesplan.planperiodend", "zh-HK", "计划周期结束日期_hk", "计划周期结束日期"),
 
             // entity.salesplan.customercode
-            new TranslationSeedItem("entity.salesplan.customercode", "en-US", "客户编码_us", "客户编码（可选；汇总计划时为空，关联 TaktCustomer.CustomerCode）"),
+            new TranslationSeedItem("entity.salesplan.customercode", "en-US", "客户编码_us", "客户编码（关联 TaktCustomer.CustomerCode，选项 TaktCustomers/options；汇总计划时可为空）"),
             // entity.salesplan.customercode
-            new TranslationSeedItem("entity.salesplan.customercode", "ja-JP", "客户编码_jp", "客户编码（可选；汇总计划时为空，关联 TaktCustomer.CustomerCode）"),
+            new TranslationSeedItem("entity.salesplan.customercode", "ja-JP", "客户编码_jp", "客户编码（关联 TaktCustomer.CustomerCode，选项 TaktCustomers/options；汇总计划时可为空）"),
             // entity.salesplan.customercode
-            new TranslationSeedItem("entity.salesplan.customercode", "zh-CN", "客户编码", "客户编码（可选；汇总计划时为空，关联 TaktCustomer.CustomerCode）"),
+            new TranslationSeedItem("entity.salesplan.customercode", "zh-CN", "客户编码", "客户编码（关联 TaktCustomer.CustomerCode，选项 TaktCustomers/options；汇总计划时可为空）"),
             // entity.salesplan.customercode
-            new TranslationSeedItem("entity.salesplan.customercode", "zh-HK", "客户编码_hk", "客户编码（可选；汇总计划时为空，关联 TaktCustomer.CustomerCode）"),
+            new TranslationSeedItem("entity.salesplan.customercode", "zh-HK", "客户编码_hk", "客户编码（关联 TaktCustomer.CustomerCode，选项 TaktCustomers/options；汇总计划时可为空）"),
 
             // entity.salesplan.customername
             new TranslationSeedItem("entity.salesplan.customername", "en-US", "客户名称_us", "客户名称（冗余字段，便于查询展示）"),
@@ -154,22 +154,22 @@ public class TaktSalesPlanI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salesplan.customername", "zh-HK", "客户名称_hk", "客户名称（冗余字段，便于查询展示）"),
 
             // entity.salesplan.plannerid
-            new TranslationSeedItem("entity.salesplan.plannerid", "en-US", "计划人员工ID_us", "计划人员工ID（关联 TaktEmployee，序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.salesplan.plannerid", "en-US", "计划人员工ID_us", "计划人员工ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
             // entity.salesplan.plannerid
-            new TranslationSeedItem("entity.salesplan.plannerid", "ja-JP", "计划人员工ID_jp", "计划人员工ID（关联 TaktEmployee，序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.salesplan.plannerid", "ja-JP", "计划人员工ID_jp", "计划人员工ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
             // entity.salesplan.plannerid
-            new TranslationSeedItem("entity.salesplan.plannerid", "zh-CN", "计划人员工ID", "计划人员工ID（关联 TaktEmployee，序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.salesplan.plannerid", "zh-CN", "计划人员工ID", "计划人员工ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
             // entity.salesplan.plannerid
-            new TranslationSeedItem("entity.salesplan.plannerid", "zh-HK", "计划人员工ID_hk", "计划人员工ID（关联 TaktEmployee，序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.salesplan.plannerid", "zh-HK", "计划人员工ID_hk", "计划人员工ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
 
             // entity.salesplan.planby
-            new TranslationSeedItem("entity.salesplan.planby", "en-US", "计划人_us", "计划人（人员代码）"),
+            new TranslationSeedItem("entity.salesplan.planby", "en-US", "计划人_us", "计划人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）"),
             // entity.salesplan.planby
-            new TranslationSeedItem("entity.salesplan.planby", "ja-JP", "计划人_jp", "计划人（人员代码）"),
+            new TranslationSeedItem("entity.salesplan.planby", "ja-JP", "计划人_jp", "计划人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）"),
             // entity.salesplan.planby
-            new TranslationSeedItem("entity.salesplan.planby", "zh-CN", "计划人", "计划人（人员代码）"),
+            new TranslationSeedItem("entity.salesplan.planby", "zh-CN", "计划人", "计划人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）"),
             // entity.salesplan.planby
-            new TranslationSeedItem("entity.salesplan.planby", "zh-HK", "计划人_hk", "计划人（人员代码）"),
+            new TranslationSeedItem("entity.salesplan.planby", "zh-HK", "计划人_hk", "计划人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）"),
 
             // entity.salesplan.totalquantity
             new TranslationSeedItem("entity.salesplan.totalquantity", "en-US", "计划总数量_us", "计划总数量（基本单位数量）"),
@@ -208,22 +208,22 @@ public class TaktSalesPlanI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salesplan.convertedamount", "zh-HK", "已转生产销售金额_hk", "已转生产/销售金额"),
 
             // entity.salesplan.planstatus
-            new TranslationSeedItem("entity.salesplan.planstatus", "en-US", "计划状态_us", "计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.salesplan.planstatus", "en-US", "计划状态_us", "计划状态（字典 sys_normal_disable_status；1=启用，0=禁用，2=锁定）"),
             // entity.salesplan.planstatus
-            new TranslationSeedItem("entity.salesplan.planstatus", "ja-JP", "计划状态_jp", "计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.salesplan.planstatus", "ja-JP", "计划状态_jp", "计划状态（字典 sys_normal_disable_status；1=启用，0=禁用，2=锁定）"),
             // entity.salesplan.planstatus
-            new TranslationSeedItem("entity.salesplan.planstatus", "zh-CN", "计划状态", "计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.salesplan.planstatus", "zh-CN", "计划状态", "计划状态（字典 sys_normal_disable_status；1=启用，0=禁用，2=锁定）"),
             // entity.salesplan.planstatus
-            new TranslationSeedItem("entity.salesplan.planstatus", "zh-HK", "计划状态_hk", "计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.salesplan.planstatus", "zh-HK", "计划状态_hk", "计划状态（字典 sys_normal_disable_status；1=启用，0=禁用，2=锁定）"),
 
             // entity.salesplan.convertedstatus
-            new TranslationSeedItem("entity.salesplan.convertedstatus", "en-US", "转单状态_us", "转单状态（0=未转单，1=部分转单，2=全部转单）"),
+            new TranslationSeedItem("entity.salesplan.convertedstatus", "en-US", "转单状态_us", "转单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）"),
             // entity.salesplan.convertedstatus
-            new TranslationSeedItem("entity.salesplan.convertedstatus", "ja-JP", "转单状态_jp", "转单状态（0=未转单，1=部分转单，2=全部转单）"),
+            new TranslationSeedItem("entity.salesplan.convertedstatus", "ja-JP", "转单状态_jp", "转单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）"),
             // entity.salesplan.convertedstatus
-            new TranslationSeedItem("entity.salesplan.convertedstatus", "zh-CN", "转单状态", "转单状态（0=未转单，1=部分转单，2=全部转单）"),
+            new TranslationSeedItem("entity.salesplan.convertedstatus", "zh-CN", "转单状态", "转单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）"),
             // entity.salesplan.convertedstatus
-            new TranslationSeedItem("entity.salesplan.convertedstatus", "zh-HK", "转单状态_hk", "转单状态（0=未转单，1=部分转单，2=全部转单）"),
+            new TranslationSeedItem("entity.salesplan.convertedstatus", "zh-HK", "转单状态_hk", "转单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）"),
 
             // entity.salesplan.plandescription
             new TranslationSeedItem("entity.salesplan.plandescription", "en-US", "计划说明_us", "计划说明"),

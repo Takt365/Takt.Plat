@@ -19,11 +19,11 @@
       @reset="handleQueryReset"
     />
     <TaktToolsBar
-      create-permission="logistics:procurement:purchaseprice:create"
-      update-permission="logistics:procurement:purchaseprice:update"
-      delete-permission="logistics:procurement:purchaseprice:delete"
+      create-permission="logistics:procurement:purchase:price:create"
+      update-permission="logistics:procurement:purchase:price:update"
+      delete-permission="logistics:procurement:purchase:price:delete"
 
-
+      export-permission="logistics:procurement:purchase:price:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -31,8 +31,8 @@
       :show-refresh="true"
 
       :show-import="false"
-      :show-export="false"
-      :show-advanced-query="false"
+      :show-export="true"
+      :show-advanced-query="true"
       :show-column-setting="true"
       :show-fullscreen="true"
       :import-disabled="!hasMasterSelection"
@@ -40,7 +40,8 @@
       :import-loading="loading"
       :export-loading="loading"
 
-
+      @export="handleExport"
+      @advanced-query="handleAdvancedQuery"
       @column-setting="handleColumnSetting"
       :create-disabled="!hasMasterSelection"
       :update-disabled="updateDisabled"
@@ -95,6 +96,133 @@
       />
     </TaktModal>
 
+    <TaktQueryDrawer
+      v-model:open="advancedQueryVisible"
+      v-model:visible-field-keys="visibleQueryFieldKeys"
+      :fields="queryFieldsMeta"
+      storage-key="takt-query-fields-logistics-procurement-purchase-price-change-log-purchase-price-change-log"
+      :form-model="advancedQueryForm"
+      @submit="handleAdvancedQuerySubmit"
+      @reset="handleAdvancedQueryReset"
+    >
+      <template #default="{ isFieldVisible }">
+      <div v-show="isFieldVisible('changeFields')">
+      <a-form-item :label="t('entity.purchasepricechangelog.changefields')">
+        <a-input
+          v-model:value="advancedQueryForm.changeFields"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchasepricechangelog.changefields') })"
+          show-count
+          :maxlength="20"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('changeTimeStart')">
+      <a-form-item :label="t('entity.purchasepricechangelog.changetimestart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.changeTimeStart"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.purchasepricechangelog.changetimestart') })"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('changeTimeEnd')">
+      <a-form-item :label="t('entity.purchasepricechangelog.changetimeend')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.changeTimeEnd"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.purchasepricechangelog.changetimeend') })"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('changeBy')">
+      <a-form-item :label="t('entity.purchasepricechangelog.changeby')">
+        <a-input
+          v-model:value="advancedQueryForm.changeBy"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchasepricechangelog.changeby') })"
+          show-count
+          :maxlength="20"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('changeReason')">
+      <a-form-item :label="t('entity.purchasepricechangelog.changereason')">
+        <a-input
+          v-model:value="advancedQueryForm.changeReason"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchasepricechangelog.changereason') })"
+          show-count
+          :maxlength="20"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('createdAtStart')">
+      <a-form-item :label="t('common.page.entity.createdatstart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.createdAtStart"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          value-format="YYYY-MM-DD HH:mm:ss"
+            show-time
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('createdAtEnd')">
+      <a-form-item :label="t('common.page.entity.createdatend')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.createdAtEnd"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          value-format="YYYY-MM-DD HH:mm:ss"
+            show-time
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
+        <a-textarea
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('remark')">
+      <a-form-item :label="t('common.page.entity.remark')">
+        <a-textarea
+          v-model:value="advancedQueryForm.remark"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
+        />
+      </a-form-item>
+      </div>
+      </template>
+    </TaktQueryDrawer>
     <TaktColumnDrawer
       v-model:open="columnSettingVisible"
       :columns="columns"
@@ -119,18 +247,28 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
 import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
+import { taktExcelEntityNames } from '@/utils/naming'
+import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 import PurchasePriceChangeLogForm from './purchase-price-change-log-form.vue'
 import { usePurchasePriceMasterContext } from '../composables/use-purchase-price-master-context'
 import {
-  ,
+  getPurchasePriceChangeLogList,
+  getPurchasePriceChangeLogById,
+  createPurchasePriceChangeLog,
+  updatePurchasePriceChangeLog,
+  deletePurchasePriceChangeLogById,
+  deletePurchasePriceChangeLogBatch,
+  exportPurchasePriceChangeLog,
 } from '@/api/logistics/procurement/purchase-price-change-log'
 import type { PurchasePriceChangeLog, PurchasePriceChangeLogQuery } from '@/types/logistics/procurement/purchase-price-change-log'
 
 const { t } = useI18n()
 const { selectedMasterRow } = usePurchasePriceMasterContext()
 
+/** Excel 导入/导出默认 sheet 名与文件名前缀 */
+const excelNames = taktExcelEntityNames('TaktPurchasePriceChangeLog')
 /** 快捷查询占位文案 */
 const searchPlaceholder = computed(
   () => t('common.page.form.placeholder.search', { keyword: t('entity.purchasepricechangelog._self') }),
@@ -151,6 +289,64 @@ const formData = ref<Partial<PurchasePriceChangeLog>>({})
 const formLoading = ref(false)
 const formRef = ref()
 
+const advancedQueryVisible = ref(false)
+const advancedQueryForm = ref({
+  changeFields: '',
+  changeTimeStart: '',
+  changeTimeEnd: '',
+  changeBy: '',
+  changeReason: '',
+  createdAtStart: '',
+  createdAtEnd: '',
+  extField: '',
+  remark: '',
+})
+const visibleQueryFieldKeys = ref<string[]>([])
+
+/** 高级查询字段元数据 */
+const queryFieldsMeta = computed(() => [
+  { key: 'changeFields', label: t('entity.purchasepricechangelog.changefields') },
+  { key: 'changeTimeStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.purchasepricechangelog.changetime')) },
+  { key: 'changeTimeEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.purchasepricechangelog.changetime')) },
+  { key: 'changeBy', label: t('entity.purchasepricechangelog.changeby') },
+  { key: 'changeReason', label: t('entity.purchasepricechangelog.changereason') },
+  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
+  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
+  { key: 'remark', label: t('common.page.entity.remark') },
+])
+
+/**
+ * 高级查询字段标签
+ * @param key 字段 key
+ */
+function fieldLabel(key: string): string {
+  return queryFieldsMeta.value.find((f) => f.key === key)?.label ?? key
+}
+
+function handleAdvancedQuery() {
+  advancedQueryVisible.value = true
+}
+
+function handleAdvancedQuerySubmit() {
+  advancedQueryVisible.value = false
+  currentPage.value = getTaktDefaultPageIndex()
+  void loadData()
+}
+
+function handleAdvancedQueryReset() {
+  advancedQueryForm.value = {
+  changeFields: '',
+  changeTimeStart: '',
+  changeTimeEnd: '',
+  changeBy: '',
+  changeReason: '',
+  createdAtStart: '',
+  createdAtEnd: '',
+  extField: '',
+  remark: '',
+  }
+}
 const columnSettingVisible = ref(false)
 const visibleColumnKeys = ref<string[]>([])
 
@@ -192,7 +388,46 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: PurchasePriceChangeLog }) =>
       String(getPurchasePriceChangeLogField(record, 'purchasePriceChangeLogId') ?? ''),
   },
-
+  {
+    title: t('entity.purchasepricechangelog.changefields'),
+    dataIndex: 'changeFields',
+    key: 'changeFields',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: PurchasePriceChangeLog }) =>
+      String(getPurchasePriceChangeLogField(record, 'changeFields') ?? ''),
+  },
+  {
+    title: t('entity.purchasepricechangelog.changetime'),
+    dataIndex: 'changeTime',
+    key: 'changeTime',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: PurchasePriceChangeLog }) =>
+      String(getPurchasePriceChangeLogField(record, 'changeTime') ?? ''),
+  },
+  {
+    title: t('entity.purchasepricechangelog.changeby'),
+    dataIndex: 'changeBy',
+    key: 'changeBy',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: PurchasePriceChangeLog }) =>
+      String(getPurchasePriceChangeLogField(record, 'changeBy') ?? ''),
+  },
+  {
+    title: t('entity.purchasepricechangelog.changereason'),
+    dataIndex: 'changeReason',
+    key: 'changeReason',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: PurchasePriceChangeLog }) =>
+      String(getPurchasePriceChangeLogField(record, 'changeReason') ?? ''),
+  },
   CreateActionColumn({
     actions: [
       {
@@ -200,7 +435,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:procurement:purchaseprice:update',
+        permission: 'logistics:procurement:purchase:price:update',
         onClick: (record: PurchasePriceChangeLog) => void handleEdit(record),
       },
       {
@@ -208,7 +443,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:procurement:purchaseprice:delete',
+        permission: 'logistics:procurement:purchase:price:delete',
         onClick: (record: PurchasePriceChangeLog) => void handleDeleteOne(record),
       },
     ],
@@ -225,7 +460,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: PurchasePriceChangeLog, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getPurchasePriceChangeLogId(selectedRow.value) === getPurchasePriceChangeLogId(record)) {
+    } else if (selectedRow.value && getPurchasePriceChangeLogId(selectedRow.value) === getPurchasePriceChangeLogId(record)) {
       selectedRow.value = null
     }
   },
@@ -275,6 +510,15 @@ function buildListQuery(overrides?: Partial<PurchasePriceChangeLogQuery>): Purch
       query[key] = v as never
     }
   }
+  assignTrimmed('changeFields', form.changeFields)
+  assignTrimmed('changeTimeStart', form.changeTimeStart)
+  assignTrimmed('changeTimeEnd', form.changeTimeEnd)
+  assignTrimmed('changeBy', form.changeBy)
+  assignTrimmed('changeReason', form.changeReason)
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('extField', form.extField)
+  assignTrimmed('remark', form.remark)
   return query
 }
 
@@ -289,7 +533,7 @@ async function loadData() {
   }
   loading.value = true
   try {
-    const res = await (buildListQuery())
+    const res = await getPurchasePriceChangeLogList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: unknown) {
@@ -340,7 +584,7 @@ async function handleEdit(record: PurchasePriceChangeLog) {
   formTitle.value = t('common.dialog.title.edit', { entity: t('entity.purchasepricechangelog._self') })
   formLoading.value = true
   try {
-    const detail = await (getPurchasePriceChangeLogId(record))
+    const detail = await getPurchasePriceChangeLogById(getPurchasePriceChangeLogId(record))
     formData.value = detail ? { ...detail } : { ...record }
     formVisible.value = true
   } finally {
@@ -372,10 +616,10 @@ async function handleFormSubmit() {
     const payload = refInst.getValues?.()
     const id = formData.value?.purchasePriceChangeLogId
     if (id) {
-      await (id, payload)
+      await updatePurchasePriceChangeLog(id, payload)
       message.success(t('common.feedback.updated', { target: t('entity.purchasepricechangelog._self') }))
     } else {
-      await (payload)
+      await createPurchasePriceChangeLog(payload)
       message.success(t('common.feedback.created', { target: t('entity.purchasepricechangelog._self') }))
     }
     formVisible.value = false
@@ -399,7 +643,7 @@ async function handleDeleteOne(record: PurchasePriceChangeLog) {
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
-      await (getPurchasePriceChangeLogId(record))
+      await deletePurchasePriceChangeLogById(getPurchasePriceChangeLogId(record))
       message.success(t('common.feedback.deleted', { target: t('entity.purchasepricechangelog._self') }))
       await loadData()
     },
@@ -424,7 +668,7 @@ async function handleDelete() {
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r) => getPurchasePriceChangeLogId(r)).filter(Boolean)
-      await (ids)
+      await deletePurchasePriceChangeLogBatch(ids)
       message.success(t('common.feedback.deleted', { target: t('entity.purchasepricechangelog._self') }))
       await loadData()
     },
@@ -435,6 +679,44 @@ function handleRefresh() {
   void loadData()
 }
 
+async function handleExport() {
+  if (!hasMasterSelection.value) {
+    message.warning(t('common.status.empty'))
+    return
+  }
+  try {
+    loading.value = true
+    const exportMeta = await exportPurchasePriceChangeLog(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
+    const ts = new Date()
+    const pad = (n: number, w = 2) => String(n).padStart(w, '0')
+    const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
+    const fileName = resolveExportDownloadFileName({
+      contentDisposition: (exportMeta as { contentDisposition?: string | null }).contentDisposition ?? null,
+      contentType: (exportMeta as { contentType?: string | null }).contentType ?? null,
+      fallbackBase,
+    })
+    const blob = (exportMeta as { blob?: Blob }).blob ?? (exportMeta as Blob)
+    const url = window.URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = fileName
+    link.style.display = 'none'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    setTimeout(() => window.URL.revokeObjectURL(url), 100)
+    message.success(t('common.feedback.export.success', { target: t('entity.purchasepricechangelog._self') }))
+  } catch (error: unknown) {
+    const err = error as { message?: string }
+    message.error(err?.message || t('common.feedback.export.failed', { target: t('entity.purchasepricechangelog._self') }))
+  } finally {
+    loading.value = false
+  }
+}
 function handleTableChange() {}
 
 function handleResizeColumn() {}

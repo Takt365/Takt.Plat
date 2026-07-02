@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Organization
 // 文件名称：TaktDeptDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Dept 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktDept 生成，请按需审阅）
 // 
@@ -14,7 +14,6 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Dtos.HumanResource.Organization;
 
@@ -75,7 +74,7 @@ public class TaktDeptDto : TaktCompanyDtoBase
     /// <summary>
     /// 费用类别（1=直接，2=间接）
     /// </summary>
-    public int CostCategory { get; set; }
+    public int CostCategory { get; set; } = 0;
 
     /// <summary>
     /// 部门负责人ID（关联TaktUser.Id）
@@ -104,14 +103,14 @@ public class TaktDeptDto : TaktCompanyDtoBase
     public string Location { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// 内置（1=是，0=否） 种子部门为内置，不允许删除
     /// </summary>
-    public int DeptStatus { get; set; }
+    public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 是否内置（1=是，0=否） 种子部门为内置，不允许删除
+    /// 部门描述
     /// </summary>
-    public int IsBuiltIn { get; set; }
+    public string DeptDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号（同级部门排序）
@@ -119,9 +118,9 @@ public class TaktDeptDto : TaktCompanyDtoBase
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 部门描述
+    /// 状态（1=启用，0=禁用）
     /// </summary>
-    public string Description { get; set; } = string.Empty;
+    public int DeptStatus { get; set; } = 0;
 
     /// <summary>
     /// 角色数据权限关联该部门（RBAC，表 takt_human_resource_organization_roledept）
@@ -236,14 +235,14 @@ public class TaktDeptQueryDto : TaktPagedQuery
     public string? Location { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（1=启用，0=禁用）
-    /// </summary>
-    public int? DeptStatus { get; set; }
-
-    /// <summary>
-    /// 是否内置（1=是，0=否） 种子部门为内置，不允许删除
+    /// 内置（1=是，0=否） 种子部门为内置，不允许删除
     /// </summary>
     public int? IsBuiltIn { get; set; }
+
+    /// <summary>
+    /// 部门描述
+    /// </summary>
+    public string? DeptDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号（同级部门排序）
@@ -251,9 +250,9 @@ public class TaktDeptQueryDto : TaktPagedQuery
     public int? SortOrder { get; set; }
 
     /// <summary>
-    /// 部门描述
+    /// 状态（1=启用，0=禁用）
     /// </summary>
-    public string? Description { get; set; } = string.Empty;
+    public int? DeptStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -296,7 +295,7 @@ public class TaktDeptCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -327,7 +326,7 @@ public class TaktDeptCreateDto
     /// <summary>
     /// 费用类别（1=直接，2=间接）
     /// </summary>
-    public int CostCategory { get; set; }
+    public int CostCategory { get; set; } = 0;
 
     /// <summary>
     /// 部门负责人ID（关联TaktUser.Id）
@@ -354,25 +353,20 @@ public class TaktDeptCreateDto
     public string Location { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// 内置（1=是，0=否） 种子部门为内置，不允许删除
     /// </summary>
-    public int DeptStatus { get; set; }
-
-    /// <summary>
-    /// 是否内置（1=是，0=否） 种子部门为内置，不允许删除
-    /// </summary>
-    public int IsBuiltIn { get; set; }
-
-    /// <summary>
-    /// 排序号（同级部门排序）
-    /// </summary>
-    public int SortOrder { get; set; } = 0;
+    public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
     /// 部门描述
     /// </summary>
     [Required(ErrorMessage = "部门描述不能为空")]
-    public string Description { get; set; } = string.Empty;
+    public string DeptDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 状态（1=启用，0=禁用）
+    /// </summary>
+    public int DeptStatus { get; set; } = 0;
 
     /// <summary>
     /// 数据权限关联该部门的角色 ID 列表（RBAC 反向合并）
@@ -437,31 +431,7 @@ public class TaktDeptStatusDto
     /// 状态（1=启用，0=禁用）
     /// </summary>
     [Required(ErrorMessage = "状态（1=启用，0=禁用）不能为空")]
-    public int DeptStatus { get; set; }
-}
-
-// ========================================
-// Dept 是否内置 DTO
-// ========================================
-
-/// <summary>
-/// Dept 是否内置更新 DTO
-/// </summary>
-public class TaktDeptBuiltInDto
-{
-    /// <summary>
-    /// DeptID
-    /// </summary>
-    [Required(ErrorMessage = "ID不能为空")]
-    [AdaptMember("Id")]
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long DeptId { get; set; }
-
-    /// <summary>
-    /// 是否内置（字典 sys_yes_no_type；1=是，0=否）
-    /// </summary>
-    [Required(ErrorMessage = "是否内置不能为空")]
-    public int IsBuiltIn { get; set; }
+    public int DeptStatus { get; set; } = 0;
 }
 
 // ========================================
@@ -555,19 +525,29 @@ public class TaktDeptTemplateDto
     public string? Location { get; set; } = string.Empty;
 
     /// <summary>
+    /// 内置（1=是，0=否） 种子部门为内置，不允许删除
+    /// </summary>
+    public int? IsBuiltIn { get; set; }
+
+    /// <summary>
+    /// 部门描述
+    /// </summary>
+    public string? DeptDescription { get; set; } = string.Empty;
+
+    /// <summary>
     /// 状态（1=启用，0=禁用）
     /// </summary>
     public int? DeptStatus { get; set; }
 
     /// <summary>
-    /// 是否内置（1=是，0=否） 种子部门为内置，不允许删除
+    /// 数据权限关联该部门的角色 ID 列表（RBAC 反向合并）
     /// </summary>
-    public int? IsBuiltIn { get; set; }
+    public long[]? RoleIds { get; set; }
 
     /// <summary>
-    /// 排序号（同级部门排序）
+    /// 关联该部门的员工 ID 列表（RBAC 反向合并）
     /// </summary>
-    public int? SortOrder { get; set; }
+    public long[]? EmployeeIds { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -597,7 +577,7 @@ public class TaktDeptImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -649,19 +629,29 @@ public class TaktDeptImportDto
     public string? Location { get; set; } = string.Empty;
 
     /// <summary>
+    /// 内置（1=是，0=否） 种子部门为内置，不允许删除
+    /// </summary>
+    public int? IsBuiltIn { get; set; }
+
+    /// <summary>
+    /// 部门描述
+    /// </summary>
+    public string? DeptDescription { get; set; } = string.Empty;
+
+    /// <summary>
     /// 状态（1=启用，0=禁用）
     /// </summary>
     public int? DeptStatus { get; set; }
 
     /// <summary>
-    /// 是否内置（1=是，0=否） 种子部门为内置，不允许删除
+    /// 数据权限关联该部门的角色 ID 列表（RBAC 反向合并）
     /// </summary>
-    public int? IsBuiltIn { get; set; }
+    public long[]? RoleIds { get; set; }
 
     /// <summary>
-    /// 排序号（同级部门排序）
+    /// 关联该部门的员工 ID 列表（RBAC 反向合并）
     /// </summary>
-    public int? SortOrder { get; set; }
+    public long[]? EmployeeIds { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -735,7 +725,7 @@ public class TaktDeptExportDto
     /// <summary>
     /// 费用类别（1=直接，2=间接）
     /// </summary>
-    public int CostCategory { get; set; }
+    public int CostCategory { get; set; } = 0;
 
     /// <summary>
     /// 部门负责人ID（关联TaktUser.Id）
@@ -759,14 +749,14 @@ public class TaktDeptExportDto
     public string Location { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// 内置（1=是，0=否） 种子部门为内置，不允许删除
     /// </summary>
-    public int DeptStatus { get; set; }
+    public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 是否内置（1=是，0=否） 种子部门为内置，不允许删除
+    /// 部门描述
     /// </summary>
-    public int IsBuiltIn { get; set; }
+    public string DeptDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号（同级部门排序）
@@ -774,9 +764,9 @@ public class TaktDeptExportDto
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 部门描述
+    /// 状态（1=启用，0=禁用）
     /// </summary>
-    public string Description { get; set; } = string.Empty;
+    public int DeptStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

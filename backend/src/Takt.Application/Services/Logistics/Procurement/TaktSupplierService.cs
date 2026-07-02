@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Procurement
 // 文件名称：TaktSupplierService.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：供货商信息应用服务实现
 // 
@@ -101,8 +101,9 @@ public class TaktSupplierService : TaktServiceBase, ITaktSupplierService
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.SupplierName ?? e.Id.ToString(),
+            DictValue = e.SupplierCode,
+            DictLabel = e.SupplierName ?? e.SupplierCode,
+            ExtValue = e.Id,
         }).ToList();
     }
 
@@ -341,6 +342,7 @@ public class TaktSupplierService : TaktServiceBase, ITaktSupplierService
                 || SqlFunc.ToString(x.SupplierType).Contains(keywords)
                 || (x.IndustrySector != null && x.IndustrySector.Contains(keywords))
                 || (x.SupplierTaxNumber != null && x.SupplierTaxNumber.Contains(keywords))
+                || SqlFunc.ToString(x.TaxRate).Contains(keywords)
                 || (x.RegistrationCountry != null && x.RegistrationCountry.Contains(keywords))
                 || (x.RegistrationAddress1 != null && x.RegistrationAddress1.Contains(keywords))
                 || (x.RegistrationAddress2 != null && x.RegistrationAddress2.Contains(keywords))
@@ -356,7 +358,6 @@ public class TaktSupplierService : TaktServiceBase, ITaktSupplierService
                 || SqlFunc.ToString(x.PaymentTerms).Contains(keywords)
                 || SqlFunc.ToString(x.SupplierLevel).Contains(keywords)
                 || SqlFunc.ToString(x.EvaluationScore).Contains(keywords)
-                || SqlFunc.ToString(x.IsQualified).Contains(keywords)
                 || SqlFunc.ToString(x.SupplierStatus).Contains(keywords)
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
@@ -398,6 +399,11 @@ public class TaktSupplierService : TaktServiceBase, ITaktSupplierService
         if (!string.IsNullOrEmpty(queryDto?.SupplierTaxNumber))
         {
             exp = exp.And(x => x.SupplierTaxNumber != null && x.SupplierTaxNumber.Contains(queryDto.SupplierTaxNumber));
+        }
+
+        if (queryDto?.TaxRate.HasValue == true)
+        {
+            exp = exp.And(x => x.TaxRate == queryDto.TaxRate);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.RegistrationCountry))
@@ -460,7 +466,7 @@ public class TaktSupplierService : TaktServiceBase, ITaktSupplierService
             exp = exp.And(x => x.CurrencyCode != null && x.CurrencyCode.Contains(queryDto.CurrencyCode));
         }
 
-        if (queryDto?.PaymentTerms.HasValue == true)
+        if (!string.IsNullOrEmpty(queryDto?.PaymentTerms))
         {
             exp = exp.And(x => x.PaymentTerms == queryDto.PaymentTerms);
         }
@@ -473,11 +479,6 @@ public class TaktSupplierService : TaktServiceBase, ITaktSupplierService
         if (queryDto?.EvaluationScore.HasValue == true)
         {
             exp = exp.And(x => x.EvaluationScore == queryDto.EvaluationScore);
-        }
-
-        if (queryDto?.IsQualified.HasValue == true)
-        {
-            exp = exp.And(x => x.IsQualified == queryDto.IsQualified);
         }
 
         if (queryDto?.SupplierStatus.HasValue == true)

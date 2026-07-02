@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.HumanResource.Attendance
 // 文件名称：TaktHolidaysController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：假日信息控制器
 // 
@@ -10,7 +10,6 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Takt.Application.Dtos.HumanResource.Attendance;
 using Takt.Application.Services.HumanResource.Attendance;
@@ -249,7 +248,7 @@ public class TaktHolidaysController : TaktControllerBase
             return HandleException(ex);
         }
     }
-
+    
     /// <summary>
     /// 登录前预览：指定租户与公司下的当日假日主题（未签发 OAuth 访问令牌，非匿名登录）
     /// </summary>

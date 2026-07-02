@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Materials
 // 文件名称：TaktPackagingService.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：物料包装信息应用服务实现
 // 
@@ -382,7 +382,7 @@ public class TaktPackagingService : TaktServiceBase, ITaktPackagingService
 
         if (!string.IsNullOrEmpty(queryDto?.OriginCountryRegionCode))
         {
-            exp = exp.And(x => x.OriginCountryRegionCode != null && x.OriginCountryRegionCode.Contains(queryDto.OriginCountryRegionCode));
+            exp = exp.And(x => x.OriginCountryRegionCode == queryDto.OriginCountryRegionCode);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.OriginCountryRegionName))
@@ -392,7 +392,7 @@ public class TaktPackagingService : TaktServiceBase, ITaktPackagingService
 
         if (!string.IsNullOrEmpty(queryDto?.DestinationCountryRegionCode))
         {
-            exp = exp.And(x => x.DestinationCountryRegionCode != null && x.DestinationCountryRegionCode.Contains(queryDto.DestinationCountryRegionCode));
+            exp = exp.And(x => x.DestinationCountryRegionCode == queryDto.DestinationCountryRegionCode);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.DestinationCountryRegionName))

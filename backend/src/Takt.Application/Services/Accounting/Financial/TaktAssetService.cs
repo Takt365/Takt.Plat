@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Accounting.Financial
 // 文件名称：TaktAssetService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：资产应用服务实现
 // 
@@ -30,23 +30,27 @@ namespace Takt.Application.Services.Accounting.Financial;
 public class TaktAssetService : TaktServiceBase, ITaktAssetService
 {
     private readonly ITaktCompanyRepository<TaktAsset> _assetRepository;
+    private readonly ITaktCompanyRepository<TaktAssetChangeLog> _assetChangeLogRepository;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="assetRepository">资产仓储</param>
+    /// <param name="assetChangeLogRepository">AssetChangeLog仓储</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktAssetService(
         ITaktCompanyRepository<TaktAsset> assetRepository,
+        ITaktCompanyRepository<TaktAssetChangeLog> assetChangeLogRepository,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
         _assetRepository = assetRepository;
+        _assetChangeLogRepository = assetChangeLogRepository;
         _uniqueValidator = uniqueValidator;
     }
 
@@ -81,18 +85,19 @@ public class TaktAssetService : TaktServiceBase, ITaktAssetService
         {
             return null;
         }
-        return entity.Adapt<TaktAssetDto>();
-    }
+        var dto = entity.Adapt<TaktAssetDto>();
+        await FillAssetDetailsAsync(dto, entity);
+        return dto;    }
 
     /// <summary>
-    /// 获取固定资产选项列表
+    /// 获取资产选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
     public async Task<List<TaktSelectOption>> GetAssetOptionsAsync()
     {
         EnsureThreeLayerContext();
         var list = await _assetRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.AssetStatus == 1,
             x => x.AssetName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
@@ -118,6 +123,7 @@ public class TaktAssetService : TaktServiceBase, ITaktAssetService
             throw new TaktBusinessException("资产的AssetCode已存在");
         }
         entity = await _assetRepository.CreateAsync(entity);
+                await SaveAssetChildrenAsync(entity, dto);
         return await GetAssetByIdAsync(entity.Id) ?? entity.Adapt<TaktAssetDto>();
     }
 
@@ -144,6 +150,7 @@ public class TaktAssetService : TaktServiceBase, ITaktAssetService
             throw new TaktBusinessException("资产的AssetCode已存在");
         }
         await _assetRepository.UpdateAsync(entity);
+                await SaveAssetChildrenAsync(entity, dto);
         return await GetAssetByIdAsync(id) ?? throw new TaktBusinessException("资产不存在");
     }
 
@@ -154,6 +161,12 @@ public class TaktAssetService : TaktServiceBase, ITaktAssetService
     /// <returns>任务</returns>
     public async Task DeleteAssetByIdAsync(long id)
     {
+        var entity = await _assetRepository.GetByIdAsync(id);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("资产不存在或已删除");
+        }
+        await _assetChangeLogRepository.DeleteAsync(x => x.AssetId == entity.Id);
         var deleted = await _assetRepository.DeleteAsync(id);
         if (!deleted)
         {
@@ -282,6 +295,54 @@ public class TaktAssetService : TaktServiceBase, ITaktAssetService
     }
 
     // ========================================
+    // 主子表级联（OneToMany）
+    // ========================================
+
+    /// <summary>
+    /// 填充资产详情（加载 OneToMany 子表：资产变更记录）
+    /// </summary>
+    /// <param name="dto">响应 DTO</param>
+    /// <param name="entity">主表实体</param>
+    /// <returns>任务</returns>
+    private async Task FillAssetDetailsAsync(TaktAssetDto dto, TaktAsset entity)
+    {
+        if (dto == null)
+        {
+            return;
+        }
+        // 资产变更记录 → dto.ChangeLogs
+        var changelogs = await _assetChangeLogRepository.GetListAsync(x => x.AssetId == entity.Id);
+        dto.ChangeLogs = changelogs.Adapt<List<TaktAssetChangeLogDto>>();
+    }
+
+    /// <summary>
+    /// 保存资产子表级联（资产变更记录；Create/Update 后按主表 Id 先删后插）
+    /// </summary>
+    /// <param name="entity">主表实体</param>
+    /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
+    /// <returns>任务</returns>
+    private async Task SaveAssetChildrenAsync(TaktAsset entity, TaktAssetCreateDto dto)
+    {
+        // 资产变更记录（ChangeLogs）
+        if (dto.ChangeLogs is not { Count: > 0 })
+        {
+            await _assetChangeLogRepository.DeleteAsync(x => x.AssetId == entity.Id);
+        }
+        else
+        {
+            var changelogs = dto.ChangeLogs.Adapt<List<TaktAssetChangeLog>>();
+            foreach (var child in changelogs)
+            {
+                child.AssetId = entity.Id;
+            }
+            await _assetChangeLogRepository.DeleteAsync(x => x.AssetId == entity.Id);
+            foreach (var child in changelogs)
+            {
+            }
+            await _assetChangeLogRepository.CreateRangeAsync(changelogs);
+        }
+    }
+    // ========================================
     // 查询表达式
     // ========================================
 
@@ -300,8 +361,7 @@ public class TaktAssetService : TaktServiceBase, ITaktAssetService
             exp = exp.And(x =>
                 (x.AssetCode != null && x.AssetCode.Contains(keywords))
                 || (x.AssetName != null && x.AssetName.Contains(keywords))
-                || (x.Remark != null && x.Remark.Contains(keywords))
-                || (x.AssetCategoryName != null && x.AssetCategoryName.Contains(keywords))
+                || (x.AssetCategory != null && x.AssetCategory.Contains(keywords))
                 || SqlFunc.ToString(x.AssetType).Contains(keywords)
                 || SqlFunc.ToString(x.AssetOriginalValue).Contains(keywords)
                 || SqlFunc.ToString(x.AssetNetValue).Contains(keywords)
@@ -319,6 +379,7 @@ public class TaktAssetService : TaktServiceBase, ITaktAssetService
                 || (x.RelatedPlant != null && x.RelatedPlant.Contains(keywords))
                 || SqlFunc.ToString(x.AssetStatus).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
+                || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.PurchaseDate).Contains(keywords)
                 || SqlFunc.ToString(x.StartDate).Contains(keywords)
                 || SqlFunc.ToString(x.ScrapDate).Contains(keywords)
@@ -337,24 +398,14 @@ public class TaktAssetService : TaktServiceBase, ITaktAssetService
             exp = exp.And(x => x.AssetName != null && x.AssetName.Contains(queryDto.AssetName));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.AssetSpec))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.AssetSpec));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.AssetDesc))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.AssetDesc));
-        }
-
         if (!string.IsNullOrEmpty(queryDto?.AssetCategory))
         {
-            exp = exp.And(x => x.AssetCategoryName != null && x.AssetCategoryName.Contains(queryDto.AssetCategory));
+            exp = exp.And(x => x.AssetCategory != null && x.AssetCategory.Contains(queryDto.AssetCategory));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.AssetType) && int.TryParse(queryDto.AssetType, out var assetType))
+        if (queryDto?.AssetType != null)
         {
-            exp = exp.And(x => x.AssetType == assetType);
+            exp = exp.And(x => x.AssetType == queryDto.AssetType);
         }
 
         if (queryDto?.AssetOriginalValue.HasValue == true)

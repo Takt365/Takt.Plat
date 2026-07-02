@@ -46,7 +46,7 @@ public abstract class TaktTenantDtoBase
     public string? Remark { get; set; }
 
     /// <summary>
-    /// 创建人ID（非空；无当前用户时仓储填 999）
+    /// 创建人ID（非空；无当前用户时仓储填 900001）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long CreatedBy { get; set; }
@@ -118,7 +118,7 @@ public abstract class TaktCompanyDtoBase
     public string? Remark { get; set; }
 
     /// <summary>
-    /// 创建人ID（非空；无当前用户时仓储填 999）
+    /// 创建人ID（非空；无当前用户时仓储填 900001）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long CreatedBy { get; set; }
@@ -188,7 +188,7 @@ public abstract class TaktApprovalDtoBase
     public string? Remark { get; set; }
 
     /// <summary>
-    /// 审批状态（TaktApprovalStatus）
+    /// 审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）
     /// </summary>
     public int ApprovalStatus { get; set; } = 0;
 
@@ -226,7 +226,7 @@ public abstract class TaktApprovalDtoBase
     public long? FlowInstanceId { get; set; }
 
     /// <summary>
-    /// 创建人ID（非空；无当前用户时仓储填 999）
+    /// 创建人ID（非空；无当前用户时仓储填 900001）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long CreatedBy { get; set; }

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/materials
 // 文件名称：manufacturer.d.ts
-// 创建时间：2026-06-20
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/materials 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -44,12 +44,12 @@ export interface Manufacturer extends CompanyDtoBase {
   manufacturerShortName?: string;
 
   /**
-   * 制造商类型（0=原始设备制造商OEM，1=原始设计制造商ODM，2=合同制造商CM，3=品牌制造商，4=其他）
+   * 制造商类型（字典 logistics_manufacturer_type；0=OEM，1=ODM，2=CM，3=品牌制造商，4=其他）
    */
   manufacturerType: number;
 
   /**
-   * 行业领域
+   * 行业领域（字典 logistics_industry_sector，DictValue=A/C/M/P）
    */
   industrySector?: string;
 
@@ -59,7 +59,7 @@ export interface Manufacturer extends CompanyDtoBase {
   manufacturerTaxNumber?: string;
 
   /**
-   * 注册国家（ISO 3166-1 alpha-2两位代码）
+   * 注册国家（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）
    */
   registrationCountry?: string;
 
@@ -114,12 +114,12 @@ export interface Manufacturer extends CompanyDtoBase {
   contactEmail?: string;
 
   /**
-   * 制造商等级（0=普通，1=优选，2=战略，3=临时）
+   * 制造商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时）
    */
   manufacturerLevel: number;
 
   /**
-   * 质量认证（0=无，1=ISO9001，2=ISO14001，3=IATF16949，4=其他）
+   * 质量认证（字典 logistics_quality_certification；0=无，1=ISO 9001，2=ISO 14001，3=ISO 45001，4=ISO 22000，5=ISO 27001，6=ISO 20000，7=ISO 50001，8=ISO 13485，9=IATF 16949，10=ISO/IEC 17025，11=GB/T 50430）
    */
   qualityCertification: number;
 
@@ -129,19 +129,14 @@ export interface Manufacturer extends CompanyDtoBase {
   evaluationScore: number;
 
   /**
-   * 是否合格制造商（0=否，1=是）
-   */
-  isQualified: number;
-
-  /**
-   * 制造商状态（1=启用，0=禁用）
-   */
-  manufacturerStatus: number;
-
-  /**
    * 排序号（越小越靠前）
    */
   sortOrder: number;
+
+  /**
+   * 制造商状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+   */
+  manufacturerStatus: number;
 
   /**
    * 导航属性：制造商物料明细列表 （子表：TaktManufacturerMaterial）
@@ -184,12 +179,12 @@ export interface ManufacturerQuery extends TaktPagedQuery {
   manufacturerShortName?: string;
 
   /**
-   * 制造商类型（0=原始设备制造商OEM，1=原始设计制造商ODM，2=合同制造商CM，3=品牌制造商，4=其他）
+   * 制造商类型（字典 logistics_manufacturer_type；0=OEM，1=ODM，2=CM，3=品牌制造商，4=其他）
    */
   manufacturerType?: number;
 
   /**
-   * 行业领域
+   * 行业领域（字典 logistics_industry_sector，DictValue=A/C/M/P）
    */
   industrySector?: string;
 
@@ -199,7 +194,7 @@ export interface ManufacturerQuery extends TaktPagedQuery {
   manufacturerTaxNumber?: string;
 
   /**
-   * 注册国家（ISO 3166-1 alpha-2两位代码）
+   * 注册国家（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）
    */
   registrationCountry?: string;
 
@@ -254,12 +249,12 @@ export interface ManufacturerQuery extends TaktPagedQuery {
   contactEmail?: string;
 
   /**
-   * 制造商等级（0=普通，1=优选，2=战略，3=临时）
+   * 制造商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时）
    */
   manufacturerLevel?: number;
 
   /**
-   * 质量认证（0=无，1=ISO9001，2=ISO14001，3=IATF16949，4=其他）
+   * 质量认证（字典 logistics_quality_certification；0=无，1=ISO 9001，2=ISO 14001，3=ISO 45001，4=ISO 22000，5=ISO 27001，6=ISO 20000，7=ISO 50001，8=ISO 13485，9=IATF 16949，10=ISO/IEC 17025，11=GB/T 50430）
    */
   qualityCertification?: number;
 
@@ -269,19 +264,14 @@ export interface ManufacturerQuery extends TaktPagedQuery {
   evaluationScore?: number;
 
   /**
-   * 是否合格制造商（0=否，1=是）
-   */
-  isQualified?: number;
-
-  /**
-   * 制造商状态（1=启用，0=禁用）
-   */
-  manufacturerStatus?: number;
-
-  /**
    * 排序号（越小越靠前）
    */
   sortOrder?: number;
+
+  /**
+   * 制造商状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+   */
+  manufacturerStatus?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -323,7 +313,7 @@ export interface ManufacturerCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -343,12 +333,12 @@ export interface ManufacturerCreate {
   manufacturerShortName?: string;
 
   /**
-   * 制造商类型（0=原始设备制造商OEM，1=原始设计制造商ODM，2=合同制造商CM，3=品牌制造商，4=其他）
+   * 制造商类型（字典 logistics_manufacturer_type；0=OEM，1=ODM，2=CM，3=品牌制造商，4=其他）
    */
   manufacturerType: number;
 
   /**
-   * 行业领域
+   * 行业领域（字典 logistics_industry_sector，DictValue=A/C/M/P）
    */
   industrySector?: string;
 
@@ -358,7 +348,7 @@ export interface ManufacturerCreate {
   manufacturerTaxNumber?: string;
 
   /**
-   * 注册国家（ISO 3166-1 alpha-2两位代码）
+   * 注册国家（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）
    */
   registrationCountry?: string;
 
@@ -413,12 +403,12 @@ export interface ManufacturerCreate {
   contactEmail?: string;
 
   /**
-   * 制造商等级（0=普通，1=优选，2=战略，3=临时）
+   * 制造商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时）
    */
   manufacturerLevel: number;
 
   /**
-   * 质量认证（0=无，1=ISO9001，2=ISO14001，3=IATF16949，4=其他）
+   * 质量认证（字典 logistics_quality_certification；0=无，1=ISO 9001，2=ISO 14001，3=ISO 45001，4=ISO 22000，5=ISO 27001，6=ISO 20000，7=ISO 50001，8=ISO 13485，9=IATF 16949，10=ISO/IEC 17025，11=GB/T 50430）
    */
   qualityCertification: number;
 
@@ -428,12 +418,7 @@ export interface ManufacturerCreate {
   evaluationScore: number;
 
   /**
-   * 是否合格制造商（0=否，1=是）
-   */
-  isQualified: number;
-
-  /**
-   * 制造商状态（1=启用，0=禁用）
+   * 制造商状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
    */
   manufacturerStatus: number;
 
@@ -482,7 +467,7 @@ export interface ManufacturerStatus {
   manufacturerId: string;
 
   /**
-   * 制造商状态（1=启用，0=禁用）
+   * 制造商状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
    */
   manufacturerStatus: number;
 
@@ -540,12 +525,12 @@ export interface ManufacturerTemplate {
   manufacturerShortName?: string;
 
   /**
-   * 制造商类型（0=原始设备制造商OEM，1=原始设计制造商ODM，2=合同制造商CM，3=品牌制造商，4=其他）
+   * 制造商类型（字典 logistics_manufacturer_type；0=OEM，1=ODM，2=CM，3=品牌制造商，4=其他）
    */
   manufacturerType?: number;
 
   /**
-   * 行业领域
+   * 行业领域（字典 logistics_industry_sector，DictValue=A/C/M/P）
    */
   industrySector?: string;
 
@@ -555,190 +540,7 @@ export interface ManufacturerTemplate {
   manufacturerTaxNumber?: string;
 
   /**
-   * 注册国家（ISO 3166-1 alpha-2两位代码）
-   */
-  registrationCountry?: string;
-
-  /**
-   * 注册地址1
-   */
-  registrationAddress1?: string;
-
-  /**
-   * 注册地址2
-   */
-  registrationAddress2?: string;
-
-  /**
-   * 注册地址3
-   */
-  registrationAddress3?: string;
-
-  /**
-   * 制造商电话
-   */
-  manufacturerPhone?: string;
-
-  /**
-   * 制造商传真
-   */
-  manufacturerFax?: string;
-
-  /**
-   * 扩展字段JSON
-   */
-  extField?: string;
-
-  /**
-   * 备注
-   */
-  remark?: string;
-
-}
-
-
-/**
- * Manufacturer 导入 DTO（独立实现，不继承 TemplateDto）
- * 对应前端 ManufacturerImport
- * @description 对应后端 TaktManufacturerImportDto
- */
-export interface ManufacturerImport {
-  /**
-   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
-   */
-  tenantCode?: string;
-
-  /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
-   */
-  companyCode?: string;
-
-  /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
-   */
-  companyDefaultCulture?: string;
-
-  /**
-   * 制造商编码（唯一索引）
-   */
-  manufacturerCode?: string;
-
-  /**
-   * 制造商名称
-   */
-  manufacturerName?: string;
-
-  /**
-   * 制造商简称
-   */
-  manufacturerShortName?: string;
-
-  /**
-   * 制造商类型（0=原始设备制造商OEM，1=原始设计制造商ODM，2=合同制造商CM，3=品牌制造商，4=其他）
-   */
-  manufacturerType?: number;
-
-  /**
-   * 行业领域
-   */
-  industrySector?: string;
-
-  /**
-   * 制造商标识（税务登记证号/统一社会信用代码）
-   */
-  manufacturerTaxNumber?: string;
-
-  /**
-   * 注册国家（ISO 3166-1 alpha-2两位代码）
-   */
-  registrationCountry?: string;
-
-  /**
-   * 注册地址1
-   */
-  registrationAddress1?: string;
-
-  /**
-   * 注册地址2
-   */
-  registrationAddress2?: string;
-
-  /**
-   * 注册地址3
-   */
-  registrationAddress3?: string;
-
-  /**
-   * 制造商电话
-   */
-  manufacturerPhone?: string;
-
-  /**
-   * 制造商传真
-   */
-  manufacturerFax?: string;
-
-  /**
-   * 扩展字段JSON
-   */
-  extField?: string;
-
-  /**
-   * 备注
-   */
-  remark?: string;
-
-}
-
-
-/**
- * Manufacturer 导出 DTO（独立实现，不继承响应 Dto）
- * 对应前端 ManufacturerExport
- * @description 对应后端 TaktManufacturerExportDto
- */
-export interface ManufacturerExport {
-  /**
-   * ManufacturerID
-   */
-  manufacturerId: string;
-
-  /**
-   * 公司代码
-   */
-  companyCode: string;
-
-  /**
-   * 制造商编码（唯一索引）
-   */
-  manufacturerCode: string;
-
-  /**
-   * 制造商名称
-   */
-  manufacturerName: string;
-
-  /**
-   * 制造商简称
-   */
-  manufacturerShortName?: string;
-
-  /**
-   * 制造商类型（0=原始设备制造商OEM，1=原始设计制造商ODM，2=合同制造商CM，3=品牌制造商，4=其他）
-   */
-  manufacturerType: number;
-
-  /**
-   * 行业领域
-   */
-  industrySector?: string;
-
-  /**
-   * 制造商标识（税务登记证号/统一社会信用代码）
-   */
-  manufacturerTaxNumber?: string;
-
-  /**
-   * 注册国家（ISO 3166-1 alpha-2两位代码）
+   * 注册国家（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）
    */
   registrationCountry?: string;
 
@@ -793,12 +595,295 @@ export interface ManufacturerExport {
   contactEmail?: string;
 
   /**
-   * 制造商等级（0=普通，1=优选，2=战略，3=临时）
+   * 制造商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时）
+   */
+  manufacturerLevel?: number;
+
+  /**
+   * 质量认证（字典 logistics_quality_certification；0=无，1=ISO 9001，2=ISO 14001，3=ISO 45001，4=ISO 22000，5=ISO 27001，6=ISO 20000，7=ISO 50001，8=ISO 13485，9=IATF 16949，10=ISO/IEC 17025，11=GB/T 50430）
+   */
+  qualityCertification?: number;
+
+  /**
+   * 评价分数（0-100分）
+   */
+  evaluationScore?: number;
+
+  /**
+   * 制造商状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+   */
+  manufacturerStatus?: number;
+
+  /**
+   * 导航属性：制造商物料明细列表（子表，级联保存）
+   */
+  manufacturerMaterials?: ManufacturerMaterialCreate[];
+
+  /**
+   * 扩展字段JSON
+   */
+  extField?: string;
+
+  /**
+   * 备注
+   */
+  remark?: string;
+
+}
+
+
+/**
+ * Manufacturer 导入 DTO（独立实现，不继承 TemplateDto）
+ * 对应前端 ManufacturerImport
+ * @description 对应后端 TaktManufacturerImportDto
+ */
+export interface ManufacturerImport {
+  /**
+   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
+   */
+  tenantCode?: string;
+
+  /**
+   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+   */
+  companyCode?: string;
+
+  /**
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   */
+  companyDefaultCulture?: string;
+
+  /**
+   * 制造商编码（唯一索引）
+   */
+  manufacturerCode?: string;
+
+  /**
+   * 制造商名称
+   */
+  manufacturerName?: string;
+
+  /**
+   * 制造商简称
+   */
+  manufacturerShortName?: string;
+
+  /**
+   * 制造商类型（字典 logistics_manufacturer_type；0=OEM，1=ODM，2=CM，3=品牌制造商，4=其他）
+   */
+  manufacturerType?: number;
+
+  /**
+   * 行业领域（字典 logistics_industry_sector，DictValue=A/C/M/P）
+   */
+  industrySector?: string;
+
+  /**
+   * 制造商标识（税务登记证号/统一社会信用代码）
+   */
+  manufacturerTaxNumber?: string;
+
+  /**
+   * 注册国家（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）
+   */
+  registrationCountry?: string;
+
+  /**
+   * 注册地址1
+   */
+  registrationAddress1?: string;
+
+  /**
+   * 注册地址2
+   */
+  registrationAddress2?: string;
+
+  /**
+   * 注册地址3
+   */
+  registrationAddress3?: string;
+
+  /**
+   * 制造商电话
+   */
+  manufacturerPhone?: string;
+
+  /**
+   * 制造商传真
+   */
+  manufacturerFax?: string;
+
+  /**
+   * 制造商邮箱
+   */
+  manufacturerEmail?: string;
+
+  /**
+   * 制造商网站
+   */
+  manufacturerWebsite?: string;
+
+  /**
+   * 联系人
+   */
+  contactPerson?: string;
+
+  /**
+   * 联系人电话
+   */
+  contactPhone?: string;
+
+  /**
+   * 联系人邮箱
+   */
+  contactEmail?: string;
+
+  /**
+   * 制造商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时）
+   */
+  manufacturerLevel?: number;
+
+  /**
+   * 质量认证（字典 logistics_quality_certification；0=无，1=ISO 9001，2=ISO 14001，3=ISO 45001，4=ISO 22000，5=ISO 27001，6=ISO 20000，7=ISO 50001，8=ISO 13485，9=IATF 16949，10=ISO/IEC 17025，11=GB/T 50430）
+   */
+  qualityCertification?: number;
+
+  /**
+   * 评价分数（0-100分）
+   */
+  evaluationScore?: number;
+
+  /**
+   * 制造商状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+   */
+  manufacturerStatus?: number;
+
+  /**
+   * 导航属性：制造商物料明细列表（子表，级联保存）
+   */
+  manufacturerMaterials?: ManufacturerMaterialCreate[];
+
+  /**
+   * 扩展字段JSON
+   */
+  extField?: string;
+
+  /**
+   * 备注
+   */
+  remark?: string;
+
+}
+
+
+/**
+ * Manufacturer 导出 DTO（独立实现，不继承响应 Dto）
+ * 对应前端 ManufacturerExport
+ * @description 对应后端 TaktManufacturerExportDto
+ */
+export interface ManufacturerExport {
+  /**
+   * ManufacturerID
+   */
+  manufacturerId: string;
+
+  /**
+   * 公司代码
+   */
+  companyCode: string;
+
+  /**
+   * 制造商编码（唯一索引）
+   */
+  manufacturerCode: string;
+
+  /**
+   * 制造商名称
+   */
+  manufacturerName: string;
+
+  /**
+   * 制造商简称
+   */
+  manufacturerShortName?: string;
+
+  /**
+   * 制造商类型（字典 logistics_manufacturer_type；0=OEM，1=ODM，2=CM，3=品牌制造商，4=其他）
+   */
+  manufacturerType: number;
+
+  /**
+   * 行业领域（字典 logistics_industry_sector，DictValue=A/C/M/P）
+   */
+  industrySector?: string;
+
+  /**
+   * 制造商标识（税务登记证号/统一社会信用代码）
+   */
+  manufacturerTaxNumber?: string;
+
+  /**
+   * 注册国家（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）
+   */
+  registrationCountry?: string;
+
+  /**
+   * 注册地址1
+   */
+  registrationAddress1?: string;
+
+  /**
+   * 注册地址2
+   */
+  registrationAddress2?: string;
+
+  /**
+   * 注册地址3
+   */
+  registrationAddress3?: string;
+
+  /**
+   * 制造商电话
+   */
+  manufacturerPhone?: string;
+
+  /**
+   * 制造商传真
+   */
+  manufacturerFax?: string;
+
+  /**
+   * 制造商邮箱
+   */
+  manufacturerEmail?: string;
+
+  /**
+   * 制造商网站
+   */
+  manufacturerWebsite?: string;
+
+  /**
+   * 联系人
+   */
+  contactPerson?: string;
+
+  /**
+   * 联系人电话
+   */
+  contactPhone?: string;
+
+  /**
+   * 联系人邮箱
+   */
+  contactEmail?: string;
+
+  /**
+   * 制造商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时）
    */
   manufacturerLevel: number;
 
   /**
-   * 质量认证（0=无，1=ISO9001，2=ISO14001，3=IATF16949，4=其他）
+   * 质量认证（字典 logistics_quality_certification；0=无，1=ISO 9001，2=ISO 14001，3=ISO 45001，4=ISO 22000，5=ISO 27001，6=ISO 20000，7=ISO 50001，8=ISO 13485，9=IATF 16949，10=ISO/IEC 17025，11=GB/T 50430）
    */
   qualityCertification: number;
 
@@ -808,19 +893,14 @@ export interface ManufacturerExport {
   evaluationScore: number;
 
   /**
-   * 是否合格制造商（0=否，1=是）
-   */
-  isQualified: number;
-
-  /**
-   * 制造商状态（1=启用，0=禁用）
-   */
-  manufacturerStatus: number;
-
-  /**
    * 排序号（越小越靠前）
    */
   sortOrder: number;
+
+  /**
+   * 制造商状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+   */
+  manufacturerStatus: number;
 
   /**
    * 扩展字段JSON

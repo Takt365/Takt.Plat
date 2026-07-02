@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/scheduling
 // 文件名称：aps-schedule-item.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/scheduling 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -44,17 +44,47 @@ export interface ApsScheduleItem extends CompanyDtoBase {
   apsScheduleCode: string;
 
   /**
+   * APS 订单 ID（关联 TaktApsOrder.Id，选项 TaktApsOrders/options）
+   */
+  apsOrderId?: string;
+
+  /**
+   * APS 订单 名称（填充字段）
+   */
+  apsOrderName?: string;
+
+  /**
+   * APS 工序排程 ID（关联 TaktApsOperation.Id，选项 TaktApsOperations/options）
+   */
+  apsOperationId?: string;
+
+  /**
+   * APS 工序排程 名称（填充字段）
+   */
+  apsOperationName?: string;
+
+  /**
+   * 工艺路线工序 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
+   */
+  routingItemId?: string;
+
+  /**
+   * 工艺路线工序 名称（填充字段）
+   */
+  routingItemName?: string;
+
+  /**
    * 行号（项号/序号，固定步长=10）
    */
   lineNumber: number;
 
   /**
-   * 生产工单编码
+   * 生产工单编码（关联 TaktProductionOrder.ProdOrderCode，选项 TaktProductionOrders/options，DictValue=ProdOrderCode）
    */
   workOrderCode: string;
 
   /**
-   * 产品编码
+   * 产品编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
    */
   productCode: string;
 
@@ -64,7 +94,7 @@ export interface ApsScheduleItem extends CompanyDtoBase {
   productName: string;
 
   /**
-   * 工作中心编码
+   * 工作中心编码（关联 TaktWorkCenter.WorkCenterCode，选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
    */
   workCenterCode?: string;
 
@@ -174,17 +204,32 @@ export interface ApsScheduleItemQuery extends TaktPagedQuery {
   apsScheduleCode?: string;
 
   /**
+   * APS 订单 ID（关联 TaktApsOrder.Id，选项 TaktApsOrders/options）
+   */
+  apsOrderId?: string;
+
+  /**
+   * APS 工序排程 ID（关联 TaktApsOperation.Id，选项 TaktApsOperations/options）
+   */
+  apsOperationId?: string;
+
+  /**
+   * 工艺路线工序 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
+   */
+  routingItemId?: string;
+
+  /**
    * 行号（项号/序号，固定步长=10）
    */
   lineNumber?: number;
 
   /**
-   * 生产工单编码
+   * 生产工单编码（关联 TaktProductionOrder.ProdOrderCode，选项 TaktProductionOrders/options，DictValue=ProdOrderCode）
    */
   workOrderCode?: string;
 
   /**
-   * 产品编码
+   * 产品编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
    */
   productCode?: string;
 
@@ -194,7 +239,7 @@ export interface ApsScheduleItemQuery extends TaktPagedQuery {
   productName?: string;
 
   /**
-   * 工作中心编码
+   * 工作中心编码（关联 TaktWorkCenter.WorkCenterCode，选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
    */
   workCenterCode?: string;
 
@@ -301,7 +346,7 @@ export interface ApsScheduleItemQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -328,7 +373,7 @@ export interface ApsScheduleItemCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -343,17 +388,32 @@ export interface ApsScheduleItemCreate {
   apsScheduleCode: string;
 
   /**
+   * APS 订单 ID（关联 TaktApsOrder.Id，选项 TaktApsOrders/options）
+   */
+  apsOrderId?: string;
+
+  /**
+   * APS 工序排程 ID（关联 TaktApsOperation.Id，选项 TaktApsOperations/options）
+   */
+  apsOperationId?: string;
+
+  /**
+   * 工艺路线工序 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
+   */
+  routingItemId?: string;
+
+  /**
    * 行号（项号/序号，固定步长=10）
    */
   lineNumber: number;
 
   /**
-   * 生产工单编码
+   * 生产工单编码（关联 TaktProductionOrder.ProdOrderCode，选项 TaktProductionOrders/options，DictValue=ProdOrderCode）
    */
   workOrderCode: string;
 
   /**
-   * 产品编码
+   * 产品编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
    */
   productCode: string;
 
@@ -363,7 +423,7 @@ export interface ApsScheduleItemCreate {
   productName: string;
 
   /**
-   * 工作中心编码
+   * 工作中心编码（关联 TaktWorkCenter.WorkCenterCode，选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
    */
   workCenterCode?: string;
 
@@ -440,7 +500,7 @@ export interface ApsScheduleItemCreate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -511,17 +571,32 @@ export interface ApsScheduleItemTemplate {
   apsScheduleCode?: string;
 
   /**
+   * APS 订单 ID（关联 TaktApsOrder.Id，选项 TaktApsOrders/options）
+   */
+  apsOrderId?: string;
+
+  /**
+   * APS 工序排程 ID（关联 TaktApsOperation.Id，选项 TaktApsOperations/options）
+   */
+  apsOperationId?: string;
+
+  /**
+   * 工艺路线工序 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
+   */
+  routingItemId?: string;
+
+  /**
    * 行号（项号/序号，固定步长=10）
    */
   lineNumber?: number;
 
   /**
-   * 生产工单编码
+   * 生产工单编码（关联 TaktProductionOrder.ProdOrderCode，选项 TaktProductionOrders/options，DictValue=ProdOrderCode）
    */
   workOrderCode?: string;
 
   /**
-   * 产品编码
+   * 产品编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
    */
   productCode?: string;
 
@@ -531,7 +606,7 @@ export interface ApsScheduleItemTemplate {
   productName?: string;
 
   /**
-   * 工作中心编码
+   * 工作中心编码（关联 TaktWorkCenter.WorkCenterCode，选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
    */
   workCenterCode?: string;
 
@@ -556,14 +631,59 @@ export interface ApsScheduleItemTemplate {
   processSequence?: number;
 
   /**
+   * 工序标准ST值
+   */
+  processStandardST?: number;
+
+  /**
    * 工序标准ST单位（0=秒/件，1=Shot/件，2=Point/件，3=分钟/件，4=小时/件）
    */
   processStandardSTUnit?: number;
 
   /**
+   * 额外时间（分钟），如换模、调试、清洁等准备时间
+   */
+  extraMinutes?: number;
+
+  /**
+   * 计划数量
+   */
+  planQuantity?: number;
+
+  /**
+   * 计划开始时间
+   */
+  planStartTime?: string;
+
+  /**
+   * 计划结束时间
+   */
+  planEndTime?: string;
+
+  /**
+   * 实际开始时间
+   */
+  actualStartTime?: string;
+
+  /**
+   * 实际结束时间
+   */
+  actualEndTime?: string;
+
+  /**
+   * 工序状态（0=未开始，1=准备中，2=加工中，3=已完工，4=已暂停，5=已取消）
+   */
+  processStatus?: number;
+
+  /**
+   * 优先级（0=普通，1=紧急，2=特急）
+   */
+  priority?: number;
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -590,7 +710,7 @@ export interface ApsScheduleItemImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -605,17 +725,32 @@ export interface ApsScheduleItemImport {
   apsScheduleCode?: string;
 
   /**
+   * APS 订单 ID（关联 TaktApsOrder.Id，选项 TaktApsOrders/options）
+   */
+  apsOrderId?: string;
+
+  /**
+   * APS 工序排程 ID（关联 TaktApsOperation.Id，选项 TaktApsOperations/options）
+   */
+  apsOperationId?: string;
+
+  /**
+   * 工艺路线工序 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
+   */
+  routingItemId?: string;
+
+  /**
    * 行号（项号/序号，固定步长=10）
    */
   lineNumber?: number;
 
   /**
-   * 生产工单编码
+   * 生产工单编码（关联 TaktProductionOrder.ProdOrderCode，选项 TaktProductionOrders/options，DictValue=ProdOrderCode）
    */
   workOrderCode?: string;
 
   /**
-   * 产品编码
+   * 产品编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
    */
   productCode?: string;
 
@@ -625,7 +760,7 @@ export interface ApsScheduleItemImport {
   productName?: string;
 
   /**
-   * 工作中心编码
+   * 工作中心编码（关联 TaktWorkCenter.WorkCenterCode，选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
    */
   workCenterCode?: string;
 
@@ -650,14 +785,59 @@ export interface ApsScheduleItemImport {
   processSequence?: number;
 
   /**
+   * 工序标准ST值
+   */
+  processStandardST?: number;
+
+  /**
    * 工序标准ST单位（0=秒/件，1=Shot/件，2=Point/件，3=分钟/件，4=小时/件）
    */
   processStandardSTUnit?: number;
 
   /**
+   * 额外时间（分钟），如换模、调试、清洁等准备时间
+   */
+  extraMinutes?: number;
+
+  /**
+   * 计划数量
+   */
+  planQuantity?: number;
+
+  /**
+   * 计划开始时间
+   */
+  planStartTime?: string;
+
+  /**
+   * 计划结束时间
+   */
+  planEndTime?: string;
+
+  /**
+   * 实际开始时间
+   */
+  actualStartTime?: string;
+
+  /**
+   * 实际结束时间
+   */
+  actualEndTime?: string;
+
+  /**
+   * 工序状态（0=未开始，1=准备中，2=加工中，3=已完工，4=已暂停，5=已取消）
+   */
+  processStatus?: number;
+
+  /**
+   * 优先级（0=普通，1=紧急，2=特急）
+   */
+  priority?: number;
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -694,17 +874,32 @@ export interface ApsScheduleItemExport {
   apsScheduleCode: string;
 
   /**
+   * APS 订单 ID（关联 TaktApsOrder.Id，选项 TaktApsOrders/options）
+   */
+  apsOrderId?: string;
+
+  /**
+   * APS 工序排程 ID（关联 TaktApsOperation.Id，选项 TaktApsOperations/options）
+   */
+  apsOperationId?: string;
+
+  /**
+   * 工艺路线工序 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
+   */
+  routingItemId?: string;
+
+  /**
    * 行号（项号/序号，固定步长=10）
    */
   lineNumber: number;
 
   /**
-   * 生产工单编码
+   * 生产工单编码（关联 TaktProductionOrder.ProdOrderCode，选项 TaktProductionOrders/options，DictValue=ProdOrderCode）
    */
   workOrderCode: string;
 
   /**
-   * 产品编码
+   * 产品编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
    */
   productCode: string;
 
@@ -714,7 +909,7 @@ export interface ApsScheduleItemExport {
   productName: string;
 
   /**
-   * 工作中心编码
+   * 工作中心编码（关联 TaktWorkCenter.WorkCenterCode，选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
    */
   workCenterCode?: string;
 
@@ -791,7 +986,7 @@ export interface ApsScheduleItemExport {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注

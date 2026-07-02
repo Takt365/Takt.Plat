@@ -54,9 +54,9 @@ export interface QuartzTaskExecutedEvent {
   executeDuration: number;
   /** 累计执行次数 */
   executeCount: number;
-  /** 上次执行时间 */
+  /** 上次执行 */
   lastRunAt?: string;
-  /** 下次执行时间 */
+  /** 下次执行 */
   nextRunAt?: string;
   /** 触发用户名 */
   triggerUserName?: string;

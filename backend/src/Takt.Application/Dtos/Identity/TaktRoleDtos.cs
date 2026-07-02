@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Identity
 // 文件名称：TaktRoleDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Role 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktRole 生成，请按需审阅）
 // 
@@ -14,7 +14,6 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Dtos.Identity;
 
@@ -47,9 +46,19 @@ public class TaktRoleDto : TaktTenantDtoBase
     public string RoleName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 数据权限范围（1=全部，2=本公司，3=本部门，4=仅本人，5=自定义）
+    /// 数据权限范围（字典 sys_data_scope_type：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）
     /// </summary>
     public int DataScope { get; set; } = 0;
+
+    /// <summary>
+    /// 内置（字典 sys_yes_no_type；种子角色为内置，不允许删除）
+    /// </summary>
+    public int IsBuiltIn { get; set; } = 0;
+
+    /// <summary>
+    /// 角色描述
+    /// </summary>
+    public string? RoleDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号
@@ -57,19 +66,9 @@ public class TaktRoleDto : TaktTenantDtoBase
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 是否内置（1=是，0=否） 种子角色为内置，不允许删除
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
-    public int IsBuiltIn { get; set; }
-
-    /// <summary>
-    /// 状态（1=启用，0=禁用）
-    /// </summary>
-    public int RoleStatus { get; set; }
-
-    /// <summary>
-    /// 角色描述
-    /// </summary>
-    public string? Description { get; set; } = string.Empty;
+    public int RoleStatus { get; set; } = 0;
 
     /// <summary>
     /// 角色菜单权限关联（RBAC，表 takt_identity_role_menu）
@@ -123,9 +122,19 @@ public class TaktRoleQueryDto : TaktPagedQuery
     public string? RoleName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 数据权限范围（1=全部，2=本公司，3=本部门，4=仅本人，5=自定义）
+    /// 数据权限范围（字典 sys_data_scope_type：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）
     /// </summary>
     public int? DataScope { get; set; }
+
+    /// <summary>
+    /// 内置（字典 sys_yes_no_type；种子角色为内置，不允许删除）
+    /// </summary>
+    public int? IsBuiltIn { get; set; }
+
+    /// <summary>
+    /// 角色描述
+    /// </summary>
+    public string? RoleDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号
@@ -133,19 +142,9 @@ public class TaktRoleQueryDto : TaktPagedQuery
     public int? SortOrder { get; set; }
 
     /// <summary>
-    /// 是否内置（1=是，0=否） 种子角色为内置，不允许删除
-    /// </summary>
-    public int? IsBuiltIn { get; set; }
-
-    /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int? RoleStatus { get; set; }
-
-    /// <summary>
-    /// 角色描述
-    /// </summary>
-    public string? Description { get; set; } = string.Empty;
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -195,29 +194,24 @@ public class TaktRoleCreateDto
     public string RoleName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 数据权限范围（1=全部，2=本公司，3=本部门，4=仅本人，5=自定义）
+    /// 数据权限范围（字典 sys_data_scope_type：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）
     /// </summary>
     public int DataScope { get; set; } = 0;
 
     /// <summary>
-    /// 排序号
+    /// 内置（字典 sys_yes_no_type；种子角色为内置，不允许删除）
     /// </summary>
-    public int SortOrder { get; set; } = 0;
-
-    /// <summary>
-    /// 是否内置（1=是，0=否） 种子角色为内置，不允许删除
-    /// </summary>
-    public int IsBuiltIn { get; set; }
-
-    /// <summary>
-    /// 状态（1=启用，0=禁用）
-    /// </summary>
-    public int RoleStatus { get; set; }
+    public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
     /// 角色描述
     /// </summary>
-    public string? Description { get; set; } = string.Empty;
+    public string? RoleDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 状态（字典 sys_normal_disable_status）
+    /// </summary>
+    public int RoleStatus { get; set; } = 0;
 
     /// <summary>
     /// 角色菜单权限关联（RBAC 全量覆盖，分配走 ITaktRbacService）
@@ -284,18 +278,18 @@ public class TaktRoleStatusDto
     public long RoleId { get; set; }
 
     /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
-    [Required(ErrorMessage = "状态（1=启用，0=禁用）不能为空")]
-    public int RoleStatus { get; set; }
+    [Required(ErrorMessage = "状态（字典 sys_normal_disable_status）不能为空")]
+    public int RoleStatus { get; set; } = 0;
 }
 
 // ========================================
-// Role 是否内置 DTO
+// Role 内置 DTO
 // ========================================
 
 /// <summary>
-/// Role 是否内置更新 DTO
+/// Role 内置更新 DTO
 /// </summary>
 public class TaktRoleBuiltInDto
 {
@@ -308,10 +302,10 @@ public class TaktRoleBuiltInDto
     public long RoleId { get; set; }
 
     /// <summary>
-    /// 是否内置（字典 sys_yes_no_type；1=是，0=否）
+    /// 内置（字典 sys_yes_no_type；1=是，0=否）
     /// </summary>
-    [Required(ErrorMessage = "是否内置不能为空")]
-    public int IsBuiltIn { get; set; }
+    [Required(ErrorMessage = "内置不能为空")]
+    public int IsBuiltIn { get; set; } = 0;
 }
 
 // ========================================
@@ -363,29 +357,39 @@ public class TaktRoleTemplateDto
     public string? RoleName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 数据权限范围（1=全部，2=本公司，3=本部门，4=仅本人，5=自定义）
+    /// 数据权限范围（字典 sys_data_scope_type：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）
     /// </summary>
     public int? DataScope { get; set; }
 
     /// <summary>
-    /// 排序号
-    /// </summary>
-    public int? SortOrder { get; set; }
-
-    /// <summary>
-    /// 是否内置（1=是，0=否） 种子角色为内置，不允许删除
+    /// 内置（字典 sys_yes_no_type；种子角色为内置，不允许删除）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
     /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// 角色描述
+    /// </summary>
+    public string? RoleDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int? RoleStatus { get; set; }
 
     /// <summary>
-    /// 角色描述
+    /// 角色菜单权限关联（RBAC 全量覆盖，分配走 ITaktRbacService）
     /// </summary>
-    public string? Description { get; set; } = string.Empty;
+    public long[]? RoleMenuIds { get; set; }
+
+    /// <summary>
+    /// 角色可访问公司关联（RBAC 全量覆盖，分配走 ITaktRbacService）
+    /// </summary>
+    public string[]? RoleCompanyCodes { get; set; }
+
+    /// <summary>
+    /// 自定义数据权限关联部门（RBAC 全量覆盖，分配走 ITaktRbacService）
+    /// </summary>
+    public long[]? RoleDeptIds { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -420,29 +424,39 @@ public class TaktRoleImportDto
     public string? RoleName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 数据权限范围（1=全部，2=本公司，3=本部门，4=仅本人，5=自定义）
+    /// 数据权限范围（字典 sys_data_scope_type：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）
     /// </summary>
     public int? DataScope { get; set; }
 
     /// <summary>
-    /// 排序号
-    /// </summary>
-    public int? SortOrder { get; set; }
-
-    /// <summary>
-    /// 是否内置（1=是，0=否） 种子角色为内置，不允许删除
+    /// 内置（字典 sys_yes_no_type；种子角色为内置，不允许删除）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
     /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// 角色描述
+    /// </summary>
+    public string? RoleDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int? RoleStatus { get; set; }
 
     /// <summary>
-    /// 角色描述
+    /// 角色菜单权限关联（RBAC 全量覆盖，分配走 ITaktRbacService）
     /// </summary>
-    public string? Description { get; set; } = string.Empty;
+    public long[]? RoleMenuIds { get; set; }
+
+    /// <summary>
+    /// 角色可访问公司关联（RBAC 全量覆盖，分配走 ITaktRbacService）
+    /// </summary>
+    public string[]? RoleCompanyCodes { get; set; }
+
+    /// <summary>
+    /// 自定义数据权限关联部门（RBAC 全量覆盖，分配走 ITaktRbacService）
+    /// </summary>
+    public long[]? RoleDeptIds { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -483,9 +497,19 @@ public class TaktRoleExportDto
     public string RoleName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 数据权限范围（1=全部，2=本公司，3=本部门，4=仅本人，5=自定义）
+    /// 数据权限范围（字典 sys_data_scope_type：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）
     /// </summary>
     public int DataScope { get; set; } = 0;
+
+    /// <summary>
+    /// 内置（字典 sys_yes_no_type；种子角色为内置，不允许删除）
+    /// </summary>
+    public int IsBuiltIn { get; set; } = 0;
+
+    /// <summary>
+    /// 角色描述
+    /// </summary>
+    public string? RoleDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号
@@ -493,19 +517,9 @@ public class TaktRoleExportDto
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 是否内置（1=是，0=否） 种子角色为内置，不允许删除
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
-    public int IsBuiltIn { get; set; }
-
-    /// <summary>
-    /// 状态（1=启用，0=禁用）
-    /// </summary>
-    public int RoleStatus { get; set; }
-
-    /// <summary>
-    /// 角色描述
-    /// </summary>
-    public string? Description { get; set; } = string.Empty;
+    public int RoleStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

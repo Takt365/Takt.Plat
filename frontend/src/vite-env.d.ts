@@ -130,6 +130,8 @@ interface ImportMetaEnv {
 
   readonly VITE_SIGNALR_HUB_NOTIFICATION_PATH: string;
 
+  readonly VITE_SIGNALR_HUB_EC_CHANGE_PATH: string;
+
 
 
   readonly VITE_LOG_MIN_LEVEL?: string;
@@ -137,6 +139,14 @@ interface ImportMetaEnv {
 
 
   readonly VITE_LOG_ENABLE_CONSOLE?: string;
+
+
+
+  readonly VITE_LOG_ENABLE_FILE?: string;
+
+
+
+  readonly VITE_LOG_FILE_URL?: string;
 
 
 
@@ -154,7 +164,64 @@ interface ImportMetaEnv {
 
   readonly VITE_LOG_FLUSH_INTERVAL_MS?: string;
 
+  readonly VITE_LONG_TASK_MONITOR_ENABLED?: string;
 
+  readonly VITE_LONG_TASK_WARN_MS?: string;
+
+  readonly VITE_LONG_TASK_ERROR_MS?: string;
+
+  /** @deprecated 使用 VITE_EVENT_TRACKING_REPORT_ENABLED */
+  readonly VITE_LONG_TASK_REPORT_ENABLED?: string;
+
+  /** @deprecated 使用 VITE_EVENT_TRACKING_BATCH_SIZE */
+  readonly VITE_LONG_TASK_REPORT_BATCH_SIZE?: string;
+
+  /** @deprecated 使用 VITE_EVENT_TRACKING_FLUSH_MS */
+  readonly VITE_LONG_TASK_REPORT_FLUSH_MS?: string;
+
+  readonly VITE_EVENT_TRACKING_ENABLED?: string;
+
+  readonly VITE_EVENT_TRACKING_REPORT_ENABLED?: string;
+
+  readonly VITE_EVENT_TRACKING_BATCH_SIZE?: string;
+
+  readonly VITE_EVENT_TRACKING_FLUSH_MS?: string;
+
+  readonly VITE_FPS_MONITOR_ENABLED?: string;
+
+  readonly VITE_FPS_WARN_THRESHOLD?: string;
+
+  readonly VITE_FPS_SAMPLE_MS?: string;
+
+  readonly VITE_FPS_REPORT_COOLDOWN_MS?: string;
+
+  readonly VITE_FPS_DWELL_MIN_MS?: string;
+
+  readonly VITE_FPS_DROP_ALERT_ENABLED?: string;
+
+  readonly VITE_API_PERF_TRACK_ENABLED?: string;
+
+  readonly VITE_API_SLOW_MS?: string;
+
+  readonly VITE_API_ERROR_MS?: string;
+
+  readonly VITE_WEB_VITALS_MONITOR_ENABLED?: string;
+
+  readonly VITE_FCP_WARN_MS?: string;
+
+  readonly VITE_LCP_WARN_MS?: string;
+
+  readonly VITE_LCP_ERROR_MS?: string;
+
+  readonly VITE_INP_WARN_MS?: string;
+
+  readonly VITE_INP_ERROR_MS?: string;
+
+  readonly VITE_CLS_WARN?: string;
+
+  readonly VITE_CLS_ERROR?: string;
+
+  readonly VITE_CORRELATION_WINDOW_MS?: string;
 
   readonly VITE_APP_VERSION?: string;
 

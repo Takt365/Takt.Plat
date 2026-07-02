@@ -14,6 +14,7 @@ import * as signalR from '@microsoft/signalr';
 import type {
   BroadcastMessage,
   ForceLogoutEvent,
+  ForceLogoutScheduledEvent,
   MessageReadEvent,
   MessageSentEvent,
   OnlineMessageEvent,
@@ -34,12 +35,25 @@ import type {
   QuartzTaskChangedEvent,
   QuartzTaskExecutedEvent,
 } from '@/types/foundation/quartz-signal-r';
-import { TaktMessageGroup, TaktMessageType } from '@/utils/foundation-enums';
+import type {
+  EcChangeClosedEvent,
+  EcChangeNotificationEvent,
+  EcExecutionTaskAlertEvent,
+  EcExecutionTaskAssignedEvent,
+  EcExecutionTaskProgressEvent,
+  EcExecutionTaskProgressReport,
+  EcNotificationConfirmRequest,
+  EcNotificationConfirmedEvent,
+} from '@/types/logistics/manufacturing/engineering-change/ec-change-signal-r';
 import { useUserStore } from '@/stores/identity/user';
 import { useTenantStore } from '@/stores/identity/tenant';
 import { getAppOrigin, joinOriginPath, requireViteEnv } from '@/config/vite-env';
 import { refreshOAuthTokens } from '@/utils/oauth';
 import { createLogger } from '@/utils/logger';
+import {
+  buildTaktClientProfileHeaders,
+  buildTaktClientProfileQueryParams,
+} from '@/utils/takt-client-profile';
 
 const signalrLogger = createLogger('signalr');
 
@@ -98,13 +112,14 @@ export function normalizeSignalRMessage(raw: unknown): SignalRMessage {
     messageId: messageId || undefined,
     fromUserName: readSignalRPayloadString(payload, 'fromUserName', 'FromUserName'),
     fromUserId: readSignalRPayloadString(payload, 'fromUserId', 'FromUserId') || undefined,
+    fromUserNickname: readSignalRPayloadString(payload, 'fromUserNickname', 'FromUserNickname') || undefined,
     toUserName: readSignalRPayloadString(payload, 'toUserName', 'ToUserName'),
     toUserId: readSignalRPayloadString(payload, 'toUserId', 'ToUserId') || undefined,
     messageTitle: readSignalRPayloadString(payload, 'messageTitle', 'MessageTitle') || undefined,
     messageContent: readSignalRPayloadString(payload, 'messageContent', 'MessageContent'),
     attachments: readSignalRPayloadString(payload, 'attachments', 'Attachments') || undefined,
-    messageType: readSignalRPayloadNumber(payload, 'messageType', 'MessageType', TaktMessageType.Text),
-    messageGroup: readSignalRPayloadNumber(payload, 'messageGroup', 'MessageGroup', 0) || undefined,
+    messageType: readSignalRPayloadString(payload, 'messageType', 'MessageType') || 'system',
+    messageGroup: readSignalRPayloadString(payload, 'messageGroup', 'MessageGroup') || 'message',
     sendTime: readSignalRPayloadString(payload, 'sendTime', 'SendTime'),
     readTime: readSignalRPayloadString(payload, 'readTime', 'ReadTime') || undefined,
     readStatus: readSignalRPayloadNumber(payload, 'readStatus', 'ReadStatus', 0),
@@ -240,6 +255,126 @@ export function normalizeQuartzTaskExecuted(raw: unknown): QuartzTaskExecutedEve
 }
 
 /**
+ * 规范化工程变更通知推送载荷
+ * @param raw Hub 原始载荷
+ * @returns 变更通知事件
+ */
+export function normalizeEcChangeNotification(raw: unknown): EcChangeNotificationEvent {
+  const payload = raw != null && typeof raw === 'object'
+    ? raw as Record<string, unknown>
+    : {};
+  return {
+    companyCode: readSignalRPayloadString(payload, 'companyCode', 'CompanyCode'),
+    deliveryId: readSignalRPayloadString(payload, 'deliveryId', 'DeliveryId'),
+    ecNotificationId: readSignalRPayloadString(payload, 'ecNotificationId', 'EcNotificationId'),
+    ecNotificationNo: readSignalRPayloadString(payload, 'ecNotificationNo', 'EcNotificationNo'),
+    ecId: readSignalRPayloadString(payload, 'ecId', 'EcId'),
+    ecNo: readSignalRPayloadString(payload, 'ecNo', 'EcNo'),
+    ecTitle: readSignalRPayloadString(payload, 'ecTitle', 'EcTitle') || undefined,
+    deptCode: readSignalRPayloadString(payload, 'deptCode', 'DeptCode'),
+    priority: readSignalRPayloadNumber(payload, 'priority', 'Priority', 1),
+    pushedAt: readSignalRPayloadString(payload, 'pushedAt', 'PushedAt'),
+  };
+}
+
+/**
+ * 规范化设变执行任务分配载荷
+ * @param raw Hub 原始载荷
+ * @returns 任务分配事件
+ */
+export function normalizeEcExecutionTaskAssigned(raw: unknown): EcExecutionTaskAssignedEvent {
+  const payload = raw != null && typeof raw === 'object'
+    ? raw as Record<string, unknown>
+    : {};
+  return {
+    companyCode: readSignalRPayloadString(payload, 'companyCode', 'CompanyCode'),
+    taskId: readSignalRPayloadString(payload, 'taskId', 'TaskId'),
+    ecNo: readSignalRPayloadString(payload, 'ecNo', 'EcNo'),
+    deptCode: readSignalRPayloadString(payload, 'deptCode', 'DeptCode'),
+    taskTitle: readSignalRPayloadString(payload, 'taskTitle', 'TaskTitle'),
+    dueDate: readSignalRPayloadString(payload, 'dueDate', 'DueDate') || undefined,
+  };
+}
+
+/**
+ * 规范化设变任务进度载荷
+ * @param raw Hub 原始载荷
+ * @returns 任务进度事件
+ */
+export function normalizeEcExecutionTaskProgress(raw: unknown): EcExecutionTaskProgressEvent {
+  const payload = raw != null && typeof raw === 'object'
+    ? raw as Record<string, unknown>
+    : {};
+  return {
+    companyCode: readSignalRPayloadString(payload, 'companyCode', 'CompanyCode'),
+    taskId: readSignalRPayloadString(payload, 'taskId', 'TaskId'),
+    ecNo: readSignalRPayloadString(payload, 'ecNo', 'EcNo'),
+    deptCode: readSignalRPayloadString(payload, 'deptCode', 'DeptCode'),
+    taskStatus: readSignalRPayloadNumber(payload, 'taskStatus', 'TaskStatus', 0),
+    progressPercent: readSignalRPayloadNumber(payload, 'progressPercent', 'ProgressPercent', 0),
+    progressRemark: readSignalRPayloadString(payload, 'progressRemark', 'ProgressRemark') || undefined,
+    reporterUserName: readSignalRPayloadString(payload, 'reporterUserName', 'ReporterUserName') || undefined,
+    reportedAt: readSignalRPayloadString(payload, 'reportedAt', 'ReportedAt'),
+  };
+}
+
+/**
+ * 规范化设变闭环载荷
+ * @param raw Hub 原始载荷
+ * @returns 闭环事件
+ */
+export function normalizeEcChangeClosed(raw: unknown): EcChangeClosedEvent {
+  const payload = raw != null && typeof raw === 'object'
+    ? raw as Record<string, unknown>
+    : {};
+  return {
+    companyCode: readSignalRPayloadString(payload, 'companyCode', 'CompanyCode'),
+    ecId: readSignalRPayloadString(payload, 'ecId', 'EcId'),
+    ecNo: readSignalRPayloadString(payload, 'ecNo', 'EcNo'),
+    ecNotificationId: readSignalRPayloadString(payload, 'ecNotificationId', 'EcNotificationId'),
+    closedAt: readSignalRPayloadString(payload, 'closedAt', 'ClosedAt'),
+  };
+}
+
+/**
+ * 规范化设变任务预警载荷
+ * @param raw Hub 原始载荷
+ * @returns 预警事件
+ */
+export function normalizeEcExecutionTaskAlert(raw: unknown): EcExecutionTaskAlertEvent {
+  const payload = raw != null && typeof raw === 'object'
+    ? raw as Record<string, unknown>
+    : {};
+  return {
+    companyCode: readSignalRPayloadString(payload, 'companyCode', 'CompanyCode'),
+    taskId: readSignalRPayloadString(payload, 'taskId', 'TaskId'),
+    ecNo: readSignalRPayloadString(payload, 'ecNo', 'EcNo'),
+    deptCode: readSignalRPayloadString(payload, 'deptCode', 'DeptCode'),
+    alertType: readSignalRPayloadString(payload, 'alertType', 'AlertType'),
+    message: readSignalRPayloadString(payload, 'message', 'Message'),
+  };
+}
+
+/**
+ * 规范化设变通知确认回执载荷
+ * @param raw Hub 原始载荷
+ * @returns 确认回执事件
+ */
+export function normalizeEcNotificationConfirmed(raw: unknown): EcNotificationConfirmedEvent {
+  const payload = raw != null && typeof raw === 'object'
+    ? raw as Record<string, unknown>
+    : {};
+  return {
+    ecNotificationId: readSignalRPayloadString(payload, 'ecNotificationId', 'EcNotificationId'),
+    ecNotificationNo: readSignalRPayloadString(payload, 'ecNotificationNo', 'EcNotificationNo') || undefined,
+    ecNo: readSignalRPayloadString(payload, 'ecNo', 'EcNo') || undefined,
+    deptCode: readSignalRPayloadString(payload, 'deptCode', 'DeptCode'),
+    confirmedByUserName: readSignalRPayloadString(payload, 'confirmedByUserName', 'ConfirmedByUserName') || undefined,
+    confirmedAt: readSignalRPayloadString(payload, 'confirmedAt', 'ConfirmedAt') || undefined,
+  };
+}
+
+/**
  * SignalR 事件回调
  */
 export interface TaktSignalRCallbacks {
@@ -289,6 +424,11 @@ export interface TaktSignalRCallbacks {
   onForceLogout?: (event: ForceLogoutEvent) => void;
 
   /**
+   * 延迟强退预告（倒计时）
+   */
+  onForceLogoutScheduled?: (event: ForceLogoutScheduledEvent) => void;
+
+  /**
    * 在线统计实时更新
    */
   onOnlineStatisticsUpdated?: (statistics: OnlineStatistics) => void;
@@ -324,11 +464,42 @@ export interface TaktSignalRCallbacks {
   onQuartzTaskExecuted?: (event: QuartzTaskExecutedEvent) => void;
 
   /**
+   * 工程变更通知推送
+   */
+  onEcChangeNotification?: (event: EcChangeNotificationEvent) => void;
+
+  /**
+   * 设变执行任务分配
+   */
+  onEcExecutionTaskAssigned?: (event: EcExecutionTaskAssignedEvent) => void;
+
+  /**
+   * 设变任务进度
+   */
+  onEcExecutionTaskProgress?: (event: EcExecutionTaskProgressEvent) => void;
+
+  /**
+   * 设变闭环完成
+   */
+  onEcChangeClosed?: (event: EcChangeClosedEvent) => void;
+
+  /**
+   * 设变任务预警
+   */
+  onEcExecutionTaskAlert?: (event: EcExecutionTaskAlertEvent) => void;
+
+  /**
+   * 设变通知确认回执
+   */
+  onEcNotificationConfirmed?: (event: EcNotificationConfirmedEvent) => void;
+
+  /**
    * Hub 连接状态变化（断开 / 重连中 / 已重连）
    */
   onConnectionStateChange?: (state: {
     connectHub: signalR.HubConnectionState;
     notificationHub: signalR.HubConnectionState;
+    ecChangeHub: signalR.HubConnectionState;
   }) => void;
 }
 
@@ -336,7 +507,12 @@ export interface TaktSignalRCallbacks {
  * 拼接 SignalR Hub 完整 URL（VITE_APP_ORIGIN + Hub 路径环境变量）
  * @param hubPathEnvKey Hub 路径环境变量名
  */
-function buildSignalRHubUrl(hubPathEnvKey: 'VITE_SIGNALR_HUB_CONNECT_PATH' | 'VITE_SIGNALR_HUB_NOTIFICATION_PATH'): string {
+function buildSignalRHubUrl(
+  hubPathEnvKey:
+    | 'VITE_SIGNALR_HUB_CONNECT_PATH'
+    | 'VITE_SIGNALR_HUB_NOTIFICATION_PATH'
+    | 'VITE_SIGNALR_HUB_EC_CHANGE_PATH',
+): string {
   return joinOriginPath(getAppOrigin(), requireViteEnv(hubPathEnvKey));
 }
 
@@ -346,7 +522,9 @@ function buildSignalRHubUrl(hubPathEnvKey: 'VITE_SIGNALR_HUB_CONNECT_PATH' | 'VI
  */
 function buildSignalRContextHeaders(): Record<string, string> {
   const tenantStore = useTenantStore();
-  const headers: Record<string, string> = {};
+  const headers: Record<string, string> = {
+    ...buildTaktClientProfileHeaders(),
+  };
   const tenantCode = tenantStore.tenantCode.trim();
   const companyCode = tenantStore.companyCode.trim();
   if (tenantCode) {
@@ -374,6 +552,9 @@ function appendSignalRContextQuery(hubUrl: string): string {
   if (companyCode) {
     url.searchParams.set('company_code', companyCode);
   }
+  for (const [key, value] of Object.entries(buildTaktClientProfileQueryParams())) {
+    url.searchParams.set(key, value);
+  }
   return url.toString();
 }
 
@@ -384,6 +565,8 @@ export class TaktSignalRManager {
   private connectHub: signalR.HubConnection | null = null;
 
   private notificationHub: signalR.HubConnection | null = null;
+
+  private ecChangeHub: signalR.HubConnection | null = null;
 
   private heartbeatTimer: number | null = null;
 
@@ -463,6 +646,10 @@ export class TaktSignalRManager {
       callbacks?.onForceLogout?.(event);
     });
 
+    this.connectHub.on('ForceLogoutScheduled', (event: ForceLogoutScheduledEvent) => {
+      callbacks?.onForceLogoutScheduled?.(event);
+    });
+
     this.connectHub.on('OnlineStatisticsUpdated', (statistics: OnlineStatistics) => {
       callbacks?.onOnlineStatisticsUpdated?.(statistics);
     });
@@ -531,6 +718,40 @@ export class TaktSignalRManager {
   }
 
   /**
+   * 注册 EcChange Hub 事件（设变通知/任务/闭环）
+   * @param callbacks 回调
+   */
+  private registerEcChangeHubEvents(callbacks?: TaktSignalRCallbacks): void {
+    if (!this.ecChangeHub) {
+      return;
+    }
+
+    this.ecChangeHub.on('ChangeNotification', (payload: unknown) => {
+      callbacks?.onEcChangeNotification?.(normalizeEcChangeNotification(payload));
+    });
+
+    this.ecChangeHub.on('TaskAssigned', (payload: unknown) => {
+      callbacks?.onEcExecutionTaskAssigned?.(normalizeEcExecutionTaskAssigned(payload));
+    });
+
+    this.ecChangeHub.on('TaskProgress', (payload: unknown) => {
+      callbacks?.onEcExecutionTaskProgress?.(normalizeEcExecutionTaskProgress(payload));
+    });
+
+    this.ecChangeHub.on('ChangeClosed', (payload: unknown) => {
+      callbacks?.onEcChangeClosed?.(normalizeEcChangeClosed(payload));
+    });
+
+    this.ecChangeHub.on('TaskAlert', (payload: unknown) => {
+      callbacks?.onEcExecutionTaskAlert?.(normalizeEcExecutionTaskAlert(payload));
+    });
+
+    this.ecChangeHub.on('NotificationConfirmed', (payload: unknown) => {
+      callbacks?.onEcNotificationConfirmed?.(normalizeEcNotificationConfirmed(payload));
+    });
+  }
+
+  /**
    * 启动心跳
    */
   private startHeartbeat(): void {
@@ -565,14 +786,18 @@ export class TaktSignalRManager {
     await this.disconnectSignalRHubsAsync();
     this.connectHub = this.createHubConnection(buildSignalRHubUrl('VITE_SIGNALR_HUB_CONNECT_PATH'));
     this.notificationHub = this.createHubConnection(buildSignalRHubUrl('VITE_SIGNALR_HUB_NOTIFICATION_PATH'));
+    this.ecChangeHub = this.createHubConnection(buildSignalRHubUrl('VITE_SIGNALR_HUB_EC_CHANGE_PATH'));
 
     this.registerConnectHubEvents(callbacks);
     this.registerNotificationHubEvents(callbacks);
+    this.registerEcChangeHubEvents(callbacks);
     this.attachConnectionStateHooks(this.connectHub, callbacks);
     this.attachConnectionStateHooks(this.notificationHub, callbacks);
+    this.attachConnectionStateHooks(this.ecChangeHub, callbacks);
 
     await this.connectHub.start();
     await this.notificationHub.start();
+    await this.ecChangeHub.start();
 
     this.startHeartbeat();
     callbacks?.onConnectionStateChange?.(this.getConnectionState());
@@ -595,6 +820,11 @@ export class TaktSignalRManager {
     if (this.notificationHub) {
       tasks.push(this.notificationHub.stop());
       this.notificationHub = null;
+    }
+
+    if (this.ecChangeHub) {
+      tasks.push(this.ecChangeHub.stop());
+      this.ecChangeHub = null;
     }
 
     await Promise.allSettled(tasks);
@@ -632,8 +862,8 @@ export class TaktSignalRManager {
     toUserName: string,
     messageContent: string,
     messageTitle?: string,
-    messageType: TaktMessageType = TaktMessageType.Text,
-    messageGroup?: TaktMessageGroup
+    messageType: string = 'text',
+    messageGroup: string = 'message'
   ): Promise<void> {
     if (!this.notificationHub || this.notificationHub.state !== signalR.HubConnectionState.Connected) {
       throw new Error('Notification Hub 未连接');
@@ -655,8 +885,8 @@ export class TaktSignalRManager {
   async broadcastMessageAsync(
     messageContent: string,
     messageTitle?: string,
-    messageType: TaktMessageType = TaktMessageType.System,
-    messageGroup: TaktMessageGroup = TaktMessageGroup.Announcement
+    messageType: string = 'system',
+    messageGroup: string = 'message'
   ): Promise<void> {
     if (!this.notificationHub || this.notificationHub.state !== signalR.HubConnectionState.Connected) {
       throw new Error('Notification Hub 未连接');
@@ -689,10 +919,12 @@ export class TaktSignalRManager {
   getConnectionState(): {
     connectHub: signalR.HubConnectionState;
     notificationHub: signalR.HubConnectionState;
+    ecChangeHub: signalR.HubConnectionState;
   } {
     return {
       connectHub: this.connectHub?.state ?? signalR.HubConnectionState.Disconnected,
       notificationHub: this.notificationHub?.state ?? signalR.HubConnectionState.Disconnected,
+      ecChangeHub: this.ecChangeHub?.state ?? signalR.HubConnectionState.Disconnected,
     };
   }
 
@@ -704,8 +936,76 @@ export class TaktSignalRManager {
 
     return (
       state.connectHub === signalR.HubConnectionState.Connected &&
-      state.notificationHub === signalR.HubConnectionState.Connected
+      state.notificationHub === signalR.HubConnectionState.Connected &&
+      state.ecChangeHub === signalR.HubConnectionState.Connected
     );
+  }
+
+  /**
+   * 加入设变部门通知组
+   * @param deptCode 部门编码
+   */
+  async joinEcExecGroupAsync(deptCode: string): Promise<void> {
+    if (!this.ecChangeHub || this.ecChangeHub.state !== signalR.HubConnectionState.Connected) {
+      throw new Error('EcChange Hub 未连接');
+    }
+    await this.ecChangeHub.invoke('JoinDeptGroup', deptCode);
+  }
+
+  /**
+   * 离开设变部门通知组
+   * @param deptCode 部门编码
+   */
+  async leaveEcExecGroupAsync(deptCode: string): Promise<void> {
+    if (!this.ecChangeHub || this.ecChangeHub.state !== signalR.HubConnectionState.Connected) {
+      throw new Error('EcChange Hub 未连接');
+    }
+    await this.ecChangeHub.invoke('LeaveDeptGroup', deptCode);
+  }
+
+  /**
+   * 加入设变执行任务进度组
+   * @param taskId 任务 ID（string）
+   */
+  async joinEcTaskGroupAsync(taskId: string): Promise<void> {
+    if (!this.ecChangeHub || this.ecChangeHub.state !== signalR.HubConnectionState.Connected) {
+      throw new Error('EcChange Hub 未连接');
+    }
+    await this.ecChangeHub.invoke('JoinTaskGroup', taskId);
+  }
+
+  /**
+   * 确认变更通知（按投递记录 ID）
+   * @param deliveryId 投递记录 ID
+   */
+  async confirmEcNotificationAsync(deliveryId: string): Promise<void> {
+    if (!this.ecChangeHub || this.ecChangeHub.state !== signalR.HubConnectionState.Connected) {
+      throw new Error('EcChange Hub 未连接');
+    }
+    await this.ecChangeHub.invoke('ConfirmNotification', deliveryId);
+  }
+
+  /**
+   * 确认变更通知（按通知单 + 部门）
+   * @param ecNotificationId 通知单 ID
+   * @param deptCode 部门编码
+   */
+  async confirmEcNotificationByDeptAsync(ecNotificationId: string, deptCode: string): Promise<void> {
+    if (!this.ecChangeHub || this.ecChangeHub.state !== signalR.HubConnectionState.Connected) {
+      throw new Error('EcChange Hub 未连接');
+    }
+    await this.ecChangeHub.invoke('ConfirmNotificationByDept', ecNotificationId, deptCode);
+  }
+
+  /**
+   * 上报设变执行任务进度
+   * @param dto 进度 DTO
+   */
+  async reportEcExecutionTaskProgressAsync(dto: EcExecutionTaskProgressReport): Promise<void> {
+    if (!this.ecChangeHub || this.ecChangeHub.state !== signalR.HubConnectionState.Connected) {
+      throw new Error('EcChange Hub 未连接');
+    }
+    await this.ecChangeHub.invoke('ReportProgress', dto);
   }
 }
 

@@ -81,6 +81,12 @@
             @change="(checked: unknown) => handlePlanStatusChange(record, Boolean(checked))"
           />
         </template>
+        <template v-else-if="column.key === 'convertedStatus'">
+          <TaktDictTag
+            :value="getSalesPlanField(record, 'convertedStatus')"
+            dict-type="sys_convert_status"
+          />
+        </template>
       </template>
       <template #detail>
         <SalesPlanItemPanel
@@ -162,45 +168,41 @@
       </div>
       <div v-show="isFieldVisible('planPeriodStartStart')">
       <a-form-item :label="t('entity.salesplan.planperiodstartstart')">
-        <a-input
+        <a-date-picker
           v-model:value="advancedQueryForm.planPeriodStartStart"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesplan.planperiodstartstart') })"
-          show-count
-          :maxlength="20"
-          allow-clear
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesplan.planperiodstartstart') })"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('planPeriodStartEnd')">
       <a-form-item :label="t('entity.salesplan.planperiodstartend')">
-        <a-input
+        <a-date-picker
           v-model:value="advancedQueryForm.planPeriodStartEnd"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesplan.planperiodstartend') })"
-          show-count
-          :maxlength="20"
-          allow-clear
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesplan.planperiodstartend') })"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('planPeriodEndStart')">
       <a-form-item :label="t('entity.salesplan.planperiodendstart')">
-        <a-input
+        <a-date-picker
           v-model:value="advancedQueryForm.planPeriodEndStart"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesplan.planperiodendstart') })"
-          show-count
-          :maxlength="20"
-          allow-clear
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesplan.planperiodendstart') })"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('planPeriodEndEnd')">
       <a-form-item :label="t('entity.salesplan.planperiodendend')">
-        <a-input
+        <a-date-picker
           v-model:value="advancedQueryForm.planPeriodEndEnd"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesplan.planperiodendend') })"
-          show-count
-          :maxlength="20"
-          allow-clear
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesplan.planperiodendend') })"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
         />
       </a-form-item>
       </div>
@@ -296,10 +298,11 @@
       </div>
       <div v-show="isFieldVisible('convertedStatus')">
       <a-form-item :label="t('entity.salesplan.convertedstatus')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.convertedStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesplan.convertedstatus') })"
-          style="width: 100%"
+          dict-type="sys_convert_status"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesplan.convertedstatus') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -315,10 +318,11 @@
       </div>
       <div v-show="isFieldVisible('approvalStatus')">
       <a-form-item :label="t('entity.salesplan.approvalstatus')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.approvalStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesplan.approvalstatus') })"
-          style="width: 100%"
+          dict-type="sys_approval_status"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesplan.approvalstatus') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -403,7 +407,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -414,7 +418,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -920,7 +924,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSalesPlanField(record, 'convertedStatus') ?? ''
   },
   {
     title: t('entity.salesplan.plandescription'),
@@ -980,7 +983,7 @@ const rowSelection = computed(() => ({
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
-    } else if (getSalesPlanId(selectedRow.value) === getSalesPlanId(record)) {
+    } else if (selectedRow.value && getSalesPlanId(selectedRow.value) === getSalesPlanId(record)) {
       selectedRow.value = null
       syncMasterSelection(null)
     }

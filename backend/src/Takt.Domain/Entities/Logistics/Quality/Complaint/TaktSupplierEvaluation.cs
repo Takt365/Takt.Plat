@@ -21,7 +21,8 @@ namespace Takt.Domain.Entities.Logistics.Quality.Complaint;
 [SugarTable("takt_logistics_quality_supplier_evaluation", "供应商评价考核表")]
 [SugarIndex("ix_supplier_evaluation_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_supplier_evaluation_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_quality_supplier_evaluation_evaluation_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(SupplierEvaluationCode), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_quality_supplier_evaluation_evaluation_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(RelatedPlant), OrderByType.Asc, nameof(SupplierEvaluationCode), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_quality_supplier_evaluation_related_plant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(RelatedPlant), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_quality_supplier_evaluation_evaluation_date", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(EvaluationDate), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_quality_supplier_evaluation_overall_rating", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(OverallRating), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_quality_supplier_evaluation_supplier_id", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(SupplierId), OrderByType.Asc, false)]
@@ -32,151 +33,132 @@ public class TaktSupplierEvaluation : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "supplier_evaluation_code", ColumnDescription = "评价表编号", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string SupplierEvaluationCode { get; set; } = string.Empty;
-
     /// <summary>
-    /// 供应商ID（序列化为string以避免Javascript精度问题）
+    /// 供应商 ID（关联 TaktSupplier.Id，选项 TaktSuppliers/options）
     /// </summary>
     [SugarColumn(ColumnName = "supplier_id", ColumnDescription = "供应商ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SupplierId { get; set; }
-
     /// <summary>
     /// 供应商名称
     /// </summary>
     [SugarColumn(ColumnName = "supplier_name", ColumnDescription = "供应商名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = false)]
     public string SupplierName { get; set; } = string.Empty;
-
     /// <summary>
-    /// 供应商编码
+    /// 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
     /// </summary>
     [SugarColumn(ColumnName = "supplier_code", ColumnDescription = "供应商编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? SupplierCode { get; set; }
-
     /// <summary>
     /// 评价日期
     /// </summary>
     [SugarColumn(ColumnName = "evaluation_date", ColumnDescription = "评价日期", ColumnDataType = "datetime", IsNullable = false)]
     public DateTime EvaluationDate { get; set; } = DateTime.Today;
-
     /// <summary>
-    /// 评价周期（0=月度，1=季度，2=半年度，3=年度）
+    /// 评价周期（字典 logistics_quality_period）
     /// </summary>
     [SugarColumn(ColumnName = "evaluation_period", ColumnDescription = "评价周期", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int EvaluationPeriod { get; set; } = 1;
-
     /// <summary>
     /// 评价类型（0=常规评价，1=准入评价，2=年度评审，3=专项评价）
     /// </summary>
     [SugarColumn(ColumnName = "evaluation_type", ColumnDescription = "评价类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int EvaluationType { get; set; } = 0;
-
     /// <summary>
-    /// 评价人（人员代码）
+    /// 评价人（选项 TaktEmployees/options，DictValue=EmployeeCode）
     /// </summary>
     [SugarColumn(ColumnName = "evaluator_by", ColumnDescription = "评价人", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? EvaluatorBy { get; set; }
-
     /// <summary>
-    /// 评价部门
+    /// 评价部门（选项 TaktDepts/tree-options，DictValue=DeptCode）
     /// </summary>
     [SugarColumn(ColumnName = "evaluation_dept", ColumnDescription = "评价部门", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
     public string? EvaluationDept { get; set; }
-
     /// <summary>
-    /// 总体评级（0=D级-不合格，1=C级-合格，2=B级-良好，3=A级-优秀）
+    /// 总体评级（字典 logistics_quality_supplier_rating）
     /// </summary>
     [SugarColumn(ColumnName = "overall_rating", ColumnDescription = "总体评级", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int OverallRating { get; set; } = 0;
-
     /// <summary>
     /// 综合评分（0-100分）
     /// </summary>
     [SugarColumn(ColumnName = "total_score", ColumnDescription = "综合评分", ColumnDataType = "int", IsNullable = true)]
     public int? TotalScore { get; set; }
-
     /// <summary>
     /// 质量评分（0-100分）
     /// </summary>
     [SugarColumn(ColumnName = "quality_score", ColumnDescription = "质量评分", ColumnDataType = "int", IsNullable = true)]
     public int? QualityScore { get; set; }
-
     /// <summary>
     /// 交付评分（0-100分）
     /// </summary>
     [SugarColumn(ColumnName = "delivery_score", ColumnDescription = "交付评分", ColumnDataType = "int", IsNullable = true)]
     public int? DeliveryScore { get; set; }
-
     /// <summary>
     /// 价格评分（0-100分）
     /// </summary>
     [SugarColumn(ColumnName = "price_score", ColumnDescription = "价格评分", ColumnDataType = "int", IsNullable = true)]
     public int? PriceScore { get; set; }
-
     /// <summary>
     /// 服务评分（0-100分）
     /// </summary>
     [SugarColumn(ColumnName = "service_score", ColumnDescription = "服务评分", ColumnDataType = "int", IsNullable = true)]
     public int? ServiceScore { get; set; }
-
     /// <summary>
     /// 技术能力评分（0-100分）
     /// </summary>
     [SugarColumn(ColumnName = "technical_score", ColumnDescription = "技术能力评分", ColumnDataType = "int", IsNullable = true)]
     public int? TechnicalScore { get; set; }
-
     /// <summary>
     /// 主要优点
     /// </summary>
     [SugarColumn(ColumnName = "main_strengths", ColumnDescription = "主要优点", ColumnDataType = "nvarchar", Length = 2000, IsNullable = true)]
     public string? MainStrengths { get; set; }
-
     /// <summary>
     /// 主要问题/不足
     /// </summary>
     [SugarColumn(ColumnName = "main_issues", ColumnDescription = "主要问题", ColumnDataType = "nvarchar", Length = 2000, IsNullable = true)]
     public string? MainIssues { get; set; }
-
     /// <summary>
     /// 改进要求/建议
     /// </summary>
     [SugarColumn(ColumnName = "improvement_requirements", ColumnDescription = "改进要求", ColumnDataType = "nvarchar", Length = 2000, IsNullable = true)]
     public string? ImprovementRequirements { get; set; }
-
     /// <summary>
-    /// 考核结论（0=继续合作，1=限期整改，2=减少订单，3=暂停合作，4=取消资格）
+    /// 考核结论（字典 logistics_quality_evaluation_conclusion）
     /// </summary>
     [SugarColumn(ColumnName = "evaluation_conclusion", ColumnDescription = "考核结论", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int EvaluationConclusion { get; set; } = 0;
-
     /// <summary>
     /// 整改期限（要求完成日期）
     /// </summary>
     [SugarColumn(ColumnName = "rectification_deadline", ColumnDescription = "整改期限", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? RectificationDeadline { get; set; }
-
     /// <summary>
-    /// 评价状态（0=草稿，1=评价中，2=已完成，3=已归档）
+    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// </summary>
+    [SugarColumn(ColumnName = "attachments", ColumnDescription = "附件JSON", ColumnDataType = "nvarchar", Length = -1, IsNullable = true)]
+    public string? Attachments { get; set; }
+    /// <summary>
+    /// 评价状态（字典 logistics_quality_evaluation_status）
     /// </summary>
     [SugarColumn(ColumnName = "evaluation_status", ColumnDescription = "评价状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int EvaluationStatus { get; set; } = 0;
-
     /// <summary>
-    /// 整改跟进状态（0=无需整改，1=待整改，2=整改中，3=已完成，4=未通过）
+    /// 关联工厂（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
-    [SugarColumn(ColumnName = "rectification_status", ColumnDescription = "整改跟进状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int RectificationStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = true)]
-    public string? RelatedPlant { get; set; }
-
+    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
+    public string RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 排序号（越小越靠前）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; } = 0;
+    /// <summary>
+    /// 整改跟进状态（字典 logistics_quality_rectification_status）
+    /// </summary>
+    [SugarColumn(ColumnName = "rectification_status", ColumnDescription = "整改跟进状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int RectificationStatus { get; set; } = 0;
 
     /// <summary>
     /// 评价项目明细列表（主子表关系）

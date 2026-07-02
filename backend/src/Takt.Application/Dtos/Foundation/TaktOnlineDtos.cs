@@ -2,9 +2,9 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Foundation
 // 文件名称：TaktOnlineDtos.cs
-// 创建时间：2026-05-25
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
-// 功能描述：Online 模块 DTO（含 SignalR 强退/统计推送入参）
+// 功能描述：Online 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktOnline 生成，请按需审阅）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -12,7 +12,7 @@
 
 using System.ComponentModel.DataAnnotations;
 using Mapster;
-using Takt.Shared.Enums;
+using Takt.Shared.Constants;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 
@@ -37,7 +37,7 @@ public class TaktOnlineDto : TaktCompanyDtoBase
     public long OnlineId { get; set; }
 
     /// <summary>
-    /// SignalR 连接 ID（租户+公司内唯一）
+    /// SignalR 连接 ID（唯一索引：租户+公司内唯一，见 ix_online_connection_id_unique）
     /// </summary>
     public string ConnectionId { get; set; } = string.Empty;
 
@@ -55,42 +55,37 @@ public class TaktOnlineDto : TaktCompanyDtoBase
     /// 用户 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? UserId { get; set; }
-
-    /// <summary>
-    /// 在线状态（0=在线，1=离线，2=离开）
-    /// </summary>
-    public int OnlineStatus { get; set; } = 0;
+    public long UserId { get; set; }
 
     /// <summary>
     /// 连接 IP 地址
     /// </summary>
-    public string? ConnectIp { get; set; } = string.Empty;
+    public string ConnectIp { get; set; } = string.Empty;
 
     /// <summary>
     /// 连接地点
     /// </summary>
-    public string? ConnectLocation { get; set; } = string.Empty;
+    public string ConnectLocation { get; set; } = string.Empty;
 
     /// <summary>
-    /// User-Agent
+    /// 用户代理（User-Agent）
     /// </summary>
-    public string? UserAgent { get; set; } = string.Empty;
+    public string UserAgent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设备类型
+    /// 登录设备（TaktConstants.DeviceType）
     /// </summary>
-    public int? DeviceType { get; set; }
+    public string DeviceType { get; set; } = TaktConstants.DeviceType.Unknown;
 
     /// <summary>
-    /// 浏览器类型
+    /// 浏览器（TaktConstants.BrowserType）
     /// </summary>
-    public int? BrowserType { get; set; }
+    public string BrowserType { get; set; } = TaktConstants.BrowserType.Unknown;
 
     /// <summary>
-    /// 操作系统
+    /// 操作系统（TaktConstants.OperatingSystem）
     /// </summary>
-    public int? OperatingSystem { get; set; }
+    public string OperatingSystem { get; set; } = TaktConstants.OperatingSystem.Unknown;
 
     /// <summary>
     /// 连接时间
@@ -100,17 +95,22 @@ public class TaktOnlineDto : TaktCompanyDtoBase
     /// <summary>
     /// 最后活动时间
     /// </summary>
-    public DateTime? LastActiveTime { get; set; }
+    public DateTime LastActiveTime { get; set; }
 
     /// <summary>
-    /// 断开时间
+    /// 断开时间（未断开时为 null）
     /// </summary>
     public DateTime? DisconnectTime { get; set; }
 
     /// <summary>
     /// 连接时长（秒）
     /// </summary>
-    public int? ConnectionDuration { get; set; }
+    public int ConnectionDuration { get; set; }
+
+    /// <summary>
+    /// 在线状态（字典 sys_online_status；0=在线 1=离线 2=离开）
+    /// </summary>
+    public int OnlineStatus { get; set; } = 0;
 
 }
 
@@ -135,7 +135,7 @@ public class TaktOnlineQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// SignalR 连接 ID（租户+公司内唯一）
+    /// SignalR 连接 ID（唯一索引：租户+公司内唯一，见 ix_online_connection_id_unique）
     /// </summary>
     public string? ConnectionId { get; set; } = string.Empty;
 
@@ -151,11 +151,6 @@ public class TaktOnlineQueryDto : TaktPagedQuery
     public long? UserId { get; set; }
 
     /// <summary>
-    /// 在线状态（0=在线，1=离线，2=离开）
-    /// </summary>
-    public int? OnlineStatus { get; set; }
-
-    /// <summary>
     /// 连接 IP 地址
     /// </summary>
     public string? ConnectIp { get; set; } = string.Empty;
@@ -166,24 +161,24 @@ public class TaktOnlineQueryDto : TaktPagedQuery
     public string? ConnectLocation { get; set; } = string.Empty;
 
     /// <summary>
-    /// User-Agent
+    /// 用户代理（User-Agent）
     /// </summary>
     public string? UserAgent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设备类型
+    /// 登录设备（TaktConstants.DeviceType）
     /// </summary>
-    public int? DeviceType { get; set; }
+    public string? DeviceType { get; set; }
 
     /// <summary>
-    /// 浏览器类型
+    /// 浏览器（TaktConstants.BrowserType）
     /// </summary>
-    public int? BrowserType { get; set; }
+    public string? BrowserType { get; set; }
 
     /// <summary>
-    /// 操作系统
+    /// 操作系统（TaktConstants.OperatingSystem）
     /// </summary>
-    public int? OperatingSystem { get; set; }
+    public string? OperatingSystem { get; set; }
 
     /// <summary>
     /// 连接时间（范围查询-开始）
@@ -221,6 +216,11 @@ public class TaktOnlineQueryDto : TaktPagedQuery
     public int? ConnectionDuration { get; set; }
 
     /// <summary>
+    /// 在线状态（字典 sys_online_status；0=在线 1=离线 2=离开）
+    /// </summary>
+    public int? OnlineStatus { get; set; }
+
+    /// <summary>
     /// 创建时间（范围查询-开始）
     /// </summary>
     public DateTime? CreatedAtStart { get; set; }
@@ -242,15 +242,33 @@ public class TaktOnlineQueryDto : TaktPagedQuery
 }
 
 // ========================================
-// 创建 DTO
+// 创建Online DTO
 // ========================================
 
+/// <summary>
+/// 创建Online DTO
+/// </summary>
 public class TaktOnlineCreateDto
 {
     /// <summary>
-    /// SignalR 连接 ID（租户+公司内唯一）
+    /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
     /// </summary>
-    [Required(ErrorMessage = "SignalR 连接 ID（租户+公司内唯一）不能为空")]
+    public string TenantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// </summary>
+    public string CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// </summary>
+    public string CompanyDefaultCulture { get; set; } = string.Empty;
+
+    /// <summary>
+    /// SignalR 连接 ID（唯一索引：租户+公司内唯一，见 ix_online_connection_id_unique）
+    /// </summary>
+    [Required(ErrorMessage = "SignalR 连接 ID（唯一索引：租户+公司内唯一，见 ix_online_connection_id_unique）不能为空")]
     public string ConnectionId { get; set; } = string.Empty;
 
     /// <summary>
@@ -262,43 +280,39 @@ public class TaktOnlineCreateDto
     /// <summary>
     /// 用户 ID
     /// </summary>
+    [Required(ErrorMessage = "用户 ID不能为空")]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? UserId { get; set; }
-
-    /// <summary>
-    /// 在线状态（0=在线，1=离线，2=离开）
-    /// </summary>
-    public int OnlineStatus { get; set; } = 0;
+    public long UserId { get; set; }
 
     /// <summary>
     /// 连接 IP 地址
     /// </summary>
-    public string? ConnectIp { get; set; } = string.Empty;
+    public string ConnectIp { get; set; } = string.Empty;
 
     /// <summary>
     /// 连接地点
     /// </summary>
-    public string? ConnectLocation { get; set; } = string.Empty;
+    public string ConnectLocation { get; set; } = string.Empty;
 
     /// <summary>
-    /// User-Agent
+    /// 用户代理（User-Agent）
     /// </summary>
-    public string? UserAgent { get; set; } = string.Empty;
+    public string UserAgent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设备类型
+    /// 登录设备（TaktConstants.DeviceType）
     /// </summary>
-    public int? DeviceType { get; set; }
+    public string DeviceType { get; set; } = TaktConstants.DeviceType.Unknown;
 
     /// <summary>
-    /// 浏览器类型
+    /// 浏览器（TaktConstants.BrowserType）
     /// </summary>
-    public int? BrowserType { get; set; }
+    public string BrowserType { get; set; } = TaktConstants.BrowserType.Unknown;
 
     /// <summary>
-    /// 操作系统
+    /// 操作系统（TaktConstants.OperatingSystem）
     /// </summary>
-    public int? OperatingSystem { get; set; }
+    public string OperatingSystem { get; set; } = TaktConstants.OperatingSystem.Unknown;
 
     /// <summary>
     /// 连接时间
@@ -308,17 +322,22 @@ public class TaktOnlineCreateDto
     /// <summary>
     /// 最后活动时间
     /// </summary>
-    public DateTime? LastActiveTime { get; set; }
+    public DateTime LastActiveTime { get; set; }
 
     /// <summary>
-    /// 断开时间
+    /// 断开时间（未断开时为 null）
     /// </summary>
     public DateTime? DisconnectTime { get; set; }
 
     /// <summary>
     /// 连接时长（秒）
     /// </summary>
-    public int? ConnectionDuration { get; set; }
+    public int ConnectionDuration { get; set; }
+
+    /// <summary>
+    /// 在线状态（字典 sys_online_status；0=在线 1=离线 2=离开）
+    /// </summary>
+    public int OnlineStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -329,6 +348,26 @@ public class TaktOnlineCreateDto
     /// 备注
     /// </summary>
     public string? Remark { get; set; }
+
+}
+
+// ========================================
+// 更新Online DTO
+// ========================================
+
+/// <summary>
+/// 更新Online DTO
+/// 继承 TaktOnlineCreateDto，添加 OnlineId 字段
+/// </summary>
+public class TaktOnlineUpdateDto : TaktOnlineCreateDto
+{
+    /// <summary>
+    /// OnlineID（标识要更新的实体）
+    /// </summary>
+    [Required(ErrorMessage = "ID不能为空")]
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long OnlineId { get; set; }
 
 }
 
@@ -350,10 +389,215 @@ public class TaktOnlineStatusDto
     public long OnlineId { get; set; }
 
     /// <summary>
-    /// 在线状态（0=在线，1=离线，2=离开）
+    /// 在线状态（字典 sys_online_status；0=在线 1=离线 2=离开）
     /// </summary>
-    [Required(ErrorMessage = "在线状态（0=在线，1=离线，2=离开）不能为空")]
+    [Required(ErrorMessage = "在线状态（字典 sys_online_status；0=在线 1=离线 2=离开）不能为空")]
     public int OnlineStatus { get; set; } = 0;
+}
+
+// ========================================
+// 导入 DTO
+// ========================================
+
+/// <summary>
+/// Online 导入模板行 DTO
+/// </summary>
+public class TaktOnlineTemplateDto
+{
+    /// <summary>
+    /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
+    /// </summary>
+    public string? TenantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// </summary>
+    public string? CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// SignalR 连接 ID（唯一索引：租户+公司内唯一，见 ix_online_connection_id_unique）
+    /// </summary>
+    public string? ConnectionId { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 用户名
+    /// </summary>
+    public string? UserName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 用户 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? UserId { get; set; }
+
+    /// <summary>
+    /// 连接 IP 地址
+    /// </summary>
+    public string? ConnectIp { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 连接地点
+    /// </summary>
+    public string? ConnectLocation { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 用户代理（User-Agent）
+    /// </summary>
+    public string? UserAgent { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 登录设备（TaktConstants.DeviceType）
+    /// </summary>
+    public string? DeviceType { get; set; }
+
+    /// <summary>
+    /// 浏览器（TaktConstants.BrowserType）
+    /// </summary>
+    public string? BrowserType { get; set; }
+
+    /// <summary>
+    /// 操作系统（TaktConstants.OperatingSystem）
+    /// </summary>
+    public string? OperatingSystem { get; set; }
+
+    /// <summary>
+    /// 连接时间
+    /// </summary>
+    public DateTime? ConnectTime { get; set; }
+
+    /// <summary>
+    /// 最后活动时间
+    /// </summary>
+    public DateTime? LastActiveTime { get; set; }
+
+    /// <summary>
+    /// 断开时间
+    /// </summary>
+    public DateTime? DisconnectTime { get; set; }
+
+    /// <summary>
+    /// 连接时长（秒）
+    /// </summary>
+    public int? ConnectionDuration { get; set; }
+
+    /// <summary>
+    /// 在线状态（字典 sys_online_status；0=在线 1=离线 2=离开）
+    /// </summary>
+    public int? OnlineStatus { get; set; }
+
+    /// <summary>
+    /// 扩展字段JSON
+    /// </summary>
+    public string? ExtField { get; set; }
+
+    /// <summary>
+    /// 备注
+    /// </summary>
+    public string? Remark { get; set; }
+
+}
+
+/// <summary>
+/// Online 导入 DTO（独立实现，不继承 TemplateDto）
+/// </summary>
+public class TaktOnlineImportDto
+{
+    /// <summary>
+    /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
+    /// </summary>
+    public string? TenantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// </summary>
+    public string? CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// </summary>
+    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+
+    /// <summary>
+    /// SignalR 连接 ID（唯一索引：租户+公司内唯一，见 ix_online_connection_id_unique）
+    /// </summary>
+    public string? ConnectionId { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 用户名
+    /// </summary>
+    public string? UserName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 用户 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? UserId { get; set; }
+
+    /// <summary>
+    /// 连接 IP 地址
+    /// </summary>
+    public string? ConnectIp { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 连接地点
+    /// </summary>
+    public string? ConnectLocation { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 用户代理（User-Agent）
+    /// </summary>
+    public string? UserAgent { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 登录设备（TaktConstants.DeviceType）
+    /// </summary>
+    public string? DeviceType { get; set; }
+
+    /// <summary>
+    /// 浏览器（TaktConstants.BrowserType）
+    /// </summary>
+    public string? BrowserType { get; set; }
+
+    /// <summary>
+    /// 操作系统（TaktConstants.OperatingSystem）
+    /// </summary>
+    public string? OperatingSystem { get; set; }
+
+    /// <summary>
+    /// 连接时间
+    /// </summary>
+    public DateTime? ConnectTime { get; set; }
+
+    /// <summary>
+    /// 最后活动时间
+    /// </summary>
+    public DateTime? LastActiveTime { get; set; }
+
+    /// <summary>
+    /// 断开时间
+    /// </summary>
+    public DateTime? DisconnectTime { get; set; }
+
+    /// <summary>
+    /// 连接时长（秒）
+    /// </summary>
+    public int? ConnectionDuration { get; set; }
+
+    /// <summary>
+    /// 在线状态（字典 sys_online_status；0=在线 1=离线 2=离开）
+    /// </summary>
+    public int? OnlineStatus { get; set; }
+
+    /// <summary>
+    /// 扩展字段JSON
+    /// </summary>
+    public string? ExtField { get; set; }
+
+    /// <summary>
+    /// 备注
+    /// </summary>
+    public string? Remark { get; set; }
+
 }
 
 // ========================================
@@ -378,7 +622,7 @@ public class TaktOnlineExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// SignalR 连接 ID（租户+公司内唯一）
+    /// SignalR 连接 ID（唯一索引：租户+公司内唯一，见 ix_online_connection_id_unique）
     /// </summary>
     public string ConnectionId { get; set; } = string.Empty;
 
@@ -391,42 +635,37 @@ public class TaktOnlineExportDto
     /// 用户 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? UserId { get; set; }
-
-    /// <summary>
-    /// 在线状态（0=在线，1=离线，2=离开）
-    /// </summary>
-    public int OnlineStatus { get; set; } = 0;
+    public long UserId { get; set; }
 
     /// <summary>
     /// 连接 IP 地址
     /// </summary>
-    public string? ConnectIp { get; set; } = string.Empty;
+    public string ConnectIp { get; set; } = string.Empty;
 
     /// <summary>
     /// 连接地点
     /// </summary>
-    public string? ConnectLocation { get; set; } = string.Empty;
+    public string ConnectLocation { get; set; } = string.Empty;
 
     /// <summary>
-    /// User-Agent
+    /// 用户代理（User-Agent）
     /// </summary>
-    public string? UserAgent { get; set; } = string.Empty;
+    public string UserAgent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设备类型
+    /// 登录设备（TaktConstants.DeviceType）
     /// </summary>
-    public int? DeviceType { get; set; }
+    public string DeviceType { get; set; } = TaktConstants.DeviceType.Unknown;
 
     /// <summary>
-    /// 浏览器类型
+    /// 浏览器（TaktConstants.BrowserType）
     /// </summary>
-    public int? BrowserType { get; set; }
+    public string BrowserType { get; set; } = TaktConstants.BrowserType.Unknown;
 
     /// <summary>
-    /// 操作系统
+    /// 操作系统（TaktConstants.OperatingSystem）
     /// </summary>
-    public int? OperatingSystem { get; set; }
+    public string OperatingSystem { get; set; } = TaktConstants.OperatingSystem.Unknown;
 
     /// <summary>
     /// 连接时间
@@ -436,17 +675,22 @@ public class TaktOnlineExportDto
     /// <summary>
     /// 最后活动时间
     /// </summary>
-    public DateTime? LastActiveTime { get; set; }
+    public DateTime LastActiveTime { get; set; }
 
     /// <summary>
-    /// 断开时间
+    /// 断开时间（未断开时为 null）
     /// </summary>
     public DateTime? DisconnectTime { get; set; }
 
     /// <summary>
     /// 连接时长（秒）
     /// </summary>
-    public int? ConnectionDuration { get; set; }
+    public int ConnectionDuration { get; set; }
+
+    /// <summary>
+    /// 在线状态（字典 sys_online_status；0=在线 1=离线 2=离开）
+    /// </summary>
+    public int OnlineStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -465,65 +709,22 @@ public class TaktOnlineExportDto
 }
 
 // ========================================
-// 强退 DTO
+// 在线统计 DTO
 // ========================================
 
 /// <summary>
-/// 在线用户强退 DTO
+/// 在线时长统计查询 DTO
 /// </summary>
-public class TaktOnlineForceKickDto
+public class TaktOnlineStatisticsQueryDto
 {
     /// <summary>
-    /// SignalR 连接 ID（可选；主键查无记录时按连接 ID 回退定位）
+    /// 用户名（为空时取当前登录用户）
     /// </summary>
-    public string? ConnectionId { get; set; }
-
-    /// <summary>
-    /// 强退原因（可选）
-    /// </summary>
-    public string? Reason { get; set; }
+    public string? UserName { get; set; }
 }
 
 /// <summary>
-/// 批量强退在线用户 DTO
-/// </summary>
-public class TaktOnlineForceKickBatchDto
-{
-    /// <summary>
-    /// 在线用户记录 ID 列表
-    /// </summary>
-    [Required(ErrorMessage = "在线用户 ID 列表不能为空")]
-    public IEnumerable<long> OnlineIds { get; set; } = Array.Empty<long>();
-
-    /// <summary>
-    /// 强退原因（可选）
-    /// </summary>
-    public string? Reason { get; set; }
-}
-
-/// <summary>
-/// SignalR 统计推送目标用户 DTO
-/// </summary>
-public class TaktSignalRPushStatisticsRequestDto
-{
-    /// <summary>
-    /// 目标用户名
-    /// </summary>
-    [Required(ErrorMessage = "用户名不能为空")]
-    public string UserName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 目标用户 ID（可选，API 传 string 与前端对齐）
-    /// </summary>
-    public string? UserId { get; set; }
-}
-
-// ========================================
-// 在线用户统计 DTO
-// ========================================
-
-/// <summary>
-/// 当前登录用户在线统计 DTO
+/// 在线时长统计 DTO（唯一实现：ITaktOnlineService.GetOnlineStatisticsAsync）
 /// </summary>
 public class TaktOnlineStatisticsDto
 {
@@ -539,22 +740,127 @@ public class TaktOnlineStatisticsDto
     public long? UserId { get; set; }
 
     /// <summary>
-    /// 当前用户活跃在线连接数（多终端/多标签页分别计数）
+    /// 当前活跃在线连接数
     /// </summary>
     public int OnlineCount { get; set; }
 
     /// <summary>
-    /// 当前在线总时长（秒）：当前用户所有活跃会话从连接至今累计
+    /// 当前在线总时长（秒）
     /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
     public long CurrentDurationSeconds { get; set; }
 
     /// <summary>
-    /// 当天累计在线时长（秒）：当前用户当日各会话有效时长之和
+    /// 当天累计在线时长（秒）
     /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
     public long TodayDurationSeconds { get; set; }
 
     /// <summary>
-    /// 当月累计在线时长（秒）：当前用户当月各会话有效时长之和
+    /// 本周累计在线时长（秒，周一至今日）
     /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long WeekTotalDurationSeconds { get; set; }
+
+    /// <summary>
+    /// 本周日均在线时长（秒）= 本周累计 / 本周已过去自然日天数
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long WeekAverageDurationSeconds { get; set; }
+
+    /// <summary>
+    /// 当月累计在线时长（秒）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
     public long MonthDurationSeconds { get; set; }
+
+    /// <summary>
+    /// 本月日均在线时长（秒）= 本月累计 / 本月已过去自然日天数
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long MonthAverageDurationSeconds { get; set; }
+}
+
+/// <summary>
+/// 在线看板统计 DTO（公司维度：在线人数、当日总访问量、当前会话）
+/// </summary>
+public class TaktOnlineDashboardStatisticsDto
+{
+    /// <summary>
+    /// 当前在线用户数（OnlineStatus=0）
+    /// </summary>
+    public int OnlineUserCount { get; set; }
+
+    /// <summary>
+    /// 当日总访问量（TaktVisitLog 当日 VisitCount 之和，与在线时长无关）
+    /// </summary>
+    public int TodayVisitCount { get; set; }
+
+    /// <summary>
+    /// 当前活跃会话数（与在线用户数一致：每用户一行在线记录）
+    /// </summary>
+    public int ActiveSessionCount { get; set; }
+}
+
+// ========================================
+// SignalR 强退 / 统计推送 DTO
+// ========================================
+
+/// <summary>
+/// 在线用户强退 DTO
+/// </summary>
+public class TaktOnlineForceKickDto
+{
+    /// <summary>
+    /// SignalR 连接 ID（可选，与在线记录 ID 二选一校验）
+    /// </summary>
+    public string? ConnectionId { get; set; }
+
+    /// <summary>
+    /// 强退原因
+    /// </summary>
+    public string? Reason { get; set; }
+
+    /// <summary>
+    /// 延迟强退秒数（0 或未传表示立即强退；见 TaktOnlineConstants.DelayedKickSeconds）
+    /// </summary>
+    public int DelaySeconds { get; set; }
+}
+
+/// <summary>
+/// 在线用户批量强退 DTO
+/// </summary>
+public class TaktOnlineForceKickBatchDto
+{
+    /// <summary>
+    /// 在线用户记录 ID 列表
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public List<long> OnlineIds { get; set; } = [];
+
+    /// <summary>
+    /// 强退原因
+    /// </summary>
+    public string? Reason { get; set; }
+
+    /// <summary>
+    /// 延迟强退秒数（0 或未传表示立即强退）
+    /// </summary>
+    public int DelaySeconds { get; set; }
+}
+
+/// <summary>
+/// SignalR 向指定用户推送统计请求 DTO
+/// </summary>
+public class TaktSignalRPushStatisticsRequestDto
+{
+    /// <summary>
+    /// 目标用户名
+    /// </summary>
+    public string UserName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 目标用户 ID（可选，前端 string 雪花 ID）
+    /// </summary>
+    public string? UserId { get; set; }
 }

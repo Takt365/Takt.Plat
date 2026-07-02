@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Output
 // 文件名称：TaktAssyOutputDetailDtos.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：AssyOutputDetail 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktAssyOutputDetail 生成，请按需审阅）
 // 
@@ -72,7 +72,7 @@ public class TaktAssyOutputDetailDto : TaktCompanyDtoBase
     public int DowntimeMinutes { get; set; } = 0;
 
     /// <summary>
-    /// 停线原因
+    /// 停线原因（字典 logistics_stop_reason_category，存 DictValue）
     /// </summary>
     public string? DowntimeReason { get; set; } = string.Empty;
 
@@ -82,7 +82,7 @@ public class TaktAssyOutputDetailDto : TaktCompanyDtoBase
     public string? DowntimeDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 未达成原因
+    /// 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
     /// </summary>
     public string? UnachievedReason { get; set; } = string.Empty;
 
@@ -171,7 +171,7 @@ public class TaktAssyOutputDetailQueryDto : TaktPagedQuery
     public int? DowntimeMinutes { get; set; }
 
     /// <summary>
-    /// 停线原因
+    /// 停线原因（字典 logistics_stop_reason_category，存 DictValue）
     /// </summary>
     public string? DowntimeReason { get; set; } = string.Empty;
 
@@ -181,7 +181,7 @@ public class TaktAssyOutputDetailQueryDto : TaktPagedQuery
     public string? DowntimeDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 未达成原因
+    /// 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
     /// </summary>
     public string? UnachievedReason { get; set; } = string.Empty;
 
@@ -251,7 +251,7 @@ public class TaktAssyOutputDetailCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -289,7 +289,7 @@ public class TaktAssyOutputDetailCreateDto
     public int DowntimeMinutes { get; set; } = 0;
 
     /// <summary>
-    /// 停线原因
+    /// 停线原因（字典 logistics_stop_reason_category，存 DictValue）
     /// </summary>
     public string? DowntimeReason { get; set; } = string.Empty;
 
@@ -299,7 +299,7 @@ public class TaktAssyOutputDetailCreateDto
     public string? DowntimeDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 未达成原因
+    /// 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
     /// </summary>
     public string? UnachievedReason { get; set; } = string.Empty;
 
@@ -401,12 +401,17 @@ public class TaktAssyOutputDetailTemplateDto
     public string? TimePeriod { get; set; } = string.Empty;
 
     /// <summary>
+    /// 实际生产数量
+    /// </summary>
+    public decimal? ProdActualQty { get; set; }
+
+    /// <summary>
     /// 停线时间(分钟)
     /// </summary>
     public int? DowntimeMinutes { get; set; }
 
     /// <summary>
-    /// 停线原因
+    /// 停线原因（字典 logistics_stop_reason_category，存 DictValue）
     /// </summary>
     public string? DowntimeReason { get; set; } = string.Empty;
 
@@ -416,7 +421,7 @@ public class TaktAssyOutputDetailTemplateDto
     public string? DowntimeDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 未达成原因
+    /// 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
     /// </summary>
     public string? UnachievedReason { get; set; } = string.Empty;
 
@@ -424,6 +429,26 @@ public class TaktAssyOutputDetailTemplateDto
     /// 未达成说明
     /// </summary>
     public string? UnachievedDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 投入工时(分钟)
+    /// </summary>
+    public decimal? InputMinutes { get; set; }
+
+    /// <summary>
+    /// 生产工时(分钟)
+    /// </summary>
+    public decimal? ProdMinutes { get; set; }
+
+    /// <summary>
+    /// 实际工时(分钟)
+    /// </summary>
+    public decimal? ActualMinutes { get; set; }
+
+    /// <summary>
+    /// 达成率(%)
+    /// </summary>
+    public decimal? AchievementRate { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -453,7 +478,7 @@ public class TaktAssyOutputDetailImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -479,12 +504,17 @@ public class TaktAssyOutputDetailImportDto
     public string? TimePeriod { get; set; } = string.Empty;
 
     /// <summary>
+    /// 实际生产数量
+    /// </summary>
+    public decimal? ProdActualQty { get; set; }
+
+    /// <summary>
     /// 停线时间(分钟)
     /// </summary>
     public int? DowntimeMinutes { get; set; }
 
     /// <summary>
-    /// 停线原因
+    /// 停线原因（字典 logistics_stop_reason_category，存 DictValue）
     /// </summary>
     public string? DowntimeReason { get; set; } = string.Empty;
 
@@ -494,7 +524,7 @@ public class TaktAssyOutputDetailImportDto
     public string? DowntimeDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 未达成原因
+    /// 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
     /// </summary>
     public string? UnachievedReason { get; set; } = string.Empty;
 
@@ -502,6 +532,26 @@ public class TaktAssyOutputDetailImportDto
     /// 未达成说明
     /// </summary>
     public string? UnachievedDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 投入工时(分钟)
+    /// </summary>
+    public decimal? InputMinutes { get; set; }
+
+    /// <summary>
+    /// 生产工时(分钟)
+    /// </summary>
+    public decimal? ProdMinutes { get; set; }
+
+    /// <summary>
+    /// 实际工时(分钟)
+    /// </summary>
+    public decimal? ActualMinutes { get; set; }
+
+    /// <summary>
+    /// 达成率(%)
+    /// </summary>
+    public decimal? AchievementRate { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -568,7 +618,7 @@ public class TaktAssyOutputDetailExportDto
     public int DowntimeMinutes { get; set; } = 0;
 
     /// <summary>
-    /// 停线原因
+    /// 停线原因（字典 logistics_stop_reason_category，存 DictValue）
     /// </summary>
     public string? DowntimeReason { get; set; } = string.Empty;
 
@@ -578,7 +628,7 @@ public class TaktAssyOutputDetailExportDto
     public string? DowntimeDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 未达成原因
+    /// 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
     /// </summary>
     public string? UnachievedReason { get; set; } = string.Empty;
 

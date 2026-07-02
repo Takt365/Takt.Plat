@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Personnel
 // 文件名称：TaktEmployeeJoinedService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：员工入职上岗应用服务实现
 // 
@@ -14,7 +14,6 @@ using System.Linq.Expressions;
 using Mapster;
 using SqlSugar;
 using Takt.Application.Dtos.HumanResource.Personnel;
-using Takt.Application.Services.Workflow.FlowEngine.Business;
 using Takt.Domain.Entities.HumanResource.Personnel;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
@@ -22,37 +21,32 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Services.HumanResource.Personnel;
 
 /// <summary>
 /// 员工入职上岗应用服务
 /// </summary>
-public class TaktEmployeeJoinedService : TaktServiceBase, ITaktEmployeeJoinedService, ITaktApprovalFlowCompletedContributor
+public class TaktEmployeeJoinedService : TaktServiceBase, ITaktEmployeeJoinedService
 {
     private readonly ITaktApprovalRepository<TaktEmployeeJoined> _employeeJoinedRepository;
-    private readonly ITaktEmployeeService _employeeService;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="employeeJoinedRepository">员工入职上岗仓储</param>
-    /// <param name="employeeService">员工应用服务</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktEmployeeJoinedService(
         ITaktApprovalRepository<TaktEmployeeJoined> employeeJoinedRepository,
-        ITaktEmployeeService employeeService,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
         _employeeJoinedRepository = employeeJoinedRepository;
-        _employeeService = employeeService;
         _uniqueValidator = uniqueValidator;
     }
 
@@ -385,38 +379,5 @@ public class TaktEmployeeJoinedService : TaktServiceBase, ITaktEmployeeJoinedSer
         }
 
         return exp.ToExpression();
-    }
-
-    /// <inheritdoc />
-    public string RelatedTableName => TaktApprovalEntityTableNames.Of<TaktEmployeeJoined>();
-
-    /// <inheritdoc />
-    public Task OnApprovalFlowCompletedAsync(TaktApprovalFlowCompletedContext context) =>
-        OnEmployeeJoinedFlowCompletedAsync(context);
-
-    /// <summary>
-    /// 上岗审批通过后回写员工主档任职投影
-    /// </summary>
-    /// <param name="context">回写上下文</param>
-    /// <returns>异步任务</returns>
-    private async Task OnEmployeeJoinedFlowCompletedAsync(TaktApprovalFlowCompletedContext context)
-    {
-        ArgumentNullException.ThrowIfNull(context);
-        if (context.EntityId <= 0)
-        {
-            return;
-        }
-        var joined = await _employeeJoinedRepository.GetByIdAsync(context.EntityId);
-        if (joined == null
-            || joined.EmployeeId <= 0
-            || joined.TenantCode != context.TenantCode
-            || joined.CompanyCode != context.CompanyCode)
-        {
-            return;
-        }
-        await _employeeService.RefreshEmployeePrimaryAssignmentAsync(
-            joined.EmployeeId,
-            context.TenantCode,
-            context.CompanyCode);
     }
 }

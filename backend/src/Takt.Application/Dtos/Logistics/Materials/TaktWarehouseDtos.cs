@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Materials
 // 文件名称：TaktWarehouseDtos.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Warehouse 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktWarehouse 生成，请按需审阅）
 // 
@@ -41,7 +41,7 @@ public class TaktWarehouseDto : TaktCompanyDtoBase
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 仓库编码（租户+公司+工厂内唯一；序列号入出库等业务表存此编码）
+    /// 存货地点编码（4位，租户+公司+工厂内唯一；业务表冗余存此编码）
     /// </summary>
     public string WarehouseCode { get; set; } = string.Empty;
 
@@ -76,22 +76,17 @@ public class TaktWarehouseDto : TaktCompanyDtoBase
     public string? ManagerUserCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否虚拟仓（is_virtual；字典 sys_yes_no_type；0=实体仓，1=虚拟仓）
+    /// 虚拟仓（is_virtual；字典 sys_yes_no_type；0=实体仓，1=虚拟仓）
     /// </summary>
     public int IsVirtual { get; set; } = 0;
 
     /// <summary>
-    /// 仓库类型（0=原材料仓，1=半成品仓，2=成品仓，3=不良品仓，4=外协仓，5=其他）
+    /// 仓库类型（字典 logistics_warehouse_type）
     /// </summary>
     public int WarehouseType { get; set; } = 0;
 
     /// <summary>
-    /// 仓库状态（字典 sys_normal_disable_status；1=启用，0=禁用）
-    /// </summary>
-    public int WarehouseStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 是否内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+    /// 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
@@ -99,6 +94,11 @@ public class TaktWarehouseDto : TaktCompanyDtoBase
     /// 排序号（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
+
+    /// <summary>
+    /// 仓库状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// </summary>
+    public int WarehouseStatus { get; set; } = 0;
 
     /// <summary>
     /// 库位列表（主子表关系）
@@ -134,7 +134,7 @@ public class TaktWarehouseQueryDto : TaktPagedQuery
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 仓库编码（租户+公司+工厂内唯一；序列号入出库等业务表存此编码）
+    /// 存货地点编码（4位，租户+公司+工厂内唯一；业务表冗余存此编码）
     /// </summary>
     public string? WarehouseCode { get; set; } = string.Empty;
 
@@ -169,22 +169,17 @@ public class TaktWarehouseQueryDto : TaktPagedQuery
     public string? ManagerUserCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否虚拟仓（is_virtual；字典 sys_yes_no_type；0=实体仓，1=虚拟仓）
+    /// 虚拟仓（is_virtual；字典 sys_yes_no_type；0=实体仓，1=虚拟仓）
     /// </summary>
     public int? IsVirtual { get; set; }
 
     /// <summary>
-    /// 仓库类型（0=原材料仓，1=半成品仓，2=成品仓，3=不良品仓，4=外协仓，5=其他）
+    /// 仓库类型（字典 logistics_warehouse_type）
     /// </summary>
     public int? WarehouseType { get; set; }
 
     /// <summary>
-    /// 仓库状态（字典 sys_normal_disable_status；1=启用，0=禁用）
-    /// </summary>
-    public int? WarehouseStatus { get; set; }
-
-    /// <summary>
-    /// 是否内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+    /// 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
@@ -192,6 +187,11 @@ public class TaktWarehouseQueryDto : TaktPagedQuery
     /// 排序号（越小越靠前）
     /// </summary>
     public int? SortOrder { get; set; }
+
+    /// <summary>
+    /// 仓库状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// </summary>
+    public int? WarehouseStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -234,7 +234,7 @@ public class TaktWarehouseCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -245,9 +245,9 @@ public class TaktWarehouseCreateDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 仓库编码（租户+公司+工厂内唯一；序列号入出库等业务表存此编码）
+    /// 存货地点编码（4位，租户+公司+工厂内唯一；业务表冗余存此编码）
     /// </summary>
-    [Required(ErrorMessage = "仓库编码（租户+公司+工厂内唯一；序列号入出库等业务表存此编码）不能为空")]
+    [Required(ErrorMessage = "存货地点编码（4位，租户+公司+工厂内唯一）不能为空")]
     public string WarehouseCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -282,24 +282,24 @@ public class TaktWarehouseCreateDto
     public string? ManagerUserCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否虚拟仓（is_virtual；字典 sys_yes_no_type；0=实体仓，1=虚拟仓）
+    /// 虚拟仓（is_virtual；字典 sys_yes_no_type；0=实体仓，1=虚拟仓）
     /// </summary>
     public int IsVirtual { get; set; } = 0;
 
     /// <summary>
-    /// 仓库类型（0=原材料仓，1=半成品仓，2=成品仓，3=不良品仓，4=外协仓，5=其他）
+    /// 仓库类型（字典 logistics_warehouse_type）
     /// </summary>
     public int WarehouseType { get; set; } = 0;
+
+    /// <summary>
+    /// 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+    /// </summary>
+    public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
     /// 仓库状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
     public int WarehouseStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 是否内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
-    /// </summary>
-    public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
     /// 库位列表（主子表关系）（子表，级联保存）
@@ -411,7 +411,7 @@ public class TaktWarehouseTemplateDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 仓库编码（租户+公司+工厂内唯一；序列号入出库等业务表存此编码）
+    /// 存货地点编码（4位，租户+公司+工厂内唯一；业务表冗余存此编码）
     /// </summary>
     public string? WarehouseCode { get; set; } = string.Empty;
 
@@ -446,14 +446,19 @@ public class TaktWarehouseTemplateDto
     public string? ManagerUserCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否虚拟仓（is_virtual；字典 sys_yes_no_type；0=实体仓，1=虚拟仓）
+    /// 虚拟仓（is_virtual；字典 sys_yes_no_type；0=实体仓，1=虚拟仓）
     /// </summary>
     public int? IsVirtual { get; set; }
 
     /// <summary>
-    /// 仓库类型（0=原材料仓，1=半成品仓，2=成品仓，3=不良品仓，4=外协仓，5=其他）
+    /// 仓库类型（字典 logistics_warehouse_type）
     /// </summary>
     public int? WarehouseType { get; set; }
+
+    /// <summary>
+    /// 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+    /// </summary>
+    public int? IsBuiltIn { get; set; }
 
     /// <summary>
     /// 仓库状态（字典 sys_normal_disable_status；1=启用，0=禁用）
@@ -461,9 +466,9 @@ public class TaktWarehouseTemplateDto
     public int? WarehouseStatus { get; set; }
 
     /// <summary>
-    /// 是否内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+    /// 库位列表（主子表关系）（子表，级联保存）
     /// </summary>
-    public int? IsBuiltIn { get; set; }
+    public List<TaktStorageLocationCreateDto>? StorageLocations { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -493,7 +498,7 @@ public class TaktWarehouseImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -503,7 +508,7 @@ public class TaktWarehouseImportDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 仓库编码（租户+公司+工厂内唯一；序列号入出库等业务表存此编码）
+    /// 存货地点编码（4位，租户+公司+工厂内唯一；业务表冗余存此编码）
     /// </summary>
     public string? WarehouseCode { get; set; } = string.Empty;
 
@@ -538,14 +543,19 @@ public class TaktWarehouseImportDto
     public string? ManagerUserCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否虚拟仓（is_virtual；字典 sys_yes_no_type；0=实体仓，1=虚拟仓）
+    /// 虚拟仓（is_virtual；字典 sys_yes_no_type；0=实体仓，1=虚拟仓）
     /// </summary>
     public int? IsVirtual { get; set; }
 
     /// <summary>
-    /// 仓库类型（0=原材料仓，1=半成品仓，2=成品仓，3=不良品仓，4=外协仓，5=其他）
+    /// 仓库类型（字典 logistics_warehouse_type）
     /// </summary>
     public int? WarehouseType { get; set; }
+
+    /// <summary>
+    /// 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+    /// </summary>
+    public int? IsBuiltIn { get; set; }
 
     /// <summary>
     /// 仓库状态（字典 sys_normal_disable_status；1=启用，0=禁用）
@@ -553,9 +563,9 @@ public class TaktWarehouseImportDto
     public int? WarehouseStatus { get; set; }
 
     /// <summary>
-    /// 是否内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+    /// 库位列表（主子表关系）（子表，级联保存）
     /// </summary>
-    public int? IsBuiltIn { get; set; }
+    public List<TaktStorageLocationCreateDto>? StorageLocations { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -596,7 +606,7 @@ public class TaktWarehouseExportDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 仓库编码（租户+公司+工厂内唯一；序列号入出库等业务表存此编码）
+    /// 存货地点编码（4位，租户+公司+工厂内唯一；业务表冗余存此编码）
     /// </summary>
     public string WarehouseCode { get; set; } = string.Empty;
 
@@ -631,22 +641,17 @@ public class TaktWarehouseExportDto
     public string? ManagerUserCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否虚拟仓（is_virtual；字典 sys_yes_no_type；0=实体仓，1=虚拟仓）
+    /// 虚拟仓（is_virtual；字典 sys_yes_no_type；0=实体仓，1=虚拟仓）
     /// </summary>
     public int IsVirtual { get; set; } = 0;
 
     /// <summary>
-    /// 仓库类型（0=原材料仓，1=半成品仓，2=成品仓，3=不良品仓，4=外协仓，5=其他）
+    /// 仓库类型（字典 logistics_warehouse_type）
     /// </summary>
     public int WarehouseType { get; set; } = 0;
 
     /// <summary>
-    /// 仓库状态（字典 sys_normal_disable_status；1=启用，0=禁用）
-    /// </summary>
-    public int WarehouseStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 是否内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
+    /// 内置（字典 sys_yes_no_type；1=是，0=否；内置记录禁止删除）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
@@ -654,6 +659,11 @@ public class TaktWarehouseExportDto
     /// 排序号（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
+
+    /// <summary>
+    /// 仓库状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// </summary>
+    public int WarehouseStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

@@ -201,11 +201,11 @@ public class TaktRolesController : TaktControllerBase
     }
 
     /// <summary>
-    /// 更新角色是否内置
+    /// 更新角色内置
     /// </summary>
-    /// <param name="dto">是否内置 DTO</param>
+    /// <param name="dto">内置 DTO</param>
     /// <returns>角色DTO</returns>
-    [TaktPermission("identity:role:update", "更新角色是否内置")]
+    [TaktPermission("identity:role:update", "更新角色内置")]
     [HttpPut("built-in")]
     public async Task<IActionResult> UpdateRoleBuiltInAsync([FromBody] TaktRoleBuiltInDto dto)
     {

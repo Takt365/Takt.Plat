@@ -111,12 +111,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.ticket.attachmentsjson')"
-                name="attachmentsJson"
+                :label="t('entity.ticket.attachments')"
+                name="attachments"
               >
                 <a-input
-                  v-model:value="formState.attachmentsJson"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.attachmentsjson') })"
+                  v-model:value="formState.attachments"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.attachments') })"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -297,12 +297,11 @@
                 :label="t('entity.ticket.firstresponseat')"
                 name="firstResponseAt"
               >
-                <a-input
+                <a-date-picker
                   v-model:value="formState.firstResponseAt"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.firstresponseat') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ticket.firstresponseat') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
@@ -321,12 +320,11 @@
                 :label="t('entity.ticket.firstresponsedueby')"
                 name="firstResponseDueBy"
               >
-                <a-input
+                <a-date-picker
                   v-model:value="formState.firstResponseDueBy"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.firstresponsedueby') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ticket.firstresponsedueby') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
@@ -335,12 +333,11 @@
                 :label="t('entity.ticket.resolvedat')"
                 name="resolvedAt"
               >
-                <a-input
+                <a-date-picker
                   v-model:value="formState.resolvedAt"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.resolvedat') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ticket.resolvedat') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
@@ -349,12 +346,11 @@
                 :label="t('entity.ticket.resolutiondueby')"
                 name="resolutionDueBy"
               >
-                <a-input
+                <a-date-picker
                   v-model:value="formState.resolutionDueBy"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.resolutiondueby') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ticket.resolutiondueby') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
@@ -363,9 +359,22 @@
                 :label="t('entity.ticket.closedat')"
                 name="closedAt"
               >
-                <a-input
+                <a-date-picker
                   v-model:value="formState.closedAt"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.closedat') })"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ticket.closedat') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.ticket.itassetid')"
+                name="itAssetId"
+              >
+                <a-input
+                  v-model:value="formState.itAssetId"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.itassetid') })"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -374,15 +383,16 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.ticket.flowinstanceid')"
-                name="flowInstanceId"
+                :label="t('entity.ticket.assetcode')"
+                name="assetCode"
               >
                 <a-input
-                  v-model:value="formState.flowInstanceId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.flowinstanceid') })"
+                  v-model:value="formState.assetCode"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.assetcode') })"
                   show-count
-                  :maxlength="20"
+                  :maxlength="40"
                   allow-clear
+                  :disabled="!!formData?.ticketId"
                 />
               </a-form-item>
             </a-col>
@@ -442,18 +452,6 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.ticket.extfield')"
-                name="ExtField"
-              >
-                <a-textarea
-                  v-model:value="formState.ExtField"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.ticket.extfield') })"
-                  :rows="2"
-                />
-              </a-form-item>
-            </a-col>
           </a-row>
         </div>
       </a-tab-pane>
@@ -464,6 +462,32 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                name="extField"
+                class="takt-form-item-ext-field"
+              >
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t('common.page.entity.extfieldhint')"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ t('common.page.entity.extfield') }}</span>
+                  </span>
+                </template>
+                <a-textarea
+                  v-model:value="formState.extField"
+                  :placeholder="t('common.page.form.placeholder.extfield')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
             <a-col :span="24">
               <a-form-item
                 :label="t('common.page.entity.remark')"
@@ -508,6 +532,7 @@ import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import type { TicketCreate } from '@/types/routine/help-desk/ticket'
 import TaktSelect from '@/components/business/takt-select/index.vue'
+import { RiQuestionLine } from '@remixicon/vue'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
@@ -541,7 +566,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","ticketNo","title","content","attachmentsJson","ticketStatus","priority","urgency","impact","categoryCode","ticketSource","submitterId","submitterName","assigneeId","assigneeName","knowledgeId","parentTicketId","firstResponseAt","firstResponseDueBy","resolvedAt","resolutionDueBy","closedAt","flowInstanceId","applicantDeptId","applicantDeptName","applicantBy","childTickets","ExtField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","ticketNo","title","content","attachments","ticketStatus","priority","urgency","impact","categoryCode","ticketSource","submitterId","submitterName","assigneeId","assigneeName","knowledgeId","parentTicketId","firstResponseAt","firstResponseDueBy","resolvedAt","resolutionDueBy","closedAt","itAssetId","assetCode","applicantDeptId","applicantDeptName","applicantBy","childTickets","extField","remark"]
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
 
@@ -585,11 +610,11 @@ const ticketChangeLogFormColumns = computed<TaktEditableTableColumn[]>(() => [
     width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.ticketchangelog.changereason') }),
   },
   {
-    key: 'ExtField',
-    title: t('entity.ticketchangelog.extfield'),
+    key: 'extField',
+    title: t('common.page.entity.extfield'),
     editor: 'textarea',
-    rows: 1,
-    placeholder: t('common.page.form.placeholder.optional', { field: t('entity.ticketchangelog.extfield') }),
+    rows: 2,
+    placeholder: t('common.page.form.placeholder.optional', { field: t('common.page.entity.extfield') }),
     width: 140,
   },
   {
@@ -614,7 +639,7 @@ function createDefaultTicketChangeLogRow(): Record<string, unknown> {
     changeSummary: '',
     changeFields: '',
     changeReason: '',
-    ExtField: '',
+    extField: '',
     remark: '',
   }
 }

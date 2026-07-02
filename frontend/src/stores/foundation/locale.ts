@@ -23,11 +23,12 @@ import { useTranslationStore } from '@/stores/foundation/translation';
 import {
   TAKT_DEFAULT_LOCALE,
   TAKT_LOCALE_STORAGE_KEY,
-  TAKT_SUPPORTED_LOCALES,
 } from '@/utils/common';
 import {
   readStoredLocale,
+  resolveLoginPreviewLocale,
   resolveTaktCultureCode,
+  setRuntimeSupportedCultureCodes,
   syncTaktComponentLocales,
 } from '@/utils/takt-locale-sync';
 import { translateLocaleMessage } from '@/utils/takt-i18n-message';
@@ -69,7 +70,7 @@ export function resolveCultureIcon(option: TaktSelectOption): string | undefined
 }
 
 /**
- * 是否默认语言（extLabel = IsDefault，1=是）
+ * 默认语言（extLabel = IsDefault，字典 sys_yes_no_type；1=是）
  * @param option 语言选项
  */
 export function resolveCultureIsDefault(option: TaktSelectOption): boolean {
@@ -143,6 +144,7 @@ export const useLocaleStore = defineStore('locale', () => {
     cultureOptions.value = [];
     cultureOptionsContextKey.value = '';
     loaded.value = false;
+    setRuntimeSupportedCultureCodes([]);
   }
 
   async function loadCultureOptionsAsync(options: { force?: boolean; tenantCode?: string } = {}): Promise<void> {
@@ -180,6 +182,7 @@ export const useLocaleStore = defineStore('locale', () => {
       cultureOptions.value = list;
       cultureOptionsContextKey.value = contextKey;
       loaded.value = true;
+      setRuntimeSupportedCultureCodes(list.map((item) => String(item.dictValue ?? '').trim()));
     } catch (error) {
       cultureOptions.value = [];
       cultureOptionsContextKey.value = '';
@@ -197,12 +200,25 @@ export const useLocaleStore = defineStore('locale', () => {
   }
 
   /**
+   * 当前租户可选 CultureCode 列表（与 cultureOptions.dictValue 一致）
+   */
+  function listAvailableCultureCodes(): string[] {
+    return cultureOptions.value
+      .map((item) => String(item.dictValue ?? '').trim())
+      .filter((code) => code.length > 0);
+  }
+
+  /**
    * 应用语言（vue-i18n + localStorage + 后续请求 Accept-Language）
    * @param cultureCode 区域文化编码（dictValue）
    * @param persist 是否写入 localStorage（用户主动选择时为 true）
    */
   function applyLocale(cultureCode: string, persist = true): void {
-    const normalized = resolveTaktCultureCode(cultureCode);
+    const availableCodes = listAvailableCultureCodes();
+    const normalized = resolveTaktCultureCode(
+      cultureCode,
+      availableCodes.length > 0 ? availableCodes : undefined,
+    );
 
     if (i18n.global.locale.value !== normalized) {
       i18n.global.locale.value = normalized as typeof i18n.global.locale.value;
@@ -220,7 +236,11 @@ export const useLocaleStore = defineStore('locale', () => {
    * @param cultureCode 区域文化编码（dictValue）
    */
   function setLocale(cultureCode: string): void {
-    const normalized = resolveTaktCultureCode(cultureCode);
+    const availableCodes = listAvailableCultureCodes();
+    const normalized = resolveTaktCultureCode(
+      cultureCode,
+      availableCodes.length > 0 ? availableCodes : undefined,
+    );
     const isLoggedIn = useUserStore().isLoggedIn;
 
     if (!isLoggedIn) {
@@ -277,7 +297,8 @@ export const useLocaleStore = defineStore('locale', () => {
 
   /**
    * 按用户 DefaultCulture 应用登录预览语言（写入 localStorage）
-   * @param cultureCode 用户默认区域文化编码 BCP47
+   * 浏览器语言与用户默认不一致时优先浏览器；浏览器语言不在租户可选列表时回退用户默认
+   * @param cultureCode 用户区域文化编码 BCP47
    */
   function applyLoginUserLocale(
     cultureCode: string,
@@ -292,8 +313,10 @@ export const useLocaleStore = defineStore('locale', () => {
       return;
     }
 
-    const normalized = resolveTaktCultureCode(cultureCode.trim());
+    const availableCultureCodes = cultureOptions.value.map((item) => resolveCultureCode(item));
+    const normalized = resolveLoginPreviewLocale(cultureCode, availableCultureCodes);
     applyLocale(normalized, true);
+    void useTranslationStore().loadPublicTranslationMessagesAsync(normalized);
   }
 
   /**
@@ -301,37 +324,55 @@ export const useLocaleStore = defineStore('locale', () => {
    * @returns 区域文化编码或 null
    */
   function readPersistedLocalePreference(): string | null {
-    const stored = localStorage.getItem(TAKT_LOCALE_STORAGE_KEY);
-    if (!stored || !(TAKT_SUPPORTED_LOCALES as readonly string[]).includes(stored)) {
+    const stored = localStorage.getItem(TAKT_LOCALE_STORAGE_KEY)?.trim();
+    if (!stored) {
       return null;
     }
 
-    return resolveTaktCultureCode(stored);
+    const availableCodes = listAvailableCultureCodes();
+    if (availableCodes.length === 0) {
+      return stored;
+    }
+
+    const inList = availableCodes.find((code) => code.toLowerCase() === stored.toLowerCase());
+    if (!inList) {
+      return null;
+    }
+
+    return inList;
   }
 
   /**
-   * 登录后按用户资料 DefaultCulture 对齐界面语言（不覆盖用户手动切换）
-   * @param cultureCode 用户默认区域文化编码 BCP47
+   * 登录后对齐界面语言：优先保留登录页已写入 localStorage 的语言，无记录时才用用户 DefaultCulture
+   * @param cultureCode 用户区域文化编码 BCP47
    */
   function applyUserProfileLocale(cultureCode: string): void {
-    if (loginLocaleUserOverride.value) {
-      return;
-    }
-
-    const normalizedProfile = resolveTaktCultureCode(cultureCode.trim());
+    const availableCodes = listAvailableCultureCodes();
     const persisted = readPersistedLocalePreference();
 
-    // OAuth 全页跳转后 loginLocaleUserOverride 会丢失；localStorage 中已与资料默认语言不同的偏好须保留（登录页手动选择或应用内切换）
-    if (persisted && persisted !== normalizedProfile) {
+    if (persisted) {
       if (i18n.global.locale.value !== persisted) {
         applyLocale(persisted, true);
       }
 
       void useTranslationStore().loadTranslationMessagesAsync(persisted);
+      clearLoginLocaleUserOverride();
       return;
     }
 
+    if (loginLocaleUserOverride.value) {
+      void useTranslationStore().loadTranslationMessagesAsync(String(i18n.global.locale.value));
+      clearLoginLocaleUserOverride();
+      return;
+    }
+
+    const normalizedProfile = resolveTaktCultureCode(
+      cultureCode.trim(),
+      availableCodes.length > 0 ? availableCodes : undefined,
+    );
+
     if (i18n.global.locale.value === normalizedProfile) {
+      void useTranslationStore().loadTranslationMessagesAsync(normalizedProfile);
       return;
     }
 

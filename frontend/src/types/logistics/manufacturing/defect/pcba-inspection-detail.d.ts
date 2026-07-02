@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/defect
 // 文件名称：pcba-inspection-detail.d.ts
-// 创建时间：2026-06-20
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/defect 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -49,17 +49,17 @@ export interface PcbaInspectionDetail extends CompanyDtoBase {
   lineNumber: number;
 
   /**
-   * PCBA板别
+   * PCBA板别（字典 logistics_pcba_panel_category，存 DictValue）
    */
   pcbaBoardType?: string;
 
   /**
-   * 目视线别
+   * 目视线别（字典 logistics_visual_inspection_line_category，存 DictValue）
    */
   visualInspectionLine?: string;
 
   /**
-   * AOI线别
+   * AOI线别（字典 logistics_aoi_inspection_line_category，存 DictValue）
    */
   aoiLine?: string;
 
@@ -74,12 +74,12 @@ export interface PcbaInspectionDetail extends CompanyDtoBase {
   tSideAssemblyDate?: string;
 
   /**
-   * 班次(1=早班 2=中班 3=晚班)
+   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo: number;
 
   /**
-   * 检查员
+   * 检查员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   inspectorName?: string;
 
@@ -94,14 +94,14 @@ export interface PcbaInspectionDetail extends CompanyDtoBase {
   inspectionQty: number;
 
   /**
-   * 检查状态(1=检查中 2=测试中 3=检查完成 4=测试完成)
+   * 检查状态（字典 logistics_pcba_inspection_status；1=检查中 2=测试中 3=检查完成 4=测试完成）
    */
   inspectionStatus: number;
 
   /**
-   * 生产线
+   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
    */
-  prodLine?: string;
+  prodTeam?: string;
 
   /**
    * 检查工数
@@ -134,7 +134,7 @@ export interface PcbaInspectionDetail extends CompanyDtoBase {
   content?: string;
 
   /**
-   * 不良个所
+   * 不良个所（字典 logistics_pcb_location_category，存 DictValue）
    */
   defectLocation?: string;
 
@@ -179,17 +179,17 @@ export interface PcbaInspectionDetailQuery extends TaktPagedQuery {
   lineNumber?: number;
 
   /**
-   * PCBA板别
+   * PCBA板别（字典 logistics_pcba_panel_category，存 DictValue）
    */
   pcbaBoardType?: string;
 
   /**
-   * 目视线别
+   * 目视线别（字典 logistics_visual_inspection_line_category，存 DictValue）
    */
   visualInspectionLine?: string;
 
   /**
-   * AOI线别
+   * AOI线别（字典 logistics_aoi_inspection_line_category，存 DictValue）
    */
   aoiLine?: string;
 
@@ -214,12 +214,12 @@ export interface PcbaInspectionDetailQuery extends TaktPagedQuery {
   tSideAssemblyDateEnd?: string;
 
   /**
-   * 班次(1=早班 2=中班 3=晚班)
+   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo?: number;
 
   /**
-   * 检查员
+   * 检查员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   inspectorName?: string;
 
@@ -234,14 +234,14 @@ export interface PcbaInspectionDetailQuery extends TaktPagedQuery {
   inspectionQty?: number;
 
   /**
-   * 检查状态(1=检查中 2=测试中 3=检查完成 4=测试完成)
+   * 检查状态（字典 logistics_pcba_inspection_status；1=检查中 2=测试中 3=检查完成 4=测试完成）
    */
   inspectionStatus?: number;
 
   /**
-   * 生产线
+   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
    */
-  prodLine?: string;
+  prodTeam?: string;
 
   /**
    * 检查工数
@@ -274,7 +274,7 @@ export interface PcbaInspectionDetailQuery extends TaktPagedQuery {
   content?: string;
 
   /**
-   * 不良个所
+   * 不良个所（字典 logistics_pcb_location_category，存 DictValue）
    */
   defectLocation?: string;
 
@@ -318,7 +318,7 @@ export interface PcbaInspectionDetailCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -338,17 +338,17 @@ export interface PcbaInspectionDetailCreate {
   lineNumber: number;
 
   /**
-   * PCBA板别
+   * PCBA板别（字典 logistics_pcba_panel_category，存 DictValue）
    */
   pcbaBoardType?: string;
 
   /**
-   * 目视线别
+   * 目视线别（字典 logistics_visual_inspection_line_category，存 DictValue）
    */
   visualInspectionLine?: string;
 
   /**
-   * AOI线别
+   * AOI线别（字典 logistics_aoi_inspection_line_category，存 DictValue）
    */
   aoiLine?: string;
 
@@ -363,12 +363,12 @@ export interface PcbaInspectionDetailCreate {
   tSideAssemblyDate?: string;
 
   /**
-   * 班次(1=早班 2=中班 3=晚班)
+   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo: number;
 
   /**
-   * 检查员
+   * 检查员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   inspectorName?: string;
 
@@ -383,14 +383,14 @@ export interface PcbaInspectionDetailCreate {
   inspectionQty: number;
 
   /**
-   * 检查状态(1=检查中 2=测试中 3=检查完成 4=测试完成)
+   * 检查状态（字典 logistics_pcba_inspection_status；1=检查中 2=测试中 3=检查完成 4=测试完成）
    */
   inspectionStatus: number;
 
   /**
-   * 生产线
+   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
    */
-  prodLine?: string;
+  prodTeam?: string;
 
   /**
    * 检查工数
@@ -423,7 +423,7 @@ export interface PcbaInspectionDetailCreate {
   content?: string;
 
   /**
-   * 不良个所
+   * 不良个所（字典 logistics_pcb_location_category，存 DictValue）
    */
   defectLocation?: string;
 
@@ -467,7 +467,7 @@ export interface PcbaInspectionDetailStatus {
   pcbaInspectionDetailId: string;
 
   /**
-   * 检查状态(1=检查中 2=测试中 3=检查完成 4=测试完成)
+   * 检查状态（字典 logistics_pcba_inspection_status；1=检查中 2=测试中 3=检查完成 4=测试完成）
    */
   inspectionStatus: number;
 
@@ -506,39 +506,74 @@ export interface PcbaInspectionDetailTemplate {
   lineNumber?: number;
 
   /**
-   * PCBA板别
+   * PCBA板别（字典 logistics_pcba_panel_category，存 DictValue）
    */
   pcbaBoardType?: string;
 
   /**
-   * 目视线别
+   * 目视线别（字典 logistics_visual_inspection_line_category，存 DictValue）
    */
   visualInspectionLine?: string;
 
   /**
-   * AOI线别
+   * AOI线别（字典 logistics_aoi_inspection_line_category，存 DictValue）
    */
   aoiLine?: string;
 
   /**
-   * 班次(1=早班 2=中班 3=晚班)
+   * B面实装日期
+   */
+  bSideAssemblyDate?: string;
+
+  /**
+   * T面实装日期
+   */
+  tSideAssemblyDate?: string;
+
+  /**
+   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo?: number;
 
   /**
-   * 检查员
+   * 检查员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   inspectorName?: string;
 
   /**
-   * 检查状态(1=检查中 2=测试中 3=检查完成 4=测试完成)
+   * 当日完成数量
+   */
+  dailyCompletedQty?: number;
+
+  /**
+   * 检查数量
+   */
+  inspectionQty?: number;
+
+  /**
+   * 检查状态（字典 logistics_pcba_inspection_status；1=检查中 2=测试中 3=检查完成 4=测试完成）
    */
   inspectionStatus?: number;
 
   /**
-   * 生产线
+   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
    */
-  prodLine?: string;
+  prodTeam?: string;
+
+  /**
+   * 检查工数
+   */
+  inspectionWorkHours?: number;
+
+  /**
+   * AOI工数
+   */
+  aoiWorkHours?: number;
+
+  /**
+   * 不良数量
+   */
+  defectQty?: number;
 
   /**
    * 手贴
@@ -549,6 +584,16 @@ export interface PcbaInspectionDetailTemplate {
    * 流水号
    */
   serialNumber?: string;
+
+  /**
+   * 内容
+   */
+  content?: string;
+
+  /**
+   * 不良个所（字典 logistics_pcb_location_category，存 DictValue）
+   */
+  defectLocation?: string;
 
   /**
    * 扩展字段JSON
@@ -580,7 +625,7 @@ export interface PcbaInspectionDetailImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -600,39 +645,74 @@ export interface PcbaInspectionDetailImport {
   lineNumber?: number;
 
   /**
-   * PCBA板别
+   * PCBA板别（字典 logistics_pcba_panel_category，存 DictValue）
    */
   pcbaBoardType?: string;
 
   /**
-   * 目视线别
+   * 目视线别（字典 logistics_visual_inspection_line_category，存 DictValue）
    */
   visualInspectionLine?: string;
 
   /**
-   * AOI线别
+   * AOI线别（字典 logistics_aoi_inspection_line_category，存 DictValue）
    */
   aoiLine?: string;
 
   /**
-   * 班次(1=早班 2=中班 3=晚班)
+   * B面实装日期
+   */
+  bSideAssemblyDate?: string;
+
+  /**
+   * T面实装日期
+   */
+  tSideAssemblyDate?: string;
+
+  /**
+   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo?: number;
 
   /**
-   * 检查员
+   * 检查员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   inspectorName?: string;
 
   /**
-   * 检查状态(1=检查中 2=测试中 3=检查完成 4=测试完成)
+   * 当日完成数量
+   */
+  dailyCompletedQty?: number;
+
+  /**
+   * 检查数量
+   */
+  inspectionQty?: number;
+
+  /**
+   * 检查状态（字典 logistics_pcba_inspection_status；1=检查中 2=测试中 3=检查完成 4=测试完成）
    */
   inspectionStatus?: number;
 
   /**
-   * 生产线
+   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
    */
-  prodLine?: string;
+  prodTeam?: string;
+
+  /**
+   * 检查工数
+   */
+  inspectionWorkHours?: number;
+
+  /**
+   * AOI工数
+   */
+  aoiWorkHours?: number;
+
+  /**
+   * 不良数量
+   */
+  defectQty?: number;
 
   /**
    * 手贴
@@ -643,6 +723,16 @@ export interface PcbaInspectionDetailImport {
    * 流水号
    */
   serialNumber?: string;
+
+  /**
+   * 内容
+   */
+  content?: string;
+
+  /**
+   * 不良个所（字典 logistics_pcb_location_category，存 DictValue）
+   */
+  defectLocation?: string;
 
   /**
    * 扩展字段JSON
@@ -689,17 +779,17 @@ export interface PcbaInspectionDetailExport {
   lineNumber: number;
 
   /**
-   * PCBA板别
+   * PCBA板别（字典 logistics_pcba_panel_category，存 DictValue）
    */
   pcbaBoardType?: string;
 
   /**
-   * 目视线别
+   * 目视线别（字典 logistics_visual_inspection_line_category，存 DictValue）
    */
   visualInspectionLine?: string;
 
   /**
-   * AOI线别
+   * AOI线别（字典 logistics_aoi_inspection_line_category，存 DictValue）
    */
   aoiLine?: string;
 
@@ -714,12 +804,12 @@ export interface PcbaInspectionDetailExport {
   tSideAssemblyDate?: string;
 
   /**
-   * 班次(1=早班 2=中班 3=晚班)
+   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo: number;
 
   /**
-   * 检查员
+   * 检查员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   inspectorName?: string;
 
@@ -734,14 +824,14 @@ export interface PcbaInspectionDetailExport {
   inspectionQty: number;
 
   /**
-   * 检查状态(1=检查中 2=测试中 3=检查完成 4=测试完成)
+   * 检查状态（字典 logistics_pcba_inspection_status；1=检查中 2=测试中 3=检查完成 4=测试完成）
    */
   inspectionStatus: number;
 
   /**
-   * 生产线
+   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
    */
-  prodLine?: string;
+  prodTeam?: string;
 
   /**
    * 检查工数
@@ -774,7 +864,7 @@ export interface PcbaInspectionDetailExport {
   content?: string;
 
   /**
-   * 不良个所
+   * 不良个所（字典 logistics_pcb_location_category，存 DictValue）
    */
   defectLocation?: string;
 

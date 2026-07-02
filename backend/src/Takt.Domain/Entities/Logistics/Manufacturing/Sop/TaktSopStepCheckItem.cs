@@ -26,7 +26,7 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Sop;
 public class TaktSopStepCheckItem : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工步 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
     /// </summary>
     [SugarColumn(ColumnName = "step_id", ColumnDescription = "工步ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -51,7 +51,7 @@ public class TaktSopStepCheckItem : TaktCompanyEntityBase
     public string? CheckStandard { get; set; }
 
     /// <summary>
-    /// 是否必检（字典 sys_yes_no_type，0=否，1=是）
+    /// 是否必检（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_required", ColumnDescription = "是否必检", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int IsRequired { get; set; } = 1;

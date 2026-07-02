@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Planning
 // 文件名称：TaktPurchasePlanItemDtos.cs
-// 创建时间：2026-06-16
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchasePlanItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPurchasePlanItem 生成，请按需审阅）
 // 
@@ -287,7 +287,7 @@ public class TaktPurchasePlanItemCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -486,6 +486,31 @@ public class TaktPurchasePlanItemTemplateDto
     public string? PlanUnit { get; set; } = string.Empty;
 
     /// <summary>
+    /// 计划数量（基本单位数量）
+    /// </summary>
+    public decimal? PlanQuantity { get; set; }
+
+    /// <summary>
+    /// 计划到货日期
+    /// </summary>
+    public DateTime? PlannedArrivalDate { get; set; }
+
+    /// <summary>
+    /// 已转申请/订单数量（基本单位数量）
+    /// </summary>
+    public decimal? ConvertedQuantity { get; set; }
+
+    /// <summary>
+    /// 预计单价
+    /// </summary>
+    public decimal? EstimatedUnitPrice { get; set; }
+
+    /// <summary>
+    /// 预计金额
+    /// </summary>
+    public decimal? EstimatedAmount { get; set; }
+
+    /// <summary>
     /// 参考供货商编码（关联 TaktSupplier.SupplierCode）
     /// </summary>
     public string? ReferenceSupplierCode { get; set; } = string.Empty;
@@ -523,7 +548,7 @@ public class TaktPurchasePlanItemImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -578,6 +603,31 @@ public class TaktPurchasePlanItemImportDto
     /// 计划单位
     /// </summary>
     public string? PlanUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 计划数量（基本单位数量）
+    /// </summary>
+    public decimal? PlanQuantity { get; set; }
+
+    /// <summary>
+    /// 计划到货日期
+    /// </summary>
+    public DateTime? PlannedArrivalDate { get; set; }
+
+    /// <summary>
+    /// 已转申请/订单数量（基本单位数量）
+    /// </summary>
+    public decimal? ConvertedQuantity { get; set; }
+
+    /// <summary>
+    /// 预计单价
+    /// </summary>
+    public decimal? EstimatedUnitPrice { get; set; }
+
+    /// <summary>
+    /// 预计金额
+    /// </summary>
+    public decimal? EstimatedAmount { get; set; }
 
     /// <summary>
     /// 参考供货商编码（关联 TaktSupplier.SupplierCode）

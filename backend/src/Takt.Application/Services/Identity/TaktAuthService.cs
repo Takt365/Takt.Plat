@@ -755,11 +755,11 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
             var employee = await _employeeRepository.GetByIdAsync(user.EmployeeId);
             if (employee != null && employee.TenantCode == tenantCode)
             {
-                employeeName = employee.Name;
+                employeeName = employee.EmployeeName;
                 employeeGender = employee.Gender;
                 employeeMobile = employee.Mobile;
                 employeeEmail = employee.Email;
-                avatar = employee.PhotoUrl;
+                avatar = employee.Avatar;
             }
         }
 

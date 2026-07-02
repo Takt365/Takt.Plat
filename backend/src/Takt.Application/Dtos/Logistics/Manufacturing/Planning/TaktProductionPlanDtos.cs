@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Planning
 // 文件名称：TaktProductionPlanDtos.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ProductionPlan 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktProductionPlan 生成，请按需审阅）
 // 
@@ -62,6 +62,22 @@ public class TaktProductionPlanDto : TaktApprovalDtoBase
     public string? SalesPlanCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 来源 MPS 头表 ID（主生产计划，可选）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? MasterProductionScheduleId { get; set; }
+
+    /// <summary>
+    /// 来源 MPS 头表 名称（填充字段）
+    /// </summary>
+    public string? MasterProductionScheduleName { get; set; }
+
+    /// <summary>
+    /// 来源 MPS 编码（冗余）
+    /// </summary>
+    public string? MpsCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 计划编制日期
     /// </summary>
     public DateTime PlanDate { get; set; }
@@ -113,19 +129,19 @@ public class TaktProductionPlanDto : TaktApprovalDtoBase
     public decimal ConvertedAmount { get; set; }
 
     /// <summary>
+    /// 计划说明
+    /// </summary>
+    public string? PlanDescription { get; set; } = string.Empty;
+
+    /// <summary>
     /// 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
     public int PlanStatus { get; set; } = 0;
 
     /// <summary>
-    /// 转单状态（0=未转单，1=部分转单，2=全部转单）
+    /// 转单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
     /// </summary>
     public int ConvertedStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 计划说明
-    /// </summary>
-    public string? PlanDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 生产计划明细列表（主子表关系）
@@ -175,6 +191,17 @@ public class TaktProductionPlanQueryDto : TaktPagedQuery
     /// 来源销售计划编码（冗余字段，便于查询）
     /// </summary>
     public string? SalesPlanCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 来源 MPS 头表 ID（主生产计划，可选）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? MasterProductionScheduleId { get; set; }
+
+    /// <summary>
+    /// 来源 MPS 编码（冗余）
+    /// </summary>
+    public string? MpsCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 计划编制日期（范围查询-开始）
@@ -238,22 +265,22 @@ public class TaktProductionPlanQueryDto : TaktPagedQuery
     public decimal? ConvertedAmount { get; set; }
 
     /// <summary>
-    /// 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）
-    /// </summary>
-    public int? PlanStatus { get; set; }
-
-    /// <summary>
-    /// 转单状态（0=未转单，1=部分转单，2=全部转单）
-    /// </summary>
-    public int? ConvertedStatus { get; set; }
-
-    /// <summary>
     /// 计划说明
     /// </summary>
     public string? PlanDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 审批状态（TaktApprovalStatus）
+    /// 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// </summary>
+    public int? PlanStatus { get; set; }
+
+    /// <summary>
+    /// 转单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
+    /// </summary>
+    public int? ConvertedStatus { get; set; }
+
+    /// <summary>
+    /// 审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）
     /// </summary>
     public TaktApprovalStatus? ApprovalStatus { get; set; }
 
@@ -336,7 +363,7 @@ public class TaktProductionPlanCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -362,6 +389,17 @@ public class TaktProductionPlanCreateDto
     /// 来源销售计划编码（冗余字段，便于查询）
     /// </summary>
     public string? SalesPlanCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 来源 MPS 头表 ID（主生产计划，可选）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? MasterProductionScheduleId { get; set; }
+
+    /// <summary>
+    /// 来源 MPS 编码（冗余）
+    /// </summary>
+    public string? MpsCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 计划编制日期
@@ -411,19 +449,19 @@ public class TaktProductionPlanCreateDto
     public decimal ConvertedAmount { get; set; }
 
     /// <summary>
+    /// 计划说明
+    /// </summary>
+    public string? PlanDescription { get; set; } = string.Empty;
+
+    /// <summary>
     /// 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
     public int PlanStatus { get; set; } = 0;
 
     /// <summary>
-    /// 转单状态（0=未转单，1=部分转单，2=全部转单）
+    /// 转单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
     /// </summary>
     public int ConvertedStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 计划说明
-    /// </summary>
-    public string? PlanDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 生产计划明细列表（主子表关系）（子表，级联保存）
@@ -527,6 +565,32 @@ public class TaktProductionPlanTemplateDto
     public string? SalesPlanCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 来源 MPS 头表 ID（主生产计划，可选）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? MasterProductionScheduleId { get; set; }
+
+    /// <summary>
+    /// 来源 MPS 编码（冗余）
+    /// </summary>
+    public string? MpsCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 计划编制日期
+    /// </summary>
+    public DateTime? PlanDate { get; set; }
+
+    /// <summary>
+    /// 计划周期开始日期
+    /// </summary>
+    public DateTime? PlanPeriodStart { get; set; }
+
+    /// <summary>
+    /// 计划周期结束日期
+    /// </summary>
+    public DateTime? PlanPeriodEnd { get; set; }
+
+    /// <summary>
     /// 计划人员工ID（关联 TaktEmployee，序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -538,19 +602,44 @@ public class TaktProductionPlanTemplateDto
     public string? PlanBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 计划总数量（基本单位数量）
     /// </summary>
-    public int? PlanStatus { get; set; }
+    public decimal? TotalQuantity { get; set; }
 
     /// <summary>
-    /// 转单状态（0=未转单，1=部分转单，2=全部转单）
+    /// 计划总金额
     /// </summary>
-    public int? ConvertedStatus { get; set; }
+    public decimal? TotalAmount { get; set; }
+
+    /// <summary>
+    /// 已转工单/采购数量（基本单位数量）
+    /// </summary>
+    public decimal? ConvertedQuantity { get; set; }
+
+    /// <summary>
+    /// 已转工单/采购金额
+    /// </summary>
+    public decimal? ConvertedAmount { get; set; }
 
     /// <summary>
     /// 计划说明
     /// </summary>
     public string? PlanDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// </summary>
+    public int? PlanStatus { get; set; }
+
+    /// <summary>
+    /// 转单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
+    /// </summary>
+    public int? ConvertedStatus { get; set; }
+
+    /// <summary>
+    /// 生产计划明细列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktProductionPlanItemCreateDto>? Items { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -580,7 +669,7 @@ public class TaktProductionPlanImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -606,6 +695,32 @@ public class TaktProductionPlanImportDto
     public string? SalesPlanCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 来源 MPS 头表 ID（主生产计划，可选）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? MasterProductionScheduleId { get; set; }
+
+    /// <summary>
+    /// 来源 MPS 编码（冗余）
+    /// </summary>
+    public string? MpsCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 计划编制日期
+    /// </summary>
+    public DateTime? PlanDate { get; set; }
+
+    /// <summary>
+    /// 计划周期开始日期
+    /// </summary>
+    public DateTime? PlanPeriodStart { get; set; }
+
+    /// <summary>
+    /// 计划周期结束日期
+    /// </summary>
+    public DateTime? PlanPeriodEnd { get; set; }
+
+    /// <summary>
     /// 计划人员工ID（关联 TaktEmployee，序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -617,19 +732,44 @@ public class TaktProductionPlanImportDto
     public string? PlanBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 计划总数量（基本单位数量）
     /// </summary>
-    public int? PlanStatus { get; set; }
+    public decimal? TotalQuantity { get; set; }
 
     /// <summary>
-    /// 转单状态（0=未转单，1=部分转单，2=全部转单）
+    /// 计划总金额
     /// </summary>
-    public int? ConvertedStatus { get; set; }
+    public decimal? TotalAmount { get; set; }
+
+    /// <summary>
+    /// 已转工单/采购数量（基本单位数量）
+    /// </summary>
+    public decimal? ConvertedQuantity { get; set; }
+
+    /// <summary>
+    /// 已转工单/采购金额
+    /// </summary>
+    public decimal? ConvertedAmount { get; set; }
 
     /// <summary>
     /// 计划说明
     /// </summary>
     public string? PlanDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// </summary>
+    public int? PlanStatus { get; set; }
+
+    /// <summary>
+    /// 转单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
+    /// </summary>
+    public int? ConvertedStatus { get; set; }
+
+    /// <summary>
+    /// 生产计划明细列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktProductionPlanItemCreateDto>? Items { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -681,6 +821,17 @@ public class TaktProductionPlanExportDto
     public string? SalesPlanCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 来源 MPS 头表 ID（主生产计划，可选）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? MasterProductionScheduleId { get; set; }
+
+    /// <summary>
+    /// 来源 MPS 编码（冗余）
+    /// </summary>
+    public string? MpsCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 计划编制日期
     /// </summary>
     public DateTime PlanDate { get; set; }
@@ -727,19 +878,19 @@ public class TaktProductionPlanExportDto
     public decimal ConvertedAmount { get; set; }
 
     /// <summary>
+    /// 计划说明
+    /// </summary>
+    public string? PlanDescription { get; set; } = string.Empty;
+
+    /// <summary>
     /// 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
     public int PlanStatus { get; set; } = 0;
 
     /// <summary>
-    /// 转单状态（0=未转单，1=部分转单，2=全部转单）
+    /// 转单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
     /// </summary>
     public int ConvertedStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 计划说明
-    /// </summary>
-    public string? PlanDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON

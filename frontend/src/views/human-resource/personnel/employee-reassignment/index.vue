@@ -54,8 +54,8 @@
 
     <!-- 表格 -->
     <TaktSingleTable
-      :columns="columns"
       entity-scope="approval"
+      :columns="columns"
       :visible-column-keys="visibleColumnKeys"
       :id-column-key="'employeeReassignmentId'"
       table-mode="single"
@@ -72,7 +72,7 @@
 
     </TaktSingleTable>
 
-    <!-- 分页组件 -->
+    <!-- 分页（服务端分页，外置 TaktPagination） -->
     <TaktPagination
       v-model:current="currentPage"
       v-model:page-size="pageSize"
@@ -92,6 +92,7 @@
       @cancel="handleFormCancel"
     >
       <EmployeeReassignmentForm
+        :key="formData?.employeeReassignmentId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -109,186 +110,226 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('employeeId')">
-      <a-form-item :label="t('entity.employeeReassignment.employeeid')">
+      <a-form-item :label="t('entity.employeereassignment.employeeid')">
         <a-input
           v-model:value="advancedQueryForm.employeeId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeReassignment.employeeid') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeereassignment.employeeid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('reassignmentType')">
-      <a-form-item :label="t('entity.employeeReassignment.reassignmenttype')">
+      <a-form-item :label="t('entity.employeereassignment.reassignmenttype')">
         <a-input-number
           v-model:value="advancedQueryForm.reassignmentType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeReassignment.reassignmenttype') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeereassignment.reassignmenttype') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('fromDeptId')">
-      <a-form-item :label="t('entity.employeeReassignment.fromdeptid')">
+      <a-form-item :label="t('entity.employeereassignment.fromdeptid')">
         <a-input
           v-model:value="advancedQueryForm.fromDeptId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeReassignment.fromdeptid') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeereassignment.fromdeptid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('fromDeptName')">
-      <a-form-item :label="t('entity.employeeReassignment.fromdeptname')">
+      <a-form-item :label="t('entity.employeereassignment.fromdeptname')">
         <a-input
           v-model:value="advancedQueryForm.fromDeptName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeReassignment.fromdeptname') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeereassignment.fromdeptname') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('fromPostId')">
-      <a-form-item :label="t('entity.employeeReassignment.frompostid')">
+      <a-form-item :label="t('entity.employeereassignment.frompostid')">
         <a-input
           v-model:value="advancedQueryForm.fromPostId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeReassignment.frompostid') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeereassignment.frompostid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('fromPostName')">
-      <a-form-item :label="t('entity.employeeReassignment.frompostname')">
+      <a-form-item :label="t('entity.employeereassignment.frompostname')">
         <a-input
           v-model:value="advancedQueryForm.fromPostName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeReassignment.frompostname') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeereassignment.frompostname') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('toDeptId')">
-      <a-form-item :label="t('entity.employeeReassignment.todeptid')">
+      <a-form-item :label="t('entity.employeereassignment.todeptid')">
         <a-input
           v-model:value="advancedQueryForm.toDeptId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeReassignment.todeptid') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeereassignment.todeptid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('toDeptName')">
-      <a-form-item :label="t('entity.employeeReassignment.todeptname')">
+      <a-form-item :label="t('entity.employeereassignment.todeptname')">
         <a-input
           v-model:value="advancedQueryForm.toDeptName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeReassignment.todeptname') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeereassignment.todeptname') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('toPostId')">
-      <a-form-item :label="t('entity.employeeReassignment.topostid')">
+      <a-form-item :label="t('entity.employeereassignment.topostid')">
         <a-input
           v-model:value="advancedQueryForm.toPostId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeReassignment.topostid') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeereassignment.topostid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('toPostName')">
-      <a-form-item :label="t('entity.employeeReassignment.topostname')">
+      <a-form-item :label="t('entity.employeereassignment.topostname')">
         <a-input
           v-model:value="advancedQueryForm.toPostName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeReassignment.topostname') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeereassignment.topostname') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('effectiveDateStart')">
-      <a-form-item :label="t('entity.employeeReassignment.effectivedatestart')">
+      <a-form-item :label="t('entity.employeereassignment.effectivedatestart')">
         <a-date-picker
           v-model:value="advancedQueryForm.effectiveDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeReassignment.effectivedatestart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeereassignment.effectivedatestart') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('effectiveDateEnd')">
-      <a-form-item :label="t('entity.employeeReassignment.effectivedateend')">
+      <a-form-item :label="t('entity.employeereassignment.effectivedateend')">
         <a-date-picker
           v-model:value="advancedQueryForm.effectiveDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeReassignment.effectivedateend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeereassignment.effectivedateend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('reason')">
-      <a-form-item :label="t('entity.employeeReassignment.reason')">
+      <a-form-item :label="t('entity.employeereassignment.reason')">
         <a-input
           v-model:value="advancedQueryForm.reason"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeReassignment.reason') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeereassignment.reason') })"
+          show-count
+          :maxlength="500"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('approvalStatus')">
-      <a-form-item :label="t('entity.employeeReassignment.approvalstatus')">
-        <a-input-number
+      <a-form-item :label="t('entity.employeereassignment.approvalstatus')">
+        <TaktSelect
           v-model:value="advancedQueryForm.approvalStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeReassignment.approvalstatus') })"
-          style="width: 100%"
+          dict-type="sys_approval_status"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeereassignment.approvalstatus') })"
+          allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('initiatorId')">
-      <a-form-item :label="t('entity.employeeReassignment.initiatorid')">
+      <a-form-item :label="t('entity.employeereassignment.initiatorid')">
         <a-input
           v-model:value="advancedQueryForm.initiatorId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeReassignment.initiatorid') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeereassignment.initiatorid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('initiatedAtStart')">
-      <a-form-item :label="t('entity.employeeReassignment.initiatedatstart')">
+      <a-form-item :label="t('entity.employeereassignment.initiatedatstart')">
         <a-input
           v-model:value="advancedQueryForm.initiatedAtStart"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeReassignment.initiatedatstart') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeereassignment.initiatedatstart') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('initiatedAtEnd')">
-      <a-form-item :label="t('entity.employeeReassignment.initiatedatend')">
+      <a-form-item :label="t('entity.employeereassignment.initiatedatend')">
         <a-date-picker
           v-model:value="advancedQueryForm.initiatedAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeReassignment.initiatedatend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeereassignment.initiatedatend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('approvedBy')">
-      <a-form-item :label="t('entity.employeeReassignment.approvedby')">
+      <a-form-item :label="t('entity.employeereassignment.approvedby')">
         <a-input
           v-model:value="advancedQueryForm.approvedBy"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeReassignment.approvedby') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeereassignment.approvedby') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('approvedAtStart')">
-      <a-form-item :label="t('entity.employeeReassignment.approvedatstart')">
+      <a-form-item :label="t('entity.employeereassignment.approvedatstart')">
         <a-input
           v-model:value="advancedQueryForm.approvedAtStart"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeReassignment.approvedatstart') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeereassignment.approvedatstart') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('approvedAtEnd')">
-      <a-form-item :label="t('entity.employeeReassignment.approvedatend')">
+      <a-form-item :label="t('entity.employeereassignment.approvedatend')">
         <a-date-picker
           v-model:value="advancedQueryForm.approvedAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeReassignment.approvedatend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeereassignment.approvedatend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('flowInstanceId')">
+      <a-form-item :label="t('entity.employeereassignment.flowinstanceid')">
+        <a-input
+          v-model:value="advancedQueryForm.flowInstanceId"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeereassignment.flowinstanceid') })"
+          show-count
+          :maxlength="20"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -298,7 +339,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -309,17 +350,36 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('ExtField')">
-      <a-form-item :label="t('common.page.entity.ExtField')">
-        <a-input
-          v-model:value="advancedQueryForm.ExtField"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
-          allow-clear
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
+        <a-textarea
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -328,8 +388,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -339,14 +401,14 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.employeeReassignment._self') })"
+      :title="t('common.dialog.title.import', { entity: t('entity.employeereassignment._self') })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.employeeReassignment._self"
+        entity-i18n-key="entity.employeereassignment._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -373,7 +435,6 @@
 </template>
 
 <script setup lang="ts">
-import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 /**
  * 员工调动记录管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/human-resource/personnel/employee-reassignment
@@ -383,12 +444,13 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import EmployeeReassignmentForm from './components/employee-reassignment-form.vue'
 import { getEmployeeReassignmentList, getEmployeeReassignmentById, createEmployeeReassignment, updateEmployeeReassignment, deleteEmployeeReassignmentById, deleteEmployeeReassignmentBatch, getEmployeeReassignmentTemplate, importEmployeeReassignment, exportEmployeeReassignment } from '@/api/human-resource/personnel/employee-reassignment'
-import type { EmployeeReassignment, EmployeeReassignmentQuery, EmployeeReassignmentCreate, EmployeeReassignmentUpdate } from '@/types/human-resource/personnel/employee-reassignment'
+import type { EmployeeReassignment, EmployeeReassignmentQuery } from '@/types/human-resource/personnel/employee-reassignment'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -396,7 +458,7 @@ const { t } = useI18n()
 const excelNames = taktExcelEntityNames('TaktEmployeeReassignment')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.employeeReassignment._self') })
+  () => t('common.page.form.placeholder.search', { keyword: t('entity.employeereassignment._self') })
 )
 
 /** 快捷查询关键字 */
@@ -423,11 +485,12 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<EmployeeReassignment>>({})
+const formData = ref<Partial<EmployeeReassignment> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
 const formRef = ref()
+
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
@@ -452,36 +515,38 @@ const advancedQueryForm = ref({
   approvedBy: '',
   approvedAtStart: '',
   approvedAtEnd: '',
+  flowInstanceId: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'employeeId', label: t('entity.employeeReassignment.employeeid') },
-  { key: 'reassignmentType', label: t('entity.employeeReassignment.reassignmenttype') },
-  { key: 'fromDeptId', label: t('entity.employeeReassignment.fromdeptid') },
-  { key: 'fromDeptName', label: t('entity.employeeReassignment.fromdeptname') },
-  { key: 'fromPostId', label: t('entity.employeeReassignment.frompostid') },
-  { key: 'fromPostName', label: t('entity.employeeReassignment.frompostname') },
-  { key: 'toDeptId', label: t('entity.employeeReassignment.todeptid') },
-  { key: 'toDeptName', label: t('entity.employeeReassignment.todeptname') },
-  { key: 'toPostId', label: t('entity.employeeReassignment.topostid') },
-  { key: 'toPostName', label: t('entity.employeeReassignment.topostname') },
-  { key: 'effectiveDateStart', label: t('entity.employeeReassignment.effectivedatestart') },
-  { key: 'effectiveDateEnd', label: t('entity.employeeReassignment.effectivedateend') },
-  { key: 'reason', label: t('entity.employeeReassignment.reason') },
-  { key: 'approvalStatus', label: t('entity.employeeReassignment.approvalstatus') },
-  { key: 'initiatorId', label: t('entity.employeeReassignment.initiatorid') },
-  { key: 'initiatedAtStart', label: t('entity.employeeReassignment.initiatedatstart') },
-  { key: 'initiatedAtEnd', label: t('entity.employeeReassignment.initiatedatend') },
-  { key: 'approvedBy', label: t('entity.employeeReassignment.approvedby') },
-  { key: 'approvedAtStart', label: t('entity.employeeReassignment.approvedatstart') },
-  { key: 'approvedAtEnd', label: t('entity.employeeReassignment.approvedatend') },
+  { key: 'employeeId', label: t('entity.employeereassignment.employeeid') },
+  { key: 'reassignmentType', label: t('entity.employeereassignment.reassignmenttype') },
+  { key: 'fromDeptId', label: t('entity.employeereassignment.fromdeptid') },
+  { key: 'fromDeptName', label: t('entity.employeereassignment.fromdeptname') },
+  { key: 'fromPostId', label: t('entity.employeereassignment.frompostid') },
+  { key: 'fromPostName', label: t('entity.employeereassignment.frompostname') },
+  { key: 'toDeptId', label: t('entity.employeereassignment.todeptid') },
+  { key: 'toDeptName', label: t('entity.employeereassignment.todeptname') },
+  { key: 'toPostId', label: t('entity.employeereassignment.topostid') },
+  { key: 'toPostName', label: t('entity.employeereassignment.topostname') },
+  { key: 'effectiveDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.employeereassignment.effectivedate')) },
+  { key: 'effectiveDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.employeereassignment.effectivedate')) },
+  { key: 'reason', label: t('entity.employeereassignment.reason') },
+  { key: 'approvalStatus', label: t('entity.employeereassignment.approvalstatus') },
+  { key: 'initiatorId', label: t('entity.employeereassignment.initiatorid') },
+  { key: 'initiatedAtStart', label: t('entity.employeereassignment.initiatedatstart') },
+  { key: 'initiatedAtEnd', label: t('entity.employeereassignment.initiatedatend') },
+  { key: 'approvedBy', label: t('entity.employeereassignment.approvedby') },
+  { key: 'approvedAtStart', label: t('entity.employeereassignment.approvedatstart') },
+  { key: 'approvedAtEnd', label: t('entity.employeereassignment.approvedatend') },
+  { key: 'flowInstanceId', label: t('entity.employeereassignment.flowinstanceid') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'ExtField', label: t('common.page.entity.ExtField') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -499,29 +564,7 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
-type EmployeeReassignmentQueryTrimmedKey =
-  | 'employeeId'
-  | 'fromDeptId'
-  | 'fromDeptName'
-  | 'fromPostId'
-  | 'fromPostName'
-  | 'toDeptId'
-  | 'toDeptName'
-  | 'toPostId'
-  | 'toPostName'
-  | 'effectiveDateStart'
-  | 'effectiveDateEnd'
-  | 'reason'
-  | 'initiatorId'
-  | 'initiatedAtStart'
-  | 'initiatedAtEnd'
-  | 'approvedBy'
-  | 'approvedAtStart'
-  | 'approvedAtEnd'
-  | 'createdAtStart'
-  | 'createdAtEnd'
-  | 'ExtField'
-  | 'remark'
+
 
 /**
  * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
@@ -539,13 +582,16 @@ function buildListQuery(overrides?: Partial<EmployeeReassignmentQuery>): Employe
   if (kw.length > 0) {
     query.keyWords = kw
   }
-  const assignTrimmed = (key: EmployeeReassignmentQueryTrimmedKey, value: string | undefined) => {
+  const assignTrimmed = (key: keyof EmployeeReassignmentQuery, value: string | undefined) => {
     const v = (value ?? '').trim()
     if (v.length > 0) {
-      query[key] = v
+      query[key] = v as never
     }
   }
   assignTrimmed('employeeId', form.employeeId)
+  if (form.reassignmentType !== undefined && form.reassignmentType !== null) {
+    query.reassignmentType = form.reassignmentType
+  }
   assignTrimmed('fromDeptId', form.fromDeptId)
   assignTrimmed('fromDeptName', form.fromDeptName)
   assignTrimmed('fromPostId', form.fromPostId)
@@ -557,30 +603,28 @@ function buildListQuery(overrides?: Partial<EmployeeReassignmentQuery>): Employe
   assignTrimmed('effectiveDateStart', form.effectiveDateStart)
   assignTrimmed('effectiveDateEnd', form.effectiveDateEnd)
   assignTrimmed('reason', form.reason)
+  if (form.approvalStatus !== undefined && form.approvalStatus !== null) {
+    query.approvalStatus = form.approvalStatus
+  }
   assignTrimmed('initiatorId', form.initiatorId)
   assignTrimmed('initiatedAtStart', form.initiatedAtStart)
   assignTrimmed('initiatedAtEnd', form.initiatedAtEnd)
   assignTrimmed('approvedBy', form.approvedBy)
   assignTrimmed('approvedAtStart', form.approvedAtStart)
   assignTrimmed('approvedAtEnd', form.approvedAtEnd)
+  assignTrimmed('flowInstanceId', form.flowInstanceId)
   assignTrimmed('createdAtStart', form.createdAtStart)
   assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('ExtField', form.ExtField)
+  assignTrimmed('extField', form.extField)
   assignTrimmed('remark', form.remark)
-  if (form.reassignmentType !== undefined && form.reassignmentType !== null) {
-    query.reassignmentType = form.reassignmentType
-  }
-  if (form.approvalStatus !== undefined && form.approvalStatus !== null) {
-    query.approvalStatus = form.approvalStatus
-  }
   return query
 }
-
-/** 页面挂载：加载分页配置后拉列表 */
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
   loadData()
 })
+
 
 
 
@@ -600,7 +644,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeReassignmentField(record, 'employeeReassignmentId') ?? ''
   },
   {
-    title: t('entity.employeeReassignment.employeeid'),
+    title: t('entity.employeereassignment.employeeid'),
     dataIndex: 'employeeId',
     key: 'employeeId',
     width: 120,
@@ -609,16 +653,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeReassignmentField(record, 'employeeId') ?? ''
   },
   {
-    title: t('entity.employeeReassignment.employeename'),
-    dataIndex: 'employeeName',
-    key: 'employeeName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmployeeReassignmentField(record, 'employeeName') ?? ''
-  },
-  {
-    title: t('entity.employeeReassignment.reassignmenttype'),
+    title: t('entity.employeereassignment.reassignmenttype'),
     dataIndex: 'reassignmentType',
     key: 'reassignmentType',
     width: 120,
@@ -627,7 +662,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeReassignmentField(record, 'reassignmentType') ?? ''
   },
   {
-    title: t('entity.employeeReassignment.fromdeptid'),
+    title: t('entity.employeereassignment.fromdeptid'),
     dataIndex: 'fromDeptId',
     key: 'fromDeptId',
     width: 120,
@@ -636,7 +671,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeReassignmentField(record, 'fromDeptId') ?? ''
   },
   {
-    title: t('entity.employeeReassignment.fromdeptname'),
+    title: t('entity.employeereassignment.fromdeptname'),
     dataIndex: 'fromDeptName',
     key: 'fromDeptName',
     width: 120,
@@ -645,7 +680,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeReassignmentField(record, 'fromDeptName') ?? ''
   },
   {
-    title: t('entity.employeeReassignment.frompostid'),
+    title: t('entity.employeereassignment.frompostid'),
     dataIndex: 'fromPostId',
     key: 'fromPostId',
     width: 120,
@@ -654,7 +689,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeReassignmentField(record, 'fromPostId') ?? ''
   },
   {
-    title: t('entity.employeeReassignment.frompostname'),
+    title: t('entity.employeereassignment.frompostname'),
     dataIndex: 'fromPostName',
     key: 'fromPostName',
     width: 120,
@@ -663,7 +698,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeReassignmentField(record, 'fromPostName') ?? ''
   },
   {
-    title: t('entity.employeeReassignment.todeptid'),
+    title: t('entity.employeereassignment.todeptid'),
     dataIndex: 'toDeptId',
     key: 'toDeptId',
     width: 120,
@@ -672,7 +707,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeReassignmentField(record, 'toDeptId') ?? ''
   },
   {
-    title: t('entity.employeeReassignment.todeptname'),
+    title: t('entity.employeereassignment.todeptname'),
     dataIndex: 'toDeptName',
     key: 'toDeptName',
     width: 120,
@@ -681,7 +716,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeReassignmentField(record, 'toDeptName') ?? ''
   },
   {
-    title: t('entity.employeeReassignment.topostid'),
+    title: t('entity.employeereassignment.topostid'),
     dataIndex: 'toPostId',
     key: 'toPostId',
     width: 120,
@@ -690,7 +725,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeReassignmentField(record, 'toPostId') ?? ''
   },
   {
-    title: t('entity.employeeReassignment.topostname'),
+    title: t('entity.employeereassignment.topostname'),
     dataIndex: 'toPostName',
     key: 'toPostName',
     width: 120,
@@ -699,7 +734,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeReassignmentField(record, 'toPostName') ?? ''
   },
   {
-    title: t('entity.employeeReassignment.effectivedate'),
+    title: t('entity.employeereassignment.effectivedate'),
     dataIndex: 'effectiveDate',
     key: 'effectiveDate',
     width: 120,
@@ -708,7 +743,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeReassignmentField(record, 'effectiveDate') ?? ''
   },
   {
-    title: t('entity.employeeReassignment.reason'),
+    title: t('entity.employeereassignment.reason'),
     dataIndex: 'reason',
     key: 'reason',
     width: 120,
@@ -747,6 +782,7 @@ const getEmployeeReassignmentId = (record: any): string => record?.[entityIdName
  */
 const getEmployeeReassignmentField = (record: any, field: string): any => record?.[field]
 
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -758,7 +794,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: EmployeeReassignment, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getEmployeeReassignmentId(selectedRow.value) === getEmployeeReassignmentId(record)) {
+    } else if (selectedRow.value && getEmployeeReassignmentId(selectedRow.value) === getEmployeeReassignmentId(record)) {
       selectedRow.value = null
     }
   },
@@ -835,9 +871,10 @@ function handleReset() {
   approvedBy: '',
   approvedAtStart: '',
   approvedAtEnd: '',
+  flowInstanceId: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
   currentPage.value = getTaktDefaultPageIndex()
@@ -846,13 +883,14 @@ function handleReset() {
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.employeeReassignment._self') })
-  formData.value = {}
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.employeereassignment._self') })
+  formData.value = null
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗 */
 function handleEdit(record: EmployeeReassignment) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.employeeReassignment._self') })
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.employeereassignment._self') })
   formData.value = { ...record }
   formVisible.value = true
 }
@@ -862,7 +900,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.employeeReassignment._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.employeereassignment._self') }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -880,12 +918,14 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateEmployeeReassignment(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.employeeReassignment._self') }))
+      message.success(t('common.feedback.updated', { target: t('entity.employeereassignment._self') }))
     } else {
       await createEmployeeReassignment(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.employeeReassignment._self') }))
+      message.success(t('common.feedback.created', { target: t('entity.employeereassignment._self') }))
     }
     formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
     loadData()
   } finally {
     formLoading.value = false
@@ -895,6 +935,8 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开导入对话框 */
 function handleImport() {
@@ -949,10 +991,10 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.employeeReassignment._self') }))
+    message.success(t('common.feedback.export.success', { target: t('entity.employeereassignment._self') }))
   } catch (error: any) {
     logger.error('[EmployeeReassignment] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.employeeReassignment._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.employeereassignment._self') }))
   } finally {
     loading.value = false
   }
@@ -961,12 +1003,12 @@ async function handleExport() {
 async function handleDeleteOne(record: EmployeeReassignment) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.employeeReassignment._self'), name: t('common.tip.this.target', { target: t('entity.employeeReassignment._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: t('entity.employeereassignment._self'), name: t('common.tip.this.target', { target: t('entity.employeereassignment._self') }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteEmployeeReassignmentById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.employeeReassignment._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.employeereassignment._self') }))
       loadData()
     }
   })
@@ -974,18 +1016,18 @@ async function handleDeleteOne(record: EmployeeReassignment) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.employeeReassignment._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.employeereassignment._self') }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.employeeReassignment._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: t('entity.employeereassignment._self'), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteEmployeeReassignmentBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.employeeReassignment._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.employeereassignment._self') }))
       loadData()
     }
   })
@@ -1024,9 +1066,10 @@ function handleAdvancedQueryReset() {
   approvedBy: '',
   approvedAtStart: '',
   approvedAtEnd: '',
+  flowInstanceId: '',
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
 }
@@ -1056,11 +1099,13 @@ function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
 /** 分页页码变更 */
-function handlePaginationChange(page: number) {
+function handlePaginationChange(page: number, size: number) {
   currentPage.value = page
+  pageSize.value = size
   loadData()
 }
-/** 分页每页条数变更 */
+
+/** 分页每页条数变更（重置到第 1 页） */
 function handlePaginationSizeChange(_current: number, size: number) {
   currentPage.value = getTaktDefaultPageIndex()
   pageSize.value = size

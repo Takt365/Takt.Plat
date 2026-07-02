@@ -26,20 +26,20 @@ namespace Takt.Domain.Entities.Routine.HelpDesk;
 public class TaktTicketReply : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工单 ID
+    /// 工单 ID（关联 TaktTicket.Id，选项 TaktTickets/options）
     /// </summary>
     [SugarColumn(ColumnName = "ticket_id", ColumnDescription = "工单ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long TicketId { get; set; }
 
     /// <summary>
-    /// 作者类型（0=客服，1=用户，2=系统）
+    /// 作者类型（字典 routine_ticket_reply_author_type；0=客服 1=用户 2=系统）
     /// </summary>
     [SugarColumn(ColumnName = "author_type", ColumnDescription = "作者类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int AuthorType { get; set; } = 0;
 
     /// <summary>
-    /// 作者用户 ID
+    /// 作者 ID（关联 TaktUser.Id，选项 TaktUsers/options）
     /// </summary>
     [SugarColumn(ColumnName = "author_id", ColumnDescription = "作者用户ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -54,17 +54,17 @@ public class TaktTicketReply : TaktCompanyEntityBase
     /// <summary>
     /// 回复内容
     /// </summary>
-    [SugarColumn(ColumnName = "content", ColumnDescription = "回复内容", ColumnDataType = "nvarchar", Length = -1, IsNullable = false)]
-    public string Content { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "ticket_reply_content", ColumnDescription = "回复内容", ColumnDataType = "nvarchar", Length = -1, IsNullable = false)]
+    public string TicketReplyContent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件列表 JSON
+    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
     /// </summary>
-    [SugarColumn(ColumnName = "attachments_json", ColumnDescription = "附件列表JSON", ColumnDataType = "nvarchar", Length = -1, IsNullable = true)]
-    public string? AttachmentsJson { get; set; }
+    [SugarColumn(ColumnName = "attachments", ColumnDescription = "附件JSON", ColumnDataType = "nvarchar", Length = -1, IsNullable = true)]
+    public string? Attachments { get; set; }
 
     /// <summary>
-    /// 是否内部备注（仅客服可见）
+    /// 是否内部备注（字典 sys_yes_no_type；1=是 0=否，仅客服可见）
     /// </summary>
     [SugarColumn(ColumnName = "is_internal", ColumnDescription = "是否内部备注", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsInternal { get; set; } = 0;

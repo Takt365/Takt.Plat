@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/bom
 // 文件名称：routing-item.d.ts
-// 创建时间：2026-06-15
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/bom 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -49,7 +49,7 @@ export interface RoutingItem extends CompanyDtoBase {
   lineNumber: number;
 
   /**
-   * 作业/工序计量单位（PC或EA）
+   * 作业/工序计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   baseUnit: string;
 
@@ -64,7 +64,7 @@ export interface RoutingItem extends CompanyDtoBase {
   standardMinutes: number;
 
   /**
-   * 工时单位
+   * 工时单位（字典 logistics_time_unit，DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
    */
   timeUnit: string;
 
@@ -74,14 +74,14 @@ export interface RoutingItem extends CompanyDtoBase {
   standardShorts: number;
 
   /**
-   * 点数单位
+   * 点数单位（字典 logistics_points_unit，DictValue=SHORT；SHORT=点数；默认 SHORT）
    */
   pointsUnit: string;
 
   /**
-   * 点数转分钟汇率（1 点数 = 多少分钟）
+   * 点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045；ConvertedMinutes = StandardShorts × rate ÷ BaseQuantity）
    */
-  pointsToMinutesRate: number;
+  pointsToMinutesRate: string;
 
   /**
    * 转换后标准工时（分钟）
@@ -99,9 +99,9 @@ export interface RoutingItem extends CompanyDtoBase {
   teardownMinutes: number;
 
   /**
-   * 是否质量检验点
+   * 检验（字典 sys_yes_no_type：0=否，1=是）
    */
-  isQualityCheck: boolean;
+  isInspection: number;
 
   /**
    * 排序号
@@ -114,7 +114,7 @@ export interface RoutingItem extends CompanyDtoBase {
   processDescription?: string;
 
   /**
-   * 工艺段类型（1=SMT，2=自插，3=手插，4=修正，5=总装；字典 logistics_process_segment_type）
+   * 工艺段类型（字典 logistics_process_segment_type：1=SMT，2=自插，3=手插，4=修正，5=总装）
    */
   processSegmentType: number;
 
@@ -169,7 +169,7 @@ export interface RoutingItemQuery extends TaktPagedQuery {
   lineNumber?: number;
 
   /**
-   * 作业/工序计量单位（PC或EA）
+   * 作业/工序计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   baseUnit?: string;
 
@@ -184,7 +184,7 @@ export interface RoutingItemQuery extends TaktPagedQuery {
   standardMinutes?: number;
 
   /**
-   * 工时单位
+   * 工时单位（字典 logistics_time_unit，DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
    */
   timeUnit?: string;
 
@@ -194,14 +194,14 @@ export interface RoutingItemQuery extends TaktPagedQuery {
   standardShorts?: number;
 
   /**
-   * 点数单位
+   * 点数单位（字典 logistics_points_unit，DictValue=SHORT；SHORT=点数；默认 SHORT）
    */
   pointsUnit?: string;
 
   /**
-   * 点数转分钟汇率（1 点数 = 多少分钟）
+   * 点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045；ConvertedMinutes = StandardShorts × rate ÷ BaseQuantity）
    */
-  pointsToMinutesRate?: number;
+  pointsToMinutesRate?: string;
 
   /**
    * 转换后标准工时（分钟）
@@ -219,9 +219,9 @@ export interface RoutingItemQuery extends TaktPagedQuery {
   teardownMinutes?: number;
 
   /**
-   * 是否质量检验点
+   * 检验（字典 sys_yes_no_type：0=否，1=是）
    */
-  isQualityCheck?: boolean;
+  isInspection?: number;
 
   /**
    * 排序号
@@ -234,7 +234,7 @@ export interface RoutingItemQuery extends TaktPagedQuery {
   processDescription?: string;
 
   /**
-   * 工艺段类型（1=SMT，2=自插，3=手插，4=修正，5=总装；字典 logistics_process_segment_type）
+   * 工艺段类型（字典 logistics_process_segment_type：1=SMT，2=自插，3=手插，4=修正，5=总装）
    */
   processSegmentType?: number;
 
@@ -283,7 +283,7 @@ export interface RoutingItemCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -303,7 +303,7 @@ export interface RoutingItemCreate {
   lineNumber: number;
 
   /**
-   * 作业/工序计量单位（PC或EA）
+   * 作业/工序计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   baseUnit: string;
 
@@ -318,7 +318,7 @@ export interface RoutingItemCreate {
   standardMinutes: number;
 
   /**
-   * 工时单位
+   * 工时单位（字典 logistics_time_unit，DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
    */
   timeUnit: string;
 
@@ -328,14 +328,14 @@ export interface RoutingItemCreate {
   standardShorts: number;
 
   /**
-   * 点数单位
+   * 点数单位（字典 logistics_points_unit，DictValue=SHORT；SHORT=点数；默认 SHORT）
    */
   pointsUnit: string;
 
   /**
-   * 点数转分钟汇率（1 点数 = 多少分钟）
+   * 点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045；ConvertedMinutes = StandardShorts × rate ÷ BaseQuantity）
    */
-  pointsToMinutesRate: number;
+  pointsToMinutesRate: string;
 
   /**
    * 转换后标准工时（分钟）
@@ -353,9 +353,9 @@ export interface RoutingItemCreate {
   teardownMinutes: number;
 
   /**
-   * 是否质量检验点
+   * 检验（字典 sys_yes_no_type：0=否，1=是）
    */
-  isQualityCheck: boolean;
+  isInspection: number;
 
   /**
    * 工序说明
@@ -363,7 +363,7 @@ export interface RoutingItemCreate {
   processDescription?: string;
 
   /**
-   * 工艺段类型（1=SMT，2=自插，3=手插，4=修正，5=总装；字典 logistics_process_segment_type）
+   * 工艺段类型（字典 logistics_process_segment_type：1=SMT，2=自插，3=手插，4=修正，5=总装）
    */
   processSegmentType: number;
 
@@ -456,12 +456,22 @@ export interface RoutingItemTemplate {
   lineNumber?: number;
 
   /**
-   * 作业/工序计量单位（PC或EA）
+   * 作业/工序计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   baseUnit?: string;
 
   /**
-   * 工时单位
+   * 基本数量
+   */
+  baseQuantity?: number;
+
+  /**
+   * 标准工时（分钟）
+   */
+  standardMinutes?: number;
+
+  /**
+   * 工时单位（字典 logistics_time_unit，DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
    */
   timeUnit?: string;
 
@@ -471,9 +481,34 @@ export interface RoutingItemTemplate {
   standardShorts?: number;
 
   /**
-   * 点数单位
+   * 点数单位（字典 logistics_points_unit，DictValue=SHORT；SHORT=点数；默认 SHORT）
    */
   pointsUnit?: string;
+
+  /**
+   * 点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045；ConvertedMinutes = StandardShorts × rate ÷ BaseQuantity）
+   */
+  pointsToMinutesRate?: string;
+
+  /**
+   * 转换后标准工时（分钟）
+   */
+  convertedMinutes?: number;
+
+  /**
+   * 准备时间（分钟），如换模、调试等
+   */
+  setupMinutes?: number;
+
+  /**
+   * 清理时间（分钟），如清洁、整理等
+   */
+  teardownMinutes?: number;
+
+  /**
+   * 检验（字典 sys_yes_no_type：0=否，1=是）
+   */
+  isInspection?: number;
 
   /**
    * 工序说明
@@ -481,7 +516,7 @@ export interface RoutingItemTemplate {
   processDescription?: string;
 
   /**
-   * 工艺段类型（1=SMT，2=自插，3=手插，4=修正，5=总装；字典 logistics_process_segment_type）
+   * 工艺段类型（字典 logistics_process_segment_type：1=SMT，2=自插，3=手插，4=修正，5=总装）
    */
   processSegmentType?: number;
 
@@ -489,6 +524,11 @@ export interface RoutingItemTemplate {
    * 工序扩展 JSON（五段工艺差异化参数，如钢网/Feeder/扭矩/烙铁温度）
    */
   extJson?: string;
+
+  /**
+   * 工序参数定义（子表，级联保存）
+   */
+  arguments?: RoutingItemArgumentCreate[];
 
   /**
    * 扩展字段JSON
@@ -520,7 +560,7 @@ export interface RoutingItemImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -540,12 +580,22 @@ export interface RoutingItemImport {
   lineNumber?: number;
 
   /**
-   * 作业/工序计量单位（PC或EA）
+   * 作业/工序计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   baseUnit?: string;
 
   /**
-   * 工时单位
+   * 基本数量
+   */
+  baseQuantity?: number;
+
+  /**
+   * 标准工时（分钟）
+   */
+  standardMinutes?: number;
+
+  /**
+   * 工时单位（字典 logistics_time_unit，DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
    */
   timeUnit?: string;
 
@@ -555,9 +605,34 @@ export interface RoutingItemImport {
   standardShorts?: number;
 
   /**
-   * 点数单位
+   * 点数单位（字典 logistics_points_unit，DictValue=SHORT；SHORT=点数；默认 SHORT）
    */
   pointsUnit?: string;
+
+  /**
+   * 点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045；ConvertedMinutes = StandardShorts × rate ÷ BaseQuantity）
+   */
+  pointsToMinutesRate?: string;
+
+  /**
+   * 转换后标准工时（分钟）
+   */
+  convertedMinutes?: number;
+
+  /**
+   * 准备时间（分钟），如换模、调试等
+   */
+  setupMinutes?: number;
+
+  /**
+   * 清理时间（分钟），如清洁、整理等
+   */
+  teardownMinutes?: number;
+
+  /**
+   * 检验（字典 sys_yes_no_type：0=否，1=是）
+   */
+  isInspection?: number;
 
   /**
    * 工序说明
@@ -565,7 +640,7 @@ export interface RoutingItemImport {
   processDescription?: string;
 
   /**
-   * 工艺段类型（1=SMT，2=自插，3=手插，4=修正，5=总装；字典 logistics_process_segment_type）
+   * 工艺段类型（字典 logistics_process_segment_type：1=SMT，2=自插，3=手插，4=修正，5=总装）
    */
   processSegmentType?: number;
 
@@ -573,6 +648,11 @@ export interface RoutingItemImport {
    * 工序扩展 JSON（五段工艺差异化参数，如钢网/Feeder/扭矩/烙铁温度）
    */
   extJson?: string;
+
+  /**
+   * 工序参数定义（子表，级联保存）
+   */
+  arguments?: RoutingItemArgumentCreate[];
 
   /**
    * 扩展字段JSON
@@ -619,7 +699,7 @@ export interface RoutingItemExport {
   lineNumber: number;
 
   /**
-   * 作业/工序计量单位（PC或EA）
+   * 作业/工序计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   baseUnit: string;
 
@@ -634,7 +714,7 @@ export interface RoutingItemExport {
   standardMinutes: number;
 
   /**
-   * 工时单位
+   * 工时单位（字典 logistics_time_unit，DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
    */
   timeUnit: string;
 
@@ -644,14 +724,14 @@ export interface RoutingItemExport {
   standardShorts: number;
 
   /**
-   * 点数单位
+   * 点数单位（字典 logistics_points_unit，DictValue=SHORT；SHORT=点数；默认 SHORT）
    */
   pointsUnit: string;
 
   /**
-   * 点数转分钟汇率（1 点数 = 多少分钟）
+   * 点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045；ConvertedMinutes = StandardShorts × rate ÷ BaseQuantity）
    */
-  pointsToMinutesRate: number;
+  pointsToMinutesRate: string;
 
   /**
    * 转换后标准工时（分钟）
@@ -669,9 +749,9 @@ export interface RoutingItemExport {
   teardownMinutes: number;
 
   /**
-   * 是否质量检验点
+   * 检验（字典 sys_yes_no_type：0=否，1=是）
    */
-  isQualityCheck: boolean;
+  isInspection: number;
 
   /**
    * 排序号
@@ -684,7 +764,7 @@ export interface RoutingItemExport {
   processDescription?: string;
 
   /**
-   * 工艺段类型（1=SMT，2=自插，3=手插，4=修正，5=总装；字典 logistics_process_segment_type）
+   * 工艺段类型（字典 logistics_process_segment_type：1=SMT，2=自插，3=手插，4=修正，5=总装）
    */
   processSegmentType: number;
 

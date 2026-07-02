@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Operation
 // 文件名称：TaktIqcOrderChangeLogI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktIqcOrderChangeLog 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktIqcOrderChangeLogI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.iqcorderchangelog._self", "zh-HK", "IQC进货检验单变更日志信息_hk", "实体名称"),
 
             // entity.iqcorderchangelog.iqcorderid
-            new TranslationSeedItem("entity.iqcorderchangelog.iqcorderid", "en-US", "IQC检验单ID_us", "IQC检验单ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.iqcorderchangelog.iqcorderid", "en-US", "IQC检验单ID_us", "IQC检验单 ID（关联 TaktIqcOrder.Id，选项 TaktIqcOrders/options）"),
             // entity.iqcorderchangelog.iqcorderid
-            new TranslationSeedItem("entity.iqcorderchangelog.iqcorderid", "ja-JP", "IQC检验单ID_jp", "IQC检验单ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.iqcorderchangelog.iqcorderid", "ja-JP", "IQC检验单ID_jp", "IQC检验单 ID（关联 TaktIqcOrder.Id，选项 TaktIqcOrders/options）"),
             // entity.iqcorderchangelog.iqcorderid
-            new TranslationSeedItem("entity.iqcorderchangelog.iqcorderid", "zh-CN", "IQC检验单ID", "IQC检验单ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.iqcorderchangelog.iqcorderid", "zh-CN", "IQC检验单ID", "IQC检验单 ID（关联 TaktIqcOrder.Id，选项 TaktIqcOrders/options）"),
             // entity.iqcorderchangelog.iqcorderid
-            new TranslationSeedItem("entity.iqcorderchangelog.iqcorderid", "zh-HK", "IQC检验单ID_hk", "IQC检验单ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.iqcorderchangelog.iqcorderid", "zh-HK", "IQC检验单ID_hk", "IQC检验单 ID（关联 TaktIqcOrder.Id，选项 TaktIqcOrders/options）"),
 
             // entity.iqcorderchangelog.changefields
             new TranslationSeedItem("entity.iqcorderchangelog.changefields", "en-US", "变更字段列表_us", "变更字段列表（JSON数组格式，记录同一时间点修改的所有字段及其旧值、新值） 格式：[{\"field\":\"FieldName\",\"description\":\"字段描述\",\"oldValue\":\"旧值\",\"newValue\":\"新值\"}]"),

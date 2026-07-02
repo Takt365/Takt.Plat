@@ -55,6 +55,27 @@ public interface ITaktFlowEngineService
     /// </summary>
     /// <returns>待办数量 DTO</returns>
     Task<TaktFlowTodoCountDto> GetFlowInstanceTodoCountAsync();
+
+    /// <summary>
+    /// 获取工作流待办统计（数据看板）
+    /// </summary>
+    /// <returns>待办统计</returns>
+    Task<TaktWorkflowTodoStatDto> GetWorkflowTodoStatAsync();
+
+    /// <summary>
+    /// 获取我发起的流程统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>我发起的流程统计</returns>
+    Task<TaktWorkflowMyInstanceStatDto> GetWorkflowMyInstanceStatAsync(TaktWorkflowMyInstanceStatQueryDto queryDto);
+
+    /// <summary>
+    /// 获取已办任务统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>已办任务统计</returns>
+    Task<TaktWorkflowProcessedStatDto> GetWorkflowProcessedStatAsync(TaktWorkflowProcessedStatQueryDto queryDto);
+
     /// <summary>
     /// 我发起的流程
     /// </summary>

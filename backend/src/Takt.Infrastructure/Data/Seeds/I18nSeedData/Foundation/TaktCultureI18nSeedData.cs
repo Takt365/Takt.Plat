@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation
 // 文件名称：TaktCultureI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktCulture 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktCultureI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.culture._self", "zh-HK", "区域文化信息_hk", "实体名称"),
 
             // entity.culture.code
-            new TranslationSeedItem("entity.culture.code", "en-US", "区域编码_us", "区域文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）"),
+            new TranslationSeedItem("entity.culture.code", "en-US", "文化编码_us", "文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）"),
             // entity.culture.code
-            new TranslationSeedItem("entity.culture.code", "ja-JP", "区域编码_jp", "区域文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）"),
+            new TranslationSeedItem("entity.culture.code", "ja-JP", "文化编码_jp", "文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）"),
             // entity.culture.code
-            new TranslationSeedItem("entity.culture.code", "zh-CN", "区域编码", "区域文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）"),
+            new TranslationSeedItem("entity.culture.code", "zh-CN", "文化编码", "文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）"),
             // entity.culture.code
-            new TranslationSeedItem("entity.culture.code", "zh-HK", "区域编码_hk", "区域文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）"),
+            new TranslationSeedItem("entity.culture.code", "zh-HK", "文化编码_hk", "文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）"),
 
             // entity.culture.languagename
             new TranslationSeedItem("entity.culture.languagename", "en-US", "语言名称_us", "语言名称（如：简体中文、English）"),
@@ -126,6 +126,15 @@ public class TaktCultureI18nSeedData : ITaktSeedDataCoordinator
             // entity.culture.icon
             new TranslationSeedItem("entity.culture.icon", "zh-HK", "语言图标_hk", "语言图标（flag-icons：fi-cn / fi-us / fi-jp，前端解析为 fi fi-xx）"),
 
+            // entity.culture.isdefault
+            new TranslationSeedItem("entity.culture.isdefault", "en-US", "默认语言_us", "默认语言（字典 sys_yes_no_type；1=是 0=否）"),
+            // entity.culture.isdefault
+            new TranslationSeedItem("entity.culture.isdefault", "ja-JP", "默认语言_jp", "默认语言（字典 sys_yes_no_type；1=是 0=否）"),
+            // entity.culture.isdefault
+            new TranslationSeedItem("entity.culture.isdefault", "zh-CN", "默认语言", "默认语言（字典 sys_yes_no_type；1=是 0=否）"),
+            // entity.culture.isdefault
+            new TranslationSeedItem("entity.culture.isdefault", "zh-HK", "默认语言_hk", "默认语言（字典 sys_yes_no_type；1=是 0=否）"),
+
             // entity.culture.sortorder
             new TranslationSeedItem("entity.culture.sortorder", "en-US", "排序号_us", "排序号"),
             // entity.culture.sortorder
@@ -134,15 +143,6 @@ public class TaktCultureI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.culture.sortorder", "zh-CN", "排序号", "排序号"),
             // entity.culture.sortorder
             new TranslationSeedItem("entity.culture.sortorder", "zh-HK", "排序号_hk", "排序号"),
-
-            // entity.culture.isdefault
-            new TranslationSeedItem("entity.culture.isdefault", "en-US", "是否默认语言_us", "是否默认语言（1=是，0=否）"),
-            // entity.culture.isdefault
-            new TranslationSeedItem("entity.culture.isdefault", "ja-JP", "是否默认语言_jp", "是否默认语言（1=是，0=否）"),
-            // entity.culture.isdefault
-            new TranslationSeedItem("entity.culture.isdefault", "zh-CN", "是否默认语言", "是否默认语言（1=是，0=否）"),
-            // entity.culture.isdefault
-            new TranslationSeedItem("entity.culture.isdefault", "zh-HK", "是否默认语言_hk", "是否默认语言（1=是，0=否）"),
 
             // entity.culture.languagestatus
             new TranslationSeedItem("entity.culture.languagestatus", "en-US", "状态_us", "状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),

@@ -19,11 +19,11 @@
       @reset="handleQueryReset"
     />
     <TaktToolsBar
-      create-permission="logistics:manufacturing:planning:productionplan:create"
-      update-permission="logistics:manufacturing:planning:productionplan:update"
-      delete-permission="logistics:manufacturing:planning:productionplan:delete"
-      import-permission="logistics:manufacturing:planning:productionplan:import"
-      export-permission="logistics:manufacturing:planning:productionplan:export"
+      create-permission="logistics:manufacturing:planning:production:plan:create"
+      update-permission="logistics:manufacturing:planning:production:plan:update"
+      delete-permission="logistics:manufacturing:planning:production:plan:delete"
+      import-permission="logistics:manufacturing:planning:production:plan:import"
+      export-permission="logistics:manufacturing:planning:production:plan:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -283,7 +283,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -294,7 +294,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -652,7 +652,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:manufacturing:planning:productionplan:update',
+        permission: 'logistics:manufacturing:planning:production:plan:update',
         onClick: (record: ProductionPlanItem) => void handleEdit(record),
       },
       {
@@ -660,7 +660,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:manufacturing:planning:productionplan:delete',
+        permission: 'logistics:manufacturing:planning:production:plan:delete',
         onClick: (record: ProductionPlanItem) => void handleDeleteOne(record),
       },
     ],
@@ -677,7 +677,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: ProductionPlanItem, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getProductionPlanItemId(selectedRow.value) === getProductionPlanItemId(record)) {
+    } else if (selectedRow.value && getProductionPlanItemId(selectedRow.value) === getProductionPlanItemId(record)) {
       selectedRow.value = null
     }
   },

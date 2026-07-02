@@ -11,12 +11,11 @@
 // ========================================
 
 using Takt.Domain.Entities;
-using Takt.Shared.Enums;
 
 namespace Takt.Domain.Entities.HumanResource.Training;
 
 /// <summary>
-/// 培训计划（年度/季度/专项）
+/// 培训计划（审批单；审批态见基类 ApprovalStatus，字典 sys_approval_status）
 /// </summary>
 [SugarTable("takt_human_resource_training_plan", "培训计划表")]
 [SugarIndex("ix_training_plan_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
@@ -40,7 +39,7 @@ public class TaktTrainingPlan : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "plan_year", ColumnDescription = "计划年度", ColumnDataType = "int", IsNullable = false)]
     public int PlanYear { get; set; } = 0;
     /// <summary>
-    /// 计划类型（年度/季度/月度/专项）
+    /// 计划类型（字典 hr_training_plan_type；列存 DictValue：YEAR/QUARTER/MONTH/SPECIAL）
     /// </summary>
     [SugarColumn(ColumnName = "plan_type", ColumnDescription = "计划类型", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string PlanType { get; set; } = string.Empty;
@@ -77,16 +76,16 @@ public class TaktTrainingPlan : TaktApprovalEntityBase
     /// <summary>
     /// 计划说明
     /// </summary>
-    [SugarColumn(ColumnName = "description", ColumnDescription = "计划说明", ColumnDataType = "nvarchar", Length = 1000, IsNullable = false)]
-    public string Description { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "training_plan_description", ColumnDescription = "计划说明", ColumnDataType = "nvarchar", Length = 1000, IsNullable = false)]
+    public string TrainingPlanDescription { get; set; } = string.Empty;
     /// <summary>
-    /// 业务状态（1=启用 0=禁用）
+    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// </summary>
+    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
+    public string RelatedPlant { get; set; } = string.Empty;
+    /// <summary>
+    /// 计划业务状态（字典 sys_normal_disable_status；1=启用 0=禁用）
     /// </summary>
     [SugarColumn(ColumnName = "training_plan_status", ColumnDescription = "业务状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int TrainingPlanStatus { get; set; } = 1;
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = true)]
-    public string? RelatedPlant { get; set; }
 }

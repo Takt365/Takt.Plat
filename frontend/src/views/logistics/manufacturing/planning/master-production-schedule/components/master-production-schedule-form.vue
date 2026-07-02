@@ -305,7 +305,56 @@ const masterProductionScheduleLineTableRef = ref<{
 
 /** 子表 masterProductionScheduleLine 可编辑列 */
 const masterProductionScheduleLineFormColumns = computed<TaktEditableTableColumn[]>(() => [
-,
+  {
+    key: 'mpsCode',
+    title: t('entity.masterproductionscheduleline.mpscode'),
+    editor: 'input',
+    width: 140,
+  },
+  {
+    key: 'masterDemandScheduleLineId',
+    title: t('entity.masterproductionscheduleline.masterdemandschedulelineid'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.masterproductionscheduleline.masterdemandschedulelineid') }),
+  },
+  {
+    key: 'materialCode',
+    title: t('entity.masterproductionscheduleline.materialcode'),
+    editor: 'input',
+    width: 140,
+  },
+  {
+    key: 'bucketStart',
+    title: t('entity.masterproductionscheduleline.bucketstart'),
+    editor: 'datePicker',
+    valueFormat: 'YYYY-MM-DD',
+    width: 140,
+  },
+  {
+    key: 'bucketEnd',
+    title: t('entity.masterproductionscheduleline.bucketend'),
+    editor: 'datePicker',
+    valueFormat: 'YYYY-MM-DD',
+    width: 140,
+  },
+  {
+    key: 'grossRequirement',
+    title: t('entity.masterproductionscheduleline.grossrequirement'),
+    editor: 'inputNumber',
+    width: 140,
+  },
+  {
+    key: 'scheduledReceipts',
+    title: t('entity.masterproductionscheduleline.scheduledreceipts'),
+    editor: 'inputNumber',
+    width: 140,
+  },
+  {
+    key: 'projectedOnHand',
+    title: t('entity.masterproductionscheduleline.projectedonhand'),
+    editor: 'inputNumber',
+    width: 140,
+  },
 ])
 
 /** 编辑态从 formData 同步各子表行 */
@@ -315,7 +364,14 @@ function syncChildRowsFromFormData(val: Partial<MasterProductionScheduleCreate &
 
 function createDefaultMasterProductionScheduleLineRow(): Record<string, unknown> {
   return {
-
+    mpsCode: '',
+    masterDemandScheduleLineId: '',
+    materialCode: '',
+    bucketStart: '',
+    bucketEnd: '',
+    grossRequirement: 0,
+    scheduledReceipts: 0,
+    projectedOnHand: 0,
   }
 }
 

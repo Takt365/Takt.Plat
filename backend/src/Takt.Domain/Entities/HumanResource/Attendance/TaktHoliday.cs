@@ -35,7 +35,7 @@ public class TaktHoliday : TaktCompanyEntityBase
     public string HolidayName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 假日类型（字典 hr_holiday_category）
+    /// 假日类型（字典 hr_holiday_category；0=法定 1=调休 2=公司）
     /// </summary>
     [SugarColumn(ColumnName = "holiday_type", ColumnDescription = "假日类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int HolidayType { get; set; } = 0;
@@ -53,7 +53,7 @@ public class TaktHoliday : TaktCompanyEntityBase
     public DateTime EndDate { get; set; }
 
     /// <summary>
-    /// 是否工作日（字典 hr_holiday_working_day_type）
+    /// 是否工作日（字典 hr_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
     /// </summary>
     [SugarColumn(ColumnName = "is_working_day", ColumnDescription = "是否工作日", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsWorkingDay { get; set; } = 0;

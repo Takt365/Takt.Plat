@@ -141,6 +141,28 @@ HTTP 路由、权限末段与前端 API 完整映射见 `@.cursor/rules/12-crud.
 - 业务实体继承 `TaktTenantEntityBase` / `TaktCompanyEntityBase` / `TaktApprovalEntityBase`（主键 `Id` 为 `long`）
 - 表名：`takt_{模块}_{实体}` 小写下划线（如 `takt_identity_user`）
 - 属性：PascalCase；列映射小写下划线
+- **实体属性命名（通用 vs 特有，强制）**：
+  - **权威顺序**：先定 C# 属性名（PascalCase），`[SugarColumn(ColumnName)]` 由属性名推导为 snake_case（`TaktStringHelper.ToSnakeCase` / 代码生成器 `Entity.cs.sbn`），❌ 禁止属性名与列名各写一套导致混用前缀。
+  - **须加前缀的通用字段**（跨表 JOIN/投影易歧义的核心标识）→ **必须**加 `{实体短名}` 前缀：
+    - `Code`、`Title`、`Name`、`Status`、`Type`、`No`
+  - **可不**再加实体前缀（本表语义已足够、或列名已表达领域）：
+    - 内容与运营：`Content`、`Summary`、`Description`、`Tags`、`Attachments`
+    - 时间：`PublishTime`、`ExpireTime`、`EffectiveTime`
+    - 统计：`ViewCount`、`ReadCount` 等
+    - 布尔：`IsTop`、`IsScheduled`、`IsRecommended` 等
+    - 复合业务：`TargetScope`、`TargetDepartments`、`ParentId`、`SortOrder`、`TopPriority`、`DeptId`
+    - 基类：`TenantCode`、`CompanyCode`、`Remark`、`ExtField` 等（见 `TaktEntityBase`）
+  - **实体属性顺序（标量末段四种，导航属性之前，强制）**：
+    - `RelatedPlant` + `SortOrder` + `*Status` → `RelatedPlant` → `SortOrder` → `*Status`
+    - `SortOrder` + `*Status` → `SortOrder` → `*Status`
+    - `RelatedPlant` + `*Status` → `RelatedPlant` → `*Status`
+    - 仅 `*Status` → `*Status` 最后
+    - `ValidFrom`/`ValidTo` 等业务字段保持在末段三字段之前，不参与上述四种重排
+    - 批量校正：`node scripts/reorder-entity-tail-fields.cjs`；DTO 顺序随 `generate-dtos-from-entity.cjs` 与实体对齐
+  - **`RelatedPlant`（强制）**：`public string RelatedPlant { get; set; } = string.Empty;`（非 `string?`）；与同实体其它必填 `string` 一致；❌ 禁止业务默认值（如 `= "0001"`）；`[SugarColumn]` 须 `IsNullable = false` 且无 `DefaultValue`
+  - **参照**：`TaktAnnouncement`（`AnnouncementCode`/`AnnouncementTitle`/`AnnouncementType`/`AnnouncementStatus` + 无前缀 `Content`/`Summary`/`PublishTime`）；`TaktUser`（`Username`、`UserType`）；`TaktCostCenter`（`ValidFrom`/`ValidTo` 在 `RelatedPlant` 之前）
+  - ❌ 禁止同实体混用 `Title` 与 `AnnouncementType` 这类「核心字段部分有前缀、部分无前缀」
+  - **i18n 末段**：`entity.{slug}.*` 由属性 camelCase 去掉 slug 重复前缀生成（`announcementTitle` → `entity.announcement.title`），与属性名一致即可。
 - 多租户字段：`TenantCode`（3 位）、`CompanyCode`（4 位）
 - **字符串列黄金长度（`varchar`/`nvarchar`，强制）**：无专项约定时 **`Length = 40`**（业务编码、字典键值对齐字段、短标识/分组等）；❌ 禁止随手写 50/100。专项长度见下表，更长须 XML 注释说明理由
 
@@ -239,3 +261,4 @@ HTTP 路由、权限末段与前端 API 完整映射见 `@.cursor/rules/12-crud.
 - 工作流运行时/引擎/实体：见 `@.cursor/rules/09-workflow.mdc`；清单 `.cursor/skills/09-workflow/`
 - 全栈代码生成：见 `@.cursor/rules/15-codegen.mdc`；删改 `scripts/` 须先读 `PIPELINE`（§四）
 - 新建/审查实体：**禁止**实体属性使用 enum；一律 `int`/`int?`（`00-project` §1.8.1）；**短字符串列默认 `Length = 40`**（§六），禁止无说明使用 50/100
+- **实体属性通用/特有前缀**：见 §六「实体属性命名」；❌ 禁止同实体混用 `Title` 与 `XxxType`

@@ -6,12 +6,12 @@
 // 创建人：Takt365(Cursor AI)
 // 功能描述：SignalR IUserIdProvider（与 JWT sub 对齐，支持 Clients.User 定向推送）
 //
-// 版权信息：Copyright (c) 2025 Takt  All rights reserved.
+// 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
-using System.Security.Claims;
 using Microsoft.AspNetCore.SignalR;
+using Takt.Infrastructure.Services;
 
 namespace Takt.Infrastructure.SignalR;
 
@@ -28,14 +28,7 @@ public sealed class TaktSignalRUserIdProvider : IUserIdProvider
     public string? GetUserId(HubConnectionContext connection)
     {
         ArgumentNullException.ThrowIfNull(connection);
-        var principal = connection.User;
-        if (principal?.Identity?.IsAuthenticated != true)
-        {
-            return null;
-        }
-
-        var userId = principal.FindFirst("sub")?.Value
-            ?? principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        return string.IsNullOrWhiteSpace(userId) ? null : userId.Trim();
+        var userId = TaktUserContext.TryResolveUserId(connection.User);
+        return userId?.ToString();
     }
 }

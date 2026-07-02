@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation
 // 文件名称：TaktNumberingI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktNumbering 实体字段国际化种子（已对齐前端 locales：src/locales/foundation/numbering）
 // 
@@ -109,22 +109,22 @@ public class TaktNumberingI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.numbering.rulename", "zh-HK", "规则名称_hk", "规则名称（如：销售订单号、采购订单号）"),
 
             // entity.numbering.documenttype
-            new TranslationSeedItem("entity.numbering.documenttype", "en-US", "业务领域_us", "业务领域（与一级菜单域一致，如 Foundation、Accounting、Logistics、Routine）"),
+            new TranslationSeedItem("entity.numbering.documenttype", "en-US", "单据类型_us", "单据类型（关联 TaktMenu.Id，选项 TaktMenus/tree-options）"),
             // entity.numbering.documenttype
-            new TranslationSeedItem("entity.numbering.documenttype", "ja-JP", "业务领域_jp", "业务领域（与一级菜单域一致，如 Foundation、Accounting、Logistics、Routine）"),
+            new TranslationSeedItem("entity.numbering.documenttype", "ja-JP", "单据类型_jp", "单据类型（关联 TaktMenu.Id，选项 TaktMenus/tree-options）"),
             // entity.numbering.documenttype
-            new TranslationSeedItem("entity.numbering.documenttype", "zh-CN", "业务领域", "业务领域（与一级菜单域一致，如 Foundation、Accounting、Logistics、Routine）"),
+            new TranslationSeedItem("entity.numbering.documenttype", "zh-CN", "单据类型", "单据类型（关联 TaktMenu.Id，选项 TaktMenus/tree-options）"),
             // entity.numbering.documenttype
-            new TranslationSeedItem("entity.numbering.documenttype", "zh-HK", "业务领域_hk", "业务领域（与一级菜单域一致，如 Foundation、Accounting、Logistics、Routine）"),
+            new TranslationSeedItem("entity.numbering.documenttype", "zh-HK", "单据类型_hk", "单据类型（关联 TaktMenu.Id，选项 TaktMenus/tree-options）"),
 
-            // entity.numbering.departmentcode
-            new TranslationSeedItem("entity.numbering.departmentcode", "en-US", "部门编码_us", "部门编码（如：DEPT01, DEPT02，不可为空） 从 TaktDepartment 实体自动获取 DisplayCode"),
-            // entity.numbering.departmentcode
-            new TranslationSeedItem("entity.numbering.departmentcode", "ja-JP", "部门编码_jp", "部门编码（如：DEPT01, DEPT02，不可为空） 从 TaktDepartment 实体自动获取 DisplayCode"),
-            // entity.numbering.departmentcode
-            new TranslationSeedItem("entity.numbering.departmentcode", "zh-CN", "部门编码", "部门编码（如：DEPT01, DEPT02，不可为空） 从 TaktDepartment 实体自动获取 DisplayCode"),
-            // entity.numbering.departmentcode
-            new TranslationSeedItem("entity.numbering.departmentcode", "zh-HK", "部门编码_hk", "部门编码（如：DEPT01, DEPT02，不可为空） 从 TaktDepartment 实体自动获取 DisplayCode"),
+            // entity.numbering.deptcode
+            new TranslationSeedItem("entity.numbering.deptcode", "en-US", "部门编码_us", "部门编码（关联 TaktIsoCode.IsoCode，选项 TaktIsoCodes/options）"),
+            // entity.numbering.deptcode
+            new TranslationSeedItem("entity.numbering.deptcode", "ja-JP", "部门编码_jp", "部门编码（关联 TaktIsoCode.IsoCode，选项 TaktIsoCodes/options）"),
+            // entity.numbering.deptcode
+            new TranslationSeedItem("entity.numbering.deptcode", "zh-CN", "部门编码", "部门编码（关联 TaktIsoCode.IsoCode，选项 TaktIsoCodes/options）"),
+            // entity.numbering.deptcode
+            new TranslationSeedItem("entity.numbering.deptcode", "zh-HK", "部门编码_hk", "部门编码（关联 TaktIsoCode.IsoCode，选项 TaktIsoCodes/options）"),
 
             // entity.numbering.prefixcode
             new TranslationSeedItem("entity.numbering.prefixcode", "en-US", "前缀编码_us", "前缀编码（如：PUR、SORD、ANN）"),
@@ -208,13 +208,22 @@ public class TaktNumberingI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.numbering.separator", "zh-HK", "分隔符_hk", "分隔符（空=段直接拼接；-=连字符分隔，默认 -）"),
 
             // entity.numbering.isbuiltin
-            new TranslationSeedItem("entity.numbering.isbuiltin", "en-US", "是否内置_us", "是否内置（0=否，1=是，系统内置的不可删除）"),
+            new TranslationSeedItem("entity.numbering.isbuiltin", "en-US", "内置_us", "内置（字典 sys_yes_no_type；0=否 1=是）"),
             // entity.numbering.isbuiltin
-            new TranslationSeedItem("entity.numbering.isbuiltin", "ja-JP", "是否内置_jp", "是否内置（0=否，1=是，系统内置的不可删除）"),
+            new TranslationSeedItem("entity.numbering.isbuiltin", "ja-JP", "内置_jp", "内置（字典 sys_yes_no_type；0=否 1=是）"),
             // entity.numbering.isbuiltin
-            new TranslationSeedItem("entity.numbering.isbuiltin", "zh-CN", "是否内置", "是否内置（0=否，1=是，系统内置的不可删除）"),
+            new TranslationSeedItem("entity.numbering.isbuiltin", "zh-CN", "内置", "内置（字典 sys_yes_no_type；0=否 1=是）"),
             // entity.numbering.isbuiltin
-            new TranslationSeedItem("entity.numbering.isbuiltin", "zh-HK", "是否内置_hk", "是否内置（0=否，1=是，系统内置的不可删除）"),
+            new TranslationSeedItem("entity.numbering.isbuiltin", "zh-HK", "内置_hk", "内置（字典 sys_yes_no_type；0=否 1=是）"),
+
+            // entity.numbering.description
+            new TranslationSeedItem("entity.numbering.description", "en-US", "描述说明_us", "描述说明；可选配置编码段顺序，格式：segments:CompanyCode,DeptCode,PrefixCode,DateSequence（段名为实体属性名）"),
+            // entity.numbering.description
+            new TranslationSeedItem("entity.numbering.description", "ja-JP", "描述说明_jp", "描述说明；可选配置编码段顺序，格式：segments:CompanyCode,DeptCode,PrefixCode,DateSequence（段名为实体属性名）"),
+            // entity.numbering.description
+            new TranslationSeedItem("entity.numbering.description", "zh-CN", "描述说明", "描述说明；可选配置编码段顺序，格式：segments:CompanyCode,DeptCode,PrefixCode,DateSequence（段名为实体属性名）"),
+            // entity.numbering.description
+            new TranslationSeedItem("entity.numbering.description", "zh-HK", "描述说明_hk", "描述说明；可选配置编码段顺序，格式：segments:CompanyCode,DeptCode,PrefixCode,DateSequence（段名为实体属性名）"),
 
             // entity.numbering.status
             new TranslationSeedItem("entity.numbering.status", "en-US", "状态_us", "状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
@@ -224,15 +233,6 @@ public class TaktNumberingI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.numbering.status", "zh-CN", "状态", "状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
             // entity.numbering.status
             new TranslationSeedItem("entity.numbering.status", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
-
-            // entity.numbering.description
-            new TranslationSeedItem("entity.numbering.description", "en-US", "描述说明_us", "描述说明；可选配置编码段顺序，格式：segments:CompanyCode,DepartmentCode,PrefixCode,DateSequence（段名为实体属性名）"),
-            // entity.numbering.description
-            new TranslationSeedItem("entity.numbering.description", "ja-JP", "描述说明_jp", "描述说明；可选配置编码段顺序，格式：segments:CompanyCode,DepartmentCode,PrefixCode,DateSequence（段名为实体属性名）"),
-            // entity.numbering.description
-            new TranslationSeedItem("entity.numbering.description", "zh-CN", "描述说明", "描述说明；可选配置编码段顺序，格式：segments:CompanyCode,DepartmentCode,PrefixCode,DateSequence（段名为实体属性名）"),
-            // entity.numbering.description
-            new TranslationSeedItem("entity.numbering.description", "zh-HK", "描述说明_hk", "描述说明；可选配置编码段顺序，格式：segments:CompanyCode,DepartmentCode,PrefixCode,DateSequence（段名为实体属性名）"),
         };
     }
 

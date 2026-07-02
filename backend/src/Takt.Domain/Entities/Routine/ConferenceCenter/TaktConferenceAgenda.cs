@@ -10,8 +10,8 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
+using SqlSugar;
 using Takt.Domain.Entities;
-using Takt.Shared.Enums;
 
 namespace Takt.Domain.Entities.Routine.ConferenceCenter;
 
@@ -27,13 +27,13 @@ namespace Takt.Domain.Entities.Routine.ConferenceCenter;
 public class TaktConferenceAgenda : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 会议 ID（主子表关系）
+    /// 会议 ID（关联 TaktConference.Id，选项 TaktConferences/options）
     /// </summary>
     [SugarColumn(ColumnName = "conference_id", ColumnDescription = "会议ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ConferenceId { get; set; }
     /// <summary>
-    /// 记录类型（议程项 / 会议纪要）
+    /// 记录类型（字典 routine_conference_record_type；0=议程项 1=会议纪要）
     /// </summary>
     [SugarColumn(ColumnName = "record_type", ColumnDescription = "记录类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int RecordType { get; set; } = 0;
@@ -45,20 +45,20 @@ public class TaktConferenceAgenda : TaktCompanyEntityBase
     /// <summary>
     /// 标题（议程议题或纪要标题）
     /// </summary>
-    [SugarColumn(ColumnName = "title", ColumnDescription = "标题", ColumnDataType = "nvarchar", Length = 200, IsNullable = false)]
-    public string Title { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "conference_agenda_title", ColumnDescription = "标题", ColumnDataType = "nvarchar", Length = 200, IsNullable = false)]
+    public string ConferenceAgendaTitle { get; set; } = string.Empty;
     /// <summary>
     /// 正文（议程说明或会议纪要富文本 HTML）
     /// </summary>
-    [SugarColumn(ColumnName = "content", ColumnDescription = "正文", ColumnDataType = "ntext", IsNullable = true)]
-    public string? Content { get; set; }
+    [SugarColumn(ColumnName = "conference_agenda_content", ColumnDescription = "正文", ColumnDataType = "ntext", IsNullable = true)]
+    public string? ConferenceAgendaContent { get; set; }
     /// <summary>
     /// 摘要（纪要列表展示用）
     /// </summary>
-    [SugarColumn(ColumnName = "summary", ColumnDescription = "摘要", ColumnDataType = "nvarchar", Length = 2000, IsNullable = true)]
-    public string? Summary { get; set; }
+    [SugarColumn(ColumnName = "conference_agenda_summary", ColumnDescription = "摘要", ColumnDataType = "nvarchar", Length = 2000, IsNullable = true)]
+    public string? ConferenceAgendaSummary { get; set; }
     /// <summary>
-    /// 主讲人/汇报人 ID（议程项）
+    /// 主讲人/汇报人 ID（关联 TaktUser.Id，选项 TaktUsers/options）
     /// </summary>
     [SugarColumn(ColumnName = "presenter_id", ColumnDescription = "主讲人ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -79,7 +79,7 @@ public class TaktConferenceAgenda : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "duration_minutes", ColumnDescription = "计划时长分钟", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int DurationMinutes { get; set; } = 0;
     /// <summary>
-    /// 记录人 ID（会议纪要）
+    /// 记录人 ID（关联 TaktUser.Id，选项 TaktUsers/options）
     /// </summary>
     [SugarColumn(ColumnName = "recorder_id", ColumnDescription = "记录人ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -89,6 +89,15 @@ public class TaktConferenceAgenda : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "recorder_name", ColumnDescription = "记录人姓名", ColumnDataType = "varchar", Length = 40, IsNullable = true)]
     public string? RecorderName { get; set; }
+    /// <summary>
+    /// 附件（JSON 列表形式，由 TaktFile 统一上传到服务器）
+    /// </summary>
+    [SugarColumn(ColumnName = "attachments", ColumnDescription = "附件JSON", ColumnDataType = "nvarchar", Length = -1, IsNullable = true)]
+    public string? Attachments { get; set; }
+
+    // ========================================
+    // 导航属性区域
+    // ========================================
     /// <summary>
     /// 会议（主表）
     /// </summary>

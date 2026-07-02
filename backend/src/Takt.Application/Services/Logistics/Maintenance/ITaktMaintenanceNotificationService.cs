@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Maintenance
 // 文件名称：ITaktMaintenanceNotificationService.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：维护通知单应用服务接口
 // 
@@ -101,5 +101,12 @@ public interface ITaktMaintenanceNotificationService
     /// <param name="fileName">文件名</param>
     /// <returns>Excel 文件</returns>
     Task<(string fileName, byte[] fileContent)> ExportMaintenanceNotificationAsync(TaktMaintenanceNotificationQueryDto? query = null, string? sheetName = null, string? fileName = null);
+
+    /// <summary>
+    /// 获取维护通知单统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>维护通知单统计</returns>
+    Task<TaktMaintenanceNotificationStatDto> GetMaintenanceNotificationStatAsync(TaktMaintenanceNotificationStatQueryDto queryDto);
 
 }

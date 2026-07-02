@@ -116,20 +116,6 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sourceofsupply.materialname')"
-                name="materialName"
-              >
-                <a-input
-                  v-model:value="formState.materialName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceofsupply.materialname') })"
-                  show-count
-                  :maxlength="40"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
                 :label="t('entity.sourceofsupply.suppliercode')"
                 name="supplierCode"
               >
@@ -145,26 +131,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sourceofsupply.suppliername')"
-                name="supplierName"
+                :label="t('entity.sourceofsupply.purchasegroup')"
+                name="purchaseGroup"
               >
                 <a-input
-                  v-model:value="formState.supplierName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceofsupply.suppliername') })"
-                  show-count
-                  :maxlength="80"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.sourceofsupply.purchasegroupcode')"
-                name="purchaseGroupCode"
-              >
-                <a-input
-                  v-model:value="formState.purchaseGroupCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceofsupply.purchasegroupcode') })"
+                  v-model:value="formState.purchaseGroup"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceofsupply.purchasegroup') })"
                   show-count
                   :maxlength="50"
                   allow-clear
@@ -187,12 +159,11 @@
                 :label="t('entity.sourceofsupply.validfrom')"
                 name="validFrom"
               >
-                <a-input
+                <a-date-picker
                   v-model:value="formState.validFrom"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceofsupply.validfrom') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sourceofsupply.validfrom') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
@@ -201,12 +172,11 @@
                 :label="t('entity.sourceofsupply.validto')"
                 name="validTo"
               >
-                <a-input
+                <a-date-picker
                   v-model:value="formState.validTo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceofsupply.validto') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sourceofsupply.validto') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
@@ -412,7 +382,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","sourceOfSupplyCode","materialCode","materialName","supplierCode","supplierName","purchaseGroupCode","validFrom","validTo","isFixed","isBlocked","purchaseUnit","minimumOrderQuantity","leadTimeDays","agreementNumber","agreementLineNumber","sourceStatus","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","sourceOfSupplyCode","materialCode","supplierCode","purchaseGroup","validFrom","validTo","isFixed","isBlocked","purchaseUnit","minimumOrderQuantity","leadTimeDays","agreementNumber","agreementLineNumber","sourceStatus","extField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -507,13 +477,6 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
-  materialName: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.sourceofsupply.materialname') }),
-      trigger: 'blur'
-    }
-  ],
   supplierCode: [
     {
       required: true,
@@ -521,25 +484,18 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
-  supplierName: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.sourceofsupply.suppliername') }),
-      trigger: 'blur'
-    }
-  ],
   validFrom: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.sourceofsupply.validfrom') }),
-      trigger: 'blur'
+      message: t('common.page.form.placeholder.select', { field: t('entity.sourceofsupply.validfrom') }),
+      trigger: 'change'
     }
   ],
   validTo: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.sourceofsupply.validto') }),
-      trigger: 'blur'
+      message: t('common.page.form.placeholder.select', { field: t('entity.sourceofsupply.validto') }),
+      trigger: 'change'
     }
   ],
   isFixed: [{

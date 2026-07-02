@@ -30,7 +30,7 @@ public class TaktEcLegacyProductsController : TaktControllerBase
     public TaktEcLegacyProductsController(ITaktEcLegacyProductService service) => _service = service;
 
     /// <summary>获取旧品管制列表（分页）</summary>
-    [TaktPermission("logistics:manufacturing:engineeringchange:legacyproduct:list", "旧品管制列表")]
+    [TaktPermission("logistics:manufacturing:engineering:change:legacy:product:list", "旧品管制列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetEcLegacyProductListAsync([FromQuery] TaktEcLegacyProductQueryDto queryDto)
     {
@@ -39,7 +39,7 @@ public class TaktEcLegacyProductsController : TaktControllerBase
     }
 
     /// <summary>获取旧品管制详情</summary>
-    [TaktPermission("logistics:manufacturing:engineeringchange:legacyproduct:query", "旧品管制详情")]
+    [TaktPermission("logistics:manufacturing:engineering:change:legacy:product:query", "旧品管制详情")]
     [HttpGet("detail/{ecDetailId}")]
     public async Task<IActionResult> GetEcLegacyProductByEcDetailIdAsync(long ecDetailId)
     {
@@ -48,7 +48,7 @@ public class TaktEcLegacyProductsController : TaktControllerBase
     }
 
     /// <summary>更新旧品管制</summary>
-    [TaktPermission("logistics:manufacturing:engineeringchange:legacyproduct:update", "更新旧品管制")]
+    [TaktPermission("logistics:manufacturing:engineering:change:legacy:product:update", "更新旧品管制")]
     [HttpPut("detail/{ecDetailId}")]
     public async Task<IActionResult> UpdateEcLegacyProductAsync(long ecDetailId, [FromBody] TaktEcLegacyProductUpdateDto dto)
     {
@@ -57,7 +57,7 @@ public class TaktEcLegacyProductsController : TaktControllerBase
     }
 
     /// <summary>导出旧品管制</summary>
-    [TaktPermission("logistics:manufacturing:engineeringchange:legacyproduct:export", "导出旧品管制")]
+    [TaktPermission("logistics:manufacturing:engineering:change:legacy:product:export", "导出旧品管制")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportEcLegacyProductAsync([FromQuery] TaktEcLegacyProductQueryDto? query)
     {

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Personnel
 // 文件名称：TaktEmployeeService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：员工应用服务实现
 // 
@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Shared.Enums;
 using Takt.Application.Services.Identity;
 
 namespace Takt.Application.Services.HumanResource.Personnel;
@@ -31,39 +30,32 @@ namespace Takt.Application.Services.HumanResource.Personnel;
 /// </summary>
 public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
 {
-    private const int PrimaryEmploymentType = 0;
-    private static readonly int ApprovedStatus = (int)TaktApprovalStatus.Approved;
-
     private readonly ITaktCompanyRepository<TaktEmployee> _employeeRepository;
-    private readonly ITaktApprovalRepository<TaktEmployeeJoined> _employeeJoinedRepository;
-    private readonly ITaktApprovalRepository<TaktEmployeeReassignment> _employeeReassignmentRepository;
     private readonly ITaktRbacService _rbacService;
+
     private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="employeeRepository">员工仓储</param>
-    /// <param name="employeeJoinedRepository">上岗单仓储</param>
-    /// <param name="employeeReassignmentRepository">调动单仓储</param>
     /// <param name="rbacService">RBAC 关联分配服务</param>
+
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktEmployeeService(
         ITaktCompanyRepository<TaktEmployee> employeeRepository,
-        ITaktApprovalRepository<TaktEmployeeJoined> employeeJoinedRepository,
-        ITaktApprovalRepository<TaktEmployeeReassignment> employeeReassignmentRepository,
         ITaktRbacService rbacService,
+
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
         _employeeRepository = employeeRepository;
-        _employeeJoinedRepository = employeeJoinedRepository;
-        _employeeReassignmentRepository = employeeReassignmentRepository;
         _rbacService = rbacService;
+
         _uniqueValidator = uniqueValidator;
     }
 
@@ -111,13 +103,13 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
     {
         EnsureThreeLayerContext();
         var list = await _employeeRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.Name ?? string.Empty,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.PoliticalStatus == 1,
+            x => x.EmployeeName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
             DictValue = e.Id,
-            DictLabel = e.Name ?? e.Id.ToString(),
+            DictLabel = e.EmployeeName ?? e.Id.ToString(),
         }).ToList();
     }
 
@@ -130,7 +122,6 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
     {
         var entity = dto.Adapt<TaktEmployee>();
         entity.IsBuiltIn = 0;
-        ResetProjectionFieldsForCreate(entity);
         var isUnique_ix_employee_no_unique = await _uniqueValidator.IsUniqueAsync(
             _employeeRepository,
             x => x.EmployeeNo == entity.EmployeeNo);
@@ -165,9 +156,7 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
         }
         var originalIsBuiltIn = entity.IsBuiltIn;
         var originalEmployeeStatus = entity.EmployeeStatus;
-        var projectionSnapshot = CaptureProjectionSnapshot(entity);
         dto.Adapt(entity);
-        RestoreProjectionSnapshot(entity, projectionSnapshot);
         entity.IsBuiltIn = originalIsBuiltIn;
         if (entity.IsBuiltIn == 1 && entity.EmployeeStatus != originalEmployeeStatus
             && (entity.EmployeeStatus == 3 || entity.EmployeeStatus == 4))
@@ -253,7 +242,7 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
         {
             throw new TaktBusinessException("员工不存在");
         }
-        entity.MaritalStatus = dto.MaritalStatus;
+        entity.PoliticalStatus = dto.PoliticalStatus;
         await _employeeRepository.UpdateAsync(entity);
         return await GetEmployeeByIdAsync(dto.EmployeeId) ?? throw new TaktBusinessException("员工不存在");
     }
@@ -295,7 +284,6 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
             {
                 var entity = rows[i].Adapt<TaktEmployee>();
                 entity.IsBuiltIn = 0;
-                ResetProjectionFieldsForCreate(entity);
                 var importKey = $"{entity.EmployeeNo}";
                 if (!importSeenKeys.Add(importKey))
                 {
@@ -345,192 +333,6 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
             fileName ?? "员工导出.xlsx");
     }
 
-    /// <inheritdoc />
-    public async Task RefreshEmployeePrimaryAssignmentAsync(long employeeId, string tenantCode, string companyCode)
-    {
-        ArgumentException.ThrowIfNullOrWhiteSpace(tenantCode);
-        ArgumentException.ThrowIfNullOrWhiteSpace(companyCode);
-        if (employeeId <= 0)
-        {
-            ThrowBusinessException("员工 ID 无效");
-        }
-        var employee = await _employeeRepository.GetByIdAsync(employeeId);
-        if (employee == null
-            || employee.TenantCode != tenantCode
-            || employee.CompanyCode != companyCode)
-        {
-            ThrowBusinessException("员工不存在或无权访问");
-        }
-        var joinedList = await _employeeJoinedRepository.GetListAsync(x =>
-            x.EmployeeId == employeeId
-            && x.ApprovalStatus == ApprovedStatus
-            && x.EmploymentType == PrimaryEmploymentType);
-        var reassignmentList = await _employeeReassignmentRepository.GetListAsync(x =>
-            x.EmployeeId == employeeId
-            && x.ApprovalStatus == ApprovedStatus);
-        var events = new List<PrimaryAssignmentEvent>();
-        foreach (var joined in joinedList)
-        {
-            events.Add(new PrimaryAssignmentEvent(
-                joined.JoinedDate.Date,
-                IsReassignment: false,
-                joined.Id,
-                joined.DeptId,
-                joined.PostId,
-                joined.JoinedDate,
-                joined.ProbationEndDate,
-                joined.RegularDate));
-        }
-        foreach (var reassignment in reassignmentList)
-        {
-            var effective = reassignment.EffectiveDate
-                ?? reassignment.ApprovedAt
-                ?? reassignment.CreatedAt;
-            events.Add(new PrimaryAssignmentEvent(
-                effective.Date,
-                IsReassignment: true,
-                reassignment.Id,
-                reassignment.ToDeptId,
-                reassignment.ToPostId,
-                null,
-                null,
-                null));
-        }
-        if (events.Count == 0)
-        {
-            return;
-        }
-        var winner = events
-            .OrderByDescending(e => e.EffectiveDate)
-            .ThenByDescending(e => e.IsReassignment)
-            .ThenByDescending(e => e.SourceId)
-            .First();
-        employee.PrimaryDeptId = winner.DeptId;
-        employee.PrimaryPostId = winner.PostId > 0 ? winner.PostId : null;
-        if (!winner.IsReassignment)
-        {
-            employee.JoinedDate = winner.JoinedDate;
-            employee.ProbationEndDate = winner.ProbationEndDate;
-            employee.RegularDate = winner.RegularDate;
-        }
-        await _employeeRepository.UpdateAsync(employee);
-        await MergePrimaryOrgRelationsAsync(employeeId, winner.DeptId, winner.PostId);
-    }
-
-    // ========================================
-    // 主档任职/离职投影字段（只读，由上岗/调动/离职审批通过后回写）
-    // ========================================
-
-    /// <summary>
-    /// 任职/离职投影字段快照
-    /// </summary>
-    private readonly record struct EmployeeProjectionSnapshot(
-        long? PrimaryDeptId,
-        long? PrimaryPostId,
-        DateTime? JoinedDate,
-        DateTime? ProbationEndDate,
-        DateTime? RegularDate,
-        DateTime? TerminationDate,
-        DateTime? LastWorkDate,
-        int? ResignationType,
-        string? ResignationReason);
-
-    /// <summary>
-    /// 捕获员工主档投影字段当前值
-    /// </summary>
-    /// <param name="entity">员工实体</param>
-    /// <returns>投影快照</returns>
-    private static EmployeeProjectionSnapshot CaptureProjectionSnapshot(TaktEmployee entity) =>
-        new(
-            entity.PrimaryDeptId,
-            entity.PrimaryPostId,
-            entity.JoinedDate,
-            entity.ProbationEndDate,
-            entity.RegularDate,
-            entity.TerminationDate,
-            entity.LastWorkDate,
-            entity.ResignationType,
-            entity.ResignationReason);
-
-    /// <summary>
-    /// 将投影快照写回员工实体（禁止 API 手改任职/离职字段）
-    /// </summary>
-    /// <param name="entity">员工实体</param>
-    /// <param name="snapshot">投影快照</param>
-    private static void RestoreProjectionSnapshot(TaktEmployee entity, EmployeeProjectionSnapshot snapshot)
-    {
-        entity.PrimaryDeptId = snapshot.PrimaryDeptId;
-        entity.PrimaryPostId = snapshot.PrimaryPostId;
-        entity.JoinedDate = snapshot.JoinedDate;
-        entity.ProbationEndDate = snapshot.ProbationEndDate;
-        entity.RegularDate = snapshot.RegularDate;
-        entity.TerminationDate = snapshot.TerminationDate;
-        entity.LastWorkDate = snapshot.LastWorkDate;
-        entity.ResignationType = snapshot.ResignationType;
-        entity.ResignationReason = snapshot.ResignationReason;
-    }
-
-    /// <summary>
-    /// 新建/导入时清空投影字段（待上岗/调动/离职审批后回写）
-    /// </summary>
-    /// <param name="entity">员工实体</param>
-    private static void ResetProjectionFieldsForCreate(TaktEmployee entity)
-    {
-        entity.PrimaryDeptId = null;
-        entity.PrimaryPostId = null;
-        entity.JoinedDate = null;
-        entity.ProbationEndDate = null;
-        entity.RegularDate = null;
-        entity.TerminationDate = null;
-        entity.LastWorkDate = null;
-        entity.ResignationType = null;
-        entity.ResignationReason = null;
-    }
-
-    /// <summary>
-    /// 将主职部门/岗位合并进员工 RBAC 关联（不整表覆盖兼职）
-    /// </summary>
-    /// <param name="employeeId">员工 ID</param>
-    /// <param name="deptId">主职部门 ID</param>
-    /// <param name="postId">主职岗位 ID</param>
-    /// <returns>异步任务</returns>
-    private async Task MergePrimaryOrgRelationsAsync(long employeeId, long deptId, long? postId)
-    {
-        if (deptId > 0)
-        {
-            var deptDtos = await _rbacService.GetEmployeeDeptIdsAsync(employeeId);
-            var deptIds = deptDtos.Select(d => d.DeptId).ToList();
-            if (!deptIds.Contains(deptId))
-            {
-                deptIds.Add(deptId);
-            }
-            await _rbacService.AssignEmployeeDeptsAsync(employeeId, deptIds.ToArray());
-        }
-        if (postId is > 0)
-        {
-            var postDtos = await _rbacService.GetEmployeePostIdsAsync(employeeId);
-            var postIds = postDtos.Select(p => p.PostId).ToList();
-            if (!postIds.Contains(postId.Value))
-            {
-                postIds.Add(postId.Value);
-            }
-            await _rbacService.AssignEmployeePostsAsync(employeeId, postIds.ToArray());
-        }
-    }
-
-    /// <summary>
-    /// 主职任职事件（上岗或调动）
-    /// </summary>
-    private sealed record PrimaryAssignmentEvent(
-        DateTime EffectiveDate,
-        bool IsReassignment,
-        long SourceId,
-        long DeptId,
-        long? PostId,
-        DateTime? JoinedDate,
-        DateTime? ProbationEndDate,
-        DateTime? RegularDate);
-
     // ========================================
     // 查询表达式
     // ========================================
@@ -549,7 +351,7 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
                 (x.EmployeeNo != null && x.EmployeeNo.Contains(keywords))
-                || (x.Name != null && x.Name.Contains(keywords))
+                || (x.EmployeeName != null && x.EmployeeName.Contains(keywords))
                 || SqlFunc.ToString(x.Gender).Contains(keywords)
                 || (x.IdCardNo != null && x.IdCardNo.Contains(keywords))
                 || (x.Mobile != null && x.Mobile.Contains(keywords))
@@ -570,7 +372,7 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
                 || (x.EmergencyContactName != null && x.EmergencyContactName.Contains(keywords))
                 || (x.EmergencyContactPhone != null && x.EmergencyContactPhone.Contains(keywords))
                 || (x.HomeAddress != null && x.HomeAddress.Contains(keywords))
-                || (x.PhotoUrl != null && x.PhotoUrl.Contains(keywords))
+                || (x.Avatar != null && x.Avatar.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.BirthDate).Contains(keywords)
@@ -588,9 +390,9 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
             exp = exp.And(x => x.EmployeeNo != null && x.EmployeeNo.Contains(queryDto.EmployeeNo));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Name))
+        if (!string.IsNullOrEmpty(queryDto?.EmployeeName))
         {
-            exp = exp.And(x => x.Name != null && x.Name.Contains(queryDto.Name));
+            exp = exp.And(x => x.EmployeeName != null && x.EmployeeName.Contains(queryDto.EmployeeName));
         }
 
         if (queryDto?.Gender.HasValue == true)
@@ -693,9 +495,9 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
             exp = exp.And(x => x.HomeAddress != null && x.HomeAddress.Contains(queryDto.HomeAddress));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PhotoUrl))
+        if (!string.IsNullOrEmpty(queryDto?.Avatar))
         {
-            exp = exp.And(x => x.PhotoUrl != null && x.PhotoUrl.Contains(queryDto.PhotoUrl));
+            exp = exp.And(x => x.Avatar != null && x.Avatar.Contains(queryDto.Avatar));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

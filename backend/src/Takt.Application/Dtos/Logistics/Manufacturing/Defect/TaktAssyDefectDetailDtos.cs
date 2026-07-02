@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Defect
 // 文件名称：TaktAssyDefectDetailDtos.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：AssyDefectDetail 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktAssyDefectDetail 生成，请按需审阅）
 // 
@@ -57,7 +57,7 @@ public class TaktAssyDefectDetailDto : TaktCompanyDtoBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 不良区分
+    /// 不良区分（字典 logistics_defect_category，存 DictValue）
     /// </summary>
     public string? DefectCategory { get; set; } = string.Empty;
 
@@ -92,7 +92,7 @@ public class TaktAssyDefectDetailDto : TaktCompanyDtoBase
     public string? DefectSymptom { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良个所
+    /// 不良个所（字典 logistics_pcb_location_category，存 DictValue）
     /// </summary>
     public string? DefectLocation { get; set; } = string.Empty;
 
@@ -102,7 +102,7 @@ public class TaktAssyDefectDetailDto : TaktCompanyDtoBase
     public string? DefectReason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 修理员
+    /// 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     public string? RepairOperator { get; set; } = string.Empty;
 
@@ -151,7 +151,7 @@ public class TaktAssyDefectDetailQueryDto : TaktPagedQuery
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 不良区分
+    /// 不良区分（字典 logistics_defect_category，存 DictValue）
     /// </summary>
     public string? DefectCategory { get; set; } = string.Empty;
 
@@ -186,7 +186,7 @@ public class TaktAssyDefectDetailQueryDto : TaktPagedQuery
     public string? DefectSymptom { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良个所
+    /// 不良个所（字典 logistics_pcb_location_category，存 DictValue）
     /// </summary>
     public string? DefectLocation { get; set; } = string.Empty;
 
@@ -196,7 +196,7 @@ public class TaktAssyDefectDetailQueryDto : TaktPagedQuery
     public string? DefectReason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 修理员
+    /// 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     public string? RepairOperator { get; set; } = string.Empty;
 
@@ -241,7 +241,7 @@ public class TaktAssyDefectDetailCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -263,7 +263,7 @@ public class TaktAssyDefectDetailCreateDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 不良区分
+    /// 不良区分（字典 logistics_defect_category，存 DictValue）
     /// </summary>
     public string? DefectCategory { get; set; } = string.Empty;
 
@@ -298,7 +298,7 @@ public class TaktAssyDefectDetailCreateDto
     public string? DefectSymptom { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良个所
+    /// 不良个所（字典 logistics_pcb_location_category，存 DictValue）
     /// </summary>
     public string? DefectLocation { get; set; } = string.Empty;
 
@@ -308,7 +308,7 @@ public class TaktAssyDefectDetailCreateDto
     public string? DefectReason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 修理员
+    /// 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     public string? RepairOperator { get; set; } = string.Empty;
 
@@ -380,9 +380,19 @@ public class TaktAssyDefectDetailTemplateDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 不良区分
+    /// 不良区分（字典 logistics_defect_category，存 DictValue）
     /// </summary>
     public string? DefectCategory { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 不良数量
+    /// </summary>
+    public decimal? DefectQty { get; set; }
+
+    /// <summary>
+    /// 累计不良
+    /// </summary>
+    public decimal? CumulativeDefectQty { get; set; }
 
     /// <summary>
     /// 随机卡号
@@ -405,7 +415,7 @@ public class TaktAssyDefectDetailTemplateDto
     public string? DefectSymptom { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良个所
+    /// 不良个所（字典 logistics_pcb_location_category，存 DictValue）
     /// </summary>
     public string? DefectLocation { get; set; } = string.Empty;
 
@@ -415,7 +425,7 @@ public class TaktAssyDefectDetailTemplateDto
     public string? DefectReason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 修理员
+    /// 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     public string? RepairOperator { get; set; } = string.Empty;
 
@@ -447,7 +457,7 @@ public class TaktAssyDefectDetailImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -468,9 +478,19 @@ public class TaktAssyDefectDetailImportDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 不良区分
+    /// 不良区分（字典 logistics_defect_category，存 DictValue）
     /// </summary>
     public string? DefectCategory { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 不良数量
+    /// </summary>
+    public decimal? DefectQty { get; set; }
+
+    /// <summary>
+    /// 累计不良
+    /// </summary>
+    public decimal? CumulativeDefectQty { get; set; }
 
     /// <summary>
     /// 随机卡号
@@ -493,7 +513,7 @@ public class TaktAssyDefectDetailImportDto
     public string? DefectSymptom { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良个所
+    /// 不良个所（字典 logistics_pcb_location_category，存 DictValue）
     /// </summary>
     public string? DefectLocation { get; set; } = string.Empty;
 
@@ -503,7 +523,7 @@ public class TaktAssyDefectDetailImportDto
     public string? DefectReason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 修理员
+    /// 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     public string? RepairOperator { get; set; } = string.Empty;
 
@@ -557,7 +577,7 @@ public class TaktAssyDefectDetailExportDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 不良区分
+    /// 不良区分（字典 logistics_defect_category，存 DictValue）
     /// </summary>
     public string? DefectCategory { get; set; } = string.Empty;
 
@@ -592,7 +612,7 @@ public class TaktAssyDefectDetailExportDto
     public string? DefectSymptom { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良个所
+    /// 不良个所（字典 logistics_pcb_location_category，存 DictValue）
     /// </summary>
     public string? DefectLocation { get; set; } = string.Empty;
 
@@ -602,7 +622,7 @@ public class TaktAssyDefectDetailExportDto
     public string? DefectReason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 修理员
+    /// 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     public string? RepairOperator { get; set; } = string.Empty;
 

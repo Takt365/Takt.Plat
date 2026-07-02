@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/procurement
 // 文件名称：purchase-request.d.ts
-// 创建时间：2026-06-21
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/procurement 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -37,6 +37,21 @@ export interface PurchaseRequest extends ApprovalDtoBase {
    * 采购申请编码（唯一索引）
    */
   purchaseRequestCode: string;
+
+  /**
+   * 来源会签单 ID（采购链路自动生成时写入）
+   */
+  countersignId?: string;
+
+  /**
+   * 来源会签单 名称（填充字段）
+   */
+  countersignName?: string;
+
+  /**
+   * 来源会签编号（冗余）
+   */
+  countersignCode?: string;
 
   /**
    * 申请日期
@@ -84,19 +99,19 @@ export interface PurchaseRequest extends ApprovalDtoBase {
   convertedAmount: number;
 
   /**
+   * 申请原因
+   */
+  requestReason?: string;
+
+  /**
    * 申请状态（1=启用，0=禁用）
    */
   requestStatus: number;
 
   /**
-   * 转订单状态（0=未转订单，1=部分转订单，2=全部转订单）
+   * 转订单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
    */
   convertedStatus: number;
-
-  /**
-   * 申请原因
-   */
-  requestReason?: string;
 
   /**
    * 采购申请明细列表（主子表关系，一个申请可以有多个明细） （子表：TaktPurchaseRequestItem）
@@ -137,6 +152,16 @@ export interface PurchaseRequestQuery extends TaktPagedQuery {
    * 采购申请编码（唯一索引）
    */
   purchaseRequestCode?: string;
+
+  /**
+   * 来源会签单 ID（采购链路自动生成时写入）
+   */
+  countersignId?: string;
+
+  /**
+   * 来源会签编号（冗余）
+   */
+  countersignCode?: string;
 
   /**
    * 申请日期（范围查询-开始）
@@ -189,22 +214,22 @@ export interface PurchaseRequestQuery extends TaktPagedQuery {
   convertedAmount?: number;
 
   /**
-   * 申请状态（1=启用，0=禁用）
-   */
-  requestStatus?: number;
-
-  /**
-   * 转订单状态（0=未转订单，1=部分转订单，2=全部转订单）
-   */
-  convertedStatus?: number;
-
-  /**
    * 申请原因
    */
   requestReason?: string;
 
   /**
-   * 审批状态（TaktApprovalStatus）
+   * 申请状态（1=启用，0=禁用）
+   */
+  requestStatus?: number;
+
+  /**
+   * 转订单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
+   */
+  convertedStatus?: number;
+
+  /**
+   * 审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）
    */
   approvalStatus?: number;
 
@@ -283,7 +308,7 @@ export interface PurchaseRequestCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -296,6 +321,16 @@ export interface PurchaseRequestCreate {
    * 采购申请编码（唯一索引）
    */
   purchaseRequestCode: string;
+
+  /**
+   * 来源会签单 ID（采购链路自动生成时写入）
+   */
+  countersignId?: string;
+
+  /**
+   * 来源会签编号（冗余）
+   */
+  countersignCode?: string;
 
   /**
    * 申请日期
@@ -338,19 +373,19 @@ export interface PurchaseRequestCreate {
   convertedAmount: number;
 
   /**
+   * 申请原因
+   */
+  requestReason?: string;
+
+  /**
    * 申请状态（1=启用，0=禁用）
    */
   requestStatus: number;
 
   /**
-   * 转订单状态（0=未转订单，1=部分转订单，2=全部转订单）
+   * 转订单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
    */
   convertedStatus: number;
-
-  /**
-   * 申请原因
-   */
-  requestReason?: string;
 
   /**
    * 采购申请明细列表（主子表关系，一个申请可以有多个明细）（子表，级联保存）
@@ -436,6 +471,26 @@ export interface PurchaseRequestTemplate {
   purchaseRequestCode?: string;
 
   /**
+   * 来源会签单 ID（采购链路自动生成时写入）
+   */
+  countersignId?: string;
+
+  /**
+   * 来源会签编号（冗余）
+   */
+  countersignCode?: string;
+
+  /**
+   * 申请日期
+   */
+  requestDate?: string;
+
+  /**
+   * 要求到货日期
+   */
+  requiredArrivalDate?: string;
+
+  /**
    * 申请人员工ID（关联 TaktEmployee，序列化为 string 以避免 Javascript 精度问题）
    */
   requestId?: string;
@@ -446,19 +501,49 @@ export interface PurchaseRequestTemplate {
   requestBy?: string;
 
   /**
-   * 申请状态（1=启用，0=禁用）
+   * 申请总数量（基本单位数量）
    */
-  requestStatus?: number;
+  totalQuantity?: number;
 
   /**
-   * 转订单状态（0=未转订单，1=部分转订单，2=全部转订单）
+   * 申请总金额（精确到分，存储为整数，单位为分）
    */
-  convertedStatus?: number;
+  totalAmount?: number;
+
+  /**
+   * 已转订单数量（基本单位数量）
+   */
+  convertedQuantity?: number;
+
+  /**
+   * 已转订单金额（精确到分，存储为整数，单位为分）
+   */
+  convertedAmount?: number;
 
   /**
    * 申请原因
    */
   requestReason?: string;
+
+  /**
+   * 申请状态（1=启用，0=禁用）
+   */
+  requestStatus?: number;
+
+  /**
+   * 转订单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
+   */
+  convertedStatus?: number;
+
+  /**
+   * 采购申请明细列表（主子表关系，一个申请可以有多个明细）（子表，级联保存）
+   */
+  items?: PurchaseRequestItemCreate[];
+
+  /**
+   * 采购申请变更记录列表（外键在子表 TaktPurchaseRequestChangeLog.RequestId）（子表，级联保存）
+   */
+  changeLogs?: PurchaseRequestChangeLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -490,7 +575,7 @@ export interface PurchaseRequestImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -505,6 +590,26 @@ export interface PurchaseRequestImport {
   purchaseRequestCode?: string;
 
   /**
+   * 来源会签单 ID（采购链路自动生成时写入）
+   */
+  countersignId?: string;
+
+  /**
+   * 来源会签编号（冗余）
+   */
+  countersignCode?: string;
+
+  /**
+   * 申请日期
+   */
+  requestDate?: string;
+
+  /**
+   * 要求到货日期
+   */
+  requiredArrivalDate?: string;
+
+  /**
    * 申请人员工ID（关联 TaktEmployee，序列化为 string 以避免 Javascript 精度问题）
    */
   requestId?: string;
@@ -515,19 +620,49 @@ export interface PurchaseRequestImport {
   requestBy?: string;
 
   /**
-   * 申请状态（1=启用，0=禁用）
+   * 申请总数量（基本单位数量）
    */
-  requestStatus?: number;
+  totalQuantity?: number;
 
   /**
-   * 转订单状态（0=未转订单，1=部分转订单，2=全部转订单）
+   * 申请总金额（精确到分，存储为整数，单位为分）
    */
-  convertedStatus?: number;
+  totalAmount?: number;
+
+  /**
+   * 已转订单数量（基本单位数量）
+   */
+  convertedQuantity?: number;
+
+  /**
+   * 已转订单金额（精确到分，存储为整数，单位为分）
+   */
+  convertedAmount?: number;
 
   /**
    * 申请原因
    */
   requestReason?: string;
+
+  /**
+   * 申请状态（1=启用，0=禁用）
+   */
+  requestStatus?: number;
+
+  /**
+   * 转订单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
+   */
+  convertedStatus?: number;
+
+  /**
+   * 采购申请明细列表（主子表关系，一个申请可以有多个明细）（子表，级联保存）
+   */
+  items?: PurchaseRequestItemCreate[];
+
+  /**
+   * 采购申请变更记录列表（外键在子表 TaktPurchaseRequestChangeLog.RequestId）（子表，级联保存）
+   */
+  changeLogs?: PurchaseRequestChangeLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -562,6 +697,16 @@ export interface PurchaseRequestExport {
    * 采购申请编码（唯一索引）
    */
   purchaseRequestCode: string;
+
+  /**
+   * 来源会签单 ID（采购链路自动生成时写入）
+   */
+  countersignId?: string;
+
+  /**
+   * 来源会签编号（冗余）
+   */
+  countersignCode?: string;
 
   /**
    * 申请日期
@@ -604,19 +749,19 @@ export interface PurchaseRequestExport {
   convertedAmount: number;
 
   /**
+   * 申请原因
+   */
+  requestReason?: string;
+
+  /**
    * 申请状态（1=启用，0=禁用）
    */
   requestStatus: number;
 
   /**
-   * 转订单状态（0=未转订单，1=部分转订单，2=全部转订单）
+   * 转订单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
    */
   convertedStatus: number;
-
-  /**
-   * 申请原因
-   */
-  requestReason?: string;
 
   /**
    * 扩展字段JSON

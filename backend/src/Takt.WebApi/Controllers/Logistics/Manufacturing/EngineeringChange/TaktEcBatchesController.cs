@@ -25,12 +25,17 @@ namespace Takt.WebApi.Controllers.Logistics.Manufacturing.EngineeringChange;
 public class TaktEcBatchesController : TaktControllerBase
 {
     private readonly ITaktEcBatchService _service;
+    private readonly ITaktEcDeptMatrixService _deptMatrixService;
 
     /// <summary>构造函数</summary>
-    public TaktEcBatchesController(ITaktEcBatchService service) => _service = service;
+    public TaktEcBatchesController(ITaktEcBatchService service, ITaktEcDeptMatrixService deptMatrixService)
+    {
+        _service = service;
+        _deptMatrixService = deptMatrixService;
+    }
 
     /// <summary>获取投入批次列表（分页）</summary>
-    [TaktPermission("logistics:manufacturing:engineeringchange:batch:list", "投入批次列表")]
+    [TaktPermission("logistics:manufacturing:engineering:change:batch:list", "投入批次列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetEcBatchListAsync([FromQuery] TaktEcBatchQueryDto queryDto)
     {
@@ -39,7 +44,7 @@ public class TaktEcBatchesController : TaktControllerBase
     }
 
     /// <summary>获取投入批次详情</summary>
-    [TaktPermission("logistics:manufacturing:engineeringchange:batch:query", "投入批次详情")]
+    [TaktPermission("logistics:manufacturing:engineering:change:batch:query", "投入批次详情")]
     [HttpGet("detail/{ecDetailId}")]
     public async Task<IActionResult> GetEcBatchByEcDetailIdAsync(long ecDetailId)
     {
@@ -48,7 +53,7 @@ public class TaktEcBatchesController : TaktControllerBase
     }
 
     /// <summary>更新投入批次</summary>
-    [TaktPermission("logistics:manufacturing:engineeringchange:batch:update", "更新投入批次")]
+    [TaktPermission("logistics:manufacturing:engineering:change:batch:update", "更新投入批次")]
     [HttpPut("detail/{ecDetailId}")]
     public async Task<IActionResult> UpdateEcBatchAsync(long ecDetailId, [FromBody] TaktEcBatchUpdateDto dto)
     {
@@ -57,11 +62,20 @@ public class TaktEcBatchesController : TaktControllerBase
     }
 
     /// <summary>导出投入批次</summary>
-    [TaktPermission("logistics:manufacturing:engineeringchange:batch:export", "导出投入批次")]
+    [TaktPermission("logistics:manufacturing:engineering:change:batch:export", "导出投入批次")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportEcBatchAsync([FromQuery] TaktEcBatchQueryDto? query)
     {
         try { var (fileName, fileContent) = await _service.ExportEcBatchAsync(query); return File(fileContent, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName); }
+        catch (Exception ex) { return HandleException(ex); }
+    }
+
+    /// <summary>获取投入批次转置列表（分页；行=设变明细，列=各阶段日期+批次）</summary>
+    [TaktPermission("logistics:manufacturing:engineering:change:batch:list", "投入批次转置列表")]
+    [HttpGet("transposed")]
+    public async Task<IActionResult> GetEcBatchTransposedListAsync([FromQuery] TaktEcExecBatchTransposedQueryDto queryDto)
+    {
+        try { var result = await _deptMatrixService.GetEcBatchTransposedListAsync(queryDto); return Success(result, "查询成功"); }
         catch (Exception ex) { return HandleException(ex); }
     }
 }

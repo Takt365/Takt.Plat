@@ -22,7 +22,7 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/4)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
         force-render
       >
         <div :class="formContentClass">
@@ -100,42 +100,13 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.asset.spec')"
-                name="assetSpec"
-              >
-                <a-input
-                  v-model:value="formState.assetSpec"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.spec') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.asset.desc')"
-                name="assetDesc"
-              >
-                <a-input
-                  v-model:value="formState.assetDesc"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.desc') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
                 :label="t('entity.asset.category')"
                 name="assetCategory"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.assetCategory"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.category') })"
-                  show-count
-                  :maxlength="20"
+                  dict-type="accounting_asset_category"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.asset.category') })"
                   allow-clear
                 />
               </a-form-item>
@@ -145,11 +116,10 @@
                 :label="t('entity.asset.type')"
                 name="assetType"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.assetType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.type') })"
-                  show-count
-                  :maxlength="20"
+                  dict-type="accounting_asset_type"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.asset.type') })"
                   allow-clear
                 />
               </a-form-item>
@@ -166,16 +136,6 @@
                 />
               </a-form-item>
             </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/4)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
                 :label="t('entity.asset.netvalue')"
@@ -188,6 +148,16 @@
                 />
               </a-form-item>
             </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
                 :label="t('entity.asset.accumulateddepreciation')"
@@ -311,16 +281,6 @@
                 />
               </a-form-item>
             </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/4)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
                 :label="t('entity.asset.startdate')"
@@ -334,7 +294,17 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-2"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.asset.scrapdate')"
                 name="scrapDate"
@@ -347,7 +317,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.asset.disposaldate')"
                 name="disposalDate"
@@ -360,7 +330,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.asset.expectedlifemonths')"
                 name="expectedLifeMonths"
@@ -372,19 +342,20 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.asset.depreciationmethod')"
                 name="depreciationMethod"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.depreciationMethod"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.depreciationmethod') })"
-                  style="width: 100%"
+                  dict-type="accounting_depreciation_method"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.asset.depreciationmethod') })"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.asset.monthlydepreciation')"
                 name="monthlyDepreciation"
@@ -396,35 +367,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.asset.relatedsupplierid')"
-                name="relatedSupplierId"
-              >
-                <a-input
-                  v-model:value="formState.relatedSupplierId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.relatedsupplierid') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.asset.relatedsuppliername')"
-                name="relatedSupplierName"
-              >
-                <a-input
-                  v-model:value="formState.relatedSupplierName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.relatedsuppliername') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.asset.relatedplant')"
                 name="relatedPlant"
@@ -438,37 +381,42 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.asset.status')"
                 name="assetStatus"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.assetStatus"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.status') })"
-                  style="width: 100%"
+                  dict-type="accounting_asset_status"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.asset.status') })"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-3"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (4/4)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.asset.extfield')"
-                name="ExtField"
+                name="extField"
+                class="takt-form-item-ext-field"
               >
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t('common.page.entity.extfieldhint')"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ t('common.page.entity.extfield') }}</span>
+                  </span>
+                </template>
                 <a-textarea
-                  v-model:value="formState.ExtField"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.asset.extfield') })"
-                  :rows="2"
+                  v-model:value="formState.extField"
+                  :placeholder="t('common.page.form.placeholder.extfield')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -499,12 +447,15 @@
  * 资产实体维护表单 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/accounting/financial/asset/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import type { AssetCreate } from '@/types/accounting/financial/asset'
+import { RiQuestionLine } from '@remixicon/vue'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
+import TaktSelect from '@/components/business/takt-select/index.vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -513,6 +464,13 @@ const { t } = useI18n()
 const tenantStore = useTenantStore()
 /** Pinia：用户上下文 */
 const userStore = useUserStore()
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载字典 */
+onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
+})
 
 /**
  * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
@@ -535,7 +493,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","assetCode","assetName","assetSpec","assetDesc","assetCategory","assetType","assetOriginalValue","assetNetValue","accumulatedDepreciation","costCenterId","costCenterName","deptId","deptName","userId","userName","assetLocation","purchaseDate","startDate","scrapDate","disposalDate","expectedLifeMonths","depreciationMethod","monthlyDepreciation","relatedSupplierId","relatedSupplierName","relatedPlant","assetStatus","ExtField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","assetCode","assetName","assetCategory","assetType","assetOriginalValue","assetNetValue","accumulatedDepreciation","costCenterId","costCenterName","deptId","deptName","userId","userName","assetLocation","purchaseDate","startDate","scrapDate","disposalDate","expectedLifeMonths","depreciationMethod","monthlyDepreciation","relatedPlant","assetStatus","extField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -614,15 +572,8 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   assetCategory: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.asset.category') }),
-      trigger: 'blur'
-    }
-  ],
-  assetType: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.asset.type') }),
-      trigger: 'blur'
+      message: t('common.page.form.placeholder.select', { field: t('entity.asset.category') }),
+      trigger: 'change'
     }
   ],
   assetOriginalValue: [{
@@ -727,6 +678,10 @@ async function validate() {
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
+  if ('assetType' in payload) {
+    const trimmed = payload.assetType == null ? '' : String(payload.assetType).trim()
+    payload.assetType = trimmed || 'NORM'
+  }
   if ('assetOriginalValue' in payload) {
     const rawassetOriginalValue = payload.assetOriginalValue
     payload.assetOriginalValue = typeof rawassetOriginalValue === 'number' ? rawassetOriginalValue : Number(rawassetOriginalValue)

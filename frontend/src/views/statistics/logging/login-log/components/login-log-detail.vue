@@ -31,17 +31,17 @@
               </a-col>
               <a-col :span="24">
                 <a-form-item :label="t('entity.loginlog.logintype')">
-                  <a-input :value="text(detail.loginType)" size="small" disabled />
+                  <TaktConstTag category="loginType" :value="detail.loginType" />
                 </a-form-item>
               </a-col>
               <a-col :span="24">
                 <a-form-item :label="t('entity.loginlog.browser')">
-                  <a-input :value="text(detail.browser)" size="small" disabled />
+                  <TaktConstTag category="browserType" :value="detail.browser" />
                 </a-form-item>
               </a-col>
               <a-col :span="24">
                 <a-form-item :label="t('entity.loginlog.os')">
-                  <a-input :value="text(detail.os)" size="small" disabled />
+                  <TaktConstTag category="operatingSystem" :value="detail.os" />
                 </a-form-item>
               </a-col>
               <a-col :span="24">
@@ -51,7 +51,7 @@
               </a-col>
               <a-col :span="24">
                 <a-form-item :label="t('entity.loginlog.loginresult')">
-                  <a-input :value="text(detail.loginResult)" size="small" disabled />
+                  <TaktConstTag category="loginResult" :value="detail.loginResult" />
                 </a-form-item>
               </a-col>
               <a-col :span="24">
@@ -78,11 +78,6 @@
               <a-col :span="24">
                 <a-form-item :label="t('entity.loginlog.logoutat')">
                   <a-input :value="text(detail.logoutAt)" size="small" disabled />
-                </a-form-item>
-              </a-col>
-              <a-col :span="24">
-                <a-form-item :label="t('entity.loginlog.sessionduration')">
-                  <a-input :value="text(detail.sessionDuration)" size="small" disabled />
                 </a-form-item>
               </a-col>
               <a-col :span="24">

@@ -1,0 +1,116 @@
+// ========================================
+// 项目名称：节拍工厂·Takt Plat
+// 命名空间：@/views/logistics/sales/order/composables
+// 文件名称：use-order-item-i18n.ts
+// 功能描述：SalesOrderItem字段清单 + useSalesOrderItemI18n（字段名映射一次，文案由 entity.salesorderitem.* 种子动态解析）
+//
+// 版权信息：Copyright (c) 2025 Takt  All rights reserved.
+// 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
+// ========================================
+
+import type { SalesOrderItemQuery } from '@/types/logistics/sales/order-item'
+import { buildEntitySelfI18nKey } from '@/utils/takt-entity-i18n'
+import { useEntityFieldI18n, type EntityFieldPlaceholderKind } from '@/composables/use-entity-field-i18n'
+
+/** 与 TaktSalesOrderItemI18nSeedData 一致的实体 slug */
+export const SALESORDERITEM_ENTITY_SLUG = 'salesorderitem'
+
+/** entity.salesorderitem._self 静态属性（导入组件 entity-i18n-key 等） */
+export const SALESORDERITEM_SELF_I18N_KEY = buildEntitySelfI18nKey(SALESORDERITEM_ENTITY_SLUG)
+
+/** 列表业务列（不含主键） */
+export const SALESORDERITEM_LIST_FIELDS = [
+  'salesOrderName',
+  'salesOrderCode',
+  'lineNumber',
+  'materialCode',
+  'materialName',
+  'materialSpecification',
+  'salesUnit',
+  'orderQuantity',
+  'shippedQuantity',
+  'salesPerUnit',
+  'unitPrice',
+  'discountRate',
+  'discountAmount',
+  'taxRate',
+  'taxAmount',
+  'subtotalAmount',
+  'deliveryStatus',
+  'salesOrder',
+] as const
+
+/** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
+export const SALESORDERITEM_PLACEHOLDER = {
+  tenantCode: 'optional',
+  companyCode: 'optional',
+  companyDefaultCulture: 'optional',
+  lineNumber: 'select',
+  materialCode: 'select',
+  materialName: 'required',
+  materialSpecification: 'optional',
+  salesUnit: 'select',
+  orderQuantity: 'select',
+  shippedQuantity: 'select',
+  salesPerUnit: 'select',
+} as const satisfies Record<string, EntityFieldPlaceholderKind>
+
+/** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
+export type SalesOrderItemField = keyof typeof SALESORDERITEM_PLACEHOLDER
+
+/** 高级查询可 trim 的字符串字段 */
+export const SALESORDERITEM_QUERY_STRING_FIELDS = [
+  'salesOrderCode',
+  'materialCode',
+  'materialName',
+  'materialSpecification',
+  'salesUnit',
+  'createdAtStart',
+  'createdAtEnd',
+  'extField',
+  'remark',
+] as const satisfies readonly (keyof SalesOrderItemQuery)[]
+
+export type SalesOrderItemQueryField =
+  | (typeof SALESORDERITEM_QUERY_STRING_FIELDS)[number]
+  | 'lineNumber' | 'orderQuantity' | 'shippedQuantity' | 'salesPerUnit' | 'unitPrice' | 'discountRate' | 'discountAmount' | 'taxRate' | 'taxAmount' | 'subtotalAmount' | 'deliveryStatus'
+
+/** 高级查询抽屉全部字段（含数值） */
+export const SALESORDERITEM_QUERY_FIELDS: readonly SalesOrderItemQueryField[] = [
+  ...SALESORDERITEM_QUERY_STRING_FIELDS,
+  'lineNumber',
+  'orderQuantity',
+  'shippedQuantity',
+  'salesPerUnit',
+  'unitPrice',
+  'discountRate',
+  'discountAmount',
+  'taxRate',
+  'taxAmount',
+  'subtotalAmount',
+  'deliveryStatus',
+]
+
+/**
+ * SalesOrderItem字段 i18n：index / order-item-form 统一入口
+ */
+export function useSalesOrderItemI18n() {
+  const ef = useEntityFieldI18n(SALESORDERITEM_ENTITY_SLUG)
+
+  function ph(field: SalesOrderItemField): string {
+    return ef.placeholder(field, SALESORDERITEM_PLACEHOLDER[field])
+  }
+
+  function queryPh(field: SalesOrderItemQueryField, kind: EntityFieldPlaceholderKind): string {
+    return ef.queryPlaceholder(field, kind)
+  }
+
+  return {
+    t: ef.t,
+    label: ef.label,
+    queryLabel: ef.queryLabel,
+    queryPh,
+    self: ef.self,
+    ph,
+  }
+}

@@ -26,14 +26,14 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Sop;
 public class TaktSopExecStep : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 执行追溯 ID（关联 TaktSopExec.Id，选项 TaktSopExecs/options）
     /// </summary>
     [SugarColumn(ColumnName = "exec_id", ColumnDescription = "执行追溯ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ExecId { get; set; }
 
     /// <summary>
-    /// 工步 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
     /// </summary>
     [SugarColumn(ColumnName = "step_id", ColumnDescription = "工步ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -58,13 +58,13 @@ public class TaktSopExecStep : TaktCompanyEntityBase
     public DateTime? EndedAt { get; set; }
 
     /// <summary>
-    /// 工步结果（1=合格，2=不合格，3=跳过；字典 logistics_sop_check_result_type）
+    /// 工步结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
     /// </summary>
     [SugarColumn(ColumnName = "step_result", ColumnDescription = "工步结果", ColumnDataType = "int", IsNullable = true)]
     public int? StepResult { get; set; }
 
     /// <summary>
-    /// 确认人 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 确认人 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [SugarColumn(ColumnName = "confirmed_by", ColumnDescription = "确认人ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -77,7 +77,7 @@ public class TaktSopExecStep : TaktCompanyEntityBase
     public DateTime? ConfirmedAt { get; set; }
 
     /// <summary>
-    /// 是否禁止下一步（字典 sys_yes_no_type，扫码 NG 等）
+    /// 是否禁止下一步（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     [SugarColumn(ColumnName = "block_next_step", ColumnDescription = "是否禁止下一步", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int BlockNextStep { get; set; } = 0;

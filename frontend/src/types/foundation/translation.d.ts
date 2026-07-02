@@ -29,7 +29,7 @@ export interface Translation extends TenantDtoBase {
   translationId: string;
 
   /**
-   * 语言ID（关联 TaktCulture.Id）
+   * 文化ID（关联 TaktCulture.Id）
    */
   cultureId: string;
 
@@ -39,12 +39,12 @@ export interface Translation extends TenantDtoBase {
   cultureName?: string;
 
   /**
-   * 区域文化编码（如：zh-CN, en-US, ja-JP）
+   * 文化编码（关联 TaktCulture.CultureCode，选项 TaktCultures/options）
    */
   cultureCode: string;
 
   /**
-   * 国际化翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；如 common.confirm）
+   * 翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；如 common.confirm）
    */
   i18nKey: string;
 
@@ -54,12 +54,12 @@ export interface Translation extends TenantDtoBase {
   translationText: string;
 
   /**
-   * 资源分组（用于分类管理翻译）
+   * 资源分组（关联 TaktMenu.Id，选项 TaktMenus/tree-options）
    */
   resourceGroup: string;
 
   /**
-   * 资源类别（0=前端，1=后端）
+   * 资源类别（字典 sys_resource_type；frontend=前端 backend=后端）
    */
   resourceType: string;
 
@@ -69,7 +69,7 @@ export interface Translation extends TenantDtoBase {
   contextNote?: string;
 
   /**
-   * 区域文化（多对一关联） （主表：TaktCulture）
+   * 文化（多对一关联） （主表：TaktCulture）
    */
   culture?: Culture;
 
@@ -89,17 +89,17 @@ export interface TranslationQuery extends TaktPagedQuery {
   tenantCode?: string;
 
   /**
-   * 语言ID（关联 TaktCulture.Id）
+   * 文化ID（关联 TaktCulture.Id）
    */
   cultureId?: string;
 
   /**
-   * 区域文化编码（如：zh-CN, en-US, ja-JP）
+   * 文化编码（关联 TaktCulture.CultureCode，选项 TaktCultures/options）
    */
   cultureCode?: string;
 
   /**
-   * 国际化翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；如 common.confirm）
+   * 翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；如 common.confirm）
    */
   i18nKey?: string;
 
@@ -109,12 +109,12 @@ export interface TranslationQuery extends TaktPagedQuery {
   translationText?: string;
 
   /**
-   * 资源分组（用于分类管理翻译）
+   * 资源分组（关联 TaktMenu.Id，选项 TaktMenus/tree-options）
    */
   resourceGroup?: string;
 
   /**
-   * 资源类别（0=前端，1=后端）
+   * 资源类别（字典 sys_resource_type；frontend=前端 backend=后端）
    */
   resourceType?: string;
 
@@ -158,17 +158,17 @@ export interface TranslationCreate {
   tenantCode: string;
 
   /**
-   * 语言ID（关联 TaktCulture.Id）
+   * 文化ID（关联 TaktCulture.Id）
    */
   cultureId: string;
 
   /**
-   * 区域文化编码（如：zh-CN, en-US, ja-JP）
+   * 文化编码（关联 TaktCulture.CultureCode，选项 TaktCultures/options）
    */
   cultureCode: string;
 
   /**
-   * 国际化翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；如 common.confirm）
+   * 翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；如 common.confirm）
    */
   i18nKey: string;
 
@@ -178,12 +178,12 @@ export interface TranslationCreate {
   translationText: string;
 
   /**
-   * 资源分组（用于分类管理翻译）
+   * 资源分组（关联 TaktMenu.Id，选项 TaktMenus/tree-options）
    */
   resourceGroup: string;
 
   /**
-   * 资源类别（0=前端，1=后端）
+   * 资源类别（字典 sys_resource_type；frontend=前端 backend=后端）
    */
   resourceType: string;
 
@@ -232,17 +232,17 @@ export interface TranslationTemplate {
   tenantCode?: string;
 
   /**
-   * 语言ID（关联 TaktCulture.Id）
+   * 文化ID（关联 TaktCulture.Id）
    */
   cultureId?: string;
 
   /**
-   * 区域文化编码（如：zh-CN, en-US, ja-JP）
+   * 文化编码（关联 TaktCulture.CultureCode，选项 TaktCultures/options）
    */
   cultureCode?: string;
 
   /**
-   * 国际化翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；如 common.confirm）
+   * 翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；如 common.confirm）
    */
   i18nKey?: string;
 
@@ -252,12 +252,12 @@ export interface TranslationTemplate {
   translationText?: string;
 
   /**
-   * 资源分组（用于分类管理翻译）
+   * 资源分组（关联 TaktMenu.Id，选项 TaktMenus/tree-options）
    */
   resourceGroup?: string;
 
   /**
-   * 资源类别（0=前端，1=后端）
+   * 资源类别（字典 sys_resource_type；frontend=前端 backend=后端）
    */
   resourceType?: string;
 
@@ -291,17 +291,17 @@ export interface TranslationImport {
   tenantCode?: string;
 
   /**
-   * 语言ID（关联 TaktCulture.Id）
+   * 文化ID（关联 TaktCulture.Id）
    */
   cultureId?: string;
 
   /**
-   * 区域文化编码（如：zh-CN, en-US, ja-JP）
+   * 文化编码（关联 TaktCulture.CultureCode，选项 TaktCultures/options）
    */
   cultureCode?: string;
 
   /**
-   * 国际化翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；如 common.confirm）
+   * 翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；如 common.confirm）
    */
   i18nKey?: string;
 
@@ -311,12 +311,12 @@ export interface TranslationImport {
   translationText?: string;
 
   /**
-   * 资源分组（用于分类管理翻译）
+   * 资源分组（关联 TaktMenu.Id，选项 TaktMenus/tree-options）
    */
   resourceGroup?: string;
 
   /**
-   * 资源类别（0=前端，1=后端）
+   * 资源类别（字典 sys_resource_type；frontend=前端 backend=后端）
    */
   resourceType?: string;
 
@@ -350,17 +350,17 @@ export interface TranslationExport {
   translationId: string;
 
   /**
-   * 语言ID（关联 TaktCulture.Id）
+   * 文化ID（关联 TaktCulture.Id）
    */
   cultureId: string;
 
   /**
-   * 区域文化编码（如：zh-CN, en-US, ja-JP）
+   * 文化编码（关联 TaktCulture.CultureCode，选项 TaktCultures/options）
    */
   cultureCode: string;
 
   /**
-   * 国际化翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；如 common.confirm）
+   * 翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；如 common.confirm）
    */
   i18nKey: string;
 
@@ -370,12 +370,12 @@ export interface TranslationExport {
   translationText: string;
 
   /**
-   * 资源分组（用于分类管理翻译）
+   * 资源分组（关联 TaktMenu.Id，选项 TaktMenus/tree-options）
    */
   resourceGroup: string;
 
   /**
-   * 资源类别（0=前端，1=后端）
+   * 资源类别（字典 sys_resource_type；frontend=前端 backend=后端）
    */
   resourceType: string;
 
@@ -414,17 +414,17 @@ export interface TranslationTransposed {
   translationId: string;
 
   /**
-   * 国际化翻译键（转置行键）
+   * 翻译键（转置行键）
    */
   i18nKey: string;
 
   /**
-   * 资源分组
+   * 资源分组（关联 TaktMenu.Id，选项 TaktMenus/tree-options）
    */
   resourceGroup: string;
 
   /**
-   * 资源类别
+   * 资源类别（字典 sys_resource_type；frontend=前端 backend=后端）
    */
   resourceType: string;
 
@@ -453,17 +453,17 @@ export interface TranslationTransposedQuery extends TaktPagedQuery {
   tenantCode?: string;
 
   /**
-   * 语言ID
+   * 文化ID
    */
   cultureId?: string;
 
   /**
-   * 区域文化编码
+   * 文化编码
    */
   cultureCode?: string;
 
   /**
-   * 国际化翻译键
+   * 翻译键
    */
   i18nKey?: string;
 
@@ -473,12 +473,12 @@ export interface TranslationTransposedQuery extends TaktPagedQuery {
   translationText?: string;
 
   /**
-   * 资源分组
+   * 资源分组（关联 TaktMenu.Id，选项 TaktMenus/tree-options）
    */
   resourceGroup?: string;
 
   /**
-   * 资源类别
+   * 资源类别（字典 sys_resource_type；frontend=前端 backend=后端）
    */
   resourceType?: string;
 
@@ -533,7 +533,7 @@ export interface TranslationTransposedBatch {
  */
 export interface TranslationMessages {
   /**
-   * 区域文化编码（BCP47，如 zh-CN）
+   * 文化编码（BCP47，如 zh-CN）
    */
   cultureCode: string;
 

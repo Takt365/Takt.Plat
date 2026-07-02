@@ -149,6 +149,61 @@ export function buildLogEntry(
 }
 
 /**
+ * 将 ISO8601 时间戳格式化为 Serilog 文件模板风格
+ * @param {string} iso ISO8601 时间戳
+ * @returns {string} 如 2026-06-23 14:30:00.123 +08:00
+ */
+function formatFileTimestamp(iso: string): string {
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) {
+    return iso;
+  }
+  const pad = (value: number, length = 2): string => String(value).padStart(length, '0');
+  const offsetMin = -date.getTimezoneOffset();
+  const sign = offsetMin >= 0 ? '+' : '-';
+  const absMin = Math.abs(offsetMin);
+  const offsetHours = pad(Math.floor(absMin / 60));
+  const offsetMinutes = pad(absMin % 60);
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}.${pad(date.getMilliseconds(), 3)} ${sign}${offsetHours}:${offsetMinutes}`;
+}
+
+/**
+ * 格式化日志条目为本地文件行（与后端 Serilog FileOutputTemplate 对齐）
+ * @param {LogEntry} entry 日志条目
+ * @returns {string} 单行或多行文本（含换行结尾）
+ */
+export function formatLogEntryForFile(entry: LogEntry): string {
+  const levelLabel = LOG_LEVEL_LABELS[entry.level] ?? 'LOG';
+  const timestamp = formatFileTimestamp(entry.timestamp);
+  let line = `${timestamp} [${levelLabel}] ${entry.message}`;
+  const contextParts: string[] = [];
+  if (entry.context?.module) {
+    contextParts.push(`module=${entry.context.module}`);
+  }
+  if (entry.context?.action) {
+    contextParts.push(`action=${entry.context.action}`);
+  }
+  if (entry.context?.tenantCode) {
+    contextParts.push(`tenant=${entry.context.tenantCode}`);
+  }
+  if (entry.context?.companyCode) {
+    contextParts.push(`company=${entry.context.companyCode}`);
+  }
+  if (entry.context?.userId) {
+    contextParts.push(`uid=${entry.context.userId}`);
+  }
+  if (contextParts.length > 0) {
+    line += ` | ${contextParts.join(' ')}`;
+  }
+  if (entry.error?.stack) {
+    line += `\n${entry.error.stack}`;
+  } else if (entry.error) {
+    line += `\n${entry.error.name}: ${entry.error.message}`;
+  }
+  return `${line}\n`;
+}
+
+/**
  * 格式化日志条目为控制台可读字符串
  * @param {LogEntry} entry 日志条目
  * @returns {string} 格式化文本
@@ -236,14 +291,181 @@ export function sampleForLog<T>(
   return { sample: items.slice(0, maxSample), total: items.length }
 }
 
+/** 性能监控 action，控制台需展开可读归因 */
+const PERFORMANCE_CONSOLE_ACTIONS = new Set([
+  'web-vital',
+  'longtask',
+  'api-slow',
+  'api-error',
+  'fps-dwell',
+]);
+
+/**
+ * 将性能监控 context 格式化为控制台多行归因（避免仅显示 {context:…}）
+ * @param context 日志上下文
+ * @returns {string[]} 归因行
+ */
+export function formatPerformanceInsightLines(context?: LogContext): string[] {
+  if (!context?.action || !PERFORMANCE_CONSOLE_ACTIONS.has(context.action)) {
+    return [];
+  }
+  const lines: string[] = [];
+  if (context.action === 'web-vital') {
+    if (context.reportResult) {
+      lines.push(`结果: ${context.reportResult}`);
+    }
+    if (context.likelyCause) {
+      lines.push(`主因: ${context.likelyCause}`);
+    }
+    if (context.problemLocation) {
+      lines.push(`定位: ${context.problemLocation}`);
+    }
+    if (context.actionHint) {
+      lines.push(`建议: ${context.actionHint}`);
+    }
+    if (context.grade) {
+      const unit = context.metric === 'cls' ? '' : 'ms';
+      lines.push(`等级: ${context.grade} | 超出阈值: ${context.excessMs ?? '-'}${unit}`);
+    }
+    const nav = context.navigation as Record<string, number> | undefined;
+    if (nav && typeof nav.ttfbMs === 'number') {
+      lines.push(
+        `Navigation: TTFB=${nav.ttfbMs}ms DNS=${nav.dnsMs ?? '-'}ms TCP=${nav.tcpMs ?? '-'}ms `
+        + `response=${nav.responseMs ?? '-'}ms DOM=${nav.domInteractiveMs ?? '-'}ms `
+        + `DCL=${nav.domContentLoadedMs ?? '-'}ms load=${nav.loadEventEndMs ?? '-'}ms`
+      );
+    } else {
+      lines.push('Navigation: 未采样到（请看 Network 瀑布图 / Performance 面板）');
+    }
+    const resources = context.slowResources as Array<{
+      name: string;
+      durationMs: number;
+      initiatorType: string;
+    }> | undefined;
+    if (resources?.length) {
+      lines.push(
+        `慢资源: ${resources.map((item) => `${item.name} ${item.durationMs}ms [${item.initiatorType}]`).join(' · ')}`
+      );
+    } else if (context.metric === 'fcp' || context.metric === 'lcp') {
+      lines.push('慢资源: dev 下多为 Vite .ts 模块编译排队；生产请用 build 后 Network 看 .js chunk');
+    }
+    if (typeof context.longTaskTotalMsBefore === 'number' && context.longTaskTotalMsBefore > 0) {
+      lines.push(`LongTask(FCP前累计): ${context.longTaskTotalMsBefore}ms`);
+    }
+    if (context.isDev) {
+      lines.push('环境: development — Vite 编译/HMR 会拉高 FCP，请用 production build 复测');
+    }
+    if (context.routePath) {
+      lines.push(`路由: ${context.routePath}`);
+    }
+    return lines;
+  }
+  if (context.action === 'fps-dwell') {
+    if (context.routePath) {
+      lines.push(`路由: ${context.routePath}`);
+    }
+    if (typeof context.dwellMs === 'number') {
+      lines.push(`停留: ${context.dwellMs}ms`);
+    }
+    if (typeof context.fpsP50 === 'number') {
+      lines.push(`FPS p50: ${context.fpsP50} | p75: ${context.fpsP75 ?? '-'} | min: ${context.fpsMin ?? '-'}`);
+    }
+    if (context.endReason) {
+      lines.push(`结束: ${context.endReason}（visibility hidden / 路由切换 / 卸载）`);
+    }
+    if (context.actionHint) {
+      lines.push(`解读: ${context.actionHint}`);
+    }
+    return lines;
+  }
+  if (context.action === 'longtask') {
+    if (context.problemLocation) {
+      lines.push(`定位: ${context.problemLocation}`);
+    }
+    if (context.actionHint) {
+      lines.push(`建议: ${context.actionHint}`);
+    }
+    if (typeof context.durationMs === 'number') {
+      lines.push(`阻塞: ${context.durationMs}ms`);
+    }
+    const attributions = context.attributions as Array<{
+      containerType?: string;
+      containerName?: string;
+      containerSrc?: string;
+      durationMs?: number;
+    }> | undefined;
+    if (attributions?.length) {
+      const primary = attributions[0];
+      lines.push(
+        `归因: ${primary.containerType ?? 'unknown'} / ${primary.containerName || primary.containerSrc || '-'}`
+      );
+    }
+    if (context.route) {
+      lines.push(`路由: ${context.route}`);
+    }
+    return lines;
+  }
+  if (context.action === 'api-slow' || context.action === 'api-error') {
+    if (context.problemLocation) {
+      lines.push(`定位: ${context.problemLocation}`);
+    }
+    if (context.actionHint) {
+      lines.push(`建议: ${context.actionHint}`);
+    }
+    if (context.method && context.url) {
+      lines.push(`接口: ${context.method} ${context.url}`);
+    }
+    if (typeof context.durationMs === 'number') {
+      lines.push(`耗时: ${context.durationMs}ms`);
+    }
+    if (context.status) {
+      lines.push(`状态: ${context.status}`);
+    }
+    return lines;
+  }
+  return lines;
+}
+
+/**
+ * 性能类日志写入控制台（主行 + 归因块 + 慢资源表）
+ * @param text 主行文本
+ * @param entry 日志条目
+ * @param writer 控制台方法
+ */
+function writePerformanceLogToConsole(
+  text: string,
+  entry: LogEntry,
+  writer: (...args: unknown[]) => void
+): void {
+  const insightLines = formatPerformanceInsightLines(entry.context);
+  writer(text);
+  if (insightLines.length > 0) {
+    writer('[性能归因 — 可直接阅读，无需展开 context]');
+    insightLines.forEach((line) => writer(`  ${line}`));
+    const resources = entry.context?.slowResources;
+    if (Array.isArray(resources) && resources.length > 0) {
+      writer('[慢资源明细]');
+      console.table(resources);
+    }
+  }
+  if (entry.error) {
+    writer(`${entry.error.name}: ${entry.error.message}`);
+    if (entry.error.stack) {
+      writer(entry.error.stack);
+    }
+  }
+}
+
 /**
  * 输出到浏览器控制台
  * @param {LogEntry} entry 日志条目
  */
 export function writeLogEntryToConsole(entry: LogEntry): void {
   const text = formatLogEntryForConsole(entry);
+  const isPerformanceLog = entry.context?.action
+    && PERFORMANCE_CONSOLE_ACTIONS.has(entry.context.action);
   const detail =
-    entry.context || entry.error
+    !isPerformanceLog && (entry.context || entry.error)
       ? (maskForLogging({ context: entry.context, error: entry.error }) as {
           context?: LogContext;
           error?: LogErrorInfo;
@@ -252,17 +474,33 @@ export function writeLogEntryToConsole(entry: LogEntry): void {
 
   switch (entry.level) {
     case LogLevel.Debug:
-      console.debug(text, detail);
+      if (isPerformanceLog) {
+        writePerformanceLogToConsole(text, entry, console.debug.bind(console));
+      } else {
+        console.debug(text, detail);
+      }
       break;
     case LogLevel.Info:
-      console.info(text, detail);
+      if (isPerformanceLog) {
+        writePerformanceLogToConsole(text, entry, console.info.bind(console));
+      } else {
+        console.info(text, detail);
+      }
       break;
     case LogLevel.Warn:
-      console.warn(text, detail);
+      if (isPerformanceLog) {
+        writePerformanceLogToConsole(text, entry, console.warn.bind(console));
+      } else {
+        console.warn(text, detail);
+      }
       break;
     case LogLevel.Error:
     case LogLevel.Fatal:
-      console.error(text, detail);
+      if (isPerformanceLog) {
+        writePerformanceLogToConsole(text, entry, console.error.bind(console));
+      } else {
+        console.error(text, detail);
+      }
       break;
     default:
       console.log(text, detail);

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/planning
 // 文件名称：master-production-schedule-line.d.ts
-// 创建时间：2026-06-22
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/planning 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -238,7 +238,7 @@ export interface MasterProductionScheduleLineCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -372,6 +372,46 @@ export interface MasterProductionScheduleLineTemplate {
   materialCode?: string;
 
   /**
+   * 时间桶开始
+   */
+  bucketStart?: string;
+
+  /**
+   * 时间桶结束
+   */
+  bucketEnd?: string;
+
+  /**
+   * 毛需求数量
+   */
+  grossRequirement?: number;
+
+  /**
+   * 预计入库（计划接收）
+   */
+  scheduledReceipts?: number;
+
+  /**
+   * 预计可用库存（期初预计库存）
+   */
+  projectedOnHand?: number;
+
+  /**
+   * 净需求数量
+   */
+  netRequirement?: number;
+
+  /**
+   * 计划订单数量（MPS 产出）
+   */
+  plannedOrderQuantity?: number;
+
+  /**
+   * 可承诺量 ATP
+   */
+  atpQuantity?: number;
+
+  /**
    * 计量单位
    */
   unitOfMeasure?: string;
@@ -406,7 +446,7 @@ export interface MasterProductionScheduleLineImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -429,6 +469,46 @@ export interface MasterProductionScheduleLineImport {
    * 物料编码
    */
   materialCode?: string;
+
+  /**
+   * 时间桶开始
+   */
+  bucketStart?: string;
+
+  /**
+   * 时间桶结束
+   */
+  bucketEnd?: string;
+
+  /**
+   * 毛需求数量
+   */
+  grossRequirement?: number;
+
+  /**
+   * 预计入库（计划接收）
+   */
+  scheduledReceipts?: number;
+
+  /**
+   * 预计可用库存（期初预计库存）
+   */
+  projectedOnHand?: number;
+
+  /**
+   * 净需求数量
+   */
+  netRequirement?: number;
+
+  /**
+   * 计划订单数量（MPS 产出）
+   */
+  plannedOrderQuantity?: number;
+
+  /**
+   * 可承诺量 ATP
+   */
+  atpQuantity?: number;
 
   /**
    * 计量单位

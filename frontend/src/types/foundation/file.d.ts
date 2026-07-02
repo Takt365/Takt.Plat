@@ -4,7 +4,7 @@
 // 文件名称：file.d.ts
 // 创建时间：2026-06-13
 // 创建人：Takt365(Auto Generated)
-// 功能描述：foundation 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
+// 功能描述：foundation 模块类型定义（自动生成 CRUD + 文件上传/分片协议类型；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -34,7 +34,7 @@ export interface File extends CompanyDtoBase {
   fileCode: string;
 
   /**
-   * 文件名称（存储文件名）
+   * 文件名称（字典 sys_storage_naming_config；0=原文件+哈希值 1=自动生成 2=自定义）
    */
   fileName: string;
 
@@ -44,7 +44,7 @@ export interface File extends CompanyDtoBase {
   fileOriginalName: string;
 
   /**
-   * 文件路径（相对路径或完整路径）
+   * 文件路径（关联一级菜单 uploadPath，选项 useMenuUploadPath）
    */
   filePath: string;
 
@@ -74,7 +74,7 @@ export interface File extends CompanyDtoBase {
   fileCategory: number;
 
   /**
-   * 存储方式（字典 sys_storage_type）
+   * 存储方式（字典 sys_storage_type；0=本地存储 1=OSS对象存储 2=FTP）
    */
   storageType: number;
 
@@ -154,7 +154,7 @@ export interface FileQuery extends TaktPagedQuery {
   fileCode?: string;
 
   /**
-   * 文件名称（存储文件名）
+   * 文件名称（字典 sys_storage_naming_config；0=原文件+哈希值 1=自动生成 2=自定义）
    */
   fileName?: string;
 
@@ -164,7 +164,7 @@ export interface FileQuery extends TaktPagedQuery {
   fileOriginalName?: string;
 
   /**
-   * 文件路径（相对路径或完整路径）
+   * 文件路径（关联一级菜单 uploadPath，选项 useMenuUploadPath）
    */
   filePath?: string;
 
@@ -194,7 +194,7 @@ export interface FileQuery extends TaktPagedQuery {
   fileCategory?: number;
 
   /**
-   * 存储方式（字典 sys_storage_type）
+   * 存储方式（字典 sys_storage_type；0=本地存储 1=OSS对象存储 2=FTP）
    */
   storageType?: number;
 
@@ -293,7 +293,7 @@ export interface FileCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
@@ -303,7 +303,7 @@ export interface FileCreate {
   fileCode: string;
 
   /**
-   * 文件名称（存储文件名）
+   * 文件名称（字典 sys_storage_naming_config；0=原文件+哈希值 1=自动生成 2=自定义）
    */
   fileName: string;
 
@@ -313,7 +313,7 @@ export interface FileCreate {
   fileOriginalName: string;
 
   /**
-   * 文件路径（相对路径或完整路径）
+   * 文件路径（关联一级菜单 uploadPath，选项 useMenuUploadPath）
    */
   filePath: string;
 
@@ -343,7 +343,7 @@ export interface FileCreate {
   fileCategory: number;
 
   /**
-   * 存储方式（字典 sys_storage_type）
+   * 存储方式（字典 sys_storage_type；0=本地存储 1=OSS对象存储 2=FTP）
    */
   storageType: number;
 
@@ -485,7 +485,7 @@ export interface FileTemplate {
   fileCode?: string;
 
   /**
-   * 文件名称（存储文件名）
+   * 文件名称（字典 sys_storage_naming_config；0=原文件+哈希值 1=自动生成 2=自定义）
    */
   fileName?: string;
 
@@ -495,7 +495,7 @@ export interface FileTemplate {
   fileOriginalName?: string;
 
   /**
-   * 文件路径（相对路径或完整路径）
+   * 文件路径（关联一级菜单 uploadPath，选项 useMenuUploadPath）
    */
   filePath?: string;
 
@@ -525,7 +525,7 @@ export interface FileTemplate {
   fileCategory?: number;
 
   /**
-   * 存储方式（字典 sys_storage_type）
+   * 存储方式（字典 sys_storage_type；0=本地存储 1=OSS对象存储 2=FTP）
    */
   storageType?: number;
 
@@ -569,7 +569,7 @@ export interface FileImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
@@ -579,7 +579,7 @@ export interface FileImport {
   fileCode?: string;
 
   /**
-   * 文件名称（存储文件名）
+   * 文件名称（字典 sys_storage_naming_config；0=原文件+哈希值 1=自动生成 2=自定义）
    */
   fileName?: string;
 
@@ -589,7 +589,7 @@ export interface FileImport {
   fileOriginalName?: string;
 
   /**
-   * 文件路径（相对路径或完整路径）
+   * 文件路径（关联一级菜单 uploadPath，选项 useMenuUploadPath）
    */
   filePath?: string;
 
@@ -619,7 +619,7 @@ export interface FileImport {
   fileCategory?: number;
 
   /**
-   * 存储方式（字典 sys_storage_type）
+   * 存储方式（字典 sys_storage_type；0=本地存储 1=OSS对象存储 2=FTP）
    */
   storageType?: number;
 
@@ -668,7 +668,7 @@ export interface FileExport {
   fileCode: string;
 
   /**
-   * 文件名称（存储文件名）
+   * 文件名称（字典 sys_storage_naming_config；0=原文件+哈希值 1=自动生成 2=自定义）
    */
   fileName: string;
 
@@ -678,7 +678,7 @@ export interface FileExport {
   fileOriginalName: string;
 
   /**
-   * 文件路径（相对路径或完整路径）
+   * 文件路径（关联一级菜单 uploadPath，选项 useMenuUploadPath）
    */
   filePath: string;
 
@@ -708,7 +708,7 @@ export interface FileExport {
   fileCategory: number;
 
   /**
-   * 存储方式（字典 sys_storage_type）
+   * 存储方式（字典 sys_storage_type；0=本地存储 1=OSS对象存储 2=FTP）
    */
   storageType: number;
 
@@ -777,4 +777,141 @@ export interface FileExport {
    */
   createdAt: string;
 
+}
+
+/**
+ * 上传策略（GET TaktFiles/upload-policy）
+ */
+export interface FileUploadPolicy {
+  /** 单文件最大字节数 */
+  maxFileSizeBytes: string | number;
+  /** 最大分片数 */
+  maxChunkCount: number;
+  /** 默认分片大小（字节） */
+  defaultChunkSizeBytes: string | number;
+  /** 分片上传阈值（字节） */
+  chunkThresholdBytes: string | number;
+  /** 分片临时目录（相对 wwwroot） */
+  chunkRelativePath: string;
+  /** 允许扩展名（小写、不含点） */
+  allowedExtensions: string[];
+  /** 禁止扩展名（小写、不含点） */
+  deniedExtensions: string[];
+  /** 传入 totalSize 时：是否应分片上传 */
+  useChunkUpload?: boolean;
+  /** 传入 totalSize 时：分片大小（字节） */
+  chunkSizeBytes?: string | number;
+  /** 传入 totalSize 时：总分片数 */
+  totalChunks?: number;
+  /** 传入 totalSize 时：文件总大小（字节） */
+  totalSizeBytes?: string | number;
+}
+
+/**
+ * 整文件/合并上传附带业务元数据
+ */
+export interface FileUploadMeta {
+  fileDescription?: string;
+  fileTags?: string;
+  isPublic?: number;
+  fileStatus?: number;
+  fileUploadType?: number;
+  targetFileName?: string;
+  categoryPath?: string;
+  storageType?: number;
+  storageNaming?: number;
+  storageConfig?: string;
+}
+
+/**
+ * 上传完成结果（存储层 + 可选业务 fileId）
+ */
+export interface FileUploadResult {
+  fileId?: string;
+  fileCode?: string;
+  fileName?: string;
+  fileOriginalName?: string;
+  filePath?: string;
+  fileSize?: string | number;
+  fileType?: string;
+  fileExtension?: string;
+  fileHash?: string;
+  fileCategory?: number;
+  storageType?: number;
+  storageConfig?: string;
+  accessUrl?: string;
+}
+
+/**
+ * 分片存在性检查请求
+ */
+export interface FileChunkCheck {
+  identifier: string;
+  chunkNumber: number;
+  chunkSize: string | number;
+  totalSize: string | number;
+  totalChunks?: number;
+  fileName?: string;
+}
+
+/**
+ * 分片存在性检查结果
+ */
+export interface FileChunkCheckResult {
+  exists: boolean;
+}
+
+/**
+ * 已上传分片列表查询
+ */
+export interface FileChunkList {
+  identifier: string;
+  totalChunks?: number;
+  totalSize: string | number;
+}
+
+/**
+ * 已上传分片列表结果
+ */
+export interface FileChunkListResult {
+  uploadedChunkNumbers: number[];
+}
+
+/**
+ * 分片上传表单元数据
+ */
+export interface FileChunkUpload {
+  identifier: string;
+  chunkNumber: number;
+  totalChunks: number;
+  chunkSize: string | number;
+  totalSize: string | number;
+  fileName: string;
+}
+
+/**
+ * 分片合并请求（含业务元数据）
+ */
+export interface FileChunkMerge {
+  identifier: string;
+  fileName: string;
+  totalChunks: number;
+  totalSize: string | number;
+  fileDescription?: string;
+  fileTags?: string;
+  isPublic?: number;
+  fileUploadType?: number;
+  targetFileName?: string;
+  categoryPath?: string;
+  storageType?: number;
+  storageConfig?: string;
+  storageNaming?: number;
+  fileStatus?: number;
+}
+
+/**
+ * 取消分片上传
+ */
+export interface FileChunkCancel {
+  identifier: string;
 }

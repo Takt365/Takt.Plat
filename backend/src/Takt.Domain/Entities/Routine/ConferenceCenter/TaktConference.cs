@@ -10,13 +10,15 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
+using SqlSugar;
 using Takt.Domain.Entities;
 
 namespace Takt.Domain.Entities.Routine.ConferenceCenter;
 
 /// <summary>
 /// 会议中心主实体
-/// 支持内部/外部/视频/混合会议排期、议程及参与人管理
+/// 支持内部/外部/视频/混合会议排期、议程及参与人管理；需审批通过后排期
+/// 审批态见基类 ApprovalStatus，字典 sys_approval_status
 /// </summary>
 [SugarTable("takt_routine_conference_center", "会议中心表")]
 [SugarIndex("ix_conference_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
@@ -35,18 +37,13 @@ public class TaktConference : TaktApprovalEntityBase
     /// <summary>
     /// 会议标题
     /// </summary>
-    [SugarColumn(ColumnName = "title", ColumnDescription = "会议标题", ColumnDataType = "nvarchar", Length = 200, IsNullable = false)]
-    public string Title { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "conference_title", ColumnDescription = "会议标题", ColumnDataType = "nvarchar", Length = 200, IsNullable = false)]
+    public string ConferenceTitle { get; set; } = string.Empty;
     /// <summary>
-    /// 会议类型
+    /// 会议类型（字典 routine_conference_type；0=内部 1=外部 2=视频 3=混合）
     /// </summary>
     [SugarColumn(ColumnName = "conference_type", ColumnDescription = "会议类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int ConferenceType { get; set; } = 0;
-    /// <summary>
-    /// 会议状态
-    /// </summary>
-    [SugarColumn(ColumnName = "conference_status", ColumnDescription = "会议状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int ConferenceStatus { get; set; } = 0;
     /// <summary>
     /// 开始时间
     /// </summary>
@@ -75,20 +72,20 @@ public class TaktConference : TaktApprovalEntityBase
     /// <summary>
     /// 会议内容（会议纪要正文，富文本 HTML）
     /// </summary>
-    [SugarColumn(ColumnName = "content", ColumnDescription = "会议内容", ColumnDataType = "ntext", IsNullable = true)]
-    public string? Content { get; set; }
+    [SugarColumn(ColumnName = "conference_content", ColumnDescription = "会议内容", ColumnDataType = "ntext", IsNullable = true)]
+    public string? ConferenceContent { get; set; }
     /// <summary>
     /// 会议纪要摘要（用于列表展示）
     /// </summary>
-    [SugarColumn(ColumnName = "summary", ColumnDescription = "会议纪要摘要", ColumnDataType = "nvarchar", Length = 2000, IsNullable = true)]
-    public string? Summary { get; set; }
+    [SugarColumn(ColumnName = "conference_summary", ColumnDescription = "会议纪要摘要", ColumnDataType = "nvarchar", Length = 2000, IsNullable = true)]
+    public string? ConferenceSummary { get; set; }
     /// <summary>
     /// 标签（逗号分隔或 JSON 数组存储）
     /// </summary>
-    [SugarColumn(ColumnName = "tags", ColumnDescription = "标签", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
-    public string? Tags { get; set; }
+    [SugarColumn(ColumnName = "conference_tags", ColumnDescription = "标签", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
+    public string? ConferenceTags { get; set; }
     /// <summary>
-    /// 组织人 ID
+    /// 组织人 ID（关联 TaktUser.Id，选项 TaktUsers/options）
     /// </summary>
     [SugarColumn(ColumnName = "organizer_id", ColumnDescription = "组织人ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -99,7 +96,7 @@ public class TaktConference : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "organizer_name", ColumnDescription = "组织人姓名", ColumnDataType = "varchar", Length = 20, IsNullable = false)]
     public string OrganizerName { get; set; } = string.Empty;
     /// <summary>
-    /// 主办部门 ID
+    /// 主办部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     [SugarColumn(ColumnName = "dept_id", ColumnDescription = "主办部门ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -120,7 +117,7 @@ public class TaktConference : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "reminder_minutes", ColumnDescription = "提前提醒分钟数", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int ReminderMinutes { get; set; } = 0;
     /// <summary>
-    /// 会议室 ID
+    /// 会议室 ID（关联 TaktConferenceRoom.Id，选项 TaktConferenceRooms/options）
     /// </summary>
     [SugarColumn(ColumnName = "conference_room_id", ColumnDescription = "会议室ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -130,6 +127,15 @@ public class TaktConference : TaktApprovalEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "conference_room_name", ColumnDescription = "会议室名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
     public string? ConferenceRoomName { get; set; }
+    /// <summary>
+    /// 会议状态（字典 routine_conference_status；0=草稿 1=已排期 2=进行中 3=已结束 4=已取消）
+    /// </summary>
+    [SugarColumn(ColumnName = "conference_status", ColumnDescription = "会议状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int ConferenceStatus { get; set; } = 0;
+
+    // ========================================
+    // 导航属性区域
+    // ========================================
     /// <summary>
     /// 参与人列表（主子表关系）
     /// </summary>

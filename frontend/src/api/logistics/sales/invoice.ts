@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/sales
 // 文件名称：invoice.ts
-// 创建时间：2026-06-20
+// 创建时间：2026-07-01
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -18,7 +18,6 @@ import type {
 import type {
   SalesInvoice,
   SalesInvoiceCreate,
-  SalesInvoiceStatus,
   SalesInvoiceUpdate
 } from '@/types/logistics/sales/invoice';
 
@@ -106,19 +105,6 @@ export function deleteSalesInvoiceBatch(ids: string[]): Promise<void> {
     url: `${SALES_INVOICE_API_BASE}/batch`,
     method: 'delete',
     data: ids,
-  });
-}
-
-/**
- * 更新销售发票状态
- * @param {SalesInvoiceStatus} dto 状态 DTO
- * @returns {Promise<SalesInvoice>} 销售发票DTO
- */
-export function updateSalesInvoiceStatus(dto: SalesInvoiceStatus): Promise<SalesInvoice> {
-  return request<SalesInvoice>({
-    url: `${SALES_INVOICE_API_BASE}/status`,
-    method: 'put',
-    data: dto,
   });
 }
 

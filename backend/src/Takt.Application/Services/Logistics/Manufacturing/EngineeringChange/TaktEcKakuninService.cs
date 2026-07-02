@@ -97,9 +97,10 @@ public class TaktEcKakuninService : TaktServiceBase, ITaktEcKakuninService
         {
             throw new TaktBusinessException("设变明细不存在");
         }
-        detail.IsCheck = dto.IsCheck;
-        detail.IsProcurement = dto.IsProcurement;
-        detail.EcNote = dto.EcNote;
+        detail.IsOldProcurement = dto.IsOldProcurement;
+        detail.IsOldCheck = dto.IsOldCheck;
+        detail.IsNewProcurement = dto.IsNewProcurement;
+        detail.IsNewCheck = dto.IsNewCheck;
         await _ecDetailRepository.UpdateAsync(detail);
         return detail.Adapt<TaktEcKakuninDto>();
     }
@@ -154,9 +155,13 @@ public class TaktEcKakuninService : TaktServiceBase, ITaktEcKakuninService
         {
             exp = exp.And(x => x.EcNewItem != null && x.EcNewItem.Contains(queryDto.EcNewItem));
         }
-        if (queryDto?.IsCheck.HasValue == true)
+        if (queryDto?.IsOldCheck.HasValue == true)
         {
-            exp = exp.And(x => x.IsCheck == queryDto.IsCheck);
+            exp = exp.And(x => x.IsOldCheck == queryDto.IsOldCheck);
+        }
+        if (queryDto?.IsNewCheck.HasValue == true)
+        {
+            exp = exp.And(x => x.IsNewCheck == queryDto.IsNewCheck);
         }
         return exp.ToExpression();
     }

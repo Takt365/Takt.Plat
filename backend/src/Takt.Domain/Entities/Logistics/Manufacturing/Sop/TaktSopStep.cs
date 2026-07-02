@@ -26,7 +26,7 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Sop;
 public class TaktSopStep : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 正文 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 正文 ID（关联 TaktSopContent.Id，选项 TaktSopContents/options）
     /// </summary>
     [SugarColumn(ColumnName = "content_id", ColumnDescription = "正文ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -57,9 +57,9 @@ public class TaktSopStep : TaktCompanyEntityBase
     public string? SafetyAlert { get; set; }
 
     /// <summary>
-    /// 是否安全弹窗（字典 sys_yes_no_type，0=否，1=是）
+    /// 弹窗（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
-    [SugarColumn(ColumnName = "safety_popup_required", ColumnDescription = "是否安全弹窗", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    [SugarColumn(ColumnName = "safety_popup_required", ColumnDescription = "弹窗", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SafetyPopupRequired { get; set; } = 0;
 
     /// <summary>

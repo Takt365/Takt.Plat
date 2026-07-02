@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Procurement
 // 文件名称：TaktPurchaseInvoiceItemI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPurchaseInvoiceItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktPurchaseInvoiceItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.purchaseinvoiceitem._self", "zh-HK", "Takt采购发票明细信息_hk", "实体名称"),
 
             // entity.purchaseinvoiceitem.purchaseinvoiceid
-            new TranslationSeedItem("entity.purchaseinvoiceitem.purchaseinvoiceid", "en-US", "采购发票ID_us", "采购发票ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.purchaseinvoiceitem.purchaseinvoiceid", "en-US", "采购发票ID_us", "采购发票 ID（关联 TaktPurchaseInvoice.Id，选项 TaktPurchaseInvoices/options）"),
             // entity.purchaseinvoiceitem.purchaseinvoiceid
-            new TranslationSeedItem("entity.purchaseinvoiceitem.purchaseinvoiceid", "ja-JP", "采购发票ID_jp", "采购发票ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.purchaseinvoiceitem.purchaseinvoiceid", "ja-JP", "采购发票ID_jp", "采购发票 ID（关联 TaktPurchaseInvoice.Id，选项 TaktPurchaseInvoices/options）"),
             // entity.purchaseinvoiceitem.purchaseinvoiceid
-            new TranslationSeedItem("entity.purchaseinvoiceitem.purchaseinvoiceid", "zh-CN", "采购发票ID", "采购发票ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.purchaseinvoiceitem.purchaseinvoiceid", "zh-CN", "采购发票ID", "采购发票 ID（关联 TaktPurchaseInvoice.Id，选项 TaktPurchaseInvoices/options）"),
             // entity.purchaseinvoiceitem.purchaseinvoiceid
-            new TranslationSeedItem("entity.purchaseinvoiceitem.purchaseinvoiceid", "zh-HK", "采购发票ID_hk", "采购发票ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.purchaseinvoiceitem.purchaseinvoiceid", "zh-HK", "采购发票ID_hk", "采购发票 ID（关联 TaktPurchaseInvoice.Id，选项 TaktPurchaseInvoices/options）"),
 
             // entity.purchaseinvoiceitem.purchaseinvoicecode
             new TranslationSeedItem("entity.purchaseinvoiceitem.purchaseinvoicecode", "en-US", "采购发票编码_us", "采购发票编码（冗余字段，便于查询）"),
@@ -208,13 +208,13 @@ public class TaktPurchaseInvoiceItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.purchaseinvoiceitem.discountamount", "zh-HK", "折扣金额_hk", "折扣金额"),
 
             // entity.purchaseinvoiceitem.taxrate
-            new TranslationSeedItem("entity.purchaseinvoiceitem.taxrate", "en-US", "税费率_us", "税费率（字典 logistics_tax_rate_param 预设或手输；0-100，表示税费百分比）"),
+            new TranslationSeedItem("entity.purchaseinvoiceitem.taxrate", "en-US", "税费率_us", "税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）"),
             // entity.purchaseinvoiceitem.taxrate
-            new TranslationSeedItem("entity.purchaseinvoiceitem.taxrate", "ja-JP", "税费率_jp", "税费率（字典 logistics_tax_rate_param 预设或手输；0-100，表示税费百分比）"),
+            new TranslationSeedItem("entity.purchaseinvoiceitem.taxrate", "ja-JP", "税费率_jp", "税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）"),
             // entity.purchaseinvoiceitem.taxrate
-            new TranslationSeedItem("entity.purchaseinvoiceitem.taxrate", "zh-CN", "税费率", "税费率（字典 logistics_tax_rate_param 预设或手输；0-100，表示税费百分比）"),
+            new TranslationSeedItem("entity.purchaseinvoiceitem.taxrate", "zh-CN", "税费率", "税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）"),
             // entity.purchaseinvoiceitem.taxrate
-            new TranslationSeedItem("entity.purchaseinvoiceitem.taxrate", "zh-HK", "税费率_hk", "税费率（字典 logistics_tax_rate_param 预设或手输；0-100，表示税费百分比）"),
+            new TranslationSeedItem("entity.purchaseinvoiceitem.taxrate", "zh-HK", "税费率_hk", "税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）"),
 
             // entity.purchaseinvoiceitem.taxamount
             new TranslationSeedItem("entity.purchaseinvoiceitem.taxamount", "en-US", "税费_us", "税费"),

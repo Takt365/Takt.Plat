@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Foundation
 // 文件名称：TaktQuartzTaskDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-29
 // 创建人：Takt365(Auto Generated)
 // 功能描述：QuartzTask 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktQuartzTask 生成，请按需审阅）
 // 
@@ -14,8 +14,6 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
-using Takt.Shared.Enums;
-using Takt.Application.Dtos.Statistics.Logging;
 
 namespace Takt.Application.Dtos.Foundation;
 
@@ -53,14 +51,14 @@ public class TaktQuartzTaskDto : TaktCompanyDtoBase
     public string JobName { get; set; } = string.Empty;
 
     /// <summary>
-    /// Quartz Job 分组
+    /// Quartz Job 分组（字典 sys_quartz_job_group 的 DictValue）
     /// </summary>
     public string JobGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 任务类型（1=程序集 2=网络请求 3=SQL语句）
+    /// 任务类型（字典 sys_quartz_task_type 的 DictValue：assembly=程序集、http=网络请求、sql=SQL语句）
     /// </summary>
-    public int TaskType { get; set; }
+    public string TaskType { get; set; } = string.Empty;
 
     /// <summary>
     /// 程序集名称（任务类型为程序集时使用）
@@ -88,9 +86,9 @@ public class TaktQuartzTaskDto : TaktCompanyDtoBase
     public string? SqlScript { get; set; } = string.Empty;
 
     /// <summary>
-    /// 触发器类型（0=Simple 1=Cron）
+    /// 触发器类型（字典 sys_quartz_trigger_type；0=Simple 1=Cron）
     /// </summary>
-    public int TriggerType { get; set; }
+    public int TriggerType { get; set; } = 0;
 
     /// <summary>
     /// Cron 表达式（触发器类型为 Cron 时使用）
@@ -108,22 +106,17 @@ public class TaktQuartzTaskDto : TaktCompanyDtoBase
     public string? ExecuteParams { get; set; } = string.Empty;
 
     /// <summary>
-    /// 任务状态
+    /// 是否允许并发执行（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
-    public int TaskStatus { get; set; }
+    public int Concurrent { get; set; } = 0;
 
     /// <summary>
-    /// 是否允许并发执行（0=禁止，1=允许）
+    /// Misfire 策略（字典 sys_quartz_misfire_policy；0=默认 1=忽略 2=立即触发 3=不触发）
     /// </summary>
-    public int Concurrent { get; set; }
+    public int MisfirePolicy { get; set; } = 0;
 
     /// <summary>
-    /// Misfire 策略
-    /// </summary>
-    public int MisfirePolicy { get; set; }
-
-    /// <summary>
-    /// 首次执行时间（调度生效开始时间）
+    /// 首次执行（调度生效开始时间）
     /// </summary>
     public DateTime? FirstRunAt { get; set; }
 
@@ -133,19 +126,24 @@ public class TaktQuartzTaskDto : TaktCompanyDtoBase
     public int ExecuteCount { get; set; } = 0;
 
     /// <summary>
-    /// 上次执行时间
+    /// 上次执行
     /// </summary>
     public DateTime? LastRunAt { get; set; }
 
     /// <summary>
-    /// 下次执行时间
+    /// 下次执行
     /// </summary>
     public DateTime? NextRunAt { get; set; }
 
     /// <summary>
     /// 任务描述
     /// </summary>
-    public string? Description { get; set; } = string.Empty;
+    public string? TaskDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 任务状态（字典 sys_quartz_task_status；0=正常 1=暂停）
+    /// </summary>
+    public int TaskStatus { get; set; } = 0;
 
     /// <summary>
     /// 关联的任务执行日志列表（主子表关系：QuartzTaskId）
@@ -191,14 +189,14 @@ public class TaktQuartzTaskQueryDto : TaktPagedQuery
     public string? JobName { get; set; } = string.Empty;
 
     /// <summary>
-    /// Quartz Job 分组
+    /// Quartz Job 分组（字典 sys_quartz_job_group 的 DictValue）
     /// </summary>
     public string? JobGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 任务类型（1=程序集 2=网络请求 3=SQL语句）
+    /// 任务类型（字典 sys_quartz_task_type 的 DictValue：assembly=程序集、http=网络请求、sql=SQL语句）
     /// </summary>
-    public int? TaskType { get; set; }
+    public string? TaskType { get; set; } = string.Empty;
 
     /// <summary>
     /// 程序集名称（任务类型为程序集时使用）
@@ -226,7 +224,7 @@ public class TaktQuartzTaskQueryDto : TaktPagedQuery
     public string? SqlScript { get; set; } = string.Empty;
 
     /// <summary>
-    /// 触发器类型（0=Simple 1=Cron）
+    /// 触发器类型（字典 sys_quartz_trigger_type；0=Simple 1=Cron）
     /// </summary>
     public int? TriggerType { get; set; }
 
@@ -246,27 +244,22 @@ public class TaktQuartzTaskQueryDto : TaktPagedQuery
     public string? ExecuteParams { get; set; } = string.Empty;
 
     /// <summary>
-    /// 任务状态
-    /// </summary>
-    public int? TaskStatus { get; set; }
-
-    /// <summary>
-    /// 是否允许并发执行（0=禁止，1=允许）
+    /// 是否允许并发执行（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     public int? Concurrent { get; set; }
 
     /// <summary>
-    /// Misfire 策略
+    /// Misfire 策略（字典 sys_quartz_misfire_policy；0=默认 1=忽略 2=立即触发 3=不触发）
     /// </summary>
     public int? MisfirePolicy { get; set; }
 
     /// <summary>
-    /// 首次执行时间（调度生效开始时间）（范围查询-开始）
+    /// 首次执行（调度生效开始时间）（范围查询-开始）
     /// </summary>
     public DateTime? FirstRunAtStart { get; set; }
 
     /// <summary>
-    /// 首次执行时间（调度生效开始时间）（范围查询-结束）
+    /// 首次执行（调度生效开始时间）（范围查询-结束）
     /// </summary>
     public DateTime? FirstRunAtEnd { get; set; }
 
@@ -276,29 +269,34 @@ public class TaktQuartzTaskQueryDto : TaktPagedQuery
     public int? ExecuteCount { get; set; }
 
     /// <summary>
-    /// 上次执行时间（范围查询-开始）
+    /// 上次执行（范围查询-开始）
     /// </summary>
     public DateTime? LastRunAtStart { get; set; }
 
     /// <summary>
-    /// 上次执行时间（范围查询-结束）
+    /// 上次执行（范围查询-结束）
     /// </summary>
     public DateTime? LastRunAtEnd { get; set; }
 
     /// <summary>
-    /// 下次执行时间（范围查询-开始）
+    /// 下次执行（范围查询-开始）
     /// </summary>
     public DateTime? NextRunAtStart { get; set; }
 
     /// <summary>
-    /// 下次执行时间（范围查询-结束）
+    /// 下次执行（范围查询-结束）
     /// </summary>
     public DateTime? NextRunAtEnd { get; set; }
 
     /// <summary>
     /// 任务描述
     /// </summary>
-    public string? Description { get; set; } = string.Empty;
+    public string? TaskDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 任务状态（字典 sys_quartz_task_status；0=正常 1=暂停）
+    /// </summary>
+    public int? TaskStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -341,7 +339,7 @@ public class TaktQuartzTaskCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -364,15 +362,16 @@ public class TaktQuartzTaskCreateDto
     public string JobName { get; set; } = string.Empty;
 
     /// <summary>
-    /// Quartz Job 分组
+    /// Quartz Job 分组（字典 sys_quartz_job_group 的 DictValue）
     /// </summary>
-    [Required(ErrorMessage = "Quartz Job 分组不能为空")]
+    [Required(ErrorMessage = "Quartz Job 分组（字典 sys_quartz_job_group 的 DictValue）不能为空")]
     public string JobGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 任务类型（1=程序集 2=网络请求 3=SQL语句）
+    /// 任务类型（字典 sys_quartz_task_type 的 DictValue：assembly=程序集、http=网络请求、sql=SQL语句）
     /// </summary>
-    public int TaskType { get; set; }
+    [Required(ErrorMessage = "任务类型（字典 sys_quartz_task_type 的 DictValue：assembly=程序集、http=网络请求、sql=SQL语句）不能为空")]
+    public string TaskType { get; set; } = string.Empty;
 
     /// <summary>
     /// 程序集名称（任务类型为程序集时使用）
@@ -402,9 +401,9 @@ public class TaktQuartzTaskCreateDto
     public string? SqlScript { get; set; } = string.Empty;
 
     /// <summary>
-    /// 触发器类型（0=Simple 1=Cron）
+    /// 触发器类型（字典 sys_quartz_trigger_type；0=Simple 1=Cron）
     /// </summary>
-    public int TriggerType { get; set; }
+    public int TriggerType { get; set; } = 0;
 
     /// <summary>
     /// Cron 表达式（触发器类型为 Cron 时使用）
@@ -423,22 +422,17 @@ public class TaktQuartzTaskCreateDto
     public string? ExecuteParams { get; set; } = string.Empty;
 
     /// <summary>
-    /// 任务状态
+    /// 是否允许并发执行（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
-    public int TaskStatus { get; set; }
+    public int Concurrent { get; set; } = 0;
 
     /// <summary>
-    /// 是否允许并发执行（0=禁止，1=允许）
+    /// Misfire 策略（字典 sys_quartz_misfire_policy；0=默认 1=忽略 2=立即触发 3=不触发）
     /// </summary>
-    public int Concurrent { get; set; }
+    public int MisfirePolicy { get; set; } = 0;
 
     /// <summary>
-    /// Misfire 策略
-    /// </summary>
-    public int MisfirePolicy { get; set; }
-
-    /// <summary>
-    /// 首次执行时间（调度生效开始时间）
+    /// 首次执行（调度生效开始时间）
     /// </summary>
     public DateTime? FirstRunAt { get; set; }
 
@@ -448,19 +442,24 @@ public class TaktQuartzTaskCreateDto
     public int ExecuteCount { get; set; } = 0;
 
     /// <summary>
-    /// 上次执行时间
+    /// 上次执行
     /// </summary>
     public DateTime? LastRunAt { get; set; }
 
     /// <summary>
-    /// 下次执行时间
+    /// 下次执行
     /// </summary>
     public DateTime? NextRunAt { get; set; }
 
     /// <summary>
     /// 任务描述
     /// </summary>
-    public string? Description { get; set; } = string.Empty;
+    public string? TaskDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 任务状态（字典 sys_quartz_task_status；0=正常 1=暂停）
+    /// </summary>
+    public int TaskStatus { get; set; } = 0;
 
     /// <summary>
     /// 关联的任务执行日志列表（主子表关系：QuartzTaskId）（子表，级联保存）
@@ -517,10 +516,10 @@ public class TaktQuartzTaskStatusDto
     public long QuartzTaskId { get; set; }
 
     /// <summary>
-    /// 任务状态
+    /// 任务状态（字典 sys_quartz_task_status；0=正常 1=暂停）
     /// </summary>
-    [Required(ErrorMessage = "任务状态不能为空")]
-    public int TaskStatus { get; set; }
+    [Required(ErrorMessage = "任务状态（字典 sys_quartz_task_status；0=正常 1=暂停）不能为空")]
+    public int TaskStatus { get; set; } = 0;
 }
 
 // ========================================
@@ -558,14 +557,14 @@ public class TaktQuartzTaskTemplateDto
     public string? JobName { get; set; } = string.Empty;
 
     /// <summary>
-    /// Quartz Job 分组
+    /// Quartz Job 分组（字典 sys_quartz_job_group 的 DictValue）
     /// </summary>
     public string? JobGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 任务类型（1=程序集 2=网络请求 3=SQL语句）
+    /// 任务类型（字典 sys_quartz_task_type 的 DictValue：assembly=程序集、http=网络请求、sql=SQL语句）
     /// </summary>
-    public int? TaskType { get; set; }
+    public string? TaskType { get; set; } = string.Empty;
 
     /// <summary>
     /// 程序集名称（任务类型为程序集时使用）
@@ -593,7 +592,7 @@ public class TaktQuartzTaskTemplateDto
     public string? SqlScript { get; set; } = string.Empty;
 
     /// <summary>
-    /// 触发器类型（0=Simple 1=Cron）
+    /// 触发器类型（字典 sys_quartz_trigger_type；0=Simple 1=Cron）
     /// </summary>
     public int? TriggerType { get; set; }
 
@@ -601,6 +600,61 @@ public class TaktQuartzTaskTemplateDto
     /// Cron 表达式（触发器类型为 Cron 时使用）
     /// </summary>
     public string? CronExpression { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 执行间隔时间（秒，触发器类型为 Simple 时使用）
+    /// </summary>
+    public int? IntervalSeconds { get; set; }
+
+    /// <summary>
+    /// 执行参数
+    /// </summary>
+    public string? ExecuteParams { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否允许并发执行（字典 sys_yes_no_type；0=否 1=是）
+    /// </summary>
+    public int? Concurrent { get; set; }
+
+    /// <summary>
+    /// Misfire 策略（字典 sys_quartz_misfire_policy；0=默认 1=忽略 2=立即触发 3=不触发）
+    /// </summary>
+    public int? MisfirePolicy { get; set; }
+
+    /// <summary>
+    /// 首次执行（调度生效开始时间）
+    /// </summary>
+    public DateTime? FirstRunAt { get; set; }
+
+    /// <summary>
+    /// 执行次数
+    /// </summary>
+    public int? ExecuteCount { get; set; }
+
+    /// <summary>
+    /// 上次执行
+    /// </summary>
+    public DateTime? LastRunAt { get; set; }
+
+    /// <summary>
+    /// 下次执行
+    /// </summary>
+    public DateTime? NextRunAt { get; set; }
+
+    /// <summary>
+    /// 任务描述
+    /// </summary>
+    public string? TaskDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 任务状态（字典 sys_quartz_task_status；0=正常 1=暂停）
+    /// </summary>
+    public int? TaskStatus { get; set; }
+
+    /// <summary>
+    /// 关联的任务执行日志列表（主子表关系：QuartzTaskId）（子表，级联保存）
+    /// </summary>
+    public List<TaktQuartzLogCreateDto>? QuartzLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -630,7 +684,7 @@ public class TaktQuartzTaskImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -650,14 +704,14 @@ public class TaktQuartzTaskImportDto
     public string? JobName { get; set; } = string.Empty;
 
     /// <summary>
-    /// Quartz Job 分组
+    /// Quartz Job 分组（字典 sys_quartz_job_group 的 DictValue）
     /// </summary>
     public string? JobGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 任务类型（1=程序集 2=网络请求 3=SQL语句）
+    /// 任务类型（字典 sys_quartz_task_type 的 DictValue：assembly=程序集、http=网络请求、sql=SQL语句）
     /// </summary>
-    public int? TaskType { get; set; }
+    public string? TaskType { get; set; } = string.Empty;
 
     /// <summary>
     /// 程序集名称（任务类型为程序集时使用）
@@ -685,7 +739,7 @@ public class TaktQuartzTaskImportDto
     public string? SqlScript { get; set; } = string.Empty;
 
     /// <summary>
-    /// 触发器类型（0=Simple 1=Cron）
+    /// 触发器类型（字典 sys_quartz_trigger_type；0=Simple 1=Cron）
     /// </summary>
     public int? TriggerType { get; set; }
 
@@ -693,6 +747,61 @@ public class TaktQuartzTaskImportDto
     /// Cron 表达式（触发器类型为 Cron 时使用）
     /// </summary>
     public string? CronExpression { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 执行间隔时间（秒，触发器类型为 Simple 时使用）
+    /// </summary>
+    public int? IntervalSeconds { get; set; }
+
+    /// <summary>
+    /// 执行参数
+    /// </summary>
+    public string? ExecuteParams { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否允许并发执行（字典 sys_yes_no_type；0=否 1=是）
+    /// </summary>
+    public int? Concurrent { get; set; }
+
+    /// <summary>
+    /// Misfire 策略（字典 sys_quartz_misfire_policy；0=默认 1=忽略 2=立即触发 3=不触发）
+    /// </summary>
+    public int? MisfirePolicy { get; set; }
+
+    /// <summary>
+    /// 首次执行（调度生效开始时间）
+    /// </summary>
+    public DateTime? FirstRunAt { get; set; }
+
+    /// <summary>
+    /// 执行次数
+    /// </summary>
+    public int? ExecuteCount { get; set; }
+
+    /// <summary>
+    /// 上次执行
+    /// </summary>
+    public DateTime? LastRunAt { get; set; }
+
+    /// <summary>
+    /// 下次执行
+    /// </summary>
+    public DateTime? NextRunAt { get; set; }
+
+    /// <summary>
+    /// 任务描述
+    /// </summary>
+    public string? TaskDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 任务状态（字典 sys_quartz_task_status；0=正常 1=暂停）
+    /// </summary>
+    public int? TaskStatus { get; set; }
+
+    /// <summary>
+    /// 关联的任务执行日志列表（主子表关系：QuartzTaskId）（子表，级联保存）
+    /// </summary>
+    public List<TaktQuartzLogCreateDto>? QuartzLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -743,14 +852,14 @@ public class TaktQuartzTaskExportDto
     public string JobName { get; set; } = string.Empty;
 
     /// <summary>
-    /// Quartz Job 分组
+    /// Quartz Job 分组（字典 sys_quartz_job_group 的 DictValue）
     /// </summary>
     public string JobGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 任务类型（1=程序集 2=网络请求 3=SQL语句）
+    /// 任务类型（字典 sys_quartz_task_type 的 DictValue：assembly=程序集、http=网络请求、sql=SQL语句）
     /// </summary>
-    public int TaskType { get; set; }
+    public string TaskType { get; set; } = string.Empty;
 
     /// <summary>
     /// 程序集名称（任务类型为程序集时使用）
@@ -778,9 +887,9 @@ public class TaktQuartzTaskExportDto
     public string? SqlScript { get; set; } = string.Empty;
 
     /// <summary>
-    /// 触发器类型（0=Simple 1=Cron）
+    /// 触发器类型（字典 sys_quartz_trigger_type；0=Simple 1=Cron）
     /// </summary>
-    public int TriggerType { get; set; }
+    public int TriggerType { get; set; } = 0;
 
     /// <summary>
     /// Cron 表达式（触发器类型为 Cron 时使用）
@@ -798,22 +907,17 @@ public class TaktQuartzTaskExportDto
     public string? ExecuteParams { get; set; } = string.Empty;
 
     /// <summary>
-    /// 任务状态
+    /// 是否允许并发执行（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
-    public int TaskStatus { get; set; }
+    public int Concurrent { get; set; } = 0;
 
     /// <summary>
-    /// 是否允许并发执行（0=禁止，1=允许）
+    /// Misfire 策略（字典 sys_quartz_misfire_policy；0=默认 1=忽略 2=立即触发 3=不触发）
     /// </summary>
-    public int Concurrent { get; set; }
+    public int MisfirePolicy { get; set; } = 0;
 
     /// <summary>
-    /// Misfire 策略
-    /// </summary>
-    public int MisfirePolicy { get; set; }
-
-    /// <summary>
-    /// 首次执行时间（调度生效开始时间）
+    /// 首次执行（调度生效开始时间）
     /// </summary>
     public DateTime? FirstRunAt { get; set; }
 
@@ -823,19 +927,24 @@ public class TaktQuartzTaskExportDto
     public int ExecuteCount { get; set; } = 0;
 
     /// <summary>
-    /// 上次执行时间
+    /// 上次执行
     /// </summary>
     public DateTime? LastRunAt { get; set; }
 
     /// <summary>
-    /// 下次执行时间
+    /// 下次执行
     /// </summary>
     public DateTime? NextRunAt { get; set; }
 
     /// <summary>
     /// 任务描述
     /// </summary>
-    public string? Description { get; set; } = string.Empty;
+    public string? TaskDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 任务状态（字典 sys_quartz_task_status；0=正常 1=暂停）
+    /// </summary>
+    public int TaskStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

@@ -33,7 +33,7 @@ public class TaktCostCenterChangeLog : TaktCompanyEntityBase
     /// <summary>
     /// 成本中心编码（冗余）
     /// </summary>
-    [SugarColumn(ColumnName = "cost_center_code", ColumnDescription = "成本中心编码", ColumnDataType = "varchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "cost_center_code", ColumnDescription = "成本中心编码", ColumnDataType = "varchar", Length = 4, IsNullable = false)]
     public string CostCenterCode { get; set; } = string.Empty;
     /// <summary>
     /// 变更字段列表 JSON

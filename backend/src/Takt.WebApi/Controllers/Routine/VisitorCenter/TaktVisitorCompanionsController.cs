@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Routine.VisitorCenter
 // 文件名称：TaktVisitorCompanionsController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-27
 // 创建人：Takt365(Cursor AI)
 // 功能描述：来访人员控制器
 // 
@@ -41,7 +41,7 @@ public class TaktVisitorCompanionsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("routine:visitorcenter:visitorcompanion:list", "来访人员列表")]
+    [TaktPermission("routine:visitor:center:list", "来访人员列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetVisitorCompanionListAsync([FromQuery] TaktVisitorCompanionQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktVisitorCompanionsController : TaktControllerBase
     /// </summary>
     /// <param name="id">来访人员ID</param>
     /// <returns>来访人员DTO</returns>
-    [TaktPermission("routine:visitorcenter:visitorcompanion:query", "来访人员详情")]
+    [TaktPermission("routine:visitor:center:query", "来访人员详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetVisitorCompanionByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktVisitorCompanionsController : TaktControllerBase
     /// 获取来访人员选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("routine:visitorcenter:visitorcompanion:query", "来访人员选项")]
+    [TaktPermission("routine:visitor:center:query", "来访人员选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetVisitorCompanionOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktVisitorCompanionsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>来访人员DTO</returns>
-    [TaktPermission("routine:visitorcenter:visitorcompanion:create", "创建来访人员")]
+    [TaktPermission("routine:visitor:center:create", "创建来访人员")]
     [HttpPost]
     public async Task<IActionResult> CreateVisitorCompanionAsync([FromBody] TaktVisitorCompanionCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktVisitorCompanionsController : TaktControllerBase
     /// <param name="id">来访人员ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>来访人员DTO</returns>
-    [TaktPermission("routine:visitorcenter:visitorcompanion:update", "更新来访人员")]
+    [TaktPermission("routine:visitor:center:update", "更新来访人员")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateVisitorCompanionAsync(long id, [FromBody] TaktVisitorCompanionUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktVisitorCompanionsController : TaktControllerBase
     /// </summary>
     /// <param name="id">来访人员ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("routine:visitorcenter:visitorcompanion:delete", "删除来访人员")]
+    [TaktPermission("routine:visitor:center:delete", "删除来访人员")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteVisitorCompanionByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktVisitorCompanionsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("routine:visitorcenter:visitorcompanion:delete", "批量删除来访人员")]
+    [TaktPermission("routine:visitor:center:delete", "批量删除来访人员")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteVisitorCompanionBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktVisitorCompanionsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("routine:visitorcenter:visitorcompanion:import", "获取来访人员导入模板")]
+    [TaktPermission("routine:visitor:center:import", "获取来访人员导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetVisitorCompanionTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -204,7 +204,7 @@ public class TaktVisitorCompanionsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("routine:visitorcenter:visitorcompanion:import", "导入来访人员")]
+    [TaktPermission("routine:visitor:center:import", "导入来访人员")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportVisitorCompanionAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -234,7 +234,7 @@ public class TaktVisitorCompanionsController : TaktControllerBase
     /// 导出来访人员
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("routine:visitorcenter:visitorcompanion:export", "导出来访人员")]
+    [TaktPermission("routine:visitor:center:export", "导出来访人员")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportVisitorCompanionAsync([FromQuery] TaktVisitorCompanionQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

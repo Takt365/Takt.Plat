@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Planning
 // 文件名称：TaktSalesPlanDtos.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SalesPlan 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSalesPlan 生成，请按需审阅）
 // 
@@ -107,19 +107,19 @@ public class TaktSalesPlanDto : TaktApprovalDtoBase
     public decimal ConvertedAmount { get; set; }
 
     /// <summary>
+    /// 计划说明
+    /// </summary>
+    public string? PlanDescription { get; set; } = string.Empty;
+
+    /// <summary>
     /// 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
     public int PlanStatus { get; set; } = 0;
 
     /// <summary>
-    /// 转单状态（0=未转单，1=部分转单，2=全部转单）
+    /// 转单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
     /// </summary>
     public int ConvertedStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 计划说明
-    /// </summary>
-    public string? PlanDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 销售计划明细列表（主子表关系）
@@ -231,22 +231,22 @@ public class TaktSalesPlanQueryDto : TaktPagedQuery
     public decimal? ConvertedAmount { get; set; }
 
     /// <summary>
-    /// 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）
-    /// </summary>
-    public int? PlanStatus { get; set; }
-
-    /// <summary>
-    /// 转单状态（0=未转单，1=部分转单，2=全部转单）
-    /// </summary>
-    public int? ConvertedStatus { get; set; }
-
-    /// <summary>
     /// 计划说明
     /// </summary>
     public string? PlanDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 审批状态（TaktApprovalStatus）
+    /// 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// </summary>
+    public int? PlanStatus { get; set; }
+
+    /// <summary>
+    /// 转单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
+    /// </summary>
+    public int? ConvertedStatus { get; set; }
+
+    /// <summary>
+    /// 审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）
     /// </summary>
     public TaktApprovalStatus? ApprovalStatus { get; set; }
 
@@ -329,7 +329,7 @@ public class TaktSalesPlanCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -403,19 +403,19 @@ public class TaktSalesPlanCreateDto
     public decimal ConvertedAmount { get; set; }
 
     /// <summary>
+    /// 计划说明
+    /// </summary>
+    public string? PlanDescription { get; set; } = string.Empty;
+
+    /// <summary>
     /// 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
     public int PlanStatus { get; set; } = 0;
 
     /// <summary>
-    /// 转单状态（0=未转单，1=部分转单，2=全部转单）
+    /// 转单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
     /// </summary>
     public int ConvertedStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 计划说明
-    /// </summary>
-    public string? PlanDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 销售计划明细列表（主子表关系）（子表，级联保存）
@@ -508,6 +508,21 @@ public class TaktSalesPlanTemplateDto
     public string? SalesPlanCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 计划编制日期
+    /// </summary>
+    public DateTime? PlanDate { get; set; }
+
+    /// <summary>
+    /// 计划周期开始日期
+    /// </summary>
+    public DateTime? PlanPeriodStart { get; set; }
+
+    /// <summary>
+    /// 计划周期结束日期
+    /// </summary>
+    public DateTime? PlanPeriodEnd { get; set; }
+
+    /// <summary>
     /// 客户编码（可选；汇总计划时为空，关联 TaktCustomer.CustomerCode）
     /// </summary>
     public string? CustomerCode { get; set; } = string.Empty;
@@ -529,19 +544,44 @@ public class TaktSalesPlanTemplateDto
     public string? PlanBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 计划总数量（基本单位数量）
     /// </summary>
-    public int? PlanStatus { get; set; }
+    public decimal? TotalQuantity { get; set; }
 
     /// <summary>
-    /// 转单状态（0=未转单，1=部分转单，2=全部转单）
+    /// 计划总金额
     /// </summary>
-    public int? ConvertedStatus { get; set; }
+    public decimal? TotalAmount { get; set; }
+
+    /// <summary>
+    /// 已转生产/销售数量（基本单位数量）
+    /// </summary>
+    public decimal? ConvertedQuantity { get; set; }
+
+    /// <summary>
+    /// 已转生产/销售金额
+    /// </summary>
+    public decimal? ConvertedAmount { get; set; }
 
     /// <summary>
     /// 计划说明
     /// </summary>
     public string? PlanDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// </summary>
+    public int? PlanStatus { get; set; }
+
+    /// <summary>
+    /// 转单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
+    /// </summary>
+    public int? ConvertedStatus { get; set; }
+
+    /// <summary>
+    /// 销售计划明细列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktSalesPlanItemCreateDto>? Items { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -571,7 +611,7 @@ public class TaktSalesPlanImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -584,6 +624,21 @@ public class TaktSalesPlanImportDto
     /// 销售计划编码（租户+公司+工厂内业务唯一）
     /// </summary>
     public string? SalesPlanCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 计划编制日期
+    /// </summary>
+    public DateTime? PlanDate { get; set; }
+
+    /// <summary>
+    /// 计划周期开始日期
+    /// </summary>
+    public DateTime? PlanPeriodStart { get; set; }
+
+    /// <summary>
+    /// 计划周期结束日期
+    /// </summary>
+    public DateTime? PlanPeriodEnd { get; set; }
 
     /// <summary>
     /// 客户编码（可选；汇总计划时为空，关联 TaktCustomer.CustomerCode）
@@ -607,19 +662,44 @@ public class TaktSalesPlanImportDto
     public string? PlanBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 计划总数量（基本单位数量）
     /// </summary>
-    public int? PlanStatus { get; set; }
+    public decimal? TotalQuantity { get; set; }
 
     /// <summary>
-    /// 转单状态（0=未转单，1=部分转单，2=全部转单）
+    /// 计划总金额
     /// </summary>
-    public int? ConvertedStatus { get; set; }
+    public decimal? TotalAmount { get; set; }
+
+    /// <summary>
+    /// 已转生产/销售数量（基本单位数量）
+    /// </summary>
+    public decimal? ConvertedQuantity { get; set; }
+
+    /// <summary>
+    /// 已转生产/销售金额
+    /// </summary>
+    public decimal? ConvertedAmount { get; set; }
 
     /// <summary>
     /// 计划说明
     /// </summary>
     public string? PlanDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// </summary>
+    public int? PlanStatus { get; set; }
+
+    /// <summary>
+    /// 转单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
+    /// </summary>
+    public int? ConvertedStatus { get; set; }
+
+    /// <summary>
+    /// 销售计划明细列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktSalesPlanItemCreateDto>? Items { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -716,19 +796,19 @@ public class TaktSalesPlanExportDto
     public decimal ConvertedAmount { get; set; }
 
     /// <summary>
+    /// 计划说明
+    /// </summary>
+    public string? PlanDescription { get; set; } = string.Empty;
+
+    /// <summary>
     /// 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
     public int PlanStatus { get; set; } = 0;
 
     /// <summary>
-    /// 转单状态（0=未转单，1=部分转单，2=全部转单）
+    /// 转单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
     /// </summary>
     public int ConvertedStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 计划说明
-    /// </summary>
-    public string? PlanDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON

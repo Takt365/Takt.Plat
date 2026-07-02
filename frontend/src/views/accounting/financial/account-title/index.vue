@@ -109,9 +109,21 @@
               {{ getAccountTitleField(record, 'accountTitleId') }}
             </span>
           </template>
-        <template v-else-if="column.key === 'titleStatus'">
+        <template v-else-if="column.key === 'accountTitleType'">
+          <TaktDictTag
+            :value="getAccountTitleField(record, 'accountTitleType')"
+            dict-type="accounting_account_title_type"
+          />
+        </template>
+        <template v-else-if="column.key === 'auxiliaryType'">
+          <TaktDictTag
+            :value="getAccountTitleField(record, 'auxiliaryType')"
+            dict-type="accounting_auxiliary_type"
+          />
+        </template>
+        <template v-else-if="column.key === 'accountTitleStatus'">
           <a-switch
-            :checked="getAccountTitleField(record, 'titleStatus') === 1"
+            :checked="getAccountTitleField(record, 'accountTitleStatus') === 1"
             :checked-children="t('common.page.button.enable')" :un-checked-children="t('common.page.button.disable')"
             @change="(checked: unknown) => handleTitleStatusChange(record, Boolean(checked))"
           />
@@ -149,22 +161,22 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('titleCode')">
-      <a-form-item :label="t('entity.accounttitle.titlecode')">
+      <div v-show="isFieldVisible('accountTitleCode')">
+      <a-form-item :label="t('entity.accounttitle.code')">
         <a-input
-          v-model:value="advancedQueryForm.titleCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accounttitle.titlecode') })"
+          v-model:value="advancedQueryForm.accountTitleCode"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accounttitle.code') })"
           show-count
           :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('titleName')">
-      <a-form-item :label="t('entity.accounttitle.titlename')">
+      <div v-show="isFieldVisible('accountTitleName')">
+      <a-form-item :label="t('entity.accounttitle.name')">
         <a-input
-          v-model:value="advancedQueryForm.titleName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accounttitle.titlename') })"
+          v-model:value="advancedQueryForm.accountTitleName"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accounttitle.name') })"
           show-count
           :maxlength="200"
           allow-clear
@@ -182,12 +194,13 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('titleType')">
-      <a-form-item :label="t('entity.accounttitle.titletype')">
-        <a-input-number
-          v-model:value="advancedQueryForm.titleType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accounttitle.titletype') })"
-          style="width: 100%"
+      <div v-show="isFieldVisible('accountTitleType')">
+      <a-form-item :label="t('entity.accounttitle.type')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.accountTitleType"
+          dict-type="accounting_account_title_type"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.accounttitle.type') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -200,11 +213,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('titleLevel')">
-      <a-form-item :label="t('entity.accounttitle.titlelevel')">
+      <div v-show="isFieldVisible('accountTitleLevel')">
+      <a-form-item :label="t('entity.accounttitle.level')">
         <a-input-number
-          v-model:value="advancedQueryForm.titleLevel"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accounttitle.titlelevel') })"
+          v-model:value="advancedQueryForm.accountTitleLevel"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accounttitle.level') })"
           style="width: 100%"
         />
       </a-form-item>
@@ -229,10 +242,11 @@
       </div>
       <div v-show="isFieldVisible('auxiliaryType')">
       <a-form-item :label="t('entity.accounttitle.auxiliarytype')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.auxiliaryType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accounttitle.auxiliarytype') })"
-          style="width: 100%"
+          dict-type="accounting_auxiliary_type"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.accounttitle.auxiliarytype') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -274,21 +288,20 @@
       </div>
       <div v-show="isFieldVisible('relatedPlant')">
       <a-form-item :label="t('entity.accounttitle.relatedplant')">
-        <a-input
+        <TaktSelect
           v-model:value="advancedQueryForm.relatedPlant"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accounttitle.relatedplant') })"
-          show-count
-          :maxlength="4"
+          api-url="TaktPlants/options"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.accounttitle.relatedplant') })"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('titleStatus')">
-      <a-form-item :label="t('entity.accounttitle.titlestatus')">
+      <div v-show="isFieldVisible('accountTitleStatus')">
+      <a-form-item :label="t('entity.accounttitle.status')">
         <TaktSelect
-          v-model:value="advancedQueryForm.titleStatus"
+          v-model:value="advancedQueryForm.accountTitleStatus"
           dict-type="sys_normal_disable_status"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.accounttitle.titlestatus') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.accounttitle.status') })"
           allow-clear
         />
       </a-form-item>
@@ -513,21 +526,21 @@ const formRef = ref()
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
-  titleCode: '',
-  titleName: '',
+  accountTitleCode: '',
+  accountTitleName: '',
   parentId: '',
-  titleType: undefined as number | undefined,
+  accountTitleType: '' as string | undefined,
   balanceDirection: undefined as number | undefined,
-  titleLevel: undefined as number | undefined,
+  accountTitleLevel: undefined as number | undefined,
   isLeaf: undefined as number | undefined,
   isAuxiliary: undefined as number | undefined,
-  auxiliaryType: undefined as number | undefined,
+  auxiliaryType: '' as string | undefined,
   isQuantity: undefined as number | undefined,
   isCurrency: undefined as number | undefined,
   isCash: undefined as number | undefined,
   isBank: undefined as number | undefined,
   relatedPlant: '',
-  titleStatus: undefined as number | undefined,
+  accountTitleStatus: undefined as number | undefined,
   validFromStart: '',
   validFromEnd: '',
   validToStart: '',
@@ -539,12 +552,12 @@ const advancedQueryForm = ref({
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'titleCode', label: t('entity.accounttitle.titlecode') },
-  { key: 'titleName', label: t('entity.accounttitle.titlename') },
+  { key: 'accountTitleCode', label: t('entity.accounttitle.code') },
+  { key: 'accountTitleName', label: t('entity.accounttitle.name') },
   { key: 'parentId', label: t('entity.accounttitle.parentid') },
-  { key: 'titleType', label: t('entity.accounttitle.titletype') },
+  { key: 'accountTitleType', label: t('entity.accounttitle.type') },
   { key: 'balanceDirection', label: t('entity.accounttitle.balancedirection') },
-  { key: 'titleLevel', label: t('entity.accounttitle.titlelevel') },
+  { key: 'accountTitleLevel', label: t('entity.accounttitle.level') },
   { key: 'isLeaf', label: t('entity.accounttitle.isleaf') },
   { key: 'isAuxiliary', label: t('entity.accounttitle.isauxiliary') },
   { key: 'auxiliaryType', label: t('entity.accounttitle.auxiliarytype') },
@@ -553,7 +566,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'isCash', label: t('entity.accounttitle.iscash') },
   { key: 'isBank', label: t('entity.accounttitle.isbank') },
   { key: 'relatedPlant', label: t('entity.accounttitle.relatedplant') },
-  { key: 'titleStatus', label: t('entity.accounttitle.titlestatus') },
+  { key: 'accountTitleStatus', label: t('entity.accounttitle.status') },
   { key: 'validFromStart', label: t('entity.accounttitle.validfromstart') },
   { key: 'validFromEnd', label: t('entity.accounttitle.validfromend') },
   { key: 'validToStart', label: t('entity.accounttitle.validtostart') },
@@ -735,21 +748,21 @@ function matchesAccountTitleRightQuery(record: Record<string, unknown>): boolean
     const k = kw.toLowerCase()
     if (!String(record.accountTitleId ?? '').toLowerCase().includes(k)) return false
   }
-  if (advancedQueryForm.value.titleCode && !String(record.titleCode ?? '').includes(String(advancedQueryForm.value.titleCode))) return false
-  if (advancedQueryForm.value.titleName && !String(record.titleName ?? '').includes(String(advancedQueryForm.value.titleName))) return false
+  if (advancedQueryForm.value.accountTitleCode && !String(record.accountTitleCode ?? '').includes(String(advancedQueryForm.value.accountTitleCode))) return false
+  if (advancedQueryForm.value.accountTitleName && !String(record.accountTitleName ?? '').includes(String(advancedQueryForm.value.accountTitleName))) return false
   if (advancedQueryForm.value.parentId && !String(record.parentId ?? '').includes(String(advancedQueryForm.value.parentId))) return false
-  if (advancedQueryForm.value.titleType !== undefined && record.titleType !== advancedQueryForm.value.titleType) return false
+  if (advancedQueryForm.value.accountTitleType && record.accountTitleType !== advancedQueryForm.value.accountTitleType) return false
   if (advancedQueryForm.value.balanceDirection !== undefined && record.balanceDirection !== advancedQueryForm.value.balanceDirection) return false
-  if (advancedQueryForm.value.titleLevel !== undefined && record.titleLevel !== advancedQueryForm.value.titleLevel) return false
+  if (advancedQueryForm.value.accountTitleLevel !== undefined && record.accountTitleLevel !== advancedQueryForm.value.accountTitleLevel) return false
   if (advancedQueryForm.value.isLeaf !== undefined && record.isLeaf !== advancedQueryForm.value.isLeaf) return false
   if (advancedQueryForm.value.isAuxiliary !== undefined && record.isAuxiliary !== advancedQueryForm.value.isAuxiliary) return false
-  if (advancedQueryForm.value.auxiliaryType !== undefined && record.auxiliaryType !== advancedQueryForm.value.auxiliaryType) return false
+  if (advancedQueryForm.value.auxiliaryType && record.auxiliaryType !== advancedQueryForm.value.auxiliaryType) return false
   if (advancedQueryForm.value.isQuantity !== undefined && record.isQuantity !== advancedQueryForm.value.isQuantity) return false
   if (advancedQueryForm.value.isCurrency !== undefined && record.isCurrency !== advancedQueryForm.value.isCurrency) return false
   if (advancedQueryForm.value.isCash !== undefined && record.isCash !== advancedQueryForm.value.isCash) return false
   if (advancedQueryForm.value.isBank !== undefined && record.isBank !== advancedQueryForm.value.isBank) return false
-  if (advancedQueryForm.value.relatedPlant && !String(record.relatedPlant ?? '').includes(String(advancedQueryForm.value.relatedPlant))) return false
-  if (advancedQueryForm.value.titleStatus !== undefined && record.titleStatus !== advancedQueryForm.value.titleStatus) return false
+  if (advancedQueryForm.value.relatedPlant && String(record.relatedPlant ?? '') !== String(advancedQueryForm.value.relatedPlant)) return false
+  if (advancedQueryForm.value.accountTitleStatus !== undefined && record.accountTitleStatus !== advancedQueryForm.value.accountTitleStatus) return false
   if (advancedQueryForm.value.validFromStart && !String(record.validFromStart ?? '').includes(String(advancedQueryForm.value.validFromStart))) return false
   if (advancedQueryForm.value.validFromEnd && !String(record.validFromEnd ?? '').includes(String(advancedQueryForm.value.validFromEnd))) return false
   if (advancedQueryForm.value.validToStart && !String(record.validToStart ?? '').includes(String(advancedQueryForm.value.validToStart))) return false
@@ -799,12 +812,12 @@ function buildAccountTitleUpdateDto(
     tenantCode: accountTitle.tenantCode,
     companyCode: accountTitle.companyCode,
     companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-    titleCode: accountTitle.titleCode,
-    titleName: accountTitle.titleName,
+    accountTitleCode: accountTitle.accountTitleCode,
+    accountTitleName: accountTitle.accountTitleName,
     parentId: overrides.parentId,
-    titleType: accountTitle.titleType,
+    accountTitleType: accountTitle.accountTitleType,
     balanceDirection: accountTitle.balanceDirection,
-    titleLevel: accountTitle.titleLevel,
+    accountTitleLevel: accountTitle.accountTitleLevel,
     isAuxiliary: accountTitle.isAuxiliary,
     auxiliaryType: accountTitle.auxiliaryType,
     isQuantity: accountTitle.isQuantity,
@@ -812,7 +825,7 @@ function buildAccountTitleUpdateDto(
     isCash: accountTitle.isCash,
     isBank: accountTitle.isBank,
     relatedPlant: accountTitle.relatedPlant,
-    titleStatus: accountTitle.titleStatus,
+    accountTitleStatus: accountTitle.accountTitleStatus,
     validFrom: accountTitle.validFrom,
     validTo: accountTitle.validTo,
     changeLogs: accountTitle.changeLogs,
@@ -945,22 +958,22 @@ watchEffect(() => {
       getAccountTitleField(record, 'accountTitleId') ?? getAccountTitleField(record, 'id') ?? '',
   },
   {
-    title: t('entity.accounttitle.titlecode'),
-    dataIndex: 'titleCode',
-    key: 'titleCode',
+    title: t('entity.accounttitle.code'),
+    dataIndex: 'accountTitleCode',
+    key: 'accountTitleCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: Record<string, unknown> }) => getAccountTitleField(record, 'titleCode') ?? ''
+    customRender: ({ record }: { record: Record<string, unknown> }) => getAccountTitleField(record, 'accountTitleCode') ?? ''
   },
   {
-    title: t('entity.accounttitle.titlename'),
-    dataIndex: 'titleName',
-    key: 'titleName',
+    title: t('entity.accounttitle.name'),
+    dataIndex: 'accountTitleName',
+    key: 'accountTitleName',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: Record<string, unknown> }) => getAccountTitleField(record, 'titleName') ?? ''
+    customRender: ({ record }: { record: Record<string, unknown> }) => getAccountTitleField(record, 'accountTitleName') ?? ''
   },
   {
     title: t('entity.accounttitle.parentid'),
@@ -972,13 +985,12 @@ watchEffect(() => {
     customRender: ({ record }: { record: Record<string, unknown> }) => getAccountTitleField(record, 'parentId') ?? ''
   },
   {
-    title: t('entity.accounttitle.titletype'),
-    dataIndex: 'titleType',
-    key: 'titleType',
+    title: t('entity.accounttitle.type'),
+    dataIndex: 'accountTitleType',
+    key: 'accountTitleType',
     width: 120,
     resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: Record<string, unknown> }) => getAccountTitleField(record, 'titleType') ?? ''
+    ellipsis: true
   },
   {
     title: t('entity.accounttitle.balancedirection'),
@@ -990,13 +1002,13 @@ watchEffect(() => {
     customRender: ({ record }: { record: Record<string, unknown> }) => getAccountTitleField(record, 'balanceDirection') ?? ''
   },
   {
-    title: t('entity.accounttitle.titlelevel'),
-    dataIndex: 'titleLevel',
-    key: 'titleLevel',
+    title: t('entity.accounttitle.level'),
+    dataIndex: 'accountTitleLevel',
+    key: 'accountTitleLevel',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: Record<string, unknown> }) => getAccountTitleField(record, 'titleLevel') ?? ''
+    customRender: ({ record }: { record: Record<string, unknown> }) => getAccountTitleField(record, 'accountTitleLevel') ?? ''
   },
   {
     title: t('entity.accounttitle.isleaf'),
@@ -1022,8 +1034,7 @@ watchEffect(() => {
     key: 'auxiliaryType',
     width: 120,
     resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: Record<string, unknown> }) => getAccountTitleField(record, 'auxiliaryType') ?? ''
+    ellipsis: true
   },
   {
     title: t('entity.accounttitle.isquantity'),
@@ -1071,9 +1082,9 @@ watchEffect(() => {
     customRender: ({ record }: { record: Record<string, unknown> }) => getAccountTitleField(record, 'relatedPlant') ?? ''
   },
   {
-    title: t('entity.accounttitle.titlestatus'),
-    dataIndex: 'titleStatus',
-    key: 'titleStatus',
+    title: t('entity.accounttitle.status'),
+    dataIndex: 'accountTitleStatus',
+    key: 'accountTitleStatus',
     width: 120,
     resizable: true,
     ellipsis: true,
@@ -1173,21 +1184,21 @@ const handleSearch = () => {
 const handleReset = () => {
   queryKeyword.value = ''
   advancedQueryForm.value = {
-  titleCode: '',
-  titleName: '',
+  accountTitleCode: '',
+  accountTitleName: '',
   parentId: '',
-  titleType: undefined as number | undefined,
+  accountTitleType: '' as string | undefined,
   balanceDirection: undefined as number | undefined,
-  titleLevel: undefined as number | undefined,
+  accountTitleLevel: undefined as number | undefined,
   isLeaf: undefined as number | undefined,
   isAuxiliary: undefined as number | undefined,
-  auxiliaryType: undefined as number | undefined,
+  auxiliaryType: '' as string | undefined,
   isQuantity: undefined as number | undefined,
   isCurrency: undefined as number | undefined,
   isCash: undefined as number | undefined,
   isBank: undefined as number | undefined,
   relatedPlant: '',
-  titleStatus: undefined as number | undefined,
+  accountTitleStatus: undefined as number | undefined,
   validFromStart: '',
   validFromEnd: '',
   validToStart: '',
@@ -1208,19 +1219,19 @@ const handleReset = () => {
  */
 async function handleTitleStatusChange(record: AccountTitleRowRecord, checked: boolean) {
   const newVal = checked ? 1 : 0
-  const oldVal = getAccountTitleField(record, 'titleStatus')
+  const oldVal = getAccountTitleField(record, 'accountTitleStatus')
   const id = getAccountTitleId(record)
   const row = null
   if (row) {
-    row.titleStatus = newVal
+    row.accountTitleStatus = newVal
   }
   try {
-    await updateAccountTitleStatus({ accountTitleId: id, titleStatus: newVal })
+    await updateAccountTitleStatus({ accountTitleId: id, accountTitleStatus: newVal })
     message.success(t('common.feedback.updated'))
     await loadData()
   } catch (error: unknown) {
     if (row) {
-      row.titleStatus = oldVal
+      row.accountTitleStatus = oldVal
     }
     message.error(t('common.feedback.failed'))
   }
@@ -1397,21 +1408,21 @@ function handleAdvancedQuerySubmit() {
 /** 重置高级查询表单（不自动查询） */
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
-  titleCode: '',
-  titleName: '',
+  accountTitleCode: '',
+  accountTitleName: '',
   parentId: '',
-  titleType: undefined as number | undefined,
+  accountTitleType: '' as string | undefined,
   balanceDirection: undefined as number | undefined,
-  titleLevel: undefined as number | undefined,
+  accountTitleLevel: undefined as number | undefined,
   isLeaf: undefined as number | undefined,
   isAuxiliary: undefined as number | undefined,
-  auxiliaryType: undefined as number | undefined,
+  auxiliaryType: '' as string | undefined,
   isQuantity: undefined as number | undefined,
   isCurrency: undefined as number | undefined,
   isCash: undefined as number | undefined,
   isBank: undefined as number | undefined,
   relatedPlant: '',
-  titleStatus: undefined as number | undefined,
+  accountTitleStatus: undefined as number | undefined,
   validFromStart: '',
   validFromEnd: '',
   validToStart: '',

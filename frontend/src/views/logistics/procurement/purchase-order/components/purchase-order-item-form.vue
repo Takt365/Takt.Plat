@@ -26,7 +26,114 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.purchaseorderitem.linenumber')"
+                name="lineNumber"
+              >
+                <a-input-number
+                  v-model:value="formState.lineNumber"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorderitem.linenumber') })"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.purchaseorderitem.requestcode')"
+                name="requestCode"
+              >
+                <a-input
+                  v-model:value="formState.requestCode"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorderitem.requestcode') })"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                  :disabled="!!formData?.purchaseOrderItemId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.purchaseorderitem.requestlinenumber')"
+                name="requestLineNumber"
+              >
+                <a-input-number
+                  v-model:value="formState.requestLineNumber"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorderitem.requestlinenumber') })"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.purchaseorderitem.materialcode')"
+                name="materialCode"
+              >
+                <a-input
+                  v-model:value="formState.materialCode"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorderitem.materialcode') })"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                  :disabled="!!formData?.purchaseOrderItemId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.purchaseorderitem.materialname')"
+                name="materialName"
+              >
+                <a-input
+                  v-model:value="formState.materialName"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorderitem.materialname') })"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.purchaseorderitem.materialspecification')"
+                name="materialSpecification"
+              >
+                <a-input
+                  v-model:value="formState.materialSpecification"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorderitem.materialspecification') })"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.purchaseorderitem.purchaseunit')"
+                name="purchaseUnit"
+              >
+                <a-input
+                  v-model:value="formState.purchaseUnit"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorderitem.purchaseunit') })"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.purchaseorderitem.orderquantity')"
+                name="orderQuantity"
+              >
+                <a-input-number
+                  v-model:value="formState.orderQuantity"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorderitem.orderquantity') })"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
           </a-row>
         </div>
       </a-tab-pane>
@@ -51,7 +158,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = []
+const formFields = ["lineNumber","requestCode","requestLineNumber","materialCode","materialName","materialSpecification","purchaseUnit","orderQuantity"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -103,7 +210,53 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-
+  lineNumber: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorderitem.linenumber') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorderitem.linenumber') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  materialCode: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.required', { field: t('entity.purchaseorderitem.materialcode') }),
+      trigger: 'blur'
+    }
+  ],
+  materialName: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.required', { field: t('entity.purchaseorderitem.materialname') }),
+      trigger: 'blur'
+    }
+  ],
+  purchaseUnit: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.required', { field: t('entity.purchaseorderitem.purchaseunit') }),
+      trigger: 'blur'
+    }
+  ],
+  orderQuantity: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorderitem.orderquantity') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorderitem.orderquantity') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -115,6 +268,18 @@ async function validate() {
 /** 映射为 Create/Update DTO（含主表外键 purchaseOrderId） */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
+  if ('lineNumber' in payload) {
+    const rawlineNumber = payload.lineNumber
+    payload.lineNumber = typeof rawlineNumber === 'number' ? rawlineNumber : Number(rawlineNumber)
+  }
+  if ('requestLineNumber' in payload) {
+    const rawrequestLineNumber = payload.requestLineNumber
+    payload.requestLineNumber = typeof rawrequestLineNumber === 'number' ? rawrequestLineNumber : Number(rawrequestLineNumber)
+  }
+  if ('orderQuantity' in payload) {
+    const raworderQuantity = payload.orderQuantity
+    payload.orderQuantity = typeof raworderQuantity === 'number' ? raworderQuantity : Number(raworderQuantity)
+  }
   if ('sortOrder' in payload) delete payload.sortOrder
   payload.purchaseOrderId = props.masterId
   return payload

@@ -28,29 +28,29 @@ namespace Takt.Application.Services.Logistics.Manufacturing.EngineeringChange;
 /// </summary>
 public class TaktEcKanbanService : TaktServiceBase, ITaktEcKanbanService
 {
-    private readonly ITaktCompanyRepository<TaktEc> _ecRepository;
+    private readonly ITaktCompanyRepository<TaktEcGijutsu> _ecEngRepository;
     private readonly ITaktCompanyRepository<TaktEcDetail> _ecDetailRepository;
-    private readonly ITaktCompanyRepository<TaktEcDept> _ecDeptRepository;
+    private readonly TaktEcExecDeptAccess _ecExecDeptAccess;
 
     /// <summary>
     /// 构造函数
     /// </summary>
-    /// <param name="ecRepository">设变主仓储</param>
+    /// <param name="ecEngRepository">设变技术课主表仓储</param>
     /// <param name="ecDetailRepository">设变明细仓储</param>
-    /// <param name="ecDeptRepository">设变部门仓储</param>
+    /// <param name="ecExecDeptAccess">设变部门执行跨表访问</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktEcKanbanService(
-        ITaktCompanyRepository<TaktEc> ecRepository,
+        ITaktCompanyRepository<TaktEcGijutsu> ecEngRepository,
         ITaktCompanyRepository<TaktEcDetail> ecDetailRepository,
-        ITaktCompanyRepository<TaktEcDept> ecDeptRepository,
+        TaktEcExecDeptAccess ecExecDeptAccess,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
-        _ecRepository = ecRepository;
+        _ecEngRepository = ecEngRepository;
         _ecDetailRepository = ecDetailRepository;
-        _ecDeptRepository = ecDeptRepository;
+        _ecExecDeptAccess = ecExecDeptAccess;
     }
 
     /// <summary>
@@ -62,18 +62,33 @@ public class TaktEcKanbanService : TaktServiceBase, ITaktEcKanbanService
     {
         EnsureThreeLayerContext();
         var predicate = QueryExpression(queryDto);
-        var (ecs, total) = await _ecRepository.GetPagedAsync(
+        var hasComputedFilter = HasComputedFilter(queryDto);
+        if (hasComputedFilter)
+        {
+            var list = await _ecEngRepository.GetListForExportAsync(predicate);
+            var rows = new List<TaktEcKanbanDto>();
+            foreach (var ec in list)
+            {
+                rows.Add(await BuildKanbanRowAsync(ec));
+            }
+            rows = ApplyComputedFilters(rows, queryDto);
+            var total = rows.Count;
+            var skip = checked((queryDto.PageIndex - 1) * queryDto.PageSize);
+            var page = rows.Skip(skip).Take(queryDto.PageSize).ToList();
+            return TaktPagedResult<TaktEcKanbanDto>.Create(page, total, queryDto.PageIndex, queryDto.PageSize);
+        }
+        var (ecs, totalCount) = await _ecEngRepository.GetPagedAsync(
             predicate,
             queryDto.PageIndex,
             queryDto.PageSize,
             x => x.EcNo,
             false);
-        var rows = new List<TaktEcKanbanDto>();
+        var pageRows = new List<TaktEcKanbanDto>();
         foreach (var ec in ecs)
         {
-            rows.Add(await BuildKanbanRowAsync(ec));
+            pageRows.Add(await BuildKanbanRowAsync(ec));
         }
-        return TaktPagedResult<TaktEcKanbanDto>.Create(rows, total, queryDto.PageIndex, queryDto.PageSize);
+        return TaktPagedResult<TaktEcKanbanDto>.Create(pageRows, totalCount, queryDto.PageIndex, queryDto.PageSize);
     }
 
     /// <summary>
@@ -84,7 +99,7 @@ public class TaktEcKanbanService : TaktServiceBase, ITaktEcKanbanService
     public async Task<TaktEcKanbanDto?> GetEcKanbanByEcIdAsync(long ecId)
     {
         EnsureThreeLayerContext();
-        var ec = await _ecRepository.GetByIdAsync(ecId);
+        var ec = await _ecEngRepository.GetByIdAsync(ecId);
         if (ec == null || ec.TenantCode != CurrentTenantCode || ec.CompanyCode != CurrentCompanyCode)
         {
             return null;
@@ -106,12 +121,13 @@ public class TaktEcKanbanService : TaktServiceBase, ITaktEcKanbanService
     {
         EnsureThreeLayerContext();
         var predicate = QueryExpression(query ?? new TaktEcKanbanQueryDto());
-        var list = await _ecRepository.GetListForExportAsync(predicate);
+        var list = await _ecEngRepository.GetListForExportAsync(predicate);
         var rows = new List<TaktEcKanbanDto>();
         foreach (var ec in list)
         {
             rows.Add(await BuildKanbanRowAsync(ec));
         }
+        rows = ApplyComputedFilters(rows, query ?? new TaktEcKanbanQueryDto());
         return await TaktExcelHelper.ExportAsync(
             rows,
             sheetName ?? "设变看板",
@@ -121,17 +137,17 @@ public class TaktEcKanbanService : TaktServiceBase, ITaktEcKanbanService
     /// <summary>
     /// 构建设变看板行
     /// </summary>
-    /// <param name="ec">设变主表</param>
+    /// <param name="ecEng">设变技术课主表</param>
     /// <returns>看板 DTO</returns>
-    private async Task<TaktEcKanbanDto> BuildKanbanRowAsync(TaktEc ec)
+    private async Task<TaktEcKanbanDto> BuildKanbanRowAsync(TaktEcGijutsu ecEng)
     {
-        var dto = ec.Adapt<TaktEcKanbanDto>();
-        var details = await _ecDetailRepository.GetListAsync(x => x.EcId == ec.Id);
+        var dto = ecEng.Adapt<TaktEcKanbanDto>();
+        var details = await _ecDetailRepository.GetListAsync(x => x.EcId == ecEng.Id);
         dto.DetailCount = details.Count;
         var detailIds = details.Select(x => x.Id).ToList();
         var depts = detailIds.Count == 0
             ? []
-            : await _ecDeptRepository.GetListAsync(x => detailIds.Contains(x.EcnDetailId));
+            : await _ecExecDeptAccess.ListBaseByEcnDetailIdsAsync(detailIds);
         dto.DeptStages = TaktEcDeptCodes.KanbanOrder.Select(code =>
         {
             var matched = depts.Where(d => d.DeptCode == code).ToList();
@@ -142,7 +158,60 @@ public class TaktEcKanbanService : TaktServiceBase, ITaktEcKanbanService
                 ImplementedCount = matched.Count(d => d.IsImplemented == 1),
             };
         }).ToList();
+        var path = TaktEcImplementationPathHelper.Resolve(
+            dto.DetailCount,
+            dto.DeptStages.Select(s => new TaktEcImplementationStageSnapshot(
+                s.DeptCode,
+                s.ImplementedCount,
+                s.TotalCount)).ToList());
+        dto.CurrentDeptCode = path.CurrentDeptCode;
+        dto.PendingAtCurrentDeptCount = path.PendingAtCurrentDeptCount;
+        dto.ImplementationStatus = path.ImplementationStatus;
+        dto.IsOfficiallyCompleted = path.IsOfficiallyCompleted ? 1 : 0;
         return dto;
+    }
+
+    /// <summary>
+    /// 是否存在实施路径计算型筛选条件
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>是否需要内存过滤</returns>
+    private static bool HasComputedFilter(TaktEcKanbanQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        return !string.IsNullOrEmpty(queryDto.CurrentDeptCode)
+            || queryDto.ImplementationStatus.HasValue
+            || queryDto.OnlyNotOfficiallyCompleted == 1;
+    }
+
+    /// <summary>
+    /// 按实施路径字段过滤看板行
+    /// </summary>
+    /// <param name="rows">看板行</param>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>过滤后的行</returns>
+    private static List<TaktEcKanbanDto> ApplyComputedFilters(
+        List<TaktEcKanbanDto> rows,
+        TaktEcKanbanQueryDto queryDto)
+    {
+        IEnumerable<TaktEcKanbanDto> filtered = rows;
+        if (!string.IsNullOrEmpty(queryDto.CurrentDeptCode))
+        {
+            filtered = filtered.Where(x =>
+                string.Equals(x.CurrentDeptCode, queryDto.CurrentDeptCode, StringComparison.OrdinalIgnoreCase));
+        }
+        if (queryDto.ImplementationStatus.HasValue)
+        {
+            filtered = filtered.Where(x => x.ImplementationStatus == queryDto.ImplementationStatus.Value);
+        }
+        if (queryDto.OnlyNotOfficiallyCompleted == 1)
+        {
+            filtered = filtered.Where(x => x.IsOfficiallyCompleted != 1);
+        }
+        return filtered.ToList();
     }
 
     /// <summary>
@@ -150,9 +219,9 @@ public class TaktEcKanbanService : TaktServiceBase, ITaktEcKanbanService
     /// </summary>
     /// <param name="queryDto">查询 DTO</param>
     /// <returns>表达式</returns>
-    private static Expression<Func<TaktEc, bool>> QueryExpression(TaktEcKanbanQueryDto? queryDto)
+    private static Expression<Func<TaktEcGijutsu, bool>> QueryExpression(TaktEcKanbanQueryDto? queryDto)
     {
-        var exp = Expressionable.Create<TaktEc>();
+        var exp = Expressionable.Create<TaktEcGijutsu>();
         if (!string.IsNullOrEmpty(queryDto?.KeyWords))
         {
             var keywords = queryDto.KeyWords;

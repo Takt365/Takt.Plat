@@ -21,83 +21,41 @@ namespace Takt.Domain.Entities.Logistics.Sales;
 [SugarTable("takt_logistics_sales_invoice", "销售发票表")]
 [SugarIndex("ix_sales_invoice_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_sales_invoice_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_sales_invoice_code_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(SalesInvoiceCode), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_sales_invoice_accounting_doc_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(AccountingDocumentCode), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_sales_invoice_plant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_sales_invoice_year_month", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(YearMonth), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_sales_invoice_customer_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(CustomerCode), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_sales_invoice_invoice_date", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(InvoiceDate), OrderByType.Desc, false)]
-[SugarIndex("ix_takt_logistics_sales_invoice_invoice_status", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(InvoiceStatus), OrderByType.Asc, false)]
 public class TaktSalesInvoice : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
-
     /// <summary>
-    /// 销售发票编码（唯一索引）
+    /// 年度期间（yyyyMM）
     /// </summary>
-    [SugarColumn(ColumnName = "sales_invoice_code", ColumnDescription = "销售发票编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
-    public string SalesInvoiceCode { get; set; } = string.Empty;
-
+    [SugarColumn(ColumnName = "year_month", ColumnDescription = "年度期间", ColumnDataType = "varchar", Length = 6, IsNullable = false)]
+    public string YearMonth { get; set; } = string.Empty;
     /// <summary>
-    /// 关联销售订单编码
+    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
     /// </summary>
-    [SugarColumn(ColumnName = "sales_order_code", ColumnDescription = "销售订单编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
-    public string? SalesOrderCode { get; set; }
-
-    /// <summary>
-    /// 客户编码
-    /// </summary>
-    [SugarColumn(ColumnName = "customer_code", ColumnDescription = "客户编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "customer_code", ColumnDescription = "客户编码", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
     public string CustomerCode { get; set; } = string.Empty;
-
     /// <summary>
     /// 客户名称
     /// </summary>
     [SugarColumn(ColumnName = "customer_name", ColumnDescription = "客户名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = false)]
     public string CustomerName { get; set; } = string.Empty;
-
     /// <summary>
-    /// 开票日期
+    /// 会计凭证编号（租户+公司+工厂内唯一）
     /// </summary>
-    [SugarColumn(ColumnName = "invoice_date", ColumnDescription = "开票日期", ColumnDataType = "datetime", IsNullable = false)]
-    public DateTime InvoiceDate { get; set; } = DateTime.Now;
+    [SugarColumn(ColumnName = "accounting_document_code", ColumnDescription = "会计凭证编号", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
+    public string AccountingDocumentCode { get; set; } = string.Empty;
 
-    /// <summary>
-    /// 发票总金额
-    /// </summary>
-    [SugarColumn(ColumnName = "total_amount", ColumnDescription = "发票总金额", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
-    public decimal TotalAmount { get; set; } = 0;
-
-    /// <summary>
-    /// 税费
-    /// </summary>
-    [SugarColumn(ColumnName = "tax_amount", ColumnDescription = "税费", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
-    public decimal TaxAmount { get; set; } = 0;
-
-    /// <summary>
-    /// 发票实付金额
-    /// </summary>
-    [SugarColumn(ColumnName = "actual_amount", ColumnDescription = "发票实付金额", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
-    public decimal ActualAmount { get; set; } = 0;
-
-    /// <summary>
-    /// 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
-    /// </summary>
-    [SugarColumn(ColumnName = "invoice_status", ColumnDescription = "发票状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int InvoiceStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 收款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
-    /// </summary>
-    [SugarColumn(ColumnName = "payment_method", ColumnDescription = "收款方式", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int PaymentMethod { get; set; } = 0;
-
-    /// <summary>
-    /// 发票号码（税务系统票号）
-    /// </summary>
-    [SugarColumn(ColumnName = "tax_invoice_no", ColumnDescription = "税务发票号码", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
-    public string? TaxInvoiceNo { get; set; }
+    // ========================================
+    // 导航属性区域
+    // ========================================
 
     /// <summary>
     /// 销售发票明细列表（主子表关系，一张发票可有多个明细行）

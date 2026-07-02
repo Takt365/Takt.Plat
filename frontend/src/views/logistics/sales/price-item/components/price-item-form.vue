@@ -1,0 +1,633 @@
+<!-- ======================================== -->
+<!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
+<!-- 命名空间：@/views/logistics/sales/price-item/components -->
+<!-- 文件名称：price-item-form.vue -->
+<!-- 功能描述：Takt销售价格明细实体维护弹窗内嵌表单（上主下从级联保存）。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
+<!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
+<!-- ======================================== -->
+
+<template>
+  <a-form
+    ref="formRef"
+    class="takt-generated-form price-item-form flex flex-col min-h-0"
+    :model="formState"
+    :rules="rules"
+    layout="horizontal"
+    label-align="right"
+  >
+    <a-tabs
+      v-model:active-key="activeTab"
+      class="price-item-form-tabs"
+    >
+      <a-tab-pane
+        key="tab-0"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('companyCode')"
+                name="companyCode"
+              >
+                <a-input
+                  v-model:value="formState.companyCode"
+                  :placeholder="pi.ph('companyCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('companyDefaultCulture')"
+                name="companyDefaultCulture"
+              >
+                <a-input
+                  v-model:value="formState.companyDefaultCulture"
+                  :placeholder="pi.ph('companyDefaultCulture')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('salesPriceId')"
+                name="salesPriceId"
+              >
+                <TaktSelect
+                  v-model:value="formState.salesPriceId"
+                  api-url="TaktSalesPrices/options"
+                  :placeholder="pi.ph('salesPriceId')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('salesPriceCode')"
+                name="salesPriceCode"
+              >
+                <a-input
+                  v-model:value="formState.salesPriceCode"
+                  :placeholder="pi.ph('salesPriceCode')"
+                  show-count
+                  :maxlength="50"
+                  allow-clear
+                  :disabled="!!formData?.salesPriceItemId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('lineNumber')"
+                name="lineNumber"
+              >
+                <a-input-number
+                  v-model:value="formState.lineNumber"
+                  :placeholder="pi.ph('lineNumber')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('materialCode')"
+                name="materialCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.materialCode"
+                  api-url="TaktMaterials/options"
+                  :placeholder="pi.ph('materialCode')"
+                  :disabled="!!formData?.salesPriceItemId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('salesUnit')"
+                name="salesUnit"
+              >
+                <TaktSelect
+                  v-model:value="formState.salesUnit"
+                  dict-type="logistics_unit_of_measure_code"
+                  :placeholder="pi.ph('salesUnit')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('salesPerUnit')"
+                name="salesPerUnit"
+              >
+                <TaktSelect
+                  v-model:value="formState.salesPerUnit"
+                  dict-type="logistics_price_unit_param"
+                  :placeholder="pi.ph('salesPerUnit')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('salesPrice')"
+                name="salesPrice"
+              >
+                <a-input-number
+                  v-model:value="formState.salesPrice"
+                  :placeholder="pi.ph('salesPrice')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('minOrderQuantity')"
+                name="minOrderQuantity"
+              >
+                <a-input-number
+                  v-model:value="formState.minOrderQuantity"
+                  :placeholder="pi.ph('minOrderQuantity')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('maxOrderQuantity')"
+                name="maxOrderQuantity"
+              >
+                <a-input-number
+                  v-model:value="formState.maxOrderQuantity"
+                  :placeholder="pi.ph('maxOrderQuantity')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                name="extField"
+                class="takt-form-item-ext-field"
+              >
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t('common.page.entity.extfieldhint')"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ pi.label('extField') }}</span>
+                  </span>
+                </template>
+                <a-textarea
+                  v-model:value="formState.extField"
+                  :placeholder="t('common.page.form.placeholder.extfield')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('remark')"
+                name="remark"
+              >
+                <a-textarea
+                  v-model:value="formState.remark"
+                  :placeholder="pi.ph('remark')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+    </a-tabs>
+    <!-- 下：子表 scales -->
+    <TaktEditableTable
+      ref="salesPriceScaleTableRef"
+      v-model="childSalesPriceScaleRows"
+      :columns="salesPriceScaleFormColumns"
+      :title="salesPriceScalePi.self()"
+      :add-button-entity="salesPriceScalePi.self()"
+      id-field="salesPriceScaleId"
+      :default-row="createDefaultSalesPriceScaleRow"
+      :disabled="loading"
+      section-border
+    />
+  </a-form>
+</template>
+
+<script setup lang="ts">
+/**
+ * Takt销售价格明细实体维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
+ * @module views/logistics/sales/price-item/components
+ */
+import { reactive, watch, computed, ref, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
+import type { Rule } from 'ant-design-vue/es/form'
+import { useSalesPriceItemI18n } from '../composables/use-price-item-i18n'
+
+/** 实体字段 i18n */
+const pi = useSalesPriceItemI18n()
+
+import type { SalesPriceItemCreate } from '@/types/logistics/sales/price-item'
+import TaktSelect from '@/components/business/takt-select/index.vue'
+import { RiQuestionLine } from '@remixicon/vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
+import { useTenantStore } from '@/stores/identity/tenant'
+import { useUserStore } from '@/stores/identity/user'
+
+/** i18n 翻译函数 */
+const { t } = useI18n()
+
+/** Pinia：租户/公司上下文 */
+const tenantStore = useTenantStore()
+/** Pinia：用户上下文 */
+const userStore = useUserStore()
+
+/**
+ * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
+ * @param target 表单数据
+ * @param force 为 true 时强制覆盖（新增态或公司切换）
+ */
+function applyScopeDefaults(target: Record<string, unknown>, force = false) {
+  if (formFields.includes('tenantCode') && (force || !target.tenantCode)) {
+    target.tenantCode = tenantStore.tenantCode
+  }
+  if (formFields.includes('companyCode') && (force || !target.companyCode)) {
+    target.companyCode = tenantStore.companyCode
+  }
+  if (formFields.includes('companyDefaultCulture') && (force || !target.companyDefaultCulture)) {
+    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  }
+}
+/** 表单内容区高度 class（字段多时 tab-10 行） */
+const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
+/** 当前激活的 Tab key */
+const activeTab = ref('tab-0')
+/** CreateDto 字段名列表（与 formState 键对齐） */
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","salesPriceId","salesPriceCode","lineNumber","materialCode","salesUnit","salesPerUnit","salesPrice","minOrderQuantity","maxOrderQuantity","extField","remark"]
+
+
+import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+import { useSalesPriceScaleI18n } from '../composables/use-price-scale-i18n'
+
+const salesPriceScalePi = useSalesPriceScaleI18n()
+
+const childSalesPriceScaleRows = ref<Record<string, unknown>[]>([])
+const salesPriceScaleTableRef = ref<{
+  getRows: () => Record<string, unknown>[]
+  validate: () => Promise<unknown>
+  resetRows: () => void
+} | null>(null)
+
+/** 子表 salesPriceScale 可编辑列 */
+const salesPriceScaleFormColumns = computed<TaktEditableTableColumn[]>(() => [
+  {
+    key: 'itemId',
+    title: salesPriceScalePi.label('itemId'),
+    editor: 'input',
+    width: 140,
+  },
+  {
+    key: 'salesPriceCode',
+    title: salesPriceScalePi.label('salesPriceCode'),
+    editor: 'input',
+    width: 140,
+  },
+  {
+    key: 'lineNumber',
+    title: salesPriceScalePi.label('lineNumber'),
+    editor: 'inputNumber',
+    width: 140, summary: 'sum',
+  },
+  {
+    key: 'startQuantity',
+    title: salesPriceScalePi.label('startQuantity'),
+    editor: 'inputNumber',
+    width: 140,
+  },
+  {
+    key: 'endQuantity',
+    title: salesPriceScalePi.label('endQuantity'),
+    editor: 'inputNumber',
+    width: 140,
+  },
+  {
+    key: 'scalePrice',
+    title: salesPriceScalePi.label('scalePrice'),
+    editor: 'inputNumber',
+    width: 140,
+  },
+  {
+    key: 'extField',
+    title: salesPriceScalePi.label('extField'),
+    editor: 'textarea',
+    rows: 2,
+    placeholder: t('common.page.form.placeholder.extfield'),
+    width: 140,
+  },
+  {
+    key: 'remark',
+    title: salesPriceScalePi.label('remark'),
+    editor: 'textarea',
+    rows: 2,
+    placeholder: salesPriceScalePi.ph('remark'),
+    width: 140,
+  },
+])
+
+/** 编辑态从 formData 同步各子表行 */
+function syncChildRowsFromFormData(val: Partial<SalesPriceItemCreate & { salesPriceItemId?: string }> | null | undefined) {
+  childSalesPriceScaleRows.value = ((val as any)?.scales ?? []) as Record<string, unknown>[]
+}
+
+function createDefaultSalesPriceScaleRow(): Record<string, unknown> {
+  return {
+    itemId: '',
+    salesPriceCode: '',
+    lineNumber: (childSalesPriceScaleRows.value.length + 1) * 10,
+    startQuantity: 0,
+    endQuantity: 0,
+    scalePrice: 0,
+    extField: '',
+    remark: '',
+  }
+}
+
+/** 组装 Create/Update 载荷（主表 + 子表数组） */
+function buildSubmitPayload() {
+  const masterId = props.formData?.salesPriceItemId ?? ''
+  return {
+    ...formState,
+    scales: salesPriceScaleTableRef.value?.getRows?.() ?? childSalesPriceScaleRows.value.map((rest) => ({
+      ...rest,
+      tenantCode: tenantStore.tenantCode,
+      companyCode: tenantStore.companyCode,
+      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+      salesPriceItemId: masterId,
+    })),
+  }
+}
+
+/** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
+interface Props {
+  formData?: Partial<SalesPriceItemCreate & { salesPriceItemId?: string }> | null
+  /** 父级提交 loading，禁用表单项 */
+  loading?: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  formData: null,
+  loading: false,
+})
+
+/** a-form 实例 ref */
+const formRef = ref()
+/** 表单双向绑定模型 */
+const formState = reactive<Record<string, any>>({})
+/** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
+const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  salesPerUnit: 1000
+}
+
+/** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  Object.assign(target, FORM_FIELD_DEFAULTS)
+}
+
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载全量字典 */
+onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
+})
+
+/** 编辑态灌入 formData；新增态恢复默认值（须含 salesPriceItemId 才视为编辑） */
+watch(
+  () => props.formData,
+  (val) => {
+    if (val?.salesPriceItemId) {
+      const next = { ...val } as Record<string, unknown>
+      Object.keys(formState).forEach((k) => delete formState[k])
+    delete (next as any).scales
+      applyScopeDefaults(next)
+      Object.assign(formState, next)
+    syncChildRowsFromFormData(val)
+      formRef.value?.clearValidate()
+    } else {
+      Object.keys(formState).forEach((k) => delete formState[k])
+      if (val && typeof val === 'object' && Object.keys(val).length > 0) {
+        Object.assign(formState, val)
+      }
+      applyFormDefaults(formState)
+      applyScopeDefaults(formState as Record<string, unknown>, true)
+      formRef.value?.clearValidate()
+    }
+  },
+  { immediate: true }
+)
+
+/** 公司/租户切换时，新增态表单同步隔离字段 */
+watch(
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
+  () => {
+    const isCreate = !props.formData?.salesPriceItemId
+    if (isCreate) {
+      applyScopeDefaults(formState, true)
+    }
+  },
+)
+
+/** 表单校验规则（与 FluentValidation 必填对齐） */
+const rules = computed<Record<string, Rule[]>>(() => ({
+  salesPriceId: [
+    {
+      required: true,
+      message: pi.ph('salesPriceId'),
+      trigger: 'change'
+    }
+  ],
+  salesPriceCode: [
+    {
+      required: true,
+      message: pi.ph('salesPriceCode'),
+      trigger: 'blur'
+    }
+  ],
+  lineNumber: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('lineNumber'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('lineNumber'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  materialCode: [
+    {
+      required: true,
+      message: pi.ph('materialCode'),
+      trigger: 'change'
+    }
+  ],
+  salesUnit: [
+    {
+      required: true,
+      message: pi.ph('salesUnit'),
+      trigger: 'change'
+    }
+  ],
+  salesPerUnit: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('salesPerUnit'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('salesPerUnit'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  salesPrice: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('salesPrice'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('salesPrice'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  minOrderQuantity: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('minOrderQuantity'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('minOrderQuantity'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  maxOrderQuantity: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('maxOrderQuantity'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('maxOrderQuantity'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+}))
+
+/** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
+async function validate() {
+  await formRef.value?.validate()
+  await salesPriceScaleTableRef.value?.validate?.()
+  return formState
+}
+
+/** 映射为 Create/Update DTO */
+function getValues(): Record<string, any> {
+  const payload = buildSubmitPayload() as Record<string, unknown>
+  if ('lineNumber' in payload) {
+    const rawlineNumber = payload.lineNumber
+    payload.lineNumber = typeof rawlineNumber === 'number' ? rawlineNumber : Number(rawlineNumber)
+  }
+  if ('salesPerUnit' in payload) {
+    const rawsalesPerUnit = payload.salesPerUnit
+    payload.salesPerUnit = typeof rawsalesPerUnit === 'number' ? rawsalesPerUnit : Number(rawsalesPerUnit)
+  }
+  if ('salesPrice' in payload) {
+    const rawsalesPrice = payload.salesPrice
+    payload.salesPrice = typeof rawsalesPrice === 'number' ? rawsalesPrice : Number(rawsalesPrice)
+  }
+  if ('minOrderQuantity' in payload) {
+    const rawminOrderQuantity = payload.minOrderQuantity
+    payload.minOrderQuantity = typeof rawminOrderQuantity === 'number' ? rawminOrderQuantity : Number(rawminOrderQuantity)
+  }
+  if ('maxOrderQuantity' in payload) {
+    const rawmaxOrderQuantity = payload.maxOrderQuantity
+    payload.maxOrderQuantity = typeof rawmaxOrderQuantity === 'number' ? rawmaxOrderQuantity : Number(rawmaxOrderQuantity)
+  }
+  if ('sortOrder' in payload) delete payload.sortOrder
+  return payload
+}
+
+/** 重置表单与子表行（弹窗未 destroy 时父级 nextTick 也会调用） */
+function resetFields() {
+  Object.keys(formState).forEach((k) => delete formState[k])
+  if (props.formData && typeof props.formData === 'object') {
+    Object.assign(formState, props.formData)
+  }
+  applyFormDefaults(formState)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.salesPriceItemId)
+  childSalesPriceScaleRows.value = []
+  salesPriceScaleTableRef.value?.resetRows?.()
+  activeTab.value = 'tab-0'
+  formRef.value?.clearValidate()
+}
+
+defineExpose({ validate, getValues, resetFields })
+</script>
+
+<style scoped lang="css">
+:deep(.ant-tabs-content-holder) {
+  min-height: 50vh;
+}
+
+:deep(.ant-tabs-tabpane) {
+  min-height: 50vh;
+}
+</style>

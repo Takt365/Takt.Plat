@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="routine:conferencecenter:room:create"
-      update-permission="routine:conferencecenter:room:update"
-      delete-permission="routine:conferencecenter:room:delete"
-      import-permission="routine:conferencecenter:room:import"
-      export-permission="routine:conferencecenter:room:export"
+      create-permission="routine:conference:center:room:create"
+      update-permission="routine:conference:center:room:update"
+      delete-permission="routine:conference:center:room:delete"
+      import-permission="routine:conference:center:room:import"
+      export-permission="routine:conference:center:room:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -199,7 +199,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -210,7 +210,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -543,7 +543,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'routine:conferencecenter:room:update',
+        permission: 'routine:conference:center:room:update',
         onClick: (record: ConferenceRoom) => handleEdit(record)
       },
       {
@@ -551,7 +551,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'routine:conferencecenter:room:delete',
+        permission: 'routine:conference:center:room:delete',
         onClick: (record: ConferenceRoom) => handleDeleteOne(record)
       }
     ]
@@ -579,7 +579,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: ConferenceRoom, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getConferenceRoomId(selectedRow.value) === getConferenceRoomId(record)) {
+    } else if (selectedRow.value && getConferenceRoomId(selectedRow.value) === getConferenceRoomId(record)) {
       selectedRow.value = null
     }
   },

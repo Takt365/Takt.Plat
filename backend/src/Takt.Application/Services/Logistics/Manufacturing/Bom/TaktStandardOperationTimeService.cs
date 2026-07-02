@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Bom
 // 文件名称：TaktStandardOperationTimeService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：标准工序时间应用服务实现
 // 
@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Services.Logistics.Manufacturing.Bom;
 
@@ -31,23 +30,27 @@ namespace Takt.Application.Services.Logistics.Manufacturing.Bom;
 public class TaktStandardOperationTimeService : TaktServiceBase, ITaktStandardOperationTimeService
 {
     private readonly ITaktApprovalRepository<TaktStandardOperationTime> _standardOperationTimeRepository;
+    private readonly ITaktCompanyRepository<TaktStandardOperationTimeChangeLog> _standardOperationTimeChangeLogRepository;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="standardOperationTimeRepository">标准工序时间仓储</param>
+    /// <param name="standardOperationTimeChangeLogRepository">StandardOperationTimeChangeLog仓储</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktStandardOperationTimeService(
         ITaktApprovalRepository<TaktStandardOperationTime> standardOperationTimeRepository,
+        ITaktCompanyRepository<TaktStandardOperationTimeChangeLog> standardOperationTimeChangeLogRepository,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
         _standardOperationTimeRepository = standardOperationTimeRepository;
+        _standardOperationTimeChangeLogRepository = standardOperationTimeChangeLogRepository;
         _uniqueValidator = uniqueValidator;
     }
 
@@ -82,8 +85,9 @@ public class TaktStandardOperationTimeService : TaktServiceBase, ITaktStandardOp
         {
             return null;
         }
-        return entity.Adapt<TaktStandardOperationTimeDto>();
-    }
+        var dto = entity.Adapt<TaktStandardOperationTimeDto>();
+        await FillStandardOperationTimeDetailsAsync(dto, entity);
+        return dto;    }
 
     /// <summary>
     /// 获取标准工序时间选项列表
@@ -104,6 +108,33 @@ public class TaktStandardOperationTimeService : TaktServiceBase, ITaktStandardOp
     }
 
     /// <summary>
+    /// 根据物料编码获取当前有效的标准工序时间列表
+    /// </summary>
+    /// <param name="materialCode">物料编码</param>
+    /// <param name="plantCode">工厂代码（可选）</param>
+    /// <returns>标准工序时间 DTO 列表</returns>
+    public async Task<List<TaktStandardOperationTimeDto>> GetStandardOperationTimeByMaterialAsync(string materialCode, string? plantCode = null)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(materialCode);
+        EnsureThreeLayerContext();
+        const int maxRows = 50;
+        var today = DateTime.Today;
+        var list = await _standardOperationTimeRepository.GetListAsync(
+            x => x.TenantCode == CurrentTenantCode
+                && x.CompanyCode == CurrentCompanyCode
+                && x.MaterialCode == materialCode
+                && x.ApprovalStatus == 2
+                && x.EffectiveDate <= today
+                && (x.ExpiryDate == null || x.ExpiryDate >= today)
+                && (string.IsNullOrWhiteSpace(plantCode) || x.PlantCode == plantCode),
+            x => x.EffectiveDate,
+            true);
+        return list
+            .Take(maxRows)
+            .Adapt<List<TaktStandardOperationTimeDto>>();
+    }
+
+    /// <summary>
     /// 创建标准工序时间
     /// </summary>
     /// <param name="dto">创建DTO</param>
@@ -121,6 +152,7 @@ public class TaktStandardOperationTimeService : TaktServiceBase, ITaktStandardOp
             throw new TaktBusinessException("标准工序时间的PlantCode、MaterialCode、WorkCenter已存在");
         }
         entity = await _standardOperationTimeRepository.CreateAsync(entity);
+                await SaveStandardOperationTimeChildrenAsync(entity, dto);
         return await GetStandardOperationTimeByIdAsync(entity.Id) ?? entity.Adapt<TaktStandardOperationTimeDto>();
     }
 
@@ -149,6 +181,7 @@ public class TaktStandardOperationTimeService : TaktServiceBase, ITaktStandardOp
             throw new TaktBusinessException("标准工序时间的PlantCode、MaterialCode、WorkCenter已存在");
         }
         await _standardOperationTimeRepository.UpdateAsync(entity);
+                await SaveStandardOperationTimeChildrenAsync(entity, dto);
         return await GetStandardOperationTimeByIdAsync(id) ?? throw new TaktBusinessException("标准工序时间不存在");
     }
 
@@ -159,6 +192,12 @@ public class TaktStandardOperationTimeService : TaktServiceBase, ITaktStandardOp
     /// <returns>任务</returns>
     public async Task DeleteStandardOperationTimeByIdAsync(long id)
     {
+        var entity = await _standardOperationTimeRepository.GetByIdAsync(id);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("标准工序时间不存在或已删除");
+        }
+        await _standardOperationTimeChangeLogRepository.DeleteAsync(x => x.StandardOperationTimeId == entity.Id);
         var deleted = await _standardOperationTimeRepository.DeleteAsync(id);
         if (!deleted)
         {
@@ -272,6 +311,54 @@ public class TaktStandardOperationTimeService : TaktServiceBase, ITaktStandardOp
     }
 
     // ========================================
+    // 主子表级联（OneToMany）
+    // ========================================
+
+    /// <summary>
+    /// 填充标准工序时间详情（加载 OneToMany 子表：标准工序时间变更记录）
+    /// </summary>
+    /// <param name="dto">响应 DTO</param>
+    /// <param name="entity">主表实体</param>
+    /// <returns>任务</returns>
+    private async Task FillStandardOperationTimeDetailsAsync(TaktStandardOperationTimeDto dto, TaktStandardOperationTime entity)
+    {
+        if (dto == null)
+        {
+            return;
+        }
+        // 标准工序时间变更记录 → dto.ChangeLogs
+        var changelogs = await _standardOperationTimeChangeLogRepository.GetListAsync(x => x.StandardOperationTimeId == entity.Id);
+        dto.ChangeLogs = changelogs.Adapt<List<TaktStandardOperationTimeChangeLogDto>>();
+    }
+
+    /// <summary>
+    /// 保存标准工序时间子表级联（标准工序时间变更记录；Create/Update 后按主表 Id 先删后插）
+    /// </summary>
+    /// <param name="entity">主表实体</param>
+    /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
+    /// <returns>任务</returns>
+    private async Task SaveStandardOperationTimeChildrenAsync(TaktStandardOperationTime entity, TaktStandardOperationTimeCreateDto dto)
+    {
+        // 标准工序时间变更记录（ChangeLogs）
+        if (dto.ChangeLogs is not { Count: > 0 })
+        {
+            await _standardOperationTimeChangeLogRepository.DeleteAsync(x => x.StandardOperationTimeId == entity.Id);
+        }
+        else
+        {
+            var changelogs = dto.ChangeLogs.Adapt<List<TaktStandardOperationTimeChangeLog>>();
+            foreach (var child in changelogs)
+            {
+                child.StandardOperationTimeId = entity.Id;
+            }
+            await _standardOperationTimeChangeLogRepository.DeleteAsync(x => x.StandardOperationTimeId == entity.Id);
+            foreach (var child in changelogs)
+            {
+            }
+            await _standardOperationTimeChangeLogRepository.CreateRangeAsync(changelogs);
+        }
+    }
+    // ========================================
     // 查询表达式
     // ========================================
 
@@ -296,7 +383,7 @@ public class TaktStandardOperationTimeService : TaktServiceBase, ITaktStandardOp
                 || (x.TimeUnit != null && x.TimeUnit.Contains(keywords))
                 || SqlFunc.ToString(x.StandardShorts).Contains(keywords)
                 || (x.PointsUnit != null && x.PointsUnit.Contains(keywords))
-                || SqlFunc.ToString(x.PointsToMinutesRate).Contains(keywords)
+                || (x.PointsToMinutesRate != null && x.PointsToMinutesRate.Contains(keywords))
                 || SqlFunc.ToString(x.ConvertedMinutes).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
@@ -346,7 +433,7 @@ public class TaktStandardOperationTimeService : TaktServiceBase, ITaktStandardOp
             exp = exp.And(x => x.PointsUnit != null && x.PointsUnit.Contains(queryDto.PointsUnit));
         }
 
-        if (queryDto?.PointsToMinutesRate.HasValue == true)
+        if (!string.IsNullOrEmpty(queryDto?.PointsToMinutesRate))
         {
             exp = exp.And(x => x.PointsToMinutesRate == queryDto.PointsToMinutesRate);
         }

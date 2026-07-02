@@ -19,28 +19,29 @@
       @reset="handleQueryReset"
     />
     <TaktToolsBar
-      create-permission="logistics:procurement:purchaseprice:create"
-      update-permission="logistics:procurement:purchaseprice:update"
-      delete-permission="logistics:procurement:purchaseprice:delete"
-
-
+      create-permission="logistics:procurement:purchase:price:create"
+      update-permission="logistics:procurement:purchase:price:update"
+      delete-permission="logistics:procurement:purchase:price:delete"
+      import-permission="logistics:procurement:purchase:price:import"
+      export-permission="logistics:procurement:purchase:price:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
       :show-expand="false"
       :show-refresh="true"
 
-      :show-import="false"
-      :show-export="false"
-      :show-advanced-query="false"
+      :show-import="true"
+      :show-export="true"
+      :show-advanced-query="true"
       :show-column-setting="true"
       :show-fullscreen="true"
       :import-disabled="!hasMasterSelection"
       :export-disabled="!hasMasterSelection"
       :import-loading="loading"
       :export-loading="loading"
-
-
+      @import="handleImport"
+      @export="handleExport"
+      @advanced-query="handleAdvancedQuery"
       @column-setting="handleColumnSetting"
       :create-disabled="!hasMasterSelection"
       :update-disabled="updateDisabled"
@@ -95,6 +96,191 @@
       />
     </TaktModal>
 
+    <TaktQueryDrawer
+      v-model:open="advancedQueryVisible"
+      v-model:visible-field-keys="visibleQueryFieldKeys"
+      :fields="queryFieldsMeta"
+      storage-key="takt-query-fields-logistics-procurement-purchase-price-purchase-price-item"
+      :form-model="advancedQueryForm"
+      @submit="handleAdvancedQuerySubmit"
+      @reset="handleAdvancedQueryReset"
+    >
+      <template #default="{ isFieldVisible }">
+      <div v-show="isFieldVisible('purchasePriceCode')">
+      <a-form-item :label="t('entity.purchasepriceitem.purchasepricecode')">
+        <a-input
+          v-model:value="advancedQueryForm.purchasePriceCode"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchasepriceitem.purchasepricecode') })"
+          show-count
+          :maxlength="10"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('lineNumber')">
+      <a-form-item :label="t('entity.purchasepriceitem.linenumber')">
+        <a-input-number
+          v-model:value="advancedQueryForm.lineNumber"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchasepriceitem.linenumber') })"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('materialCode')">
+      <a-form-item :label="t('entity.purchasepriceitem.materialcode')">
+        <a-input
+          v-model:value="advancedQueryForm.materialCode"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchasepriceitem.materialcode') })"
+          show-count
+          :maxlength="20"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('materialName')">
+      <a-form-item :label="t('entity.purchasepriceitem.materialname')">
+        <a-input
+          v-model:value="advancedQueryForm.materialName"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchasepriceitem.materialname') })"
+          show-count
+          :maxlength="20"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('materialSpecification')">
+      <a-form-item :label="t('entity.purchasepriceitem.materialspecification')">
+        <a-input
+          v-model:value="advancedQueryForm.materialSpecification"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchasepriceitem.materialspecification') })"
+          show-count
+          :maxlength="20"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('purchaseUnit')">
+      <a-form-item :label="t('entity.purchasepriceitem.purchaseunit')">
+        <a-input
+          v-model:value="advancedQueryForm.purchaseUnit"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchasepriceitem.purchaseunit') })"
+          show-count
+          :maxlength="20"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('purchasePrice')">
+      <a-form-item :label="t('entity.purchasepriceitem.purchaseprice')">
+        <a-input-number
+          v-model:value="advancedQueryForm.purchasePrice"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchasepriceitem.purchaseprice') })"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('minPurchaseQuantity')">
+      <a-form-item :label="t('entity.purchasepriceitem.minpurchasequantity')">
+        <a-input-number
+          v-model:value="advancedQueryForm.minPurchaseQuantity"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchasepriceitem.minpurchasequantity') })"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('maxPurchaseQuantity')">
+      <a-form-item :label="t('entity.purchasepriceitem.maxpurchasequantity')">
+        <a-input-number
+          v-model:value="advancedQueryForm.maxPurchaseQuantity"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchasepriceitem.maxpurchasequantity') })"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('createdAtStart')">
+      <a-form-item :label="t('common.page.entity.createdatstart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.createdAtStart"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          value-format="YYYY-MM-DD HH:mm:ss"
+            show-time
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('createdAtEnd')">
+      <a-form-item :label="t('common.page.entity.createdatend')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.createdAtEnd"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          value-format="YYYY-MM-DD HH:mm:ss"
+            show-time
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
+        <a-textarea
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('remark')">
+      <a-form-item :label="t('common.page.entity.remark')">
+        <a-textarea
+          v-model:value="advancedQueryForm.remark"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
+        />
+      </a-form-item>
+      </div>
+      </template>
+    </TaktQueryDrawer>
+    <TaktModal
+      v-model:open="importVisible"
+      :title="t('common.dialog.title.import', { entity: t('entity.purchasepriceitem._self') })"
+      :width="600"
+      :footer="null"
+      :cancel-text="t('common.page.button.close')"
+      @cancel="handleImportCancel"
+    >
+      <TaktImportFile
+        entity-i18n-key="entity.purchasepriceitem._self"
+        file-type="xlsx"
+        :sheet-name="excelNames.sheet"
+        :template-file-name="excelNames.fileBase"
+        :download-template="handleDownloadTemplate"
+        :import-file="handleImportFile"
+        :max-size="10"
+        :max-rows="1000"
+        @success="handleImportSuccess"
+      />
+    </TaktModal>
     <TaktColumnDrawer
       v-model:open="columnSettingVisible"
       :columns="columns"
@@ -119,18 +305,30 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
 import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
+import { taktExcelEntityNames } from '@/utils/naming'
+import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 import PurchasePriceItemForm from './purchase-price-item-form.vue'
 import { usePurchasePriceMasterContext } from '../composables/use-purchase-price-master-context'
 import {
-  ,
+  getPurchasePriceItemList,
+  getPurchasePriceItemById,
+  createPurchasePriceItem,
+  updatePurchasePriceItem,
+  deletePurchasePriceItemById,
+  deletePurchasePriceItemBatch,
+  getPurchasePriceItemTemplate,
+  importPurchasePriceItem,
+  exportPurchasePriceItem,
 } from '@/api/logistics/procurement/purchase-price-item'
 import type { PurchasePriceItem, PurchasePriceItemQuery } from '@/types/logistics/procurement/purchase-price-item'
 
 const { t } = useI18n()
 const { selectedMasterRow } = usePurchasePriceMasterContext()
 
+/** Excel 导入/导出默认 sheet 名与文件名前缀 */
+const excelNames = taktExcelEntityNames('TaktPurchasePriceItem')
 /** 快捷查询占位文案 */
 const searchPlaceholder = computed(
   () => t('common.page.form.placeholder.search', { keyword: t('entity.purchasepriceitem._self') }),
@@ -151,6 +349,76 @@ const formData = ref<Partial<PurchasePriceItem>>({})
 const formLoading = ref(false)
 const formRef = ref()
 
+const advancedQueryVisible = ref(false)
+const advancedQueryForm = ref({
+  purchasePriceCode: '',
+  lineNumber: undefined as number | undefined,
+  materialCode: '',
+  materialName: '',
+  materialSpecification: '',
+  purchaseUnit: '',
+  purchasePrice: undefined as number | undefined,
+  minPurchaseQuantity: undefined as number | undefined,
+  maxPurchaseQuantity: undefined as number | undefined,
+  createdAtStart: '',
+  createdAtEnd: '',
+  extField: '',
+  remark: '',
+})
+const visibleQueryFieldKeys = ref<string[]>([])
+
+/** 高级查询字段元数据 */
+const queryFieldsMeta = computed(() => [
+  { key: 'purchasePriceCode', label: t('entity.purchasepriceitem.purchasepricecode') },
+  { key: 'lineNumber', label: t('entity.purchasepriceitem.linenumber') },
+  { key: 'materialCode', label: t('entity.purchasepriceitem.materialcode') },
+  { key: 'materialName', label: t('entity.purchasepriceitem.materialname') },
+  { key: 'materialSpecification', label: t('entity.purchasepriceitem.materialspecification') },
+  { key: 'purchaseUnit', label: t('entity.purchasepriceitem.purchaseunit') },
+  { key: 'purchasePrice', label: t('entity.purchasepriceitem.purchaseprice') },
+  { key: 'minPurchaseQuantity', label: t('entity.purchasepriceitem.minpurchasequantity') },
+  { key: 'maxPurchaseQuantity', label: t('entity.purchasepriceitem.maxpurchasequantity') },
+  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
+  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
+  { key: 'remark', label: t('common.page.entity.remark') },
+])
+
+/**
+ * 高级查询字段标签
+ * @param key 字段 key
+ */
+function fieldLabel(key: string): string {
+  return queryFieldsMeta.value.find((f) => f.key === key)?.label ?? key
+}
+
+function handleAdvancedQuery() {
+  advancedQueryVisible.value = true
+}
+
+function handleAdvancedQuerySubmit() {
+  advancedQueryVisible.value = false
+  currentPage.value = getTaktDefaultPageIndex()
+  void loadData()
+}
+
+function handleAdvancedQueryReset() {
+  advancedQueryForm.value = {
+  purchasePriceCode: '',
+  lineNumber: undefined as number | undefined,
+  materialCode: '',
+  materialName: '',
+  materialSpecification: '',
+  purchaseUnit: '',
+  purchasePrice: undefined as number | undefined,
+  minPurchaseQuantity: undefined as number | undefined,
+  maxPurchaseQuantity: undefined as number | undefined,
+  createdAtStart: '',
+  createdAtEnd: '',
+  extField: '',
+  remark: '',
+  }
+}
 const columnSettingVisible = ref(false)
 const visibleColumnKeys = ref<string[]>([])
 
@@ -165,6 +433,7 @@ function handleColumnKeysChange(keys: string[]) {
 function handleColumnSettingReset() {
   visibleColumnKeys.value = []
 }
+const importVisible = ref(false)
 
 const entityIdName = 'purchasePriceItemId'
 const hasMasterSelection = computed(() => !!selectedMasterRow.value?.purchasePriceId)
@@ -192,7 +461,86 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: PurchasePriceItem }) =>
       String(getPurchasePriceItemField(record, 'purchasePriceItemId') ?? ''),
   },
-
+  {
+    title: t('entity.purchasepriceitem.purchasepricecode'),
+    dataIndex: 'purchasePriceCode',
+    key: 'purchasePriceCode',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: PurchasePriceItem }) =>
+      String(getPurchasePriceItemField(record, 'purchasePriceCode') ?? ''),
+  },
+  {
+    title: t('entity.purchasepriceitem.linenumber'),
+    dataIndex: 'lineNumber',
+    key: 'lineNumber',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: PurchasePriceItem }) =>
+      String(getPurchasePriceItemField(record, 'lineNumber') ?? ''),
+  },
+  {
+    title: t('entity.purchasepriceitem.materialcode'),
+    dataIndex: 'materialCode',
+    key: 'materialCode',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: PurchasePriceItem }) =>
+      String(getPurchasePriceItemField(record, 'materialCode') ?? ''),
+  },
+  {
+    title: t('entity.purchasepriceitem.materialname'),
+    dataIndex: 'materialName',
+    key: 'materialName',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: PurchasePriceItem }) =>
+      String(getPurchasePriceItemField(record, 'materialName') ?? ''),
+  },
+  {
+    title: t('entity.purchasepriceitem.materialspecification'),
+    dataIndex: 'materialSpecification',
+    key: 'materialSpecification',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: PurchasePriceItem }) =>
+      String(getPurchasePriceItemField(record, 'materialSpecification') ?? ''),
+  },
+  {
+    title: t('entity.purchasepriceitem.purchaseunit'),
+    dataIndex: 'purchaseUnit',
+    key: 'purchaseUnit',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: PurchasePriceItem }) =>
+      String(getPurchasePriceItemField(record, 'purchaseUnit') ?? ''),
+  },
+  {
+    title: t('entity.purchasepriceitem.purchaseprice'),
+    dataIndex: 'purchasePrice',
+    key: 'purchasePrice',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: PurchasePriceItem }) =>
+      String(getPurchasePriceItemField(record, 'purchasePrice') ?? ''),
+  },
+  {
+    title: t('entity.purchasepriceitem.minpurchasequantity'),
+    dataIndex: 'minPurchaseQuantity',
+    key: 'minPurchaseQuantity',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: PurchasePriceItem }) =>
+      String(getPurchasePriceItemField(record, 'minPurchaseQuantity') ?? ''),
+  },
   CreateActionColumn({
     actions: [
       {
@@ -200,7 +548,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:procurement:purchaseprice:update',
+        permission: 'logistics:procurement:purchase:price:update',
         onClick: (record: PurchasePriceItem) => void handleEdit(record),
       },
       {
@@ -208,7 +556,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:procurement:purchaseprice:delete',
+        permission: 'logistics:procurement:purchase:price:delete',
         onClick: (record: PurchasePriceItem) => void handleDeleteOne(record),
       },
     ],
@@ -225,7 +573,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: PurchasePriceItem, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getPurchasePriceItemId(selectedRow.value) === getPurchasePriceItemId(record)) {
+    } else if (selectedRow.value && getPurchasePriceItemId(selectedRow.value) === getPurchasePriceItemId(record)) {
       selectedRow.value = null
     }
   },
@@ -275,6 +623,27 @@ function buildListQuery(overrides?: Partial<PurchasePriceItemQuery>): PurchasePr
       query[key] = v as never
     }
   }
+  assignTrimmed('purchasePriceCode', form.purchasePriceCode)
+  if (form.lineNumber !== undefined && form.lineNumber !== null) {
+    query.lineNumber = form.lineNumber
+  }
+  assignTrimmed('materialCode', form.materialCode)
+  assignTrimmed('materialName', form.materialName)
+  assignTrimmed('materialSpecification', form.materialSpecification)
+  assignTrimmed('purchaseUnit', form.purchaseUnit)
+  if (form.purchasePrice !== undefined && form.purchasePrice !== null) {
+    query.purchasePrice = form.purchasePrice
+  }
+  if (form.minPurchaseQuantity !== undefined && form.minPurchaseQuantity !== null) {
+    query.minPurchaseQuantity = form.minPurchaseQuantity
+  }
+  if (form.maxPurchaseQuantity !== undefined && form.maxPurchaseQuantity !== null) {
+    query.maxPurchaseQuantity = form.maxPurchaseQuantity
+  }
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('extField', form.extField)
+  assignTrimmed('remark', form.remark)
   return query
 }
 
@@ -289,7 +658,7 @@ async function loadData() {
   }
   loading.value = true
   try {
-    const res = await (buildListQuery())
+    const res = await getPurchasePriceItemList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: unknown) {
@@ -340,7 +709,7 @@ async function handleEdit(record: PurchasePriceItem) {
   formTitle.value = t('common.dialog.title.edit', { entity: t('entity.purchasepriceitem._self') })
   formLoading.value = true
   try {
-    const detail = await (getPurchasePriceItemId(record))
+    const detail = await getPurchasePriceItemById(getPurchasePriceItemId(record))
     formData.value = detail ? { ...detail } : { ...record }
     formVisible.value = true
   } finally {
@@ -372,10 +741,10 @@ async function handleFormSubmit() {
     const payload = refInst.getValues?.()
     const id = formData.value?.purchasePriceItemId
     if (id) {
-      await (id, payload)
+      await updatePurchasePriceItem(id, payload)
       message.success(t('common.feedback.updated', { target: t('entity.purchasepriceitem._self') }))
     } else {
-      await (payload)
+      await createPurchasePriceItem(payload)
       message.success(t('common.feedback.created', { target: t('entity.purchasepriceitem._self') }))
     }
     formVisible.value = false
@@ -399,7 +768,7 @@ async function handleDeleteOne(record: PurchasePriceItem) {
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
-      await (getPurchasePriceItemId(record))
+      await deletePurchasePriceItemById(getPurchasePriceItemId(record))
       message.success(t('common.feedback.deleted', { target: t('entity.purchasepriceitem._self') }))
       await loadData()
     },
@@ -424,7 +793,7 @@ async function handleDelete() {
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r) => getPurchasePriceItemId(r)).filter(Boolean)
-      await (ids)
+      await deletePurchasePriceItemBatch(ids)
       message.success(t('common.feedback.deleted', { target: t('entity.purchasepriceitem._self') }))
       await loadData()
     },
@@ -435,6 +804,76 @@ function handleRefresh() {
   void loadData()
 }
 
+function handleImport() {
+  if (!hasMasterSelection.value) {
+    message.warning(t('common.status.empty'))
+    return
+  }
+  importVisible.value = true
+}
+
+async function handleDownloadTemplate(sheetName?: string, fileName?: string): Promise<Blob> {
+  const res = await getPurchasePriceItemTemplate(sheetName, fileName)
+  return (res as { data?: Blob }).data ?? (res as Blob)
+}
+
+async function handleImportFile(
+  file: File,
+  sheetName?: string,
+): Promise<{ success: number; fail: number; errors: string[] }> {
+  return await importPurchasePriceItem(file, sheetName)
+}
+
+function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+  void loadData()
+  if (result.fail === 0) {
+    setTimeout(() => {
+      importVisible.value = false
+    }, 2000)
+  }
+}
+
+function handleImportCancel() {
+  importVisible.value = false
+}
+async function handleExport() {
+  if (!hasMasterSelection.value) {
+    message.warning(t('common.status.empty'))
+    return
+  }
+  try {
+    loading.value = true
+    const exportMeta = await exportPurchasePriceItem(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
+    const ts = new Date()
+    const pad = (n: number, w = 2) => String(n).padStart(w, '0')
+    const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
+    const fileName = resolveExportDownloadFileName({
+      contentDisposition: (exportMeta as { contentDisposition?: string | null }).contentDisposition ?? null,
+      contentType: (exportMeta as { contentType?: string | null }).contentType ?? null,
+      fallbackBase,
+    })
+    const blob = (exportMeta as { blob?: Blob }).blob ?? (exportMeta as Blob)
+    const url = window.URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = fileName
+    link.style.display = 'none'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    setTimeout(() => window.URL.revokeObjectURL(url), 100)
+    message.success(t('common.feedback.export.success', { target: t('entity.purchasepriceitem._self') }))
+  } catch (error: unknown) {
+    const err = error as { message?: string }
+    message.error(err?.message || t('common.feedback.export.failed', { target: t('entity.purchasepriceitem._self') }))
+  } finally {
+    loading.value = false
+  }
+}
 function handleTableChange() {}
 
 function handleResizeColumn() {}

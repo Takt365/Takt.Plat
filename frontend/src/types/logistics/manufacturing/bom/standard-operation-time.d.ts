@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/bom
 // 文件名称：standard-operation-time.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/bom 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,17 +29,17 @@ export interface StandardOperationTime extends ApprovalDtoBase {
   standardOperationTimeId: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options）
    */
   plantCode: string;
 
   /**
-   * 物料编码
+   * 物料编码（选项 TaktMaterials/options）
    */
   materialCode: string;
 
   /**
-   * 工作中心
+   * 工作中心（选项 TaktWorkCenters/options，按工厂 ExtValue 过滤）
    */
   workCenter: string;
 
@@ -54,7 +54,7 @@ export interface StandardOperationTime extends ApprovalDtoBase {
   standardMinutes: number;
 
   /**
-   * 工时单位
+   * 工时单位（字典 logistics_time_unit，默认 MIN）
    */
   timeUnit: string;
 
@@ -64,14 +64,14 @@ export interface StandardOperationTime extends ApprovalDtoBase {
   standardShorts: number;
 
   /**
-   * 点数单位
+   * 点数单位（字典 logistics_points_unit，默认 SHORT）
    */
   pointsUnit: string;
 
   /**
-   * 点数转分钟汇率（1 点数 = 多少分钟）
+   * 点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045）
    */
-  pointsToMinutesRate: number;
+  pointsToMinutesRate: string;
 
   /**
    * 转换后标准工时（分钟）
@@ -87,6 +87,11 @@ export interface StandardOperationTime extends ApprovalDtoBase {
    * 失效日期
    */
   expiryDate?: string;
+
+  /**
+   * 标准工序时间变更记录列表（外键在子表 TaktStandardOperationTimeChangeLog.StandardOperationTimeId） （子表：TaktStandardOperationTimeChangeLog）
+   */
+  changeLogs?: StandardOperationTimeChangeLog[];
 
 }
 
@@ -109,17 +114,17 @@ export interface StandardOperationTimeQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options）
    */
   plantCode?: string;
 
   /**
-   * 物料编码
+   * 物料编码（选项 TaktMaterials/options）
    */
   materialCode?: string;
 
   /**
-   * 工作中心
+   * 工作中心（选项 TaktWorkCenters/options，按工厂 ExtValue 过滤）
    */
   workCenter?: string;
 
@@ -134,7 +139,7 @@ export interface StandardOperationTimeQuery extends TaktPagedQuery {
   standardMinutes?: number;
 
   /**
-   * 工时单位
+   * 工时单位（字典 logistics_time_unit，默认 MIN）
    */
   timeUnit?: string;
 
@@ -144,14 +149,14 @@ export interface StandardOperationTimeQuery extends TaktPagedQuery {
   standardShorts?: number;
 
   /**
-   * 点数单位
+   * 点数单位（字典 logistics_points_unit，默认 SHORT）
    */
   pointsUnit?: string;
 
   /**
-   * 点数转分钟汇率（1 点数 = 多少分钟）
+   * 点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045）
    */
-  pointsToMinutesRate?: number;
+  pointsToMinutesRate?: string;
 
   /**
    * 转换后标准工时（分钟）
@@ -179,7 +184,7 @@ export interface StandardOperationTimeQuery extends TaktPagedQuery {
   expiryDateEnd?: string;
 
   /**
-   * 审批状态（TaktApprovalStatus）
+   * 审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）
    */
   approvalStatus?: number;
 
@@ -214,6 +219,11 @@ export interface StandardOperationTimeQuery extends TaktPagedQuery {
   approvedAtEnd?: string;
 
   /**
+   * 流程实例 ID
+   */
+  flowInstanceId?: string;
+
+  /**
    * 创建时间（范围查询-开始）
    */
   createdAtStart?: string;
@@ -226,7 +236,7 @@ export interface StandardOperationTimeQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -253,22 +263,22 @@ export interface StandardOperationTimeCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options）
    */
   plantCode: string;
 
   /**
-   * 物料编码
+   * 物料编码（选项 TaktMaterials/options）
    */
   materialCode: string;
 
   /**
-   * 工作中心
+   * 工作中心（选项 TaktWorkCenters/options，按工厂 ExtValue 过滤）
    */
   workCenter: string;
 
@@ -283,7 +293,7 @@ export interface StandardOperationTimeCreate {
   standardMinutes: number;
 
   /**
-   * 工时单位
+   * 工时单位（字典 logistics_time_unit，默认 MIN）
    */
   timeUnit: string;
 
@@ -293,14 +303,14 @@ export interface StandardOperationTimeCreate {
   standardShorts: number;
 
   /**
-   * 点数单位
+   * 点数单位（字典 logistics_points_unit，默认 SHORT）
    */
   pointsUnit: string;
 
   /**
-   * 点数转分钟汇率（1 点数 = 多少分钟）
+   * 点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045）
    */
-  pointsToMinutesRate: number;
+  pointsToMinutesRate: string;
 
   /**
    * 转换后标准工时（分钟）
@@ -318,9 +328,14 @@ export interface StandardOperationTimeCreate {
   expiryDate?: string;
 
   /**
+   * 标准工序时间变更记录列表（外键在子表 TaktStandardOperationTimeChangeLog.StandardOperationTimeId）（子表，级联保存）
+   */
+  changeLogs?: StandardOperationTimeChangeLogCreate[];
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -362,17 +377,17 @@ export interface StandardOperationTimeTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options）
    */
   plantCode?: string;
 
   /**
-   * 物料编码
+   * 物料编码（选项 TaktMaterials/options）
    */
   materialCode?: string;
 
   /**
-   * 工作中心
+   * 工作中心（选项 TaktWorkCenters/options，按工厂 ExtValue 过滤）
    */
   workCenter?: string;
 
@@ -382,7 +397,12 @@ export interface StandardOperationTimeTemplate {
   operationDesc?: string;
 
   /**
-   * 工时单位
+   * 标准工时（分钟）
+   */
+  standardMinutes?: number;
+
+  /**
+   * 工时单位（字典 logistics_time_unit，默认 MIN）
    */
   timeUnit?: string;
 
@@ -392,14 +412,39 @@ export interface StandardOperationTimeTemplate {
   standardShorts?: number;
 
   /**
-   * 点数单位
+   * 点数单位（字典 logistics_points_unit，默认 SHORT）
    */
   pointsUnit?: string;
 
   /**
+   * 点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045）
+   */
+  pointsToMinutesRate?: string;
+
+  /**
+   * 转换后标准工时（分钟）
+   */
+  convertedMinutes?: number;
+
+  /**
+   * 生效日期
+   */
+  effectiveDate?: string;
+
+  /**
+   * 失效日期
+   */
+  expiryDate?: string;
+
+  /**
+   * 标准工序时间变更记录列表（外键在子表 TaktStandardOperationTimeChangeLog.StandardOperationTimeId）（子表，级联保存）
+   */
+  changeLogs?: StandardOperationTimeChangeLogCreate[];
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -426,22 +471,22 @@ export interface StandardOperationTimeImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options）
    */
   plantCode?: string;
 
   /**
-   * 物料编码
+   * 物料编码（选项 TaktMaterials/options）
    */
   materialCode?: string;
 
   /**
-   * 工作中心
+   * 工作中心（选项 TaktWorkCenters/options，按工厂 ExtValue 过滤）
    */
   workCenter?: string;
 
@@ -451,7 +496,12 @@ export interface StandardOperationTimeImport {
   operationDesc?: string;
 
   /**
-   * 工时单位
+   * 标准工时（分钟）
+   */
+  standardMinutes?: number;
+
+  /**
+   * 工时单位（字典 logistics_time_unit，默认 MIN）
    */
   timeUnit?: string;
 
@@ -461,14 +511,39 @@ export interface StandardOperationTimeImport {
   standardShorts?: number;
 
   /**
-   * 点数单位
+   * 点数单位（字典 logistics_points_unit，默认 SHORT）
    */
   pointsUnit?: string;
 
   /**
+   * 点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045）
+   */
+  pointsToMinutesRate?: string;
+
+  /**
+   * 转换后标准工时（分钟）
+   */
+  convertedMinutes?: number;
+
+  /**
+   * 生效日期
+   */
+  effectiveDate?: string;
+
+  /**
+   * 失效日期
+   */
+  expiryDate?: string;
+
+  /**
+   * 标准工序时间变更记录列表（外键在子表 TaktStandardOperationTimeChangeLog.StandardOperationTimeId）（子表，级联保存）
+   */
+  changeLogs?: StandardOperationTimeChangeLogCreate[];
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -490,17 +565,17 @@ export interface StandardOperationTimeExport {
   standardOperationTimeId: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options）
    */
   plantCode: string;
 
   /**
-   * 物料编码
+   * 物料编码（选项 TaktMaterials/options）
    */
   materialCode: string;
 
   /**
-   * 工作中心
+   * 工作中心（选项 TaktWorkCenters/options，按工厂 ExtValue 过滤）
    */
   workCenter: string;
 
@@ -515,7 +590,7 @@ export interface StandardOperationTimeExport {
   standardMinutes: number;
 
   /**
-   * 工时单位
+   * 工时单位（字典 logistics_time_unit，默认 MIN）
    */
   timeUnit: string;
 
@@ -525,14 +600,14 @@ export interface StandardOperationTimeExport {
   standardShorts: number;
 
   /**
-   * 点数单位
+   * 点数单位（字典 logistics_points_unit，默认 SHORT）
    */
   pointsUnit: string;
 
   /**
-   * 点数转分钟汇率（1 点数 = 多少分钟）
+   * 点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045）
    */
-  pointsToMinutesRate: number;
+  pointsToMinutesRate: string;
 
   /**
    * 转换后标准工时（分钟）
@@ -552,7 +627,7 @@ export interface StandardOperationTimeExport {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注

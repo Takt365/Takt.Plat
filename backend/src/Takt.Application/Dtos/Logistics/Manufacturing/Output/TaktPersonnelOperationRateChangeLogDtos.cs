@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Output
 // 文件名称：TaktPersonnelOperationRateChangeLogDtos.cs
-// 创建时间：2026-06-21
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PersonnelOperationRateChangeLog 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPersonnelOperationRateChangeLog 生成，请按需审阅）
 // 
@@ -47,9 +47,9 @@ public class TaktPersonnelOperationRateChangeLogDto : TaktCompanyDtoBase
     public string? PersonnelOperationRateName { get; set; }
 
     /// <summary>
-    /// 生产线（冗余）
+    /// 生产班组（冗余）
     /// </summary>
-    public string ProductionLine { get; set; } = string.Empty;
+    public string ProdTeam { get; set; } = string.Empty;
 
     /// <summary>
     /// 变更字段列表（JSON数组格式，记录同一时间点修改的所有字段及其旧值、新值）
@@ -106,9 +106,9 @@ public class TaktPersonnelOperationRateChangeLogQueryDto : TaktPagedQuery
     public long? PersonnelOperationRateId { get; set; }
 
     /// <summary>
-    /// 生产线（冗余）
+    /// 生产班组（冗余）
     /// </summary>
-    public string? ProductionLine { get; set; } = string.Empty;
+    public string? ProdTeam { get; set; } = string.Empty;
 
     /// <summary>
     /// 变更字段列表（JSON数组格式，记录同一时间点修改的所有字段及其旧值、新值）
@@ -176,7 +176,7 @@ public class TaktPersonnelOperationRateChangeLogCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -187,10 +187,10 @@ public class TaktPersonnelOperationRateChangeLogCreateDto
     public long PersonnelOperationRateId { get; set; }
 
     /// <summary>
-    /// 生产线（冗余）
+    /// 生产班组（冗余）
     /// </summary>
     [Required(ErrorMessage = "生产线（冗余）不能为空")]
-    public string ProductionLine { get; set; } = string.Empty;
+    public string ProdTeam { get; set; } = string.Empty;
 
     /// <summary>
     /// 变更字段列表（JSON数组格式，记录同一时间点修改的所有字段及其旧值、新值）
@@ -272,9 +272,9 @@ public class TaktPersonnelOperationRateChangeLogExportDto
     public long PersonnelOperationRateId { get; set; }
 
     /// <summary>
-    /// 生产线（冗余）
+    /// 生产班组（冗余）
     /// </summary>
-    public string ProductionLine { get; set; } = string.Empty;
+    public string ProdTeam { get; set; } = string.Empty;
 
     /// <summary>
     /// 变更字段列表（JSON数组格式，记录同一时间点修改的所有字段及其旧值、新值）

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Maintenance
 // 文件名称：TaktMaintenanceHistoriesController.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-27
 // 创建人：Takt365(Cursor AI)
 // 功能描述：设备维护履历控制器
 // 
@@ -49,6 +49,26 @@ public class TaktMaintenanceHistoriesController : TaktControllerBase
         {
             var result = await _maintenanceHistoryService.GetMaintenanceHistoryListAsync(queryDto);
             return Success(result.Data, result.Total, result.PageIndex, result.PageSize, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 获取维护履历统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>维护履历统计</returns>
+    [TaktPermission("logistics:maintenance:history:list", "维护履历统计")]
+    [HttpGet("history-stat")]
+    public async Task<IActionResult> GetMaintenanceHistoryStatAsync([FromQuery] TaktMaintenanceHistoryStatQueryDto queryDto)
+    {
+        try
+        {
+            var result = await _maintenanceHistoryService.GetMaintenanceHistoryStatAsync(queryDto);
+            return Success(result, "查询成功");
         }
         catch (Exception ex)
         {

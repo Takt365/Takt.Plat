@@ -25,7 +25,7 @@ namespace Takt.Domain.Entities.Logistics.Sales;
 public class TaktSalesQuotationItem : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 销售报价ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 销售报价（关联 TaktSalesQuotation.Id，选项 TaktSalesQuotations/options）
     /// </summary>
     [SugarColumn(ColumnName = "sales_quotation_id", ColumnDescription = "销售报价ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -44,7 +44,7 @@ public class TaktSalesQuotationItem : TaktCompanyEntityBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 物料编码
+    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
     /// </summary>
     [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string MaterialCode { get; set; } = string.Empty;
@@ -62,25 +62,31 @@ public class TaktSalesQuotationItem : TaktCompanyEntityBase
     public string? MaterialSpecification { get; set; }
 
     /// <summary>
-    /// 销售单位
+    /// 销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
     /// </summary>
-    [SugarColumn(ColumnName = "sales_unit", ColumnDescription = "销售单位", ColumnDataType = "nvarchar", Length = 20, IsNullable = false, DefaultValue = "个")]
-    public string SalesUnit { get; set; } = "个";
+    [SugarColumn(ColumnName = "sales_unit", ColumnDescription = "销售单位", ColumnDataType = "nvarchar", Length = 5, IsNullable = false, DefaultValue = "PC")]
+    public string SalesUnit { get; set; } = "PC";
 
     /// <summary>
     /// 报价数量（基本单位数量）
     /// </summary>
-    [SugarColumn(ColumnName = "quotation_quantity", ColumnDescription = "报价数量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 4, IsNullable = false, DefaultValue = "0")]
+    [SugarColumn(ColumnName = "quotation_quantity", ColumnDescription = "报价数量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "0")]
     public decimal QuotationQuantity { get; set; } = 0;
+
+    /// <summary>
+    /// 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+    /// </summary>
+    [SugarColumn(ColumnName = "sales_per_unit", ColumnDescription = "价格单位", ColumnDataType = "int", IsNullable = false, DefaultValue = "1000")]
+    public int SalesPerUnit { get; set; } = 1000;
 
     /// <summary>
     /// 单价
     /// </summary>
-    [SugarColumn(ColumnName = "unit_price", ColumnDescription = "单价", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
+    [SugarColumn(ColumnName = "unit_price", ColumnDescription = "单价", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "0")]
     public decimal UnitPrice { get; set; } = 0;
 
     /// <summary>
-    /// 折扣率（0-100，表示折扣百分比）
+    /// 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
     /// </summary>
     [SugarColumn(ColumnName = "discount_rate", ColumnDescription = "折扣率", ColumnDataType = "decimal", Length = 5, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
     public decimal DiscountRate { get; set; } = 0;
@@ -88,11 +94,11 @@ public class TaktSalesQuotationItem : TaktCompanyEntityBase
     /// <summary>
     /// 折扣金额
     /// </summary>
-    [SugarColumn(ColumnName = "discount_amount", ColumnDescription = "折扣金额", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
+    [SugarColumn(ColumnName = "discount_amount", ColumnDescription = "折扣金额", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "0")]
     public decimal DiscountAmount { get; set; } = 0;
 
     /// <summary>
-    /// 税费率（0-100，表示税费百分比）
+    /// 税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）
     /// </summary>
     [SugarColumn(ColumnName = "tax_rate", ColumnDescription = "税费率", ColumnDataType = "decimal", Length = 5, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
     public decimal TaxRate { get; set; } = 0;
@@ -100,14 +106,18 @@ public class TaktSalesQuotationItem : TaktCompanyEntityBase
     /// <summary>
     /// 税费
     /// </summary>
-    [SugarColumn(ColumnName = "tax_amount", ColumnDescription = "税费", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
+    [SugarColumn(ColumnName = "tax_amount", ColumnDescription = "税费", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "0")]
     public decimal TaxAmount { get; set; } = 0;
 
     /// <summary>
     /// 小计金额
     /// </summary>
-    [SugarColumn(ColumnName = "subtotal_amount", ColumnDescription = "小计金额", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
+    [SugarColumn(ColumnName = "subtotal_amount", ColumnDescription = "小计金额", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "0")]
     public decimal SubtotalAmount { get; set; } = 0;
+
+    // ========================================
+    // 导航属性区域
+    // ========================================
 
     /// <summary>
     /// 销售报价主表

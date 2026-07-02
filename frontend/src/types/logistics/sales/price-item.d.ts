@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/sales
 // 文件名称：price-item.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-07-01
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,12 +29,12 @@ export interface SalesPriceItem extends CompanyDtoBase {
   salesPriceItemId: string;
 
   /**
-   * 销售价格ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 销售价格（关联 TaktSalesPrice.Id，选项 TaktSalesPrices/options）
    */
   salesPriceId: string;
 
   /**
-   * 销售价格名称（填充字段）
+   * 销售价格（关联 TaktSalesPrice.Id，选项 TaktSalesPrices/options）
    */
   salesPriceName?: string;
 
@@ -49,27 +49,32 @@ export interface SalesPriceItem extends CompanyDtoBase {
   lineNumber: number;
 
   /**
-   * 物料编码
+   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
    */
   materialCode: string;
 
   /**
-   * 销售单位
+   * 销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   salesUnit: string;
 
   /**
-   * 销售价格（精确到分，存储为整数，单位为分）
+   * 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+   */
+  salesPerUnit: number;
+
+  /**
+   * 销售价格（decimal(18,5)）
    */
   salesPrice: number;
 
   /**
-   * 最小订购量（基本单位数量）
+   * 最小订购量（基本单位数量，整数）
    */
   minOrderQuantity: number;
 
   /**
-   * 最大订购量（基本单位数量，0表示无限制）
+   * 最大订购量（基本单位数量，0表示无限制，整数）
    */
   maxOrderQuantity: number;
 
@@ -104,7 +109,7 @@ export interface SalesPriceItemQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 销售价格ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 销售价格（关联 TaktSalesPrice.Id，选项 TaktSalesPrices/options）
    */
   salesPriceId?: string;
 
@@ -119,27 +124,32 @@ export interface SalesPriceItemQuery extends TaktPagedQuery {
   lineNumber?: number;
 
   /**
-   * 物料编码
+   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
    */
   materialCode?: string;
 
   /**
-   * 销售单位
+   * 销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   salesUnit?: string;
 
   /**
-   * 销售价格（精确到分，存储为整数，单位为分）
+   * 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+   */
+  salesPerUnit?: number;
+
+  /**
+   * 销售价格（decimal(18,5)）
    */
   salesPrice?: number;
 
   /**
-   * 最小订购量（基本单位数量）
+   * 最小订购量（基本单位数量，整数）
    */
   minOrderQuantity?: number;
 
   /**
-   * 最大订购量（基本单位数量，0表示无限制）
+   * 最大订购量（基本单位数量，0表示无限制，整数）
    */
   maxOrderQuantity?: number;
 
@@ -156,7 +166,7 @@ export interface SalesPriceItemQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -183,12 +193,12 @@ export interface SalesPriceItemCreate {
   companyCode: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture: string;
 
   /**
-   * 销售价格ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 销售价格（关联 TaktSalesPrice.Id，选项 TaktSalesPrices/options）
    */
   salesPriceId: string;
 
@@ -203,27 +213,32 @@ export interface SalesPriceItemCreate {
   lineNumber: number;
 
   /**
-   * 物料编码
+   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
    */
   materialCode: string;
 
   /**
-   * 销售单位
+   * 销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   salesUnit: string;
 
   /**
-   * 销售价格（精确到分，存储为整数，单位为分）
+   * 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+   */
+  salesPerUnit: number;
+
+  /**
+   * 销售价格（decimal(18,5)）
    */
   salesPrice: number;
 
   /**
-   * 最小订购量（基本单位数量）
+   * 最小订购量（基本单位数量，整数）
    */
   minOrderQuantity: number;
 
   /**
-   * 最大订购量（基本单位数量，0表示无限制）
+   * 最大订购量（基本单位数量，0表示无限制，整数）
    */
   maxOrderQuantity: number;
 
@@ -235,7 +250,7 @@ export interface SalesPriceItemCreate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -277,7 +292,7 @@ export interface SalesPriceItemTemplate {
   companyCode?: string;
 
   /**
-   * 销售价格ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 销售价格（关联 TaktSalesPrice.Id，选项 TaktSalesPrices/options）
    */
   salesPriceId?: string;
 
@@ -292,19 +307,44 @@ export interface SalesPriceItemTemplate {
   lineNumber?: number;
 
   /**
-   * 物料编码
+   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
    */
   materialCode?: string;
 
   /**
-   * 销售单位
+   * 销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   salesUnit?: string;
 
   /**
+   * 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+   */
+  salesPerUnit?: number;
+
+  /**
+   * 销售价格（decimal(18,5)）
+   */
+  salesPrice?: number;
+
+  /**
+   * 最小订购量（基本单位数量，整数）
+   */
+  minOrderQuantity?: number;
+
+  /**
+   * 最大订购量（基本单位数量，0表示无限制，整数）
+   */
+  maxOrderQuantity?: number;
+
+  /**
+   * 价格阶梯列表（主子表关系，一个物料价格可以有多个阶梯）（子表，级联保存）
+   */
+  scales?: SalesPriceScaleCreate[];
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -331,12 +371,12 @@ export interface SalesPriceItemImport {
   companyCode?: string;
 
   /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   companyDefaultCulture?: string;
 
   /**
-   * 销售价格ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 销售价格（关联 TaktSalesPrice.Id，选项 TaktSalesPrices/options）
    */
   salesPriceId?: string;
 
@@ -351,19 +391,44 @@ export interface SalesPriceItemImport {
   lineNumber?: number;
 
   /**
-   * 物料编码
+   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
    */
   materialCode?: string;
 
   /**
-   * 销售单位
+   * 销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   salesUnit?: string;
 
   /**
+   * 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+   */
+  salesPerUnit?: number;
+
+  /**
+   * 销售价格（decimal(18,5)）
+   */
+  salesPrice?: number;
+
+  /**
+   * 最小订购量（基本单位数量，整数）
+   */
+  minOrderQuantity?: number;
+
+  /**
+   * 最大订购量（基本单位数量，0表示无限制，整数）
+   */
+  maxOrderQuantity?: number;
+
+  /**
+   * 价格阶梯列表（主子表关系，一个物料价格可以有多个阶梯）（子表，级联保存）
+   */
+  scales?: SalesPriceScaleCreate[];
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -390,7 +455,7 @@ export interface SalesPriceItemExport {
   companyCode: string;
 
   /**
-   * 销售价格ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 销售价格（关联 TaktSalesPrice.Id，选项 TaktSalesPrices/options）
    */
   salesPriceId: string;
 
@@ -405,34 +470,39 @@ export interface SalesPriceItemExport {
   lineNumber: number;
 
   /**
-   * 物料编码
+   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
    */
   materialCode: string;
 
   /**
-   * 销售单位
+   * 销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   salesUnit: string;
 
   /**
-   * 销售价格（精确到分，存储为整数，单位为分）
+   * 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+   */
+  salesPerUnit: number;
+
+  /**
+   * 销售价格（decimal(18,5)）
    */
   salesPrice: number;
 
   /**
-   * 最小订购量（基本单位数量）
+   * 最小订购量（基本单位数量，整数）
    */
   minOrderQuantity: number;
 
   /**
-   * 最大订购量（基本单位数量，0表示无限制）
+   * 最大订购量（基本单位数量，0表示无限制，整数）
    */
   maxOrderQuantity: number;
 
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注

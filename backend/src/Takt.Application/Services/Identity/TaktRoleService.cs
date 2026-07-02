@@ -266,9 +266,9 @@ public class TaktRoleService : TaktServiceBase, ITaktRoleService
     }
 
     /// <summary>
-    /// 更新角色是否内置
+    /// 更新角色内置
     /// </summary>
-    /// <param name="dto">是否内置 DTO</param>
+    /// <param name="dto">内置 DTO</param>
     /// <returns>DTO</returns>
     public async Task<TaktRoleDto> UpdateRoleBuiltInAsync(TaktRoleBuiltInDto dto)
     {
@@ -279,7 +279,7 @@ public class TaktRoleService : TaktServiceBase, ITaktRoleService
         }
         if (dto.IsBuiltIn is not 0 and not 1)
         {
-            throw new TaktBusinessException("是否内置必须为字典 sys_yes_no_type 合法值（0=否，1=是）");
+            throw new TaktBusinessException("内置必须为字典 sys_yes_no_type 合法值（0=否，1=是）");
         }
         if (entity.IsBuiltIn == 1 && dto.IsBuiltIn != 1)
         {
@@ -424,7 +424,7 @@ public class TaktRoleService : TaktServiceBase, ITaktRoleService
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
                 || SqlFunc.ToString(x.IsBuiltIn).Contains(keywords)
                 || SqlFunc.ToString(x.RoleStatus).Contains(keywords)
-                || (x.Description != null && x.Description.Contains(keywords))
+                || (x.RoleDescription != null && x.RoleDescription.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
@@ -461,9 +461,9 @@ public class TaktRoleService : TaktServiceBase, ITaktRoleService
             exp = exp.And(x => x.RoleStatus == queryDto.RoleStatus);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Description))
+        if (!string.IsNullOrEmpty(queryDto?.RoleDescription))
         {
-            exp = exp.And(x => x.Description != null && x.Description.Contains(queryDto.Description));
+            exp = exp.And(x => x.RoleDescription != null && x.RoleDescription.Contains(queryDto.RoleDescription));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

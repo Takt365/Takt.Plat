@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Routine.ConferenceCenter
 // 文件名称：TaktConferenceAgendaValidators.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ConferenceAgenda 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktConferenceAgenda 生成，请按需审阅）
 // 
@@ -37,19 +37,13 @@ public class TaktConferenceAgendaCreateValidator : AbstractValidator<TaktConfere
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.ConferenceId)
             .GreaterThanOrEqualTo(0).WithMessage("会议 ID不能为负数");
-        RuleFor(x => x.Title)
+        RuleFor(x => x.ConferenceAgendaTitle)
             .NotEmpty().WithMessage("标题不能为空")
             .MaximumLength(200).WithMessage("标题长度不能超过200个字符");
-        RuleFor(x => x.Summary)
-            .MaximumLength(2000).WithMessage("摘要长度不能超过2000个字符");
         RuleFor(x => x.PresenterId)
             .GreaterThanOrEqualTo(0).WithMessage("主讲人/汇报人 ID不能为负数");
-        RuleFor(x => x.PresenterName)
-            .MaximumLength(40).WithMessage("主讲人姓名长度不能超过40个字符");
         RuleFor(x => x.RecorderId)
             .GreaterThanOrEqualTo(0).WithMessage("记录人 ID不能为负数");
-        RuleFor(x => x.RecorderName)
-            .MaximumLength(40).WithMessage("记录人姓名长度不能超过40个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -73,6 +67,25 @@ public class TaktConferenceAgendaUpdateValidator : AbstractValidator<TaktConfere
     {
         RuleFor(x => x.ConferenceAgendaId)
             .GreaterThan(0).WithMessage("ConferenceAgendaID无效");
+        RuleFor(x => x.TenantCode)
+            .NotEmpty().WithMessage("租户编码不能为空")
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.CompanyCode)
+            .NotEmpty().WithMessage("公司代码不能为空")
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.ConferenceId)
+            .GreaterThanOrEqualTo(0).WithMessage("会议 ID不能为负数");
+        RuleFor(x => x.ConferenceAgendaTitle)
+            .NotEmpty().WithMessage("标题不能为空")
+            .MaximumLength(200).WithMessage("标题长度不能超过200个字符");
+        RuleFor(x => x.PresenterId)
+            .GreaterThanOrEqualTo(0).WithMessage("主讲人/汇报人 ID不能为负数");
+        RuleFor(x => x.RecorderId)
+            .GreaterThanOrEqualTo(0).WithMessage("记录人 ID不能为负数");
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
     }
 }
 
@@ -96,19 +109,13 @@ public class TaktConferenceAgendaImportValidator : AbstractValidator<TaktConfere
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
         RuleFor(x => x.ConferenceId)
             .GreaterThanOrEqualTo(0).WithMessage("会议 ID不能为负数");
-        RuleFor(x => x.Title)
+        RuleFor(x => x.ConferenceAgendaTitle)
             .NotEmpty().WithMessage("标题不能为空")
             .MaximumLength(200).WithMessage("标题长度不能超过200个字符");
-        RuleFor(x => x.Summary)
-            .MaximumLength(2000).WithMessage("摘要长度不能超过2000个字符").When(x => !string.IsNullOrWhiteSpace(x.Summary));
         RuleFor(x => x.PresenterId)
             .GreaterThanOrEqualTo(0).WithMessage("主讲人/汇报人 ID不能为负数");
-        RuleFor(x => x.PresenterName)
-            .MaximumLength(40).WithMessage("主讲人姓名长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.PresenterName));
         RuleFor(x => x.RecorderId)
             .GreaterThanOrEqualTo(0).WithMessage("记录人 ID不能为负数");
-        RuleFor(x => x.RecorderName)
-            .MaximumLength(40).WithMessage("记录人姓名长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.RecorderName));
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

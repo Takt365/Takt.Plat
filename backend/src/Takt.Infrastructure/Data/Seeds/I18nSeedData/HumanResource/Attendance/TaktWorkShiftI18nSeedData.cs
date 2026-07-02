@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Attendance
 // 文件名称：TaktWorkShiftI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktWorkShift 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -127,13 +127,22 @@ public class TaktWorkShiftI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.workshift.endtime", "zh-HK", "结束时间_hk", "当班结束时间（HH:mm）"),
 
             // entity.workshift.crossmidnight
-            new TranslationSeedItem("entity.workshift.crossmidnight", "en-US", "是否跨日_us", "是否跨自然日（0=否 1=是）"),
+            new TranslationSeedItem("entity.workshift.crossmidnight", "en-US", "是否跨日_us", "是否跨自然日（字典 sys_yes_no_type；0=否 1=是）"),
             // entity.workshift.crossmidnight
-            new TranslationSeedItem("entity.workshift.crossmidnight", "ja-JP", "是否跨日_jp", "是否跨自然日（0=否 1=是）"),
+            new TranslationSeedItem("entity.workshift.crossmidnight", "ja-JP", "是否跨日_jp", "是否跨自然日（字典 sys_yes_no_type；0=否 1=是）"),
             // entity.workshift.crossmidnight
-            new TranslationSeedItem("entity.workshift.crossmidnight", "zh-CN", "是否跨日", "是否跨自然日（0=否 1=是）"),
+            new TranslationSeedItem("entity.workshift.crossmidnight", "zh-CN", "是否跨日", "是否跨自然日（字典 sys_yes_no_type；0=否 1=是）"),
             // entity.workshift.crossmidnight
-            new TranslationSeedItem("entity.workshift.crossmidnight", "zh-HK", "是否跨日_hk", "是否跨自然日（0=否 1=是）"),
+            new TranslationSeedItem("entity.workshift.crossmidnight", "zh-HK", "是否跨日_hk", "是否跨自然日（字典 sys_yes_no_type；0=否 1=是）"),
+
+            // entity.workshift.relatedplant
+            new TranslationSeedItem("entity.workshift.relatedplant", "en-US", "关联工厂_us", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            // entity.workshift.relatedplant
+            new TranslationSeedItem("entity.workshift.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            // entity.workshift.relatedplant
+            new TranslationSeedItem("entity.workshift.relatedplant", "zh-CN", "关联工厂", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            // entity.workshift.relatedplant
+            new TranslationSeedItem("entity.workshift.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
 
             // entity.workshift.sortorder
             new TranslationSeedItem("entity.workshift.sortorder", "en-US", "排序号_us", "排序号"),
@@ -143,15 +152,6 @@ public class TaktWorkShiftI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.workshift.sortorder", "zh-CN", "排序号", "排序号"),
             // entity.workshift.sortorder
             new TranslationSeedItem("entity.workshift.sortorder", "zh-HK", "排序号_hk", "排序号"),
-
-            // entity.workshift.relatedplant
-            new TranslationSeedItem("entity.workshift.relatedplant", "en-US", "关联工厂_us", "关联工厂"),
-            // entity.workshift.relatedplant
-            new TranslationSeedItem("entity.workshift.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂"),
-            // entity.workshift.relatedplant
-            new TranslationSeedItem("entity.workshift.relatedplant", "zh-CN", "关联工厂", "关联工厂"),
-            // entity.workshift.relatedplant
-            new TranslationSeedItem("entity.workshift.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂"),
         };
     }
 

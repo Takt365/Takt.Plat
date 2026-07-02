@@ -181,7 +181,7 @@
           v-model:value="advancedQueryForm.originCountryRegionCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.packaging.origincountryregioncode') })"
           show-count
-          :maxlength="20"
+          :maxlength="2"
           allow-clear
         />
       </a-form-item>
@@ -203,7 +203,7 @@
           v-model:value="advancedQueryForm.destinationCountryRegionCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.packaging.destinationcountryregioncode') })"
           show-count
-          :maxlength="20"
+          :maxlength="2"
           allow-clear
         />
       </a-form-item>
@@ -359,7 +359,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -370,7 +370,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -923,7 +923,7 @@ const rowSelection = computed(() => ({
   onSelect: (record: Packaging, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getPackagingId(selectedRow.value) === getPackagingId(record)) {
+    } else if (selectedRow.value && getPackagingId(selectedRow.value) === getPackagingId(record)) {
       selectedRow.value = null
     }
   },

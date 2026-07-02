@@ -374,7 +374,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -385,7 +385,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -1036,7 +1036,7 @@ const rowSelection = computed(() => ({
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
-    } else if (getCustomerSatisfactionSurveyId(selectedRow.value) === getCustomerSatisfactionSurveyId(record)) {
+    } else if (selectedRow.value && getCustomerSatisfactionSurveyId(selectedRow.value) === getCustomerSatisfactionSurveyId(record)) {
       selectedRow.value = null
       syncMasterSelection(null)
     }

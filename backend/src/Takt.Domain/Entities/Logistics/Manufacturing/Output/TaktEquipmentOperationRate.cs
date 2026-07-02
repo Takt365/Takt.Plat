@@ -6,6 +6,9 @@
 // 创建时间：2025-02-02
 // 创建人：Takt365(Cursor AI)
 // 功能描述：机器稼动率实体（生产设备运行效率记录）
+// 计算公式：时间稼动率(%) = 稼动时间 ÷ 负荷时间 × 100%（OEE 时间稼动率基础之一）
+// 辅助关系：稼动时间 = 负荷时间 - 停线损失时间；负荷时间 = 计划作业时间 - 计划停机时间
+// 良品率(%) = 合格品数量 ÷ 实际产量 × 100%（OEE 品质率基础之一）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -26,12 +29,12 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Output;
 [SugarIndex("ix_takt_logistics_manufacturing_output_equipment_operation_rate_eor_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(EquipmentCode), OrderByType.Asc, nameof(TimeCategory), OrderByType.Asc, nameof(StartDate), OrderByType.Asc, nameof(ShiftNo), OrderByType.Asc, true)]
 [SugarIndex("ix_takt_logistics_manufacturing_output_equipment_operation_rate_equipment_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(EquipmentCode), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_manufacturing_output_equipment_operation_rate_plant_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_output_equipment_operation_rate_production_line", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProductionLine), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_output_equipment_operation_rate_prod_team", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProdTeam), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_manufacturing_output_equipment_operation_rate_start_date", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(StartDate), OrderByType.Asc, false)]
 public class TaktEquipmentOperationRate : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
@@ -67,7 +70,7 @@ public class TaktEquipmentOperationRate : TaktCompanyEntityBase
     public int? MonthNumber { get; set; }
 
     /// <summary>
-    /// 设备编码
+    /// 设备编码（关联 TaktEquipment.EquipmentCode，选项 TaktEquipments/options）
     /// </summary>
     [SugarColumn(ColumnName = "equipment_code", ColumnDescription = "设备编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string EquipmentCode { get; set; } = string.Empty;
@@ -79,22 +82,22 @@ public class TaktEquipmentOperationRate : TaktCompanyEntityBase
     public string EquipmentName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设备类型（1=生产设备，2=检测设备，3=包装设备，4=其他）
+    /// 登录设备（字典 logistics_equipment_type；0=生产设备 1=检测设备 2=包装设备 3=物流设备 4=辅助设备）
     /// </summary>
-    [SugarColumn(ColumnName = "equipment_type", ColumnDescription = "设备类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public int EquipmentType { get; set; } = 1;
+    [SugarColumn(ColumnName = "equipment_type", ColumnDescription = "登录设备", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int EquipmentType { get; set; } = 0;
 
     /// <summary>
-    /// 生产线
+    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
     /// </summary>
-    [SugarColumn(ColumnName = "production_line", ColumnDescription = "生产线", ColumnDataType = "nvarchar", Length = 20, IsNullable = true)]
-    public string? ProductionLine { get; set; }
+    [SugarColumn(ColumnName = "prod_team", ColumnDescription = "生产班组", ColumnDataType = "nvarchar", Length = 20, IsNullable = true)]
+    public string? ProdTeam { get; set; }
 
     /// <summary>
-    /// 班次（1=早班，2=中班，3=晚班）
+    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
-    [SugarColumn(ColumnName = "shift_no", ColumnDescription = "班次", ColumnDataType = "int", IsNullable = false)]
-    public int ShiftNo { get; set; }
+    [SugarColumn(ColumnName = "shift_no", ColumnDescription = "班次", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
+    public int ShiftNo { get; set; } = 1;
 
     /// <summary>
     /// 负荷时间（分钟）。设备在计划内应运行的总时间，即 计划作业时间 - 计划停机时间。
@@ -157,31 +160,25 @@ public class TaktEquipmentOperationRate : TaktCompanyEntityBase
     public int? DowntimeReasonType { get; set; }
 
     /// <summary>
-    /// 停机原因描述
+    /// 停机原因描述（自由文本，与 DowntimeReasonType 配合）
     /// </summary>
     [SugarColumn(ColumnName = "downtime_reason", ColumnDescription = "停机原因描述", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
     public string? DowntimeReason { get; set; }
 
     /// <summary>
-    /// 设备状态（1=正常运行，2=故障停机，3=维护保养，4=换型调试，5=其他）
-    /// </summary>
-    [SugarColumn(ColumnName = "equipment_status", ColumnDescription = "设备状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public int EquipmentStatus { get; set; } = 1;
-
-    /// <summary>
-    /// 设备操作员
+    /// 设备操作员（选项 TaktEmployees/options，存员工姓名或工号）
     /// </summary>
     [SugarColumn(ColumnName = "equipment_operator", ColumnDescription = "设备操作员", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? EquipmentOperator { get; set; }
 
     /// <summary>
-    /// 设备维护员
+    /// 设备维护员（选项 TaktEmployees/options，存员工姓名或工号）
     /// </summary>
     [SugarColumn(ColumnName = "equipment_maintainer", ColumnDescription = "设备维护员", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? EquipmentMaintainer { get; set; }
 
     /// <summary>
-    /// 班组长
+    /// 班组长（选项 TaktEmployees/options，存员工姓名或工号）
     /// </summary>
     [SugarColumn(ColumnName = "team_leader", ColumnDescription = "班组长", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? TeamLeader { get; set; }
@@ -190,7 +187,7 @@ public class TaktEquipmentOperationRate : TaktCompanyEntityBase
     /// 状态（0=正常，1=停用）
     /// </summary>
     [SugarColumn(ColumnName = "status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int Status { get; set; } = 0;
+    public int EquipmentOperationRateStatus { get; set; } = 0;
 
     /// <summary>
     /// 机器稼动率变更记录列表（外键在子表 TaktEquipmentOperationRateChangeLog.EquipmentOperationRateId）

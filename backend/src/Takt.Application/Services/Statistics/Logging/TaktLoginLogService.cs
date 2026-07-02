@@ -17,6 +17,7 @@ using Takt.Application.Dtos.Statistics.Logging;
 using Takt.Domain.Entities.Statistics.Logging;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
+using Takt.Shared.Constants;
 using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
@@ -63,8 +64,13 @@ public class TaktLoginLogService : TaktServiceBase, ITaktLoginLogService
             queryDto.PageIndex,
             queryDto.PageSize,
             predicate);
+        var dtos = data.Adapt<List<TaktLoginLogDto>>();
+        foreach (var dto in dtos)
+        {
+            EnrichLoginLogDto(dto);
+        }
         return TaktPagedResult<TaktLoginLogDto>.Create(
-            data.Adapt<List<TaktLoginLogDto>>(),
+            dtos,
             total,
             queryDto.PageIndex,
             queryDto.PageSize);
@@ -82,7 +88,9 @@ public class TaktLoginLogService : TaktServiceBase, ITaktLoginLogService
         {
             return null;
         }
-        return entity.Adapt<TaktLoginLogDto>();
+        var dto = entity.Adapt<TaktLoginLogDto>();
+        EnrichLoginLogDto(dto);
+        return dto;
     }
 
     /// <summary>
@@ -111,6 +119,7 @@ public class TaktLoginLogService : TaktServiceBase, ITaktLoginLogService
     public async Task<TaktLoginLogDto> CreateLoginLogAsync(TaktLoginLogCreateDto dto)
     {
         var entity = dto.Adapt<TaktLoginLog>();
+        ApplyClientUserAgentProfile(entity);
         entity = await _loginLogRepository.CreateAsync(entity);
         return await GetLoginLogByIdAsync(entity.Id) ?? entity.Adapt<TaktLoginLogDto>();
     }
@@ -129,6 +138,7 @@ public class TaktLoginLogService : TaktServiceBase, ITaktLoginLogService
             throw new TaktBusinessException("登录日志不存在");
         }
         dto.Adapt(entity);
+        ApplyClientUserAgentProfile(entity);
         await _loginLogRepository.UpdateAsync(entity);
         return await GetLoginLogByIdAsync(id) ?? throw new TaktBusinessException("登录日志不存在");
     }
@@ -209,14 +219,13 @@ public class TaktLoginLogService : TaktServiceBase, ITaktLoginLogService
             exp = exp.And(x =>
                 (x.Username != null && x.Username.Contains(keywords))
                 || SqlFunc.ToString(x.LoginType).Contains(keywords)
-                || SqlFunc.ToString(x.Browser).Contains(keywords)
-                || SqlFunc.ToString(x.Os).Contains(keywords)
+                || (x.Browser != null && x.Browser.Contains(keywords))
+                || (x.Os != null && x.Os.Contains(keywords))
                 || (x.UserAgent != null && x.UserAgent.Contains(keywords))
                 || SqlFunc.ToString(x.LoginResult).Contains(keywords)
                 || (x.LoginMessage != null && x.LoginMessage.Contains(keywords))
                 || (x.LoginIp != null && x.LoginIp.Contains(keywords))
                 || (x.LoginLocation != null && x.LoginLocation.Contains(keywords))
-                || SqlFunc.ToString(x.SessionDuration).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.LogoutAt).Contains(keywords)
@@ -229,19 +238,22 @@ public class TaktLoginLogService : TaktServiceBase, ITaktLoginLogService
             exp = exp.And(x => x.Username != null && x.Username.Contains(queryDto.Username));
         }
 
-        if (queryDto?.LoginType.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.LoginType))
         {
-            exp = exp.And(x => x.LoginType == queryDto.LoginType);
+            var loginType = queryDto.LoginType.Trim();
+            exp = exp.And(x => x.LoginType == loginType);
         }
 
-        if (queryDto?.Browser.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.Browser))
         {
-            exp = exp.And(x => x.Browser == queryDto.Browser);
+            var browser = queryDto.Browser.Trim();
+            exp = exp.And(x => x.Browser == browser);
         }
 
-        if (queryDto?.Os.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.Os))
         {
-            exp = exp.And(x => x.Os == queryDto.Os);
+            var os = queryDto.Os.Trim();
+            exp = exp.And(x => x.Os == os);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.UserAgent))
@@ -249,9 +261,10 @@ public class TaktLoginLogService : TaktServiceBase, ITaktLoginLogService
             exp = exp.And(x => x.UserAgent != null && x.UserAgent.Contains(queryDto.UserAgent));
         }
 
-        if (queryDto?.LoginResult.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.LoginResult))
         {
-            exp = exp.And(x => x.LoginResult == queryDto.LoginResult);
+            var loginResult = queryDto.LoginResult.Trim();
+            exp = exp.And(x => x.LoginResult == loginResult);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.LoginMessage))
@@ -267,11 +280,6 @@ public class TaktLoginLogService : TaktServiceBase, ITaktLoginLogService
         if (!string.IsNullOrEmpty(queryDto?.LoginLocation))
         {
             exp = exp.And(x => x.LoginLocation != null && x.LoginLocation.Contains(queryDto.LoginLocation));
-        }
-
-        if (queryDto?.SessionDuration.HasValue == true)
-        {
-            exp = exp.And(x => x.SessionDuration == queryDto.SessionDuration);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))
@@ -305,5 +313,30 @@ public class TaktLoginLogService : TaktServiceBase, ITaktLoginLogService
         }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 列表/详情展示时根据 User-Agent 回填 Browser/Os
+    /// </summary>
+    /// <param name="dto">登录日志 DTO</param>
+    private static void EnrichLoginLogDto(TaktLoginLogDto dto)
+    {
+        dto.LoginLocation = TaktHttpAuditHelper.ResolveLocationFromIp(dto.LoginIp, dto.LoginLocation);
+        (dto.Browser, dto.Os) = TaktUserAgentHelper.FillBrowserOsFromUserAgent(
+            dto.UserAgent,
+            dto.Browser ?? TaktConstants.BrowserType.Unknown,
+            dto.Os ?? TaktConstants.OperatingSystem.Unknown);
+    }
+
+    /// <summary>
+    /// 根据 User-Agent 回填 Browser/Os（显式 unknown 时解析）
+    /// </summary>
+    /// <param name="entity">登录日志实体</param>
+    private static void ApplyClientUserAgentProfile(TaktLoginLog entity)
+    {
+        (entity.Browser, entity.Os) = TaktUserAgentHelper.FillBrowserOsFromUserAgent(
+            entity.UserAgent,
+            entity.Browser,
+            entity.Os);
     }
 }

@@ -2,16 +2,44 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Shared.Helpers
 // 文件名称：TaktNumberingHelper.cs
-// 功能描述：编号规则 DateFormat 与 ResetPeriod 对齐、日期格式键归一化（与 TaktNumberingService 一致）
+// 创建时间：2025-01-20
+// 创建人：Takt365(Cursor AI)
+// 功能描述：编号规则归一化、段配置、业务编号拼接与流水计算（无 I/O；与 TaktNumberingService / TaktNumberingGenerator 一致）
+//
+// 版权信息：Copyright (c) 2026 Takt  All rights reserved.
+// 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
+
+using Takt.Shared.Exceptions;
+using Takt.Shared.Models;
 
 namespace Takt.Shared.Helpers;
 
 /// <summary>
-/// 编号规则 DateFormat ↔ ResetPeriod 对齐辅助（无 I/O）
+/// 编号规则辅助（DateFormat/ResetPeriod 对齐、段配置、编码拼接与流水计算）
 /// </summary>
 public static class TaktNumberingHelper
 {
+    private static readonly string[] DefaultSegmentKeys =
+    {
+        "CompanyCode",
+        "DeptCode",
+        "PrefixCode",
+        "DateSequence",
+    };
+
+    private const string DefaultSegmentsDescription =
+        "segments:CompanyCode,DeptCode,PrefixCode,DateSequence";
+
+    private const string SegmentsCompanyLevelDescription =
+        "segments:CompanyCode,PrefixCode,DateSequence";
+
+    private const string SegmentsCompanyNoDateDescription =
+        "segments:CompanyCode,PrefixCode,Sequence";
+
+    private const string SegmentsWithDepartmentNoDateDescription =
+        "segments:CompanyCode,DeptCode,PrefixCode,Sequence";
+
     /// <summary>
     /// 归一化日期格式键（none/空 → none；其余去空白）
     /// </summary>
@@ -127,12 +155,6 @@ public static class TaktNumberingHelper
         return string.Equals(NormalizeResetPeriod(resetPeriod), required, StringComparison.OrdinalIgnoreCase);
     }
 
-    private static bool Assign(string value, out string resetPeriod)
-    {
-        resetPeriod = value;
-        return true;
-    }
-
     /// <summary>
     /// 归一化业务领域（兼容旧版数字 document_type 种子）
     /// </summary>
@@ -206,5 +228,375 @@ public static class TaktNumberingHelper
             return text;
         }
         return marker + string.Join(",", keys.Select(NormalizeSegmentKey));
+    }
+
+    /// <summary>
+    /// 规范化编号规则快照默认值
+    /// </summary>
+    /// <param name="rule">编号规则快照</param>
+    public static void NormalizeNumberingModel(TaktNumberingModel rule)
+    {
+        if (rule.SequenceLength <= 0)
+        {
+            rule.SequenceLength = 6;
+        }
+        if (rule.SequenceStep <= 0)
+        {
+            rule.SequenceStep = 1;
+        }
+        if (string.IsNullOrWhiteSpace(rule.ResetPeriod))
+        {
+            rule.ResetPeriod = "none";
+        }
+        if (string.Equals(rule.DateFormat?.Trim(), "none", StringComparison.OrdinalIgnoreCase))
+        {
+            rule.DateFormat = null;
+        }
+        else
+        {
+            rule.DateFormat = NormalizeSupportedDateFormat(rule.DateFormat);
+        }
+        if (TryResolveRequiredResetPeriod(rule.DateFormat, out var requiredResetPeriod))
+        {
+            rule.ResetPeriod = requiredResetPeriod;
+        }
+        else
+        {
+            rule.ResetPeriod = NormalizeResetPeriod(rule.ResetPeriod);
+        }
+        rule.Description = NormalizeSegmentDescription(
+            ResolveEffectiveSegmentDescription(rule.Description));
+        rule.DocumentType = NormalizeDocumentType(rule.DocumentType);
+        if (string.IsNullOrWhiteSpace(rule.Separator))
+        {
+            rule.Separator = "-";
+        }
+    }
+
+    /// <summary>
+    /// 按编号规则拼接业务编号
+    /// </summary>
+    /// <param name="rule">编号规则快照</param>
+    /// <param name="sequence">流水号</param>
+    /// <param name="referenceTime">参考时间</param>
+    /// <returns>业务编号</returns>
+    public static string FormatBusinessCode(TaktNumberingModel rule, int sequence, DateTime? referenceTime = null)
+    {
+        if (sequence < 0)
+        {
+            throw new TaktBusinessException("流水号不能小于 0");
+        }
+        var time = referenceTime ?? DateTime.Now;
+        var length = rule.SequenceLength <= 0 ? 6 : rule.SequenceLength;
+        var separator = string.IsNullOrWhiteSpace(rule.Separator) ? "-" : rule.Separator.Trim();
+        var parts = new List<string>();
+        foreach (var segmentKey in ResolveSegmentKeys(rule))
+        {
+            var part = ResolveSegmentValue(rule, segmentKey, sequence, length, time);
+            if (!string.IsNullOrWhiteSpace(part))
+            {
+                parts.Add(part);
+            }
+        }
+        var code = string.IsNullOrEmpty(separator)
+            ? string.Concat(parts)
+            : string.Join(separator, parts);
+        var suffixCode = rule.SuffixCode?.Trim();
+        if (!string.IsNullOrWhiteSpace(suffixCode))
+        {
+            code += suffixCode.StartsWith(separator, StringComparison.Ordinal) ? suffixCode : suffixCode;
+        }
+        return code;
+    }
+
+    /// <summary>
+    /// 计算预览用下一个流水号（不持久化）
+    /// </summary>
+    /// <param name="rule">编号规则快照</param>
+    /// <param name="now">当前时间</param>
+    /// <returns>预览流水号</returns>
+    public static int ComputePreviewSequence(TaktNumberingModel rule, DateTime now)
+    {
+        if (ShouldResetSequence(rule.ResetPeriod, rule.UpdatedAt, now))
+        {
+            return rule.SequenceStep <= 0 ? 1 : rule.SequenceStep;
+        }
+        var step = rule.SequenceStep <= 0 ? 1 : rule.SequenceStep;
+        return rule.CurrentSequence <= 0 ? step : rule.CurrentSequence + step;
+    }
+
+    /// <summary>
+    /// 解析创建/导入时的起始编码与当前流水
+    /// </summary>
+    /// <param name="rule">编号规则快照</param>
+    /// <param name="exampleCodeInput">起始编码输入</param>
+    /// <param name="autoGenerateWhenEmpty">为空时是否自动生成</param>
+    /// <returns>起始编码与当前流水</returns>
+    public static (string ExampleCode, int CurrentSequence) ResolveExampleCodeOnCreate(
+        TaktNumberingModel rule,
+        string? exampleCodeInput,
+        bool autoGenerateWhenEmpty)
+    {
+        var now = DateTime.Now;
+        if (string.IsNullOrWhiteSpace(exampleCodeInput))
+        {
+            if (!autoGenerateWhenEmpty)
+            {
+                throw new TaktBusinessException("起始编码不能为空");
+            }
+            return BuildInitialExampleCode(rule, now);
+        }
+        var exampleCode = exampleCodeInput.Trim();
+        if (!TryParseCurrentSequenceFromExampleCode(
+                exampleCode,
+                rule.SequenceLength,
+                rule.Separator,
+                out var currentSequence))
+        {
+            throw new TaktBusinessException("起始编码末段须为有效流水号");
+        }
+        return (exampleCode, currentSequence);
+    }
+
+    /// <summary>
+    /// 按规则生成初始业务编号
+    /// </summary>
+    /// <param name="rule">编号规则快照</param>
+    /// <param name="referenceTime">参考时间</param>
+    /// <returns>起始编码与当前流水号</returns>
+    public static (string ExampleCode, int CurrentSequence) BuildInitialExampleCode(
+        TaktNumberingModel rule,
+        DateTime referenceTime)
+    {
+        var step = rule.SequenceStep <= 0 ? 1 : rule.SequenceStep;
+        var initialSequence = step;
+        var code = FormatBusinessCode(rule, initialSequence, referenceTime);
+        return (code, initialSequence);
+    }
+
+    /// <summary>
+    /// 按规则生成下一个业务编号（含重置周期判断）
+    /// </summary>
+    /// <param name="rule">编号规则快照（会临时修改 CurrentSequence 以应用重置）</param>
+    /// <param name="now">当前时间</param>
+    /// <returns>业务编号与下一流水号</returns>
+    public static (string BusinessCode, int NextSequence) BuildNextBusinessCode(TaktNumberingModel rule, DateTime now)
+    {
+        if (ShouldResetSequence(rule.ResetPeriod, rule.UpdatedAt, now))
+        {
+            rule.CurrentSequence = 0;
+        }
+        var step = rule.SequenceStep <= 0 ? 1 : rule.SequenceStep;
+        var nextSequence = checked(rule.CurrentSequence + step);
+        var code = FormatBusinessCode(rule, nextSequence, now);
+        return (code, nextSequence);
+    }
+
+    /// <summary>
+    /// 从起始编码末段解析当前流水号
+    /// </summary>
+    /// <param name="exampleCode">起始编码</param>
+    /// <param name="sequenceLength">流水位数</param>
+    /// <param name="separator">分隔符</param>
+    /// <param name="currentSequence">解析出的流水号</param>
+    /// <returns>是否解析成功</returns>
+    public static bool TryParseCurrentSequenceFromExampleCode(
+        string exampleCode,
+        int sequenceLength,
+        string? separator,
+        out int currentSequence)
+    {
+        currentSequence = 0;
+        if (string.IsNullOrWhiteSpace(exampleCode))
+        {
+            return false;
+        }
+        var trimmed = exampleCode.Trim();
+        var lastSegment = trimmed;
+        var sep = separator?.Trim();
+        if (!string.IsNullOrEmpty(sep) && sep.Length == 1)
+        {
+            var idx = trimmed.LastIndexOf(sep[0]);
+            if (idx >= 0)
+            {
+                lastSegment = trimmed[(idx + 1)..];
+            }
+        }
+        else
+        {
+            var lastSeparator = Math.Max(trimmed.LastIndexOf('-'), trimmed.LastIndexOf('_'));
+            lastSegment = lastSeparator >= 0 ? trimmed[(lastSeparator + 1)..] : trimmed;
+        }
+        if (string.IsNullOrWhiteSpace(lastSegment) || lastSegment.Length > 18)
+        {
+            return false;
+        }
+        for (var i = 0; i < lastSegment.Length; i++)
+        {
+            if (!char.IsDigit(lastSegment[i]))
+            {
+                return false;
+            }
+        }
+        if (!int.TryParse(lastSegment, System.Globalization.NumberStyles.None, System.Globalization.CultureInfo.InvariantCulture, out var parsed)
+            || parsed < 0)
+        {
+            return false;
+        }
+        if (sequenceLength > 0 && lastSegment.Length > sequenceLength)
+        {
+            return false;
+        }
+        currentSequence = parsed;
+        return true;
+    }
+
+    private static bool Assign(string value, out string resetPeriod)
+    {
+        resetPeriod = value;
+        return true;
+    }
+
+    private static bool ShouldResetSequence(string resetPeriod, DateTime? lastUpdatedAt, DateTime now)
+    {
+        var period = resetPeriod?.Trim().ToLowerInvariant() ?? "none";
+        if (period == "none" || !lastUpdatedAt.HasValue)
+        {
+            return false;
+        }
+        var last = lastUpdatedAt.Value;
+        return period switch
+        {
+            "day" or "daily" => last.Date < now.Date,
+            "month" or "monthly" => last.Year < now.Year || (last.Year == now.Year && last.Month < now.Month),
+            "year" or "yearly" => last.Year < now.Year,
+            "hour" or "hourly" => last.Year != now.Year
+                || last.Month != now.Month
+                || last.Day != now.Day
+                || last.Hour != now.Hour,
+            _ => false,
+        };
+    }
+
+    private static IReadOnlyList<string> ResolveSegmentKeys(TaktNumberingModel rule)
+    {
+        var fromDescription = TryParseSegmentKeysFromDescription(ResolveEffectiveSegmentDescription(rule.Description));
+        return fromDescription ?? DefaultSegmentKeys;
+    }
+
+    private static string? ResolveSegmentValue(
+        TaktNumberingModel rule,
+        string segmentKey,
+        int sequence,
+        int sequenceLength,
+        DateTime time)
+    {
+        if (segmentKey.Equals("Sequence", StringComparison.OrdinalIgnoreCase))
+        {
+            return sequence.ToString().PadLeft(sequenceLength, '0');
+        }
+        if (segmentKey.Equals("DateSequence", StringComparison.OrdinalIgnoreCase))
+        {
+            var datePart = FormatDateSegment(rule.DateFormat, time);
+            var seqPart = sequence.ToString().PadLeft(sequenceLength, '0');
+            var combined = string.Concat(datePart, seqPart);
+            return string.IsNullOrWhiteSpace(combined) ? null : combined;
+        }
+        if (segmentKey.Equals("DateFormat", StringComparison.OrdinalIgnoreCase))
+        {
+            return FormatDateSegment(rule.DateFormat, time);
+        }
+        if (segmentKey.Equals("CompanyCode", StringComparison.OrdinalIgnoreCase))
+        {
+            var text = rule.CompanyCode?.Trim();
+            return string.IsNullOrWhiteSpace(text) ? null : text;
+        }
+        if (segmentKey.Equals("DeptCode", StringComparison.OrdinalIgnoreCase)
+            || segmentKey.Equals("DepartmentCode", StringComparison.OrdinalIgnoreCase))
+        {
+            var text = rule.DeptCode?.Trim();
+            return string.IsNullOrWhiteSpace(text) ? null : text;
+        }
+        if (segmentKey.Equals("PrefixCode", StringComparison.OrdinalIgnoreCase)
+            || segmentKey.Equals("Prefix", StringComparison.OrdinalIgnoreCase))
+        {
+            var text = rule.PrefixCode?.Trim();
+            return string.IsNullOrWhiteSpace(text) ? null : TrimTrailingSeparators(text);
+        }
+        if (segmentKey.Equals("DocumentType", StringComparison.OrdinalIgnoreCase))
+        {
+            var text = rule.DocumentType?.Trim();
+            return string.IsNullOrWhiteSpace(text) ? null : text;
+        }
+        return null;
+    }
+
+    private static string ResolveEffectiveSegmentDescription(string? description)
+    {
+        var text = description?.Trim() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(text)
+            || !text.StartsWith("segments:", StringComparison.OrdinalIgnoreCase))
+        {
+            return DefaultSegmentsDescription;
+        }
+        var body = text["segments:".Length..];
+        var isLegacy = body.Contains("DocumentType", StringComparison.OrdinalIgnoreCase)
+            || body.Contains("DateFormat,Sequence", StringComparison.OrdinalIgnoreCase);
+        if (!isLegacy)
+        {
+            return text;
+        }
+        var hasDepartment = body.Contains("DeptCode", StringComparison.OrdinalIgnoreCase)
+            || body.Contains("DepartmentCode", StringComparison.OrdinalIgnoreCase);
+        var hasDate = body.Contains("DateFormat", StringComparison.OrdinalIgnoreCase)
+            || body.Contains("DateSequence", StringComparison.OrdinalIgnoreCase);
+        if (hasDepartment)
+        {
+            return hasDate ? DefaultSegmentsDescription : SegmentsWithDepartmentNoDateDescription;
+        }
+        return hasDate ? SegmentsCompanyLevelDescription : SegmentsCompanyNoDateDescription;
+    }
+
+    private static string[]? TryParseSegmentKeysFromDescription(string? description)
+    {
+        if (string.IsNullOrWhiteSpace(description))
+        {
+            return null;
+        }
+        var text = description.Trim();
+        const string prefix = "segments:";
+        if (!text.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+        {
+            return null;
+        }
+        var body = text[prefix.Length..].Trim();
+        if (string.IsNullOrWhiteSpace(body))
+        {
+            return null;
+        }
+        var keys = body.Split(new[] { ',', '|', ';' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        return keys.Length == 0 ? null : keys;
+    }
+
+    private static string FormatDateSegment(string? dateFormat, DateTime time)
+    {
+        if (string.IsNullOrWhiteSpace(dateFormat)
+            || dateFormat.Trim().Equals("none", StringComparison.OrdinalIgnoreCase))
+        {
+            return string.Empty;
+        }
+        return dateFormat.Trim() switch
+        {
+            "yyyy" => time.ToString("yyyy"),
+            "yyyyMM" => time.ToString("yyyyMM"),
+            "yyyyMMdd" => time.ToString("yyyyMMdd"),
+            "yyyyMMddHH" => time.ToString("yyyyMMddHH"),
+            _ => time.ToString(dateFormat.Trim()),
+        };
+    }
+
+    private static string TrimTrailingSeparators(string value)
+    {
+        return value.TrimEnd('-', '_', '/', ' ');
     }
 }

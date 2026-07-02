@@ -26,7 +26,7 @@ namespace Takt.Domain.Entities.HumanResource.Attendance;
 public class TaktOvertimeItem : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 加班申请单 ID
+    /// 加班申请单（关联 TaktOvertime.Id，主子表关系）
     /// </summary>
     [SugarColumn(ColumnName = "overtime_id", ColumnDescription = "加班申请单ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -37,7 +37,7 @@ public class TaktOvertimeItem : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "line_number", ColumnDescription = "行号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int LineNumber { get; set; }
     /// <summary>
-    /// 员工 ID
+    /// 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [SugarColumn(ColumnName = "employee_id", ColumnDescription = "员工ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -67,6 +67,7 @@ public class TaktOvertimeItem : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "actual_hours", ColumnDescription = "实际小时数", ColumnDataType = "decimal", Length = 8, DecimalDigits = 2, IsNullable = true)]
     public decimal? ActualHours { get; set; }
+
     // ========================================
     // 导航属性区域
     // ========================================

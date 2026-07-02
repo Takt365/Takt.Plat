@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Foundation
 // 文件名称：TaktSettingService.cs
-// 创建时间：2026-06-14
+// 创建时间：2026-06-27
 // 创建人：Takt365(Cursor AI)
 // 功能描述：系统设置应用服务实现
 // 
@@ -207,6 +207,23 @@ public class TaktSettingService : TaktServiceBase, ITaktSettingService
     }
 
     /// <summary>
+    /// 更新系统设置状态
+    /// </summary>
+    /// <param name="dto">状态DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktSettingDto> UpdateSettingStatusAsync(TaktSettingStatusDto dto)
+    {
+        var entity = await _settingRepository.GetByIdAsync(dto.SettingId);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("系统设置不存在");
+        }
+        entity.SettingStatus = dto.SettingStatus;
+        await _settingRepository.UpdateAsync(entity);
+        return await GetSettingByIdAsync(dto.SettingId) ?? throw new TaktBusinessException("系统设置不存在");
+    }
+
+    /// <summary>
     /// 更新系统设置排序
     /// </summary>
     /// <param name="dto">排序DTO</param>
@@ -337,13 +354,14 @@ public class TaktSettingService : TaktServiceBase, ITaktSettingService
                 (x.SettingKey != null && x.SettingKey.Contains(keywords))
                 || (x.SettingValue != null && x.SettingValue.Contains(keywords))
                 || (x.SettingName != null && x.SettingName.Contains(keywords))
-                || (x.Description != null && x.Description.Contains(keywords))
-                || SqlFunc.ToString(x.SettingGroup).Contains(keywords)
-                || SqlFunc.ToString(x.ValueType).Contains(keywords)
+                || (x.SettingDescription != null && x.SettingDescription.Contains(keywords))
+                || (x.SettingGroup != null && x.SettingGroup.Contains(keywords))
+                || (x.ValueType != null && x.ValueType.Contains(keywords))
                 || SqlFunc.ToString(x.IsBuiltIn).Contains(keywords)
                 || SqlFunc.ToString(x.IsReadonly).Contains(keywords)
                 || SqlFunc.ToString(x.IsEncrypted).Contains(keywords)
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
+                || SqlFunc.ToString(x.SettingStatus).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
@@ -365,17 +383,17 @@ public class TaktSettingService : TaktServiceBase, ITaktSettingService
             exp = exp.And(x => x.SettingName != null && x.SettingName.Contains(queryDto.SettingName));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Description))
+        if (!string.IsNullOrEmpty(queryDto?.SettingDescription))
         {
-            exp = exp.And(x => x.Description != null && x.Description.Contains(queryDto.Description));
+            exp = exp.And(x => x.SettingDescription != null && x.SettingDescription.Contains(queryDto.SettingDescription));
         }
 
-        if (queryDto?.SettingGroup.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.SettingGroup))
         {
             exp = exp.And(x => x.SettingGroup == queryDto.SettingGroup);
         }
 
-        if (queryDto?.ValueType.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.ValueType))
         {
             exp = exp.And(x => x.ValueType == queryDto.ValueType);
         }
@@ -398,6 +416,11 @@ public class TaktSettingService : TaktServiceBase, ITaktSettingService
         if (queryDto?.SortOrder.HasValue == true)
         {
             exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
+        }
+
+        if (queryDto?.SettingStatus.HasValue == true)
+        {
+            exp = exp.And(x => x.SettingStatus == queryDto.SettingStatus);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

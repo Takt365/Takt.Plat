@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Code.Generator
 // 文件名称：TaktGenTableI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktGenTable 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,22 +91,22 @@ public class TaktGenTableI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.gentable._self", "zh-HK", "Takt代码生成表配置信息_hk", "实体名称"),
 
             // entity.gentable.datasource
-            new TranslationSeedItem("entity.gentable.datasource", "en-US", "数据源_us", "数据源（前面是数据库名称，后面是 TenantCode，如：Takt_000_Dev:000，不可空）"),
+            new TranslationSeedItem("entity.gentable.datasource", "en-US", "数据源_us", "数据源（选项 TaktDatabaseInfos/list；持久化 displayName:tenantCode）"),
             // entity.gentable.datasource
-            new TranslationSeedItem("entity.gentable.datasource", "ja-JP", "数据源_jp", "数据源（前面是数据库名称，后面是 TenantCode，如：Takt_000_Dev:000，不可空）"),
+            new TranslationSeedItem("entity.gentable.datasource", "ja-JP", "数据源_jp", "数据源（选项 TaktDatabaseInfos/list；持久化 displayName:tenantCode）"),
             // entity.gentable.datasource
-            new TranslationSeedItem("entity.gentable.datasource", "zh-CN", "数据源", "数据源（前面是数据库名称，后面是 TenantCode，如：Takt_000_Dev:000，不可空）"),
+            new TranslationSeedItem("entity.gentable.datasource", "zh-CN", "数据源", "数据源（选项 TaktDatabaseInfos/list；持久化 displayName:tenantCode）"),
             // entity.gentable.datasource
-            new TranslationSeedItem("entity.gentable.datasource", "zh-HK", "数据源_hk", "数据源（前面是数据库名称，后面是 TenantCode，如：Takt_000_Dev:000，不可空）"),
+            new TranslationSeedItem("entity.gentable.datasource", "zh-HK", "数据源_hk", "数据源（选项 TaktDatabaseInfos/list；持久化 displayName:tenantCode）"),
 
             // entity.gentable.tablename
-            new TranslationSeedItem("entity.gentable.tablename", "en-US", "表名称_us", "数据表名称（唯一索引：租户内数据源+表名唯一，见 ix_gen_table_datasource_table_unique）"),
+            new TranslationSeedItem("entity.gentable.tablename", "en-US", "表名称_us", "表名称（选项 TaktDatabaseInfos/tables；新建可手输；租户内与 DataSource 唯一）"),
             // entity.gentable.tablename
-            new TranslationSeedItem("entity.gentable.tablename", "ja-JP", "表名称_jp", "数据表名称（唯一索引：租户内数据源+表名唯一，见 ix_gen_table_datasource_table_unique）"),
+            new TranslationSeedItem("entity.gentable.tablename", "ja-JP", "表名称_jp", "表名称（选项 TaktDatabaseInfos/tables；新建可手输；租户内与 DataSource 唯一）"),
             // entity.gentable.tablename
-            new TranslationSeedItem("entity.gentable.tablename", "zh-CN", "表名称", "数据表名称（唯一索引：租户内数据源+表名唯一，见 ix_gen_table_datasource_table_unique）"),
+            new TranslationSeedItem("entity.gentable.tablename", "zh-CN", "表名称", "表名称（选项 TaktDatabaseInfos/tables；新建可手输；租户内与 DataSource 唯一）"),
             // entity.gentable.tablename
-            new TranslationSeedItem("entity.gentable.tablename", "zh-HK", "表名称_hk", "数据表名称（唯一索引：租户内数据源+表名唯一，见 ix_gen_table_datasource_table_unique）"),
+            new TranslationSeedItem("entity.gentable.tablename", "zh-HK", "表名称_hk", "表名称（选项 TaktDatabaseInfos/tables；新建可手输；租户内与 DataSource 唯一）"),
 
             // entity.gentable.tablecomment
             new TranslationSeedItem("entity.gentable.tablecomment", "en-US", "表描述_us", "表描述（表注释）"),
@@ -118,67 +118,67 @@ public class TaktGenTableI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.gentable.tablecomment", "zh-HK", "表描述_hk", "表描述（表注释）"),
 
             // entity.gentable.subtablename
-            new TranslationSeedItem("entity.gentable.subtablename", "en-US", "关联父表_us", "关联父表名（用于主子表）"),
+            new TranslationSeedItem("entity.gentable.subtablename", "en-US", "关联父表_us", "关联父表（选项 TaktDatabaseInfos/tables 同库其它表；sub 模板必填）"),
             // entity.gentable.subtablename
-            new TranslationSeedItem("entity.gentable.subtablename", "ja-JP", "关联父表_jp", "关联父表名（用于主子表）"),
+            new TranslationSeedItem("entity.gentable.subtablename", "ja-JP", "关联父表_jp", "关联父表（选项 TaktDatabaseInfos/tables 同库其它表；sub 模板必填）"),
             // entity.gentable.subtablename
-            new TranslationSeedItem("entity.gentable.subtablename", "zh-CN", "关联父表", "关联父表名（用于主子表）"),
+            new TranslationSeedItem("entity.gentable.subtablename", "zh-CN", "关联父表", "关联父表（选项 TaktDatabaseInfos/tables 同库其它表；sub 模板必填）"),
             // entity.gentable.subtablename
-            new TranslationSeedItem("entity.gentable.subtablename", "zh-HK", "关联父表_hk", "关联父表名（用于主子表）"),
+            new TranslationSeedItem("entity.gentable.subtablename", "zh-HK", "关联父表_hk", "关联父表（选项 TaktDatabaseInfos/tables 同库其它表；sub 模板必填）"),
 
             // entity.gentable.subtablefkname
-            new TranslationSeedItem("entity.gentable.subtablefkname", "en-US", "关联外键_us", "本表关联父表的外键名（用于主子表）"),
+            new TranslationSeedItem("entity.gentable.subtablefkname", "en-US", "关联外键_us", "关联外键（选项本表 columnList.databaseColumnName；sub 模板必填）"),
             // entity.gentable.subtablefkname
-            new TranslationSeedItem("entity.gentable.subtablefkname", "ja-JP", "关联外键_jp", "本表关联父表的外键名（用于主子表）"),
+            new TranslationSeedItem("entity.gentable.subtablefkname", "ja-JP", "关联外键_jp", "关联外键（选项本表 columnList.databaseColumnName；sub 模板必填）"),
             // entity.gentable.subtablefkname
-            new TranslationSeedItem("entity.gentable.subtablefkname", "zh-CN", "关联外键", "本表关联父表的外键名（用于主子表）"),
+            new TranslationSeedItem("entity.gentable.subtablefkname", "zh-CN", "关联外键", "关联外键（选项本表 columnList.databaseColumnName；sub 模板必填）"),
             // entity.gentable.subtablefkname
-            new TranslationSeedItem("entity.gentable.subtablefkname", "zh-HK", "关联外键_hk", "本表关联父表的外键名（用于主子表）"),
+            new TranslationSeedItem("entity.gentable.subtablefkname", "zh-HK", "关联外键_hk", "关联外键（选项本表 columnList.databaseColumnName；sub 模板必填）"),
 
             // entity.gentable.treecode
-            new TranslationSeedItem("entity.gentable.treecode", "en-US", "树编码_us", "树编码字段（用于树形结构）"),
+            new TranslationSeedItem("entity.gentable.treecode", "en-US", "树编码_us", "树编码（选项本表 columnList.databaseColumnName；tree 模板必填）"),
             // entity.gentable.treecode
-            new TranslationSeedItem("entity.gentable.treecode", "ja-JP", "树编码_jp", "树编码字段（用于树形结构）"),
+            new TranslationSeedItem("entity.gentable.treecode", "ja-JP", "树编码_jp", "树编码（选项本表 columnList.databaseColumnName；tree 模板必填）"),
             // entity.gentable.treecode
-            new TranslationSeedItem("entity.gentable.treecode", "zh-CN", "树编码", "树编码字段（用于树形结构）"),
+            new TranslationSeedItem("entity.gentable.treecode", "zh-CN", "树编码", "树编码（选项本表 columnList.databaseColumnName；tree 模板必填）"),
             // entity.gentable.treecode
-            new TranslationSeedItem("entity.gentable.treecode", "zh-HK", "树编码_hk", "树编码字段（用于树形结构）"),
+            new TranslationSeedItem("entity.gentable.treecode", "zh-HK", "树编码_hk", "树编码（选项本表 columnList.databaseColumnName；tree 模板必填）"),
 
             // entity.gentable.treeparentcode
-            new TranslationSeedItem("entity.gentable.treeparentcode", "en-US", "树父编码_us", "树父编码字段（用于树形结构）"),
+            new TranslationSeedItem("entity.gentable.treeparentcode", "en-US", "树父编码_us", "树父编码（选项本表 columnList.databaseColumnName；tree 模板必填）"),
             // entity.gentable.treeparentcode
-            new TranslationSeedItem("entity.gentable.treeparentcode", "ja-JP", "树父编码_jp", "树父编码字段（用于树形结构）"),
+            new TranslationSeedItem("entity.gentable.treeparentcode", "ja-JP", "树父编码_jp", "树父编码（选项本表 columnList.databaseColumnName；tree 模板必填）"),
             // entity.gentable.treeparentcode
-            new TranslationSeedItem("entity.gentable.treeparentcode", "zh-CN", "树父编码", "树父编码字段（用于树形结构）"),
+            new TranslationSeedItem("entity.gentable.treeparentcode", "zh-CN", "树父编码", "树父编码（选项本表 columnList.databaseColumnName；tree 模板必填）"),
             // entity.gentable.treeparentcode
-            new TranslationSeedItem("entity.gentable.treeparentcode", "zh-HK", "树父编码_hk", "树父编码字段（用于树形结构）"),
+            new TranslationSeedItem("entity.gentable.treeparentcode", "zh-HK", "树父编码_hk", "树父编码（选项本表 columnList.databaseColumnName；tree 模板必填）"),
 
             // entity.gentable.treename
-            new TranslationSeedItem("entity.gentable.treename", "en-US", "树名称_us", "树名称字段（用于树形结构）"),
+            new TranslationSeedItem("entity.gentable.treename", "en-US", "树名称_us", "树名称（选项本表 columnList.databaseColumnName；tree 模板必填）"),
             // entity.gentable.treename
-            new TranslationSeedItem("entity.gentable.treename", "ja-JP", "树名称_jp", "树名称字段（用于树形结构）"),
+            new TranslationSeedItem("entity.gentable.treename", "ja-JP", "树名称_jp", "树名称（选项本表 columnList.databaseColumnName；tree 模板必填）"),
             // entity.gentable.treename
-            new TranslationSeedItem("entity.gentable.treename", "zh-CN", "树名称", "树名称字段（用于树形结构）"),
+            new TranslationSeedItem("entity.gentable.treename", "zh-CN", "树名称", "树名称（选项本表 columnList.databaseColumnName；tree 模板必填）"),
             // entity.gentable.treename
-            new TranslationSeedItem("entity.gentable.treename", "zh-HK", "树名称_hk", "树名称字段（用于树形结构）"),
+            new TranslationSeedItem("entity.gentable.treename", "zh-HK", "树名称_hk", "树名称（选项本表 columnList.databaseColumnName；tree 模板必填）"),
 
             // entity.gentable.indatabase
-            new TranslationSeedItem("entity.gentable.indatabase", "en-US", "库表标识_us", "是否在数据库中（1=是库表，0=不是库表）"),
+            new TranslationSeedItem("entity.gentable.indatabase", "en-US", "库表标识_us", "库表标识（字典 sys_yes_no_type；0=否 1=是）"),
             // entity.gentable.indatabase
-            new TranslationSeedItem("entity.gentable.indatabase", "ja-JP", "库表标识_jp", "是否在数据库中（1=是库表，0=不是库表）"),
+            new TranslationSeedItem("entity.gentable.indatabase", "ja-JP", "库表标识_jp", "库表标识（字典 sys_yes_no_type；0=否 1=是）"),
             // entity.gentable.indatabase
-            new TranslationSeedItem("entity.gentable.indatabase", "zh-CN", "库表标识", "是否在数据库中（1=是库表，0=不是库表）"),
+            new TranslationSeedItem("entity.gentable.indatabase", "zh-CN", "库表标识", "库表标识（字典 sys_yes_no_type；0=否 1=是）"),
             // entity.gentable.indatabase
-            new TranslationSeedItem("entity.gentable.indatabase", "zh-HK", "库表标识_hk", "是否在数据库中（1=是库表，0=不是库表）"),
+            new TranslationSeedItem("entity.gentable.indatabase", "zh-HK", "库表标识_hk", "库表标识（字典 sys_yes_no_type；0=否 1=是）"),
 
             // entity.gentable.gentemplatecategory
-            new TranslationSeedItem("entity.gentable.gentemplatecategory", "en-US", "生成模板类型_us", "生成模板类型（crud=单表操作，tree=树表操作，sub=主子表操作）"),
+            new TranslationSeedItem("entity.gentable.gentemplatecategory", "en-US", "生成模板类型_us", "生成模板类型（字典 gen_template_type；crud/sub/tree）"),
             // entity.gentable.gentemplatecategory
-            new TranslationSeedItem("entity.gentable.gentemplatecategory", "ja-JP", "生成模板类型_jp", "生成模板类型（crud=单表操作，tree=树表操作，sub=主子表操作）"),
+            new TranslationSeedItem("entity.gentable.gentemplatecategory", "ja-JP", "生成模板类型_jp", "生成模板类型（字典 gen_template_type；crud/sub/tree）"),
             // entity.gentable.gentemplatecategory
-            new TranslationSeedItem("entity.gentable.gentemplatecategory", "zh-CN", "生成模板类型", "生成模板类型（crud=单表操作，tree=树表操作，sub=主子表操作）"),
+            new TranslationSeedItem("entity.gentable.gentemplatecategory", "zh-CN", "生成模板类型", "生成模板类型（字典 gen_template_type；crud/sub/tree）"),
             // entity.gentable.gentemplatecategory
-            new TranslationSeedItem("entity.gentable.gentemplatecategory", "zh-HK", "生成模板类型_hk", "生成模板类型（crud=单表操作，tree=树表操作，sub=主子表操作）"),
+            new TranslationSeedItem("entity.gentable.gentemplatecategory", "zh-HK", "生成模板类型_hk", "生成模板类型（字典 gen_template_type；crud/sub/tree）"),
 
             // entity.gentable.genmodulename
             new TranslationSeedItem("entity.gentable.genmodulename", "en-US", "模块名_us", "模块名（功能模块名称）"),
@@ -217,13 +217,13 @@ public class TaktGenTableI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.gentable.permsprefix", "zh-HK", "权限前缀_hk", "权限前缀（与生成控制器/菜单/前端权限一致；对应库列 <c>perms_prefix</c>）。"),
 
             // entity.gentable.menubuttongroup
-            new TranslationSeedItem("entity.gentable.menubuttongroup", "en-US", "菜单权限组_us", "菜单权限组（逗号/JSON；<b>仅</b>用于生成 menu_and_translation.sql 按钮 INSERT，不参与控制器/前端代码生成）"),
+            new TranslationSeedItem("entity.gentable.menubuttongroup", "en-US", "菜单权限组_us", "菜单权限组（字典 gen_button_category 多选逗号；仅用于生成 menu_and_translation.sql 按钮 INSERT，不参与控制器/前端代码生成）"),
             // entity.gentable.menubuttongroup
-            new TranslationSeedItem("entity.gentable.menubuttongroup", "ja-JP", "菜单权限组_jp", "菜单权限组（逗号/JSON；<b>仅</b>用于生成 menu_and_translation.sql 按钮 INSERT，不参与控制器/前端代码生成）"),
+            new TranslationSeedItem("entity.gentable.menubuttongroup", "ja-JP", "菜单权限组_jp", "菜单权限组（字典 gen_button_category 多选逗号；仅用于生成 menu_and_translation.sql 按钮 INSERT，不参与控制器/前端代码生成）"),
             // entity.gentable.menubuttongroup
-            new TranslationSeedItem("entity.gentable.menubuttongroup", "zh-CN", "菜单权限组", "菜单权限组（逗号/JSON；<b>仅</b>用于生成 menu_and_translation.sql 按钮 INSERT，不参与控制器/前端代码生成）"),
+            new TranslationSeedItem("entity.gentable.menubuttongroup", "zh-CN", "菜单权限组", "菜单权限组（字典 gen_button_category 多选逗号；仅用于生成 menu_and_translation.sql 按钮 INSERT，不参与控制器/前端代码生成）"),
             // entity.gentable.menubuttongroup
-            new TranslationSeedItem("entity.gentable.menubuttongroup", "zh-HK", "菜单权限组_hk", "菜单权限组（逗号/JSON；<b>仅</b>用于生成 menu_and_translation.sql 按钮 INSERT，不参与控制器/前端代码生成）"),
+            new TranslationSeedItem("entity.gentable.menubuttongroup", "zh-HK", "菜单权限组_hk", "菜单权限组（字典 gen_button_category 多选逗号；仅用于生成 menu_and_translation.sql 按钮 INSERT，不参与控制器/前端代码生成）"),
 
             // entity.gentable.nameprefix
             new TranslationSeedItem("entity.gentable.nameprefix", "en-US", "命名空间前缀_us", "命名空间前缀（用于生成类名、方法名等的前缀）"),
@@ -316,13 +316,13 @@ public class TaktGenTableI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.gentable.controllerclassname", "zh-HK", "控制器类名称_hk", "控制器类名称"),
 
             // entity.gentable.isrepository
-            new TranslationSeedItem("entity.gentable.isrepository", "en-US", "仓储层_us", "是否生成仓储层（1=是，0=否）"),
+            new TranslationSeedItem("entity.gentable.isrepository", "en-US", "仓储层_us", "仓储层（字典 sys_yes_no_type；0=否 1=是）"),
             // entity.gentable.isrepository
-            new TranslationSeedItem("entity.gentable.isrepository", "ja-JP", "仓储层_jp", "是否生成仓储层（1=是，0=否）"),
+            new TranslationSeedItem("entity.gentable.isrepository", "ja-JP", "仓储层_jp", "仓储层（字典 sys_yes_no_type；0=否 1=是）"),
             // entity.gentable.isrepository
-            new TranslationSeedItem("entity.gentable.isrepository", "zh-CN", "仓储层", "是否生成仓储层（1=是，0=否）"),
+            new TranslationSeedItem("entity.gentable.isrepository", "zh-CN", "仓储层", "仓储层（字典 sys_yes_no_type；0=否 1=是）"),
             // entity.gentable.isrepository
-            new TranslationSeedItem("entity.gentable.isrepository", "zh-HK", "仓储层_hk", "是否生成仓储层（1=是，0=否）"),
+            new TranslationSeedItem("entity.gentable.isrepository", "zh-HK", "仓储层_hk", "仓储层（字典 sys_yes_no_type；0=否 1=是）"),
 
             // entity.gentable.repositoryinterfacenamespace
             new TranslationSeedItem("entity.gentable.repositoryinterfacenamespace", "en-US", "仓储接口命名空间_us", "仓储接口命名空间（默认当前项目：Takt.Domain.Repositories）"),
@@ -361,112 +361,112 @@ public class TaktGenTableI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.gentable.repositoryclassname", "zh-HK", "仓储类名称_hk", "仓储类名称"),
 
             // entity.gentable.genfunction
-            new TranslationSeedItem("entity.gentable.genfunction", "en-US", "生成功能_us", "生成功能，JSON 格式。对象形式：{\"查看\":\"View\",\"新增\":\"Create\",\"更新\":\"Update\",\"删除\":\"Delete\",...}，键为中文功能名、值为英文标识；也支持数组 [\"查询\",\"新增\",...] 或逗号分隔。 <para><b>核心设计</b>：GenFunction 不仅决定生成哪些 Controller Actions 和 Service Methods，还决定生成哪些 DTO 类。功能与 DTO 的映射关系如下：</para> <para>- Query → QueryDto（查询传输对象）</para> <para>- Create → CreateDto（创建传输对象）</para> <para>- Update → UpdateDto（更新传输对象）</para> <para>- Status → StatusDto（状态传输对象）</para> <para>- Sort → SortDto（排序传输对象）</para> <para>- Import → TemplateDto + ImportDto（模板+导入传输对象）</para> <para>- Export → ExportDto（导出传输对象）</para> <para>- 所有功能 → Dto（基础传输对象，包含所有字段）</para>"),
+            new TranslationSeedItem("entity.gentable.genfunction", "en-US", "生成功能_us", "生成功能（字典 gen_function_type 多选逗号；亦支持 JSON/数组）。 核心设计：GenFunction 不仅决定生成哪些 Controller Actions 和 Service Methods，还决定生成哪些 DTO 类。功能与 DTO 的映射关系如下： Query → QueryDto；Create → CreateDto；Update → UpdateDto；Status → StatusDto；Sort → SortDto； Import → TemplateDto + ImportDto；Export → ExportDto；所有功能 → Dto（基础传输对象，包含所有字段）。"),
             // entity.gentable.genfunction
-            new TranslationSeedItem("entity.gentable.genfunction", "ja-JP", "生成功能_jp", "生成功能，JSON 格式。对象形式：{\"查看\":\"View\",\"新增\":\"Create\",\"更新\":\"Update\",\"删除\":\"Delete\",...}，键为中文功能名、值为英文标识；也支持数组 [\"查询\",\"新增\",...] 或逗号分隔。 <para><b>核心设计</b>：GenFunction 不仅决定生成哪些 Controller Actions 和 Service Methods，还决定生成哪些 DTO 类。功能与 DTO 的映射关系如下：</para> <para>- Query → QueryDto（查询传输对象）</para> <para>- Create → CreateDto（创建传输对象）</para> <para>- Update → UpdateDto（更新传输对象）</para> <para>- Status → StatusDto（状态传输对象）</para> <para>- Sort → SortDto（排序传输对象）</para> <para>- Import → TemplateDto + ImportDto（模板+导入传输对象）</para> <para>- Export → ExportDto（导出传输对象）</para> <para>- 所有功能 → Dto（基础传输对象，包含所有字段）</para>"),
+            new TranslationSeedItem("entity.gentable.genfunction", "ja-JP", "生成功能_jp", "生成功能（字典 gen_function_type 多选逗号；亦支持 JSON/数组）。 核心设计：GenFunction 不仅决定生成哪些 Controller Actions 和 Service Methods，还决定生成哪些 DTO 类。功能与 DTO 的映射关系如下： Query → QueryDto；Create → CreateDto；Update → UpdateDto；Status → StatusDto；Sort → SortDto； Import → TemplateDto + ImportDto；Export → ExportDto；所有功能 → Dto（基础传输对象，包含所有字段）。"),
             // entity.gentable.genfunction
-            new TranslationSeedItem("entity.gentable.genfunction", "zh-CN", "生成功能", "生成功能，JSON 格式。对象形式：{\"查看\":\"View\",\"新增\":\"Create\",\"更新\":\"Update\",\"删除\":\"Delete\",...}，键为中文功能名、值为英文标识；也支持数组 [\"查询\",\"新增\",...] 或逗号分隔。 <para><b>核心设计</b>：GenFunction 不仅决定生成哪些 Controller Actions 和 Service Methods，还决定生成哪些 DTO 类。功能与 DTO 的映射关系如下：</para> <para>- Query → QueryDto（查询传输对象）</para> <para>- Create → CreateDto（创建传输对象）</para> <para>- Update → UpdateDto（更新传输对象）</para> <para>- Status → StatusDto（状态传输对象）</para> <para>- Sort → SortDto（排序传输对象）</para> <para>- Import → TemplateDto + ImportDto（模板+导入传输对象）</para> <para>- Export → ExportDto（导出传输对象）</para> <para>- 所有功能 → Dto（基础传输对象，包含所有字段）</para>"),
+            new TranslationSeedItem("entity.gentable.genfunction", "zh-CN", "生成功能", "生成功能（字典 gen_function_type 多选逗号；亦支持 JSON/数组）。 核心设计：GenFunction 不仅决定生成哪些 Controller Actions 和 Service Methods，还决定生成哪些 DTO 类。功能与 DTO 的映射关系如下： Query → QueryDto；Create → CreateDto；Update → UpdateDto；Status → StatusDto；Sort → SortDto； Import → TemplateDto + ImportDto；Export → ExportDto；所有功能 → Dto（基础传输对象，包含所有字段）。"),
             // entity.gentable.genfunction
-            new TranslationSeedItem("entity.gentable.genfunction", "zh-HK", "生成功能_hk", "生成功能，JSON 格式。对象形式：{\"查看\":\"View\",\"新增\":\"Create\",\"更新\":\"Update\",\"删除\":\"Delete\",...}，键为中文功能名、值为英文标识；也支持数组 [\"查询\",\"新增\",...] 或逗号分隔。 <para><b>核心设计</b>：GenFunction 不仅决定生成哪些 Controller Actions 和 Service Methods，还决定生成哪些 DTO 类。功能与 DTO 的映射关系如下：</para> <para>- Query → QueryDto（查询传输对象）</para> <para>- Create → CreateDto（创建传输对象）</para> <para>- Update → UpdateDto（更新传输对象）</para> <para>- Status → StatusDto（状态传输对象）</para> <para>- Sort → SortDto（排序传输对象）</para> <para>- Import → TemplateDto + ImportDto（模板+导入传输对象）</para> <para>- Export → ExportDto（导出传输对象）</para> <para>- 所有功能 → Dto（基础传输对象，包含所有字段）</para>"),
+            new TranslationSeedItem("entity.gentable.genfunction", "zh-HK", "生成功能_hk", "生成功能（字典 gen_function_type 多选逗号；亦支持 JSON/数组）。 核心设计：GenFunction 不仅决定生成哪些 Controller Actions 和 Service Methods，还决定生成哪些 DTO 类。功能与 DTO 的映射关系如下： Query → QueryDto；Create → CreateDto；Update → UpdateDto；Status → StatusDto；Sort → SortDto； Import → TemplateDto + ImportDto；Export → ExportDto；所有功能 → Dto（基础传输对象，包含所有字段）。"),
 
             // entity.gentable.genmethod
-            new TranslationSeedItem("entity.gentable.genmethod", "en-US", "生成方式_us", "生成代码方式（0=zip 压缩包，1=自定义路径，2=当前项目）"),
+            new TranslationSeedItem("entity.gentable.genmethod", "en-US", "生成方式_us", "生成方式（字典 gen_method_type；0=zip 1=自定义路径 2=当前项目）"),
             // entity.gentable.genmethod
-            new TranslationSeedItem("entity.gentable.genmethod", "ja-JP", "生成方式_jp", "生成代码方式（0=zip 压缩包，1=自定义路径，2=当前项目）"),
+            new TranslationSeedItem("entity.gentable.genmethod", "ja-JP", "生成方式_jp", "生成方式（字典 gen_method_type；0=zip 1=自定义路径 2=当前项目）"),
             // entity.gentable.genmethod
-            new TranslationSeedItem("entity.gentable.genmethod", "zh-CN", "生成方式", "生成代码方式（0=zip 压缩包，1=自定义路径，2=当前项目）"),
+            new TranslationSeedItem("entity.gentable.genmethod", "zh-CN", "生成方式", "生成方式（字典 gen_method_type；0=zip 1=自定义路径 2=当前项目）"),
             // entity.gentable.genmethod
-            new TranslationSeedItem("entity.gentable.genmethod", "zh-HK", "生成方式_hk", "生成代码方式（0=zip 压缩包，1=自定义路径，2=当前项目）"),
+            new TranslationSeedItem("entity.gentable.genmethod", "zh-HK", "生成方式_hk", "生成方式（字典 gen_method_type；0=zip 1=自定义路径 2=当前项目）"),
 
             // entity.gentable.genpath
-            new TranslationSeedItem("entity.gentable.genpath", "en-US", "生成路径_us", "生成路径（默认为项目根目录）"),
+            new TranslationSeedItem("entity.gentable.genpath", "en-US", "生成路径_us", "生成路径（字典 gen_path_type；GenMethod=1 时选择；0 默认 /；2 由 GenMethod 解析）"),
             // entity.gentable.genpath
-            new TranslationSeedItem("entity.gentable.genpath", "ja-JP", "生成路径_jp", "生成路径（默认为项目根目录）"),
+            new TranslationSeedItem("entity.gentable.genpath", "ja-JP", "生成路径_jp", "生成路径（字典 gen_path_type；GenMethod=1 时选择；0 默认 /；2 由 GenMethod 解析）"),
             // entity.gentable.genpath
-            new TranslationSeedItem("entity.gentable.genpath", "zh-CN", "生成路径", "生成路径（默认为项目根目录）"),
+            new TranslationSeedItem("entity.gentable.genpath", "zh-CN", "生成路径", "生成路径（字典 gen_path_type；GenMethod=1 时选择；0 默认 /；2 由 GenMethod 解析）"),
             // entity.gentable.genpath
-            new TranslationSeedItem("entity.gentable.genpath", "zh-HK", "生成路径_hk", "生成路径（默认为项目根目录）"),
+            new TranslationSeedItem("entity.gentable.genpath", "zh-HK", "生成路径_hk", "生成路径（字典 gen_path_type；GenMethod=1 时选择；0 默认 /；2 由 GenMethod 解析）"),
 
             // entity.gentable.isgenmenu
-            new TranslationSeedItem("entity.gentable.isgenmenu", "en-US", "生成菜单_us", "是否生成菜单（1=是，0=否）"),
+            new TranslationSeedItem("entity.gentable.isgenmenu", "en-US", "生成菜单_us", "生成菜单（字典 sys_yes_no_type；0=否 1=是）"),
             // entity.gentable.isgenmenu
-            new TranslationSeedItem("entity.gentable.isgenmenu", "ja-JP", "生成菜单_jp", "是否生成菜单（1=是，0=否）"),
+            new TranslationSeedItem("entity.gentable.isgenmenu", "ja-JP", "生成菜单_jp", "生成菜单（字典 sys_yes_no_type；0=否 1=是）"),
             // entity.gentable.isgenmenu
-            new TranslationSeedItem("entity.gentable.isgenmenu", "zh-CN", "生成菜单", "是否生成菜单（1=是，0=否）"),
+            new TranslationSeedItem("entity.gentable.isgenmenu", "zh-CN", "生成菜单", "生成菜单（字典 sys_yes_no_type；0=否 1=是）"),
             // entity.gentable.isgenmenu
-            new TranslationSeedItem("entity.gentable.isgenmenu", "zh-HK", "生成菜单_hk", "是否生成菜单（1=是，0=否）"),
+            new TranslationSeedItem("entity.gentable.isgenmenu", "zh-HK", "生成菜单_hk", "生成菜单（字典 sys_yes_no_type；0=否 1=是）"),
 
             // entity.gentable.parentmenuid
-            new TranslationSeedItem("entity.gentable.parentmenuid", "en-US", "上级菜单ID_us", "上级菜单ID"),
+            new TranslationSeedItem("entity.gentable.parentmenuid", "en-US", "上级菜单ID_us", "上级菜单（关联 TaktMenu.Id，选项 TaktMenus/tree-options）"),
             // entity.gentable.parentmenuid
-            new TranslationSeedItem("entity.gentable.parentmenuid", "ja-JP", "上级菜单ID_jp", "上级菜单ID"),
+            new TranslationSeedItem("entity.gentable.parentmenuid", "ja-JP", "上级菜单ID_jp", "上级菜单（关联 TaktMenu.Id，选项 TaktMenus/tree-options）"),
             // entity.gentable.parentmenuid
-            new TranslationSeedItem("entity.gentable.parentmenuid", "zh-CN", "上级菜单ID", "上级菜单ID"),
+            new TranslationSeedItem("entity.gentable.parentmenuid", "zh-CN", "上级菜单ID", "上级菜单（关联 TaktMenu.Id，选项 TaktMenus/tree-options）"),
             // entity.gentable.parentmenuid
-            new TranslationSeedItem("entity.gentable.parentmenuid", "zh-HK", "上级菜单ID_hk", "上级菜单ID"),
+            new TranslationSeedItem("entity.gentable.parentmenuid", "zh-HK", "上级菜单ID_hk", "上级菜单（关联 TaktMenu.Id，选项 TaktMenus/tree-options）"),
 
             // entity.gentable.isgentranslation
-            new TranslationSeedItem("entity.gentable.isgentranslation", "en-US", "生成翻译_us", "是否生成翻译（1=是，0=否）"),
+            new TranslationSeedItem("entity.gentable.isgentranslation", "en-US", "生成翻译_us", "生成翻译（字典 sys_yes_no_type；0=否 1=是）"),
             // entity.gentable.isgentranslation
-            new TranslationSeedItem("entity.gentable.isgentranslation", "ja-JP", "生成翻译_jp", "是否生成翻译（1=是，0=否）"),
+            new TranslationSeedItem("entity.gentable.isgentranslation", "ja-JP", "生成翻译_jp", "生成翻译（字典 sys_yes_no_type；0=否 1=是）"),
             // entity.gentable.isgentranslation
-            new TranslationSeedItem("entity.gentable.isgentranslation", "zh-CN", "生成翻译", "是否生成翻译（1=是，0=否）"),
+            new TranslationSeedItem("entity.gentable.isgentranslation", "zh-CN", "生成翻译", "生成翻译（字典 sys_yes_no_type；0=否 1=是）"),
             // entity.gentable.isgentranslation
-            new TranslationSeedItem("entity.gentable.isgentranslation", "zh-HK", "生成翻译_hk", "是否生成翻译（1=是，0=否）"),
+            new TranslationSeedItem("entity.gentable.isgentranslation", "zh-HK", "生成翻译_hk", "生成翻译（字典 sys_yes_no_type；0=否 1=是）"),
 
             // entity.gentable.sortfield
-            new TranslationSeedItem("entity.gentable.sortfield", "en-US", "排序字段_us", "排序字段"),
+            new TranslationSeedItem("entity.gentable.sortfield", "en-US", "排序字段_us", "排序字段（选项本表 columnList.databaseColumnName）"),
             // entity.gentable.sortfield
-            new TranslationSeedItem("entity.gentable.sortfield", "ja-JP", "排序字段_jp", "排序字段"),
+            new TranslationSeedItem("entity.gentable.sortfield", "ja-JP", "排序字段_jp", "排序字段（选项本表 columnList.databaseColumnName）"),
             // entity.gentable.sortfield
-            new TranslationSeedItem("entity.gentable.sortfield", "zh-CN", "排序字段", "排序字段"),
+            new TranslationSeedItem("entity.gentable.sortfield", "zh-CN", "排序字段", "排序字段（选项本表 columnList.databaseColumnName）"),
             // entity.gentable.sortfield
-            new TranslationSeedItem("entity.gentable.sortfield", "zh-HK", "排序字段_hk", "排序字段"),
+            new TranslationSeedItem("entity.gentable.sortfield", "zh-HK", "排序字段_hk", "排序字段（选项本表 columnList.databaseColumnName）"),
 
             // entity.gentable.sorttype
-            new TranslationSeedItem("entity.gentable.sorttype", "en-US", "排序类型_us", "排序类型（asc=升序，desc=降序）"),
+            new TranslationSeedItem("entity.gentable.sorttype", "en-US", "排序类型_us", "排序类型（字典 sys_sort_type；asc=升序 desc=降序）"),
             // entity.gentable.sorttype
-            new TranslationSeedItem("entity.gentable.sorttype", "ja-JP", "排序类型_jp", "排序类型（asc=升序，desc=降序）"),
+            new TranslationSeedItem("entity.gentable.sorttype", "ja-JP", "排序类型_jp", "排序类型（字典 sys_sort_type；asc=升序 desc=降序）"),
             // entity.gentable.sorttype
-            new TranslationSeedItem("entity.gentable.sorttype", "zh-CN", "排序类型", "排序类型（asc=升序，desc=降序）"),
+            new TranslationSeedItem("entity.gentable.sorttype", "zh-CN", "排序类型", "排序类型（字典 sys_sort_type；asc=升序 desc=降序）"),
             // entity.gentable.sorttype
-            new TranslationSeedItem("entity.gentable.sorttype", "zh-HK", "排序类型_hk", "排序类型（asc=升序，desc=降序）"),
+            new TranslationSeedItem("entity.gentable.sorttype", "zh-HK", "排序类型_hk", "排序类型（字典 sys_sort_type；asc=升序 desc=降序）"),
 
             // entity.gentable.frontui
-            new TranslationSeedItem("entity.gentable.frontui", "en-US", "前端UI框架_us", "前端UI框架（1=element plus，2=ant design vue）"),
+            new TranslationSeedItem("entity.gentable.frontui", "en-US", "前端UI框架_us", "前端UI框架（字典 gen_frontend_ui_type；1=element plus 2=ant design vue）"),
             // entity.gentable.frontui
-            new TranslationSeedItem("entity.gentable.frontui", "ja-JP", "前端UI框架_jp", "前端UI框架（1=element plus，2=ant design vue）"),
+            new TranslationSeedItem("entity.gentable.frontui", "ja-JP", "前端UI框架_jp", "前端UI框架（字典 gen_frontend_ui_type；1=element plus 2=ant design vue）"),
             // entity.gentable.frontui
-            new TranslationSeedItem("entity.gentable.frontui", "zh-CN", "前端UI框架", "前端UI框架（1=element plus，2=ant design vue）"),
+            new TranslationSeedItem("entity.gentable.frontui", "zh-CN", "前端UI框架", "前端UI框架（字典 gen_frontend_ui_type；1=element plus 2=ant design vue）"),
             // entity.gentable.frontui
-            new TranslationSeedItem("entity.gentable.frontui", "zh-HK", "前端UI框架_hk", "前端UI框架（1=element plus，2=ant design vue）"),
+            new TranslationSeedItem("entity.gentable.frontui", "zh-HK", "前端UI框架_hk", "前端UI框架（字典 gen_frontend_ui_type；1=element plus 2=ant design vue）"),
 
             // entity.gentable.frontformlayout
-            new TranslationSeedItem("entity.gentable.frontformlayout", "en-US", "前端表单布局_us", "前端表单布局（12=一行一列，24=一行两列）"),
+            new TranslationSeedItem("entity.gentable.frontformlayout", "en-US", "前端表单布局_us", "前端表单布局（字典 gen_frontend_form_layout_config；12=一行一列 24=一行两列）"),
             // entity.gentable.frontformlayout
-            new TranslationSeedItem("entity.gentable.frontformlayout", "ja-JP", "前端表单布局_jp", "前端表单布局（12=一行一列，24=一行两列）"),
+            new TranslationSeedItem("entity.gentable.frontformlayout", "ja-JP", "前端表单布局_jp", "前端表单布局（字典 gen_frontend_form_layout_config；12=一行一列 24=一行两列）"),
             // entity.gentable.frontformlayout
-            new TranslationSeedItem("entity.gentable.frontformlayout", "zh-CN", "前端表单布局", "前端表单布局（12=一行一列，24=一行两列）"),
+            new TranslationSeedItem("entity.gentable.frontformlayout", "zh-CN", "前端表单布局", "前端表单布局（字典 gen_frontend_form_layout_config；12=一行一列 24=一行两列）"),
             // entity.gentable.frontformlayout
-            new TranslationSeedItem("entity.gentable.frontformlayout", "zh-HK", "前端表单布局_hk", "前端表单布局（12=一行一列，24=一行两列）"),
+            new TranslationSeedItem("entity.gentable.frontformlayout", "zh-HK", "前端表单布局_hk", "前端表单布局（字典 gen_frontend_form_layout_config；12=一行一列 24=一行两列）"),
 
             // entity.gentable.frontbtnstyle
-            new TranslationSeedItem("entity.gentable.frontbtnstyle", "en-US", "前端按钮样式_us", "前端操作按钮样式（0=文本，1=标准）"),
+            new TranslationSeedItem("entity.gentable.frontbtnstyle", "en-US", "前端按钮样式_us", "前端按钮样式（字典 gen_button_style_config；0=文本 1=标准）"),
             // entity.gentable.frontbtnstyle
-            new TranslationSeedItem("entity.gentable.frontbtnstyle", "ja-JP", "前端按钮样式_jp", "前端操作按钮样式（0=文本，1=标准）"),
+            new TranslationSeedItem("entity.gentable.frontbtnstyle", "ja-JP", "前端按钮样式_jp", "前端按钮样式（字典 gen_button_style_config；0=文本 1=标准）"),
             // entity.gentable.frontbtnstyle
-            new TranslationSeedItem("entity.gentable.frontbtnstyle", "zh-CN", "前端按钮样式", "前端操作按钮样式（0=文本，1=标准）"),
+            new TranslationSeedItem("entity.gentable.frontbtnstyle", "zh-CN", "前端按钮样式", "前端按钮样式（字典 gen_button_style_config；0=文本 1=标准）"),
             // entity.gentable.frontbtnstyle
-            new TranslationSeedItem("entity.gentable.frontbtnstyle", "zh-HK", "前端按钮样式_hk", "前端操作按钮样式（0=文本，1=标准）"),
+            new TranslationSeedItem("entity.gentable.frontbtnstyle", "zh-HK", "前端按钮样式_hk", "前端按钮样式（字典 gen_button_style_config；0=文本 1=标准）"),
 
             // entity.gentable.isgencode
-            new TranslationSeedItem("entity.gentable.isgencode", "en-US", "是否生成_us", "是否生成代码（1=是，0=否）"),
+            new TranslationSeedItem("entity.gentable.isgencode", "en-US", "是否生成_us", "是否生成（字典 sys_yes_no_type；0=否 1=是）"),
             // entity.gentable.isgencode
-            new TranslationSeedItem("entity.gentable.isgencode", "ja-JP", "是否生成_jp", "是否生成代码（1=是，0=否）"),
+            new TranslationSeedItem("entity.gentable.isgencode", "ja-JP", "是否生成_jp", "是否生成（字典 sys_yes_no_type；0=否 1=是）"),
             // entity.gentable.isgencode
-            new TranslationSeedItem("entity.gentable.isgencode", "zh-CN", "是否生成", "是否生成代码（1=是，0=否）"),
+            new TranslationSeedItem("entity.gentable.isgencode", "zh-CN", "是否生成", "是否生成（字典 sys_yes_no_type；0=否 1=是）"),
             // entity.gentable.isgencode
-            new TranslationSeedItem("entity.gentable.isgencode", "zh-HK", "是否生成_hk", "是否生成代码（1=是，0=否）"),
+            new TranslationSeedItem("entity.gentable.isgencode", "zh-HK", "是否生成_hk", "是否生成（字典 sys_yes_no_type；0=否 1=是）"),
 
             // entity.gentable.gencodecount
             new TranslationSeedItem("entity.gentable.gencodecount", "en-US", "代码生成次数_us", "代码生成次数（每次生成成功后自增）"),
@@ -478,13 +478,13 @@ public class TaktGenTableI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.gentable.gencodecount", "zh-HK", "代码生成次数_hk", "代码生成次数（每次生成成功后自增）"),
 
             // entity.gentable.isusetabs
-            new TranslationSeedItem("entity.gentable.isusetabs", "en-US", "使用tabs_us", "是否使用tabs（1=是，0=否）"),
+            new TranslationSeedItem("entity.gentable.isusetabs", "en-US", "使用tabs_us", "使用tabs（字典 sys_yes_no_type；0=否 1=是）"),
             // entity.gentable.isusetabs
-            new TranslationSeedItem("entity.gentable.isusetabs", "ja-JP", "使用tabs_jp", "是否使用tabs（1=是，0=否）"),
+            new TranslationSeedItem("entity.gentable.isusetabs", "ja-JP", "使用tabs_jp", "使用tabs（字典 sys_yes_no_type；0=否 1=是）"),
             // entity.gentable.isusetabs
-            new TranslationSeedItem("entity.gentable.isusetabs", "zh-CN", "使用tabs", "是否使用tabs（1=是，0=否）"),
+            new TranslationSeedItem("entity.gentable.isusetabs", "zh-CN", "使用tabs", "使用tabs（字典 sys_yes_no_type；0=否 1=是）"),
             // entity.gentable.isusetabs
-            new TranslationSeedItem("entity.gentable.isusetabs", "zh-HK", "使用tabs_hk", "是否使用tabs（1=是，0=否）"),
+            new TranslationSeedItem("entity.gentable.isusetabs", "zh-HK", "使用tabs_hk", "使用tabs（字典 sys_yes_no_type；0=否 1=是）"),
 
             // entity.gentable.tabsfieldcount
             new TranslationSeedItem("entity.gentable.tabsfieldcount", "en-US", "tabs标签字段_us", "tabs标签中字段的数量"),

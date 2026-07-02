@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Output
 // 文件名称：ITaktProductionOrderService.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：生产工单应用服务接口
 // 
@@ -38,8 +38,9 @@ public interface ITaktProductionOrderService
     /// <summary>
     /// 获取生产工单选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
     /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetProductionOrderOptionsAsync();
+    Task<List<TaktSelectOption>> GetProductionOrderOptionsAsync(string? plantCode = null);
 
     /// <summary>
     /// 创建生产工单

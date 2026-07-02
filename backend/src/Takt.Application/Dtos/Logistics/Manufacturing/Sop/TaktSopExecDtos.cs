@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopExecDtos.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SopExec 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSopExec 生成，请按需审阅）
 // 
@@ -36,7 +36,12 @@ public class TaktSopExecDto : TaktCompanyDtoBase
     public long SopExecId { get; set; }
 
     /// <summary>
-    /// 生产工单 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 生产工单 ID（关联 TaktProductionOrder.Id，选项 TaktProductionOrders/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ProductionOrderId { get; set; }
@@ -57,12 +62,12 @@ public class TaktSopExecDto : TaktCompanyDtoBase
     public string? SerialNumber { get; set; } = string.Empty;
 
     /// <summary>
-    /// 产品/机种物料编码
+    /// 产品/机种物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工序 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工序 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long RoutingItemId { get; set; }
@@ -73,12 +78,12 @@ public class TaktSopExecDto : TaktCompanyDtoBase
     public string? RoutingItemName { get; set; }
 
     /// <summary>
-    /// 工艺段类型（1=SMT，2=自插，3=手插，4=修正，5=总装；字典 logistics_process_segment_type）
+    /// 工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
     /// </summary>
     public int ProcessSegmentType { get; set; } = 0;
 
     /// <summary>
-    /// 工位 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long WorkstationId { get; set; }
@@ -89,7 +94,7 @@ public class TaktSopExecDto : TaktCompanyDtoBase
     public string? WorkstationName { get; set; }
 
     /// <summary>
-    /// 员工 ID（员工卡，序列化为 string 以避免 Javascript 精度问题）
+    /// 员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EmployeeId { get; set; }
@@ -100,7 +105,7 @@ public class TaktSopExecDto : TaktCompanyDtoBase
     public string? EmployeeName { get; set; }
 
     /// <summary>
-    /// SOP 主档 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SopId { get; set; }
@@ -111,7 +116,7 @@ public class TaktSopExecDto : TaktCompanyDtoBase
     public string? SopName { get; set; }
 
     /// <summary>
-    /// SOP 版本 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// SOP 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long RevisionId { get; set; }
@@ -127,7 +132,7 @@ public class TaktSopExecDto : TaktCompanyDtoBase
     public string Revision { get; set; } = string.Empty;
 
     /// <summary>
-    /// 使用语言（zh-CN 简体 / en-US 英文 / ja-JP 日文 / zh-HK 香港繁体；与 TaktCulture.CultureCode 一致）
+    /// 使用语言（选项 TaktCultures/options，DictValue=CultureCode）
     /// </summary>
     public string ContentLang { get; set; } = string.Empty;
 
@@ -142,17 +147,17 @@ public class TaktSopExecDto : TaktCompanyDtoBase
     public DateTime? EndedAt { get; set; }
 
     /// <summary>
-    /// 自检结果（1=合格，2=不合格，3=不适用；字典 logistics_sop_check_result_type）
+    /// 自检结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
     /// </summary>
     public int? SelfCheckResult { get; set; }
 
     /// <summary>
-    /// 执行状态（1=进行中，2=完成，3=中断；字典 logistics_sop_exec_status）
+    /// 执行状态（字典 logistics_sop_exec_status；1=进行中，2=完成，3=中断）
     /// </summary>
     public int ExecStatus { get; set; } = 0;
 
     /// <summary>
-    /// 当前工步 ID（运行时指针，序列化为 string 以避免 Javascript 精度问题）
+    /// 当前工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CurrentStepId { get; set; }
@@ -209,7 +214,12 @@ public class TaktSopExecQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产工单 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 生产工单 ID（关联 TaktProductionOrder.Id，选项 TaktProductionOrders/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ProductionOrderId { get; set; }
@@ -225,41 +235,41 @@ public class TaktSopExecQueryDto : TaktPagedQuery
     public string? SerialNumber { get; set; } = string.Empty;
 
     /// <summary>
-    /// 产品/机种物料编码
+    /// 产品/机种物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工序 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工序 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RoutingItemId { get; set; }
 
     /// <summary>
-    /// 工艺段类型（1=SMT，2=自插，3=手插，4=修正，5=总装；字典 logistics_process_segment_type）
+    /// 工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
     /// </summary>
     public int? ProcessSegmentType { get; set; }
 
     /// <summary>
-    /// 工位 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? WorkstationId { get; set; }
 
     /// <summary>
-    /// 员工 ID（员工卡，序列化为 string 以避免 Javascript 精度问题）
+    /// 员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
 
     /// <summary>
-    /// SOP 主档 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SopId { get; set; }
 
     /// <summary>
-    /// SOP 版本 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// SOP 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RevisionId { get; set; }
@@ -270,7 +280,7 @@ public class TaktSopExecQueryDto : TaktPagedQuery
     public string? Revision { get; set; } = string.Empty;
 
     /// <summary>
-    /// 使用语言（zh-CN 简体 / en-US 英文 / ja-JP 日文 / zh-HK 香港繁体；与 TaktCulture.CultureCode 一致）
+    /// 使用语言（选项 TaktCultures/options，DictValue=CultureCode）
     /// </summary>
     public string? ContentLang { get; set; } = string.Empty;
 
@@ -295,17 +305,17 @@ public class TaktSopExecQueryDto : TaktPagedQuery
     public DateTime? EndedAtEnd { get; set; }
 
     /// <summary>
-    /// 自检结果（1=合格，2=不合格，3=不适用；字典 logistics_sop_check_result_type）
+    /// 自检结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
     /// </summary>
     public int? SelfCheckResult { get; set; }
 
     /// <summary>
-    /// 执行状态（1=进行中，2=完成，3=中断；字典 logistics_sop_exec_status）
+    /// 执行状态（字典 logistics_sop_exec_status；1=进行中，2=完成，3=中断）
     /// </summary>
     public int? ExecStatus { get; set; }
 
     /// <summary>
-    /// 当前工步 ID（运行时指针，序列化为 string 以避免 Javascript 精度问题）
+    /// 当前工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CurrentStepId { get; set; }
@@ -351,12 +361,18 @@ public class TaktSopExecCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产工单 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// </summary>
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 生产工单 ID（关联 TaktProductionOrder.Id，选项 TaktProductionOrders/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ProductionOrderId { get; set; }
@@ -373,42 +389,42 @@ public class TaktSopExecCreateDto
     public string? SerialNumber { get; set; } = string.Empty;
 
     /// <summary>
-    /// 产品/机种物料编码
+    /// 产品/机种物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
     /// </summary>
-    [Required(ErrorMessage = "产品/机种物料编码不能为空")]
+    [Required(ErrorMessage = "产品/机种物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）不能为空")]
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工序 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工序 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long RoutingItemId { get; set; }
 
     /// <summary>
-    /// 工艺段类型（1=SMT，2=自插，3=手插，4=修正，5=总装；字典 logistics_process_segment_type）
+    /// 工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
     /// </summary>
     public int ProcessSegmentType { get; set; } = 0;
 
     /// <summary>
-    /// 工位 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long WorkstationId { get; set; }
 
     /// <summary>
-    /// 员工 ID（员工卡，序列化为 string 以避免 Javascript 精度问题）
+    /// 员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EmployeeId { get; set; }
 
     /// <summary>
-    /// SOP 主档 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SopId { get; set; }
 
     /// <summary>
-    /// SOP 版本 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// SOP 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long RevisionId { get; set; }
@@ -420,9 +436,9 @@ public class TaktSopExecCreateDto
     public string Revision { get; set; } = string.Empty;
 
     /// <summary>
-    /// 使用语言（zh-CN 简体 / en-US 英文 / ja-JP 日文 / zh-HK 香港繁体；与 TaktCulture.CultureCode 一致）
+    /// 使用语言（选项 TaktCultures/options，DictValue=CultureCode）
     /// </summary>
-    [Required(ErrorMessage = "使用语言（zh-CN 简体 / en-US 英文 / ja-JP 日文 / zh-HK 香港繁体；与 TaktCulture.CultureCode 一致）不能为空")]
+    [Required(ErrorMessage = "使用语言（选项 TaktCultures/options，DictValue=CultureCode）不能为空")]
     public string ContentLang { get; set; } = string.Empty;
 
     /// <summary>
@@ -436,17 +452,17 @@ public class TaktSopExecCreateDto
     public DateTime? EndedAt { get; set; }
 
     /// <summary>
-    /// 自检结果（1=合格，2=不合格，3=不适用；字典 logistics_sop_check_result_type）
+    /// 自检结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
     /// </summary>
     public int? SelfCheckResult { get; set; }
 
     /// <summary>
-    /// 执行状态（1=进行中，2=完成，3=中断；字典 logistics_sop_exec_status）
+    /// 执行状态（字典 logistics_sop_exec_status；1=进行中，2=完成，3=中断）
     /// </summary>
     public int ExecStatus { get; set; } = 0;
 
     /// <summary>
-    /// 当前工步 ID（运行时指针，序列化为 string 以避免 Javascript 精度问题）
+    /// 当前工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CurrentStepId { get; set; }
@@ -516,9 +532,9 @@ public class TaktSopExecStatusDto
     public long SopExecId { get; set; }
 
     /// <summary>
-    /// 执行状态（1=进行中，2=完成，3=中断；字典 logistics_sop_exec_status）
+    /// 执行状态（字典 logistics_sop_exec_status；1=进行中，2=完成，3=中断）
     /// </summary>
-    [Required(ErrorMessage = "执行状态（1=进行中，2=完成，3=中断；字典 logistics_sop_exec_status）不能为空")]
+    [Required(ErrorMessage = "执行状态（字典 logistics_sop_exec_status；1=进行中，2=完成，3=中断）不能为空")]
     public int ExecStatus { get; set; } = 0;
 }
 
@@ -542,7 +558,12 @@ public class TaktSopExecTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产工单 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 生产工单 ID（关联 TaktProductionOrder.Id，选项 TaktProductionOrders/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ProductionOrderId { get; set; }
@@ -558,41 +579,41 @@ public class TaktSopExecTemplateDto
     public string? SerialNumber { get; set; } = string.Empty;
 
     /// <summary>
-    /// 产品/机种物料编码
+    /// 产品/机种物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工序 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工序 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RoutingItemId { get; set; }
 
     /// <summary>
-    /// 工艺段类型（1=SMT，2=自插，3=手插，4=修正，5=总装；字典 logistics_process_segment_type）
+    /// 工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
     /// </summary>
     public int? ProcessSegmentType { get; set; }
 
     /// <summary>
-    /// 工位 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? WorkstationId { get; set; }
 
     /// <summary>
-    /// 员工 ID（员工卡，序列化为 string 以避免 Javascript 精度问题）
+    /// 员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
 
     /// <summary>
-    /// SOP 主档 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SopId { get; set; }
 
     /// <summary>
-    /// SOP 版本 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// SOP 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RevisionId { get; set; }
@@ -603,9 +624,50 @@ public class TaktSopExecTemplateDto
     public string? Revision { get; set; } = string.Empty;
 
     /// <summary>
-    /// 使用语言（zh-CN 简体 / en-US 英文 / ja-JP 日文 / zh-HK 香港繁体；与 TaktCulture.CultureCode 一致）
+    /// 使用语言（选项 TaktCultures/options，DictValue=CultureCode）
     /// </summary>
     public string? ContentLang { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 开始时间
+    /// </summary>
+    public DateTime? StartedAt { get; set; }
+
+    /// <summary>
+    /// 结束时间
+    /// </summary>
+    public DateTime? EndedAt { get; set; }
+
+    /// <summary>
+    /// 自检结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
+    /// </summary>
+    public int? SelfCheckResult { get; set; }
+
+    /// <summary>
+    /// 执行状态（字典 logistics_sop_exec_status；1=进行中，2=完成，3=中断）
+    /// </summary>
+    public int? ExecStatus { get; set; }
+
+    /// <summary>
+    /// 当前工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? CurrentStepId { get; set; }
+
+    /// <summary>
+    /// 工步执行明细（子表，级联保存）
+    /// </summary>
+    public List<TaktSopExecStepCreateDto>? Steps { get; set; }
+
+    /// <summary>
+    /// 扫码记录（子表，级联保存）
+    /// </summary>
+    public List<TaktSopExecScanCreateDto>? Scans { get; set; }
+
+    /// <summary>
+    /// 作业参数（子表，级联保存）
+    /// </summary>
+    public List<TaktSopArgumentCreateDto>? Arguments { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -635,12 +697,17 @@ public class TaktSopExecImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产工单 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 生产工单 ID（关联 TaktProductionOrder.Id，选项 TaktProductionOrders/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ProductionOrderId { get; set; }
@@ -656,41 +723,41 @@ public class TaktSopExecImportDto
     public string? SerialNumber { get; set; } = string.Empty;
 
     /// <summary>
-    /// 产品/机种物料编码
+    /// 产品/机种物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工序 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工序 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RoutingItemId { get; set; }
 
     /// <summary>
-    /// 工艺段类型（1=SMT，2=自插，3=手插，4=修正，5=总装；字典 logistics_process_segment_type）
+    /// 工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
     /// </summary>
     public int? ProcessSegmentType { get; set; }
 
     /// <summary>
-    /// 工位 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? WorkstationId { get; set; }
 
     /// <summary>
-    /// 员工 ID（员工卡，序列化为 string 以避免 Javascript 精度问题）
+    /// 员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
 
     /// <summary>
-    /// SOP 主档 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SopId { get; set; }
 
     /// <summary>
-    /// SOP 版本 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// SOP 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RevisionId { get; set; }
@@ -701,9 +768,50 @@ public class TaktSopExecImportDto
     public string? Revision { get; set; } = string.Empty;
 
     /// <summary>
-    /// 使用语言（zh-CN 简体 / en-US 英文 / ja-JP 日文 / zh-HK 香港繁体；与 TaktCulture.CultureCode 一致）
+    /// 使用语言（选项 TaktCultures/options，DictValue=CultureCode）
     /// </summary>
     public string? ContentLang { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 开始时间
+    /// </summary>
+    public DateTime? StartedAt { get; set; }
+
+    /// <summary>
+    /// 结束时间
+    /// </summary>
+    public DateTime? EndedAt { get; set; }
+
+    /// <summary>
+    /// 自检结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
+    /// </summary>
+    public int? SelfCheckResult { get; set; }
+
+    /// <summary>
+    /// 执行状态（字典 logistics_sop_exec_status；1=进行中，2=完成，3=中断）
+    /// </summary>
+    public int? ExecStatus { get; set; }
+
+    /// <summary>
+    /// 当前工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? CurrentStepId { get; set; }
+
+    /// <summary>
+    /// 工步执行明细（子表，级联保存）
+    /// </summary>
+    public List<TaktSopExecStepCreateDto>? Steps { get; set; }
+
+    /// <summary>
+    /// 扫码记录（子表，级联保存）
+    /// </summary>
+    public List<TaktSopExecScanCreateDto>? Scans { get; set; }
+
+    /// <summary>
+    /// 作业参数（子表，级联保存）
+    /// </summary>
+    public List<TaktSopArgumentCreateDto>? Arguments { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -739,7 +847,12 @@ public class TaktSopExecExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产工单 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 生产工单 ID（关联 TaktProductionOrder.Id，选项 TaktProductionOrders/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ProductionOrderId { get; set; }
@@ -755,41 +868,41 @@ public class TaktSopExecExportDto
     public string? SerialNumber { get; set; } = string.Empty;
 
     /// <summary>
-    /// 产品/机种物料编码
+    /// 产品/机种物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工序 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工序 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long RoutingItemId { get; set; }
 
     /// <summary>
-    /// 工艺段类型（1=SMT，2=自插，3=手插，4=修正，5=总装；字典 logistics_process_segment_type）
+    /// 工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
     /// </summary>
     public int ProcessSegmentType { get; set; } = 0;
 
     /// <summary>
-    /// 工位 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long WorkstationId { get; set; }
 
     /// <summary>
-    /// 员工 ID（员工卡，序列化为 string 以避免 Javascript 精度问题）
+    /// 员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EmployeeId { get; set; }
 
     /// <summary>
-    /// SOP 主档 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SopId { get; set; }
 
     /// <summary>
-    /// SOP 版本 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// SOP 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long RevisionId { get; set; }
@@ -800,7 +913,7 @@ public class TaktSopExecExportDto
     public string Revision { get; set; } = string.Empty;
 
     /// <summary>
-    /// 使用语言（zh-CN 简体 / en-US 英文 / ja-JP 日文 / zh-HK 香港繁体；与 TaktCulture.CultureCode 一致）
+    /// 使用语言（选项 TaktCultures/options，DictValue=CultureCode）
     /// </summary>
     public string ContentLang { get; set; } = string.Empty;
 
@@ -815,17 +928,17 @@ public class TaktSopExecExportDto
     public DateTime? EndedAt { get; set; }
 
     /// <summary>
-    /// 自检结果（1=合格，2=不合格，3=不适用；字典 logistics_sop_check_result_type）
+    /// 自检结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
     /// </summary>
     public int? SelfCheckResult { get; set; }
 
     /// <summary>
-    /// 执行状态（1=进行中，2=完成，3=中断；字典 logistics_sop_exec_status）
+    /// 执行状态（字典 logistics_sop_exec_status；1=进行中，2=完成，3=中断）
     /// </summary>
     public int ExecStatus { get; set; } = 0;
 
     /// <summary>
-    /// 当前工步 ID（运行时指针，序列化为 string 以避免 Javascript 精度问题）
+    /// 当前工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CurrentStepId { get; set; }

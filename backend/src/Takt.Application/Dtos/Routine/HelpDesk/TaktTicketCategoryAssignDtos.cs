@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Routine.HelpDesk
 // 文件名称：TaktTicketCategoryAssignDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TicketCategoryAssign 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktTicketCategoryAssign 生成，请按需审阅）
 // 
@@ -140,7 +140,7 @@ public class TaktTicketCategoryAssignCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -160,11 +160,6 @@ public class TaktTicketCategoryAssignCreateDto
     /// 默认处理人姓名
     /// </summary>
     public string? AssigneeName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 排序号
-    /// </summary>
-    public int SortOrder { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -258,11 +253,6 @@ public class TaktTicketCategoryAssignTemplateDto
     public string? AssigneeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号
-    /// </summary>
-    public int? SortOrder { get; set; }
-
-    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -290,7 +280,7 @@ public class TaktTicketCategoryAssignImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -309,11 +299,6 @@ public class TaktTicketCategoryAssignImportDto
     /// 默认处理人姓名
     /// </summary>
     public string? AssigneeName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 排序号
-    /// </summary>
-    public int? SortOrder { get; set; }
 
     /// <summary>
     /// 扩展字段JSON

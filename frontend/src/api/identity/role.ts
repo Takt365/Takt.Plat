@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/identity
 // 文件名称：role.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：identity 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -18,11 +18,13 @@ import type {
 import type {
   Role,
   RoleCreate,
-  RoleBuiltIn,
   RoleSort,
   RoleStatus,
   RoleUpdate
 } from '@/types/identity/role';
+import type {
+  RoleBuiltIn
+} from '@/types/identity/role-built-in';
 
 /**
  * API 路径前缀（相对 request baseURL，对应后端 [controller]）
@@ -125,8 +127,8 @@ export function updateRoleStatus(dto: RoleStatus): Promise<Role> {
 }
 
 /**
- * 更新角色是否内置
- * @param {RoleBuiltIn} dto 是否内置 DTO
+ * 更新角色内置
+ * @param {RoleBuiltIn} dto 内置 DTO
  * @returns {Promise<Role>} 角色DTO
  */
 export function updateRoleBuiltIn(dto: RoleBuiltIn): Promise<Role> {

@@ -108,7 +108,7 @@ public interface ITaktTranslationService
     /// <summary>
     /// 获取指定区域文化的前端扁平翻译消息（ResourceType=Frontend）
     /// </summary>
-    /// <param name="cultureCode">区域文化编码 BCP47</param>
+    /// <param name="cultureCode">文化编码 BCP47</param>
     /// <returns>扁平键值 DTO</returns>
     Task<TaktTranslationMessagesDto> GetTranslationMessagesAsync(string cultureCode);
 

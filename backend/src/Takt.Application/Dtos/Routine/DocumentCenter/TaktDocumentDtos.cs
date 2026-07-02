@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Routine.DocumentCenter
 // 文件名称：TaktDocumentDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Document 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktDocument 生成，请按需审阅）
 // 
@@ -14,7 +14,6 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Dtos.Routine.DocumentCenter;
 
@@ -44,22 +43,17 @@ public class TaktDocumentDto : TaktApprovalDtoBase
     /// <summary>
     /// 文档标题
     /// </summary>
-    public string Title { get; set; } = string.Empty;
+    public string DocumentTitle { get; set; } = string.Empty;
 
     /// <summary>
     /// 文档分类
     /// </summary>
-    public int DocumentCategory { get; set; }
-
-    /// <summary>
-    /// 文档状态
-    /// </summary>
-    public int DocumentStatus { get; set; }
+    public int DocumentCategory { get; set; } = 0;
 
     /// <summary>
     /// 密级
     /// </summary>
-    public int ConfidentialLevel { get; set; }
+    public int ConfidentialLevel { get; set; } = 0;
 
     /// <summary>
     /// 当前版本号
@@ -69,17 +63,17 @@ public class TaktDocumentDto : TaktApprovalDtoBase
     /// <summary>
     /// 文档内容（富文本 HTML）
     /// </summary>
-    public string? Content { get; set; } = string.Empty;
+    public string? DocumentContent { get; set; } = string.Empty;
 
     /// <summary>
     /// 文档摘要（用于列表展示）
     /// </summary>
-    public string? Summary { get; set; } = string.Empty;
+    public string? DocumentSummary { get; set; } = string.Empty;
 
     /// <summary>
     /// 标签（逗号分隔或 JSON 数组存储）
     /// </summary>
-    public string? Tags { get; set; } = string.Empty;
+    public string? DocumentTags { get; set; } = string.Empty;
 
     /// <summary>
     /// 当前文件 ID
@@ -116,17 +110,17 @@ public class TaktDocumentDto : TaktApprovalDtoBase
     /// <summary>
     /// 生效时间
     /// </summary>
-    public DateTime? EffectiveTime { get; set; }
+    public DateTime? DocumentEffectiveTime { get; set; }
 
     /// <summary>
     /// 失效时间
     /// </summary>
-    public DateTime? ExpireTime { get; set; }
+    public DateTime? DocumentExpireTime { get; set; }
 
     /// <summary>
     /// 发布时间
     /// </summary>
-    public DateTime? PublishTime { get; set; }
+    public DateTime? DocumentPublishTime { get; set; }
 
     /// <summary>
     /// 发布人 ID
@@ -151,19 +145,14 @@ public class TaktDocumentDto : TaktApprovalDtoBase
     public string? DeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否置顶
+    /// 置顶
     /// </summary>
-    public int IsTop { get; set; }
-
-    /// <summary>
-    /// 排序号
-    /// </summary>
-    public int SortOrder { get; set; } = 0;
+    public int DocumentIsTop { get; set; } = 0;
 
     /// <summary>
     /// 浏览次数
     /// </summary>
-    public int ViewCount { get; set; } = 0;
+    public int DocumentViewCount { get; set; } = 0;
 
     /// <summary>
     /// 下载次数
@@ -184,6 +173,16 @@ public class TaktDocumentDto : TaktApprovalDtoBase
     /// 目标用户 ID（多个用逗号分隔）
     /// </summary>
     public string? TargetUsers { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 排序号
+    /// </summary>
+    public int SortOrder { get; set; } = 0;
+
+    /// <summary>
+    /// 文档状态
+    /// </summary>
+    public int DocumentStatus { get; set; } = 0;
 
     /// <summary>
     /// 版本历史列表（主子表关系）
@@ -227,17 +226,12 @@ public class TaktDocumentQueryDto : TaktPagedQuery
     /// <summary>
     /// 文档标题
     /// </summary>
-    public string? Title { get; set; } = string.Empty;
+    public string? DocumentTitle { get; set; } = string.Empty;
 
     /// <summary>
     /// 文档分类
     /// </summary>
     public int? DocumentCategory { get; set; }
-
-    /// <summary>
-    /// 文档状态
-    /// </summary>
-    public int? DocumentStatus { get; set; }
 
     /// <summary>
     /// 密级
@@ -252,17 +246,17 @@ public class TaktDocumentQueryDto : TaktPagedQuery
     /// <summary>
     /// 文档内容（富文本 HTML）
     /// </summary>
-    public string? Content { get; set; } = string.Empty;
+    public string? DocumentContent { get; set; } = string.Empty;
 
     /// <summary>
     /// 文档摘要（用于列表展示）
     /// </summary>
-    public string? Summary { get; set; } = string.Empty;
+    public string? DocumentSummary { get; set; } = string.Empty;
 
     /// <summary>
     /// 标签（逗号分隔或 JSON 数组存储）
     /// </summary>
-    public string? Tags { get; set; } = string.Empty;
+    public string? DocumentTags { get; set; } = string.Empty;
 
     /// <summary>
     /// 当前文件 ID
@@ -299,32 +293,32 @@ public class TaktDocumentQueryDto : TaktPagedQuery
     /// <summary>
     /// 生效时间（范围查询-开始）
     /// </summary>
-    public DateTime? EffectiveTimeStart { get; set; }
+    public DateTime? DocumentEffectiveTimeStart { get; set; }
 
     /// <summary>
     /// 生效时间（范围查询-结束）
     /// </summary>
-    public DateTime? EffectiveTimeEnd { get; set; }
+    public DateTime? DocumentEffectiveTimeEnd { get; set; }
 
     /// <summary>
     /// 失效时间（范围查询-开始）
     /// </summary>
-    public DateTime? ExpireTimeStart { get; set; }
+    public DateTime? DocumentExpireTimeStart { get; set; }
 
     /// <summary>
     /// 失效时间（范围查询-结束）
     /// </summary>
-    public DateTime? ExpireTimeEnd { get; set; }
+    public DateTime? DocumentExpireTimeEnd { get; set; }
 
     /// <summary>
     /// 发布时间（范围查询-开始）
     /// </summary>
-    public DateTime? PublishTimeStart { get; set; }
+    public DateTime? DocumentPublishTimeStart { get; set; }
 
     /// <summary>
     /// 发布时间（范围查询-结束）
     /// </summary>
-    public DateTime? PublishTimeEnd { get; set; }
+    public DateTime? DocumentPublishTimeEnd { get; set; }
 
     /// <summary>
     /// 发布人 ID
@@ -349,19 +343,14 @@ public class TaktDocumentQueryDto : TaktPagedQuery
     public string? DeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否置顶
+    /// 置顶
     /// </summary>
-    public int? IsTop { get; set; }
-
-    /// <summary>
-    /// 排序号
-    /// </summary>
-    public int? SortOrder { get; set; }
+    public int? DocumentIsTop { get; set; }
 
     /// <summary>
     /// 浏览次数
     /// </summary>
-    public int? ViewCount { get; set; }
+    public int? DocumentViewCount { get; set; }
 
     /// <summary>
     /// 下载次数
@@ -384,9 +373,19 @@ public class TaktDocumentQueryDto : TaktPagedQuery
     public string? TargetUsers { get; set; } = string.Empty;
 
     /// <summary>
-    /// 审批状态（TaktApprovalStatus）
+    /// 排序号
     /// </summary>
-    public int? ApprovalStatus { get; set; }
+    public int? SortOrder { get; set; }
+
+    /// <summary>
+    /// 文档状态
+    /// </summary>
+    public int? DocumentStatus { get; set; }
+
+    /// <summary>
+    /// 审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）
+    /// </summary>
+    public TaktApprovalStatus? ApprovalStatus { get; set; }
 
     /// <summary>
     /// 发起人ID
@@ -421,6 +420,12 @@ public class TaktDocumentQueryDto : TaktPagedQuery
     public DateTime? ApprovedAtEnd { get; set; }
 
     /// <summary>
+    /// 流程实例 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? FlowInstanceId { get; set; }
+
+    /// <summary>
     /// 创建时间（范围查询-开始）
     /// </summary>
     public DateTime? CreatedAtStart { get; set; }
@@ -439,6 +444,60 @@ public class TaktDocumentQueryDto : TaktPagedQuery
     /// 备注（模糊查询）
     /// </summary>
     public string? Remark { get; set; }
+
+    /// <summary>
+    /// 生效时间（范围查询-开始）；与 DocumentEffectiveTimeStart 同义
+    /// </summary>
+    public DateTime? EffectiveTimeStart
+    {
+        get => DocumentEffectiveTimeStart;
+        set => DocumentEffectiveTimeStart = value;
+    }
+
+    /// <summary>
+    /// 生效时间（范围查询-结束）；与 DocumentEffectiveTimeEnd 同义
+    /// </summary>
+    public DateTime? EffectiveTimeEnd
+    {
+        get => DocumentEffectiveTimeEnd;
+        set => DocumentEffectiveTimeEnd = value;
+    }
+
+    /// <summary>
+    /// 失效时间（范围查询-开始）；与 DocumentExpireTimeStart 同义
+    /// </summary>
+    public DateTime? ExpireTimeStart
+    {
+        get => DocumentExpireTimeStart;
+        set => DocumentExpireTimeStart = value;
+    }
+
+    /// <summary>
+    /// 失效时间（范围查询-结束）；与 DocumentExpireTimeEnd 同义
+    /// </summary>
+    public DateTime? ExpireTimeEnd
+    {
+        get => DocumentExpireTimeEnd;
+        set => DocumentExpireTimeEnd = value;
+    }
+
+    /// <summary>
+    /// 发布时间（范围查询-开始）；与 DocumentPublishTimeStart 同义
+    /// </summary>
+    public DateTime? PublishTimeStart
+    {
+        get => DocumentPublishTimeStart;
+        set => DocumentPublishTimeStart = value;
+    }
+
+    /// <summary>
+    /// 发布时间（范围查询-结束）；与 DocumentPublishTimeEnd 同义
+    /// </summary>
+    public DateTime? PublishTimeEnd
+    {
+        get => DocumentPublishTimeEnd;
+        set => DocumentPublishTimeEnd = value;
+    }
 }
 
 // ========================================
@@ -461,7 +520,7 @@ public class TaktDocumentCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -475,22 +534,17 @@ public class TaktDocumentCreateDto
     /// 文档标题
     /// </summary>
     [Required(ErrorMessage = "文档标题不能为空")]
-    public string Title { get; set; } = string.Empty;
+    public string DocumentTitle { get; set; } = string.Empty;
 
     /// <summary>
     /// 文档分类
     /// </summary>
-    public int DocumentCategory { get; set; }
-
-    /// <summary>
-    /// 文档状态
-    /// </summary>
-    public int DocumentStatus { get; set; }
+    public int DocumentCategory { get; set; } = 0;
 
     /// <summary>
     /// 密级
     /// </summary>
-    public int ConfidentialLevel { get; set; }
+    public int ConfidentialLevel { get; set; } = 0;
 
     /// <summary>
     /// 当前版本号
@@ -500,17 +554,17 @@ public class TaktDocumentCreateDto
     /// <summary>
     /// 文档内容（富文本 HTML）
     /// </summary>
-    public string? Content { get; set; } = string.Empty;
+    public string? DocumentContent { get; set; } = string.Empty;
 
     /// <summary>
     /// 文档摘要（用于列表展示）
     /// </summary>
-    public string? Summary { get; set; } = string.Empty;
+    public string? DocumentSummary { get; set; } = string.Empty;
 
     /// <summary>
     /// 标签（逗号分隔或 JSON 数组存储）
     /// </summary>
-    public string? Tags { get; set; } = string.Empty;
+    public string? DocumentTags { get; set; } = string.Empty;
 
     /// <summary>
     /// 当前文件 ID
@@ -547,17 +601,17 @@ public class TaktDocumentCreateDto
     /// <summary>
     /// 生效时间
     /// </summary>
-    public DateTime? EffectiveTime { get; set; }
+    public DateTime? DocumentEffectiveTime { get; set; }
 
     /// <summary>
     /// 失效时间
     /// </summary>
-    public DateTime? ExpireTime { get; set; }
+    public DateTime? DocumentExpireTime { get; set; }
 
     /// <summary>
     /// 发布时间
     /// </summary>
-    public DateTime? PublishTime { get; set; }
+    public DateTime? DocumentPublishTime { get; set; }
 
     /// <summary>
     /// 发布人 ID
@@ -583,19 +637,14 @@ public class TaktDocumentCreateDto
     public string? DeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否置顶
+    /// 置顶
     /// </summary>
-    public int IsTop { get; set; }
-
-    /// <summary>
-    /// 排序号
-    /// </summary>
-    public int SortOrder { get; set; } = 0;
+    public int DocumentIsTop { get; set; } = 0;
 
     /// <summary>
     /// 浏览次数
     /// </summary>
-    public int ViewCount { get; set; } = 0;
+    public int DocumentViewCount { get; set; } = 0;
 
     /// <summary>
     /// 下载次数
@@ -617,6 +666,11 @@ public class TaktDocumentCreateDto
     /// 目标用户 ID（多个用逗号分隔）
     /// </summary>
     public string? TargetUsers { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 文档状态
+    /// </summary>
+    public int DocumentStatus { get; set; } = 0;
 
     /// <summary>
     /// 版本历史列表（主子表关系）（子表，级联保存）
@@ -681,7 +735,7 @@ public class TaktDocumentStatusDto
     /// 文档状态
     /// </summary>
     [Required(ErrorMessage = "文档状态不能为空")]
-    public int DocumentStatus { get; set; }
+    public int DocumentStatus { get; set; } = 0;
 }
 
 // ========================================
@@ -735,17 +789,12 @@ public class TaktDocumentTemplateDto
     /// <summary>
     /// 文档标题
     /// </summary>
-    public string? Title { get; set; } = string.Empty;
+    public string? DocumentTitle { get; set; } = string.Empty;
 
     /// <summary>
     /// 文档分类
     /// </summary>
     public int? DocumentCategory { get; set; }
-
-    /// <summary>
-    /// 文档状态
-    /// </summary>
-    public int? DocumentStatus { get; set; }
 
     /// <summary>
     /// 密级
@@ -760,17 +809,17 @@ public class TaktDocumentTemplateDto
     /// <summary>
     /// 文档内容（富文本 HTML）
     /// </summary>
-    public string? Content { get; set; } = string.Empty;
+    public string? DocumentContent { get; set; } = string.Empty;
 
     /// <summary>
     /// 文档摘要（用于列表展示）
     /// </summary>
-    public string? Summary { get; set; } = string.Empty;
+    public string? DocumentSummary { get; set; } = string.Empty;
 
     /// <summary>
     /// 标签（逗号分隔或 JSON 数组存储）
     /// </summary>
-    public string? Tags { get; set; } = string.Empty;
+    public string? DocumentTags { get; set; } = string.Empty;
 
     /// <summary>
     /// 当前文件 ID
@@ -787,6 +836,104 @@ public class TaktDocumentTemplateDto
     /// 当前文件路径
     /// </summary>
     public string? FilePath { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 当前文件大小（字节）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? FileSize { get; set; }
+
+    /// <summary>
+    /// 当前文件类型（MIME）
+    /// </summary>
+    public string? FileType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 当前文件扩展名
+    /// </summary>
+    public string? FileExtension { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 生效时间
+    /// </summary>
+    public DateTime? DocumentEffectiveTime { get; set; }
+
+    /// <summary>
+    /// 失效时间
+    /// </summary>
+    public DateTime? DocumentExpireTime { get; set; }
+
+    /// <summary>
+    /// 发布时间
+    /// </summary>
+    public DateTime? DocumentPublishTime { get; set; }
+
+    /// <summary>
+    /// 发布人 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? PublisherId { get; set; }
+
+    /// <summary>
+    /// 发布人姓名
+    /// </summary>
+    public string? PublisherName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 归属部门 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? DeptId { get; set; }
+
+    /// <summary>
+    /// 归属部门名称
+    /// </summary>
+    public string? DeptName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 置顶
+    /// </summary>
+    public int? DocumentIsTop { get; set; }
+
+    /// <summary>
+    /// 浏览次数
+    /// </summary>
+    public int? DocumentViewCount { get; set; }
+
+    /// <summary>
+    /// 下载次数
+    /// </summary>
+    public int? DownloadCount { get; set; }
+
+    /// <summary>
+    /// 目标范围（all=全员，company=本公司，department=本部门，custom=自定义）
+    /// </summary>
+    public string? TargetScope { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 目标部门编码（多个用逗号分隔）
+    /// </summary>
+    public string? TargetDepartments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 目标用户 ID（多个用逗号分隔）
+    /// </summary>
+    public string? TargetUsers { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 文档状态
+    /// </summary>
+    public int? DocumentStatus { get; set; }
+
+    /// <summary>
+    /// 版本历史列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktDocumentVersionCreateDto>? Versions { get; set; }
+
+    /// <summary>
+    /// 变更日志列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktDocumentChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -816,7 +963,7 @@ public class TaktDocumentImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -828,17 +975,12 @@ public class TaktDocumentImportDto
     /// <summary>
     /// 文档标题
     /// </summary>
-    public string? Title { get; set; } = string.Empty;
+    public string? DocumentTitle { get; set; } = string.Empty;
 
     /// <summary>
     /// 文档分类
     /// </summary>
     public int? DocumentCategory { get; set; }
-
-    /// <summary>
-    /// 文档状态
-    /// </summary>
-    public int? DocumentStatus { get; set; }
 
     /// <summary>
     /// 密级
@@ -853,17 +995,17 @@ public class TaktDocumentImportDto
     /// <summary>
     /// 文档内容（富文本 HTML）
     /// </summary>
-    public string? Content { get; set; } = string.Empty;
+    public string? DocumentContent { get; set; } = string.Empty;
 
     /// <summary>
     /// 文档摘要（用于列表展示）
     /// </summary>
-    public string? Summary { get; set; } = string.Empty;
+    public string? DocumentSummary { get; set; } = string.Empty;
 
     /// <summary>
     /// 标签（逗号分隔或 JSON 数组存储）
     /// </summary>
-    public string? Tags { get; set; } = string.Empty;
+    public string? DocumentTags { get; set; } = string.Empty;
 
     /// <summary>
     /// 当前文件 ID
@@ -880,6 +1022,104 @@ public class TaktDocumentImportDto
     /// 当前文件路径
     /// </summary>
     public string? FilePath { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 当前文件大小（字节）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? FileSize { get; set; }
+
+    /// <summary>
+    /// 当前文件类型（MIME）
+    /// </summary>
+    public string? FileType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 当前文件扩展名
+    /// </summary>
+    public string? FileExtension { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 生效时间
+    /// </summary>
+    public DateTime? DocumentEffectiveTime { get; set; }
+
+    /// <summary>
+    /// 失效时间
+    /// </summary>
+    public DateTime? DocumentExpireTime { get; set; }
+
+    /// <summary>
+    /// 发布时间
+    /// </summary>
+    public DateTime? DocumentPublishTime { get; set; }
+
+    /// <summary>
+    /// 发布人 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? PublisherId { get; set; }
+
+    /// <summary>
+    /// 发布人姓名
+    /// </summary>
+    public string? PublisherName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 归属部门 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? DeptId { get; set; }
+
+    /// <summary>
+    /// 归属部门名称
+    /// </summary>
+    public string? DeptName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 置顶
+    /// </summary>
+    public int? DocumentIsTop { get; set; }
+
+    /// <summary>
+    /// 浏览次数
+    /// </summary>
+    public int? DocumentViewCount { get; set; }
+
+    /// <summary>
+    /// 下载次数
+    /// </summary>
+    public int? DownloadCount { get; set; }
+
+    /// <summary>
+    /// 目标范围（all=全员，company=本公司，department=本部门，custom=自定义）
+    /// </summary>
+    public string? TargetScope { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 目标部门编码（多个用逗号分隔）
+    /// </summary>
+    public string? TargetDepartments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 目标用户 ID（多个用逗号分隔）
+    /// </summary>
+    public string? TargetUsers { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 文档状态
+    /// </summary>
+    public int? DocumentStatus { get; set; }
+
+    /// <summary>
+    /// 版本历史列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktDocumentVersionCreateDto>? Versions { get; set; }
+
+    /// <summary>
+    /// 变更日志列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktDocumentChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -917,22 +1157,17 @@ public class TaktDocumentExportDto
     /// <summary>
     /// 文档标题
     /// </summary>
-    public string Title { get; set; } = string.Empty;
+    public string DocumentTitle { get; set; } = string.Empty;
 
     /// <summary>
     /// 文档分类
     /// </summary>
-    public int DocumentCategory { get; set; }
-
-    /// <summary>
-    /// 文档状态
-    /// </summary>
-    public int DocumentStatus { get; set; }
+    public int DocumentCategory { get; set; } = 0;
 
     /// <summary>
     /// 密级
     /// </summary>
-    public int ConfidentialLevel { get; set; }
+    public int ConfidentialLevel { get; set; } = 0;
 
     /// <summary>
     /// 当前版本号
@@ -942,17 +1177,17 @@ public class TaktDocumentExportDto
     /// <summary>
     /// 文档内容（富文本 HTML）
     /// </summary>
-    public string? Content { get; set; } = string.Empty;
+    public string? DocumentContent { get; set; } = string.Empty;
 
     /// <summary>
     /// 文档摘要（用于列表展示）
     /// </summary>
-    public string? Summary { get; set; } = string.Empty;
+    public string? DocumentSummary { get; set; } = string.Empty;
 
     /// <summary>
     /// 标签（逗号分隔或 JSON 数组存储）
     /// </summary>
-    public string? Tags { get; set; } = string.Empty;
+    public string? DocumentTags { get; set; } = string.Empty;
 
     /// <summary>
     /// 当前文件 ID
@@ -989,17 +1224,17 @@ public class TaktDocumentExportDto
     /// <summary>
     /// 生效时间
     /// </summary>
-    public DateTime? EffectiveTime { get; set; }
+    public DateTime? DocumentEffectiveTime { get; set; }
 
     /// <summary>
     /// 失效时间
     /// </summary>
-    public DateTime? ExpireTime { get; set; }
+    public DateTime? DocumentExpireTime { get; set; }
 
     /// <summary>
     /// 发布时间
     /// </summary>
-    public DateTime? PublishTime { get; set; }
+    public DateTime? DocumentPublishTime { get; set; }
 
     /// <summary>
     /// 发布人 ID
@@ -1024,19 +1259,14 @@ public class TaktDocumentExportDto
     public string? DeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否置顶
+    /// 置顶
     /// </summary>
-    public int IsTop { get; set; }
-
-    /// <summary>
-    /// 排序号
-    /// </summary>
-    public int SortOrder { get; set; } = 0;
+    public int DocumentIsTop { get; set; } = 0;
 
     /// <summary>
     /// 浏览次数
     /// </summary>
-    public int ViewCount { get; set; } = 0;
+    public int DocumentViewCount { get; set; } = 0;
 
     /// <summary>
     /// 下载次数
@@ -1057,6 +1287,16 @@ public class TaktDocumentExportDto
     /// 目标用户 ID（多个用逗号分隔）
     /// </summary>
     public string? TargetUsers { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 排序号
+    /// </summary>
+    public int SortOrder { get; set; } = 0;
+
+    /// <summary>
+    /// 文档状态
+    /// </summary>
+    public int DocumentStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

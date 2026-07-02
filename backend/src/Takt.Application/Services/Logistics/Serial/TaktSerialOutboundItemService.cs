@@ -2,9 +2,9 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Serial
 // 文件名称：TaktSerialOutboundItemService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
-// 功能描述：产品序列号出库明细应用服务实现
+// 功能描述：序列号出库明细应用服务实现
 // 
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -25,7 +25,7 @@ using Takt.Shared.Options;
 namespace Takt.Application.Services.Logistics.Serial;
 
 /// <summary>
-/// 产品序列号出库明细应用服务
+/// 序列号出库明细应用服务
 /// </summary>
 public class TaktSerialOutboundItemService : TaktServiceBase, ITaktSerialOutboundItemService
 {
@@ -37,8 +37,8 @@ public class TaktSerialOutboundItemService : TaktServiceBase, ITaktSerialOutboun
     /// <summary>
     /// 构造函数
     /// </summary>
-    /// <param name="serialOutboundItemRepository">产品序列号出库明细仓储</param>
-    /// <param name="serialOutboundRepository">产品序列号出库仓储</param>
+    /// <param name="serialOutboundItemRepository">序列号出库明细仓储</param>
+    /// <param name="serialOutboundRepository">序列号出库仓储</param>
     /// <param name="lineNumberGenerator">明细行号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
@@ -59,7 +59,7 @@ public class TaktSerialOutboundItemService : TaktServiceBase, ITaktSerialOutboun
     }
 
     /// <summary>
-    /// 获取产品序列号出库明细列表（分页）
+    /// 获取序列号出库明细列表（分页）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
@@ -78,9 +78,9 @@ public class TaktSerialOutboundItemService : TaktServiceBase, ITaktSerialOutboun
     }
 
     /// <summary>
-    /// 根据ID获取产品序列号出库明细
+    /// 根据ID获取序列号出库明细
     /// </summary>
-    /// <param name="id">产品序列号出库明细ID</param>
+    /// <param name="id">序列号出库明细ID</param>
     /// <returns>DTO</returns>
     public async Task<TaktSerialOutboundItemDto?> GetSerialOutboundItemByIdAsync(long id)
     {
@@ -111,7 +111,7 @@ public class TaktSerialOutboundItemService : TaktServiceBase, ITaktSerialOutboun
     }
 
     /// <summary>
-    /// 创建产品序列号出库明细
+    /// 创建序列号出库明细
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>DTO</returns>
@@ -124,7 +124,7 @@ public class TaktSerialOutboundItemService : TaktServiceBase, ITaktSerialOutboun
             x => x.OutboundSerialNo == entity.OutboundSerialNo);
         if (!isUnique_ix_takt_logistics_serial_outbound_item_outbound_serial_no_unique)
         {
-            throw new TaktBusinessException("产品序列号出库明细的OutboundSerialNo已存在");
+            throw new TaktBusinessException("序列号出库明细的OutboundSerialNo已存在");
         }
         if (entity.LineNumber <= 0)
         {
@@ -139,9 +139,9 @@ public class TaktSerialOutboundItemService : TaktServiceBase, ITaktSerialOutboun
     }
 
     /// <summary>
-    /// 更新产品序列号出库明细
+    /// 更新序列号出库明细
     /// </summary>
-    /// <param name="id">产品序列号出库明细ID</param>
+    /// <param name="id">序列号出库明细ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>DTO</returns>
     public async Task<TaktSerialOutboundItemDto> UpdateSerialOutboundItemAsync(long id, TaktSerialOutboundItemUpdateDto dto)
@@ -149,7 +149,7 @@ public class TaktSerialOutboundItemService : TaktServiceBase, ITaktSerialOutboun
         var entity = await _serialOutboundItemRepository.GetByIdAsync(id);
         if (entity == null)
         {
-            throw new TaktBusinessException("产品序列号出库明细不存在");
+            throw new TaktBusinessException("序列号出库明细不存在");
         }
         dto.Adapt(entity);
         await StampSerialOutboundItemSerialOutboundAsync(entity, dto);
@@ -159,28 +159,28 @@ public class TaktSerialOutboundItemService : TaktServiceBase, ITaktSerialOutboun
             id);
         if (!isUnique_ix_takt_logistics_serial_outbound_item_outbound_serial_no_unique)
         {
-            throw new TaktBusinessException("产品序列号出库明细的OutboundSerialNo已存在");
+            throw new TaktBusinessException("序列号出库明细的OutboundSerialNo已存在");
         }
         await _serialOutboundItemRepository.UpdateAsync(entity);
-        return await GetSerialOutboundItemByIdAsync(id) ?? throw new TaktBusinessException("产品序列号出库明细不存在");
+        return await GetSerialOutboundItemByIdAsync(id) ?? throw new TaktBusinessException("序列号出库明细不存在");
     }
 
     /// <summary>
-    /// 删除产品序列号出库明细
+    /// 删除序列号出库明细
     /// </summary>
-    /// <param name="id">产品序列号出库明细ID</param>
+    /// <param name="id">序列号出库明细ID</param>
     /// <returns>任务</returns>
     public async Task DeleteSerialOutboundItemByIdAsync(long id)
     {
         var deleted = await _serialOutboundItemRepository.DeleteAsync(id);
         if (!deleted)
         {
-            throw new TaktBusinessException("产品序列号出库明细不存在或已删除");
+            throw new TaktBusinessException("序列号出库明细不存在或已删除");
         }
     }
 
     /// <summary>
-    /// 批量删除产品序列号出库明细
+    /// 批量删除序列号出库明细
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>任务</returns>
@@ -206,12 +206,12 @@ public class TaktSerialOutboundItemService : TaktServiceBase, ITaktSerialOutboun
     public async Task<(string fileName, byte[] content)> GetSerialOutboundItemTemplateAsync(string? sheetName = null, string? fileName = null)
     {
         return await TaktExcelHelper.GenerateTemplateAsync<TaktSerialOutboundItemTemplateDto>(
-            sheetName ?? "产品序列号出库明细导入模板",
-            fileName ?? "产品序列号出库明细导入模板.xlsx");
+            sheetName ?? "序列号出库明细导入模板",
+            fileName ?? "序列号出库明细导入模板.xlsx");
     }
 
     /// <summary>
-    /// 导入产品序列号出库明细
+    /// 导入序列号出库明细
     /// </summary>
     /// <param name="fileStream">Excel 文件流</param>
     /// <param name="sheetName">工作表名称</param>
@@ -221,7 +221,7 @@ public class TaktSerialOutboundItemService : TaktServiceBase, ITaktSerialOutboun
         var errors = new List<string>();
         var success = 0;
         var fail = 0;
-        var rows = await TaktExcelHelper.ImportAsync<TaktSerialOutboundItemImportDto>(fileStream, sheetName ?? "产品序列号出库明细导入模板");
+        var rows = await TaktExcelHelper.ImportAsync<TaktSerialOutboundItemImportDto>(fileStream, sheetName ?? "序列号出库明细导入模板");
         if (rows == null || rows.Count == 0)
         {
             errors.Add("Excel文件中没有数据");
@@ -245,7 +245,7 @@ public class TaktSerialOutboundItemService : TaktServiceBase, ITaktSerialOutboun
                     x => x.OutboundSerialNo == entity.OutboundSerialNo);
                 if (!isUnique_ix_takt_logistics_serial_outbound_item_outbound_serial_no_unique)
                 {
-                    throw new TaktBusinessException("产品序列号出库明细的OutboundSerialNo已存在");
+                    throw new TaktBusinessException("序列号出库明细的OutboundSerialNo已存在");
                 }
                 if (entity.LineNumber <= 0)
                 {
@@ -268,7 +268,7 @@ public class TaktSerialOutboundItemService : TaktServiceBase, ITaktSerialOutboun
     }
 
     /// <summary>
-    /// 导出产品序列号出库明细
+    /// 导出序列号出库明细
     /// </summary>
     /// <param name="query">查询条件</param>
     /// <param name="sheetName">工作表名称</param>
@@ -282,14 +282,14 @@ public class TaktSerialOutboundItemService : TaktServiceBase, ITaktSerialOutboun
         {
             return await TaktExcelHelper.ExportAsync(
                 new List<TaktSerialOutboundItemExportDto>(),
-                sheetName ?? "产品序列号出库明细数据",
-                fileName ?? "产品序列号出库明细导出.xlsx");
+                sheetName ?? "序列号出库明细数据",
+                fileName ?? "序列号出库明细导出.xlsx");
         }
         var exportData = list.Adapt<List<TaktSerialOutboundItemExportDto>>();
         return await TaktExcelHelper.ExportAsync(
             exportData,
-            sheetName ?? "产品序列号出库明细数据",
-            fileName ?? "产品序列号出库明细导出.xlsx");
+            sheetName ?? "序列号出库明细数据",
+            fileName ?? "序列号出库明细导出.xlsx");
     }
 
     // ========================================
@@ -297,7 +297,7 @@ public class TaktSerialOutboundItemService : TaktServiceBase, ITaktSerialOutboun
     // ========================================
 
     /// <summary>
-    /// 同步产品序列号出库明细主表外键（ManyToOne → 产品序列号出库）
+    /// 同步序列号出库明细主表外键（ManyToOne → 序列号出库）
     /// </summary>
     /// <param name="entity">当前实体</param>
     /// <param name="dto">创建 DTO</param>
@@ -311,7 +311,7 @@ public class TaktSerialOutboundItemService : TaktServiceBase, ITaktSerialOutboun
         var master = await _serialOutboundRepository.GetByIdAsync(dto.OutboundId);
         if (master == null)
         {
-            throw new TaktBusinessException("产品序列号出库不存在");
+            throw new TaktBusinessException("序列号出库不存在");
         }
         entity.OutboundId = master.Id;
     }
@@ -320,7 +320,7 @@ public class TaktSerialOutboundItemService : TaktServiceBase, ITaktSerialOutboun
     // ========================================
 
     /// <summary>
-    /// 构建产品序列号出库明细查询表达式
+    /// 构建序列号出库明细查询表达式
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>查询表达式</returns>

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/human-resource/organization
 // 文件名称：post.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/organization 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -17,7 +17,6 @@ import type {
 } from '@/types/common';
 import type {
   Post,
-  PostBuiltIn,
   PostCreate,
   PostSort,
   PostStatus,
@@ -113,25 +112,12 @@ export function deletePostBatch(ids: string[]): Promise<void> {
 
 /**
  * 更新岗位状态
- * @param {PostStatus} dto 状态 DTO（TaktCommonStatus 枚举）
+ * @param {PostStatus} dto 状态 DTO
  * @returns {Promise<Post>} 岗位DTO
  */
 export function updatePostStatus(dto: PostStatus): Promise<Post> {
   return request<Post>({
     url: `${POST_API_BASE}/status`,
-    method: 'put',
-    data: dto,
-  });
-}
-
-/**
- * 更新岗位是否内置
- * @param {PostBuiltIn} dto 是否内置 DTO
- * @returns {Promise<Post>} 岗位DTO
- */
-export function updatePostBuiltIn(dto: PostBuiltIn): Promise<Post> {
-  return request<Post>({
-    url: `${POST_API_BASE}/built-in`,
     method: 'put',
     data: dto,
   });

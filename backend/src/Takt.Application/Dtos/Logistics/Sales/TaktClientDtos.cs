@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Sales
 // 文件名称：TaktClientDtos.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-07-01
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Client 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktClient 生成，请按需审阅）
 // 
@@ -36,7 +36,7 @@ public class TaktClientDto : TaktCompanyDtoBase
     public long ClientId { get; set; }
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -56,7 +56,7 @@ public class TaktClientDto : TaktCompanyDtoBase
     public string? ClientShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户端类型（字典 logistics_client_category；0=终端客户，1=分销商，2=零售商，3=电商平台，4=其他）
+    /// 客户端类型（字典 logistics_client_category；0=终端客户 1=分销商 2=零售商 3=电商平台 4=其他）
     /// </summary>
     public int ClientType { get; set; } = 0;
 
@@ -69,6 +69,11 @@ public class TaktClientDto : TaktCompanyDtoBase
     /// 客户端标识（税务登记证号/统一社会信用代码）
     /// </summary>
     public string? ClientTaxNumber { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等）
+    /// </summary>
+    public int TaxRate { get; set; } = 0;
 
     /// <summary>
     /// 注册国家（ISO 3166-1 alpha-2两位代码）
@@ -131,12 +136,12 @@ public class TaktClientDto : TaktCompanyDtoBase
     public string CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
+    /// 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
     /// </summary>
-    public int PaymentTerms { get; set; } = 0;
+    public string PaymentTerms { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售渠道（字典 logistics_sales_channel_type；0=直销，1=经销，2=代销，3=电商，4=其他）
+    /// 销售渠道（字典 logistics_sales_channel_type；0=直销 1=经销 2=代销 3=电商 4=其他）
     /// </summary>
     public int SalesChannel { get; set; } = 0;
 
@@ -151,7 +156,7 @@ public class TaktClientDto : TaktCompanyDtoBase
     public string? StoreName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户端等级（字典 logistics_customer_level_category；0=普通，1=重要，2=VIP，3=战略）
+    /// 客户端等级（字典 logistics_customer_level_category；0=普通 1=重要 2=VIP 3=战略）
     /// </summary>
     public int ClientLevel { get; set; } = 0;
 
@@ -161,19 +166,14 @@ public class TaktClientDto : TaktCompanyDtoBase
     public decimal EvaluationScore { get; set; }
 
     /// <summary>
-    /// 是否合格客户端（0=否，1=是）
-    /// </summary>
-    public int IsQualified { get; set; } = 0;
-
-    /// <summary>
-    /// 客户端状态（1=启用，0=禁用）
-    /// </summary>
-    public int ClientStatus { get; set; } = 0;
-
-    /// <summary>
     /// 排序号（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
+
+    /// <summary>
+    /// 客户端状态（字典 sys_normal_disable_status）
+    /// </summary>
+    public int ClientStatus { get; set; } = 0;
 
 }
 
@@ -198,7 +198,7 @@ public class TaktClientQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -218,7 +218,7 @@ public class TaktClientQueryDto : TaktPagedQuery
     public string? ClientShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户端类型（字典 logistics_client_category；0=终端客户，1=分销商，2=零售商，3=电商平台，4=其他）
+    /// 客户端类型（字典 logistics_client_category；0=终端客户 1=分销商 2=零售商 3=电商平台 4=其他）
     /// </summary>
     public int? ClientType { get; set; }
 
@@ -231,6 +231,11 @@ public class TaktClientQueryDto : TaktPagedQuery
     /// 客户端标识（税务登记证号/统一社会信用代码）
     /// </summary>
     public string? ClientTaxNumber { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等）
+    /// </summary>
+    public int? TaxRate { get; set; }
 
     /// <summary>
     /// 注册国家（ISO 3166-1 alpha-2两位代码）
@@ -293,12 +298,12 @@ public class TaktClientQueryDto : TaktPagedQuery
     public string? CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
+    /// 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
     /// </summary>
-    public int? PaymentTerms { get; set; }
+    public string? PaymentTerms { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售渠道（字典 logistics_sales_channel_type；0=直销，1=经销，2=代销，3=电商，4=其他）
+    /// 销售渠道（字典 logistics_sales_channel_type；0=直销 1=经销 2=代销 3=电商 4=其他）
     /// </summary>
     public int? SalesChannel { get; set; }
 
@@ -313,7 +318,7 @@ public class TaktClientQueryDto : TaktPagedQuery
     public string? StoreName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户端等级（字典 logistics_customer_level_category；0=普通，1=重要，2=VIP，3=战略）
+    /// 客户端等级（字典 logistics_customer_level_category；0=普通 1=重要 2=VIP 3=战略）
     /// </summary>
     public int? ClientLevel { get; set; }
 
@@ -323,19 +328,14 @@ public class TaktClientQueryDto : TaktPagedQuery
     public decimal? EvaluationScore { get; set; }
 
     /// <summary>
-    /// 是否合格客户端（0=否，1=是）
-    /// </summary>
-    public int? IsQualified { get; set; }
-
-    /// <summary>
-    /// 客户端状态（1=启用，0=禁用）
-    /// </summary>
-    public int? ClientStatus { get; set; }
-
-    /// <summary>
     /// 排序号（越小越靠前）
     /// </summary>
     public int? SortOrder { get; set; }
+
+    /// <summary>
+    /// 客户端状态（字典 sys_normal_disable_status）
+    /// </summary>
+    public int? ClientStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -378,14 +378,14 @@ public class TaktClientCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码不能为空")]
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -406,7 +406,7 @@ public class TaktClientCreateDto
     public string? ClientShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户端类型（字典 logistics_client_category；0=终端客户，1=分销商，2=零售商，3=电商平台，4=其他）
+    /// 客户端类型（字典 logistics_client_category；0=终端客户 1=分销商 2=零售商 3=电商平台 4=其他）
     /// </summary>
     public int ClientType { get; set; } = 0;
 
@@ -419,6 +419,11 @@ public class TaktClientCreateDto
     /// 客户端标识（税务登记证号/统一社会信用代码）
     /// </summary>
     public string? ClientTaxNumber { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等）
+    /// </summary>
+    public int TaxRate { get; set; } = 0;
 
     /// <summary>
     /// 注册国家（ISO 3166-1 alpha-2两位代码）
@@ -482,12 +487,13 @@ public class TaktClientCreateDto
     public string CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
+    /// 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
     /// </summary>
-    public int PaymentTerms { get; set; } = 0;
+    [Required(ErrorMessage = "付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）不能为空")]
+    public string PaymentTerms { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售渠道（字典 logistics_sales_channel_type；0=直销，1=经销，2=代销，3=电商，4=其他）
+    /// 销售渠道（字典 logistics_sales_channel_type；0=直销 1=经销 2=代销 3=电商 4=其他）
     /// </summary>
     public int SalesChannel { get; set; } = 0;
 
@@ -502,7 +508,7 @@ public class TaktClientCreateDto
     public string? StoreName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户端等级（字典 logistics_customer_level_category；0=普通，1=重要，2=VIP，3=战略）
+    /// 客户端等级（字典 logistics_customer_level_category；0=普通 1=重要 2=VIP 3=战略）
     /// </summary>
     public int ClientLevel { get; set; } = 0;
 
@@ -512,12 +518,7 @@ public class TaktClientCreateDto
     public decimal EvaluationScore { get; set; }
 
     /// <summary>
-    /// 是否合格客户端（0=否，1=是）
-    /// </summary>
-    public int IsQualified { get; set; } = 0;
-
-    /// <summary>
-    /// 客户端状态（1=启用，0=禁用）
+    /// 客户端状态（字典 sys_normal_disable_status）
     /// </summary>
     public int ClientStatus { get; set; } = 0;
 
@@ -571,9 +572,9 @@ public class TaktClientStatusDto
     public long ClientId { get; set; }
 
     /// <summary>
-    /// 客户端状态（1=启用，0=禁用）
+    /// 客户端状态（字典 sys_normal_disable_status）
     /// </summary>
-    [Required(ErrorMessage = "客户端状态（1=启用，0=禁用）不能为空")]
+    [Required(ErrorMessage = "客户端状态（字典 sys_normal_disable_status）不能为空")]
     public int ClientStatus { get; set; } = 0;
 }
 
@@ -621,7 +622,7 @@ public class TaktClientTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -641,7 +642,7 @@ public class TaktClientTemplateDto
     public string? ClientShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户端类型（字典 logistics_client_category；0=终端客户，1=分销商，2=零售商，3=电商平台，4=其他）
+    /// 客户端类型（字典 logistics_client_category；0=终端客户 1=分销商 2=零售商 3=电商平台 4=其他）
     /// </summary>
     public int? ClientType { get; set; }
 
@@ -654,6 +655,11 @@ public class TaktClientTemplateDto
     /// 客户端标识（税务登记证号/统一社会信用代码）
     /// </summary>
     public string? ClientTaxNumber { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等）
+    /// </summary>
+    public int? TaxRate { get; set; }
 
     /// <summary>
     /// 注册国家（ISO 3166-1 alpha-2两位代码）
@@ -679,6 +685,76 @@ public class TaktClientTemplateDto
     /// 客户端电话
     /// </summary>
     public string? ClientPhone { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 客户端传真
+    /// </summary>
+    public string? ClientFax { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 客户端邮箱
+    /// </summary>
+    public string? ClientEmail { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 客户端网站
+    /// </summary>
+    public string? ClientWebsite { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 联系人
+    /// </summary>
+    public string? ContactPerson { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 联系人电话
+    /// </summary>
+    public string? ContactPhone { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 联系人邮箱
+    /// </summary>
+    public string? ContactEmail { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 结算币种代码
+    /// </summary>
+    public string? CurrencyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
+    /// </summary>
+    public string? PaymentTerms { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 销售渠道（字典 logistics_sales_channel_type；0=直销 1=经销 2=代销 3=电商 4=其他）
+    /// </summary>
+    public int? SalesChannel { get; set; }
+
+    /// <summary>
+    /// 平台名称（电商平台名称）
+    /// </summary>
+    public string? PlatformName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 店铺名称
+    /// </summary>
+    public string? StoreName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 客户端等级（字典 logistics_customer_level_category；0=普通 1=重要 2=VIP 3=战略）
+    /// </summary>
+    public int? ClientLevel { get; set; }
+
+    /// <summary>
+    /// 评价分数（0-100分）
+    /// </summary>
+    public decimal? EvaluationScore { get; set; }
+
+    /// <summary>
+    /// 客户端状态（字典 sys_normal_disable_status）
+    /// </summary>
+    public int? ClientStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -708,12 +784,12 @@ public class TaktClientImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -733,7 +809,7 @@ public class TaktClientImportDto
     public string? ClientShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户端类型（字典 logistics_client_category；0=终端客户，1=分销商，2=零售商，3=电商平台，4=其他）
+    /// 客户端类型（字典 logistics_client_category；0=终端客户 1=分销商 2=零售商 3=电商平台 4=其他）
     /// </summary>
     public int? ClientType { get; set; }
 
@@ -746,6 +822,11 @@ public class TaktClientImportDto
     /// 客户端标识（税务登记证号/统一社会信用代码）
     /// </summary>
     public string? ClientTaxNumber { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等）
+    /// </summary>
+    public int? TaxRate { get; set; }
 
     /// <summary>
     /// 注册国家（ISO 3166-1 alpha-2两位代码）
@@ -771,6 +852,76 @@ public class TaktClientImportDto
     /// 客户端电话
     /// </summary>
     public string? ClientPhone { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 客户端传真
+    /// </summary>
+    public string? ClientFax { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 客户端邮箱
+    /// </summary>
+    public string? ClientEmail { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 客户端网站
+    /// </summary>
+    public string? ClientWebsite { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 联系人
+    /// </summary>
+    public string? ContactPerson { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 联系人电话
+    /// </summary>
+    public string? ContactPhone { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 联系人邮箱
+    /// </summary>
+    public string? ContactEmail { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 结算币种代码
+    /// </summary>
+    public string? CurrencyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
+    /// </summary>
+    public string? PaymentTerms { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 销售渠道（字典 logistics_sales_channel_type；0=直销 1=经销 2=代销 3=电商 4=其他）
+    /// </summary>
+    public int? SalesChannel { get; set; }
+
+    /// <summary>
+    /// 平台名称（电商平台名称）
+    /// </summary>
+    public string? PlatformName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 店铺名称
+    /// </summary>
+    public string? StoreName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 客户端等级（字典 logistics_customer_level_category；0=普通 1=重要 2=VIP 3=战略）
+    /// </summary>
+    public int? ClientLevel { get; set; }
+
+    /// <summary>
+    /// 评价分数（0-100分）
+    /// </summary>
+    public decimal? EvaluationScore { get; set; }
+
+    /// <summary>
+    /// 客户端状态（字典 sys_normal_disable_status）
+    /// </summary>
+    public int? ClientStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -806,7 +957,7 @@ public class TaktClientExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -826,7 +977,7 @@ public class TaktClientExportDto
     public string? ClientShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户端类型（字典 logistics_client_category；0=终端客户，1=分销商，2=零售商，3=电商平台，4=其他）
+    /// 客户端类型（字典 logistics_client_category；0=终端客户 1=分销商 2=零售商 3=电商平台 4=其他）
     /// </summary>
     public int ClientType { get; set; } = 0;
 
@@ -839,6 +990,11 @@ public class TaktClientExportDto
     /// 客户端标识（税务登记证号/统一社会信用代码）
     /// </summary>
     public string? ClientTaxNumber { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等）
+    /// </summary>
+    public int TaxRate { get; set; } = 0;
 
     /// <summary>
     /// 注册国家（ISO 3166-1 alpha-2两位代码）
@@ -901,12 +1057,12 @@ public class TaktClientExportDto
     public string CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
+    /// 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
     /// </summary>
-    public int PaymentTerms { get; set; } = 0;
+    public string PaymentTerms { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售渠道（字典 logistics_sales_channel_type；0=直销，1=经销，2=代销，3=电商，4=其他）
+    /// 销售渠道（字典 logistics_sales_channel_type；0=直销 1=经销 2=代销 3=电商 4=其他）
     /// </summary>
     public int SalesChannel { get; set; } = 0;
 
@@ -921,7 +1077,7 @@ public class TaktClientExportDto
     public string? StoreName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户端等级（字典 logistics_customer_level_category；0=普通，1=重要，2=VIP，3=战略）
+    /// 客户端等级（字典 logistics_customer_level_category；0=普通 1=重要 2=VIP 3=战略）
     /// </summary>
     public int ClientLevel { get; set; } = 0;
 
@@ -931,19 +1087,14 @@ public class TaktClientExportDto
     public decimal EvaluationScore { get; set; }
 
     /// <summary>
-    /// 是否合格客户端（0=否，1=是）
-    /// </summary>
-    public int IsQualified { get; set; } = 0;
-
-    /// <summary>
-    /// 客户端状态（1=启用，0=禁用）
-    /// </summary>
-    public int ClientStatus { get; set; } = 0;
-
-    /// <summary>
     /// 排序号（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
+
+    /// <summary>
+    /// 客户端状态（字典 sys_normal_disable_status）
+    /// </summary>
+    public int ClientStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

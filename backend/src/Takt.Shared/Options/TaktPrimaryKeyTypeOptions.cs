@@ -13,24 +13,24 @@
 namespace Takt.Shared.Options;
 
 /// <summary>
-/// 主键类型配置选项
+/// 主键类型配置选项（与实体 <c>Id</c> 字段类型配对，由 TaktPrimaryKeyInsertHelper 统一执行）
 /// </summary>
 public class PrimaryKeyTypeOptions
 {
     public const string SectionName = "PrimaryKeyType";
 
     /// <summary>
-    /// 数据库自增ID配置
+    /// 数据库自增 ID（Takt*EntityIncrementBase）
     /// </summary>
     public IdentityIdOptions Identity { get; set; } = new() { Enabled = true };
 
     /// <summary>
-    /// GUID配置
+    /// GUID 主键（Takt*EntityGuidBase）
     /// </summary>
     public GuidIdOptions Guid { get; set; } = new() { Enabled = true };
 
     /// <summary>
-    /// 雪花ID配置
+    /// 雪花 ID（TaktTenantEntityBase / TaktCompanyEntityBase / TaktApprovalEntityBase）
     /// </summary>
     public SnowflakeIdOptions Snowflake { get; set; } = new() { Enabled = true, WorkId = 1 };
 

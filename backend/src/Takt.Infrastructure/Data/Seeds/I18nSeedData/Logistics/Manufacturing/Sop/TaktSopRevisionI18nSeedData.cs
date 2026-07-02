@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopRevisionI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSopRevision 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktSopRevisionI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.soprevision._self", "zh-HK", "SOP 版本信息_hk", "实体名称"),
 
             // entity.soprevision.sopid
-            new TranslationSeedItem("entity.soprevision.sopid", "en-US", "SOP文档头ID_us", "SOP 文档头 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.soprevision.sopid", "en-US", "SOP文档头ID_us", "SOP 文档头 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）"),
             // entity.soprevision.sopid
-            new TranslationSeedItem("entity.soprevision.sopid", "ja-JP", "SOP文档头ID_jp", "SOP 文档头 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.soprevision.sopid", "ja-JP", "SOP文档头ID_jp", "SOP 文档头 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）"),
             // entity.soprevision.sopid
-            new TranslationSeedItem("entity.soprevision.sopid", "zh-CN", "SOP文档头ID", "SOP 文档头 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.soprevision.sopid", "zh-CN", "SOP文档头ID", "SOP 文档头 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）"),
             // entity.soprevision.sopid
-            new TranslationSeedItem("entity.soprevision.sopid", "zh-HK", "SOP文档头ID_hk", "SOP 文档头 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.soprevision.sopid", "zh-HK", "SOP文档头ID_hk", "SOP 文档头 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）"),
 
             // entity.soprevision.revision
             new TranslationSeedItem("entity.soprevision.revision", "en-US", "版本号_us", "版本号（主版本.次版本，如 1.0、A.01）"),
@@ -127,49 +127,49 @@ public class TaktSopRevisionI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.soprevision.changedesc", "zh-HK", "变更说明_hk", "变更说明"),
 
             // entity.soprevision.ecnid
-            new TranslationSeedItem("entity.soprevision.ecnid", "en-US", "ECN主表ID_us", "关联 ECN 主表 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.soprevision.ecnid", "en-US", "ECN主表ID_us", "关联 ECN 主表 ID（关联 TaktEc.Id，选项 TaktEcs/options）"),
             // entity.soprevision.ecnid
-            new TranslationSeedItem("entity.soprevision.ecnid", "ja-JP", "ECN主表ID_jp", "关联 ECN 主表 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.soprevision.ecnid", "ja-JP", "ECN主表ID_jp", "关联 ECN 主表 ID（关联 TaktEc.Id，选项 TaktEcs/options）"),
             // entity.soprevision.ecnid
-            new TranslationSeedItem("entity.soprevision.ecnid", "zh-CN", "ECN主表ID", "关联 ECN 主表 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.soprevision.ecnid", "zh-CN", "ECN主表ID", "关联 ECN 主表 ID（关联 TaktEc.Id，选项 TaktEcs/options）"),
             // entity.soprevision.ecnid
-            new TranslationSeedItem("entity.soprevision.ecnid", "zh-HK", "ECN主表ID_hk", "关联 ECN 主表 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            new TranslationSeedItem("entity.soprevision.ecnid", "zh-HK", "ECN主表ID_hk", "关联 ECN 主表 ID（关联 TaktEc.Id，选项 TaktEcs/options）"),
 
             // entity.soprevision.islocked
-            new TranslationSeedItem("entity.soprevision.islocked", "en-US", "是否锁定_us", "是否锁定（ECN 后旧版锁定；字典 sys_yes_no_type，0=否，1=是）"),
+            new TranslationSeedItem("entity.soprevision.islocked", "en-US", "是否锁定_us", "是否锁定（字典 sys_yes_no_type；0=否，1=是）"),
             // entity.soprevision.islocked
-            new TranslationSeedItem("entity.soprevision.islocked", "ja-JP", "是否锁定_jp", "是否锁定（ECN 后旧版锁定；字典 sys_yes_no_type，0=否，1=是）"),
+            new TranslationSeedItem("entity.soprevision.islocked", "ja-JP", "是否锁定_jp", "是否锁定（字典 sys_yes_no_type；0=否，1=是）"),
             // entity.soprevision.islocked
-            new TranslationSeedItem("entity.soprevision.islocked", "zh-CN", "是否锁定", "是否锁定（ECN 后旧版锁定；字典 sys_yes_no_type，0=否，1=是）"),
+            new TranslationSeedItem("entity.soprevision.islocked", "zh-CN", "是否锁定", "是否锁定（字典 sys_yes_no_type；0=否，1=是）"),
             // entity.soprevision.islocked
-            new TranslationSeedItem("entity.soprevision.islocked", "zh-HK", "是否锁定_hk", "是否锁定（ECN 后旧版锁定；字典 sys_yes_no_type，0=否，1=是）"),
+            new TranslationSeedItem("entity.soprevision.islocked", "zh-HK", "是否锁定_hk", "是否锁定（字典 sys_yes_no_type；0=否，1=是）"),
 
             // entity.soprevision.forceleaderack
-            new TranslationSeedItem("entity.soprevision.forceleaderack", "en-US", "是否强制班组长确认_us", "是否强制班组长确认（新版本弹窗；字典 sys_yes_no_type，0=否，1=是）"),
+            new TranslationSeedItem("entity.soprevision.forceleaderack", "en-US", "是否强制班组长确认_us", "是否强制班组长确认（字典 sys_yes_no_type；0=否，1=是）"),
             // entity.soprevision.forceleaderack
-            new TranslationSeedItem("entity.soprevision.forceleaderack", "ja-JP", "是否强制班组长确认_jp", "是否强制班组长确认（新版本弹窗；字典 sys_yes_no_type，0=否，1=是）"),
+            new TranslationSeedItem("entity.soprevision.forceleaderack", "ja-JP", "是否强制班组长确认_jp", "是否强制班组长确认（字典 sys_yes_no_type；0=否，1=是）"),
             // entity.soprevision.forceleaderack
-            new TranslationSeedItem("entity.soprevision.forceleaderack", "zh-CN", "是否强制班组长确认", "是否强制班组长确认（新版本弹窗；字典 sys_yes_no_type，0=否，1=是）"),
+            new TranslationSeedItem("entity.soprevision.forceleaderack", "zh-CN", "是否强制班组长确认", "是否强制班组长确认（字典 sys_yes_no_type；0=否，1=是）"),
             // entity.soprevision.forceleaderack
-            new TranslationSeedItem("entity.soprevision.forceleaderack", "zh-HK", "是否强制班组长确认_hk", "是否强制班组长确认（新版本弹窗；字典 sys_yes_no_type，0=否，1=是）"),
+            new TranslationSeedItem("entity.soprevision.forceleaderack", "zh-HK", "是否强制班组长确认_hk", "是否强制班组长确认（字典 sys_yes_no_type；0=否，1=是）"),
 
             // entity.soprevision.revisionstatus
-            new TranslationSeedItem("entity.soprevision.revisionstatus", "en-US", "版本状态_us", "版本状态（字典 sys_lifecycle_status）"),
+            new TranslationSeedItem("entity.soprevision.revisionstatus", "en-US", "版本状态_us", "版本状态（字典 sys_lifecycle_status；1=编制中，2=审核中，3=已生效，4=已废止）"),
             // entity.soprevision.revisionstatus
-            new TranslationSeedItem("entity.soprevision.revisionstatus", "ja-JP", "版本状态_jp", "版本状态（字典 sys_lifecycle_status）"),
+            new TranslationSeedItem("entity.soprevision.revisionstatus", "ja-JP", "版本状态_jp", "版本状态（字典 sys_lifecycle_status；1=编制中，2=审核中，3=已生效，4=已废止）"),
             // entity.soprevision.revisionstatus
-            new TranslationSeedItem("entity.soprevision.revisionstatus", "zh-CN", "版本状态", "版本状态（字典 sys_lifecycle_status）"),
+            new TranslationSeedItem("entity.soprevision.revisionstatus", "zh-CN", "版本状态", "版本状态（字典 sys_lifecycle_status；1=编制中，2=审核中，3=已生效，4=已废止）"),
             // entity.soprevision.revisionstatus
-            new TranslationSeedItem("entity.soprevision.revisionstatus", "zh-HK", "版本状态_hk", "版本状态（字典 sys_lifecycle_status）"),
+            new TranslationSeedItem("entity.soprevision.revisionstatus", "zh-HK", "版本状态_hk", "版本状态（字典 sys_lifecycle_status；1=编制中，2=审核中，3=已生效，4=已废止）"),
 
             // entity.soprevision.effectiverule
-            new TranslationSeedItem("entity.soprevision.effectiverule", "en-US", "生效规则_us", "生效规则（1=立即生效，2=按工单生效；字典 logistics_sop_effective_rule）"),
+            new TranslationSeedItem("entity.soprevision.effectiverule", "en-US", "生效规则_us", "生效规则（字典 logistics_sop_effective_rule；1=立即生效，2=按工单生效）"),
             // entity.soprevision.effectiverule
-            new TranslationSeedItem("entity.soprevision.effectiverule", "ja-JP", "生效规则_jp", "生效规则（1=立即生效，2=按工单生效；字典 logistics_sop_effective_rule）"),
+            new TranslationSeedItem("entity.soprevision.effectiverule", "ja-JP", "生效规则_jp", "生效规则（字典 logistics_sop_effective_rule；1=立即生效，2=按工单生效）"),
             // entity.soprevision.effectiverule
-            new TranslationSeedItem("entity.soprevision.effectiverule", "zh-CN", "生效规则", "生效规则（1=立即生效，2=按工单生效；字典 logistics_sop_effective_rule）"),
+            new TranslationSeedItem("entity.soprevision.effectiverule", "zh-CN", "生效规则", "生效规则（字典 logistics_sop_effective_rule；1=立即生效，2=按工单生效）"),
             // entity.soprevision.effectiverule
-            new TranslationSeedItem("entity.soprevision.effectiverule", "zh-HK", "生效规则_hk", "生效规则（1=立即生效，2=按工单生效；字典 logistics_sop_effective_rule）"),
+            new TranslationSeedItem("entity.soprevision.effectiverule", "zh-HK", "生效规则_hk", "生效规则（字典 logistics_sop_effective_rule；1=立即生效，2=按工单生效）"),
 
             // entity.soprevision.sopdoc
             new TranslationSeedItem("entity.soprevision.sopdoc", "en-US", "SOP 文档头_us", "SOP 文档头"),

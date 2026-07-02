@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Procurement
 // 文件名称：TaktPurchasePriceItemI18nSeedData.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPurchasePriceItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktPurchasePriceItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.purchasepriceitem._self", "zh-HK", "Takt采购价格明细信息_hk", "实体名称"),
 
             // entity.purchasepriceitem.purchasepriceid
-            new TranslationSeedItem("entity.purchasepriceitem.purchasepriceid", "en-US", "采购价格ID_us", "采购价格ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.purchasepriceitem.purchasepriceid", "en-US", "采购价格ID_us", "采购价格 ID（关联 TaktPurchasePrice.Id，选项 TaktPurchasePrices/options）"),
             // entity.purchasepriceitem.purchasepriceid
-            new TranslationSeedItem("entity.purchasepriceitem.purchasepriceid", "ja-JP", "采购价格ID_jp", "采购价格ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.purchasepriceitem.purchasepriceid", "ja-JP", "采购价格ID_jp", "采购价格 ID（关联 TaktPurchasePrice.Id，选项 TaktPurchasePrices/options）"),
             // entity.purchasepriceitem.purchasepriceid
-            new TranslationSeedItem("entity.purchasepriceitem.purchasepriceid", "zh-CN", "采购价格ID", "采购价格ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.purchasepriceitem.purchasepriceid", "zh-CN", "采购价格ID", "采购价格 ID（关联 TaktPurchasePrice.Id，选项 TaktPurchasePrices/options）"),
             // entity.purchasepriceitem.purchasepriceid
-            new TranslationSeedItem("entity.purchasepriceitem.purchasepriceid", "zh-HK", "采购价格ID_hk", "采购价格ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.purchasepriceitem.purchasepriceid", "zh-HK", "采购价格ID_hk", "采购价格 ID（关联 TaktPurchasePrice.Id，选项 TaktPurchasePrices/options）"),
 
             // entity.purchasepriceitem.purchasepricecode
             new TranslationSeedItem("entity.purchasepriceitem.purchasepricecode", "en-US", "采购价格编码_us", "采购价格编码（冗余字段，便于查询）"),
@@ -153,14 +153,23 @@ public class TaktPurchasePriceItemI18nSeedData : ITaktSeedDataCoordinator
             // entity.purchasepriceitem.purchaseunit
             new TranslationSeedItem("entity.purchasepriceitem.purchaseunit", "zh-HK", "采购单位_hk", "采购单位"),
 
+            // entity.purchasepriceitem.purchaseperunit
+            new TranslationSeedItem("entity.purchasepriceitem.purchaseperunit", "en-US", "价格单位_us", "价格单位（字典 logistics_price_unit_param：1/100/1000/10000；默认 1000）"),
+            // entity.purchasepriceitem.purchaseperunit
+            new TranslationSeedItem("entity.purchasepriceitem.purchaseperunit", "ja-JP", "价格单位_jp", "价格单位（字典 logistics_price_unit_param：1/100/1000/10000；默认 1000）"),
+            // entity.purchasepriceitem.purchaseperunit
+            new TranslationSeedItem("entity.purchasepriceitem.purchaseperunit", "zh-CN", "价格单位", "价格单位（字典 logistics_price_unit_param：1/100/1000/10000；默认 1000）"),
+            // entity.purchasepriceitem.purchaseperunit
+            new TranslationSeedItem("entity.purchasepriceitem.purchaseperunit", "zh-HK", "价格单位_hk", "价格单位（字典 logistics_price_unit_param：1/100/1000/10000；默认 1000）"),
+
             // entity.purchasepriceitem.purchaseprice
-            new TranslationSeedItem("entity.purchasepriceitem.purchaseprice", "en-US", "采购价格_us", "采购价格（精确到分，存储为整数，单位为分）"),
+            new TranslationSeedItem("entity.purchasepriceitem.purchaseprice", "en-US", "采购价格_us", "采购价格（decimal(18,5)）"),
             // entity.purchasepriceitem.purchaseprice
-            new TranslationSeedItem("entity.purchasepriceitem.purchaseprice", "ja-JP", "采购价格_jp", "采购价格（精确到分，存储为整数，单位为分）"),
+            new TranslationSeedItem("entity.purchasepriceitem.purchaseprice", "ja-JP", "采购价格_jp", "采购价格（decimal(18,5)）"),
             // entity.purchasepriceitem.purchaseprice
-            new TranslationSeedItem("entity.purchasepriceitem.purchaseprice", "zh-CN", "采购价格", "采购价格（精确到分，存储为整数，单位为分）"),
+            new TranslationSeedItem("entity.purchasepriceitem.purchaseprice", "zh-CN", "采购价格", "采购价格（decimal(18,5)）"),
             // entity.purchasepriceitem.purchaseprice
-            new TranslationSeedItem("entity.purchasepriceitem.purchaseprice", "zh-HK", "采购价格_hk", "采购价格（精确到分，存储为整数，单位为分）"),
+            new TranslationSeedItem("entity.purchasepriceitem.purchaseprice", "zh-HK", "采购价格_hk", "采购价格（decimal(18,5)）"),
 
             // entity.purchasepriceitem.minpurchasequantity
             new TranslationSeedItem("entity.purchasepriceitem.minpurchasequantity", "en-US", "最小采购量_us", "最小采购量（基本单位数量）"),

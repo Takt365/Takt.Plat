@@ -65,6 +65,8 @@
       :master-row-selection="rowSelection"
       master-id-column-key="salesQuotationId"
       :master-visible-column-keys="visibleColumnKeys"
+      master-table-mode="masterDetailMaster"
+      master-scroll-layout="masterDetailLr"
       :master-total="total"
       master-entity-scope="company"
       @master-change="handleTableChange"
@@ -72,6 +74,15 @@
       @master-pagination-change="handleMasterPaginationChange"
       @master-select="handleMasterSelect"
     >
+      <!-- 字典/开关列渲染 -->
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'quotationStatus'">
+          <TaktDictTag
+            :value="getSalesQuotationDictValue(record, 'quotationStatus')"
+            dict-type="logistics_quotation_status"
+          />
+        </template>
+      </template>
       <template #detail>
         <SalesQuotationItemPanel
           ref="salesQuotationItemPanelRef"
@@ -109,21 +120,20 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="t('entity.salesquotation.plantcode')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('plantCode')">
+        <TaktSelect
           v-model:value="advancedQueryForm.plantCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesquotation.plantcode') })"
-          show-count
-          :maxlength="50"
+          api-url="TaktPlants/options"
+          :placeholder="pi.queryPh('plantCode', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('salesQuotationCode')">
-      <a-form-item :label="t('entity.salesquotation.code')">
+      <a-form-item :label="pi.queryLabel('salesQuotationCode')">
         <a-input
           v-model:value="advancedQueryForm.salesQuotationCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesquotation.code') })"
+          :placeholder="pi.queryPh('salesQuotationCode', 'required')"
           show-count
           :maxlength="50"
           allow-clear
@@ -131,21 +141,20 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('customerCode')">
-      <a-form-item :label="t('entity.salesquotation.customercode')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('customerCode')">
+        <TaktSelect
           v-model:value="advancedQueryForm.customerCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesquotation.customercode') })"
-          show-count
-          :maxlength="50"
+          api-url="TaktCustomers/options"
+          :placeholder="pi.queryPh('customerCode', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('customerName')">
-      <a-form-item :label="t('entity.salesquotation.customername')">
+      <a-form-item :label="pi.queryLabel('customerName')">
         <a-input
           v-model:value="advancedQueryForm.customerName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesquotation.customername') })"
+          :placeholder="pi.queryPh('customerName', 'required')"
           show-count
           :maxlength="200"
           allow-clear
@@ -153,158 +162,175 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('quotationDateStart')">
-      <a-form-item :label="t('entity.salesquotation.quotationdatestart')">
+      <a-form-item :label="pi.queryLabel('quotationDateStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.quotationDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesquotation.quotationdatestart') })"
+          :placeholder="pi.queryPh('quotationDateStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('quotationDateEnd')">
-      <a-form-item :label="t('entity.salesquotation.quotationdateend')">
+      <a-form-item :label="pi.queryLabel('quotationDateEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.quotationDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesquotation.quotationdateend') })"
+          :placeholder="pi.queryPh('quotationDateEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('validUntilDateStart')">
-      <a-form-item :label="t('entity.salesquotation.validuntildatestart')">
+      <a-form-item :label="pi.queryLabel('validUntilDateStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.validUntilDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesquotation.validuntildatestart') })"
+          :placeholder="pi.queryPh('validUntilDateStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('validUntilDateEnd')">
-      <a-form-item :label="t('entity.salesquotation.validuntildateend')">
+      <a-form-item :label="pi.queryLabel('validUntilDateEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.validUntilDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesquotation.validuntildateend') })"
+          :placeholder="pi.queryPh('validUntilDateEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('salesBy')">
-      <a-form-item :label="t('entity.salesquotation.salesby')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('salesBy')">
+        <TaktSelect
           v-model:value="advancedQueryForm.salesBy"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesquotation.salesby') })"
-          show-count
-          :maxlength="50"
+          api-url="TaktEmployees/options"
+          :placeholder="pi.queryPh('salesBy', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('totalQuantity')">
-      <a-form-item :label="t('entity.salesquotation.totalquantity')">
+      <a-form-item :label="pi.queryLabel('totalQuantity')">
         <a-input-number
           v-model:value="advancedQueryForm.totalQuantity"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesquotation.totalquantity') })"
+          :placeholder="pi.queryPh('totalQuantity', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('totalAmount')">
-      <a-form-item :label="t('entity.salesquotation.totalamount')">
+      <a-form-item :label="pi.queryLabel('totalAmount')">
         <a-input-number
           v-model:value="advancedQueryForm.totalAmount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesquotation.totalamount') })"
+          :placeholder="pi.queryPh('totalAmount', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('discountAmount')">
-      <a-form-item :label="t('entity.salesquotation.discountamount')">
+      <a-form-item :label="pi.queryLabel('discountAmount')">
         <a-input-number
           v-model:value="advancedQueryForm.discountAmount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesquotation.discountamount') })"
+          :placeholder="pi.queryPh('discountAmount', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('taxAmount')">
-      <a-form-item :label="t('entity.salesquotation.taxamount')">
+      <a-form-item :label="pi.queryLabel('taxAmount')">
         <a-input-number
           v-model:value="advancedQueryForm.taxAmount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesquotation.taxamount') })"
+          :placeholder="pi.queryPh('taxAmount', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('actualAmount')">
-      <a-form-item :label="t('entity.salesquotation.actualamount')">
+      <a-form-item :label="pi.queryLabel('actualAmount')">
         <a-input-number
           v-model:value="advancedQueryForm.actualAmount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesquotation.actualamount') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('quotationStatus')">
-      <a-form-item :label="t('entity.salesquotation.quotationstatus')">
-        <a-input-number
-          v-model:value="advancedQueryForm.quotationStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesquotation.quotationstatus') })"
+          :placeholder="pi.queryPh('actualAmount', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('salesOrderCode')">
-      <a-form-item :label="t('entity.salesquotation.salesordercode')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('salesOrderCode')">
+        <TaktSelect
           v-model:value="advancedQueryForm.salesOrderCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesquotation.salesordercode') })"
-          show-count
-          :maxlength="50"
+          api-url="TaktSalesOrders/options"
+          :placeholder="pi.queryPh('salesOrderCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('quotationStatus')">
+      <a-form-item :label="pi.queryLabel('quotationStatus')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.quotationStatus"
+          dict-type="logistics_quotation_status"
+          :placeholder="pi.queryPh('quotationStatus', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="t('common.page.entity.createdatstart')">
+      <a-form-item :label="pi.queryLabel('createdAtStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          :placeholder="pi.queryPh('createdAtStart', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="t('common.page.entity.createdatend')">
+      <a-form-item :label="pi.queryLabel('createdAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          :placeholder="pi.queryPh('createdAtEnd', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('ExtField')">
-      <a-form-item :label="t('entity.salesquotation.extfield')">
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ pi.queryLabel('extField') }}</span>
+          </span>
+        </template>
         <a-textarea
-          v-model:value="advancedQueryForm.ExtField"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.salesquotation.extfield') })"
-          :rows="2"
-          allow-clear
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="t('common.page.entity.remark')">
+      <a-form-item :label="pi.queryLabel('remark')">
         <a-textarea
           v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+          :placeholder="pi.queryPh('remark', 'optional')"
             :rows="4"
             show-count
             :maxlength="400"
@@ -318,14 +344,15 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.salesquotation._self') })"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.salesquotation._self"
+        v-if="importVisible"
+        :entity-i18n-key="SALESQUOTATION_SELF_I18N_KEY"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -344,7 +371,7 @@
       :id-column-key="'salesQuotationId'"
       :action-column-key="'action'"
       entity-scope="company"
-      table-mode="single"
+      table-mode="masterDetailMaster"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -364,12 +391,25 @@ import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import SalesQuotationForm from './components/quotation-form.vue'
 import SalesQuotationItemPanel from './components/quotation-item-panel.vue'
-import { provideSalesQuotationMasterContext } from './composables/use-quotation-master-context'
+import { provideSalesQuotationMasterContext, type SalesQuotationRowRecord } from './composables/use-quotation-master-context'
 import { getSalesQuotationList, getSalesQuotationById, createSalesQuotation, updateSalesQuotation, deleteSalesQuotationById, deleteSalesQuotationBatch, getSalesQuotationTemplate, importSalesQuotation, exportSalesQuotation, updateSalesQuotationStatus } from '@/api/logistics/sales/quotation'
 import type { SalesQuotation, SalesQuotationQuery } from '@/types/logistics/sales/quotation'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+
+import {
+  useSalesQuotationI18n,
+  SALESQUOTATION_LIST_FIELDS,
+  SALESQUOTATION_QUERY_STRING_FIELDS,
+  SALESQUOTATION_QUERY_FIELDS,
+  SALESQUOTATION_SELF_I18N_KEY,
+} from './composables/use-quotation-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = useSalesQuotationI18n()
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -377,7 +417,7 @@ const { t } = useI18n()
 const excelNames = taktExcelEntityNames('TaktSalesQuotation')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.salesquotation._self') })
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() })
 )
 
 /** 快捷查询关键字 */
@@ -393,9 +433,9 @@ const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
-const selectedRow = ref<SalesQuotation | null>(null)
+const selectedRow = ref<SalesQuotationRowRecord | null>(null)
 /** 表格多选行 */
-const selectedRows = ref<SalesQuotation[]>([])
+const selectedRows = ref<SalesQuotationRowRecord[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 
@@ -412,52 +452,31 @@ const formRef = ref()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
+/**
+ * 创建空的高级查询表单
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(SALESQUOTATION_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof SALESQUOTATION_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  return {
+    ...form,
+    totalQuantity: undefined as number | undefined,
+    totalAmount: undefined as number | undefined,
+    discountAmount: undefined as number | undefined,
+    taxAmount: undefined as number | undefined,
+    actualAmount: undefined as number | undefined,
+    quotationStatus: undefined as number | undefined,
+  }
+}
 /** 高级查询表单模型 */
-const advancedQueryForm = ref({
-  plantCode: '',
-  salesQuotationCode: '',
-  customerCode: '',
-  customerName: '',
-  quotationDateStart: '',
-  quotationDateEnd: '',
-  validUntilDateStart: '',
-  validUntilDateEnd: '',
-  salesBy: '',
-  totalQuantity: undefined as number | undefined,
-  totalAmount: undefined as number | undefined,
-  discountAmount: undefined as number | undefined,
-  taxAmount: undefined as number | undefined,
-  actualAmount: undefined as number | undefined,
-  quotationStatus: undefined as number | undefined,
-  salesOrderCode: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  ExtField: '',
-  remark: '',
-})
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 /** 高级查询字段元数据（列显隐配置） */
-const queryFieldsMeta = computed(() => [
-  { key: 'plantCode', label: t('entity.salesquotation.plantcode') },
-  { key: 'salesQuotationCode', label: t('entity.salesquotation.code') },
-  { key: 'customerCode', label: t('entity.salesquotation.customercode') },
-  { key: 'customerName', label: t('entity.salesquotation.customername') },
-  { key: 'quotationDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.salesquotation.quotationdate')) },
-  { key: 'quotationDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.salesquotation.quotationdate')) },
-  { key: 'validUntilDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.salesquotation.validuntildate')) },
-  { key: 'validUntilDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.salesquotation.validuntildate')) },
-  { key: 'salesBy', label: t('entity.salesquotation.salesby') },
-  { key: 'totalQuantity', label: t('entity.salesquotation.totalquantity') },
-  { key: 'totalAmount', label: t('entity.salesquotation.totalamount') },
-  { key: 'discountAmount', label: t('entity.salesquotation.discountamount') },
-  { key: 'taxAmount', label: t('entity.salesquotation.taxamount') },
-  { key: 'actualAmount', label: t('entity.salesquotation.actualamount') },
-  { key: 'quotationStatus', label: t('entity.salesquotation.quotationstatus') },
-  { key: 'salesOrderCode', label: t('entity.salesquotation.salesordercode') },
-  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
-  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'ExtField', label: t('entity.salesquotation.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+const queryFieldsMeta = computed(() =>
+  SALESQUOTATION_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -473,6 +492,8 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
+/** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
+const dictDataStore = useDictDataStore()
 /** 主表选中行上下文（右侧明细面板读取） */
 const { selectedMasterRow } = provideSalesQuotationMasterContext()
 const salesQuotationItemPanelRef = ref<InstanceType<typeof SalesQuotationItemPanel> | null>(null)
@@ -499,15 +520,9 @@ function buildListQuery(overrides?: Partial<SalesQuotationQuery>): SalesQuotatio
       query[key] = v as never
     }
   }
-  assignTrimmed('plantCode', form.plantCode)
-  assignTrimmed('salesQuotationCode', form.salesQuotationCode)
-  assignTrimmed('customerCode', form.customerCode)
-  assignTrimmed('customerName', form.customerName)
-  assignTrimmed('quotationDateStart', form.quotationDateStart)
-  assignTrimmed('quotationDateEnd', form.quotationDateEnd)
-  assignTrimmed('validUntilDateStart', form.validUntilDateStart)
-  assignTrimmed('validUntilDateEnd', form.validUntilDateEnd)
-  assignTrimmed('salesBy', form.salesBy)
+  for (const key of SALESQUOTATION_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
+  }
   if (form.totalQuantity !== undefined && form.totalQuantity !== null) {
     query.totalQuantity = form.totalQuantity
   }
@@ -526,16 +541,12 @@ function buildListQuery(overrides?: Partial<SalesQuotationQuery>): SalesQuotatio
   if (form.quotationStatus !== undefined && form.quotationStatus !== null) {
     query.quotationStatus = form.quotationStatus
   }
-  assignTrimmed('salesOrderCode', form.salesOrderCode)
-  assignTrimmed('createdAtStart', form.createdAtStart)
-  assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('ExtField', form.ExtField)
-  assignTrimmed('remark', form.remark)
   return query
 }
 /** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
+  void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
 
@@ -544,7 +555,7 @@ onMounted(async () => {
 const selectedMasterKey = ref('')
 
 /** 同步主表选中行到右侧明细（子表由 *-panel watch 自动 reload） */
-function syncMasterSelection(record: SalesQuotation | null) {
+function syncMasterSelection(record: SalesQuotationRowRecord | null) {
   selectedMasterRow.value = record
   selectedMasterKey.value = record ? getSalesQuotationId(record) : ''
 }
@@ -554,7 +565,7 @@ function syncMasterSelection(record: SalesQuotation | null) {
  * @param record 主表行
  */
 function handleMasterSelect(record: Record<string, unknown>) {
-  const row = record as unknown as SalesQuotation
+  const row = record as unknown as SalesQuotationRowRecord
   const key = getSalesQuotationId(row)
   selectedRowKeys.value = [key]
   selectedRows.value = [row]
@@ -572,7 +583,7 @@ function handleMasterPaginationChange(_page: number, _pageSize: number) {
 }
 
 /** 加载主表详情并回填当前页 dataSource */
-async function loadSalesQuotationDetail(record: SalesQuotation): Promise<SalesQuotation | null> {
+async function loadSalesQuotationDetail(record: SalesQuotationRowRecord): Promise<SalesQuotation | null> {
   const id = getSalesQuotationId(record)
   if (!id) {
     return null
@@ -603,7 +614,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesQuotationField(record, 'salesQuotationId') ?? ''
   },
   {
-    title: t('entity.salesquotation.plantcode'),
+    title: pi.label('plantCode'),
     dataIndex: 'plantCode',
     key: 'plantCode',
     width: 120,
@@ -612,7 +623,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesQuotationField(record, 'plantCode') ?? ''
   },
   {
-    title: t('entity.salesquotation.code'),
+    title: pi.label('salesQuotationCode'),
     dataIndex: 'salesQuotationCode',
     key: 'salesQuotationCode',
     width: 120,
@@ -621,7 +632,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesQuotationField(record, 'salesQuotationCode') ?? ''
   },
   {
-    title: t('entity.salesquotation.customercode'),
+    title: pi.label('customerCode'),
     dataIndex: 'customerCode',
     key: 'customerCode',
     width: 120,
@@ -630,7 +641,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesQuotationField(record, 'customerCode') ?? ''
   },
   {
-    title: t('entity.salesquotation.customername'),
+    title: pi.label('customerName'),
     dataIndex: 'customerName',
     key: 'customerName',
     width: 120,
@@ -639,7 +650,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesQuotationField(record, 'customerName') ?? ''
   },
   {
-    title: t('entity.salesquotation.quotationdate'),
+    title: pi.label('quotationDate'),
     dataIndex: 'quotationDate',
     key: 'quotationDate',
     width: 120,
@@ -648,7 +659,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesQuotationField(record, 'quotationDate') ?? ''
   },
   {
-    title: t('entity.salesquotation.validuntildate'),
+    title: pi.label('validUntilDate'),
     dataIndex: 'validUntilDate',
     key: 'validUntilDate',
     width: 120,
@@ -657,7 +668,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesQuotationField(record, 'validUntilDate') ?? ''
   },
   {
-    title: t('entity.salesquotation.salesby'),
+    title: pi.label('salesBy'),
     dataIndex: 'salesBy',
     key: 'salesBy',
     width: 120,
@@ -666,7 +677,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesQuotationField(record, 'salesBy') ?? ''
   },
   {
-    title: t('entity.salesquotation.totalquantity'),
+    title: pi.label('totalQuantity'),
     dataIndex: 'totalQuantity',
     key: 'totalQuantity',
     width: 120,
@@ -675,7 +686,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesQuotationField(record, 'totalQuantity') ?? ''
   },
   {
-    title: t('entity.salesquotation.totalamount'),
+    title: pi.label('totalAmount'),
     dataIndex: 'totalAmount',
     key: 'totalAmount',
     width: 120,
@@ -684,7 +695,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesQuotationField(record, 'totalAmount') ?? ''
   },
   {
-    title: t('entity.salesquotation.discountamount'),
+    title: pi.label('discountAmount'),
     dataIndex: 'discountAmount',
     key: 'discountAmount',
     width: 120,
@@ -693,7 +704,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesQuotationField(record, 'discountAmount') ?? ''
   },
   {
-    title: t('entity.salesquotation.taxamount'),
+    title: pi.label('taxAmount'),
     dataIndex: 'taxAmount',
     key: 'taxAmount',
     width: 120,
@@ -702,7 +713,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesQuotationField(record, 'taxAmount') ?? ''
   },
   {
-    title: t('entity.salesquotation.actualamount'),
+    title: pi.label('actualAmount'),
     dataIndex: 'actualAmount',
     key: 'actualAmount',
     width: 120,
@@ -711,22 +722,21 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesQuotationField(record, 'actualAmount') ?? ''
   },
   {
-    title: t('entity.salesquotation.quotationstatus'),
-    dataIndex: 'quotationStatus',
-    key: 'quotationStatus',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSalesQuotationField(record, 'quotationStatus') ?? ''
-  },
-  {
-    title: t('entity.salesquotation.salesordercode'),
+    title: pi.label('salesOrderCode'),
     dataIndex: 'salesOrderCode',
     key: 'salesOrderCode',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getSalesQuotationField(record, 'salesOrderCode') ?? ''
+  },
+  {
+    title: pi.label('quotationStatus'),
+    dataIndex: 'quotationStatus',
+    key: 'quotationStatus',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
   },
   CreateActionColumn({
     actions: [
@@ -736,7 +746,7 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiEditLine,
         permission: 'logistics:sales:quotation:update',
-        onClick: (record: SalesQuotation) => handleEdit(record)
+        onClick: (record: SalesQuotationRowRecord) => handleEdit(record)
       },
       {
         key: 'delete',
@@ -744,26 +754,44 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiDeleteBinLine,
         permission: 'logistics:sales:quotation:delete',
-        onClick: (record: SalesQuotation) => handleDeleteOne(record)
+        onClick: (record: SalesQuotationRowRecord) => handleDeleteOne(record)
       }
     ]
   })
 ])
 
 /** 表格 row-key（优先实体主键字段） */
-const getSalesQuotationId = (record: any): string => record?.[entityIdName] ?? ''
+const getSalesQuotationId = (record: SalesQuotationRowRecord): string => {
+  const id = (record as Record<string, unknown>)?.[entityIdName]
+  return id != null ? String(id) : ''
+}
 /**
  * 读取行字段值
  * @param record 行数据
  * @param field 字段名
  */
 const getSalesQuotationField = (record: any, field: string): any => record?.[field]
+/**
+ * 供 TaktDictTag 等组件使用的标量字典值
+ * @param record 行数据
+ * @param field 字段名
+ */
+const getSalesQuotationDictValue = (
+  record: SalesQuotationRowRecord,
+  field: string,
+): string | number | undefined => {
+  const value = (record as Record<string, unknown>)?.[field]
+  if (value === null || value === undefined) return undefined
+  if (typeof value === 'string' || typeof value === 'number') return value
+  return String(value)
+}
+
 
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: SalesQuotation[]) => {
+  onChange: (keys: (string | number)[], rows: SalesQuotationRowRecord[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
@@ -773,16 +801,16 @@ const rowSelection = computed(() => ({
       syncMasterSelection(null)
     }
   },
-  onSelect: (record: SalesQuotation, selected: boolean) => {
+  onSelect: (record: SalesQuotationRowRecord, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
-    } else if (getSalesQuotationId(selectedRow.value) === getSalesQuotationId(record)) {
+    } else if (selectedRow.value && getSalesQuotationId(selectedRow.value) === getSalesQuotationId(record)) {
       selectedRow.value = null
       syncMasterSelection(null)
     }
   },
-  onSelectAll: (selected: boolean, selectedRowsData: SalesQuotation[]) => {
+  onSelectAll: (selected: boolean, selectedRowsData: SalesQuotationRowRecord[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
     syncMasterSelection(selectedRow.value)
   }
@@ -832,11 +860,11 @@ function handleReset() {
   discountAmount: undefined as number | undefined,
   taxAmount: undefined as number | undefined,
   actualAmount: undefined as number | undefined,
-  quotationStatus: undefined as number | undefined,
   salesOrderCode: '',
+  quotationStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
   currentPage.value = getTaktDefaultPageIndex()
@@ -845,14 +873,14 @@ function handleReset() {
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.salesquotation._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = null
   formVisible.value = true
   nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗（主子表：先拉详情含子表） */
-async function handleEdit(record: SalesQuotation) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.salesquotation._self') })
+async function handleEdit(record: SalesQuotationRowRecord) {
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
   formLoading.value = true
   try {
     const detail = await loadSalesQuotationDetail(record)
@@ -868,7 +896,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.salesquotation._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -886,10 +914,10 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateSalesQuotation(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.salesquotation._self') }))
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
       await createSalesQuotation(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.salesquotation._self') }))
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     formData.value = null
@@ -920,15 +948,22 @@ async function handleDownloadTemplate(sheetName?: string, fileName?: string): Pr
   return (res as any)?.data ?? res
 }
 
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importSalesQuotation(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importSalesQuotation(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
+
+      if (selectedMasterKey.value) {
+    salesQuotationItemPanelRef.value?.reload?.()
+      }
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
+  }
 }
 
 /** 关闭导入对话框 */
@@ -962,24 +997,24 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.salesquotation._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: any) {
     logger.error('[SalesQuotation] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.salesquotation._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }
 }
 /** 删除单行 */
-async function handleDeleteOne(record: SalesQuotation) {
+async function handleDeleteOne(record: SalesQuotationRowRecord) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.salesquotation._self'), name: t('common.tip.this.target', { target: t('entity.salesquotation._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteSalesQuotationById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.salesquotation._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       selectedRowKeys.value = []
       selectedRows.value = []
       selectedRow.value = null
@@ -991,18 +1026,18 @@ async function handleDeleteOne(record: SalesQuotation) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.salesquotation._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.salesquotation._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteSalesQuotationBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.salesquotation._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       selectedRowKeys.value = []
       selectedRows.value = []
       selectedRow.value = null
@@ -1039,11 +1074,11 @@ function handleAdvancedQueryReset() {
   discountAmount: undefined as number | undefined,
   taxAmount: undefined as number | undefined,
   actualAmount: undefined as number | undefined,
-  quotationStatus: undefined as number | undefined,
   salesOrderCode: '',
+  quotationStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  ExtField: '',
+  extField: '',
   remark: '',
   }
 }

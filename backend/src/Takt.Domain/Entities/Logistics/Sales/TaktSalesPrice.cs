@@ -30,9 +30,9 @@ namespace Takt.Domain.Entities.Logistics.Sales;
 public class TaktSalesPrice : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -42,16 +42,16 @@ public class TaktSalesPrice : TaktCompanyEntityBase
     public string SalesPriceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户编码（如果为空则表示通用价格）
+    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode；为空表示通用价格）
     /// </summary>
     [SugarColumn(ColumnName = "customer_code", ColumnDescription = "客户编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? CustomerCode { get; set; }
 
     /// <summary>
-    /// 价格类型（字典 logistics_sales_price_type；0=标准价格，1=客户价格，2=促销价格，3=合同价格，4=临时价格）
+    /// 价格类型（字典 logistics_sales_price_type；SAP 定价条件类型 KSCHL，如 PR00/PB00；默认 PR00）
     /// </summary>
-    [SugarColumn(ColumnName = "price_type", ColumnDescription = "价格类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int PriceType { get; set; } = 0;
+    [SugarColumn(ColumnName = "price_type", ColumnDescription = "价格类型", ColumnDataType = "nvarchar", Length = 4, IsNullable = false, DefaultValue = "PR00")]
+    public string PriceType { get; set; } = "PR00";
 
     /// <summary>
     /// 生效日期
@@ -66,10 +66,14 @@ public class TaktSalesPrice : TaktCompanyEntityBase
     public DateTime? EffectiveEndDate { get; set; }
 
     /// <summary>
-    /// 价格状态（1=启用，0=禁用）
+    /// 价格状态（字典 sys_normal_disable_status；1=启用 0=禁用）
     /// </summary>
     [SugarColumn(ColumnName = "price_status", ColumnDescription = "价格状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int PriceStatus { get; set; } = 1;
+
+    // ========================================
+    // 导航属性区域
+    // ========================================
 
     /// <summary>
     /// 物料价格明细列表（主子表关系，一个客户价格可以有多个物料价格）
@@ -78,7 +82,7 @@ public class TaktSalesPrice : TaktCompanyEntityBase
     public List<TaktSalesPriceItem>? Items { get; set; }
 
     /// <summary>
-    /// 销售价格变更记录列表（外键在子表 <see cref="TaktSalesPriceChangeLog.PriceId"/>）
+    /// 销售价格变更记录列表（外键在子表 TaktSalesPriceChangeLog.SalesPriceId）
     /// </summary>
     [Navigate(NavigateType.OneToMany, nameof(TaktSalesPriceChangeLog.SalesPriceId))]
     public List<TaktSalesPriceChangeLog>? ChangeLogs { get; set; }

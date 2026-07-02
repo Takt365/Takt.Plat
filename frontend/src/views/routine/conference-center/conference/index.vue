@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="routine:conferencecenter:create"
-      update-permission="routine:conferencecenter:update"
-      delete-permission="routine:conferencecenter:delete"
-      import-permission="routine:conferencecenter:import"
-      export-permission="routine:conferencecenter:export"
+      create-permission="routine:conference:center:create"
+      update-permission="routine:conference:center:update"
+      delete-permission="routine:conference:center:delete"
+      import-permission="routine:conference:center:import"
+      export-permission="routine:conference:center:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -153,8 +153,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.startTimeStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.conference.starttimestart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -164,8 +163,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.startTimeEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.conference.starttimeend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -175,8 +173,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.endTimeStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.conference.endtimestart') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -186,8 +183,7 @@
         <a-date-picker
           v-model:value="advancedQueryForm.endTimeEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.conference.endtimeend') })"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+          value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
@@ -343,10 +339,11 @@
       </div>
       <div v-show="isFieldVisible('approvalStatus')">
       <a-form-item :label="t('entity.conference.approvalstatus')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.approvalStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.approvalstatus') })"
-          style="width: 100%"
+          dict-type="sys_approval_status"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.conference.approvalstatus') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -431,7 +428,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -442,7 +439,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -1004,7 +1001,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'routine:conferencecenter:update',
+        permission: 'routine:conference:center:update',
         onClick: (record: Conference) => handleEdit(record)
       },
       {
@@ -1012,7 +1009,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'routine:conferencecenter:delete',
+        permission: 'routine:conference:center:delete',
         onClick: (record: Conference) => handleDeleteOne(record)
       }
     ]
@@ -1046,7 +1043,7 @@ const rowSelection = computed(() => ({
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
-    } else if (getConferenceId(selectedRow.value) === getConferenceId(record)) {
+    } else if (selectedRow.value && getConferenceId(selectedRow.value) === getConferenceId(record)) {
       selectedRow.value = null
       syncMasterSelection(null)
     }

@@ -26,7 +26,7 @@ namespace Takt.Domain.Entities.Logistics.Quality.Cost;
 public class TaktQualityIncidentItem : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 品质事故主表ID(主子表关系,序列化为string以避免Javascript精度问题)
+    /// 品质事故主表 ID（关联 TaktQualityIncident.Id，选项 TaktQualityIncidents/options）
     /// </summary>
     [SugarColumn(ColumnName = "quality_incident_id", ColumnDescription = "品质事故主表ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -45,7 +45,7 @@ public class TaktQualityIncidentItem : TaktCompanyEntityBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 物料编码
+    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
     /// </summary>
     [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", Length = 20, ColumnDataType = "nvarchar", IsNullable = false)]
     public string MaterialCode { get; set; } = string.Empty;

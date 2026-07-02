@@ -724,7 +724,7 @@ public class TaktRbacService : TaktServiceBase, ITaktRbacService
 
         foreach (var dto in dtos)
         {
-            dto.EmployeeName = employee.Name;
+            dto.EmployeeName = employee.EmployeeName;
             if (deptNameMap.TryGetValue(dto.DeptId, out var deptName))
             {
                 dto.DeptName = deptName;
@@ -760,7 +760,7 @@ public class TaktRbacService : TaktServiceBase, ITaktRbacService
 
         foreach (var dto in dtos)
         {
-            dto.EmployeeName = employee.Name;
+            dto.EmployeeName = employee.EmployeeName;
             if (postNameMap.TryGetValue(dto.PostId, out var postName))
             {
                 dto.PostName = postName;
@@ -827,7 +827,7 @@ public class TaktRbacService : TaktServiceBase, ITaktRbacService
         }
         var employeeIds = dtos.Select(d => d.EmployeeId).Distinct().ToList();
         var employees = await _employeeRepository.GetListAsync(e => employeeIds.Contains(e.Id));
-        var employeeNameMap = employees.ToDictionary(e => e.Id, e => e.Name);
+        var employeeNameMap = employees.ToDictionary(e => e.Id, e => e.EmployeeName);
         foreach (var dto in dtos)
         {
             dto.DeptName = dept.DeptName;
@@ -929,7 +929,7 @@ public class TaktRbacService : TaktServiceBase, ITaktRbacService
         }
         var employeeIds = dtos.Select(d => d.EmployeeId).Distinct().ToList();
         var employees = await _employeeRepository.GetListAsync(e => employeeIds.Contains(e.Id));
-        var employeeNameMap = employees.ToDictionary(e => e.Id, e => e.Name);
+        var employeeNameMap = employees.ToDictionary(e => e.Id, e => e.EmployeeName);
         foreach (var dto in dtos)
         {
             dto.PostName = post.PostName;

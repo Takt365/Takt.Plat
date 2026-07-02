@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Maintenance
 // 文件名称：TaktMaintenanceHistoryDtos.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：MaintenanceHistory 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktMaintenanceHistory 生成，请按需审阅）
 // 
@@ -133,11 +133,6 @@ public class TaktMaintenanceHistoryDto : TaktCompanyDtoBase
     public int MaintenanceResult { get; set; } = 0;
 
     /// <summary>
-    /// 履历状态（固定为 2=已完成，归档写入）
-    /// </summary>
-    public int MaintenanceStatus { get; set; } = 0;
-
-    /// <summary>
     /// 下次维护日期
     /// </summary>
     public DateTime? NextMaintenanceDate { get; set; }
@@ -176,6 +171,11 @@ public class TaktMaintenanceHistoryDto : TaktCompanyDtoBase
     /// 归档时间
     /// </summary>
     public DateTime ArchivedAt { get; set; }
+
+    /// <summary>
+    /// 履历状态（固定为 2=已完成，归档写入）
+    /// </summary>
+    public int MaintenanceStatus { get; set; } = 0;
 
     /// <summary>
     /// 设备（主表）
@@ -314,11 +314,6 @@ public class TaktMaintenanceHistoryQueryDto : TaktPagedQuery
     public int? MaintenanceResult { get; set; }
 
     /// <summary>
-    /// 履历状态（固定为 2=已完成，归档写入）
-    /// </summary>
-    public int? MaintenanceStatus { get; set; }
-
-    /// <summary>
     /// 下次维护日期（范围查询-开始）
     /// </summary>
     public DateTime? NextMaintenanceDateStart { get; set; }
@@ -374,6 +369,11 @@ public class TaktMaintenanceHistoryQueryDto : TaktPagedQuery
     public DateTime? ArchivedAtEnd { get; set; }
 
     /// <summary>
+    /// 履历状态（固定为 2=已完成，归档写入）
+    /// </summary>
+    public int? MaintenanceStatus { get; set; }
+
+    /// <summary>
     /// 创建时间（范围查询-开始）
     /// </summary>
     public DateTime? CreatedAtStart { get; set; }
@@ -414,7 +414,7 @@ public class TaktMaintenanceHistoryCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -508,11 +508,6 @@ public class TaktMaintenanceHistoryCreateDto
     public int MaintenanceResult { get; set; } = 0;
 
     /// <summary>
-    /// 履历状态（固定为 2=已完成，归档写入）
-    /// </summary>
-    public int MaintenanceStatus { get; set; } = 0;
-
-    /// <summary>
     /// 下次维护日期
     /// </summary>
     public DateTime? NextMaintenanceDate { get; set; }
@@ -551,6 +546,11 @@ public class TaktMaintenanceHistoryCreateDto
     /// 归档时间
     /// </summary>
     public DateTime ArchivedAt { get; set; }
+
+    /// <summary>
+    /// 履历状态（固定为 2=已完成，归档写入）
+    /// </summary>
+    public int MaintenanceStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -670,6 +670,21 @@ public class TaktMaintenanceHistoryTemplateDto
     public string? MaintenanceTechnician { get; set; } = string.Empty;
 
     /// <summary>
+    /// 维护日期（归档基准日，通常取工单完工时间）
+    /// </summary>
+    public DateTime? MaintenanceDate { get; set; }
+
+    /// <summary>
+    /// 维护开始时间
+    /// </summary>
+    public DateTime? MaintenanceStartTime { get; set; }
+
+    /// <summary>
+    /// 维护结束时间
+    /// </summary>
+    public DateTime? MaintenanceEndTime { get; set; }
+
+    /// <summary>
     /// 维护内容描述
     /// </summary>
     public string? MaintenanceContent { get; set; } = string.Empty;
@@ -688,6 +703,61 @@ public class TaktMaintenanceHistoryTemplateDto
     /// 使用配件（JSON，由工单领料明细汇总）
     /// </summary>
     public string? UsedParts { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 维护费用（工单总成本快照）
+    /// </summary>
+    public decimal? MaintenanceCost { get; set; }
+
+    /// <summary>
+    /// 维护结果（0=正常，1=待观察，2=需再次维修，3=已报废）
+    /// </summary>
+    public int? MaintenanceResult { get; set; }
+
+    /// <summary>
+    /// 下次维护日期
+    /// </summary>
+    public DateTime? NextMaintenanceDate { get; set; }
+
+    /// <summary>
+    /// 维护周期（天）
+    /// </summary>
+    public int? MaintenanceCycleDays { get; set; }
+
+    /// <summary>
+    /// 维护文档（JSON格式，存储维护文档ID列表）
+    /// </summary>
+    public string? MaintenanceDocuments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 维护图片（JSON格式，存储维护图片URL列表）
+    /// </summary>
+    public string? MaintenanceImages { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 验收总结
+    /// </summary>
+    public string? AcceptedSummary { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 验收人（人员编码）
+    /// </summary>
+    public string? AcceptedBy { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 验收时间
+    /// </summary>
+    public DateTime? AcceptedAt { get; set; }
+
+    /// <summary>
+    /// 归档时间
+    /// </summary>
+    public DateTime? ArchivedAt { get; set; }
+
+    /// <summary>
+    /// 履历状态（固定为 2=已完成，归档写入）
+    /// </summary>
+    public int? MaintenanceStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -717,7 +787,7 @@ public class TaktMaintenanceHistoryImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -764,6 +834,21 @@ public class TaktMaintenanceHistoryImportDto
     public string? MaintenanceTechnician { get; set; } = string.Empty;
 
     /// <summary>
+    /// 维护日期（归档基准日，通常取工单完工时间）
+    /// </summary>
+    public DateTime? MaintenanceDate { get; set; }
+
+    /// <summary>
+    /// 维护开始时间
+    /// </summary>
+    public DateTime? MaintenanceStartTime { get; set; }
+
+    /// <summary>
+    /// 维护结束时间
+    /// </summary>
+    public DateTime? MaintenanceEndTime { get; set; }
+
+    /// <summary>
     /// 维护内容描述
     /// </summary>
     public string? MaintenanceContent { get; set; } = string.Empty;
@@ -782,6 +867,61 @@ public class TaktMaintenanceHistoryImportDto
     /// 使用配件（JSON，由工单领料明细汇总）
     /// </summary>
     public string? UsedParts { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 维护费用（工单总成本快照）
+    /// </summary>
+    public decimal? MaintenanceCost { get; set; }
+
+    /// <summary>
+    /// 维护结果（0=正常，1=待观察，2=需再次维修，3=已报废）
+    /// </summary>
+    public int? MaintenanceResult { get; set; }
+
+    /// <summary>
+    /// 下次维护日期
+    /// </summary>
+    public DateTime? NextMaintenanceDate { get; set; }
+
+    /// <summary>
+    /// 维护周期（天）
+    /// </summary>
+    public int? MaintenanceCycleDays { get; set; }
+
+    /// <summary>
+    /// 维护文档（JSON格式，存储维护文档ID列表）
+    /// </summary>
+    public string? MaintenanceDocuments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 维护图片（JSON格式，存储维护图片URL列表）
+    /// </summary>
+    public string? MaintenanceImages { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 验收总结
+    /// </summary>
+    public string? AcceptedSummary { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 验收人（人员编码）
+    /// </summary>
+    public string? AcceptedBy { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 验收时间
+    /// </summary>
+    public DateTime? AcceptedAt { get; set; }
+
+    /// <summary>
+    /// 归档时间
+    /// </summary>
+    public DateTime? ArchivedAt { get; set; }
+
+    /// <summary>
+    /// 履历状态（固定为 2=已完成，归档写入）
+    /// </summary>
+    public int? MaintenanceStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -904,11 +1044,6 @@ public class TaktMaintenanceHistoryExportDto
     public int MaintenanceResult { get; set; } = 0;
 
     /// <summary>
-    /// 履历状态（固定为 2=已完成，归档写入）
-    /// </summary>
-    public int MaintenanceStatus { get; set; } = 0;
-
-    /// <summary>
     /// 下次维护日期
     /// </summary>
     public DateTime? NextMaintenanceDate { get; set; }
@@ -947,6 +1082,11 @@ public class TaktMaintenanceHistoryExportDto
     /// 归档时间
     /// </summary>
     public DateTime ArchivedAt { get; set; }
+
+    /// <summary>
+    /// 履历状态（固定为 2=已完成，归档写入）
+    /// </summary>
+    public int MaintenanceStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

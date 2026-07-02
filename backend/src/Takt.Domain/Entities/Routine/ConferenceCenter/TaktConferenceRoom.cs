@@ -10,8 +10,8 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
+using SqlSugar;
 using Takt.Domain.Entities;
-using Takt.Shared.Enums;
 
 namespace Takt.Domain.Entities.Routine.ConferenceCenter;
 
@@ -62,13 +62,13 @@ public class TaktConferenceRoom : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "facilities", ColumnDescription = "设施说明", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
     public string? Facilities { get; set; }
     /// <summary>
-    /// 会议室状态
-    /// </summary>
-    [SugarColumn(ColumnName = "room_status", ColumnDescription = "会议室状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int RoomStatus { get; set; } = 0;
-    /// <summary>
     /// 排序号
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; } = 0;
+    /// <summary>
+    /// 会议室状态（字典 routine_conference_room_status；0=可用 1=使用中 2=维护中 3=停用）
+    /// </summary>
+    [SugarColumn(ColumnName = "room_status", ColumnDescription = "会议室状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int RoomStatus { get; set; } = 0;
 }
